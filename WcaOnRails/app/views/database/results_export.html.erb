@@ -5,19 +5,19 @@
 
   <dl>
     <dt>
-      SQL: <a href="/export/results/<%= @sql_filename %>"><%= @sql_filename %></a> (<%= number_to_human_size @sql_filesize %>)
-      <small>(<a href="/export/results/<%= "#{DatabaseController::SQL_PERMALINK_FILE}" %>"><%= t('.permalink') %></a>)</small>
+      SQL: <%= link_to(@sql_filename, @sql_rel_path) %> (<%= number_to_human_size @sql_filesize %>)
+      <small>(<%= link_to(t('.permalink'), @sql_perma_path) %>)</small>
     </dt>
     <dd><%= t('.file_formats.sql') %></dd>
 
     <dt>
-      TSV: <a href="/export/results/<%= @tsv_filename %>"><%= @tsv_filename %></a> (<%= number_to_human_size @tsv_filesize %>)
-      <small>(<a href="/export/results/<%= "#{DatabaseController::TSV_PERMALINK_FILE}" %>"><%= t('.permalink') %></a>)</small>
+      TSV: <%= link_to(@tsv_filename, @tsv_rel_path) %> (<%= number_to_human_size @tsv_filesize %>)
+      <small>(<%= link_to(t('.permalink'), @tsv_perma_path) %>)</small>
     </dt>
     <dd><%= t('.file_formats.tsv') %></dd>
   </dl>
 
-  <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DatabaseController::README_FILENAME)) %></p>
+  <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DatabaseController::RESULTS_README)) %></p>
 
   <pre><%= DatabaseController.render_readme(self, DateTime.now) %></pre>
 </div>

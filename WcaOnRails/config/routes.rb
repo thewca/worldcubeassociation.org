@@ -116,6 +116,8 @@ Rails.application.routes.draw do
 
   get 'export/results' => 'database#results_export', as: :db_results_export
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
+  # redirect from the old path that used to be linked on GitHub
+  get 'wst/wca-developer-database-dump.zip', to: redirect('/export/developer/wca-developer-database-dump.zip')
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   resources :persons, only: [:index, :show]

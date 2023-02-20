@@ -41,19 +41,17 @@ namespace :db do
     task development: :environment do
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dump_filename = "wca-developer-database-dump.sql"
-          zip_filename = "wca-developer-database-dump.zip"
-          DatabaseDumper.development_dump(dump_filename)
+          DatabaseDumper.development_dump(DatabaseController::DEVELOPER_SQL)
 
-          LogTask.log_task "Zipping '#{dump_filename}' to '#{zip_filename}'" do
-            system("zip #{zip_filename} #{dump_filename}") || raise("Error running `zip`")
+          LogTask.log_task "Zipping '#{DatabaseController::DEVELOPER_SQL}' to '#{DatabaseController::DEVELOPER_SQL_PERMALINK}'" do
+            system("zip #{DatabaseController::DEVELOPER_SQL_PERMALINK} #{DatabaseController::DEVELOPER_SQL}") || raise("Error running `zip`")
           end
 
-          public_zip_path = DatabaseController::DEVELOPER_EXPORT_FOLDER.join(zip_filename)
+          public_zip_path = DatabaseController::DEVELOPER_EXPORT_FOLDER.join(DatabaseController::DEVELOPER_SQL_PERMALINK)
 
           LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
             FileUtils.mkpath(File.dirname(public_zip_path))
-            FileUtils.mv(zip_filename, public_zip_path)
+            FileUtils.mv(DatabaseController::DEVELOPER_SQL_PERMALINK, public_zip_path)
           end
         end
       end
@@ -67,22 +65,22 @@ namespace :db do
           tsv_folder_name = "TSV_export"
           FileUtils.mkpath tsv_folder_name
 
-          DatabaseDumper.public_results_dump(DatabaseController::SQL_FILENAME, tsv_folder_name)
+          DatabaseDumper.public_results_dump(DatabaseController::RESULTS_SQL, tsv_folder_name)
 
           metadata = {
             'export_format_version' => DatabaseDumper::PUBLIC_RESULTS_VERSION,
             'export_date' => export_timestamp,
           }
-          File.write(DatabaseController::METADATA_FILENAME, JSON.dump(metadata))
+          File.write(DatabaseController::RESULTS_METADATA, JSON.dump(metadata))
 
           readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp)
-          File.write(DatabaseController::README_FILENAME, readme_template)
+          File.write(DatabaseController::RESULTS_README, readme_template)
 
           # Remove old exports to save storage space
           FileUtils.rm_r DatabaseController::RESULTS_EXPORT_FOLDER
 
           def zip_and_permalink(zip_filename, permalink_filename, *additional_files)
-            zip_contents = [DatabaseController::METADATA_FILENAME, DatabaseController::README_FILENAME] | additional_files
+            zip_contents = [DatabaseController::RESULTS_METADATA, DatabaseController::RESULTS_README] | additional_files
             zip_filelist = zip_contents.join(" ")
 
             LogTask.log_task "Zipping metadata and #{additional_files.length} additional files to '#{zip_filename}'" do
@@ -101,7 +99,7 @@ namespace :db do
           end
 
           sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
-          zip_and_permalink(sql_zip_filename, DatabaseController::SQL_PERMALINK_FILE, DatabaseController::SQL_FILENAME)
+          zip_and_permalink(sql_zip_filename, DatabaseController::RESULTS_SQL_PERMALINK, DatabaseController::RESULTS_SQL)
 
           tsv_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.tsv.zip"
           tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
@@ -109,7 +107,7 @@ namespace :db do
             File.basename tsv
           end
 
-          zip_and_permalink(tsv_zip_filename, DatabaseController::TSV_PERMALINK_FILE, *tsv_files)
+          zip_and_permalink(tsv_zip_filename, DatabaseController::RESULTS_TSV_PERMALINK, *tsv_files)
         end
       end
     end
@@ -124,22 +122,20 @@ namespace :db do
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dev_db_dump_url = "https://www.worldcubeassociation.org/wst/wca-developer-database-dump.zip"
-          dump_filename = "wca-developer-database-dump.sql"
-          zip_filename = "wca-developer-database-dump.zip"
+          dev_db_dump_url = "https://www.worldcubeassociation.org/export/developer/#{DatabaseController::DEVELOPER_SQL_PERMALINK}"
 
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
-            system("curl -o #{zip_filename} #{dev_db_dump_url}") || raise("Error while running `curl`")
+            system("curl -o #{DatabaseController::DEVELOPER_SQL_PERMALINK} #{dev_db_dump_url}") || raise("Error while running `curl`")
           end
-          LogTask.log_task("Unzipping #{zip_filename}") do
-            system("unzip #{zip_filename}") || raise("Error while running `unzip`")
+          LogTask.log_task("Unzipping #{DatabaseController::DEVELOPER_SQL_PERMALINK}") do
+            system("unzip #{DatabaseController::DEVELOPER_SQL_PERMALINK}") || raise("Error while running `unzip`")
           end
 
           config = ActiveRecord::Base.connection_db_config
-          LogTask.log_task "Clobbering contents of '#{config.database}' with #{dump_filename}" do
+          LogTask.log_task "Clobbering contents of '#{config.database}' with #{DatabaseController::DEVELOPER_SQL}" do
             DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config.database}")
             DatabaseDumper.mysql("CREATE DATABASE #{config.database}")
-            DatabaseDumper.mysql("SOURCE #{dump_filename}", config.database)
+            DatabaseDumper.mysql("SOURCE #{DatabaseController::DEVELOPER_SQL}", config.database)
           end
 
           default_password = 'wca'
