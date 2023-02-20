@@ -1,0 +1,12 @@
+<% provide(:title, "Check results") %>
+<%= render layout: 'competitions/nav' do %>
+  <h1><%= yield(:title) %></h1>
+  <p>
+    Check existing results for the competition.
+  </p>
+
+  <%= render "validator_form", backend_url: competition_admin_run_validators_path %>
+  <%= render "results_submission/check_results_panel", results_validator: @results_validator %>
+
+  <%= render "results_submission/results_preview_panel", results_validator: @results_validator %>
+<% end %>

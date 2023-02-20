@@ -75,12 +75,12 @@ Rails.application.routes.draw do
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
-    get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
+    get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
+    post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
-  post 'admin/check-existing-results' => "admin#run_validators", as: :admin_run_validators
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -194,6 +194,8 @@ Rails.application.routes.draw do
   get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
+  get '/admin/check_results' => 'admin#check_results'
+  post '/admin/check_results' => 'admin#do_check_results'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
   get '/admin/edit_person' => 'admin#edit_person'

@@ -1,16 +1,12 @@
-<% results_validator ||= ResultsValidators::CompetitionsResultsValidator.new %>
-<% competition ||= nil %>
-<% all_validators = ResultsValidators::Utils::ALL_VALIDATORS %>
-<% selected_validators = results_validator.validators.empty? ? all_validators : results_validator.validators %>
+<% backend_url ||= nil %>
+<% lock_selection = defined? @competition %>
 <div class="panel panel-default">
   <div class="panel-heading">Configure validations to run</div>
   <div class="panel-body">
-    <%= simple_form_for :results_validation, url: admin_run_validators_path do |f| %>
-      <%# NOTE: i18n-tasks detects "validators" and "competition_ids" as having their hints under "person". %>
-      <%# This is most likely a bug and the cleanest workaround I could find was to explicitly set the hint here. %>
-      <%= f.input :validators, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
-      <%= f.input :apply_fixes, as: :boolean, label: apply_fixes_label, hint: apply_fixes_hint, input_html: { checked: results_validator.apply_fixes } %>
-      <%= f.input :competition_ids, as: :string, readonly: competition.present?, hint: false, input_html: { value: competition&.id }, label: "Competition ID(s)" %>
+    <%= simple_form_for @result_validation, url: backend_url do |f| %>
+      <%= f.input :validator_classes, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
+      <%= f.input :apply_fixes, as: :boolean, label: "Apply fix when possible", hint: "List of validators with automated fix: #{ResultValidationForm::VALIDATOR_WITH_FIX_NAMES.join(",")}." %>
+      <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
     <% end %>
   </div>
@@ -23,7 +19,6 @@
     labelField: 'name',
     searchField: ['name'],
     plugins: ['remove_button'],
-    options: <%= raw(all_validators.map(&:serialize).to_json) %>,
-    items: <%= raw(selected_validators.map(&:class_name).to_json) %>,
+    options: <%= raw(ResultsValidators::Utils::ALL_VALIDATORS.map(&:serialize).to_json) %>,
   });
 </script>

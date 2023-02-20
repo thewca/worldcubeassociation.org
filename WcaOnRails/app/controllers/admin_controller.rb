@@ -40,24 +40,51 @@ class AdminController < ApplicationController
   end
 
   def check_results
-    @competition = competition_from_params
+    with_results_validator
+  end
+
+  def check_competition_results
+    with_results_validator do
+      @competition = competition_from_params
+      @result_validation.competition_ids = @competition.id
+    end
+  end
+
+  def with_results_validator
+    @result_validation = ResultValidationForm.new(
+      competition_ids: params[:competition_ids] || "",
+      validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
+    )
+
     # For this view, we just build an empty validator: the WRT will decide what
     # to actually run (by default all validators will be selected).
     @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
+    yield if block_given?
   end
 
-  def run_validators
-    action_params = params.require(:results_validation).permit(:competition_ids, :validators, :apply_fixes)
-    # NOTE: for now only one competition is supported, we plan to extend this
-    # endpoint to support an arbitrary set of competitions (we'll need to
-    # render a different view in this case).
+  def do_check_results
+    running_validators do
+      render :check_results
+    end
+  end
 
-    @competition = Competition.find(action_params[:competition_ids])
-    validator_classes = action_params[:validators].split(",").map { |v| ResultsValidators::Utils.validator_class_from_name(v) }.compact
-    apply_fixes = ActiveModel::Type::Boolean.new.cast(action_params[:apply_fixes])
-    @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true, validators: validator_classes, apply_fixes: apply_fixes)
-    @results_validator.validate(@competition.id)
-    render :check_results
+  def do_check_competition_results
+    running_validators do
+      uniq_id = @result_validation.competitions.first
+      @competition = Competition.find(uniq_id)
+
+      render :check_competition_results
+    end
+  end
+
+  def running_validators
+    action_params = params.require(:result_validation_form)
+                          .permit(:competition_ids, :validator_classes, :apply_fixes)
+
+    @result_validation = ResultValidationForm.new(action_params)
+    @results_validator = @result_validation.build_and_run
+
+    yield if block_given?
   end
 
   def clear_results_submission
