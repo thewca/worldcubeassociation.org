@@ -31,7 +31,12 @@ function QualificationInput({
     case 'attemptResult':
       return (
         <>
-          {eventId === '333mbf' && "Note: Please enter n/n in any time to specify n points."}
+          {eventId === '333mbf' &&
+            <>
+              <Label>{i18n.t(`common.${resultType}`)}</Label>
+              Note: Please enter n/n in any time to specify n points.
+            </>
+          }
           <AttemptResultField
             eventId={eventId}
             value={level}
@@ -42,11 +47,12 @@ function QualificationInput({
               </Label>
             ) : "Time (will be ignored)"}
           />
+          {eventId === '333mbf' && <br/>}
         </>
       );
     case 'ranking':
       return (
-        <input
+        <Form.Input
           type="number"
           min={1}
           value={level}
