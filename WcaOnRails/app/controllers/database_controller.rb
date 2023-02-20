@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class DatabaseController < ApplicationController
-  _EXPORT_PUBLIC_FOLDER = Rails.root.join('public', 'export')
+  EXPORT_PUBLIC_FOLDER = Rails.root.join('public', 'export')
+  README_TEMPLATE = 'database/public_results_readme'
 
-  RESULTS_EXPORT_FOLDER = _EXPORT_PUBLIC_FOLDER.join('results')
-  DEVELOPER_EXPORT_FOLDER = _EXPORT_PUBLIC_FOLDER.join('developer')
+  RESULTS_EXPORT_FOLDER = EXPORT_PUBLIC_FOLDER.join('results')
+  DEVELOPER_EXPORT_FOLDER = EXPORT_PUBLIC_FOLDER.join('developer')
 
   SQL_FILENAME = "WCA_export.sql"
   README_FILENAME = "README.md"
@@ -31,4 +32,14 @@ class DatabaseController < ApplicationController
   end
 
   def developer_export; end
+
+  def self.render_readme(rendering_engine, export_timestamp)
+    locals = { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION }
+
+    if rendering_engine.respond_to?(:render_to_string)
+      rendering_engine.render_to_string(partial: README_TEMPLATE, formats: :md, locals:)
+    else
+      rendering_engine.render(partial: README_TEMPLATE, formats: :md, locals:)
+    end
+  end
 end

@@ -19,5 +19,5 @@
 
   <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DatabaseController::README_FILENAME)) %></p>
 
-  <pre><%= render partial: 'public_results_readme', formats: :md, locals: { long_date: DateTime.now, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION } %></pre>
+  <pre><%= DatabaseController.render_readme(self, DateTime.now) %></pre>
 </div>

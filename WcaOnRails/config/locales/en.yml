@@ -2578,7 +2578,7 @@ en:
         tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."
       hint_readme_html: "The included %{readme_filename} file contains the terms of use and a general description (in English, not translated):"
     developer_export:
-      heading: "WST developer export"
+      heading: "WST Developer Export"
       description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
       #context: The button that is clicked to download the file
       download: "Download"

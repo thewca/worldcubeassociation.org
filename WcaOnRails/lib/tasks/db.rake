@@ -75,48 +75,41 @@ namespace :db do
           }
           File.write(DatabaseController::METADATA_FILENAME, JSON.dump(metadata))
 
-          readme_template = ActionController::Base.new.render_to_string(partial: 'database/public_results_readme', formats: :md, locals: { long_date: export_timestamp, export_version: DatabaseDumper::PUBLIC_RESULTS_VERSION })
+          readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp)
           File.write(DatabaseController::README_FILENAME, readme_template)
 
           # Remove old exports to save storage space
           FileUtils.rm_r DatabaseController::RESULTS_EXPORT_FOLDER
 
-          sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
+          def zip_and_permalink(zip_filename, permalink_filename, *additional_files)
+            zip_contents = [DatabaseController::METADATA_FILENAME, DatabaseController::README_FILENAME] | additional_files
+            zip_filelist = zip_contents.join(" ")
 
-          LogTask.log_task "Zipping '#{DatabaseController::SQL_FILENAME}' and metadata to '#{sql_zip_filename}'" do
-            system("zip #{sql_zip_filename} #{DatabaseController::SQL_FILENAME} #{DatabaseController::METADATA_FILENAME} #{DatabaseController::README_FILENAME}") || raise("Error running `zip`")
-          end
-
-          public_sql_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(sql_zip_filename)
-          permalink_sql_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(DatabaseController::SQL_PERMALINK_FILE)
-
-          LogTask.log_task "Moving zipped file to '#{public_sql_zip_path}'" do
-            FileUtils.mkpath(File.dirname(public_sql_zip_path))
-            FileUtils.mv(sql_zip_filename, public_sql_zip_path)
-            # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
-            FileUtils.ln_s(sql_zip_filename, permalink_sql_zip_path, force: true)
-          end
-
-          tsv_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.tsv.zip"
-
-          LogTask.log_task "Zipping '#{tsv_folder_name}' and metadata to '#{tsv_zip_filename}'" do
-            tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
-              FileUtils.mv(tsv, '.')
-              File.basename tsv
+            LogTask.log_task "Zipping metadata and #{additional_files.length} additional files to '#{zip_filename}'" do
+              system("zip #{zip_filename} #{zip_filelist}") || raise("Error running `zip`")
             end
 
-            system("zip #{tsv_zip_filename} #{DatabaseController::METADATA_FILENAME} #{DatabaseController::README_FILENAME} #{tsv_files.join(" ")}") || raise("Error running `zip`")
+            public_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(zip_filename)
+            permalink_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(permalink_filename)
+
+            LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
+              FileUtils.mkpath(File.dirname(public_zip_path))
+              FileUtils.mv(zip_filename, public_zip_path)
+              # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
+              FileUtils.ln_s(zip_filename, permalink_zip_path, force: true)
+            end
           end
 
-          public_tsv_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(tsv_zip_filename)
-          permalink_tsv_zip_path = DatabaseController::RESULTS_EXPORT_FOLDER.join(DatabaseController::TSV_PERMALINK_FILE)
+          sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
+          zip_and_permalink(sql_zip_filename, DatabaseController::SQL_PERMALINK_FILE, DatabaseController::SQL_FILENAME)
 
-          LogTask.log_task "Moving zipped file to '#{public_tsv_zip_path}'" do
-            FileUtils.mkpath(File.dirname(public_tsv_zip_path))
-            FileUtils.mv(tsv_zip_filename, public_tsv_zip_path)
-            # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
-            FileUtils.ln_s(tsv_zip_filename, permalink_tsv_zip_path, force: true)
+          tsv_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.tsv.zip"
+          tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
+            FileUtils.mv(tsv, '.')
+            File.basename tsv
           end
+
+          zip_and_permalink(tsv_zip_filename, DatabaseController::TSV_PERMALINK_FILE, *tsv_files)
         end
       end
     end
