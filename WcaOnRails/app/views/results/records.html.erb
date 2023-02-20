@@ -1,6 +1,6 @@
 <% provide(:title, t(".title")) %>
 
-<% record_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end")&.date || "" %>
+<% record_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end")&.date || Date.current %>
 
 <% @rows = execute_cached_query([*@cache_params, record_timestamp], @query) %>
 

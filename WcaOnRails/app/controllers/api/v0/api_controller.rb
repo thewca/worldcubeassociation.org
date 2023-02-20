@@ -90,8 +90,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def search(*models)
-    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end").date
-    cache_key = "search/#{concise_results_date.iso8601}/#{query}"
+    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end")&.date || Date.current
+    cache_key = "search/#{concise_results_date&.iso8601}/#{query}"
     ActiveRecord::Base.connected_to(role: :read_replica) do
       query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
       unless query
@@ -162,7 +162,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def records
-    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end").date
+    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end")&.date || Date.current
     cache_key = "records/#{concise_results_date.iso8601}"
     json = Rails.cache.fetch(cache_key) do
       records = ActiveRecord::Base.connection.exec_query <<-SQL
