@@ -1,5 +1,5 @@
 <div id="fix-results-selector">
-  <%= simple_form_for @result_selector, url: admin_fix_results_ajax_path, html: { id: "fix-selector-form" } do |f| %>
+  <%= simple_form_for @result_selector, url: @edit_result_path, method: :get, html: { id: "fix-selector-form" } do |f| %>
     <%= f.label :person_id %>
     <%= f.input :person_id, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
 

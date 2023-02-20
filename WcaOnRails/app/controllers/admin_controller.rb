@@ -98,7 +98,11 @@ class AdminController < ApplicationController
   end
 
   def fix_results
-    @result_selector = FixResultsSelector.new
+    action_params = params.require(:fix_results_selector)
+                          .permit(:person_id, :competition_id, :event_id, :round_type_id)
+
+    @result_selector = FixResultsSelector.new(action_params)
+    @edit_result_path = admin_fix_results_path
   end
 
   def fix_results_selector
@@ -106,6 +110,7 @@ class AdminController < ApplicationController
                           .permit(:person_id, :competition_id, :event_id, :round_type_id)
 
     @result_selector = FixResultsSelector.new(action_params)
+    @edit_result_path = edit_result_path(@result_selector.selected_result)
 
     render partial: "fix_results_selector"
   end
