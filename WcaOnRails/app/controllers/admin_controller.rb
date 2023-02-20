@@ -54,6 +54,8 @@ class AdminController < ApplicationController
     @result_validation = ResultValidationForm.new(
       competition_ids: params[:competition_ids] || "",
       validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
+      competition_selection: params[:competition_selection] || ResultValidationForm::COMP_VALIDATION_MANUAL,
+      apply_fixes: params[:apply_fixes] || false,
     )
 
     # For this view, we just build an empty validator: the WRT will decide what
@@ -79,7 +81,7 @@ class AdminController < ApplicationController
 
   def running_validators
     action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes)
+                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection)
 
     @result_validation = ResultValidationForm.new(action_params)
     @results_validator = @result_validation.build_and_run

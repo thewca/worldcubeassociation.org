@@ -4,13 +4,24 @@ class ResultValidationForm
   ALL_VALIDATOR_NAMES = ResultsValidators::Utils::ALL_VALIDATORS.map(&:class_name)
   VALIDATOR_WITH_FIX_NAMES = ResultsValidators::Utils::VALIDATORS_WITH_FIX.map(&:class_name)
 
+  COMP_VALIDATION_ALL = :all
+  COMP_VALIDATION_MANUAL = :manual
+
   include ActiveModel::Model
 
   attr_accessor :validator_classes, :competition_ids
-  attr_writer :apply_fixes
+  attr_writer :apply_fixes, :competition_selection
 
   def competitions
-    @competition_ids.split(",").uniq.compact
+    if @competition_selection == COMP_VALIDATION_ALL
+      Competition.ids
+    else
+      @competition_ids.split(",").uniq.compact
+    end
+  end
+
+  def competition_selection
+    @competition_selection || COMP_VALIDATION_MANUAL
   end
 
   def validators
