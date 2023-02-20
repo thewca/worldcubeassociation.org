@@ -30,29 +30,33 @@ function QualificationInput({
   switch (type) {
     case 'attemptResult':
       return (
-        <AttemptResultField
-          value={level}
-          onChange={(value) => onChange(value)}
-          label={(
-            <Label>
-              {i18n.t(`common.${resultType}`)}
-            </Label>
-          )}
-        />
+        <>
+          {eventId === '333mbf' && "Note: Please enter n/n in any time to specify n points."}
+          <AttemptResultField
+            eventId={eventId}
+            value={level}
+            onChange={(value) => onChange(value)}
+            label={eventId !== '333mbf' ? (
+              <Label>
+                {i18n.t(`common.${resultType}`)}
+              </Label>
+            ) : "Time (will be ignored)"}
+          />
+        </>
       );
     case 'ranking':
       return (
-          <input
-            type="number"
-            min={1}
-            value={level}
-            onChange={(e) => onChange(parseInt(e.target.value, 10))}
+        <input
+          type="number"
+          min={1}
+          value={level}
+          onChange={(e) => onChange(parseInt(e.target.value, 10))}
           label={(
             <Label>
               {i18n.t('qualification.type.ranking')}
             </Label>
           )}
-          />
+        />
       );
     default:
       return null;
@@ -160,5 +164,4 @@ export default function EditQualificationModal({
   );
 }
 
-// !!! failing tests
 // !!! accept mbf point qual
