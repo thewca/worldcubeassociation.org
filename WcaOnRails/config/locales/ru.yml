@@ -2032,6 +2032,10 @@ ru:
       remove_avatar: Удалить аватарку
       #original_hash: 4bd25cf
       remove_avatar_confirm: 'Вы уверены, что хотите удалить аватарку?'
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Подтвердить удаление аватара
+      #original_hash: 010b0e5
+      remove_avatar_reason: 'Пожалуйста, укажите причину удаления'
       #original_hash: 141d1d7
       guidelines: Указания
       avatar_guidelines:
