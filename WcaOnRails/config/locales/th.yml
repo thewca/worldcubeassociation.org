@@ -1490,10 +1490,10 @@ th:
       welcome_back: >-
         ยินดีต้อนรับกลับมา! ในการสร้าง account ของเว็บไซต์ WCA เราต้องการทราบ
         WCA ID ที่คุณใช้แข่งขัน
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
-        เราต้องการข้อมูลเพิ่มเติมบางอย่าง
+        เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึกไว้
         โปรดทราบว่าวันเกิดของคุณจะไม่ถูกเปิดเผยโดยไม่ได้รับอนุญาตจากคุณ
         <br/><br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น
         กรุณากรอกข้อมูลของ<strong>ผู้เข้าแข่งขัน</strong>
@@ -1917,6 +1917,10 @@ th:
       remove_avatar: ลบรูปแทนตัว
       #original_hash: 4bd25cf
       remove_avatar_confirm: คุณแน่ใจที่จะลบรูปแทนตัวของคุณหรือไม่
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: ยืนยันการลบรูปประจำตัว
+      #original_hash: 010b0e5
+      remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
       guidelines: แนวทาง
       avatar_guidelines:
