@@ -1549,7 +1549,7 @@ cs:
       welcome_back: >-
         Vítejte zpět! Abyste si mohl(a) vytvořit účet na webových stránkách WCA,
         potřebujeme znát vaše WCA ID, pod kterým jste soutěžil(a).
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         Vítejte! Předtím, než budete moct soutěžit na vaší první soutěži WCA,
         potřebujeme nějaké informace, abychom mohli uchovávat rekordy.
@@ -1988,6 +1988,10 @@ cs:
       remove_avatar: Odstranit avatar
       #original_hash: 4bd25cf
       remove_avatar_confirm: 'Jste si jist(á), že chcete odstranit svůj avatar?'
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Potvrdit smazání avatara
+      #original_hash: 010b0e5
+      remove_avatar_reason: Prosíme uveďte důvod pro odstranění
       #original_hash: 141d1d7
       guidelines: Pokyny
       avatar_guidelines:
