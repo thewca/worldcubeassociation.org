@@ -104,8 +104,7 @@
     });
 
     // No idea why this is necessary
-    // Without it, after a failed submission you can get both panels
-    // open by switching twice
+    // Fixes /spec/features/sign_up_spec.rb:276
     $haveCompetedPanel.on('show.bs.collapse', function() {
       $neverCompetedPanel.collapse('hide');
     });
