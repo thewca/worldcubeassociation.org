@@ -29,7 +29,7 @@ class PersonsController < ApplicationController
   def show
     @person = Person.current.includes(:user, :ranksSingle, :ranksAverage, :competitions).find_by_wca_id!(params[:id])
 
-    if stale?(@person)
+    if stale?(:etag => [@person, current_user, I18n.locale])
       @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
       @ranks_single = @person.ranksSingle.select { |r| r.event.official? }
       @ranks_average = @person.ranksAverage.select { |r| r.event.official? }
