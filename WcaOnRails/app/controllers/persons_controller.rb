@@ -28,13 +28,16 @@ class PersonsController < ApplicationController
 
   def show
     @person = Person.current.includes(:user, :ranksSingle, :ranksAverage, :competitions).find_by_wca_id!(params[:id])
-    @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
-    @ranks_single = @person.ranksSingle.select { |r| r.event.official? }
-    @ranks_average = @person.ranksAverage.select { |r| r.event.official? }
-    @medals = @person.medals
-    @records = @person.records
-    @results = @person.results.includes(:competition, :event, :format, :round_type).order("Events.rank, Competitions.start_date DESC, Competitions.id, RoundTypes.rank DESC")
-    @championship_podiums = @person.championship_podiums
-    params[:event] ||= @results.first.event.id
+
+    if stale?(@person)
+      @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
+      @ranks_single = @person.ranksSingle.select { |r| r.event.official? }
+      @ranks_average = @person.ranksAverage.select { |r| r.event.official? }
+      @medals = @person.medals
+      @records = @person.records
+      @results = @person.results.includes(:competition, :event, :format, :round_type).order("Events.rank, Competitions.start_date DESC, Competitions.id, RoundTypes.rank DESC")
+      @championship_podiums = @person.championship_podiums
+      params[:event] ||= @results.first.event.id
+    end
   end
 end

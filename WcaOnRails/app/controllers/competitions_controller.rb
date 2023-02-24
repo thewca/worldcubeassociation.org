@@ -448,53 +448,63 @@ class CompetitionsController < ApplicationController
       },
     }
     @competition = competition_from_params(includes: associations)
-    respond_to do |format|
-      format.html
-      format.pdf do
-        unless @competition.has_schedule?
-          flash[:danger] = t('.no_schedule')
-          return redirect_to competition_path(@competition)
-        end
-        @colored_schedule = params.key?(:with_colors)
-        # Manually cache the pdf on:
-        #   - competiton.updated_at (touched by any change through WCIF)
-        #   - locale
-        #   - color or n&b
-        # We have a scheduled job to clear out old files
-        cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
-        begin
-          File.open(cached_path) do |f|
-            send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
-                              type: "application/pdf", disposition: "inline"
+    if stale?(@competition)
+      respond_to do |format|
+        format.html
+        format.pdf do
+          unless @competition.has_schedule?
+            flash[:danger] = t('.no_schedule')
+            return redirect_to competition_path(@competition)
           end
-        rescue Errno::ENOENT
-          # This exception occurs when the file doesn't exist: let's create it!
-          helpers.create_pdfs_directory
-          render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
-                 save_to_file: cached_path, disposition: "inline"
+          @colored_schedule = params.key?(:with_colors)
+          # Manually cache the pdf on:
+          #   - competiton.updated_at (touched by any change through WCIF)
+          #   - locale
+          #   - color or n&b
+          # We have a scheduled job to clear out old files
+          cached_path = helpers.path_to_cached_pdf(@competition, @colored_schedule)
+          begin
+            File.open(cached_path) do |f|
+              send_data f.read, filename: "#{helpers.pdf_name(@competition)}.pdf",
+                                type: "application/pdf", disposition: "inline"
+            end
+          rescue Errno::ENOENT
+            # This exception occurs when the file doesn't exist: let's create it!
+            helpers.create_pdfs_directory
+            render pdf: helpers.pdf_name(@competition), orientation: "Landscape",
+                  save_to_file: cached_path, disposition: "inline"
+          end
         end
-      end
-      format.ics do
-        calendar = @competition.to_ics
-        render plain: calendar.to_ical, content_type: 'text/calendar'
+        format.ics do
+          calendar = @competition.to_ics
+          render plain: calendar.to_ical, content_type: 'text/calendar'
+        end
       end
     end
   end
 
   def show_podiums
     @competition = competition_from_params
+    if stale?(@competition)
+    end
   end
 
   def show_all_results
     @competition = competition_from_params
+    if stale?(@competition)
+    end
   end
 
   def show_results_by_person
     @competition = competition_from_params
+    if stale?(@competition)
+    end
   end
 
   def show_scrambles
     @competition = competition_from_params
+    if stale?(@competition)
+    end
   end
 
   def embedable_map
