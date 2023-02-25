@@ -30,6 +30,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def results
     competition = competition_from_params
     render json: competition.results
+    fresh_when(last_modified: competition.updated_at)
   end
 
   def event_results
@@ -52,13 +53,13 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
           name: round&.name || "#{event.name} #{round_type.name}",
           results: results.sort_by { |r| [r.pos, r.personName] },
         }
-    end
-    render json: {
-      id: event.id,
-      # Also include the (localized) name here, we don't have i18n in js yet.
-      name: event.name,
-      rounds: rounds,
-    }
+      end
+      render json: {
+        id: event.id,
+        # Also include the (localized) name here, we don't have i18n in js yet.
+        name: event.name,
+        rounds: rounds,
+      }
     end
   end
 

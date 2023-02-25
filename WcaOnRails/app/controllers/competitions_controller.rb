@@ -448,7 +448,7 @@ class CompetitionsController < ApplicationController
       },
     }
     @competition = competition_from_params(includes: associations)
-    if stale?(:etag => [@competition, current_user, I18n.locale], :last_modified => @competition.updated_at)
+    if stale?(etag: [@competition, current_user, I18n.locale], last_modified: @competition.updated_at)
       respond_to do |format|
         format.html
         format.pdf do
@@ -485,22 +485,22 @@ class CompetitionsController < ApplicationController
 
   def show_podiums
     @competition = competition_from_params
-    fresh_when(:etag => [@competition, current_user, I18n.locale], :last_modified => @competition.updated_at)
+    fresh_when(etag: [@competition, current_user, I18n.locale], last_modified: @competition.updated_at)
   end
 
   def show_all_results
     @competition = competition_from_params
-    fresh_when(:etag => [@competition, current_user, I18n.locale], :last_modified => @competition.updated_at)
+    fresh_when(etag: [@competition, current_user, I18n.locale], last_modified: @competition.updated_at)
   end
 
   def show_results_by_person
     @competition = competition_from_params
-    fresh_when(:etag => [@competition, current_user, I18n.locale], :last_modified => @competition.updated_at)
+    fresh_when(etag: [@competition, current_user, I18n.locale], last_modified: @competition.updated_at)
   end
 
   def show_scrambles
     @competition = competition_from_params
-    fresh_when(:etag => [@competition, current_user, I18n.locale], :last_modified => @competition.updated_at)
+    fresh_when(etag: [@competition, current_user, I18n.locale], last_modified: @competition.updated_at)
   end
 
   def embedable_map
