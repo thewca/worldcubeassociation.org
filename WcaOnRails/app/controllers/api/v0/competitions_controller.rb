@@ -34,23 +34,24 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def event_results
     competition = competition_from_params(associations: [:rounds])
-    event = Event.c_find!(params[:event_id])
-    results_by_round = competition.results
-                                  .where(eventId: event.id)
-                                  .group_by(&:round_type)
-                                  .sort_by { |round_type, _| -round_type.rank }
-    rounds = results_by_round.map do |round_type, results|
-      # I think all competitions now have round data, but let's be cautious
-      # and assume they may not.
-      # round data.
-      round = competition.find_round_for(event.id, round_type.id)
-      {
-        id: round&.id,
-        roundTypeId: round_type.id,
-        # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round&.name || "#{event.name} #{round_type.name}",
-        results: results.sort_by { |r| [r.pos, r.personName] },
-      }
+    if stale?(competition)
+      event = Event.c_find!(params[:event_id])
+      results_by_round = competition.results
+                                    .where(eventId: event.id)
+                                    .group_by(&:round_type)
+                                    .sort_by { |round_type, _| -round_type.rank }
+      rounds = results_by_round.map do |round_type, results|
+        # I think all competitions now have round data, but let's be cautious
+        # and assume they may not.
+        # round data.
+        round = competition.find_round_for(event.id, round_type.id)
+        {
+          id: round&.id,
+          roundTypeId: round_type.id,
+          # Also include the (localized) name here, we don't have i18n in js yet.
+          name: round&.name || "#{event.name} #{round_type.name}",
+          results: results.sort_by { |r| [r.pos, r.personName] },
+        }
     end
     render json: {
       id: event.id,
@@ -58,39 +59,44 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
       name: event.name,
       rounds: rounds,
     }
+    end
   end
 
   def scrambles
     competition = competition_from_params
     render json: competition.scrambles
+    fresh_when(last_modified: competition.updated_at)
   end
 
   def event_scrambles
     competition = competition_from_params
-    event = Event.c_find!(params[:event_id])
-    scrambles_by_round = competition.scrambles
-                                    .where(eventId: event.id)
-                                    .group_by(&:round_type)
-                                    .sort_by { |round_type, _| -round_type.rank }
-    rounds = scrambles_by_round.map do |round_type, scrambles|
-      {
-        id: round_type,
+    if stale?(competition)
+      event = Event.c_find!(params[:event_id])
+      scrambles_by_round = competition.scrambles
+                                      .where(eventId: event.id)
+                                      .group_by(&:round_type)
+                                      .sort_by { |round_type, _| -round_type.rank }
+      rounds = scrambles_by_round.map do |round_type, scrambles|
+        {
+          id: round_type,
+          # Also include the (localized) name here, we don't have i18n in js yet.
+          name: round_type.name,
+          scrambles: scrambles,
+        }
+      end
+      render json: {
+        id: event.id,
         # Also include the (localized) name here, we don't have i18n in js yet.
-        name: round_type.name,
-        scrambles: scrambles,
+        name: event.name,
+        rounds: rounds,
       }
     end
-    render json: {
-      id: event.id,
-      # Also include the (localized) name here, we don't have i18n in js yet.
-      name: event.name,
-      rounds: rounds,
-    }
   end
 
   def competitors
     competition = competition_from_params
     render json: competition.competitors
+    fresh_when(last_modified: competition.updated_at)
   end
 
   def registrations
