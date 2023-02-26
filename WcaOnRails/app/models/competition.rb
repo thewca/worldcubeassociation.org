@@ -373,7 +373,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    self.competitor_limit_enabled? && self.registrations.accepted.count >= self.competitor_limit
+    competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
 
   def country
@@ -423,7 +423,7 @@ class Competition < ApplicationRecord
       end
 
       if self.registration_full? && self.registration_opened?
-        warnings[:waiting_list] = I18n.t('registrations.registration_full', competitor_limit: self.competitor_limit)
+        warnings[:waiting_list] = registration_full_message
       end
 
     else
@@ -486,6 +486,14 @@ class Competition < ApplicationRecord
     end
 
     warnings
+  end
+
+  def registration_full_message
+    if registration_full? && registrations.accepted.count >= competitor_limit
+      I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
+    else
+      I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
+    end
   end
 
   def reg_warnings

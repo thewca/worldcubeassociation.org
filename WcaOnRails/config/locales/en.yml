@@ -1263,6 +1263,7 @@ en:
     greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
+    registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     can_register: "You can register for %{comp} below."
     check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
     have_registered: "You have submitted your registration for %{comp}. You can see your registration details below."

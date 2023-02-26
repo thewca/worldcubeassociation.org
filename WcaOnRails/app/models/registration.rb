@@ -220,6 +220,10 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_and_paid_pending_count
+    accepted.count + pending.with_payments.count
+  end
+
   # Only run the validations when creating the registration as we don't want user changes
   # to invalidate all the corresponding registrations (e.g. if the user gets banned).
   # Instead the validations should be placed such that they ensure that a user

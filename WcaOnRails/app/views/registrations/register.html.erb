@@ -58,7 +58,7 @@
         <% end %>
       <% else %>
         <% if @competition.registration_full? %>
-          <%= alert :warning, t('registrations.registration_full', competitor_limit: @competition.competitor_limit) %>
+          <%= alert :warning, @competition.registration_full_message %>
         <% end %>
         <p>
           <%= t 'registrations.can_register', comp: @competition.name %>
