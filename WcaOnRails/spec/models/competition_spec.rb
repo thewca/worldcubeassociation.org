@@ -1164,7 +1164,7 @@ RSpec.describe Competition do
       # Add a 10th accepted registration
       new_registration = FactoryBot.create :registration, :accepted, competition: competition
       expect(competition.registration_full_message).to eq(
-        I18n.t('registrations.registration_full', competitor_limit: competition.competitor_limit)
+        I18n.t('registrations.registration_full', competitor_limit: competition.competitor_limit),
       )
 
       # Delete the 10th accepted registration
@@ -1173,7 +1173,7 @@ RSpec.describe Competition do
       # Add a paid pending registration
       FactoryBot.create :registration, :paid_pending, competition: competition
       expect(competition.registration_full_message).to eq(
-        I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competition.competitor_limit)
+        I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competition.competitor_limit),
       )
     end
   end
