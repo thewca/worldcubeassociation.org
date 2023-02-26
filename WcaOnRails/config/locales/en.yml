@@ -1228,6 +1228,7 @@ en:
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
       deleted_registrations: "Deleted registrations"
+      non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
         without_stripe: "Registered on"
