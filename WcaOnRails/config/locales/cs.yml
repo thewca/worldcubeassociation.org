@@ -2326,6 +2326,8 @@ cs:
       approved_registrations: Schválené registrace
       #original_hash: bff04e8
       deleted_registrations: Smazané registrace
+      #original_hash: e86b1e1
+      non_competing: Registrace nesoutěžících
       #original_hash: ac5d958
       not_paid: Nezaplaceno
       registered:
@@ -2403,6 +2405,11 @@ cs:
       Limit pro soutěžící této soutěže je %{competitor_limit} a již byl dosažen.
       Pokud se zaregistrujete, budete umístěn(a) na waiting list. Registrace
       nemusí být schválena, dokud se neuvolní místo.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Limit pro soutěžící je %{competitor_limit} a je možné, že je již zaplněn.
+      Pokud se zaregistrujete, Vaše registrace bude přidána na waiting list.
+      Nemůže být schválena, dokud se neuvolní místo.
     #original_hash: 855ca9c
     can_register: 'Níže se můžete zaregistrovat na %{comp}.'
     #original_hash: 4167ed7
