@@ -103,7 +103,6 @@
       $('input[type="submit"]').attr('disabled', true);
     });
 
-    // No idea why this is necessary
     // Fixes /spec/features/sign_up_spec.rb:276
     $haveCompetedPanel.on('show.bs.collapse', function() {
       $neverCompetedPanel.collapse('hide');
@@ -112,15 +111,10 @@
       $haveCompetedPanel.collapse('hide');
     });
 
-    // Show the correct panel if reloading after bad validation
-    // Also clear the other panel to prevent data leaks
+    // Show the correct panel if reloading after failed validation
     // Do this last so that all other behavior is already set up
     if($claiming_wca_id.val() === "true") {
       $haveCompetedPanel.collapse('show');
-
-      $neverCompetedPanel.find("input").val('');
-      $neverCompetedPanel.find("input").removeAttr('value');
-      $neverCompetedPanel.find("option").removeAttr('selected');
     }
     if ($claiming_wca_id.val() === "false") {
       $neverCompetedPanel.collapse('show');
