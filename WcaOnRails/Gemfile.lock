@@ -533,7 +533,7 @@ GEM
       tilt
     recaptcha (5.12.3)
       json
-    redcarpet (3.5.1)
+    redcarpet (3.6.0)
     regexp_parser (2.6.2)
     reline (0.3.2)
       io-console (~> 0.5)
