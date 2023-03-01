@@ -243,8 +243,8 @@ GEM
       responders
       warden (~> 1.2.3)
     devise-bootstrap-views (1.1.0)
-    devise-i18n (1.10.3)
-      devise (>= 4.8.0)
+    devise-i18n (1.11.0)
+      devise (>= 4.9.0)
     devise-two-factor (5.0.0)
       activesupport (~> 7.0)
       devise (~> 4.0)
