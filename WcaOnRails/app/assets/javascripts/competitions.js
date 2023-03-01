@@ -34,6 +34,7 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
 
   $('input[name="competition[event_restrictions]"]').on('change', function() {
     $('.competition_event_restrictions_reason').toggle(this.checked);
+    document.querySelector('.competition_events_per_registration_limit').style.display = this.checked ? '' : 'none';
   }).trigger('change');
 
   $('input[name="competition[refund_policy_limit_date]"]').on('change dp.change', function() {

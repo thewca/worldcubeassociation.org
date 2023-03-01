@@ -477,7 +477,7 @@ pt-BR:
         #original_hash: 28a6fbb
         currency_code: Código da moeda do país
         #original_hash: 2e3ed8b
-        delegate_ids: Delegado(s) da WCA
+        staff_delegate_ids: Delegado(s) da WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegado Trainee da WCA
         #original_hash: 958562e
@@ -875,7 +875,7 @@ pt-BR:
           mostradas na página principal da competição. <br/>Por favor preencha
           <b>em Inglês</b> e quaisquer outras línguas que os competidores falam.
         #original_hash: b4d020f
-        delegate_ids: Delegado(s) da WCA da competição.
+        staff_delegate_ids: Delegado(s) da WCA da competição.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegados Trainees da WCA para a competição.
         #original_hash: 517d376
@@ -1539,7 +1539,7 @@ pt-BR:
         Bem-vindo de volta! Para criar sua conta no site da WCA, precisamos do
         seu ID WCA.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Bem-vindo! Antes de participar de sua primeira competição da WCA,
         precisamos de algumas informações. Sua data de nascimento nunca será
         divulgada sem sua permissão.

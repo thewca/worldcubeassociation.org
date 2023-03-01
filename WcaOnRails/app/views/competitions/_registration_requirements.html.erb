@@ -136,6 +136,11 @@
   <br>
 <% end %>
 
+<% if @competition.events_per_registration_limit_enabled? %>
+  <%= t('competitions.competition_info.event_limit', count: @competition.events_per_registration_limit) %>
+  <br>
+<% end %>
+
 <% if @competition.extra_registration_requirements %>
   <br>
   <%=md @competition.extra_registration_requirements %>

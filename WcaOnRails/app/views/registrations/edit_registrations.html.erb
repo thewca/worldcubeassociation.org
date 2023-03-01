@@ -45,13 +45,15 @@
   <% end %>
 
   <%= form_for @competition, url: competition_registrations_do_actions_for_selected_path(@competition), remote: true do |f| %>
-    <% [:pending, :accepted, :deleted].each do |status| %>
+    <% [:pending, :accepted, :deleted, :non_competing].each do |status| %>
       <% if :pending == status %>
         <h2><%= t 'registrations.list.waiting_list' %></h2>
       <% elsif :accepted == status %>
         <h2><%= t 'registrations.list.approved_registrations' %></h2>
-      <% else %>
+      <% elsif :deleted == status %>
         <h2><%= t 'registrations.list.deleted_registrations' %></h2>
+      <% else %>
+        <h2><%= t 'registrations.list.non_competing' %></h2>
       <% end %>
       <% registrations = @registrations.public_send(status) %>
       <%= wca_table table_class: "registrations-table #{status}",

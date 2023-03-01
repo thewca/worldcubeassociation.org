@@ -7,7 +7,7 @@
     <% end %>
   <% end %>
 
-  <% if @competition.persisted? %>
+  <% if f.object&.persisted? %>
     <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.wcif_id') %>
     <%# i18n-tasks-use t('activerecord.attributes.competition_series.wcif_id') %>
     <%= f.input :wcif_id %>
@@ -17,7 +17,7 @@
   <%# i18n-tasks-use t('activerecord.attributes.competition_series.name') %>
   <%= f.input :name %>
 
-  <% if @competition.persisted? %>
+  <% if f.object&.persisted? %>
     <%# i18n-tasks-use t('simple_form.hints.competition.competition_series.short_name') %>
     <%# i18n-tasks-use t('activerecord.attributes.competition_series.short_name') %>
     <%= f.input :short_name %>

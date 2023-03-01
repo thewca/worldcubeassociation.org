@@ -85,11 +85,6 @@ Strainerfile
 .colander
 .strainer
 
-# Vagrant #
-###########
-.vagrant
-Vagrantfile
-
 # Travis #
 ##########
 .travis.yml

@@ -37,3 +37,15 @@
     background: rgba(0, 0, 0, 0.5);
   }
 }
+
+#upload-avatar-form {
+  display: inline;
+}
+
+.remove-avatar-confirm * {
+  margin-top: 5px;
+}
+
+.remove-avatar-confirm {
+  display: none;
+}

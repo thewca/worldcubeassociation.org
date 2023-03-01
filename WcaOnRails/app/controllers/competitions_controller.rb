@@ -39,7 +39,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup, :orga_close_reg_when_full_limit]
 
   before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
 
@@ -48,13 +48,7 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
-    if current_user.any_kind_of_delegate?
-      if current_user.trainee_delegate?
-        competition.trainee_delegates |= [current_user]
-      else
-        competition.delegates |= [current_user]
-      end
-    end
+    competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
   def new
@@ -266,6 +260,17 @@ class CompetitionsController < ApplicationController
 
     flash[:success] = t('competitions.messages.results_posted')
     redirect_to admin_edit_competition_path(comp)
+  end
+
+  def orga_close_reg_when_full_limit
+    comp = competition_from_params
+    if comp.orga_can_close_reg_full_limit?
+      comp.update!(registration_close: Time.now)
+      flash[:success] = t('competitions.messages.orga_closed_reg_success')
+    else
+      flash[:danger] = t('competitions.messages.orga_closed_reg_failure')
+    end
+    redirect_to edit_competition_path(comp)
   end
 
   def edit_events
@@ -573,7 +578,6 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = registrations.uniq.to_h do |r|
@@ -583,8 +587,11 @@ class CompetitionsController < ApplicationController
     if current_user.person
       competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
+    # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+    # For example, mailing all competitors about the cancellation.
+    # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
     competitions = Competition.includes(:delegate_report, :delegates)
-                              .where(id: competition_ids.uniq)
+                              .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                               .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
     bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
@@ -640,7 +647,7 @@ class CompetitionsController < ApplicationController
         :start_date,
         :end_date,
         :information,
-        :delegate_ids,
+        :staff_delegate_ids,
         :trainee_delegate_ids,
         :organizer_ids,
         :contact,
@@ -652,12 +659,14 @@ class CompetitionsController < ApplicationController
         :enable_donations,
         :guests_enabled,
         :guests_per_registration_limit,
+        :events_per_registration_limit,
         :registration_open,
         :registration_close,
         :competitor_limit_enabled,
         :competitor_limit,
         :competitor_limit_reason,
         :remarks,
+        :force_comment_in_registration,
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,

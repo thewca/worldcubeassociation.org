@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit) }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -278,7 +278,7 @@ RSpec.describe CompetitionsController do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
         expect do
-          post :create, params: { competition: { name: "Test 2015", countryId: "USA", delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
+          post :create, params: { competition: { name: "Test 2015", countryId: "USA", staff_delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
         end.to change { enqueued_jobs.size }.by(1)
         expect(response).to redirect_to edit_competition_path("Test2015")
         new_comp = assigns(:competition)
@@ -335,6 +335,12 @@ RSpec.describe CompetitionsController do
         expect(new_comp.guests_enabled).to eq competition.guests_enabled
         expect(new_comp.guest_entry_status).to eq competition.guest_entry_status
         expect(new_comp.guests_per_registration_limit).to eq competition.guests_per_registration_limit
+        # Source competition has event limit
+        expect(competition.events_per_registration_limit_enabled?).to eq true
+        # Event limit is NOT cloned
+        expect(new_comp.event_restrictions).not_to eq competition.event_restrictions
+        expect(new_comp.event_restrictions_reason).not_to eq competition.event_restrictions_reason
+        expect(new_comp.events_per_registration_limit).not_to eq competition.events_per_registration_limit
       end
 
       it 'clones a competition that they delegated' do
@@ -380,13 +386,13 @@ RSpec.describe CompetitionsController do
         expect(competition.reload.confirmed?).to eq true
       end
 
-      it 'saves delegate_ids' do
+      it 'saves staff_delegate_ids' do
         delegate1 = FactoryBot.create(:delegate)
         delegate2 = FactoryBot.create(:delegate)
-        delegates = [delegate1, delegate2]
-        delegate_ids = delegates.map(&:id).join(",")
-        patch :update, params: { id: competition, competition: { delegate_ids: delegate_ids } }
-        expect(competition.reload.delegates).to eq delegates
+        staff_delegates = [delegate1, delegate2]
+        staff_delegate_ids = staff_delegates.map(&:id).join(",")
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: staff_delegate_ids } }
+        expect(competition.reload.delegates).to eq staff_delegates
       end
 
       it "saving removes nonexistent delegates" do
@@ -409,7 +415,7 @@ RSpec.describe CompetitionsController do
         cos = competition.competition_organizers.to_a
 
         old_id = competition.id
-        patch :update, params: { id: competition, competition: { id: "NewId2015", delegate_ids: competition.delegates.map(&:id).join(",") } }
+        patch :update, params: { id: competition, competition: { id: "NewId2015", staff_delegate_ids: competition.delegates.map(&:id).join(",") } }
 
         expect(CompetitionDelegate.where(competition_id: old_id).count).to eq 0
         expect(CompetitionOrganizer.where(competition_id: old_id).count).to eq 0
@@ -435,18 +441,19 @@ RSpec.describe CompetitionsController do
       end
 
       it 'cannot pass a non-delegate as delegate' do
-        delegate_ids_old = future_competition.delegate_ids
+        delegate_ids_old = future_competition.staff_delegate_ids
         fake_delegate = FactoryBot.create(:user)
-        post :update, params: { id: future_competition, competition: { delegate_ids: fake_delegate.id } }
+        post :update, params: { id: future_competition, competition: { staff_delegate_ids: fake_delegate.id } }
         invalid_competition = assigns(:competition)
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["are not all Delegates"]
+        expect(invalid_competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
+                                                              trainee_delegate_ids: ["are not all Delegates"])
         future_competition.reload
-        expect(future_competition.delegate_ids).to eq delegate_ids_old
+        expect(future_competition.staff_delegate_ids).to eq delegate_ids_old
       end
 
       it 'can change the delegate' do
         new_delegate = FactoryBot.create(:delegate)
-        post :update, params: { id: competition, competition: { delegate_ids: new_delegate.id } }
+        post :update, params: { id: competition, competition: { staff_delegate_ids: new_delegate.id } }
         competition.reload
         expect(competition.delegates).to eq [new_delegate]
       end
@@ -464,7 +471,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: organizer.id } }
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: "", organizer_ids: organizer.id } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -476,7 +483,8 @@ RSpec.describe CompetitionsController do
         invalid_competition = assigns(:competition)
         expect(invalid_competition).to be_invalid
         expect(invalid_competition.organizer_ids).to eq ""
-        expect(invalid_competition.errors.messages[:delegate_ids]).to eq ["You cannot demote yourself"]
+        expect(invalid_competition.errors.messages[:staff_delegate_ids]).to eq ["You cannot demote yourself"]
+        expect(invalid_competition.errors.messages[:trainee_delegate_ids]).to eq ["You cannot demote yourself"]
         expect(invalid_competition.errors.messages[:organizer_ids]).to eq ["You cannot demote yourself"]
         expect(competition.reload.organizers).to eq [organizer]
       end
@@ -514,7 +522,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as an organizer. This should be allowed, because we're
         # still able to administer results.
-        patch :update, params: { id: competition, competition: { delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
+        patch :update, params: { id: competition, competition: { staff_delegate_ids: "", organizer_ids: "", receive_registration_emails: true } }
         expect(competition.reload.delegates).to eq []
         expect(competition.reload.organizers).to eq []
       end
@@ -699,7 +707,7 @@ RSpec.describe CompetitionsController do
       let(:organizer2) { FactoryBot.create(:user) }
       before :each do
         competition.delegates << delegate
-        competition.trainee_delegates << trainee_delegate
+        competition.delegates << trainee_delegate
         sign_in trainee_delegate
       end
 
@@ -789,7 +797,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "cannot change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], trainee_delegates: [trainee_delegate], extra_registration_requirements: "Extra requirements")
+        comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
         patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
         comp.reload
@@ -889,6 +897,46 @@ RSpec.describe CompetitionsController do
         patch :cancel_competition, params: { id: cancelled_competition }
         expect(response).to redirect_to root_url
         expect(cancelled_competition.reload.cancelled?).to eq true
+      end
+    end
+  end
+
+  describe 'POST #orga_close_reg_when_full_limit' do
+    context 'organiser trying to close registration via button' do
+      let(:orga) { FactoryBot.create(:user) }
+      before :each do
+        sign_in orga
+      end
+
+      it "can close registration with full limit" do
+        comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
+        comp_with_full_reg.organizers << orga
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
+        patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+        expect(response).to redirect_to edit_competition_path(comp_with_full_reg)
+        expect(comp_with_full_reg.reload.registration_close).to be < Time.now
+      end
+
+      it "cannot close registration non full limit" do
+        comp_without_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 100, competitor_limit_reason: "venue size")
+        comp_without_full_reg.organizers << orga
+        FactoryBot.create(:registration, :pending, :newcomer, competition: comp_without_full_reg)
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_without_full_reg)
+        patch :orga_close_reg_when_full_limit, params: { id: comp_without_full_reg }
+        expect(response).to redirect_to edit_competition_path(comp_without_full_reg)
+        expect(comp_without_full_reg.reload.registration_close).to be > Time.now
+      end
+    end
+
+    context 'regular user trying to close registration via button' do
+      sign_in { FactoryBot.create :user }
+      it 'does not allow regular user to use organiser reg close button' do
+        comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
+        FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
+        expect {
+          patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+        }.to raise_error(ActionController::RoutingError)
+        expect(comp_with_full_reg.reload.registration_close).to be > Time.now
       end
     end
   end

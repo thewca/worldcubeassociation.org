@@ -6,7 +6,7 @@
     "authorization": {
       "sudo": {
         "groups": ["admin", "sudo", "sysadmin"],
-        "users": ["vagrant", "cubing"],
+        "users": ["cubing"],
         "passwordless": "true"
       }
     },

@@ -39,5 +39,10 @@ FactoryBot.define do
         FactoryBot.create :registration_payment, registration: registration, user: registration.user
       end
     end
+
+    trait :paid_pending do
+      accepted_at { nil }
+      paid
+    end
   end
 end

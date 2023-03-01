@@ -7,8 +7,8 @@ RSpec.describe RegistrationsMailer, type: :mailer do
   let(:delegate2) { FactoryBot.create :trainee_delegate }
   let(:organizer1) { FactoryBot.create :user }
   let(:organizer2) { FactoryBot.create :user }
-  let(:competition_without_organizers) { FactoryBot.create(:competition, :registration_open, delegates: [delegate1], trainee_delegates: [delegate2]) }
-  let(:competition_with_organizers) { FactoryBot.create(:competition, :registration_open, delegates: [delegate1], trainee_delegates: [delegate2], organizers: [organizer1, organizer2]) }
+  let(:competition_without_organizers) { FactoryBot.create(:competition, :registration_open, delegates: [delegate1, delegate2]) }
+  let(:competition_with_organizers) { FactoryBot.create(:competition, :registration_open, delegates: [delegate1, delegate2], organizers: [organizer1, organizer2]) }
 
   describe "notify registrants in their language" do
     let(:french_user) { FactoryBot.create :user, :wca_id, :french_locale }
@@ -52,7 +52,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "renders the headers" do
       # Set receive_registration_emails to true and test that the email headers are present
-      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -64,7 +64,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
 
     it "renders the body" do
       # Set receive_registration_emails to true and test that the email body is present
-      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -86,7 +86,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       competition_delegate1.receive_registration_emails = true
       competition_delegate1.save!
 
-      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -101,7 +101,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
       competition_delegate1.receive_registration_emails = true
       competition_delegate1.save!
 
-      competition_delegate2 = competition_without_organizers.competition_trainee_delegates.find_by_trainee_delegate_id(delegate2.id)
+      competition_delegate2 = competition_without_organizers.competition_delegates.find_by_delegate_id(delegate2.id)
       competition_delegate2.receive_registration_emails = true
       competition_delegate2.save!
 
@@ -117,7 +117,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("Your registration for #{registration.competition.name} is submitted and pending approval")
       expect(mail.to).to eq([registration.email])
-      expect(mail.reply_to).to eq(competition_without_organizers.all_delegates.map(&:email))
+      expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
@@ -147,7 +147,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been accepted")
       expect(mail.to).to eq([registration.email])
-      expect(mail.reply_to).to eq(competition_without_organizers.all_delegates.map(&:email))
+      expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
@@ -176,7 +176,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("You have been moved to the waiting list for #{registration.competition.name}")
       expect(mail.to).to eq([registration.email])
-      expect(mail.reply_to).to eq(competition_without_organizers.all_delegates.map(&:email))
+      expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
@@ -207,7 +207,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     it "renders the headers" do
       expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been deleted")
       expect(mail.to).to eq([registration.email])
-      expect(mail.reply_to).to eq(competition_without_organizers.all_delegates.map(&:email))
+      expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
     end
 
