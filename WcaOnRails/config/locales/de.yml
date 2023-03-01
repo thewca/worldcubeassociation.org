@@ -374,11 +374,11 @@ de:
       #original_hash: 89ff312
       owner: Eigentümer
       #original_hash: 557031c
-      application_id: Application ID
+      application_id: Anwendungs-ID
       #original_hash: c3cd636
       actions: Aktionen
       #original_hash: f4e7a87
-      secret: Client Secret
+      secret: Geheim
       #original_hash: c23540e
       scopes: Scopes
       #original_hash: 3b0d449
@@ -1561,6 +1561,19 @@ de:
           zero: 'Das Formular enthält %{count} Fehler:'
           one: 'Das Formular enthält einen Fehler:'
           other: 'Das Formular enthält %{count} Fehler:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Entschuldige, etwas ist schiefgelaufen.'
+        #original_hash: d815249
+        500_contact: >-
+          Wenn du diesen Fehler ans Software Team meldest, erwähne bitte die
+          Request ID
+        #original_hash: b61e305
+        400_error: Die angeforderte Seite existiert nicht.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Wenn du glaubst, dass dies ein Fehler ist, kontaktiere bitte das
+          Software Team und erwähne die Request ID
     doorkeeper:
       applications:
         help:
@@ -1598,14 +1611,14 @@ de:
       welcome_back: >-
         Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir
         die WCA-ID kennen, mit der Du teilgenommen hast.
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst,
         brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
         Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein
-        Einverständnis weitergereicht wird.<br/><br/>Wenn Du die Anmeldung im Namen
-        einer anderen Person durchführst, gib bitte die Details <strong>des
-        Teilnehmers / der Teilnehmerin</strong> an.
+        Einverständnis weitergereicht wird.<br/><br/>Wenn Du die Anmeldung im
+        Namen einer anderen Person durchführst, gib bitte die Details
+        <strong>des Teilnehmers / der Teilnehmerin</strong> an.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2066,7 +2079,11 @@ de:
       #original_hash: 58e0c56
       remove_avatar: Avatar entfernen
       #original_hash: 4bd25cf
-      remove_avatar_confirm: 'Bist du sicher, dass du deinen Avatar löschen willst?'
+      remove_avatar_confirm: 'Bist du sicher, dass du dein Profilbild löschen willst?'
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Bestätige das Entfernen des Profilbildes
+      #original_hash: 010b0e5
+      remove_avatar_reason: Bitte gib einen Grund für das Entfernen an
       #original_hash: 141d1d7
       guidelines: Richtlinien
       avatar_guidelines:
@@ -2244,6 +2261,7 @@ de:
       must_register: muss sich für mindestens eine Disziplin anmelden
       #original_hash: abdc718
       exceeds_event_limit:
+        zero: zero
         one: Du darfst dich in genau einem Event anmelden
         other: 'Du darfst dich maximal %{count} Events anmelden'
       #original_hash: e78eec3
@@ -2416,6 +2434,8 @@ de:
       approved_registrations: Bestätigte Anmeldungen
       #original_hash: bff04e8
       deleted_registrations: Gelöschte Anmeldungen
+      #original_hash: e86b1e1
+      non_competing: Nicht-teilnehmende Anmeldungen
       #original_hash: ac5d958
       not_paid: Nicht bezahlt
       registered:
@@ -2496,6 +2516,12 @@ de:
       wurde bereits erreicht. Wenn du dich anmeldest, wird deine Anmeldung auf
       eine Warteliste gesetzt. Sie wird nicht bestätigt werden, bevor ein Platz
       frei ist.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Das Teilnehmerlimit für diesen Wettbewerb ist %{competitor_limit} und kann
+      bereits erreicht sein. Wenn du dich anmeldest, wird deine Anmeldung auf
+      die Warteliste gesetzt. Diese wird erst dann akzeptiert, wenn ein Platz
+      frei wird.
     #original_hash: 855ca9c
     can_register: 'Du kannst dich weiter unten für %{comp} anmelden.'
     #original_hash: 4167ed7
@@ -2934,6 +2960,7 @@ de:
         other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
       #original_hash: bad09c8
       event_limit:
+        zero: zero
         one: Teilnehmer dürfen sich in genau einem Event anmelden.
         other: 'Teilnehmer dürfen sich bei maximal %{count} Events anmelden.'
       #original_hash: 64e0ddd
@@ -5161,12 +5188,12 @@ de:
     paragraph4:
       #original_hash: b6dca56
       title: Abstandsregel
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        WCA Wettbewerbe werden genehmigt wenn sie mindestens 100 km oder 19 Tage
-        von jedem anderen Wettbewerb entfernt sind. Das WCA Board sollte einen
-        Wettbewerb überprüfen, wenn die Distanz unter 200 km und die Zeitspanne
-        unter 26 Tagen liegt. Ein Delegierter, der eine Competition anfragt, der
+        WCA Wettbewerbe werden genehmigt wenn sie mindestens 10 km oder 5 Tage
+        von jedem anderen Wettbewerb entfernt sind. Das WCAT sollte einen
+        Wettbewerb überprüfen, wenn die Distanz unter 10 km und die Zeitspanne
+        unter 5 Tagen liegt. Ein Delegierter, der eine Competition anfragt, die
         diese Regeln nicht erfüllt, muss weitere Informationen angeben, warum
         diese Competition trotzdem akzeptiert werden soll. Mögliche Gründe, die
         eine solche Entscheidung beeinflussen, sind folgende:
@@ -5189,9 +5216,9 @@ de:
               Zeiträume, in denen beide stattfinden, dürfen sich nicht
               überlappen.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Wenn ein Standort eines solchen Wettbewerbes näher als 100 km zu
+            Wenn ein Standort eines solchen Wettbewerbes näher als 10 km zu
             einem anderen regulären Wettbewerb ist, dann
           alist1:
             #original_hash: 8f532bb
