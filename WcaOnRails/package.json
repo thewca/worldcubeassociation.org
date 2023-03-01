@@ -19,7 +19,7 @@
     "autonumeric": "^4.6.0",
     "autoprefixer": "^10.4.13",
     "autosize": "^6.0.1",
-    "babel-loader": "^8.3.0",
+    "babel-loader": "^9.1.2",
     "babel-plugin-lodash": "^3.3.4",
     "babel-plugin-macros": "^3.1.0",
     "babel-plugin-module-resolver": "^5.0.0",
