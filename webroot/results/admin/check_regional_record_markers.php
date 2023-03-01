@@ -267,7 +267,6 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       $storedColor = $same ? '999' : 'F00';
       $calcedColor = $same ? '999' : '0E0';
       if( ! $same ){
-        $selectedIds[] = $resultId;
         $differencesWereFound = true;
       }
 
@@ -328,7 +327,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 #----------------------------------------------------------------------
 function handlePendingCompetition ( $pendingCompetition ) {
 #----------------------------------------------------------------------
-  global $previousRecord, $pendingCompetitions, $startDate;
+  global $previousRecord, $startDate;
 
   list( $endDate, $pendingRecord ) = $pendingCompetition;
   if ( $endDate >= $startDate ) return true;
