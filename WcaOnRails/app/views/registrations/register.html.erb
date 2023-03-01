@@ -31,7 +31,7 @@
       <% end %>
     <% end %>
   <% else %>
-    <% user_may_register = current_user.cannot_register_for_competition_reasons.length == 0 %>
+    <% user_may_register = current_user.cannot_register_for_competition_reasons(@competition).length == 0 %>
     <% if @registration.show_details?(current_user) %>
       <p><%= t 'registrations.greeting', name: current_user.name %></p>
     <% end %>
@@ -51,14 +51,14 @@
           <%= t 'registrations.please_fix_profile_html', comp: @competition.name,
                 profile: link_to(t('registrations.profile'), profile_edit_path) %>
           <ul>
-            <% current_user.cannot_register_for_competition_reasons.each do |reason| %>
+            <% current_user.cannot_register_for_competition_reasons(@competition).each do |reason| %>
               <li><%= reason %></li>
             <% end %>
           </ul>
         <% end %>
       <% else %>
         <% if @competition.registration_full? %>
-          <%= alert :warning, t('registrations.registration_full', competitor_limit: @competition.competitor_limit) %>
+          <%= alert :warning, @competition.registration_full_message %>
         <% end %>
         <p>
           <%= t 'registrations.can_register', comp: @competition.name %>

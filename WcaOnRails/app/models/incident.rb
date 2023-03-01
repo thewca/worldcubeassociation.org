@@ -43,18 +43,6 @@ class Incident < ApplicationRecord
     Rails.application.routes.url_helpers.incident_url(self)
   end
 
-  DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "title", "public_summary"],
-    methods: ["url"],
-  }.freeze
-
-  def serializable_hash(options = nil)
-    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
-    json.merge!(
-      class: self.class.to_s.downcase,
-    )
-  end
-
   def self.search(query, params: {})
     incidents = Incident
     query&.split&.each do |part|
@@ -68,5 +56,43 @@ class Incident < ApplicationRecord
       incidents = incidents.where(incident_competitions: IncidentCompetition.where(competition_id: params[:competitions].split(",")))
     end
     incidents.order(created_at: :desc)
+  end
+
+  DEFAULT_PUBLIC_SERIALIZE_OPTIONS = {
+    only: [:id, :title, :public_summary, :created_at, :updated_at, :resolved_at],
+    methods: [:url],
+  }.freeze
+
+  DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS = {
+    only: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:only] +
+          [:private_description, :digest_worthy, :digest_sent_at],
+    methods: DEFAULT_PUBLIC_SERIALIZE_OPTIONS[:methods],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    if options && options[:can_view_delegate_matters]
+      options = DEFAULT_DELEGATE_MATTERS_SERIALIZE_OPTIONS.merge(options || {})
+    else
+      options = DEFAULT_PUBLIC_SERIALIZE_OPTIONS.merge(options || {})
+    end
+
+    json = super(options)
+    json.merge!(
+      class: self.class.to_s.downcase,
+    )
+
+    json[:tags] = tags_array.map { |tag|
+      { name: tag }.merge(Regulation.find_or_nil(tag) || {})
+    }
+
+    json[:competitions] = incident_competitions.map { |incident_competition|
+      {
+        id: incident_competition.competition.id,
+        name: incident_competition.competition.name,
+        comments: incident_competition.comments,
+      }
+    }
+
+    json
   end
 end

@@ -84,6 +84,8 @@ CREATE TABLE `Competitions` (
   `use_wca_live_for_scoretaking` tinyint(1) NOT NULL DEFAULT '0',
   `allow_registration_without_qualification` tinyint(1) DEFAULT '0',
   `guests_per_registration_limit` int(11) DEFAULT NULL,
+  `events_per_registration_limit` int(11) DEFAULT NULL,
+  `force_comment_in_registration` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `year_month_day` (`year`,`month`,`day`),
   KEY `index_Competitions_on_countryId` (`countryId`),
@@ -798,21 +800,6 @@ CREATE TABLE `competition_tabs` (
   UNIQUE KEY `index_competition_tabs_on_display_order_and_competition_id` (`display_order`,`competition_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `competition_trainee_delegates`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `competition_trainee_delegates` (
-  `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `competition_id` varchar(191) DEFAULT NULL,
-  `trainee_delegate_id` int(11) DEFAULT NULL,
-  `receive_registration_emails` tinyint(1) NOT NULL DEFAULT '0',
-  `created_at` datetime NOT NULL,
-  `updated_at` datetime NOT NULL,
-  PRIMARY KEY (`id`),
-  KEY `index_competition_trainee_delegates_on_competition_id` (`competition_id`),
-  KEY `index_competition_trainee_delegates_on_trainee_delegate_id` (`trainee_delegate_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `competition_venues`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1202,6 +1189,7 @@ CREATE TABLE `registrations` (
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL,
   `roles` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `is_competing` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_registrations_on_competition_id_and_user_id` (`competition_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1805,4 +1793,8 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20220822232936'),
 ('20220916132536'),
 ('20221121111430'),
-('20221123090104');
+('20221123090104'),
+('20221123121220'),
+('20230119115432'),
+('20230204111111'),
+('20221224215048');

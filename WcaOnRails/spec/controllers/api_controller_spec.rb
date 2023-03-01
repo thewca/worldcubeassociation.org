@@ -132,7 +132,7 @@ RSpec.describe Api::V0::ApiController do
 
     it 'can only find delegates' do
       delegate = FactoryBot.create(:senior_delegate, name: "Jeremy")
-      get :users_search, params: { q: "erem", only_delegates: true }
+      get :users_search, params: { q: "erem", only_staff_delegates: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["result"].length).to eq 1
@@ -141,7 +141,7 @@ RSpec.describe Api::V0::ApiController do
   end
 
   describe 'GET #omni_search' do
-    let!(:user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy Fleischman") }
+    let!(:user) { FactoryBot.create(:delegate, name: "Jeremy Fleischman") }
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
     let!(:post) { FactoryBot.create(:post, title: "jeremy post title", body: "post body", author: user) }
 

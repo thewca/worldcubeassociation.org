@@ -56,6 +56,13 @@ onPage('users#edit, users#update', function() {
       alert($confirmation.data('alert'));
     }
   });
+
+  // Show avatar removal confirmation form
+  $(document).ready(function(){
+    $('.remove-avatar').click(function(){
+      $('.remove-avatar-confirm').show();
+    });
+  });
 });
 
 

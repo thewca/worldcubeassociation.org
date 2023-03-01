@@ -152,7 +152,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    paginate json: User.delegates
+    paginate json: User.staff_delegates
   end
 
   def records
@@ -208,5 +208,9 @@ class Api::V0::ApiController < ApplicationController
     return @current_api_user if defined?(@current_api_user)
 
     @current_api_user = User.find_by_id(doorkeeper_token&.resource_owner_id)
+  end
+
+  def countries
+    render json: Country.all
   end
 end

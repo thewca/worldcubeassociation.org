@@ -469,7 +469,7 @@ fi:
         #original_hash: 28a6fbb
         currency_code: Valuuttatunnus
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-delegaatti/delegaatit
+        staff_delegate_ids: WCA-delegaatti/delegaatit
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegaattiharjoittelijat
         #original_hash: 958562e
@@ -854,7 +854,7 @@ fi:
           <br/>Kirjoita tämä <b>englanniksi<b/> ja muilla kilpailijoiden
           todennäköisesti puhumilla kielillä.
         #original_hash: b4d020f
-        delegate_ids: Kilpailun WCA-delegaatit.
+        staff_delegate_ids: Kilpailun WCA-delegaatit.
         #original_hash: cb9882c
         trainee_delegate_ids: Kilpailun delegaattiharjoittelijat
         #original_hash: 517d376
@@ -1479,7 +1479,7 @@ fi:
         Tervetuloa takaisin! Luodaksesi tilin WCA-sivustolle, meidän täytyy
         tietää WCA ID, jolla olet kilpaillut.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Tervetuloa! Ennen kuin voit kilpailla ensimmäisessä WCA-kilpailussasi,
         tarvitsemme hieman lisätietoa kirjaamistarkoitukseen. Huomioithan, että
         syntymäaikaasi ei ikinä julkisteta ilman lupaasi.

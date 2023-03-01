@@ -135,11 +135,14 @@ template "/etc/my.cnf" do
             })
 end
 
+### Fonts for generating PDFs
+package 'fonts-thai-tlwg'
 
 #### Ruby and Rails
 # Install native dependencies for gems
 package 'libghc-zlib-dev'
 package 'libsqlite3-dev'
+package 'libyaml-dev' #newly required by Psych 5.0
 package 'g++'
 package 'libmysqlclient-dev'
 package 'imagemagick'
