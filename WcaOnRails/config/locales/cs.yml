@@ -1513,6 +1513,19 @@ cs:
           one: chyba
           few: chyby
           other: chyb
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Je nám to líto, ale něco se pokazilo.'
+        #original_hash: d815249
+        500_contact: >-
+          Pokud tuto chybu nahlásíte WCA Software Týmu, prosíme zmiňte Request
+          ID
+        #original_hash: b61e305
+        400_error: 'Stránka, kterou hledáte, neexistuje.'
+        #original_hash: 8b309f5
+        400_contact: >-
+          Pokud is myslíte, že se jedná o chybu, kontaktujte WCA Software Tým a
+          zahrňte Request ID
     doorkeeper:
       applications:
         help:
