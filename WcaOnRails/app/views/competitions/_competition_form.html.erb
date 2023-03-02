@@ -252,7 +252,9 @@
           function UpdateDues(){
 
             var obj = $("#competition-form").serializeJSON();
-            var compLimitEnabled = obj['competition[competitor_limit_enabled]']
+            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]'])
+            console.log("comp limit enabled:" + typeof compLimitEnabled)
+            console.log(compLimitEnabled)
             var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
             var currencyCode = obj['competition[currency_code]']
 
