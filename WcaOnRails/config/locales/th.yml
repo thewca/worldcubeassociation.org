@@ -1458,6 +1458,17 @@ th:
         form_error:
           zero: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
+      error_pages:
+        #original_hash: 1042478
+        500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
+        #original_hash: d815249
+        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: b61e305
+        400_error: ไม่มีหน้าที่คุณกำลังมองหา
+        #original_hash: 8b309f5
+        400_contact: >-
+          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
+          ID
     doorkeeper:
       applications:
         help:
