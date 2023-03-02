@@ -418,7 +418,8 @@ class CompetitionsController < ApplicationController
         dues_value: estimated_dues,
       }
     else
-      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
+      # price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
+      price_per_competitor = 10
 
       render json: {
         dues_value: price_per_competitor,
