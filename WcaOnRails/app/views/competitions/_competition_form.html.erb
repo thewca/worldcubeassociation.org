@@ -266,7 +266,6 @@
                 entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
               },
               success: function(data) {
-                console.log(data)
                 if (compLimitEnabled) {
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
