@@ -1966,20 +1966,4 @@ class Competition < ApplicationRecord
         (format_id.nil? || format_id == r.format_id)
     end
   end
-
-  def self.find_by_interval(interval_duration, scope = Competition)
-    iter_start_date = scope.minimum(:start_date)
-
-    until iter_start_date.nil?
-      iter_end_date = iter_start_date + interval_duration
-
-      batch = scope.where("start_date >= ?", iter_start_date)
-                   .where("start_date < ?", iter_end_date)
-
-      batch.each { |comp| yield comp }
-
-      iter_start_date = scope.where("start_date >= ?", iter_end_date)
-                             .minimum(:start_date)
-    end
-  end
 end
