@@ -252,10 +252,8 @@
           function UpdateDues(){
 
             var obj = $("#competition-form").serializeJSON();
-            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]'])
-            console.log("comp limit enabled:" + typeof compLimitEnabled)
-            console.log(compLimitEnabled)
-            var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
+            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]']) // Coercing this variable to be a boolean, as one expects.
+            var compLimit = compLimitEnabled ? obj['competition[competitor_limit]'] : null
             var currencyCode = obj['competition[currency_code]']
 
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
@@ -268,6 +266,7 @@
                 entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
               },
               success: function(data) {
+                console.log(data)
                 if (compLimitEnabled) {
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
