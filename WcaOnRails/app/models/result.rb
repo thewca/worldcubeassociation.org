@@ -10,7 +10,7 @@ class Result < ApplicationRecord
   belongs_to :country, foreign_key: :countryId
   alias_attribute :country_id, :countryId
   has_one :continent, through: :country
-  delegate :continent_id, to: :country
+  delegate :continent_id, :continent, to: :country
 
   # NOTE: both nil and "" exist in the database, we may consider cleaning that up.
   MARKERS = [nil, "", "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze

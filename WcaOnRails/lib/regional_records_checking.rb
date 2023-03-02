@@ -5,7 +5,7 @@ module RegionalRecordsChecking
   CHECK_RECORDS_INTERVAL = 3.months
   REGION_WORLD = '__World'
 
-  def self.find_by_interval(interval_duration, scope = Competition, &block)
+  def self.find_by_interval(scope, interval_duration, &block)
     iter_start_date = scope.minimum(:start_date)
 
     until iter_start_date.nil?
@@ -49,26 +49,22 @@ module RegionalRecordsChecking
     competition_scope
   end
 
-  def self.results_scope(competition, event_id, value_column)
+  def self.results_scope(competition, event_id)
     results_scope = competition.results
 
     if event_id.present?
+      # If there's an event_id, focus on those results only.
       results_scope = results_scope.where(event_id: event_id)
     end
 
-    # Ordering by RoundType is _crucial_ because the `rank` property encodes information
-    # about the temporal sequence of rounds (i.e. a Final has a higher `rank` than
-    #   a First Round because a Final comes after the First Round in a schedule.)
-    # Ordering by the actual value is also _crucial_, because we mark records eagerly,
-    #   i.e. as soon as a faster result is found it is immediately marked, without checking
-    #   whether an _even faster_ result occured in the same round.
-    results_scope.joins(:round_type)
-                 .order("RoundTypes.rank, #{value_column}")
+    results_scope
   end
 
   def self.compute_record_marker(event_records, result, wca_value)
     computed_marker = nil
 
+    # Pretty straight-forward computation. Check all of the records that have been iterated until now (event_records)
+    # and if you find a better result (equalling is enough, hence <= instead of <) set the marker and remember the new record.
     if !event_records.key?(result.country_id) || wca_value <= event_records[result.country_id]
       computed_marker = 'NR'
       event_records[result.country_id] = wca_value
@@ -101,39 +97,65 @@ module RegionalRecordsChecking
     end
   end
 
-  def self.check_records(event_id, competition_id, value_column, value_type)
+  SOLUTION_TYPES = [[:best, 'Single'], [:average, 'Average']].freeze
+
+  def self.check_records(event_id, competition_id)
     competition_scope = self.competition_scope(event_id, competition_id)
 
+    check_results = {}
     records_registry = {}
-    result_rows = []
 
-    self.find_by_interval(CHECK_RECORDS_INTERVAL, competition_scope) do |comp|
-      # Cannot use Rails' hyper-efficient `find_each`, see self#find_by_interval documentation.
-      self.results_scope(comp, event_id, value_column).each do |r|
-        value_solve = r.send("#{value_column}_solve".to_sym)
+    # Why do we iterate over competitions instead of iterating over (Results JOIN Competitions) directly?
+    #   (a) Joining over the Results table (which is notoriously big) is sinfully expensive when repeated.
+    #     This especially holds true when repeatedly querying from the same table structure as we're doing below.
+    #   (b) We need the start_date of competitions as sorting criteria. Iterating over comps as a "helper" allows us
+    #     to relegate this as an ORDER BY clause to our SQL database.
+    #   (c) (In the future) this will allow us to cache all computed records up to a certain date and cache them
+    #     for significant performance boosts and improvements (but we should think about _how_ to cache them first.)
+    self.find_by_interval(competition_scope, CHECK_RECORDS_INTERVAL) do |comp|
+      # Fetch the attached Result rows per competition only _once_,
+      # and then re-order the same set in-memory for single and average computations.
+      # Pre-ordering with a JOIN on RoundTypes makes no sense as Ruby sorting algorithms are not stable :(
+      results = self.results_scope(comp, event_id).to_a
 
-        # Skip DNF, DNS, invalid Multi attempts
-        next if value_solve.incomplete?
+      SOLUTION_TYPES.each do |value_column, value_type|
+        # Ordering by RoundType is _crucial_ because the `rank` property encodes information
+        # about the temporal sequence of rounds (i.e. a Final has a higher `rank` than
+        #   a First Round because a Final comes after the First Round in a schedule.)
+        # Ordering by the actual value is also _crucial_, because we mark records eagerly,
+        #   i.e. as soon as a faster result is found it is immediately marked, without checking
+        #   whether an _even faster_ result occured in the same round.
+        sorted_results = results.sort_by { |r| [r.round_type.rank, r.send(value_column)] }
 
-        event_records = records_registry[r.event_id] || {}
-        computed_marker, event_records = self.compute_record_marker(event_records, r, value_solve.wca_value)
+        check_results[value_column] ||= []
+        records_registry[value_column] ||= {}
 
-        # write back current state of (computed) records for next competition(s)
-        records_registry[r.event_id] = event_records
+        sorted_results.each do |r|
+          value_solve = r.send("#{value_column}_solve".to_sym)
 
-        stored_marker = r.send("regional#{value_type}Record".to_sym)
+          # Skip DNF, DNS, invalid Multi attempts
+          next if value_solve.incomplete?
 
-        # Nothing to see here. Go on.
-        next unless computed_marker.present? || stored_marker.present?
-        next unless self.relevant_result(event_id, competition_id, r, computed_marker, stored_marker)
+          event_records = records_registry[value_column][r.event_id] || {}
+          computed_marker, event_records = self.compute_record_marker(event_records, r, value_solve.wca_value)
 
-        result_rows.push({
-                           computed_marker: computed_marker,
-                           result: r
-                         })
+          # write back current state of (computed) records for next competition(s)
+          records_registry[value_column][r.event_id] = event_records
+
+          stored_marker = r.send("regional#{value_type}Record".to_sym)
+
+          # Nothing to see here. Go on.
+          next unless computed_marker.present? || stored_marker.present?
+          next unless self.relevant_result(event_id, competition_id, r, computed_marker, stored_marker)
+
+          check_results[value_column].push({
+                                             computed_marker: computed_marker,
+                                             result: r
+                                           })
+        end
       end
     end
 
-    result_rows
+    check_results
   end
 end
