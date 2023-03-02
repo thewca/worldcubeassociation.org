@@ -387,14 +387,14 @@ it:
     submit:
       competition_medium:
         #original_hash: dc112af
-        create: Submit media
+        create: Invia media
         #original_hash: 4cf19ca
-        update: Update media
+        update: Aggiorna media
   activerecord:
     attributes:
       user:
         #original_hash: eeb6920
-        name: Nome Completo
+        name: Nome completo
         #original_hash: 603a218
         wca_id: WCA ID
         #original_hash: cb77bea
@@ -406,7 +406,7 @@ it:
         #original_hash: ab58155
         dob: Data di nascita
         #original_hash: 7636bbc
-        dob_verification: Data di nascita
+        dob_verification: La tua data di nascita
         #original_hash: 8a754c6
         gender: Sesso
         #original_hash: 84add5b
@@ -422,17 +422,19 @@ it:
         #original_hash: 58e0c56
         remove_avatar: Rimuovi avatar
         #original_hash: 9af9099
-        results_notifications_enabled: Inviami una mail quando i miei risultati vengono annunciati
+        results_notifications_enabled: Inviami una mail quando i miei risultati vengono pubblicati.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
-          Quando organizzo o delego una competizione, inviami un'email quando
-          nuove iscrizioni vengono effettuate.
+          Quando organizzo o delego una competizione, inviami una mail quando
+          vengono effettuate nuove iscrizioni.
         #original_hash: de60ab8
-        delegate_status: Stato di delegato
+        delegate_status: Stato del delegato
         #original_hash: 0f21717
         region: Regione
         #original_hash: 730db33
-        receive_delegate_reports: Voglio ricevere i Report dei Delegati sulle Competizioni WCA via email
+        receive_delegate_reports: >-
+          Desidero ricevere per email i Report dei Delegati sulle Competizioni
+          WCA
         #original_hash: 57eaf24
         user_preferred_events: Eventi preferiti
         #original_hash: e632fbf
@@ -455,7 +457,7 @@ it:
         #original_hash: 25b7b06
         cityName: Città
         #original_hash: 67cd406
-        venue: Location
+        venue: Sede
         #original_hash: 486f8fb
         venueAddress: Indirizzo
         #original_hash: 08767af
@@ -535,9 +537,9 @@ it:
         #original_hash: 99a9169
         event_change_deadline_date: Data limite dei partecipanti per modificare i propri eventi
         #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: Tassa per gli spettatori
+        guests_entry_fee_lowest_denomination: Quota d'ingresso per gli spettatori
         #original_hash: bb16247
-        guest_entry_status: Visualizza messaggio per l'ingresso gratuito agli spettatori
+        guest_entry_status: Visualizza il messaggio per l'ingresso gratuito agli spettatori
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Voglio richiedere ai partecipanti di consegnare i propri puzzle a uno
@@ -557,7 +559,7 @@ it:
         #original_hash: 4bf194c
         event_restrictions_reason: Dettagli e motivazioni per le restrizioni sugli eventi
         #original_hash: 3c24bd2
-        main_event_id: Main event
+        main_event_id: Evento principale
         #original_hash: a541bfa
         allow_registration_without_qualification: Eventi con Qualificazione
       championship:
@@ -598,21 +600,25 @@ it:
         #original_hash: 983d541
         discussion_url: URL della discussione sul Gruppo Google
         #original_hash: 65a9b28
-        schedule_url: URL della schedule
+        schedule_url: URL del programma
         #original_hash: 36155d4
         equipment: Equipaggiamento
         #original_hash: 67cd406
-        venue: Location
+        venue: Sede
         #original_hash: 519255a
         organization: Organizzazione
         #original_hash: 5e326b1
         incidents: Incidenti
         #original_hash: 1362470
-        wrc_feedback_requested: Desidero ricevere dal WRC un feedback su alcuni dei suddetti incidenti
+        wrc_feedback_requested: >-
+          Desidero ricevere dal WRC un feedback su alcuni dei suddetti
+          incidenti.
         #original_hash: 0c7191d
         wrc_incidents: Incidenti che richiedono un feedback del WRC
         #original_hash: 5a92b25
-        wdc_feedback_requested: Desidero ricevere dal WDC un feedback su alcuni dei suddetti incidenti
+        wdc_feedback_requested: >-
+          Desidero ricevere dal WDC un feedback su alcuni dei suddetti
+          incidenti.
         #original_hash: 06a0568
         wdc_incidents: Incidenti che richiedono un feedback del WDC
         #original_hash: d7020f4
@@ -629,7 +635,7 @@ it:
         #original_hash: 709a232
         name: Nome
         #original_hash: c6bc0f4
-        incorrect_wca_id_claim_count: Conteggio reclami WCA ID errato
+        incorrect_wca_id_claim_count: Conteggio richiesta WCA ID errato
       poll:
         #original_hash: 002ff59
         question: Domanda
@@ -643,7 +649,7 @@ it:
         #original_hash: 6f915a2
         sticky: Fissato
         #original_hash: 231d9ff
-        unstick_at: Unstick at
+        unstick_at: Togli a
         #original_hash: 848eed0
         tags: Tag
         #original_hash: fb4002e
@@ -681,18 +687,18 @@ it:
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Submitter name
+        submitterName: Nome del mittente
         #original_hash: 78cdfee
-        submitterEmail: Submitter email
+        submitterEmail: Email del mittente
         #original_hash: 0d31f23
-        submitterComment: Submitter comment
+        submitterComment: Commenti del mittente
         #original_hash: bae7d5b
         status: Stato
       regional_organization:
         #original_hash: 709a232
         name: Nome
         #original_hash: d523ebb
-        country: Paese
+        country: Nazione
         #original_hash: 2e8a57c
         website: Sito web
         #original_hash: 83fce83
@@ -879,8 +885,8 @@ it:
         information: >-
           Informazioni importanti che i partecipanti devono sapere. Sarà
           mostrato nella pagina principale della competizione. <br/>Per favore,
-          compila questo <b>in inglese</b> e qualunque altra lingua parlino i
-          partecipanti.
+          compila questo campo <b>in inglese</b> e qualunque altra lingua
+          parlino i partecipanti.
         #original_hash: b4d020f
         staff_delegate_ids: Delegati WCA della competizione.
         #original_hash: cb9882c
@@ -1117,7 +1123,7 @@ it:
       delegate_report:
         #original_hash: 4eefb60
         schedule_url: >-
-          Il link completo della schedule pubblicata (es.
+          Il link completo del programma pubblicato (es.
           https://www.cubingusa.com/usnationals2016/schedule.php)
         #original_hash: 1a68719
         equipment: >-
@@ -2038,6 +2044,10 @@ it:
       remove_avatar: Rimuovi avatar
       #original_hash: 4bd25cf
       remove_avatar_confirm: Sei sicuro di voler cancellare il tuo avatar?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Conferma rimozione dell'avatar
+      #original_hash: 010b0e5
+      remove_avatar_reason: 'Per favore, motiva la rimozione'
       #original_hash: 141d1d7
       guidelines: Linee Guida
       avatar_guidelines:
@@ -2073,7 +2083,7 @@ it:
           '2': >-
             L'avatar deve essere ritagliato, angolato e illuminato, in modo che
             qualsiasi partecipante o spettatore di una competizione possa usarlo
-            per identificarti in modo univoco in una competizione.
+            per identificarti in modo univoco a una competizione.
           #original_hash: 13fab02
           '3': >-
             La thumbnail dell'avatar è solo una parte dell'avatar e verrà
@@ -2383,6 +2393,8 @@ it:
       approved_registrations: Registrazioni approvate
       #original_hash: bff04e8
       deleted_registrations: Registrazioni cancellate
+      #original_hash: e86b1e1
+      non_competing: Registrazioni non-partecipanti
       #original_hash: ac5d958
       not_paid: Non pagato
       registered:
@@ -2463,6 +2475,12 @@ it:
       già stato raggiunto. Se ti registri, la tua registrazione verrà inserita
       in lista di attesa. Potrebbe non essere approvata a meno che un posto non
       si liberi.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Il limite partecipanti per questa competizione è di %{competitor_limit} e
+      potrebbe essere stato raggiunto. Se ti iscrivi, la tua registrazione sarà
+      messa in lista d'attesa e non verrà approvata finché non si libererà un
+      posto.
     #original_hash: 855ca9c
     can_register: 'Qui puoi registrarti per il %{comp}.'
     #original_hash: 4167ed7
@@ -2811,7 +2829,7 @@ it:
       #original_hash: c5497bc
       events: Eventi
       #original_hash: 3c24bd2
-      main_event: Main event
+      main_event: Evento principale
       #original_hash: ff722f0
       registration_requirements: Requisiti per la registrazione
       #original_hash: 74d0bf1
@@ -3120,12 +3138,12 @@ it:
         Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
-        La location dove questa competizione si svolge. %{md}. Per esempio:
-        [Ludoteca La Casa dei Giochi](http://www.uniesm.it/)
+        La sede dove si svolge la competizione. %{md}. Per esempio: [Ludoteca La
+        Casa dei Giochi](http://www.uniesm.it/)
       #original_hash: 2651d1a
       venue_details_html: >-
-        Dettagli riguardo la location (es. Sul primo piano, segui le
-        indicazioni; suona il citofono per aprire il cancello). %{md}
+        Dettagli riguardo la sede (es. Al primo piano, seguire le indicazioni;
+        suonare il citofono per aprire il cancello). %{md}
       #original_hash: 447814d
       contact_html: >-
         Informazioni di contatto facoltative. Se non compili questo campo, le
@@ -3214,8 +3232,8 @@ it:
       must_contain_event: deve contenere almeno un evento
       #original_hash: 54fe619
       schedule_must_match_rounds: >-
-        deve avere almeno un round e tutti i round devono essere inclusi nella
-        schedule.
+        deve avere almeno un round e tutti i round devono essere inclusi nel
+        programma.
       #original_hash: 6e228b7
       must_contain_delegate: deve contenere almeno un Delegato WCA
       #original_hash: 8131fc2
@@ -3401,10 +3419,10 @@ it:
       #original_hash: c5497bc
       events: Eventi
       #original_hash: 0a8adac
-      schedule: Schedule
+      schedule: Programma
       #original_hash: 1060ed0
       no_schedule: >-
-        Non esiste una schedule per questa competizione. Il PDF non può essere
+        Non esiste un programma per questa competizione. Il PDF non può essere
         generato.
     events:
       time_limit_information:
@@ -3461,13 +3479,13 @@ it:
     schedule:
       display_as:
         #original_hash: ec5dd7c
-        label: 'Mostra la schedule come:'
+        label: 'Mostra il programma come:'
         #original_hash: 0424f6e
         table: Tabella
         #original_hash: adab509
         calendar: Calendario
       #original_hash: 017e4d8
-      display_for_room: 'Mostra la schedule per:'
+      display_for_room: 'Mostra il programma per:'
       range:
         #original_hash: 3f66052
         from: Dalle
@@ -3484,15 +3502,15 @@ it:
       #original_hash: 73acb7f
       room_in_venue: '%{room} in %{venue}'
       #original_hash: 2896c7a
-      venue_information_html: 'Stai visualizzando la schedule per la venue %{venue_name}.'
+      venue_information_html: 'Stai visualizzando il programma per la sede %{venue_name}.'
       #original_hash: b97e383
-      timezone_message: 'La schedule è mostrata nel fuso orario %{timezone}.'
+      timezone_message: 'Il programma è mostrato nel fuso orario %{timezone}.'
       #original_hash: 2ab94a0
       multiple_venues_available: >-
-        Questa competizione ha più venue, assicurati di controllare la schedule
-        anche per le altre venue!
+        Questa competizione ha più sedi. Assicurati di controllare il programma
+        anche per le altre sedi!
       #original_hash: 37b1adb
-      schedule_for_date: 'Schedule per %{day_name} (%{full_date})'
+      schedule_for_date: 'Programma per %{day_name} (%{full_date})'
     nav:
       menu:
         #original_hash: 612e12d
@@ -3514,7 +3532,7 @@ it:
         #original_hash: c6171f8
         event_view: Eventi
         #original_hash: 6235b27
-        schedule_view: Schedule
+        schedule_view: Gestisci programma
         #original_hash: 6f7aef9
         payment_view: Configura pagamenti
         #original_hash: 76bfdcf
@@ -3977,7 +3995,7 @@ it:
           #original_hash: 890d879
           '1': >-
             Dopo il termine di una competizione, il Delegato WCA deve
-            controllare tutti i foglietti segna tempo e le informazioni
+            controllare tutti i foglietti dei risultati e le informazioni
             personali per eliminare possibili errori. Terminata questa
             operazione, i risultati vengono inviati al WCA Results Team (WRT),
             che è responsabile del caricamento dei risultati e del mantenimento
@@ -3986,7 +4004,7 @@ it:
           #original_hash: daf1cb1
           '2': >-
             A seconda delle dimensioni della competizione e degli impegni
-            personali del delegato WCA, questa operazione può richiedere da un
+            personali del Delegato WCA, questa operazione può richiedere da un
             giorno fino a una settimana. Sii paziente.
           #original_hash: bf8adbe
           '3': >-
@@ -4106,7 +4124,7 @@ it:
       <p>Ogni due anni organizziamo la competizione che decreta ufficialmente il
       nuovo campione del mondo. Questi eventi richiedono una pianificazione
       estremamente attenta da parte di un gran numero di volontari, oltre che un
-      notevole impegno economico per riservare una location adeguata e fare i
+      notevole impegno economico per riservare una sede adeguata e fare i
       preparativi necessari .</p>
     #original_hash: 1aa5344
     contributing_title: Dare un contributo
@@ -4690,7 +4708,7 @@ it:
           Tool per la gestione di ruoli e gruppi in competizioni WCA. Tra le
           funzioni troverai: divisione dei partecipanti per abilità,
           assegnazione di ruoli (giudici, scrambler), calcolo del numero di
-          scramble necessari, generazione di scoresheet, schedule individuali e
+          scramble necessari, generazione di scoresheet, programmi individuali e
           sommari. Vai al sito per ulteriori informazioni.
       scorecards:
         #original_hash: aa1b64d
@@ -5037,19 +5055,19 @@ it:
       #original_hash: 44bd0ba
       description: Documenti fondamentali
       #original_hash: 1cf87ad
-      finding-venue: Trovare una venue
+      finding-venue: Trovare una sede
       #original_hash: 3ce0d9c
       orga-team-delegate: Creare un team organizzativo e contattare un Delegato
       #original_hash: d3c693b
       budget: Preventivare le spese di una competizione
       #original_hash: b1429a7
-      schedule: Creare la schedule
+      schedule: Creare il programma
       #original_hash: beea57d
       checklist: Checklist per una competizione
       #original_hash: 9defcf1
       registration: Gestire le registrazioni
       #original_hash: e298a56
-      venue-setup: Sistemazione della venue
+      venue-setup: Sistemazione della sede
       #original_hash: 2b6a5dd
       work-during-comp: Compiti dell'organizzatore durante la competizione
     recommended:
@@ -5098,7 +5116,7 @@ it:
       #original_hash: f16a06f
       content: >-
         Le spese previste differiscono da nazione a nazione e sono determinate
-        da diversi fattori, fra cui la dimensione della venue e il costo dei
+        da diversi fattori, fra cui la dimensione della sede e il costo dei
         materiali. È possibile coprire tutte le spese grazie alle tasse di
         registrazione; anche se, per tenerle il più basso possibile, è
         consigliato cercare degli sponsor. Anche se i Delegati WCA sono
@@ -5230,16 +5248,16 @@ it:
         #original_hash: c8abb5e
         '1': >-
           Prima di annunciare la competizione, è richiesta la creazione e la
-          pubblicazione di una schedule sul sito web della competizione. Questo
-          programma non deve essere per forza definitivo e potrà comunque subire
-          variazioni.
+          pubblicazione di un programma sul sito web della competizione. Questo
+          programma non deve essere per forza definitivo e potrà subire
+          variazioni in seguito.
         #original_hash: e93d043
         '2': >-
-          I partecipanti dovrebbero essere divisi in gruppi, i foglietti segna
-          tempo dovrebbero essere stampati e divisi rispettando la distribuzione
-          dei gruppi. È inoltre suggerito pianificare in anticipo gli scrambler
-          per ogni gruppo di ogni evento, almeno per i primi turni. È
-          consigliabile scegliere scrambler affidabili.
+          I partecipanti dovrebbero essere divisi in gruppi, i foglietti per i
+          risultati dovrebbero essere stampati e divisi rispettando la
+          distribuzione in gruppi. Suggeriamo inoltre di pianificare in anticipo
+          gli scrambler per ogni gruppo di ogni evento, almeno per i primi
+          turni. È consigliabile scegliere scrambler affidabili.
     paragraph9:
       #original_hash: ead44f5
       title: Compiti durante la competizione
@@ -5254,14 +5272,14 @@ it:
         #original_hash: c4388f3
         '2': Annunci
         #original_hash: 45c78ae
-        '3': Chiamate dei gruppi e disposizione dei foglietti segna tempo
+        '3': Chiamate dei gruppi e disposizione dei foglietti per i risultati
         #original_hash: 0b31986
         '4': Registrazione e stampa dei risultati
         #original_hash: 7ab2d4c
         '5': Ricerca di giudici e scrambler
         #original_hash: 52e8316
         '6': >-
-          Gestione di tutti i problemi organizzativi relativi alla venue (es.
+          Gestione di tutti i problemi organizzativi relativi alla sede (es.
           connessione internet)
   media:
     common:
@@ -5388,8 +5406,8 @@ it:
       short_intro: 'Fai una breve introduzione, parla di te e della competizione.'
       #original_hash: a053b5a
       venue_feel: >-
-        Fai alcune storie per dare un'impressione della venue e dell'aria che
-        c'è tra le persone (es. una ripresa dall'aria partecipanti o dalla
+        Fai alcune storie per dare un'impressione della sede e del clima che c'è
+        alla competizione (es. una ripresa dall'area partecipanti o da una
         postazione)
       #original_hash: d17fb2f
       people_solving: >-
