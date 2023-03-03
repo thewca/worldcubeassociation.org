@@ -31,12 +31,132 @@
 
     <hr/>
 
-    <%= simple_form_for @check_records_request, url: admin_do_check_regional_records_path do |f| %>
-      <%= f.input :competition_id, as: :competition_id %>
-      <%= f.input :event_id, as: :events_picker, allowed_events: Event.all, only_one: true, include_all: true %>
+    <% if @check_results %>
+      <%= simple_form_for :regional_record_overrides, url: admin_override_regional_records_path do |f| %>
+        <% RegionalRecordsChecking::SOLUTION_TYPES.each do |value_column, value_name| %>
+          <h2><%= value_name %></h2>
 
-      <%= f.button :submit, value: "Run check", class: "btn-primary" %>
+          <% results_by_event = @check_results[value_column].group_by { |row| row[:result].event } %>
+
+          <% results_by_event.each do |event, rows| %>
+            <h3 class="text-center">
+              <%= cubing_icon(event.id) %> <%= event.name %>
+            </h3>
+
+            <% value_check_results = rows.sort_by { |row| [row[:result].competition_id, row[:result].event_id, row[:result].round_type_id] } %>
+
+            <% if value_check_results.empty? %>
+              All good, carry on!
+            <% else %>
+              <%= wca_table table_class: "wca-results" do %>
+                <thead>
+                <tr>
+                  <th class="date"> Date</th>
+                  <th class="competition"> Competition</th>
+                  <th class="round"> Round</th>
+                  <th class="name"> Name</th>
+                  <th class="event"> Event</th>
+                  <th class="country"> Country</th>
+                  <th class="continent"> Continent</th>
+                  <th class="world"> World</th>
+                  <th class="value"> Value</th>
+                  <th class="stored"> Stored</th>
+                  <th class="computed"> Computed</th>
+                  <th class="agree"> Agree?</th>
+
+                  <!-- Extra column for .table-greedy-last-column -->
+                  <th></th>
+                </tr>
+                </thead>
+
+                <% announced_competition_id = announced_round_id = nil %>
+
+                <tbody>
+                <% value_check_results.each do |row| %>
+                  <% result = row[:result] %>
+
+                  <% new_competition = result.competition_id != announced_competition_id; announced_competition_id = result.competition_id %>
+                  <% new_round = result.round_type_id != announced_round_id; announced_round_id = result.round_type_id %>
+
+                  <% if new_competition || new_round %>
+                    <tr>
+                      <td colspan=12 class="text-center"><%= row[:competition_name] %>
+                        - <%= result.round_type.name %></td>
+                    </tr>
+                  <% end %>
+
+                  <tr>
+                    <% value_solve = result.send("#{value_column}_solve".to_sym) %>
+
+                    <% computed_marker = row[:computed_marker] %>
+                    <% stored_marker = result.send("regional#{value_name}Record") %>
+
+                    <% markers_same = computed_marker == stored_marker %>
+
+                    <% computed_color = markers_same ? '999' : '0E0' %>
+                    <% stored_color = markers_same ? '999' : 'F00' %>
+
+                    <td class="date"> <%= wca_date_range(row[:competition_start_date], row[:competition_end_date]) %></td>
+                    <td class="competition">
+                      <%= link_to result.competition_id, competition_path(result.competition_id) %>
+                    </td>
+                    <td class="round"> <%= result.round_type_id %></td>
+                    <td class="name">
+                      <% if result.wca_id %>
+                        <%= link_to result.person_name, person_path(result.wca_id) %>
+                      <% else %>
+                        <%= result.person_name %>
+                      <% end %>
+                    </td>
+                    <td class="event"> <%= result.event_id %></td>
+                    <td class="country">
+                      <%# Any marker is always "at least" a national record. %>
+                      <% if computed_marker.present? %>
+                        <b><%= result.country.name %></b>
+                      <% else %>
+                        <%= result.country.name %>
+                      <% end %>
+                    </td>
+                    <td class="continent">
+                      <%# Any marker other than "NR" is always "at least" a continental record. %>
+                      <% if computed_marker.present? && computed_marker != "NR" %>
+                        <b><%= result.continent.name %></b>
+                      <% else %>
+                        <%= result.continent.name %>
+                      <% end %>
+                    </td>
+                    <td class="world">
+                      <% if computed_marker == "WR" %>
+                        <b>World</b>
+                      <% else %>
+                        World
+                      <% end %>
+                    </td>
+                    <td class="value"> <%= value_solve.clock_format %></td>
+                    <td class="stored"><b style="color:#<%= stored_color %>"><%= stored_marker %></b></td>
+                    <td class="computed"><b style="color:#<%= computed_color %>"><%= computed_marker %></b></td>
+                    <td class="agree">
+                      <% unless markers_same %>
+                        <%= f.check_box "#{result.id}-#{value_name}", {}, computed_marker, nil %>
+                      <% end %>
+                    </td>
+                  </tr>
+                <% end %>
+                </tbody>
+              <% end %>
+            <% end %>
+          <% end %>
+        <% end %>
+
+        <%= f.button :submit, value: "Submit overrides", class: "btn-primary" %>
+      <% end %>
+    <% else %>
+      <%= simple_form_for @check_records_request, url: admin_check_regional_records_path do |f| %>
+        <%= f.input :competition_id, as: :competition_id, only_one: true %>
+        <%= f.input :event_id, as: :events_picker, allowed_events: Event.all, only_one: true, include_all: true %>
+
+        <%= f.button :submit, value: "Run check", class: "btn-primary" %>
+      <% end %>
     <% end %>
-
   <% end %>
 </div>

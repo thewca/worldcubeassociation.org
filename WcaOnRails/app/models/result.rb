@@ -6,6 +6,7 @@ class Result < ApplicationRecord
   self.table_name = "Results"
 
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
+  alias_attribute :person_name, :personName
   validates :personName, presence: true
   belongs_to :country, foreign_key: :countryId
   alias_attribute :country_id, :countryId

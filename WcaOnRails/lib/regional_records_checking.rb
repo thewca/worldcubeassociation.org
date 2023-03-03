@@ -124,7 +124,7 @@ module RegionalRecordsChecking
       # and then re-order the same set in-memory for single and average computations.
       results = self.results_scope(comp, event_id).to_a
 
-      SOLUTION_TYPES.each do |value_column, value_type|
+      SOLUTION_TYPES.each do |value_column, value_name|
         # Ordering by RoundType is _crucial_ because the `rank` property encodes information
         # about the temporal sequence of rounds (i.e. a Final has a higher `rank` than
         #   a First Round because a Final comes after the First Round in a schedule.)
@@ -148,7 +148,7 @@ module RegionalRecordsChecking
           # write back current state of (computed) records for next competition(s)
           records_registry[value_column][r.event_id] = event_records
 
-          stored_marker = r.send("regional#{value_type}Record".to_sym)
+          stored_marker = r.send("regional#{value_name}Record".to_sym)
 
           # Nothing to see here. Go on.
           next unless computed_marker.present? || stored_marker.present?
@@ -156,6 +156,9 @@ module RegionalRecordsChecking
 
           check_results[value_column].push({
                                              computed_marker: computed_marker,
+                                             competition_start_date: comp.start_date,
+                                             competition_end_date: comp.end_date,
+                                             competition_name: comp.name,
                                              result: r
                                            })
         end
