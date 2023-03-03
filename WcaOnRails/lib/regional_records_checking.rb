@@ -49,7 +49,7 @@ module RegionalRecordsChecking
 
       # Use all competitions up to _but excluding_ the end date of the desired competition
       # because we currently don't have a reliable way of ordering results within one day
-      competition_scope = competition_scope.where('end_date < ?', model_competition.end_date)
+      competition_scope = competition_scope.where('end_date < ?', model_competition.start_date)
     end
 
     [competition_scope, model_competition]
