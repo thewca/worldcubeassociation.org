@@ -5,7 +5,7 @@ module RegionalRecordsChecking
   CHECK_RECORDS_INTERVAL = 3.months
   REGION_WORLD = '__World'
 
-  def self.find_by_interval(scope, interval_duration, &block)
+  def self.find_by_interval(scope, interval_duration, last_competition = nil, &block)
     iter_start_date = scope.minimum(:start_date)
 
     until iter_start_date.nil?
@@ -20,6 +20,10 @@ module RegionalRecordsChecking
       iter_start_date = scope.where("start_date >= ?", iter_end_date)
                              .minimum(:start_date)
     end
+
+    # As of writing this initial implementation, we loop over end_date STRICTLY less than the selected competition,
+    # so we would exclude our target objective in the last loop. This is a hack to avoid redundant SQL OR filters.
+    yield last_competition if last_competition.present?
   end
 
   def self.competition_scope(event_id, competition_id)
@@ -37,16 +41,18 @@ module RegionalRecordsChecking
                                            .where(competition_events: { event_id: event_id })
     end
 
+    model_competition = nil
+
     if competition_id.present?
       # Load the competition (complains via ActiveRecord if an invalid ID was used)
       model_competition = Competition.find(competition_id)
 
-      # Use all competitions up to _and including_ the end date of the desired competition
-      # because otherwise we would exclude the chosen competition itself
-      competition_scope = competition_scope.where('end_date <= ?', model_competition.end_date)
+      # Use all competitions up to _but excluding_ the end date of the desired competition
+      # because we currently don't have a reliable way of ordering results within one day
+      competition_scope = competition_scope.where('end_date < ?', model_competition.end_date)
     end
 
-    competition_scope
+    [competition_scope, model_competition]
   end
 
   def self.results_scope(competition, event_id)
@@ -57,6 +63,7 @@ module RegionalRecordsChecking
       results_scope = results_scope.where(event_id: event_id)
     end
 
+    # Pre-ordering with a JOIN on RoundTypes makes no sense as Ruby sorting algorithms are not stable :(
     results_scope
   end
 
@@ -100,7 +107,7 @@ module RegionalRecordsChecking
   SOLUTION_TYPES = [[:best, 'Single'], [:average, 'Average']].freeze
 
   def self.check_records(event_id, competition_id)
-    competition_scope = self.competition_scope(event_id, competition_id)
+    competition_scope, model_competition = self.competition_scope(event_id, competition_id)
 
     check_results = {}
     records_registry = {}
@@ -112,10 +119,9 @@ module RegionalRecordsChecking
     #     to relegate this as an ORDER BY clause to our SQL database.
     #   (c) (In the future) this will allow us to cache all computed records up to a certain date and cache them
     #     for significant performance boosts and improvements (but we should think about _how_ to cache them first.)
-    self.find_by_interval(competition_scope, CHECK_RECORDS_INTERVAL) do |comp|
+    self.find_by_interval(competition_scope, CHECK_RECORDS_INTERVAL, model_competition) do |comp|
       # Fetch the attached Result rows per competition only _once_,
       # and then re-order the same set in-memory for single and average computations.
-      # Pre-ordering with a JOIN on RoundTypes makes no sense as Ruby sorting algorithms are not stable :(
       results = self.results_scope(comp, event_id).to_a
 
       SOLUTION_TYPES.each do |value_column, value_type|
