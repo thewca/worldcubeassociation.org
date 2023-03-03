@@ -1,0 +1,42 @@
+<% provide(:title, "Check regional records") %>
+
+<div class="container">
+  <%= render layout: 'nav' do %>
+    <h1><%= yield(:title) %></h1>
+    <p>
+      This computes regional record markers for all successful results (value>0). If a result has a stored or computed
+      regional record marker, it is displayed. If the two markers differ, they're shown in red/green.
+    </p>
+
+    <p>
+      Only strictly previous competitions (other.<b>end</b>Date < this.<b>start</b>Date) are used to compare, not
+      overlapping competitions. Thus I might wrongfully compute a too good record status (because a result was actually
+      beaten earlier in an overlapping competition) but I should never wrongfully compute a too bad record status.
+    </p>
+
+    <p>
+      Inside the same competition, results are sorted first by round, then by value, and then they're declared records
+      on a first-come-first-served basis. This results in the records-are-updated-at-the-end-of-each-round rule you
+      requested.
+    </p>
+
+    <p>
+      A result does not need to beat another to get a certain record status, equaling is good enough.
+    </p>
+
+    <p>
+      If you choose 'All' both for event and competition, I only show the differences (otherwise the page would be
+      huge).
+    </p>
+
+    <hr/>
+
+    <%= simple_form_for @check_records_request, url: admin_do_check_regional_records_path do |f| %>
+      <%= f.input :competition_id, as: :competition_id %>
+      <%= f.input :event_id, as: :events_picker, allowed_events: Event.all, only_one: true, include_all: true %>
+
+      <%= f.button :submit, value: "Run check", class: "btn-primary" %>
+    <% end %>
+
+  <% end %>
+</div>

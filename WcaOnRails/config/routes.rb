@@ -214,6 +214,8 @@ Rails.application.routes.draw do
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
+  get '/admin/check_regional_records' => 'admin#check_regional_records'
+  post '/admin/do_check_regional_records' => 'admin#do_check_regional_records'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'

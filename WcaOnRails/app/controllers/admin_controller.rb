@@ -244,6 +244,22 @@ class AdminController < ApplicationController
     redirect_to admin_generate_exports_path
   end
 
+  def check_regional_records
+    @check_records_request = CheckRegionalRecordsForm.new(
+      competition_id: params[:competition_id] || nil,
+      event_id: params[:event_id] || nil,
+    )
+  end
+
+  def do_check_regional_records
+    action_params = params.require(:check_regional_records_form)
+                          .permit(:competition_id, :event_id)
+
+    @check_records_request = CheckRegionalRecordsForm.new(action_params)
+
+    render :check_regional_records
+  end
+
   def all_voters
     voters User.eligible_voters, "all-wca-voters"
   end
