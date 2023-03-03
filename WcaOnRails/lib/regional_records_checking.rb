@@ -110,7 +110,12 @@ module RegionalRecordsChecking
     competition_scope, model_competition = self.competition_scope(event_id, competition_id)
 
     check_results = {}
+
     records_registry = {}
+    records_pending_cache = {}
+
+    # Need to keep track of when we switch competitions
+    last_competition_id = nil
 
     # Why do we iterate over competitions instead of iterating over (Results JOIN Competitions) directly?
     #   (a) Joining over the Results table (which is notoriously big) is sinfully expensive when repeated.
@@ -119,10 +124,44 @@ module RegionalRecordsChecking
     #     to relegate this as an ORDER BY clause to our SQL database.
     #   (c) (In the future) this will allow us to cache all computed records up to a certain date and cache them
     #     for significant performance boosts and improvements (but we should think about _how_ to cache them first.)
+    #   (d) It helps us to compute the correct temporal order of records, because we don't know the order of events within
+    #     a day (yet), which means that we have to do manual shenanigans that are easier when we have the competition object.
     self.find_by_interval(competition_scope, CHECK_RECORDS_INTERVAL, model_competition) do |comp|
       # Fetch the attached Result rows per competition only _once_,
       # and then re-order the same set in-memory for single and average computations.
       results = self.results_scope(comp, event_id).to_a
+
+      # this entire if-block can be removed once we're able to order results within a competition
+      if comp.id != last_competition_id
+        still_pending = []
+
+        records_pending_cache.each do |cache|
+          if comp.start_date > cache[:end_date]
+            cache[:records].each do |col, events|
+              records_registry[col] ||= {}
+
+              events.each do |event, regions|
+                records_registry[col][event] ||= {}
+
+                regions.each do |region, record|
+                  if !records_registry[col][event].key?(region) || record < records_registry[col][event][region]
+                    records_registry[col][event][region] = record
+                  end
+                end
+              end
+            end
+          else
+            still_pending.push(cache)
+          end
+        end
+
+        records_pending_cache = still_pending
+        last_competition_id = comp.id
+      end
+
+      # We're not allowed to directly write back to `records_registry` for competitions that happen on the same weekend
+      #   (see also remark (d) in the big comment above)
+      temporary_registry = records_registry.deep_dup
 
       SOLUTION_TYPES.each do |value_column, value_name|
         # Ordering by RoundType is _crucial_ because the `rank` property encodes information
@@ -134,7 +173,7 @@ module RegionalRecordsChecking
         sorted_results = results.sort_by { |r| [r.round_type.rank, r.send(value_column)] }
 
         check_results[value_column] ||= []
-        records_registry[value_column] ||= {}
+        temporary_registry[value_column] ||= {}
 
         sorted_results.each do |r|
           value_solve = r.send("#{value_column}_solve".to_sym)
@@ -142,11 +181,11 @@ module RegionalRecordsChecking
           # Skip DNF, DNS, invalid Multi attempts
           next if value_solve.incomplete?
 
-          event_records = records_registry[value_column][r.event_id] || {}
+          event_records = temporary_registry[value_column][r.event_id] || {}
           computed_marker, event_records = self.compute_record_marker(event_records, r, value_solve.wca_value)
 
           # write back current state of (computed) records for next competition(s)
-          records_registry[value_column][r.event_id] = event_records
+          temporary_registry[value_column][r.event_id] = event_records
 
           stored_marker = r.send("regional#{value_name}Record".to_sym)
 
@@ -162,6 +201,11 @@ module RegionalRecordsChecking
                                              result: r
                                            })
         end
+
+        records_pending_cache.push({
+                                     end_date: comp.end_date,
+                                     records: temporary_registry
+                                   })
       end
     end
 
