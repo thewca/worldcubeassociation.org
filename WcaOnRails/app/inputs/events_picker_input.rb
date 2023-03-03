@@ -32,10 +32,10 @@ class EventsPickerInput < SimpleForm::Inputs::Base
                   template.content_tag(:i, "", data: { toggle: "tooltip", placement: "top" }, title: 'ALL', class: "cubing-icon icon unofficial-miniguild")
               ),
               for: label_id,
-              ),
-            class: element_class + (merged_input_options[:disabled] ? " disabled" : ""),
             ),
-          )
+            class: element_class + (merged_input_options[:disabled] ? " disabled" : ""),
+          ),
+        )
       end
 
       allowed_events.each do |event|

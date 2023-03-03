@@ -5,7 +5,7 @@ module RegionalRecordsChecking
   CHECK_RECORDS_INTERVAL = 3.months
   REGION_WORLD = '__World'
 
-  def self.find_by_interval(scope, interval_duration, last_competition = nil, &block)
+  def self.find_by_interval(scope, interval_duration, last_competition = nil, &)
     iter_start_date = scope.minimum(:start_date)
 
     until iter_start_date.nil?
@@ -15,7 +15,7 @@ module RegionalRecordsChecking
       # The entire purpose of this method is essentially to replicate find_each with our custom ordering.
       scope.where("start_date >= ?", iter_start_date)
            .where("start_date < ?", iter_end_date)
-           .each(&block)
+           .each(&)
 
       iter_start_date = scope.where("start_date >= ?", iter_end_date)
                              .minimum(:start_date)
@@ -198,13 +198,13 @@ module RegionalRecordsChecking
                                              competition_start_date: comp.start_date,
                                              competition_end_date: comp.end_date,
                                              competition_name: comp.name,
-                                             result: r
+                                             result: r,
                                            })
         end
 
         records_pending_cache.push({
                                      end_date: comp.end_date,
-                                     records: temporary_registry
+                                     records: temporary_registry,
                                    })
       end
     end
