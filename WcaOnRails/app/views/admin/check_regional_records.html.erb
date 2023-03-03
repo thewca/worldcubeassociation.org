@@ -46,7 +46,7 @@
                 <%= cubing_icon(event.id) %> <%= event.name %>
               </h3>
 
-              <% value_check_results = rows.sort_by { |row| [row[:result].competition_id, row[:result].event_id, row[:result].round_type_id] } %>
+              <% value_check_results = rows.sort_by { |row| [row[:competition_start_date], row[:result].competition_id, row[:result].round_type_id] } %>
 
               <% if value_check_results.empty? %>
                 All good, carry on!
