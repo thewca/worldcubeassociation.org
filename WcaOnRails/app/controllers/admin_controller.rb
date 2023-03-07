@@ -338,6 +338,22 @@ class AdminController < ApplicationController
     render 'anonymize_person'
   end
 
+  def finish_persons
+    @finish_persons = FinishPersonsForm.new(
+      params[:competition_id] || nil
+    )
+  end
+
+  def do_finish_persons
+    action_params = params.require(:finish_persons_form)
+                          .permit(:competition_id)
+
+    @finish_persons = FinishPersonsForm.new(action_params)
+    @persons_to_finish = @finish_persons.search_persons
+
+    render :finish_persons
+  end
+
   def reassign_wca_id
     @reassign_wca_id = ReassignWcaId.new
     @reassign_wca_id_validated = false

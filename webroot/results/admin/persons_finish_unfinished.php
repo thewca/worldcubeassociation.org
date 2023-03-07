@@ -63,12 +63,12 @@ function getPersons () {
   // when we are spliting wca profile, the person has an empty personId
   // when we are uploading results, the person has an digit only personId
   $persons = dbQueryHandle("
-    SELECT personName, Results.countryId, year, Results.personId, Results.competitionId, InboxPersons.dob
+    SELECT Results.personId, Results.personName, Results.competitionId, Results.countryId, Competitions.year, InboxPersons.dob
     FROM Results
     LEFT JOIN Competitions ON Competitions.id=Results.competitionId
     LEFT JOIN InboxPersons ON InboxPersons.id=Results.personId and InboxPersons.competitionId=Results.competitionId
     WHERE personId='' OR personId REGEXP '^[0-9]+$'
-    GROUP BY Results.personId, Results.personName, Results.competitionId
+    GROUP BY Results.personId, Results.personName, Results.competitionId, Results.countryId
     ORDER BY personName
   ");
   while( $row = mysql_fetch_array( $persons ))
@@ -157,7 +157,7 @@ function showUnfinishedPersons () {
             if (!count($lastIdTaken)) {
                 $counter = 0;
             } else {
-                $counter = intval(substr($lastIdTaken[0]['id'],8,2),10);
+                $counter = intval(substr($lastIdTaken[0]['id'],8,2));
             }
             $availableSpots[$semiId] = 99-$counter;
         }

@@ -1,0 +1,41 @@
+<% provide(:title, 'Finish unfinished persons') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h2><%= yield(:title) %></h2>
+    <div>
+      <p>In this script, a "person" always means a triple of (id,name,countryId) and "similar" always means just name
+        similarity. A person is called "finished" if it has a non-empty personId. A "semi-id" is the id without the
+        running number at the end.</p>
+
+      <p>For each unfinished person in the Results table, I show you the few most similar persons. Then you make choices
+        and click "update" at the bottom of the page to show and execute your choices. You can:</p>
+
+      <ul>
+        <li>
+          <p>Choose the person as "new", optionally modifying name, country and semi-id. This will add the person to the
+            Persons table (with appropriately extended id) and change its Results accordingly. If this person has both
+            roman and local names, the syntax for the names to be inserted correctly is 'romanName (localName)'.</p>
+        </li>
+        <li>
+          <p>Choose another person. This will overwrite the person's (id,name,countryId) triple in the Results table
+            with those of the other person.</p>
+        </li>
+        <li>
+          <p>Skip it if you're not sure yet.</p>
+        </li>
+      </ul>
+
+      <hr/>
+    </div>
+
+    <% if @persons_to_finish %>
+      Table here.
+    <% else %>
+      <%= simple_form_for @finish_persons, url: admin_finish_persons_path do |f| %>
+        <%= f.input :competition_id, as: :competition_id, only_one: true %>
+        <%= f.button :submit, value: "Check now!", class: "btn-primary" %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

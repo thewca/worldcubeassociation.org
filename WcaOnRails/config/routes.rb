@@ -217,6 +217,8 @@ Rails.application.routes.draw do
   get '/admin/check_regional_records' => 'admin#check_regional_records'
   get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
+  get '/admin/finish_persons' => 'admin#finish_persons'
+  post '/admin/finish_persons' => 'admin#do_finish_persons'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
