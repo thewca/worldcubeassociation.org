@@ -4,7 +4,7 @@ module FinishUnfinishedPersons
   WCA_ID_PADDING = 'U'
   WCA_QUARTER_ID_LENGTH = 4
 
-  WITH_ACCENT =    'ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķКкŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ'
+  WITH_ACCENT = 'ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķКкŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ'
   WITHOUT_ACCENT = 'aaaaaaaaccceeeeiiiiiddnoooooouuuuybrsssssssssttttzzzzzaaaaaaaaaaaaaaaaaaaccceeeeeeeeeeeegiiiiiiiiddkKklllnnnnoooooooooooooooouuuuuuuuuuuuuyybyyy'
 
   def self.search_persons(competition_id = nil)
@@ -96,8 +96,7 @@ module FinishUnfinishedPersons
   end
 
   def self.compute_similar_persons(result)
-    Person.all
-          .sort_by do |p|
+    Person.all.sort_by do |p|
       name_similarity = self.string_similarity(result.person_name, p.name)
       country_similarity = self.string_similarity(result.person_name, p.name)
 
@@ -106,6 +105,10 @@ module FinishUnfinishedPersons
   end
 
   def self.string_similarity(a, b)
-    0 # TODO: Tentative implementation
+    # Original PHP implementation uses PHP stdlib `string_similarity` function, which is custom built
+    # and "kinda like" Jaro-Winkler. I felt that the rewrite warrants a standardised matching algorithm.
+    @jarow ||= FuzzyStringMatch::JaroWinkler.create(:native)
+
+    @jarow.getDistance(a, b)
   end
 end
