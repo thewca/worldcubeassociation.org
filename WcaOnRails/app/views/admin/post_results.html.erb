@@ -18,7 +18,9 @@
             <li>clear <%= link_to "InboxPersons", competition_admin_delete_inbox_persons_path(@competition.id) %></li>
           <% end %>
         </ul>
-        <p>You can also always run <%= link_to "validators", competition_admin_check_existing_results_path(@competition.id) %> and return to this page later. Your progress will be saved.</p>
+        <p>You can also always
+          run <%= link_to "validators", competition_admin_check_existing_results_path(@competition.id) %> and return to
+          this page later. Your progress will be saved.</p>
       <% end %>
     <% end %>
 
@@ -33,10 +35,13 @@
       <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
     <% elsif @existing_data[:inbox_person] > 0 %>
       <%# TODO: Redo link pending other PR %>
-      <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+' %> to newcomers</p>
+      <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+' %> to
+        newcomers</p>
 
-      <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending (including <b style="color:#F00"><%= @existing_data[:newcomer] %></b> newcomers).
-        After the import is done, you can clear the table using the info box above. <i>Note that the process on this page will not proceed until all inbox data is cleared.</i></p>
+      <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending (including
+        <b style="color:#F00"><%= @existing_data[:newcomer] %></b> newcomers).
+        After the import is done, you can clear the table using the info box above.
+        <i>Note that the process on this page will not proceed until all inbox data is cleared.</i></p>
     <% else %>
       <p>All inbox data has been imported. You should consider the following steps next:</p>
       <ul>
@@ -44,6 +49,50 @@
         <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
         <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
+      <p>You can also refer to the following table for Results and Scrambles:</p>
+      <%= wca_table do %>
+        <thead>
+        <tr>
+          <th class="event">Event</th>
+          <th class="round-format">Round</th>
+          <th>Fully imported Results</th>
+          <th>Fully imported Scrambles</th>
+        </tr>
+        </thead>
+        <tbody>
+        <% rounds_by_event = @competition.rounds.group_by(&:event) %>
+
+        <% @competition.events.sort_by(&:rank).each do |e| %>
+          <% announced_event = false %>
+
+          <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
+            <tr>
+              <td><%= announced_event ? '' : e.name %></td>
+              <td><%= r.round_type.name %></td>
+
+              <% [Result, Scramble].each do |model| %>
+                <% has_assoc = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).any? %>
+
+                <td class="text-center <%= has_assoc ? "good_cell" : "bad_cell" %>">
+                  <% if has_assoc %>
+                    Yes <%= link_to "X", competition_admin_delete_results_data_path(@competition.id, table: model.name, event: e.id, roundType: r.round_type.id) %>
+                  <% else %>
+                    Nope.
+                  <% end %>
+                </td>
+              <% end %>
+            </tr>
+
+            <% announced_event = true %>
+          <% end %>
+        <% end %>
+        </tbody>
+      <% end %>
+      <p>
+        <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
+        Remove all results and scrambles only, does not affect
+        persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, table: 'All') %>
+      </p>
     <% end %>
 
     <% if @existing_data[:result] > 0 %>

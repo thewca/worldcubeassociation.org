@@ -185,6 +185,24 @@ class AdminController < ApplicationController
     redirect_to competition_admin_post_results_path
   end
 
+  def delete_results_data
+    @competition = competition_from_params
+
+    case params[:table]
+    when "All"
+      Result.destroy_by(competitionId: @competition.id)
+      Scramble.destroy_by(competitionId: @competition.id)
+    when "Result"
+      Result.destroy_by(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType])
+    when "Scramble"
+      Scramble.destroy_by(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType])
+    else
+      raise "Invalid table: #{params[:table]}"
+    end
+
+    redirect_to competition_admin_post_results_path
+  end
+
   def create_results
     @competition = competition_from_params
 
