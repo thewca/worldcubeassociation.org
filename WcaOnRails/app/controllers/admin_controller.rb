@@ -354,6 +354,43 @@ class AdminController < ApplicationController
     render :finish_persons
   end
 
+  def do_complete_persons
+    # memoize all WCA IDs, especially useful if we have several identical semi-IDs in the same batch
+    # (siblings with the same last name competing as newcomers at the same competition etc.)
+    wca_id_index = Person.pluck(:wca_id)
+
+    ActiveRecord::Base.transaction do
+      params[:person_completions].each do |person_key, procedure|
+        old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
+
+        case procedure[:action]
+        when "skip"
+          next
+        when "create"
+          new_name = procedure[:new_name]
+          new_country = procedure[:new_country]
+          new_semi_id = procedure[:new_semi_id]
+
+          new_id, wca_id_index = FinishUnfinishedPersons.complete_wca_id(new_semi_id, wca_id_index)
+
+          inbox_person = InboxPerson.where(id: pending_person_id)
+                                    .where(competitionId: pending_competition_id)
+                                    .first
+
+          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
+          FinishUnfinishedPersons.adapt_results(inbox_person.id, inbox_person.name, inbox_person.countryId, new_name, new_country, new_id, pending_competition_id)
+        else
+          _, merge_id = procedure[:action].split '-'
+          new_person = Person.find(merge_id)
+
+          FinishUnfinishedPersons.adapt_results(nil, old_name, old_country, new_person.name, new_person.countryId, new_person.wca_id)
+        end
+      end
+    end
+
+    redirect_to :admin_finish_persons
+  end
+
   def reassign_wca_id
     @reassign_wca_id = ReassignWcaId.new
     @reassign_wca_id_validated = false

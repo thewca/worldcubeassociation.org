@@ -8,6 +8,7 @@ class Result < ApplicationRecord
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
   alias_attribute :person_name, :personName
   validates :personName, presence: true
+  alias_attribute :person_id, :personId
   alias_attribute :person_name, :personName
   belongs_to :country, foreign_key: :countryId
   alias_attribute :country_id, :countryId
