@@ -118,9 +118,18 @@ class AdminController < ApplicationController
       @competition.update(results_submitted_at: nil)
       flash[:success] = "Results submission cleared."
     else
-      flash[:danger] = "Could not clear the results submission. Maybe results are alredy posted, or there is no submission."
+      flash[:danger] = "Could not clear the results submission. Maybe results are already posted, or there is no submission."
     end
     redirect_to competition_admin_upload_results_edit_path
+  end
+
+  def post_results
+    @competition = competition_from_params
+  end
+
+  def do_post_results
+    @competition = competition_from_params
+    redirect_to competition_admin_post_results_path
   end
 
   def create_results

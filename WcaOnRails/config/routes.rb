@@ -79,6 +79,8 @@ Rails.application.routes.draw do
     post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
+    get '/admin/post-results' => 'admin#post_results', as: :admin_post_results
+    post '/admin/post-results' => 'admin#do_post_results', as: :admin_do_post_results
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
 
