@@ -1,4 +1,62 @@
 <% provide(:title, "Post competition results & scrambles") %>
 <%= render layout: 'competitions/nav' do %>
   <h1><%= yield(:title) %></h1>
+
+  <% if @existing_data.values.all?(&:zero?) %>
+    <%= alert :info do %>
+      This competition has no data yet. Upload something to get started.
+    <% end %>
+  <% else %>
+    <% if @existing_data[:inbox_result] > 0 || @existing_data[:inbox_person] > 0 %>
+      <%= alert :info do %>
+        <p>This competition is in the process of having data uploaded. If necessary, you can:</p>
+        <ul>
+          <% if @existing_data[:inbox_result] > 0 %>
+            <li>clear <%= link_to "InboxResults", competition_admin_delete_inbox_results_path(@competition.id) %></li>
+          <% end %>
+          <% if @existing_data[:inbox_person] > 0 %>
+            <li>clear <%= link_to "InboxPersons", competition_admin_delete_inbox_persons_path(@competition.id) %></li>
+          <% end %>
+        </ul>
+        <p>You can also always run <%= link_to "validators", competition_admin_check_existing_results_path(@competition.id) %> and return to this page later. Your progress will be saved.</p>
+      <% end %>
+    <% end %>
+
+    <% if @existing_data[:inbox_result] > 0 %>
+      <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition.id) %> results</p>
+
+      <%# Small hack because I want to reuse the existing results preview panel, but it expects a @results_validator. %>
+      <%# So we just create one on the fly and "run" the checks without actually checking anything. %>
+      <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
+      <% results_validator.validate [@competition.id] %>
+
+      <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
+    <% elsif @existing_data[:inbox_person] > 0 %>
+      <%# TODO: Redo link pending other PR %>
+      <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+' %> to newcomers</p>
+
+      <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending (including <b style="color:#F00"><%= @existing_data[:newcomer] %></b> newcomers).
+        After the import is done, you can clear the table using the info box above. <i>Note that the process on this page will not proceed until all inbox data is cleared.</i></p>
+    <% else %>
+      <p>All inbox data has been imported. You should consider the following steps next:</p>
+      <ul>
+        <%# TODO: Redo link pending other PR %>
+        <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
+        <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
+      </ul>
+    <% end %>
+
+    <% if @existing_data[:result] > 0 %>
+      <%= alert :warning, note: true do %>
+        This competition has result data imported. Uploading more data may cause duplicate entries.
+      <% end %>
+    <% end %>
+
+    <% if @existing_data[:scramble] > 0 %>
+      <%= alert :warning, note: true do %>
+        This competition has scramble data uploaded. Uploading more data may cause duplicate entries.
+        You may remove scrambles using the interface above.
+      <% end %>
+    <% end %>
+  <% end %>
 <% end %>

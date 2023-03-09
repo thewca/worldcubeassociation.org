@@ -80,7 +80,9 @@ Rails.application.routes.draw do
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/post-results' => 'admin#post_results', as: :admin_post_results
-    post '/admin/post-results' => 'admin#do_post_results', as: :admin_do_post_results
+    get '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
+    post '/admin/delete-inbox-results' => 'admin#delete_inbox_results', as: :admin_delete_inbox_results
+    post '/admin/delete-inbox-persons' => 'admin#delete_inbox_persons', as: :admin_delete_inbox_persons
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
 

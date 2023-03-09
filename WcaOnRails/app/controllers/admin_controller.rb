@@ -125,10 +125,63 @@ class AdminController < ApplicationController
 
   def post_results
     @competition = competition_from_params
+
+    data_tables = {
+      result: Result,
+      scramble: Scramble,
+      inbox_result: InboxResult,
+      inbox_person: InboxPerson,
+      newcomer: InboxPerson.where(wcaId: ''),
+    }
+
+    @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
   end
 
-  def do_post_results
+  def import_inbox_results
     @competition = competition_from_params
+
+    ActiveRecord::Base.transaction do
+      @competition.inbox_results
+                  .joins("LEFT JOIN InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
+                  .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
+                  .each do |inbox_res|
+        person_id = inbox_res.personWcaId || inbox_res.personId
+        person_country = Country.find_by_iso2(inbox_res.personCountryIso2)
+
+        Result.create(
+          pos: inbox_res.pos,
+          personId: person_id,
+          personName: inbox_res.personName,
+          countryId: person_country.id,
+          competitionId: inbox_res.competitionId,
+          eventId: inbox_res.eventId,
+          roundTypeId: inbox_res.roundTypeId,
+          formatId: inbox_res.formatId,
+          value1: inbox_res.value1,
+          value2: inbox_res.value2,
+          value3: inbox_res.value3,
+          value4: inbox_res.value4,
+          value5: inbox_res.value5,
+          best: inbox_res.best,
+          average: inbox_res.average,
+        )
+      end
+    end
+
+    redirect_to competition_admin_post_results_path
+  end
+
+  def delete_inbox_results
+    @competition = competition_from_params
+
+    InboxResult.destroy_by(competitionId: @competition.id)
+    redirect_to competition_admin_post_results_path
+  end
+
+  def delete_inbox_persons
+    @competition = competition_from_params
+
+    InboxPerson.destroy_by(competitionId: @competition.id)
     redirect_to competition_admin_post_results_path
   end
 
