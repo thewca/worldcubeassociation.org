@@ -4,7 +4,7 @@
 
   <% if @existing_data.values.all?(&:zero?) %>
     <%= alert :info do %>
-      This competition has no data yet. Upload something to get started.
+      This competition has no data yet. <%= link_to "Upload something", competition_admin_upload_results_edit_path(@competition.id) %> to get started.
     <% end %>
   <% else %>
     <% if @existing_data[:inbox_result] > 0 || @existing_data[:inbox_person] > 0 %>
@@ -27,6 +27,14 @@
     <% if @existing_data[:inbox_result] > 0 %>
       <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition.id) %> results</p>
 
+      <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
+      <p>There are a total of <b><%= @existing_data[:result] %></b> rows inserted into the Results table.</p>
+
+      <% if @existing_data[:inbox_result] == @existing_data[:result] %>
+        <p>You can <%= link_to "delete", competition_admin_delete_inbox_results_path(@competition.id) %> the inbox data,
+          as all rows seem to have been fully imported.</p>
+      <% end %>
+
       <%# Small hack because I want to reuse the existing results preview panel, but it expects a @results_validator. %>
       <%# So we just create one on the fly and "run" the checks without actually checking anything. %>
       <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
@@ -38,10 +46,20 @@
       <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+' %> to
         newcomers</p>
 
-      <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending (including
-        <b style="color:#F00"><%= @existing_data[:newcomer] %></b> newcomers).
-        After the import is done, you can clear the table using the info box above.
-        <i>Note that the process on this page will not proceed until all inbox data is cleared.</i></p>
+      <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending</p>
+
+      <ul>
+        <li><b><%= @existing_data[:newcomer_person] %></b> entries from InboxPersons are newcomers.</li>
+        <li>
+          <b style="color:<%= @existing_data[:newcomer_result] == 0 ? "#0B0" : "#F00" %>"><%= @existing_data[:newcomer_result] %></b>
+          newcomers in the Results table are still pending.
+        </li>
+      </ul>
+
+      <% if @existing_data[:newcomer_result] == 0 %>
+        <p>You can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id) %> the inbox data,
+          as all rows seem to have been fully imported.</p>
+      <% end %>
     <% else %>
       <p>All inbox data has been imported. You should consider the following steps next:</p>
       <ul>

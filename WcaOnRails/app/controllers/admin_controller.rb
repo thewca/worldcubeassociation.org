@@ -131,7 +131,8 @@ class AdminController < ApplicationController
       scramble: Scramble,
       inbox_result: InboxResult,
       inbox_person: InboxPerson,
-      newcomer: InboxPerson.where(wcaId: ''),
+      newcomer_person: InboxPerson.where(wcaId: ''),
+      newcomer_result: Result.where("personId REGEXP '^[0-9]+$'"),
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
@@ -145,10 +146,12 @@ class AdminController < ApplicationController
                   .joins("LEFT JOIN InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
                   .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
                   .each do |inbox_res|
-        person_id = inbox_res.personWcaId || inbox_res.personId
+        person_id = inbox_res.personWcaId.presence || inbox_res.personId
         person_country = Country.find_by_iso2(inbox_res.personCountryIso2)
 
-        Result.create(
+        # TODO: This runs a lot of validations and is slow(ish, aka. bearable but could be faster).
+        #   Is it safe to just let Results Team insert rows without Rails validations?
+        created_res = Result.create(
           pos: inbox_res.pos,
           personId: person_id,
           personName: inbox_res.personName,
@@ -165,6 +168,10 @@ class AdminController < ApplicationController
           best: inbox_res.best,
           average: inbox_res.average,
         )
+
+        unless created_res.valid?
+          raise "Invalid Result when imported from InboxResult: #{created_res.errors.full_messages}"
+        end
       end
     end
 
@@ -181,7 +188,9 @@ class AdminController < ApplicationController
   def delete_inbox_persons
     @competition = competition_from_params
 
-    InboxPerson.destroy_by(competitionId: @competition.id)
+    # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
+    @competition.inbox_persons.each(&:delete)
+
     redirect_to competition_admin_post_results_path
   end
 

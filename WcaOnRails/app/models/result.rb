@@ -5,7 +5,7 @@ class Result < ApplicationRecord
 
   self.table_name = "Results"
 
-  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
+  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId, optional: true
   alias_attribute :person_name, :personName
   validates :personName, presence: true
   alias_attribute :person_id, :personId
