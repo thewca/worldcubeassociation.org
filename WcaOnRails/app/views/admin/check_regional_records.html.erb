@@ -137,7 +137,9 @@
                       <td class="computed"><b style="color:#<%= computed_color %>"><%= computed_marker %></b></td>
                       <td class="agree">
                         <% unless markers_same %>
-                          <%= f.check_box "#{result.id}-#{value_name}", {}, computed_marker, nil %>
+                          <%= f.input "#{result.id}-#{value_name}", label: false, hint: false do %>
+                            <%= f.check_box "#{result.id}-#{value_name}", {}, computed_marker, nil %>
+                          <% end %>
                         <% end %>
                       </td>
                     </tr>
