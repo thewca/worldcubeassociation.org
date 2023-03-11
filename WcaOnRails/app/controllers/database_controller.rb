@@ -22,11 +22,11 @@ class DatabaseController < ApplicationController
     @sql_filename, @sql_filesize = _link_info RESULTS_SQL_PERMALINK
     @tsv_filename, @tsv_filesize = _link_info RESULTS_TSV_PERMALINK
 
-    @sql_rel_path = _rel_download_path RESULTS_EXPORT_FOLDER, @sql_filename
-    @tsv_rel_path = _rel_download_path RESULTS_EXPORT_FOLDER, @tsv_filename
+    @sql_rel_path = DatabaseController.rel_download_path RESULTS_EXPORT_FOLDER, @sql_filename
+    @tsv_rel_path = DatabaseController.rel_download_path RESULTS_EXPORT_FOLDER, @tsv_filename
 
-    @sql_perma_path = _rel_download_path RESULTS_EXPORT_FOLDER, RESULTS_SQL_PERMALINK
-    @tsv_perma_path = _rel_download_path RESULTS_EXPORT_FOLDER, RESULTS_TSV_PERMALINK
+    @sql_perma_path = DatabaseController.rel_download_path RESULTS_EXPORT_FOLDER, RESULTS_SQL_PERMALINK
+    @tsv_perma_path = DatabaseController.rel_download_path RESULTS_EXPORT_FOLDER, RESULTS_TSV_PERMALINK
   end
 
   def _link_info(permalink)
@@ -41,16 +41,16 @@ class DatabaseController < ApplicationController
     [actual_filename, filesize_bytes]
   end
 
-  def _rel_download_path(base_folder, file_name)
+  def developer_export
+    @rel_download_path = DatabaseController.rel_download_path DEVELOPER_EXPORT_FOLDER, DEVELOPER_SQL_PERMALINK
+  end
+
+  def self.rel_download_path(base_folder, file_name)
     file_path = base_folder.join file_name
     relative_path = file_path.relative_path_from EXPORT_PUBLIC_FOLDER.parent
 
     # has to start with / or otherwise Rails resolves the controller action into the path
     "/#{relative_path}"
-  end
-
-  def developer_export
-    @rel_download_path = _rel_download_path DEVELOPER_EXPORT_FOLDER, DEVELOPER_SQL_PERMALINK
   end
 
   def self.render_readme(rendering_engine, export_timestamp)

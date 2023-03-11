@@ -179,18 +179,15 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    sql_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.sql.zip")).sort!
-    tsv_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.tsv.zip")).sort!
+    sql_perma_path = DatabaseController.rel_download_path DatabaseController::RESULTS_EXPORT_FOLDER, DatabaseController::RESULTS_SQL_PERMALINK
+    tsv_perma_path = DatabaseController.rel_download_path DatabaseController::RESULTS_EXPORT_FOLDER, DatabaseController::RESULTS_TSV_PERMALINK
 
-    last_sql = File.basename(sql_zips.last)
-    last_tsv = File.basename(tsv_zips.last)
-    m = /WCA_export(\d+)_(.*).sql.zip/.match(last_sql)
-    date = Time.parse(m[2])
+    timestamp = Timestamp.find_by(name: DumpPublicResultsDatabase::TIMESTAMP_NAME)
 
     render json: {
-      export_date: date.iso8601,
-      sql_url: "#{root_url}results/misc/#{last_sql}",
-      tsv_url: "#{root_url}results/misc/#{last_tsv}",
+      export_date: timestamp&.date&.iso8601,
+      sql_url: "#{root_url}#{sql_perma_path.delete_prefix '/'}",
+      tsv_url: "#{root_url}#{tsv_perma_path.delete_prefix '/'}",
     }
   end
 
