@@ -22,6 +22,7 @@ class FixResultsSelector
     person.results
           .filter { |r| r.competition_id == competition_id }
           .map(&:event)
+          .sort_by(&:rank)
           .uniq
   end
 
@@ -34,6 +35,7 @@ class FixResultsSelector
           .filter { |r| r.competition_id == competition_id }
           .filter { |r| r.event_id == event_id }
           .map(&:round_type)
+          .sort_by(&:rank)
           .uniq
   end
 
