@@ -51,7 +51,7 @@
             <% case_id = "#{p[:person_name]}|#{p[:country_id]}|#{p[:person_id]}|#{p[:competition_id]}" %>
 
             <tr>
-              <td colspan="8" class="text-center"><%= p[:person_name] %> (ID <code><%= p[:person_id] %></code>)</td>
+              <td colspan="8" class="text-center"><b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)</td>
             </tr>
 
             <tr>
@@ -70,8 +70,12 @@
             </tr>
 
             <% p[:similar_persons].each do |sim, np, cp| %>
-              <% radio_checked = sim.name == p[:person_name] %>
-              <tr style="<%= radio_checked ? "background-color: #F00" : "" %>">
+              <% name_identical = FinishUnfinishedPersons.extract_roman_name(sim.name) == FinishUnfinishedPersons.extract_roman_name(p[:person_name]) %>
+              <% dob_identical = sim.dob == p[:person_dob] %>
+
+              <% radio_checked = name_identical || dob_identical %>
+
+              <tr style="<%= radio_checked ? "background-color: #F2DEDE" : "" %>">
                 <td>
                   <%= f.input "#{case_id}][action", label: false, hint: false do %>
                     <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: radio_checked %>
