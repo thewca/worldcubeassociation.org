@@ -340,7 +340,7 @@ class AdminController < ApplicationController
 
   def finish_persons
     @finish_persons = FinishPersonsForm.new(
-      params[:competition_id] || nil
+      params[:competition_id] || nil,
     )
   end
 
@@ -378,12 +378,14 @@ class AdminController < ApplicationController
                                     .first
 
           FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
-          FinishUnfinishedPersons.adapt_results(inbox_person.id, inbox_person.name, inbox_person.countryId, new_name, new_country, new_id, pending_competition_id)
+          FinishUnfinishedPersons.adapt_results(inbox_person.id, inbox_person.name, inbox_person.countryId, new_id, new_name, new_country, pending_competition_id)
         else
-          _, merge_id = procedure[:action].split '-'
+          action, merge_id = procedure[:action].split '-'
+          raise "Invalid action: #{action}" unless action == "merge"
+
           new_person = Person.find(merge_id)
 
-          FinishUnfinishedPersons.adapt_results(nil, old_name, old_country, new_person.name, new_person.countryId, new_person.wca_id)
+          FinishUnfinishedPersons.adapt_results(nil, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId)
         end
       end
     end

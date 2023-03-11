@@ -159,20 +159,34 @@ module FinishUnfinishedPersons
     )
   end
 
-  def self.adapt_results(pending_id, pending_name, pending_country, new_name, new_country, new_wca_id, pending_comp_id = nil)
+  # rubocop:disable Metrics/ParameterLists
+  def self.adapt_results(
+    pending_id,
+    pending_name,
+    pending_country,
+    new_wca_id,
+    new_name,
+    new_country,
+    pending_comp_id = nil
+  )
     results_scope = Result
 
     if pending_id.present?
       raise "Must supply a competition ID for updating newcomer results!" if pending_comp_id.nil?
 
-      results_scope = results_scope.where(personId: pending_id)
-                                   .where(competition_id: pending_comp_id)
+      results_scope = results_scope.where(
+        personId: pending_id,
+        competition_id: pending_comp_id,
+      )
     else
-      results_scope = results_scope.where(personName: pending_name)
-                                   .where(countryId: pending_country)
-                                   .where(personId: '') # personId is empty when splitting profiles
+      results_scope = results_scope.where(
+        personName: pending_name,
+        countryId: pending_country,
+        personId: '', # personId is empty when splitting profiles
+      )
     end
 
     results_scope.update_all(personName: new_name, countryId: new_country, personId: new_wca_id)
   end
+  # rubocop:enable Metrics/ParameterLists
 end
