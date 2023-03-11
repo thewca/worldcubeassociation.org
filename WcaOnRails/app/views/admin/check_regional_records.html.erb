@@ -1,6 +1,6 @@
 <% provide(:title, "Check regional records") %>
 
-<div class="container">
+<div class="<%= @check_results ? "container-fluid" : "container" %>">
   <%= render layout: 'nav' do %>
     <h1><%= yield(:title) %></h1>
     <p>
@@ -51,7 +51,7 @@
               <% if value_check_results.empty? %>
                 All good, carry on!
               <% else %>
-                <%= wca_table table_class: "wca-results" do %>
+                <%= wca_table table_class: "wca-results", greedy: false do %>
                   <thead>
                   <tr>
                     <th class="date"> Date</th>
@@ -66,9 +66,6 @@
                     <th class="stored"> Stored</th>
                     <th class="computed"> Computed</th>
                     <th class="agree"> Agree?</th>
-
-                    <!-- Extra column for .table-greedy-last-column -->
-                    <th></th>
                   </tr>
                   </thead>
 
