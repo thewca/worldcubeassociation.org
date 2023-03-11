@@ -8,6 +8,13 @@ class StripeTransaction < ApplicationRecord
     failure: "failure",
   }
 
+  # Actual values are according to Stripe API documentation as of 2023-03-12.
+  enum api_type: {
+    payment_intent: "payment_intent",
+    charge: "charge",
+    refund: "refund",
+  }
+
   has_one :registration_payment, as: :receipt
   belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
 
@@ -61,5 +68,17 @@ class StripeTransaction < ApplicationRecord
 
     # Stripe and ruby-money agree. All good.
     amount_stripe_denomination
+  end
+
+  def self.create_receipt(api_transaction, parameters, status, account_id)
+    StripeTransaction.create!(
+      api_type: api_transaction.object,
+      parameters: parameters,
+      stripe_id: api_transaction.id,
+      amount_stripe_denomination: api_transaction.amount,
+      currency_code: api_transaction.currency,
+      status: status,
+      account_id: account_id,
+    )
   end
 end

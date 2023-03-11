@@ -497,7 +497,7 @@ class RegistrationsController < ApplicationController
         # Log the payment attempt
         stripe_transaction = StripeTransaction.create!(
           parameters: payment_intent_args,
-          api_type: "PaymentIntent",
+          api_type: "payment_intent",
           stripe_id: nil,
           status: "unknown",
           account_id: account_id,
@@ -509,7 +509,7 @@ class RegistrationsController < ApplicationController
           stripe_account: account_id,
         )
       elsif params[:payment_intent_id]
-        stripe_transaction = StripeTransaction.find_by(type: 'PaymentIntent', stripe_id: params[:payment_intent_id])
+        stripe_transaction = StripeTransaction.find_by(stripe_id: params[:payment_intent_id])
         # We should definitely find a StripeTransaction for this PI, so show an error if we don't.
         unless stripe_transaction
           render json: { error: { message: t("registrations.payment_form.errors.intent_not_found") } }
@@ -542,14 +542,19 @@ class RegistrationsController < ApplicationController
       )
       # Tell the client to handle the action
       [200, { requires_action: true, payment_intent_client_secret: intent.client_secret }]
-    elsif intent.status == "succeeded"
+    elsif intent&.status == "succeeded"
+      account_id = registration.competition.connected_stripe_account_id
+
       intent.charges.data.each do |charge|
+        charge_receipt = StripeTransaction.create_receipt(charge, {}, "success", account_id)
+        charge_receipt.update!(parent_transaction: stripe_transaction)
+
         ruby_amount = StripeTransaction.amount_to_ruby(charge.amount, charge.currency)
 
         registration.record_payment(
           ruby_amount,
           charge.currency,
-          charge.id,
+          charge_receipt,
           current_user.id,
         )
       end
@@ -596,13 +601,25 @@ class RegistrationsController < ApplicationController
     currency_iso = registration.competition.currency_code
     stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
 
+    # Backwards compatibility: We may at some point try to record a refund for a payment that was
+    #   - created before the introduction of receipts
+    #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
+    charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
+
+    refund_args = {
+      charge: charge_id,
+      amount: stripe_amount,
+    }
+
+    account_id = registration.competition.connected_stripe_account_id
+
     refund = Stripe::Refund.create(
-      {
-        charge: payment.stripe_charge_id,
-        amount: stripe_amount,
-      },
-      stripe_account: registration.competition.connected_stripe_account_id,
+      refund_args,
+      stripe_account: account_id,
     )
+
+    refund_receipt = StripeTransaction.create_receipt(refund, refund_args, "success", account_id)
+    refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
@@ -611,7 +628,7 @@ class RegistrationsController < ApplicationController
     registration.record_refund(
       ruby_amount,
       refund.currency,
-      refund.id,
+      refund_receipt,
       payment.id,
       current_user.id,
     )

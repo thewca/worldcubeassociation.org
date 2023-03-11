@@ -571,7 +571,7 @@ RSpec.describe "registrations" do
           # the 'register' page which does.
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
-          charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          charge = Stripe::Charge.retrieve(registration.registration_payments.first.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
@@ -589,7 +589,7 @@ RSpec.describe "registrations" do
           }
           expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
           expect(registration.paid_entry_fees.cents).to eq payment_amount
-          charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          charge = Stripe::Charge.retrieve(registration.registration_payments.first.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
           expect(charge.amount).to eq payment_amount
         end
 
@@ -599,10 +599,9 @@ RSpec.describe "registrations" do
             payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge_id = registration.reload.registration_payments.first.stripe_charge_id
-          stripe_transaction = StripeTransaction.find_by(stripe_id: stripe_charge_id)
+          stripe_transaction = registration.reload.registration_payments.first.receipt.parent_transaction
           expect(stripe_transaction&.status).to eq "success"
-          metadata = JSON.parse(stripe_transaction.metadata)["metadata"]
+          metadata = stripe_transaction.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
       end
