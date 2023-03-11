@@ -58,20 +58,28 @@
             </tr>
 
             <tr>
-              <td><%= f.radio_button "#{case_id}][action", :create, checked: true %></td>
+              <td>
+                <%= f.input "#{case_id}][action", label: false, hint: false do %>
+                  <%= f.radio_button "#{case_id}][action", :create, checked: true %>
+                <% end %>
+              </td>
               <td><%= display_string p[:person_name] %></td>
               <td><%= country.name %></td>
               <td>(pending)</td>
               <td><%= p[:person_dob] %></td>
-              <td><%= f.input_field "#{case_id}][new_name", value: p[:person_name] %></td>
-              <td><%= f.collection_select "#{case_id}][new_country", Country.all, :id, :name, selected: p[:country_id] %></td>
-              <td><%= f.input_field "#{case_id}][new_semi_id", value: p[:computed_semi_id], maxlength: 8 %></td>
+              <td><%= f.input "#{case_id}][new_name", input_html: { value: p[:person_name] }, label: false, hint: false %></td>
+              <td><%= f.input "#{case_id}][new_country", collection: Country.all_sorted_by(I18n.locale, real: true), value_method: :id, label_method: :name, selected: p[:country_id], label: false, hint: false %></td>
+              <td><%= f.input "#{case_id}][new_semi_id", input_html: { value: p[:computed_semi_id] }, maxlength: 8, label: false, hint: false %></td>
             </tr>
 
             <% p[:similar_persons].each do |sim, np, cp| %>
               <% radio_checked = sim.name == p[:person_name] %>
               <tr style="<%= radio_checked ? "background-color: #F00" : "" %>">
-                <td><%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: radio_checked %></td>
+                <td>
+                  <%= f.input "#{case_id}][action", label: false, hint: false do %>
+                    <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: radio_checked %>
+                  <% end %>
+                </td>
                 <td><%= display_string sim.name %></td>
                 <td><%= sim.country.name %></td>
                 <td>
@@ -89,7 +97,11 @@
             <% end %>
 
             <tr>
-              <td><%= f.radio_button "#{case_id}][action", :skip %></td>
+              <td>
+                <%= f.input "#{case_id}][action", label: false, hint: false do %>
+                  <%= f.radio_button "#{case_id}][action", :skip %>
+                <% end %>
+              </td>
               <td colspan=7>I'm not sure yet</td>
             </tr>
           <% end %>
@@ -98,8 +110,8 @@
         <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
       <% end %>
     <% else %>
-      <%= simple_form_for @finish_persons, url: admin_finish_persons_path do |f| %>
-        <%= f.input :competition_id, as: :competition_id, only_one: true %>
+      <%= simple_form_for @finish_persons, url: admin_finish_unfinished_persons_path do |f| %>
+        <%= f.input :competition_id, as: :competition_id, only_one: true, label: "Competition ID", hint: "Leave blank to check for all competitions" %>
         <%= f.button :submit, value: "Check now!", class: "btn-primary" %>
       <% end %>
     <% end %>
