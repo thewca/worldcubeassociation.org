@@ -467,8 +467,9 @@ class RegistrationsController < ApplicationController
       return
     end
     intent = nil
-    stripe_charge = nil
+    stripe_transaction = nil
     competition = registration.competition
+    account_id = competition.connected_stripe_account_id
     registration_metadata = {
       competition: competition.name,
       registration_url: edit_registration_url(registration),
@@ -481,7 +482,7 @@ class RegistrationsController < ApplicationController
         end
 
         currency_iso = registration.outstanding_entry_fees.currency.iso_code
-        stripe_amount = StripeCharge.amount_to_stripe(amount, currency_iso)
+        stripe_amount = StripeTransaction.amount_to_stripe(amount, currency_iso)
 
         payment_intent_args = {
           payment_method: params[:payment_method_id],
@@ -494,55 +495,56 @@ class RegistrationsController < ApplicationController
           metadata: registration_metadata,
         }
         # Log the payment attempt
-        stripe_charge = StripeCharge.create!(
-          metadata: payment_intent_args.to_json,
-          stripe_charge_id: nil,
+        stripe_transaction = StripeTransaction.create!(
+          parameters: payment_intent_args,
+          api_type: "PaymentIntent",
+          stripe_id: nil,
           status: "unknown",
+          account_id: account_id,
         )
         # Create the PaymentIntent, overriding the stripe_account for the request
         # by the connected stripe account for the competition.
         intent = Stripe::PaymentIntent.create(
           payment_intent_args,
-          stripe_account: registration.competition.connected_stripe_account_id,
+          stripe_account: account_id,
         )
       elsif params[:payment_intent_id]
-        stripe_charge = StripeCharge.find_by(stripe_charge_id: params[:payment_intent_id])
-        # We should definitely find a StripeCharge for this PI, so show an error if we don't.
-        unless stripe_charge
+        stripe_transaction = StripeTransaction.find_by(type: 'PaymentIntent', stripe_id: params[:payment_intent_id])
+        # We should definitely find a StripeTransaction for this PI, so show an error if we don't.
+        unless stripe_transaction
           render json: { error: { message: t("registrations.payment_form.errors.intent_not_found") } }
           return
         end
         intent = Stripe::PaymentIntent.confirm(
           params[:payment_intent_id],
           {},
-          stripe_account: registration.competition.connected_stripe_account_id,
+          stripe_account: account_id,
         )
       end
     rescue Stripe::StripeError => e
       # Log and display error to client
-      stripe_charge.update!(status: "failure", error: e.message)
+      stripe_transaction.update!(status: "failure", error: e.message)
       render json: { error: { message: e.message } }
       return
     end
-    status, response = generate_payment_response!(registration, intent, stripe_charge)
+    status, response = generate_payment_response!(registration, intent, stripe_transaction)
     render json: response, status: status
   end
 
-  private def generate_payment_response!(registration, intent, stripe_charge)
+  private def generate_payment_response!(registration, intent, stripe_transaction)
     if intent && intent.status == "requires_action" &&
        intent.next_action.type == "use_stripe_sdk"
       # For now, since we don't have a charge, we'll keep the intent id as the charge id
       # to be able to match the log entry to an actual Stripe action.
-      stripe_charge.update!(
+      stripe_transaction.update!(
         status: "payment_intent_registered",
-        stripe_charge_id: intent.id,
+        stripe_id: intent.id,
       )
       # Tell the client to handle the action
       [200, { requires_action: true, payment_intent_client_secret: intent.client_secret }]
-    elsif intent&.status == "succeeded"
-      # FIXME: what if intent.charges.total_count is not 1?!
+    elsif intent.status == "succeeded"
       intent.charges.data.each do |charge|
-        ruby_amount = StripeCharge.amount_to_ruby(charge.amount, charge.currency)
+        ruby_amount = StripeTransaction.amount_to_ruby(charge.amount, charge.currency)
 
         registration.record_payment(
           ruby_amount,
@@ -550,11 +552,11 @@ class RegistrationsController < ApplicationController
           charge.id,
           current_user.id,
         )
-        stripe_charge.update!(
-          status: "success",
-          stripe_charge_id: charge.id,
-        )
       end
+      stripe_transaction.update!(
+        status: "success",
+        stripe_id: intent.id,
+      )
       # The payment didn’t need any additional actions and is completed!
       # Handle post-payment fulfillment
       [200, { success: true }]
@@ -592,7 +594,7 @@ class RegistrationsController < ApplicationController
     end
 
     currency_iso = registration.competition.currency_code
-    stripe_amount = StripeCharge.amount_to_stripe(refund_amount, currency_iso)
+    stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
 
     refund = Stripe::Refund.create(
       {
@@ -604,7 +606,7 @@ class RegistrationsController < ApplicationController
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    ruby_amount = StripeCharge.amount_to_ruby(refund.amount, refund.currency)
+    ruby_amount = StripeTransaction.amount_to_ruby(refund.amount, refund.currency)
 
     registration.record_refund(
       ruby_amount,

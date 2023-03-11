@@ -594,15 +594,15 @@ RSpec.describe "registrations" do
         end
 
         it "insert a success in the stripe journal" do
-          expect(StripeCharge.all.length).to eq 0
+          expect(StripeTransaction.all.length).to eq 0
           post registration_payment_intent_path(registration.id), params: {
             payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
           stripe_charge_id = registration.reload.registration_payments.first.stripe_charge_id
-          stripe_charge = StripeCharge.find_by(stripe_charge_id: stripe_charge_id)
-          expect(stripe_charge&.status).to eq "success"
-          metadata = JSON.parse(stripe_charge.metadata)["metadata"]
+          stripe_transaction = StripeTransaction.find_by(stripe_id: stripe_charge_id)
+          expect(stripe_transaction&.status).to eq "success"
+          metadata = JSON.parse(stripe_transaction.metadata)["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
       end
@@ -635,14 +635,14 @@ RSpec.describe "registrations" do
         end
 
         it "inserts an 'intent registered' event in the stripe journal" do
-          expect(StripeCharge.all.length).to eq 0
+          expect(StripeTransaction.all.length).to eq 0
           post registration_payment_intent_path(registration.id), params: {
             payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge = StripeCharge.first
-          expect(stripe_charge&.status).to eq "payment_intent_registered"
-          metadata = JSON.parse(stripe_charge.metadata)
+          stripe_transaction = StripeTransaction.first
+          expect(stripe_transaction&.status).to eq "payment_intent_registered"
+          metadata = stripe_transaction.parameters
           expect(metadata["payment_method"]).to eq pm.id
           expect(metadata["metadata"]["competition"]).to eq competition.name
         end
@@ -693,7 +693,7 @@ RSpec.describe "registrations" do
         end
 
         it "records a failure in the stripe journal" do
-          expect(StripeCharge.all.length).to eq 0
+          expect(StripeTransaction.all.length).to eq 0
           card = FactoryBot.create(:credit_card, :invalid)
           pm = Stripe::PaymentMethod.create(
             { type: "card", card: card },
@@ -703,9 +703,9 @@ RSpec.describe "registrations" do
             payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge = StripeCharge.first
+          stripe_charge = StripeTransaction.first
           expect(stripe_charge&.status).to eq "failure"
-          metadata = JSON.parse(stripe_charge.metadata)
+          metadata = stripe_charge.parameters
           expect(metadata["payment_method"]).to eq pm.id
           expect(metadata["metadata"]["competition"]).to eq competition.name
         end

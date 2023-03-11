@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class StripeCharge < ApplicationRecord
+class StripeTransaction < ApplicationRecord
   enum status: {
     unknown: "unknown",
     payment_intent_registered: "payment_intent_registered",
@@ -9,6 +9,11 @@ class StripeCharge < ApplicationRecord
   }
 
   has_one :registration_payment, as: :receipt
+  belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
+
+  # We don't need the native JSON type on DB level, so we serialize in Ruby.
+  # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
+  serialize :parameters, JSON
 
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
   # that are not compatible with the subunits from our RubyMoney gem.
