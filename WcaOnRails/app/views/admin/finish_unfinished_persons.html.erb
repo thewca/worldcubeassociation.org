@@ -1,6 +1,6 @@
 <% provide(:title, 'Finish unfinished persons') %>
 
-<div class="container">
+<div class="<%= @persons_to_finish ? "container-fluid" : "container" %>">
   <%= render layout: "nav" do %>
     <h2><%= yield(:title) %></h2>
     <div>
@@ -31,7 +31,7 @@
 
     <% if @persons_to_finish %>
       <%= simple_form_for :person_completions, url: admin_complete_persons_path do |f| %>
-        <%= wca_table table_class: 'wca-persons' do %>
+        <%= wca_table table_class: 'wca-persons', greedy: false do %>
           <thead>
           <tr>
             <th></th><!-- Empty header for radio toggle -->
@@ -42,9 +42,6 @@
             <th class="name">Person Name</th>
             <th class="country">Country ID</th>
             <th class="wca-id">Semi ID</th>
-
-            <!-- Extra column for .table-greedy-last-column -->
-            <th></th>
           </tr>
           </thead>
 
