@@ -7,13 +7,7 @@
       <%= f.input :validator_classes, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
       <%= f.input :apply_fixes, as: :boolean, label: "Apply fix when possible", hint: "List of validators with automated fix: #{ResultValidationForm::VALIDATOR_WITH_FIX_NAMES.join(",")}." %>
       <% unless lock_selection %>
-        <fieldset id="selection-mode">
-          <%= f.label :competition_selection, "All competitions", value: ResultValidationForm::COMP_VALIDATION_ALL %>
-          <%= f.radio_button :competition_selection, ResultValidationForm::COMP_VALIDATION_ALL %>
-          <br/>
-          <%= f.label :competition_selection, "Manual selection", value: ResultValidationForm::COMP_VALIDATION_MANUAL %>
-          <%= f.radio_button :competition_selection, ResultValidationForm::COMP_VALIDATION_MANUAL %>
-        </fieldset>
+        <%= f.input :competition_selection, collection: ResultValidationForm::COMP_VALIDATION_MODES, as: :radio_buttons, label: "Competition selection", hint: "WARNING: Running multiple validations on all competitions can take a long time." %>
       <% end %>
       <div id="selectize-competition-ids">
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>

@@ -4,8 +4,10 @@ class ResultValidationForm
   ALL_VALIDATOR_NAMES = ResultsValidators::Utils::ALL_VALIDATORS.map(&:class_name)
   VALIDATOR_WITH_FIX_NAMES = ResultsValidators::Utils::VALIDATORS_WITH_FIX.map(&:class_name)
 
-  COMP_VALIDATION_ALL = :all
-  COMP_VALIDATION_MANUAL = :manual
+  COMP_VALIDATION_ALL = "Validate ALL competitions"
+  COMP_VALIDATION_MANUAL = "Pick competition(s) manually"
+
+  COMP_VALIDATION_MODES = [COMP_VALIDATION_ALL, COMP_VALIDATION_MANUAL].freeze
 
   include ActiveModel::Model
 
