@@ -22,6 +22,8 @@ module FinishUnfinishedPersons
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
 
+    @persons_cache = nil
+
     unfinished_person_results.each do |res|
       competition_year = res.competition.year
       inbox_dob = res.inbox_person&.dob
@@ -99,6 +101,10 @@ module FinishUnfinishedPersons
     end.join
   end
 
+  def self.persons_cache
+    @persons_cache ||= Person.select(:wca_id, :name, :year, :month, :day, :countryId)
+  end
+
   def self.compute_similar_persons(result, n = 5)
     res_roman_name = self.extract_roman_name(result.person_name)
 
@@ -106,7 +112,7 @@ module FinishUnfinishedPersons
     persons_with_probas = []
 
     # pre-cache probabilities, so that we avoid doing string computations on _every_ comparison
-    Person.all.each do |p|
+    self.persons_cache.each do |p|
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
@@ -124,12 +130,14 @@ module FinishUnfinishedPersons
                       .take(n)
   end
 
-  def self.string_similarity(a, b)
+  def self.string_similarity_algorithm
     # Original PHP implementation uses PHP stdlib `string_similarity` function, which is custom built
     # and "kinda like" Jaro-Winkler. I felt that the rewrite warrants a standardised matching algorithm.
-    @jarow ||= FuzzyStringMatch::JaroWinkler.create(:native)
+    @jaro_winkler ||= FuzzyStringMatch::JaroWinkler.create(:native)
+  end
 
-    @jarow.getDistance(a, b)
+  def self.string_similarity(a, b)
+    self.string_similarity_algorithm.getDistance(a, b)
   end
 
   def self.complete_wca_id(semi_id, used_ids)
