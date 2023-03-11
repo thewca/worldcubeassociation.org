@@ -8,6 +8,6 @@ class CheckRegionalRecordsForm
   def run_check
     check_event_id = event_id == 'all' ? nil : event_id
 
-    RegionalRecordsChecking.check_records(check_event_id, competition_id)
+    CheckRegionalRecords.check_records(check_event_id, competition_id)
   end
 end

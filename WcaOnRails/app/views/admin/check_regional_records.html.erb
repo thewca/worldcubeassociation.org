@@ -33,7 +33,7 @@
 
     <% if @check_results %>
       <%= simple_form_for :regional_record_overrides, url: admin_override_regional_records_path do |f| %>
-        <% RegionalRecordsChecking::SOLUTION_TYPES.each do |value_column, value_name| %>
+        <% CheckRegionalRecords::SOLUTION_TYPES.each do |value_column, value_name| %>
           <h2><%= value_name %></h2>
 
           <% results_by_event = @check_results[value_column].group_by { |row| row[:result].event } %>

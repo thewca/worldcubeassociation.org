@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module RegionalRecordsChecking
+module CheckRegionalRecords
   # as of 3-2023, the amount of competitions happening within 3 months can comfortably fit into memory.
   CHECK_RECORDS_INTERVAL = 3.months
   REGION_WORLD = '__World'
@@ -30,7 +30,7 @@ module RegionalRecordsChecking
     # Ordering by start_date is _crucial_ as we're checking results over time.
     # A competition that starts later has the potential to set a new record.
     # Ordering by competition ID is pure cosmetics and useful for consistency in debugging.
-    competition_scope = Competition.order("start_date, id")
+    competition_scope = Competition.includes(:results).order("start_date, id")
 
     if event_id.present?
       # If there's an event_id, care only for competitions that hold the event in question.
@@ -55,16 +55,18 @@ module RegionalRecordsChecking
     [competition_scope, model_competition]
   end
 
-  def self.results_scope(competition, event_id)
-    results_scope = competition.results
+  def self.competition_results(competition, event_id)
+    # Note that we're *deliberately* loading all results into a Rails array first,
+    #   because these results have already been loaded from the SQL database as part of an `includes` scope above.
+    competition_results = competition.results.to_a
 
     if event_id.present?
       # If there's an event_id, focus on those results only.
-      results_scope = results_scope.where(event_id: event_id)
+      competition_results = competition_results.filter { |r| r.event_id == event_id }
     end
 
     # Pre-ordering with a JOIN on RoundTypes makes no sense as Ruby sorting algorithms are not stable :(
-    results_scope
+    competition_results
   end
 
   def self.compute_record_marker(event_records, result, wca_value)
@@ -129,7 +131,7 @@ module RegionalRecordsChecking
     self.find_by_interval(competition_scope, CHECK_RECORDS_INTERVAL, model_competition) do |comp|
       # Fetch the attached Result rows per competition only _once_,
       # and then re-order the same set in-memory for single and average computations.
-      results = self.results_scope(comp, event_id).to_a
+      results = self.competition_results(comp, event_id)
 
       # this entire if-block can be removed once we're able to order results within a competition
       if comp.id != last_competition_id
