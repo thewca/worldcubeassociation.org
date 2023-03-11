@@ -1,18 +1,18 @@
 <div id="fix-results-selector">
   <%= simple_form_for @result_selector, url: @edit_result_path, method: :get, html: { id: "fix-selector-form" } do |f| %>
-    <%= f.input :person_id, as: :string, input_html: { id: "validators" } %>
+    <%= f.input :person_id, as: :string, label: "WCA ID", hint: false %>
 
     <% if @result_selector.person # NOT querying person_id here, to make sure that user input exists %>
       <% if @result_selector.eligible_competitions.any? %>
-        <%= f.input :competition_id, collection: @result_selector.eligible_competitions, value_method: :id, label_method: :name %>
+        <%= f.input :competition_id, collection: @result_selector.eligible_competitions, value_method: :id, label_method: :name, label: "Competition", hint: false %>
       <% end %>
 
       <% if @result_selector.eligible_events.any? %>
-        <%= f.input :event_id, collection: @result_selector.eligible_events, value_method: :id, label_method: :name %>
+        <%= f.input :event_id, collection: @result_selector.eligible_events, value_method: :id, label_method: :name, label: "Event", hint: false %>
       <% end %>
 
       <% if @result_selector.eligible_round_types.any? %>
-        <%= f.input :round_type_id, collection: @result_selector.eligible_round_types, value_method: :id, label_method: :name %>
+        <%= f.input :round_type_id, collection: @result_selector.eligible_round_types, value_method: :id, label_method: :name, label: "Round", hint: false %>
       <% end %>
 
       <% if @result_selector.selected_result %>
