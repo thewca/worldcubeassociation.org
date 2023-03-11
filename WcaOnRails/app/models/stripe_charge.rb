@@ -8,6 +8,8 @@ class StripeCharge < ApplicationRecord
     failure: "failure",
   }
 
+  has_one :registration_payment, as: :receipt
+
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
   # that are not compatible with the subunits from our RubyMoney gem.
   # In other words, `Money::Currency.find(iso_code).subunit_to_unit`

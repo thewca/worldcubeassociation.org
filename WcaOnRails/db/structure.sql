@@ -1162,6 +1162,8 @@ CREATE TABLE `registration_payments` (
   `registration_id` int(11) DEFAULT NULL,
   `amount_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `receipt_id` bigint DEFAULT NULL,
+  `receipt_type` varchar(191) DEFAULT NULL,
   `stripe_charge_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1169,7 +1171,8 @@ CREATE TABLE `registration_payments` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`),
-  KEY `idx_reg_payments_on_refunded_registration_payment_id` (`refunded_registration_payment_id`)
+  KEY `idx_reg_payments_on_refunded_registration_payment_id` (`refunded_registration_payment_id`),
+  KEY `index_registration_payments_on_receipt` (`receipt_type`, `receipt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `registrations`;
@@ -1798,4 +1801,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20230119115432'),
 ('20230204111111'),
 ('20221224215048'),
-('20230303093411');
+('20230303093411'),
+('20230311165116');

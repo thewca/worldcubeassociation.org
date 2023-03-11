@@ -4,6 +4,8 @@ class RegistrationPayment < ApplicationRecord
   belongs_to :registration
   belongs_to :user
 
+  belongs_to :receipt, polymorphic: true
+
   monetize :amount_lowest_denomination,
            as: "amount",
            allow_nil: true,
