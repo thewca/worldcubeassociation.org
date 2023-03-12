@@ -30,15 +30,14 @@ module CheckRegionalRecords
     # Ordering by start_date is _crucial_ as we're checking results over time.
     # A competition that starts later has the potential to set a new record.
     # Ordering by competition ID is pure cosmetics and useful for consistency in debugging.
-    competition_scope = Competition.includes(:results).order("start_date, id")
+    competition_scope = Competition.includes(:results).order("start_date, Competitions.id")
 
     if event_id.present?
       # If there's an event_id, care only for competitions that hold the event in question.
       # Quirk: If there are Results in the SQL tables with the desired event_id but with a
       #   competition_id that has no associated competition_event with that event_id,
       #   those Results won't be considered.
-      competition_scope = competition_scope.joins(:competition_events)
-                                           .where(competition_events: { event_id: event_id })
+      competition_scope = competition_scope.where(results: { event_id: event_id })
     end
 
     model_competition = nil
