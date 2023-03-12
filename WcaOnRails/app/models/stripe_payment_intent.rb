@@ -5,7 +5,8 @@ class StripePaymentIntent < ApplicationRecord
   belongs_to :stripe_transaction
   belongs_to :user
 
-  encrypts :client_secret, downcase: true
+  # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
+  encrypts :client_secret, downcase: false
 
   def retrieve_intent
     Stripe::PaymentIntent.retrieve(

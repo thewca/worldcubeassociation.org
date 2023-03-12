@@ -2,10 +2,19 @@
 
 class StripeTransaction < ApplicationRecord
   enum status: {
-    unknown: "unknown",
-    payment_intent_registered: "payment_intent_registered",
-    success: "success",
-    failure: "failure",
+    requires_payment_method: "requires_payment_method",
+    requires_confirmation: "requires_confirmation",
+    requires_action: "requires_action",
+    processing: "processing",
+    requires_capture: "requires_capture",
+    canceled: "canceled",
+    succeeded: "succeeded",
+    pending: "pending",
+    failed: "failed",
+    legacy_unknown: "unknown",
+    legacy_payment_intent_registered: "payment_intent_registered",
+    legacy_success: "success",
+    legacy_failure: "failure",
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
@@ -16,7 +25,10 @@ class StripeTransaction < ApplicationRecord
   }
 
   has_one :registration_payment, as: :receipt
+  has_one :stripe_payment_intent
+
   belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
+  has_many :child_transactions, class_name: "StripeTransaction", inverse_of: :parent_transaction
 
   # We don't need the native JSON type on DB level, so we serialize in Ruby.
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
@@ -74,14 +86,14 @@ class StripeTransaction < ApplicationRecord
     amount_stripe_denomination
   end
 
-  def self.create_from_api(api_transaction, parameters, status, account_id = nil)
+  def self.create_from_api(api_transaction, parameters, account_id = nil)
     StripeTransaction.create!(
       api_type: api_transaction.object,
       parameters: parameters,
       stripe_id: api_transaction.id,
       amount_stripe_denomination: api_transaction.amount,
       currency_code: api_transaction.currency,
-      status: status,
+      status: api_transaction.status,
       account_id: account_id,
     )
   end

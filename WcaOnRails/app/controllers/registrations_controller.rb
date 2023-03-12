@@ -449,32 +449,33 @@ class RegistrationsController < ApplicationController
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
 
-    account_id = @competition.connected_stripe_account_id
+    stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
+    stored_intent = stored_transaction.stripe_payment_intent
 
-    # No need to create a new intent here. We can just query the intent from Stripe using the redirect parameters.
-    # We use the client_secret to query the intent to retrieve as many status details as possible.
-    intent = Stripe::PaymentIntent.retrieve(
-      intent_id,
-      client_secret: intent_secret,
-      stripe_account: account_id,
-    )
-
-    unless intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      redirect_to competition_register_path(@competition)
+    unless stored_intent.client_secret == intent_secret
+      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
+      return redirect_to competition_register_path(@competition)
     end
 
-    stripe_transaction = StripeTransaction.find_by(stripe_id: intent_id)
+    # No need to create a new intent here. We can just query the stored intent from Stripe directly.
+    stripe_intent = stored_intent.retrieve_intent
+
+    unless stripe_intent.present?
+      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
+      return redirect_to competition_register_path(@competition)
+    end
+
+    stored_transaction.update!(status: stripe_intent.status)
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case intent.status
+    case stripe_intent.status
     when 'succeeded'
       # The payment didn’t need any additional actions and is completed!
-      stripe_transaction&.update!(status: "success")
+      stored_intent.update!(confirmed_at: DateTime.current)
 
-      intent.charges.data.each do |charge|
-        charge_receipt = StripeTransaction.create_receipt(charge, {}, charge.status, account_id)
-        charge_receipt.update(parent_transaction: stripe_transaction)
+      stripe_intent.charges.data.each do |charge|
+        charge_receipt = StripeTransaction.create_from_api(charge, {})
+        charge_receipt.update(parent_transaction: stored_transaction)
 
         ruby_amount = StripeTransaction.amount_to_ruby(charge.amount, charge.currency)
 
@@ -516,25 +517,24 @@ class RegistrationsController < ApplicationController
   # This return URL handles record keeping and stuff at `payment_success` above.
   def load_payment_intent
     registration = Registration.includes(:user, :competition).find(params[:id])
+    user = registration.user
 
-    user = registration&.user
     unless user == current_user
-      render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
-      return
+      return render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
     end
 
     amount = params[:amount].to_i
+
     if registration.outstanding_entry_fees.cents <= 0
-      render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
-      return
+      return render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
     end
 
     if amount < registration.outstanding_entry_fees.cents
-      render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
-      return
+      return render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
     end
 
     competition = registration.competition
+
     registration_metadata = {
       competition: competition.name,
       registration_url: edit_registration_url(registration),
@@ -548,23 +548,30 @@ class RegistrationsController < ApplicationController
       currency: currency_iso,
       # recommended as per https://stripe.com/docs/payments/payment-element/migration
       automatic_payment_methods: { enabled: true },
-      receipt_email: user&.email,
+      receipt_email: user.email,
       description: "Registration payment for #{competition.name}",
       metadata: registration_metadata,
     }
+
+    account_id = competition.connected_stripe_account_id
 
     # Create the PaymentIntent, overriding the stripe_account for the request
     # by the connected stripe account for the competition.
     intent = Stripe::PaymentIntent.create(
       payment_intent_args,
-      stripe_account: registration.competition.connected_stripe_account_id,
+      stripe_account: account_id,
     )
 
     # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    StripeTransaction.create!(
-      parameters: payment_intent_args,
-      stripe_id: intent.id,
-      status: intent.status,
+    stripe_transaction = StripeTransaction.create_from_api(intent, payment_intent_args, account_id)
+
+    # memoize the payment intent in our DB because payments are handled asynchronously
+    # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
+    StripePaymentIntent.create!(
+      holder: registration,
+      stripe_transaction: stripe_transaction,
+      client_secret: intent.client_secret,
+      user: current_user,
     )
 
     render json: { clientSecret: intent.client_secret }
@@ -576,25 +583,25 @@ class RegistrationsController < ApplicationController
 
   def refund_payment
     registration = Registration.find(params[:id])
+
     unless registration.competition.using_stripe_payments?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
-      redirect_to edit_registration_path(registration)
-      return
+      return redirect_to edit_registration_path(registration)
     end
 
     payment = RegistrationPayment.find(params[:payment_id])
+
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
     if refund_amount > payment.amount_available_for_refund
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      redirect_to edit_registration_path(registration)
-      return
+      return redirect_to edit_registration_path(registration)
     end
+
     if refund_amount < 0
       flash[:danger] = "The refund amount must be greater than zero."
-      redirect_to edit_registration_path(registration)
-      return
+      return redirect_to edit_registration_path(registration)
     end
 
     currency_iso = registration.competition.currency_code
@@ -617,7 +624,7 @@ class RegistrationsController < ApplicationController
       stripe_account: account_id,
     )
 
-    refund_receipt = StripeTransaction.create_receipt(refund, refund_args, "success", account_id)
+    refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
     refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
