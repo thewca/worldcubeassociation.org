@@ -6,7 +6,7 @@
   hint_context_attribute = hint_context.blank? ? "" : "class=\"text-#{hint_context} bg-#{hint_context}\""
 %>
 
-<% if @registration.entry_fee %>
+<% if money_amount %>
   <div class="simple_form form-horizontal">
     <div class="form-group">
       <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
