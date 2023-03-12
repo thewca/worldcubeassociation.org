@@ -99,11 +99,12 @@ class AdminController < ApplicationController
   end
 
   def fix_results
-    @result_selector = FixResultsSelector.new
-
-    # simple_form does not allow nil as URL value, but we don't know the actual redirect value yet.
-    # So just set the current page as a dummy value instead.
-    @edit_result_path = admin_fix_results_path
+    @result_selector = FixResultsSelector.new(
+      person_id: params[:person_id],
+      competition_id: params[:competition_id],
+      event_id: params[:event_id],
+      round_type_id: params[:round_type_id],
+    )
   end
 
   def fix_results_selector
@@ -111,7 +112,6 @@ class AdminController < ApplicationController
                           .permit(:person_id, :competition_id, :event_id, :round_type_id)
 
     @result_selector = FixResultsSelector.new(action_params)
-    @edit_result_path = @result_selector.person && @result_selector.selected_result ? edit_result_path(@result_selector.selected_result) : admin_fix_results_path
 
     render partial: "fix_results_selector"
   end

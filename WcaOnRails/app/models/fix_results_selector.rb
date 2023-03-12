@@ -7,12 +7,17 @@ class FixResultsSelector
   attr_writer :competition_id, :event_id, :round_type_id
 
   def person
-    Person.find_by(wca_id: @person_id)
+    @person ||= Person.find_by(wca_id: @person_id)
+  end
+
+  def person_hint(template)
+    person ? "#{person.name}, #{template.flag_icon(person.country.iso2)} #{person.country.name}".html_safe : false
   end
 
   def eligible_competitions
     person.competitions
           .sort_by(&:start_date)
+          .reverse
   end
 
   def competition_id
@@ -50,5 +55,11 @@ class FixResultsSelector
           .filter { |r| r.event_id == event_id }
           .filter { |r| r.round_type_id == round_type_id }
           .first
+  end
+
+  def result_or_repeat_link(resolver)
+    # simple_form does not allow nil as URL value, but in the middle of the process
+    # we don't know the actual redirect value yet. So just set the current page as a dummy value instead.
+    person && selected_result ? resolver.edit_result_path(selected_result) : resolver.admin_fix_results_path
   end
 end

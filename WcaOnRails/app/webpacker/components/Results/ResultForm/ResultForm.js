@@ -187,7 +187,12 @@ function ResultForm({
           as="a"
           loading={saving}
           disabled={saving}
-          href={adminFixResultsUrl}
+          href={adminFixResultsUrl(
+            personData.wcaId,
+            roundData.competitionId,
+            roundData.eventId,
+            roundData.roundTypeId,
+          )}
         >
           Go to Fix results
         </Button>
