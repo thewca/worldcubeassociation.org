@@ -27,7 +27,12 @@
     options: <%= raw(ResultsValidators::Utils::ALL_VALIDATORS.map(&:serialize).to_json) %>,
   });
 
-  $('input[name="result_validation_form[competition_selection]"]').on('change', function() {
-    $('#selectize-competition-ids').toggle(this.value === "<%= ResultValidationForm::COMP_VALIDATION_MANUAL %>");
+  $('input[name="result_validation_form[competition_selection]"][type=radio]').on('change', function() {
+    var isManualRadio = this.value === "<%= ResultValidationForm::COMP_VALIDATION_MANUAL %>"
+    var isChecked = $(this).is(':checked')
+
+    if (isChecked) {
+      $('#selectize-competition-ids').toggle(isManualRadio);
+    }
   }).trigger('change');
 </script>
