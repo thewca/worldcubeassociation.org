@@ -780,6 +780,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "stripe_transactions" => :skip_all_rows,
+    "stripe_payment_intents" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,

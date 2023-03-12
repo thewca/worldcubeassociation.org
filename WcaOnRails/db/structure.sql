@@ -1334,6 +1334,27 @@ CREATE TABLE `stripe_transactions` (
   CONSTRAINT `fk_rails_6ad225b020` FOREIGN KEY (`parent_transaction_id`) REFERENCES `stripe_transactions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `stripe_payment_intents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `stripe_payment_intents` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `holder_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `holder_id` bigint(20) DEFAULT NULL,
+  `stripe_transaction_id` bigint(20) DEFAULT NULL,
+  `client_secret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `created_at` datetime NOT NULL,
+  `updated_at` datetime NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `confirmed_at` datetime DEFAULT NULL,
+  `canceled_at` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_stripe_payment_intents_on_holder` (`holder_type`,`holder_id`),
+  KEY `index_stripe_payment_intents_on_stripe_transaction_id` (`stripe_transaction_id`),
+  CONSTRAINT `fk_rails_81f3af31de` FOREIGN KEY (`stripe_transaction_id`) REFERENCES `stripe_transactions` (`id`),
+  CONSTRAINT `fk_rails_2dbc373c0c` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `team_members`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1807,4 +1828,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20230303093411'),
 ('20230311165116'),
 ('20230311183558'),
+('20230312182740'),
 ('20230517135741');

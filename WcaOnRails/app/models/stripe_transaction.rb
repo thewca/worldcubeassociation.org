@@ -22,6 +22,10 @@ class StripeTransaction < ApplicationRecord
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
   serialize :parameters, JSON
 
+  def find_account_id
+    self.account_id || parent_transaction&.find_account_id
+  end
+
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
   # that are not compatible with the subunits from our RubyMoney gem.
   # In other words, `Money::Currency.find(iso_code).subunit_to_unit`
@@ -70,7 +74,7 @@ class StripeTransaction < ApplicationRecord
     amount_stripe_denomination
   end
 
-  def self.create_receipt(api_transaction, parameters, status, account_id)
+  def self.create_from_api(api_transaction, parameters, status, account_id = nil)
     StripeTransaction.create!(
       api_type: api_transaction.object,
       parameters: parameters,
