@@ -1,6 +1,6 @@
 <div id="fix-results-selector">
   <%= simple_form_for @result_selector, url: @edit_result_path, method: :get, html: { id: "fix-selector-form" } do |f| %>
-    <%= f.input :person_id, as: :string, label: "WCA ID", hint: false %>
+    <%= f.input :person_id, as: :string, label: "WCA ID", hint: @result_selector.person&.name %>
 
     <% if @result_selector.person # NOT querying person_id here, to make sure that user input exists %>
       <% if @result_selector.eligible_competitions.any? %>
@@ -19,11 +19,22 @@
         <%= f.button :submit, value: "Edit result", class: "btn-primary" %>
       <% end %>
     <% end %>
+
+    <div class="progress" style="display: none">
+      <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%">
+        <span class="sr-only">LOADING</span>
+      </div>
+    </div>
   <% end %>
 
   <script>
-    function reloadForm(ignoreCompetitionData = false) {
-      var obj = $("#fix-selector-form").serializeJSON();
+    function reloadForm(ignoreCompetitionData = false, ignoreLoading = false) {
+      var obj = $('#fix-selector-form').serializeJSON();
+
+      if (!ignoreLoading) {
+        $('input[type=submit]').hide();
+        $('div.progress').show();
+      }
 
       if (ignoreCompetitionData) {
         // remove all competition details, relevant if person ID changed
@@ -37,15 +48,23 @@
         url: '<%= admin_fix_results_ajax_path %>',
         data: obj,
         success: function (data) {
-          $("#fix-results-selector").html(data)
+          $('#fix-results-selector').replaceWith(data);
+          target.removeClass('loading');
         }
       });
     }
 
-    $('input[name="fix_results_selector[person_id]"]').on('input', function() {
+    $('input[name="fix_results_selector[person_id]"]').on('input', function(e) {
       // only using a simple, naive WCA ID regex because this feature will be used by WRT members who know what they're doing
-      if (this.value.match(/^\d{4}\w{4}\d{2}$/)) {
-        reloadForm(true);
+      var matchesWcaId = this.value.match(/^\d{4}\w{4}\d{2}$/)
+      var isDeletingCompletedWcaId = this.value.length === 9 && e.originalEvent.inputType === 'deleteContentBackward'
+
+      if (matchesWcaId || isDeletingCompletedWcaId) {
+        reloadForm(true, isDeletingCompletedWcaId);
+      }
+    }).on('keypress', function (e) {
+      if(e.which === 13 && !e.ctrlKey) {
+        e.preventDefault();
       }
     });
 

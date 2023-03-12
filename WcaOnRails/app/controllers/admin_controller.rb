@@ -8,6 +8,7 @@ class AdminController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_see_eligible_voters?) }, only: [:all_voters, :leader_senior_voters]
 
   before_action :compute_navbar_data
+
   def compute_navbar_data
     @pending_avatars_count = User.where.not(pending_avatar: nil).count
     @pending_media_count = CompetitionMedium.pending.count
@@ -110,7 +111,7 @@ class AdminController < ApplicationController
                           .permit(:person_id, :competition_id, :event_id, :round_type_id)
 
     @result_selector = FixResultsSelector.new(action_params)
-    @edit_result_path = @result_selector.selected_result ? edit_result_path(@result_selector.selected_result) : admin_fix_results_path
+    @edit_result_path = @result_selector.person && @result_selector.selected_result ? edit_result_path(@result_selector.selected_result) : admin_fix_results_path
 
     render partial: "fix_results_selector"
   end

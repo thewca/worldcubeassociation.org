@@ -12,6 +12,7 @@ class FixResultsSelector
 
   def eligible_competitions
     person.competitions
+          .sort_by(&:start_date)
   end
 
   def competition_id
