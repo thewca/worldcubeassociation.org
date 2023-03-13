@@ -1297,6 +1297,7 @@ en:
         donation: "Donation"
         card_information: "Card information"
         cardholder_name: "Cardholder name"
+        show_donation: "I would like to make an additional optional donation that will go only to the organization team"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
