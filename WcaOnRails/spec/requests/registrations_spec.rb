@@ -571,7 +571,7 @@ RSpec.describe "registrations" do
           # the 'register' page which does.
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
-          charge = Stripe::Charge.retrieve(registration.registration_payments.first.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
@@ -589,7 +589,7 @@ RSpec.describe "registrations" do
           }
           expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
           expect(registration.paid_entry_fees.cents).to eq payment_amount
-          charge = Stripe::Charge.retrieve(registration.registration_payments.first.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq payment_amount
         end
 

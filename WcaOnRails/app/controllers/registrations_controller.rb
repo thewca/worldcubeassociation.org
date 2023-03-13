@@ -465,28 +465,23 @@ class RegistrationsController < ApplicationController
       return redirect_to competition_register_path(@competition)
     end
 
-    stored_transaction.update!(status: stripe_intent.status)
+    stored_intent.update_status_and_charges(stripe_intent) do |charge_transaction|
+      ruby_amount = StripeTransaction.amount_to_ruby(
+        charge_transaction.amount_stripe_denomination,
+        charge_transaction.currency_code,
+      )
+
+      registration.record_payment(
+        ruby_amount,
+        charge_transaction.currency_code,
+        charge_transaction,
+        current_user.id,
+      )
+    end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stripe_intent.status
+    case stored_transaction.status
     when 'succeeded'
-      # The payment didn’t need any additional actions and is completed!
-      stored_intent.update!(confirmed_at: DateTime.current)
-
-      stripe_intent.charges.data.each do |charge|
-        charge_receipt = StripeTransaction.create_from_api(charge, {})
-        charge_receipt.update(parent_transaction: stored_transaction)
-
-        ruby_amount = StripeTransaction.amount_to_ruby(charge.amount, charge.currency)
-
-        registration.record_payment(
-          ruby_amount,
-          charge.currency,
-          charge_receipt,
-          current_user.id,
-        )
-      end
-
       flash[:success] = t("registrations.payment_form.payment_successful")
     when 'requires_action'
       # Customer did not complete the payment
@@ -534,6 +529,17 @@ class RegistrationsController < ApplicationController
     end
 
     competition = registration.competition
+    account_id = competition.connected_stripe_account_id
+
+    registration.stripe_payment_intents
+                .pending
+                .each do |intent|
+      intent_account_id = intent.stripe_transaction.account_id
+
+      if intent_account_id == account_id && intent.pending? && !intent.started?
+        return render json: { clientSecret: intent.client_secret }
+      end
+    end
 
     registration_metadata = {
       competition: competition.name,
@@ -552,8 +558,6 @@ class RegistrationsController < ApplicationController
       description: "Registration payment for #{competition.name}",
       metadata: registration_metadata,
     }
-
-    account_id = competition.connected_stripe_account_id
 
     # Create the PaymentIntent, overriding the stripe_account for the request
     # by the connected stripe account for the competition.

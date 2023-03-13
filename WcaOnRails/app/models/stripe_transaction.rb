@@ -28,7 +28,7 @@ class StripeTransaction < ApplicationRecord
   has_one :stripe_payment_intent
 
   belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
-  has_many :child_transactions, class_name: "StripeTransaction", inverse_of: :parent_transaction
+  has_many :child_transactions, class_name: "StripeTransaction", foreign_key: :parent_transaction_id
 
   # We don't need the native JSON type on DB level, so we serialize in Ruby.
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
@@ -36,6 +36,33 @@ class StripeTransaction < ApplicationRecord
 
   def find_account_id
     self.account_id || parent_transaction&.find_account_id
+  end
+
+  def update_status(api_transaction)
+    stripe_error = nil
+
+    case self.api_type
+    when 'payment_intent'
+      stripe_error = api_transaction.last_payment_error&.code
+    when 'charge'
+      stripe_error = api_transaction.failure_message
+    end
+
+    self.update!(
+      status: api_transaction.status,
+      error: stripe_error,
+    )
+  end
+
+  def retrieve_stripe
+    case self.api_type
+    when 'payment_intent'
+      Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.find_account_id)
+    when 'charge'
+      Stripe::Charge.retrieve(self.stripe_id, stripe_account: self.find_account_id)
+    when 'refund'
+      Stripe::Refund.retrieve(self.stripe_id, stripe_account: self.find_account_id)
+    end
   end
 
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
