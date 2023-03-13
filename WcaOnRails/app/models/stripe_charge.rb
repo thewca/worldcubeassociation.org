@@ -36,4 +36,23 @@ class StripeCharge < ApplicationRecord
     # Stripe API will be happy as-is.
     amount_lowest_denomination
   end
+
+  def self.amount_to_ruby(amount_stripe_denomination, iso_currency)
+    # For the specifics of these currencies, see the comments in `amount_to_stripe`
+    if ZERO_DECIMAL_CURRENCIES.include?(iso_currency)
+      amount_div_hundred = amount_stripe_denomination.to_f / 100
+
+      # We're losing precision after dividing it down to the "smaller" denomination.
+      # Normally, this should not happen as the Stripe API docs specify that sub-hundreds
+      # on the special currencies are not accepted and thus should never be returned by the API.
+      if amount_div_hundred.truncate != amount_div_hundred
+        raise "Trying to receive an amount of #{amount_stripe_denomination} #{iso_currency}, which is more precise than what the Stripe API returns for sub-hundred currencies"
+      end
+
+      return amount_div_hundred
+    end
+
+    # Stripe and ruby-money agree. All good.
+    amount_stripe_denomination
+  end
 end

@@ -542,8 +542,10 @@ class RegistrationsController < ApplicationController
     elsif intent&.status == "succeeded"
       # FIXME: what if intent.charges.total_count is not 1?!
       intent.charges.data.each do |charge|
+        ruby_amount = StripeCharge.amount_to_ruby(charge.amount, charge.currency)
+
         registration.record_payment(
-          charge.amount,
+          ruby_amount,
           charge.currency,
           charge.id,
           current_user.id,
@@ -600,8 +602,12 @@ class RegistrationsController < ApplicationController
       stripe_account: registration.competition.connected_stripe_account_id,
     )
 
+    # Should be the same as `refund_amount`, but by double-converting from the Stripe object
+    # we can also double-check that they're on the same page as we are (to be _really_ sure!)
+    ruby_amount = StripeCharge.amount_to_ruby(refund.amount, refund.currency)
+
     registration.record_refund(
-      refund.amount,
+      ruby_amount,
       refund.currency,
       refund.id,
       payment.id,
