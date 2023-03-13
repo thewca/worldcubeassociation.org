@@ -43,6 +43,8 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
 
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe]
+
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
@@ -356,6 +358,17 @@ class CompetitionsController < ApplicationController
     }
 
     OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
+  end
+
+  def disconnect_stripe
+    comp = competition_from_params
+    if comp.connected_stripe_account_id
+      comp.update!(connected_stripe_account_id: nil)
+      flash[:success] = t('competitions.messages.stripe_disconnected_success')
+    else
+      flash[:danger] = t('competitions.messages.stripe_disconnected_failure')
+    end
+    redirect_to competitions_payment_setup_path(comp)
   end
 
   def clone_competition
