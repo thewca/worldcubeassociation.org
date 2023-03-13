@@ -3,7 +3,7 @@
   <%= render 'entry_fee', label: "Paid", money_amount: @registration.paid_entry_fees %>
   <%= render 'entry_fee', label: "Remaining", money_amount: @registration.outstanding_entry_fees %>
   <% if @competition.enable_donations %>
-    <%= f.input :show_donation, as: :boolean, label: t('registrations.payment_form.labels.show_donation') %>
+    <%= f.input :show_donation, as: :boolean, label: t('registrations.payment_form.labels.show_donation'), hint: "" %>
     <%= f.input :donation, as: :money_amount, currency: @registration.outstanding_entry_fees.currency.iso_code, value: "0", label: t('registrations.payment_form.labels.donation'), hint: t('registrations.payment_form.hints.donation') %>
   <% end %>
   <div class="form-group" id="group-cardholder-name">
