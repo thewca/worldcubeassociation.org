@@ -28,9 +28,12 @@
   <% else %>
     <p>
       This competition is set up to accept payments through Stripe.
-      If you want to disconnect your account, you will first do so from your Stripe account dashboard
+      If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard
       <%= link_to "here", "https://dashboard.stripe.com/account/applications" %> (please note it will revoke access for all competitions using the account).
-      You will have to get your Delegate to reach out to WCAT to clear the entry before a new Stripe account can be connected.
+      Before a new Stripe account can be connected, please request your Delegate to reach out to WCAT to clear the entry.
+    </p>
+    <p>
+      Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments.
     </p>
 
   <% end %>
