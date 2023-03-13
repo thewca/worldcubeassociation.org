@@ -2483,6 +2483,10 @@ cs:
         card_information: Informace o kartě
         #original_hash: bc8091a
         cardholder_name: Držitel karty
+        #original_hash: 919710d
+        show_donation: >-
+          Rád bych přidal dobrovolný příspěvek, který půjde jen organizačnímu
+          týmu
       alerts:
         #original_hash: a34940e
         not_a_number: 'Prosíme, zadejte platnou částku.'
@@ -2676,6 +2680,10 @@ cs:
       stripe_connected: >-
         Připojil(a) jste úspěšně svůj Stripe účet a můžete nyní dostávat
         registrační platby pro tuto soutěž.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Stripe účet byl úspěšně odpojen.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Vyskytla se chyba při odpojování Stripe účtu.
       #original_hash: 0a4bb53
       stripe_not_connected: Vyskytla se chyba a nemohli jsme připojit váš Stripe účet.
       #original_hash: 724cf0d
@@ -3283,7 +3291,7 @@ cs:
     cancel_mistake: Udělali jste chybu?
     #original_hash: 0fb43d5
     note_before_cancel: 'Poznámka: jen potvrzené soutěže mohou být zrušené.'
-    #original_hash: 19a0ac2
+    #original_hash: b38ee61
     orga_close_reg: Uzavřít registraci.
     #original_hash: b2bfea9
     orga_close_reg_confirm: 'Jste si jisti, že chcete uzavřít registraci? Tato akce je nevratná.'
@@ -3291,6 +3299,10 @@ cs:
     note_reg_not_full_orga_close_reg: >-
       Poznámka: registraci je možné uzavřít pouze pokud již byl dosažen limit
       pro soutěžící.
+    #original_hash: 1ae594d
+    stripe_disconnect: Odpojit Stripe účet
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: 'Jste si jisti, že chcete odpojit Stripe účet? Tato akce je nenávratná.'
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Poznámka: registrace již byla uzavřena.'
     show:
