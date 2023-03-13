@@ -2509,6 +2509,10 @@ pt:
         card_information: Informação do cartão
         #original_hash: bc8091a
         cardholder_name: Nome no cartão
+        #original_hash: 919710d
+        show_donation: >-
+          Gostaria de fazer uma doação opcional adicional que irá apenas para a
+          equipa de organização
       alerts:
         #original_hash: a34940e
         not_a_number: Por favor introduza um montante válido.
@@ -2711,6 +2715,10 @@ pt:
       stripe_connected: >-
         Conseguiu conectar com sucesso a sua conta Stripe e pode agora receber
         pagamentos de registos para esta competição.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Desconectou a conta Stripe com sucesso.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Ocorreu um erro ao desconectar a conta Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: Houve um problema e não foi possível ligar à sua conta Stripe.
       #original_hash: 724cf0d
@@ -3334,8 +3342,8 @@ pt:
     cancel_mistake: Cometeu um erro?
     #original_hash: 0fb43d5
     note_before_cancel: 'Nota: apenas competições confirmadas podem ser canceladas.'
-    #original_hash: 19a0ac2
-    orga_close_reg: Fechar inscrições.
+    #original_hash: b38ee61
+    orga_close_reg: Fechar inscrições
     #original_hash: b2bfea9
     orga_close_reg_confirm: >-
       Tem certeza de que deseja encerrar as inscrições? Esta operação não pode
@@ -3344,6 +3352,12 @@ pt:
     note_reg_not_full_orga_close_reg: >-
       Nota: Só poderá encerrar as inscrições quando o limite de competidores for
       atingido.
+    #original_hash: 1ae594d
+    stripe_disconnect: Desconectar conta Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Tem certeza de que deseja desconectar a conta Stripe? Esta ação não pode
+      ser desfeita.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Nota: Inscrições já se encontram encerradas.'
     show:
