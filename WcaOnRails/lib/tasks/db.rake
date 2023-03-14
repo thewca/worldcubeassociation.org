@@ -77,7 +77,7 @@ namespace :db do
           File.write(DatabaseController::RESULTS_README, readme_template)
 
           # Remove old exports to save storage space
-          FileUtils.rm_r DatabaseController::RESULTS_EXPORT_FOLDER
+          FileUtils.rm_r DatabaseController::RESULTS_EXPORT_FOLDER, force: true, secure: true
 
           def zip_and_permalink(zip_filename, permalink_filename, *additional_files)
             zip_contents = [DatabaseController::RESULTS_METADATA, DatabaseController::RESULTS_README] | additional_files
