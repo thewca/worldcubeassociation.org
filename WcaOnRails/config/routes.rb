@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
   get 'registration/:id/payment-success' => 'registrations#payment_success', as: :registration_payment_success
+  post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'

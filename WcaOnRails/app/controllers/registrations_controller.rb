@@ -3,7 +3,9 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
+  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook]
+  # Stripe has its own authenticity mechanism with Webhook Secrets.
+  protect_from_forgery except: [:stripe_webhook]
 
   private def competition_from_params
     competition = if params[:competition_id]
@@ -18,9 +20,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_success, :load_payment_intent, :destroy, :update]
+                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_success, :load_payment_intent, :stripe_webhook, :destroy, :update]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event]
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
@@ -439,6 +441,73 @@ class RegistrationsController < ApplicationController
       @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
       @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
     end
+  end
+
+  # Respond to asynchronous payment updates from Stripe.
+  # Code skeleton according to https://stripe.com/docs/webhooks/quickstart
+  def stripe_webhook
+    payload = request.body.read
+
+    begin
+      event = Stripe::Event.construct_from(
+        JSON.parse(payload, symbolize_names: true),
+      )
+    rescue JSON::ParserError => e
+      # Invalid payload
+      logger.warn "Stripe webhook error while parsing basic request. #{e.message}"
+      return head :bad_request
+    end
+    # Check if webhook signing is configured.
+    if EnvVars.STRIPE_WEBHOOK_SECRET.present?
+      # Retrieve the event by verifying the signature using the raw body and secret.
+      signature = request.env['HTTP_STRIPE_SIGNATURE']
+      begin
+        event = Stripe::Webhook.construct_event(
+          payload, signature, EnvVars.STRIPE_WEBHOOK_SECRET
+        )
+      rescue Stripe::SignatureVerificationError => e
+        logger.warn "Stripe webhook signature verification failed. #{e.message}"
+        return head :bad_request
+      end
+    elsif Rails.env.production? && EnvVars.WCA_LIVE_SITE?
+      logger.error "No Stripe webhook secret defined in Production."
+      return head :bad_request
+    end
+
+    # Handle the event
+    # TODO: should we log webhook events somewhere in our DB? (similar to audits)
+    case event.type
+    when 'payment_intent.succeeded'
+      stripe_intent = event.data.object # contains a Stripe::PaymentIntent
+      stored_transaction = StripeTransaction.find_by(stripe_id: stripe_intent.id)
+
+      unless stored_transaction.present?
+        logger.error "Stripe webhook reported successful PI #{stripe_intent.id} but we have no matching transaction."
+        return head :not_found
+      end
+
+      stored_intent = stored_transaction.stripe_payment_intent
+
+      stored_intent.update_status_and_charges(stripe_intent) do |charge_transaction|
+        if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
+          ruby_amount = StripeTransaction.amount_to_ruby(
+            charge_transaction.amount_stripe_denomination,
+            charge_transaction.currency_code,
+          )
+
+          stored_intent.holder.record_payment(
+            ruby_amount,
+            charge_transaction.currency_code,
+            charge_transaction,
+            stored_intent.user.id,
+          )
+        end
+      end
+    else
+      logger.info "Unhandled event type: #{event.type}"
+    end
+
+    head :ok
   end
 
   def payment_success
