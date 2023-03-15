@@ -28,7 +28,9 @@ class StripeTransaction < ApplicationRecord
   has_one :stripe_payment_intent
 
   belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
-  has_many :child_transactions, class_name: "StripeTransaction", foreign_key: :parent_transaction_id
+  has_many :child_transactions, class_name: "StripeTransaction", inverse_of: :parent_transaction, foreign_key: :parent_transaction_id
+
+  has_many :stripe_webhook_events, inverse_of: :stripe_transaction, dependent: :nullify
 
   # We don't need the native JSON type on DB level, so we serialize in Ruby.
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.

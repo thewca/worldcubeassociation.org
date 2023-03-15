@@ -474,17 +474,25 @@ class RegistrationsController < ApplicationController
       return head :bad_request
     end
 
-    # Handle the event
-    # TODO: should we log webhook events somewhere in our DB? (similar to audits)
-    case event.type
-    when 'payment_intent.succeeded'
-      stripe_intent = event.data.object # contains a Stripe::PaymentIntent
-      stored_transaction = StripeTransaction.find_by(stripe_id: stripe_intent.id)
+    # Create a default audit that marks the event as "unhandled".
+    audit_event = StripeWebhookEvent.create_from_api(event)
 
-      unless stored_transaction.present?
-        logger.error "Stripe webhook reported successful PI #{stripe_intent.id} but we have no matching transaction."
+    stripe_intent = event.data.object # contains a polymorphic type that depends on the event
+    stored_transaction = StripeTransaction.find_by(stripe_id: stripe_intent.id)
+
+    if StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+      if stored_transaction.nil?
+        logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
         return head :not_found
+      else
+        audit_event.update!(stripe_transaction: stored_transaction, handled: true)
       end
+    end
+
+    # Handle the event
+    case event.type
+    when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
+      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_transaction.stripe_payment_intent
 
@@ -500,8 +508,13 @@ class RegistrationsController < ApplicationController
           )
         end
       end
+    when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
+      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+
+      stored_intent = stored_transaction.stripe_payment_intent
+      stored_intent.update_status_and_charges(stripe_intent, audit_event)
     else
-      logger.info "Unhandled event type: #{event.type}"
+      logger.info "Unhandled Stripe event type: #{event.type}"
     end
 
     head :ok
