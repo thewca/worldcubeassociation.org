@@ -490,14 +490,11 @@ class RegistrationsController < ApplicationController
 
       stored_intent.update_status_and_charges(stripe_intent) do |charge_transaction|
         if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
-          ruby_amount = StripeTransaction.amount_to_ruby(
-            charge_transaction.amount_stripe_denomination,
-            charge_transaction.currency_code,
-          )
+          ruby_money = charge_transaction.money_amount
 
           stored_intent.holder.record_payment(
-            ruby_amount,
-            charge_transaction.currency_code,
+            ruby_money.cents,
+            ruby_money.currency.iso_code,
             charge_transaction,
             stored_intent.user.id,
           )
@@ -535,14 +532,11 @@ class RegistrationsController < ApplicationController
     end
 
     stored_intent.update_status_and_charges(stripe_intent) do |charge_transaction|
-      ruby_amount = StripeTransaction.amount_to_ruby(
-        charge_transaction.amount_stripe_denomination,
-        charge_transaction.currency_code,
-      )
+      ruby_money = charge_transaction.money_amount
 
       registration.record_payment(
-        ruby_amount,
-        charge_transaction.currency_code,
+        ruby_money.cents,
+        ruby_money.currency.iso_code,
         charge_transaction,
         current_user.id,
       )
@@ -702,11 +696,11 @@ class RegistrationsController < ApplicationController
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    ruby_amount = StripeTransaction.amount_to_ruby(refund.amount, refund.currency)
+    ruby_money = refund_receipt.money_amount
 
     registration.record_refund(
-      ruby_amount,
-      refund.currency,
+      ruby_money.cents,
+      ruby_money.currency.iso_code,
       refund_receipt,
       payment.id,
       current_user.id,

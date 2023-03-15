@@ -85,7 +85,7 @@ class StripeTransaction < ApplicationRecord
     # Stripe has a small handful of fancy snowflake currencies
     # that need to be submitted as multiples of 100 even though they technically have subunits.
     # The details are documented at https://stripe.com/docs/currencies#special-cases
-    if ZERO_DECIMAL_CURRENCIES.include?(iso_currency)
+    if ZERO_DECIMAL_CURRENCIES.include?(iso_currency.upcase)
       amount_times_hundred = amount_lowest_denomination * 100
 
       # Stripe API rejects payments that are below the hundreds sub-unit.
@@ -105,7 +105,7 @@ class StripeTransaction < ApplicationRecord
 
   def self.amount_to_ruby(amount_stripe_denomination, iso_currency)
     # For the specifics of these currencies, see the comments in `amount_to_stripe`
-    if ZERO_DECIMAL_CURRENCIES.include?(iso_currency)
+    if ZERO_DECIMAL_CURRENCIES.include?(iso_currency.upcase)
       amount_div_hundred = amount_stripe_denomination.to_f / 100
 
       # We're losing precision after dividing it down to the "smaller" denomination.
