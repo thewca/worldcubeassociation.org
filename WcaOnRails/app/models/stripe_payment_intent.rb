@@ -5,17 +5,21 @@ class StripePaymentIntent < ApplicationRecord
   belongs_to :stripe_transaction
   belongs_to :user
 
-  scope :pending, -> { where(confirmed_at: nil) }
+  scope :pending, -> { where(confirmed_at: nil, canceled_at: nil) }
+  scope :started, -> { joins(:stripe_transaction).where.not(stripe_transaction: { status: 'requires_payment_method' }) }
+  scope :processing, -> { started.merge(pending) }
+
+  delegate :stripe_id, :status, :money_amount, to: :stripe_transaction
 
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
 
   def pending?
-    self.confirmed_at.nil?
+    self.confirmed_at.nil? && self.canceled_at.nil?
   end
 
   def started?
-    self.stripe_transaction.status != "requires_payment_method"
+    self.status != "requires_payment_method"
   end
 
   def retrieve_intent

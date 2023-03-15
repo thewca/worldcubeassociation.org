@@ -65,6 +65,15 @@ class StripeTransaction < ApplicationRecord
     end
   end
 
+  def money_amount
+    ruby_amount = StripeTransaction.amount_to_ruby(
+      self.amount_stripe_denomination,
+      self.currency_code,
+    )
+
+    Money.new(ruby_amount, self.currency_code)
+  end
+
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
   # that are not compatible with the subunits from our RubyMoney gem.
   # In other words, `Money::Currency.find(iso_code).subunit_to_unit`
