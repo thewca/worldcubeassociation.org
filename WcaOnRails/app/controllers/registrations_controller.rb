@@ -496,7 +496,7 @@ class RegistrationsController < ApplicationController
 
       stored_intent = stored_transaction.stripe_payment_intent
 
-      stored_intent.update_status_and_charges(stripe_intent) do |charge_transaction|
+      stored_intent.update_status_and_charges(stripe_intent, audit_event) do |charge_transaction|
         if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
           ruby_money = charge_transaction.money_amount
 
@@ -544,7 +544,7 @@ class RegistrationsController < ApplicationController
       return redirect_to competition_register_path(@competition)
     end
 
-    stored_intent.update_status_and_charges(stripe_intent) do |charge_transaction|
+    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
       registration.record_payment(

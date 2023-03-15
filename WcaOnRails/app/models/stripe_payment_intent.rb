@@ -4,6 +4,8 @@ class StripePaymentIntent < ApplicationRecord
   belongs_to :holder, polymorphic: true
   belongs_to :stripe_transaction
   belongs_to :user
+  belongs_to :confirmed_by, polymorphic: true, optional: true
+  belongs_to :canceled_by, polymorphic: true, optional: true
 
   scope :pending, -> { where(confirmed_at: nil, canceled_at: nil) }
   scope :started, -> { joins(:stripe_transaction).where.not(stripe_transaction: { status: 'requires_payment_method' }) }
@@ -30,7 +32,7 @@ class StripePaymentIntent < ApplicationRecord
     )
   end
 
-  def update_status_and_charges(api_intent)
+  def update_status_and_charges(api_intent, action_source)
     self.stripe_transaction.update_status(api_intent)
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
@@ -39,7 +41,7 @@ class StripePaymentIntent < ApplicationRecord
       # The payment didn’t need any additional actions and is completed!
 
       # Record the success timestamp if not already done
-      self.update!(confirmed_at: DateTime.current) if self.pending?
+      self.update!(confirmed_at: DateTime.current, confirmed_by: action_source) if self.pending?
 
       api_intent.charges.data.each do |charge|
         recorded_transaction = StripeTransaction.find_by(stripe_id: charge.id)
@@ -53,10 +55,19 @@ class StripePaymentIntent < ApplicationRecord
           yield fresh_transaction if block_given?
         end
       end
+    when 'canceled'
+      # Canceled by Stripe
+
+      self.update!(canceled_at: DateTime.current, canceled_by: action_source)
     when 'requires_payment_method'
       # Reset by Stripe
 
-      self.update!(confirmed_at: nil)
+      self.update!(
+        confirmed_at: nil,
+        confirmed_by: nil,
+        canceled_at: nil,
+        canceled_by: nil,
+      )
     end
   end
 end

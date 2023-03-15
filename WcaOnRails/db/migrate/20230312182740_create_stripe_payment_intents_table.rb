@@ -9,7 +9,9 @@ class CreateStripePaymentIntentsTable < ActiveRecord::Migration[7.0]
       t.timestamps
       t.references :user, type: :integer, foreign_key: true
       t.datetime :confirmed_at
+      t.references :confirmed_by, polymorphic: true
       t.datetime :canceled_at
+      t.references :canceled_by, polymorphic: true
     end
   end
 end
