@@ -816,15 +816,20 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       context "processes a payment" do
         before :each do
           sign_in organizer
-          card = FactoryBot.create(:credit_card)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
+          post :load_payment_intent, params: {
+            id: registration.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
             stripe_account: competition.connected_stripe_account_id,
           )
-          post :process_payment_intent, params: {
+          get :payment_success, params: {
             id: registration.id,
-            payment_method_id: pm.id,
-            amount: registration.outstanding_entry_fees.cents,
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
           }
           @payment = registration.reload.registration_payments.first
         end

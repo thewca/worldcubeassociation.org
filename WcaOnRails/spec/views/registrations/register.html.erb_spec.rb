@@ -63,6 +63,6 @@ RSpec.describe "registrations/register" do
 
   it "renders unpaid registrations and ask for payment" do
     setup :unpaid
-    expect(rendered).to match(/Pay your fees with card/)
+    expect(rendered).to match(/Pay now!/)
   end
 end

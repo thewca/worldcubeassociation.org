@@ -625,11 +625,16 @@ class RegistrationsController < ApplicationController
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
     stripe_amount = StripeTransaction.amount_to_stripe(amount, currency_iso)
 
+    # The Stripe API forces the user to provide a return_url when using automated payment methods.
+    # In our test suite however, we want to be able to confirm specific payment methods without a return URL
+    # because our CI containers are not exposed to the public. So we need this little hack :/
+    enable_automatic_pm = !Rails.env.test?
+
     payment_intent_args = {
       amount: stripe_amount,
       currency: currency_iso,
       # recommended as per https://stripe.com/docs/payments/payment-element/migration
-      automatic_payment_methods: { enabled: true },
+      automatic_payment_methods: { enabled: enable_automatic_pm },
       receipt_email: user.email,
       description: "Registration payment for #{competition.name}",
       metadata: registration_metadata,
