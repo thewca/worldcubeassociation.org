@@ -168,12 +168,12 @@ class AdminController < ApplicationController
   end
 
   def do_generate_dev_export
-    DumpDeveloperDatabase.perform_later unless DumpDeveloperDatabase.in_progress?
+    DumpDeveloperDatabase.perform_later(force_export: true) unless DumpDeveloperDatabase.in_progress?
     redirect_to admin_generate_exports_path
   end
 
   def do_generate_public_export
-    DumpPublicResultsDatabase.perform_later unless DumpPublicResultsDatabase.in_progress?
+    DumpPublicResultsDatabase.perform_later(force_export: true) unless DumpPublicResultsDatabase.in_progress?
     redirect_to admin_generate_exports_path
   end
 
