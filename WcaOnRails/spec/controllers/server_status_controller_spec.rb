@@ -75,8 +75,8 @@ RSpec.describe "StripeChargesCheck" do
   end
 
   it "warns about stripe charges with status unknown" do
-    StripeCharge.create!(
-      metadata: "",
+    StripeTransaction.create!(
+      parameters: {},
       status: "unknown",
     )
 

@@ -1,12 +1,26 @@
 # frozen_string_literal: true
 
-class StripeCharge < ApplicationRecord
+class StripeTransaction < ApplicationRecord
   enum status: {
     unknown: "unknown",
     payment_intent_registered: "payment_intent_registered",
     success: "success",
     failure: "failure",
   }
+
+  # Actual values are according to Stripe API documentation as of 2023-03-12.
+  enum api_type: {
+    payment_intent: "payment_intent",
+    charge: "charge",
+    refund: "refund",
+  }
+
+  has_one :registration_payment, as: :receipt
+  belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
+
+  # We don't need the native JSON type on DB level, so we serialize in Ruby.
+  # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
+  serialize :parameters, JSON
 
   # sub-hundred units special cases per https://stripe.com/docs/currencies#special-cases
   # that are not compatible with the subunits from our RubyMoney gem.
@@ -54,5 +68,17 @@ class StripeCharge < ApplicationRecord
 
     # Stripe and ruby-money agree. All good.
     amount_stripe_denomination
+  end
+
+  def self.create_receipt(api_transaction, parameters, status, account_id)
+    StripeTransaction.create!(
+      api_type: api_transaction.object,
+      parameters: parameters,
+      stripe_id: api_transaction.id,
+      amount_stripe_denomination: api_transaction.amount,
+      currency_code: api_transaction.currency,
+      status: status,
+      account_id: account_id,
+    )
   end
 end
