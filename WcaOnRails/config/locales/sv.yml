@@ -1513,6 +1513,19 @@ sv:
           zero: 'Formuläret innehåller %{count} fel:'
           one: 'Formuläret innehåller ett fel:'
           other: 'Formuläret innehåller %{count} fel:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Vi ber om ursäkt, något gick fel.'
+        #original_hash: d815249
+        500_contact: >-
+          Om du rapporterar detta fel till WCA Software Team, var vänlig nämn
+          anrops-ID:t
+        #original_hash: b61e305
+        400_error: Sidan du letade efter existerar inte.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Om du tror detta är ett misstag, var vänlig kontakta WCA Software
+          Team, och inkludera anrops-ID:t
     doorkeeper:
       applications:
         help:
@@ -2326,6 +2339,8 @@ sv:
       approved_registrations: Godkända anmälningar
       #original_hash: bff04e8
       deleted_registrations: Raderade anmälningar
+      #original_hash: e86b1e1
+      non_competing: Icke-tävlande anmälningar
       #original_hash: ac5d958
       not_paid: Inte betalat
       registered:
@@ -2402,6 +2417,11 @@ sv:
       Gränsen för antalet tävlande på denna tävling är %{competitor_limit} och
       den har redan uppnåtts. Om du anmäler dig kommer din anmälan att placeras
       på en väntelista. Anmälan kanske inte godkänns om inte en plats frigörs.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Gränsen för antalet tävlande på denna tävling är %{competitor_limit}, och
+      tävlingen kan fyllas. Om du anmäler dig hamnar din anmälan då på
+      väntelistan, och blir bara godkänd om det blir platser lediga.
     #original_hash: 855ca9c
     can_register: 'Du kan anmäla dig till %{comp} nedan.'
     #original_hash: 4167ed7

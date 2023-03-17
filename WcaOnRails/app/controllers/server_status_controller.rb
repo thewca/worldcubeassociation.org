@@ -93,7 +93,7 @@ class StripeChargesCheck < StatusCheck
   end
 
   protected def _status_description
-    unknown_stripe_charges_count = StripeCharge.where(status: "unknown").count
+    unknown_stripe_charges_count = StripeTransaction.where(status: "unknown").count
 
     if unknown_stripe_charges_count == 0
       [:success, nil]

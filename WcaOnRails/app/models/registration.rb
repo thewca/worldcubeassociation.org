@@ -150,26 +150,31 @@ class Registration < ApplicationRecord
     (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
-  def record_payment(amount, currency_code, stripe_charge_id, user_id)
+  def record_payment(
+    amount_lowest_denomination,
+    currency_code,
+    receipt,
+    user_id
+  )
     registration_payments.create!(
-      amount_lowest_denomination: amount,
+      amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
-      stripe_charge_id: stripe_charge_id,
+      receipt: receipt,
       user_id: user_id,
     )
   end
 
   def record_refund(
-    amount,
+    amount_lowest_denomination,
     currency_code,
-    stripe_refund_id,
+    receipt,
     refunded_registration_payment_id,
     user_id
   )
     registration_payments.create!(
-      amount_lowest_denomination: amount * -1,
+      amount_lowest_denomination: amount_lowest_denomination.abs * -1,
       currency_code: currency_code,
-      stripe_charge_id: stripe_refund_id,
+      receipt: receipt,
       refunded_registration_payment_id: refunded_registration_payment_id,
       user_id: user_id,
     )
