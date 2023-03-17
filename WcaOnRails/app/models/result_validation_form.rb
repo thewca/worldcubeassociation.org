@@ -16,7 +16,7 @@ class ResultValidationForm
 
   def competitions
     if @competition_selection == COMP_VALIDATION_ALL
-      Competition.ids
+      Competition.over.not_cancelled.ids
     else
       @competition_ids.split(",").uniq.compact
     end

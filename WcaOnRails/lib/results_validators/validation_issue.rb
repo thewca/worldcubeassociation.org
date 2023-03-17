@@ -10,8 +10,11 @@ module ResultsValidators
       @competition_id = competition_id
     end
 
-    def to_s
-      format(@message, @args)
+    def to_s(include_competition: false)
+      competiton_prefix = include_competition ? "[#{@competition_id}] " : ""
+      raw_message = format(@message, @args)
+
+      competiton_prefix + raw_message
     end
 
     def ==(other)
