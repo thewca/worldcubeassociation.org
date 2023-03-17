@@ -10,7 +10,7 @@
 <% else %>
   <% if job.in_progress? %>
     <%= alert :info, "The job is running. Thanks for checking =)" %>
-  <% elsif job.is_a? TimedApplicationJob %>
+  <% elsif job < TimedApplicationJob %>
     <% if job.finished? %>
       <%= alert :success do %>
         Job was last completed <%= time_ago_in_words job.end_date %> ago
