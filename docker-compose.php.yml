@@ -4,28 +4,28 @@ services:
     image: nginx
     ports:
       - "8080:8080"
-      volumes:
-        - ./webroot:/webroot #PHP stuff
-        - ./WcaOnRails/app/views/regulations:/regulations #static regulations files
-        - ./WcaOnRails/public:/public #other static files
-        - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf
-        - ./docker/fcgi.conf:/etc/nginx/fcgi.conf
-        networks:
-          - wca-main
-          depends_on:
-            - php
-            - wca_on_rails
+    volumes:
+      - ./webroot:/webroot #PHP stuff
+      - ./WcaOnRails/app/views/regulations:/regulations #static regulations files
+      - ./WcaOnRails/public:/public #other static files
+      - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf
+      - ./docker/fcgi.conf:/etc/nginx/fcgi.conf
+    networks:
+      - wca-main
+    depends_on:
+      - php
+      - wca_on_rails
 
-php:
-  build:
-    dockerfile: './docker/php-dockerfile'
+  php:
+    build:
+      dockerfile: './docker/php-dockerfile'
     volumes:
       - ./webroot:/webroot
       - ./secrets/uploads:/secrets/uploads # so we can pretend to upload stuff
-      networks:
-        - wca-main
-        environment:
-          - MYSQL_HOST=wca_db
-          - MYSQL_USER=root
-          - MYSQL_PASSWORD=
-          - MYSQL_DB=wca_development
+    networks:
+      - wca-main
+    environment:
+      - MYSQL_HOST=wca_db
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=
+      - MYSQL_DB=wca_development

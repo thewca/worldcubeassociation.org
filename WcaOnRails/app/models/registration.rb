@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 
 class Registration < ApplicationRecord
-  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil) }
+  scope :pending, -> { where(accepted_at: nil).where(deleted_at: nil).where(is_competing: true) }
   scope :accepted, -> { where.not(accepted_at: nil).where(deleted_at: nil) }
   scope :deleted, -> { where.not(deleted_at: nil) }
+  scope :non_competing, -> { where(is_competing: false) }
   scope :not_deleted, -> { where(deleted_at: nil) }
   scope :with_payments, -> { joins(:registration_payments).distinct }
 
@@ -16,6 +17,7 @@ class Registration < ApplicationRecord
   has_many :competition_events, through: :registration_competition_events
   has_many :events, through: :competition_events
   has_many :assignments, dependent: :delete_all
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
 
   serialize :roles, Array
 
@@ -51,7 +53,7 @@ class Registration < ApplicationRecord
   end
 
   def pending?
-    !accepted? && !deleted?
+    !accepted? && !deleted? && is_competing?
   end
 
   def self.status_from_timestamp(accepted_at, deleted_at)
@@ -69,7 +71,7 @@ class Registration < ApplicationRecord
   end
 
   def new_or_deleted?
-    new_record? || deleted?
+    new_record? || deleted? || !is_competing?
   end
 
   def name
@@ -148,26 +150,31 @@ class Registration < ApplicationRecord
     (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
-  def record_payment(amount, currency_code, stripe_charge_id, user_id)
+  def record_payment(
+    amount_lowest_denomination,
+    currency_code,
+    receipt,
+    user_id
+  )
     registration_payments.create!(
-      amount_lowest_denomination: amount,
+      amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
-      stripe_charge_id: stripe_charge_id,
+      receipt: receipt,
       user_id: user_id,
     )
   end
 
   def record_refund(
-    amount,
+    amount_lowest_denomination,
     currency_code,
-    stripe_refund_id,
+    receipt,
     refunded_registration_payment_id,
     user_id
   )
     registration_payments.create!(
-      amount_lowest_denomination: amount * -1,
+      amount_lowest_denomination: amount_lowest_denomination.abs * -1,
       currency_code: currency_code,
-      stripe_charge_id: stripe_refund_id,
+      receipt: receipt,
       refunded_registration_payment_id: refunded_registration_payment_id,
       user_id: user_id,
     )
@@ -218,14 +225,19 @@ class Registration < ApplicationRecord
     }
   end
 
+  def self.accepted_and_paid_pending_count
+    accepted.count + pending.with_payments.count
+  end
+
   # Only run the validations when creating the registration as we don't want user changes
   # to invalidate all the corresponding registrations (e.g. if the user gets banned).
   # Instead the validations should be placed such that they ensure that a user
   # change doesn't lead to an invalid state.
   validate :user_can_register_for_competition, on: :create
   private def user_can_register_for_competition
-    if user&.cannot_register_for_competition_reasons.present?
-      errors.add(:user_id, user.cannot_register_for_competition_reasons.to_sentence)
+    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition)
+    if cannot_register_reasons.present?
+      errors.add(:user_id, cannot_register_reasons.to_sentence)
     end
   end
 
@@ -238,8 +250,18 @@ class Registration < ApplicationRecord
 
   validate :must_register_for_gte_one_event
   private def must_register_for_gte_one_event
-    if registration_competition_events.reject(&:marked_for_destruction?).empty?
+    if is_competing && registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
+    end
+  end
+
+  validate :must_not_register_for_more_events_than_event_limit
+  private def must_not_register_for_more_events_than_event_limit
+    if !competition.present? || !competition.events_per_registration_limit_enabled?
+      return
+    end
+    if registration_competition_events.reject(&:marked_for_destruction?).length > competition.events_per_registration_limit
+      errors.add(:registration_competition_events, I18n.t('registrations.errors.exceeds_event_limit', count: competition.events_per_registration_limit))
     end
   end
 
@@ -250,6 +272,13 @@ class Registration < ApplicationRecord
     end
     if registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }.any?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
+    end
+  end
+
+  validate :forcing_competitors_to_add_comment
+  private def forcing_competitors_to_add_comment
+    if competition&.force_comment_in_registration.present? && comments.strip.empty?
+      errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end
 

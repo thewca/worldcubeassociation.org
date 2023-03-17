@@ -428,7 +428,7 @@ fr:
         #original_hash: 28a6fbb
         currency_code: Monnaie
         #original_hash: 2e3ed8b
-        delegate_ids: Délégué(s) WCA
+        staff_delegate_ids: Délégué(s) WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Délégué(es) WCA Stagiaire(s)
         #original_hash: 958562e
@@ -819,7 +819,7 @@ fr:
           de remplir ces informations <b>en anglais</b> et dans les langues que
           vos compétiteurs parlent.
         #original_hash: b4d020f
-        delegate_ids: Délégué(s) WCA pour la compétition.
+        staff_delegate_ids: Délégué(s) WCA pour la compétition.
         #original_hash: cb9882c
         trainee_delegate_ids: Délégués WCA Stagiaire pour la compétition.
         #original_hash: 517d376
@@ -1464,7 +1464,7 @@ fr:
         Bon retour parmi nous ! Pour créer votre compte sur le site de la WCA,
         nous avons besoin de connaître l'ID WCA avec lequel vous avez participé.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Bienvenue ! Avant que vous puissiez participer à votre première
         compétition WCA, nous avons besoin de plus d'informations pour vous
         identifier. Merci de noter que votre date de naissance ne sera jamais

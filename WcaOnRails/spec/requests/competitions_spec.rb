@@ -12,7 +12,7 @@ RSpec.describe "competitions" do
       it 'can confirm competition' do
         patch competition_path(competition), params: {
           'competition[name]' => competition.name,
-          'competition[delegate_ids]' => competition.delegate_ids,
+          'competition[staff_delegate_ids]' => competition.staff_delegate_ids,
           'commit' => 'Confirm',
         }
         follow_redirect!

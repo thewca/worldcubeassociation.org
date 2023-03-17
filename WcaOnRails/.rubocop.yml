@@ -5,11 +5,11 @@ AllCops:
   DisplayCopNames: true
   NewCops: enable
   Exclude:
-    - 'WcaOnRails/node_modules/**/*'
-    - 'WcaOnRails/bin/**/*'
-    - 'WcaOnRails/vendor/**/*'
+    - 'node_modules/**/*'
+    - 'bin/**/*'
+    - 'vendor/**/*'
     # This file is provided as-is by Discourse
-    - 'WcaOnRails/lib/single_sign_on.rb'
+    - 'lib/single_sign_on.rb'
 
 Bundler/OrderedGems:
   Enabled: false
@@ -201,7 +201,7 @@ Layout/EmptyLineAfterGuardClause:
 
 Lint/EmptyFile:
   Exclude:
-    - 'WcaOnRails/db/seeds.rb'
+    - 'db/seeds.rb'
 
 # We have too many event IDs and Comp Years with numbers in them
 Naming/VariableNumber:
@@ -211,11 +211,11 @@ Naming/VariableNumber:
 # we have no choice but to follow their conventions until they update
 Naming/InclusiveLanguage:
   Exclude:
-    - 'WcaOnRails/config/**/*'
+    - 'config/**/*'
 
 Style/OpenStructUse:
   Exclude:
-    - 'WcaOnRails/spec/lib/middlewares/warden_user_logger_spec.rb'
+    - 'spec/lib/middlewares/warden_user_logger_spec.rb'
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: never

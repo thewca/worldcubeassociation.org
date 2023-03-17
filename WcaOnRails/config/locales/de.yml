@@ -192,10 +192,10 @@ de:
       #original_hash: 672b22c
       cellName: Finale
     g:
-      #original_hash: ccf6f8e
-      name: Dritte Runde
-      #original_hash: ccf6f8e
-      cellName: Dritte Runde
+      #original_hash: e2f74d2
+      name: Halbfinale
+      #original_hash: e2f74d2
+      cellName: Halbfinale
     h:
       #original_hash: 4d618bb
       name: Qualifikationsrunde
@@ -374,11 +374,11 @@ de:
       #original_hash: 89ff312
       owner: Eigentümer
       #original_hash: 557031c
-      application_id: Anwendungs-ID
+      application_id: Application ID
       #original_hash: c3cd636
       actions: Aktionen
       #original_hash: f4e7a87
-      secret: Geheim
+      secret: Client Secret
       #original_hash: c23540e
       scopes: Scopes
       #original_hash: 3b0d449
@@ -478,7 +478,7 @@ de:
         #original_hash: 28a6fbb
         currency_code: Währungscode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegierte
+        staff_delegate_ids: WCA-Delegierte
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -503,6 +503,8 @@ de:
         guests_enabled: Gäste
         #original_hash: 7d78478
         guests_per_registration_limit: Maximale Anzahl Gäste pro Anmeldung
+        #original_hash: 22516e1
+        events_per_registration_limit: Events pro Anmeldung - Limit
         #original_hash: 089cbfd
         receive_registration_emails: >-
           Benachrichtige mich per E-Mail, wenn sich jemand für diesen Wettbewerb
@@ -523,6 +525,10 @@ de:
         enable_donations: Ich möchte zusätzlich zu den Eintrittsgebühren Spenden ermöglichen
         #original_hash: 556fda0
         extra_registration_requirements: Zusätzliche Bedingungen für die Registrierung
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: >-
+          Zwinge Teilnehmer dazu, bei der Anmeldung einen Kommentar zu
+          hinterlassen
         #original_hash: 2529d04
         on_the_spot_registration: Vor-Ort Registrierung
         #original_hash: 69780b5
@@ -567,10 +573,10 @@ de:
         #original_hash: 4baf44b
         championship_type: Meisterschaftstyp
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Name
+        #original_hash: e2b4898
+        wcif_id: Serien-ID
+        #original_hash: 75ceb67
+        name: Name der Serie
         #original_hash: 8a6bee1
         short_name: Spitzname der Serie
         #original_hash: af3d38e
@@ -815,14 +821,16 @@ de:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Trage dein Geburtsdatum im Format JJJJ-MM-TT ein.
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: >-
+          Trage das Geburtsdatum des Teilnehmers / der Teilnehmerin im Format
+          JJJJ-MM-TT ein.
+        #original_hash: ac908c9
         name: >-
-          Trage deinen vollen Namen sorgfältig ein, zum Beispiel <strong>Stefan
-          Pochmann</strong>. Nicht unachtsam wie etwa <strong>s
-          pochman</strong>. Zweite Vornamen (entweder ganz oder als Initial)
-          sind optional.
+          Trage den vollen Namen des Teilnehmers / der Teilnehmerin sorgfältig
+          ein, zum Beispiel <strong>Stefan Pochmann</strong>. Nicht unachtsam
+          wie etwa <strong>s pochman</strong>. Zweite Vornamen (entweder ganz
+          oder als Initial) sind optional.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -890,7 +898,7 @@ de:
           <b>Englisch</b> und in jeder anderen Sprache, die die Teilnehmer
           sprechen, aus.
         #original_hash: b4d020f
-        delegate_ids: WCA-Delegierte des Wettbewerbs
+        staff_delegate_ids: WCA-Delegierte des Wettbewerbs
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegate für diesen Wettbewerb.
         #original_hash: 517d376
@@ -966,6 +974,13 @@ de:
           Die maximal erlaubte Anzahl von Gästen pro Anmeldung bei diesem
           Wettbewerb. Anmeldungen mit zu vielen Gästen werden blockiert. Lasse
           dies frei, wenn es keine Begrenzung gibt.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Lege wahlweise fest, für wie viele Events sich ein Teilnehmer
+          insgesamt anmelden darf (wird häufig für "Favorites" competitions
+          verwendet). Du solltest vor Nutzung dieses Feldes Events hinzufügen.
+          Anmeldungen mit zu vielen Events werden blockiert. Lasse dies frei,
+          wenn es kein Limit gibt.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1034,6 +1049,8 @@ de:
         event_restrictions_reason: >-
           Bitte erläutere hier, warum du die Anmeldung bestimmter
           Eventkombinationen verbieten willst. Bitte fülle dies in Englisch aus!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Der Gewinner dieses Events ist der Gewinner der Competition.
         #original_hash: da39a3e
@@ -1544,6 +1561,19 @@ de:
           zero: 'Das Formular enthält %{count} Fehler:'
           one: 'Das Formular enthält einen Fehler:'
           other: 'Das Formular enthält %{count} Fehler:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Entschuldige, etwas ist schiefgelaufen.'
+        #original_hash: d815249
+        500_contact: >-
+          Wenn du diesen Fehler ans Software Team meldest, erwähne bitte die
+          Request ID
+        #original_hash: b61e305
+        400_error: Die angeforderte Seite existiert nicht.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Wenn du glaubst, dass dies ein Fehler ist, kontaktiere bitte das
+          Software Team und erwähne die Request ID
     doorkeeper:
       applications:
         help:
@@ -1581,12 +1611,14 @@ de:
       welcome_back: >-
         Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir
         die WCA-ID kennen, mit der Du teilgenommen hast.
-      #original_hash: 669fb57
-      welcome: >-
+      #original_hash: ef8243e
+      welcome_html: >-
         Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst,
         brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
         Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein
-        Einverständnis weitergereicht wird.
+        Einverständnis weitergereicht wird.<br/><br/>Wenn Du die Anmeldung im
+        Namen einer anderen Person durchführst, gib bitte die Details
+        <strong>des Teilnehmers / der Teilnehmerin</strong> an.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1695,6 +1727,12 @@ de:
       manage_auth_app: Autorisierte Anwendungen verwalten
       #original_hash: acac109
       media_submission: Medien Einreichung
+      #original_hash: cf01481
+      privacy: Datenschutz
+      #original_hash: 4c4a2e8
+      disclaimer: Haftungsausschluss
+      #original_hash: d561f1a
+      find_us: Finde uns
   homepage:
     #original_hash: 824d76b
     learn_more: Erfahre mehr
@@ -1891,6 +1929,26 @@ de:
         more_info_html: 'Du kannst deine E-Mail Einstellungen anpassen %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Viele Grüße, <br/>das WCA Results Team im Namen von %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Setze das Passwort deines WCA Accounts zurück
+        #original_hash: 65611e9
+        greeting: 'Hallo,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Wir haben eine Anfrage zum Zurücksetzen des Passworts deines WCA
+          Accounts, verknüpft mit %{user_email}, erhalten. Bislang wurden noch
+          keine Änderungen an deinem Account vorgenommen.
+        #original_hash: 60fef9e
+        instruction2: 'Du kannst dein Passwort mit Klick auf den folgenden Link zurücksetzen:'
+        #original_hash: 00850c3
+        instruction3: >-
+          Wenn du das Zurücksetzen deines Passworts nicht angefordert hast,
+          ignoriere bitte diese E-Mail.
+        #original_hash: dbc2263
+        instruction4: >-
+          Hast du weitere Fragen? Wir antworten dir gerne! Kontaktiere uns unter
+          %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA-ID anfordern
@@ -2021,7 +2079,11 @@ de:
       #original_hash: 58e0c56
       remove_avatar: Avatar entfernen
       #original_hash: 4bd25cf
-      remove_avatar_confirm: 'Bist du sicher, dass du deinen Avatar löschen willst?'
+      remove_avatar_confirm: 'Bist du sicher, dass du dein Profilbild löschen willst?'
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Bestätige das Entfernen des Profilbildes
+      #original_hash: 010b0e5
+      remove_avatar_reason: Bitte gib einen Grund für das Entfernen an
       #original_hash: 141d1d7
       guidelines: Richtlinien
       avatar_guidelines:
@@ -2197,6 +2259,11 @@ de:
       cannot_be_deleted_and_accepted: Eine Anmeldung kann nicht gleichzeitig akzeptiert und gelöscht werden.
       #original_hash: a38d024
       must_register: muss sich für mindestens eine Disziplin anmelden
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: Du darfst dich in keinem Event anmelden
+        one: Du darfst dich in genau einem Event anmelden
+        other: 'Du darfst dich maximal %{count} Events anmelden'
       #original_hash: e78eec3
       banned_html: >-
         Du bist gebannt. Falls du denkst dass dies ein Fehler ist, kontaktiere
@@ -2210,6 +2277,12 @@ de:
       can_only_register_for_qualified_events: >-
         Du kannst dich nicht für Events anmelden, für die du nicht qualifiziert
         bist.
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        Du musst einen Kommentar hinterlassen. Stelle sicher, dass du die
+        Anmeldevoraussetzungen gelesen hast und alle Details angegeben hast
+        (z.B. für einen Fewest Moves Multi-Location Wettbewerb angegeben hast,
+        an welchem Ort du teilnehmen wirst).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2361,6 +2434,8 @@ de:
       approved_registrations: Bestätigte Anmeldungen
       #original_hash: bff04e8
       deleted_registrations: Gelöschte Anmeldungen
+      #original_hash: e86b1e1
+      non_competing: Nicht-teilnehmende Anmeldungen
       #original_hash: ac5d958
       not_paid: Nicht bezahlt
       registered:
@@ -2441,6 +2516,12 @@ de:
       wurde bereits erreicht. Wenn du dich anmeldest, wird deine Anmeldung auf
       eine Warteliste gesetzt. Sie wird nicht bestätigt werden, bevor ein Platz
       frei ist.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Das Teilnehmerlimit für diesen Wettbewerb ist %{competitor_limit} und kann
+      bereits erreicht sein. Wenn du dich anmeldest, wird deine Anmeldung auf
+      die Warteliste gesetzt. Diese wird erst dann akzeptiert, wenn ein Platz
+      frei wird.
     #original_hash: 855ca9c
     can_register: 'Du kannst dich weiter unten für %{comp} anmelden.'
     #original_hash: 4167ed7
@@ -2719,6 +2800,10 @@ de:
         verbinden.
       #original_hash: 724cf0d
       championship_exists: 'Es gibt bereits eine %{championship_type} in %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Anmeldung erfolgreich geschlossen.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Anmeldung kann nicht geschlossen werden.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Meine Wettbewerbe
@@ -2808,6 +2893,8 @@ de:
         nur eine dieser Anmeldungen wird bestätigt und akzeptiert. <b>Du wirst
         die Erlaubnis zur Teilnahme nur für einen der Wettbewerbe der Serie
         erhalten!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Teilnehmerlimit
       #original_hash: 196725e
       competitor_limit_is: 'Es gibt ein Teilnehmerlimit von %{competitor_limit} Teilnehmern.'
       #original_hash: 5101f65
@@ -2871,6 +2958,11 @@ de:
         zero: Teilnehmer dürfen keine Gäste mitbringen.
         one: Teilnehmer dürfen maximal einen Gast mitbringen.
         other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
+      #original_hash: bad09c8
+      event_limit:
+        zero: Teilnehmer dürfen sich bei keinem Event anmelden.
+        one: Teilnehmer dürfen sich in genau einem Event anmelden.
+        other: 'Teilnehmer dürfen sich bei maximal %{count} Events anmelden.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Teilnehmer dürfen sich nur für Events anmelden, für die sie bereits
@@ -3342,6 +3434,18 @@ de:
     cancel_mistake: Fehler gemacht?
     #original_hash: 0fb43d5
     note_before_cancel: 'Achtung: nur bestätigte Wettbewerbe können abgesagt werden.'
+    #original_hash: 19a0ac2
+    orga_close_reg: Schließe die Anmeldung.
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: >-
+      Bist du sicher, dass du die Anmeldung schließen möchtest? Dies kann nicht
+      rückgängig gemacht werden.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Beachte: du kannst die Anmeldung nur schließen, nachdem das
+      Teilnehmerlimit erreicht wurde.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Beachte: die Anmeldung ist bereits geschlossen.'
     show:
       #original_hash: b0fe391
       general_info: Allgemeine Info
@@ -4688,6 +4792,11 @@ de:
           können von einem oder mehreren TNoodle JSON Dateien importiert werden.
           Die Ergebnisse können für die Einreichung auf der WCA Webseite
           exportiert werden.
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: Zeige Gruppen eines beliebigen laufenden Wettbewerbs
   logo:
     #original_hash: c72c969
     title: WCA-Logo
@@ -5079,12 +5188,12 @@ de:
     paragraph4:
       #original_hash: b6dca56
       title: Abstandsregel
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        WCA Wettbewerbe werden genehmigt wenn sie mindestens 100 km oder 19 Tage
-        von jedem anderen Wettbewerb entfernt sind. Das WCA Board sollte einen
-        Wettbewerb überprüfen, wenn die Distanz unter 200 km und die Zeitspanne
-        unter 26 Tagen liegt. Ein Delegierter, der eine Competition anfragt, der
+        WCA Wettbewerbe werden genehmigt wenn sie mindestens 10 km oder 5 Tage
+        von jedem anderen Wettbewerb entfernt sind. Das WCAT sollte einen
+        Wettbewerb überprüfen, wenn die Distanz unter 10 km und die Zeitspanne
+        unter 5 Tagen liegt. Ein Delegierter, der eine Competition anfragt, die
         diese Regeln nicht erfüllt, muss weitere Informationen angeben, warum
         diese Competition trotzdem akzeptiert werden soll. Mögliche Gründe, die
         eine solche Entscheidung beeinflussen, sind folgende:
@@ -5107,9 +5216,9 @@ de:
               Zeiträume, in denen beide stattfinden, dürfen sich nicht
               überlappen.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Wenn ein Standort eines solchen Wettbewerbes näher als 100 km zu
+            Wenn ein Standort eines solchen Wettbewerbes näher als 10 km zu
             einem anderen regulären Wettbewerb ist, dann
           alist1:
             #original_hash: 8f532bb
@@ -5379,3 +5488,22 @@ de:
     privacy: Datenschutz
     #original_hash: 4c4a2e8
     disclaimer: Disclaimer
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Gehe zu %{oauth_link}, um deine OAuth Anwendungen zu verwalten'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Hier ist ein Beispiel, welches curl verwendet, um ein Access-Token
+      mithilfe von Application ID, Client Secret, deiner WCA E-Mail, und deinem
+      Passwort zu erhalten:
+    #original_hash: 59d8cf3
+    user_email_placeholder: DEINE_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: DEIN_PASSWORT
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      Ein OAuth Access Token kann verwendet werden, bis es ungültig wird, um
+      authorisierte API Requests zu machen. Beispielsweise, um auf Informationen
+      zu deinen Account zuzugreifen:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Zugelassene TNoodle-Version
