@@ -252,7 +252,8 @@
           function UpdateDues(){
 
             var obj = $("#competition-form").serializeJSON();
-            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]']) // Coercing this variable to be a boolean, as one expects.
+            // Coerce compLimitEnabled to a bool, as it is a string obj['competition[competitor_limit_enabled]'] returns a string
+            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]']) 
             var compLimit = compLimitEnabled ? obj['competition[competitor_limit]'] : null
             var currencyCode = obj['competition[currency_code]']
 

@@ -423,10 +423,7 @@ class CompetitionsController < ApplicationController
     # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
     price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
 
-    # This is quite a hacky fix to getting a boolean as a string from the view, however I'm not sure how to/if we can
-    # specify or coerce types for params we receive other option would be to manually override the hash value, or define
-    # a variable based on the param at the start of the function
-    if params[:competitor_limit_enabled] == true || params[:competitor_limit_enabled] == "true"
+    if ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled])
       estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
       estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
 
