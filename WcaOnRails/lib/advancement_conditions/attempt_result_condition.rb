@@ -18,5 +18,13 @@ module AdvancementConditions
         I18n.t("advancement_condition#{".short" if short}.attempt_result.points", round_format: round_form, points: SolveTime.multibld_attempt_to_points(attempt_result))
       end
     end
+
+    def max_advancing(results)
+      return 0 if results.empty?
+      field = results.first.format.sort_by == "single" ? :best : :average
+      results.select do |r|
+        r.to_solve_time(field).complete? && r.send(field) < attempt_result
+      end.size
+    end
   end
 end

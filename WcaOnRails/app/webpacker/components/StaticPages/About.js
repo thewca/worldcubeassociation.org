@@ -117,11 +117,9 @@ function About({ currentBoardMembers }) {
         <I18nHTMLTranslate
           i18nKey="about.structure.operations_html"
           options={{
-            committees_and_teams: `
-                <a href="/teams-committees">
-                    ${I18n.t('about.structure.teams_committees')}
-                </a>
-            `,
+            committees_and_teams: `<a href="/teams-committees">${I18n.t(
+              'about.structure.teams_committees',
+            )}</a>`,
           }}
         />
       </p>

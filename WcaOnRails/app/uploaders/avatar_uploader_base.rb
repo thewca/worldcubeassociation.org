@@ -127,16 +127,3 @@ module CarrierWave
     end
   end
 end
-
-if File.exist? "/vagrant"
-  # Workaround for Vagrant bug with sendfile.
-  # carrierwave uses FileUtils.cp to copy around files that it
-  # mutates with mogrify, which exposes this bug.
-  # See https://github.com/mitchellh/vagrant/issues/351.
-  module FileUtils
-    def cp(src, dest, **options)
-      `cp #{src.shellescape} #{dest.shellescape}`
-    end
-    module_function :cp
-  end
-end

@@ -23,32 +23,12 @@
 .incident-tag,
 .competition-tag {
   display: inline-block;
+  margin-right: 0.35em;
   &:hover {
     cursor: pointer;
   }
   a {
     all: unset;
-  }
-}
-
-.incidents-log-table-container {
-  .table-responsive {
-    overflow-x: visible;
-    .search,
-    #custom-search-toolbar {
-      @extend .pull-left;
-      padding: 5px;
-      input {
-        display: inline-block;
-      }
-    }
-    .selectize-input > input {
-      min-width: 100px;
-    }
-    .status-cell,
-    .digest-cell {
-      width: 10%;
-    }
   }
 }
 

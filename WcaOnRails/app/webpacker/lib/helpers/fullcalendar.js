@@ -64,7 +64,7 @@ const fullCalendarHandlers = {
       }
       $menu.removeClass('hide-element');
       $menu.position({ my: 'left top', of: jsEvent });
-      // avoid it being immediately hiddent by our window click listener
+      // avoid it being immediately hidden by our window click listener
       jsEvent.stopPropagation();
     } else {
       $menu.addClass('hide-element');
@@ -81,8 +81,8 @@ const fullCalendarHandlers = {
   onSizeChanged: eventModifiedInCalendar,
   onTimeframeSelected: (showModalAction, start, end) => {
     const eventProps = {
-      title: commonActivityCodes['other-registration'],
-      activityCode: 'other-registration',
+      title: commonActivityCodes['other-checkin'],
+      activityCode: 'other-checkin',
       start,
       end,
     };
@@ -96,7 +96,7 @@ export default function generate(eventFetcher, showModalAction, scheduleWcif, ad
 
   const localOptions = {
     // Having only one view for edition enable us to have a "static" list of event
-    // If we had more, we would need a function to fetch them everytime
+    // If we had more, we would need a function to fetch them every time
     events: eventFetcher,
     editable: true,
     droppable: true,

@@ -16,9 +16,6 @@ WcaOnRails/public/documents/*
 # byebug stuff
 .byebug_history
 
-# Vagrant stuff
-.vagrant/
-
 # phpBB mess
 webroot/forum/cache/*
 !webroot/forum/cache/.htaccess

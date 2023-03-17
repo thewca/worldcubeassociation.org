@@ -110,7 +110,7 @@ RSpec.feature "Competition management" do
       expect(page).to have_text("Display message for free guest entry")
     end
 
-    scenario "change guest entry fee to non-zero", js: true do
+    scenario "change guest entry fee to non-zero", js: true, retry: 3 do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
       visit edit_competition_path(competition)
 
@@ -146,7 +146,7 @@ RSpec.feature "Competition management" do
       sign_in delegate
     end
 
-    scenario 'create competition', js: true do
+    scenario 'create competition', js: true, retry: 3 do
       visit "/competitions/new"
 
       fill_in "Name", with: "New Comp 2015"
@@ -161,7 +161,7 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario 'clone competition', js: true do
+    scenario 'clone competition', js: true, retry: 3 do
       visit clone_competition_path(competition_to_clone)
 
       fill_in "Name", with: "New Comp 2015"
@@ -183,7 +183,7 @@ RSpec.feature "Competition management" do
     feature "edit" do
       let(:comp_with_fours) { FactoryBot.create :competition, events: [fours], delegates: [delegate] }
 
-      scenario 'can edit registration open datetime', js: true do
+      scenario 'can edit registration open datetime', js: true, retry: 3 do
         visit edit_competition_path(comp_with_fours)
         check "competition_use_wca_registration"
 

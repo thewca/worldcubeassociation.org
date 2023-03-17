@@ -69,6 +69,10 @@ FactoryBot.define do
       delegates { [FactoryBot.create(:trainee_delegate)] }
     end
 
+    trait :with_delegates_and_trainee_delegate do
+      delegates { [FactoryBot.create(:delegate), FactoryBot.create(:trainee_delegate), FactoryBot.create(:delegate)] }
+    end
+
     trait :with_organizer do
       organizers { [FactoryBot.create(:user)] }
     end
@@ -83,6 +87,12 @@ FactoryBot.define do
       guests_enabled { true }
       guest_entry_status { Competition.guest_entry_statuses['restricted'] }
       guests_per_registration_limit { 10 }
+    end
+
+    trait :with_event_limit do
+      event_restrictions { true }
+      event_restrictions_reason { "this is a favourites competition" }
+      events_per_registration_limit { events.length }
     end
 
     use_wca_registration { false }

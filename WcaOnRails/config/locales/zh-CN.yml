@@ -23,7 +23,7 @@ zh-CN:
     #original_hash: 5c34abb
     KP: 朝鲜民主主义人民共和国
     #original_hash: 4430b22
-    KR: 韩国
+    KR: 大韩民国
     #original_hash: 673b1cf
     LC: 圣卢西亚
     #original_hash: e2ac50f
@@ -200,7 +200,26 @@ zh-CN:
     333mbf: 每魔方十分钟
     #original_hash: da39a3e
     333mbo: ''
+  qualification:
+    #original_hash: a2b25bf
+    type_label: 资格类型
+    #original_hash: 65c848f
+    result_type: 结果类型
+    type:
+      #original_hash: f5c3f76
+      none: 无资格
+      #original_hash: f8c5669
+      result: 按结果
+      #original_hash: 4aebda3
+      ranking: 首 N
+      #original_hash: 3bc54a0
+      any_result: 任何结果
+    deadline:
+      #original_hash: 3b7f9f6
+      description: 资格截止日期
   common:
+    #original_hash: 70c07ec
+    world: 世界
     #original_hash: 2513cf0
     continent: 洲
     #original_hash: d523ebb
@@ -363,7 +382,7 @@ zh-CN:
         #original_hash: 28a6fbb
         currency_code: 货币代码
         #original_hash: 2e3ed8b
-        delegate_ids: WCA 代表
+        staff_delegate_ids: WCA 代表
         #original_hash: 958562e
         organizer_ids: 主办方
         #original_hash: b37456c
@@ -547,9 +566,9 @@ zh-CN:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
+        #original_hash: 7588d71
         dob: 按“YYYY-MM-DD"格式输入你的生日。
-        #original_hash: d0bb74a
+        #original_hash: ac908c9
         name: >-
           正确输入你的全名，比如<strong>Baiqiang Dong (董百强)</strong>。别偷懒只输入<strong>Baiqiang
           (百强)</strong>
@@ -591,7 +610,7 @@ zh-CN:
         #original_hash: bb470cc
         information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
         #original_hash: b4d020f
-        delegate_ids: 比赛的WCA代表们。
+        staff_delegate_ids: 比赛的WCA代表们。
         #original_hash: 517d376
         organizer_ids: 主办方（需要提前注册帐号）
         #original_hash: cabe7fb
@@ -608,8 +627,11 @@ zh-CN:
         end_date: ''
         #original_hash: da39a3e
         generate_website: ''
-        #original_hash: a6f6562
-        base_entry_fee_lowest_denomination: 比赛的基础报名费。如果填写报名费，将在比赛信息页和报名页显示。
+        #original_hash: 82ea18a
+        base_entry_fee_lowest_denomination: >-
+          比赛的基础报名费。如果填写报名费，将在比赛信息页和报名页显示。如果设置为
+          0，将显示一句话，表示将免费接受报名。<br><br><b>免责声明：以下 WCA
+          费用估算仅是基于当前汇率的近似值，费用没有任何法律约束力。</b>
         #original_hash: 9735ddf
         currency_code: 报名费的货币代码。
         #original_hash: da39a3e
@@ -630,6 +652,8 @@ zh-CN:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: 目前这个数字只是纯展示，不会限制选手报名。我们在努力为注册流程添加人数限制的功能。
         #original_hash: b7b599b
@@ -639,11 +663,11 @@ zh-CN:
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: da39a3e
-        championship_type: ''
-        #original_hash: da39a3e
         on_the_spot_registration: ''
         #original_hash: da39a3e
         allow_registration_edits: ''
+        #original_hash: da39a3e
+        allow_registration_self_delete_after_acceptance: ''
         #original_hash: da39a3e
         guest_entry_status: ''
         #original_hash: da39a3e
@@ -652,6 +676,14 @@ zh-CN:
         qualification_results: ''
         #original_hash: da39a3e
         event_restrictions: ''
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1008,8 +1040,10 @@ zh-CN:
       let_us_know: 如果你之前参加过 WCA 比赛，请告知我们。
       #original_hash: f9f512b
       welcome_back: 欢迎回来！要注册一个 WCA 网站帐号，我们需要知道你参加比赛的 WCA ID。
-      #original_hash: 669fb57
-      welcome: 欢迎！在你参加第一场 WCA 比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。
+      #original_hash: 3b2bcea
+      welcome_html: >-
+        欢迎！在你参加第一场 WCA
+        比赛之前，我们需要一些额外信息。除非你同意，否则你的生日永远不会公开。<br/><br/>如果你帮助其他人报名，请提供<strong>参赛者</strong>的详细信息。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1337,7 +1371,7 @@ zh-CN:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': 头像必须是真人照片。
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': 上面的人必须是你自己。
         #original_hash: de9b742
         '3': 如果头像上有很多人，那么哪个是你必须很清楚。
@@ -1446,8 +1480,6 @@ zh-CN:
       need_dob: 生日必填
       #original_hash: d84a54f
       need_country: 地区必填
-      #original_hash: cec28a0
-      comp_not_found: 比赛未找到
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: 报名不能同时被删除和通过。
       #original_hash: a38d024
