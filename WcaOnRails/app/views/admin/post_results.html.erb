@@ -12,10 +12,10 @@
         <p>This competition is in the process of having data uploaded. If necessary, you can:</p>
         <ul>
           <% if @existing_data[:inbox_result] > 0 %>
-            <li>clear <%= link_to "InboxResults", competition_admin_delete_inbox_results_path(@competition.id) %></li>
+            <li>clear <%= link_to "InboxResults", competition_admin_delete_inbox_results_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_result]} entries from -->InboxResults<--\n\nPlease confirm below if you're sure." } %></li>
           <% end %>
           <% if @existing_data[:inbox_person] > 0 %>
-            <li>clear <%= link_to "InboxPersons", competition_admin_delete_inbox_persons_path(@competition.id) %></li>
+            <li>clear <%= link_to "InboxPersons", competition_admin_delete_inbox_persons_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_person]} entries from -->InboxPersons<--\n\nPlease confirm below if you're sure." } %></li>
           <% end %>
         </ul>
         <p>You can also always
@@ -25,13 +25,13 @@
     <% end %>
 
     <% if @existing_data[:inbox_result] > 0 %>
-      <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition.id) %> results</p>
+      <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition.id), method: :post %> results</p>
 
       <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
       <p>There are a total of <b><%= @existing_data[:result] %></b> rows inserted into the Results table.</p>
 
       <% if @existing_data[:inbox_result] == @existing_data[:result] %>
-        <p>You can <%= link_to "delete", competition_admin_delete_inbox_results_path(@competition.id) %> the inbox data,
+        <p>You can <%= link_to "delete", competition_admin_delete_inbox_results_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_result]} entries from -->InboxResults<--\n\nPlease confirm below if you're sure." } %> the inbox data,
           as all rows seem to have been fully imported.</p>
       <% end %>
 
@@ -57,7 +57,7 @@
       </ul>
 
       <% if @existing_data[:newcomer_result] == 0 %>
-        <p>You can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id) %> the inbox data,
+        <p>You can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_person]} entries from -->InboxPersons<--\n\nPlease confirm below if you're sure." } %> the inbox data,
           as all rows seem to have been fully imported.</p>
       <% end %>
     <% else %>
@@ -93,7 +93,7 @@
 
                 <td class="text-center <%= has_assoc ? "good_cell" : "bad_cell" %>">
                   <% if has_assoc %>
-                    Yes <%= link_to "X", competition_admin_delete_results_data_path(@competition.id, table: model.name, event: e.id, roundType: r.round_type.id) %>
+                    Yes <%= link_to "X", competition_admin_delete_results_data_path(@competition.id, table: model.name, event: e.id, roundType: r.round_type.id), method: :delete %>
                   <% else %>
                     Nope.
                   <% end %>
@@ -109,7 +109,7 @@
       <p>
         <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
         Remove all results and scrambles only, does not affect
-        persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, table: 'All') %>
+        persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, table: 'All', method: :delete) %>
       </p>
     <% end %>
 
