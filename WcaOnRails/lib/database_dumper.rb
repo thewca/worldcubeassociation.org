@@ -1,18 +1,18 @@
 # frozen_string_literal: true
 
 module DatabaseDumper
-  WHERE_VISIBLE_COMP = "WHERE Competitions.showAtAll=1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id #{WHERE_VISIBLE_COMP}".freeze
+  WHERE_VISIBLE_COMP = "WHERE Competitions.showAtAll = 1"
+  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
   VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A " \
-                         "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type='VenueRoom') " \
+                         "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = 'VenueRoom') " \
                          "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}".freeze
   PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON Competitions.id = competition_events.competition_id " \
-                            "LEFT JOIN competition_delegates ON Competitions.id=competition_delegates.competition_id " \
-                            "LEFT JOIN users AS users_delegates ON users_delegates.id=competition_delegates.delegate_id " \
-                            "LEFT JOIN competition_organizers ON Competitions.id=competition_organizers.competition_id " \
-                            "LEFT JOIN users AS users_organizers ON users_organizers.id=competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
+                            "LEFT JOIN competition_delegates ON Competitions.id = competition_delegates.competition_id " \
+                            "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
+                            "LEFT JOIN competition_organizers ON Competitions.id = competition_organizers.competition_id " \
+                            "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
                             "GROUP BY Competitions.id".freeze
 
   PUBLIC_RESULTS_VERSION = '1.0.0'
