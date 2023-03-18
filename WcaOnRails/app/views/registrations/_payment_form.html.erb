@@ -6,6 +6,10 @@
     <%= f.input :show_donation, as: :boolean, label: t('registrations.payment_form.labels.show_donation'), hint: "" %>
     <%= f.input :donation, as: :money_amount, currency: @registration.outstanding_entry_fees.currency.iso_code, value: "0", label: t('registrations.payment_form.labels.donation'), hint: t('registrations.payment_form.hints.donation') %>
   <% end %>
+  <div class="form-group">
+    <div class="col-sm-offset-2 col-sm-10 text-danger" id="intent-ajax-error">
+    </div>
+  </div>
   <%= f.button :button, t('registrations.payment_button_text'), id: :"stripe-button", class: 'btn btn-primary' %>
   <div id="stripe-elements" style="display: none;">
     <div class="form-group" id="group-payment-element">
@@ -34,26 +38,28 @@
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
       stripeAccount: '<%= @competition.connected_stripe_account_id %>',
     });
-    var $stripeButton = $('#stripe-button');
+    var $stripeCheckoutButton = $('#stripe-button');
+    var $stripeElementsDiv = $('#stripe-elements');
+
     var $paymentButton = $('#payment-button');
+
+    var $intentAjaxError = $('#intent-ajax-error');
 
     var elements;
 
-    function toggleSaving(saving) {
-      $paymentButton.attr("disabled", saving);
-      $paymentButton.toggleClass("saving", saving);
+    function toggleSaving(saving, button = $paymentButton) {
+      button.attr("disabled", saving);
+      button.toggleClass("saving", saving);
     }
 
     // We need to ask the user to explicitly start the checkout process, because they may or may not enter
     // a donation amount that needs to be included in the "amount" computation we send over to Stripe.
     // TODO if anybody has smarter ideas how to handle the donation amount, feel free to change this!
-    $stripeButton.on('click', function(e) {
+    $stripeCheckoutButton.on('click', function(e) {
       e.preventDefault();
 
-      $stripeButton.hide();
-
-      $('#stripe-elements').show();
-      toggleSaving(true);
+      toggleSaving(true, $stripeCheckoutButton);
+      $intentAjaxError.hide();
 
       loadPaymentIntent();
     });
@@ -75,18 +81,19 @@
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           data: JSON.stringify({ amount: amount }),
-          complete: initializeStripeElements,
+          success: initializeStripeElements,
+          error: handlePaymentIntentError,
         });
       }
     }
 
-    async function initializeStripeElements(piResponse) {
-      // TODO error handling if the backend complains
-      const { clientSecret } = piResponse.responseJSON;
+    async function initializeStripeElements(data) {
+      $stripeCheckoutButton.hide();
+      $stripeElementsDiv.show();
 
-      const appearance = {
-        theme: 'flat',
-      };
+      const { clientSecret } = data;
+      const appearance = { theme: 'flat' };
+
       elements = stripe.elements({ appearance, clientSecret });
 
       const paymentElement = elements.create("payment");
@@ -94,6 +101,15 @@
 
       $paymentButton.on('click', handleSubmit);
       toggleSaving(false);
+    }
+
+    async function handlePaymentIntentError(errorData) {
+      toggleSaving(false, $stripeCheckoutButton);
+      $intentAjaxError.show();
+
+      var requestId = errorData.getResponseHeader('X-Request-Id');
+
+      $intentAjaxError.text(`${errorData.statusText}: ${requestId}`);
     }
 
     async function handleSubmit(e) {
@@ -120,10 +136,9 @@
           $paymentElement.addClass("has-error");
           $paymentError.text('<%= t("registrations.payment_form.errors.stripe_failed") %>');
         }
-      } else {
-        // no further action necessary, since the Stripe element is redirecting the user automatically
-        toggleSaving(false);
       }
+
+      toggleSaving(false);
     }
 
     var donationField = $('.payment_donation');

@@ -662,10 +662,6 @@ class RegistrationsController < ApplicationController
     render json: { clientSecret: intent.client_secret }
   end
 
-  private def error_to_s(error)
-    error.inspect + "\n" + error.backtrace.join("\n")
-  end
-
   def refund_payment
     registration = Registration.find(params[:id])
 
