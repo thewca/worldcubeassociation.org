@@ -92,7 +92,8 @@ module ResultsValidators
               if condition.instance_of? AdvancementConditions::AttemptResultCondition
                 current_persons = results_by_round_type_id[round_type_id].map(&:wca_id)
                 people_over_condition = previous_results.filter do |r|
-                  current_persons.include?(r.wca_id) && r.send(r.format.sort_by) > condition.attempt_result
+                  sort_by_column = r.format.sort_by == "single" ? :best : :average
+                  current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
                 end.map(&:wca_id)
                 if people_over_condition.any?
                   @errors << ValidationError.new(:rounds, competition_id,
