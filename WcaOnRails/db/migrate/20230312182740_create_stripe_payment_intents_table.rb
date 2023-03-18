@@ -6,6 +6,7 @@ class CreateStripePaymentIntentsTable < ActiveRecord::Migration[7.0]
       t.references :holder, polymorphic: true
       t.references :stripe_transaction, foreign_key: true
       t.text :client_secret
+      t.text :error_details
       t.timestamps
       t.references :user, type: :integer, foreign_key: true
       t.datetime :confirmed_at

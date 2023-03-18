@@ -1343,6 +1343,7 @@ CREATE TABLE `stripe_payment_intents` (
   `holder_id` bigint(20) DEFAULT NULL,
   `stripe_transaction_id` bigint(20) DEFAULT NULL,
   `client_secret` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `error_details` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
   `user_id` int(11) DEFAULT NULL,
