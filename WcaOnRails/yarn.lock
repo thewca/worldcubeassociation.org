@@ -2077,10 +2077,10 @@ astral-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-2.0.0.tgz#483143c567aeed4785759c0865786dc77d7d2e31"
   integrity sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==
 
-autonumeric@^4.6.0:
-  version "4.6.0"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.6.0.tgz#6b87240f060b2d33e36b0c8de5ba7a5ed67a38d4"
-  integrity sha512-bYnD2oD9UMZBTxSWcvXH1MTcp0w+CUBfXe4HI1QJLGzJu+O27Ny5gqzRcFuDsZB9jrZ5SJjqAG0PieJsaUdTcg==
+autonumeric@^4.6.3:
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.6.3.tgz#9b0151a8132e7a952019d573a6771a8a29f5f219"
+  integrity sha512-d8K/X/vZOwqV2AkRYtrIBjS69RgXd1gxMeJuOy8j9L2ssj03/p5rzyE6D/2FwauulaDNdqjBcQ9XUuPJto7NNQ==
 
 autoprefixer@^10.4.13:
   version "10.4.13"
