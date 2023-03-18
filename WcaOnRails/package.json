@@ -16,7 +16,7 @@
     "@babel/runtime": "^7.21.0",
     "@cubing/icons": "^1.0.6",
     "@rails/ujs": "^6.1.7",
-    "autonumeric": "^4.6.0",
+    "autonumeric": "^4.6.3",
     "autoprefixer": "^10.4.13",
     "autosize": "^6.0.1",
     "babel-loader": "^9.1.2",
