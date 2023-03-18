@@ -5,11 +5,6 @@ updates:
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
-  ignore:
-  # https://github.com/thewca/worldcubeassociation.org/pull/3644
-  - dependency-name: seedbank
-    versions:
-    - 0.5.0
 - package-ecosystem: npm
   directory: "/WcaOnRails"
   schedule:
