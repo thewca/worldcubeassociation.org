@@ -3430,10 +3430,10 @@ exit@0.1.2, exit@0.1.x:
   resolved "https://registry.yarnpkg.com/exit/-/exit-0.1.2.tgz#0632638f8d877cc82107d30a0fff1a17cba1cd0c"
   integrity sha512-Zk/eNKV2zbjpKzrsQ+n1G6poVbErQxJ0LBOJXaKZ1EViLzH+hrLu9cdXI4zw9dBQJslwBEpbQ2P1oS7nDxs6jQ==
 
-expose-loader@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-4.0.0.tgz#aa6f06f57cbc904175de4fe4eaff6211337e0231"
-  integrity sha512-kUEvHyf6MPR2ubZCL9aziP9Br5wxMvq1cghTpYhM6MW52NPq+7hXixw2EqQuI1SvGb1fDjc2ehJOg6645wR6ww==
+expose-loader@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/expose-loader/-/expose-loader-4.1.0.tgz#9c6d55d24e3ac0e5d50ee5dc7930d564fc475d48"
+  integrity sha512-oLAesnzerwDGGADzBMnu0LPqqnlVz6e2V9lTa+/4X6VeW9W93x/nJpw05WBrcIdbqXm/EdnEQpiVDFFiQXuNfg==
 
 express@^4.17.3:
   version "4.18.1"
