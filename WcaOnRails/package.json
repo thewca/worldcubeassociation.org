@@ -17,7 +17,7 @@
     "@cubing/icons": "^1.0.6",
     "@rails/ujs": "^6.1.7",
     "autonumeric": "^4.6.3",
-    "autoprefixer": "^10.4.13",
+    "autoprefixer": "^10.4.14",
     "autosize": "^6.0.1",
     "babel-loader": "^9.1.2",
     "babel-plugin-lodash": "^3.3.4",
