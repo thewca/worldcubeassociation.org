@@ -12,7 +12,7 @@ module CompetitionsHelper
         messages << t('competitions.messages.tooltip_registered')
       elsif registration.deleted?
         messages << t('competitions.messages.tooltip_deleted')
-      else # If not delted or accepted, assume user is on the waiting list
+      else # If not deleted or accepted, assume user is on the waiting list
         messages << t('competitions.messages.tooltip_waiting_list')
       end
     end
