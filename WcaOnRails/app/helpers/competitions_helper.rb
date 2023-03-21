@@ -7,7 +7,14 @@ module CompetitionsHelper
     if competition.cancelled?
       messages << t('competitions.messages.cancelled')
     elsif registration
-      messages << (registration.accepted? ? t('competitions.messages.tooltip_registered') : t('competitions.messages.tooltip_waiting_list'))
+      # Display a tooltip on a user's bookmarked competition based on their registration status.
+      if registration.accepted?
+        messages << t('competitions.messages.tooltip_registered')
+      elsif registration.deleted?
+        messages << t('competitions.messages.tooltip_deleted')
+      else # If not delted or accepted, assume user is on the waiting list
+        messages << t('competitions.messages.tooltip_waiting_list')
+      end
     end
     visible = competition.showAtAll?
     messages << if competition.confirmed?
