@@ -2,26 +2,39 @@
 
 module CompetitionsHelper
   def competition_message_for_user(competition, user)
-    messages = []
-    registration = competition.registrations.find_by_user_id(user.id)
-    if competition.cancelled?
-      messages << t('competitions.messages.cancelled')
-    elsif registration
-      # Display a tooltip on a user's bookmarked competition based on their registration status.
-      if registration.accepted?
-        messages << t('competitions.messages.tooltip_registered')
-      elsif registration.deleted?
-        messages << t('competitions.messages.tooltip_deleted')
-      else # If not delted or accepted, assume user is on the waiting list
-        messages << t('competitions.messages.tooltip_waiting_list')
-      end
+    # Generates a list of messages, which will be combined and displayed in a tooltip to the user in their bookmarked
+    # competitions list when they hover over a competition.
+    # Message indicates the state of the competition, and the state of the user's registration.
+
+    messages = [] # Messages to be combined
+
+    if competition.cancelled? # If the competition is cancelled, just return the cancellation message to the user.
+      return t('competitions.messages.cancelled')
     end
+
+    # Registration state messages
+    registration = competition.registrations.find_by_user_id(user.id) # Variable for the registration state
+
+    if registration # Only add messages if the user has a registration state
+      messages << if registration.accepted?
+                    t('competitions.messages.tooltip_registered')
+                  elsif registration.deleted?
+                    t('competitions.messages.tooltip_deleted')
+                  else # If not delted or accepted, assume user is on the waiting list
+                    t('competitions.messages.tooltip_waiting_list')
+                  end
+    end
+
+    # Competition state messages
     visible = competition.showAtAll?
+
     messages << if competition.confirmed?
                   visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
                 else
                   visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
                 end
+
+    # Join the messages together into one string, and return that string.
     messages.join(' ')
   end
 
