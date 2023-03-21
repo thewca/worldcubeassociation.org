@@ -495,7 +495,7 @@ RSpec.describe Competition do
 
       competition = FactoryBot.create :competition, starts: Date.new(2019, 10, 1), championship_types: ["world"]
       expect(competition).to be_valid
-      expect(competition.championship_warnings["world"]).to eq "There is already a World Championship in 2019"
+      expect(competition.championship_warnings["world"]).to eq "There is already a World Championship in 2019."
     end
 
     it "warns if competition id starts with a lowercase" do
