@@ -363,6 +363,7 @@
             <%= f.button :submit, t('.submit_update_value'), class: "btn-primary" %>
           <% else %>
             <%= f.button :submit, t('.submit_create_value'), class: "btn-primary" %>
+            <%= f.button :submit, "Save as Draft", class: "btn-secondary", formaction: url_for(action: "create_draft") %>
           <% end %>
 
           <% if @competition.persisted? && !@competition_admin_view && !is_actually_confirmed && current_user.can_confirm_competition?(@competition) %>

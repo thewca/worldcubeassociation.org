@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+# rozen_string_literal: true
 
 class Competition < ApplicationRecord
   self.table_name = "Competitions"

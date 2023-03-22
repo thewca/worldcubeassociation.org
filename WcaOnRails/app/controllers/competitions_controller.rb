@@ -194,6 +194,34 @@ class CompetitionsController < ApplicationController
     end
   end
 
+  def create_draft
+  #   @competition = Competition.new(competition_params)
+
+  #   if @competition.save
+  #     flash[:success] = t('competitions.messages.create_success')
+  #     @competition.organizers.each do |organizer|
+  #       CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
+  #     end
+  #     redirect_to edit_competition_path(@competition)
+  #   else
+  #     # Show id errors under name, since we don't actually show an
+  #     # id field to the user, so they wouldn't see any id errors.
+  #     @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
+  #     render :new
+  #   end
+  # end
+    puts params[:id]
+    @competition = Competition.new(competition_params)
+
+    if @competition.save(validate: false)
+      flash[:success] = "Saved as a draft competition."
+      redirect_to edit_competition_path(@competition)
+    else
+      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
+      render :new
+    end
+  end
+
   def post_announcement
     comp = competition_from_params
     unless comp.announced?
