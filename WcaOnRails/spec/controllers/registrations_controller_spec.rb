@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe RegistrationsController do
   context "signed in as organizer" do
-    let(:organizer) { FactoryBot.create(:user) }
+    let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
     let(:zzyzx_user) { FactoryBot.create :user, name: "Zzyzx" }
     let(:registration) { FactoryBot.create(:registration, competition: competition, user: zzyzx_user) }
@@ -505,6 +505,27 @@ RSpec.describe RegistrationsController do
       expect(response).to redirect_to(competition_path(competition))
       expect(flash[:danger]).to match "You cannot register for this competition"
     end
+
+    it "creates reg when comment is required and present" do
+      competition.force_comment_in_registration = true
+      competition.save!
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: "Hvidovre, Denmark" } }
+      end.to change { enqueued_jobs.size }.by(2)
+
+      registration = Registration.find_by_user_id(user.id)
+      expect(registration.competition_id).to eq competition.id
+    end
+
+    it "fails to create reg when comment is required and not present" do
+      competition.force_comment_in_registration = true
+      competition.save!
+      expect do
+        post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: competition.competition_events.first }], guests: 1, comments: " " } }
+      end.to change { enqueued_jobs.size }.by(0)
+
+      expect(Registration.find_by_user_id(user.id)).to be nil
+    end
   end
 
   context "register" do
@@ -544,7 +565,7 @@ RSpec.describe RegistrationsController do
   end
 
   context "competition not visible" do
-    let(:organizer) { FactoryBot.create :user }
+    let!(:organizer) { FactoryBot.create :user }
     let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), showAtAll: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do
@@ -811,7 +832,7 @@ RSpec.describe RegistrationsController do
         it 'issues a full refund' do
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
           expect(refund.amount).to eq competition.base_entry_fee.cents
@@ -825,7 +846,7 @@ RSpec.describe RegistrationsController do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
           expect(refund.amount).to eq competition.base_entry_fee.cents / 2

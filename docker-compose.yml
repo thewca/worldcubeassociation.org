@@ -4,9 +4,10 @@ services:
     build:
       context: WcaOnRails
     ports:
-      - 3000:3000
+      - "3000:3000"
     environment:
       DATABASE_HOST: wca_db
+      WEBPACKER_DEV_SERVER_HOST: wca_webpacker
     working_dir: /app/WcaOnRails
     volumes:
       - .:/app
@@ -23,11 +24,33 @@ services:
       done &&
       echo "MySQL is ready!" &&
       if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
-        then echo "Populating development db, this will take a while" && bin/rake db:load:development ;
+        then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
       bin/rails server -b 0.0.0.0'
     depends_on:
       - wca_db
+    networks:
+      - wca-main
+
+  wca_webpacker:
+    build:
+      context: WcaOnRails
+    ports:
+      - "3035:3035"
+    environment:
+      DATABASE_HOST: wca_db
+      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+    working_dir: /app/WcaOnRails
+    volumes:
+      - .:/app
+      - gems_volume:/usr/local/bundle
+    command: >
+      bash -c 'bundle install && yarn install &&
+      bin/webpacker-dev-server'
+    depends_on:
+      - wca_on_rails
+    networks:
+      - wca-main
 
   wca_db:
     image: mysql:8.0
@@ -38,12 +61,19 @@ services:
       - "3306"
     volumes:
       - wca_db_volume:/var/lib/mysql
+      - ./docker/my.cnf:/etc/my.cnf
     # Suppress unneeded messages via https://stackoverflow.com/a/55706057/2558618
     cap_add:
       - SYS_NICE
+    networks:
+      - wca-main
 
 volumes:
   wca_db_volume:
     driver: local
   gems_volume:
     driver: local
+
+networks:
+  wca-main:
+    name: wca-main

@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Edit user" do
-  let(:admin) { FactoryBot.create(:admin) }
+  let!(:admin) { FactoryBot.create(:admin) }
   let(:existing_user) { FactoryBot.create(:user_with_wca_id) }
   let(:new_person) { FactoryBot.create(:person) }
   let(:new_user) do

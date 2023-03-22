@@ -39,22 +39,18 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup, :orga_close_reg_when_full_limit]
 
   before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
+
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
-    if current_user.any_kind_of_delegate?
-      if current_user.trainee_delegate?
-        competition.trainee_delegates |= [current_user]
-      else
-        competition.delegates |= [current_user]
-      end
-    end
+    competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
   def new
@@ -268,6 +264,17 @@ class CompetitionsController < ApplicationController
     redirect_to admin_edit_competition_path(comp)
   end
 
+  def orga_close_reg_when_full_limit
+    comp = competition_from_params
+    if comp.orga_can_close_reg_full_limit?
+      comp.update!(registration_close: Time.now)
+      flash[:success] = t('competitions.messages.orga_closed_reg_success')
+    else
+      flash[:danger] = t('competitions.messages.orga_closed_reg_failure')
+    end
+    redirect_to edit_competition_path(comp)
+  end
+
   def edit_events
     associations = CHECK_SCHEDULE_ASSOCIATIONS.merge(
       competition_events: {
@@ -282,19 +289,19 @@ class CompetitionsController < ApplicationController
   end
 
   def get_nearby_competitions(competition)
-    nearby_competitions = competition.nearby_competitions_warning[0, 10]
+    nearby_competitions = competition.nearby_competitions_warning.to_a[0, 10]
     nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
   end
 
   def get_series_eligible_competitions(competition)
-    series_eligible_competitions = competition.series_eligible_competitions
+    series_eligible_competitions = competition.series_eligible_competitions.to_a
     series_eligible_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     series_eligible_competitions
   end
 
   def get_colliding_registration_start_competitions(competition)
-    colliding_registration_start_competitions = competition.colliding_registration_start_competitions
+    colliding_registration_start_competitions = competition.colliding_registration_start_competitions.to_a
     colliding_registration_start_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     colliding_registration_start_competitions
   end
@@ -353,6 +360,17 @@ class CompetitionsController < ApplicationController
     OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
   end
 
+  def disconnect_stripe
+    comp = competition_from_params
+    if comp.connected_stripe_account_id
+      comp.update!(connected_stripe_account_id: nil)
+      flash[:success] = t('competitions.messages.stripe_disconnected_success')
+    else
+      flash[:danger] = t('competitions.messages.stripe_disconnected_failure')
+    end
+    redirect_to competitions_payment_setup_path(comp)
+  end
+
   def clone_competition
     competition_to_clone = competition_from_params
     @competition = competition_to_clone.build_clone
@@ -392,13 +410,33 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def currency_convert
-    update_rates_if_needed
-    converted = Money.new(params[:value], params[:from_currency]).exchange_to(params[:to_currency])
-    render json: {
-      formatted: converted.format,
-      value: converted.cents,
-    }
+  def calculate_dues
+    country_iso2 = Country.find_by(id: params[:country_id])&.iso2
+    country_band = CountryBand.find_by(iso2: country_iso2)&.number
+
+    update_exchange_rates_if_needed
+    input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
+
+    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand::PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT
+    country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
+
+    # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
+    price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
+
+    if ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled])
+      estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
+      estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: estimated_dues,
+      }
+    else
+      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
+
+      render json: {
+        dues_value: price_per_competitor,
+      }
+    end
   end
 
   def show
@@ -553,7 +591,6 @@ class CompetitionsController < ApplicationController
   def my_competitions
     competition_ids = current_user.organized_competitions.pluck(:competition_id)
     competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    competition_ids.concat(current_user.trainee_delegated_competitions.pluck(:competition_id))
     registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
     registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
     @registered_for_by_competition_id = registrations.uniq.to_h do |r|
@@ -563,8 +600,11 @@ class CompetitionsController < ApplicationController
     if current_user.person
       competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
     end
+    # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+    # For example, mailing all competitors about the cancellation.
+    # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
     competitions = Competition.includes(:delegate_report, :delegates)
-                              .where(id: competition_ids.uniq)
+                              .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                               .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
     @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
     bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
@@ -582,7 +622,7 @@ class CompetitionsController < ApplicationController
     params[:commit] == "Confirm"
   end
 
-  private def update_rates_if_needed
+  private def update_exchange_rates_if_needed
     if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
       Money.default_bank.update_rates
     end
@@ -620,7 +660,7 @@ class CompetitionsController < ApplicationController
         :start_date,
         :end_date,
         :information,
-        :delegate_ids,
+        :staff_delegate_ids,
         :trainee_delegate_ids,
         :organizer_ids,
         :contact,
@@ -631,12 +671,15 @@ class CompetitionsController < ApplicationController
         :use_wca_live_for_scoretaking,
         :enable_donations,
         :guests_enabled,
+        :guests_per_registration_limit,
+        :events_per_registration_limit,
         :registration_open,
         :registration_close,
         :competitor_limit_enabled,
         :competitor_limit,
         :competitor_limit_reason,
         :remarks,
+        :force_comment_in_registration,
         :extra_registration_requirements,
         :on_the_spot_registration,
         :on_the_spot_entry_fee_lowest_denomination,
@@ -652,7 +695,7 @@ class CompetitionsController < ApplicationController
         :event_restrictions,
         :event_restrictions_reason,
         :guests_entry_fee_lowest_denomination,
-        :free_guest_entry_status,
+        :guest_entry_status,
         :main_event_id,
         :waiting_list_deadline_date,
         :event_change_deadline_date,

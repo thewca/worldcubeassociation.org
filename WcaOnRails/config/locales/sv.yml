@@ -192,10 +192,10 @@ sv:
       #original_hash: 672b22c
       cellName: Final
     g:
-      #original_hash: ccf6f8e
-      name: Tredje omgången
-      #original_hash: ccf6f8e
-      cellName: Tredje omgången
+      #original_hash: e2f74d2
+      name: Semifinal
+      #original_hash: e2f74d2
+      cellName: Semifinal
     h:
       #original_hash: 4d618bb
       name: Kvalificeringsomgång
@@ -475,7 +475,7 @@ sv:
         #original_hash: 28a6fbb
         currency_code: Valutakod
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-Delegat(er)
+        staff_delegate_ids: WCA-Delegat(er)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA-Trainee-Delegat(er)
         #original_hash: 958562e
@@ -498,6 +498,10 @@ sv:
         competitor_limit_reason: Anledningen till gränsen för antalet tävlande
         #original_hash: 3c23a67
         guests_enabled: Gäster
+        #original_hash: 7d78478
+        guests_per_registration_limit: Maximalt antal gäster per anmälan
+        #original_hash: 22516e1
+        events_per_registration_limit: Events per registration limit
         #original_hash: 089cbfd
         receive_registration_emails: Meddela mig via e-post när någon anmäler sig till den här tävlingen
         #original_hash: d4aeed9
@@ -514,6 +518,8 @@ sv:
         enable_donations: Jag vill möjliggöra donationer utöver anmälningsavgifterna
         #original_hash: 556fda0
         extra_registration_requirements: Extra anmälningskrav
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: Kräv att tävlande lämnar en kommentar vid anmälan
         #original_hash: 2529d04
         on_the_spot_registration: Anmälan på plats
         #original_hash: 69780b5
@@ -533,7 +539,7 @@ sv:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Inträdesavgift för gäster
         #original_hash: bb16247
-        free_guest_entry_status: Text som ska visas för gratis avgift för gäster
+        guest_entry_status: Meddelande som ska visas angående gäster
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Jag vill kräva att tävlande lämnar in pussel vid en viss tidpunkt
@@ -560,10 +566,10 @@ sv:
         #original_hash: 4baf44b
         championship_type: Typ av mästerskap
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Namn
+        #original_hash: e2b4898
+        wcif_id: Serie-ID
+        #original_hash: 75ceb67
+        name: Serienamn
         #original_hash: 8a6bee1
         short_name: Smeknamn för tävlingsserien
         #original_hash: af3d38e
@@ -755,13 +761,13 @@ sv:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
-        unclear: Visa ingen text (utveckla eventuellt under "Extra anmälningskrav")
+        unclear: Visa ingenting (utveckla gärna i avsnittet "Extra anmälningskrav")
         #original_hash: 694bce4
-        anyone: '"Alla åskådare är välkomna gratis"'
+        free: '"Åskådare välkomna utan avgift"'
         #original_hash: 762c509
-        restricted: '"Åskådare är endast tillåtna tillsammans med tävlande"'
+        restricted: '"Åskådare endast tillåtna som medföljande till tävlande"'
   simple_form:
     #original_hash: 5397e05
     'yes': Ja
@@ -802,12 +808,12 @@ sv:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Ange ditt födelsedatum i formatet ÅÅÅÅ-MM-DD.
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: Ange den tävlandes födelsedatum i formatet ÅÅÅÅ-MM-DD.
+        #original_hash: ac908c9
         name: >-
-          Ange ditt fullständiga namn korrekt, till exempel <strong>Stefan
-          Pochmann</strong>. Inte slarvigt som <strong>s
+          Ange den tävlandes fullständiga namn korrekt, till exempel
+          <strong>Stefan Pochmann</strong>. Inte slarvigt som <strong>s
           pochman</strong>.<br/>Mellannamn (antingen hela eller som initialer)
           är valfria.
         #original_hash: da39a3e
@@ -874,7 +880,7 @@ sv:
           tävlingens huvudsida. <br/>Fyll i det här <b>på engelska</b>< och
           eventuella andra språk dina tävlande talar.>
         #original_hash: b4d020f
-        delegate_ids: WCA-delegater för tävlingen.
+        staff_delegate_ids: WCA-Delegater för tävlingen.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA-Trainee-Delegater för tävlingen.
         #original_hash: 517d376
@@ -900,7 +906,7 @@ sv:
         external_registration_page: >-
           Sidan där de tävlande anmäler sig till tävlingen. Måste vara en giltig
           http(s)-url.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Basanmälningsavgiften för tävlingen. Den kommer att visas på
           tävlingens informationssida och anmälningssidan om den används. Om
@@ -947,6 +953,17 @@ sv:
         competitor_limit_reason: >-
           Vad är anledningen till begränsningen av antalet tävlande? Vänligen
           fyll i detta på engelska!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Antalet gäster per anmälan som är tillåtet vid denna tävling.
+          Anmälningar med för många gäster kommer att blockeras. Lämna tomt om
+          det inte finns någon gräns.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Om du vill kan du begränsa det totala antalet grenar som en tävlande
+          kan anmäla sig till (används ofta för "Favorites"-tävlingar). Du bör
+          lägga till grenar innan du använder det här fältet. Anmälningar med
+          för många grenar blockeras. Lämna tomt om det inte finns någon gräns.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -993,7 +1010,7 @@ sv:
           inte hanteras via denna hemsida. Om detta är satt till 0 visas en text
           som du väljer om policyn för åskådare.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1012,6 +1029,8 @@ sv:
         event_restrictions_reason: >-
           Förklara här varför ni vill begränsa vissa kombinationer av grenar.
           Vänligen fyll i detta på engelska!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Vinnaren av denna gren kommer att vara vinnaren av tävlingen.
         #original_hash: da39a3e
@@ -1494,6 +1513,19 @@ sv:
           zero: 'Formuläret innehåller %{count} fel:'
           one: 'Formuläret innehåller ett fel:'
           other: 'Formuläret innehåller %{count} fel:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Vi ber om ursäkt, något gick fel.'
+        #original_hash: d815249
+        500_contact: >-
+          Om du rapporterar detta fel till WCA Software Team, var vänlig nämn
+          anrops-ID:t
+        #original_hash: b61e305
+        400_error: Sidan du letade efter existerar inte.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Om du tror detta är ett misstag, var vänlig kontakta WCA Software
+          Team, och inkludera anrops-ID:t
     doorkeeper:
       applications:
         help:
@@ -1529,11 +1561,13 @@ sv:
       welcome_back: >-
         Välkommen tillbaka! För att skapa ditt konto på WCA:s hemsida måste vi
         veta vilket WCA-ID du tävlade under.
-      #original_hash: 669fb57
-      welcome: >-
-        Välkommen! Innan du kan tävla i din första WCA-tävling, behöver vi lite
-        ytterligare information om dig. Observera att ditt födelsedatum aldrig
-        lämnas ut utan ditt tillstånd.
+      #original_hash: ef8243e
+      welcome_html: >-
+        Välkommen! Innan du kan delta i din första WCA-tävling behöver vi lite
+        ytterligare information för att kunna föra register. Notera att ditt
+        födelsedatum aldrig kommer att offentliggöras utan ditt
+        tillstånd.<br/><br/>Om du anmäler dig för någon annans räkning ska du
+        ange uppgifterna för <strong>den tävlande</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1642,6 +1676,12 @@ sv:
       manage_auth_app: Hantera auktoriserade applikationer
       #original_hash: acac109
       media_submission: Skicka in media
+      #original_hash: cf01481
+      privacy: Integritet
+      #original_hash: 4c4a2e8
+      disclaimer: Observera
+      #original_hash: d561f1a
+      find_us: Hitta oss
   homepage:
     #original_hash: 824d76b
     learn_more: Läs mer
@@ -1824,6 +1864,24 @@ sv:
         more_info_html: 'Du kan hantera dina e-postinställningar %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Hälsningar, <br/>WCA Results Team, för %{managers} räkning.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Återställ lösenordet för ditt WCA-konto
+        #original_hash: 65611e9
+        greeting: 'Hej,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Vi har fått en begäran om att återställa lösenordet för WCA-kontot som
+          är kopplat till %{user_email}. Inga ändringar har gjorts på ditt konto
+          ännu.
+        #original_hash: 60fef9e
+        instruction2: 'Du kan återställa ditt lösenord genom att klicka på länken nedan:'
+        #original_hash: 00850c3
+        instruction3: 'Om du inte begärt ett nytt lösenord, vänligen bortse från detta mejl.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Har du fler frågor? Vi svarar gärna på dem! Välkommen att höra av dig
+          till %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Gör anspråk på ett WCA-ID
@@ -1944,12 +2002,16 @@ sv:
       remove_avatar: Ta bort profilbild
       #original_hash: 4bd25cf
       remove_avatar_confirm: Är du säker på att du vill ta bort din profilbild?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Bekräfta borttagande av profilbild
+      #original_hash: 010b0e5
+      remove_avatar_reason: Vänligen ange anledningen till borttagandet
       #original_hash: 141d1d7
       guidelines: Riktlinjer
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Alla profilbilder ska vara bilder på riktiga personer.
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': Personen som visas måste vara du.
         #original_hash: de9b742
         '3': >-
@@ -2113,6 +2175,11 @@ sv:
       cannot_be_deleted_and_accepted: En anmälan kan inte raderas och godkännas samtidigt.
       #original_hash: a38d024
       must_register: måste anmäla till minst en gren
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: 'Du måste anmäla dig till %{count} grenar eller färre'
+        one: du måste anmäla dig till exakt 1 gren
+        other: 'Du måste anmäla dig till %{count} grenar eller färre'
       #original_hash: e78eec3
       banned_html: >-
         Du är avstängd. Om du tror att detta är ett fel, kontakta <a
@@ -2124,6 +2191,11 @@ sv:
       series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        Du måste lämna en kommentar. Se anmälningskraven för information om vad
+        som måste anges (t.ex. kan det vara vilken plats du ska att tävla på i
+        en Fewest Moves-tävling som äger rum på flera platser samtidigt).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2267,6 +2339,8 @@ sv:
       approved_registrations: Godkända anmälningar
       #original_hash: bff04e8
       deleted_registrations: Raderade anmälningar
+      #original_hash: e86b1e1
+      non_competing: Icke-tävlande anmälningar
       #original_hash: ac5d958
       not_paid: Inte betalat
       registered:
@@ -2343,6 +2417,11 @@ sv:
       Gränsen för antalet tävlande på denna tävling är %{competitor_limit} och
       den har redan uppnåtts. Om du anmäler dig kommer din anmälan att placeras
       på en väntelista. Anmälan kanske inte godkänns om inte en plats frigörs.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Gränsen för antalet tävlande på denna tävling är %{competitor_limit}, och
+      tävlingen kan fyllas. Om du anmäler dig hamnar din anmälan då på
+      väntelistan, och blir bara godkänd om det blir platser lediga.
     #original_hash: 855ca9c
     can_register: 'Du kan anmäla dig till %{comp} nedan.'
     #original_hash: 4167ed7
@@ -2599,6 +2678,10 @@ sv:
       stripe_not_connected: Det uppstod ett problem och vi kunde inte ansluta ditt Stripe-konto.
       #original_hash: 724cf0d
       championship_exists: 'Det finns redan ett %{championship_type} för %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Anmälan har stängts.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Kunde inte stänga anmälan.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mina tävlingar
@@ -2686,6 +2769,8 @@ sv:
         Obs: Du kan skicka in anmälningar till alla tävlingar i en
         tävlingsserie, men bara en av anmälningarna kan bekräftas och godkännas.
         <b>Du kommer bara tillåtas att delta i en tävling i tävlingsserien!<\b>
+      #original_hash: 9bb1965
+      competitor_limit: Gräns för antal tävlande
       #original_hash: 196725e
       competitor_limit_is: 'Det finns en gräns på %{competitor_limit} tävlande.'
       #original_hash: 5101f65
@@ -2733,9 +2818,19 @@ sv:
       guests_pay: 'Åskådare kan delta mot en avgift på %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Alla åskådare är välkomna gratis
+        free: Åskådare välkomna utan avgift
         #original_hash: f1e6aef
         restricted: Åskådare är endast tillåtna tillsammans med tävlande.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Tävlande får inte ha med några gäster.
+        one: 'Tävlande får ha med max %{count} gäster.'
+        other: 'Tävlande får ha med max %{count} gäster.'
+      #original_hash: bad09c8
+      event_limit:
+        zero: 'Tävlande får som mest anmäla sig till %{count} grenar.'
+        one: Tävlande måste anmäla sig till exakt 1 gren.
+        other: 'Tävlande får som mest anmäla sig till %{count} grenar.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Tävlande får endast anmäla sig till grenar som de redan är kvalificerade
@@ -3017,10 +3112,10 @@ sv:
         calculated: 'Uppskattad WCA-avgift för %{limit} tävlande är %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Uppskattad WCA-avgift per tävlande är %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Ett fel uppstod vid uppskattningen av WCA-avgiften, vänligen sätt till
-          noll och ange anmälningsavgiften igen.
+          Ett fel uppstod vid uppskattningen av WCA-avgiften, eventuellt för att
+          det inte finns några tillgängliga växelkurser för den valda valutan.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3083,6 +3178,8 @@ sv:
       series_distance_km: 'Tävlingen är för långt ifrån %{competition}.'
       #original_hash: 4a5d7c5
       series_distance_days: 'Tävlingen är för många dagar ifrån %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: Måste fråga om antal gäster om det finns en gräns för antalet gäster.
     new:
       #original_hash: 1208df7
       create_competition: Skapa tävling
@@ -3131,6 +3228,8 @@ sv:
       delegates: Delegat(er)
       #original_hash: eb9a4bc
       date: Datum
+      #original_hash: 6c82e6d
+      time: Tid
       #original_hash: d219c68
       location: Plats
       #original_hash: 4232080
@@ -3153,6 +3252,17 @@ sv:
       show_events: Visa grenar
       #original_hash: 0df66f7
       hide_events: Dölj grenar
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Kolliderande anmälningsperioder (startar inom %{hours} timmar)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Inga kolliderande anmälningsperioder!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Du har inte angett ett startdatum för anmälan för den här tävlingen
+        ännu.
+      #original_hash: c38824e
+      opens_registration_at: öppnar anmälan klockan
     #original_hash: 06b01c4
     announcements: Publiceringar
     #original_hash: a2b80b0
@@ -3177,6 +3287,16 @@ sv:
     cancel_mistake: Gjort ett misstag?
     #original_hash: 0fb43d5
     note_before_cancel: 'OBS: Endast bekräftade tävlingar kan ställas in.'
+    #original_hash: 19a0ac2
+    orga_close_reg: Stäng anmälan.
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: Är du säker på att du vill stänga anmälan? Detta går inte att ångra.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Notera: du kan endast stänga anmälan när gränsen för antal tävlande har
+      nåtts.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Notera: anmälan är redan stängd.'
     show:
       #original_hash: b0fe391
       general_info: Generell information
@@ -4455,6 +4575,11 @@ sv:
           Live), ett kalkylark, eller en fristående WCIF-fil. Importera
           blandningar från en eller flera TNoodle json-filer. Exportera resultat
           till lämpligt format för inskickning till WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Tävlingsgrupper
+        #original_hash: 74a0926
+        description: Visa tävlingsgrupper för en pågående tävling
   logo:
     #original_hash: c72c969
     title: 'WCA:s Logotyp'
@@ -4618,6 +4743,8 @@ sv:
       people: Personer
       #original_hash: 6db75ea
       advanced_search: Avancerad sökning
+      #original_hash: 5e326b1
+      incidents: Incidenter
       #original_hash: a0ca0c3
       posts: Inlägg
       #original_hash: 9d7ea9c
@@ -4633,6 +4760,8 @@ sv:
         people: Inga personer hittades för
         #original_hash: c6a04aa
         posts: Inga inlägg hittades för
+        #original_hash: 3499e7e
+        incidents: Inga incidenter hittade för
         #original_hash: 76a6bf1
         regulations_and_guidelines: Inga Regler eller Riktlinjer hittades för
   incidents_log:
@@ -4640,6 +4769,8 @@ sv:
     i18n_disclaimer: >-
       Observera att incidenter endast är tillgängliga på engelska, innehållet
       nedan är inte översatt.
+    #original_hash: 2c23c1a
+    incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Om Reglerna
@@ -4825,16 +4956,15 @@ sv:
     paragraph4:
       #original_hash: b6dca56
       title: Proximity policy
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        WCA competitions will be accepted if they are at least 100 km or 19 days
-        away from any other competition. The WCAT should particularly review a
-        proposed competition if there is another competition for which the
-        distance between them is less than 100 km and the time between them is
-        less than 19 days. A Delegate requesting approval for such a competition
-        must provide further information on why the competition should still be
-        accepted. Possible arguments that support such a competition being
-        accepted include:
+        WCA-tävlingar godkänns om de ligger minst 10 km eller 5 dagar från andra
+        tävlingar. WCAT bör särskilt granska en föreslagen tävling om det finns
+        en annan tävling där avståndet mellan dem är mindre än 10 km och tiden
+        mellan dem är mindre än 5 dagar. En delegat som begär godkännande för en
+        sådan tävling måste lämna ytterligare information om varför tävlingen
+        ändå bör godkännas. Möjliga argument för att en sådan tävling ska
+        godkännas inkluderar:
       olist1:
         #original_hash: de00462
         '1': The two competitions don't have events in common.
@@ -4855,10 +4985,10 @@ sv:
             #original_hash: 75aa0c7
             1a: Time frames when both are celebrated can’t overlap.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            If any location of such competitions is closer than 100 km to any
-            other regular competition, then
+            Om någon plats för en sådan tävling är närmre än 10 km från någon
+            annan tävling, så
           alist1:
             #original_hash: 8f532bb
             2a: 'both competitions should be at least 5 days apart, or'
@@ -5113,3 +5243,21 @@ sv:
     privacy: Integritet
     #original_hash: 4c4a2e8
     disclaimer: Disclaimer
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Gå till %{oauth_link} för att hantera dina OAuth-applikationer.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Här är ett exempel, med curl, på hur du får en access token med hjälp at
+      ett Application ID, Client Secret, din WCA-mejl, och ditt lösenord:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      En OAuth access token kan användas, tills den löper ut, för att göra
+      auktoriserade API-anrop. Till exempel, för att få tillgång till
+      information om ditt konto:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Giltig TNoodle-version

@@ -1,0 +1,127 @@
+import _ from 'lodash';
+import I18n from './i18n'
+
+/* We bundle all backend data constants in one big file, because the way we currently
+ * export the Ruby values to JS is very inefficient (it basically spins up an entire server per file)
+ *
+ * As a result, this file is very cluttered for the time being. But we need this as an intermediate solution
+ * in order not to fry our own servers when compiling assets. A more permanent solution would be advisable.
+ *
+ * Signed GB 12-16-2022
+ * See https://github.com/thewca/worldcubeassociation.org/issues/7284 for details.
+ */
+
+// ----- COUNTRIES -----
+
+export const countries = {
+  byIso2: _.mapValues(<%= Country.all.index_by(&:iso2).to_json.html_safe %>, extendCountries),
+  real: _.map(<%= Country.real.to_json.html_safe %>, extendCountries),
+};
+
+function extendCountries(country) {
+  return {
+    ...country,
+    name: I18n.t(`countries.${country.iso2}`),
+  };
+}
+
+// ----- CURRENCIES -----
+
+<%
+  # Select currencies, for all the iso_code is matching the hash key.
+  # However for 2 currencies (JPY, GHS) there is a second currency with the same iso_code but a different key.
+  # They exist for backward compatibilities reason (see here: https://github.com/RubyMoney/money/blob/190683e7b84b66d11b83b7be32d019cf3c2fc114/config/currency_backwards_compatible.json), and we actually don't use them.
+  selected_currencies = Money::Currency.table.select { |k,v| k.to_s == v[:iso_code].downcase }
+  currencies_info_hash = Hash[selected_currencies.map do |_,v|
+    [v[:iso_code], {:symbol => v[:symbol],
+                    :symbol_first => v[:symbol_first],
+                    :subunit_to_unit => v[:subunit_to_unit]}]
+  end]
+%>
+
+export const currenciesData = {
+  byIso: _.mapValues(<%= currencies_info_hash.to_json.html_safe %>, extendCurrenciesData),
+};
+
+function extendCurrenciesData(rawFormat) {
+  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+}
+
+// ----- FORMATS -----
+
+export const formats = {
+  byId: _.mapValues(<%= Format.all.index_by(&:id).to_json.html_safe %>, extendFormats),
+};
+
+function extendFormats(rawFormat) {
+  rawFormat = _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+  return {
+    ...rawFormat,
+    name: I18n.t(`formats.${rawFormat.id}`),
+    shortName: I18n.t(`formats.short.${rawFormat.id}`),
+  };
+}
+
+// ----- EVENTS -----
+
+export const events = {
+  official: _.map(<%= Event.official.to_json.html_safe %>, extendEvents),
+  byId: _.mapValues(<%= Event.all.index_by(&:id).to_json.html_safe %>, extendEvents),
+};
+
+function extendEvents(rawEvent) {
+  rawEvent = _.mapKeys(rawEvent, (v, k) => _.camelCase(k));
+  return {
+    ...rawEvent,
+    name: I18n.t(`events.${rawEvent.id}`),
+    formats() {
+      return rawEvent.formatIds.map(formatId => formats.byId[formatId]);
+    },
+    recommendedFormat() {
+      return this.formats()[0];
+    },
+  }
+}
+
+// ----- GENDERS -----
+
+export const genders = {
+  byId: _.mapValues(<%= User::ALLOWABLE_GENDERS.index_by(&:itself).to_json.html_safe %>, extendGenders),
+};
+
+function extendGenders(gender) {
+  return {
+    id: gender,
+    name: I18n.t(`enums.user.gender.${gender}`),
+  };
+}
+
+// ----- ROUND TYPES -----
+
+export const roundTypes = {
+  byId: _.mapValues(<%= RoundType.all.index_by(&:id).to_json.html_safe %>, extendRoundTypes),
+};
+
+function extendRoundTypes(rawFormat) {
+  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
+}
+
+// ----- TIMEZONES -----
+
+export const timezoneData = <%= Country::ALL_TIMEZONES_MAPPING.to_json.html_safe %>;
+
+export function friendlyTimezoneName(id) {
+  return _.findKey(timezoneData, { id }) || id;
+}
+
+// ----- REGIONAL MARKERS -----
+
+export const regionalMarkers = <%= Result::MARKERS.compact %>;
+
+// ----- VENUE ROOM COLORS -----
+
+export const defaultRoomColor = "<%= VenueRoom::DEFAULT_ROOM_COLOR %>";
+
+// ----- RAILS ENV -----
+
+export const railsEnv = '<%= Rails.env %>';

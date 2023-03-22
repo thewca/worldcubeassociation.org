@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import events from '../wca-data/events.js.erb';
+import { events } from '../wca-data.js.erb';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';

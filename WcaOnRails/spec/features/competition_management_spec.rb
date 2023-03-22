@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Competition management" do
   context "when signed in as admin" do
-    let(:admin) { FactoryBot.create :admin }
+    let!(:admin) { FactoryBot.create :admin }
     before :each do
       sign_in admin
     end
@@ -110,23 +110,23 @@ RSpec.feature "Competition management" do
       expect(page).to have_text("Display message for free guest entry")
     end
 
-    scenario "change guest entry fee to non-zero", js: true do
+    scenario "change guest entry fee to non-zero", js: true, retry: 3 do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
       visit edit_competition_path(competition)
 
       expect(page).not_to have_text("Display message for free guest entry")
     end
 
-    scenario "select anyone free guest entry status" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", free_guest_entry_status: 1)
+    scenario "select free guest entry status" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['free'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
       expect(page).to have_text("Any spectator can attend for free.")
     end
 
-    scenario "select restricted free guest entry status" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", free_guest_entry_status: 2)
+    scenario "select restricted guest entry status" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guest_entry_status: Competition.guest_entry_statuses['restricted'])
       visit competition_path(competition)
       find('div', id: 'show_registration_requirements').click_link('here')
 
@@ -135,7 +135,7 @@ RSpec.feature "Competition management" do
   end
 
   context "when signed in as delegate" do
-    let(:delegate) { FactoryBot.create(:delegate) }
+    let!(:delegate) { FactoryBot.create(:delegate) }
     let(:cloned_delegate) { FactoryBot.create(:delegate) }
     let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
 
@@ -146,7 +146,7 @@ RSpec.feature "Competition management" do
       sign_in delegate
     end
 
-    scenario 'create competition', js: true do
+    scenario 'create competition', js: true, retry: 3 do
       visit "/competitions/new"
 
       fill_in "Name", with: "New Comp 2015"
@@ -161,7 +161,7 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario 'clone competition', js: true do
+    scenario 'clone competition', js: true, retry: 3 do
       visit clone_competition_path(competition_to_clone)
 
       fill_in "Name", with: "New Comp 2015"
@@ -183,7 +183,7 @@ RSpec.feature "Competition management" do
     feature "edit" do
       let(:comp_with_fours) { FactoryBot.create :competition, events: [fours], delegates: [delegate] }
 
-      scenario 'can edit registration open datetime', js: true do
+      scenario 'can edit registration open datetime', js: true, retry: 3 do
         visit edit_competition_path(comp_with_fours)
         check "competition_use_wca_registration"
 

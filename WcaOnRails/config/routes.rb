@@ -96,7 +96,7 @@ Rails.application.routes.draw do
   get 'competitions/edit/colliding_registration_start_competitions' => 'competitions#colliding_registration_start_competitions', as: :colliding_registration_start_competitions
   get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
-  get 'competitions/edit/currency_convert' => 'competitions#currency_convert', as: :currency_convert
+  get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
@@ -129,6 +129,8 @@ Rails.application.routes.draw do
   post 'competitions/:id/post_announcement' => 'competitions#post_announcement', as: :competition_post_announcement
   post 'competitions/:id/cancel' => 'competitions#cancel_competition', as: :competition_cancel
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
+  post 'competitions/:id/orga_close_reg_when_full_limit' => 'competitions#orga_close_reg_when_full_limit', as: :competition_orga_close_reg_when_full_limit
+  post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
   get 'panel' => 'panel#index'
   get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
@@ -234,6 +236,7 @@ Rails.application.routes.draw do
   end
 
   get '/sso-discourse' => 'users#sso_discourse'
+  get '/redirect/wac-survey' => 'users#wac_survey'
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
@@ -256,7 +259,8 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
-      get '/geocoding/search' => 'geocoding#get_location_from_query'
+      get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
+      get '/countries' => 'api#countries'
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'

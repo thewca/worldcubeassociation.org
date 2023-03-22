@@ -23,12 +23,12 @@ RSpec.feature "cookie law" do
   end
 
   context "signed in" do
-    let(:admin) { FactoryBot.create(:admin, cookies_acknowledged: false) }
+    let!(:admin) { FactoryBot.create(:admin, cookies_acknowledged: false) }
     background do
       sign_in admin
     end
 
-    scenario "remembers acknowledgement without cookies", js: true do
+    scenario "remembers acknowledgement without cookies", js: true, retry: 3 do
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
 

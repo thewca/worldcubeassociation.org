@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ApplicationController do
   describe "GET #update_locale" do
-    let(:user) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
 
     it "updates the user preferred locale and the session locale" do
       sign_in user

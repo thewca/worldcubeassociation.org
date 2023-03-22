@@ -426,7 +426,7 @@ nl:
         #original_hash: 28a6fbb
         currency_code: Valutacode
         #original_hash: 2e3ed8b
-        delegate_ids: WCA-delegate(s)
+        staff_delegate_ids: WCA-delegate(s)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate(s)
         #original_hash: 958562e
@@ -486,7 +486,7 @@ nl:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Bezoekerskosten
         #original_hash: bb16247
-        free_guest_entry_status: Toon bericht over gratis toegang voor gasten
+        guest_entry_status: Toon bericht over gratis toegang voor gasten
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Ik wil van deelnemers eisen dat ze hun puzzels op een specifiek
@@ -697,13 +697,13 @@ nl:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Laat niks zien (en wellicht een toelichting geven in de sectie Extra
           registratie-eisen)
         #original_hash: 694bce4
-        anyone: Iedere gast kan gratis komen kijken
+        free: Iedere gast kan gratis komen kijken
         #original_hash: 762c509
         restricted: Gasten alleen toegestaan als begeleider van deelnemers
   simple_form:
@@ -810,7 +810,7 @@ nl:
           deelnemers en toeschouwers, en andere details die relevant zijn voor
           mensen die zijn geïnteresseerd om deel te nemen of te komen kijken.
         #original_hash: b4d020f
-        delegate_ids: WCA-delegates van de wedstrijd.
+        staff_delegate_ids: WCA-delegates van de wedstrijd.
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegates voor deze wedstrijd
         #original_hash: 517d376
@@ -924,7 +924,7 @@ nl:
           kun je niet via deze website regelen. Als het bedrag 0 is, dan wordt
           een zin naar keuze getoond over het beleid rond gasten.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1432,7 +1432,7 @@ nl:
         Welkom terug! Om je WCA-account aan te maken, moeten we weten wat je
         WCA-id is.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Welkom! Voor je kunt deelnemen aan je eerste WCA-wedstrijd hebben we
         aanvullende informatie nodig voor onze administratie. Let op: je
         geboortedatum wordt nooit gedeeld zonder jouw expliciete toestemming.
@@ -2634,7 +2634,7 @@ nl:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Iedere gast heeft gratis toegang.
+        free: Iedere gast heeft gratis toegang.
         #original_hash: f1e6aef
         restricted: Gasten zijn alleen toegestaan als begeleider van deelnemers.
       #original_hash: 97a31ee

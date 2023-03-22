@@ -1,13 +1,10 @@
 module WcaHelper
+  # gregorbg: This method exists as a relic from a time when we needed to distinguish between "real" servers and Vagrant.
+  # Now that we're planning to get rid of Chef entirely, I didn't bother to properly refactor this.
   def self.get_username_and_repo_root(recipe)
-    vagrant_user = recipe.node['etc']['passwd']['vagrant']
-    if vagrant_user
-      username = "vagrant"
-      repo_root = "/vagrant"
-    else
-      username = "cubing"
-      repo_root = "/home/#{username}/worldcubeassociation.org"
-    end
+    username = "cubing"
+    repo_root = "/home/#{username}/worldcubeassociation.org"
+
     return [ username, repo_root ]
   end
 

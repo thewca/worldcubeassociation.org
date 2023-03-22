@@ -20,7 +20,7 @@ module ResultsValidators
                              "Please ensure that every DNF and DNS is indeed correct. If the competitor did not start an attempt or did not have any remaining time before starting an attempt, it must be entered as DNS."
 
     # Miscelaneous errors
-    MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round \%{wcif_id}\ for the cumulative time limit specified in the WCIF. " \
+    MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. " \
                                         "Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
     @@desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."

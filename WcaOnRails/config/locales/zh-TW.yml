@@ -464,7 +464,7 @@ zh-TW:
         #original_hash: 28a6fbb
         currency_code: 貨幣代碼
         #original_hash: 2e3ed8b
-        delegate_ids: WCA代表
+        staff_delegate_ids: WCA代表
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA 實習代表
         #original_hash: 958562e
@@ -520,7 +520,7 @@ zh-TW:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 陪同者入場費
         #original_hash: bb16247
-        free_guest_entry_status: 顯示免費陪同者的訊息
+        guest_entry_status: 顯示免費陪同者的訊息
         #original_hash: 723cad9
         early_puzzle_submission: 我希望參賽者能在該比賽項目開始前的一個時間點先繳交方塊
         #original_hash: 78308cc
@@ -725,11 +725,11 @@ zh-TW:
         #original_hash: 82dabd0
         multimedia: 多媒體
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: 不要顯示任何東西（也許需要在「額外報名條件」中詳述）
         #original_hash: 694bce4
-        anyone: 觀眾都可免費入場
+        free: 觀眾都可免費入場
         #original_hash: 762c509
         restricted: 只有參賽者的陪同者才能入場當觀眾
   simple_form:
@@ -817,7 +817,7 @@ zh-TW:
         #original_hash: bb470cc
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
-        delegate_ids: 本場比賽的WCA代表。
+        staff_delegate_ids: 本場比賽的WCA代表。
         #original_hash: cb9882c
         trainee_delegate_ids: 比賽的WCA實習代表。
         #original_hash: 517d376
@@ -895,7 +895,7 @@ zh-TW:
         #original_hash: 0419547
         guests_entry_fee_lowest_denomination: 目前這個數字僅供顯示資訊用，本網站不處理陪同者入場費。如果此處設為0，可以選擇顯示一個觀眾政策的文字。
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1303,7 +1303,7 @@ zh-TW:
       #original_hash: f9f512b
       welcome_back: 歡迎回來！我們需要知道您的WCA ID才能幫您建立WCA帳號。
       #original_hash: 669fb57
-      welcome: 歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。
+      welcome_html: 歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2262,7 +2262,7 @@ zh-TW:
       guests_pay: '觀眾需繳交進場費%{guests_base_fee}才得入場。'
       guests_free:
         #original_hash: 573eeb7
-        anyone: 觀眾都可免費入場。
+        free: 觀眾都可免費入場。
         #original_hash: f1e6aef
         restricted: 只有參賽者的陪同者才能入場當觀眾
       #original_hash: 97a31ee

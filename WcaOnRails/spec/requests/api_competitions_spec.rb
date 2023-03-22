@@ -90,7 +90,7 @@ RSpec.describe "API Competitions" do
   end
 
   describe "GET #show_wcif" do
-    let(:competition) { FactoryBot.create(:competition, :visible) }
+    let!(:competition) { FactoryBot.create(:competition, :visible) }
 
     context "when not signed in" do
       it "does not allow access" do
@@ -184,7 +184,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "events" do
-      let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
       context "when signed in as a board member" do
         sign_in { FactoryBot.create :user, :board_member }
@@ -244,7 +244,7 @@ RSpec.describe "API Competitions" do
         before { sign_in competition.delegates.first }
 
         context "confirmed competition" do
-          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by_event_id("333").rounds.delete_all
@@ -458,7 +458,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "extensions" do
-      let(:competition) { FactoryBot.create(:competition, :with_organizer, :visible) }
+      let!(:competition) { FactoryBot.create(:competition, :with_organizer, :visible) }
       context "when signed in as a competition manager" do
         before { sign_in competition.organizers.first }
 
@@ -477,7 +477,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "OAuth user" do
-      let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
       context "as a competition manager" do
         let(:scopes) { Doorkeeper::OAuth::Scopes.new }
@@ -511,7 +511,7 @@ RSpec.describe "API Competitions" do
       end
 
       context "as a normal user" do
-        let(:user) { FactoryBot.create :user }
+        let!(:user) { FactoryBot.create :user }
         let(:scopes) { Doorkeeper::OAuth::Scopes.new }
 
         before :each do
@@ -531,7 +531,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "CSRF" do
-      let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
 
       # CSRF protection is always disabled for tests, enable it for this these requests.
       around(:each) do |example|

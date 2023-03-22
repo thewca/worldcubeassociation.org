@@ -1,76 +1,9 @@
-<% provide(:title, "Incidents log") %>
-
 <%= render layout: "nav" do %>
-  <h1><%= yield(:title) %></h1>
-
-  <div id="custom-search-toolbar">
-    <input id="incident-tags" class="form-control" type="text" placeholder="Filter by tags">
-  </div>
-  <div class="incidents-log-table-container">
-    <%= wca_table(table_class: "incidents-log-table", data: { toggle: "table", pagination: true, search: true, toolbar: "#custom-search-toolbar" }, floatThead: false, greedy: false) do %>
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th class="tags-cell">Tags</th>
-          <th class="comps-cell" data-field="happened" data-sortable="true" data-sorter="incidentsSorter">Happened during</th>
-          <th class="status-cell">Status</th>
-          <% if current_user&.can_view_delegate_matters? %>
-            <th class="digest-cell" data-field="digest-sent" data-sortable="true">Sent in digest</th>
-          <% end %>
-        </tr>
-      </thead>
-
-      <tbody>
-        <% @incidents.each do |incident| %>
-          <tr>
-            <td><%= link_to incident.title, incident %></td>
-            <td data-tags="<%= incident.tags %>">
-              <% incident.tags_array.each do |t| %>
-                <%= render "incident_tag", tag: t, js_search: true %>
-              <% end %>
-            </td>
-            <td data-competitions="<%= incident.competitions %>">
-              <div data-last-happened="<%= incident.last_happened_date %>">
-                <% incident.incident_competitions.each do |incident_competition| %>
-                  <%= render "competition_tag", incident_competition: incident_competition %>
-                <% end %>
-              </div>
-            </td>
-            <% status_class, status_text = class_and_text_for_status(incident) %>
-            <td class="text-<%= status_class %>"><%= status_text %></td>
-            <% if current_user&.can_view_delegate_matters? %>
-              <% digest_class, digest_text = class_and_text_for_digest(incident) %>
-              <td class="text-<%= digest_class %>"><%= digest_text %></td>
-            <% end %>
-          </tr>
-        <% end %>
-      </tbody>
-    <% end %>
-  </div>
-
-  <script>
-    function incidentsSorter(a, b) {
-      dateA = $(a).data("last-happened");
-      dateB = $(b).data("last-happened");
-      if (dateA < dateB) {
-        return -1;
-      } else if (dateA > dateB) {
-        return 1;
-      } else {
-        return 0;
-      }
-    }
-    $(function() {
-      var opts = window.wca.defaultSelectizeOptions(<%= all_to_options(IncidentTag) %>);
-      window.wca.initIncidentsLogTable(opts, $('.incidents-log-table'), '.search input', $('input#incident-tags'));
-    });
-  </script>
-
-  <br>
-  <% if current_user&.can_manage_incidents? %>
-    <%= link_to new_incident_path, class: "btn btn-success" do %>
-      <%= ui_icon('plus') %> New Incident
-    <% end %>
-  <% end %>
-
+  <%= react_component("IncidentsLog", {
+    canManageIncidents: current_user&.can_manage_incidents?,
+    canViewDelegateMatters: current_user&.can_view_delegate_matters?,
+    allTags: IncidentTag.select(:tag).distinct.pluck(:tag),
+  }, {
+    id: "incidents_log",
+  }) %>
 <% end %>

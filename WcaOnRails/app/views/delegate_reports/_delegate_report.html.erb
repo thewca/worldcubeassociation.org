@@ -51,7 +51,7 @@
 
   <div>
     <strong>Delegates</strong>
-    <%= competition.delegates.pluck(:name).to_sentence %>
+    <%= competition.staff_delegates.pluck(:name).to_sentence %>
   </div>
   <% if competition.trainee_delegates.length > 0 %>
     <div>

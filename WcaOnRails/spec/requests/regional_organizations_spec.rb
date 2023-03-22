@@ -40,8 +40,8 @@ RSpec.describe "Regional Organizations management", type: :request do
     }
   }
 
-  let(:board_member) { FactoryBot.create(:user, :board_member) }
-  let(:user) { FactoryBot.create(:user) }
+  let!(:board_member) { FactoryBot.create(:user, :board_member) }
+  let!(:user) { FactoryBot.create(:user) }
 
   describe "GET #index" do
     context "when logged in as a user" do

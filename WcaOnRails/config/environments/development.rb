@@ -12,7 +12,8 @@ Rails.application.configure do
 
   # Do not eager load code on boot.
   config.eager_load = false
-
+  # We need this so docker compose works in dev
+  config.hosts.clear
   # Show full error reports.
   config.consider_all_requests_local = true
 
@@ -85,6 +86,12 @@ Rails.application.configure do
     # not using the rounds association.
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
+
+  # uncomment this if you want to test error pages in development
+  # config.consider_all_requests_local = false
+  # config.exceptions_app = ->(env) {
+  #   ErrorsController.action(:show).call(env)
+  # }
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true

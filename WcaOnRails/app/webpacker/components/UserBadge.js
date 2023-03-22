@@ -82,14 +82,14 @@ function UserBadge({
                 {user.name}
                 <Icon name="user circle outline" />
               </b>
-              <p className="user-badge-subtext">{subtext}</p>
+              <div className="user-badge-subtext">{subtext}</div>
             </Button>
           )}
         />
       ) : (
         <div className="user-name ui button user-name-no-link">
           <b>{user.name}</b>
-          <p className="user-badge-subtext">{subtext}</p>
+          <div className="user-badge-subtext">{subtext}</div>
         </div>
       )}
     </Button>

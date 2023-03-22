@@ -45,22 +45,22 @@ id:
     #original_hash: 9af4622
     XF: Banyak Negara (Afrika)
     #original_hash: 374ac0d
-    XM: Beberapa Negara (Amerika)
+    XM: Banyak Negara (Amerika)
     #original_hash: 3f8c9de
-    XA: Beberapa Negara (Asia)
+    XA: Banyak Negara (Asia)
     #original_hash: 090f3ce
-    XE: Beberapa Negara (Eropa)
+    XE: Banyak Negara (Eropa)
     #original_hash: b50b7a5
     XN: Banyak Negara (Amerika Utara)
     #original_hash: 428e7af
     XO: Banyak Negara (Oseania)
     #original_hash: 459f987
-    XS: Beberapa Negara (Amerika Selatan)
+    XS: Banyak Negara (Amerika Selatan)
     #original_hash: 9027fe6
     XW: Banyak Negara (Dunia)
   continents:
     #original_hash: 0f138c8
-    Multiple Continents: Beberapa Benua
+    Multiple Continents: Banyak Benua
     #original_hash: 1d35114
     Africa: Afrika
     #original_hash: a173e72
@@ -418,6 +418,10 @@ id:
         remove_avatar: Hapus avatar
         #original_hash: 9af9099
         results_notifications_enabled: Email saya jika hasil saya telah diposting.
+        #original_hash: 29ce2ff
+        registration_notifications_enabled: >-
+          Ketika saya menjadi panitia atau Delegate kompetisi, email saya ketika
+          ada pendaftaran baru yang masuk.
         #original_hash: de60ab8
         delegate_status: Status Delegate
         #original_hash: 0f21717
@@ -436,7 +440,7 @@ id:
         #original_hash: 7f3d889
         confirmed: Panitia dilarang menyunting kompetisi ini
         #original_hash: d493e6a
-        showAtAll: Buat kompetisi terlihat di publik
+        showAtAll: Buat kompetisi terlihat secara publik
         #original_hash: 709a232
         name: Nama
         #original_hash: f91b080
@@ -468,7 +472,7 @@ id:
         #original_hash: 28a6fbb
         currency_code: Kode mata uang
         #original_hash: 2e3ed8b
-        delegate_ids: Delegate WCA
+        staff_delegate_ids: Delegate WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegate Magang WCA
         #original_hash: 958562e
@@ -479,6 +483,8 @@ id:
         information: Informasi
         #original_hash: 87b7d5f
         use_wca_registration: Saya ingin menggunakan situs web WCA untuk pendaftaran
+        #original_hash: ebe8c47
+        use_wca_live_for_scoretaking: Saya akan menggunakan WCA Live untuk input hasil.
         #original_hash: 8020e88
         external_registration_page: Laman pendaftaran
         #original_hash: 9bb1965
@@ -489,6 +495,8 @@ id:
         competitor_limit_reason: Alasan membatasi jumlah kompetitor
         #original_hash: 3c23a67
         guests_enabled: Pendamping
+        #original_hash: 7d78478
+        guests_per_registration_limit: Jumlah pendamping maksimal per pendaftaran
         #original_hash: 089cbfd
         receive_registration_emails: Beritahu saya dengan email jika ada yang mendaftar pada kompetisi ini
         #original_hash: d4aeed9
@@ -526,13 +534,17 @@ id:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Biaya masuk untuk pendamping
         #original_hash: bb16247
-        free_guest_entry_status: Tampilkan pesan untuk bebas masuk sebagai pendamping
+        guest_entry_status: Tampilkan pesan bebas biaya masuk untuk pendamping
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Saya ingin kompetitor untuk mengumpulkan puzzle pada waktu tertentu
           sebelum cabang dimulai
         #original_hash: 78308cc
         early_puzzle_submission_reason: Alasan dan detail pengumpulan puzzle lebih awal
+        #original_hash: 88da0ef
+        qualification_results: >-
+          Saya ingin menggunakan hasil kualifikasi untuk membatasi jumlah
+          kompetitor pada cabang tertentu
         #original_hash: 1ec6dd4
         qualification_results_reason: Alasan dan detail hasil kualifikasi
         #original_hash: ac30de9
@@ -543,9 +555,20 @@ id:
         event_restrictions_reason: Alasan dan detail pembatasan cabang
         #original_hash: 3c24bd2
         main_event_id: Cabang utama
+        #original_hash: a541bfa
+        allow_registration_without_qualification: Cabang dengan Kualifikasi
       championship:
         #original_hash: 4baf44b
         championship_type: Tipe kejuaraan
+      competition_series:
+        #original_hash: 89f89c0
+        wcif_id: ID
+        #original_hash: 709a232
+        name: Nama
+        #original_hash: 8a6bee1
+        short_name: Nama singkat rangkaian
+        #original_hash: af3d38e
+        competition_ids: Semua kompetisi
       registration:
         #original_hash: 3c23a67
         guests: Pendamping
@@ -623,7 +646,7 @@ id:
         #original_hash: 848eed0
         tags: Tag
         #original_hash: fb4002e
-        show_on_homepage: Perlihatkan pada beranda
+        show_on_homepage: Tampilkan pada beranda
       team:
         #original_hash: 709a232
         name: Nama
@@ -735,15 +758,15 @@ id:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
-          Jangan tampilkan apapun (dan sebisa mungkin jelaskan pada bagian
-          "Syarat pendaftaran tambahan")
+          Jangan tampilkan apapun (dan harap dijelaskan pada bagian "Kebutuhan
+          pendaftaran ekstra")
         #original_hash: 694bce4
-        anyone: '"Penonton dapat datang secara gratis"'
+        free: '"Semua orang dapat menonton dengan gratis"'
         #original_hash: 762c509
-        restricted: '"Penonton yang diperbolehkan datang hanyalah pendamping kompetitor"'
+        restricted: '"Penonton hanya diperbolehkan sebagai pendamping kompetitor"'
   simple_form:
     #original_hash: 5397e05
     'yes': Ya
@@ -818,6 +841,10 @@ id:
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
+        #original_hash: f62eb10
+        registration_notifications_enabled: >-
+          Hal ini hanya berlaku untuk kompetisi yang Anda selenggarakan atau
+          delegasikan, dan dapat dibatalkan dalam basis per-kompetisi.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
@@ -856,7 +883,7 @@ id:
           ini <b>dalam Bahasa Inggris</b> dan bahasa apapun yang dimengerti oleh
           calon kompetitor.
         #original_hash: b4d020f
-        delegate_ids: Delegate WCA untuk kompetisi.
+        staff_delegate_ids: Delegate WCA untuk kompetisi ini.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegate Magang WCA untuk kompetisi ini.
         #original_hash: 517d376
@@ -884,17 +911,14 @@ id:
         external_registration_page: >-
           Laman di mana pendaftaran kompetisi dilakukan oleh kompetitor. Wajib
           merupakan url http(s) yang valid.
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Biaya dasar pendaftaran untuk kompetisi. Biaya ini akan ditampilkan
           pada halaman informasi kompetisi dan pendaftaran jika dipakai. Jika
           diisi dengan nilai 0, akan ditampilkan bahwa pendaftaran dapat
           dilakukan dengan gratis. <br><br><b>PENYANGKALAN: Estimasi Iuran WCA
           berikut merupakan perkiraan berdasarkan nilai tukar saat ini dan sama
-          sekali tidak berkaitan dengan pembayaran Iuran.</b><br>Klik "Perbarui
-          Kompetisi" setelah mengubah kode mata uang untuk sinkronisasi dengan
-          estimasi. Jika nilai tukar pada mata uang yang dipilih tidak tersedia,
-          tidak ada yang akan ditampilkan.
+          sekali tidak berkaitan dengan pembayaran Iuran.</b>
         #original_hash: 9735ddf
         currency_code: Kode mata uang untuk biaya.
         #original_hash: da39a3e
@@ -915,6 +939,8 @@ id:
         start_date: ''
         #original_hash: da39a3e
         use_wca_registration: ''
+        #original_hash: da39a3e
+        use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
           Walaupun pernyataan batas kompetitor tidak diperlukan berdasarkan
@@ -930,10 +956,13 @@ id:
         competitor_limit_reason: >-
           Apa alasan jumlah kompetitor dibatasi? Harap ditulis dengan Bahasa
           Inggris!
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          Jumlah pendamping per pendaftaran yang diperbolehkan pada kompetisi
+          ini. Pendaftaran dengan jumlah pendamping yang terlalu banyak akan
+          diblokir. Kosongkan jika pembatasan tidak diperlukan.
         #original_hash: da39a3e
         venueAddress: ''
-        #original_hash: da39a3e
-        championship_type: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Harap tunjukkan di sini tentang syarat pendaftaran ekstra yang belum
@@ -981,13 +1010,15 @@ id:
           angka 0, pernyataan pilihan Anda akan ditampilkan tentang kebijakan
           penonton.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
         early_puzzle_submission_reason: >-
           Harap uraikan di sini alasan Anda ingin kompetitor untuk mengumpulkan
           puzzle lebih awal. Harap diisi dengan bahasa Inggris!
+        #original_hash: da39a3e
+        qualification_results: ''
         #original_hash: f859883
         qualification_results_reason: >-
           Harap uraikan di sini alasan Anda ingin menggunakan waktu kualifikasi.
@@ -1000,6 +1031,28 @@ id:
           tertentu. Harap diisi dengan bahasa Inggris!
         #original_hash: 1067798
         main_event_id: Pemenang cabang ini merupakan pemenang kompetisi.
+        #original_hash: da39a3e
+        allow_registration_without_qualification: ''
+        championships:
+          #original_hash: da39a3e
+          championship_type: ''
+        competition_series:
+          #original_hash: da39a3e
+          wcif_id: ''
+          #original_hash: 77811b5
+          name: >-
+            Nama lengkap Rangkaian Kompetisi termasuk tahun di belakang (cth:
+            Southern Australia 2022). Pastikan menggunakan huruf kapital di awal
+            kata. Aturan ini juga berlaku untuk nama dari setiap kompetisi.
+          #original_hash: 778c20c
+          short_name: >-
+            Nama singkat yang ditampilkan. Aturan ini juga berlaku untuk nama
+            dari setiap kompetisi.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Kolom ini tidak dapat diubah!</b><br/>Untuk menambahkan kompetisi
+            pada Rangkaian, Anda harus membuka setiap halaman 'Edit' pada
+            kompetisi yang ingin Anda tambah.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1035,7 +1088,7 @@ id:
         #original_hash: 53c16eb
         body: >-
           Gunakan tag &lt;!-- break --&gt; untuk memperlihatkan pratinjau pada
-          beranda. Postingan apapun pada beranda akan memunculkan semua teks
+          beranda. Postingan apapun pada beranda akan menampilkan semua teks
           sebelum tag pembagi ini. Postingan yang sebenarnya akan memperlihatkan
           seluruh isi postingan.
         #original_hash: da39a3e
@@ -1049,7 +1102,7 @@ id:
         #original_hash: 0e3764f
         show_on_homepage: >-
           Hati-hati! Hal ini tidak aman untuk data pribadi. Hal ini hanya untuk
-          mencegah kekacauan pada beranda. Postingan yang tidak dimunculkan pada
+          mencegah kekacauan pada beranda. Postingan yang tidak ditampilkan pada
           beranda masih dapat diakses oleh publik lewat tautan permanen atau
           tag.
       delegate_report:
@@ -1234,6 +1287,13 @@ id:
           'true': Pendaftaran di tempat dapat diterima
           #original_hash: 0f236df
           'false': Pendaftaran di tempat TIDAK AKAN diterima
+        allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': >-
+            Kompetitor akan diperbolehkan untuk mendaftar cabang yang tidak
+            lolos kualifikasi (Saya akan menghapusnya nanti)
+          #original_hash: 6509041
+          'false': Kompetitor WAJIB lolos kualifikasi untuk mendaftar cabang
         allow_registration_edits:
           #original_hash: 52a2f4a
           'true': >-
@@ -1415,9 +1475,9 @@ id:
           generate_backup_codes: Buat kode cadangan
           #original_hash: a69dd5b
           backup_codes_warning: >-
-            Kode cadangan akan muncul di bawah ini. Pastikan untuk langsung
+            Kode cadangan akan ditampilkan di bawah ini. Pastikan untuk langsung
             ditulis/disimpan: kode disimpan secara terenkripsi pada basis data
-            kami dan tidak dapat dimunculkan kemudian.
+            kami dan tidak dapat ditampilkan kemudian.
           #original_hash: b5e3ad8
           email_auth_desc: >-
             Anda dapat meminta one-time password (OTP) melalui email saat Anda
@@ -1500,7 +1560,7 @@ id:
         Selamat datang kembali! Untuk membuat akun situs web WCA, beritahu kami
         ID WCA Anda yang digunakan pada kompetisi.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Selamat datang! Sebelum Anda mengikuti kompetisi WCA pertama Anda, kami
         membutuhkan informasi tambahan untuk keperluan penyimpanan catatan.
         Harap dicatat bahwa tanggal lahir Anda tidak akan dirilis tanpa seizin
@@ -1613,6 +1673,12 @@ id:
       manage_auth_app: Atur aplikasi resmi
       #original_hash: acac109
       media_submission: Penyerahan Media
+      #original_hash: cf01481
+      privacy: Privasi
+      #original_hash: 4c4a2e8
+      disclaimer: Penyangkalan
+      #original_hash: d561f1a
+      find_us: Temukan kami
   homepage:
     #original_hash: 824d76b
     learn_more: Pelajari lebih lanjut
@@ -1936,7 +2002,7 @@ id:
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Avatar harus merupakan gambar asli dari orang yang terkait.
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': Orang yang tampak haruslah diri Anda sendiri.
         #original_hash: de9b742
         '3': >-
@@ -2092,8 +2158,6 @@ id:
       need_dob: Dibutuhkan tanggal lahir
       #original_hash: d84a54f
       need_country: Dibutuhkan negara asal
-      #original_hash: cec28a0
-      comp_not_found: Kompetisi tidak ditemukan
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Pendaftaran tidak dapat dihapus dan diterima secara bersamaan.
       #original_hash: a38d024
@@ -2105,6 +2169,12 @@ id:
         target='_blank'>WDC</a>.
       #original_hash: 8d07e7f
       undelete_banned: adalah kompetitor yang di-banned dan tidak dapat dipulihkan
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: >-
+        Anda hanya dapat disetujui pada satu Rangkaian kompetisi dalam satu
+        waktu.
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: Anda tidak dapat mendaftar cabang yang tidak lolos kualifikasi.
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2257,6 +2327,12 @@ id:
       payment_requested_on: 'Pembayaran diminta pada: %{date}'
       #original_hash: f5b1b34
       payment_completed_on: 'Pembayaran selesai pada: %{date}'
+      #original_hash: 3141a14
+      series_registrations: Pendaftaran rangkaian
+      #original_hash: 845bb47
+      series_registrations_hint_html: >-
+        Petunjuk: Pendaftaran rangkaian ditampilkan sebagai
+        <i>%{description}</i>
       #original_hash: b25928c
       total: Total
       #original_hash: df036fe
@@ -2346,6 +2422,8 @@ id:
     will_pay_here: Anda akan membayar setelah mengirim pendaftaran Anda
     #original_hash: b7ef562
     wont_pay_here: Lihat informasi kompetisi untuk melihat panduan pembayaran
+    #original_hash: be4b39d
+    not_qualified: Tidak lolos kualifikasi
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2360,7 +2438,7 @@ id:
       title: Biaya pendaftaran
       #original_hash: d1569e6
       payment_successful: >-
-        Pembayaran Anda berhasil, dan pendaftaran Anda akan muncul dengan status
+        Pembayaran Anda berhasil, dan pendaftaran Anda akan tampil dengan status
         sudah bayar di bawah.
       hints:
         #original_hash: bf3a39e
@@ -2555,6 +2633,10 @@ id:
       in_progress: >-
         Kompetisi ini sedang berlangsung. Silakan datang kembali setelah %{date}
         untuk melihat hasil!
+      #original_hash: 8eeeb44
+      in_progress_at_wca_live_html: >-
+        Kompetisi ini sedang berlangsung. Anda dapat mengecek hasil secara
+        langsung <a href='%{link_here}'>di sini</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: >-
         Pendaftaran ditetapkan untuk dimulai dalah waktu kurang dari waktu yang
@@ -2584,9 +2666,9 @@ id:
       title: Kompetisi saya
       #original_hash: 1fa5a4b
       disclaimer: >-
-        Hanya kompetitor yang menggunakan sistem pendaftaran WCA yang dapat
-        muncul di sini. Jika kompetisi Anda tidak terlihat di sini, lihat daftar
-        kompetitor pada situs web kompetisi.
+        Hanya kompetitor yang menggunakan sistem pendaftaran WCA yang
+        ditampilkan di sini. Jika kompetisi Anda tidak terlihat di sini, lihat
+        daftar kompetitor pada situs web kompetisi.
       #original_hash: 94a2fc8
       past_competitions: Kompetisi lampau
       #original_hash: ec7e697
@@ -2653,6 +2735,18 @@ id:
       register_link_html: 'Daftar ke kompetisi ini %{here}.'
       #original_hash: 45834fd
       register_below_html: Daftar ke kompetisi ini di bawah.
+      #original_hash: c5dfcc7
+      part_of_a_series: Kompetisi ini adalah bagian dari Rangkaian Kompetisi.
+      #original_hash: 171e593
+      part_of_a_series_list: >-
+        Kompetisi ini adalah bagian dari Rangkaian Kompetisi %{name}. Kompetisi
+        lainnya pada Rangkaian ini adalah:
+      #original_hash: 09fa333
+      series_registration_warning_html: >-
+        Catatan: Anda dapat mengirimkan pendaftaran untuk seluruh kompetisi pada
+        Rangkaian, namun hanya satu pendaftaran yang akan dikonfirmasi dan
+        disetujui. <b>Anda hanya diperbolehkan untuk mengikuti satu kompetisi
+        pada Rangkaian ini!</b>
       #original_hash: 196725e
       competitor_limit_is: 'Terdapat batas kompetitor sejumlah %{competitor_limit} kompetitor.'
       #original_hash: 5101f65
@@ -2708,9 +2802,15 @@ id:
         %{guests_base_fee}.
       guests_free:
         #original_hash: 573eeb7
-        anyone: Penonton dapat datang secara gratis.
+        free: Semua orang dapat menonton secara gratis.
         #original_hash: f1e6aef
         restricted: Penonton hanya boleh datang sebagai pendamping kompetitor.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Jumlah pendamping kompetitor maksimal adalah 1.
+        other: 'Jumlah pendamping kompetitor maksimal adalah %{count}.'
+      #original_hash: 64e0ddd
+      require_qualification: Kompetitor hanya diperbolehkan mendaftar cabang yang lolos kualifikasi.
       #original_hash: 97a31ee
       click_to_display_requirements_html: >-
         Kompetisi ini telah berakhir, klik %{link_here} untuk menampilkan syarat
@@ -2794,6 +2894,8 @@ id:
       all_years: Semua Tahun
       #original_hash: 719ea39
       clear: Hapus
+      #original_hash: e827f28
+      select_hint: Harap pilih cabang
       #original_hash: a1fffaa
       list: Daftar
       #original_hash: ab478f3
@@ -2824,6 +2926,10 @@ id:
       past_from: 'Lampau dari %{year}'
       #original_hash: 7cff459
       past_all: Lampau dari semua tahun
+      #original_hash: 819fe62
+      show_cancelled: Tampilkan kompetisi yang dibatalkan
+      #original_hash: 0eda967
+      show_registration_status: Tampilkan ikon status pendaftaran
       titles:
         #original_hash: 69447c9
         in_progress: Kompetisi sedang berlangsung
@@ -2859,6 +2965,17 @@ id:
         search: Nama atau kota
         #original_hash: 3bc8082
         recent: '%{count} hari terakhir'
+        registration:
+          #original_hash: 49d8169
+          opens_in: 'Pendaftaran akan dibuka dalam %{duration}'
+          #original_hash: 2d601fa
+          closed: 'Pendaftaran telah ditutup. Kompetisi akan dimulai dalam %{days}'
+          #original_hash: 2e17db8
+          open: Pendaftaran telah dibuka!
+          #original_hash: c098975
+          full: >-
+            Batas kompetitor telah terpenuhi, pendaftaran terbaru akan
+            dimasukkan ke dalam daftar tunggu
       #original_hash: 8b09d74
       no_comp_found: Tidak ada kompetisi yang ditemukan.
       #original_hash: 7008166
@@ -2914,6 +3031,10 @@ id:
         pertanyaan akan ditetapkan pada formulir tanpa memperlihatkan email
         panitia. %{md}. Contohnya: [Teks untuk
         ditampilkan](mailto:some@email.com)
+      #original_hash: 05c66b5
+      series_save_first_hint: >-
+        Catatan: Anda harus simpan kompetisi terlebih dahulu sebelum Anda dapat
+        menambah Rangkaian baru.
       #original_hash: c5497bc
       events: Cabang
       #original_hash: cafc153
@@ -2970,10 +3091,10 @@ id:
         calculated: 'Estimasi Iuran WCA untuk %{limit} kompetitor adalah %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Estimasi Iuran WCA per kompetitor adalah %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          Terjadi galat pada estimasi Iuran, harap setel ke nol (0) dan isi
-          kembali biaya dasar pendaftaran
+          Terjadi galat pada estimasi Iuran, kemungkinan dikarenakan tidak
+          adanya nilai tukar untuk mata uang yang dipilih.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3035,6 +3156,12 @@ id:
       event_change_deadline_with_ots: >-
         Batas waktu untuk memperbarui cabang harus terjadi pada rentang waktu
         kompetisi jika pendaftaran di tempat diperbolehkan.
+      #original_hash: 5ae2437
+      series_distance_km: 'Kompetisi ini berlokasi terlalu jauh dari %{competition}.'
+      #original_hash: 4a5d7c5
+      series_distance_days: 'Kompetisi ini dijadwalkan terlalu jauh dari %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: Wajib bertanya mengenai pendamping jika batas jumlah pendamping diisi.
     new:
       #original_hash: 1208df7
       create_competition: Buat kompetisi
@@ -3068,22 +3195,24 @@ id:
       #original_hash: 9eb8f46
       within: 'Dalam waktu %{days} hari'
       #original_hash: d97d1ee
-      show: Perlihatkan
+      show: Tampilkan
     adjacent_competitions:
       #original_hash: e3528ec
-      label: 'Kompetisi terdekat (dalam jarak %{days} hari dan %{kms} km)'
+      label: 'Kompetisi terdekat (dalam %{days} hari dan %{kms} km)'
       #original_hash: feefb46
-      no_comp_nearby: Tidak ada kompetisi terdekat!
+      no_comp_nearby: Kompetisi terdekat tidak ditemukan!
       #original_hash: 7e76950
-      no_date_yet: Anda belum menetapkan tanggal kompetisi ini.
+      no_date_yet: Anda belum memasukkan tanggal untuk kompetisi ini.
       #original_hash: 82a95d2
-      no_location_yet: Anda belum menetapkan lokasi kompetisi ini.
+      no_location_yet: Anda belum memasukkan lokasi untuk kompetisi ini.
       #original_hash: 709a232
       name: Nama
       #original_hash: adc24b7
       delegates: Delegate
       #original_hash: eb9a4bc
       date: Tanggal
+      #original_hash: 6c82e6d
+      time: Waktu
       #original_hash: d219c68
       location: Lokasi
       #original_hash: 4232080
@@ -3095,7 +3224,7 @@ id:
       #original_hash: e1978a9
       starts_on: dimulai pada
       #original_hash: 964aedc
-      ends_on: selesai pada
+      ends_on: berakhir pada
       #original_hash: 24d948e
       limit: Batas
       #original_hash: 855bd26
@@ -3103,9 +3232,18 @@ id:
       #original_hash: c5497bc
       events: Cabang
       #original_hash: 50cb854
-      show_events: Lihat cabang
+      show_events: Tampilkan cabang
       #original_hash: 0df66f7
       hide_events: Sembunyikan cabang
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Periode pendaftaran bertabrakan (dimulai dalam %{hours} jam)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Periode pendaftaran yang bertabrakan tidak diperbolehkan!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: Anda belum memasukkan tanggal mulai registrasi pada kompetisi ini.
+      #original_hash: c38824e
+      opens_registration_at: registrasi dibuka pada
     #original_hash: 06b01c4
     announcements: Pengumuman
     #original_hash: a2b80b0
@@ -3288,6 +3426,11 @@ id:
       group: Grup
       #original_hash: b7126cd
       scramble: Acakan
+    competition_series_fields:
+      #original_hash: ed8ff7b
+      add_series: Tambah pada Rangkaian
+      #original_hash: be6edcd
+      remove_series: Hapus dari Rangkaian
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -3319,7 +3462,7 @@ id:
       tabs_list_title: Atur tab
       #original_hash: 40f9491
       tabs_introduction_text: >-
-        Di sini Anda dapat menambah dan menyunting tab yang muncul pada halaman
+        Di sini Anda dapat menambah dan menyunting tab yang tampil pada halaman
         info kompetisi.
     edit:
       #original_hash: 5f1f5b8
@@ -3337,6 +3480,17 @@ id:
     records:
       #original_hash: e51c552
       title: Rekor
+    #original_hash: e02fccb
+    last_updated_html: 'Terakhir diperbarui: %{timestamp}'
+    #original_hash: 50c021e
+    heading_disabled_functions: >-
+      Catat bahwa beberapa filter (seperti tahun) tidak berfungsi untuk
+      sementara waktu. Jika Anda memiliki pengalaman dalam optimasi SQL, harap
+      kontak WST!
+    #original_hash: e3710ed
+    tooltip_no_years: Basis data kami terlalu besar untuk merangkum data historis
+    #original_hash: 357094b
+    tooltip_no_quantities: Basis data kami terlalu besar untuk merangkum ranking yang panjang
     selector_elements:
       events_selector:
         #original_hash: ad8919a
@@ -4364,7 +4518,7 @@ id:
     tools:
       age:
         #original_hash: 4aaae5b
-        title: UMUR
+        title: AGE
         #original_hash: 2e4832d
         description: >-
           Kakas untuk membuat dan menyunting grup/penetapan tugas untuk
@@ -4424,6 +4578,11 @@ id:
           Spreadsheet, atau berkas WCIF mandiri. Impor acakan dari satu atau
           lebih berkas json TNoodle. Ekspor hasil ke format yang ditentukan
           untuk dikirimkan ke WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Grup kompetisi
+        #original_hash: 74a0926
+        description: Lihat grup untuk kompetisi yang berlangsung
   logo:
     #original_hash: c72c969
     title: Logo WCA
@@ -4592,6 +4751,8 @@ id:
       people: Orang
       #original_hash: 6db75ea
       advanced_search: Pencarian lanjutan
+      #original_hash: 5e326b1
+      incidents: Insiden
       #original_hash: a0ca0c3
       posts: Postingan
       #original_hash: 9d7ea9c
@@ -4607,6 +4768,8 @@ id:
         people: Tidak ada orang yang ditemukan untuk
         #original_hash: c6a04aa
         posts: Tidak ada postingan yang ditemukan untuk
+        #original_hash: 3499e7e
+        incidents: Tidak ada insiden yang ditemukan
         #original_hash: 76a6bf1
         regulations_and_guidelines: Tidak ada Regulasi atau Pedoman yang ditemukan untuk
   incidents_log:
@@ -4614,6 +4777,8 @@ id:
     i18n_disclaimer: >-
       Harap dicatat bahwa bagian insiden hanya tersedia dalam Bahasa Inggris,
       konten di bawah ini tidak diterjemahkan.
+    #original_hash: 2c23c1a
+    incident: 'Insiden:'
   about_regulations:
     #original_hash: 6bce1b5
     title: Tentang Regulasi
@@ -4813,7 +4978,7 @@ id:
         #original_hash: de00462
         '1': Dua kompetisi tidak memiliki cabang yang sama.
         #original_hash: f7bacc5
-        '2': Dua kompetisi bertempat di beda negara.
+        '2': Dua kompetisi bertempat di negara berbeda.
       #original_hash: 5c5cf04
       content2: >-
         "3x3x3 Fewest Moves simultaneous competitions" adalah kompetisi WCA yang

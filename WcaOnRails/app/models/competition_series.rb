@@ -3,8 +3,8 @@
 class CompetitionSeries < ApplicationRecord
   has_many :competitions, -> { order(:start_date) }, inverse_of: :competition_series, dependent: :nullify, after_remove: :destroy_if_orphaned
 
-  # WCRP 2.5.1 as of 2022-08-23. Note that these values are strictly "less than"
-  MAX_SERIES_DISTANCE_KM = 100
+  # WCRP 2.5.1 as of 2022-11-21. Note that these values are strictly "less than"
+  MAX_SERIES_DISTANCE_KM = 200
   MAX_SERIES_DISTANCE_DAYS = 33
 
   MAX_ID_LENGTH = Competition::MAX_ID_LENGTH
@@ -25,6 +25,26 @@ class CompetitionSeries < ApplicationRecord
 
   private def name_valid_or_updating?
     self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
+  end
+
+  before_validation :create_id_and_cell_name
+  def create_id_and_cell_name
+    m = VALID_NAME_RE.match(name)
+    if m
+      name_without_year = m[1]
+      year = m[2]
+      if wcif_id.blank?
+        # Generate competition id from name
+        # By replacing accented chars with their ascii equivalents, and then
+        # removing everything that isn't a digit or a character.
+        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
+        self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+      end
+      if short_name.blank?
+        year = " " + year
+        self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
+      end
+    end
   end
 
   # The notion of circumventing model associations is stolen from competition.rb#delegate_ids et al.

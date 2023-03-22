@@ -440,7 +440,7 @@ pl:
         #original_hash: 28a6fbb
         currency_code: Kod waluty
         #original_hash: 2e3ed8b
-        delegate_ids: Delegat/Delegaci WCA
+        staff_delegate_ids: Delegat/Delegaci WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: Delegat(ci) Praktykant(ci) WCA
         #original_hash: 958562e
@@ -500,7 +500,7 @@ pl:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Wpisowe dla gości
         #original_hash: bb16247
-        free_guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
+        guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Chciałbym wymagać od zawodników dostarczenia układanek w określonym
@@ -715,13 +715,13 @@ pl:
         #original_hash: 82dabd0
         multimedia: Multimedia
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           Nie wyświetlaj nic (rozwiń temat w sekcji "Dodatkowe wymagania
           rejestracyjne")
         #original_hash: 694bce4
-        anyone: Każdy widz może wejść za darmo
+        free: Każdy widz może wejść za darmo
         #original_hash: 762c509
         restricted: Widzowie mogą wejść jedynie jako goście zawodników
   simple_form:
@@ -832,7 +832,7 @@ pl:
           tego <b>w języku angielskim</b> oraz jakichkolwiek innych językach
           używanych przez twoich zawodników.
         #original_hash: b4d020f
-        delegate_ids: Delegaci WCA dla tych zawodów.
+        staff_delegate_ids: Delegaci WCA dla tych zawodów.
         #original_hash: cb9882c
         trainee_delegate_ids: Delegaci Praktykanci WCA dla tych zawodów.
         #original_hash: 517d376
@@ -957,7 +957,7 @@ pl:
           wyświetlone wybrane przez ciebie zdanie informujące o polityce wstępu
           dla gości.
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -1466,7 +1466,7 @@ pl:
         Witaj ponownie! Aby utworzyć twoje konto, musimy znać WCA ID, z którym
         brałeś udział w zawodach.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach
         WCA, potrzebujemy kilka dodatkowych informacji. Pamiętaj, że twoja data
         urodzin nigdy nie zostanie ujawniona bez twojej zgody.
@@ -2707,7 +2707,7 @@ pl:
       guests_pay: 'Wstęp dla widzów wynosi %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        anyone: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
+        free: Widzowie mogą uczestniczyć w wydarzeniu za darmo.
         #original_hash: f1e6aef
         restricted: Widzowie będą wpuszczani jedynie jako goście zawodników.
       #original_hash: 97a31ee

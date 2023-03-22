@@ -317,7 +317,7 @@ sk:
         #original_hash: 28a6fbb
         currency_code: Kód meny
         #original_hash: 5b2fe69
-        delegate_ids: WCA delegát(i)
+        staff_delegate_ids: WCA delegát(i)
         #original_hash: 958562e
         organizer_ids: Organizátor(i)
         #original_hash: b37456c
@@ -594,7 +594,7 @@ sk:
           a divákov a iné detaily relevantné pre ľudí, ktorí maju záujem v
           zúčastnení sa súťaže.
         #original_hash: 0708400
-        delegate_ids: WCA delegáti pre túto súťaž.
+        staff_delegate_ids: WCA delegáti pre túto súťaž.
         #original_hash: 517d376
         organizer_ids: >-
           Organizátori súťaže(potrebujú mať účet, na to aby mohli byť
@@ -890,7 +890,7 @@ sk:
         Vitajte naspäť! Aby ste si mohli vytvoriť webový WCA účet, potrebujeme
         vedieť vaše WCA ID pod ktorým ste súťažili.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Vitajte. Predtým, než budete môcť súťažiť v prvej súťaži WCA,
         potrebujeme vedieť nejaké doplnkové informácie. Prosím, dajte na
         vedomie, že váš dátum narodenia nebude nikdy zverejnený bez vášho

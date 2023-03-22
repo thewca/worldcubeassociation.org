@@ -194,10 +194,10 @@ th:
       #original_hash: 672b22c
       cellName: รอบชิงชนะเลิศ
     g:
-      #original_hash: ccf6f8e
-      name: รอบที่สาม
-      #original_hash: ccf6f8e
-      cellName: รอบที่สาม
+      #original_hash: e2f74d2
+      name: รอบรองชนะเลิศ
+      #original_hash: e2f74d2
+      cellName: รอบรองชนะเลิศ
     h:
       #original_hash: 4d618bb
       name: รอบคัดเลือก
@@ -264,7 +264,7 @@ th:
     #original_hash: 65c848f
     result_type: ประเภทผลการแข่งขัน
     #original_hash: 29ef642
-    for_event: 'Qualification for %{event}'
+    for_event: 'การคัดเลือกสำหรับ %{event}'
     type:
       #original_hash: f5c3f76
       none: ไม่มีการคัดเลือก
@@ -470,7 +470,7 @@ th:
         #original_hash: 28a6fbb
         currency_code: สกุลเงิน
         #original_hash: 2e3ed8b
-        delegate_ids: WCA Delegate(s)
+        staff_delegate_ids: WCA Delegate(s)
         #original_hash: c0ddcd6
         trainee_delegate_ids: WCA Trainee Delegate
         #original_hash: 958562e
@@ -493,6 +493,10 @@ th:
         competitor_limit_reason: เหตุผลของการจำกัดจำนวนผู้เข้าแข่งขัน
         #original_hash: 3c23a67
         guests_enabled: ผู้ติดตาม
+        #original_hash: 7d78478
+        guests_per_registration_limit: จำนวนของผู้ติดตามสูงสุดต่อผู้แข่งขัน
+        #original_hash: 22516e1
+        events_per_registration_limit: จำนวนประเภทการแข่งขันที่สามารถสมัครได้
         #original_hash: 089cbfd
         receive_registration_emails: แจ้งเตือนฉันด้วย email เมื่อมีผู้สมัครการแข่งขัน
         #original_hash: d4aeed9
@@ -509,6 +513,8 @@ th:
         enable_donations: ฉันต้องการเปิดรับบริจาคนอกหนือจากค่าสมัคร
         #original_hash: 556fda0
         extra_registration_requirements: ข้อกำหนดการลงทะเบียนเพิ่มเติม
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         #original_hash: 2529d04
         on_the_spot_registration: เปิดรับสมัครที่การแข่งขัน
         #original_hash: 69780b5
@@ -528,7 +534,7 @@ th:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: ค่าเข้าชมการแข่งขัน
         #original_hash: bb16247
-        free_guest_entry_status: แสดงข้อความให้ผู้เข้าชมการแข่งขันเข้าได้โดยไม่เสียค่าใช้จ่าย
+        guest_entry_status: แสดงข้อความให้ผู้เข้าชมการแข่งขันเข้าได้โดยไม่เสียค่าใช้จ่าย
         #original_hash: 723cad9
         early_puzzle_submission: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
         #original_hash: 78308cc
@@ -549,10 +555,10 @@ th:
         #original_hash: 4baf44b
         championship_type: ประเภทการแข่งขันชิงแชมป์
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: ชื่อ
+        #original_hash: e2b4898
+        wcif_id: ID ของซีรียส์
+        #original_hash: 75ceb67
+        name: ชื่อของซีรียส์
         #original_hash: 8a6bee1
         short_name: ชื่อเล่น
         #original_hash: af3d38e
@@ -744,13 +750,13 @@ th:
         #original_hash: 82dabd0
         multimedia: มัลติมีเดีย
     competition:
-      free_guest_entry_status:
+      guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
           ไม่ต้องแสดงอะไรทั้งสิ้น (และอาจอธิบายให้ละเอียดในส่วน
           "ข้อกำหนดเพิ่มเติมในการลงทะเบียน")
         #original_hash: 694bce4
-        anyone: ผู้เข้าชมการแข่งขันสามารถเข้าชมได้โดยไม่เสียค่าใช้จ่าย
+        free: ผู้เข้าชมการแข่งขันสามารถเข้าชมได้โดยไม่เสียค่าใช้จ่าย
         #original_hash: 762c509
         restricted: >-
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นที่สามารถเข้ารับชมการแข่งขันได้
@@ -790,11 +796,11 @@ th:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: กรอกวันเกิดของคุณในรูปแบบ YYYY-MM-DD
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: กรอกวันเกิดของผู้เข้าแข่งขันในรูปแบบ YYYY-MM-DD
+        #original_hash: ac908c9
         name: >-
-          กรอกชื่อเต็มของคุณให้ถูกต้อง
+          กรอกชื่อเต็มของผู้เข้าแข่งขันให้ถูกต้อง
           เป็นภาษาอังกฤษแล้วตามด้วยชื่อภาษาไทยในวงเล็บ ตัวอย่างเช่น
           <strong>Chanatupe Songrasai (ชนาธูป สรงกระสัย)</strong>,
           ไม่กรอกรูปแบบนี้ <strong>c songrasai</strong>.<br/>ชื่อกลาง
@@ -860,7 +866,7 @@ th:
           ข้อมูลสำคัญที่ผู้เข้าแข่งขันควรรู้ มันจะปรากฏในหน้าหลักของการแข่งขัน
           <br/>กรุณากรอกเป็น <b>ภาษาอังกฤษ</b> และภาษาอื่นที่ผู้เข้าแข่งขันใช้.
         #original_hash: b4d020f
-        delegate_ids: WCA Delegates สำหรับการแข่งขัน
+        staff_delegate_ids: WCA Delegates สำหรับการแข่งขัน
         #original_hash: cb9882c
         trainee_delegate_ids: WCA Trainee Delegates สำหรับการแข่งขัน
         #original_hash: 517d376
@@ -885,16 +891,14 @@ th:
         external_registration_page: >-
           หน้าเว็บที่ผู้เข้าแข่งขันต้องลงทะเบียนสำหรับการแข่งขัน ต้องเป็น URL
           ที่ถูกต้อง
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           ค่าลงทะเบียนฐานสำหรับการแข่งขัน
           มันจะปรากฏบนหน้าข้อมูลการแข่งขันและหน้าลงทะเบียน หากตั้งค่าเป็น 0
           ประโยคจะปรากฏขึ้นโดยแจ้งว่า สมารถสมัครแข่งขันได้โดยไม่เสียค่าใช้จ่าย
           <br><br><b>ข้อจำกัด: การประมาณค่าธรรมเนียมของ WCA
           ต่อไปนี้เป็นเพียงการประมาณโดยอิงตามอัตราแลกเปลี่ยนปัจจุบัน
-          และไม่มีผลผูกพันทางกฎหมายสำหรับการชำระค่าธรรมเนียม</b><br>กด
-          "แก้ไขการแข่งขัน" หลังจากเปลี่ยนสกุลเงินเพื่อซิงโครไนซ์กับค่าประมาณ
-          หากไม่มีอัตราแลกเปลี่ยนสำหรับสกุลเงินที่เลือกจะไม่มีอะไรแสดง
+          และไม่มีผลผูกพันทางกฎหมายสำหรับการชำระค่าธรรมเนียม</b>
         #original_hash: 9735ddf
         currency_code: สกลุเงินสำหรับต่าสมัคร
         #original_hash: da39a3e
@@ -927,6 +931,18 @@ th:
           แต่จำเป็นต้องทำอย่างอื่นก่อน
         #original_hash: 4bd7102
         competitor_limit_reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
+        #original_hash: 7d19570
+        guests_per_registration_limit: >-
+          จำนวนผู้ติดตามที่ได้รับอนุญาติในการแข่งขันนี้
+          หากคุณสมัครโดนมีผู้ติดตามมากเกินไปการสมัครจะถูกบล็อก,
+          เว้นว่างไว้ภ้าไม่ต้องการจำกัด
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          เลือกบังคับจำนวนประเภทการแข่งขันทั้งหมดที่ผู้แข่งขันสามารถลงทะเบียนได้
+          (ใช้ทั่วไปสำหรับการแข่งขัน "Favorites")
+          คุณควรเพิ่มประเภทการแข่งขันก่อนที่จะใช้ฟิลด์นี้
+          การสมัครการแข่งขันที่มีประเภทการแข่งขันมากเกินไปจะถูกบล็อก
+          เว้นว่างไว้หากไม่มีขีดจำกัด
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -971,7 +987,7 @@ th:
           ค่าเข้าชมการแข่งขันไม่สามารถจัดการผ่าน website นี้ได้ หากตั้งเป็น 0
           จะแสดงข้อความที่คุณเลือกเกี่ยวกับนโยบายของผู้เข้าชมการแข่งขัน
         #original_hash: da39a3e
-        free_guest_entry_status: ''
+        guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -990,6 +1006,8 @@ th:
         event_restrictions_reason: >-
           โปรดอธิบายรายละเอียดที่นี่ ทำไมคุณต้องการจำกัดการสมัครบางประเภท
           กรุณากรอกเป็นภาษาอังกฤษ!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: ผู้ชนะการแข่งขันประเภทนี้ จะถือว่าเป็นผู้ชนะการแข่งขันนี้
         #original_hash: da39a3e
@@ -1440,6 +1458,17 @@ th:
         form_error:
           zero: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
+      error_pages:
+        #original_hash: 1042478
+        500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
+        #original_hash: d815249
+        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: b61e305
+        400_error: ไม่มีหน้าที่คุณกำลังมองหา
+        #original_hash: 8b309f5
+        400_contact: >-
+          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
+          ID
     doorkeeper:
       applications:
         help:
@@ -1472,11 +1501,13 @@ th:
       welcome_back: >-
         ยินดีต้อนรับกลับมา! ในการสร้าง account ของเว็บไซต์ WCA เราต้องการทราบ
         WCA ID ที่คุณใช้แข่งขัน
-      #original_hash: 669fb57
-      welcome: >-
+      #original_hash: ef8243e
+      welcome_html: >-
         ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
-        เราต้องการข้อมูลเพิ่มเติมบางอย่าง
+        เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึกไว้
         โปรดทราบว่าวันเกิดของคุณจะไม่ถูกเปิดเผยโดยไม่ได้รับอนุญาตจากคุณ
+        <br/><br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น
+        กรุณากรอกข้อมูลของ<strong>ผู้เข้าแข่งขัน</strong>
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1585,6 +1616,12 @@ th:
       manage_auth_app: จัดการแอปพลิเคชันที่ได้รับอนุญาต
       #original_hash: acac109
       media_submission: Media Submission
+      #original_hash: cf01481
+      privacy: Privacy
+      #original_hash: 4c4a2e8
+      disclaimer: Disclaimer
+      #original_hash: d561f1a
+      find_us: Find us
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -1766,6 +1803,23 @@ th:
         more_info_html: 'คุณสามารถจัดการการตั้งค่าสำหรับ email ได้ที่ %{preferences_link}'
         #original_hash: 7594a32
         regards_html: 'ด้วยความนับถือ <br/>The WCA Results Team ในนามของ %{managers}'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Reset รหัสผ่าน WCA Account
+        #original_hash: 65611e9
+        greeting: 'สวัสดี,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          เราได้รับคำขอให้รีเซ็ตรหัสผ่านสำหรับบัญชี WCA ที่เชื่อมโยงกับ
+          %{user_email}. ขณะนี้ยังไม่มีการเปลี่ยนแปลง account ของคุณ
+        #original_hash: 60fef9e
+        instruction2: 'คุณสามารถรีเซ็ตรหัสผ่านได้โดยคลิกลิงก์ด้านล่าง:'
+        #original_hash: 00850c3
+        instruction3: หากคุณไม่ได้ขอรหัสผ่านใหม่ โปรดเพิกเฉยต่ออีเมลนี้
+        #original_hash: dbc2263
+        instruction4: >-
+          คุณมีคำถามเพิ่มเติมหรือไม่? เรายินดีที่จะตอบคำถามเหล่านี้!
+          อย่าลังเลที่จะส่งอีเมลไปที่ %{contact_link}
     claim_wca_id:
       #original_hash: f28bf87
       title: ขอรับ WCA ID
@@ -1874,12 +1928,16 @@ th:
       remove_avatar: ลบรูปแทนตัว
       #original_hash: 4bd25cf
       remove_avatar_confirm: คุณแน่ใจที่จะลบรูปแทนตัวของคุณหรือไม่
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: ยืนยันการลบรูปประจำตัว
+      #original_hash: 010b0e5
+      remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
       guidelines: แนวทาง
       avatar_guidelines:
         #original_hash: 255f28c
         '1': รูปแทนตัวทั้งหมดต้องเป็นบุคคลจริง
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': บุคคลที่ในภาพต้องเป็นคุณ
         #original_hash: de9b742
         '3': >-
@@ -2024,6 +2082,12 @@ th:
       cannot_be_deleted_and_accepted: การสมัครไม่สามารถถูกลบและยืนยันได้ในเวลาเดียวกัน
       #original_hash: a38d024
       must_register: ต้องสมัครการแข่งขันอย่างน้อยหนึ่งประเภท
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: คุณสามารถสมัครการแข่งขันได้แค่ 1 ประเภทเท่านั้น
+        other: >-
+          คุณต้องสมัครการแข่งขันโดยมีประเภทการแข่งขันน้อยกว่าหรือเท่ากับ
+          %{count} ประเภท
       #original_hash: e78eec3
       banned_html: >-
         คุณถูกแบน ถ้าคุณเชื่อว่านี่คือข้อผิดพลาด กรุณาติดต่อ <a
@@ -2035,6 +2099,11 @@ th:
       series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        คุณจำเป็นต้องใส่ข้อความในช่องอธิบายเพิ่มเติม
+        กรุณาอ่านข้อกำหนดการสมัครการแข่งขันว่าต้องใส่ข้อความอะไร (เช่น
+        สถานที่ที่คุณเข้าแข่งขันในการแข่งขัน FMC หลายสถานที่)
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2169,8 +2238,10 @@ th:
       approved_registrations: การสมัครที่ได้รับการยืนยันแล้ว
       #original_hash: bff04e8
       deleted_registrations: การสมัครที่ถูกลบ
+      #original_hash: e86b1e1
+      non_competing: การสมัครที่ไม่ได้เข้าแข่งขัน
       #original_hash: ac5d958
-      not_paid: ไม่ชำระค่สมัคร
+      not_paid: ยังไม่ชำระค่าสมัคร
       registered:
         #original_hash: 2c2f473
         without_stripe: สมัครวันที่
@@ -2240,6 +2311,12 @@ th:
       จำกัดจำนวนผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
       และมันได้ถึงจำนวนแล้ว ถ้าคุณสมัครการแข่งขัน
       การสมัครของคุณจะอยู่ในรายชื่อรอ ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      จำกัดผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
+      และมันอาจจะเต็มแล้ว หากคุณสมัครการแข่งขัน
+      การสมัครของคุณจะไปอยู่ในรายชื่อรอ
+      ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
     #original_hash: 855ca9c
     can_register: 'คุณสามารถสมัครการแข่งขัน %{comp} ได้ที่ด้านล่าง'
     #original_hash: 4167ed7
@@ -2296,6 +2373,8 @@ th:
         card_information: ข้อมูลบัตร
         #original_hash: bc8091a
         cardholder_name: ผู้ถือบัตร
+        #original_hash: 919710d
+        show_donation: ฉันต้องการบริจาคเพิ่มเติม ซึ่งจะไปที่ทีมผู้จัดการแข่งขันเท่านั้น
       alerts:
         #original_hash: a34940e
         not_a_number: กรุณาใส่จำนวนให้ถูกต้อง
@@ -2481,10 +2560,18 @@ th:
       stripe_connected: >-
         คุณได้เชื่อมต่อ Stripe สำเร็จแล้ว
         และคุณสามารถรับการชำระค่าสมัครสำหรับการแข่งขันครั้งนี้ได้
+      #original_hash: b8fc60f
+      stripe_disconnected_success: ตัดการเชื่อมต่อบัญชี Stripe สำเร็จแล้ว
+      #original_hash: e1a250c
+      stripe_disconnected_failure: เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี Stripe
       #original_hash: 0a4bb53
       stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
       #original_hash: 724cf0d
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
@@ -2569,6 +2656,8 @@ th:
         คุณสามารถส่งการลงทะเบียนสำหรับการแข่งขันทั้งหมดในซีรีส์
         แต่สามารถได้รับการยืนยันและยอมรับการลงทะเบียนได้เพียงรายการเดียวเท่านั้น
         <b>คุณจะได้รับอนุญาตให้แข่งขันในการแข่งขันซีรีส์การแข่งขันเดียวเท่านั้น!</b>
+      #original_hash: 9bb1965
+      competitor_limit: จำกัดจำนวนผู้เข้าแข่งขัน
       #original_hash: 196725e
       competitor_limit_is: 'จำกัดจำนวนผู้เข้าแข่งขัน %{competitor_limit} คน'
       #original_hash: 5101f65
@@ -2618,10 +2707,18 @@ th:
       guests_pay: 'ผู้เข้าชมสามารถเข้าชมได้โดยชำระค่าเข้า %{guests_base_fee}'
       guests_free:
         #original_hash: 573eeb7
-        anyone: ผู้เข้าชมการแข่งขันสามารถรับชมได้โดยไม่มีค่าใช้จ่าย
+        free: ผู้เข้าชมการแข่งขันสามารถรับชมได้โดยไม่มีค่าใช้จ่าย
         #original_hash: f1e6aef
         restricted: >-
           เฉพาะผู้ที่เดินทางมากับผู้เข้าแข่งขันเท่านั้นจึงจะสามารถรับชมการแข่งขันได้
+      #original_hash: 35f892a
+      guest_limit:
+        zero: ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด 1 คน
+        other: 'ผู้เข้าแข่งขันสามารถพาผู้ติดตามมาได้สูงสุด %{count} คน'
+      #original_hash: bad09c8
+      event_limit:
+        zero: ผู้เข้าแข่งขันสามารถสมัครได้แค่ 1 ประเภทการแข่งขัน
+        other: 'ผู้เข้าแข่งขันสามารถสมัครได้สูงสุด %{count} ประเภทการแข่งขัน'
       #original_hash: 64e0ddd
       require_qualification: >-
         ผู้เข้าแข่งขันสามารถลงทะเบียนประเภทการแข่งขันที่พวกเขาผ่านการคัดเลือกอยู่แล้วเท่านั้น
@@ -2895,10 +2992,10 @@ th:
           %{estimate}
         #original_hash: 5e8cffe
         per_competitor: 'ค่าธรรมเนียม WCA โดยประมาณต่อผู้เข้าแข่งขันคือ %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
           มีข้อผิดพลาดในการประมาณการค่าธรรมเนียม
-          โปรดตั้งค่าเป็นศูนย์และป้อนค่าธรรมเนียมการสมัครการแข่งขันอีกครั้ง
+          อาจเป็นไปได้ว่าไม่มีอัตราแลกเปลี่ยนสำหรับสกุลเงินที่เลือก
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -2956,6 +3053,8 @@ th:
       series_distance_km: 'การแข่งขันอยู่ห่างจาก %{competition} มากเกินไป'
       #original_hash: 4a5d7c5
       series_distance_days: 'การแข่งขันถูกกำหนดให้อยู่ห่างจาก %{competition} หลายวันเกินไป'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: ต้องถามเกี่ยวกับผู้ติดตามหากมีการระบุขีดจำกัดของผู้ติดตาม
     new:
       #original_hash: 1208df7
       create_competition: สร้างการแข่งขัน
@@ -3003,6 +3102,8 @@ th:
       delegates: Delegate(s)
       #original_hash: eb9a4bc
       date: วันที่
+      #original_hash: 6c82e6d
+      time: เวลา
       #original_hash: d219c68
       location: สถานที่
       #original_hash: 4232080
@@ -3025,6 +3126,15 @@ th:
       show_events: แสดงประเภทการแข่งขัน
       #original_hash: 0df66f7
       hide_events: ซ่อนประเภทการแข่งขัน
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'ช่วงเวลาการลงทะเบียนชนกัน (เริ่มภายใน %{hours} ชั่วโมง)'
+      #original_hash: f1cecf1
+      no_comp_colliding: ไม่มีการสมัครที่ชนกัน
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: คุณยังไม่ได้กำหนดวันรับสมัครของการแข่งขันนี้
+      #original_hash: c38824e
+      opens_registration_at: เปิดรับสมัครที่
     #original_hash: 06b01c4
     announcements: ประกาศ
     #original_hash: a2b80b0
@@ -3049,6 +3159,22 @@ th:
     cancel_mistake: ทำผิดพลาดหรือไม่?
     #original_hash: 0fb43d5
     note_before_cancel: 'Note: การแข่งขันที่ได้รับการยืนยันแล้วเท่านั้นที่ถูกยกเลิกได้'
+    #original_hash: b38ee61
+    orga_close_reg: ปิดการรับสมัคร
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: คุณแน่ใจหรือไม่ว่าต้องการปิดการรับสมัคร คุณจะไม่สามารถแก้ไขมันได้
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      หมายเหตุ:
+      คุณสามารถปิดการสมัครการแข่งขันได้เมื่อผู้เข้าแข่งขันเต็มแล้วเท่านั้น
+    #original_hash: 1ae594d
+    stripe_disconnect: ยกเลิกการเชื่อมต่อบัญชี Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี Stripe?
+      การดำเนินการนี้ไม่สามารถยกเลิกได้
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
       #original_hash: b0fe391
       general_info: ข้อมูลทั่วไป
@@ -3086,12 +3212,14 @@ th:
           รูปแบบที่อนุญาตต่อประเภทอธิบายไว้ใน %{link_to_9b} ดู %{link_to_9f}
           สำหรับคำอธิบายของแต่ละรูปแบบ
         #original_hash: fa50f5c
-        qualification_html: ต้องกำหนดเวลาคัดเลือกในการแข่งขัน WCA อื่น ๆ เพื่อแข่งขัน
+        qualification_html: >-
+          ต้องทำเวลาผ่านเวลาคัดเลือกในการแข่งขัน WCA การแข่งขันครั้งอื่น ๆ
+          เพื่อเข้าแข่งขันในการแข่งขันครั้งนี้
         #original_hash: 3b524fd
-        qualification_all_events_html: 'กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกคือ <b>%{date}</b>'
+        qualification_all_events_html: 'ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่ <b>%{date}</b>'
         #original_hash: 0d791e9
         qualification_some_events_html: >-
-          กำหนดเวลาในการทำเวลาให้ผ่านการคัดเลือกสำหรับประเภท %{events} คือ
+          สำหรับประเภท %{events} ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: รูปแบบ
@@ -4292,6 +4420,11 @@ th:
           นำเข้าผลการแข่งขันจากเว็บไซต์ WCA (เมื่อใช้ WCA Live), spreadsheet
           หรือไฟล์ WCIF. นำเข้า scrambles จากไฟล์ json ของ TNoodle
           หนึ่งไฟล์ขึ้นไป. ส่งออกผลลัพธ์เป็นรูปแบบที่เหมาะสมสำหรับการส่ง WCA
+      groups:
+        #original_hash: 311a3f6
+        title: Competition groups
+        #original_hash: 74a0926
+        description: ดูกลุ่มการแข่งขันของการแข่งขันที่กำลังแข่งขันอยู่
   logo:
     #original_hash: c72c969
     title: WCA Logo
@@ -4433,9 +4566,9 @@ th:
       show_relation: แสดงความสัมพันธ์
       connectives:
         #original_hash: f85194e
-        was_at: เคยที่
+        was_at: เคยแข่งขันที่
         #original_hash: 8c00243
-        together_with: ด้วยกันที่
+        together_with: ด้วยกันกับ
     messages:
       #original_hash: 4406a0b
       invalid_wca_ids: กรุณาแจ้ง WCA ID ที่ถูกต้อง 2 อัน
@@ -4647,12 +4780,12 @@ th:
     paragraph4:
       #original_hash: b6dca56
       title: Proximity policy
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        การแข่งขันของ WCA จะได้รับการยอมรับหากมีระยะห่างจากการแข่งขันอื่น 100
-        กิโลเมตร หรือ ห่างจากการแข่งขันอื่น 19 วัน WCAT
+        การแข่งขันของ WCA จะได้รับการยอมรับหากมีระยะห่างจากการแข่งขันอื่น 10
+        กิโลเมตร หรือ ห่างจากการแข่งขันอื่น 5 วัน WCAT
         จะทบทวนการแข่งขันที่เสนอโดยเฉพาะอย่างยิ่งหากมีการแข่งขันอื่นที่อยู่ในระยะ
-        100 กิโลเมตร หรือ ห่างจากการแข่งขันอื่นไม่เกิน 19 วัน Delegate
+        10 กิโลเมตร หรือ ห่างจากการแข่งขันอื่นไม่เกิน 5 วัน Delegate
         ที่ทำการขอการยอมรับการแข่งขันจะต้องให้ข้อมูลที่แสดงให้เห็นว่าทำไมการแข่งขันถึงควรได้รับการอนุมัติ
         ข้อโต้แย้งสำหรับการยอมรับการแข่งขันมีดังนี้
       olist1:
@@ -4675,9 +4808,9 @@ th:
             #original_hash: 75aa0c7
             1a: ช่วงเวลาของการแข่งขัน 2 ครั้งนั้นต้องไม่ทับซ้อนกัน
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            ถ้าสถานที่ของการแข่งขันอยู่ใกล้กว่า 100
+            ถ้าสถานที่ของการแข่งขันอยู่ใกล้กว่า 10
             กิโลเมตรกับการแข่งขันอื่นแล้วนั้น
           alist1:
             #original_hash: 8f532bb
@@ -4919,3 +5052,21 @@ th:
     privacy: ความเป็นส่วนตัว
     #original_hash: 4c4a2e8
     disclaimer: ข้อจำกัดความรับผิดชอบ
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'ไปที่ %{oauth_link} เพื่อจัดการ OAuth applications ของคุณ'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      นี่คือตัวอย่าง, การ curl, ในการรับ token การเข้าถึงโดยใช้ Application ID,
+      Client Secret, your WCA email, and your password:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      สามารถใช้ token การเข้าถึง OAuth เพื่อสร้างคำขอ API
+      ที่ได้รับอนุญาตได้จนกว่าจะหมดอายุ ตัวอย่างเช่น
+      ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Legal TNoodle version

@@ -63,6 +63,8 @@ module DatabaseDumper
           competitor_limit
           competitor_limit_reason
           guests_enabled
+          guests_per_registration_limit
+          events_per_registration_limit
           results_posted_at
           results_submitted_at
           results_nag_sent_at
@@ -79,7 +81,7 @@ module DatabaseDumper
           refund_policy_percent
           refund_policy_limit_date
           guests_entry_fee_lowest_denomination
-          free_guest_entry_status
+          guest_entry_status
           early_puzzle_submission
           early_puzzle_submission_reason
           qualification_results
@@ -93,6 +95,7 @@ module DatabaseDumper
           cancelled_by
           waiting_list_deadline_date
           event_change_deadline_date
+          force_comment_in_registration
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
           competition_series_id
@@ -354,19 +357,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "competition_trainee_delegates" => {
-      where_clause: JOIN_WHERE_VISIBLE_COMP,
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          competition_id
-          created_at
-          trainee_delegate_id
-          receive_registration_emails
-          updated_at
-        ),
-      ),
-    }.freeze,
     "competition_events" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
@@ -495,6 +485,7 @@ module DatabaseDumper
           wdc_incidents
           wrc_primary_user_id
           wrc_secondary_user_id
+          reminder_sent_at
         ),
       ),
     }.freeze,
@@ -596,6 +587,7 @@ module DatabaseDumper
           updated_at
           user_id
           roles
+          is_competing
         ),
         db_default: %w(ip),
         fake_values: {
@@ -779,7 +771,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "stripe_charges" => :skip_all_rows,
+    "stripe_transactions" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+PRODUCTION_ELASTIC_IP="34.208.140.116"
+
 print_usage_and_exit() {
   echo "Usage: $0 <environment>"
   echo "Bootstraps a WCA server."
@@ -36,6 +38,14 @@ fi
 if ! command -v gcc &> /dev/null; then
   apt-get install -y build-essential
 fi
+if ! command -v zip &> /dev/null; then
+apt-get install -y zip
+fi
+if ! command -v aws &> /dev/null; then
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+unzip awscliv2.zip
+sudo ./aws/install
+fi
 
 if [ -d /vagrant ]; then
   repo_root=/vagrant
@@ -70,16 +80,9 @@ EOL
 fi
 
 if [ "$environment" != "development" ]; then
-  # Download secrets that are required to provision a new server.
-  # You'll need ssh access to worldcubeassociation.org as user `cubing`. Contact
-  # software-admins@worldcubeassociation.org if you need access.
-  echo "Downloading secrets from worldcubeassociation.org..."
-  rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/ $repo_root/secrets
-
-  if [ "$environment" == "staging" ]; then
-    echo "Downloading certificate from staging.worldcubeassociation.org..."
-    rsync -az -e "ssh -o StrictHostKeyChecking=no" --info=progress2 cubing@staging.worldcubeassociation.org:/home/cubing/worldcubeassociation.org/secrets/https/ $repo_root/secrets/https
-  fi
+  echo "Downloading secret chef key from S3"
+  aws s3 cp s3://wca-backups/latest/my_secret_key $repo_root/secrets/my_secret_key
+  aws s3 cp s3://wca-backups/latest/application_default_credentials.json $repo_root/secrets/application_default_credentials.json
 fi
 
 # Install chef client

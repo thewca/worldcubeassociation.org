@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
 
-import countries from '../../lib/wca-data/countries.js.erb';
+import { countries } from '../../lib/wca-data.js.erb';
 import CountryFlag from '../wca/CountryFlag';
 import '../../stylesheets/country_selector.scss';
 

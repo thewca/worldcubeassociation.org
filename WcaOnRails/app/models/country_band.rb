@@ -3,7 +3,7 @@
 class CountryBand < ApplicationRecord
   BANDS = {
     0 => {
-      value: 0,
+      value: 0.00,
     },
     1 => {
       value: 0.19,
@@ -18,9 +18,14 @@ class CountryBand < ApplicationRecord
       value: 2.28,
     },
     5 => {
-      value: 3.0,
+      value: 3.00,
     },
   }.freeze
+
+  # According to WCA's current dues policy, the due amount per competitor is equivalent
+  # to this percent of registration fee. Only used if this due amount per competitor is
+  # larger than the due amount per competitor calculated from the competition's country band.
+  PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT = 0.15
 
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2
   validates_inclusion_of :iso2, in: Country.real.map(&:iso2).freeze

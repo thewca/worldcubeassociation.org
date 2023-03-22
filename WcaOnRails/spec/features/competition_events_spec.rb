@@ -132,7 +132,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "confirmed competition" do
-    let(:competition) { FactoryBot.create(:competition, :confirmed, event_ids: ["222", "444"]) }
+    let!(:competition) { FactoryBot.create(:competition, :confirmed, event_ids: ["222", "444"]) }
 
     scenario "delegate cannot add events", js: true do
       sign_in competition.delegates.first
@@ -214,7 +214,7 @@ RSpec.feature "Competition events management" do
   end
 
   context "competition with results posted" do
-    let(:competition) { FactoryBot.create :competition, :confirmed, :visible, :results_posted, event_ids: Event.where(id: '333') }
+    let!(:competition) { FactoryBot.create :competition, :confirmed, :visible, :results_posted, event_ids: Event.where(id: '333') }
     let(:competition_event) { competition.competition_events.find_by_event_id("333") }
 
     scenario "delegate cannot update events", js: true, retry: 3 do

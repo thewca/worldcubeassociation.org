@@ -34,6 +34,7 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
 
   $('input[name="competition[event_restrictions]"]').on('change', function() {
     $('.competition_event_restrictions_reason').toggle(this.checked);
+    document.querySelector('.competition_events_per_registration_limit').style.display = this.checked ? '' : 'none';
   }).trigger('change');
 
   $('input[name="competition[refund_policy_limit_date]"]').on('change dp.change', function() {
@@ -51,6 +52,10 @@ onPage('competitions#edit, competitions#update, competitions#admin_edit, competi
     $('.adjacent-competitions .wca-adjacent-competitions-show-events').hide();
     $('.adjacent-competitions .wca-adjacent-competitions-hide-events').show();
   });
+
+  $('select[name="competition[guest_entry_status]"]').on('change', function() {
+    $('.competition_guests_per_registration_limit').toggle(this.value === 'restricted');
+  }).trigger('change');
 
   // the forms library we're using is built for 1-to-many associations. So when deleting an existing
   // Series, it simply adds another new Series entry on top of that, which our 1-on-1 association

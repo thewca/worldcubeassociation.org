@@ -22,7 +22,7 @@ RSpec.describe "Incidents management", type: :request do
     }
   }
 
-  let(:wrc_member) { FactoryBot.create(:user, :wrc_member) }
+  let!(:wrc_member) { FactoryBot.create(:user, :wrc_member) }
 
   describe "GET #show" do
     let!(:pending_incident) { FactoryBot.create(:incident) }

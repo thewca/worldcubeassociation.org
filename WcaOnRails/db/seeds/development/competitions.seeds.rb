@@ -78,7 +78,7 @@ after "development:users" do
           total_number_of_rounds: round_types.length,
           time_limit: event.can_change_time_limit? ? TimeLimit.new : nil,
           cutoff: nil,
-          advancement_condition: is_final ? nil : RankingCondition.new(16),
+          advancement_condition: is_final ? nil : AdvancementConditions::RankingCondition.new(16),
           scramble_set_count: rand(1..4),
           round_results: [],
         )

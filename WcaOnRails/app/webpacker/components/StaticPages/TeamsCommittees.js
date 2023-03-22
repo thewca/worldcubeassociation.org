@@ -41,8 +41,8 @@ function Team({ team }) {
       <div className="team-members">
         {team.current_members
           .sort((a, b) => a.name.localeCompare(b.name))
-          .sort((a) => (a.senior_member ? -1 : 1))
-          .sort((a) => (a.leader ? -1 : 1))
+          .sort((a, b) => (b.senior_member - a.senior_member))
+          .sort((a, b) => (b.leader - a.leader))
           .map((user) => (
             <div key={team.id.toString() + user.id.toString()}>
               <UserBadge

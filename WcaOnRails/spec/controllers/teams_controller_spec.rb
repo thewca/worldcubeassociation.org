@@ -38,7 +38,7 @@ RSpec.describe TeamsController do
     context 'when signed in as a team leader without rights to manage all teams' do
       let(:team_where_is_leader) { Team.wrc }
       let(:team_where_is_not_leader) { Team.wst }
-      let(:leader) do
+      let!(:leader) do
         user = FactoryBot.create(:user)
         FactoryBot.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
         user
@@ -91,7 +91,7 @@ RSpec.describe TeamsController do
 
   describe 'POST #update' do
     context 'when signed in as an admin' do
-      let(:admin) { FactoryBot.create :admin }
+      let!(:admin) { FactoryBot.create :admin }
       before :each do
         sign_in admin
       end

@@ -90,7 +90,7 @@ RSpec.describe "users" do
   end
 
   context "user without 2FA" do
-    let(:user) { FactoryBot.create(:user) }
+    let!(:user) { FactoryBot.create(:user) }
     before { sign_in user }
 
     context "recently authenticated" do
@@ -129,7 +129,7 @@ RSpec.describe "users" do
   end
 
   context "user with 2FA" do
-    let(:user) { FactoryBot.create(:user, :with_2fa) }
+    let!(:user) { FactoryBot.create(:user, :with_2fa) }
     before { sign_in user }
     context "recently authenticated" do
       before { post users_authenticate_sensitive_path, params: { 'user[otp_attempt]': user.current_otp } }

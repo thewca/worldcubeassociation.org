@@ -27,12 +27,13 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   ```
   If some changes are made to this hook, you will have to update it running this command from the repository's root directory: `BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --sign`.
 
-## Run using Docker (simplest option, but only runs the Rails portions of the site)
+## Run using Docker
 
 - Install [Docker](https://docs.docker.com/get-docker/) (remember to complete the [Linux post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) if you're on Linux)
 - Install docker-compose. The best way to get an up-to-date version is to get it from their [releases page](https://github.com/docker/compose/releases)
 - Navigate into the repository's main directory (`worldcubeassociation.org`)
 - To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal)
+- If you want to run the php part of the website as well, run `docker compose -f docker-compose.yml -f docker-compose.php.yml up`
 - To run tests, run `docker-compose exec wca_on_rails bash -c "RAILS_ENV=test bin/rake db:reset && RAILS_ENV=test bin/rake assets:precompile && bin/rspec"`
 - If you're using Visual Studio Code to develop, you can [attach it to the Docker container](https://code.visualstudio.com/docs/remote/containers) so that your extensions can take advantage of the Ruby environment and so the terminal runs from inside the container
 
@@ -51,24 +52,15 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   Feel free to take a look at our [chef recipe](https://github.com/thewca/worldcubeassociation.org/blob/master/chef/site-cookbooks/wca/recipes/default.rb#L6-L23)
   for the accurate versions we use and how we install them.
   Please note that other versions may work, but it is not guaranteed.
-  3. `bundle install && bin/yarn`
-  4. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export). Depending on your computer it may take a long time. Alternatively you can run `bin/rake db:reset` which will create the database and seed it with random data (it's way faster, but less representative of our website content).
-  5. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
+  3. Install `libyaml` using your package manager of choice, eg. [Mac](https://formulae.brew.sh/formula/libyaml) or [Ubuntu](https://launchpad.net/ubuntu/+source/libyaml)
+  4. `bundle install && bin/yarn`
+  5. `bin/rake db:load:development` - Download and import the [developer's database export](https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export). Depending on your computer it may take a long time. Alternatively you can run `bin/rake db:reset` which will create the database and seed it with random data (it's way faster, but less representative of our website content).
+  6. `bin/rails server` - Run rails. The server will be accessible at localhost:3000
 - Run tests.
   1. `RAILS_ENV=test bin/rake db:reset` - Set up test database.
   2. `RAILS_ENV=test bin/rake assets:precompile` - Compile some assets needed for tests to run.
   3. `bin/rspec` - Run tests.
 - [Mailcatcher](http://mailcatcher.me/) is a good tool for catching emails in development.
-
-## Run in Vagrant (gets everything working, but is very slow, recommended only if you need to run the PHP portions of the website)
-
-- Install [Vagrant](https://www.vagrantup.com/), which requires
-  [VirtualBox](https://www.virtualbox.org/).
-- `vagrant up all` - Once the VM finishes initializing (which can take some time),
-  the website will be accessible at [http://localhost:2331](http://localhost:2331).
-  - Note: There are some minor [issues with development on Windows](https://github.com/thewca/worldcubeassociation.org/issues/393).
-- All emails will be accessible at `http://localhost:2332`.
-- Please take a look at this [wiki page](https://github.com/thewca/worldcubeassociation.org/wiki/Misc.-important-commands-to-know) for more detailed informations about the application's internals.
 
 # Production
 

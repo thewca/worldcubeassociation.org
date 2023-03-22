@@ -1,9 +1,0 @@
-import _ from 'lodash';
-
-export default {
-  byId: _.mapValues(<%= RoundType.all.index_by(&:id).to_json.html_safe %>, extend),
-};
-
-function extend(rawFormat) {
-  return _.mapKeys(rawFormat, (v, k) => _.camelCase(k));
-}
