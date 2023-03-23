@@ -8,8 +8,6 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
   <p><%= t("results.last_updated_html", timestamp: wca_local_time(record_timestamp)) %></p>
-
-  <%# Note: When removing this announcement and its translation string, also remove results.heading_disabled_functions from i18n files. %>
   <p><i><%= t('results.filters_fixes_underway') %></i></p>
 
   <div id="results-selector" class="results-select form-inline">
