@@ -1,41 +1,51 @@
 # frozen_string_literal: true
 
 module CompetitionsHelper
+  def get_registration_status_message_if_registered(competition, user)
+    # Helper function for `competition_message_for_user`
+    # Determines what message to display to the user based on the state of their registration.
+
+    registration_status = competition.registrations.find_by_user_id(user.id)
+    return unless registration_status.present?
+
+    if registration_status.accepted?
+      t('competitions.messages.tooltip_registered')
+    elsif registration_status.deleted?
+      t('competitions.messages.tooltip_deleted')
+    else # If not delted or accepted, assume user is on the waiting list
+      t('competitions.messages.tooltip_waiting_list')
+    end
+  end
+
+  def get_competition_status_message(competition)
+    # Helper function for `competition_message_for_user`
+    # Returns a string indicating (a) whether the competition is visible, and
+    # (b) whether the competition is confirmed, based on the competition's state.
+
+    visible = competition.showAtAll?
+
+    if competition.confirmed?
+      visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
+    else
+      visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
+    end
+  end
+
   def competition_message_for_user(competition, user)
     # Generates a list of messages, which will be combined and displayed in a tooltip to the user in their bookmarked
     # competitions list when they hover over a competition.
     # Message indicates the state of the competition, and the state of the user's registration.
 
-    messages = [] # Messages to be combined
+    messages_to_join = []
 
-    if competition.cancelled? # If the competition is cancelled, just return the cancellation message to the user.
+    if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
       return t('competitions.messages.cancelled')
     end
 
-    # Registration state messages
-    registration = competition.registrations.find_by_user_id(user.id) # Variable for the registration state
+    messages_to_join << get_registration_status_message_if_registered(competition, user)
+    messages_to_join << get_competition_status_message(competition)
 
-    if registration # Only add messages if the user has a registration state
-      messages << if registration.accepted?
-                    t('competitions.messages.tooltip_registered')
-                  elsif registration.deleted?
-                    t('competitions.messages.tooltip_deleted')
-                  else # If not delted or accepted, assume user is on the waiting list
-                    t('competitions.messages.tooltip_waiting_list')
-                  end
-    end
-
-    # Competition state messages
-    visible = competition.showAtAll?
-
-    messages << if competition.confirmed?
-                  visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
-                else
-                  visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
-                end
-
-    # Join the messages together into one string, and return that string.
-    messages.join(' ')
+    messages_to_join.join(' ')
   end
 
   def pretty_print_result(result, short: false)
