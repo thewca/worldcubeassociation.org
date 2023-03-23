@@ -344,14 +344,17 @@ class AdminController < ApplicationController
     )
   end
 
-  def do_finish_unfinished_persons
+  def complete_persons
     action_params = params.require(:finish_persons_form)
                           .permit(:competition_id)
 
     @finish_persons = FinishPersonsForm.new(action_params)
     @persons_to_finish = @finish_persons.search_persons
 
-    render :finish_unfinished_persons
+    if @persons_to_finish.empty?
+      flash[:warning] = "There are no persons to complete for the selected competition"
+      redirect_to action: :finish_unfinished_persons
+    end
   end
 
   def do_complete_persons
@@ -361,6 +364,8 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       params[:person_completions].each do |person_key, procedure|
+        next if [:competition_id, :continue_batch].include? person_key.to_sym
+
         old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
 
         case procedure[:action]
@@ -390,7 +395,19 @@ class AdminController < ApplicationController
       end
     end
 
-    redirect_to :admin_finish_persons
+    continue_batch = params.dig(:person_completions, :continue_batch)
+    continue_batch = ActiveRecord::Type::Boolean.new.cast(continue_batch)
+
+    if continue_batch
+      competition_id = params.dig(:person_completions, :competition_id)
+      can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_id).any?
+
+      if can_continue
+        return redirect_to action: :complete_persons, finish_persons_form: { competition_id: competition_id }
+      end
+    end
+
+    redirect_to action: :finish_unfinished_persons
   end
 
   def reassign_wca_id

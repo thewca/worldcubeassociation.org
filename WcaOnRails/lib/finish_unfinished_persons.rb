@@ -9,15 +9,23 @@ module FinishUnfinishedPersons
   WITH_ACCENT = 'ÀÁÂÃÄÅÆĂÇĆČÈÉÊËÌÍÎÏİÐĐÑÒÓÔÕÖØÙÚÛÜÝÞřßŞȘŠŚşșśšŢȚţțŻŽźżžəàáâãäåæăąắặảầấạậāằçćčèéêëęěễệếềēểğìíîïịĩіıðđķКкŁłļñńņňòóôõöøỗọơốờőợồộớùúûüưứữũụűūůựýýþÿỳỹ'
   WITHOUT_ACCENT = 'aaaaaaaaccceeeeiiiiiddnoooooouuuuybrsssssssssttttzzzzzaaaaaaaaaaaaaaaaaaaccceeeeeeeeeeeegiiiiiiiiddkKklllnnnnoooooooooooooooouuuuuuuuuuuuuyybyyy'
 
-  def self.search_persons(competition_id = nil)
+  # The infamous '20 persons limit' is still in place because computing name similarities across the entire DB is expensive.
+  # We try a better job by handling it though, as the page tries to load the next batch after submission.
+  MAX_PER_BATCH = 20
+
+  def self.unfinished_results_scope(competition_id = nil)
     results_scope = Result.includes(:competition, :inbox_person)
                           .select(:personId, :personName, :competitionId, :countryId)
 
     results_scope = results_scope.where(competitionId: competition_id) if competition_id.present?
 
-    unfinished_person_results = results_scope.where("(personId = '' OR personId REGEXP '^[0-9]+$')")
-                                             .group(:personId, :personName, :competitionId, :countryId)
-                                             .order(:personName)
+    results_scope.where("(personId = '' OR personId REGEXP '^[0-9]+$')")
+                 .group(:personId, :personName, :competitionId, :countryId)
+                 .order(:personName)
+  end
+
+  def self.search_persons(competition_id = nil)
+    unfinished_person_results = self.unfinished_results_scope(competition_id)
 
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other
@@ -25,6 +33,8 @@ module FinishUnfinishedPersons
     @persons_cache = nil
 
     unfinished_person_results.each do |res|
+      next if unfinished_persons.length >= MAX_PER_BATCH
+
       competition_year = res.competition.year
       inbox_dob = res.inbox_person&.dob
 
@@ -196,5 +206,6 @@ module FinishUnfinishedPersons
 
     results_scope.update_all(personName: new_name, countryId: new_country, personId: new_wca_id)
   end
+
   # rubocop:enable Metrics/ParameterLists
 end

@@ -220,7 +220,7 @@ Rails.application.routes.draw do
   get '/admin/finish_persons' => 'admin#finish_persons'
   post '/admin/finish_persons' => 'admin#do_finish_persons'
   get '/admin/finish_unfinished_persons' => 'admin#finish_unfinished_persons'
-  post '/admin/finish_unfinished_persons' => 'admin#do_finish_unfinished_persons'
+  get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'

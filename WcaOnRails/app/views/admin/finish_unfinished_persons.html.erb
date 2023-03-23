@@ -1,6 +1,6 @@
 <% provide(:title, 'Finish unfinished persons') %>
 
-<div class="<%= @persons_to_finish ? "container-fluid" : "container" %>">
+<div class="container">
   <%= render layout: "nav" do %>
     <h2><%= yield(:title) %></h2>
     <div>
@@ -29,92 +29,9 @@
       <hr/>
     </div>
 
-    <% if @persons_to_finish %>
-      <%= simple_form_for :person_completions, url: admin_complete_persons_path do |f| %>
-        <%= wca_table table_class: 'wca-persons', greedy: false do %>
-          <thead>
-          <tr>
-            <th></th><!-- Empty header for radio toggle -->
-            <th class="name">Person Name</th>
-            <th class="country">Country</th>
-            <th class="wca-id">WCA ID</th>
-            <th class="dob">Date of Birth</th>
-            <th class="name">Person Name</th>
-            <th class="country">Country ID</th>
-            <th class="wca-id">Semi ID</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          <% @persons_to_finish.each do |p| %>
-            <% country = Country.c_find(p[:country_id]) %>
-            <% case_id = "#{p[:person_name]}|#{p[:country_id]}|#{p[:person_id]}|#{p[:competition_id]}" %>
-
-            <tr>
-              <td colspan="8" class="text-center"><b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)</td>
-            </tr>
-
-            <tr>
-              <td>
-                <%= f.input "#{case_id}][action", label: false, hint: false do %>
-                  <%= f.radio_button "#{case_id}][action", :create, checked: true %>
-                <% end %>
-              </td>
-              <td><%= display_string p[:person_name] %></td>
-              <td><%= country.name %></td>
-              <td>(pending)</td>
-              <td><%= p[:person_dob] %></td>
-              <td><%= f.input "#{case_id}][new_name", input_html: { value: p[:person_name] }, label: false, hint: false %></td>
-              <td><%= f.input "#{case_id}][new_country", collection: Country.all_sorted_by(I18n.locale, real: true), value_method: :id, label_method: :name, selected: p[:country_id], label: false, hint: false %></td>
-              <td><%= f.input "#{case_id}][new_semi_id", input_html: { value: p[:computed_semi_id] }, maxlength: 8, label: false, hint: false %></td>
-            </tr>
-
-            <% p[:similar_persons].each do |sim, np, cp| %>
-              <% name_identical = FinishUnfinishedPersons.extract_roman_name(sim.name) == FinishUnfinishedPersons.extract_roman_name(p[:person_name]) %>
-              <% dob_identical = sim.dob == p[:person_dob] %>
-
-              <% radio_checked = name_identical || dob_identical %>
-
-              <tr style="<%= radio_checked ? "background-color: #F2DEDE" : "" %>">
-                <td>
-                  <%= f.input "#{case_id}][action", label: false, hint: false do %>
-                    <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: radio_checked %>
-                  <% end %>
-                </td>
-                <td><%= display_string sim.name %></td>
-                <td><%= sim.country.name %></td>
-                <td>
-                  <% if sim.wca_id.present? %>
-                    <%= link_to sim.wca_id, person_path(sim.wca_id) %>
-                  <% else %>
-                    TODO Peek
-                  <% end %>
-                </td>
-                <td><%= sim.dob %></td>
-                <td class="text-right"><%= number_to_percentage np * 100 %></td>
-                <td class="text-right"><%= cp %></td>
-                <td></td>
-              </tr>
-            <% end %>
-
-            <tr>
-              <td>
-                <%= f.input "#{case_id}][action", label: false, hint: false do %>
-                  <%= f.radio_button "#{case_id}][action", :skip %>
-                <% end %>
-              </td>
-              <td colspan=7>I'm not sure yet</td>
-            </tr>
-          <% end %>
-          </tbody>
-        <% end %>
-        <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
-      <% end %>
-    <% else %>
-      <%= simple_form_for @finish_persons, url: admin_finish_unfinished_persons_path do |f| %>
-        <%= f.input :competition_id, as: :competition_id, only_one: true, label: "Competition ID", hint: "Leave blank to check for all competitions" %>
-        <%= f.button :submit, value: "Check now!", class: "btn-primary" %>
-      <% end %>
+    <%= simple_form_for @finish_persons, url: admin_complete_persons_path, method: :get do |f| %>
+      <%= f.input :competition_id, as: :competition_id, only_one: true, label: "Competition ID", hint: "Leave blank to check for all competitions" %>
+      <%= f.button :submit, value: "Check now!", class: "btn-primary" %>
     <% end %>
   <% end %>
 </div>
