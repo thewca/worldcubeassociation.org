@@ -172,7 +172,6 @@ Layout/SpaceAroundOperators:
 Layout/IndentationConsistency:
   EnforcedStyle: indented_internal_methods
 
-
 Style/StringLiteralsInInterpolation:
   Enabled: false
 
