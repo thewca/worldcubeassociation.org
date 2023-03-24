@@ -410,6 +410,24 @@ class AdminController < ApplicationController
     redirect_to action: :finish_unfinished_persons
   end
 
+  def peek_unfinished_results
+    @person_name = params.require(:person_name)
+    @country_id = params.require(:country_id)
+    @person_id = params.require(:person_id)
+
+    all_results = Result.select("Results.*, FALSE AS `muted`")
+                        .joins(:event, :round_type)
+                        .where(
+                          personName: @person_name,
+                          countryId: @country_id,
+                          personId: @person_id,
+                        )
+                        .order("Events.rank, RoundTypes.rank DESC")
+
+    @results_by_competition = all_results.group_by(&:competition_id)
+                                         .transform_keys { |id| Competition.find(id) }
+  end
+
   def reassign_wca_id
     @reassign_wca_id = ReassignWcaId.new
     @reassign_wca_id_validated = false

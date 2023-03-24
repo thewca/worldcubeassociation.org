@@ -222,6 +222,7 @@ Rails.application.routes.draw do
   get '/admin/finish_unfinished_persons' => 'admin#finish_unfinished_persons'
   get '/admin/complete_persons' => 'admin#complete_persons'
   post '/admin/complete_persons' => 'admin#do_complete_persons'
+  get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'

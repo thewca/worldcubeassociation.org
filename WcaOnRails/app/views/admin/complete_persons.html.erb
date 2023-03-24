@@ -37,7 +37,7 @@
           </td>
           <td><%= display_string p[:person_name] %></td>
           <td><%= country.name %></td>
-          <td>(pending)</td>
+          <td><%= link_to "(results)", admin_peek_unfinished_results_path(**p.slice(:person_name, :country_id, :person_id)), target: '_blank' %></td>
           <td><%= p[:person_dob] %></td>
           <td><%= f.input "#{case_id}][new_name", input_html: { value: p[:person_name] }, label: false, hint: false %></td>
           <td><%= f.input "#{case_id}][new_country", collection: Country.all_sorted_by(I18n.locale, real: true), value_method: :id, label_method: :name, selected: p[:country_id], label: false, hint: false %></td>
@@ -62,7 +62,7 @@
               <% if sim.wca_id.present? %>
                 <%= link_to sim.wca_id, person_path(sim.wca_id) %>
               <% else %>
-                TODO Peek
+                <%= link_to "(results)", admin_peek_unfinished_results_path(person_name: sim.name, country_id: sim.countryId, person_id: sim.wca_id), target: '_blank' %>
               <% end %>
             </td>
             <td><%= sim.dob %></td>
