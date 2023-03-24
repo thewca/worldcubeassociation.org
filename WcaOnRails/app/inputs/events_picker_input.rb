@@ -8,7 +8,7 @@ class EventsPickerInput < SimpleForm::Inputs::Base
     merged_input_options = merge_wrapper_options(input_html_options, wrapper_options)
 
     allowed_events = @options[:allowed_events] || Event.official
-    selected_events = @options[:selected_events] || [@options[:selected_event]].compact || []
+    selected_events = @options[:selected_events] || [@options[:selected_event]].compact.presence || [@builder.object.send(attribute_name)].compact.presence || []
 
     only_one = @options[:only_one].present? && @options[:only_one]
     include_all = @options[:include_all].present? && @options[:include_all]
@@ -23,7 +23,7 @@ class EventsPickerInput < SimpleForm::Inputs::Base
 
       allowed_events.each do |event|
         icon = template.cubing_icon(event.id, data: { toggle: "tooltip", placement: "top" }, title: event.name)
-        selected = selected_events.include?(event)
+        selected = selected_events.include?(event.id)
 
         add_input_field(only_one, event.id, icon, merged_input_options, selected: selected)
       end
