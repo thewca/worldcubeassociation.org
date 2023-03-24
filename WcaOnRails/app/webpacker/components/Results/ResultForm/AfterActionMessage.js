@@ -39,15 +39,6 @@ function AfterActionMessage({
             </List.Item>
             <List.Item>
               <a
-                href={`/results/admin/check_rounds.php?competitionId=${competitionId}&show=Show`}
-                target="_blank"
-                rel="noreferrer"
-              >
-                Check Rounds
-              </a>
-            </List.Item>
-            <List.Item>
-              <a
                 href={`/results/admin/check_regional_record_markers.php?competitionId=${competitionId}&show=Show`}
                 target="_blank"
                 rel="noreferrer"
