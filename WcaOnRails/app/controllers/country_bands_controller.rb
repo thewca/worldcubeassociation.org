@@ -51,20 +51,20 @@ class CountryBandsController < ApplicationController
 
   private
 
-  def id_from_params
-    Integer(params.require(:id))
-  rescue ArgumentError
-    nil
-  end
-
-  def set_instance_variables
-    @in_band = CountryBand.where(number: @number).map(&:country).sort_by(&:name).map(&:iso2)
-    # The list of unused countries should contain both unused countries and countries for the selected band.
-    # Therefore we can get the list of relevant countries by substracting all the
-    # other bands countries to the overall list of countries.
-    used_countries = CountryBand.where.not(number: @number).map(&:country)
-    @unused = (Country.real - used_countries).map do |c|
-      { name: c.name, iso2: c.iso2 }
+    def id_from_params
+      Integer(params.require(:id))
+    rescue ArgumentError
+      nil
     end
-  end
+
+    def set_instance_variables
+      @in_band = CountryBand.where(number: @number).map(&:country).sort_by(&:name).map(&:iso2)
+      # The list of unused countries should contain both unused countries and countries for the selected band.
+      # Therefore we can get the list of relevant countries by substracting all the
+      # other bands countries to the overall list of countries.
+      used_countries = CountryBand.where.not(number: @number).map(&:country)
+      @unused = (Country.real - used_countries).map do |c|
+        { name: c.name, iso2: c.iso2 }
+      end
+    end
 end

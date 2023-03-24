@@ -178,11 +178,11 @@ RSpec.describe ACV do
 
   private
 
-  def build_person(result_kind, competition)
-    if result_kind == :result
-      FactoryBot.build(:person)
-    else
-      FactoryBot.build(:inbox_person, competitionId: competition.id)
+    def build_person(result_kind, competition)
+      if result_kind == :result
+        FactoryBot.build(:person)
+      else
+        FactoryBot.build(:inbox_person, competitionId: competition.id)
+      end
     end
-  end
 end
