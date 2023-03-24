@@ -181,7 +181,7 @@ class AdminController < ApplicationController
           flash.now[:success] = "Successfully fixed #{@person.name}."
           if @person.saved_change_to_countryId?
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
-            <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
+            <a href='#{admin_check_regional_records_path}'>check_regional_record_markers</a>.".html_safe
           end
         else
           flash.now[:danger] = "Error while fixing #{@person.name}."
