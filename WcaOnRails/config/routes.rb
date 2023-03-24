@@ -215,7 +215,7 @@ Rails.application.routes.draw do
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/check_regional_records' => 'admin#check_regional_records'
-  post '/admin/check_regional_records' => 'admin#do_check_regional_records'
+  get '/admin/override_regional_records' => 'admin#override_regional_records'
   post '/admin/override_regional_records' => 'admin#do_override_regional_records'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'

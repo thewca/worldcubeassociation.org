@@ -251,18 +251,16 @@ class AdminController < ApplicationController
     )
   end
 
-  def do_check_regional_records
+  def override_regional_records
     action_params = params.require(:check_regional_records_form)
                           .permit(:competition_id, :event_id)
 
     @check_records_request = CheckRegionalRecordsForm.new(action_params)
     @check_results = @check_records_request.run_check
-
-    render :check_regional_records
   end
 
   def do_override_regional_records
-    action_params = params[:regional_record_overrides]
+    action_params = params[:regional_record_overrides] || []
 
     ActiveRecord::Base.transaction do
       action_params.each do |id_and_type, marker|
@@ -271,7 +269,7 @@ class AdminController < ApplicationController
         result_id, result_type = id_and_type.split('-')
         record_marker = "regional#{result_type}Record".to_sym
 
-        Result.find(result_id).update(record_marker => marker)
+        Result.where(id: result_id).update_all(record_marker => marker)
       end
     end
 
