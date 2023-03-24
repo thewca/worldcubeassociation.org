@@ -1458,6 +1458,17 @@ th:
         form_error:
           zero: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
+      error_pages:
+        #original_hash: 1042478
+        500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
+        #original_hash: d815249
+        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: b61e305
+        400_error: ไม่มีหน้าที่คุณกำลังมองหา
+        #original_hash: 8b309f5
+        400_contact: >-
+          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
+          ID
     doorkeeper:
       applications:
         help:
@@ -2362,6 +2373,8 @@ th:
         card_information: ข้อมูลบัตร
         #original_hash: bc8091a
         cardholder_name: ผู้ถือบัตร
+        #original_hash: 919710d
+        show_donation: ฉันต้องการบริจาคเพิ่มเติม ซึ่งจะไปที่ทีมผู้จัดการแข่งขันเท่านั้น
       alerts:
         #original_hash: a34940e
         not_a_number: กรุณาใส่จำนวนให้ถูกต้อง
@@ -2547,6 +2560,10 @@ th:
       stripe_connected: >-
         คุณได้เชื่อมต่อ Stripe สำเร็จแล้ว
         และคุณสามารถรับการชำระค่าสมัครสำหรับการแข่งขันครั้งนี้ได้
+      #original_hash: b8fc60f
+      stripe_disconnected_success: ตัดการเชื่อมต่อบัญชี Stripe สำเร็จแล้ว
+      #original_hash: e1a250c
+      stripe_disconnected_failure: เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี Stripe
       #original_hash: 0a4bb53
       stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
       #original_hash: 724cf0d
@@ -3142,7 +3159,7 @@ th:
     cancel_mistake: ทำผิดพลาดหรือไม่?
     #original_hash: 0fb43d5
     note_before_cancel: 'Note: การแข่งขันที่ได้รับการยืนยันแล้วเท่านั้นที่ถูกยกเลิกได้'
-    #original_hash: 19a0ac2
+    #original_hash: b38ee61
     orga_close_reg: ปิดการรับสมัคร
     #original_hash: b2bfea9
     orga_close_reg_confirm: คุณแน่ใจหรือไม่ว่าต้องการปิดการรับสมัคร คุณจะไม่สามารถแก้ไขมันได้
@@ -3150,6 +3167,12 @@ th:
     note_reg_not_full_orga_close_reg: >-
       หมายเหตุ:
       คุณสามารถปิดการสมัครการแข่งขันได้เมื่อผู้เข้าแข่งขันเต็มแล้วเท่านั้น
+    #original_hash: 1ae594d
+    stripe_disconnect: ยกเลิกการเชื่อมต่อบัญชี Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี Stripe?
+      การดำเนินการนี้ไม่สามารถยกเลิกได้
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:

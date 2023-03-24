@@ -53,6 +53,7 @@ PreCommit:
 
   RuboCop:
     enabled: true
+    command: ['bundle', 'exec', 'rubocop', '--config', './WcaOnRails/.rubocop.yml']
     on_warn: fail # Treat all warnings as failures
 
   IllegalStrings:

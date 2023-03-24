@@ -2,18 +2,18 @@
 
 class TestDbManager
   CONSTANT_TABLES = %w(
-    Countries
     Continents
+    Countries
+    eligible_country_iso2s_for_championship
     Events
-    RoundTypes
     Formats
     preferred_formats
+    RoundTypes
     teams
-    eligible_country_iso2s_for_championship
   ).freeze
 
   def self.fill_tables
-    Seedbank.load_tasks
+    Rails.application.load_tasks
     Rake::Task["db:seed:common"].invoke
   end
 end

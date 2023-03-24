@@ -809,6 +809,12 @@ en:
         form_error:
           one: "The form contains one error:"
           other: "The form contains %{count} errors:"
+      error_pages:
+        #context: The error pages in the case of 500s or 400s
+        500_error: "We're sorry, but something went wrong."
+        500_contact: "If you report this error to the Software Team please mention the Request ID"
+        400_error: "The page you were looking for doesn't exist."
+        400_contact: "If you think this is a mistake please contact the Software Team and include the Request ID"
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -1291,6 +1297,7 @@ en:
         donation: "Donation"
         card_information: "Card information"
         cardholder_name: "Cardholder name"
+        show_donation: "I would like to make an additional optional donation that will go only to the organization team"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
@@ -1368,6 +1375,8 @@ en:
       not_confirmed_visible: "This competition is not confirmed but visible."
       not_confirmed_not_visible: "This competition is not confirmed and not visible."
       stripe_connected: "You have now successfully connected your Stripe account and can now receive registration payments for this competition."
+      stripe_disconnected_success: "Sucessfully disconnected the Stripe account."
+      stripe_disconnected_failure: "There was an error with disconnecting the Stripe account."
       stripe_not_connected: "There was a problem and we could not connect your Stripe account."
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
@@ -1669,9 +1678,11 @@ en:
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
     cancel_mistake: "Made a mistake?"
     note_before_cancel: "Note: only confirmed competitions can be cancelled."
-    orga_close_reg: "Close registration."
+    orga_close_reg: "Close registration"
     orga_close_reg_confirm: "Are you sure you want to close registration? You cannot undo this."
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
+    stripe_disconnect: "Disconnect Stripe account"
+    stripe_disconnect_confirm: "Are you sure you want to disconnect the Stripe account? This action cannot be undone."
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
       general_info: "General info"
@@ -1795,7 +1806,7 @@ en:
     records:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
-    heading_disabled_functions: "Please note that some filters (such as past years) are temporarily disabled. If you have experience in SQL optimisations, please contact the WST!"
+    filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
     tooltip_no_years: "Our database is too large to compute historical data"
     tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
