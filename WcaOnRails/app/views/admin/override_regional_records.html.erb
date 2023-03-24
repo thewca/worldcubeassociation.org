@@ -16,7 +16,7 @@
             <%= cubing_icon(event.id) %> <%= event.name %>
           </h3>
 
-          <% value_check_results = rows.sort_by { |row| [row[:competition_start_date], row[:result].competition_id, row[:result].round_type_id] } %>
+          <% value_check_results = rows.sort_by { |row| [row[:competition].start_date, row[:competition].id, row[:result].round_type_id] } %>
 
           <% if value_check_results.empty? %>
             All good, carry on!
@@ -44,13 +44,14 @@
               <tbody>
               <% value_check_results.each do |row| %>
                 <% result = row[:result] %>
+                <% competition = row[:competition] %>
 
                 <% new_competition = result.competition_id != announced_competition_id; announced_competition_id = result.competition_id %>
                 <% new_round = result.round_type_id != announced_round_id; announced_round_id = result.round_type_id %>
 
                 <% if new_competition || new_round %>
                   <tr>
-                    <td colspan=12 class="text-center"><%= row[:competition_name] %>
+                    <td colspan=12 class="text-center"><%= competition.name %>
                       - <%= result.round_type.name %></td>
                   </tr>
                 <% end %>
@@ -66,7 +67,7 @@
                   <% computed_color = markers_same ? '999' : '0E0' %>
                   <% stored_color = markers_same ? '999' : 'F00' %>
 
-                  <td class="date"> <%= wca_date_range(row[:competition_start_date], row[:competition_end_date]) %></td>
+                  <td class="date"> <%= wca_date_range(competition.start_date, competition.end_date) %></td>
                   <td class="competition">
                     <%= link_to result.competition_id, competition_path(result.competition_id) %>
                   </td>

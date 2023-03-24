@@ -192,9 +192,7 @@ module CheckRegionalRecords
 
         {
           computed_marker: computed_marker,
-          competition_start_date: r.competition.start_date,
-          competition_end_date: r.competition.end_date,
-          competition_name: r.competition.name,
+          competition: r.competition,
           result: r,
         }
       end.compact
