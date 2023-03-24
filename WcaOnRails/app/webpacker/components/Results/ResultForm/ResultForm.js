@@ -213,6 +213,13 @@ function ResultFormWrapper({ result, sync }) {
   const [created, setCreated] = useState(undefined);
   const [deleted, setDeleted] = useState(undefined);
 
+  const [edited, setEdited] = useState(undefined);
+
+  const setUpdated = useCallback((data) => {
+    setEdited(data);
+    sync();
+  }, [sync, setEdited]);
+
   if (created) {
     return (
       <AfterActionMessage
@@ -221,6 +228,26 @@ function ResultFormWrapper({ result, sync }) {
         competitionId={result.competition_id}
         response={created.response}
       />
+    );
+  }
+  if (edited) {
+    return (
+      <div>
+        <AfterActionMessage
+          wcaId={edited.result.personId}
+          eventId={result.event_id}
+          competitionId={result.competition_id}
+          response={edited.response}
+        />
+        <Button
+          secondary
+          loading={saving}
+          disabled={saving}
+          onClick={() => setEdited(undefined)}
+        >
+          Go back for more edits
+        </Button>
+      </div>
     );
   }
   if (deleted) {
@@ -239,7 +266,7 @@ function ResultFormWrapper({ result, sync }) {
       save={save}
       saving={saving}
       onCreate={setCreated}
-      onUpdate={sync}
+      onUpdate={setUpdated}
       onDelete={setDeleted}
     />
   );
