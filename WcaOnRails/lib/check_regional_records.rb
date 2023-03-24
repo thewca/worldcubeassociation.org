@@ -80,14 +80,16 @@ module CheckRegionalRecords
                                              .where("#{value_column} > 0")
                                              .group("eventId, competitionId, roundTypeId, countryId")
 
-    minimum_results = results_scope.includes(:competition)
-                                   .select("Results.*")
-                                   .from("Results, (#{minimum_result_candidates.to_sql}) AS `helper`")
-                                   .where("Results.eventId = helper.eventId")
-                                   .where("Results.competitionId = helper.competitionId")
-                                   .where("Results.roundTypeId = helper.roundTypeId")
-                                   .where("Results.countryId = helper.countryId")
-                                   .where("Results.#{value_column} = helper.`value`")
+    # Deliberately NOT using `results_scope` here, because the necessary event/competition filtering is
+    # implicitly included via the `minimum_result_candidate` view (and doubling up would make the query much slower!)
+    minimum_results = Result.includes(:competition)
+                            .select("Results.*")
+                            .from("Results, (#{minimum_result_candidates.to_sql}) AS `helper`")
+                            .where("Results.eventId = helper.eventId")
+                            .where("Results.competitionId = helper.competitionId")
+                            .where("Results.roundTypeId = helper.roundTypeId")
+                            .where("Results.countryId = helper.countryId")
+                            .where("Results.#{value_column} = helper.`value`")
 
     (marked_records + minimum_results).uniq(&:id)
                                       .sort_by do |r|
