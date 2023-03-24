@@ -2,7 +2,9 @@
 
 module ResultsValidators
   class EventsRoundsValidator < GenericValidator
-    NOT_333_MAIN_EVENT_WARNING = "The selected main event for this competition is %{main_event_id}. Please give WRT an explanation of how that event was treated as the main event of the competition."
+    NOT_333_MAIN_EVENT_WARNING = "The selected main event for this competition is %{main_event_id}. " \
+                                 "How was that event treated as the main event of the competition? " \
+                                 "Please give WRT a brief explanation (e.g. number of rounds, prizes, declared winner of the competition, ...)."
     NO_MAIN_EVENT_WARNING = "There is no selected main event for this competition. Please let WRT know that this is correct."
     UNEXPECTED_RESULTS_ERROR = "Results are present for %{event_id}, however it is not listed as an official event. " \
                                "Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
