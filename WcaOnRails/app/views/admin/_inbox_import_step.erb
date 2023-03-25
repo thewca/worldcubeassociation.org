@@ -4,7 +4,7 @@
   Import <code><%= render_step.to_s.camelize %></code>s
   <% if @inbox_step == render_step %>
     <%= link_to ui_icon('refresh') %>
-    <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), method: :post, data: { confirm: "You're about to remove #{@existing_data[render_step]} entries from -->#{render_step.to_s.camelize}<--\n\nPlease confirm below if you're sure." } %>
+    <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), method: :post, data: { confirm: delete_inbox_confirm_message(render_step) } %>
   <% end %>
 </h2>
 
@@ -25,8 +25,7 @@
   <% elsif render_step == :inbox_person %>
     <%# TODO: Redo link pending other PR %>
     <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+', target: '_blank' %>
-      to
-      newcomers</p>
+      to newcomers</p>
 
     <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending</p>
 
@@ -40,7 +39,7 @@
 
     <% if @existing_data[:newcomer_result] == 0 %>
       <p>You
-        can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_person]} entries from -->InboxPersons<--\n\nPlease confirm below if you're sure." } %>
+        can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id), method: :delete, data: { confirm: delete_inbox_confirm_message(:inbox_person) } %>
         the inbox data, as all rows seem to have been fully imported.</p>
     <% end %>
   <% end %>

@@ -46,7 +46,7 @@
 
                   <td class="text-center <%= has_assoc ? "success" : "warning" %>">
                     <% if has_assoc %>
-                      <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: "You're about to delete #{assoc_count} entries from -->#{model.name}<--\n\nPlease confirm below if you're sure." } %>)
+                      <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: delete_inbox_confirm_message(model.name, assoc_count) } %>)
                     <% else %>
                       Nope.
                     <% end %>
