@@ -21,7 +21,7 @@
           <% if value_check_results.empty? %>
             All good, carry on!
           <% else %>
-            <%= wca_table table_class: "wca-results", greedy: false do %>
+            <%= wca_table table_class: "wca-results", striped: false, greedy: false do %>
               <thead>
               <tr>
                 <th class="date"> Date</th>
@@ -50,23 +50,23 @@
                 <% new_round = result.round_type_id != announced_round_id; announced_round_id = result.round_type_id %>
 
                 <% if new_competition || new_round %>
-                  <tr>
+                  <tr class="active">
                     <td colspan=12 class="text-center"><%= competition.name %>
                       - <%= result.round_type.name %></td>
                   </tr>
                 <% end %>
 
-                <tr>
-                  <% value_solve = result.send("#{value_column}_solve".to_sym) %>
+                <% value_solve = result.send("#{value_column}_solve".to_sym) %>
 
-                  <% computed_marker = row[:computed_marker] %>
-                  <% stored_marker = result.send("regional#{value_name}Record") %>
+                <% computed_marker = row[:computed_marker] %>
+                <% stored_marker = result.send("regional#{value_name}Record") %>
 
-                  <% markers_same = computed_marker == stored_marker %>
+                <% markers_same = computed_marker == stored_marker %>
 
-                  <% computed_color = markers_same ? '999' : '0E0' %>
-                  <% stored_color = markers_same ? '999' : 'F00' %>
+                <% computed_color = markers_same ? '999' : '0E0' %>
+                <% stored_color = markers_same ? '999' : 'F00' %>
 
+                <tr class="<%= "warning" unless markers_same %>">
                   <td class="date"> <%= wca_date_range(competition.start_date, competition.end_date) %></td>
                   <td class="competition">
                     <%= link_to result.competition_id, competition_path(result.competition_id) %>
@@ -125,3 +125,12 @@
     <%= f.button :submit, value: "Submit overrides", class: "btn-primary" %>
   <% end %>
 </div>
+
+<style>
+  /* Bootstrap gives margin-bottom globally to all forms.
+   Normally, this is reasonable to make HTML forms look nice.
+   But we're hacking form elements into a table here, which makes the table unusually wide otherwise. */
+  table .form-group {
+    margin-bottom: 0;
+  }
+</style>
