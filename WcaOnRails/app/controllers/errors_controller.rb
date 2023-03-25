@@ -12,15 +12,15 @@ class ErrorsController < ApplicationController
 
   private
 
-  def error_page(code)
-    supported_error_codes.fetch(code, "404")
-  end
+    def error_page(code)
+      supported_error_codes.fetch(code, "404")
+    end
 
-  def supported_error_codes
-    {
-      500 => "500",
-      501 => "500",
-      502 => "500",
-    }
-  end
+    def supported_error_codes
+      {
+        500 => "500",
+        501 => "500",
+        502 => "500",
+      }
+    end
 end

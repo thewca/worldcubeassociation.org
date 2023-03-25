@@ -31,13 +31,13 @@ class SubmitReportNagJob < SingletonApplicationJob
 
   private
 
-  def send_nag(competition)
-    competition.delegate_report.update(nag_sent_at: Time.now)
-    CompetitionsMailer.submit_report_nag(competition).deliver_now
-  end
+    def send_nag(competition)
+      competition.delegate_report.update(nag_sent_at: Time.now)
+      CompetitionsMailer.submit_report_nag(competition).deliver_now
+    end
 
-  def send_reminder(competition)
-    competition.delegate_report.update(reminder_sent_at: Time.now)
-    CompetitionsMailer.submit_report_reminder(competition).deliver_now
-  end
+    def send_reminder(competition)
+      competition.delegate_report.update(reminder_sent_at: Time.now)
+      CompetitionsMailer.submit_report_reminder(competition).deliver_now
+    end
 end
