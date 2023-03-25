@@ -2480,6 +2480,10 @@ sv:
         card_information: Kortinformation
         #original_hash: bc8091a
         cardholder_name: Kortinnehavarens namn
+        #original_hash: 919710d
+        show_donation: >-
+          Jag vill göra en extra frivillig donation till arrangörsteamet (för
+          svenska tävlingar tillfaller donationerna SveKub)
       alerts:
         #original_hash: a34940e
         not_a_number: Ange ett giltigt belopp.
@@ -2674,6 +2678,10 @@ sv:
       stripe_connected: >-
         Du har nu lyckats ansluta ditt Stripe-konto och kan nu ta emot
         betalningar med anmälningsavgifter för den här tävlingen.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Stripe-kontot har kopplats bort.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Det uppstod ett fel när Stripe-kontot skulle kopplas bort.
       #original_hash: 0a4bb53
       stripe_not_connected: Det uppstod ett problem och vi kunde inte ansluta ditt Stripe-konto.
       #original_hash: 724cf0d
@@ -3287,14 +3295,20 @@ sv:
     cancel_mistake: Gjort ett misstag?
     #original_hash: 0fb43d5
     note_before_cancel: 'OBS: Endast bekräftade tävlingar kan ställas in.'
-    #original_hash: 19a0ac2
-    orga_close_reg: Stäng anmälan.
+    #original_hash: b38ee61
+    orga_close_reg: Stäng anmälan
     #original_hash: b2bfea9
     orga_close_reg_confirm: Är du säker på att du vill stänga anmälan? Detta går inte att ångra.
     #original_hash: ce5686a
     note_reg_not_full_orga_close_reg: >-
       Notera: du kan endast stänga anmälan när gränsen för antal tävlande har
       nåtts.
+    #original_hash: 1ae594d
+    stripe_disconnect: Koppla bort Stripe-konto
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Är du säker på att du vill koppla bort Stripe-kontot? Detta kan inte
+      ångras.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Notera: anmälan är redan stängd.'
     show:
@@ -3507,11 +3521,11 @@ sv:
       title: Rekord
     #original_hash: e02fccb
     last_updated_html: 'Senast uppdaterad: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Observera att vissa filter (t.ex. tidigare år) är tillfälligt
-      inaktiverade. Om du har erfarenhet av SQL-optimeringar kan du kontakta
-      WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Notera att vissa filter (såsom tidigare år) temporärt är inaktiverade. WCA
+      Software Team arbetar för att återaktivera dessa filter - vi ber om ursäkt
+      för besväret.
     #original_hash: e3710ed
     tooltip_no_years: Vår databas är för stor för att beräkna historiska data.
     #original_hash: 357094b
