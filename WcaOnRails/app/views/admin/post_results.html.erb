@@ -63,13 +63,13 @@
         <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
       <p>You can also refer to the following table for Results and Scrambles:</p>
-      <%= wca_table do %>
+      <%= wca_table(greedy: false) do %>
         <thead>
         <tr>
           <th class="event">Event</th>
           <th class="round-format">Round</th>
-          <th>Fully imported Results</th>
-          <th>Fully imported Scrambles</th>
+          <th class="text-center">Fully imported Results</th>
+          <th class="text-center">Fully imported Scrambles</th>
         </tr>
         </thead>
         <tbody>
