@@ -84,11 +84,12 @@
               <td><%= r.round_type.name %></td>
 
               <% [Result, Scramble].each do |model| %>
-                <% has_assoc = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).any? %>
+                <% assoc_count = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).count %>
+                <% has_assoc = assoc_count > 0 %>
 
                 <td class="text-center <%= has_assoc ? "good_cell" : "bad_cell" %>">
                   <% if has_assoc %>
-                    Yes <%= link_to "X", competition_admin_delete_results_data_path(@competition.id, table: model.name, event: e.id, roundType: r.round_type.id), method: :delete %>
+                    Yes <%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: "You're about to delete #{assoc_count} entries from -->#{model.name}<--\n\nPlease confirm below if you're sure." } %>
                   <% else %>
                     Nope.
                   <% end %>
@@ -104,7 +105,7 @@
       <p>
         <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
         Remove all results and scrambles only, does not affect
-        persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, table: 'All', method: :delete) %>
+        persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, model: 'All'), method: :delete, data: { confirm: "You're about to delete ALL Results and Scrambles for #{@competition.id}.\nTHIS ACTION CANNOT BE UNDONE!\n\nPlease confirm below if you're sure." } %>
       </p>
     <% end %>
 

@@ -192,16 +192,23 @@ class AdminController < ApplicationController
   def delete_results_data
     @competition = competition_from_params
 
-    case params[:table]
-    when "All"
+    model = params.require(:model)
+
+    if model == 'All'
       @competition.results.destroy_all
       @competition.scrambles.destroy_all
-    when "Result"
-      Result.where(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType]).destroy_all
-    when "Scramble"
-      Scramble.where(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType]).destroy_all
     else
-      raise "Invalid table: #{params[:table]}"
+      event_id = params.require(:event_id)
+      round_type_id = params.require(:round_type_id)
+
+      case model
+      when Result.name
+        Result.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+      when Scramble.name
+        Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+      else
+        raise "Invalid table: #{params[:table]}"
+      end
     end
 
     redirect_to competition_admin_post_results_path
