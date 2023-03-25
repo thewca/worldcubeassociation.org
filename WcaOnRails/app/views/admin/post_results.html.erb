@@ -62,11 +62,21 @@
         <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
         <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
-      <p>You can also refer to the following table for Results and Scrambles:</p>
-      <%= wca_table(greedy: false) do %>
+      <p>You can also visit the following pages as sanity checks:</p>
+      <ul>
+        <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all') %></li>
+        <li><%= link_to "Post the results", admin_edit_competition_path(@competition) %></li>
+      </ul>
+    <% end %>
+
+    <% if @existing_data[:result] > 0 || @existing_data[:scramble] > 0 %>
+      <hr/>
+
+      <p>Here is a table detailing the import progress for Results and Scrambles:</p>
+      <%= wca_table striped: false, floatThead: false, greedy: false, table_class: "center-block" do %>
         <thead>
         <tr>
-          <th class="event">Event</th>
+          <th class="event text-right">Event</th>
           <th class="round-format">Round</th>
           <th class="text-center">Fully imported Results</th>
           <th class="text-center">Fully imported Scrambles</th>
@@ -80,16 +90,16 @@
 
           <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
             <tr>
-              <td><%= announced_event ? '' : e.name %></td>
-              <td><%= r.round_type.name %></td>
+              <td class="text-right <%= "active" unless announced_event %>" style="padding-left: 30px;"><%= e.name unless announced_event %></td>
+              <td class="<%= "active" unless announced_event %>" style="padding-right: 30px;"><%= r.round_type.name %></td>
 
               <% [Result, Scramble].each do |model| %>
                 <% assoc_count = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).count %>
                 <% has_assoc = assoc_count > 0 %>
 
-                <td class="text-center <%= has_assoc ? "good_cell" : "bad_cell" %>">
+                <td class="text-center <%= has_assoc ? "success" : "warning" %>">
                   <% if has_assoc %>
-                    Yes <%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: "You're about to delete #{assoc_count} entries from -->#{model.name}<--\n\nPlease confirm below if you're sure." } %>
+                    <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: "You're about to delete #{assoc_count} entries from -->#{model.name}<--\n\nPlease confirm below if you're sure." } %>)
                   <% else %>
                     Nope.
                   <% end %>
