@@ -81,8 +81,7 @@ Rails.application.routes.draw do
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
     get '/admin/post-results' => 'admin#post_results', as: :admin_post_results
     post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
-    delete '/admin/inbox-results' => 'admin#delete_inbox_results', as: :admin_delete_inbox_results
-    delete '/admin/inbox-persons' => 'admin#delete_inbox_persons', as: :admin_delete_inbox_persons
+    delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end

@@ -1,0 +1,49 @@
+<% render_step ||= nil %>
+
+<h2>
+  Import <code><%= render_step.to_s.camelize %></code>s
+  <% if @inbox_step == render_step %>
+    <%= link_to ui_icon('refresh') %>
+    <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), method: :post, data: { confirm: "You're about to remove #{@existing_data[render_step]} entries from -->#{render_step.to_s.camelize}<--\n\nPlease confirm below if you're sure." } %>
+  <% end %>
+</h2>
+
+<% if @inbox_step == render_step %>
+  <% if render_step == :inbox_result %>
+    <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
+    <p>There are a total of <b><%= @existing_data[:result] %></b> rows inserted into the Results table.</p>
+
+    <%# Small hack because I want to reuse the existing results preview panel, but it expects a @results_validator. %>
+    <%# So we just create one on the fly and "run" the checks without actually checking anything. %>
+    <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
+    <% results_validator.validate [@competition.id] %>
+
+    <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
+
+    <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), method: :post %>
+      results</p>
+  <% elsif render_step == :inbox_person %>
+    <%# TODO: Redo link pending other PR %>
+    <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+', target: '_blank' %>
+      to
+      newcomers</p>
+
+    <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending</p>
+
+    <ul>
+      <li><b><%= @existing_data[:newcomer_person] %></b> entries from InboxPersons are newcomers.</li>
+      <li>
+        <b style="color:<%= @existing_data[:newcomer_result] == 0 ? "#0B0" : "#F00" %>"><%= @existing_data[:newcomer_result] %></b>
+        newcomers in the Results table are still pending.
+      </li>
+    </ul>
+
+    <% if @existing_data[:newcomer_result] == 0 %>
+      <p>You
+        can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_person]} entries from -->InboxPersons<--\n\nPlease confirm below if you're sure." } %>
+        the inbox data, as all rows seem to have been fully imported.</p>
+    <% end %>
+  <% end %>
+<% else %>
+  This step has been completed! <%= ui_icon('check') %>
+<% end %>

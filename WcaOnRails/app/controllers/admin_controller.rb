@@ -178,17 +178,12 @@ class AdminController < ApplicationController
     redirect_to competition_admin_post_results_path
   end
 
-  def delete_inbox_results
+  def delete_inbox_data
     @competition = competition_from_params
+    inbox_model = params.require(:model).to_sym
 
-    @competition.inbox_results.destroy_all
-    redirect_to competition_admin_post_results_path
-  end
+    @competition.send(inbox_model).destroy_all
 
-  def delete_inbox_persons
-    @competition = competition_from_params
-
-    @competition.inbox_persons.destroy_all
     redirect_to competition_admin_post_results_path
   end
 
