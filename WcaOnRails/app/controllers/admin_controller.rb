@@ -136,6 +136,9 @@ class AdminController < ApplicationController
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
+
+    # The order of this array has to follow the steps in which results have to be imported.
+    @inbox_step = [:inbox_result, :inbox_person].find { |inbox| @existing_data[inbox] > 0 }
   end
 
   def import_inbox_results

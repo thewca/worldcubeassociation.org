@@ -7,7 +7,7 @@
       This competition has no data yet. <%= link_to "Upload something", competition_admin_upload_results_edit_path(@competition.id) %> to get started.
     <% end %>
   <% else %>
-    <% if @existing_data[:inbox_result] > 0 || @existing_data[:inbox_person] > 0 %>
+    <% if @inbox_step.present? %>
       <%= alert :info do %>
         <p>This competition is in the process of having data uploaded. If necessary, you can:</p>
         <ul>
@@ -24,7 +24,9 @@
       <% end %>
     <% end %>
 
-    <% if @existing_data[:inbox_result] > 0 %>
+    <h2>Import <code>InboxResult</code>s</h2>
+
+    <% if @inbox_step == :inbox_result %>
       <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition.id), method: :post %> results</p>
 
       <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
@@ -36,9 +38,15 @@
       <% results_validator.validate [@competition.id] %>
 
       <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
-    <% elsif @existing_data[:inbox_person] > 0 %>
+    <% else %>
+      This step has been completed! <%= ui_icon('check') %>
+    <% end %>
+
+    <h2>Import <code>InboxPerson</code>s</h2>
+
+    <% if @inbox_step == :inbox_person %>
       <%# TODO: Redo link pending other PR %>
-      <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+' %> to
+      <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+', target: '_blank' %> to
         newcomers</p>
 
       <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending</p>
@@ -56,6 +64,12 @@
           as all rows seem to have been fully imported.</p>
       <% end %>
     <% else %>
+      This step has been completed! <%= ui_icon('check') %>
+    <% end %>
+
+    <% if @inbox_step.nil? %>
+      <hr/>
+
       <p>All inbox data has been imported. You should consider the following steps next:</p>
       <ul>
         <%# TODO: Redo link pending other PR %>
@@ -72,64 +86,60 @@
     <% if @existing_data[:result] > 0 || @existing_data[:scramble] > 0 %>
       <hr/>
 
-      <p>Here is a table detailing the import progress for Results and Scrambles:</p>
-      <%= wca_table striped: false, floatThead: false, greedy: false, table_class: "center-block" do %>
-        <thead>
-        <tr>
-          <th class="event text-right">Event</th>
-          <th class="round-format">Round</th>
-          <th class="text-center">Fully imported Results</th>
-          <th class="text-center">Fully imported Scrambles</th>
-        </tr>
-        </thead>
-        <tbody>
-        <% rounds_by_event = @competition.rounds.group_by(&:event) %>
+      <% message = [:result, :scramble].filter { |data| @existing_data[data] > 0 }.map(&:capitalize).join(' and ') %>
 
-        <% @competition.events.sort_by(&:rank).each do |e| %>
-          <% announced_event = false %>
+      <%= alert :warning, note: true do %>
+        This competition has <%= message %> data uploaded. Uploading more data may cause duplicate entries.
+        You may remove the uploaded data using the interface below.
+      <% end %>
 
-          <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
-            <tr>
-              <td class="text-right <%= "active" unless announced_event %>" style="padding-left: 30px;"><%= e.name unless announced_event %></td>
-              <td class="<%= "active" unless announced_event %>" style="padding-right: 30px;"><%= r.round_type.name %></td>
+      <div class="container">
+        <%= wca_table striped: false, floatThead: false, greedy: false do %>
+          <thead>
+          <tr>
+            <th class="event text-right">Event</th>
+            <th class="round-format">Round</th>
+            <th class="text-center">Fully imported Results</th>
+            <th class="text-center">Fully imported Scrambles</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% rounds_by_event = @competition.rounds.group_by(&:event) %>
 
-              <% [Result, Scramble].each do |model| %>
-                <% assoc_count = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).count %>
-                <% has_assoc = assoc_count > 0 %>
+          <% @competition.events.sort_by(&:rank).each do |e| %>
+            <% announced_event = false %>
 
-                <td class="text-center <%= has_assoc ? "success" : "warning" %>">
-                  <% if has_assoc %>
-                    <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: "You're about to delete #{assoc_count} entries from -->#{model.name}<--\n\nPlease confirm below if you're sure." } %>)
-                  <% else %>
-                    Nope.
-                  <% end %>
-                </td>
-              <% end %>
-            </tr>
+            <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
+              <tr>
+                <td class="text-right <%= "active" unless announced_event %>"><%= e.name unless announced_event %></td>
+                <td class="<%= "active" unless announced_event %>"><%= r.round_type.name %></td>
 
-            <% announced_event = true %>
+                <% [Result, Scramble].each do |model| %>
+                  <% assoc_count = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).count %>
+                  <% has_assoc = assoc_count > 0 %>
+
+                  <td class="text-center <%= has_assoc ? "success" : "warning" %>">
+                    <% if has_assoc %>
+                      <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), method: :delete, data: { confirm: "You're about to delete #{assoc_count} entries from -->#{model.name}<--\n\nPlease confirm below if you're sure." } %>)
+                    <% else %>
+                      Nope.
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+
+              <% announced_event = true %>
+            <% end %>
           <% end %>
+          </tbody>
         <% end %>
-        </tbody>
-      <% end %>
-      <p>
-        <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
-        Remove all results and scrambles only, does not affect
-        persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, model: 'All'), method: :delete, data: { confirm: "You're about to delete ALL Results and Scrambles for #{@competition.id}.\nTHIS ACTION CANNOT BE UNDONE!\n\nPlease confirm below if you're sure." } %>
-      </p>
-    <% end %>
 
-    <% if @existing_data[:result] > 0 %>
-      <%= alert :warning, note: true do %>
-        This competition has result data imported. Uploading more data may cause duplicate entries.
-      <% end %>
-    <% end %>
-
-    <% if @existing_data[:scramble] > 0 %>
-      <%= alert :warning, note: true do %>
-        This competition has scramble data uploaded. Uploading more data may cause duplicate entries.
-        You may remove scrambles using the interface above.
-      <% end %>
+        <p>
+          <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
+          Remove all results and scrambles only, does not affect
+          persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, model: 'All'), method: :delete, data: { confirm: "You're about to delete ALL Results and Scrambles for #{@competition.id}.\nTHIS ACTION CANNOT BE UNDONE!\n\nPlease confirm below if you're sure." } %>
+        </p>
+      </div>
     <% end %>
   <% end %>
 <% end %>
