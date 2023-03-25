@@ -130,7 +130,6 @@ module CompetitionsHelper
     text
   end
 
-
   def announced_content(competition)
     competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), "day")} before" : ""
   end
