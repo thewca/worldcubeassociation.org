@@ -123,9 +123,10 @@ class AdminController < ApplicationController
     redirect_to competition_admin_upload_results_edit_path
   end
 
-  def post_results
-    @competition = competition_from_params
+  # The order of this array has to follow the steps in which results have to be imported.
+  RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
 
+  private def load_result_posting_steps
     data_tables = {
       result: Result,
       scramble: Scramble,
@@ -136,9 +137,23 @@ class AdminController < ApplicationController
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
+    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
 
-    # The order of this array has to follow the steps in which results have to be imported.
-    @inbox_step = [:inbox_result, :inbox_person].find { |inbox| @existing_data[inbox] > 0 }
+    yield if block_given?
+  end
+
+  def post_results
+    @competition = competition_from_params
+
+    load_result_posting_steps
+  end
+
+  def result_inbox_steps
+    @competition = competition_from_params
+
+    load_result_posting_steps do
+      render partial: 'result_inbox_steps'
+    end
   end
 
   def import_inbox_results
@@ -175,16 +190,29 @@ class AdminController < ApplicationController
       @competition.inbox_results.destroy_all
     end
 
-    redirect_to competition_admin_post_results_path
+    load_result_posting_steps do
+      render partial: 'result_inbox_steps'
+    end
   end
 
   def delete_inbox_data
     @competition = competition_from_params
+
     inbox_model = params.require(:model).to_sym
 
-    @competition.send(inbox_model).destroy_all
+    case inbox_model
+    when :inbox_result
+      @competition.inbox_results.destroy_all
+    when :inbox_person
+      # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
+      @competition.inbox_persons.each(&:destroy)
+    else
+      raise "Invalid model association: #{inbox_model}"
+    end
 
-    redirect_to competition_admin_post_results_path
+    load_result_posting_steps do
+      render partial: 'result_inbox_steps'
+    end
   end
 
   def delete_results_data

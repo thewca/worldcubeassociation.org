@@ -1,14 +1,22 @@
 <% render_step ||= nil %>
 
+<% inbox_step_index = AdminController::RESULTS_POSTING_STEPS.index @inbox_step %>
+<% render_step_index = AdminController::RESULTS_POSTING_STEPS.index render_step %>
+
 <h2>
   Import <code><%= render_step.to_s.camelize %></code>s
-  <% if @inbox_step == render_step %>
-    <%= link_to ui_icon('refresh') %>
-    <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), method: :post, data: { confirm: delete_inbox_confirm_message(render_step) } %>
+  <% if inbox_step_index >= render_step_index %>
+    <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(render_step) } %>
+
+    <% if inbox_step_index == render_step_index %>
+      <%= link_to ui_icon('refresh'), competition_admin_result_inbox_steps_path(@competition), class: 'inbox-trigger' %>
+    <% end %>
   <% end %>
 </h2>
 
-<% if @inbox_step == render_step %>
+<% if inbox_step_index < render_step_index %>
+  This step is still pending! <%= ui_icon('clock') %>
+<% elsif inbox_step_index == render_step_index %>
   <% if render_step == :inbox_result %>
     <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
     <p>There are a total of <b><%= @existing_data[:result] %></b> rows inserted into the Results table.</p>
@@ -20,7 +28,7 @@
 
     <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
 
-    <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), method: :post %>
+    <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), method: :post, class: 'inbox-trigger' %>
       results</p>
   <% elsif render_step == :inbox_person %>
     <%# TODO: Redo link pending other PR %>
@@ -39,7 +47,7 @@
 
     <% if @existing_data[:newcomer_result] == 0 %>
       <p>You
-        can <%= link_to "delete", competition_admin_delete_inbox_persons_path(@competition.id), method: :delete, data: { confirm: delete_inbox_confirm_message(:inbox_person) } %>
+        can <%= link_to "delete", competition_admin_delete_inbox_data_path(@competition.id, model: :inbox_person), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(:inbox_person) } %>
         the inbox data, as all rows seem to have been fully imported.</p>
     <% end %>
   <% end %>
