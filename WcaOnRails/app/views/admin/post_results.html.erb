@@ -30,11 +30,6 @@
       <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
       <p>There are a total of <b><%= @existing_data[:result] %></b> rows inserted into the Results table.</p>
 
-      <% if @existing_data[:inbox_result] == @existing_data[:result] %>
-        <p>You can <%= link_to "delete", competition_admin_delete_inbox_results_path(@competition.id), method: :delete, data: { confirm: "You're about to remove #{@existing_data[:inbox_result]} entries from -->InboxResults<--\n\nPlease confirm below if you're sure." } %> the inbox data,
-          as all rows seem to have been fully imported.</p>
-      <% end %>
-
       <%# Small hack because I want to reuse the existing results preview panel, but it expects a @results_validator. %>
       <%# So we just create one on the fly and "run" the checks without actually checking anything. %>
       <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>

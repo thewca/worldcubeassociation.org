@@ -142,16 +142,14 @@ class AdminController < ApplicationController
     @competition = competition_from_params
 
     ActiveRecord::Base.transaction do
-      @competition.inbox_results
-                  .joins("LEFT JOIN InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
-                  .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
-                  .each do |inbox_res|
+      result_rows = @competition.inbox_results
+                                .left_joins("InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
+                                .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
+                                .map do |inbox_res|
         person_id = inbox_res.personWcaId.presence || inbox_res.personId
         person_country = Country.find_by_iso2(inbox_res.personCountryIso2)
 
-        # TODO: This runs a lot of validations and is slow(ish, aka. bearable but could be faster).
-        #   Is it safe to just let Results Team insert rows without Rails validations?
-        created_res = Result.create(
+        {
           pos: inbox_res.pos,
           personId: person_id,
           personName: inbox_res.personName,
@@ -167,12 +165,11 @@ class AdminController < ApplicationController
           value5: inbox_res.value5,
           best: inbox_res.best,
           average: inbox_res.average,
-        )
-
-        unless created_res.valid?
-          raise "Invalid Result when imported from InboxResult: #{created_res.errors.full_messages}"
-        end
+        }
       end
+
+      Result.insert_all!(result_rows)
+      @competition.inbox_results.destroy_all
     end
 
     redirect_to competition_admin_post_results_path
@@ -181,16 +178,14 @@ class AdminController < ApplicationController
   def delete_inbox_results
     @competition = competition_from_params
 
-    InboxResult.destroy_by(competitionId: @competition.id)
+    @competition.inbox_results.destroy_all
     redirect_to competition_admin_post_results_path
   end
 
   def delete_inbox_persons
     @competition = competition_from_params
 
-    # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
-    @competition.inbox_persons.each(&:delete)
-
+    @competition.inbox_persons.destroy_all
     redirect_to competition_admin_post_results_path
   end
 
@@ -199,12 +194,12 @@ class AdminController < ApplicationController
 
     case params[:table]
     when "All"
-      Result.destroy_by(competitionId: @competition.id)
-      Scramble.destroy_by(competitionId: @competition.id)
+      @competition.results.destroy_all
+      @competition.scrambles.destroy_all
     when "Result"
-      Result.destroy_by(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType])
+      Result.where(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType]).destroy_all
     when "Scramble"
-      Scramble.destroy_by(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType])
+      Scramble.where(competitionId: @competition.id, eventId: params[:event], roundTypeId: params[:roundType]).destroy_all
     else
       raise "Invalid table: #{params[:table]}"
     end
