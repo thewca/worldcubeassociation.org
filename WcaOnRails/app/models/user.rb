@@ -928,13 +928,13 @@ class User < ApplicationRecord
   # Note this is very similar to the cannot_be_assigned_to_user_reasons method in person.rb.
   # The competition parameter is there when you want to check if a (potentially banned)
   # competitor wants to register for a specific competition, not competitions in general
-  def cannot_register_for_competition_reasons(competition = nil)
+  def cannot_register_for_competition_reasons(competition = nil, is_competing: true)
     [].tap do |reasons|
       reasons << I18n.t('registrations.errors.need_name') if name.blank?
       reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
       reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
-      reasons << I18n.t('registrations.errors.banned_html').html_safe if competition.present? && banned_at_date?(competition.start_date)
+      reasons << I18n.t('registrations.errors.banned_html').html_safe if is_competing && competition.present? && banned_at_date?(competition.start_date)
     end
   end
 
