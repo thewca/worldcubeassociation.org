@@ -5,7 +5,7 @@
   <%= simple_form_for :person_completions, url: admin_complete_persons_path do |f| %>
     <%= f.hidden_field :competition_id, value: @finish_persons.competition_id %>
 
-    <%= wca_table table_class: 'wca-persons', greedy: false do %>
+    <%= wca_table table_class: 'wca-persons', striped: false, greedy: false do %>
       <thead>
       <tr>
         <th></th><!-- Empty header for radio toggle -->
@@ -24,12 +24,12 @@
         <% country = Country.c_find(p[:country_id]) %>
         <% case_id = "#{p[:person_name]}|#{p[:country_id]}|#{p[:person_id]}|#{p[:competition_id]}" %>
 
-        <tr>
+        <tr class="active">
           <td colspan="8" class="text-center"><b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)
           </td>
         </tr>
 
-        <tr>
+        <tr class="info">
           <td>
             <%= f.input "#{case_id}][action", label: false, hint: false do %>
               <%= f.radio_button "#{case_id}][action", :create, checked: true %>
@@ -50,7 +50,7 @@
 
           <% radio_checked = name_identical || dob_identical %>
 
-          <tr style="<%= radio_checked ? "background-color: #F2DEDE" : "" %>">
+          <tr class="<%= "danger" if radio_checked %>">
             <td>
               <%= f.input "#{case_id}][action", label: false, hint: false do %>
                 <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: radio_checked %>
@@ -72,13 +72,18 @@
           </tr>
         <% end %>
 
-        <tr>
+        <tr class="warning">
           <td>
             <%= f.input "#{case_id}][action", label: false, hint: false do %>
               <%= f.radio_button "#{case_id}][action", :skip %>
             <% end %>
           </td>
-          <td colspan=7>I'm not sure yet</td>
+          <td class="text-center">I'm not sure yet (skip)</td>
+          <td colspan="6"></td>
+        </tr>
+
+        <tr>
+          <td colspan="8" style="padding: 10px;"></td>
         </tr>
       <% end %>
       </tbody>
@@ -87,3 +92,16 @@
     <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
   <% end %>
 </div>
+
+<style>
+  /* Bootstrap gives margin-bottom globally to all forms.
+   Normally, this is reasonable to make HTML forms look nice.
+   But we're hacking form elements into a table here, which makes the table unusually wide otherwise. */
+  table .form-group {
+    margin-bottom: 0;
+  }
+
+  tr.info > td {
+    vertical-align: middle !important;
+  }
+</style>
