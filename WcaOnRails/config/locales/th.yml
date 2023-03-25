@@ -3381,10 +3381,10 @@ th:
       title: สถิติ
     #original_hash: e02fccb
     last_updated_html: 'แก้ไขครั้งล่าสุดเมื่อ: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      โปรดทราบว่าตัวกรองบางตัว (เช่น ปีที่ผ่านมา) ถูกปิดใช้งานชั่วคราว
-      หากคุณมีประสบการณ์ในการเพิ่มประสิทธิภาพ SQL โปรดติดต่อ WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      ขอแจ้งให้ทราบว่า filter บางอย่า (เช่น ปีในอดีต) ไม่สามารถใช้ได้ชั่วคราว
+      ทาง Software Team กำลังพยายามแก้ไขอยู่ - ขออภัยในความไม่สะดวก
     #original_hash: e3710ed
     tooltip_no_years: ฐานข้อมูลของเราใหญ่เกินกว่าจะคำนวณข้อมูลย้อนหลังได้
     #original_hash: 357094b
