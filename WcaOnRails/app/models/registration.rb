@@ -235,7 +235,7 @@ class Registration < ApplicationRecord
   # change doesn't lead to an invalid state.
   validate :user_can_register_for_competition, on: :create
   private def user_can_register_for_competition
-    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition)
+    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
     if cannot_register_reasons.present?
       errors.add(:user_id, cannot_register_reasons.to_sentence)
     end
@@ -248,9 +248,9 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :must_register_for_gte_one_event
+  validate :must_register_for_gte_one_event, if: :is_competing?
   private def must_register_for_gte_one_event
-    if is_competing && registration_competition_events.reject(&:marked_for_destruction?).empty?
+    if registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
     end
   end
@@ -275,7 +275,7 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :forcing_competitors_to_add_comment
+  validate :forcing_competitors_to_add_comment, if: :is_competing?
   private def forcing_competitors_to_add_comment
     if competition&.force_comment_in_registration.present? && comments.strip.empty?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
