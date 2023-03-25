@@ -169,9 +169,6 @@ Style/SignalException:
 Layout/SpaceAroundOperators:
   Enabled: false
 
-Layout/IndentationConsistency:
-  EnforcedStyle: indented_internal_methods
-
 Style/StringLiteralsInInterpolation:
   Enabled: false
 
