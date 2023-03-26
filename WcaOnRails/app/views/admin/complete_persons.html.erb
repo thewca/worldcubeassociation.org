@@ -90,6 +90,7 @@
     <% end %>
     <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: @finish_persons.competition_id.present? } %>
     <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
+    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_id: @finish_persons.competition_id), class: "btn btn-default" %>
   <% end %>
 </div>
 

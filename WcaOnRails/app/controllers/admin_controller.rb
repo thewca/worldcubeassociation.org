@@ -340,7 +340,7 @@ class AdminController < ApplicationController
 
   def finish_unfinished_persons
     @finish_persons = FinishPersonsForm.new(
-      params[:competition_id] || nil,
+      competition_id: params[:competition_id] || nil,
     )
   end
 
@@ -398,8 +398,9 @@ class AdminController < ApplicationController
     continue_batch = params.dig(:person_completions, :continue_batch)
     continue_batch = ActiveRecord::Type::Boolean.new.cast(continue_batch)
 
+    competition_id = params.dig(:person_completions, :competition_id)
+
     if continue_batch
-      competition_id = params.dig(:person_completions, :competition_id)
       can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_id).any?
 
       if can_continue
@@ -407,7 +408,7 @@ class AdminController < ApplicationController
       end
     end
 
-    redirect_to action: :finish_unfinished_persons
+    redirect_to action: :finish_unfinished_persons, competition_id: competition_id
   end
 
   def peek_unfinished_results
