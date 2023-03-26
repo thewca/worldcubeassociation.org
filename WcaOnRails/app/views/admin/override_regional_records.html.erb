@@ -74,7 +74,12 @@
                   <td class="competition">
                     <%= link_to result.competition_id, competition_path(result.competition_id) %>
                   </td>
-                  <td class="round"> <%= result.round_type_id %></td>
+                  <td class="round">
+                    <% if current_user&.can_admin_results? %>
+                      <%= link_to(ui_icon("pencil alt"), edit_result_path(result.id)) %>
+                    <% end %>
+                    <%= result.round_type_id %>
+                  </td>
                   <td class="name">
                     <% if result.wca_id %>
                       <%= link_to result.person_name, person_path(result.wca_id) %>
