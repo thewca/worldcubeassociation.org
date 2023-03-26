@@ -3513,11 +3513,11 @@ cs:
       title: Rekordy
     #original_hash: e02fccb
     last_updated_html: 'Naposledy upraveno: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Prosíme uvědomte si, že některé filtry (například minulé roky), jsou
-      dočasně nepovolené. Pokud máte zkušenosti s SQL optimalizacemi, prosíme,
-      kontaktujte WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Berte na vědomí, že některá nastavení (například uplynulé roky), jsou
+      dočasně nedostupná. WCA Software Tým pracuje na jejich obnovení –
+      omlouváme se, za způsobené nepříjemnosti.
     #original_hash: e3710ed
     tooltip_no_years: Naše databáze je příliš velká pro počítání historických dat.
     #original_hash: 357094b
