@@ -161,7 +161,7 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       result_rows = @competition.inbox_results
-                                .left_joins("InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
+                                .joins("LEFT JOIN InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
                                 .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
                                 .map do |inbox_res|
         person_id = inbox_res.personWcaId.presence || inbox_res.personId
@@ -205,7 +205,7 @@ class AdminController < ApplicationController
       @competition.inbox_results.destroy_all
     when :inbox_person
       # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
-      @competition.inbox_persons.each(&:destroy)
+      @competition.inbox_persons.each(&:delete)
     else
       raise "Invalid model association: #{inbox_model}"
     end

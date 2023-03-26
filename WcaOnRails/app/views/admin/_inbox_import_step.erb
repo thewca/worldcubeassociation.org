@@ -6,7 +6,9 @@
 <h2>
   Import <code><%= render_step.to_s.camelize %></code>s
   <% if inbox_step_index >= render_step_index %>
-    <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(render_step) } %>
+    <% if @existing_data[render_step] > 0 %>
+      <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(render_step) } %>
+    <% end %>
 
     <% if inbox_step_index == render_step_index %>
       <%= link_to ui_icon('refresh'), competition_admin_result_inbox_steps_path(@competition), class: 'inbox-trigger' %>
@@ -28,7 +30,7 @@
 
     <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
 
-    <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), method: :post, class: 'inbox-trigger' %>
+    <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger', data: { jquery_method: :post } %>
       results</p>
   <% elsif render_step == :inbox_person %>
     <%# TODO: Redo link pending other PR %>

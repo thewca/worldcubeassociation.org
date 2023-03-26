@@ -5,10 +5,24 @@
         can <%= link_to "run validators", competition_admin_check_existing_results_path(@competition.id), target: '_blank' %>
         at any time, but you will need to refresh this page manually afterwards.</p>
     <% end %>
-  <% end %>
 
-  <% AdminController::RESULTS_POSTING_STEPS.each do |step| %>
-    <%= render 'inbox_import_step', render_step: step %>
+    <% AdminController::RESULTS_POSTING_STEPS.each do |step| %>
+      <%= render 'inbox_import_step', render_step: step %>
+    <% end %>
+  <% else %>
+    <hr/>
+
+    <p>All inbox data has been imported. You should consider the following steps next:</p>
+    <ul>
+      <%# TODO: Redo link pending other PR %>
+      <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
+      <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
+    </ul>
+    <p>You can also visit the following pages as sanity checks:</p>
+    <ul>
+      <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all') %></li>
+      <li><%= link_to "Post the results", admin_edit_competition_path(@competition) %></li>
+    </ul>
   <% end %>
 
   <script>
@@ -32,21 +46,4 @@
       }
     });
   </script>
-
-  <% if @inbox_step.nil? %>
-    <hr/>
-
-    <p>All inbox data has been imported. You should consider the following steps next:</p>
-    <ul>
-      <%# TODO: Redo link pending other PR %>
-      <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
-      <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
-    </ul>
-    <p>You can also visit the following pages as sanity checks:</p>
-    <ul>
-      <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all') %></li>
-      <li><%= link_to "Post the results", admin_edit_competition_path(@competition) %></li>
-    </ul>
-  <% end %>
 </div>
-
