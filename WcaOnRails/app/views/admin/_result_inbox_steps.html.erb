@@ -1,17 +1,24 @@
 <div id="result-inbox-steps">
-  <% if @inbox_step.present? %>
-    <%= alert :info do %>
-      <p>This competition is in the process of having data uploaded. You
-        can <%= link_to "run validators", competition_admin_check_existing_results_path(@competition.id), target: '_blank' %>
-        at any time, but you will need to refresh this page manually afterwards.</p>
-    <% end %>
+  <div class="progress">
+    <% inbox_step_num = (AdminController::RESULTS_POSTING_STEPS.index(@inbox_step) || AdminController::RESULTS_POSTING_STEPS.length) + 1 %>
+    <% number_of_steps = AdminController::RESULTS_POSTING_STEPS.length + 1 # count Sanity Checks as additional step %>
 
+    <% progress_percent = inbox_step_num.to_f / number_of_steps * 100 %>
+
+    <div class="progress-bar <%= "progress-bar-success" unless @inbox_step.present? %>" role="progressbar" style="width: <%= progress_percent %>%">
+      <% if @inbox_step.present? %>
+        Step <%= inbox_step_num %>/<%= number_of_steps %>
+      <% else %>
+        All steps completed!
+      <% end %>
+    </div>
+  </div>
+
+  <% if @inbox_step.present? %>
     <% AdminController::RESULTS_POSTING_STEPS.each do |step| %>
       <%= render 'inbox_import_step', render_step: step %>
     <% end %>
   <% else %>
-    <hr/>
-
     <p>All inbox data has been imported. You should consider the following steps next:</p>
     <ul>
       <%# TODO: Redo link pending other PR %>
@@ -36,11 +43,20 @@
       var userConfirms = !confirmationMessage || confirm(confirmationMessage);
 
       if (userConfirms) {
+        var progressBar = $('div.progress-bar')
+        progressBar.removeClass('progress-bar-danger').addClass('progress-bar-striped active');
+
         window.wca.cancelPendingAjaxAndAjax('inbox-trigger', {
           url: $el.attr('href'),
           method: httpMethod.toUpperCase(),
           success: function(html) {
             $('#result-inbox-steps').replaceWith(html);
+          },
+          error: function(response) {
+            progressBar.removeClass('progress-bar-success active').addClass('progress-bar-danger');
+
+            var requestId = response.getResponseHeader('X-Request-Id');
+            progressBar.text(`An error occured! Request ID ${requestId}`)
           }
         });
       }
