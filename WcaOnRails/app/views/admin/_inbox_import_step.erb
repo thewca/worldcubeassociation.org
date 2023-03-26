@@ -28,7 +28,7 @@
     <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
     <% results_validator.validate [@competition.id] %>
 
-    <%= render "results_submission/results_preview_panel", results_validator: results_validator %>
+    <%= render "results_submission/results_preview_panel", results_validator: results_validator, max_height: "500px", expand_all: true %>
 
     <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger', data: { jquery_method: :post } %>
       results</p>

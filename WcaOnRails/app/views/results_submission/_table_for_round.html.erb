@@ -1,8 +1,11 @@
 <%# expect variables: results, results_validator, round_id %>
 <% persons_by_id = results_validator.persons_by_id %>
 <% round_name = Round.name_from_attributes_id(*round_id.split("-")) %>
+
+<% expand_all ||= false %>
+
 <h3><%= link_to round_name, "##{round_id}", "data-toggle": "collapse" %></h3>
-<%= wca_table table_class: "wca-results collapse", floatThead: false, table_id: round_id do %>
+<%= wca_table table_class: "wca-results collapse #{"in" if expand_all}", floatThead: false, table_id: round_id do %>
   <thead>
     <tr>
       <th class="pos">#</th>
