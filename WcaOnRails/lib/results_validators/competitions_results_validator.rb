@@ -34,49 +34,47 @@ module ResultsValidators
     end
 
     def persons_by_id
-      @persons_by_id ||= @persons.to_h { |person| [@check_real_results ? person.wca_id : person.id, person] }
+      @persons_by_id ||= @persons.index_by { |person| person.ref_id }
+    end
+
+    protected def competition_associations
+      @validators.map(&:competition_associations)
+                 .inject(:deep_merge)
+    end
+
+    protected def competition_where_filters
+      @validators.map(&:competition_where_filters)
+                 .inject(:deep_merge)
+    end
+
+    protected def include_persons?
+      true
     end
 
     # The concept: this aggregate of validators should be applicable on any association
     # of competitions/validators (eg: run all validations on a given competition,
     # validate the competitor limit for a given set of competitions).
-    def validate(competition_ids = [])
-      unless competition_ids.respond_to?(:each)
-        competition_ids = [competition_ids]
-      end
-      result_model = @check_real_results ? Result : InboxResult
-      include_results = result_model.name.underscore.pluralize.to_sym
-
-      # FIXME: aggregating this way prevent multiple loading of the data, and still
-      # guarantees the overall validation is in O(n).
-      # However we could reduce the constant by refactoring a bit the validators,
-      # and making them work either on a result row or on the whole competition.
-      # We should also share some of the data for all validators (rounds_by_id,
-      # persons_by_id, and so on).
-      # This is especially relevant for large competitions.
-      @results = []
-      @persons = []
-
-      Competition.includes(include_results)
-                 .where(competition_id: competition_ids)
-                 .find_each do |competition|
-        sorted_results = competition.send(include_results).sorted
-
-        if sorted_results.empty?
-          @errors << ValidationError.new(:results, competition.id, "No results for the competition.")
-        else
-          @results += sorted_results
-          @persons += @check_real_results ? competition.competitors : competition.inbox_persons
-        end
+    protected def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        @results += competition_data.results
+        @persons += competition_data.persons
       end
 
       # Ensure any call to localizable name (eg: round names) is made in English,
       # as all errors and warnings are in English.
       I18n.with_locale(:en) do
-        merge(@validators.map { |v| v.new(apply_fixes: @apply_fixes).validate(results: @results, model: result_model) })
-      end
+        @validators.each do |validator_class|
+          validator = validator_class.new(apply_fixes: @apply_fixes)
+          validator.run_validation(validator_data)
 
-      self
+          merge(validator)
+        end
+      end
+    end
+
+    def validate(competition_ids = [])
+      result_model = @check_real_results ? Result : InboxResult
+      super(competition_ids: competition_ids, model: result_model)
     end
 
     private
