@@ -45,6 +45,8 @@ module ResultsValidators
         competition_ids = [competition_ids]
       end
       result_model = @check_real_results ? Result : InboxResult
+      include_results = result_model.name.underscore.pluralize.to_sym
+
       # FIXME: aggregating this way prevent multiple loading of the data, and still
       # guarantees the overall validation is in O(n).
       # However we could reduce the constant by refactoring a bit the validators,
@@ -52,23 +54,28 @@ module ResultsValidators
       # We should also share some of the data for all validators (rounds_by_id,
       # persons_by_id, and so on).
       # This is especially relevant for large competitions.
-      @results = result_model.sorted_for_competitions(competition_ids)
+      @results = []
+      @persons = []
 
-      (competition_ids - @results.map(&:competitionId).uniq).each do |c|
-        @errors << ValidationError.new(:results, c, "No results for the competition.")
+      Competition.includes(include_results)
+                 .where(competition_id: competition_ids)
+                 .find_each do |competition|
+        sorted_results = competition.send(include_results).sorted
+
+        if sorted_results.empty?
+          @errors << ValidationError.new(:results, competition.id, "No results for the competition.")
+        else
+          @results += sorted_results
+          @persons += @check_real_results ? competition.competitors : competition.inbox_persons
+        end
       end
-
-      @persons = if @check_real_results
-                   Person.where(wca_id: @results.map(&:personId).uniq)
-                 else
-                   InboxPerson.where(competitionId: competition_ids)
-                 end
 
       # Ensure any call to localizable name (eg: round names) is made in English,
       # as all errors and warnings are in English.
       I18n.with_locale(:en) do
         merge(@validators.map { |v| v.new(apply_fixes: @apply_fixes).validate(results: @results, model: result_model) })
       end
+
       self
     end
 
