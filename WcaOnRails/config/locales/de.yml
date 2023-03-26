@@ -2584,6 +2584,10 @@ de:
         card_information: Karteninformationen
         #original_hash: bc8091a
         cardholder_name: Name des Karteninhaber
+        #original_hash: 919710d
+        show_donation: >-
+          Ich würde dem Organisationsteam gerne eine zusätzliche, optionale
+          Spende zukommen lassen
       alerts:
         #original_hash: a34940e
         not_a_number: Bitte gebe einen gültigen Betrag ein
@@ -2794,6 +2798,10 @@ de:
       stripe_connected: >-
         Du hast jetzt erfolgreich dein Stripe Konto verbunden und kannst
         Eintrittsgelder für diesen Wettbewerb empfangen.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Stripe-Account erfolgreich getrennt.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Es gab einen Fehler bei der Trennung des Stripe-Accounts.
       #original_hash: 0a4bb53
       stripe_not_connected: >-
         Es ist ein Problem aufgetreten und wir konnten dein Stripe Konto nicht
@@ -3434,8 +3442,8 @@ de:
     cancel_mistake: Fehler gemacht?
     #original_hash: 0fb43d5
     note_before_cancel: 'Achtung: nur bestätigte Wettbewerbe können abgesagt werden.'
-    #original_hash: 19a0ac2
-    orga_close_reg: Schließe die Anmeldung.
+    #original_hash: b38ee61
+    orga_close_reg: Schließe die Anmeldung
     #original_hash: b2bfea9
     orga_close_reg_confirm: >-
       Bist du sicher, dass du die Anmeldung schließen möchtest? Dies kann nicht
@@ -3444,6 +3452,12 @@ de:
     note_reg_not_full_orga_close_reg: >-
       Beachte: du kannst die Anmeldung nur schließen, nachdem das
       Teilnehmerlimit erreicht wurde.
+    #original_hash: 1ae594d
+    stripe_disconnect: Trenne den Stripe-Account
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Bist du sicher, dass du den Stripe-Account trennen möchtest? Diese Aktion
+      kann nicht rückgängig gemacht werden.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Beachte: die Anmeldung ist bereits geschlossen.'
     show:
@@ -3664,11 +3678,12 @@ de:
       title: Rekorde
     #original_hash: e02fccb
     last_updated_html: 'Zuletzt aktualisiert: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Bitte beachte, dass manche Filter (z.B. zurückliegende Jahre) momentan
-      nicht zur Verfügung stehen. Falls du Erfahrung mit SQL-Optimierung hast,
-      kontaktiere bitte das WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Bitte beachte, dass manche Filter (wie beispielsweise zurückliegende
+      Jahre) momentan nicht zur Verfügung stehen. Das Software-Team arbeitet
+      daran, diese Filter wiederherzustellen - wir bitten, dies zu
+      entschuldigen.
     #original_hash: e3710ed
     tooltip_no_years: 'Unsere Datenbank ist zu groß, um historische Daten anzuzeigen'
     #original_hash: 357094b
