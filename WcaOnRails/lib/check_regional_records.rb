@@ -111,7 +111,7 @@ module CheckRegionalRecords
 
   SOLUTION_TYPES = [[:best, 'Single'], [:average, 'Average']].freeze
 
-  def self.check_records(event_id, competition_id)
+  def self.check_records(event_id = nil, competition_id = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name|
       # some helper symbols for further down
       regional_record_symbol = "regional#{value_name}Record".to_sym

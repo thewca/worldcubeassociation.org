@@ -1,10 +1,28 @@
 <% provide(:title, "Check regional records") %>
 
 <div class="container">
+  <% competition_id = @check_records_request.competition_id %>
+  <% event_id = @check_records_request.check_event_id %>
+
+  <% diff_mode = !competition_id.present? && !event_id.present? %>
+
   <h1><%= yield(:title) %></h1>
+
+  <% if diff_mode %>
+    <p>Running for all competitions and all events. This only shows cases where the stored and computed markers are
+      different.</p>
+  <% else %>
+    <% if competition_id.present? %>
+      <p>Competition: <code><%= competition_id %></code></p>
+    <% end %>
+    <% if event_id.present? %>
+      <p>Event: <code><%= event_id %></code></p>
+    <% end %>
+  <% end %>
+
   <%= simple_form_for :regional_record_overrides, url: admin_override_regional_records_path do |f| %>
-    <%= f.hidden_field :competition_id, value: @check_records_request.competition_id %>
-    <%= f.hidden_field :event_id, value: @check_records_request.event_id %>
+    <%= f.hidden_field :competition_id, value: competition_id %>
+    <%= f.hidden_field :event_id, value: event_id %>
 
     <% CheckRegionalRecords::SOLUTION_TYPES.each do |value_column, value_name| %>
       <h2><%= value_name %></h2>
@@ -69,7 +87,7 @@
                 <% computed_color = markers_same ? '999' : '0E0' %>
                 <% stored_color = markers_same ? '999' : 'F00' %>
 
-                <tr class="<%= "warning" unless markers_same %>">
+                <tr class="<%= "warning" unless markers_same || diff_mode %>">
                   <td class="date"> <%= wca_date_range(competition.start_date, competition.end_date) %></td>
                   <td class="competition">
                     <%= link_to result.competition_id, competition_path(result.competition_id) %>
@@ -131,7 +149,7 @@
     <% end %>
 
     <%= f.button :submit, value: "Submit overrides", class: "btn-primary" %>
-    <%= link_to "Go back", admin_check_regional_records_path(competition_id: @check_records_request.competition_id, event_id: @check_records_request.event_id), class: "btn btn-default" %>
+    <%= link_to "Go back", admin_check_regional_records_path(competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
   <% end %>
 </div>
 

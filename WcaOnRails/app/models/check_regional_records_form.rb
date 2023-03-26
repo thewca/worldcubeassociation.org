@@ -5,9 +5,11 @@ class CheckRegionalRecordsForm
 
   attr_accessor :competition_id, :event_id
 
-  def run_check
-    check_event_id = event_id == 'all' ? nil : event_id
+  def check_event_id
+    self.event_id == 'all' ? nil : self.event_id
+  end
 
-    CheckRegionalRecords.check_records(check_event_id, competition_id)
+  def run_check
+    CheckRegionalRecords.check_records(self.check_event_id, self.competition_id)
   end
 end
