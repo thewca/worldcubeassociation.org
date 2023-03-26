@@ -10,19 +10,23 @@ module ResultsValidators
 
     attr_reader :results, :persons, :validators
 
-    # Takes a list of validator classes, and if it should process real results
-    # or not.
-    def initialize(validators: [], check_real_results: false, apply_fixes: false)
+    # Takes a list of validator classes, and if it should process real results or not.
+    def initialize(validators = [], check_real_results: false, apply_fixes: false, sql_batch: nil, memory_batch: nil)
       super(apply_fixes: apply_fixes)
-      # If no validator is given, assume we should apply all.
+
       @validators = validators
+
       @check_real_results = check_real_results
+
+      @sql_batch = sql_batch
+      @memory_batch = memory_batch
+
       @results = []
       @persons = []
     end
 
     def self.create_full_validation
-      new(validators: ResultsValidators::Utils::ALL_VALIDATORS)
+      new(ResultsValidators::Utils::ALL_VALIDATORS)
     end
 
     def check_real_results?
@@ -47,15 +51,17 @@ module ResultsValidators
       true
     end
 
-    protected def validate_competitions(competition_ids, check_real_results: true)
-      competition_ids.each do |competition_id|
-        competition_data = ValidatorData.from_competition(self, competition_id, check_real_results: check_real_results)
+    protected def validate_competitions(competition_ids, check_real_results)
+      if @memory_batch.present?
+        competition_ids.each_slice(@memory_batch) do |batch_ids|
+          validator_data = ValidatorData.from_competitions(self, batch_ids, check_real_results)
 
-        @results += competition_data.results
-        @persons += competition_data.persons
+          run_validation(validator_data)
+        end
+      else
+        validator_data = ValidatorData.from_competitions(self, competition_ids, check_real_results, batch_size: @sql_batch)
 
-        # Intentionally run after every competition to avoid loading all competitions into memory at once.
-        run_validation([competition_data])
+        run_validation(validator_data)
       end
     end
 
@@ -63,6 +69,11 @@ module ResultsValidators
     # of competitions/validators (eg: run all validations on a given competition,
     # validate the competitor limit for a given set of competitions).
     def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        @results += competition_data.results
+        @persons += competition_data.persons
+      end
+
       # Ensure any call to localizable name (eg: round names) is made in English,
       # as all errors and warnings are in English.
       I18n.with_locale(:en) do

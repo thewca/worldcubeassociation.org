@@ -30,7 +30,9 @@ module ResultsValidators
       self.reset_state
 
       if results.present?
-        self.validate_results(results)
+        validator_data = ValidatorData.from_results(self, results)
+
+        run_validation(validator_data)
       end
 
       if competition_ids.present?
@@ -38,9 +40,9 @@ module ResultsValidators
           competition_ids = [competition_ids]
         end
 
-        real_results = model == Result
+        check_real_results = model == Result
 
-        self.validate_competitions(competition_ids, check_real_results: real_results)
+        self.validate_competitions(competition_ids, check_real_results)
       end
 
       self
@@ -82,16 +84,8 @@ module ResultsValidators
 
     protected
 
-      def validate_competitions(competition_ids, check_real_results: true)
-        validator_data = competition_ids.map do |competition_id|
-          ValidatorData.from_competition(self, competition_id, check_real_results: check_real_results)
-        end
-
-        run_validation(validator_data)
-      end
-
-      def validate_results(results)
-        validator_data = ValidatorData.from_results(self, results)
+      def validate_competitions(competition_ids, check_real_results)
+        validator_data = ValidatorData.from_competitions(self, competition_ids, check_real_results)
 
         run_validation(validator_data)
       end
