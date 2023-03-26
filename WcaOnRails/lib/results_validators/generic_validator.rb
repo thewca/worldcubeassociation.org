@@ -46,6 +46,10 @@ module ResultsValidators
       self
     end
 
+    def run_validation(validator_data)
+      raise NotImplementedError
+    end
+
     def description
       @@desc
     end
@@ -90,10 +94,6 @@ module ResultsValidators
         validator_data = ValidatorData.from_results(self, results)
 
         run_validation(validator_data)
-      end
-
-      def run_validation(validator_data)
-        raise NotImplementedError
       end
 
       def get_rounds_info(competition, round_ids_from_results)

@@ -42,7 +42,7 @@ module ResultsValidators
       }
     end
 
-    protected def run_validation(validator_data)
+    def run_validation(validator_data)
       validator_data.each do |competition_data|
         competition = competition_data.competition
 

@@ -38,7 +38,8 @@ module ResultsValidators
     end
 
     def competition_associations
-      @validators.map(&:competition_associations)
+      @validators.map { |v| self.load_validator v }
+                 .map(&:competition_associations)
                  .inject(:deep_merge)
     end
 
@@ -48,27 +49,25 @@ module ResultsValidators
 
     protected def validate_competitions(competition_ids, check_real_results: true)
       competition_ids.each do |competition_id|
-        validator_data = ValidatorData.from_competition(self, competition_id, check_real_results: check_real_results)
+        competition_data = ValidatorData.from_competition(self, competition_id, check_real_results: check_real_results)
+
+        @results += competition_data.results
+        @persons += competition_data.persons
 
         # Intentionally run after every competition to avoid loading all competitions into memory at once.
-        run_validation([validator_data])
+        run_validation([competition_data])
       end
     end
 
     # The concept: this aggregate of validators should be applicable on any association
     # of competitions/validators (eg: run all validations on a given competition,
     # validate the competitor limit for a given set of competitions).
-    protected def run_validation(validator_data)
-      validator_data.each do |competition_data|
-        @results += competition_data.results
-        @persons += competition_data.persons
-      end
-
+    def run_validation(validator_data)
       # Ensure any call to localizable name (eg: round names) is made in English,
       # as all errors and warnings are in English.
       I18n.with_locale(:en) do
         @validators.each do |validator_class|
-          validator = validator_class.new(apply_fixes: @apply_fixes)
+          validator = self.load_validator(validator_class)
           validator.run_validation(validator_data)
 
           merge(validator)
@@ -82,6 +81,10 @@ module ResultsValidators
     end
 
     private
+
+      def load_validator(validator_class)
+        validator_class.new(apply_fixes: @apply_fixes)
+      end
 
       def merge(other_validators)
         unless other_validators.respond_to?(:each)

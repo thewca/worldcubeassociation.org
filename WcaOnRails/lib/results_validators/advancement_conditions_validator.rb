@@ -35,7 +35,7 @@ module ResultsValidators
       }
     end
 
-    protected def run_validation(validator_data)
+    def run_validation(validator_data)
       ordered_round_type_ids = RoundType.order(:rank).all.map(&:id)
 
       validator_data.each do |competition_data|
