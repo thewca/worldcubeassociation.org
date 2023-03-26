@@ -12,6 +12,8 @@ class Person < ApplicationRecord
 
   enum gender: (User::ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
 
+  alias_attribute :ref_id, :wca_id
+
   scope :current, -> { where(subId: 1) }
 
   scope :in_region, lambda { |region_id|

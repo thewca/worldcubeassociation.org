@@ -23,11 +23,45 @@ module ResultsValidators
       @infos.any?
     end
 
+    def validate_competitions(competition_ids, check_real_results: true)
+      validator_data = competition_ids.map do |competition_id|
+        ValidatorData.from_competition(self, competition_id, check_real_results: check_real_results)
+      end
+
+      run_validation(validator_data)
+    end
+
+    def validate_results(results)
+      validator_data = ValidatorData.from_results(self, results)
+
+      run_validation(validator_data)
+    end
+
+    protected def run_validation(validator_data)
+      raise NotImplementedError
+    end
+
     # User must provide either:
     #   - 'competition_ids' and 'model' (Result | InboxResult)
     #   - 'results'
     def validate(competition_ids: [], model: Result, results: nil)
-      raise NotImplementedError
+      self.reset_state
+
+      if results.present?
+        self.validate_results(results)
+      end
+
+      if competition_ids.present?
+        unless competition_ids.respond_to? :each
+          competition_ids = [competition_ids]
+        end
+
+        real_results = model == Result
+
+        self.validate_competitions(competition_ids, check_real_results: real_results)
+      end
+
+      self
     end
 
     def description
@@ -35,7 +69,7 @@ module ResultsValidators
     end
 
     def self.class_name
-      self.name.split('::').last
+      self.name.demodulize
     end
 
     def self.serialize
@@ -53,6 +87,18 @@ module ResultsValidators
       end
 
     protected
+
+      def competition_associations
+        {}
+      end
+
+      def competition_where_filters
+        {}
+      end
+
+      def include_persons?
+        false
+      end
 
       def get_rounds_info(competition, round_ids_from_results)
         # Get rounds information from the competition, and detect a legitimate situation

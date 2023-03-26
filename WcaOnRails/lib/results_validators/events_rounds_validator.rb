@@ -19,28 +19,21 @@ module ResultsValidators
       false
     end
 
-    def validate(competition_ids: [], model: Result, results: nil)
-      reset_state
-      # Get all results if not provided.
-      results ||= model.sorted_for_competitions(competition_ids)
-
-      associations = {
+    protected def competition_associations
+      {
         events: [],
         competition_events: {
           rounds: [:competition_event],
         },
       }
+    end
 
-      results_by_competition_id = results.group_by(&:competitionId)
+    protected def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        competition = competition_data.competition
+        results_for_comp = competition_data.results
 
-      competitions = Competition.includes(associations).where(id: results_by_competition_id.keys).to_h do |c|
-        [c.id, c]
-      end
-
-      results_by_competition_id.each do |competition_id, results_for_comp|
-        competition = competitions[competition_id]
-
-        check_main_event(competition, results_for_comp)
+        check_main_event(competition)
 
         check_events_match(competition, results_for_comp)
 
@@ -48,12 +41,11 @@ module ResultsValidators
           check_rounds_match(competition, results_for_comp)
         end
       end
-      self
     end
 
     private
 
-      def check_main_event(competition, results)
+      def check_main_event(competition)
         if competition.main_event
           if competition.main_event_id != "333"
             @warnings << ValidationWarning.new(:events, competition.id,
