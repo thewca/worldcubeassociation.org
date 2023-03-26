@@ -1,21 +1,28 @@
 <% provide(:title, 'Finish unfinished persons') %>
 
 <div class="container">
+  <% competition_id = @finish_persons.competition_id %>
+
   <h2><%= yield(:title) %></h2>
+
+  <% if competition_id.present? %>
+    <p>For competition <code><%= competition_id %></code></p>
+  <% end %>
+
   <%= simple_form_for :person_completions, url: admin_complete_persons_path do |f| %>
-    <%= f.hidden_field :competition_id, value: @finish_persons.competition_id %>
+    <%= f.hidden_field :competition_id, value: competition_id %>
 
     <%= wca_table table_class: 'wca-persons', striped: false, greedy: false do %>
       <thead>
       <tr>
         <th></th><!-- Empty header for radio toggle -->
-        <th class="name">Person Name</th>
-        <th class="country">Country</th>
-        <th class="wca-id">WCA ID</th>
-        <th class="dob">Date of Birth</th>
-        <th class="name">Person Name</th>
-        <th class="country">Country ID</th>
-        <th class="wca-id">Semi ID</th>
+        <th class="name col-md-2">Person Name</th>
+        <th class="country col-md-1">Country</th>
+        <th class="wca-id col-md-1">WCA ID</th>
+        <th class="dob col-md-1">Date of Birth</th>
+        <th class="name col-md-3">Person Name</th>
+        <th class="country col-md-2">Country ID</th>
+        <th class="wca-id col-md-2">Semi ID</th>
       </tr>
       </thead>
 
@@ -25,7 +32,12 @@
         <% case_id = "#{p[:person_name]}|#{p[:country_id]}|#{p[:person_id]}|#{p[:competition_id]}" %>
 
         <tr class="active">
-          <td colspan="8" class="text-center"><b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)
+          <td colspan="8" class="text-center">
+            <% if competition_id.present? %>
+              <b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)
+            <% else %>
+              <b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>, Competition <code><%= p[:competition_id] %></code>)
+            <% end %>
           </td>
         </tr>
 
@@ -88,9 +100,9 @@
       <% end %>
       </tbody>
     <% end %>
-    <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: @finish_persons.competition_id.present? } %>
+    <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: competition_id.present? } %>
     <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
-    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_id: @finish_persons.competition_id), class: "btn btn-default" %>
+    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_id: competition_id), class: "btn btn-default" %>
   <% end %>
 </div>
 
