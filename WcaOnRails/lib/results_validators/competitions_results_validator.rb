@@ -46,6 +46,15 @@ module ResultsValidators
       true
     end
 
+    protected def validate_competitions(competition_ids, check_real_results: true)
+      competition_ids.each do |competition_id|
+        validator_data = ValidatorData.from_competition(self, competition_id, check_real_results: check_real_results)
+
+        # Intentionally run after every competition to avoid loading all competitions into memory at once.
+        run_validation([validator_data])
+      end
+    end
+
     # The concept: this aggregate of validators should be applicable on any association
     # of competitions/validators (eg: run all validations on a given competition,
     # validate the competitor limit for a given set of competitions).
