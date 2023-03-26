@@ -1,35 +1,108 @@
 <div id="result-inbox-steps">
-  <div class="progress">
-    <% inbox_step_num = (AdminController::RESULTS_POSTING_STEPS.index(@inbox_step) || AdminController::RESULTS_POSTING_STEPS.length) + 1 %>
-    <% number_of_steps = AdminController::RESULTS_POSTING_STEPS.length + 1 # count Sanity Checks as additional step %>
-
-    <% progress_percent = inbox_step_num.to_f / number_of_steps * 100 %>
-
-    <div class="progress-bar <%= "progress-bar-success" unless @inbox_step.present? %>" role="progressbar" style="width: <%= progress_percent %>%">
-      <% if @inbox_step.present? %>
-        Step <%= inbox_step_num %>/<%= number_of_steps %>
-      <% else %>
-        All steps completed!
-      <% end %>
-    </div>
-  </div>
-
-  <% if @inbox_step.present? %>
-    <% AdminController::RESULTS_POSTING_STEPS.each do |step| %>
-      <%= render 'inbox_import_step', render_step: step %>
+  <% if @existing_data.values.all?(&:zero?) %>
+    <%= alert :info do %>
+      This competition has no data yet. <%= link_to "Upload something", competition_admin_upload_results_edit_path(@competition.id) %> to get started.
     <% end %>
   <% else %>
-    <p>All inbox data has been imported. You should consider the following steps next:</p>
-    <ul>
-      <%# TODO: Redo link pending other PR %>
-      <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
-      <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
-    </ul>
-    <p>You can also visit the following pages as sanity checks:</p>
-    <ul>
-      <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all') %></li>
-      <li><%= link_to "Post the results", admin_edit_competition_path(@competition) %></li>
-    </ul>
+    <% if @inbox_step.present? %>
+      <%= alert :info do %>
+        <p>This competition is in the process of having data uploaded. You
+          can <%= link_to "run validators", competition_admin_check_existing_results_path(@competition.id), target: '_blank' %>
+          at any time, but you will need to refresh this page manually afterwards.</p>
+      <% end %>
+    <% end %>
+
+    <div class="progress">
+      <% inbox_step_num = (AdminController::RESULTS_POSTING_STEPS.index(@inbox_step) || AdminController::RESULTS_POSTING_STEPS.length) + 1 %>
+      <% number_of_steps = AdminController::RESULTS_POSTING_STEPS.length + 1 # count Sanity Checks as additional step %>
+
+      <% progress_percent = inbox_step_num.to_f / number_of_steps * 100 %>
+
+      <div class="progress-bar <%= "progress-bar-success" unless @inbox_step.present? %>" role="progressbar" style="width: <%= progress_percent %>%">
+        <% if @inbox_step.present? %>
+          Step <%= inbox_step_num %>/<%= number_of_steps %>
+        <% else %>
+          All steps completed!
+        <% end %>
+      </div>
+    </div>
+
+    <% if @inbox_step.present? %>
+      <% AdminController::RESULTS_POSTING_STEPS.each do |step| %>
+        <%= render 'inbox_import_step', render_step: step %>
+      <% end %>
+    <% else %>
+      <p>All inbox data has been imported. You should consider the following steps next:</p>
+      <ul>
+        <%# TODO: Redo link pending other PR %>
+        <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
+        <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
+      </ul>
+      <p>You can also visit the following pages as sanity checks:</p>
+      <ul>
+        <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all') %></li>
+        <li><%= link_to "Post the results", admin_edit_competition_path(@competition) %></li>
+      </ul>
+    <% end %>
+
+    <% if @existing_data[:result] > 0 || @existing_data[:scramble] > 0 %>
+      <hr/>
+
+      <% message = [:result, :scramble].filter { |data| @existing_data[data] > 0 }.map(&:capitalize).join(' and ') %>
+
+      <%= alert :warning, note: true do %>
+        This competition has <%= message %> data uploaded. Uploading more data may cause duplicate entries.
+        You may remove the uploaded data using the interface below.
+      <% end %>
+
+      <div class="container">
+        <%= wca_table striped: false, floatThead: false, greedy: false do %>
+          <thead>
+          <tr>
+            <th class="event text-right">Event</th>
+            <th class="round-format">Round</th>
+            <th class="text-center">Fully imported Results</th>
+            <th class="text-center">Fully imported Scrambles</th>
+          </tr>
+          </thead>
+          <tbody>
+          <% rounds_by_event = @competition.rounds.group_by(&:event) %>
+
+          <% @competition.events.sort_by(&:rank).each do |e| %>
+            <% announced_event = false %>
+
+            <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
+              <tr>
+                <td class="text-right <%= "active" unless announced_event %>"><%= e.name unless announced_event %></td>
+                <td class="<%= "active" unless announced_event %>"><%= r.round_type.name %></td>
+
+                <% [Result, Scramble].each do |model| %>
+                  <% assoc_count = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).count %>
+                  <% has_assoc = assoc_count > 0 %>
+
+                  <td class="text-center <%= has_assoc ? "success" : "warning" %>">
+                    <% if has_assoc %>
+                      <span style="margin-inline: 10px">Yes</span>(<%= link_to "X", competition_admin_delete_results_data_path(@competition.id, model: model.name, event_id: e.id, round_type_id: r.round_type.id), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(model.name, assoc_count) } %>)
+                    <% else %>
+                      Nope.
+                    <% end %>
+                  </td>
+                <% end %>
+              </tr>
+
+              <% announced_event = true %>
+            <% end %>
+          <% end %>
+          </tbody>
+        <% end %>
+
+        <p>
+          <strong style='color: #900'>Please be careful removing data! Data in the above table is live.</strong><br/>
+          Remove all results and scrambles only, does not affect
+          persons: <%= link_to "X ALL", competition_admin_delete_results_data_path(@competition.id, model: 'All'), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: "You're about to delete ALL Results and Scrambles for #{@competition.id}.\nTHIS ACTION CANNOT BE UNDONE!\n\nPlease confirm below if you're sure." } %>
+        </p>
+      </div>
+    <% end %>
   <% end %>
 
   <script>

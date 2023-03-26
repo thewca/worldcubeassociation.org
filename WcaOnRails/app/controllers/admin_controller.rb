@@ -127,6 +127,8 @@ class AdminController < ApplicationController
   RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
 
   private def load_result_posting_steps
+    @competition = competition_from_params(associations: [:events, :rounds])
+
     data_tables = {
       result: Result,
       scramble: Scramble,
@@ -143,14 +145,10 @@ class AdminController < ApplicationController
   end
 
   def post_results
-    @competition = competition_from_params
-
     load_result_posting_steps
   end
 
   def result_inbox_steps
-    @competition = competition_from_params
-
     load_result_posting_steps do
       render partial: 'result_inbox_steps'
     end
@@ -237,7 +235,9 @@ class AdminController < ApplicationController
       end
     end
 
-    redirect_to competition_admin_post_results_path
+    load_result_posting_steps do
+      render partial: 'result_inbox_steps'
+    end
   end
 
   def create_results
@@ -415,8 +415,8 @@ class AdminController < ApplicationController
     send_data csv, filename: "#{filename}-#{Time.now.utc.iso8601}.csv", type: :csv
   end
 
-  private def competition_from_params
-    Competition.find_by_id!(params[:competition_id])
+  private def competition_from_params(associations: {})
+    Competition.includes(associations).find_by_id!(params[:competition_id])
   end
 
   def anonymize_person
