@@ -4,11 +4,10 @@ module ResultsValidators
   class ValidatorData
     include ActiveModel::Model
 
-    attr_reader :competition, :results
-    attr_accessor :persons
+    attr_accessor :competition, :results, :persons
 
     def self.from_competition(validator, competition_id, check_real_results: true)
-      associations = self.load_associations(validator)
+      associations = self.load_associations(validator, check_real_results: check_real_results)
 
       results_assoc = check_real_results ? :results : :inbox_results
       associations.deep_merge!({ results_assoc => [] })
@@ -31,9 +30,7 @@ module ResultsValidators
       end
     end
 
-    private
-
-    def load_associations(validator, check_real_results: false)
+    def self.load_associations(validator, check_real_results: false)
       associations = validator.competition_associations
 
       if validator.include_persons?
@@ -44,18 +41,19 @@ module ResultsValidators
       associations
     end
 
-    def load_competition(validator, competition_id, associations = nil, check_real_results: false)
+    def self.load_competition(validator, competition_id, associations = nil, check_real_results: false)
       associations ||= self.load_associations(validator, check_real_results: check_real_results)
 
-      where_filters = validator.competition_where_filters
+      competition_scope = Competition
 
-      Competition.includes(**associations)
-                 .where(**where_filters)
-                 .find(competition_id)
+      # Rails has an error message that complains about "The method .includes() must contain arguments."
+      competition_scope = competition_scope.includes(**associations) unless associations.empty?
+
+      competition_scope.find(competition_id)
     end
 
-    def load_data(validator, competition, results, check_real_results: false)
-      data = self.new(
+    def self.load_data(validator, competition, results, check_real_results: false)
+      data = ResultsValidators::ValidatorData.new(
         competition: competition,
         results: results,
       )

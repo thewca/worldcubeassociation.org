@@ -35,7 +35,7 @@ module ResultsValidators
       false
     end
 
-    protected def include_persons?
+    def include_persons?
       true
     end
 

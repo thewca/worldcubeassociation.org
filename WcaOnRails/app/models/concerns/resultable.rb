@@ -25,7 +25,7 @@ module Resultable
 
     # Order by event, then roundTypeId, then average if exists, then best if exists
     scope :sorted_for_competitions,
-          ->(competition_ids) { includes(:format).where(competitionId: competition_ids).order(:competitionId).merge(Result.sorted) }
+          ->(competition_ids) { includes(:format).where(competitionId: competition_ids).order(:competitionId).sorted }
     scope :sorted, -> { order(:eventId, :roundTypeId).order(Arel.sql("IF(formatId IN ('a','m') AND average>0, average, 2147483647), IF(best>0, best, 2147483647)")) }
 
     # Define cached stuff with the same name as the associations for validation

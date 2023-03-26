@@ -122,7 +122,7 @@ RSpec.describe ACV do
                                   round_id: "333-f", actual: 9, expected: 4,
                                   condition: first_round2.advancement_condition.to_s(first_round2)),
       ]
-      acv = ACV.new.validate(competition_ids: [competition2, competition3], model: Result)
+      acv = ACV.new.validate(competition_ids: [competition2.id, competition3.id], model: Result)
       expect(acv.warnings).to match_array(expected_warnings)
       expect(acv.errors).to match_array(expected_errors)
     end

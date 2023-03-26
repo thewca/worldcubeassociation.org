@@ -37,17 +37,12 @@ module ResultsValidators
       @persons_by_id ||= @persons.index_by { |person| person.ref_id }
     end
 
-    protected def competition_associations
+    def competition_associations
       @validators.map(&:competition_associations)
                  .inject(:deep_merge)
     end
 
-    protected def competition_where_filters
-      @validators.map(&:competition_where_filters)
-                 .inject(:deep_merge)
-    end
-
-    protected def include_persons?
+    def include_persons?
       true
     end
 

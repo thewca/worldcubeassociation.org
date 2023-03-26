@@ -19,7 +19,7 @@ module ResultsValidators
       false
     end
 
-    protected def competition_associations
+    def competition_associations
       {
         events: [],
         competition_events: {

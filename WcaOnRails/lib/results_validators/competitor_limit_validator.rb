@@ -11,13 +11,7 @@ module ResultsValidators
       false
     end
 
-    protected def competition_where_filters
-      {
-        competitor_limit_enabled: true,
-      }
-    end
-
-    protected def include_persons?
+    def include_persons?
       true
     end
 
@@ -28,7 +22,7 @@ module ResultsValidators
         competitor_limit = competition.competitor_limit
         total_competitors = competition_data.persons.count
 
-        if total_competitors > competitor_limit
+        if competition.competitor_limit_enabled && total_competitors > competitor_limit
           @warnings << ValidationWarning.new(:persons, competition.id,
                                              COMPETITOR_LIMIT_WARNING,
                                              n_competitors: total_competitors,

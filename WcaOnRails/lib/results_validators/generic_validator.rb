@@ -78,6 +78,14 @@ module ResultsValidators
       }
     end
 
+    def competition_associations
+      {}
+    end
+
+    def include_persons?
+      false
+    end
+
     private
 
       def reset_state
@@ -87,18 +95,6 @@ module ResultsValidators
       end
 
     protected
-
-      def competition_associations
-        {}
-      end
-
-      def competition_where_filters
-        {}
-      end
-
-      def include_persons?
-        false
-      end
 
       def get_rounds_info(competition, round_ids_from_results)
         # Get rounds information from the competition, and detect a legitimate situation
