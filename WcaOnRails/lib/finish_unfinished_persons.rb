@@ -112,7 +112,7 @@ module FinishUnfinishedPersons
   end
 
   def self.persons_cache
-    @persons_cache ||= Person.select(:wca_id, :name, :year, :month, :day, :countryId)
+    @persons_cache ||= Person.select(:id, :wca_id, :name, :year, :month, :day, :countryId)
   end
 
   def self.compute_similar_persons(result, n = 5)
