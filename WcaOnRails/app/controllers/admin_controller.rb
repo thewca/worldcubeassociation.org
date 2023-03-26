@@ -260,10 +260,10 @@ class AdminController < ApplicationController
   end
 
   def do_override_regional_records
-    action_params = params[:regional_record_overrides] || []
-
     ActiveRecord::Base.transaction do
-      action_params.each do |id_and_type, marker|
+      params[:regional_record_overrides].each do |id_and_type, marker|
+        next if [:competition_id, :event_id].include? id_and_type.to_sym
+
         next unless marker.present?
 
         result_id, result_type = id_and_type.split('-')
@@ -273,7 +273,10 @@ class AdminController < ApplicationController
       end
     end
 
-    redirect_to :admin_check_regional_records
+    competition_id = params.dig(:regional_record_overrides, :competition_id)
+    event_id = params.dig(:regional_record_overrides, :event_id)
+
+    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
   end
 
   def all_voters

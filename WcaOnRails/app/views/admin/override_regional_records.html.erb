@@ -3,6 +3,9 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
   <%= simple_form_for :regional_record_overrides, url: admin_override_regional_records_path do |f| %>
+    <%= f.hidden_field :competition_id, value: @check_records_request.competition_id %>
+    <%= f.hidden_field :event_id, value: @check_records_request.event_id %>
+
     <% CheckRegionalRecords::SOLUTION_TYPES.each do |value_column, value_name| %>
       <h2><%= value_name %></h2>
 
@@ -123,6 +126,7 @@
     <% end %>
 
     <%= f.button :submit, value: "Submit overrides", class: "btn-primary" %>
+    <%= link_to "Go back", admin_check_regional_records_path(competition_id: @check_records_request.competition_id, event_id: @check_records_request.event_id), class: "btn btn-default" %>
   <% end %>
 </div>
 
