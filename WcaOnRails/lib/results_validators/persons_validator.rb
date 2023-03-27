@@ -160,10 +160,11 @@ module ResultsValidators
                                              MULTIPLE_NEWCOMERS_WITH_SAME_NAME_WARNING,
                                              name: name)
         end
-        existing_person_by_wca_id = Person.current.where(wca_id: with_wca_id.map(&:wca_id)).to_h { |p| [p.wca_id, p] }
         with_wca_id.each do |p|
-          existing_person = existing_person_by_wca_id[p.wca_id]
-          if existing_person
+          # We have to "convert" to the actual `Person` model first, which is reasonable given that we're only using entries that have a WCA ID.
+          existing_person = p.wca_person
+
+          if existing_person.present?
             # WRT wants to show warnings for wrong person information.
             # (If I get this right, we do not actually update existing persons from InboxPerson)
             unless p.dob == existing_person.dob

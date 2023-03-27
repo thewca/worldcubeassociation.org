@@ -45,7 +45,9 @@ module ResultsValidators
 
       if validator.include_persons?
         persons_assoc = check_real_results ? :competitors : :inbox_persons
-        associations.deep_merge!({ persons_assoc => [] })
+        assoc_models = check_real_results ? [] : [:person]
+
+        associations.deep_merge!({ persons_assoc => assoc_models })
       end
 
       associations

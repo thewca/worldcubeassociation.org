@@ -149,6 +149,10 @@ class Person < ApplicationRecord
     [most_frequent_delegate, most_recent_delegate].uniq
   end
 
+  def wca_person
+    self
+  end
+
   def sub_ids
     Person.where(wca_id: wca_id).map(&:subId)
   end
