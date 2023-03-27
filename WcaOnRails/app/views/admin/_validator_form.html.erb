@@ -12,6 +12,9 @@
       <div id="selectize-competition-ids">
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       </div>
+      <div id="datetime-start-range">
+        <%= f.input :competition_start_date, as: :date_picker, hint: "This will encompass at most #{ResultValidationForm::ALL_COMPETITIONS_MAX} competitions.", label: "Start date for checking" %>
+      </div>
       <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
     <% end %>
   </div>
@@ -28,11 +31,28 @@
   });
 
   $('input[name="result_validation_form[competition_selection]"][type=radio]').on('change', function() {
-    var isManualRadio = this.value === "<%= ResultValidationForm::COMP_VALIDATION_MANUAL %>"
     var isChecked = $(this).is(':checked')
 
     if (isChecked) {
+      var isManualRadio = this.value === "<%= ResultValidationForm::COMP_VALIDATION_MANUAL %>"
       $('#selectize-competition-ids').toggle(isManualRadio);
+
+      var isAllRadio = this.value === "<%= ResultValidationForm::COMP_VALIDATION_ALL %>"
+      $('#datetime-start-range').toggle(isAllRadio);
     }
   }).trigger('change');
+
+  $('input[name="result_validation_form[competition_start_date]"]').on('dp.change', function(e) {
+    window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
+      url: '<%= admin_validation_end_date_path %>',
+      data: {
+        'start_date': $(this).val()
+      },
+      success: function(data) {
+        var { endDate } = data;
+
+        $('#datetime-start-range p.help-block').html(`The checks will run until <b>${endDate}</b>`);
+      }
+    })
+  });
 </script>

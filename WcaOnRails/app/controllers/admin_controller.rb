@@ -50,9 +50,17 @@ class AdminController < ApplicationController
     end
   end
 
+  def compute_validation_end_date
+    start_date = Date.parse(params[:start_date])
+    end_date = ResultValidationForm.compute_end_date(start_date)
+
+    render json: { endDate: end_date }
+  end
+
   def with_results_validator
     @result_validation = ResultValidationForm.new(
       competition_ids: params[:competition_ids] || "",
+      competition_start_date: params[:competition_start_date] || "",
       validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
       competition_selection: params[:competition_selection] || ResultValidationForm::COMP_VALIDATION_MANUAL,
       apply_fixes: params[:apply_fixes] || false,
@@ -81,7 +89,7 @@ class AdminController < ApplicationController
 
   def running_validators
     action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection)
+                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date)
 
     @result_validation = ResultValidationForm.new(action_params)
     @results_validator = @result_validation.build_and_run
