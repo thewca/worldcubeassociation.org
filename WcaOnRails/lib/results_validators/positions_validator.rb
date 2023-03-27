@@ -23,7 +23,7 @@ module ResultsValidators
           number_of_tied = 0
           results_for_round.each do |result|
             # Check for position in round
-            # The scope "InboxResult.sorted_for_competitions" already sorts by average then best,
+            # The validator data already sorts by average then best via ValidatorData#load_data,
             # so we simply need to check that the position stored matched the expected one
 
             # Unless we find two exact same results, we increase the expected position

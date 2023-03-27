@@ -4,12 +4,15 @@ module ResultsValidators
   class ValidatorData
     include ActiveModel::Model
 
+    BACKOFF_INT_MAX = 2_147_483_648
+
     attr_accessor :competition, :results, :persons
 
     def self.from_competitions(validator, competition_ids, check_real_results, batch_size: nil)
       associations = self.load_associations(validator, check_real_results: check_real_results)
 
       results_assoc = check_real_results ? :results : :inbox_results
+      # Deliberately NOT sending :format and :event because those are cached values anyways
       associations.deep_merge!({ results_assoc => [] })
 
       competition_scope = self.load_competition_includes(validator, associations)
@@ -18,7 +21,7 @@ module ResultsValidators
       competition_scope = competition_scope.find_each(batch_size: batch_size) if batch_size.present?
 
       competition_scope.map do |model_competition|
-        model_results = model_competition.send(results_assoc).sorted
+        model_results = model_competition.send(results_assoc)
 
         self.load_data(validator, model_competition, model_results, check_real_results: check_real_results)
       end
@@ -60,9 +63,23 @@ module ResultsValidators
     end
 
     def self.load_data(validator, competition, results, check_real_results: false)
+      # We're sorting in-memory because it is cheaper to re-order an arbitrary Results array that was efficiently loaded by `Competition.includes`,
+      # rather than firing a custom SQL ORDER BY that cannot be pre-loaded via `includes`. Bonus: We get to sort via rank and not pure ID.
+      ordered_results = results.sort_by do |r|
+        valid_average = %w[a m].include?(r.format_id) && r.average > 0
+        valid_best = r.best > 0
+
+        [
+          r.event.rank,
+          r.round_type.rank,
+          valid_average ? r.average : BACKOFF_INT_MAX,
+          valid_best ? r.best : BACKOFF_INT_MAX,
+        ]
+      end
+
       data = ResultsValidators::ValidatorData.new(
         competition: competition,
-        results: results,
+        results: ordered_results,
       )
 
       if validator.include_persons?
