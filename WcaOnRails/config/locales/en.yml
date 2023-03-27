@@ -550,7 +550,7 @@ en:
         competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
-        guests_per_registration_limit: "The number guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
+        guests_per_registration_limit: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
         events_per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
         venueAddress: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
