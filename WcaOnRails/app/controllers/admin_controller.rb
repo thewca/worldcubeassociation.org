@@ -52,7 +52,9 @@ class AdminController < ApplicationController
 
   def compute_validation_end_date
     start_date = Date.parse(params[:start_date])
-    end_date = ResultValidationForm.compute_end_date(start_date)
+    count = params[:count].to_i
+
+    end_date = ResultValidationForm.compute_end_date(start_date, count)
 
     render json: { endDate: end_date }
   end

@@ -13,6 +13,7 @@
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       </div>
       <div id="datetime-start-range">
+        <%= f.input :competition_count, as: :integer, hint: "Warning: Setting this number too high can lead to timeouts. Use at your own risk!", label: "Number of competitions to check" %>
         <%= f.input :competition_start_date, as: :date_picker, hint: "This will encompass at most #{ResultValidationForm::ALL_COMPETITIONS_MAX} competitions.", label: "Start date for checking" %>
       </div>
       <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
@@ -42,17 +43,29 @@
     }
   }).trigger('change');
 
-  $('input[name="result_validation_form[competition_start_date]"]').on('dp.change', function(e) {
-    window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
-      url: '<%= admin_validation_end_date_path %>',
-      data: {
-        'start_date': $(this).val()
-      },
-      success: function(data) {
-        var { endDate } = data;
+  var $compStartDate = $('input[name="result_validation_form[competition_start_date]"]');
+  var $compCount = $('input[name="result_validation_form[competition_count]"]');
 
-        $('#datetime-start-range p.help-block').html(`The checks will run up to and including <b>${endDate}</b>`);
-      }
-    })
-  });
+  function fetchEndDate() {
+    var startDate = $compStartDate.val();
+    var count = $compCount.val();
+
+    if (startDate && count) {
+      window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
+        url: '<%= admin_validation_end_date_path %>',
+        data: {
+          'start_date': startDate,
+          'count': count
+        },
+        success: function(data) {
+          var { endDate } = data;
+
+          $('#datetime-start-range p.help-block').html(`The checks will run up to and including <b>${endDate}</b>`);
+        }
+      });
+    }
+  }
+
+  $compStartDate.on('dp.change', fetchEndDate);
+  $compCount.on('change', fetchEndDate);
 </script>
