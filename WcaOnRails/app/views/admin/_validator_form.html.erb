@@ -51,7 +51,7 @@
       success: function(data) {
         var { endDate } = data;
 
-        $('#datetime-start-range p.help-block').html(`The checks will run until <b>${endDate}</b>`);
+        $('#datetime-start-range p.help-block').html(`The checks will run up to and including <b>${endDate}</b>`);
       }
     })
   });

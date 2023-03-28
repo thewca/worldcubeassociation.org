@@ -17,11 +17,11 @@ class ResultValidationForm
   attr_accessor :validator_classes, :competition_ids
   attr_writer :apply_fixes, :competition_selection, :competition_start_date
 
-  validates :competition_ids, presence: true, if: -> { competition_selection == COMP_VALIDATION_MANUAL }
-  validates :competition_start_date, presence: true, if: -> { competition_selection == COMP_VALIDATION_ALL }
+  validates :competition_ids, presence: true, if: -> { self.competition_selection == COMP_VALIDATION_MANUAL }
+  validates :competition_start_date, presence: true, if: -> { self.competition_selection == COMP_VALIDATION_ALL }
 
   def competitions
-    if @competition_selection.to_s == COMP_VALIDATION_ALL.to_s
+    if self.competition_selection == COMP_VALIDATION_ALL
       ALL_COMPETITIONS_SCOPE.where("start_date >= ?", self.competition_start_date)
                             .where("end_date <= ?", self.competition_end_date)
                             .ids
@@ -31,7 +31,7 @@ class ResultValidationForm
   end
 
   def competition_selection
-    @competition_selection || COMP_VALIDATION_MANUAL
+    @competition_selection.to_sym || COMP_VALIDATION_MANUAL
   end
 
   def competition_start_date
@@ -65,7 +65,7 @@ class ResultValidationForm
   def self.compute_end_date(start_date)
     end_date = ALL_COMPETITIONS_SCOPE.where("start_date >= ?", start_date)
                                      .order(:start_date)
-                                     # Not using `offset` because of the risk to skip into nothingness for new competitions
+                                     # Not using `offset` because of the risk to skip into nothingness for newer competitions
                                      .limit(ALL_COMPETITIONS_MAX)
                                      .pluck(:end_date)
                                      .last

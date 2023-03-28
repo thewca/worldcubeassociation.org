@@ -92,7 +92,12 @@ class AdminController < ApplicationController
                           .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date)
 
     @result_validation = ResultValidationForm.new(action_params)
-    @results_validator = @result_validation.build_and_run
+
+    if @result_validation.valid?
+      @results_validator = @result_validation.build_and_run
+    else
+      @results_validator = @result_validation.build_validator
+    end
 
     yield if block_given?
   end
