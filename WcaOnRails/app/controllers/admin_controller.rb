@@ -144,13 +144,13 @@ class AdminController < ApplicationController
     yield if block_given?
   end
 
-  def post_results
+  def import_results
     load_result_posting_steps
   end
 
   def result_inbox_steps
     load_result_posting_steps do
-      render partial: 'result_inbox_steps'
+      render partial: 'import_results_steps'
     end
   end
 
@@ -189,7 +189,7 @@ class AdminController < ApplicationController
     end
 
     load_result_posting_steps do
-      render partial: 'result_inbox_steps'
+      render partial: 'import_results_steps'
     end
   end
 
@@ -209,7 +209,7 @@ class AdminController < ApplicationController
     end
 
     load_result_posting_steps do
-      render partial: 'result_inbox_steps'
+      render partial: 'import_results_steps'
     end
   end
 
@@ -236,7 +236,7 @@ class AdminController < ApplicationController
     end
 
     load_result_posting_steps do
-      render partial: 'result_inbox_steps'
+      render partial: 'import_results_steps'
     end
   end
 

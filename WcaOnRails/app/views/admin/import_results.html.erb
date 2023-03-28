@@ -1,0 +1,6 @@
+<% provide(:title, "Import uploaded competition results") %>
+<%= render layout: 'competitions/nav' do %>
+  <h1><%= yield(:title) %></h1>
+
+  <%= render 'import_results_steps' %>
+<% end %>

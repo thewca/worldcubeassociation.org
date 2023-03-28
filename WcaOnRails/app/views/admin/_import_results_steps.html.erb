@@ -33,7 +33,7 @@
 
     <% if @inbox_step.present? %>
       <% AdminController::RESULTS_POSTING_STEPS.each do |step| %>
-        <%= render 'inbox_import_step', render_step: step %>
+        <%= render 'import_inbox_step', render_step: step %>
       <% end %>
     <% else %>
       <p>All inbox data has been imported. You should consider the following steps next:</p>

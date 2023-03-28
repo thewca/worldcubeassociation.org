@@ -79,7 +79,7 @@ Rails.application.routes.draw do
     post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
-    get '/admin/post-results' => 'admin#post_results', as: :admin_post_results
+    get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
     get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
     post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
