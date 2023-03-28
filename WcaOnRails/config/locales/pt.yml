@@ -957,7 +957,7 @@ pt:
         competitor_limit_reason: >-
           Qual é a razão para o limite de competidores? Por favor preencher em
           Inglês!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           O número máximo de convidados por competidor permitido nesta
           competição. O registo com demasiados convidados será bloqueado. Deixe
@@ -3571,11 +3571,11 @@ pt:
       title: Recordes
     #original_hash: e02fccb
     last_updated_html: 'Última atualização: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Por favor note que alguns filtros (como anos anteriores) estão
-      temporariamente desativados. Se tem experiência em otimizações de SQL,
-      entre em contacto com o WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Note que alguns filtros (como o de anos anteriores) estão temporariamente
+      desativados. A equipa de software está a trabalhar para restaurar estes
+      filtros - lamentamos o inconveniente.
     #original_hash: e3710ed
     tooltip_no_years: A nossa base de dados é demasiado grande para processar dados históricos
     #original_hash: 357094b
