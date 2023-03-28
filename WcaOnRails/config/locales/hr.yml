@@ -237,18 +237,21 @@ hr:
       zero: '%{count} pokušaja u vremenu od < %{time}'
       one: '%{count} pokušaj u vremenu od < %{time}'
       few: '%{count} pokušaja u vremenu od < %{time}'
+      many: '%{count} pokušaja u vremenu od < %{time}'
       other: '%{count} pokušaja u vremenu od < %{time}'
     #original_hash: b49d930
     moves:
       zero: '%{count} pokušaja za dobiti < %{moves} poteza'
       one: '%{count} pokušaj za dobiti < %{moves} poteza'
       few: '%{count} pokušaja za dobiti < %{moves} poteza'
+      many: '%{count} pokušaja za dobiti < %{moves} poteza'
       other: '%{count} pokušaja za dobiti < %{moves} poteza'
     #original_hash: eba1b97
     points:
       zero: '%{count} pokušaja za dobiti  > %{points} bodova'
       one: '%{count} pokušaj za dobiti  > %{points} bodova'
       few: '%{count} pokušaja za dobiti  > %{points} bodova'
+      many: '%{count} pokušaja za dobiti  > %{points} bodova'
       other: '%{count} pokušaja za dobiti  > %{points} bodova'
   time_limit:
     cumulative:
@@ -342,12 +345,14 @@ hr:
       zero: 0 dana
       one: 1 dan
       few: '%{count} dan(a)'
+      many: '%{count} dan(a)'
       other: '%{count} dan(a)'
     #original_hash: 203e1b3
     these_events:
       zero: 0 disciplina
       one: 1 disciplina
       few: nekoliko disciplina
+      many: nekoliko disciplina
       other: 'ovih %{count} disciplina'
     #original_hash: 51ef7d4
     search_site: Pretraži stranicu
@@ -1526,6 +1531,7 @@ hr:
           zero: 'Prijavnica sadrži %{count} grešaka.'
           one: Prijavnica sadrži jednu grešku.
           few: 'Prijavnica sadrži %{count} grešaka.'
+          many: 'Prijavnica sadrži %{count} grešaka.'
           other: 'Prijavnica sadrži %{count} grešaka.'
       error_pages:
         #original_hash: 1042478
@@ -2189,6 +2195,7 @@ hr:
         zero: se može registrirati u točno 1 disciplini
         one: možeš se samo registrirati u točno 1 disciplini
         few: možeš se samo registrirati u točno 1 disciplini
+        many: možeš se samo registrirati u točno 1 disciplini
         other: >-
           možeš se samo registrirati u manje ili točno jednako %{count}
           disciplina
@@ -2214,18 +2221,21 @@ hr:
         zero: first-timer(a)
         one: first-timer
         few: first-timer(a)
+        many: first-timer(a)
         other: first-timer(a)
       #original_hash: bc010e3
       returner:
         zero: povratnik(a)
         one: povratnik(a)
         few: povratnik(a)
+        many: povratnik(a)
         other: povratnik(a)
       #original_hash: b7da17a
       person:
         zero: osoba
         one: osoba
         few: osoba
+        many: osoba
         other: osoba
     flash:
       #original_hash: da7ec53
@@ -2235,18 +2245,21 @@ hr:
         zero: Nijedna registracija nije prihvaćena! E-mail obavijest nije poslana.
         one: Registracija prihvaćena! E-mail obavijest poslana.
         few: Registracija prihvaćenih! E-mail obavijesti poslane.
+        many: Registracija prihvaćenih! E-mail obavijesti poslane.
         other: Registracija prihvaćenih! E-mail obavijesti poslane.
       #original_hash: 42ea8de
       rejected_and_mailed:
         zero: Registracija pomaknuto na listu čekanja
         one: Registracija pomaknuta na listu čekanja
         few: Registracija pomaknuto na listu čekanja
+        many: Registracija pomaknuto na listu čekanja
         other: Registracija pomaknuto na listu čekanja
       #original_hash: a360b31
       deleted_and_mailed:
         zero: Registracija obrisano
         one: Registracija obrisana
         few: Registracija obrisano
+        many: Registracija obrisano
         other: Registracija obrisano
       #original_hash: c3aa289
       single_deletion_and_mail: 'Obrisana registracija i e-mail poslan %{mail}'
@@ -2340,6 +2353,7 @@ hr:
         zero: 0 država
         one: 1 država
         few: '%{count} država/e'
+        many: '%{count} država/e'
         other: '%{count} država/e'
       #original_hash: 1feee0e
       export_csv: Izvezi u .csv datoteku
@@ -2759,6 +2773,7 @@ hr:
         zero: Organizatora
         one: Organizator
         few: Organizator(i)
+        many: Organizator(i)
         other: Organizator(i)
       #original_hash: 53a9522
       organization_team: Organizacijski tim
@@ -2767,6 +2782,7 @@ hr:
         zero: WCA Delegata
         one: WCA Delegat
         few: WCA Delegat(i)
+        many: WCA Delegat(i)
         other: WCA Delegat(i)
       #original_hash: b37456c
       contact: Kontakt
@@ -2866,12 +2882,14 @@ hr:
         zero: Natjecatelji mogu povesti 0 gostiju.
         one: Natjecatelji mogu povesti 1 gosta.
         few: Natjecatelji mogu povesti nekoliko gostiju.
+        many: Natjecatelji mogu povesti nekoliko gostiju.
         other: 'Natjecatelji mogu povesti najviše %{count} gostiju.'
       #original_hash: bad09c8
       event_limit:
         zero: Natjecatelj se može registrirati samo u 1 disciplini.
         one: Natjecatelj se može registrirati samo u 1 disciplini.
         few: Natjecatelj se može registrirati samo u nekoliko disciplina.
+        many: Natjecatelj se može registrirati samo u nekoliko disciplina.
         other: 'Natjecatelj se može registrirati maksimalno u %{count} disciplina.'
       #original_hash: 64e0ddd
       require_qualification: >-
@@ -3245,6 +3263,7 @@ hr:
         zero: nula natjecanja
         one: jedno natjecanje
         few: nekoliko natjecanja
+        many: nekoliko natjecanja
         other: '%{count} natjecanja'
       #original_hash: 3446062
       label_admin: 'Zadnjih %{days} dana'
