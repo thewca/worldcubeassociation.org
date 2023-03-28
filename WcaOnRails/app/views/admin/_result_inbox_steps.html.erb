@@ -42,11 +42,18 @@
         <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
         <li><%= link_to "Run CAD", admin_do_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
-      <p>You can also visit the following pages as sanity checks:</p>
-      <ul>
-        <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all'), target: '_blank' %></li>
-        <li><%= link_to "Post the results", admin_edit_competition_path(@competition), target: '_blank' %></li>
-      </ul>
+      <p>
+        You can also visit the <%= link_to "public results page", competition_results_all_path(@competition, event: 'all'), target: '_blank' %> as an additional sanity check.
+        Once you are sure, you can post the results using the button below:
+      </p>
+      <%= button_to competition_post_results_path(@competition), class: 'btn', disabled: @competition.results_posted?, method: :post, data: { confirm: 'You are about to publish the results, including sending out emails to the competitors. Are you sure?'} do %>
+        <%= t 'competitions.post_results' %>
+      <% end %>
+      <% if @competition.results_posted? %>
+          <p class="help-block">
+            <%= t 'competitions.results_posted_by_html', poster_name: User.find(@competition.results_posted_by).name, date_time: wca_local_time(@competition.results_posted_at) %>
+          </p>
+      <% end %>
     <% end %>
 
     <% if @existing_data[:result] > 0 || @existing_data[:scramble] > 0 %>

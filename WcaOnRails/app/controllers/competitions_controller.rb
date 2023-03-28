@@ -236,22 +236,22 @@ class CompetitionsController < ApplicationController
     comp = competition_from_params
     if ComputeAuxiliaryData.in_progress?
       flash[:danger] = t('competitions.messages.computing_auxiliary_data')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_post_results_path(comp)
     end
 
     unless comp.results.any?
       flash[:danger] = t('competitions.messages.no_results')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_post_results_path(comp)
     end
 
     if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_post_results_path(comp)
     end
 
     if comp.results_posted?
       flash[:danger] = t('competitions.messages.results_already_posted')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_post_results_path(comp)
     end
 
     ActiveRecord::Base.transaction do
@@ -261,7 +261,7 @@ class CompetitionsController < ApplicationController
     end
 
     flash[:success] = t('competitions.messages.results_posted')
-    redirect_to admin_edit_competition_path(comp)
+    redirect_to competition_admin_post_results_path(comp)
   end
 
   def orga_close_reg_when_full_limit
