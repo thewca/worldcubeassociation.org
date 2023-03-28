@@ -18,12 +18,16 @@
 
       <% progress_percent = inbox_step_num.to_f / number_of_steps * 100 %>
 
-      <div class="progress-bar <%= "progress-bar-success" unless @inbox_step.present? %>" role="progressbar" style="width: <%= progress_percent %>%">
+      <% results_public = @competition.results_posted? %>
+
+      <div class="progress-bar <%= "progress-bar-success" if results_public %>" role="progressbar" style="width: <%= progress_percent %>%">
         <% if @inbox_step.present? %>
           Step <%= inbox_step_num %>/<%= number_of_steps %>
+        <% elsif !results_public %>
+          Import complete, pending sanity checks…
         <% else %>
           All steps completed!
-        <% end %>
+      <% end %>
       </div>
     </div>
 
@@ -36,12 +40,12 @@
       <ul>
         <%# TODO: Redo link pending other PR %>
         <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
-        <li><%= link_to "Run CAD", admin_compute_auxiliary_data_path, target: '_blank' %></li>
+        <li><%= link_to "Run CAD", admin_do_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
       <p>You can also visit the following pages as sanity checks:</p>
       <ul>
-        <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all') %></li>
-        <li><%= link_to "Post the results", admin_edit_competition_path(@competition) %></li>
+        <li><%= link_to "View the public competition page", competition_results_all_path(@competition, event: 'all'), target: '_blank' %></li>
+        <li><%= link_to "Post the results", admin_edit_competition_path(@competition), target: '_blank' %></li>
       </ul>
     <% end %>
 
@@ -51,8 +55,8 @@
       <% message = [:result, :scramble].filter { |data| @existing_data[data] > 0 }.map(&:capitalize).join(' and ') %>
 
       <%= alert :warning, note: true do %>
-        This competition has <%= message %> data uploaded. Uploading more data may cause duplicate entries.
-        You may remove the uploaded data using the interface below.
+        This competition has <%= message %> data uploaded. Uploading more data will override the existing inbox data, but not the imported results data.
+        You may remove the currently imported results data using the interface below.
       <% end %>
 
       <div class="container">

@@ -4,7 +4,7 @@
 <% render_step_index = AdminController::RESULTS_POSTING_STEPS.index render_step %>
 
 <h2>
-  Import <code><%= render_step.to_s.camelize %></code>s
+  Import <code><%= render_step.to_s.camelize %>s</code>
   <% if inbox_step_index >= render_step_index %>
     <% if @existing_data[render_step] > 0 %>
       <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(render_step) } %>
@@ -28,7 +28,7 @@
     <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
     <% results_validator.validate [@competition.id] %>
 
-    <%= render "results_submission/results_preview_panel", results_validator: results_validator, max_height: "500px", expand_all: true %>
+    <%= render "results_submission/results_preview_panel", results_validator: results_validator, max_height: "500px", expand_all: true, unindent_solves: true %>
 
     <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger', data: { jquery_method: :post } %>
       results</p>
