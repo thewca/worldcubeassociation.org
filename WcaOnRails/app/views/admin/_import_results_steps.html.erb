@@ -24,9 +24,9 @@
         <% if @inbox_step.present? %>
           Step <%= inbox_step_num %>/<%= number_of_steps %>
         <% elsif !results_public %>
-          Import complete, pending sanity checks…
+          Import complete, but not published yet…
         <% else %>
-          All steps completed!
+          All steps completed and published!
       <% end %>
       </div>
     </div>
@@ -46,7 +46,7 @@
         You can also visit the <%= link_to "public results page", competition_results_all_path(@competition, event: 'all'), target: '_blank' %> as an additional sanity check.
         Once you are sure, you can post the results using the button below:
       </p>
-      <%= button_to competition_post_results_path(@competition), class: 'btn', disabled: @competition.results_posted?, method: :post, data: { confirm: 'You are about to publish the results, including sending out emails to the competitors. Are you sure?'} do %>
+      <%= button_to competition_post_results_path(@competition), class: 'btn btn-primary', disabled: @competition.results_posted?, method: :post, data: { confirm: 'You are about to publish the results, including sending out emails to the competitors. Are you sure?'} do %>
         <%= t 'competitions.post_results' %>
       <% end %>
       <% if @competition.results_posted? %>

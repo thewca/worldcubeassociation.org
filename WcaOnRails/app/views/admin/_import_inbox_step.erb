@@ -30,13 +30,10 @@
 
     <%= render "results_submission/results_preview_panel", results_validator: results_validator, max_height: "500px", expand_all: true, unindent_solves: true %>
 
-    <p><%= link_to "Finish importing", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger', data: { jquery_method: :post } %>
-      results</p>
+    <p>Please <%= link_to "finish importing results", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger btn btn-primary', data: { jquery_method: :post } %>
+      to proceed to the next step</p>
   <% elsif render_step == :inbox_person %>
     <%# TODO: Redo link pending other PR %>
-    <p><%= link_to "Assign WCA IDs", '/results/admin/persons_finish_unfinished.php?check=+Check+now+', target: '_blank' %>
-      to newcomers</p>
-
     <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending</p>
 
     <ul>
@@ -47,11 +44,14 @@
       </li>
     </ul>
 
-    <% if @existing_data[:newcomer_result] == 0 %>
-      <p>You
-        can <%= link_to "delete", competition_admin_delete_inbox_data_path(@competition.id, model: :inbox_person), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(:inbox_person) } %>
-        the inbox data, as all rows seem to have been fully imported.</p>
-    <% end %>
+    <p>
+      <% if @existing_data[:newcomer_result] == 0 %>
+        All newcomers seem to have been assigned WCA IDs. Please delete the inbox rows using the buttons above.
+      <% else %>
+        Please <%= link_to "assign WCA IDs to newcomers", '/results/admin/persons_finish_unfinished.php?check=+Check+now+', target: '_blank', class: 'btn btn-primary' %>
+        to proceed to the next step.
+      <% end %>
+    </p>
   <% end %>
 <% else %>
   This step has been completed! <%= ui_icon('check') %>
