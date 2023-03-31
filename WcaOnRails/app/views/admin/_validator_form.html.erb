@@ -12,9 +12,15 @@
       <div id="selectize-competition-ids">
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       </div>
-      <div id="datetime-start-range">
+      <div id="datetime-start-range" style="margin-bottom: 20px;">
         <%= f.input :competition_count, as: :integer, hint: "Warning: Setting this number too high can lead to timeouts. Use at your own risk!", label: "Number of competitions to check" %>
-        <%= f.input :competition_start_date, as: :date_picker, hint: "This will encompass at most #{ResultValidationForm::ALL_COMPETITIONS_MAX} competitions.", label: "Start date for checking" %>
+        <%= f.input :competition_start_date, as: :date_picker, hint: "Please pick a date above to update this label with information on the time span.", label: "Start date for checking" %>
+
+        <div class="progress" style="margin-top: 5px; display: none;">
+          <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%;">
+            <span class="sr-only">LOADING</span>
+          </div>
+        </div>
       </div>
       <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
     <% end %>
@@ -50,7 +56,18 @@
     var startDate = $compStartDate.val();
     var count = $compCount.val();
 
+    var $progressDiv = $('div.progress');
+    var $progressBar = $('div.progress-bar');
+
+    var $datePickerHint = $('#datetime-start-range .result_validation_form_competition_start_date p.help-block');
+
     if (startDate && count) {
+      $datePickerHint.hide();
+
+      $progressDiv.show();
+      $progressBar.removeClass('progress-bar-danger').addClass('progress-bar-success active');
+      $progressBar.html('<span class="sr-only">LOADING</span>');
+
       window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
         url: '<%= admin_validation_end_date_path %>',
         data: {
@@ -60,12 +77,28 @@
         success: function(data) {
           var { endDate } = data;
 
-          $('#datetime-start-range p.help-block').html(`The checks will run up to and including <b>${endDate}</b>`);
+          $datePickerHint.html(`The checks will run for competitions with an <code>end_date</code> up to and including <b>${endDate}</b>`);
+          $datePickerHint.show();
+
+          $progressDiv.hide();
+        },
+        error: function(response) {
+          var $progressBar = $('div.progress-bar');
+          $progressBar.removeClass('progress-bar-success active').addClass('progress-bar-danger');
+
+          var requestId = response.getResponseHeader('X-Request-Id');
+          $progressBar.text(`An error occured! Request ID ${requestId}`);
         }
       });
     }
   }
 
   $compStartDate.on('dp.change', fetchEndDate);
-  $compCount.on('change', fetchEndDate);
+  $compCount.on('input', fetchEndDate);
 </script>
+
+<style>
+  div.form-group.result_validation_form_competition_start_date {
+    margin-bottom: 0;
+  }
+</style>
