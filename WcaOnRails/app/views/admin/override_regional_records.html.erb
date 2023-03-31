@@ -6,7 +6,10 @@
 
   <% diff_mode = !competition_id.present? && !event_id.present? %>
 
-  <h1><%= yield(:title) %></h1>
+  <h1>
+    <%= yield(:title) %>
+    <%= link_to "Go back", admin_check_regional_records_path(competition_id: competition_id, event_id: event_id), class: "btn btn-default" %>
+  </h1>
 
   <% if diff_mode %>
     <p>Running for all competitions and all events. This only shows conflicting rows, where the stored and computed
