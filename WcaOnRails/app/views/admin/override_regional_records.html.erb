@@ -9,12 +9,17 @@
   <h1><%= yield(:title) %></h1>
 
   <% if diff_mode %>
-    <p>Running for all competitions and all events. This only shows cases where the stored and computed markers are
-      different.</p>
+    <p>Running for all competitions and all events. This only shows conflicting rows, where the stored and computed
+      markers are different.</p>
+
+    <%= alert :warning do %>
+      Note that conflicting rows are <b>not</b> being highlighted separately in this mode!
+    <% end %>
   <% else %>
     <% if competition_id.present? %>
       <p>Competition: <code><%= competition_id %></code></p>
     <% end %>
+
     <% if event_id.present? %>
       <p>Event: <code><%= event_id %></code></p>
     <% end %>
