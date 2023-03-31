@@ -195,7 +195,7 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   get '/admin/check_results' => 'admin#check_results'
-  get '/admin/validation_end_date' => "admin#compute_validation_end_date"
+  get '/admin/validation_range_end' => "admin#compute_validation_range_end"
   post '/admin/check_results' => 'admin#do_check_results'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'

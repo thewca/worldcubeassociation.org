@@ -50,13 +50,20 @@ class AdminController < ApplicationController
     end
   end
 
-  def compute_validation_end_date
-    start_date = Date.parse(params[:start_date])
-    count = params[:count].to_i
+  def compute_validation_range_end
+    validation_form = ResultValidationForm.new(
+      competition_start_date: params[:start_date],
+      competition_count: params[:count],
+      competition_selection: ResultValidationForm::COMP_VALIDATION_ALL,
+    )
 
-    end_date = ResultValidationForm.compute_end_date(start_date, count)
+    competition_ids = validation_form.competitions
 
-    render json: { endDate: end_date }
+    render json: {
+      rangeEnd: validation_form.competition_range_end,
+      count: competition_ids.length,
+      competitions: competition_ids,
+    }
   end
 
   def with_results_validator
@@ -91,7 +98,7 @@ class AdminController < ApplicationController
 
   def running_validators
     action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date)
+                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date, :competition_count)
 
     @result_validation = ResultValidationForm.new(action_params)
 

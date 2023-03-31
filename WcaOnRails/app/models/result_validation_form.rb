@@ -24,11 +24,9 @@ class ResultValidationForm
 
   def competitions
     if self.competition_selection == COMP_VALIDATION_ALL
-      ALL_COMPETITIONS_SCOPE.where("start_date >= ?", self.competition_start_date)
-                            .where("end_date <= ?", self.competition_end_date)
-                            .limit(self.competition_count)
-                            .order(:start_date)
-                            .ids
+      ResultValidationForm.competitions_between(self.competition_start_date, self.competition_range_end)
+                          .order(:start_date)
+                          .ids
     else
       @competition_ids.split(",").uniq.compact
     end
@@ -42,8 +40,8 @@ class ResultValidationForm
     Date.parse(@competition_start_date) if @competition_start_date.present?
   end
 
-  def competition_end_date
-    ResultValidationForm.compute_end_date(self.competition_start_date, self.competition_count) if self.competition_start_date.present?
+  def competition_range_end
+    @competition_range_end ||= ResultValidationForm.compute_range_end(self.competition_start_date, self.competition_count) if self.competition_start_date.present?
   end
 
   def competition_count
@@ -71,32 +69,35 @@ class ResultValidationForm
     build_validator.validate competitions
   end
 
-  def self.compute_end_date(start_date, count = ALL_COMPETITIONS_MAX)
-    end_date = ALL_COMPETITIONS_SCOPE.where("start_date >= ?", start_date)
-                                     .order(:start_date)
-                                     # Not using `offset` because of the risk to skip into nothingness for newer competitions
-                                     .limit(count)
-                                     .pluck(:end_date)
-                                     .last
+  def self.compute_range_end(start_date, count = ALL_COMPETITIONS_MAX)
+    range_end = ALL_COMPETITIONS_SCOPE.where(start_date: start_date..)
+                                      .order(:start_date)
+                                      # Not using `offset` because of the risk to skip into nothingness for newer competitions
+                                      .limit(count)
+                                      .pluck(:start_date)
+                                      .last
 
-    return start_date if end_date.nil?
+    return start_date if range_end.nil?
 
-    self.cap_range(start_date, end_date, count)
+    self.cap_range(start_date, range_end, count)
   end
 
-  def self.cap_range(start_date, end_date, count)
-    if end_date < start_date
+  def self.cap_range(start_date, range_end, max_count)
+    if range_end < start_date
       return start_date
     end
 
-    limit_count = ALL_COMPETITIONS_SCOPE.where("start_date >= ?", start_date)
-                                        .where("end_date <= ?", end_date)
-                                        .count
+    actual_count = self.competitions_between(start_date, range_end).count
 
-    if limit_count > count
-      return self.cap_range(start_date, end_date - 1.day, count)
+    if actual_count > max_count
+      return self.cap_range(start_date, range_end - 1.day, max_count)
     end
 
-    end_date
+    range_end
+  end
+
+  def self.competitions_between(range_start, range_end)
+    ALL_COMPETITIONS_SCOPE.where(start_date: range_start..)
+                          .where(start_date: ..range_end)
   end
 end

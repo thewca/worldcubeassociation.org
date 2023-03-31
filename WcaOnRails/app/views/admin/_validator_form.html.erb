@@ -13,7 +13,7 @@
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       </div>
       <div id="datetime-start-range" style="margin-bottom: 20px;">
-        <%= f.input :competition_count, as: :integer, hint: "Warning: Setting this number too high can lead to timeouts. Use at your own risk!", label: "Number of competitions to check" %>
+        <%= f.input :competition_count, as: :integer, hint: "Warning: Setting this number too high can lead to timeouts. Use at your own risk!", label: "Number of competitions to check", input_html: { max: ResultValidationForm::ALL_COMPETITIONS_MAX } %>
         <%= f.input :competition_start_date, as: :date_picker, hint: "Please pick a date above to update this label with information on the time span.", label: "Start date for checking" %>
 
         <div class="progress" style="margin-top: 5px; display: none;">
@@ -69,15 +69,38 @@
       $progressBar.html('<span class="sr-only">LOADING</span>');
 
       window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
-        url: '<%= admin_validation_end_date_path %>',
+        url: '<%= admin_validation_range_end_path %>',
         data: {
           'start_date': startDate,
           'count': count
         },
         success: function(data) {
-          var { endDate } = data;
+          var { rangeEnd, count, competitions } = data;
 
-          $datePickerHint.html(`The checks will run for competitions with an <code>end_date</code> up to and including <b>${endDate}</b>`);
+          var displayLength = Math.min(10, competitions.length);
+          var displaySlice = Math.floor(displayLength / 2);
+
+          var displayIds = competitions.slice(0, displaySlice);
+
+          var sliceCheck = displaySlice * 2;
+
+          if (competitions.length > sliceCheck) {
+            var remaining = competitions.length - sliceCheck;
+
+            var filler = (remaining + sliceCheck <= displayLength)
+              ? competitions.slice(displaySlice, displaySlice + remaining)
+              : ['&nbsp;', `(${remaining}&nbsp;more&nbsp;competitions)`, '&nbsp;'];
+
+            displayIds = displayIds.concat(filler);
+          }
+
+          var lastIds = competitions.slice(-displaySlice);
+          displayIds = displayIds.concat(lastIds);
+
+          var competitionIds = displayIds.join('\n');
+
+          $datePickerHint.html(`The checks will run for <b data-toggle="tooltip" data-placement="bottom" data-container="body" title="${competitionIds}">${count}</b> competitions with <code>start_date</code> before or on <b>${rangeEnd}</b>`);
+          $('b', $datePickerHint).tooltip();
           $datePickerHint.show();
 
           $progressDiv.hide();
