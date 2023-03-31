@@ -3,7 +3,10 @@
 <div class="container">
   <% competition_id = @finish_persons.competition_id %>
 
-  <h2><%= yield(:title) %></h2>
+  <h2>
+    <%= yield(:title) %>
+    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_id: competition_id), class: "btn btn-default" %>
+  </h2>
 
   <% if competition_id.present? %>
     <p>For competition <code><%= competition_id %></code></p>
