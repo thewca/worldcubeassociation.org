@@ -217,14 +217,18 @@ module CompetitionsHelper
     end.to_json.html_safe
   end
 
-  def championship_option_tags(selected: nil)
-    grouped_championship_types = {
+  def grouped_championship_types
+    {
       "Planetary Championship" => [["World", "world"]],
       "Continental Championship" => Continent.all_sorted_by(I18n.locale, real: true).map { |continent| [continent.name, continent.id] },
       "Multi-country Championship" => EligibleCountryIso2ForChampionship.championship_types.map { |championship_type| [championship_type.titleize, championship_type] },
       "National Championship" => Country.all_sorted_by(I18n.locale, real: true).map { |country| [country.name, country.iso2] },
     }
-    grouped_options_for_select(grouped_championship_types, selected)
+  end
+
+  def championship_option_tags(selected: nil)
+    championship_types = grouped_championship_types
+    grouped_options_for_select(championship_types, selected)
   end
 
   def first_and_last_time_from_activities(activities, timezone)

@@ -80,12 +80,14 @@ export function InputSelect({ inputState, options, ...props }) {
   );
 }
 
-export function InputBoolean({ inputState, ...props }) {
-  // TODO: this needs to have a different way of handling the label
+export function InputBoolean({ inputState }) {
+  const label = getInputStateLabel(inputState);
+  const onChange = (e, { checked }) => {
+    inputState.onChange(checked);
+  };
+
   return (
-    <FieldWrapper inputState={inputState} {...props}>
-      <Checkbox checked={inputState.value} onChange={inputState.onChange} />
-    </FieldWrapper>
+    <Checkbox checked={inputState.value} onChange={onChange} label={label} />
   );
 }
 

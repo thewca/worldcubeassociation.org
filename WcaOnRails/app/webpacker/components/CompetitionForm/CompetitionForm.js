@@ -20,6 +20,7 @@ import {
 import VenueMap from './VenueMap';
 import NearbyComps from './NearbyComps';
 import SeriesComps from './SeriesComps';
+import ChampionshipInput from './ChampionshipInput';
 
 function AdminView({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
@@ -60,7 +61,6 @@ function AnnouncementDetails({ competition, confirmed, mail }) {
 
 function CoordinatesInput({ latData, longData }) {
   const label = I18n.t('competitions.competition_form.coordinates');
-  // TODO: The layout of this is kinda weird
   return (
     <Form.Group widths="equal">
       <InputString inputState={latData} attachedLabel="Latitude" label={label} hint="&#8203;" />
@@ -102,17 +102,12 @@ function CompetitorLimitInput({
     value: false,
     text: I18n.t('simple_form.options.competition.competitor_limit_enabled.false'),
   }];
-  if (!competitorLimitEnabledData.value) {
-    return (
-      <InputSelect inputState={competitorLimitEnabledData} options={options} />
-    )
-  }
 
   return (
     <>
       <InputSelect inputState={competitorLimitEnabledData} options={options} />
-      <InputNumber inputState={competitorLimitData} />
-      <InputString inputState={competitorLimitReasonData} />
+      {competitorLimitEnabledData.value && <InputNumber inputState={competitorLimitData} />}
+      {competitorLimitEnabledData.value && <InputString inputState={competitorLimitReasonData} />}
     </>
   );
 }
@@ -159,6 +154,12 @@ export default function CompetitionForm({
   const staffDelegateData = useFormInputState('staff_delegate_ids', competition);
   const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
   const organizerData = useFormInputState('organizer_ids', competition);
+  const contactData = useFormInputState('contact', competition);
+
+  const generateWebsiteData = useFormInputState('generate_website', competition, true);
+  const externalWebsiteData = useFormInputState('external_website', competition);
+
+  const championshipsData = useFormInputState('championships', competition, []);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -207,9 +208,9 @@ export default function CompetitionForm({
           startDateData={startDateData}
           endDateData={endDateData}
         />
-      </Form>
-      <hr />
-      <Form>
+
+        <hr />
+
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
         <InputMarkdown inputState={informationData} />
         <CompetitorLimitInput
@@ -220,6 +221,21 @@ export default function CompetitionForm({
         <UserSearch inputState={staffDelegateData} delegateOnly />
         <UserSearch inputState={traineeDelegateData} traineeOnly />
         <UserSearch inputState={organizerData} />
+        <InputString
+          inputState={contactData}
+          hint={I18n.t('competitions.competition_form.contact_html', {
+            md: I18n.t('competitions.competition_form.supports_md_html'),
+          })}
+        />
+
+        <hr />
+
+        <InputBoolean inputState={generateWebsiteData} />
+        {!generateWebsiteData.value && <InputString inputState={externalWebsiteData} />}
+
+        <hr />
+
+        <ChampionshipInput inputState={championshipsData} />
       </Form>
     </>
   );
