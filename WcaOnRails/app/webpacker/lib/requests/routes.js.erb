@@ -2,6 +2,8 @@ export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.u
 
 export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;
 
+export const deleSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
+
 export const newResultUrl = (competitionId, roundId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_new_result_path("${competitionId}", "${roundId}"))%>`;
 export const resultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.result_path("${id}"))%>`;
 export const editResultUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_result_path("${id}"))%>`;
@@ -59,3 +61,5 @@ export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_he
 export const competitionNearbyJsonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.nearby_competitions_json_path)%>`;
 
 export const seriesElegableCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.series_eligible_competitions_json_path)%>`;
+
+export const personSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;

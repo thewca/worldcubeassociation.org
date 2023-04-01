@@ -2,7 +2,7 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-danger */
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   Checkbox,
@@ -101,6 +101,33 @@ export function InputMarkdown({ inputState }) {
   return (
     <FieldWrapper inputState={inputState}>
       <MarkdownEditor value={inputState.value} onChange={inputState.onChange} />
+    </FieldWrapper>
+  );
+}
+
+export function UserSearch({ inputState, delegateOnly = false, traineeOnly = false }) {
+  let classNames = 'form-control user_ids optional wca-autocomplete wca-autocomplete-users_search';
+  if (delegateOnly) classNames += ' wca-autocomplete-only_staff_delegates';
+  if (traineeOnly) classNames += ' wca-autocomplete-only_trainee_delegates';
+
+  // This is a workaround for selectize and jquery not calling onChange
+  const inputRef = React.useRef(null);
+  useEffect(() => {
+    if (!inputRef.current) return;
+    $(`#${inputState.attribute}`).on('change', (e) => {
+      inputState.onChange(e.target.value);
+    });
+  }, [inputRef.current]);
+
+  return (
+    <FieldWrapper inputState={inputState}>
+      <input
+        ref={inputRef}
+        defaultValue={inputState.value}
+        className={classNames}
+        type="text"
+        id={inputState.attribute}
+      />
     </FieldWrapper>
   );
 }

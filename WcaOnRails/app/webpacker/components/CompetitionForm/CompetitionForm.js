@@ -13,6 +13,7 @@ import {
   InputMarkdown,
   InputSelect,
   InputString,
+  UserSearch,
   useFormInputState,
 } from './FormInputs';
 import VenueMap from './VenueMap';
@@ -120,6 +121,10 @@ export default function CompetitionForm({
   const regEndData = useFormInputState('registration_close', competition);
   const informationData = useFormInputState('information', competition);
 
+  const staffDelegateData = useFormInputState('staff_delegate_ids', competition);
+  const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
+  const organizerData = useFormInputState('organizer_ids', competition);
+
   const [compMarkers, setCompMarkers] = React.useState([]);
 
   return (
@@ -172,6 +177,9 @@ export default function CompetitionForm({
       <Form>
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
         <InputMarkdown inputState={informationData} />
+        <UserSearch inputState={staffDelegateData} delegateOnly />
+        <UserSearch inputState={traineeDelegateData} traineeOnly />
+        <UserSearch inputState={organizerData} />
       </Form>
     </>
   );

@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import SimpleMDE from 'react-simplemde-editor';
 import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
 import 'easymde/dist/easymde.min.css';
