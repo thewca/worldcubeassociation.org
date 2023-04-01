@@ -45,7 +45,12 @@ function DraggableMarker({ latData, longData }) {
   );
 }
 
-function GeoSearchControl({ latData, longData }) {
+function StaticMarker({ lat, lng }) {
+  const position = { lat, lng };
+  return <Marker position={position} icon={blueMarker} />;
+}
+
+function GeoSearchControl({ latData, longData, setZoom }) {
   const { map } = useLeaflet();
 
   useEffect(() => {
@@ -64,6 +69,7 @@ function GeoSearchControl({ latData, longData }) {
       if (!e.location) return;
       latData.onChange(roundToMicrodegrees(e.location.y));
       longData.onChange(roundToMicrodegrees(e.location.x));
+      setZoom(11);
     });
 
     return () => {
@@ -98,7 +104,7 @@ function CompetitionsMap({ latData, longData, children }) {
         attribution={provider.attribution}
         maxZoom={19}
       />
-      <GeoSearchControl latData={latData} longData={longData} />
+      <GeoSearchControl latData={latData} longData={longData} setZoom={setZoom} />
       <ZoomControl position="topright" />
       {children}
     </Map>
@@ -106,7 +112,7 @@ function CompetitionsMap({ latData, longData, children }) {
 }
 
 export default function VenueMap({
-  latData, longData, warningDist, dangerDist,
+  latData, longData, warningDist, dangerDist, markers,
 }) {
   const center = [latData.value || 0, longData.value || 0];
 
@@ -125,6 +131,9 @@ export default function VenueMap({
         color="#f0ad4e"
       />
       <DraggableMarker latData={latData} longData={longData} />
+      {markers.map((marker) => (
+        <StaticMarker key={marker} lat={marker.lat} lng={marker.lng} />
+      ))}
     </CompetitionsMap>
   );
 }

@@ -9,6 +9,7 @@ import CompsTable from './CompsTable';
 export default function NearbyComps({
   latData, longData,
   startDateData, endDateData,
+  setCompMarkers,
 }) {
   const [nearby, setNearby] = useState();
   const [loading, setLoading] = useState(false);
@@ -24,6 +25,10 @@ export default function NearbyComps({
 
     fetchJsonOrError(`${competitionNearbyJsonUrl}?${params.toString()}`).then(({ data }) => {
       setNearby(data);
+      setCompMarkers(data.map((comp) => ({
+        lat: comp.latitude_degrees,
+        lng: comp.longitude_degrees,
+      })));
       setLoading(false);
     });
   }, [latData.value, longData.value, startDateData.value, endDateData.value]);

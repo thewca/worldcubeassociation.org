@@ -9,6 +9,7 @@ import I18n from '../../lib/i18n';
 import {
   InputBoolean,
   InputDate,
+  InputDateTime,
   InputSelect,
   InputString,
   useFormInputState,
@@ -74,6 +75,15 @@ function DatesRange({ startDateData, endDateData }) {
   );
 }
 
+function DateTimeRange({ startTimeData, endTimeData }) {
+  return (
+    <Form.Group widths="equal">
+      <InputDateTime inputState={startTimeData} />
+      <InputDateTime inputState={endTimeData} />
+    </Form.Group>
+  );
+}
+
 export default function CompetitionForm({
   competition,
   adminView,
@@ -105,6 +115,11 @@ export default function CompetitionForm({
   const startDateData = useFormInputState('start_date', competition);
   const endDateData = useFormInputState('end_date', competition);
 
+  const regStartData = useFormInputState('registration_open', competition);
+  const regEndData = useFormInputState('registration_close', competition);
+
+  const [compMarkers, setCompMarkers] = React.useState([]);
+
   return (
     <>
       <Form>
@@ -132,6 +147,7 @@ export default function CompetitionForm({
         longData={longData}
         warningDist={warningDistance}
         dangerDist={dangerDistance}
+        markers={compMarkers}
       />
       <Form>
         <CoordinatesInput latData={latData} longData={longData} />
@@ -141,6 +157,7 @@ export default function CompetitionForm({
           longData={longData}
           startDateData={startDateData}
           endDateData={endDateData}
+          setCompMarkers={setCompMarkers}
         />
         <SeriesComps
           latData={latData}
@@ -148,6 +165,10 @@ export default function CompetitionForm({
           startDateData={startDateData}
           endDateData={endDateData}
         />
+      </Form>
+      <hr />
+      <Form>
+        <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
       </Form>
     </>
   );

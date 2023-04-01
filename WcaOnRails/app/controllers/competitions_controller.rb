@@ -403,6 +403,8 @@ class CompetitionsController < ApplicationController
       events: c.events.map { |event|
         cubing_icon(event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name)
       },
+      latitude_degrees: c.latitude_degrees,
+      longitude_degrees: c.longitude_degrees,
     }
   end
 

@@ -103,7 +103,7 @@ function CompsTableContent({ nearby, action }) {
         {headerRow()}
       </Table.Header>
       <Table.Body>
-        {nearby.map((comp) => compRow(comp))}
+        {nearby.reverse().map((comp) => compRow(comp))}
       </Table.Body>
       <Table.Footer fullWidth>
         <Table.Row>

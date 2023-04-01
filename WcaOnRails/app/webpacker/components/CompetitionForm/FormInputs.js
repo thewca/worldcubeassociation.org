@@ -8,6 +8,7 @@ import {
   Checkbox,
   Form,
   Input,
+  Select,
 } from 'semantic-ui-react';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
@@ -49,7 +50,7 @@ export function FieldWrapper({
     <Form.Field>
       <label dangerouslySetInnerHTML={{ __html: inputLabel }} />
       {children}
-      <p dangerouslySetInnerHTML={{ __html: inputHint }} />
+      <p dangerouslySetInnerHTML={{ __html: inputHint }} className="help-block" />
     </Form.Field>
   );
 }
@@ -65,13 +66,7 @@ export function InputString({ inputState, attachedLabel, ...props }) {
 export function InputSelect({ inputState, options, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
-      <select value={inputState.value} onChange={inputState.onChange}>
-        {options.map((option) => (
-          <option key={option.value} value={option.value}>
-            {option.text}
-          </option>
-        ))}
-      </select>
+      <Select options={options} value={inputState.value} onChange={inputState.onChange} basic />
     </FieldWrapper>
   );
 }
@@ -89,6 +84,14 @@ export function InputDate({ inputState, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
       <Input type="date" value={inputState.value} onChange={inputState.onChange} style={{ width: 'full' }} />
+    </FieldWrapper>
+  );
+}
+
+export function InputDateTime({ inputState, ...props }) {
+  return (
+    <FieldWrapper inputState={inputState} {...props}>
+      <Input type="datetime-local" value={inputState.value} onChange={inputState.onChange} style={{ width: 'full' }} />
     </FieldWrapper>
   );
 }
