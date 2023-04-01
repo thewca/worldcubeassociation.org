@@ -87,7 +87,9 @@ export function InputBoolean({ inputState }) {
   };
 
   return (
-    <Checkbox checked={inputState.value} onChange={onChange} label={label} />
+    <Form.Field>
+      <Checkbox checked={inputState.value} onChange={onChange} label={label} />
+    </Form.Field>
   );
 }
 

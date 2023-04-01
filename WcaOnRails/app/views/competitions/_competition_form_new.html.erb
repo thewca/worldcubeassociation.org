@@ -23,4 +23,5 @@
     countries: Country.all_sorted_by(I18n.locale),
     warningDistance: Competition::NEARBY_DISTANCE_KM_WARNING,
     dangerDistance: Competition::NEARBY_DISTANCE_KM_DANGER,
+    currencies: Money::Currency.table.values.pluck(:name, :iso_code).uniq,
   }) %>

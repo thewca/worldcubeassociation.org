@@ -120,11 +120,18 @@ export default function CompetitionForm({
   countries,
   warningDistance,
   dangerDistance,
+  currencies,
 }) {
   const countriesData = countries.map((c) => ({
     key: c.id,
     value: c.name,
     text: c.name,
+  }));
+
+  const currenciesData = currencies.map((c) => ({
+    key: c[0] + c[1],
+    value: c[1],
+    text: `${c[0]} (${c[1]})`,
   }));
 
   const idData = useFormInputState('id', competition);
@@ -160,6 +167,12 @@ export default function CompetitionForm({
   const externalWebsiteData = useFormInputState('external_website', competition);
 
   const championshipsData = useFormInputState('championships', competition, []);
+
+  const useWCARegData = useFormInputState('use_wca_registration', competition, false);
+  const useWCALiveForScoretakingData = useFormInputState('use_wca_live_for_scoretaking', competition, false);
+  const regPageData = useFormInputState('external_registration_page', competition);
+
+  const currencyCodeData = useFormInputState('currency_code', competition);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -236,6 +249,13 @@ export default function CompetitionForm({
         <hr />
 
         <ChampionshipInput inputState={championshipsData} />
+
+        <hr />
+
+        <InputBoolean inputState={useWCARegData} />
+        <InputBoolean inputState={useWCALiveForScoretakingData} />
+        {!useWCARegData.value && <InputString inputState={regPageData} />}
+        <InputSelect inputState={currencyCodeData} options={currenciesData} />
       </Form>
     </>
   );
