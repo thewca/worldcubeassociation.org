@@ -174,7 +174,7 @@ GEM
     bindex (0.8.1)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
-    blocks (4.0.0)
+    blocks (4.0.1)
       rails (>= 3.0.0)
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
