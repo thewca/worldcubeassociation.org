@@ -12,6 +12,7 @@ import {
 } from 'semantic-ui-react';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
+import MarkdownEditor from './MarkdownEditor';
 
 export function useFormInputState(attribute, currentData, defaultVal = '') {
   const initialValue = currentData[attribute] || defaultVal;
@@ -92,6 +93,14 @@ export function InputDateTime({ inputState, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
       <Input type="datetime-local" value={inputState.value} onChange={inputState.onChange} style={{ width: 'full' }} />
+    </FieldWrapper>
+  );
+}
+
+export function InputMarkdown({ inputState }) {
+  return (
+    <FieldWrapper inputState={inputState}>
+      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} />
     </FieldWrapper>
   );
 }

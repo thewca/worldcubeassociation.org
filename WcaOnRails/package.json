@@ -57,6 +57,7 @@
     "react-datepicker": "^4.11.0",
     "react-dom": "^16.14.0",
     "react-leaflet": "^2.8.0",
+    "react-simplemde-editor": "^5.2.0",
     "react_ujs": "^2.6.2",
     "regenerator-runtime": "^0.13.11",
     "resolve-url-loader": "^5.0.0",

@@ -10,6 +10,7 @@ import {
   InputBoolean,
   InputDate,
   InputDateTime,
+  InputMarkdown,
   InputSelect,
   InputString,
   useFormInputState,
@@ -117,6 +118,7 @@ export default function CompetitionForm({
 
   const regStartData = useFormInputState('registration_open', competition);
   const regEndData = useFormInputState('registration_close', competition);
+  const informationData = useFormInputState('information', competition);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -169,6 +171,7 @@ export default function CompetitionForm({
       <hr />
       <Form>
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
+        <InputMarkdown inputState={informationData} />
       </Form>
     </>
   );
