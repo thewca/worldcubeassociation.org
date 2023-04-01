@@ -64,6 +64,14 @@ export function InputString({ inputState, attachedLabel, ...props }) {
   );
 }
 
+export function InputNumber({ inputState, ...props }) {
+  return (
+    <FieldWrapper inputState={inputState} {...props}>
+      <Input type="number" value={inputState.value} onChange={inputState.onChange} />
+    </FieldWrapper>
+  );
+}
+
 export function InputSelect({ inputState, options, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>

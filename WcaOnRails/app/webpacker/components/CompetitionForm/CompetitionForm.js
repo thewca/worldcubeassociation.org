@@ -11,6 +11,7 @@ import {
   InputDate,
   InputDateTime,
   InputMarkdown,
+  InputNumber,
   InputSelect,
   InputString,
   UserSearch,
@@ -86,6 +87,36 @@ function DateTimeRange({ startTimeData, endTimeData }) {
   );
 }
 
+function CompetitorLimitInput({
+  competitorLimitEnabledData,
+  competitorLimitData,
+  competitorLimitReasonData,
+}) {
+  const options = [{
+    key: 'true',
+    value: true,
+    text: I18n.t('simple_form.options.competition.competitor_limit_enabled.true'),
+  },
+  {
+    key: 'false',
+    value: false,
+    text: I18n.t('simple_form.options.competition.competitor_limit_enabled.false'),
+  }];
+  if (!competitorLimitEnabledData.value) {
+    return (
+      <InputSelect inputState={competitorLimitEnabledData} options={options} />
+    )
+  }
+
+  return (
+    <>
+      <InputSelect inputState={competitorLimitEnabledData} options={options} />
+      <InputNumber inputState={competitorLimitData} />
+      <InputString inputState={competitorLimitReasonData} />
+    </>
+  );
+}
+
 export default function CompetitionForm({
   competition,
   adminView,
@@ -120,6 +151,10 @@ export default function CompetitionForm({
   const regStartData = useFormInputState('registration_open', competition);
   const regEndData = useFormInputState('registration_close', competition);
   const informationData = useFormInputState('information', competition);
+
+  const competitorLimitEnabledData = useFormInputState('competitor_limit_enabled', competition);
+  const competitorLimitData = useFormInputState('competitor_limit', competition);
+  const competitorLimitReasonData = useFormInputState('competitor_limit_reason', competition);
 
   const staffDelegateData = useFormInputState('staff_delegate_ids', competition);
   const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
@@ -177,6 +212,11 @@ export default function CompetitionForm({
       <Form>
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
         <InputMarkdown inputState={informationData} />
+        <CompetitorLimitInput
+          competitorLimitEnabledData={competitorLimitEnabledData}
+          competitorLimitData={competitorLimitData}
+          competitorLimitReasonData={competitorLimitReasonData}
+        />
         <UserSearch inputState={staffDelegateData} delegateOnly />
         <UserSearch inputState={traineeDelegateData} traineeOnly />
         <UserSearch inputState={organizerData} />

@@ -47,4 +47,6 @@ translations:
       - "*.round.*"
       - "*.search_results.*"
       - "*.simple_form.hints.competition.*"
+      - "*.simple_form.options.competition.*"
+
       - "*.activerecord.attributes.competition.*"
