@@ -1466,7 +1466,7 @@ pl:
         Witaj ponownie! Aby utworzyć twoje konto, musimy znać WCA ID, z którym
         brałeś udział w zawodach.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Witaj! Zanim będziesz mógł wziąć udział w swoich pierwszych zawodach
         WCA, potrzebujemy kilka dodatkowych informacji. Pamiętaj, że twoja data
         urodzin nigdy nie zostanie ujawniona bez twojej zgody.

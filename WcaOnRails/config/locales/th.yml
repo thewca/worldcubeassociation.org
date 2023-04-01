@@ -194,10 +194,10 @@ th:
       #original_hash: 672b22c
       cellName: รอบชิงชนะเลิศ
     g:
-      #original_hash: ccf6f8e
-      name: รอบที่สาม
-      #original_hash: ccf6f8e
-      cellName: รอบที่สาม
+      #original_hash: e2f74d2
+      name: รอบรองชนะเลิศ
+      #original_hash: e2f74d2
+      cellName: รอบรองชนะเลิศ
     h:
       #original_hash: 4d618bb
       name: รอบคัดเลือก
@@ -513,6 +513,8 @@ th:
         enable_donations: ฉันต้องการเปิดรับบริจาคนอกหนือจากค่าสมัคร
         #original_hash: 556fda0
         extra_registration_requirements: ข้อกำหนดการลงทะเบียนเพิ่มเติม
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         #original_hash: 2529d04
         on_the_spot_registration: เปิดรับสมัครที่การแข่งขัน
         #original_hash: 69780b5
@@ -553,10 +555,10 @@ th:
         #original_hash: 4baf44b
         championship_type: ประเภทการแข่งขันชิงแชมป์
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: ชื่อ
+        #original_hash: e2b4898
+        wcif_id: ID ของซีรียส์
+        #original_hash: 75ceb67
+        name: ชื่อของซีรียส์
         #original_hash: 8a6bee1
         short_name: ชื่อเล่น
         #original_hash: af3d38e
@@ -1004,6 +1006,8 @@ th:
         event_restrictions_reason: >-
           โปรดอธิบายรายละเอียดที่นี่ ทำไมคุณต้องการจำกัดการสมัครบางประเภท
           กรุณากรอกเป็นภาษาอังกฤษ!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: ผู้ชนะการแข่งขันประเภทนี้ จะถือว่าเป็นผู้ชนะการแข่งขันนี้
         #original_hash: da39a3e
@@ -1454,6 +1458,17 @@ th:
         form_error:
           zero: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
+      error_pages:
+        #original_hash: 1042478
+        500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
+        #original_hash: d815249
+        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: b61e305
+        400_error: ไม่มีหน้าที่คุณกำลังมองหา
+        #original_hash: 8b309f5
+        400_contact: >-
+          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
+          ID
     doorkeeper:
       applications:
         help:
@@ -1486,12 +1501,12 @@ th:
       welcome_back: >-
         ยินดีต้อนรับกลับมา! ในการสร้าง account ของเว็บไซต์ WCA เราต้องการทราบ
         WCA ID ที่คุณใช้แข่งขัน
-      #original_hash: 3b2bcea
-      welcome: >-
+      #original_hash: ef8243e
+      welcome_html: >-
         ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
-        เราต้องการข้อมูลเพิ่มเติมบางอย่าง
+        เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึกไว้
         โปรดทราบว่าวันเกิดของคุณจะไม่ถูกเปิดเผยโดยไม่ได้รับอนุญาตจากคุณ
-        <br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น
+        <br/><br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น
         กรุณากรอกข้อมูลของ<strong>ผู้เข้าแข่งขัน</strong>
   layouts:
     navigation:
@@ -1913,6 +1928,10 @@ th:
       remove_avatar: ลบรูปแทนตัว
       #original_hash: 4bd25cf
       remove_avatar_confirm: คุณแน่ใจที่จะลบรูปแทนตัวของคุณหรือไม่
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: ยืนยันการลบรูปประจำตัว
+      #original_hash: 010b0e5
+      remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
       guidelines: แนวทาง
       avatar_guidelines:
@@ -2080,6 +2099,11 @@ th:
       series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        คุณจำเป็นต้องใส่ข้อความในช่องอธิบายเพิ่มเติม
+        กรุณาอ่านข้อกำหนดการสมัครการแข่งขันว่าต้องใส่ข้อความอะไร (เช่น
+        สถานที่ที่คุณเข้าแข่งขันในการแข่งขัน FMC หลายสถานที่)
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2214,6 +2238,8 @@ th:
       approved_registrations: การสมัครที่ได้รับการยืนยันแล้ว
       #original_hash: bff04e8
       deleted_registrations: การสมัครที่ถูกลบ
+      #original_hash: e86b1e1
+      non_competing: การสมัครที่ไม่ได้เข้าแข่งขัน
       #original_hash: ac5d958
       not_paid: ยังไม่ชำระค่าสมัคร
       registered:
@@ -2285,6 +2311,12 @@ th:
       จำกัดจำนวนผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
       และมันได้ถึงจำนวนแล้ว ถ้าคุณสมัครการแข่งขัน
       การสมัครของคุณจะอยู่ในรายชื่อรอ ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      จำกัดผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
+      และมันอาจจะเต็มแล้ว หากคุณสมัครการแข่งขัน
+      การสมัครของคุณจะไปอยู่ในรายชื่อรอ
+      ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
     #original_hash: 855ca9c
     can_register: 'คุณสามารถสมัครการแข่งขัน %{comp} ได้ที่ด้านล่าง'
     #original_hash: 4167ed7
@@ -2341,6 +2373,8 @@ th:
         card_information: ข้อมูลบัตร
         #original_hash: bc8091a
         cardholder_name: ผู้ถือบัตร
+        #original_hash: 919710d
+        show_donation: ฉันต้องการบริจาคเพิ่มเติม ซึ่งจะไปที่ทีมผู้จัดการแข่งขันเท่านั้น
       alerts:
         #original_hash: a34940e
         not_a_number: กรุณาใส่จำนวนให้ถูกต้อง
@@ -2526,6 +2560,10 @@ th:
       stripe_connected: >-
         คุณได้เชื่อมต่อ Stripe สำเร็จแล้ว
         และคุณสามารถรับการชำระค่าสมัครสำหรับการแข่งขันครั้งนี้ได้
+      #original_hash: b8fc60f
+      stripe_disconnected_success: ตัดการเชื่อมต่อบัญชี Stripe สำเร็จแล้ว
+      #original_hash: e1a250c
+      stripe_disconnected_failure: เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี Stripe
       #original_hash: 0a4bb53
       stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
       #original_hash: 724cf0d
@@ -3121,7 +3159,7 @@ th:
     cancel_mistake: ทำผิดพลาดหรือไม่?
     #original_hash: 0fb43d5
     note_before_cancel: 'Note: การแข่งขันที่ได้รับการยืนยันแล้วเท่านั้นที่ถูกยกเลิกได้'
-    #original_hash: 19a0ac2
+    #original_hash: b38ee61
     orga_close_reg: ปิดการรับสมัคร
     #original_hash: b2bfea9
     orga_close_reg_confirm: คุณแน่ใจหรือไม่ว่าต้องการปิดการรับสมัคร คุณจะไม่สามารถแก้ไขมันได้
@@ -3129,6 +3167,12 @@ th:
     note_reg_not_full_orga_close_reg: >-
       หมายเหตุ:
       คุณสามารถปิดการสมัครการแข่งขันได้เมื่อผู้เข้าแข่งขันเต็มแล้วเท่านั้น
+    #original_hash: 1ae594d
+    stripe_disconnect: ยกเลิกการเชื่อมต่อบัญชี Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี Stripe?
+      การดำเนินการนี้ไม่สามารถยกเลิกได้
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
@@ -3337,10 +3381,10 @@ th:
       title: สถิติ
     #original_hash: e02fccb
     last_updated_html: 'แก้ไขครั้งล่าสุดเมื่อ: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      โปรดทราบว่าตัวกรองบางตัว (เช่น ปีที่ผ่านมา) ถูกปิดใช้งานชั่วคราว
-      หากคุณมีประสบการณ์ในการเพิ่มประสิทธิภาพ SQL โปรดติดต่อ WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      ขอแจ้งให้ทราบว่า filter บางอย่า (เช่น ปีในอดีต) ไม่สามารถใช้ได้ชั่วคราว
+      ทาง Software Team กำลังพยายามแก้ไขอยู่ - ขออภัยในความไม่สะดวก
     #original_hash: e3710ed
     tooltip_no_years: ฐานข้อมูลของเราใหญ่เกินกว่าจะคำนวณข้อมูลย้อนหลังได้
     #original_hash: 357094b
@@ -4736,12 +4780,12 @@ th:
     paragraph4:
       #original_hash: b6dca56
       title: Proximity policy
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        การแข่งขันของ WCA จะได้รับการยอมรับหากมีระยะห่างจากการแข่งขันอื่น 100
-        กิโลเมตร หรือ ห่างจากการแข่งขันอื่น 19 วัน WCAT
+        การแข่งขันของ WCA จะได้รับการยอมรับหากมีระยะห่างจากการแข่งขันอื่น 10
+        กิโลเมตร หรือ ห่างจากการแข่งขันอื่น 5 วัน WCAT
         จะทบทวนการแข่งขันที่เสนอโดยเฉพาะอย่างยิ่งหากมีการแข่งขันอื่นที่อยู่ในระยะ
-        100 กิโลเมตร หรือ ห่างจากการแข่งขันอื่นไม่เกิน 19 วัน Delegate
+        10 กิโลเมตร หรือ ห่างจากการแข่งขันอื่นไม่เกิน 5 วัน Delegate
         ที่ทำการขอการยอมรับการแข่งขันจะต้องให้ข้อมูลที่แสดงให้เห็นว่าทำไมการแข่งขันถึงควรได้รับการอนุมัติ
         ข้อโต้แย้งสำหรับการยอมรับการแข่งขันมีดังนี้
       olist1:
@@ -4764,9 +4808,9 @@ th:
             #original_hash: 75aa0c7
             1a: ช่วงเวลาของการแข่งขัน 2 ครั้งนั้นต้องไม่ทับซ้อนกัน
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            ถ้าสถานที่ของการแข่งขันอยู่ใกล้กว่า 100
+            ถ้าสถานที่ของการแข่งขันอยู่ใกล้กว่า 10
             กิโลเมตรกับการแข่งขันอื่นแล้วนั้น
           alist1:
             #original_hash: 8f532bb
@@ -5008,3 +5052,21 @@ th:
     privacy: ความเป็นส่วนตัว
     #original_hash: 4c4a2e8
     disclaimer: ข้อจำกัดความรับผิดชอบ
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'ไปที่ %{oauth_link} เพื่อจัดการ OAuth applications ของคุณ'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      นี่คือตัวอย่าง, การ curl, ในการรับ token การเข้าถึงโดยใช้ Application ID,
+      Client Secret, your WCA email, and your password:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      สามารถใช้ token การเข้าถึง OAuth เพื่อสร้างคำขอ API
+      ที่ได้รับอนุญาตได้จนกว่าจะหมดอายุ ตัวอย่างเช่น
+      ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Legal TNoodle version

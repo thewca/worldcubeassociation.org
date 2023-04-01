@@ -1432,7 +1432,7 @@ nl:
         Welkom terug! Om je WCA-account aan te maken, moeten we weten wat je
         WCA-id is.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Welkom! Voor je kunt deelnemen aan je eerste WCA-wedstrijd hebben we
         aanvullende informatie nodig voor onze administratie. Let op: je
         geboortedatum wordt nooit gedeeld zonder jouw expliciete toestemming.

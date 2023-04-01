@@ -2,7 +2,9 @@
 
 module ResultsValidators
   class EventsRoundsValidator < GenericValidator
-    NOT_333_MAIN_EVENT_WARNING = "The selected main event for this competition is %{main_event_id}. Please give WRT an explanation of how that event was treated as the main event of the competition."
+    NOT_333_MAIN_EVENT_WARNING = "The selected main event for this competition is %{main_event_id}. " \
+                                 "How was that event treated as the main event of the competition? " \
+                                 "Please give WRT a brief explanation (e.g. number of rounds, prizes, declared winner of the competition, ...)."
     NO_MAIN_EVENT_WARNING = "There is no selected main event for this competition. Please let WRT know that this is correct."
     UNEXPECTED_RESULTS_ERROR = "Results are present for %{event_id}, however it is not listed as an official event. " \
                                "Please remove the event from the results or contact the WCAT to request the event to be added to the WCA website."
@@ -51,71 +53,71 @@ module ResultsValidators
 
     private
 
-    def check_main_event(competition, results)
-      if competition.main_event
-        if competition.main_event_id != "333"
-          @warnings << ValidationWarning.new(:events, competition.id,
-                                             NOT_333_MAIN_EVENT_WARNING,
-                                             main_event_id: competition.main_event_id)
-        end
-      else
-        @warnings << ValidationWarning.new(:events, competition.id,
-                                           NO_MAIN_EVENT_WARNING)
-      end
-    end
-
-    def check_events_match(competition, results)
-      # Check for missing/unexpected events.
-      # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
-      expected = competition.events.map(&:id)
-      real = results.map(&:eventId).uniq
-
-      (real - expected).each do |event_id|
-        @errors << ValidationError.new(:events, competition.id,
-                                       UNEXPECTED_RESULTS_ERROR,
-                                       event_id: event_id)
-      end
-
-      (expected - real).each do |event_id|
-        @warnings << ValidationWarning.new(:events, competition.id,
-                                           MISSING_RESULTS_WARNING,
-                                           event_id: event_id)
-      end
-    end
-
-    def check_rounds_match(competition, results)
-      # Check that rounds match what was declared.
-      # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
-
-      expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.to_h { |r| ["#{r.event.id}-#{r.round_type_id}", r] }
-
-      expected = expected_rounds_by_ids.keys
-      real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
-      unexpected = real - expected
-      missing = expected - real
-
-      missing.each do |round_id|
-        event_id, round_type_id = round_id.split("-")
-        equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
-        if unexpected.include?(equivalent_round_id)
-          unexpected.delete(equivalent_round_id)
-          round = expected_rounds_by_ids[round_id]
-          unless round.round_type.combined?
-            @errors << ValidationError.new(:rounds, competition.id,
-                                           UNEXPECTED_COMBINED_ROUND_ERROR,
-                                           round_name: round.name)
+      def check_main_event(competition, results)
+        if competition.main_event
+          if competition.main_event_id != "333"
+            @warnings << ValidationWarning.new(:events, competition.id,
+                                               NOT_333_MAIN_EVENT_WARNING,
+                                               main_event_id: competition.main_event_id)
           end
         else
+          @warnings << ValidationWarning.new(:events, competition.id,
+                                             NO_MAIN_EVENT_WARNING)
+        end
+      end
+
+      def check_events_match(competition, results)
+        # Check for missing/unexpected events.
+        # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
+        expected = competition.events.map(&:id)
+        real = results.map(&:eventId).uniq
+
+        (real - expected).each do |event_id|
+          @errors << ValidationError.new(:events, competition.id,
+                                         UNEXPECTED_RESULTS_ERROR,
+                                         event_id: event_id)
+        end
+
+        (expected - real).each do |event_id|
+          @warnings << ValidationWarning.new(:events, competition.id,
+                                             MISSING_RESULTS_WARNING,
+                                             event_id: event_id)
+        end
+      end
+
+      def check_rounds_match(competition, results)
+        # Check that rounds match what was declared.
+        # This function automatically casts cutoff rounds to regular rounds if everyone has met the cutoff.
+
+        expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.to_h { |r| ["#{r.event.id}-#{r.round_type_id}", r] }
+
+        expected = expected_rounds_by_ids.keys
+        real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+        unexpected = real - expected
+        missing = expected - real
+
+        missing.each do |round_id|
+          event_id, round_type_id = round_id.split("-")
+          equivalent_round_id = "#{event_id}-#{RoundType.toggle_cutoff(round_type_id)}"
+          if unexpected.include?(equivalent_round_id)
+            unexpected.delete(equivalent_round_id)
+            round = expected_rounds_by_ids[round_id]
+            unless round.round_type.combined?
+              @errors << ValidationError.new(:rounds, competition.id,
+                                             UNEXPECTED_COMBINED_ROUND_ERROR,
+                                             round_name: round.name)
+            end
+          else
+            @errors << ValidationError.new(:rounds, competition.id,
+                                           MISSING_ROUND_RESULTS_ERROR,
+                                           round_id: round_id)
+          end
+        end
+        unexpected.each do |round_id|
           @errors << ValidationError.new(:rounds, competition.id,
-                                         MISSING_ROUND_RESULTS_ERROR,
+                                         UNEXPECTED_ROUND_RESULTS_ERROR,
                                          round_id: round_id)
         end
       end
-      unexpected.each do |round_id|
-        @errors << ValidationError.new(:rounds, competition.id,
-                                       UNEXPECTED_ROUND_RESULTS_ERROR,
-                                       round_id: round_id)
-      end
-    end
   end
 end

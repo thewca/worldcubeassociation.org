@@ -87,6 +87,12 @@ Rails.application.configure do
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
 
+  # uncomment this if you want to test error pages in development
+  # config.consider_all_requests_local = false
+  # config.exceptions_app = ->(env) {
+  #   ErrorsController.action(:show).call(env)
+  # }
+
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true
 

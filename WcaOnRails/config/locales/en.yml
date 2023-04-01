@@ -330,6 +330,7 @@ en:
         competition_events: "Events"
         enable_donations: "I want to enable donations additionally to collecting the registration fees"
         extra_registration_requirements: "Extra registration requirements"
+        force_comment_in_registration: "Force competitors to make a comment when registering"
         on_the_spot_registration: "On the spot registrations"
         on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
         allow_registration_edits: "Registration edits"
@@ -549,7 +550,7 @@ en:
         competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
-        guests_per_registration_limit: "The number guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
+        guests_per_registration_limit: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
         events_per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
         venueAddress: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
@@ -569,6 +570,7 @@ en:
         qualification_results_reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
         event_restrictions: ""
         event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
+        force_comment_in_registration: ""
         main_event_id: "The winner of this event will be the winner of the competition."
         allow_registration_without_qualification: ""
         #context: when marked as championship
@@ -807,6 +809,12 @@ en:
         form_error:
           one: "The form contains one error:"
           other: "The form contains %{count} errors:"
+      error_pages:
+        #context: The error pages in the case of 500s or 400s
+        500_error: "We're sorry, but something went wrong."
+        500_contact: "If you report this error to the Software Team please mention the Request ID"
+        400_error: "The page you were looking for doesn't exist."
+        400_contact: "If you think this is a mistake please contact the Software Team and include the Request ID"
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -827,7 +835,7 @@ en:
       have_never_competed: "I have never competed in a WCA competition."
       let_us_know: "Please let us know if you have competed in a WCA competition before."
       welcome_back: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
-      welcome: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
+      welcome_html: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/><br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
   layouts:
     #context: This key belongs to the navigation bar
     navigation:
@@ -1052,6 +1060,8 @@ en:
       sign_out_of_devices: "Sign out of other devices"
       remove_avatar: "Remove avatar"
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
+      remove_avatar_confirm_button: "Confirm avatar removal"
+      remove_avatar_reason: "Please provide the reason for removal"
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
@@ -1122,6 +1132,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
+      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simutaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1223,6 +1234,7 @@ en:
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
       deleted_registrations: "Deleted registrations"
+      non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
         without_stripe: "Registered on"
@@ -1257,6 +1269,7 @@ en:
     greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
+    registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     can_register: "You can register for %{comp} below."
     check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
     have_registered: "You have submitted your registration for %{comp}. You can see your registration details below."
@@ -1284,6 +1297,7 @@ en:
         donation: "Donation"
         card_information: "Card information"
         cardholder_name: "Cardholder name"
+        show_donation: "I would like to make an additional optional donation that will go only to the organization team"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
@@ -1360,6 +1374,8 @@ en:
       not_confirmed_visible: "This competition is not confirmed but visible"
       not_confirmed_not_visible: "This competition is not confirmed and not visible"
       stripe_connected: "You have now successfully connected your Stripe account and can now receive registration payments for this competition."
+      stripe_disconnected_success: "Sucessfully disconnected the Stripe account."
+      stripe_disconnected_failure: "There was an error with disconnecting the Stripe account."
       stripe_not_connected: "There was a problem and we could not connect your Stripe account."
       championship_exists: "There is already a %{championship_type} in %{year}"
       orga_closed_reg_success: "Sucessfully closed registration."
@@ -1661,9 +1677,11 @@ en:
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
     cancel_mistake: "Made a mistake?"
     note_before_cancel: "Note: only confirmed competitions can be cancelled."
-    orga_close_reg: "Close registration."
+    orga_close_reg: "Close registration"
     orga_close_reg_confirm: "Are you sure you want to close registration? You cannot undo this."
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
+    stripe_disconnect: "Disconnect Stripe account"
+    stripe_disconnect_confirm: "Are you sure you want to disconnect the Stripe account? This action cannot be undone."
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
       general_info: "General info"
@@ -1787,7 +1805,7 @@ en:
     records:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
-    heading_disabled_functions: "Please note that some filters (such as past years) are temporarily disabled. If you have experience in SQL optimisations, please contact the WST!"
+    filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
     tooltip_no_years: "Our database is too large to compute historical data"
     tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
@@ -2431,7 +2449,7 @@ en:
       content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
-      content1: "WCA competitions will be accepted if they are at least 100 km or 19 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 100 km and the time between them is less than 19 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
+      content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
         '2': "The two competitions take place in different countries."
@@ -2442,7 +2460,7 @@ en:
           alist1:
             '1a': "Time frames when both are celebrated can’t overlap."
         '2':
-          content1: "If any location of such competitions is closer than 100 km to any other regular competition, then"
+          content1: "If any location of such competitions is closer than 10 km to any other regular competition, then"
           alist1:
             '2a': "both competitions should be at least 5 days apart, or"
             '2b': "the other competition must not have the 3x3x3 Fewest Moves event."

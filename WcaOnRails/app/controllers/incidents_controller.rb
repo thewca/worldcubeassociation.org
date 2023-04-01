@@ -106,19 +106,19 @@ class IncidentsController < ApplicationController
 
   private
 
-  def set_incident
-    @incident = Incident.find(params[:id])
-  end
+    def set_incident
+      @incident = Incident.find(params[:id])
+    end
 
-  def incident_params
-    params.require(:incident).permit(
-      :title,
-      :private_description,
-      :private_wrc_decision,
-      :public_summary,
-      :tags,
-      :digest_worthy,
-      incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
-    )
-  end
+    def incident_params
+      params.require(:incident).permit(
+        :title,
+        :private_description,
+        :private_wrc_decision,
+        :public_summary,
+        :tags,
+        :digest_worthy,
+        incident_competitions_attributes: [:id, :competition_id, :comments, :_destroy],
+      )
+    end
 end

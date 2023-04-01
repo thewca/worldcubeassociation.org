@@ -41,7 +41,17 @@ module Resultable
     end
 
     def round
-      Round.find_for(competitionId, eventId, roundTypeId, formatId)
+      # This method is actually relatively expensive, it's definitely fine to
+      # use it if you're dealing with a single result, but if you're manipulating
+      # a bunch of them please don't use it as you likely have another mean
+      # to get a 'round' for your set of results.
+      # Using a 'find' here is intentional to pass the `includes(:rounds)` to
+      # avoid the n+1 query on competition_events if we were directly using
+      # competition.find_round_for.
+      Competition
+        .includes(:rounds)
+        .find_by_id(competition_id)
+        &.find_round_for(event_id, round_type_id, format_id)
     end
 
     validate :belongs_to_a_round

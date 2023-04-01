@@ -86,6 +86,12 @@ RSpec.describe Registration do
     expect(registration).to be_invalid_with_errors(registration_competition_events: ["must register for at least one event"])
   end
 
+  it "allows zero events for non competing staff" do
+    registration.registration_competition_events = []
+    registration.is_competing = false
+    expect(registration).to be_valid
+  end
+
   it "requires events be offered by competition" do
     registration.registration_competition_events.build(competition_event_id: 1234)
     expect(registration).to be_invalid_with_errors(
@@ -312,6 +318,17 @@ RSpec.describe Registration do
       competition.save!
       registration.reload
       expect(registration).to be_invalid_with_errors(registration_competition_events: ["You cannot register for events you are not qualified for."])
+    end
+  end
+
+  describe '#accepted_and_paid_pending_count' do
+    it 'returns count of registrations which are accepted and which are paid and pending' do
+      accepted_registrations_count = described_class.accepted.count
+      paid_pending_registrations_count = described_class.pending.with_payments.count
+
+      total_count = accepted_registrations_count + paid_pending_registrations_count
+
+      expect(described_class.accepted_and_paid_pending_count).to eq(total_count)
     end
   end
 end

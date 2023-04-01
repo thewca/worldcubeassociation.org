@@ -192,10 +192,10 @@ pt:
       #original_hash: 672b22c
       cellName: Final
     g:
-      #original_hash: ccf6f8e
-      name: Terceira ronda
-      #original_hash: ccf6f8e
-      cellName: Terceira ronda
+      #original_hash: e2f74d2
+      name: Meia-Final
+      #original_hash: e2f74d2
+      cellName: Meia-Final
     h:
       #original_hash: 4d618bb
       name: Ronda de qualificação
@@ -500,6 +500,8 @@ pt:
         guests_enabled: Convidados
         #original_hash: 7d78478
         guests_per_registration_limit: Número máximo de acompanhantes por registo
+        #original_hash: 22516e1
+        events_per_registration_limit: Limite de eventos por inscrição
         #original_hash: 089cbfd
         receive_registration_emails: Notificar-me via email quando alguém se regista nesta competição
         #original_hash: d4aeed9
@@ -518,6 +520,8 @@ pt:
           taxas de registo
         #original_hash: 556fda0
         extra_registration_requirements: Requisitos adicionais para registo
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: Forçar os competidores a fazer um comentário ao se registarem
         #original_hash: 2529d04
         on_the_spot_registration: Registos no local da competição
         #original_hash: 69780b5
@@ -566,10 +570,10 @@ pt:
         #original_hash: 4baf44b
         championship_type: Tipo de Campeonato
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Nome
+        #original_hash: e2b4898
+        wcif_id: ID da Série
+        #original_hash: 75ceb67
+        name: Nome da Série
         #original_hash: 8a6bee1
         short_name: Nome curto da Série
         #original_hash: af3d38e
@@ -810,12 +814,12 @@ pt:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Introduza a sua data de nascimento no formato AAAA-MM-DD.
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: Introduza a data de nascimento do competidor no formato AAAA-MM-DD.
+        #original_hash: ac908c9
         name: >-
-          Introduza o seu nome corretamente, por exemplo <strong>Luís Vaz de
-          Camões</strong>, não desleixadamente como <strong>luis v
+          Introduza o nome do competidor corretamente, por exemplo <strong>Luís
+          Vaz de Camões</strong>, não desleixadamente como <strong>luis v
           camoes</strong>. Nomes do meio (completos ou iniciais) são opcionais.
         #original_hash: da39a3e
         email: ''
@@ -953,11 +957,18 @@ pt:
         competitor_limit_reason: >-
           Qual é a razão para o limite de competidores? Por favor preencher em
           Inglês!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           O número máximo de convidados por competidor permitido nesta
           competição. O registo com demasiados convidados será bloqueado. Deixe
           em branco se não houver limite.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Opcionalmente, imponha o número máximo de eventos em que um competidor
+          pode se inscrever (geralmente usado para competições "Favoritas").
+          Deve adicionar eventos antes de usar este campo. Inscrições com
+          demasiados eventos serão bloqueadas. Deixe em branco se não houver
+          limite.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1026,6 +1037,8 @@ pt:
         event_restrictions_reason: >-
           Por favor elabore aqui o porquê de restringir certas combinações de
           eventos. Por favor preencha em Inglês!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: O vencedor deste evento será o vencedor da competição.
         #original_hash: da39a3e
@@ -1512,6 +1525,19 @@ pt:
           zero: O formulário contém zero erros.
           one: 'O formulário contém um erro:'
           other: 'O formulário contém %{count} erros:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Lamentamos, mas ocorreu um erro.'
+        #original_hash: d815249
+        500_contact: >-
+          Se reportar este erro à Equipa de Software, por favor indique o ID do
+          pedido
+        #original_hash: b61e305
+        400_error: A página que procura não existe.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Se acha que isto é um erro, entre em contacto com a Equipa de Software
+          e inclua o ID do pedido
     doorkeeper:
       applications:
         help:
@@ -1547,11 +1573,13 @@ pt:
       welcome_back: >-
         Bem-vindo de volta! Para criar a sua conta no site da WCA, precisamos do
         seu ID da WCA.
-      #original_hash: 669fb57
-      welcome: >-
-        Bem-vindo! Antes de participar na sua primeira competição da WCA,
-        precisamos de algumas informações adicionais. Note que a sua data de
-        nascimento nunca será divulgada sem sua permissão.
+      #original_hash: ef8243e
+      welcome_html: >-
+        Bem-vindo! Antes que possa competir na sua primeira competição WCA,
+        precisamos de algumas informações adicionais para fins de manutenção de
+        registos. Note que a sua data de nascimento nunca será divulgada sem a
+        sua permissão.<br/><br/>Se se estiver a inscrever em nome de outra
+        pessoa, forneça os detalhes do <strong>competidor</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1855,6 +1883,24 @@ pt:
         more_info_html: 'Pode gerir as suas preferências de email %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Cumprimentos,<br/>Equipa de Resultados da WCA em nome de %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Redefinir a password da conta WCA
+        #original_hash: 65611e9
+        greeting: 'Olá,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Recebemos uma solicitação para redefinir a password da conta da WCA
+          associada a %{user_email}. Nenhuma alteração foi feita na sua conta
+          ainda.
+        #original_hash: 60fef9e
+        instruction2: 'Pode redefinir a sua password clicando no link abaixo:'
+        #original_hash: 00850c3
+        instruction3: 'Se não solicitou uma nova password, ignore este e-mail.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Tem mais perguntas? Teremos todo o gosto em responder! Sinta-se à
+          vontade para enviar um e-mail para %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Associar o seu ID da WCA
@@ -1981,6 +2027,10 @@ pt:
       remove_avatar: Remover avatar
       #original_hash: 4bd25cf
       remove_avatar_confirm: Tem a certeza que pretende remove o seu avatar?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Confirmar remoção de avatar
+      #original_hash: 010b0e5
+      remove_avatar_reason: Por favor indique o motivo da remoção
       #original_hash: 141d1d7
       guidelines: Orientações
       avatar_guidelines:
@@ -2143,6 +2193,13 @@ pt:
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceite e excluída ao mesmo tempo.
       #original_hash: a38d024
       must_register: deve inscrever-se em pelo menos um evento
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: tem que se registar em exatamente 0 eventos
+        one: tem que se registar em exatamente 1 evento
+        other: >-
+          o número de eventos para os quais se pode registar tem que ser menor
+          ou igual a %{count}
       #original_hash: e78eec3
       banned_html: >-
         Está banido. Se acreditar que se trata de um erro, por favor contacte o
@@ -2154,6 +2211,11 @@ pt:
       series_more_than_one_accepted: Só pode ser aceite para uma das competições de uma série de competições.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Não se pode registar em eventos para os quais não está qualificado.
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        Tem que fazer um comentário. Certifique-se de ler os requisitos de
+        registo, o que deve ser incluído (por exemplo, numa competição
+        simultânea de Menos Movimentos, em que local competirá).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2298,6 +2360,8 @@ pt:
       approved_registrations: Inscrições aprovadas
       #original_hash: bff04e8
       deleted_registrations: Inscrições apagadas
+      #original_hash: e86b1e1
+      non_competing: Inscrições de não-competidores
       #original_hash: ac5d958
       not_paid: Não pago
       registered:
@@ -2377,6 +2441,12 @@ pt:
       O limite de competidores para esta competição é %{competitor_limit} e já
       foi atingido. Se se registar, o seu registo será colocado numa lista de
       espera. Poderá não ser aprovado a não ser que uma vaga fique disponível.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      O limite de competidores para esta competição é %{competitor_limit} e
+      poderá estar atingidoo. Se se inscrever, a sua inscrição será colocada
+      numa lista de espera. Poderá não ser aprovada a menos que uma vaga seja
+      libertada.
     #original_hash: 855ca9c
     can_register: 'Pode inscrever-se em %{comp} abaixo.'
     #original_hash: 4167ed7
@@ -2439,6 +2509,10 @@ pt:
         card_information: Informação do cartão
         #original_hash: bc8091a
         cardholder_name: Nome no cartão
+        #original_hash: 919710d
+        show_donation: >-
+          Gostaria de fazer uma doação opcional adicional que irá apenas para a
+          equipa de organização
       alerts:
         #original_hash: a34940e
         not_a_number: Por favor introduza um montante válido.
@@ -2641,10 +2715,18 @@ pt:
       stripe_connected: >-
         Conseguiu conectar com sucesso a sua conta Stripe e pode agora receber
         pagamentos de registos para esta competição.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Desconectou a conta Stripe com sucesso.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Ocorreu um erro ao desconectar a conta Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: Houve um problema e não foi possível ligar à sua conta Stripe.
       #original_hash: 724cf0d
       championship_exists: 'Já existe um %{championship_type} em %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Inscrições encerradas com sucesso.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Não pode fechar as inscrições.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -2732,6 +2814,8 @@ pt:
         Nota: Pode submeter um registo para todas as competições de uma Série,
         mas apenas um desses registos poderá ser confirmado e aceite. <b>Só
         poderá competir em uma das competições da Série!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Limite de competidores
       #original_hash: 196725e
       competitor_limit_is: 'Existe um limite de %{competitor_limit} competidores.'
       #original_hash: 5101f65
@@ -2790,6 +2874,11 @@ pt:
         zero: Competidores não podem trazer convidados.
         one: Competidores podem trazer no máximo 1 convidado.
         other: 'Competidores podem trazer no máximo %{count} convidados.'
+      #original_hash: bad09c8
+      event_limit:
+        zero: Competidores podem registar-se em exatamente 0 eventos.
+        one: Competidores podem registar-se em exatamente 1 evento.
+        other: 'Competidores podem registar-se em, no máximo, %{count} eventos.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Competidores apenas se podem registar em eventos para os quais se
@@ -3253,6 +3342,24 @@ pt:
     cancel_mistake: Cometeu um erro?
     #original_hash: 0fb43d5
     note_before_cancel: 'Nota: apenas competições confirmadas podem ser canceladas.'
+    #original_hash: b38ee61
+    orga_close_reg: Fechar inscrições
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: >-
+      Tem certeza de que deseja encerrar as inscrições? Esta operação não pode
+      ser voltada atrás.
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Nota: Só poderá encerrar as inscrições quando o limite de competidores for
+      atingido.
+    #original_hash: 1ae594d
+    stripe_disconnect: Desconectar conta Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Tem certeza de que deseja desconectar a conta Stripe? Esta ação não pode
+      ser desfeita.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Nota: Inscrições já se encontram encerradas.'
     show:
       #original_hash: b0fe391
       general_info: Informações gerais
@@ -3464,11 +3571,11 @@ pt:
       title: Recordes
     #original_hash: e02fccb
     last_updated_html: 'Última atualização: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Por favor note que alguns filtros (como anos anteriores) estão
-      temporariamente desativados. Se tem experiência em otimizações de SQL,
-      entre em contacto com o WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Note que alguns filtros (como o de anos anteriores) estão temporariamente
+      desativados. A equipa de software está a trabalhar para restaurar estes
+      filtros - lamentamos o inconveniente.
     #original_hash: e3710ed
     tooltip_no_years: A nossa base de dados é demasiado grande para processar dados históricos
     #original_hash: 357094b
@@ -4947,15 +5054,15 @@ pt:
     paragraph4:
       #original_hash: b6dca56
       title: Política de proximidade
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        Competições da WCA serão aceites se acontecerem com pelo menos 100 km ou
-        com intervalo de 19 dias de qualquer outra competição nessa região. A
+        Competições da WCA serão aceites se acontecerem com pelo menos 10 km ou
+        com intervalo de 5 dias de qualquer outra competição nessa região. A
         Equipa de Competições da WCA deve rever particularmente uma proposta de
         competição se existir outra competição em que a distância seja inferior
-        a 100 km e o tempo de diferença entre competições nessa área seja
-        inferior a 19 dias. Um pedido de aprovação feito por um Delegado para
-        uma competição nestas condições deve conter informação adicional que o
+        a 10 km e o tempo de diferença entre competições nessa área seja
+        inferior a 5 dias. Um pedido de aprovação feito por um Delegado para uma
+        competição nestas condições deve conter informação adicional que o
         justifique. Argumentos possíveis que suportarão a sua aprovação incluem:
       olist1:
         #original_hash: de00462
@@ -4979,9 +5086,9 @@ pt:
               Intervalos de tempo quando ambas são levadas a cabo não se podem
               sobrepor.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Se qualquer local de tal competição for mais próximo que 100 km de
+            Se qualquer local de tal competição for mais próximo que 10 km de
             qualquer outra competição regular, então
           alist1:
             #original_hash: 8f532bb
@@ -5248,3 +5355,22 @@ pt:
     privacy: Privacidade
     #original_hash: 4c4a2e8
     disclaimer: Aviso legal
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Aceda a %{oauth_link} para gerir as suas aplicações OAuth.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Aqui está um exemplo, usando curl, de obtenção de um token de acesso
+      usando um Application ID, Client Secret, o seu e-mail WCA e a sua
+      password:
+    #original_hash: 59d8cf3
+    user_email_placeholder: O_SEU_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: A_SUA_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      Um token de acesso OAuth pode ser usado, até que expire, para fazer
+      solicitações de API autorizadas. Por exemplo, para aceder a informações
+      sobre a sua conta:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Versão TNoodle legal
