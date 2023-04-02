@@ -42,7 +42,7 @@ export default function RoundRow({
         });
     } else {
       // if the format is changing to a format that has a cutoff
-      dispatch(updateRoundFormat(wcifRound, newFormat));
+      dispatch(updateRoundFormat(wcifRound.id, newFormat));
     }
   };
 
