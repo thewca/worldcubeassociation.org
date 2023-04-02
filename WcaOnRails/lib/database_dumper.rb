@@ -95,6 +95,7 @@ module DatabaseDumper
           cancelled_by
           waiting_list_deadline_date
           event_change_deadline_date
+          force_comment_in_registration
           allow_registration_edits
           allow_registration_self_delete_after_acceptance
           competition_series_id
@@ -586,6 +587,7 @@ module DatabaseDumper
           updated_at
           user_id
           roles
+          is_competing
         ),
         db_default: %w(ip),
         fake_values: {
@@ -769,7 +771,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "stripe_charges" => :skip_all_rows,
+    "stripe_transactions" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,

@@ -1421,7 +1421,7 @@ da:
         Velkommen tilbage! For at oprette din WCA konto, har vi brug for at vide
         det WCA ID som du deltog med.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Velkommen! Før du kan deltage i din første WCA konkurrence, har vi brug
         for nogle yderlige informationer for ranglisternes skyld. Din fødselsdag
         vil ikke blive offentliggjort uden din tilladelse.

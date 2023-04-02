@@ -985,7 +985,7 @@ sl:
         Dobrodošli nazaj!  Za ustvaritev vašega WCA uporabniškega računa moramo
         poznati WCA ID s katerim ste tekmovali.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Dobrodošli! Potrebujemo še nekaj dodatnih informacij preden lahko
         tekmujete na vašem prvem WCA tekmovanju. Informacije se bodo zabeležile
         v bazo podatkov, vaš rojstni datum pa ne bo nikoli objavljen brez vašega

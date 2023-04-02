@@ -1303,7 +1303,7 @@ zh-TW:
       #original_hash: f9f512b
       welcome_back: 歡迎回來！我們需要知道您的WCA ID才能幫您建立WCA帳號。
       #original_hash: 669fb57
-      welcome: 歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。
+      welcome_html: 歡迎！在您參加第一場WCA比賽之前，我們需要額外的資訊以利我們儲存資料。請注意，我們絕對不會在沒有您的許可下公開您的生日。
   layouts:
     navigation:
       #original_hash: 0eb5ed5

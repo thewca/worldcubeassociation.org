@@ -74,15 +74,15 @@ module ResultsValidators
 
     private
 
-    def merge(other_validators)
-      unless other_validators.respond_to?(:each)
-        other_validators = [other_validators]
+      def merge(other_validators)
+        unless other_validators.respond_to?(:each)
+          other_validators = [other_validators]
+        end
+        other_validators.each do |v|
+          @errors.concat(v.errors)
+          @warnings.concat(v.warnings)
+          @infos.concat(v.infos)
+        end
       end
-      other_validators.each do |v|
-        @errors.concat(v.errors)
-        @warnings.concat(v.warnings)
-        @infos.concat(v.infos)
-      end
-    end
   end
 end

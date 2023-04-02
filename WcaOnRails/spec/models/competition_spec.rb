@@ -1131,8 +1131,50 @@ RSpec.describe Competition do
       expect(competition.registration_full?).to be false
 
       # Add a 10th registration, which will fill up the registration list.
-      FactoryBot.create :registration, :accepted, competition: competition
+      new_registration = FactoryBot.create :registration, :accepted, competition: competition
       expect(competition.registration_full?).to be true
+
+      # Delete the 10th accepted registration. Now the list should not be full.
+      new_registration.destroy
+      expect(competition.registration_full?).to be false
+
+      # Add an unpaid pending registration. The list should not yet be full.
+      FactoryBot.create :registration, :pending, competition: competition
+      expect(competition.registration_full?).to be false
+
+      # Add a paid pending registration. The list should be full.
+      FactoryBot.create :registration, :paid_pending, competition: competition
+      expect(competition.registration_full?).to be true
+    end
+  end
+
+  describe '#registration_full_message' do
+    let(:competition) {
+      FactoryBot.create :competition,
+                        :registration_open,
+                        competitor_limit_enabled: true,
+                        competitor_limit: 10,
+                        competitor_limit_reason: "Dude, this is my closet"
+    }
+
+    it "detects full competition warning message" do
+      # Add 9 accepted registrations
+      FactoryBot.create_list :registration, 9, :accepted, competition: competition
+
+      # Add a 10th accepted registration
+      new_registration = FactoryBot.create :registration, :accepted, competition: competition
+      expect(competition.registration_full_message).to eq(
+        I18n.t('registrations.registration_full', competitor_limit: competition.competitor_limit),
+      )
+
+      # Delete the 10th accepted registration
+      new_registration.destroy
+
+      # Add a paid pending registration
+      FactoryBot.create :registration, :paid_pending, competition: competition
+      expect(competition.registration_full_message).to eq(
+        I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competition.competitor_limit),
+      )
     end
   end
 

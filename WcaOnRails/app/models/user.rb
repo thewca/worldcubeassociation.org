@@ -700,6 +700,15 @@ class User < ApplicationRecord
     current_teams.include?(Team.banned)
   end
 
+  def banned_at_date?(date)
+    if banned?
+      ban_end = current_team_members.select(:team == Team.banned).first.end_date
+      !ban_end.present? || date < ban_end
+    else
+      false
+    end
+  end
+
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
   end
@@ -921,13 +930,15 @@ class User < ApplicationRecord
   end
 
   # Note this is very similar to the cannot_be_assigned_to_user_reasons method in person.rb.
-  def cannot_register_for_competition_reasons
+  # The competition parameter is there when you want to check if a (potentially banned)
+  # competitor wants to register for a specific competition, not competitions in general
+  def cannot_register_for_competition_reasons(competition = nil, is_competing: true)
     [].tap do |reasons|
       reasons << I18n.t('registrations.errors.need_name') if name.blank?
       reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
       reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
-      reasons << I18n.t('registrations.errors.banned_html').html_safe if banned?
+      reasons << I18n.t('registrations.errors.banned_html').html_safe if is_competing && competition.present? && banned_at_date?(competition.start_date)
     end
   end
 
@@ -1154,7 +1165,7 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if any_kind_of_delegate?
-      default_options[:methods].concat(["email", "region", "senior_delegate_id"])
+      default_options[:methods].push("email", "region", "senior_delegate_id")
     end
 
     options = default_options.merge(options || {})
@@ -1217,6 +1228,7 @@ class User < ApplicationRecord
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person_pb.map(&:to_wcif),
+      "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
 
@@ -1243,6 +1255,7 @@ class User < ApplicationRecord
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
         "personalBests" => { "type" => "array", "items" => PersonalBest.wcif_json_schema },
+        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
       },
     }
   end

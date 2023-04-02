@@ -252,8 +252,9 @@
           function UpdateDues(){
 
             var obj = $("#competition-form").serializeJSON();
-            var compLimitEnabled = obj['competition[competitor_limit_enabled]']
-            var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
+            // Coerce compLimitEnabled to a bool, as it is a string obj['competition[competitor_limit_enabled]'] returns a string
+            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]'])
+            var compLimit = compLimitEnabled ? obj['competition[competitor_limit]'] : null
             var currencyCode = obj['competition[currency_code]']
 
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
@@ -336,6 +337,8 @@
         <%= f.input :event_restrictions %>
         <%= f.input :event_restrictions_reason %>
         <%= f.input :events_per_registration_limit %>
+
+        <%= f.input :force_comment_in_registration %>
 
         <% if !@competition.being_cloned_from.present? && @competition.events.any? %>
           <hr>

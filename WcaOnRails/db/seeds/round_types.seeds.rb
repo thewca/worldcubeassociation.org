@@ -10,6 +10,6 @@ sql = "INSERT INTO `RoundTypes` (`id`, `rank`, `name`, `cellName`, `final`) VALU
 ('d', 20, 'First round', 'First round', 0),
 ('e', 59, 'Second round', 'Second round', 0),
 ('f', 99, 'Final', 'Final', 1),
-('g', 70, 'Third round', 'Third round', 0),
+('g', 70, 'Semi Final', 'Semi Final', 0),
 ('h', 10, 'Qualification round', 'Qualification round', 0);"
 ActiveRecord::Base.connection.execute(sql)

@@ -75,8 +75,8 @@ RSpec.describe "StripeChargesCheck" do
   end
 
   it "warns about stripe charges with status unknown" do
-    StripeCharge.create!(
-      metadata: "",
+    StripeTransaction.create!(
+      parameters: {},
       status: "unknown",
     )
 
@@ -121,6 +121,6 @@ RSpec.describe "RegulationsCheck" do
     expect(status).to eq :danger
     # The \d reference is a line number in the external `json` gem which might change every now and then.
     # We want to avoid having to change our tests whenever that library updates.
-    expect(description).to match(/Error while loading regulations: \d+: unexpected token at 'i am definitely not json'/)
+    expect(description).to match(/Error while loading regulations: unexpected token at 'i am definitely not json'/)
   end
 end

@@ -1072,7 +1072,7 @@ hu:
         Üdvözlünk újra! A WCA felhasználód létrehozásához szükségünk van a WCA
         ID-dre.
       #original_hash: 669fb57
-      welcome: >-
+      welcome_html: >-
         Üdvözlünk! Mielőtt regisztrálni tudnál az első WCA versenyedre,
         szükségünk van néhány információra az eredmények rögzítéséhez. Kérünk,
         vedd figyelembe, hogy a születési dátumodat soha nem tesszük nyilvánossá
