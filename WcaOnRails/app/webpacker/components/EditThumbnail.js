@@ -5,7 +5,7 @@ import ReactCrop from "react-image-crop";
 
 import { CancelAndSave } from "../elements/CancelAndSave";
 
-const EditAvatar = ({ cdnExplanation, cdnWarning, user, pending }) => {
+const EditThumbnail = ({ cdnExplanation, cdnWarning, user, pending }) => {
   const [crop, setCrop] = useState();
 
   const handleSubmit = (evt) => {
@@ -45,4 +45,4 @@ const EditAvatar = ({ cdnExplanation, cdnWarning, user, pending }) => {
   );
 };
 
-export default EditAvatar;
+export default EditThumbnail;

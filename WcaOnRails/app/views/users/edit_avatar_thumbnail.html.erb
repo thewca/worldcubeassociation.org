@@ -4,7 +4,7 @@
 <% provide(:title, (pending_avatar ? "Pending " : "") + "Avatar Thumbnail | #{@user.name}") %>
 
 <div class="container">
-  <%= react_component("EditAvatar", {
+  <%= react_component("EditThumbnail", {
     user: @user,
     pending: @pending_avatar,
     cdnWarning: t('.cdn_warning'),
