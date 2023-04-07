@@ -8747,6 +8747,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-image-crop@npm:^10.0.9":
+  version: 10.1.8
+  resolution: "react-image-crop@npm:10.1.8"
+  peerDependencies:
+    react: ">=16.13.1"
+  checksum: 7d5da917b95951490041f8e7567d7e7d4cd4ce24a24626edc4893fd3d5d6c4c72572ddbb994fcee78dec6e6f608f6a65d4c9675e484e5f868671ce33856e182e
+  languageName: node
+  linkType: hard
+
 "react-intersection-observer@npm:^9.6.0":
   version: 9.6.0
   resolution: "react-intersection-observer@npm:9.6.0"
@@ -9273,6 +9282,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-datepicker: "npm:^6.0.0"
     react-dom: "npm:^18.2.0"
+    react-image-crop: "npm:^10.0.9"
     react-intersection-observer: "npm:^9.6.0"
     react-leaflet: "npm:^4.2.1"
     react-simplemde-editor: "npm:^5.2.0"

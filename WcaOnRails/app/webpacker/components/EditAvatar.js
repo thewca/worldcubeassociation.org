@@ -1,16 +1,45 @@
-import React from "react";
+import React, { useState } from "react";
+import "react-image-crop/dist/ReactCrop.css";
 
-const EditAvatar = ({ cdn_explanation, cdn_warning, user }) => {
+import ReactCrop from "react-image-crop";
+
+const EditAvatar = ({ cdnExplanation, cdnWarning, user, pending }) => {
+  const [crop, setCrop] = useState();
+
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+
+    console.log("submit");
+  };
+
   return (
-    <div>
+    <form onSubmit={handleSubmit}>
       <header className="alert alert-warning">
-        <p>{cdn_explanation}</p>
-        <p>{cdn_warning}</p>
+        <p>{cdnExplanation}</p>
+        <p>{cdnWarning}</p>
       </header>
       <section className="text-center">
-        <img src={user.avatar.url} style={{ width: "50%", height: "auto" }} />
+        <ReactCrop
+          aspect={1}
+          crop={crop}
+          onChange={setCrop}
+          disabled={pending}
+          style={{ width: "50%" }}
+        >
+          <img
+            src={user.avatar.url}
+            style={{ width: "100%", height: "auto" }}
+          />
+        </ReactCrop>
       </section>
-    </div>
+
+      <div>
+        <button className="btn btn-primary pull-right" type="submit">
+          Save
+        </button>
+      </div>
+    </form>
   );
 };
 

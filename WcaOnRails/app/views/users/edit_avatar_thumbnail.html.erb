@@ -5,8 +5,9 @@
 
 <div class="container">
   <%= react_component("EditAvatar", {
-    cdn_explanation: cdn_explanation,
-    cdn_warning: cdn_warning,
+    cdnExplanation: cdn_explanation,
+    cdnWarning: cdn_warning,
+    pending: @pending_avatar,
     user: @user,
   }) %>
 </div>
