@@ -1,10 +1,21 @@
 <% pending_avatar = defined? @pending_avatar %>
 <% avatar_sym = pending_avatar ? :pending_avatar : :avatar %>
+<% cdn_explanation =t '.cdn_explanation' %>
+<% cdn_warning =t '.cdn_warning' %>
+
+<div class="container">
+  <%= react_component("EditAvatar", {
+    cdn_explanation: cdn_explanation,
+    cdn_warning: cdn_warning,
+  }) %>
+</div>
+
 <%
   def crop_sym(type)
     :"saved_#{((defined? @pending_avatar) ? :pending_avatar : :avatar)}_crop_#{type}"
   end
 %>
+
 <% provide(:title, (pending_avatar ? "Pending " : "") + "Avatar Thumbnail | #{@user.name}") %>
 
 <div class="container">
