@@ -3,6 +3,8 @@ import "react-image-crop/dist/ReactCrop.css";
 
 import ReactCrop from "react-image-crop";
 
+import { CancelAndSave } from "../elements/CancelAndSave";
+
 const EditAvatar = ({ cdnExplanation, cdnWarning, user, pending }) => {
   const [crop, setCrop] = useState();
 
@@ -10,7 +12,7 @@ const EditAvatar = ({ cdnExplanation, cdnWarning, user, pending }) => {
     evt.preventDefault();
     evt.stopPropagation();
 
-    console.log("submit");
+    console.log(crop);
   };
 
   return (
@@ -34,11 +36,11 @@ const EditAvatar = ({ cdnExplanation, cdnWarning, user, pending }) => {
         </ReactCrop>
       </section>
 
-      <div>
-        <button className="btn btn-primary pull-right" type="submit">
-          Save
-        </button>
-      </div>
+      <CancelAndSave
+        onCancel={() => setCrop(undefined)}
+        saveDisabed={!crop}
+        cancelDisabled={!crop}
+      />
     </form>
   );
 };
