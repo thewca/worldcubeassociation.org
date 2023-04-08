@@ -960,7 +960,7 @@ cs:
         competitor_limit_reason: >-
           Z jakého důvodu jste určili tento limit pro soutěžící? Prosíme,
           vyplňte toto pole v angličtině!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           Počet hostů na jednu registraci povolený na této soutěži. Registrace s
           příliš velkým počtem hostů bude zablokována. Nechte prázdné, pokud
@@ -1844,7 +1844,7 @@ cs:
         information: '%{remover} vás odstranil z %{competition} jako organizátora.'
       registration_reminder_email:
         #original_hash: 7d355cb
-        header: 'Byl(a) jste přidán(a) k soutěži %{competition} jako organizátor'
+        header: 'Registrace na %{competition} brzy začíná'
         #original_hash: c9d0561
         intro: 'Ahoj %{name},'
         #original_hash: a8f7e72
@@ -2184,7 +2184,7 @@ cs:
       series_more_than_one_accepted: Můžete být přijati jen na jednu soutěž ze série.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: 'Nemůžete se zaregistrovat na eventy, na které nejste kvalifikováni'
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Musíte vyplnit komentář. Přečtěte si podmínky pro registraci, abyste
         zjistili, co musí zahrnovat (např. kde chcete soutěžit u simultánních
@@ -2626,7 +2626,7 @@ cs:
       not_announced: 'Tato soutěž je veřejně viditelná, ale ještě nebyla ohlášená.'
       #original_hash: ab61991
       announced: Soutěž byla úspěšně ohlášena!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Soutěž byla zrušena. Prosíme přečtěte si informační sekci pro více
         informací.
@@ -2668,14 +2668,18 @@ cs:
       tooltip_registered: Jste zaregistrovaný/á.
       #original_hash: f2d092f
       tooltip_waiting_list: Momentálně jste na waiting listu.
-      #original_hash: 9ecd976
-      confirmed_visible: Tato soutěž je potvrzená a viditelná
-      #original_hash: fa186a9
-      confirmed_not_visible: 'Tato soutěž je potvrzená, ale není viditelná'
-      #original_hash: a66bbe3
-      not_confirmed_visible: 'Tato soutěž není potvrzená, ale je viditelná'
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: 'Tato soutěž není ani potvrzená, ani viditelná'
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Vaše registrace byla bohužel smazána. Pro podrobnosti zkontrolujte svůj
+        email, nebo kontaktujte organizátory.
+      #original_hash: 1b6dc61
+      confirmed_visible: Tato soutěž je potvrzená a viditelná.
+      #original_hash: abc2f96
+      confirmed_not_visible: 'Tato soutěž je potvrzená, ale není viditelná.'
+      #original_hash: 6d6290b
+      not_confirmed_visible: 'Tato soutěž není potvrzená, ale je viditelná.'
+      #original_hash: b299b27
+      not_confirmed_not_visible: 'Tato soutěž není ani potvrzená, ani viditelná.'
       #original_hash: a821396
       stripe_connected: >-
         Připojil(a) jste úspěšně svůj Stripe účet a můžete nyní dostávat
@@ -2686,8 +2690,8 @@ cs:
       stripe_disconnected_failure: Vyskytla se chyba při odpojování Stripe účtu.
       #original_hash: 0a4bb53
       stripe_not_connected: Vyskytla se chyba a nemohli jsme připojit váš Stripe účet.
-      #original_hash: 724cf0d
-      championship_exists: 'Už je jiné %{championship_type} v %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Už je jiné %{championship_type} v %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Registrace byla úspěšně uzavřena.
       #original_hash: 7f197a0
