@@ -50,19 +50,15 @@ class AdminController < ApplicationController
     end
   end
 
-  def compute_validation_range_end
+  def compute_validation_competitions
     validation_form = ResultValidationForm.new(
       competition_start_date: params[:start_date],
-      competition_count: params[:count],
+      competition_end_date: params[:end_date],
       competition_selection: ResultValidationForm::COMP_VALIDATION_ALL,
     )
 
-    competition_ids = validation_form.competitions
-
     render json: {
-      rangeEnd: validation_form.competition_range_end,
-      count: competition_ids.length,
-      competitions: competition_ids,
+      competitions: validation_form.competitions,
     }
   end
 
@@ -70,6 +66,7 @@ class AdminController < ApplicationController
     @result_validation = ResultValidationForm.new(
       competition_ids: params[:competition_ids] || "",
       competition_start_date: params[:competition_start_date] || "",
+      competition_end_date: params[:competition_end_date] || "",
       validator_classes: params[:validator_classes] || ResultValidationForm::ALL_VALIDATOR_NAMES.join(","),
       competition_selection: params[:competition_selection] || ResultValidationForm::COMP_VALIDATION_MANUAL,
       apply_fixes: params[:apply_fixes] || false,
@@ -98,14 +95,14 @@ class AdminController < ApplicationController
 
   def running_validators
     action_params = params.require(:result_validation_form)
-                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date, :competition_count)
+                          .permit(:competition_ids, :validator_classes, :apply_fixes, :competition_selection, :competition_start_date, :competition_end_date)
 
     @result_validation = ResultValidationForm.new(action_params)
 
     if @result_validation.valid?
       @results_validator = @result_validation.build_and_run
     else
-      @results_validator = @result_validation.build_validator
+      @results_validator = ResultsValidators::CompetitionsResultsValidator.new(check_real_results: true)
     end
 
     yield if block_given?

@@ -13,8 +13,8 @@
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       </div>
       <div id="datetime-start-range" style="margin-bottom: 20px;">
-        <%= f.input :competition_count, as: :integer, hint: "Warning: Setting this number too high can lead to timeouts. Use at your own risk!", label: "Number of competitions to check", input_html: { max: ResultValidationForm::ALL_COMPETITIONS_MAX } %>
-        <%= f.input :competition_start_date, as: :date_picker, hint: "Please pick a date above to update this label with information on the time span.", label: "Start date for checking" %>
+        <%= f.input :competition_start_date, as: :date_picker, hint: false, label: "Start date for checking" %>
+        <%= f.input :competition_end_date, as: :date_picker, hint: "Please pick dates above to update this label with information on the selected competitions.", label: "End date for checking" %>
 
         <div class="progress" style="margin-top: 5px; display: none;">
           <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%;">
@@ -50,18 +50,18 @@
   }).trigger('change');
 
   var $compStartDate = $('input[name="result_validation_form[competition_start_date]"]');
-  var $compCount = $('input[name="result_validation_form[competition_count]"]');
+  var $compEndDate = $('input[name="result_validation_form[competition_end_date]"]');
 
   function fetchEndDate() {
     var startDate = $compStartDate.val();
-    var count = $compCount.val();
+    var endDate = $compEndDate.val();
 
     var $progressDiv = $('div.progress');
     var $progressBar = $('div.progress-bar');
 
-    var $datePickerHint = $('#datetime-start-range .result_validation_form_competition_start_date p.help-block');
+    var $datePickerHint = $('#datetime-start-range .result_validation_form_competition_end_date p.help-block');
 
-    if (startDate && count) {
+    if (startDate && endDate) {
       $datePickerHint.hide();
 
       $progressDiv.show();
@@ -69,13 +69,13 @@
       $progressBar.html('<span class="sr-only">LOADING</span>');
 
       window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
-        url: '<%= admin_validation_range_end_path %>',
+        url: '<%= admin_validation_competitions_path %>',
         data: {
           'start_date': startDate,
-          'count': count
+          'end_date': endDate
         },
         success: function(data) {
-          var { rangeEnd, count, competitions } = data;
+          var { competitions } = data;
 
           var displayLength = Math.min(10, competitions.length);
           var displaySlice = Math.floor(displayLength / 2);
@@ -99,10 +99,10 @@
 
           var competitionIds = displayIds.join('\n');
 
-          $datePickerHint.html(`The checks will run for <b data-toggle="tooltip" data-placement="bottom" data-container="body" title="${competitionIds}">${count}</b> competitions with <code>start_date</code> before or on <b>${rangeEnd}</b>`);
+          $datePickerHint.html(`The checks will run for <b data-toggle="tooltip" data-placement="bottom" data-container="body" title="${competitionIds}">${competitions.length}</b> competitions`);
           $('b', $datePickerHint).tooltip();
-          $datePickerHint.show();
 
+          $datePickerHint.show();
           $progressDiv.hide();
         },
         error: function(response) {
@@ -117,11 +117,11 @@
   }
 
   $compStartDate.on('dp.change', fetchEndDate);
-  $compCount.on('input', fetchEndDate);
+  $compEndDate.on('dp.change', fetchEndDate);
 </script>
 
 <style>
-  div.form-group.result_validation_form_competition_start_date {
+  div.form-group.result_validation_form_competition_end_date {
     margin-bottom: 0;
   }
 </style>

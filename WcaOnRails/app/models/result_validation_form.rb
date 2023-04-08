@@ -15,16 +15,37 @@ class ResultValidationForm
   include ActiveModel::Model
 
   attr_accessor :validator_classes, :competition_ids
-  attr_writer :apply_fixes, :competition_selection, :competition_start_date, :competition_count
+  attr_writer :apply_fixes, :competition_selection, :competition_start_date, :competition_end_date
 
   validates :competition_ids, presence: true, if: -> { self.competition_selection == COMP_VALIDATION_MANUAL }
 
   validates :competition_start_date, presence: true, if: -> { self.competition_selection == COMP_VALIDATION_ALL }
-  validates :competition_count, presence: true, numericality: { only_integer: true }, if: -> { self.competition_selection == COMP_VALIDATION_ALL }
+  validates :competition_end_date, presence: true, if: -> { self.competition_selection == COMP_VALIDATION_ALL }
+
+  validate :competition_count_within_bounds, :competition_range_overlapping
+
+  def competition_count_within_bounds
+    if competition_selection == COMP_VALIDATION_ALL && competition_range_count > ALL_COMPETITIONS_MAX
+      range_end_date = ResultValidationForm.compute_range_end(self.competition_start_date)
+      errors.add(:competition_range_count, "You are only allowed to select up to #{ALL_COMPETITIONS_MAX} at once! Suggested end date is #{range_end_date}")
+    end
+  end
+
+  def competition_range_overlapping
+    if competition_selection == COMP_VALIDATION_ALL
+      if competition_start_date > competition_end_date
+        errors.add(:competition_start_date, "The start date must be before the end date!")
+      end
+
+      if competition_start_date > Date.today
+        errors.add(:competition_start_date, "The start date must not be in the future!")
+      end
+    end
+  end
 
   def competitions
     if self.competition_selection == COMP_VALIDATION_ALL
-      ResultValidationForm.competitions_between(self.competition_start_date, self.competition_range_end)
+      ResultValidationForm.competitions_between(self.competition_start_date, self.competition_end_date)
                           .order(:start_date)
                           .ids
     else
@@ -40,13 +61,12 @@ class ResultValidationForm
     Date.parse(@competition_start_date) if @competition_start_date.present?
   end
 
-  def competition_range_end
-    @competition_range_end ||= ResultValidationForm.compute_range_end(self.competition_start_date, self.competition_count) if self.competition_start_date.present?
+  def competition_end_date
+    Date.parse(@competition_end_date) if @competition_end_date.present?
   end
 
-  def competition_count
-    converted = @competition_count.to_i
-    converted == 0 ? ALL_COMPETITIONS_MAX : converted
+  def competition_range_count
+    ResultValidationForm.competitions_between(competition_start_date, competition_end_date).count
   end
 
   def validators
