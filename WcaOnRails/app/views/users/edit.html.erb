@@ -196,6 +196,7 @@
               avatarGuidelines: t('.avatar_guidelines').values,
               staffAvatarGuidelines: t('.staff_avatar_guidelines.paragraphs').values,
               staffAvatarGuidelinesTitle: t('.staff_avatar_guidelines.title'),
+              yourThumbnail: t('.your_thumbnail'),
             }
           }) %>
         <div class="row">
@@ -229,20 +230,6 @@
             <% end %>
           </div>
           <div class="col-sm-6 text-center">
-            <div class="image-preview-container" data-input-selector="#user_pending_avatar" data-max-height="400" data-orientation="true">
-              <%= image_tag @user.avatar.url, class: "img-responsive center-block", id: "avatar-img" %>
-            </div>
-            <% if @user.avatar? %>
-              <h4><%= t('.your_thumbnail') %></h4>
-              <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
-                <%= react_component("UserAvatar", {
-                  avatar: @user.avatar,
-                  size: "small",
-                  title: t('.edit_thumbnail'),
-                  breakCache: true
-                }) %>
-              <% end %>
-            <% end %>
           </div>
         </div>
       </div>

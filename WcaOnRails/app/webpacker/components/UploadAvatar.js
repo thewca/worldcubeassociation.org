@@ -25,6 +25,17 @@ const UploadAvatar = ({ user, translations }) => {
         </div>
         <div className="col-sm-6 text-center">
           <img src={user.avatar.url} style={{ width: "60%", height: "auto" }} />
+          {user.avatar && (
+            <>
+              <h4>{translations.yourThumbnail}</h4>
+              <a href={`/users/${user.id}/edit/avatar_thumbnail`}>
+                <img
+                  src={user.avatar.thumb_url}
+                  style={{ width: "10%", height: "auto" }}
+                />
+              </a>
+            </>
+          )}
         </div>
       </div>
     </section>
