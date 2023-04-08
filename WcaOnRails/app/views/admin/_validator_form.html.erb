@@ -22,7 +22,30 @@
           </div>
         </div>
       </div>
-      <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
+      <div class="form-group">
+        <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
+        <%= ui_icon('info circle', 'data-toggle': "collapse", 'data-target': "#collapse-validator-desc") %>
+      </div>
+      <div id="collapse-validator-desc" class="collapse">
+        <%= wca_table do %>
+          <thead>
+            <tr>
+              <th>Validator</th>
+              <th>Description</th>
+              <th></th> <!-- Extra column for .table-greedy-last-column -->
+            </tr>
+          </thead>
+          <tbody>
+            <% ResultsValidators::Utils::ALL_VALIDATORS.each do |validator| %>
+              <tr>
+                <td><%= validator.class_name %></td>
+                <td><%= validator.new.description %></td>
+                <td></td> <!-- Extra column for .table-greedy-last-column -->
+              </tr>
+            <% end %>
+          </tbody>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
