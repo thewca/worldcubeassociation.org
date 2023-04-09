@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { AvatarEdit } from "./AvatarEdit";
 
 const UploadAvatar = ({
   user,
@@ -31,38 +32,11 @@ const UploadAvatar = ({
               </>
             )}
           </div>
-          <div>
-            <label htmlFor="send-new-avatar" className="form-label">
-              {translations.sendNewAvatar}
-            </label>
-            <input className="form-control" type="file" id="send-new-avatar" />
-          </div>
-          <p className="text-muted">{translations.afterAvatarUpload}</p>
-          <div className="form-check">
-            <input
-              className="form-check-input"
-              value={confirmation}
-              type="checkbox"
-              id="guidelines-confirmation"
-              onChange={() => setConfirmation((old) => !old)}
-              disabled={uploadDisabled}
-            />
-            &nbsp;
-            <label
-              className="form-check-label"
-              htmlFor="guidelines-confirmation"
-            >
-              {translations.guidelinesConfirmation}
-            </label>
-          </div>
-          <div>
-            <button className="btn btn-primary">{translations.save}</button>
-            {!!canRemoveAvatar && (
-              <button className="btn btn-danger">
-                {translations.removeAvatar}
-              </button>
-            )}
-          </div>
+          <AvatarEdit
+            translations={translations}
+            uploadDisabled={uploadDisabled}
+            canRemoveAvatar={canRemoveAvatar}
+          />
         </div>
         <div className="col-sm-6 text-center">
           <img src={user.avatar.url} style={{ width: "60%", height: "auto" }} />

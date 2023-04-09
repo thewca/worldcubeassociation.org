@@ -188,7 +188,7 @@
 
     <% if current_user.can_change_users_avatar?(@user) %>
       <div class="tab-pane active" id="avatar">
-          <%= react_component("UploadAvatar", {
+          <%= react_component("UploadAvatar/UploadAvatar", {
             user: @user,
             staff: @user.staff?,
             uploadDisabled: !editable_fields.include?(:pending_avatar),
