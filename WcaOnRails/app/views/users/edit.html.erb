@@ -191,31 +191,28 @@
           <%= react_component("UploadAvatar", {
             user: @user,
             staff: @user.staff?,
+            uploadDisabled: !editable_fields.include?(:pending_avatar),
+            canRemoveAvatar: @user.avatar? && editable_fields.include?(:remove_avatar),
             translations: {
               guidelines: t('.guidelines'),
               avatarGuidelines: t('.avatar_guidelines').values,
               staffAvatarGuidelines: t('.staff_avatar_guidelines.paragraphs').values,
               staffAvatarGuidelinesTitle: t('.staff_avatar_guidelines.title'),
               yourThumbnail: t('.your_thumbnail'),
+              sendNewAvatar: t('activerecord.attributes.user.pending_avatar'),
+              afterAvatarUpload: t('simple_form.hints.user.pending_avatar'),
+              guidelinesConfirmation: t('.guidelines_confirmation'),
+              save: t('.save'),
+              removeAvatar: t('.remove_avatar'),
             }
           }) %>
         <div class="row">
           <div class="col-sm-6">
             <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure', id: "upload-avatar-form" } do |f| %>
-              <%= hidden_field_tag "section", "avatar" %>
-              <%= f.input :pending_avatar, as: :file, disabled: !editable_fields.include?(:pending_avatar) %>
+              <%= hidden_field_tag "section", "avatar" %>              
               <%= f.hidden_field :pending_avatar_cache %>
-              <div>
-                <input type="checkbox" name="guidelines-confirmation" id="guidelines-confirmation" data-alert="<%= t '.confirm_guidelines' %>">
-                <label for="guidelines-confirmation"><%= t '.guidelines_confirmation' %></label>
-              </div>
-              <%= f.submit t('.save'), class: "btn btn-primary" %>
             <% end %>
             <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
-              <div class="btn btn-default btn-danger remove-avatar">
-                <%= t('.remove_avatar') %>
-              </div>
-
               <div class="remove-avatar-confirm">
                 <%= form_with model: @user, method: :patch do |f| %>
                   <%= f.text_area :removal_reason, class: 'form-control',
@@ -228,8 +225,6 @@
                 <% end %>
               </div>
             <% end %>
-          </div>
-          <div class="col-sm-6 text-center">
           </div>
         </div>
       </div>
