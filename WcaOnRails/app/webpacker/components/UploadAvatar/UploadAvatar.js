@@ -1,4 +1,5 @@
 import React from "react";
+import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { AvatarEdit } from "./AvatarEdit";
 
 const UploadAvatar = ({
@@ -44,12 +45,15 @@ const UploadAvatar = ({
           {user.avatar && (
             <>
               <h4>{translations.yourThumbnail}</h4>
-              <a href={`/users/${user.id}/edit/avatar_thumbnail`}>
+              <OverlayTrigger
+                overlay={<Tooltip>{translations.clickToEditThumbnail}</Tooltip>}
+                id="edit-thumbnail"
+              >
                 <img
                   src={user.avatar.thumb_url}
-                  style={{ width: "10%", height: "auto" }}
+                  style={{ width: "20%", height: "auto" }}
                 />
-              </a>
+              </OverlayTrigger>
             </>
           )}
         </div>
