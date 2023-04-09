@@ -6,6 +6,8 @@ export const AvatarEdit = ({
   canRemoveAvatar,
 }) => {
   const [confirmation, setConfirmation] = useState(false);
+  const [isRemoving, setIsRemoving] = useState(false);
+  const [reasonForRemoval, setReasonForRemoval] = useState("");
   return (
     <>
       <div>
@@ -32,9 +34,25 @@ export const AvatarEdit = ({
       <div>
         <button className="btn btn-primary">{translations.save}</button>
         {!!canRemoveAvatar && (
-          <button className="btn btn-danger">
+          <button
+            className="btn btn-danger"
+            onClick={() => setIsRemoving((old) => !old)}
+          >
             {translations.removeAvatar}
           </button>
+        )}
+        {isRemoving && (
+          <div className="form-group">
+            <textarea
+              className="form-control"
+              placeholder={translations.removeAvatarReason}
+              value={reasonForRemoval}
+              onChange={(evt) => setReasonForRemoval(evt.target.value)}
+            />
+            <button className="btn btn-danger">
+              {translations.removeAvatarConfirmText}
+            </button>
+          </div>
         )}
       </div>
     </>

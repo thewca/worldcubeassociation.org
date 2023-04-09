@@ -194,16 +194,18 @@
             uploadDisabled: !editable_fields.include?(:pending_avatar),
             canRemoveAvatar: @user.avatar? && editable_fields.include?(:remove_avatar),
             translations: {
+              save: t('.save'),
               guidelines: t('.guidelines'),
+              yourThumbnail: t('.your_thumbnail'),
               avatarGuidelines: t('.avatar_guidelines').values,
               staffAvatarGuidelines: t('.staff_avatar_guidelines.paragraphs').values,
               staffAvatarGuidelinesTitle: t('.staff_avatar_guidelines.title'),
-              yourThumbnail: t('.your_thumbnail'),
               sendNewAvatar: t('activerecord.attributes.user.pending_avatar'),
               afterAvatarUpload: t('simple_form.hints.user.pending_avatar'),
               guidelinesConfirmation: t('.guidelines_confirmation'),
-              save: t('.save'),
               removeAvatar: t('.remove_avatar'),
+              removeAvatarReason: t('.remove_avatar_reason'),
+              removeAvatarConfirmText: t('.remove_avatar_confirm_button'),
             }
           }) %>
         <div class="row">

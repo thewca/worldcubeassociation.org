@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { AvatarEdit } from "./AvatarEdit";
 
 const UploadAvatar = ({
@@ -8,8 +8,6 @@ const UploadAvatar = ({
   uploadDisabled,
   canRemoveAvatar,
 }) => {
-  const [confirmation, setConfirmation] = useState(false);
-  const [isRemovingAvatar, setIsRemovingAvatar] = useState(false);
   return (
     <section className="container">
       <div className="row">
@@ -39,7 +37,10 @@ const UploadAvatar = ({
           />
         </div>
         <div className="col-sm-6 text-center">
-          <img src={user.avatar.url} style={{ width: "60%", height: "auto" }} />
+          <img
+            src={user.avatar.url}
+            style={{ width: "100%", height: "auto" }}
+          />
           {user.avatar && (
             <>
               <h4>{translations.yourThumbnail}</h4>
