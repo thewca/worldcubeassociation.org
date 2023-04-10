@@ -18,8 +18,10 @@ const EditThumbnail = ({ cdnExplanation, cdnWarning, user, pending }) => {
   return (
     <form onSubmit={handleSubmit}>
       <header className="alert alert-warning">
-        <p>{cdnExplanation}</p>
-        <p>{cdnWarning}</p>
+        <p>
+          {cdnExplanation}
+          {cdnWarning}
+        </p>
       </header>
       <section className="text-center">
         <ReactCrop

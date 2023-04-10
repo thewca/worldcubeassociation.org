@@ -6,7 +6,7 @@ import { Icon } from "semantic-ui-react";
 
 export const CancelAndSave = ({ saveDisabed, cancelDisabled, onCancel }) => {
   return (
-    <div>
+    <div className="row">
       <button
         className="btn btn-primary pull-right"
         type="submit"

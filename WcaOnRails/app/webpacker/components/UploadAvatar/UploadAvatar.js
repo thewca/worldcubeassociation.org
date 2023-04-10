@@ -41,6 +41,8 @@ const UploadAvatar = ({
   const handleSaveThumbnail = (evt) => {
     evt.preventDefault();
     evt.stopPropagation();
+
+    console.log(crop);
   };
 
   const onCancelThumbnail = () => {
@@ -93,7 +95,16 @@ const UploadAvatar = ({
             </ReactCrop>
 
             {editingThumbnail && (
-              <CancelAndSave saveDisabed={!crop} onCancel={onCancelThumbnail} />
+              <div>
+                <CancelAndSave
+                  saveDisabed={!crop}
+                  onCancel={onCancelThumbnail}
+                />
+                <div className="alert alert-warning">
+                  <p>{translations.cdnWarning}</p>
+                  <p>{translations.cdnExplanation}</p>
+                </div>
+              </div>
             )}
           </form>
           {user.avatar && (
