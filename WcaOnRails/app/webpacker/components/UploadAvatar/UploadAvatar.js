@@ -1,6 +1,14 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
 import { AvatarEdit } from "./AvatarEdit";
+
+import "react-image-crop/dist/ReactCrop.css";
+
+import ReactCrop from "react-image-crop";
+import { CancelAndSave } from "../../elements/CancelAndSave";
+
+// Crop starts as 25% of the original image size
+const SUGGESTED_IMG_RATIO = 4;
 
 const UploadAvatar = ({
   user,
@@ -8,7 +16,38 @@ const UploadAvatar = ({
   translations,
   uploadDisabled,
   canRemoveAvatar,
+  pending,
 }) => {
+  const [crop, setCrop] = useState();
+  const [editingThumbnail, setEditingThumbnail] = useState(false);
+  const imgRef = useRef(null);
+
+  const startCropImage = () => {
+    setEditingThumbnail(true);
+    const imgWidth = imgRef.current?.clientWidth;
+    const imgHeight = imgRef.current?.clientHeight;
+
+    const initialDimension = Math.min(imgWidth, imgHeight) / 2;
+
+    setCrop({
+      x: imgWidth / SUGGESTED_IMG_RATIO,
+      y: imgHeight / SUGGESTED_IMG_RATIO,
+      width: initialDimension,
+      height: initialDimension,
+      unit: "px",
+    });
+  };
+
+  const handleSaveThumbnail = (evt) => {
+    evt.preventDefault();
+    evt.stopPropagation();
+  };
+
+  const onCancelThumbnail = () => {
+    setCrop(undefined);
+    setEditingThumbnail(false);
+  };
+
   return (
     <section className="container">
       <div className="row">
@@ -38,10 +77,25 @@ const UploadAvatar = ({
           />
         </div>
         <div className="col-sm-6 text-center">
-          <img
-            src={user.avatar.url}
-            style={{ width: "100%", height: "auto" }}
-          />
+          <form onSubmit={handleSaveThumbnail}>
+            <ReactCrop
+              aspect={1}
+              crop={crop}
+              onChange={setCrop}
+              disabled={!editingThumbnail} // TODO include :pending_avatar
+              style={{ width: "100%" }}
+            >
+              <img
+                ref={imgRef}
+                src={user.avatar.url}
+                style={{ width: "100%", height: "auto" }}
+              />
+            </ReactCrop>
+
+            {editingThumbnail && (
+              <CancelAndSave saveDisabed={!crop} onCancel={onCancelThumbnail} />
+            )}
+          </form>
           {user.avatar && (
             <>
               <h4>{translations.yourThumbnail}</h4>
@@ -52,6 +106,7 @@ const UploadAvatar = ({
                 <img
                   src={user.avatar.thumb_url}
                   style={{ width: "20%", height: "auto" }}
+                  onClick={startCropImage}
                 />
               </OverlayTrigger>
             </>
