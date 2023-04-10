@@ -155,14 +155,6 @@ class UsersController < ApplicationController
     redirect_to_root_unless_user(:can_change_users_avatar?, @user)
   end
 
-  def edit_pending_avatar_thumbnail
-    @user = user_to_edit
-    @pending_avatar = true
-    redirect_to_root_unless_user(:can_change_users_avatar?, @user) && return
-
-    render :edit_avatar_thumbnail
-  end
-
   def update
     @user = user_to_edit
     @user.current_user = current_user

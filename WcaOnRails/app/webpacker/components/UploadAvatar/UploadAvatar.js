@@ -100,7 +100,11 @@ const UploadAvatar = ({
             <>
               <h4>{translations.yourThumbnail}</h4>
               <OverlayTrigger
-                overlay={<Tooltip>{translations.clickToEditThumbnail}</Tooltip>}
+                overlay={
+                  <Tooltip id="edit-thumbnail-hint">
+                    {translations.clickToEditThumbnail}
+                  </Tooltip>
+                }
                 id="edit-thumbnail"
               >
                 <img
