@@ -16,7 +16,6 @@ const UploadAvatar = ({
   translations,
   uploadDisabled,
   canRemoveAvatar,
-  pending,
 }) => {
   const [crop, setCrop] = useState();
   const [editingThumbnail, setEditingThumbnail] = useState(false);
