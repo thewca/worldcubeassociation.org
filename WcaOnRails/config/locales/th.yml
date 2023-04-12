@@ -931,11 +931,11 @@ th:
           แต่จำเป็นต้องทำอย่างอื่นก่อน
         #original_hash: 4bd7102
         competitor_limit_reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           จำนวนผู้ติดตามที่ได้รับอนุญาติในการแข่งขันนี้
           หากคุณสมัครโดนมีผู้ติดตามมากเกินไปการสมัครจะถูกบล็อก,
-          เว้นว่างไว้ภ้าไม่ต้องการจำกัด
+          เว้นว่างไว้ถ้าไม่ต้องการจำกัด
         #original_hash: d09af8f
         events_per_registration_limit: >-
           เลือกบังคับจำนวนประเภทการแข่งขันทั้งหมดที่ผู้แข่งขันสามารถลงทะเบียนได้
@@ -2099,7 +2099,7 @@ th:
       series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         คุณจำเป็นต้องใส่ข้อความในช่องอธิบายเพิ่มเติม
         กรุณาอ่านข้อกำหนดการสมัครการแข่งขันว่าต้องใส่ข้อความอะไร (เช่น
@@ -2506,7 +2506,7 @@ th:
       not_announced: การแข่งขันนี้ปรากฏต่อสาธารณชน แต่ยังไม่ได้ประกาศ
       #original_hash: ab61991
       announced: ประกาศผลการแข่งขันสำเร็จแล้ว!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         การแข่งขันนี้ถูกยกเลิก
         หากต้องการทราบรายละเอียดเพิ่มเติมกรุณาตรวจสอบที่ส่วนข้อมูล
@@ -2548,13 +2548,17 @@ th:
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
       tooltip_waiting_list: คุณกำลังอยู่ในรายชื่อรอ
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        ขออภัย การสมัครการแข่งขันของคุณถูกลบไปแล้ว
+        โปรดตรวจสอบอีเมลของคุณเพื่อดูรายละเอียด หรือติดต่อผู้จัดงาน
+      #original_hash: 1b6dc61
       confirmed_visible: การแข่งขันนี้ได้รับการยืนยันแล้วปรากฎต่อสาธารณะแล้ว
-      #original_hash: fa186a9
+      #original_hash: abc2f96
       confirmed_not_visible: การแข่งขันนี้ได้รับการยืนยันแล้ว แต่ยังไม่ปรากฎต่อสาธารณะ
-      #original_hash: a66bbe3
+      #original_hash: 6d6290b
       not_confirmed_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน แต่ปรากฎต่อสาธารณะแล้ว
-      #original_hash: 0f44e45
+      #original_hash: b299b27
       not_confirmed_not_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน และยังไม่ปรากฎต่อสาธารณะ
       #original_hash: a821396
       stripe_connected: >-
@@ -2566,7 +2570,7 @@ th:
       stripe_disconnected_failure: เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี Stripe
       #original_hash: 0a4bb53
       stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
-      #original_hash: 724cf0d
+      #original_hash: 1b92d16
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
       #original_hash: 0644bdc
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
