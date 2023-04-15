@@ -16,7 +16,7 @@ class EventsPickerInput < SimpleForm::Inputs::Base
     template.content_tag(:p) do
       if include_all
         icon = template.unofficial_cubing_icon('miniguild', data: { toggle: "tooltip", placement: "top" }, title: 'All events')
-        selected = selected_events.empty?
+        selected = selected_events.empty? || (selected_events.length == 1 && selected_events.first == 'all')
 
         add_input_field(only_one, 'all', icon, merged_input_options, selected: selected)
       end

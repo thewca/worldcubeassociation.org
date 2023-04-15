@@ -2,9 +2,13 @@
 
 <div class="container">
   <% competition_id = @check_records_request.competition_id %>
-  <% event_id = @check_records_request.check_event_id %>
 
-  <% diff_mode = !competition_id.present? && !event_id.present? %>
+  <% event_id = @check_records_request.event_id %>
+  <% check_event_id = @check_records_request.check_event_id %>
+
+  <% diff_mode = !competition_id.present? && !check_event_id.present? %>
+
+  <% show_edit = current_user&.can_admin_results? %>
 
   <h1>
     <%= yield(:title) %>
@@ -23,8 +27,8 @@
       <p>Competition: <code><%= competition_id %></code></p>
     <% end %>
 
-    <% if event_id.present? %>
-      <p>Event: <code><%= event_id %></code></p>
+    <% if check_event_id.present? %>
+      <p>Event: <code><%= check_event_id %></code></p>
     <% end %>
   <% end %>
 
@@ -53,6 +57,9 @@
             <%= wca_table table_class: "wca-results", striped: false, greedy: false do %>
               <thead>
               <tr>
+                <% if show_edit %>
+                  <th class=edit"></th>
+                <% end %>
                 <th class="date"> Date</th>
                 <th class="competition"> Competition</th>
                 <th class="round"> Round</th>
@@ -61,7 +68,7 @@
                 <th class="country"> Country</th>
                 <th class="continent"> Continent</th>
                 <th class="world"> World</th>
-                <th class="value"> Value</th>
+                <th class="value text-right"> Value</th>
                 <th class="stored"> Stored</th>
                 <th class="computed"> Computed</th>
                 <th class="agree"> Agree?</th>
@@ -80,7 +87,7 @@
 
                 <% if new_competition || new_round %>
                   <tr class="active">
-                    <td colspan=12 class="text-center"><%= competition.name %>
+                    <td colspan=<%= show_edit ? 13 : 12 %> class="text-center"><%= competition.name %>
                       - <%= result.round_type.name %></td>
                   </tr>
                 <% end %>
@@ -96,14 +103,16 @@
                 <% stored_color = markers_same ? '999' : 'F00' %>
 
                 <tr class="<%= "warning" unless markers_same || diff_mode %>">
+                  <% if show_edit %>
+                    <td class="edit">
+                      <%= link_to(ui_icon("pencil alt"), edit_result_path(result.id), target: '_blank', class: 'hide-new-window-icon') %>
+                    </td>
+                  <% end %>
                   <td class="date"> <%= wca_date_range(competition.start_date, competition.end_date) %></td>
                   <td class="competition">
                     <%= link_to result.competition_id, competition_path(result.competition_id) %>
                   </td>
                   <td class="round">
-                    <% if current_user&.can_admin_results? %>
-                      <%= link_to(ui_icon("pencil alt"), edit_result_path(result.id)) %>
-                    <% end %>
                     <%= result.round_type_id %>
                   </td>
                   <td class="name">
@@ -137,7 +146,9 @@
                       World
                     <% end %>
                   </td>
-                  <td class="value text-right"> <%= value_solve.clock_format %></td>
+                  <td class="value text-right">
+                    <%= value_solve.clock_format %>
+                  </td>
                   <td class="stored"><b style="color:#<%= stored_color %>"><%= stored_marker %></b></td>
                   <td class="computed"><b style="color:#<%= computed_color %>"><%= computed_marker %></b></td>
                   <td class="agree">
