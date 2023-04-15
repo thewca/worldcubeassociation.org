@@ -38,8 +38,7 @@
     <% else %>
       <p>All inbox data has been imported. You should consider the following steps next:</p>
       <ul>
-        <%# TODO: Redo link pending other PR %>
-        <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
+        <li><%= link_to "Check record markers", admin_override_regional_records_path(check_regional_records_form: { competition_ids: @competition.id }), target: '_blank' %></li>
         <li><%= link_to "Compute auxiliary data", admin_do_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
       <p>
