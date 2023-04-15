@@ -12,16 +12,18 @@
       <div id="selectize-competition-ids">
         <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
       </div>
-      <div id="datetime-start-range" style="margin-bottom: 20px;">
-        <%= f.input :competition_start_date, as: :date_picker, hint: false, label: "Start date for checking" %>
-        <%= f.input :competition_end_date, as: :date_picker, hint: "Please pick dates above to update this label with information on the selected competitions.", label: "End date for checking" %>
+      <% unless lock_selection %>
+        <div id="datetime-start-range" style="margin-bottom: 20px;">
+          <%= f.input :competition_start_date, as: :date_picker, hint: false, label: "Start date for checking" %>
+          <%= f.input :competition_end_date, as: :date_picker, hint: "Please pick dates above to update this label with information on the selected competitions.", label: "End date for checking" %>
 
-        <div class="progress" style="margin-top: 5px; display: none;">
-          <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%;">
-            <span class="sr-only">LOADING</span>
+          <div class="progress" style="margin-top: 5px; display: none;">
+            <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%;">
+              <span class="sr-only">LOADING</span>
+            </div>
           </div>
         </div>
-      </div>
+      <% end %>
       <div class="form-group">
         <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
         <%= ui_icon('info circle', 'data-toggle': "collapse", 'data-target': "#collapse-validator-desc") %>

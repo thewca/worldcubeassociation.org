@@ -54,7 +54,7 @@ class ResultValidationForm
   end
 
   def competition_selection
-    @competition_selection.to_sym || COMP_VALIDATION_MANUAL
+    @competition_selection&.to_sym || COMP_VALIDATION_MANUAL
   end
 
   def competition_start_date
