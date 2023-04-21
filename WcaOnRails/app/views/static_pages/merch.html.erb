@@ -1,0 +1,21 @@
+<% provide(:title, t('merch.title')) %>
+
+<div class="ui container" id="merch-description">
+  <h1 class="ui header">
+    <%= t('merch.title') %>
+  </h1>
+
+  <% t('merch.paragraphs').each do |paragraph| %>
+    <p><%= paragraph %></p>
+  <% end %>
+
+  <ul id="merch-stores">
+    <li>
+      <%= link_to "Worldwide Store", "www.shop.worldcubeassociation.org" %>
+    </li>
+    <li>
+      <%= link_to "Indian Store", "india-shop.worldcubeassociation.org" %>
+    </li>
+  </ul>
+
+</div>
