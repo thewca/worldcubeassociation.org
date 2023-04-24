@@ -127,6 +127,27 @@ RSpec.describe ACV do
       expect(acv.errors).to match_array(expected_errors)
     end
 
+    it "ignores incomplete results when computing qualified people" do
+      first_round = FactoryBot.create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 1)
+      first_round.update(advancement_condition: AdvancementConditions::PercentCondition.new(75))
+      FactoryBot.create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 2)
+      # This creates 20 results: 10 complete, 10 DNF. With 75% proceeding it used to report a
+      # warning that 15 could have proceeded but only 10 did. Now we take into account
+      # the number of valid results when emitting the warning.
+      (1..20).each do |i|
+        fake_person = FactoryBot.create(:person)
+        value = i > 10 ? -1 : i * 100
+        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
+        if i <= 10
+          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
+        end
+      end
+
+      acv = ACV.new.validate(competition_ids: [competition2], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
+    end
+
     # Triggers:
     # REGULATION_9M1_ERROR
     # REGULATION_9M2_ERROR
