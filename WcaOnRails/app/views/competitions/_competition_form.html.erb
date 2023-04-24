@@ -81,20 +81,18 @@
                 return;
               }
 
-              var obj = $("#competition-form").serializeJSON();
-
               var request = {
                 url: url,
                 data: {
                   <% if @competition_admin_view %>
                     'competition_admin_view': true,
                   <% end %>
-                  'competition[id]': obj['competition[id]'],
-                  'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
-                  'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
-                  'competition[start_date]': obj['competition[start_date]'],
-                  'competition[end_date]': obj['competition[end_date]'],
-                  'competition[registration_open]': obj['competition[registration_open]'],
+                  'competition[id]': $("#competition_id").val(),
+                  'competition[latitude_degrees]': $("#competition_latitude").val(),
+                  'competition[longitude_degrees]': $("#competition_longitude").val(),
+                  'competition[start_date]': $("#competition_start_date").val(),
+                  'competition[end_date]': $("#competition_end_date").val(),
+                  'competition[registration_open]': $("#competition_registration_open").val(),
                 },
                 success: successFn
               };
@@ -250,21 +248,19 @@
 
         <script>
           function UpdateDues(){
-
-            var obj = $("#competition-form").serializeJSON();
-            // Coerce compLimitEnabled to a bool, as it is a string obj['competition[competitor_limit_enabled]'] returns a string
-            var compLimitEnabled = ("true" === obj['competition[competitor_limit_enabled]'])
-            var compLimit = compLimitEnabled ? obj['competition[competitor_limit]'] : null
-            var currencyCode = obj['competition[currency_code]']
-
+            var compLimitEnabled = $("#competition_competitor_limit_enabled").val();
+            var compLimit = compLimitEnabled ? $("#competition_competitor_limit").val() : null;
+            var currencyCode = $("#competition_currency_code").val();
+            var countryId = $("#competition_countryId").val();
+            var entryFee = $("#base_entry_fee_lowest_denomination_input_field").val();
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
               url: '<%= calculate_dues_path %>',
               data: {
                 competitor_limit_enabled: compLimitEnabled,
                 competitor_limit: compLimit,
                 currency_code: currencyCode,
-                country_id: obj['competition[countryId]'],
-                entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
+                country_id: countryId,
+                entry_fee_cents: entryFee,
               },
               success: function(data) {
                 if (compLimitEnabled) {
