@@ -36,6 +36,7 @@
       <div class="col-sm-offset-2 col-sm-10">
         <% if @registration.new_or_deleted? %>
           <%= f.submit t('registrations.register'), class: "btn btn-success" %>
+          <p>Do not refresh or resubmit the form after clicking "Register" - this will break the registration flow.</p>
         <% else %>
           <%= f.hidden_field :status, value: @registration.checked_status %>
           <% if current_user.can_delete_registration?(@registration) %>

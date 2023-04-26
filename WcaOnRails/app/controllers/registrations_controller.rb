@@ -645,39 +645,51 @@ class RegistrationsController < ApplicationController
       return
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
-    if @registration.save
+    begin
+      if @registration.save
+        saved_registration_actions
+      else
+        @selected_events = @registration.saved_and_unsaved_events
+        render :register
+      end
+    # Catches the error which occurs if a user refreshes after submitting their registration.
+    # This has the danger of double-mailing organisers and registrant - worth it to keep registration flow consistent
+    rescue ActiveRecord::RecordNotUnique
+      saved_registration_actions
+    end
+  end
+
+  private
+
+    def registration_params
+      permitted_params = [
+        :guests,
+        :comments,
+        { registration_competition_events_attributes: [:id, :competition_event_id, :_destroy] },
+      ]
+      if current_user.can_manage_competition?(competition_from_params)
+        permitted_params += [
+          :accepted_at,
+          :deleted_at,
+          :accepted_by,
+          :deleted_by,
+        ]
+        params[:registration].merge! case params[:registration][:status]
+                                     when "accepted"
+                                       { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
+                                     when "deleted"
+                                       { deleted_at: Time.now, deleted_by: current_user.id }
+                                     else
+                                       { accepted_at: nil, deleted_at: nil }
+                                     end
+      end
+      params.require(:registration).permit(*permitted_params)
+    end
+
+    def saved_registration_actions
       flash[:success] = I18n.t('registrations.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_later
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path
-    else
-      @selected_events = @registration.saved_and_unsaved_events
-      render :register
     end
-  end
-
-  private def registration_params
-    permitted_params = [
-      :guests,
-      :comments,
-      { registration_competition_events_attributes: [:id, :competition_event_id, :_destroy] },
-    ]
-    if current_user.can_manage_competition?(competition_from_params)
-      permitted_params += [
-        :accepted_at,
-        :deleted_at,
-        :accepted_by,
-        :deleted_by,
-      ]
-      params[:registration].merge! case params[:registration][:status]
-                                   when "accepted"
-                                     { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
-                                   when "deleted"
-                                     { deleted_at: Time.now, deleted_by: current_user.id }
-                                   else
-                                     { accepted_at: nil, deleted_at: nil }
-                                   end
-    end
-    params.require(:registration).permit(*permitted_params)
-  end
 end
