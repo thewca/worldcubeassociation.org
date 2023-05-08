@@ -355,7 +355,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
     io-console (0.6.0)
-    irb (1.6.3)
+    irb (1.6.4)
       reline (>= 0.3.0)
     iso (0.2.2)
       i18n
@@ -539,7 +539,7 @@ GEM
     recaptcha (5.14.0)
     redcarpet (3.6.0)
     regexp_parser (2.8.0)
-    reline (0.3.2)
+    reline (0.3.3)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
