@@ -248,7 +248,7 @@
 
         <script>
           function UpdateDues(){
-            var compLimitEnabled = $("#competition_competitor_limit_enabled").val();
+            var compLimitEnabled = "true" === $("#competition_competitor_limit_enabled").val();
             var compLimit = compLimitEnabled ? $("#competition_competitor_limit").val() : null;
             var currencyCode = $("#competition_currency_code").val();
             var countryId = $("#competition_countryId").val();
