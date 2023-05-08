@@ -2102,10 +2102,10 @@ astral-regex@^2.0.0:
   resolved "https://registry.yarnpkg.com/astral-regex/-/astral-regex-2.0.0.tgz#483143c567aeed4785759c0865786dc77d7d2e31"
   integrity sha512-Z7tMw1ytTXt5jqMcOP+OQteU1VuNK9Y02uuJtKQ1Sv69jXQKKg5cibLwGJow8yzZP+eAc18EmLGPal0bp36rvQ==
 
-autonumeric@^4.8.1:
-  version "4.8.1"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.8.1.tgz#24259b4175d7814dde89fd26ad3d388368b40ddd"
-  integrity sha512-bXymqga5EvHSEyoifaw/+pGLJHPOv9+C31G1zUHAFU/2J+94LYm24BYqInw7XWmQJQ96r4VXUchurFmiqzxB5w==
+autonumeric@^4.8.3:
+  version "4.8.3"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.8.3.tgz#d692de1cf98ffbad28ff4ca65af30378c71a2803"
+  integrity sha512-7+VTaR1GVIeJaEiSYqgJdADMw6p5J/+TGHgRd+RyXgMZzqs/hxdggb+apFwvc/DPgGLnjlm6z4cAcXNK278QlA==
 
 autoprefixer@^10.4.14:
   version "10.4.14"
