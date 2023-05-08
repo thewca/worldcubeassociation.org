@@ -6069,12 +6069,10 @@ react@^16.14.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react_ujs@^2.6.1, react_ujs@^2.6.2:
-  version "2.6.2"
-  resolved "https://registry.yarnpkg.com/react_ujs/-/react_ujs-2.6.2.tgz#28230c4082c6e99ecfe8cf59a8a95f3562fe89c5"
-  integrity sha512-4WH91hVZp0533LsTjbcd9uI9xS/7/e4QkFbDpDjy8Pr7GuUt1gE+cM0zml7Ii9aSUDl2A/zzkUrLN5X9akmViQ==
-  dependencies:
-    react_ujs "^2.6.1"
+react_ujs@^2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/react_ujs/-/react_ujs-2.7.0.tgz#988ebfb57f0ad9e7fb1e0109021bba7f6526f756"
+  integrity sha512-uCYdLT6rDQnnrwZorFo+oHddvuJzt/At3Avl+vy2hfp1fZPqkOjSWlvnCVglNS8+qhMaY3tKCg2P5cjqhpHSYw==
 
 read-cache@^1.0.0:
   version "1.0.0"
