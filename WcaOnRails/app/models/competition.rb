@@ -642,14 +642,14 @@ class Competition < ApplicationRecord
         end
       end
 
-      if id.blank? or has_to_update_cell
+      if id.blank? || has_to_update_cell
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank? or has_to_update_cell
+      if cellName.blank? || has_to_update_cell
         year = " " + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
