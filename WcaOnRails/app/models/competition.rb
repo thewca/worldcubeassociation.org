@@ -632,24 +632,14 @@ class Competition < ApplicationRecord
     if m
       name_without_year = m[1]
       year = m[2]
-      # The user should generally not update these fields unless they are comp admins
-      if editing_user_id
-        editing_user = User.find(editing_user_id)
-        if editing_user.can_admin_competitions?
-          has_to_update_cell = false
-        else
-          has_to_update_cell = name.length < 32
-        end
-      end
-
-      if id.blank? || has_to_update_cell
+      if id.blank?
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank? || has_to_update_cell
+      if cellName.blank?
         year = " " + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
