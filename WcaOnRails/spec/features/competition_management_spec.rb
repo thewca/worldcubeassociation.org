@@ -60,8 +60,8 @@ RSpec.feature "Competition management" do
       expect(page).to have_text("Successfully confirmed competition.")
     end
 
-    scenario "change competition id" do
-      competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify as non admin 2016")
+    scenario "change competition id of long name" do
+      competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify long 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
@@ -175,6 +175,18 @@ RSpec.feature "Competition management" do
       new_competition = Competition.find("NewComp2015")
       expect(new_competition.name).to eq "New Comp 2015"
       expect(new_competition.delegates).to eq [delegate]
+    end
+
+    scenario "id and cellname changes for short comp name" do
+      competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionanmeshort2016", name: "competition name short 2016")
+      visit edit_competition_path(competition)
+      fill_in "Name", with: "New Id 2016"
+
+      click_button "Update Competition"
+
+      c = Competition.find("NewId2016")
+      expect(c).not_to be_nil
+      expect(c.cellName).to eq "New Id 2016"
     end
 
     scenario 'clone competition', js: true, retry: 3 do
