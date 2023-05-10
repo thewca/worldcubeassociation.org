@@ -637,7 +637,7 @@ class Competition < ApplicationRecord
         editing_user = User.find(editing_user_id)
         if editing_user.can_admin_competitions?
           has_to_update_cell = false
-        else 
+        else
           has_to_update_cell = name.length < 32
         end
       end
