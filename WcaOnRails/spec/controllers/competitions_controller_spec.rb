@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do

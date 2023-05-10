@@ -61,7 +61,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id" do
-      competition = FactoryBot.create(:competition, :with_delegate)
+      competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify as non admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
@@ -71,7 +71,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id to invalid id" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as non admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId With Spaces"
       click_button "Update Competition"
@@ -84,23 +84,39 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id with validation error" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as non admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
-      fill_in "Name", with: "Name that does not end in a year"
+      fill_in "Name", with: "Name that does not end in a year but is long"
       click_button "Update Competition"
 
       expect(page).to have_text("Name must end with a year")
       expect(page).to have_selector("input#competition_id[value='OldId2016']")
 
-      fill_in "Name", with: "Name that does end in 2016"
+      fill_in "Name", with: "Name that is long and does end in year 2016"
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
 
       expect(page).to have_text("Successfully saved competition.")
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
-      expect(c.name).to eq "Name that does end in 2016"
+      expect(c.name).to eq "Name that is long and does end in year 2016"
+    end
+
+    scenario "can change id of short name from admin view" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
+      visit admin_edit_competition_path(competition)
+      fill_in "ID", with: "NewId2016"
+      click_button "Update Competition"
+
+      c = Competition.find("NewId2016")
+      expect(c).not_to be_nil
+    end
+
+    scenario "cannot change id of short name from orga view" do
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
+      visit edit_competition_path(competition)
+      expect { fill_in "ID", with: "NewId2016" }.to raise_error(Capybara::ElementNotFound)
     end
 
     scenario "change guest entry fee to zero" do
