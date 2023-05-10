@@ -447,6 +447,10 @@ class Competition < ApplicationRecord
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
 
+      if !self.waiting_list_deadline_date
+        warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified')
+      end
+
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
@@ -628,14 +632,24 @@ class Competition < ApplicationRecord
     if m
       name_without_year = m[1]
       year = m[2]
-      if id.blank?
+      # The user should generally not update these fields unless they are comp admins
+      if editing_user_id
+        editing_user = User.find(editing_user_id)
+        if editing_user.can_admin_competitions?
+          has_to_update_cell = false
+        else 
+          has_to_update_cell = name.length < 32
+        end
+      end 
+
+      if id.blank? or has_to_update_cell
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank?
+      if cellName.blank? or has_to_update_cell # Daniel
         year = " " + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
