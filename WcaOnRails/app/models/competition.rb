@@ -640,7 +640,7 @@ class Competition < ApplicationRecord
         else 
           has_to_update_cell = name.length < 32
         end
-      end 
+      end
 
       if id.blank? or has_to_update_cell
         # Generate competition id from name

@@ -34,7 +34,7 @@
           <%= f.input :id , disabled: edit_cellName_id %>
         <% end %>
         <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
-        
+
         <% if @competition.persisted? %>
           
           <%= f.input :cellName, disabled: edit_cellName_id %>
