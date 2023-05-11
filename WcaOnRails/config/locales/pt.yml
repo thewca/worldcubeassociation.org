@@ -2211,7 +2211,7 @@ pt:
       series_more_than_one_accepted: Só pode ser aceite para uma das competições de uma série de competições.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Não se pode registar em eventos para os quais não está qualificado.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Tem que fazer um comentário. Certifique-se de ler os requisitos de
         registo, o que deve ser incluído (por exemplo, numa competição
@@ -2657,7 +2657,7 @@ pt:
       not_announced: 'Esta competição é visível para o público, mas ainda não foi anunciada.'
       #original_hash: ab61991
       announced: Competição anunciada com sucesso!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Esta competição foi cancelada. Por favor verifique a seção de informação
         para mais detalhes.
@@ -2703,13 +2703,17 @@ pt:
       tooltip_registered: Está registado.
       #original_hash: f2d092f
       tooltip_waiting_list: Está na lista de espera.
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Infelizmente, o seu registo foi apagado. Verifique o seu e-mail para
+        obter detalhes ou entre em contacto com o(s) organizador(es).
+      #original_hash: 1b6dc61
       confirmed_visible: Esta competição está confirmada e visível
-      #original_hash: fa186a9
+      #original_hash: abc2f96
       confirmed_not_visible: Esta competição está confirmada mas não está visível
-      #original_hash: a66bbe3
+      #original_hash: 6d6290b
       not_confirmed_visible: Esta competição não está confirmada mas está visível
-      #original_hash: 0f44e45
+      #original_hash: b299b27
       not_confirmed_not_visible: Esta competição não está confirmada nem visível
       #original_hash: a821396
       stripe_connected: >-
@@ -2721,7 +2725,7 @@ pt:
       stripe_disconnected_failure: Ocorreu um erro ao desconectar a conta Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: Houve um problema e não foi possível ligar à sua conta Stripe.
-      #original_hash: 724cf0d
+      #original_hash: 1b92d16
       championship_exists: 'Já existe um %{championship_type} em %{year}'
       #original_hash: 0644bdc
       orga_closed_reg_success: Inscrições encerradas com sucesso.

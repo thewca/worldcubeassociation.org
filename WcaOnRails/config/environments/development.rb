@@ -72,7 +72,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   config.after_initialize do
-    Bullet.enable = !EnvVars.DISABLE_BULLET?
+    Bullet.enable = EnvVars.ENABLE_BULLET?
     Bullet.alert = true
     Bullet.bullet_logger = true
     Bullet.console = true

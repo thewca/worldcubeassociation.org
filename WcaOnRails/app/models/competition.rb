@@ -72,7 +72,7 @@ class Competition < ApplicationRecord
       ).group(:id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
-  scope :order_by_announcement_date, -> { order(announced_at: :desc) }
+  scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
