@@ -4,6 +4,8 @@
 
 * **Schedule:** [Did you fall behind or run ahead of schedule? What were the reasons for deviations? Did you start/end the competition day(s) on time?]
 
+* **Registration and check in:** [Did you remember to perform ID checks of newcomers? Did every newcomer supply ID stating nationality (and if not, how did you handle it)? Any particular issues you faced or found hard to handle at this competition?]
+
 * **Judging system:** [Running VS Fixed/Seated? Did you have dedicated staff? Were there pre-computed assignments (e.g., Groupifier)?]
 
 * **Scrambling:** [How many scramblers did you generally assign? Did you have troubles with the scrambling of any particular puzzles? Did you use scrambler signatures? Did you use printed scrambles or display device(s)? If printed, who prepared the print-outs? If display, who was in charge of changing scrambles with password access?]
