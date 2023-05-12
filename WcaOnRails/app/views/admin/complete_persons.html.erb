@@ -67,14 +67,16 @@
 
         <% p[:similar_persons].each do |sim, np, cp| %>
           <% name_identical = FinishUnfinishedPersons.extract_roman_name(sim.name) == FinishUnfinishedPersons.extract_roman_name(p[:person_name]) %>
+
           <% dob_identical = sim.dob == p[:person_dob] %>
+          <% country_identical = sim.countryId == p[:country_id] %>
 
-          <% radio_checked = name_identical || dob_identical %>
+          <% exact_match = name_identical && dob_identical && country_identical %>
 
-          <tr class="<%= "danger" if radio_checked %>">
+          <tr class="<%= "danger" if exact_match %>">
             <td>
               <%= f.input "#{case_id}][action", label: false, hint: false do %>
-                <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: radio_checked %>
+                <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: exact_match %>
               <% end %>
             </td>
             <td><%= display_string sim.name %></td>
