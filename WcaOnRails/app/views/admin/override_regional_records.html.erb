@@ -110,14 +110,14 @@
                   <% end %>
                   <td class="date"> <%= wca_date_range(competition.start_date, competition.end_date) %></td>
                   <td class="competition">
-                    <%= link_to result.competition_id, competition_path(result.competition_id) %>
+                    <%= link_to result.competition_id, competition_path(result.competition_id), target: '_blank', class: 'hide-new-window-icon' %>
                   </td>
                   <td class="round">
                     <%= result.round_type_id %>
                   </td>
                   <td class="name">
                     <% if result.wca_id %>
-                      <%= link_to result.person_name, person_path(result.wca_id) %>
+                      <%= link_to result.person_name, person_path(result.wca_id), target: '_blank', class: 'hide-new-window-icon' %>
                     <% else %>
                       <%= result.person_name %>
                     <% end %>
