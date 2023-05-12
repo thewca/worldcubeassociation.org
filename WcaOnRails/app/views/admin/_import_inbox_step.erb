@@ -46,7 +46,8 @@
 
     <p>
       <% if @existing_data[:newcomer_result] == 0 %>
-        All newcomers seem to have been assigned WCA IDs. Please delete the inbox rows using the buttons above.
+        All newcomers seem to have been assigned WCA IDs.
+        Please <%= link_to "delete the inbox rows", competition_admin_delete_inbox_data_path(@competition, model: :inbox_person), class: 'inbox-trigger btn btn-primary', data: { jquery_method: :delete } %>.
       <% else %>
         Please <%= link_to "assign WCA IDs to newcomers", '/results/admin/persons_finish_unfinished.php?check=+Check+now+', target: '_blank', class: 'btn btn-primary' %>
         to proceed to the next step.
