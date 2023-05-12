@@ -34,13 +34,13 @@
       to proceed to the next step</p>
   <% elsif render_step == :inbox_person %>
     <%# TODO: Redo link pending other PR %>
-    <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> InboxPersons pending</p>
+    <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> entries in InboxPersons pending for this competition.</p>
 
     <ul>
-      <li><b><%= @existing_data[:newcomer_person] %></b> entries from InboxPersons are newcomers.</li>
+      <li><b><%= @existing_data[:newcomer_person] %></b> entries from InboxPersons for this competition are missing a WCA ID.</li>
       <li>
         <b style="color:<%= @existing_data[:newcomer_result] == 0 ? "#0B0" : "#F00" %>"><%= @existing_data[:newcomer_result] %></b>
-        newcomers in the Results table are still pending.
+        competitors in the Results table for this competition still have to be assigned a WCA ID.
       </li>
     </ul>
 

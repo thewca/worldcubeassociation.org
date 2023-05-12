@@ -40,7 +40,7 @@
       <ul>
         <%# TODO: Redo link pending other PR %>
         <li><%= link_to "Check record markers", "/results/admin/check_regional_record_markers.php?competitionId=#{@competition.id}&show=Show", target: '_blank' %></li>
-        <li><%= link_to "Run CAD", admin_do_compute_auxiliary_data_path, target: '_blank' %></li>
+        <li><%= link_to "Compute auxiliary data", admin_do_compute_auxiliary_data_path, target: '_blank' %></li>
       </ul>
       <p>
         You can also visit the <%= link_to "public results page", competition_results_all_path(@competition, event: 'all'), target: '_blank' %> as an additional sanity check.
