@@ -390,7 +390,7 @@ class AdminController < ApplicationController
 
           new_person = Person.find(merge_id)
 
-          FinishUnfinishedPersons.adapt_results(nil, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId)
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId, pending_competition_id)
         end
       end
     end

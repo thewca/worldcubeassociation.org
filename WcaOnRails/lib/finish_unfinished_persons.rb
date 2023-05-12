@@ -190,7 +190,7 @@ module FinishUnfinishedPersons
     results_scope = Result
 
     if pending_id.present?
-      raise "Must supply a competition ID for updating newcomer results!" if pending_comp_id.nil?
+      raise "Must supply a competition ID for updating newcomer results!" unless pending_comp_id.present?
 
       results_scope = results_scope.where(
         personId: pending_id,
