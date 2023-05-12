@@ -13,19 +13,19 @@ module FinishUnfinishedPersons
   # We try a better job by handling it though, as the page tries to load the next batch after submission.
   MAX_PER_BATCH = 20
 
-  def self.unfinished_results_scope(competition_id = nil)
+  def self.unfinished_results_scope(competition_ids = nil)
     results_scope = Result.includes(:competition, :inbox_person)
                           .select(:personId, :personName, :competitionId, :countryId)
 
-    results_scope = results_scope.where(competitionId: competition_id) if competition_id.present?
+    results_scope = results_scope.where(competitionId: competition_ids) if competition_ids.present?
 
     results_scope.where("(personId = '' OR personId REGEXP '^[0-9]+$')")
                  .group(:personId, :personName, :competitionId, :countryId)
                  .order(:personName)
   end
 
-  def self.search_persons(competition_id = nil)
-    unfinished_person_results = self.unfinished_results_scope(competition_id)
+  def self.search_persons(competition_ids = nil)
+    unfinished_person_results = self.unfinished_results_scope(competition_ids)
 
     unfinished_persons = []
     available_id_spots = {} # to make sure that all of the newcomer IDs that we're creating in one batch are unique among each other

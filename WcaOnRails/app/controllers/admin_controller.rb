@@ -340,13 +340,13 @@ class AdminController < ApplicationController
 
   def finish_unfinished_persons
     @finish_persons = FinishPersonsForm.new(
-      competition_id: params[:competition_id] || nil,
+      competition_ids: params[:competition_ids] || nil,
     )
   end
 
   def complete_persons
     action_params = params.require(:finish_persons_form)
-                          .permit(:competition_id)
+                          .permit(:competition_ids)
 
     @finish_persons = FinishPersonsForm.new(action_params)
     @persons_to_finish = @finish_persons.search_persons
@@ -364,7 +364,7 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       params[:person_completions].each do |person_key, procedure|
-        next if [:competition_id, :continue_batch].include? person_key.to_sym
+        next if [:competition_ids, :continue_batch].include? person_key.to_sym
 
         old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
 
@@ -398,17 +398,18 @@ class AdminController < ApplicationController
     continue_batch = params.dig(:person_completions, :continue_batch)
     continue_batch = ActiveRecord::Type::Boolean.new.cast(continue_batch)
 
-    competition_id = params.dig(:person_completions, :competition_id)
+    competition_ids = params.dig(:person_completions, :competition_ids)
 
     if continue_batch
-      can_continue = FinishUnfinishedPersons.unfinished_results_scope(competition_id).any?
+      finish_persons = FinishPersonsForm.new(competition_ids: competition_ids)
+      can_continue = FinishUnfinishedPersons.unfinished_results_scope(finish_persons.competitions).any?
 
       if can_continue
-        return redirect_to action: :complete_persons, finish_persons_form: { competition_id: competition_id }
+        return redirect_to action: :complete_persons, finish_persons_form: { competition_ids: competition_ids }
       end
     end
 
-    redirect_to action: :finish_unfinished_persons, competition_id: competition_id
+    redirect_to action: :finish_unfinished_persons, competition_ids: competition_ids
   end
 
   def peek_unfinished_results

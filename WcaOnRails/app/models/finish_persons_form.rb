@@ -3,9 +3,13 @@
 class FinishPersonsForm
   include ActiveModel::Model
 
-  attr_accessor :competition_id
+  attr_accessor :competition_ids
+
+  def competitions
+    competition_ids.split(',').uniq.compact
+  end
 
   def search_persons
-    FinishUnfinishedPersons.search_persons competition_id
+    FinishUnfinishedPersons.search_persons competitions
   end
 end

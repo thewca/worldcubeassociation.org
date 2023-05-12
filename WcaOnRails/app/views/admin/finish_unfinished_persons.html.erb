@@ -30,7 +30,7 @@
     </div>
 
     <%= simple_form_for @finish_persons, url: admin_complete_persons_path, method: :get do |f| %>
-      <%= f.input :competition_id, as: :competition_id, only_one: true, label: "Competition ID", hint: "Leave blank to check for all competitions" %>
+      <%= f.input :competition_ids, as: :competition_id, label: "Competition(s)", hint: "Leave blank to check for all competitions" %>
       <%= f.button :submit, value: "Check now!", class: "btn-primary" %>
     <% end %>
   <% end %>
