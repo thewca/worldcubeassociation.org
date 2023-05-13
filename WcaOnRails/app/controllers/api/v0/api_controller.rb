@@ -179,8 +179,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    sql_perma_path = DatabaseController.rel_download_path DatabaseController::RESULTS_EXPORT_FOLDER, DatabaseController::RESULTS_EXPORT_SQL_PERMALINK
-    tsv_perma_path = DatabaseController.rel_download_path DatabaseController::RESULTS_EXPORT_FOLDER, DatabaseController::RESULTS_EXPORT_TSV_PERMALINK
+    sql_perma_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK
+    tsv_perma_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK
 
     timestamp = Timestamp.find_by(name: DumpPublicResultsDatabase::TIMESTAMP_NAME)
 

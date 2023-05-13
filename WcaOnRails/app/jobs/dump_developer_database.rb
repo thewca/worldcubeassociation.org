@@ -10,10 +10,8 @@ class DumpDeveloperDatabase < SingletonApplicationJob
       running_on_dev_dump = Timestamp.exists?(name: DatabaseDumper::DEV_TIMESTAMP_NAME)
 
       unless running_on_dev_dump
-        Rake::Task["db:dump:development"].invoke
-
+        DbDumpHelper.dump_developer_db
         last_developer_db_dump.touch :date
-        Rake::Task["db:dump:development"].reenable
       end
     end
   end
