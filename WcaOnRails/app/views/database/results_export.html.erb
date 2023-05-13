@@ -1,0 +1,23 @@
+<div class="container">
+  <h1><%= t('.heading') %></h1>
+
+  <p><%= t('.description') %></p>
+
+  <dl>
+    <dt>
+      SQL: <%= link_to(@sql_filename, @sql_rel_path) %> (<%= number_to_human_size @sql_filesize %>)
+      <small>(<%= link_to(t('.permalink'), @sql_perma_path) %>)</small>
+    </dt>
+    <dd><%= t('.file_formats.sql') %></dd>
+
+    <dt>
+      TSV: <%= link_to(@tsv_filename, @tsv_rel_path) %> (<%= number_to_human_size @tsv_filesize %>)
+      <small>(<%= link_to(t('.permalink'), @tsv_perma_path) %>)</small>
+    </dt>
+    <dd><%= t('.file_formats.tsv') %></dd>
+  </dl>
+
+  <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DatabaseController::RESULTS_EXPORT_README)) %></p>
+
+  <pre><%= DatabaseController.render_readme(self, DateTime.now) %></pre>
+</div>

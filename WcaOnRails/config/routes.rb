@@ -114,6 +114,11 @@ Rails.application.routes.draw do
   get "media/validate" => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
 
+  get 'export/results' => 'database#results_export', as: :db_results_export
+  get 'export/developer' => 'database#developer_export', as: :db_dev_export
+  # redirect from the old path that used to be linked on GitHub
+  get 'wst/wca-developer-database-dump.zip', to: redirect('/export/developer/wca-developer-database-dump.zip')
+
   get 'persons/new_id' => 'admin/persons#generate_ids'
   resources :persons, only: [:index, :show]
   post 'persons' => 'admin/persons#create'
@@ -201,6 +206,9 @@ Rails.application.routes.draw do
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/generate_exports' => 'admin#generate_exports'
+  get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
+  get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'

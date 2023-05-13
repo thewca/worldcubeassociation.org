@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 
 class SingletonApplicationJob < ApplicationJob
+  def self.in_progress?
+    Delayed::Job.exists?(["handler LIKE ?", "%job_class: #{self.name}%"])
+  end
+
   before_enqueue do |job|
     # Abort if job of the kind is already enqueued.
-    already_enqueued = Delayed::Job.exists?(["handler LIKE ?", "%job_class: #{job.class.name}%"])
-    throw :abort if already_enqueued
+    throw :abort if job.class.in_progress?
   end
 end
