@@ -19,7 +19,7 @@ function numberToInput(number) {
 function FmField({
   value: rawValue, onChange, label, disabled, TextFieldProps = {}, resultType = 'single',
 }) {
-  const isAverage = resultType === 'average'
+  const isAverage = resultType === 'average';
   // 35 single is stored as 35, 35 average is stored as 3500
   const value = isAverage ? rawValue / 100 : rawValue;
   const [prevValue, setPrevValue] = useState(value);
@@ -45,11 +45,11 @@ function FmField({
   }, [setDraftValue]);
 
   const handleBlur = useCallback(() => {
-    const parsedDraftValue = isAverage ? draftValue * 100 : draftValue
+    const parsedDraftValue = isAverage ? draftValue * 100 : draftValue;
     onChange(parsedDraftValue);
     // Once we emit the change, reflect the initial state.
     setDraftValue(value);
-  }, [onChange, draftValue, setDraftValue, value]);
+  }, [onChange, draftValue, setDraftValue, value, isAverage]);
 
   return (
     <Form.Input

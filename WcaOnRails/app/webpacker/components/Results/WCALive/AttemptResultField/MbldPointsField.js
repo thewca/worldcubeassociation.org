@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { SKIPPED_VALUE } from '../../../../lib/wca-live/attempts';
 import {
   attemptResultToMbPoints,
-  mbPointsToAttemptResultWithUnknownTime
+  mbPointsToAttemptResultWithUnknownTime,
 } from '../../../../lib/utils/edit-events';
 
 function numberToInput(number) {
