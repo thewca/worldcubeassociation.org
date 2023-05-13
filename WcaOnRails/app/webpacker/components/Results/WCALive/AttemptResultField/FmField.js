@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import _ from 'lodash';
 import { DNF_KEYS, DNS_KEYS } from './keybindings';
@@ -17,8 +17,11 @@ function numberToInput(number) {
 
 /* eslint react/jsx-props-no-spreading: "off" */
 function FmField({
-  value, onChange, label, disabled, TextFieldProps = {},
+  value: rawValue, onChange, label, disabled, TextFieldProps = {}, resultType = 'single',
 }) {
+  const isAverage = resultType === 'average'
+  // 35 single is stored as 35, 35 average is stored as 3500
+  const value = isAverage ? rawValue / 100 : rawValue;
   const [prevValue, setPrevValue] = useState(value);
   const [draftValue, setDraftValue] = useState(value);
 
@@ -42,7 +45,8 @@ function FmField({
   }, [setDraftValue]);
 
   const handleBlur = useCallback(() => {
-    onChange(draftValue);
+    const parsedDraftValue = isAverage ? draftValue * 100 : draftValue
+    onChange(parsedDraftValue);
     // Once we emit the change, reflect the initial state.
     setDraftValue(value);
   }, [onChange, draftValue, setDraftValue, value]);

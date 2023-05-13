@@ -44,6 +44,7 @@ function QualificationInput({
                 value={level}
                 onChange={(value) => onChange(value)}
                 label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+                resultType={resultType}
               />
           }
         </>
