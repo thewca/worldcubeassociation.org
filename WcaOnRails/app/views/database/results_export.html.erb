@@ -17,7 +17,7 @@
     <dd><%= t('.file_formats.tsv') %></dd>
   </dl>
 
-  <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DatabaseController::RESULTS_EXPORT_README)) %></p>
+  <p><%= t('.hint_readme_html', readme_filename: content_tag('code', DbDumpHelper::RESULTS_EXPORT_README)) %></p>
 
   <pre><%= DatabaseController.render_readme(self, DateTime.now) %></pre>
 </div>
