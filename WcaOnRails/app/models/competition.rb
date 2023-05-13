@@ -29,6 +29,8 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
+  has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -574,7 +576,9 @@ class Competition < ApplicationRecord
              'bookmarked_competitions',
              'bookmarked_users',
              'competition_series',
-             'series_competitions'
+             'series_competitions',
+             'inbox_results',
+             'inbox_persons'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

@@ -79,8 +79,8 @@ class ResultValidationForm
 
   def build_validator
     ResultsValidators::CompetitionsResultsValidator.new(
+      validators,
       check_real_results: true,
-      validators: validators,
       apply_fixes: apply_fixes,
     )
   end

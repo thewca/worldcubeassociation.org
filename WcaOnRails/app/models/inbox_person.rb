@@ -3,7 +3,11 @@
 class InboxPerson < ApplicationRecord
   self.table_name = "InboxPersons"
 
+  belongs_to :person, -> { current }, foreign_key: "wcaId", primary_key: "wca_id", optional: true
+
   alias_attribute :wca_id, :wcaId
+  alias_attribute :ref_id, :id
+  alias_attribute :wca_person, :person
 
   validates :name, presence: true
   validates :dob, presence: true
