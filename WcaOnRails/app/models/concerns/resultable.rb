@@ -23,10 +23,6 @@ module Resultable
     # outside the scope of the WCA website.
     validates_numericality_of :pos, message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"
 
-    # Order by event, then roundTypeId, then average if exists, then best if exists
-    scope :sorted_for_competitions,
-          ->(competition_ids) { includes(:format).where(competitionId: competition_ids).order(:competitionId, :eventId, :roundTypeId).order(Arel.sql("if(formatId in ('a','m') and average>0, average, 2147483647), if(best>0, best, 2147483647)")) }
-
     # Define cached stuff with the same name as the associations for validation
     def round_type
       RoundType.c_find(roundTypeId)
