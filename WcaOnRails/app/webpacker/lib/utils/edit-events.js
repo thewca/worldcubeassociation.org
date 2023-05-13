@@ -61,6 +61,13 @@ export function mbPointsToAttemptResult(mbPoints) {
   return parsedMbToAttemptResult({ solved, attempted, timeCentiseconds });
 }
 
+export function mbPointsToAttemptResultWithUnknownTime(mbPoints) {
+  const solved = mbPoints;
+  const attempted = mbPoints;
+  const timeCentiseconds = 99999;
+  return parsedMbToAttemptResult({ solved, attempted, timeCentiseconds });
+}
+
 export const SECOND_IN_CS = 100;
 export const MINUTE_IN_CS = 60 * SECOND_IN_CS;
 export const HOUR_IN_CS = 60 * MINUTE_IN_CS;

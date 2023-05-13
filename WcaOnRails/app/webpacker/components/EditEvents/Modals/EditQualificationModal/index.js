@@ -8,6 +8,7 @@ import { eventQualificationToString } from '../../../../lib/utils/wcif';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import useInputState from '../../../../lib/hooks/useInputState';
 import AttemptResultField from '../../../Results/WCALive/AttemptResultField/AttemptResultField';
+import MbldPointsField from '../../../Results/WCALive/AttemptResultField/MbldPointsField';
 import { updateQualification } from '../../store/actions';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import QualificationType from './QualificationTypeInput';
@@ -31,23 +32,20 @@ function QualificationInput({
     case 'attemptResult':
       return (
         <>
-          {eventId === '333mbf' &&
-            <>
-              <Label>{i18n.t(`common.${resultType}`)}</Label>
-              Note: Please enter n/n in any time to specify n points.
-            </>
+          {eventId === '333mbf'
+            ? <MbldPointsField
+                eventId={eventId}
+                value={level}
+                onChange={(level) => onChange(level)}
+                label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+              />
+            : <AttemptResultField
+                eventId={eventId}
+                value={level}
+                onChange={(value) => onChange(value)}
+                label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+              />
           }
-          <AttemptResultField
-            eventId={eventId}
-            value={level}
-            onChange={(value) => onChange(value)}
-            label={eventId !== '333mbf' ? (
-              <Label>
-                {i18n.t(`common.${resultType}`)}
-              </Label>
-            ) : "Time (will be ignored)"}
-          />
-          {eventId === '333mbf' && <br/>}
         </>
       );
     case 'ranking':
@@ -170,5 +168,3 @@ export default function EditQualificationModal({
     </ButtonActivatedModal>
   );
 }
-
-// !!! accept mbf point qual
