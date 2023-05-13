@@ -6,10 +6,14 @@ import {
   adminCADUrl,
   competitionAllResultsUrl,
   personUrl,
+  adminFixResultsUrl,
 } from '../../../lib/requests/routes.js.erb';
 
 function AfterActionMessage({
-  wcaId, eventId, competitionId, response,
+  wcaId,
+  eventId,
+  competitionId,
+  response,
 }) {
   return (
     <>
@@ -21,7 +25,7 @@ function AfterActionMessage({
             {' '}
             <a href={personUrl(wcaId)} target="_blank" rel="noreferrer">{wcaId}</a>
           </>
-      )}
+        )}
         list={response.messages}
       />
       <Message positive>
@@ -68,6 +72,18 @@ function AfterActionMessage({
           You can also
           {' '}
           <a href={competitionAllResultsUrl(competitionId, eventId)}>go back to the results</a>
+          {' '}
+          or you can
+          {' '}
+          <a
+            href={adminFixResultsUrl(
+              wcaId,
+              competitionId,
+              eventId,
+            )}
+          >
+            go to the Fix Results entry point
+          </a>
           .
         </div>
       </Message>
