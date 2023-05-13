@@ -1,17 +1,53 @@
-<% results_validator ||= ResultsValidators::CompetitionsResultsValidator.new %>
-<% competition ||= nil %>
-<% all_validators = ResultsValidators::Utils::ALL_VALIDATORS %>
-<% selected_validators = results_validator.validators.empty? ? all_validators : results_validator.validators %>
+<% backend_url ||= nil %>
+<% lock_selection = defined? @competition %>
 <div class="panel panel-default">
   <div class="panel-heading">Configure validations to run</div>
   <div class="panel-body">
-    <%= simple_form_for :results_validation, url: admin_run_validators_path do |f| %>
-      <%# NOTE: i18n-tasks detects "validators" and "competition_ids" as having their hints under "person". %>
-      <%# This is most likely a bug and the cleanest workaround I could find was to explicitly set the hint here. %>
-      <%= f.input :validators, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
-      <%= f.input :apply_fixes, as: :boolean, label: apply_fixes_label, hint: apply_fixes_hint, input_html: { checked: results_validator.apply_fixes } %>
-      <%= f.input :competition_ids, as: :string, readonly: competition.present?, hint: false, input_html: { value: competition&.id }, label: "Competition ID(s)" %>
-      <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
+    <%= simple_form_for @result_validation, url: backend_url do |f| %>
+      <%= f.input :validator_classes, as: :string, label: false, hint: false, input_html: { id: "validators" } %>
+      <%= f.input :apply_fixes, as: :boolean, label: "Apply fix when possible", hint: "List of validators with automated fix: #{ResultValidationForm::VALIDATOR_WITH_FIX_NAMES.join(",")}." %>
+      <% unless lock_selection %>
+        <%= f.input :competition_selection, collection: ResultValidationForm::COMP_VALIDATION_MODES, as: :radio_buttons, label: "Competition selection", hint: "WARNING: Running multiple validations on all competitions can take a long time." %>
+      <% end %>
+      <div id="selectize-competition-ids">
+        <%= f.input :competition_ids, as: :competition_id, hint: false, label: "Competition ID(s)", input_html: { class: lock_selection ? "wca-autocomplete-input_lock" : "" } %>
+      </div>
+      <% unless lock_selection %>
+        <div id="datetime-start-range" style="margin-bottom: 20px;">
+          <%= f.input :competition_start_date, as: :date_picker, hint: false, label: "Start date for checking" %>
+          <%= f.input :competition_end_date, as: :date_picker, hint: "Please pick dates above to update this label with information on the selected competitions.", label: "End date for checking" %>
+
+          <div class="progress" style="margin-top: 5px; display: none;">
+            <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%;">
+              <span class="sr-only">LOADING</span>
+            </div>
+          </div>
+        </div>
+      <% end %>
+      <div class="form-group">
+        <%= f.button :submit, value: "Run validators", class: "btn-primary" %>
+        <%= ui_icon('info circle', 'data-toggle': "collapse", 'data-target': "#collapse-validator-desc") %>
+      </div>
+      <div id="collapse-validator-desc" class="collapse">
+        <%= wca_table do %>
+          <thead>
+            <tr>
+              <th>Validator</th>
+              <th>Description</th>
+              <th></th> <!-- Extra column for .table-greedy-last-column -->
+            </tr>
+          </thead>
+          <tbody>
+            <% ResultsValidators::Utils::ALL_VALIDATORS.each do |validator| %>
+              <tr>
+                <td><%= validator.class_name %></td>
+                <td><%= validator.new.description %></td>
+                <td></td> <!-- Extra column for .table-greedy-last-column -->
+              </tr>
+            <% end %>
+          </tbody>
+        <% end %>
+      </div>
     <% end %>
   </div>
 </div>
@@ -23,7 +59,94 @@
     labelField: 'name',
     searchField: ['name'],
     plugins: ['remove_button'],
-    options: <%= raw(all_validators.map(&:serialize).to_json) %>,
-    items: <%= raw(selected_validators.map(&:class_name).to_json) %>,
+    options: <%= raw(ResultsValidators::Utils::ALL_VALIDATORS.map(&:serialize).to_json) %>,
   });
+
+  $('input[name="result_validation_form[competition_selection]"][type=radio]').on('change', function() {
+    var isChecked = $(this).is(':checked')
+
+    if (isChecked) {
+      var isManualRadio = this.value === "<%= ResultValidationForm::COMP_VALIDATION_MANUAL %>"
+      $('#selectize-competition-ids').toggle(isManualRadio);
+
+      var isAllRadio = this.value === "<%= ResultValidationForm::COMP_VALIDATION_ALL %>"
+      $('#datetime-start-range').toggle(isAllRadio);
+    }
+  }).trigger('change');
+
+  var $compStartDate = $('input[name="result_validation_form[competition_start_date]"]');
+  var $compEndDate = $('input[name="result_validation_form[competition_end_date]"]');
+
+  function fetchEndDate() {
+    var startDate = $compStartDate.val();
+    var endDate = $compEndDate.val();
+
+    var $progressDiv = $('div.progress');
+    var $progressBar = $('div.progress-bar');
+
+    var $datePickerHint = $('#datetime-start-range .result_validation_form_competition_end_date p.help-block');
+
+    if (startDate && endDate) {
+      $datePickerHint.hide();
+
+      $progressDiv.show();
+      $progressBar.removeClass('progress-bar-danger').addClass('progress-bar-success active');
+      $progressBar.html('<span class="sr-only">LOADING</span>');
+
+      window.wca.cancelPendingAjaxAndAjax('competition-range-end-date', {
+        url: '<%= admin_validation_competitions_path %>',
+        data: {
+          'start_date': startDate,
+          'end_date': endDate
+        },
+        success: function(data) {
+          var { competitions } = data;
+
+          var displayLength = Math.min(10, competitions.length);
+          var displaySlice = Math.floor(displayLength / 2);
+
+          var displayIds = competitions.slice(0, displaySlice);
+
+          var sliceCheck = displaySlice * 2;
+
+          if (competitions.length > sliceCheck) {
+            var remaining = competitions.length - sliceCheck;
+
+            var filler = (remaining + sliceCheck <= displayLength)
+              ? competitions.slice(displaySlice, displaySlice + remaining)
+              : ['&nbsp;', `(${remaining}&nbsp;more&nbsp;competitions)`, '&nbsp;'];
+
+            displayIds = displayIds.concat(filler);
+          }
+
+          var lastIds = competitions.slice(-displaySlice);
+          displayIds = displayIds.concat(lastIds);
+
+          var competitionIds = displayIds.join('\n');
+
+          $datePickerHint.html(`The checks will run for <b data-toggle="tooltip" data-placement="bottom" data-container="body" title="${competitionIds}">${competitions.length}</b> competitions`);
+          $('b', $datePickerHint).tooltip();
+
+          $datePickerHint.show();
+          $progressDiv.hide();
+        },
+        error: function(response) {
+          var $progressBar = $('div.progress-bar');
+          $progressBar.removeClass('progress-bar-success active').addClass('progress-bar-danger');
+
+          var requestId = response.getResponseHeader('X-Request-Id');
+          $progressBar.text(`An error occured! Request ID ${requestId}`);
+        }
+      });
+    }
+  }
+
+  $compStartDate.on('dp.change', fetchEndDate);
+  $compEndDate.on('dp.change', fetchEndDate);
 </script>
+
+<style>
+  div.form-group.result_validation_form_competition_end_date {
+    margin-bottom: 0;
+  }
+</style>
