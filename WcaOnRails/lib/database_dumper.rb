@@ -962,6 +962,11 @@ module DatabaseDumper
           "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
         }.freeze,
       ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "information" => "REGEXP_REPLACE(information, '[[:space:]]+', ' ')",
+        },
+      ),
     }.freeze,
     "Scrambles" => {
       where_clause: "",
@@ -1093,7 +1098,7 @@ module DatabaseDumper
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    bash!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" > #{dest_filename} #{filter_out_mysql_warning}")
+    bash!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)
@@ -1104,8 +1109,8 @@ module DatabaseDumper
     bash!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
   end
 
-  def self.filter_out_mysql_warning
-    '2>&1 | grep -v "[Warning] Using a password on the command line interface can be insecure." || true'
+  def self.filter_out_mysql_warning(dest_filename = nil)
+    "2>&1 | grep -v \"[Warning] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
   end
 end
 
