@@ -1903,6 +1903,9 @@ class Competition < ApplicationRecord
       year: year,
       isProbablyOver: is_probably_over?,
       cancelled: cancelled?,
+      resultsPosted: results_posted?,
+      inProgress: in_progress?,
+      dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
     )
   end
 

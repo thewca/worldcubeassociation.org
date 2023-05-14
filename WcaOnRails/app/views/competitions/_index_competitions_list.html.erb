@@ -10,6 +10,7 @@
         <%= react_component("CompetitionOverview/CompetitionTable", {
           competitions: competitions,
           title: table_title,
+          showRegistrationStatus: @show_registration_status,
         }) %>
       </div>
     <% elsif @recent_selected %>
@@ -17,6 +18,7 @@
         <%= react_component("CompetitionOverview/CompetitionTable", {
           competitions: competitions,
           title: t('competitions.index.titles.recent', count: Competition::RECENT_DAYS),
+          showRegistrationStatus: @show_registration_status,
         }) %>
       </div>
     <% elsif @by_announcement_selected %>
