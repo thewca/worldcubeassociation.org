@@ -1,7 +1,9 @@
+<% long_date ||= DateTime.now %>
+<% export_version ||= '1.0.0' %>
 # World Cube Association – Results Database Export
 
-- Date: [longDate]
-- Export Format Version: [exportFormatVersion]
+- Date: <%= long_date.strftime('%B %e, %Y') %>
+- Export Format Version: <%= export_version %>
 - Contact: WCA Results Team (results@worldcubeassociation.org)
 - Website: https://www.worldcubeassociation.org/results
 
@@ -23,7 +25,7 @@ as users are clearly notified of the following:
 
 > This information is based on competition results owned and maintained by the
 > World Cube Assocation, published at https://worldcubeassociation.org/results
-> as of [longDate].
+> as of <%= long_date.strftime('%B %e, %Y') %>.
 
 ## Acknowledgements
 
@@ -42,10 +44,10 @@ https://www.worldcubeassociation.org/about
 
 The export contains a `metadata.json` file, with the following fields:
 
-| Field                   | Sample Value                  |
-| ----------------------- | ----------------------------- |
-| `export_date`           | `"2018-09-19T05:04:58+02:00"` |
-| `export_format_version` | `"1.0.0"`                     |
+| Field                   | Sample Value              |
+|-------------------------|---------------------------|
+| `export_date`           | `"<%= long_date.to_s %>"` |
+| `export_format_version` | `"<%= export_version %>"` |
 
 If you regularly process this export, we recommend that you check the
 `export_format_version` value in your program and and review your code if the
@@ -57,12 +59,12 @@ https://www.worldcubeassociation.org/api/v0/export/public
 You can use the `export_date` to detect if there is a new export, and the
 `sql_url` and `tsv_url` will contain the URLs for the corresponding downloads.
 
-## Format (version [exportFormatVersion])
+## Format (version <%= export_version %>)
 
 The database export consists of these tables:
 
 | Table                                   | Contents                                           |
-| --------------------------------------- | -------------------------------------------------- |
+|-----------------------------------------|----------------------------------------------------|
 | Persons                                 | WCA competitors                                    |
 | Competitions                            | WCA competitions                                   |
 | Events                                  | WCA events (3x3x3 Cube, Megaminx, etc)             |

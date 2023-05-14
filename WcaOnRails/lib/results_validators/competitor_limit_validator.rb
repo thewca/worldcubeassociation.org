@@ -11,25 +11,22 @@ module ResultsValidators
       false
     end
 
-    def validate(competition_ids: [], model: Result, results: nil)
-      reset_state
+    def include_persons?
+      true
+    end
 
-      if competition_ids.empty?
-        competition_ids = results.map(&:competitionId).uniq
-      end
+    def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        competition = competition_data.competition
 
-      Competition.where(id: competition_ids, competitor_limit_enabled: true).each do |competition|
-        limit = competition.competitor_limit
-        total_competitors = if model == Result
-                              competition.competitors.count
-                            else
-                              InboxPerson.where(competitionId: competition.id).count
-                            end
-        if total_competitors > limit
+        competitor_limit = competition.competitor_limit
+        total_competitors = competition_data.persons.count
+
+        if competition.competitor_limit_enabled && total_competitors > competitor_limit
           @warnings << ValidationWarning.new(:persons, competition.id,
                                              COMPETITOR_LIMIT_WARNING,
                                              n_competitors: total_competitors,
-                                             competitor_limit: limit)
+                                             competitor_limit: competitor_limit)
         end
       end
 

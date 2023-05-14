@@ -50,6 +50,24 @@ export const competitionEventsDataUrl = (id) => `<%= CGI.unescape(Rails.applicat
 
 export const adminCADUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_compute_auxiliary_data_path) %>`;
 
+export const adminFixResultsUrl = (personId, competition_id = undefined, event_id = undefined, round_type_id = undefined) => {
+  const searchParams = new URLSearchParams(`person_id=${personId}`);
+
+  if (competition_id) {
+    searchParams.append(`competition_id`, competition_id);
+
+    if (event_id) {
+      searchParams.append(`event_id`, event_id);
+
+      if (round_type_id) {
+        searchParams.append(`round_type_id`, round_type_id);
+      }
+    }
+  }
+
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>?${searchParams.toString()}`
+};
+
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;

@@ -42,6 +42,8 @@ class UploadJson
       persons_to_import = []
       parsed_json["persons"].each do |p|
         new_person_attributes = p.merge(competitionId: competition_id)
+        # mask uploaded DOB on staging to avoid accidentally importing PII
+        new_person_attributes["dob"] = "1954-12-04" if Rails.env.production? && !EnvVars::WCA_LIVE_SITE?
         persons_to_import << InboxPerson.new(new_person_attributes)
       end
       results_to_import = []
