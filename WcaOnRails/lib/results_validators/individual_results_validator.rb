@@ -29,15 +29,8 @@ module ResultsValidators
       false
     end
 
-    def validate(competition_ids: [], model: Result, results: nil)
-      reset_state
-      # Get all results if not provided
-      results ||= model.sorted_for_competitions(competition_ids)
-      results_by_round_id_by_competition_id = results.group_by(&:competitionId).transform_values do |results_for_comp|
-        results_for_comp.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
-      end.to_h
-
-      associations = {
+    def competition_associations
+      {
         events: [],
         competition_events: {
           rounds: {
@@ -47,20 +40,23 @@ module ResultsValidators
           },
         },
       }
+    end
 
-      # eagerload all competitions informations with all appropriate associations.
-      competitions = Competition.includes(associations).where(id: results_by_round_id_by_competition_id.keys).to_h do |c|
-        [c.id, c]
-      end
-      results_by_round_id_by_competition_id.each do |competition_id, results_by_round_id|
-        rounds_info_by_round_id = get_rounds_info(competitions[competition_id], results_by_round_id.keys)
+    def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        competition = competition_data.competition
+
+        results_for_comp = competition_data.results
+        results_by_round_id = results_for_comp.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }
+
+        rounds_info_by_round_id = get_rounds_info(competition, results_by_round_id.keys)
         results_by_round_id.each do |round_id, results_for_round|
           # get cutoff and timelimit
           round_info = rounds_info_by_round_id[round_id]
 
           unless round_info
             # This situation may happen with "old" competitions
-            @warnings << ValidationWarning.new(:results, competition_id,
+            @warnings << ValidationWarning.new(:results, competition.id,
                                                NO_ROUND_INFORMATION_WARNING,
                                                round_id: round_id)
             next
@@ -73,7 +69,7 @@ module ResultsValidators
             # were possibly not enforced at the discretion of the WCA Delegate.
             # In which case we let the TL undefined, and no errors should be
             # generated.
-            @warnings << ValidationWarning.new(:results, competition_id,
+            @warnings << ValidationWarning.new(:results, competition.id,
                                                UNDEF_TL_WARNING,
                                                round_id: round_id)
           end
@@ -81,7 +77,7 @@ module ResultsValidators
           cutoff_for_round = round_info.cutoff
 
           results_for_round.each_with_index do |result, index|
-            context = [competition_id, result, round_id, round_info]
+            context = [competition.id, result, round_id, round_info]
             all_solve_times = result.solve_times
 
             # Check for possible similar results
@@ -99,7 +95,7 @@ module ResultsValidators
             next if round_info.has_undef_tl?
 
             # Checks for time limits if it can be user-specified
-            if !["333mbf", "333fm"].include?(result.eventId)
+            unless %w[333mbf 333fm].include?(result.eventId)
               cumulative_wcif_round_ids = time_limit_for_round.cumulative_round_ids
 
               check_result_after_dns(context, all_solve_times)
@@ -109,7 +105,7 @@ module ResultsValidators
                 # easy case: each completed result (not DNS, DNF, or SKIPPED) must be below the time limit.
                 results_over_time_limit = completed_solves.reject { |t| t.time_centiseconds < time_limit_for_round.centiseconds }
                 if results_over_time_limit&.any?
-                  @errors << ValidationError.new(:results, competition_id,
+                  @errors << ValidationError.new(:results, competition.id,
                                                  RESULT_OVER_TIME_LIMIT_ERROR,
                                                  round_id: round_id,
                                                  person_name: result.personName,
@@ -121,7 +117,7 @@ module ResultsValidators
               end
             end
 
-            check_multi_time_limit(context, competition_id, round_id, completed_solves) if result.eventId == "333mbf"
+            check_multi_time_limit(context, competition.id, round_id, completed_solves) if result.eventId == "333mbf"
           end
         end
       end
@@ -129,7 +125,6 @@ module ResultsValidators
       # Cleanup possible duplicate errors and warnings from cumulative time limits
       @errors.uniq!
       @warnings.uniq!
-      self
     end
 
     private

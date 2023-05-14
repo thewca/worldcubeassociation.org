@@ -228,20 +228,7 @@ if(count( $checks_table ) > 0) {
   print "No fully imported result or scramble data exists to compare.";
 }
 print "</li></ol></li>";
-
-
-// Final scripts...
-$optionalScriptsCronSchedule = `crontab -l | grep cronned_results_scripts.sh`;
-print "<li><p><strong>Optional</strong>: Run Some More Scripts (These are run on the following cron schedule: <code>$optionalScriptsCronSchedule</code>)</p>
-         <ol type='a'>
-           <li><a href='../statistics.php?update8392=1' target='_blank' class='link-external external'>update_statistics_page</a></li>
-           <li><a href='export_public.php' target='_blank' class='link-external external'>export_public</a></li>
-         </ol>
-       </li>";
-
 print "<li><p>Good job, you're done!</p></li>";
-
-
 print "</div>";
 
 

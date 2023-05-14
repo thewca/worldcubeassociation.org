@@ -1619,8 +1619,10 @@ cs:
       statistics: Statistiky
       #original_hash: 82dabd0
       multimedia: Multimédia
-      #original_hash: 4fd2a7f
-      db_export: Export databáze
+      #original_hash: cfde9db
+      db_results_export: Export výsledků
+      #original_hash: 7533c29
+      db_dev_export: Export pro vývojáře
       #original_hash: 1fa73f3
       regulations: Pravidla
       #original_hash: 6bce1b5
@@ -5228,3 +5230,36 @@ cs:
       Například pro přístup k informacím o Vašem účtu:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Legální verze TNoodle
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Export WCA výsledků
+      #original_hash: f9fe9df
+      description: >-
+        Na této stránce si můžete stáhnout WCA výsledky v několika formátech,
+        abyste je mohli pohodlně využívat a analyzovat. Většinou je
+        aktualizujeme po každém víkendu, když jsou výsledky nahrány. Soubory
+        jsou číslovány a označeny datumem, takže můžete vidět, zda už máte
+        nejnovější verzi.
+      #original_hash: 4f59283
+      permalink: permalink
+      file_formats:
+        #original_hash: b086d79
+        sql: 'SQL příkazy, pro import do SQL databází'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Hodnoty oddělené tabulátorem, pro tabulky v OpenOffice.org, Excelu
+          apod.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        Zahrnutý soubor %{readme_filename} obsahuje pravidla pro použití a
+        obecný popis (v angličtině, nepřeložené):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST export pro vývojáře
+      #original_hash: eba769a
+      description_html: >-
+        Na této stránce naleznete WST export pro vývojáře jako SQL dump. Detaily
+        můžete nalézt na %{github_link}.
+      #original_hash: a479c9c
+      download: Stáhnout

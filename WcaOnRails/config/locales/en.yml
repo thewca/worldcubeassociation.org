@@ -863,7 +863,8 @@ en:
       my_results: "My Results"
       statistics: "Statistics"
       multimedia: "Multimedia"
-      db_export: "Database Export"
+      db_results_export: "Results Export"
+      db_dev_export: "Developer Export"
       regulations: "Regulations"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
@@ -2567,4 +2568,17 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
-
+  database:
+    results_export:
+      heading: "WCA Results Export"
+      description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
+      permalink: "permalink"
+      file_formats:
+        sql: "SQL statements, for import into SQL databases."
+        tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."
+      hint_readme_html: "The included %{readme_filename} file contains the terms of use and a general description (in English, not translated):"
+    developer_export:
+      heading: "WST Developer Export"
+      description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
+      #context: The button that is clicked to download the file
+      download: "Download"
