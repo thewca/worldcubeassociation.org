@@ -1898,7 +1898,7 @@ class Competition < ApplicationRecord
     json.merge!(
       class: self.class.to_s.downcase,
       displayName: display_name,
-      countryName: country.name,
+      countryName: country ? country.name : nil,
       cityName: cityName,
       year: year,
       isProbablyOver: is_probably_over?,
