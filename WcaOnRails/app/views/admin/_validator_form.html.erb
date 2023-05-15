@@ -41,7 +41,7 @@
             <% ResultsValidators::Utils::ALL_VALIDATORS.each do |validator| %>
               <tr>
                 <td><%= validator.class_name %></td>
-                <td><%= validator.new.description %></td>
+                <td><%= validator.description %></td>
                 <td></td> <!-- Extra column for .table-greedy-last-column -->
               </tr>
             <% end %>

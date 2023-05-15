@@ -12,7 +12,7 @@ module ResultsValidators
     WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. " \
                                           "Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
 
-    @@desc = "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
+    @desc = "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
 
     def self.has_automated_fix?
       false
