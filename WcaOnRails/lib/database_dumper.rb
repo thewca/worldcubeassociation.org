@@ -1110,7 +1110,7 @@ module DatabaseDumper
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)
-    "2>&1 | grep -v \"[Warning] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
+    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
   end
 end
 
