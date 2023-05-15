@@ -13,7 +13,7 @@ module ResultsValidators
     MISSING_ROUND_RESULTS_ERROR = "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
     UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
 
-    @@desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
+    @desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
 
     def self.has_automated_fix?
       false

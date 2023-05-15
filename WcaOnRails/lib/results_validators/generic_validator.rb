@@ -4,7 +4,7 @@ module ResultsValidators
   class GenericValidator
     attr_reader :errors, :warnings, :infos, :apply_fixes
 
-    @@desc = "Please override that class variable with a proper description when you inherit the class."
+    @desc = "Please override that class variable with a proper description when you inherit the class."
 
     def initialize(apply_fixes: false)
       @apply_fixes = apply_fixes
@@ -52,8 +52,8 @@ module ResultsValidators
       raise NotImplementedError
     end
 
-    def description
-      @@desc
+    def self.description
+      @desc
     end
 
     def self.class_name
