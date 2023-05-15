@@ -240,6 +240,10 @@ class Competition < ApplicationRecord
     persisted_events_id.length
   end
 
+  def has_administrative_notes?
+    registrations.any? { |registration| !registration.administrative_notes.blank? }
+  end
+
   NEARBY_DISTANCE_KM_WARNING = 250
   NEARBY_DISTANCE_KM_DANGER = 10
   NEARBY_DISTANCE_KM_INFO = 100

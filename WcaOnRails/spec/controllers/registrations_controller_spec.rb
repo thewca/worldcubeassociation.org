@@ -205,6 +205,11 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       expect(flash[:danger]).to include I18n.t('registrations.errors.undelete_banned')
     end
 
+    it "can edit administrative notes on registration" do
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq "admin notes"
+    end
+
     describe "with views" do
       render_views
       it "does not update registration that changed" do
@@ -481,6 +486,13 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       registration = FactoryBot.create :registration, :accepted, competition: competition, user_id: user.id
       get :edit, params: { id: registration.id }
       expect(response).to redirect_to root_path
+    end
+
+    it "cannot edit administrative notes on registration" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq ""
     end
 
     it "cannot edit someone else's registration" do
