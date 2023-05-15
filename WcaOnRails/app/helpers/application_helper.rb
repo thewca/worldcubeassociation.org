@@ -198,10 +198,18 @@ module ApplicationHelper
   end
 
   def cubing_icon(event, **html_options)
+    _cubing_icon_tag "event-#{event}", **html_options
+  end
+
+  def unofficial_cubing_icon(event, **html_options)
+    _cubing_icon_tag "unofficial-#{event}", **html_options
+  end
+
+  def _cubing_icon_tag(icon_id, **html_options)
     html_options[:class] ||= ""
     # We use 'icon' which is the default Semantic-UI class for icons.
     # It applies fixed-width and inline block on them.
-    html_options[:class] += " cubing-icon icon event-#{event}"
+    html_options[:class] += " cubing-icon icon #{icon_id}"
     content_tag :i, "", html_options
   end
 

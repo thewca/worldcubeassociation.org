@@ -181,7 +181,7 @@ class AdminController < ApplicationController
           flash.now[:success] = "Successfully fixed #{@person.name}."
           if @person.saved_change_to_countryId?
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
-            <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
+            <a href='#{admin_check_regional_records_path}'>check_regional_record_markers</a>.".html_safe
           end
         else
           flash.now[:danger] = "Error while fixing #{@person.name}."
@@ -242,6 +242,41 @@ class AdminController < ApplicationController
   def do_generate_public_export
     DumpPublicResultsDatabase.perform_later(force_export: true) unless DumpPublicResultsDatabase.in_progress?
     redirect_to admin_generate_exports_path
+  end
+
+  def check_regional_records
+    @check_records_request = CheckRegionalRecordsForm.new(
+      competition_id: params[:competition_id] || nil,
+      event_id: params[:event_id] || nil,
+    )
+  end
+
+  def override_regional_records
+    action_params = params.require(:check_regional_records_form)
+                          .permit(:competition_id, :event_id)
+
+    @check_records_request = CheckRegionalRecordsForm.new(action_params)
+    @check_results = @check_records_request.run_check
+  end
+
+  def do_override_regional_records
+    ActiveRecord::Base.transaction do
+      params[:regional_record_overrides].each do |id_and_type, marker|
+        next if [:competition_id, :event_id].include? id_and_type.to_sym
+
+        next unless marker.present?
+
+        result_id, result_type = id_and_type.split('-')
+        record_marker = "regional#{result_type}Record".to_sym
+
+        Result.where(id: result_id).update_all(record_marker => marker)
+      end
+    end
+
+    competition_id = params.dig(:regional_record_overrides, :competition_id)
+    event_id = params.dig(:regional_record_overrides, :event_id)
+
+    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
   end
 
   def all_voters
