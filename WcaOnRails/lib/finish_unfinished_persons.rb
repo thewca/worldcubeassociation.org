@@ -36,52 +36,11 @@ module FinishUnfinishedPersons
       next if unfinished_persons.length >= MAX_PER_BATCH
 
       competition_year = res.competition.year
+      person_name = res.person_name
+
+      semi_id, available_id_spots = self.compute_semi_id(competition_year, person_name, available_id_spots)
+
       inbox_dob = res.inbox_person&.dob
-
-      roman_name = self.extract_roman_name res.person_name
-      sanitized_roman_name = self.remove_accents roman_name
-      name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
-
-      last_name = name_parts[-1]
-      rest_of_name = name_parts[...-1].join
-
-      padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
-      letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max
-
-      semi_id = nil
-      cleared_id = false
-
-      until cleared_id || letters_to_shift > WCA_QUARTER_ID_LENGTH
-        quarter_id = last_name[...(WCA_QUARTER_ID_LENGTH - letters_to_shift)] + padded_rest_of_name[...letters_to_shift]
-        semi_id = competition_year.to_s + quarter_id
-
-        unless available_id_spots.key?(semi_id)
-          # TODO: Merge with anonymization code
-          last_id_taken = Person.where('wca_id LIKE ?', "#{semi_id}__")
-                                .order(wca_id: :desc)
-                                .pluck(:wca_id)
-                                .first
-
-          if last_id_taken.present?
-            counter = last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
-          else
-            counter = 0
-          end
-
-          available_id_spots[semi_id] = 99 - counter
-        end
-
-        if available_id_spots.key?(semi_id)
-          available_id_spots[semi_id] -= 1
-          cleared_id = true
-        else
-          letters_to_shift += 1
-        end
-      end
-
-      unless cleared_id
-        raise "Could not compute a semi-id for #{res.person_name}"
-      end
 
       similar_persons = compute_similar_persons(res)
 
@@ -100,6 +59,10 @@ module FinishUnfinishedPersons
   end
 
   def self.extract_roman_name(person_name)
+    # We store names in our database as "Romanized Name (Local Name)"
+    #   so the regex captures the first group as romanized name,
+    #   then the actual brackets (which have to be \ masked)
+    #   and then the local name within those brackets
     name_matches = person_name.match(/(.*)\((.*)\)$/)
     name_matches ? name_matches[0] : person_name
   end
@@ -150,7 +113,58 @@ module FinishUnfinishedPersons
     self.string_similarity_algorithm.getDistance(a, b)
   end
 
-  def self.complete_wca_id(semi_id, used_ids)
+  def self.compute_semi_id(competition_year, person_name, available_per_semi = {})
+    roman_name = self.extract_roman_name person_name
+    sanitized_roman_name = self.remove_accents roman_name
+    name_parts = sanitized_roman_name.gsub(/[^a-zA-Z ]/, '').upcase.split
+
+    last_name = name_parts[-1]
+    rest_of_name = name_parts[...-1].join
+
+    padded_rest_of_name = rest_of_name.ljust WCA_QUARTER_ID_LENGTH, WCA_ID_PADDING
+    letters_to_shift = [0, WCA_QUARTER_ID_LENGTH - last_name.length].max
+
+    semi_id = nil
+    cleared_id = false
+
+    until cleared_id || letters_to_shift > WCA_QUARTER_ID_LENGTH
+      quarter_id = last_name[...(WCA_QUARTER_ID_LENGTH - letters_to_shift)] + padded_rest_of_name[...letters_to_shift]
+      semi_id = competition_year.to_s + quarter_id
+
+      unless available_per_semi.key?(semi_id)
+        last_id_taken = Person.where('wca_id LIKE ?', "#{semi_id}__")
+                              .order(wca_id: :desc)
+                              .pluck(:wca_id)
+                              .first
+
+        if last_id_taken.present?
+          # 4 because the year prefix is 4 digits long
+          counter = last_id_taken[(4 + WCA_QUARTER_ID_LENGTH)..].to_i
+        else
+          counter = 0
+        end
+
+        available_per_semi[semi_id] = 99 - counter
+      end
+
+      if available_per_semi.key?(semi_id) && available_per_semi[semi_id] > 0
+        available_per_semi[semi_id] -= 1
+        cleared_id = true
+      else
+        letters_to_shift += 1
+      end
+    end
+
+    unless cleared_id
+      raise "Could not compute a semi-id for #{person_name}"
+    end
+
+    [semi_id, available_per_semi]
+  end
+
+  def self.complete_wca_id(semi_id, used_ids = nil)
+    used_ids ||= Person.where("wca_id LIKE ?", "#{semi_id}%").pluck(:wca_id)
+
     (1..99).each do |i|
       new_id = semi_id + i.to_s.rjust(2, '0')
 
@@ -160,7 +174,7 @@ module FinishUnfinishedPersons
       end
     end
 
-    raise "Uh oh! Not able to compute a free WCA ID for #{semi_id}"
+    raise "Could not compute a WCA ID suffix for #{semi_id}"
   end
 
   def self.insert_person(inbox_person, new_name, new_country, new_wca_id)
