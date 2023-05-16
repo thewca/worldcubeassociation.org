@@ -372,22 +372,29 @@ class AdminController < ApplicationController
         when "skip"
           next
         when "create"
-          new_name = procedure[:new_name]
-          new_country = procedure[:new_country]
           new_semi_id = procedure[:new_semi_id]
 
           new_id, wca_id_index = FinishUnfinishedPersons.complete_wca_id(new_semi_id, wca_id_index)
 
-          inbox_person = InboxPerson.where(id: pending_person_id)
-                                    .where(competitionId: pending_competition_id)
-                                    .first
+          new_name = procedure[:new_name]
+          new_country = procedure[:new_country]
+
+          inbox_person = nil
+
+          if pending_person_id.present?
+            inbox_person = InboxPerson.find_by(id: pending_person_id, competition_id: pending_competition_id)
+
+            old_name = inbox_person.name
+            old_country = inbox_person.countryId
+          end
 
           FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
-          FinishUnfinishedPersons.adapt_results(inbox_person.id, inbox_person.name, inbox_person.countryId, new_id, new_name, new_country, pending_competition_id)
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_id, new_name, new_country, pending_competition_id)
         else
           action, merge_id = procedure[:action].split '-'
           raise "Invalid action: #{action}" unless action == "merge"
 
+          # Has to exist because otherwise there would be nothing to merge
           new_person = Person.find(merge_id)
 
           FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId, pending_competition_id)

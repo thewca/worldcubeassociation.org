@@ -178,15 +178,15 @@ module FinishUnfinishedPersons
   end
 
   def self.insert_person(inbox_person, new_name, new_country, new_wca_id)
-    Person.create(
+    Person.create!(
       wca_id: new_wca_id,
       subId: 1,
       name: new_name,
       countryId: new_country,
-      gender: inbox_person.gender,
-      year: inbox_person.dob.year,
-      month: inbox_person.dob.month,
-      day: inbox_person.dob.day,
+      gender: inbox_person&.gender,
+      year: inbox_person&.dob&.year || 0,
+      month: inbox_person&.dob&.month || 0,
+      day: inbox_person&.dob&.day || 0,
       comments: '',
     )
   end
