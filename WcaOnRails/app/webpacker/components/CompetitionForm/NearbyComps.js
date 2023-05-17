@@ -39,7 +39,7 @@ export default function NearbyComps({
   return (
     <FieldWrapper label={label}>
       <CompsTable
-        nearby={nearby}
+        comps={nearby}
         latData={latData}
         longData={longData}
         startDateData={startDateData}

@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { FieldWrapper } from './FormInputs';
-import { seriesElegableCompetitionsUrl } from '../../lib/requests/routes.js.erb';
+import { seriesElegableCompetitionsJsonUrl } from '../../lib/requests/routes.js.erb';
 import I18n from '../../lib/i18n';
 import CompsTable from './CompsTable';
 
@@ -23,10 +23,11 @@ export default function SeriesComps({
     params.append(`competition[${startDateData.attribute}]`, startDateData.value);
     params.append(`competition[${endDateData.attribute}]`, endDateData.value);
 
-    fetchJsonOrError(`${seriesElegableCompetitionsUrl}?${params.toString()}`).then(({ data }) => {
-      setNearby(data);
-      setLoading(false);
-    });
+    fetchJsonOrError(`${seriesElegableCompetitionsJsonUrl}?${params.toString()}`)
+      .then(({ data }) => {
+        setNearby(data);
+        setLoading(false);
+      });
   }, [latData.value, longData.value, startDateData.value, endDateData.value]);
 
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 33, kms: 200 });
@@ -34,7 +35,7 @@ export default function SeriesComps({
   return (
     <FieldWrapper label={label}>
       <CompsTable
-        nearby={nearby}
+        comps={nearby}
         latData={latData}
         longData={longData}
         startDateData={startDateData}

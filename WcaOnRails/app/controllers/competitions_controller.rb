@@ -441,6 +441,31 @@ class CompetitionsController < ApplicationController
     render partial: 'series_eligible_competitions'
   end
 
+  def nearby_registrations_json
+    @competition = Competition.new(competition_params)
+    @competition.valid?
+    @colliding_registration_start_competitions = get_colliding_registration_start_competitions(@competition)
+
+    render json: @colliding_registration_start_competitions.map { |c|
+      if current_user.can_admin_results?
+        compLink = ActionController::Base.helpers.link_to(c.name, admin_edit_competition_path(c.id), target: "_blank")
+      else
+        compLink = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
+      end
+
+      {
+        danger: @competition.registration_open_adjacent_to?(c, Competition::REGISTRATION_COLLISION_MINUTES_DANGER),
+        name: c.name,
+        nameLink: compLink,
+        confirmed: c.confirmed?,
+        delegates: users_to_sentence(c.delegates),
+        minutesUntil: @competition.minutes_until_other_registration_starts(c),
+        registrationOpen: c.registration_open.to_s,
+        location: "#{c.cityName}, #{c.countryId}",
+      }
+    }
+  end
+
   def colliding_registration_start_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here

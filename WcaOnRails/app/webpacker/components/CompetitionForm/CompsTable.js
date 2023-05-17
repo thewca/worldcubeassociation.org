@@ -18,7 +18,7 @@ function NotConfirmedIcon() {
   );
 }
 
-function CompsTableContent({ nearby, action }) {
+function CompsTableContent({ comps, action }) {
   const [showEvents, setShowEvents] = useState(false);
 
   const headerRow = () => (
@@ -103,7 +103,7 @@ function CompsTableContent({ nearby, action }) {
         {headerRow()}
       </Table.Header>
       <Table.Body>
-        {nearby.reverse().map((comp) => compRow(comp))}
+        {comps.reverse().map((comp) => compRow(comp))}
       </Table.Body>
       <Table.Footer fullWidth>
         <Table.Row>
@@ -133,7 +133,7 @@ function MissingInfo({ missingDate, missingLocation }) {
 }
 
 export default function CompsTable({
-  latData, longData, startDateData, endDateData, nearby, loading, action,
+  latData, longData, startDateData, endDateData, comps, loading, action,
 }) {
   if (loading) return <Loading />;
   if (!startDateData.value || !endDateData.value || !latData.value || !longData.value) {
@@ -145,13 +145,13 @@ export default function CompsTable({
     );
   }
 
-  if (!nearby || nearby.length === 0) {
+  if (!comps || comps.length === 0) {
     return (
       <Message positive>
-        {I18n.t('competitions.adjacent_competitions.no_comp_nearby')}
+        {I18n.t('competitions.adjacent_competitions.no_comp_comps')}
       </Message>
     );
   }
 
-  return <CompsTableContent nearby={nearby} action={action} />;
+  return <CompsTableContent comps={comps} action={action} />;
 }

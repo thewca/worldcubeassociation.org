@@ -11,6 +11,7 @@ import {
   Form,
   Input,
   Select,
+  TextArea,
 } from 'semantic-ui-react';
 import Loading from '../Requests/Loading';
 import useInputState from '../../lib/hooks/useInputState';
@@ -63,6 +64,14 @@ export function InputString({ inputState, attachedLabel, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
       <Input label={attachedLabel} value={inputState.value} onChange={inputState.onChange} />
+    </FieldWrapper>
+  );
+}
+
+export function InputTextArea({ inputState, ...props }) {
+  return (
+    <FieldWrapper inputState={inputState} {...props}>
+      <TextArea value={inputState.value} onChange={inputState.onChange} />
     </FieldWrapper>
   );
 }
@@ -148,21 +157,18 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
   }, []);
 
   return (
-    <>
-      <p>{inputState.value}</p>
-      <FieldWrapper inputState={inputState}>
-        {initialData
-          ? (
-            <input
-              ref={refWrapper}
-              defaultValue={inputState.value}
-              className={classNames}
-              type="text"
-              data-data={initialData}
-              id={inputState.attribute}
-            />
-          ) : <Loading />}
-      </FieldWrapper>
-    </>
+    <FieldWrapper inputState={inputState}>
+      {initialData
+        ? (
+          <input
+            ref={refWrapper}
+            defaultValue={inputState.value}
+            className={classNames}
+            type="text"
+            data-data={initialData}
+            id={inputState.attribute}
+          />
+        ) : <Loading />}
+    </FieldWrapper>
   );
 }

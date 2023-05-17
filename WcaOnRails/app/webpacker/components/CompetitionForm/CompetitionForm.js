@@ -14,6 +14,7 @@ import {
   InputNumber,
   InputSelect,
   InputString,
+  InputTextArea,
   UserSearch,
   useFormInputState,
 } from './FormInputs';
@@ -21,6 +22,7 @@ import VenueMap from './VenueMap';
 import NearbyComps from './NearbyComps';
 import SeriesComps from './SeriesComps';
 import ChampionshipInput from './ChampionshipInput';
+import RegistrationTable from './RegistrationTable';
 
 function AdminView({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
@@ -106,8 +108,10 @@ function CompetitorLimitInput({
   return (
     <>
       <InputSelect inputState={competitorLimitEnabledData} options={options} />
-      {competitorLimitEnabledData.value && <InputNumber inputState={competitorLimitData} />}
-      {competitorLimitEnabledData.value && <InputString inputState={competitorLimitReasonData} />}
+      {competitorLimitEnabledData.value
+        && <InputNumber inputState={competitorLimitData} />}
+      {competitorLimitEnabledData.value
+        && <InputTextArea inputState={competitorLimitReasonData} rows={2} />}
     </>
   );
 }
@@ -134,9 +138,10 @@ export default function CompetitionForm({
     text: `${c[0]} (${c[1]})`,
   }));
 
-  const idData = useFormInputState('id', competition);
+  // Some fields are commented out until I add in the persistance logic
+  // const idData = useFormInputState('id', competition);
   const nameData = useFormInputState('name', competition);
-  const cellNameData = useFormInputState('cellName', competition);
+  // const cellNameData = useFormInputState('cellName', competition);
   const nameReasonData = useFormInputState('name_reason', competition);
   const countryData = useFormInputState('countryId', competition);
   const cityNameData = useFormInputState('cityName', competition);
@@ -169,13 +174,13 @@ export default function CompetitionForm({
   const organizerData = useFormInputState('organizer_ids', competition);
   const contactData = useFormInputState('contact', competition);
 
-  const generateWebsiteData = useFormInputState('generate_website', competition, true);
+  const generateWebsiteData = useFormInputState('generate_website', competition, false);
   const externalWebsiteData = useFormInputState('external_website', competition);
 
   const championshipsData = useFormInputState('championships', competition, []);
 
-  const useWCARegData = useFormInputState('use_wca_registration', competition, false);
-  const useWCALiveForScoretakingData = useFormInputState('use_wca_live_for_scoretaking', competition, false);
+  const useWCARegData = useFormInputState('use_wca_registration', competition, true);
+  const useWCALiveForScoretakingData = useFormInputState('use_wca_live_for_scoretaking', competition, true);
   const regPageData = useFormInputState('external_registration_page', competition);
 
   const currencyCodeData = useFormInputState('currency_code', competition);
@@ -194,9 +199,9 @@ export default function CompetitionForm({
           />
         )}
 
-        <InputString inputState={idData} />
+        {/* <InputString inputState={idData} /> */}
         <InputString inputState={nameData} />
-        <InputString inputState={cellNameData} />
+        {/* <InputString inputState={cellNameData} /> */}
         <InputString inputState={nameReasonData} hint={I18n.t('competitions.competition_form.name_reason_html')} />
         <InputSelect inputState={countryData} options={countriesData} />
         <InputString inputState={cityNameData} />
@@ -231,6 +236,7 @@ export default function CompetitionForm({
         <hr />
 
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
+        <RegistrationTable regStartData={regStartData} />
         <InputMarkdown inputState={informationData} />
         <CompetitorLimitInput
           competitorLimitEnabledData={competitorLimitEnabledData}

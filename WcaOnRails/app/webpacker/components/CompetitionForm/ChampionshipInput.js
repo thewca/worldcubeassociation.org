@@ -84,7 +84,7 @@ export default function ChampionshipInput({ inputState }) {
     const champs = [...inputState.value];
     champs.push({
       id: getAvailibleId(champs),
-      region: regions[Object.keys(regions)[0]][0],
+      region: regions.find((region) => !region.disabled).value,
     });
     inputState.onChange(champs);
   };
