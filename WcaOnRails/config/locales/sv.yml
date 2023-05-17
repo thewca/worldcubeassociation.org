@@ -953,7 +953,7 @@ sv:
         competitor_limit_reason: >-
           Vad är anledningen till begränsningen av antalet tävlande? Vänligen
           fyll i detta på engelska!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           Antalet gäster per anmälan som är tillåtet vid denna tävling.
           Anmälningar med för många gäster kommer att blockeras. Lämna tomt om
@@ -1618,8 +1618,10 @@ sv:
       statistics: Statistik
       #original_hash: 82dabd0
       multimedia: Multimedia
-      #original_hash: 4fd2a7f
-      db_export: Databasexport
+      #original_hash: cfde9db
+      db_results_export: Resultatexport
+      #original_hash: 7533c29
+      db_dev_export: Utvecklarexport
       #original_hash: 1fa73f3
       regulations: Regler
       #original_hash: 6bce1b5
@@ -2191,7 +2193,7 @@ sv:
       series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Du måste lämna en kommentar. Se anmälningskraven för information om vad
         som måste anges (t.ex. kan det vara vilken plats du ska att tävla på i
@@ -2624,7 +2626,7 @@ sv:
       not_announced: Tävlingen är synlig för allmänheten men har inte publicerats ännu.
       #original_hash: ab61991
       announced: Tävlingen publicerades!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: Tävlingen har ställts in. Se tävlingens information för mer detaljer.
       #original_hash: b4aa5ee
       cancel_success: Tävlingen har ställts in!
@@ -2666,14 +2668,18 @@ sv:
       tooltip_registered: Du är anmäld.
       #original_hash: f2d092f
       tooltip_waiting_list: Du är för närvarande på väntelistan.
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Din anmälan har tyvärr blivit raderad. Kolla din epost för mer detaljer,
+        eller kontakta arrangören.
+      #original_hash: 1b6dc61
       confirmed_visible: Tävlingen är bekräftad och synlig
-      #original_hash: fa186a9
-      confirmed_not_visible: Tävlingen är bekräftad men inte synlig
-      #original_hash: a66bbe3
-      not_confirmed_visible: Tävlingen är inte bekräftad men den är synlig
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: Tävlingen är inte bekräftad och inte synlig
+      #original_hash: abc2f96
+      confirmed_not_visible: Tävlingen är bekräftad men inte synlig.
+      #original_hash: 6d6290b
+      not_confirmed_visible: Tävlingen är inte bekräftad men den är synlig.
+      #original_hash: b299b27
+      not_confirmed_not_visible: Tävlingen är inte bekräftad och inte synlig.
       #original_hash: a821396
       stripe_connected: >-
         Du har nu lyckats ansluta ditt Stripe-konto och kan nu ta emot
@@ -2684,8 +2690,8 @@ sv:
       stripe_disconnected_failure: Det uppstod ett fel när Stripe-kontot skulle kopplas bort.
       #original_hash: 0a4bb53
       stripe_not_connected: Det uppstod ett problem och vi kunde inte ansluta ditt Stripe-konto.
-      #original_hash: 724cf0d
-      championship_exists: 'Det finns redan ett %{championship_type} för %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Det finns redan ett %{championship_type} för %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
@@ -5275,3 +5281,34 @@ sv:
       information om ditt konto:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Giltig TNoodle-version
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Export av WCA-Resultat
+      #original_hash: f9fe9df
+      description: >-
+        På den här sidan erbjuder vi WCA-resultaten för nedladdning i flera
+        olika format så att du kan använda/analysera dem. Vi kommer vanligtvis
+        att uppdatera efter varje tävlingshelg när resultaten är färdigställda.
+        Filerna är numrerade och daterade så att du kan se om du redan har den
+        senaste versionen.
+      #original_hash: 4f59283
+      permalink: permalänk
+      file_formats:
+        #original_hash: b086d79
+        sql: SQL för import till SQL-databaser.
+        #original_hash: 5f6fb6e
+        tsv: 'Tab-separerade värden, för kalkylark i OpenOffice.org, Excel, etc.'
+      #original_hash: 178506e
+      hint_readme_html: >-
+        Den medföljande filen %{readme_filename} innehåller användarvillkoren
+        och en allmän beskrivning (på engelska, inte översatt):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Utvecklarexport
+      #original_hash: eba769a
+      description_html: >-
+        På den här sidan erbjuder vi WST-utvecklarexporten för nedladdning som
+        SQL-dump. Detaljer finns på %{github_link}.
+      #original_hash: a479c9c
+      download: Ladda ned
