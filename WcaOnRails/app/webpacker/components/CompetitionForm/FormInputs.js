@@ -5,6 +5,7 @@
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
+import AutoNumeric from 'autonumeric';
 
 import {
   Checkbox,
@@ -17,6 +18,9 @@ import Loading from '../Requests/Loading';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
+import { currenciesData } from '../../lib/wca-data.js.erb';
+import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import { userApiUrl } from '../../lib/requests/routes.js.erb';
 
 export function useFormInputState(attribute, currentData, defaultVal = '') {
   const initialValue = currentData[attribute] || defaultVal;
@@ -84,6 +88,40 @@ export function InputNumber({ inputState, ...props }) {
   );
 }
 
+export function InputCurrency({ inputState, currency, ...props }) {
+  const [autoNumeric, setAutoNumeric] = useState();
+
+  const inputComponentRef = useRef();
+
+  const currencyInfo = currenciesData.byIso[currency] || currenciesData.byIso.USD;
+
+  useEffect(() => {
+    const newAutoNumeric = new AutoNumeric(inputComponentRef.current.inputRef.current, {
+      currencySymbol: currencyInfo.symbol,
+      currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
+      decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
+      showWarnings: false,
+      modifyValueOnWheel: false,
+    });
+    setAutoNumeric(newAutoNumeric);
+  }, []);
+
+  useEffect(() => {
+    if (!autoNumeric) return;
+    autoNumeric.update({
+      currencySymbol: currencyInfo.symbol,
+      currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
+      decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
+    });
+  }, [currency]);
+
+  return (
+    <FieldWrapper inputState={inputState} {...props}>
+      <Input ref={inputComponentRef} type="text" value={inputState.value} onChange={inputState.onChange} />
+    </FieldWrapper>
+  );
+}
+
 export function InputSelect({ inputState, options, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
@@ -138,19 +176,15 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
 
   useEffect(() => {
     if (!inputState.value) return;
-    // const ids = inputState.value.split(',');
-    // const promises = ids.map((id) => fetchJsonOrError(userApiUrl(id)));
-    // Promise.all(promises).then((users) => {
-    //   setInitialData(JSON.stringify(users));
-    // });
-    setInitialData('[]');
+    const ids = inputState.value.split(',');
+    const promises = ids.map((id) => fetchJsonOrError(userApiUrl(id)));
+    Promise.all(promises).then((users) => {
+      setInitialData(JSON.stringify(users));
+    });
   }, []);
 
   // This is a workaround for selectize and jquery not calling onChange
-  const inputRef = useRef(null);
-  const refWrapper = useCallback((node) => {
-    inputRef.current = node;
-    if (!inputRef.current) return;
+  const refWrapper = useCallback(() => {
     $(`#${inputState.attribute}`).on('change', (e) => {
       inputState.onChange(e.target.value);
     });

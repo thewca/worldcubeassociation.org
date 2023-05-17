@@ -8,6 +8,7 @@ import { Alert } from 'react-bootstrap';
 import I18n from '../../lib/i18n';
 import {
   InputBoolean,
+  InputCurrency,
   InputDate,
   InputDateTime,
   InputMarkdown,
@@ -169,7 +170,7 @@ export default function CompetitionForm({
   const competitorLimitData = useFormInputState('competitor_limit', competition);
   const competitorLimitReasonData = useFormInputState('competitor_limit_reason', competition);
 
-  const staffDelegateData = useFormInputState('staff_delegate_ids', competition);
+  const staffDelegateData = useFormInputState('staff_delegate_ids', competition, '54140');
   const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
   const organizerData = useFormInputState('organizer_ids', competition);
   const contactData = useFormInputState('contact', competition);
@@ -184,6 +185,8 @@ export default function CompetitionForm({
   const regPageData = useFormInputState('external_registration_page', competition);
 
   const currencyCodeData = useFormInputState('currency_code', competition);
+
+  const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -267,7 +270,9 @@ export default function CompetitionForm({
         <InputBoolean inputState={useWCARegData} />
         <InputBoolean inputState={useWCALiveForScoretakingData} />
         {!useWCARegData.value && <InputString inputState={regPageData} />}
+
         <InputSelect inputState={currencyCodeData} options={currenciesData} />
+        <InputCurrency inputState={baseEntryFeeData} currency={currencyCodeData.value} />
       </Form>
     </>
   );
