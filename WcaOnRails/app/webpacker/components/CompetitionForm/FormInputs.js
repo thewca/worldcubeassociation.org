@@ -178,7 +178,8 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
     if (!inputState.value) return;
     const ids = inputState.value.split(',');
     const promises = ids.map((id) => fetchJsonOrError(userApiUrl(id)));
-    Promise.all(promises).then((users) => {
+    Promise.all(promises).then((reqs) => {
+      const users = reqs.map((req) => req.data.user);
       setInitialData(JSON.stringify(users));
     });
   }, []);
@@ -188,6 +189,7 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
     $(`#${inputState.attribute}`).on('change', (e) => {
       inputState.onChange(e.target.value);
     });
+    $(`#${inputState.attribute}`).wcaAutocomplete();
   }, []);
 
   return (
