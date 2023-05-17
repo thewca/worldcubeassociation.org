@@ -13,6 +13,7 @@ import {
   InputDateTime,
   InputMarkdown,
   InputNumber,
+  InputRadio,
   InputSelect,
   InputString,
   InputTextArea,
@@ -97,13 +98,11 @@ function CompetitorLimitInput({
   competitorLimitReasonData,
 }) {
   const options = [{
-    key: 'true',
-    value: true,
+    value: 'true',
     text: I18n.t('simple_form.options.competition.competitor_limit_enabled.true'),
   },
   {
-    key: 'false',
-    value: false,
+    value: 'false',
     text: I18n.t('simple_form.options.competition.competitor_limit_enabled.false'),
   }];
 
@@ -118,6 +117,24 @@ function CompetitorLimitInput({
   );
 }
 
+function GuestsEnabledInput({ inputState }) {
+  const options = [{
+    value: 'true',
+    text: I18n.t('simple_form.options.competition.guests_enabled.true'),
+  },
+  {
+    value: 'false',
+    text: I18n.t('simple_form.options.competition.guests_enabled.false'),
+  }];
+
+  return (
+    <InputRadio
+      inputState={inputState}
+      options={options}
+    />
+  );
+}
+
 export default function CompetitionForm({
   competition,
   adminView,
@@ -128,17 +145,33 @@ export default function CompetitionForm({
   dangerDistance,
   currencies,
 }) {
-  const countriesData = countries.map((c) => ({
+  const countriesOptions = countries.map((c) => ({
     key: c.id,
     value: c.name,
     text: c.name,
   }));
 
-  const currenciesData = currencies.map((c) => ({
+  const currenciesOptions = currencies.map((c) => ({
     key: c[0] + c[1],
     value: c[1],
     text: `${c[0]} (${c[1]})`,
   }));
+
+  const guestMessageOptions = [{
+    key: 'unclear',
+    value: 'unclear',
+    text: I18n.t('enums.competition.guest_entry_status.unclear'),
+  },
+  {
+    key: 'free',
+    value: 'free',
+    text: I18n.t('enums.competition.guest_entry_status.free'),
+  },
+  {
+    key: 'restricted',
+    value: 'restricted',
+    text: I18n.t('enums.competition.guest_entry_status.restricted'),
+  }];
 
   // Some fields are commented out until I add in the persistance logic
   // const idData = useFormInputState('id', competition);
@@ -188,6 +221,12 @@ export default function CompetitionForm({
   const currencyCodeData = useFormInputState('currency_code', competition);
 
   const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition, 1234);
+  const enableDonationsData = useFormInputState('enable_donations', competition, false);
+
+  const guestsEnabledData = useFormInputState('guests_enabled', competition, 'true');
+  const guestsEntryFeeData = useFormInputState('guests_entry_fee_lowest_denomination', competition, 1234);
+  const guestEntryStatusData = useFormInputState('guest_entry_status', competition, guestMessageOptions[0].value);
+  const guestsPerRegLimitData = useFormInputState('guests_per_registration_limit', competition);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -207,7 +246,7 @@ export default function CompetitionForm({
         <InputString inputState={nameData} />
         {/* <InputString inputState={cellNameData} /> */}
         <InputString inputState={nameReasonData} hint={I18n.t('competitions.competition_form.name_reason_html')} />
-        <InputSelect inputState={countryData} options={countriesData} />
+        <InputSelect inputState={countryData} options={countriesOptions} />
         <InputString inputState={cityNameData} />
         <InputString inputState={venueData} hint={I18n.t('competitions.competition_form.venue_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
         <InputString inputState={venueDetailsData} hint={I18n.t('competitions.competition_form.venue_details_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
@@ -272,7 +311,7 @@ export default function CompetitionForm({
         <InputBoolean inputState={useWCALiveForScoretakingData} />
         {!useWCARegData.value && <InputString inputState={regPageData} />}
 
-        <InputSelect inputState={currencyCodeData} options={currenciesData} />
+        <InputSelect inputState={currencyCodeData} options={currenciesOptions} />
         <InputCurrency inputState={baseEntryFeeData} currency={currencyCodeData.value} />
         <DuesEstimate
           country={countryData.value}
@@ -281,6 +320,14 @@ export default function CompetitionForm({
           compLimit={competitorLimitData.value}
           compLimitEnabled={competitorLimitEnabledData.value}
         />
+        <InputBoolean inputState={enableDonationsData} />
+
+        <GuestsEnabledInput inputState={guestsEnabledData} />
+        <InputCurrency inputState={guestsEntryFeeData} currency={currencyCodeData.value} />
+        {!guestsEntryFeeData.value
+          && <InputSelect inputState={guestEntryStatusData} options={guestMessageOptions} />}
+        {!guestsEntryFeeData.value && guestEntryStatusData.value === guestMessageOptions[2].value
+          && <InputNumber inputState={guestsPerRegLimitData} />}
       </Form>
     </>
   );

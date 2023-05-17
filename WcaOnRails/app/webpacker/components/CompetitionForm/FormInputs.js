@@ -11,6 +11,7 @@ import {
   Checkbox,
   Form,
   Input,
+  Radio,
   Select,
   TextArea,
 } from 'semantic-ui-react';
@@ -144,6 +145,24 @@ export function InputBoolean({ inputState }) {
     <Form.Field>
       <Checkbox checked={inputState.value} onChange={onChange} label={label} />
     </Form.Field>
+  );
+}
+
+export function InputRadio({ inputState, options, ...props }) {
+  return (
+    <FieldWrapper inputState={inputState} {...props}>
+      {options.map((option, idx) => (
+        <>
+          {idx !== 0 && <br />}
+          <Radio
+            key={option.value}
+            label={option.text}
+            checked={inputState.value === option.value}
+            onChange={() => inputState.onChange(option.value)}
+          />
+        </>
+      ))}
+    </FieldWrapper>
   );
 }
 
