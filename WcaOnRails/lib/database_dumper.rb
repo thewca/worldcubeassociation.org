@@ -691,9 +691,6 @@ module DatabaseDumper
           consumed_timestep
           cookies_acknowledged
           current_sign_in_ip
-          encrypted_otp_secret
-          encrypted_otp_secret_iv
-          encrypted_otp_secret_salt
           encrypted_password
           last_sign_in_ip
           otp_backup_codes
