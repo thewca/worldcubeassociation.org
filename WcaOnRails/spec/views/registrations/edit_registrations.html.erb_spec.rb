@@ -11,7 +11,7 @@ RSpec.describe "registrations/edit_registrations" do
     assign(:registrations, competition.registrations)
 
     render
-    expect(rendered).to match(/Administrative Notes/)
+    expect(rendered).to match(/Administrative notes/)
     expect(rendered).to match(/😎/)
   end
 
@@ -23,6 +23,6 @@ RSpec.describe "registrations/edit_registrations" do
     assign(:registrations, competition.registrations)
 
     render
-    expect(rendered).not_to match(/Administrative Notes/)
+    expect(rendered).not_to match(/Administrative notes/)
   end
 end
