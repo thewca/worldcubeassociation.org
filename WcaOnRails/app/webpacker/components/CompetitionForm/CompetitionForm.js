@@ -24,6 +24,7 @@ import NearbyComps from './NearbyComps';
 import SeriesComps from './SeriesComps';
 import ChampionshipInput from './ChampionshipInput';
 import RegistrationTable from './RegistrationTable';
+import DuesEstimate from './DuesEstimate';
 
 function AdminView({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
@@ -186,7 +187,7 @@ export default function CompetitionForm({
 
   const currencyCodeData = useFormInputState('currency_code', competition);
 
-  const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition);
+  const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition, 1234);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -273,6 +274,13 @@ export default function CompetitionForm({
 
         <InputSelect inputState={currencyCodeData} options={currenciesData} />
         <InputCurrency inputState={baseEntryFeeData} currency={currencyCodeData.value} />
+        <DuesEstimate
+          country={countryData.value}
+          currency={currencyCodeData.value}
+          feeCents={baseEntryFeeData.value}
+          compLimit={competitorLimitData.value}
+          compLimitEnabled={competitorLimitEnabledData.value}
+        />
       </Form>
     </>
   );

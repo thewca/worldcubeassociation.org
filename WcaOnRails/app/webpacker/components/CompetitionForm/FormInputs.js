@@ -102,7 +102,7 @@ export function InputCurrency({ inputState, currency, ...props }) {
       decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
       showWarnings: false,
       modifyValueOnWheel: false,
-    });
+    }).set(inputState.value / currencyInfo.subunitToUnit);
     setAutoNumeric(newAutoNumeric);
   }, []);
 
@@ -115,9 +115,13 @@ export function InputCurrency({ inputState, currency, ...props }) {
     });
   }, [currency]);
 
+  const onChange = (e) => {
+    inputState.onChange(e.rawValue * currencyInfo.subunitToUnit);
+  };
+
   return (
     <FieldWrapper inputState={inputState} {...props}>
-      <Input ref={inputComponentRef} type="text" value={inputState.value} onChange={inputState.onChange} />
+      <Input ref={inputComponentRef} type="text" onChange={onChange} />
     </FieldWrapper>
   );
 }
