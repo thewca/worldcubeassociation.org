@@ -2,7 +2,9 @@
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 /* eslint-disable react/no-danger */
-import React, { useEffect } from 'react';
+import React, {
+  useCallback, useEffect, useRef, useState,
+} from 'react';
 
 import {
   Checkbox,
@@ -10,6 +12,7 @@ import {
   Input,
   Select,
 } from 'semantic-ui-react';
+import Loading from '../Requests/Loading';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
@@ -122,24 +125,44 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
   if (delegateOnly) classNames += ' wca-autocomplete-only_staff_delegates';
   if (traineeOnly) classNames += ' wca-autocomplete-only_trainee_delegates';
 
-  // This is a workaround for selectize and jquery not calling onChange
-  const inputRef = React.useRef(null);
+  const [initialData, setInitialData] = useState(inputState.value ? null : '[]');
+
   useEffect(() => {
+    if (!inputState.value) return;
+    // const ids = inputState.value.split(',');
+    // const promises = ids.map((id) => fetchJsonOrError(userApiUrl(id)));
+    // Promise.all(promises).then((users) => {
+    //   setInitialData(JSON.stringify(users));
+    // });
+    setInitialData('[]');
+  }, []);
+
+  // This is a workaround for selectize and jquery not calling onChange
+  const inputRef = useRef(null);
+  const refWrapper = useCallback((node) => {
+    inputRef.current = node;
     if (!inputRef.current) return;
     $(`#${inputState.attribute}`).on('change', (e) => {
       inputState.onChange(e.target.value);
     });
-  }, [inputRef.current]);
+  }, []);
 
   return (
-    <FieldWrapper inputState={inputState}>
-      <input
-        ref={inputRef}
-        defaultValue={inputState.value}
-        className={classNames}
-        type="text"
-        id={inputState.attribute}
-      />
-    </FieldWrapper>
+    <>
+      <p>{inputState.value}</p>
+      <FieldWrapper inputState={inputState}>
+        {initialData
+          ? (
+            <input
+              ref={refWrapper}
+              defaultValue={inputState.value}
+              className={classNames}
+              type="text"
+              data-data={initialData}
+              id={inputState.attribute}
+            />
+          ) : <Loading />}
+      </FieldWrapper>
+    </>
   );
 }

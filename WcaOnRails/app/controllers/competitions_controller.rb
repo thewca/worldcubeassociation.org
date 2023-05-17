@@ -389,6 +389,7 @@ class CompetitionsController < ApplicationController
 
     {
       danger: @competition.dangerously_close_to?(c),
+      id: c.id,
       name: c.name,
       nameLink: compLink,
       confirmed: c.confirmed?,

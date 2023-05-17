@@ -132,7 +132,7 @@ export default function VenueMap({
       />
       <DraggableMarker latData={latData} longData={longData} />
       {markers.map((marker) => (
-        <StaticMarker key={marker} lat={marker.lat} lng={marker.lng} />
+        <StaticMarker key={marker.id} lat={marker.lat} lng={marker.lng} />
       ))}
     </CompetitionsMap>
   );

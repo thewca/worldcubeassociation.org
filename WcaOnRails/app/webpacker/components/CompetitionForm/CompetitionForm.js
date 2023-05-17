@@ -1,6 +1,6 @@
 // TODO: Switch to single line eslint disable / Find a better way of handling
 /* eslint-disable react/no-danger */
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   Form,
 } from 'semantic-ui-react';
@@ -152,6 +152,12 @@ export default function CompetitionForm({
 
   const regStartData = useFormInputState('registration_open', competition);
   const regEndData = useFormInputState('registration_close', competition);
+
+  useEffect(() => {
+    regStartData.onChange(regStartData.value.slice(0, 16));
+    regEndData.onChange(regEndData.value.slice(0, 16));
+  }, [competition]);
+
   const informationData = useFormInputState('information', competition);
 
   const competitorLimitEnabledData = useFormInputState('competitor_limit_enabled', competition);

@@ -26,6 +26,7 @@ export default function NearbyComps({
     fetchJsonOrError(`${competitionNearbyJsonUrl}?${params.toString()}`).then(({ data }) => {
       setNearby(data);
       setCompMarkers(data.map((comp) => ({
+        id: comp.id,
         lat: comp.latitude_degrees,
         lng: comp.longitude_degrees,
       })));
