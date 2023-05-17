@@ -183,10 +183,10 @@ module FinishUnfinishedPersons
       subId: 1,
       name: new_name,
       countryId: new_country,
-      gender: inbox_person&.gender,
-      year: inbox_person&.dob&.year || 0,
-      month: inbox_person&.dob&.month || 0,
-      day: inbox_person&.dob&.day || 0,
+      gender: inbox_person&.gender || :o,
+      year: inbox_person&.dob&.year || 1954,
+      month: inbox_person&.dob&.month || 12,
+      day: inbox_person&.dob&.day || 4,
       comments: '',
     )
   end
