@@ -338,6 +338,105 @@ class AdminController < ApplicationController
     render 'anonymize_person'
   end
 
+  def finish_unfinished_persons
+    @finish_persons = FinishPersonsForm.new(
+      competition_ids: params[:competition_ids] || nil,
+    )
+  end
+
+  def complete_persons
+    action_params = params.require(:finish_persons_form)
+                          .permit(:competition_ids)
+
+    @finish_persons = FinishPersonsForm.new(action_params)
+    @persons_to_finish = @finish_persons.search_persons
+
+    if @persons_to_finish.empty?
+      flash[:warning] = "There are no persons to complete for the selected competition"
+      redirect_to action: :finish_unfinished_persons
+    end
+  end
+
+  def do_complete_persons
+    # memoize all WCA IDs, especially useful if we have several identical semi-IDs in the same batch
+    # (siblings with the same last name competing as newcomers at the same competition etc.)
+    wca_id_index = Person.pluck(:wca_id)
+
+    ActiveRecord::Base.transaction do
+      params[:person_completions].each do |person_key, procedure|
+        next if [:competition_ids, :continue_batch].include? person_key.to_sym
+
+        old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
+
+        case procedure[:action]
+        when "skip"
+          next
+        when "create"
+          new_semi_id = procedure[:new_semi_id]
+
+          new_id, wca_id_index = FinishUnfinishedPersons.complete_wca_id(new_semi_id, wca_id_index)
+
+          new_name = procedure[:new_name]
+          new_country = procedure[:new_country]
+
+          inbox_person = nil
+
+          if pending_person_id.present?
+            inbox_person = InboxPerson.find_by(id: pending_person_id, competition_id: pending_competition_id)
+
+            old_name = inbox_person.name
+            old_country = inbox_person.countryId
+          end
+
+          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_id, new_name, new_country, pending_competition_id)
+        else
+          action, merge_id = procedure[:action].split '-'
+          raise "Invalid action: #{action}" unless action == "merge"
+
+          # Has to exist because otherwise there would be nothing to merge
+          new_person = Person.find(merge_id)
+
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId, pending_competition_id)
+        end
+      end
+    end
+
+    continue_batch = params.dig(:person_completions, :continue_batch)
+    continue_batch = ActiveRecord::Type::Boolean.new.cast(continue_batch)
+
+    competition_ids = params.dig(:person_completions, :competition_ids)
+
+    if continue_batch
+      finish_persons = FinishPersonsForm.new(competition_ids: competition_ids)
+      can_continue = FinishUnfinishedPersons.unfinished_results_scope(finish_persons.competitions).any?
+
+      if can_continue
+        return redirect_to action: :complete_persons, finish_persons_form: { competition_ids: competition_ids }
+      end
+    end
+
+    redirect_to action: :finish_unfinished_persons, competition_ids: competition_ids
+  end
+
+  def peek_unfinished_results
+    @person_name = params.require(:person_name)
+    @country_id = params.require(:country_id)
+    @person_id = params.require(:person_id)
+
+    all_results = Result.select("Results.*, FALSE AS `muted`")
+                        .joins(:event, :round_type)
+                        .where(
+                          personName: @person_name,
+                          countryId: @country_id,
+                          personId: @person_id,
+                        )
+                        .order("Events.rank, RoundTypes.rank DESC")
+
+    @results_by_competition = all_results.group_by(&:competition_id)
+                                         .transform_keys { |id| Competition.find(id) }
+  end
+
   def reassign_wca_id
     @reassign_wca_id = ReassignWcaId.new
     @reassign_wca_id_validated = false

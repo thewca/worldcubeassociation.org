@@ -8,10 +8,13 @@ class Result < ApplicationRecord
   belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId
   alias_attribute :person_name, :personName
   validates :personName, presence: true
+  alias_attribute :person_id, :personId
+  alias_attribute :person_name, :personName
   belongs_to :country, foreign_key: :countryId
   alias_attribute :country_id, :countryId
   has_one :continent, through: :country
   delegate :continent_id, :continent, to: :country
+  belongs_to :inbox_person, primary_key: :id, foreign_key: :personId, optional: true
 
   # NOTE: both nil and "" exist in the database, we may consider cleaning that up.
   MARKERS = [nil, "", "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
