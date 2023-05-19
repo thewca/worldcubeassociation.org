@@ -13,7 +13,7 @@ services:
   nginx:
     image: nginx:1.17.4-alpine
     volumes:
-      - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/default.conf:/etc/nginx/conf.d/default.conf:ro
       - phpmyadmin_data:/var/www/html/:ro
     ports:
       - "8000:80"
