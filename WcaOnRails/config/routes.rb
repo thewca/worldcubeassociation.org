@@ -258,8 +258,7 @@ Rails.application.routes.draw do
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
-      get '/users/:id' => 'api#show_user_by_id', as: :user_by_id # TODO: Look for a better way to do this for routes.js.erb
-      get '/users/:wca_id' => 'api#show_user_by_wca_id'
+      get '/users/:wca_id' => 'api#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
