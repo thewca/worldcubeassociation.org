@@ -13,14 +13,14 @@ services:
   nginx:
     image: nginx:1.17.4-alpine
     volumes:
-      - ./docker/default.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf:ro
       - phpmyadmin_data:/var/www/html/:ro
     environment:
       - PMA_HOST=wca_db
       - PMA_USER=root
       - PMA_PASSWORD=
     ports:
-      - "8000:80"
+      - "8000:8000"
     networks:
       - wca-main
     depends_on:
