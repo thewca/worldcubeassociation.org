@@ -557,9 +557,7 @@ class CompetitionsController < ApplicationController
       year_space = " " + year
       if @actually_using_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
         @competition.update(cellName: name_without_year.truncate(Competition::MAX_CELL_NAME_LENGTH - year_space.length) + year_space)
-      end
-
-      if @actually_using_organizer_view && @competition.name.length <= 32
+        
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         inferred_id = safe_name_without_year[0...(Competition::MAX_ID_LENGTH - year.length)] + year
         @competition.update(id: inferred_id)
