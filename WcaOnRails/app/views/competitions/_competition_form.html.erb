@@ -28,7 +28,7 @@
       <% disable_form = !can_edit_competition %>
 
       <fieldset <%= disable_form && "disabled" %>>
-        <% edit_cellName_id = !(@competition_admin_view || (@competition.name.length > 32)) %>
+        <% edit_cellName_id = !(@competition_admin_view || (@competition.name.length > Competition::MAX_CELL_NAME_LENGTH)) %>
 
         <% if @competition.persisted? %>
           <%= f.input :id , disabled: edit_cellName_id %>
@@ -36,7 +36,7 @@
         <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
 
         <% if @competition.persisted? %>
-          <%= f.input :cellName, disabled: edit_cellName_id %>
+          <%= f.input :cellName, disabled: edit_cellName_id, hint: t('simple_form.hints.competition.cellName', short_name_limit: Competition::MAX_CELL_NAME_LENGTH) %>
         <% end %>
 
         <%= f.input :name_reason, hint: t('.name_reason_html') %>

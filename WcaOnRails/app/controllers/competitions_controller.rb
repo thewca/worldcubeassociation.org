@@ -4,9 +4,6 @@ class CompetitionsController < ApplicationController
   include ApplicationHelper
 
   PAST_COMPETITIONS_DAYS = 90
-  MAX_CELL_NAME_LENGTH = 32
-  MAX_ID_LENGTH = 32
-  VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/ # Duplicate of that in models/competition.rb
   CHECK_SCHEDULE_ASSOCIATIONS = {
     competition_events: [:rounds],
     competition_venues: {
@@ -554,20 +551,19 @@ class CompetitionsController < ApplicationController
       end
     elsif @competition.update(comp_params_minus_id)
       # The two extra updates here are done to automatically compute the cellname and ID for competitions with a short name.
-      m = VALID_NAME_RE.match(@competition.name) # These three lines are from models/competition.rb
+      m = Competition::VALID_NAME_RE.match(@competition.name) # These three lines are from models/competition.rb
       name_without_year = m[1]
       year = m[2]
       year_space = " " + year
       if @actually_using_organizer_view && @competition.name.length <= 32
-        @competition.update(cellName: name_without_year.truncate(MAX_CELL_NAME_LENGTH - year_space.length) + year_space)
+        @competition.update(cellName: name_without_year.truncate(Competition::MAX_CELL_NAME_LENGTH - year_space.length) + year_space)
       end
 
       if @actually_using_organizer_view && @competition.name.length <= 32
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
-        inferred_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
+        inferred_id = safe_name_without_year[0...(Competition::MAX_ID_LENGTH - year.length)] + year
         @competition.update(id: inferred_id)
       elsif new_id && !@competition.update(id: new_id)
-        # 2023 remark, The code inside this elsif doesnt seem to actually do anything, but the magic is performed during the elsif
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with
