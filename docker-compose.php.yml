@@ -15,6 +15,10 @@ services:
     volumes:
       - ./docker/default.conf:/etc/nginx/conf.d/default.conf:ro
       - phpmyadmin_data:/var/www/html/:ro
+    environment:
+      - PMA_HOST=wca_db
+      - PMA_USER=root
+      - PMA_PASSWORD=
     ports:
       - "8000:80"
     networks:
