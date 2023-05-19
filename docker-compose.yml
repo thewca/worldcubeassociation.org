@@ -68,11 +68,32 @@ services:
     networks:
       - wca-main
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:fpm-alpine
+    volumes:
+      - phpmyadmin_data:/var/www/html/
+    networks:
+      - wca-main
+
+  nginx:
+    image: nginx:1.17.4-alpine
+    volumes:
+      - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf:ro
+      - phpmyadmin_data:/var/www/html/:ro
+    ports:
+      - "8000:80"
+    networks:
+      - wca-main
+    depends_on:
+      - phpmyadmin
+      - wca_on_rails
+
 volumes:
   wca_db_volume:
     driver: local
   gems_volume:
     driver: local
+  phpmyadmin_data:
 
 networks:
   wca-main:
