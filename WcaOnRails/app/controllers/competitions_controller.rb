@@ -555,7 +555,7 @@ class CompetitionsController < ApplicationController
       name_without_year = m[1]
       year = m[2]
       year_space = " " + year
-      if @actually_using_organizer_view && @competition.name.length <= 32
+      if @actually_using_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
         @competition.update(cellName: name_without_year.truncate(Competition::MAX_CELL_NAME_LENGTH - year_space.length) + year_space)
       end
 
