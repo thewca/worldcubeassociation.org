@@ -25,3 +25,4 @@ services:
       - wca-main
     depends_on:
       - phpmyadmin
+      - wca_on_rails
