@@ -1,10 +1,8 @@
 version: "3.7"
-volumes:
-  phpmyadmin_data:
 
 services:
   phpmyadmin:
-    image: phpmyadmin/phpmyadmin:fpm-alpine
+    image: phpmyadmin:fpm-alpine
     environment:
       - PMA_HOST=wca_db
       - PMA_USER=root
@@ -15,7 +13,7 @@ services:
       - wca-main
 
   nginx:
-    image: nginx:1.17.4-alpine
+    image: nginx:stable-alpine
     volumes:
       - ./docker/nginx-dev.conf:/etc/nginx/conf.d/default.conf:ro
       - phpmyadmin_data:/var/www/html/:ro
@@ -26,3 +24,7 @@ services:
     depends_on:
       - phpmyadmin
       - wca_on_rails
+
+volumes:
+  phpmyadmin_data:
+    driver: local
