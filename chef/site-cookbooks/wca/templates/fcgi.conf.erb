@@ -1,0 +1,11 @@
+location ~ \.php$ {
+  # NOTE: Despite what many guides recommend, we are leaving
+  # cgi.fix_pathinfo = 1; in php.ini. See http://serverfault.com/a/625953
+  fastcgi_split_path_info ^(.+\.php)(/.+)$;
+  fastcgi_pass unix:/run/php/php-fpm.sock;
+  fastcgi_index index.php;
+
+  # See https://blog.martinfjordvald.com/2013/04/nginx-config-history-fastcgi_params-versus-fastcgi-conf/
+  fastcgi_param SCRIPT_FILENAME $request_filename;
+  include fastcgi_params;
+}

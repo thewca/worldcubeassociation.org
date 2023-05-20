@@ -214,8 +214,12 @@ server_name = {
 }[node.chef_environment]
 
 #### Nginx
-package 'nginx'
+package "nginx"
 
+template "/etc/nginx/fcgi.conf" do
+  source "fcgi.conf.erb"
+  notifies :run, 'execute[reload-nginx]', :delayed
+end
 template "/etc/init.d/nginx" do
   source "nginx.erb"
   mode 0755
@@ -290,10 +294,30 @@ template "#{rails_root}/.env.production" do
 end
 
 #### phpMyAdmin
-package "phpmyadmin"
-package "php-mbstring"
-template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
+package "phpmyadmin" do
+  # skipping recommends because otherwise it will install an entire apache2 server…
+  options ["--no-install-recommends"]
+end
+
+link "#{repo_root}/webroot/results/admin/phpMyAdmin" do
+  to "/usr/share/phpmyadmin"
+end
+
+package "php-fpm"
+
+template "etc/phpmyadmin/conf.d/wca.php" do
   source "phpMyAdmin_config.inc.php.erb"
+  variables({
+              secrets: secrets,
+              db: db,
+            })
+end
+
+template "#{repo_root}/webroot/results/includes/_config.php" do
+  source "results_config.php.erb"
+  mode 0644
+  owner username
+  group username
   variables({
               secrets: secrets,
               db: db,
