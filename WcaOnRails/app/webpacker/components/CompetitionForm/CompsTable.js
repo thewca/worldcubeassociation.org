@@ -18,10 +18,8 @@ function NotConfirmedIcon() {
   );
 }
 
-function CompsTableContent({ comps, action }) {
-  const [showEvents, setShowEvents] = useState(false);
-
-  const headerRow = () => (
+function CompsTableHeaderRow({ showEvents }) {
+  return (
     <Table.Row>
       <Table.HeaderCell name="name" width={3}>
         {I18n.t('competitions.adjacent_competitions.name')}
@@ -51,9 +49,11 @@ function CompsTableContent({ comps, action }) {
       )}
     </Table.Row>
   );
+}
 
-  const compRow = (comp) => (
-    <Table.Row key={comp.name} warning={!comp.danger} error={comp.danger}>
+function CompsTableCompRow({ comp, action, showEvents }) {
+  return (
+    <Table.Row warning={!comp.danger} error={comp.danger}>
       <Table.Cell name="name" width={3}>
         <span dangerouslySetInnerHTML={{ __html: comp.nameLink }} />
         {comp.confirmed && <NotConfirmedIcon />}
@@ -96,14 +96,25 @@ function CompsTableContent({ comps, action }) {
       )}
     </Table.Row>
   );
+}
+
+function CompsTableContent({ comps, action }) {
+  const [showEvents, setShowEvents] = useState(false);
 
   return (
     <Table structured>
       <Table.Header>
-        {headerRow()}
+        <CompsTableHeaderRow showEvents={showEvents} />
       </Table.Header>
       <Table.Body>
-        {comps.reverse().map((comp) => compRow(comp))}
+        {comps.reverse().map((comp) => (
+          <CompsTableCompRow
+            key={comp.name}
+            comp={comp}
+            showEvents={showEvents}
+            action={action}
+          />
+        ))}
       </Table.Body>
       <Table.Footer fullWidth>
         <Table.Row>
@@ -148,7 +159,7 @@ export default function CompsTable({
   if (!comps || comps.length === 0) {
     return (
       <Message positive>
-        {I18n.t('competitions.adjacent_competitions.no_comp_comps')}
+        {I18n.t('competitions.adjacent_competitions.no_comp_nearby')}
       </Message>
     );
   }

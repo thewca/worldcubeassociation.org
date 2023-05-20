@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, {
-  useRef,
   useState,
   useEffect,
   useContext,
@@ -29,12 +28,9 @@ function roundToMicrodegrees(toRound) {
 
 function DraggableMarker({ latData, longData }) {
   const position = { lat: latData.value, lng: longData.value };
-  const markerRef = useRef(null);
 
-  const updatePosition = () => {
-    const marker = markerRef.current;
-    if (marker == null) return;
-    const newPos = marker.leafletElement.getLatLng();
+  const updatePosition = (e) => {
+    const newPos = e.target.getLatLng();
     latData.onChange(roundToMicrodegrees(newPos.lat));
     longData.onChange(roundToMicrodegrees(newPos.lng));
   };
@@ -43,7 +39,6 @@ function DraggableMarker({ latData, longData }) {
     <Marker
       draggable
       position={position}
-      ref={markerRef}
       icon={blueMarker}
       onDragend={updatePosition}
       autoPanOnFocus={false}
