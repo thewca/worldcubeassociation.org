@@ -68,7 +68,7 @@ RSpec.describe CompetitionsController do
         end
 
         it "when a single year is selected, shows past competitions from this year" do
-          get :index, params: { state: :past, year: past_comp1.year }
+          get :index, params: { state: :past, year: past_comp1.start_date.year }
           expect(assigns(:competitions)).to eq [past_comp1]
         end
 
@@ -999,7 +999,7 @@ RSpec.describe CompetitionsController do
         person = user.person
         FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         FactoryBot.create(:result, competition: competition, person: person, eventId: "333")
-        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, year: person.year, month: person.month, day: person.day)
+        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, dob: person.dob)
         FactoryBot.create(:result, competition: competition, person: another_person, eventId: "333")
 
         user.update(wca_id: nil)
@@ -1038,7 +1038,7 @@ RSpec.describe CompetitionsController do
     let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
+    let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
     let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: future_competition3, user: registered_user) }

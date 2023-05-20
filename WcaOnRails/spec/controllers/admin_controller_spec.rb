@@ -34,7 +34,7 @@ RSpec.describe AdminController, type: :controller do
     sign_in { FactoryBot.create :admin }
 
     let(:person1) { FactoryBot.create(:person) }
-    let(:person2) { FactoryBot.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :year, :month, :day)) }
+    let(:person2) { FactoryBot.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :dob)) }
 
     it 'can merge people' do
       post :do_merge_people, params: { merge_people: { person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id } }

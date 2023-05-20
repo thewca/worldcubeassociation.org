@@ -12,18 +12,14 @@ FactoryBot.define do
     name { Faker::Name.name }
     countryId { Country.real.sample.id }
     gender { "m" }
-    year { 1966 }
-    month { 4 }
-    day { 4 }
+    dob { '1966-04-04' }
 
     trait :skip_validation do
       to_create { |res| res.save(validate: false) }
     end
 
     trait :missing_dob do
-      year { 0 }
-      month { 0 }
-      day { 0 }
+      dob { nil }
     end
 
     trait :missing_gender do

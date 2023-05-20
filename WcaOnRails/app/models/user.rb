@@ -1003,7 +1003,7 @@ class User < ApplicationRecord
     if !wca_id && !unconfirmed_wca_id
       matches = []
       unless country.nil? || dob.nil?
-        matches = competition.competitors.where(name: name, year: dob.year, month: dob.month, day: dob.day, gender: gender, countryId: country.id).to_a
+        matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a
       end
       if matches.size == 1 && matches.first.user.nil?
         update(wca_id: matches.first.wca_id)

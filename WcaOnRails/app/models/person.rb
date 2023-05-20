@@ -31,27 +31,6 @@ class Person < ApplicationRecord
   validates_uniqueness_of :wca_id, if: -> { new_record? && subId == 1 }, case_sensitive: true
   validates_format_of :wca_id, with: User::WCA_ID_RE
 
-  before_validation :unpack_dob
-  private def unpack_dob
-    if @dob.nil? && !dob.blank?
-      @dob = dob.strftime("%F")
-    end
-    if @dob.blank?
-      self.year = self.month = self.day = 0
-    else
-      unless @dob =~ /\A\d{4}-\d{2}-\d{2}\z/
-        # NOTE: error message built-in rails
-        errors.add(:dob, I18n.t('errors.messages.invalid'))
-        return false
-      end
-      self.year, self.month, self.day = @dob.split("-").map(&:to_i)
-      unless Date.valid_date? self.year, self.month, self.day
-        errors.add(:dob, I18n.t('errors.messages.invalid'))
-        false
-      end
-    end
-  end
-
   # After checking with the WRT there are still missing dob in the db.
   # Therefore we'll enforce dob validation only for new records.
   # If we absolutely need to add a person for which we don't know the dob,
@@ -136,7 +115,7 @@ class Person < ApplicationRecord
   end
 
   def likely_delegates
-    all_delegates = competitions.order(:year, :month, :day).map(&:staff_delegates).flatten.select(&:any_kind_of_delegate?)
+    all_delegates = competitions.order(:start_date).map(&:staff_delegates).flatten.select(&:any_kind_of_delegate?)
     if all_delegates.empty?
       return []
     end
@@ -154,12 +133,6 @@ class Person < ApplicationRecord
 
   def sub_ids
     Person.where(wca_id: wca_id).map(&:subId)
-  end
-
-  attr_writer :dob
-
-  def dob
-    year == 0 || month == 0 || day == 0 ? nil : Date.new(year, month, day)
   end
 
   def country
@@ -195,7 +168,7 @@ class Person < ApplicationRecord
     results.podium
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
-           .order("year DESC, Events.rank")
+           .order("YEAR(start_date) DESC, Events.rank")
            .includes(:competition, :format)
   end
 
@@ -207,7 +180,7 @@ class Person < ApplicationRecord
       yield(results)
         .final
         .succeeded
-        .order("year DESC")
+        .order("YEAR(start_date) DESC")
         .includes(:competition)
         .map(&:competition)
         .uniq
