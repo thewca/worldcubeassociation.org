@@ -55,6 +55,10 @@ server {
     return 302 /admin/;
   }
 
+  location /results/misc {
+    rewrite ^/results/misc/(.*\.zip)$ /export/results/$1 break;
+  }
+
   # Redirect competitions.php to /competitions
   location /results/competitions.php {
     set $rails_args "";
