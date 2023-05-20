@@ -196,6 +196,8 @@ class RegistrationsController < ApplicationController
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+      registration_comment = params.dig(:registration_data, :comments)
+      registration.assign_attributes(comments: registration_comment) if registration_comment.present?
       registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
       params[:registration_data][:event_ids]&.each do |event_id|
         competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
