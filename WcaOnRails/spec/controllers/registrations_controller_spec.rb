@@ -352,6 +352,13 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       expect(registration.reload.comments).to eq "new comment"
       expect(flash[:success]).to eq "Updated registration"
     end
+
+    it "cannot edit administrative notes on registration" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq ""
+    end
   end
 
   context "signed in as competitor" do
