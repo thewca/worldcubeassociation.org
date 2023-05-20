@@ -2,12 +2,14 @@
 /* eslint-disable react/no-danger */
 import React, { useEffect } from 'react';
 import {
+  Button,
   Form,
 } from 'semantic-ui-react';
 import { Alert } from 'react-bootstrap';
 import I18n from '../../lib/i18n';
 import {
   InputBoolean,
+  InputBooleanSelect,
   InputCurrency,
   InputDate,
   InputDateTime,
@@ -97,22 +99,13 @@ function CompetitorLimitInput({
   competitorLimitData,
   competitorLimitReasonData,
 }) {
-  const options = [{
-    value: 'true',
-    text: I18n.t('simple_form.options.competition.competitor_limit_enabled.true'),
-  },
-  {
-    value: 'false',
-    text: I18n.t('simple_form.options.competition.competitor_limit_enabled.false'),
-  }];
-
   return (
     <>
-      <InputSelect inputState={competitorLimitEnabledData} options={options} />
+      <InputBooleanSelect inputState={competitorLimitEnabledData} />
       {competitorLimitEnabledData.value
         && <InputNumber inputState={competitorLimitData} />}
       {competitorLimitEnabledData.value
-        && <InputTextArea inputState={competitorLimitReasonData} rows={2} />}
+        && <InputTextArea inputState={competitorLimitReasonData} />}
     </>
   );
 }
@@ -228,6 +221,33 @@ export default function CompetitionForm({
   const guestEntryStatusData = useFormInputState('guest_entry_status', competition, guestMessageOptions[0].value);
   const guestsPerRegLimitData = useFormInputState('guests_per_registration_limit', competition);
 
+  const refundPercentData = useFormInputState('refund_policy_percent', competition);
+  const refundDeadlineData = useFormInputState('refund_policy_limit_date', competition);
+  const waitingListDeadlineData = useFormInputState('waiting_list_deadline_date', competition);
+  const eventChangeDeadlineData = useFormInputState('event_change_deadline_date', competition);
+
+  const onSiteRegData = useFormInputState('on_the_spot_registration', competition);
+  const onSiteRegFeeData = useFormInputState('on_the_spot_entry_fee_lowest_denomination', competition, 1234);
+
+  const allowEditRegEventsData = useFormInputState('allow_registration_edits', competition, true);
+  const allowDeleteRegData = useFormInputState('allow_registration_self_delete_after_acceptance', competition, true);
+  const extraRegRequirementData = useFormInputState('extra_registration_requirements', competition);
+
+  const earlyPuzzleSubmissionData = useFormInputState('early_puzzle_submission', competition, false);
+  const earlyPuzzleSubmissionReasonData = useFormInputState('early_puzzle_submission_reason', competition);
+
+  const qualificationData = useFormInputState('qualification_results', competition, false);
+  const qualificationReasonData = useFormInputState('qualification_results_reason', competition);
+  const allowRegWithoutQualificationData = useFormInputState('allow_registration_without_qualification', competition, false);
+
+  const eventRestrictionData = useFormInputState('event_restrictions', competition, false);
+  const eventRestrictionReasonData = useFormInputState('event_restrictions_reason', competition);
+  const eventPerRegLimitData = useFormInputState('events_per_registration_limit', competition);
+
+  const forceCommentInRegData = useFormInputState('force_comment_in_registration', competition, false);
+
+  const remarksData = useFormInputState('remarks', competition, '');
+
   const [compMarkers, setCompMarkers] = React.useState([]);
 
   return (
@@ -328,6 +348,53 @@ export default function CompetitionForm({
           && <InputSelect inputState={guestEntryStatusData} options={guestMessageOptions} />}
         {!guestsEntryFeeData.value && guestEntryStatusData.value === guestMessageOptions[2].value
           && <InputNumber inputState={guestsPerRegLimitData} />}
+
+        <InputNumber inputState={refundPercentData} />
+        <InputDate inputState={refundDeadlineData} />
+        <InputDate inputState={waitingListDeadlineData} />
+        <InputDate inputState={eventChangeDeadlineData} />
+
+        <InputBooleanSelect inputState={onSiteRegData} />
+        {onSiteRegData.value
+          && <InputCurrency inputState={onSiteRegFeeData} currency={currencyCodeData.value} />}
+
+        <InputBooleanSelect inputState={allowEditRegEventsData} />
+        <InputBooleanSelect inputState={allowDeleteRegData} />
+        <InputMarkdown inputState={extraRegRequirementData} />
+
+        <hr />
+
+        <InputBoolean inputState={earlyPuzzleSubmissionData} />
+        {earlyPuzzleSubmissionData.value
+          && <InputTextArea inputState={earlyPuzzleSubmissionReasonData} />}
+
+        <InputBoolean inputState={qualificationData} />
+        {qualificationData.value && (
+          <>
+            <InputTextArea inputState={qualificationReasonData} />
+            <InputBooleanSelect inputState={allowRegWithoutQualificationData} />
+          </>
+        )}
+
+        <InputBoolean inputState={eventRestrictionData} />
+        {eventRestrictionData.value && (
+          <>
+            <InputTextArea inputState={eventRestrictionReasonData} />
+            <InputNumber inputState={eventPerRegLimitData} />
+          </>
+        )}
+
+        <InputBoolean inputState={forceCommentInRegData} />
+
+        <hr />
+
+        <InputTextArea inputState={remarksData} />
+
+        <hr />
+
+        <Button color="blue" onClick={() => {}} type="submit">
+          {I18n.t('competitions.competition_form.submit_create_value')}
+        </Button>
       </Form>
     </>
   );

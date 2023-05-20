@@ -6,15 +6,14 @@ import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
 import AutoNumeric from 'autonumeric';
-
 import {
   Checkbox,
   Form,
   Input,
   Radio,
   Select,
-  TextArea,
 } from 'semantic-ui-react';
+import TextareaAutosize from 'react-autosize-textarea';
 import Loading from '../Requests/Loading';
 import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
@@ -76,7 +75,14 @@ export function InputString({ inputState, attachedLabel, ...props }) {
 export function InputTextArea({ inputState, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
-      <TextArea value={inputState.value} onChange={inputState.onChange} />
+      <TextareaAutosize
+        value={inputState.value}
+        onChange={(e) => {
+          inputState.onChange(e.target.value);
+        }}
+        className="no-autosize"
+        rows={2}
+      />
     </FieldWrapper>
   );
 }
@@ -135,6 +141,28 @@ export function InputSelect({ inputState, options, ...props }) {
   );
 }
 
+export function InputBooleanSelect({ inputState, ...props }) {
+  const options = [
+    {
+      value: '',
+      text: '',
+    },
+    {
+      value: true,
+      text: I18n.t(`simple_form.options.competition.${inputState.attribute}.true`),
+    },
+    {
+      value: false,
+      text: I18n.t(`simple_form.options.competition.${inputState.attribute}.false`),
+    }];
+
+  return (
+    <FieldWrapper inputState={inputState} {...props}>
+      <Select options={options} value={inputState.value} onChange={inputState.onChange} basic />
+    </FieldWrapper>
+  );
+}
+
 export function InputBoolean({ inputState }) {
   const label = getInputStateLabel(inputState);
   const onChange = (e, { checked }) => {
@@ -152,15 +180,14 @@ export function InputRadio({ inputState, options, ...props }) {
   return (
     <FieldWrapper inputState={inputState} {...props}>
       {options.map((option, idx) => (
-        <>
+        <React.Fragment key={option.value}>
           {idx !== 0 && <br />}
           <Radio
-            key={option.value}
             label={option.text}
             checked={inputState.value === option.value}
             onChange={() => inputState.onChange(option.value)}
           />
-        </>
+        </React.Fragment>
       ))}
     </FieldWrapper>
   );
@@ -199,8 +226,10 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
 
   useEffect(() => {
     if (!inputState.value) return;
+
     const ids = inputState.value.split(',');
     const promises = ids.map((id) => fetchJsonOrError(userApiUrl(id)));
+
     Promise.all(promises).then((reqs) => {
       const users = reqs.map((req) => req.data.user);
       setInitialData(JSON.stringify(users));
@@ -209,9 +238,7 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
 
   // This is a workaround for selectize and jquery not calling onChange
   const refWrapper = useCallback(() => {
-    $(`#${inputState.attribute}`).on('change', (e) => {
-      inputState.onChange(e.target.value);
-    });
+    $(`#${inputState.attribute}`).on('change', (e) => inputState.onChange(e.target.value));
     $(`#${inputState.attribute}`).wcaAutocomplete();
   }, []);
 

@@ -53,6 +53,7 @@
     "prop-types": "^15.8.1",
     "rails-erb-loader": "^5.5.2",
     "react": "^16.14.0",
+    "react-autosize-textarea": "^7.1.0",
     "react-bootstrap": "^0.33.1",
     "react-datepicker": "^4.11.0",
     "react-dom": "^16.14.0",

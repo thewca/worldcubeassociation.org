@@ -100,7 +100,7 @@ export default function ChampionshipInput({ inputState }) {
           regions={regions}
         />
       ))}
-      <Button color="blue" onClick={onClick}>
+      <Button basic onClick={onClick}>
         <Icon name="plus" />
         {I18n.t('competitions.competition_form.add_championship')}
       </Button>
