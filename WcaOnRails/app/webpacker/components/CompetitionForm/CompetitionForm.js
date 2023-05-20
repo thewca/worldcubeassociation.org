@@ -1,5 +1,3 @@
-// TODO: Switch to single line eslint disable / Find a better way of handling
-/* eslint-disable react/no-danger */
 import React, { useEffect } from 'react';
 import {
   Button,
@@ -61,6 +59,7 @@ function AnnouncementDetails({ competition, confirmed, mail }) {
 
   return (
     <Alert bsStyle={alertStyle}>
+      {/* eslint-disable-next-line react/no-danger */}
       <span dangerouslySetInnerHTML={{ __html: alertHTML }} />
     </Alert>
   );
@@ -77,10 +76,26 @@ function CoordinatesInput({ latData, longData }) {
 }
 
 function DatesRange({ startDateData, endDateData }) {
+  const onChangeStart = (_, v) => {
+    const val = v.value;
+    if (endDateData.value < val) {
+      endDateData.onChange(val);
+    }
+    startDateData.onChange(val);
+  };
+
+  const onChangeEnd = (_, v) => {
+    const val = v.value;
+    if (startDateData.value > val) {
+      startDateData.onChange(val);
+    }
+    endDateData.onChange(val);
+  };
+
   return (
     <Form.Group widths="equal">
-      <InputDate inputState={startDateData} />
-      <InputDate inputState={endDateData} />
+      <InputDate inputState={startDateData} onChange={onChangeStart} />
+      <InputDate inputState={endDateData} onChange={onChangeEnd} />
     </Form.Group>
   );
 }
@@ -112,11 +127,11 @@ function CompetitorLimitInput({
 
 function GuestsEnabledInput({ inputState }) {
   const options = [{
-    value: 'true',
+    value: true,
     text: I18n.t('simple_form.options.competition.guests_enabled.true'),
   },
   {
-    value: 'false',
+    value: false,
     text: I18n.t('simple_form.options.competition.guests_enabled.false'),
   }];
 
@@ -186,7 +201,7 @@ export default function CompetitionForm({
   const regStartData = useFormInputState('registration_open', competition);
   const regEndData = useFormInputState('registration_close', competition);
 
-  useEffect(() => {
+  useEffect(() => { // TODO: This is bad
     regStartData.onChange(regStartData.value.slice(0, 16));
     regEndData.onChange(regEndData.value.slice(0, 16));
   }, [competition]);
@@ -197,7 +212,7 @@ export default function CompetitionForm({
   const competitorLimitData = useFormInputState('competitor_limit', competition);
   const competitorLimitReasonData = useFormInputState('competitor_limit_reason', competition);
 
-  const staffDelegateData = useFormInputState('staff_delegate_ids', competition, '54140');
+  const staffDelegateData = useFormInputState('staff_delegate_ids', competition); // TODO: This should include the current delegate
   const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
   const organizerData = useFormInputState('organizer_ids', competition);
   const contactData = useFormInputState('contact', competition);
@@ -211,13 +226,13 @@ export default function CompetitionForm({
   const useWCALiveForScoretakingData = useFormInputState('use_wca_live_for_scoretaking', competition, true);
   const regPageData = useFormInputState('external_registration_page', competition);
 
-  const currencyCodeData = useFormInputState('currency_code', competition);
+  const currencyCodeData = useFormInputState('currency_code', competition, 'USD');
 
-  const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition, 1234);
+  const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition);
   const enableDonationsData = useFormInputState('enable_donations', competition, false);
 
-  const guestsEnabledData = useFormInputState('guests_enabled', competition, 'true');
-  const guestsEntryFeeData = useFormInputState('guests_entry_fee_lowest_denomination', competition, 1234);
+  const guestsEnabledData = useFormInputState('guests_enabled', competition, true);
+  const guestsEntryFeeData = useFormInputState('guests_entry_fee_lowest_denomination', competition);
   const guestEntryStatusData = useFormInputState('guest_entry_status', competition, guestMessageOptions[0].value);
   const guestsPerRegLimitData = useFormInputState('guests_per_registration_limit', competition);
 
@@ -227,10 +242,10 @@ export default function CompetitionForm({
   const eventChangeDeadlineData = useFormInputState('event_change_deadline_date', competition);
 
   const onSiteRegData = useFormInputState('on_the_spot_registration', competition);
-  const onSiteRegFeeData = useFormInputState('on_the_spot_entry_fee_lowest_denomination', competition, 1234);
+  const onSiteRegFeeData = useFormInputState('on_the_spot_entry_fee_lowest_denomination', competition);
 
-  const allowEditRegEventsData = useFormInputState('allow_registration_edits', competition, true);
-  const allowDeleteRegData = useFormInputState('allow_registration_self_delete_after_acceptance', competition, true);
+  const allowEditRegEventsData = useFormInputState('allow_registration_edits', competition, false);
+  const allowDeleteRegData = useFormInputState('allow_registration_self_delete_after_acceptance', competition, false);
   const extraRegRequirementData = useFormInputState('extra_registration_requirements', competition);
 
   const earlyPuzzleSubmissionData = useFormInputState('early_puzzle_submission', competition, false);
@@ -344,15 +359,18 @@ export default function CompetitionForm({
 
         <GuestsEnabledInput inputState={guestsEnabledData} />
         <InputCurrency inputState={guestsEntryFeeData} currency={currencyCodeData.value} />
-        {!guestsEntryFeeData.value
+        {/* {console.log(guestsEntryFeeData.value)}
+        {console.log((!(guestsEntryFeeData.value > 0)))} */}
+        {!(guestsEntryFeeData.value > 0)
           && <InputSelect inputState={guestEntryStatusData} options={guestMessageOptions} />}
-        {!guestsEntryFeeData.value && guestEntryStatusData.value === guestMessageOptions[2].value
+        {!(guestsEntryFeeData.value > 0)
+          && guestEntryStatusData.value === guestMessageOptions[2].value
           && <InputNumber inputState={guestsPerRegLimitData} />}
 
         <InputNumber inputState={refundPercentData} />
-        <InputDate inputState={refundDeadlineData} />
-        <InputDate inputState={waitingListDeadlineData} />
-        <InputDate inputState={eventChangeDeadlineData} />
+        <InputDateTime inputState={refundDeadlineData} />
+        <InputDateTime inputState={waitingListDeadlineData} />
+        <InputDateTime inputState={eventChangeDeadlineData} />
 
         <InputBooleanSelect inputState={onSiteRegData} />
         {onSiteRegData.value
@@ -392,7 +410,7 @@ export default function CompetitionForm({
 
         <hr />
 
-        <Button color="blue" onClick={() => {}} type="submit">
+        <Button color="blue" type="button">
           {I18n.t('competitions.competition_form.submit_create_value')}
         </Button>
       </Form>

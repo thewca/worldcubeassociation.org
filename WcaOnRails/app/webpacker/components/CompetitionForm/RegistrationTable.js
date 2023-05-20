@@ -106,7 +106,7 @@ export default function RegistrationTable({ regStartData }) {
   }, [regStartData.value]);
 
   if (loading) return <Loading />;
-  if (!regStartData) {
+  if (!regStartData.value) {
     return (
       <MissingInfo
         missingDate={!regStartData.value}

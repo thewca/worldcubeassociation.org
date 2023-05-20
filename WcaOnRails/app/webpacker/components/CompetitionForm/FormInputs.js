@@ -1,11 +1,6 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable react/jsx-props-no-spreading */
-/* eslint-disable jsx-a11y/label-has-associated-control */
-/* eslint-disable react/no-danger */
 import React, {
   useCallback, useEffect, useRef, useState,
 } from 'react';
-import AutoNumeric from 'autonumeric';
 import {
   Checkbox,
   Form,
@@ -13,6 +8,7 @@ import {
   Radio,
   Select,
 } from 'semantic-ui-react';
+import AutoNumeric from 'autonumeric';
 import TextareaAutosize from 'react-autosize-textarea';
 import Loading from '../Requests/Loading';
 import useInputState from '../../lib/hooks/useInputState';
@@ -57,24 +53,31 @@ export function FieldWrapper({
 
   return (
     <Form.Field>
+      {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
       <label dangerouslySetInnerHTML={{ __html: inputLabel }} />
       {children}
+      {/* eslint-disable-next-line react/no-danger */}
       <p dangerouslySetInnerHTML={{ __html: inputHint }} className="help-block" />
     </Form.Field>
   );
 }
 
-export function InputString({ inputState, attachedLabel, ...props }) {
+export function InputString({
+  inputState,
+  attachedLabel,
+  label,
+  hint,
+}) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState} label={label} hint={hint}>
       <Input label={attachedLabel} value={inputState.value} onChange={inputState.onChange} />
     </FieldWrapper>
   );
 }
 
-export function InputTextArea({ inputState, ...props }) {
+export function InputTextArea({ inputState }) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState}>
       <TextareaAutosize
         value={inputState.value}
         onChange={(e) => {
@@ -87,15 +90,15 @@ export function InputTextArea({ inputState, ...props }) {
   );
 }
 
-export function InputNumber({ inputState, ...props }) {
+export function InputNumber({ inputState }) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState}>
       <Input type="number" value={inputState.value} onChange={inputState.onChange} />
     </FieldWrapper>
   );
 }
 
-export function InputCurrency({ inputState, currency, ...props }) {
+export function InputCurrency({ inputState, currency }) {
   const [autoNumeric, setAutoNumeric] = useState();
 
   const inputComponentRef = useRef();
@@ -122,26 +125,26 @@ export function InputCurrency({ inputState, currency, ...props }) {
     });
   }, [currency]);
 
-  const onChange = (e) => {
-    inputState.onChange(e.rawValue * currencyInfo.subunitToUnit);
+  const onChange = () => {
+    inputState.onChange(autoNumeric.rawValue * currencyInfo.subunitToUnit);
   };
 
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState}>
       <Input ref={inputComponentRef} type="text" onChange={onChange} />
     </FieldWrapper>
   );
 }
 
-export function InputSelect({ inputState, options, ...props }) {
+export function InputSelect({ inputState, options }) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState}>
       <Select options={options} value={inputState.value} onChange={inputState.onChange} basic />
     </FieldWrapper>
   );
 }
 
-export function InputBooleanSelect({ inputState, ...props }) {
+export function InputBooleanSelect({ inputState }) {
   const options = [
     {
       value: '',
@@ -157,7 +160,7 @@ export function InputBooleanSelect({ inputState, ...props }) {
     }];
 
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState}>
       <Select options={options} value={inputState.value} onChange={inputState.onChange} basic />
     </FieldWrapper>
   );
@@ -176,9 +179,9 @@ export function InputBoolean({ inputState }) {
   );
 }
 
-export function InputRadio({ inputState, options, ...props }) {
+export function InputRadio({ inputState, options }) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
+    <FieldWrapper inputState={inputState}>
       {options.map((option, idx) => (
         <React.Fragment key={option.value}>
           {idx !== 0 && <br />}
@@ -193,18 +196,24 @@ export function InputRadio({ inputState, options, ...props }) {
   );
 }
 
-export function InputDate({ inputState, ...props }) {
+export function InputDate({ inputState, onChange }) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
-      <Input type="date" value={inputState.value} onChange={inputState.onChange} style={{ width: 'full' }} />
+    <FieldWrapper inputState={inputState}>
+      <Input type="date" value={inputState.value} onChange={onChange || inputState.onChange} style={{ width: 'full' }} />
     </FieldWrapper>
   );
 }
 
-export function InputDateTime({ inputState, ...props }) {
+export function InputDateTime({ inputState }) {
   return (
-    <FieldWrapper inputState={inputState} {...props}>
-      <Input type="datetime-local" value={inputState.value} onChange={inputState.onChange} style={{ width: 'full' }} />
+    <FieldWrapper inputState={inputState}>
+      <Input
+        type="datetime-local"
+        value={inputState.value}
+        onChange={inputState.onChange}
+        style={{ width: 'full' }}
+        label="UTC"
+      />
     </FieldWrapper>
   );
 }
