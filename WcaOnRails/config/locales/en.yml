@@ -880,7 +880,7 @@ en:
       polls: "Polls"
       results_team: "Results team"
       results_admin: "Admin"
-      results_phpmyadmin: "phpMyAdmin"
+      results_database: "Database"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"

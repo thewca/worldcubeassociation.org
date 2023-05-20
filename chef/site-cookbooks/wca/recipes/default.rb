@@ -216,10 +216,6 @@ server_name = {
 #### Nginx
 package "nginx"
 
-template "/etc/nginx/fcgi.conf" do
-  source "fcgi.conf.erb"
-  notifies :run, 'execute[reload-nginx]', :delayed
-end
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
   mode 0644
@@ -290,10 +286,6 @@ end
 package "phpmyadmin" do
   # skipping recommends because otherwise it will install an entire apache2 server…
   options ["--no-install-recommends"]
-end
-
-link "#{repo_root}/webroot/results/admin/phpMyAdmin" do
-  to "/usr/share/phpmyadmin"
 end
 
 package "php-fpm"
