@@ -118,9 +118,126 @@ class AdminController < ApplicationController
       @competition.update(results_submitted_at: nil)
       flash[:success] = "Results submission cleared."
     else
-      flash[:danger] = "Could not clear the results submission. Maybe results are alredy posted, or there is no submission."
+      flash[:danger] = "Could not clear the results submission. Maybe results are already posted, or there is no submission."
     end
     redirect_to competition_admin_upload_results_edit_path
+  end
+
+  # The order of this array has to follow the steps in which results have to be imported.
+  RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
+
+  private def load_result_posting_steps
+    @competition = competition_from_params(associations: [:events, :rounds])
+
+    data_tables = {
+      result: Result,
+      scramble: Scramble,
+      inbox_result: InboxResult,
+      inbox_person: InboxPerson,
+      newcomer_person: InboxPerson.where(wcaId: ''),
+      newcomer_result: Result.select(:personId).distinct.where("personId REGEXP '^[0-9]+$'"),
+    }
+
+    @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
+    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
+
+    yield if block_given?
+  end
+
+  def import_results
+    load_result_posting_steps
+  end
+
+  def result_inbox_steps
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
+  end
+
+  def import_inbox_results
+    @competition = competition_from_params
+
+    ActiveRecord::Base.transaction do
+      result_rows = @competition.inbox_results
+                                .joins("LEFT JOIN InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
+                                .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
+                                .map do |inbox_res|
+        person_id = inbox_res.personWcaId.presence || inbox_res.personId
+        person_country = Country.find_by_iso2(inbox_res.personCountryIso2)
+
+        {
+          pos: inbox_res.pos,
+          personId: person_id,
+          personName: inbox_res.personName,
+          countryId: person_country.id,
+          competitionId: inbox_res.competitionId,
+          eventId: inbox_res.eventId,
+          roundTypeId: inbox_res.roundTypeId,
+          formatId: inbox_res.formatId,
+          value1: inbox_res.value1,
+          value2: inbox_res.value2,
+          value3: inbox_res.value3,
+          value4: inbox_res.value4,
+          value5: inbox_res.value5,
+          best: inbox_res.best,
+          average: inbox_res.average,
+        }
+      end
+
+      Result.insert_all!(result_rows)
+      @competition.inbox_results.destroy_all
+    end
+
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
+  end
+
+  def delete_inbox_data
+    @competition = competition_from_params
+
+    inbox_model = params.require(:model).to_sym
+
+    case inbox_model
+    when :inbox_result
+      @competition.inbox_results.destroy_all
+    when :inbox_person
+      # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
+      @competition.inbox_persons.each(&:delete)
+    else
+      raise "Invalid model association: #{inbox_model}"
+    end
+
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
+  end
+
+  def delete_results_data
+    @competition = competition_from_params
+
+    model = params.require(:model)
+
+    if model == 'All'
+      @competition.results.destroy_all
+      @competition.scrambles.destroy_all
+    else
+      event_id = params.require(:event_id)
+      round_type_id = params.require(:round_type_id)
+
+      case model
+      when Result.name
+        Result.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+      when Scramble.name
+        Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+      else
+        raise "Invalid table: #{params[:table]}"
+      end
+    end
+
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
   end
 
   def create_results
@@ -298,8 +415,8 @@ class AdminController < ApplicationController
     send_data csv, filename: "#{filename}-#{Time.now.utc.iso8601}.csv", type: :csv
   end
 
-  private def competition_from_params
-    Competition.find_by_id!(params[:competition_id])
+  private def competition_from_params(associations: {})
+    Competition.includes(associations).find_by_id!(params[:competition_id])
   end
 
   def anonymize_person

@@ -2,7 +2,7 @@
 
 <p>
   <%= @submitter_user.name %> has uploaded the results for <%= link_to @competition.name, competition_url(@competition) %>.
-  You can check and preview the uploaded results <%= link_to "here", competition_admin_upload_results_edit_url(@competition) %>, or you can go ahead with the posting process <%= link_to "here", "#{root_url}results/admin/upload_results.php?competitionId=#{@competition.id}" %>.
+  You can check and preview the uploaded results <%= link_to "here", competition_admin_upload_results_edit_url(@competition) %>, or you can go ahead with the posting process <%= link_to "here", competition_admin_import_results_url(@competition) %>.
   <br>
   The latest uploaded json by the Delegate is attached.
 </p>

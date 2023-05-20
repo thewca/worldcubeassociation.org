@@ -153,7 +153,7 @@ print "<li><p>Run some more scripts:</p>
 print "<li><p>Sanity Checks:</p>
          <ol type='a'>
            <li><a href='/competitions/$compIdUrl/results/all?event=all' target='_blank' class='link-external external'>View the Public competition page</a></li>
-           <li><a href='/competitions/$compIdUrl/edit/admin' target='_blank' class='link-external external'>Post the results</a></li>
+           <li><a href='/competitions/$compIdUrl/admin/import-results' target='_blank' class='link-external external'>Post the results</a></li>
            <li>";
 $checks_table = $wcadb_conn->boundQuery(
    "SELECT e.cellName as event, d.cellName as round, c.hasscr, c.hasevent, e.id as eventId, d.id as roundTypeId FROM (

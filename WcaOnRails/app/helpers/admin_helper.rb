@@ -15,4 +15,8 @@ module AdminHelper
       result
     end
   end
+
+  def delete_inbox_confirm_message(model_name, count = nil)
+    "You're about to remove #{count || @existing_data[model_name]} entries from -->#{model_name.to_s.camelize}<--\n\nPlease confirm below if you're sure."
+  end
 end
