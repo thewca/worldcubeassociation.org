@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class Person < ApplicationRecord
-  self.table_name = "rails_persons"
-  self.primary_key = "id"
+  self.table_name = "Persons"
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
   has_many :results, primary_key: "wca_id", foreign_key: "personId"

@@ -242,7 +242,8 @@ DROP TABLE IF EXISTS `Persons`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `Persons` (
-  `id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `wca_id` varchar(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
   `subId` tinyint(6) NOT NULL DEFAULT '1',
   `name` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `countryId` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
@@ -251,9 +252,8 @@ CREATE TABLE `Persons` (
   `month` tinyint(4) NOT NULL DEFAULT '0',
   `day` tinyint(4) NOT NULL DEFAULT '0',
   `comments` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT '',
-  `rails_id` int(11) NOT NULL AUTO_INCREMENT,
   `incorrect_wca_id_claim_count` int(11) NOT NULL DEFAULT '0',
-  PRIMARY KEY (`rails_id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `index_Persons_on_id_and_subId` (`id`,`subId`),
   KEY `Persons_fk_country` (`countryId`),
   KEY `Persons_id` (`id`),
@@ -1101,23 +1101,6 @@ CREATE TABLE `preferred_formats` (
   KEY `fk_rails_c3e0098ed3` (`format_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `rails_persons`;
-/*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-/*!50001 CREATE VIEW `rails_persons` AS SELECT
- 1 AS `id`,
- 1 AS `wca_id`,
- 1 AS `subId`,
- 1 AS `name`,
- 1 AS `countryId`,
- 1 AS `gender`,
- 1 AS `year`,
- 1 AS `month`,
- 1 AS `day`,
- 1 AS `comments`,
- 1 AS `incorrect_wca_id_claim_count`*/;
-SET character_set_client = @saved_cs_client;
 DROP TABLE IF EXISTS `regional_organizations`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1554,15 +1537,12 @@ CREATE TABLE `wcif_extensions` (
   KEY `index_wcif_extensions_on_extendable_type_and_extendable_id` (`extendable_type`,`extendable_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-/*!50001 DROP VIEW IF EXISTS `rails_persons`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
 /*!50001 SET @saved_cs_results         = @@character_set_results */;
 /*!50001 SET @saved_col_connection     = @@collation_connection */;
 /*!50001 SET character_set_client      = utf8mb4 */;
 /*!50001 SET character_set_results     = utf8mb4 */;
 /*!50001 SET collation_connection      = utf8mb4_unicode_ci */;
-/*!50001 CREATE ALGORITHM=UNDEFINED */
-/*!50001 VIEW `rails_persons` AS select `Persons`.`rails_id` AS `id`,`Persons`.`id` AS `wca_id`,`Persons`.`subId` AS `subId`,`Persons`.`name` AS `name`,`Persons`.`countryId` AS `countryId`,`Persons`.`gender` AS `gender`,`Persons`.`year` AS `year`,`Persons`.`month` AS `month`,`Persons`.`day` AS `day`,`Persons`.`comments` AS `comments`,`Persons`.`incorrect_wca_id_claim_count` AS `incorrect_wca_id_claim_count` from `Persons` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -1857,4 +1837,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20230315170143'),
 ('20230515103948'),
 ('20230517135741'),
+('20230520171858'),
 ('20230701100417');
