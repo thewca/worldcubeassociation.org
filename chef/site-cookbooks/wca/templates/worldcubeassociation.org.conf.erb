@@ -33,7 +33,6 @@ server {
     deny all;
   }
 
-
   # Redirect 401 to log in page
   # Unfortunately, I don't think there's any way to redirect back after the
   # user logs in.
@@ -49,7 +48,7 @@ server {
     proxy_set_header X-Original-URI $request_uri;
   }
 
-  #### Legacy PHP code
+  #### Legacy PHP redirects
   # /results/admin/ is now handled by Rails over at /admin/
   location ~ ^/results/admin/?$ {
     return 302 /admin/;
@@ -106,6 +105,7 @@ server {
   location /results/c.php {
     return 302 /results/competition.php$is_args$args;
   }
+
   location /results/competition.php {
     # The competition id could be in the url parameter "competitionId" or "i".
     if ($arg_competitionId = "") {
@@ -144,6 +144,7 @@ server {
   location /results/media_insertion.php {
     return 302 /media/new;
   }
+
   location /results/media.php {
     return 302 /media/;
   }
@@ -153,6 +154,7 @@ server {
     if ($arg_eventId = "") {
       set $args "${args}&eventId=${arg_i}";
     }
+
     return 302 /results/events.php$is_args$args;
   }
   # Redirect /results/events.php to /results/rankings
@@ -290,6 +292,7 @@ server {
     if ($arg_personId = "") {
       set $arg_personId $arg_i;
     }
+
     return 302 /persons/$arg_personId;
   }
 
@@ -324,7 +327,6 @@ server {
 
   # Redirect /organisations to /organizations
   location /organisations {
-
     return 302 /organizations;
   }
 
@@ -348,6 +350,7 @@ server {
     add_header Access-Control-Allow-Origin *;
   }
 <% end %>
+
   # Prefer to serve static files directly from nginx to avoid unnecessary
   # data copies from the application server.
   try_files $uri/index.html $uri.html $uri @app;
@@ -378,6 +381,7 @@ server {
     # proxy_buffering off;
     proxy_pass http://app;
   }
+
   # Rails error pages
   error_page 500 502 503 504 /500.html;
   client_max_body_size 64M;
