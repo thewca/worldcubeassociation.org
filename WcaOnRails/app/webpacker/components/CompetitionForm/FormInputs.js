@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useEffect, useRef, useState,
+  useCallback, useContext, useEffect, useRef, useState,
 } from 'react';
 import {
   Checkbox,
@@ -17,6 +17,7 @@ import MarkdownEditor from './MarkdownEditor';
 import { currenciesData } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import { userApiUrl } from '../../lib/requests/routes.js.erb';
+import FormContext from './FormContext';
 
 export function useFormInputState(attribute, currentData, defaultVal = '') {
   const initialValue = currentData[attribute] || defaultVal;
@@ -68,14 +69,23 @@ export function InputString({
   label,
   hint,
 }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState} label={label} hint={hint}>
-      <Input label={attachedLabel} value={inputState.value} onChange={inputState.onChange} />
+      <Input
+        label={attachedLabel}
+        value={inputState.value}
+        onChange={inputState.onChange}
+        disabled={disabled}
+      />
     </FieldWrapper>
   );
 }
 
 export function InputTextArea({ inputState }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
       <TextareaAutosize
@@ -85,21 +95,25 @@ export function InputTextArea({ inputState }) {
         }}
         className="no-autosize"
         rows={2}
+        disabled={disabled}
       />
     </FieldWrapper>
   );
 }
 
 export function InputNumber({ inputState }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
-      <Input type="number" value={inputState.value} onChange={inputState.onChange} />
+      <Input type="number" value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
     </FieldWrapper>
   );
 }
 
 export function InputCurrency({ inputState, currency }) {
   const [autoNumeric, setAutoNumeric] = useState();
+  const { disabled } = useContext(FormContext);
 
   const inputComponentRef = useRef();
 
@@ -131,15 +145,23 @@ export function InputCurrency({ inputState, currency }) {
 
   return (
     <FieldWrapper inputState={inputState}>
-      <Input ref={inputComponentRef} type="text" onChange={onChange} />
+      <Input ref={inputComponentRef} type="text" onChange={onChange} disabled={disabled} />
     </FieldWrapper>
   );
 }
 
 export function InputSelect({ inputState, options }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
-      <Select options={options} value={inputState.value} onChange={inputState.onChange} basic />
+      <Select
+        options={options}
+        value={inputState.value}
+        onChange={inputState.onChange}
+        basic
+        disabled={disabled}
+      />
     </FieldWrapper>
   );
 }
@@ -159,27 +181,39 @@ export function InputBooleanSelect({ inputState }) {
       text: I18n.t(`simple_form.options.competition.${inputState.attribute}.false`),
     }];
 
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
-      <Select options={options} value={inputState.value} onChange={inputState.onChange} basic />
+      <Select
+        options={options}
+        value={inputState.value}
+        onChange={inputState.onChange}
+        basic
+        disabled={disabled}
+      />
     </FieldWrapper>
   );
 }
 
-export function InputBoolean({ inputState }) {
+export function InputBoolean({ inputState, ignoreDisabled }) {
   const label = getInputStateLabel(inputState);
   const onChange = (e, { checked }) => {
     inputState.onChange(checked);
   };
 
+  const { disabled } = useContext(FormContext);
+
   return (
-    <Form.Field>
+    <Form.Field disabled={disabled && !ignoreDisabled}>
       <Checkbox checked={inputState.value} onChange={onChange} label={label} />
     </Form.Field>
   );
 }
 
 export function InputRadio({ inputState, options }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
       {options.map((option, idx) => (
@@ -189,6 +223,7 @@ export function InputRadio({ inputState, options }) {
             label={option.text}
             checked={inputState.value === option.value}
             onChange={() => inputState.onChange(option.value)}
+            disabled={disabled}
           />
         </React.Fragment>
       ))}
@@ -197,14 +232,24 @@ export function InputRadio({ inputState, options }) {
 }
 
 export function InputDate({ inputState, onChange }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
-      <Input type="date" value={inputState.value} onChange={onChange || inputState.onChange} style={{ width: 'full' }} />
+      <Input
+        type="date"
+        value={inputState.value}
+        onChange={onChange || inputState.onChange}
+        style={{ width: 'full' }}
+        disabled={disabled}
+      />
     </FieldWrapper>
   );
 }
 
 export function InputDateTime({ inputState }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
       <Input
@@ -213,15 +258,18 @@ export function InputDateTime({ inputState }) {
         onChange={inputState.onChange}
         style={{ width: 'full' }}
         label="UTC"
+        disabled={disabled}
       />
     </FieldWrapper>
   );
 }
 
 export function InputMarkdown({ inputState }) {
+  const { disabled } = useContext(FormContext);
+
   return (
     <FieldWrapper inputState={inputState}>
-      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} />
+      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
     </FieldWrapper>
   );
 }
@@ -232,6 +280,7 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
   if (traineeOnly) classNames += ' wca-autocomplete-only_trainee_delegates';
 
   const [initialData, setInitialData] = useState(inputState.value ? null : '[]');
+  const { disabled } = useContext(FormContext);
 
   useEffect(() => {
     if (!inputState.value) return;
@@ -262,6 +311,7 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
             type="text"
             data-data={initialData}
             id={inputState.attribute}
+            disabled={disabled}
           />
         ) : <Loading />}
     </FieldWrapper>

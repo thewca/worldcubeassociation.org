@@ -1,6 +1,11 @@
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { useRef, useState, useEffect } from 'react';
+import React, {
+  useRef,
+  useState,
+  useEffect,
+  useContext,
+} from 'react';
 import {
   Circle,
   Map,
@@ -12,6 +17,7 @@ import {
 import { GeoSearchControl as SearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
 import { userTileProvider } from '../../lib/leaflet-wca/providers';
 import { blueMarker } from '../../lib/leaflet-wca/markers';
+import FormContext from './FormContext';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {
@@ -80,7 +86,9 @@ function GeoSearchControl({ latData, longData, setZoom }) {
   return null;
 }
 
-function CompetitionsMap({ latData, longData, children }) {
+function CompetitionsMap({
+  latData, longData, children, disabled,
+}) {
   const provider = userTileProvider;
   const center = [latData.value || 0, longData.value || 0];
 
@@ -104,7 +112,7 @@ function CompetitionsMap({ latData, longData, children }) {
         attribution={provider.attribution}
         maxZoom={19}
       />
-      <GeoSearchControl latData={latData} longData={longData} setZoom={setZoom} />
+      {!disabled && <GeoSearchControl latData={latData} longData={longData} setZoom={setZoom} />}
       <ZoomControl position="topright" />
       {children}
     </Map>
@@ -116,8 +124,10 @@ export default function VenueMap({
 }) {
   const center = [latData.value || 0, longData.value || 0];
 
+  const { disabled } = useContext(FormContext);
+
   return (
-    <CompetitionsMap latData={latData} longData={longData}>
+    <CompetitionsMap latData={latData} longData={longData} disabled={disabled}>
       <Circle
         center={center}
         fill={false}
@@ -130,7 +140,8 @@ export default function VenueMap({
         radius={warningDist * 1000}
         color="#f0ad4e"
       />
-      <DraggableMarker latData={latData} longData={longData} />
+      {!disabled && <DraggableMarker latData={latData} longData={longData} />}
+      {disabled && <StaticMarker lat={latData.value} lng={longData.value} />}
       {markers.map((marker) => (
         <StaticMarker key={marker.id} lat={marker.lat} lng={marker.lng} />
       ))}

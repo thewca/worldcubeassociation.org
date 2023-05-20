@@ -7,8 +7,11 @@ import I18n from '../../lib/i18n';
 import CompsTable from './CompsTable';
 
 export default function NearbyComps({
-  latData, longData,
-  startDateData, endDateData,
+  idData,
+  latData,
+  longData,
+  startDateData,
+  endDateData,
   setCompMarkers,
 }) {
   const [nearby, setNearby] = useState();
@@ -18,6 +21,7 @@ export default function NearbyComps({
     if (!latData.value || !longData.value || !startDateData.value || !endDateData.value) return;
     setLoading(true);
     const params = new URLSearchParams();
+    params.append(`competition[${idData.attribute}]`, idData.value);
     params.append(`competition[${latData.attribute}]`, latData.value);
     params.append(`competition[${longData.attribute}]`, longData.value);
     params.append(`competition[${startDateData.attribute}]`, startDateData.value);

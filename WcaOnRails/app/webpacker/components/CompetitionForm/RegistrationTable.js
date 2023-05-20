@@ -88,14 +88,17 @@ function MissingInfo({ missingDate }) {
   );
 }
 
-export default function RegistrationTable({ regStartData }) {
+export default function RegistrationTable({ idData, regStartData }) {
   const [comps, setComps] = useState();
   const [loading, setLoading] = useState(false);
+
+  const label = I18n.t('competitions.colliding_registration_start_competitions.label', { hours: 3 });
 
   useEffect(() => {
     if (!regStartData.value) return;
     setLoading(true);
     const params = new URLSearchParams();
+    params.append(`competition[${idData.attribute}]`, idData.value);
     params.append(`competition[${regStartData.attribute}]`, regStartData.value);
 
     fetchJsonOrError(`${registrationNearbyJsonUrl}?${params.toString()}`)
@@ -108,9 +111,11 @@ export default function RegistrationTable({ regStartData }) {
   if (loading) return <Loading />;
   if (!regStartData.value) {
     return (
-      <MissingInfo
-        missingDate={!regStartData.value}
-      />
+      <FieldWrapper label={label}>
+        <MissingInfo
+          missingDate={!regStartData.value}
+        />
+      </FieldWrapper>
     );
   }
 
@@ -121,8 +126,6 @@ export default function RegistrationTable({ regStartData }) {
       </Message>
     );
   }
-
-  const label = I18n.t('competitions.colliding_registration_start_competitions.label', { hours: 3 });
 
   return (
     <FieldWrapper label={label}>

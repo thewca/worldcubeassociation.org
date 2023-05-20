@@ -28,7 +28,7 @@ function insertText(editor, markup, promptText) {
   cm.focus();
 }
 
-function getOptions() {
+function getOptions(disabled) {
   const table = {
     name: 'table-custom',
     action: '\n\n| Column 1 | Column 2 | Column 3 |\n| -------- | -------- | -------- |\n| Text     | Text      | Text     |\n\n',
@@ -113,14 +113,17 @@ function getOptions() {
         onError(e);
       }
     },
+    disabled,
   };
 }
 
-export default function MarkdownEditor({ value, onChange }) {
-  const options = useMemo(getOptions, []);
+export default function MarkdownEditor({ value, onChange, disabled }) {
+  const options = useMemo(() => getOptions(disabled), [disabled]);
   const mdChange = (text) => onChange(text);
+
   return (
     <SimpleMDE
+      className={disabled ? 'field disabled' : ''}
       value={value}
       onChange={mdChange}
       options={options}

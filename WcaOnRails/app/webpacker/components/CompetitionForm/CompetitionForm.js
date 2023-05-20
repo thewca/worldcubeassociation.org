@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import {
   Button,
   Form,
@@ -26,6 +26,7 @@ import SeriesComps from './SeriesComps';
 import ChampionshipInput from './ChampionshipInput';
 import RegistrationTable from './RegistrationTable';
 import DuesEstimate from './DuesEstimate';
+import FormContext from './FormContext';
 
 function AdminView({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
@@ -181,10 +182,9 @@ export default function CompetitionForm({
     text: I18n.t('enums.competition.guest_entry_status.restricted'),
   }];
 
-  // Some fields are commented out until I add in the persistance logic
-  // const idData = useFormInputState('id', competition);
+  const idData = useFormInputState('id', competition);
   const nameData = useFormInputState('name', competition);
-  // const cellNameData = useFormInputState('cellName', competition);
+  const cellNameData = useFormInputState('cellName', competition);
   const nameReasonData = useFormInputState('name_reason', competition);
   const countryData = useFormInputState('countryId', competition);
   const cityNameData = useFormInputState('cityName', competition);
@@ -226,6 +226,8 @@ export default function CompetitionForm({
   const useWCALiveForScoretakingData = useFormInputState('use_wca_live_for_scoretaking', competition, true);
   const regPageData = useFormInputState('external_registration_page', competition);
 
+  const receiveRegEmailsData = useFormInputState('receive_registration_emails', competition, true);
+
   const currencyCodeData = useFormInputState('currency_code', competition, 'USD');
 
   const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition);
@@ -265,8 +267,12 @@ export default function CompetitionForm({
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
+  const formContext = useMemo(() => ({
+    disabled: isActuallyConfirmed && !adminView,
+  }), [adminView, isActuallyConfirmed]);
+
   return (
-    <>
+    <FormContext.Provider value={formContext}>
       <Form>
         {competition.persisted && adminView && <AdminView competition={competition} />}
         {competition.persisted && !adminView && (
@@ -277,9 +283,9 @@ export default function CompetitionForm({
           />
         )}
 
-        {/* <InputString inputState={idData} /> */}
+        {competition.persisted && <InputString inputState={idData} />}
         <InputString inputState={nameData} />
-        {/* <InputString inputState={cellNameData} /> */}
+        {competition.persisted && <InputString inputState={cellNameData} />}
         <InputString inputState={nameReasonData} hint={I18n.t('competitions.competition_form.name_reason_html')} />
         <InputSelect inputState={countryData} options={countriesOptions} />
         <InputString inputState={cityNameData} />
@@ -298,6 +304,7 @@ export default function CompetitionForm({
         <CoordinatesInput latData={latData} longData={longData} />
         <DatesRange startDateData={startDateData} endDateData={endDateData} />
         <NearbyComps
+          idData={idData}
           latData={latData}
           longData={longData}
           startDateData={startDateData}
@@ -305,6 +312,7 @@ export default function CompetitionForm({
           setCompMarkers={setCompMarkers}
         />
         <SeriesComps
+          idData={idData}
           latData={latData}
           longData={longData}
           startDateData={startDateData}
@@ -314,7 +322,7 @@ export default function CompetitionForm({
         <hr />
 
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
-        <RegistrationTable regStartData={regStartData} />
+        <RegistrationTable idData={idData} regStartData={regStartData} />
         <InputMarkdown inputState={informationData} />
         <CompetitorLimitInput
           competitorLimitEnabledData={competitorLimitEnabledData}
@@ -345,6 +353,8 @@ export default function CompetitionForm({
         <InputBoolean inputState={useWCARegData} />
         <InputBoolean inputState={useWCALiveForScoretakingData} />
         {!useWCARegData.value && <InputString inputState={regPageData} />}
+
+        <InputBoolean inputState={receiveRegEmailsData} ignoreDisabled />
 
         <InputSelect inputState={currencyCodeData} options={currenciesOptions} />
         <InputCurrency inputState={baseEntryFeeData} currency={currencyCodeData.value} />
@@ -414,6 +424,6 @@ export default function CompetitionForm({
           {I18n.t('competitions.competition_form.submit_create_value')}
         </Button>
       </Form>
-    </>
+    </FormContext.Provider>
   );
 }

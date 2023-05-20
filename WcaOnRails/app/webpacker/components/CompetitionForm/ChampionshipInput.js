@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import {
   Button,
   Form,
@@ -8,8 +8,11 @@ import {
 import I18n from '../../lib/i18n';
 import { championshipRegionsUrl } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
+import FormContext from './FormContext';
 
-function ChampionshipSelect({ inputState, index, regions }) {
+function ChampionshipSelect({
+  inputState, index, regions, disabled,
+}) {
   const localState = {
     value: inputState.value[index].region,
     onChange: (e, { value }) => {
@@ -35,8 +38,9 @@ function ChampionshipSelect({ inputState, index, regions }) {
           value={localState.value}
           onChange={localState.onChange}
           basic
+          disabled={disabled}
         />
-        <Form.Button icon color="red" onClick={remove}>
+        <Form.Button icon color="red" onClick={remove} disabled={disabled}>
           <Icon inverted name="close" />
         </Form.Button>
       </Form.Group>
@@ -54,6 +58,8 @@ function getAvailibleId(data) {
 export default function ChampionshipInput({ inputState }) {
   const [regions, setRegions] = useState();
   const [loading, setLoading] = useState(true);
+
+  const { disabled } = useContext(FormContext);
 
   useEffect(() => {
     fetch(championshipRegionsUrl)
@@ -98,9 +104,10 @@ export default function ChampionshipInput({ inputState }) {
           inputState={inputState}
           index={index}
           regions={regions}
+          disabled={disabled}
         />
       ))}
-      <Button basic onClick={onClick} onKeyPress={null} type="button">
+      <Button basic onClick={onClick} onKeyPress={null} type="button" disabled={disabled}>
         <Icon name="plus" />
         {I18n.t('competitions.competition_form.add_championship')}
       </Button>
