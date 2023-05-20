@@ -220,13 +220,6 @@ template "/etc/nginx/fcgi.conf" do
   source "fcgi.conf.erb"
   notifies :run, 'execute[reload-nginx]', :delayed
 end
-template "/etc/init.d/nginx" do
-  source "nginx.erb"
-  mode 0755
-  owner 'root'
-  group 'root'
-  notifies :run, 'execute[update-rc]', :delayed
-end
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
   mode 0644
