@@ -639,7 +639,7 @@ en:
         comments: ""
         guests: ""
         status: ""
-        administrative_notes: ""
+        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:
