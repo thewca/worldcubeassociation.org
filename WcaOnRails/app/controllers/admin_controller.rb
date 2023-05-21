@@ -481,7 +481,7 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       params[:person_completions].each do |person_key, procedure|
-        next if [:competition_ids, :continue_batch].include? person_key.to_sym
+        next if [:competition_ids, :continue_batch, :clear_inbox_persons_after_finish].include? person_key.to_sym
 
         old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
 
@@ -522,6 +522,9 @@ class AdminController < ApplicationController
     continue_batch = params.dig(:person_completions, :continue_batch)
     continue_batch = ActiveRecord::Type::Boolean.new.cast(continue_batch)
 
+    clear_inbox_persons_after_finish = params.dig(:person_completions, :clear_inbox_persons_after_finish)
+    clear_inbox_persons_after_finish = ActiveRecord::Type::Boolean.new.cast(clear_inbox_persons_after_finish)
+
     competition_ids = params.dig(:person_completions, :competition_ids)
 
     if continue_batch
@@ -530,6 +533,14 @@ class AdminController < ApplicationController
 
       if can_continue
         return redirect_to action: :complete_persons, finish_persons_form: { competition_ids: competition_ids }
+      end
+    end
+
+    if clear_inbox_persons_after_finish
+      competition_ids.split(",").each do |competition_id|
+        @competition = Competition.find(competition_id)
+        # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
+        @competition.inbox_persons.each(&:delete)
       end
     end
 

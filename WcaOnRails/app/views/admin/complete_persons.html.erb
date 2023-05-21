@@ -114,7 +114,8 @@
       <% end %>
       </tbody>
     <% end %>
-    <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: competition_ids.present? } %>
+    <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", input_html: { checked: competition_ids.present? } %>
+    <%= f.input :clear_inbox_persons_after_finish, as: :boolean, label: "Clear InboxPersons if there are no more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: competition_ids.present? } %>
     <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
     <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_ids: competition_ids), class: "btn btn-default" %>
   <% end %>

@@ -45,13 +45,8 @@
     </ul>
 
     <p>
-      <% if @existing_data[:newcomer_result] == 0 %>
-        All newcomers seem to have been assigned WCA IDs.
-        Please <%= link_to "delete the inbox rows", competition_admin_delete_inbox_data_path(@competition, model: :inbox_person), class: 'inbox-trigger btn btn-primary', data: { jquery_method: :delete } %>.
-      <% else %>
-        Please <%= link_to "assign WCA IDs to newcomers", admin_complete_persons_path(finish_persons_form: { competition_ids: @competition.id }), target: '_blank', class: 'btn btn-primary' %>
-        to proceed to the next step.
-      <% end %>
+      Please <%= link_to "assign WCA IDs to newcomers", admin_complete_persons_path(finish_persons_form: { competition_ids: @competition.id }), target: '_blank', class: 'btn btn-primary' %>
+      and then <%= link_to "refresh", competition_admin_result_inbox_steps_path(@competition), class: 'inbox-trigger' %>.
     </p>
   <% end %>
 <% else %>
