@@ -74,16 +74,15 @@ module CheckRegionalRecords
     results_scope = results_scope.where(event_id: event_id) if event_id.present?
 
     marked_records = results_scope.includes(:competition)
-                                  .where.not({ regional_record_marker => '' })
+                                  .where.not(regional_record_marker => '')
 
     minimum_result_candidates = results_scope.select("eventId, competitionId, roundTypeId, countryId, MIN(#{value_column}) AS `value`")
-                                             .where("#{value_column} > 0")
+                                             .where.not(value_column => ..0)
                                              .group("eventId, competitionId, roundTypeId, countryId")
 
     # Deliberately NOT using `results_scope` here, because the necessary event/competition filtering is
     # implicitly included via the `minimum_result_candidate` view (and doubling up would make the query much slower!)
     minimum_results = Result.includes(:competition)
-                            .select("Results.*")
                             .from("Results, (#{minimum_result_candidates.to_sql}) AS `helper`")
                             .where("Results.eventId = helper.eventId")
                             .where("Results.competitionId = helper.competitionId")
@@ -122,11 +121,27 @@ module CheckRegionalRecords
       if competition_id.present?
         model_comp = Competition.find(competition_id)
 
-        previous_min_results = Result.joins(:competition)
-                                     .select("eventId, Results.countryId, MIN(#{value_column}) AS `value`")
-                                     .where("#{value_column} > 0")
-                                     .where("Competitions.end_date < ?", model_comp.start_date)
-                                     .group("eventId, Results.countryId")
+        non_zero_results = Result.select(:eventId, :competitionId, :countryId, value_column.to_sym)
+                                 .where.not(value_column => ..0)
+
+        if event_id.present?
+          non_zero_results = non_zero_results.where(eventId: event_id)
+        end
+
+        earlier_competitions = Competition.select(:id)
+                                          .where(end_date: ...model_comp.start_date)
+
+        previous_min_results = Result.select("r.eventId, r.countryId, MIN(r.#{value_column}) AS `value`")
+                                     .from("(#{non_zero_results.to_sql}) AS r")
+                                     .joins("INNER JOIN (#{earlier_competitions.to_sql}) c ON c.id = r.competitionId")
+                                     .group("r.eventId, r.countryId")
+
+        unless event_id.present?
+          competition_events = CompetitionEvent.select(:event_id)
+                                               .where(competition_id: model_comp.id)
+
+          previous_min_results = previous_min_results.joins("INNER JOIN (#{competition_events.to_sql}) ce ON ce.event_id = r.eventId")
+        end
 
         previous_min_results.each do |r|
           event_records = base_records[r.event_id] || {}
