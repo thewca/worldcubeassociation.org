@@ -44,7 +44,7 @@ module ResultsValidators
     def competition_associations
       @validators.map { |v| self.load_validator v }
                  .map(&:competition_associations)
-                 .inject(:deep_merge)
+                 .inject({}, :deep_merge) # default {} value for the rare case that @validators is empty.
     end
 
     def include_persons?
