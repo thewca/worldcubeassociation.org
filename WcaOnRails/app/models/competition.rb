@@ -1448,6 +1448,7 @@ class Competition < ApplicationRecord
   SortedRegistration = Struct.new(:registration, :tied_previous, :pos, keyword_init: true)
   PsychSheet = Struct.new(:sorted_registrations, :sort_by, :sort_by_second, keyword_init: true)
   def psych_sheet_event(event, sort_by)
+    ActiveRecord::Base.connected_to(role: :read_replica) do
     competition_event = competition_events.find_by!(event_id: event.id)
     joinsql = <<-SQL
       JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
@@ -1479,13 +1480,15 @@ class Competition < ApplicationRecord
     end
     sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
 
-    registrations = self.registrations
-                        .accepted
-                        .joins(joinsql)
-                        .where("registration_competition_events.competition_event_id=?", competition_event.id)
-                        .order(sort_clause)
-                        .select(selectsql)
-                        .to_a
+
+      registrations = self.registrations
+                          .accepted
+                          .joins(joinsql)
+                          .where("registration_competition_events.competition_event_id=?", competition_event.id)
+                          .order(sort_clause)
+                          .select(selectsql)
+                          .to_a
+
 
     prev_sorted_registration = nil
     sorted_registrations = []
@@ -1518,6 +1521,7 @@ class Competition < ApplicationRecord
       sort_by: sort_by,
       sort_by_second: sort_by_second,
     )
+    end
   end
 
   # For associated_events_picker
