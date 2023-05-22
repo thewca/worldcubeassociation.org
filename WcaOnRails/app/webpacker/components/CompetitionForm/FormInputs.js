@@ -30,14 +30,14 @@ export function useFormInputState(attribute, currentData, defaultVal = '') {
   };
 }
 
-export function getInputStateLabel(inputState) {
+function getInputStateLabel(inputState) {
   if (!inputState) return null;
   const translation = I18n.t(`activerecord.attributes.competition.${inputState.attribute}`);
   if (translation) return translation;
   return inputState.attribute;
 }
 
-export function getInputStateHint(inputState) {
+function getInputStateHint(inputState) {
   if (!inputState) return null;
   return I18n.t(`simple_form.hints.competition.${inputState.attribute}`);
 }
@@ -82,7 +82,7 @@ export function InputString({
   );
 }
 
-export function InputTextArea({ inputState }) {
+export function InputTextArea({ inputState, forceDisable = false }) {
   const { disabled } = useContext(FormContext);
 
   return (
@@ -94,8 +94,18 @@ export function InputTextArea({ inputState }) {
         }}
         className="no-autosize"
         rows={2}
-        disabled={disabled}
+        disabled={disabled || forceDisable}
       />
+    </FieldWrapper>
+  );
+}
+
+export function InputMarkdown({ inputState }) {
+  const { disabled } = useContext(FormContext);
+
+  return (
+    <FieldWrapper inputState={inputState}>
+      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
     </FieldWrapper>
   );
 }
@@ -117,7 +127,7 @@ export function InputNumber({ inputState, min, max }) {
   );
 }
 
-export function InputCurrency({ inputState, currency }) {
+export function InputCurrency({ inputState, currency, forceDisable = false }) {
   const [autoNumeric, setAutoNumeric] = useState();
   const { disabled } = useContext(FormContext);
 
@@ -151,12 +161,12 @@ export function InputCurrency({ inputState, currency }) {
 
   return (
     <FieldWrapper inputState={inputState}>
-      <Input ref={inputComponentRef} type="text" onChange={onChange} disabled={disabled} />
+      <Input ref={inputComponentRef} type="text" onChange={onChange} disabled={disabled || forceDisable} />
     </FieldWrapper>
   );
 }
 
-export function InputSelect({ inputState, options }) {
+export function InputSelect({ inputState, options, forceDisable = false }) {
   const { disabled } = useContext(FormContext);
 
   return (
@@ -166,7 +176,7 @@ export function InputSelect({ inputState, options }) {
         value={inputState.value}
         onChange={inputState.onChange}
         basic
-        disabled={disabled}
+        disabled={disabled || forceDisable}
       />
     </FieldWrapper>
   );
@@ -241,6 +251,31 @@ export function InputDate({ inputState, onChange }) {
   );
 }
 
+export function InputDateRange({ startDateData, endDateData }) {
+  const onChangeStart = (_, v) => {
+    const val = v.value;
+    if (endDateData.value < val) {
+      endDateData.onChange(val);
+    }
+    startDateData.onChange(val);
+  };
+
+  const onChangeEnd = (_, v) => {
+    const val = v.value;
+    if (startDateData.value > val) {
+      startDateData.onChange(val);
+    }
+    endDateData.onChange(val);
+  };
+
+  return (
+    <Form.Group widths="equal">
+      <InputDate inputState={startDateData} onChange={onChangeStart} />
+      <InputDate inputState={endDateData} onChange={onChangeEnd} />
+    </Form.Group>
+  );
+}
+
 export function InputDateTime({ inputState }) {
   const { disabled } = useContext(FormContext);
 
@@ -260,13 +295,12 @@ export function InputDateTime({ inputState }) {
   );
 }
 
-export function InputMarkdown({ inputState }) {
-  const { disabled } = useContext(FormContext);
-
+export function InputDateTimeRange({ startTimeData, endTimeData }) {
   return (
-    <FieldWrapper inputState={inputState}>
-      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
-    </FieldWrapper>
+    <Form.Group widths="equal">
+      <InputDateTime inputState={startTimeData} />
+      <InputDateTime inputState={endTimeData} />
+    </Form.Group>
   );
 }
 

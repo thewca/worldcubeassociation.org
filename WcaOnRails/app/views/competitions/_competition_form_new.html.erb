@@ -1,5 +1,7 @@
 <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
 <% series = @competition.competition_series %>
+<% can_receive_registration_emails = @competition.can_receive_registration_emails?(current_user.id) %>
+<% receive_registration_emails = @competition.receiving_registration_emails?(current_user.id) %>
 <% mail_to_wcat = mail_to Team.wcat.email, t("competitions.competition_form.wcat"), target: "_blank" %>
 <%= react_component("CompetitionForm/CompetitionForm", {
     competition: {
@@ -42,6 +44,9 @@
       use_wca_registration: @competition.use_wca_registration,
       use_wca_live_for_scoretaking: @competition.use_wca_live_for_scoretaking,
       external_registration_page: @competition.external_registration_page,
+      can_recieve_registration_emails: can_receive_registration_emails,
+      receive_registration_emails: receive_registration_emails,
+      can_edit_registration_fees: @competition.can_edit_registration_fees?,
       currency_code: @competition.currency_code,
       base_entry_fee_lowest_denomination: @competition.base_entry_fee_lowest_denomination,
       enable_donations: @competition.enable_donations,
@@ -70,6 +75,7 @@
       main_event_id: @competition.main_event_id,
       main_event_options: @competition.events.map { |event| [event.name, event.id] },
       remarks: @competition.remarks,
+      can_clone_tabs: @competition.being_cloned_from&.tabs&.present?
     },
     adminView: @competition_admin_view,
     isActuallyConfirmed: is_actually_confirmed,
