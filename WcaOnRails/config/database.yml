@@ -7,17 +7,16 @@ default: &default
   host: <%= ENV['DATABASE_HOST'] || "127.0.0.1" %>
   port: 3306
   username: root
+  password: <%= ENV['DATABASE_PASSWORD'] || "" %>
 
 production:
   primary:
     <<: *default
     database: cubing
-    password: <%= ENV['DATABASE_PASSWORD'] || "" %>
   primary_replica:
     <<: *default
     database: cubing
     host: <%= ENV['READ_REPLICA_HOST'] || "127.0.0.1" %>
-    password: <%= ENV['DATABASE_PASSWORD'] || "" %>
     replica: true
 
 development:
