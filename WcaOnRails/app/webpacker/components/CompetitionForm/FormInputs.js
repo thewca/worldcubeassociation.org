@@ -188,19 +188,7 @@ export function InputBooleanSelect({ inputState }) {
       text: I18n.t(`simple_form.options.competition.${inputState.attribute}.false`),
     }];
 
-  const { disabled } = useContext(FormContext);
-
-  return (
-    <FieldWrapper inputState={inputState}>
-      <Select
-        options={options}
-        value={inputState.value}
-        onChange={inputState.onChange}
-        basic
-        disabled={disabled}
-      />
-    </FieldWrapper>
-  );
+  return <InputSelect inputState={inputState} options={options} />;
 }
 
 export function InputBoolean({ inputState, ignoreDisabled }) {
