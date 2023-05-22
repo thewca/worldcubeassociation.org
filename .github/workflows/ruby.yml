@@ -10,7 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     env:
-      DATABASE_URL: mysql2://root:root@127.0.0.1:3306/wca_test
       RACK_ENV: test
     defaults:
       run:

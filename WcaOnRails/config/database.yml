@@ -1,6 +1,3 @@
-# Currently (2.2023) we are setting the DB using db_url in the chef recipe
-# To make sure this also works when migrating into docker we additionally
-# define the host and password here via environment variables
 default: &default
   adapter: mysql2
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
