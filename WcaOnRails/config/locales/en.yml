@@ -550,7 +550,7 @@ en:
         competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
         competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
         competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
-        guests_per_registration_limit: "The number guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
+        guests_per_registration_limit: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
         events_per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
         venueAddress: ""
         extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
@@ -809,6 +809,12 @@ en:
         form_error:
           one: "The form contains one error:"
           other: "The form contains %{count} errors:"
+      error_pages:
+        #context: The error pages in the case of 500s or 400s
+        500_error: "We're sorry, but something went wrong."
+        500_contact: "If you report this error to the Software Team please mention the Request ID"
+        400_error: "The page you were looking for doesn't exist."
+        400_contact: "If you think this is a mistake please contact the Software Team and include the Request ID"
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -857,7 +863,8 @@ en:
       my_results: "My Results"
       statistics: "Statistics"
       multimedia: "Multimedia"
-      db_export: "Database Export"
+      db_results_export: "Results Export"
+      db_dev_export: "Developer Export"
       regulations: "Regulations"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
@@ -1054,6 +1061,8 @@ en:
       sign_out_of_devices: "Sign out of other devices"
       remove_avatar: "Remove avatar"
       remove_avatar_confirm: "Are you sure you want to delete your avatar?"
+      remove_avatar_confirm_button: "Confirm avatar removal"
+      remove_avatar_reason: "Please provide the reason for removal"
       guidelines: "Guidelines"
       avatar_guidelines:
         '1': "All avatars should be pictures of real persons."
@@ -1124,7 +1133,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
-      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simutaneous competition, which location you will compete at)."
+      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1226,6 +1235,7 @@ en:
       waiting_list: "Waiting List"
       approved_registrations: "Approved registrations"
       deleted_registrations: "Deleted registrations"
+      non_competing: "Non-competing registrations"
       not_paid: "Not paid"
       registered:
         without_stripe: "Registered on"
@@ -1260,6 +1270,7 @@ en:
     greeting: "Hi, %{name}!"
     please_fix_profile_html: "In order to register for %{comp}, you must fix the following problems with your %{profile}:"
     registration_full: "The competitor limit for this competition is %{competitor_limit} and it has already been reached. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
+    registration_full_include_waiting_list: "The competitor limit for this competition is %{competitor_limit} and it may be filled. If you register, your registration will be placed on a waiting list. It may not be approved unless a spot frees up."
     can_register: "You can register for %{comp} below."
     check_registration_information: "Please check the information about registration to find out if you need to do something else, like paying a registration fee."
     have_registered: "You have submitted your registration for %{comp}. You can see your registration details below."
@@ -1287,6 +1298,7 @@ en:
         donation: "Donation"
         card_information: "Card information"
         cardholder_name: "Cardholder name"
+        show_donation: "I would like to make an additional optional donation that will go only to the organization team"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
@@ -1340,7 +1352,7 @@ en:
       registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
-      cancelled: "This competition has been cancelled. Please checkout the information section for more details."
+      cancelled: "This competition has been cancelled. Please check the information section for more details."
       cancel_success: "Successfully cancelled competition!"
       cancel_failure: "Cannot cancel the competition."
       uncancel_success: "Successfully uncancelled competition!"
@@ -1358,13 +1370,16 @@ en:
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
-      confirmed_visible: "This competition is confirmed and visible"
-      confirmed_not_visible: "This competition is confirmed but not visible"
-      not_confirmed_visible: "This competition is not confirmed but visible"
-      not_confirmed_not_visible: "This competition is not confirmed and not visible"
+      tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
+      confirmed_visible: "This competition is confirmed and visible."
+      confirmed_not_visible: "This competition is confirmed but not visible."
+      not_confirmed_visible: "This competition is not confirmed but visible."
+      not_confirmed_not_visible: "This competition is not confirmed and not visible."
       stripe_connected: "You have now successfully connected your Stripe account and can now receive registration payments for this competition."
+      stripe_disconnected_success: "Sucessfully disconnected the Stripe account."
+      stripe_disconnected_failure: "There was an error with disconnecting the Stripe account."
       stripe_not_connected: "There was a problem and we could not connect your Stripe account."
-      championship_exists: "There is already a %{championship_type} in %{year}"
+      championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
     #context: on the "My competitions" page
@@ -1659,14 +1674,15 @@ en:
     uncancel: "Uncancel the competition"
     cancelled_by_html: "Cancelled by %{name} on %{date_time}"
     cancel_confirm: "Are you sure you want to cancel that competition?"
-    upload_results: "Upload the results"
     post_results: "Post the results"
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
     cancel_mistake: "Made a mistake?"
     note_before_cancel: "Note: only confirmed competitions can be cancelled."
-    orga_close_reg: "Close registration."
+    orga_close_reg: "Close registration"
     orga_close_reg_confirm: "Are you sure you want to close registration? You cannot undo this."
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
+    stripe_disconnect: "Disconnect Stripe account"
+    stripe_disconnect_confirm: "Are you sure you want to disconnect the Stripe account? This action cannot be undone."
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
       general_info: "General info"
@@ -1790,7 +1806,7 @@ en:
     records:
       title: "Records"
     last_updated_html: "Last updated: %{timestamp}"
-    heading_disabled_functions: "Please note that some filters (such as past years) are temporarily disabled. If you have experience in SQL optimisations, please contact the WST!"
+    filters_fixes_underway: "Please note that some filters (such as past years) are temporarily disabled. The Software Team is working to restore these filters - we are sorry for the inconvenience."
     tooltip_no_years: "Our database is too large to compute historical data"
     tooltip_no_quantities: "Our database is too large to compute long rankings"
     selector_elements:
@@ -2551,4 +2567,17 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
-
+  database:
+    results_export:
+      heading: "WCA Results Export"
+      description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
+      permalink: "permalink"
+      file_formats:
+        sql: "SQL statements, for import into SQL databases."
+        tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."
+      hint_readme_html: "The included %{readme_filename} file contains the terms of use and a general description (in English, not translated):"
+    developer_export:
+      heading: "WST Developer Export"
+      description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
+      #context: The button that is clicked to download the file
+      download: "Download"

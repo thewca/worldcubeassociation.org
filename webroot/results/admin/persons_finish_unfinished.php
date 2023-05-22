@@ -63,12 +63,12 @@ function getPersons () {
   // when we are spliting wca profile, the person has an empty personId
   // when we are uploading results, the person has an digit only personId
   $persons = dbQueryHandle("
-    SELECT personName, Results.countryId, year, Results.personId, Results.competitionId, InboxPersons.dob
+    SELECT Results.personId, Results.personName, Results.competitionId, Results.countryId, Competitions.year, InboxPersons.dob
     FROM Results
     LEFT JOIN Competitions ON Competitions.id=Results.competitionId
     LEFT JOIN InboxPersons ON InboxPersons.id=Results.personId and InboxPersons.competitionId=Results.competitionId
     WHERE personId='' OR personId REGEXP '^[0-9]+$'
-    GROUP BY Results.personId, Results.personName, Results.competitionId
+    GROUP BY Results.personId, Results.personName, Results.competitionId, Results.countryId
     ORDER BY personName
   ");
   while( $row = mysql_fetch_array( $persons ))
@@ -136,6 +136,7 @@ function showUnfinishedPersons () {
   foreach( $personsFromResultsWithoutId as $person ){
     $name = $person['personName'];
     $countryId = $person['countryId'];
+    $personId = $person['personId'];
     $firstYear = $person['year'];
 
     #--- Try to compute the semi-id.
@@ -157,7 +158,7 @@ function showUnfinishedPersons () {
             if (!count($lastIdTaken)) {
                 $counter = 0;
             } else {
-                $counter = intval(substr($lastIdTaken[0]['id'],8,2),10);
+                $counter = intval(substr($lastIdTaken[0]['id'],8,2));
             }
             $availableSpots[$semiId] = 99-$counter;
         }
@@ -184,13 +185,13 @@ function showUnfinishedPersons () {
     #--- Html-ify name and country.
     $nameHtml = htmlEscape( $name );
     $countryIdHtml = htmlEscape( $countryId );
-    $personId = htmlEscape( $person['personId'] );
+    $personIdHtml = htmlEscape( $personId );
     $competitionId = htmlEscape( $person['competitionId'] );
     $dob = empty($person['dob']) ? 'yyyy-mm-dd' : $person['dob'];
 
     #--- Hidden field describing the case.
     $caseNr++;
-    tableRowFull( "&nbsp;<input type='hidden' name='oldNameAndCountryAndPersonIdAndCompId$caseNr' value='$nameHtml|$countryIdHtml|$personId|$competitionId' />" );
+    tableRowFull( "&nbsp;<input type='hidden' name='oldNameAndCountryAndPersonIdAndCompId$caseNr' value='$nameHtml|$countryIdHtml|$personIdHtml|$competitionId' />" );
 
     #--- Show the person.
     # Note that we set this input to checked, but if there's a better match
@@ -199,7 +200,7 @@ function showUnfinishedPersons () {
       "<input type='radio' name='action$caseNr' value='new' checked='checked' />",
       visualize( $name ),
       visualize( $countryId ),
-      peekLink( $name, $countryId ),
+      peekLink( $name, $countryId, $personId ),
       $dob,
       "<input type='text' name='name$caseNr' value='$nameHtml' size='20' />",
       "<input type='text' name='country$caseNr' value='$countryIdHtml' size='20' />",
@@ -234,7 +235,7 @@ function showUnfinishedPersons () {
 #        ($other_id ? personLink( $other_id, $other_name ) : $other_name),
         visualize( $other_name ),
         visualize( $other_countryId ),
-        ($other_id ? "<a class='p' href='../p.php?i=$other_id' target='_blank'>$other_id</a>" : peekLink( $other_name, $other_countryId )),
+        ($other_id ? "<a class='p' href='../p.php?i=$other_id' target='_blank'>$other_id</a>" : peekLink( $other_name, $other_countryId, $other_id )),
         $birthdates[ $other_id ],
         '', #sprintf( "%.2f", $similarity ),
         '',
@@ -323,9 +324,10 @@ function compareCandidates ( $a, $b ) {
 }
 
 #----------------------------------------------------------------------
-function peekLink ( $name, $countryId ) {
+function peekLink ( $name, $countryId, $personId ) {
 #----------------------------------------------------------------------
   $N = urlencode( $name );
   $C = urlencode( $countryId );
-  return "<a href='persons_finish_unfinished_peek_at_results.php?name=$N&countryId=$C' target='_blank'>(results)</a>";
+  $I = urlencode( $personId );
+  return "<a href='persons_finish_unfinished_peek_at_results.php?name=$N&countryId=$C&personId=$I' target='_blank'>(results)</a>";
 }

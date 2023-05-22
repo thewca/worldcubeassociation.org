@@ -969,11 +969,11 @@ de:
         competitor_limit_reason: >-
           Was ist der Grund für das Teilnehmerlimit? Bitte fülle dieses Feld in
           Englisch aus.
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
-          Die maximal erlaubte Anzahl von Gästen pro Anmeldung bei diesem
-          Wettbewerb. Anmeldungen mit zu vielen Gästen werden blockiert. Lasse
-          dies frei, wenn es keine Begrenzung gibt.
+          Die Anzahl erlaubter Gäste pro Anmeldung bei dieser Competition. Eine
+          Anmeldung mit zu vielen Gästen wird blockiert. Lasse dies frei, wenn
+          es keine Begrenzung gibt.
         #original_hash: d09af8f
         events_per_registration_limit: >-
           Lege wahlweise fest, für wie viele Events sich ein Teilnehmer
@@ -1561,6 +1561,19 @@ de:
           zero: 'Das Formular enthält %{count} Fehler:'
           one: 'Das Formular enthält einen Fehler:'
           other: 'Das Formular enthält %{count} Fehler:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Entschuldige, etwas ist schiefgelaufen.'
+        #original_hash: d815249
+        500_contact: >-
+          Wenn du diesen Fehler ans Software Team meldest, erwähne bitte die
+          Request ID
+        #original_hash: b61e305
+        400_error: Die angeforderte Seite existiert nicht.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Wenn du glaubst, dass dies ein Fehler ist, kontaktiere bitte das
+          Software Team und erwähne die Request ID
     doorkeeper:
       applications:
         help:
@@ -1598,14 +1611,14 @@ de:
       welcome_back: >-
         Willkommen zurück! Um Dein WCA-Benutzerkonto zu erstellen, müssen wir
         die WCA-ID kennen, mit der Du teilgenommen hast.
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         Willkommen! Bevor Du an deinem ersten WCA-Wettbewerb teilnehmen kannst,
         brauchen wir ein paar zusätzliche Informationen zur Verwaltung der
         Ergebnisse. Bitte beachte, dass Dein Geburtsdatum nie ohne Dein
-        Einverständnis weitergereicht wird.<br/><br/>Wenn Du die Anmeldung im Namen
-        einer anderen Person durchführst, gib bitte die Details <strong>des
-        Teilnehmers / der Teilnehmerin</strong> an.
+        Einverständnis weitergereicht wird.<br/><br/>Wenn Du die Anmeldung im
+        Namen einer anderen Person durchführst, gib bitte die Details
+        <strong>des Teilnehmers / der Teilnehmerin</strong> an.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -2066,7 +2079,11 @@ de:
       #original_hash: 58e0c56
       remove_avatar: Avatar entfernen
       #original_hash: 4bd25cf
-      remove_avatar_confirm: 'Bist du sicher, dass du deinen Avatar löschen willst?'
+      remove_avatar_confirm: 'Bist du sicher, dass du dein Profilbild löschen willst?'
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Bestätige das Entfernen des Profilbildes
+      #original_hash: 010b0e5
+      remove_avatar_reason: Bitte gib einen Grund für das Entfernen an
       #original_hash: 141d1d7
       guidelines: Richtlinien
       avatar_guidelines:
@@ -2244,6 +2261,7 @@ de:
       must_register: muss sich für mindestens eine Disziplin anmelden
       #original_hash: abdc718
       exceeds_event_limit:
+        zero: Du darfst dich in keinem Event anmelden
         one: Du darfst dich in genau einem Event anmelden
         other: 'Du darfst dich maximal %{count} Events anmelden'
       #original_hash: e78eec3
@@ -2259,12 +2277,12 @@ de:
       can_only_register_for_qualified_events: >-
         Du kannst dich nicht für Events anmelden, für die du nicht qualifiziert
         bist.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
-        Du musst einen Kommentar hinterlassen. Stelle sicher, dass du die
-        Anmeldevoraussetzungen gelesen hast und alle Details angegeben hast
-        (z.B. für einen Fewest Moves Multi-Location Wettbewerb angegeben hast,
-        an welchem Ort du teilnehmen wirst).
+        Du musst einen Kommentar hinzufügen. Stelle sicher, dass du die
+        Anmeldevoraussetzungen gelesen hast, um zu wissen, was in diesem Feld
+        eingetragen werden muss (z.B. für eine FM Multi-Location Competition, an
+        welchem Ort zu teilnehmen wirst).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2416,6 +2434,8 @@ de:
       approved_registrations: Bestätigte Anmeldungen
       #original_hash: bff04e8
       deleted_registrations: Gelöschte Anmeldungen
+      #original_hash: e86b1e1
+      non_competing: Nicht-teilnehmende Anmeldungen
       #original_hash: ac5d958
       not_paid: Nicht bezahlt
       registered:
@@ -2496,6 +2516,12 @@ de:
       wurde bereits erreicht. Wenn du dich anmeldest, wird deine Anmeldung auf
       eine Warteliste gesetzt. Sie wird nicht bestätigt werden, bevor ein Platz
       frei ist.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Das Teilnehmerlimit für diesen Wettbewerb ist %{competitor_limit} und kann
+      bereits erreicht sein. Wenn du dich anmeldest, wird deine Anmeldung auf
+      die Warteliste gesetzt. Diese wird erst dann akzeptiert, wenn ein Platz
+      frei wird.
     #original_hash: 855ca9c
     can_register: 'Du kannst dich weiter unten für %{comp} anmelden.'
     #original_hash: 4167ed7
@@ -2558,6 +2584,10 @@ de:
         card_information: Karteninformationen
         #original_hash: bc8091a
         cardholder_name: Name des Karteninhaber
+        #original_hash: 919710d
+        show_donation: >-
+          Ich würde dem Organisationsteam gerne eine zusätzliche, optionale
+          Spende zukommen lassen
       alerts:
         #original_hash: a34940e
         not_a_number: Bitte gebe einen gültigen Betrag ein
@@ -2708,10 +2738,10 @@ de:
       not_announced: 'Der Wettbewerb ist öffentlich sichtbar, wurde aber nicht angekündigt.'
       #original_hash: ab61991
       announced: Turnier wurde erfolgreich angekündigt!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
-        Der Wettbewerb wurde abgesagt. Unter den Informationen sind weitere
-        Details dazu zu finden.
+        Dieser Wettbewerb wurde abgesagt. Bitte beachte die Informationsseite
+        für weitere Details.
       #original_hash: b4aa5ee
       cancel_success: Der Wettbewerb wurde erfolgreich abgesagt!
       #original_hash: d0478cf
@@ -2756,24 +2786,32 @@ de:
       tooltip_registered: Du bist angemeldet.
       #original_hash: f2d092f
       tooltip_waiting_list: Du bist momentan auf der Warteliste.
-      #original_hash: 9ecd976
-      confirmed_visible: Dieser Wettbewerb ist bestätigt und sichtbar
-      #original_hash: fa186a9
-      confirmed_not_visible: Dieser Wettbewerb ist bestätigt aber nicht sichtbar
-      #original_hash: a66bbe3
-      not_confirmed_visible: Dieser Wettbewerb ist nicht bestätigt aber sichtbar
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: Dieser Wettbewerb ist nicht bestätigt und nicht sichtbar
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Leider wurde deine Anmeldung gelöscht. Bitte sieh in deinen E-Mails nach
+        Details nach, oder kontaktiere die Organisatoren.
+      #original_hash: 1b6dc61
+      confirmed_visible: Dieser Wettbewerb ist bestätigt und sichtbar.
+      #original_hash: abc2f96
+      confirmed_not_visible: Dieser Wettbewerb ist bestätigt aber nicht sichtbar.
+      #original_hash: 6d6290b
+      not_confirmed_visible: Dieser Wettbewerb ist nicht bestätigt aber sichtbar.
+      #original_hash: b299b27
+      not_confirmed_not_visible: Dieser Wettbewerb ist nicht bestätigt und nicht sichtbar.
       #original_hash: a821396
       stripe_connected: >-
         Du hast jetzt erfolgreich dein Stripe Konto verbunden und kannst
         Eintrittsgelder für diesen Wettbewerb empfangen.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Stripe-Account erfolgreich getrennt.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Es gab einen Fehler bei der Trennung des Stripe-Accounts.
       #original_hash: 0a4bb53
       stripe_not_connected: >-
         Es ist ein Problem aufgetreten und wir konnten dein Stripe Konto nicht
         verbinden.
-      #original_hash: 724cf0d
-      championship_exists: 'Es gibt bereits eine %{championship_type} in %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Es gibt bereits eine %{championship_type} in %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Anmeldung erfolgreich geschlossen.
       #original_hash: 7f197a0
@@ -2934,6 +2972,7 @@ de:
         other: 'Teilnehmer dürfen maximal %{count} Gäste mitbringen.'
       #original_hash: bad09c8
       event_limit:
+        zero: Teilnehmer dürfen sich bei keinem Event anmelden.
         one: Teilnehmer dürfen sich in genau einem Event anmelden.
         other: 'Teilnehmer dürfen sich bei maximal %{count} Events anmelden.'
       #original_hash: 64e0ddd
@@ -3407,8 +3446,8 @@ de:
     cancel_mistake: Fehler gemacht?
     #original_hash: 0fb43d5
     note_before_cancel: 'Achtung: nur bestätigte Wettbewerbe können abgesagt werden.'
-    #original_hash: 19a0ac2
-    orga_close_reg: Schließe die Anmeldung.
+    #original_hash: b38ee61
+    orga_close_reg: Schließe die Anmeldung
     #original_hash: b2bfea9
     orga_close_reg_confirm: >-
       Bist du sicher, dass du die Anmeldung schließen möchtest? Dies kann nicht
@@ -3417,6 +3456,12 @@ de:
     note_reg_not_full_orga_close_reg: >-
       Beachte: du kannst die Anmeldung nur schließen, nachdem das
       Teilnehmerlimit erreicht wurde.
+    #original_hash: 1ae594d
+    stripe_disconnect: Trenne den Stripe-Account
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Bist du sicher, dass du den Stripe-Account trennen möchtest? Diese Aktion
+      kann nicht rückgängig gemacht werden.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Beachte: die Anmeldung ist bereits geschlossen.'
     show:
@@ -3637,11 +3682,12 @@ de:
       title: Rekorde
     #original_hash: e02fccb
     last_updated_html: 'Zuletzt aktualisiert: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Bitte beachte, dass manche Filter (z.B. zurückliegende Jahre) momentan
-      nicht zur Verfügung stehen. Falls du Erfahrung mit SQL-Optimierung hast,
-      kontaktiere bitte das WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Bitte beachte, dass manche Filter (wie beispielsweise zurückliegende
+      Jahre) momentan nicht zur Verfügung stehen. Das Software-Team arbeitet
+      daran, diese Filter wiederherzustellen - wir bitten, dies zu
+      entschuldigen.
     #original_hash: e3710ed
     tooltip_no_years: 'Unsere Datenbank ist zu groß, um historische Daten anzuzeigen'
     #original_hash: 357094b
@@ -5161,12 +5207,12 @@ de:
     paragraph4:
       #original_hash: b6dca56
       title: Abstandsregel
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        WCA Wettbewerbe werden genehmigt wenn sie mindestens 100 km oder 19 Tage
-        von jedem anderen Wettbewerb entfernt sind. Das WCA Board sollte einen
-        Wettbewerb überprüfen, wenn die Distanz unter 200 km und die Zeitspanne
-        unter 26 Tagen liegt. Ein Delegierter, der eine Competition anfragt, der
+        WCA Wettbewerbe werden genehmigt wenn sie mindestens 10 km oder 5 Tage
+        von jedem anderen Wettbewerb entfernt sind. Das WCAT sollte einen
+        Wettbewerb überprüfen, wenn die Distanz unter 10 km und die Zeitspanne
+        unter 5 Tagen liegt. Ein Delegierter, der eine Competition anfragt, die
         diese Regeln nicht erfüllt, muss weitere Informationen angeben, warum
         diese Competition trotzdem akzeptiert werden soll. Mögliche Gründe, die
         eine solche Entscheidung beeinflussen, sind folgende:
@@ -5189,9 +5235,9 @@ de:
               Zeiträume, in denen beide stattfinden, dürfen sich nicht
               überlappen.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Wenn ein Standort eines solchen Wettbewerbes näher als 100 km zu
+            Wenn ein Standort eines solchen Wettbewerbes näher als 10 km zu
             einem anderen regulären Wettbewerb ist, dann
           alist1:
             #original_hash: 8f532bb

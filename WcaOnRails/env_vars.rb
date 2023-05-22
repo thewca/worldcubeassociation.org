@@ -9,7 +9,7 @@ EnvVars = SuperConfig.new do
   end
 
   unless Rails.env.production?
-    mandatory :DISABLE_BULLET, :bool
+    mandatory :ENABLE_BULLET, :bool
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''

@@ -22,12 +22,12 @@ RSpec.describe AnonymizePerson do
     expect(anonymize_person.generate_new_wca_id).to eq "2020ANON01"
   end
 
-  it "generates nil for a year with 99 ANON ids already" do
+  it "generates padded wca id for a year with 99 ANON ids already" do
     (1..99).each do |i|
       FactoryBot.create(:person_who_has_competed_once, wca_id: "2020ANON" + i.to_s.rjust(2, "0"))
     end
 
-    expect(anonymize_person.generate_new_wca_id).to eq nil
+    expect(anonymize_person.generate_new_wca_id).to eq "2020ANOU01" # ANON, take the last N, pad with U.
   end
 
   it "can anonymize person and results" do

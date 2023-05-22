@@ -10,6 +10,8 @@ class Continent < ReadonlyRecord
 
   has_many :countries, foreign_key: :continentId
 
+  alias_attribute :record_name, :recordName
+
   def self.country_ids(continent_id)
     c_all_by_id[continent_id]&.countries&.map(&:id)
   end

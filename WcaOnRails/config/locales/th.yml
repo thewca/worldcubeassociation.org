@@ -931,11 +931,11 @@ th:
           แต่จำเป็นต้องทำอย่างอื่นก่อน
         #original_hash: 4bd7102
         competitor_limit_reason: เหตุผลในการจำกัดจำนวนผู้เข้าแข่งขัน กรุณากรอกเป็นภาษาอังกฤษ
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           จำนวนผู้ติดตามที่ได้รับอนุญาติในการแข่งขันนี้
           หากคุณสมัครโดนมีผู้ติดตามมากเกินไปการสมัครจะถูกบล็อก,
-          เว้นว่างไว้ภ้าไม่ต้องการจำกัด
+          เว้นว่างไว้ถ้าไม่ต้องการจำกัด
         #original_hash: d09af8f
         events_per_registration_limit: >-
           เลือกบังคับจำนวนประเภทการแข่งขันทั้งหมดที่ผู้แข่งขันสามารถลงทะเบียนได้
@@ -1458,6 +1458,17 @@ th:
         form_error:
           zero: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
           other: 'แบบฟอร์มมีข้อผิดพลาด %{count} ข้อผิดพลาด'
+      error_pages:
+        #original_hash: 1042478
+        500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
+        #original_hash: d815249
+        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: b61e305
+        400_error: ไม่มีหน้าที่คุณกำลังมองหา
+        #original_hash: 8b309f5
+        400_contact: >-
+          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
+          ID
     doorkeeper:
       applications:
         help:
@@ -1490,10 +1501,10 @@ th:
       welcome_back: >-
         ยินดีต้อนรับกลับมา! ในการสร้าง account ของเว็บไซต์ WCA เราต้องการทราบ
         WCA ID ที่คุณใช้แข่งขัน
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         ยินดีต้อนรับ! ก่อนที่คุณจะสามารถแข่งขันในการแข่งขัน WCA ครั้งแรกของคุณ
-        เราต้องการข้อมูลเพิ่มเติมบางอย่าง
+        เราต้องการข้อมูลเพิ่มเติมบางอย่างสำหรับการเก็บบันทึกไว้
         โปรดทราบว่าวันเกิดของคุณจะไม่ถูกเปิดเผยโดยไม่ได้รับอนุญาตจากคุณ
         <br/><br/>ถ้าคุณเข้าสู่ระบบแทนผู้อื่น
         กรุณากรอกข้อมูลของ<strong>ผู้เข้าแข่งขัน</strong>
@@ -1547,8 +1558,10 @@ th:
       statistics: สถิติ
       #original_hash: 82dabd0
       multimedia: มัลติมีเดีย
-      #original_hash: 4fd2a7f
-      db_export: Database Export
+      #original_hash: cfde9db
+      db_results_export: Results Export
+      #original_hash: 7533c29
+      db_dev_export: Developer Export
       #original_hash: 1fa73f3
       regulations: กติกา
       #original_hash: 6bce1b5
@@ -1917,6 +1930,10 @@ th:
       remove_avatar: ลบรูปแทนตัว
       #original_hash: 4bd25cf
       remove_avatar_confirm: คุณแน่ใจที่จะลบรูปแทนตัวของคุณหรือไม่
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: ยืนยันการลบรูปประจำตัว
+      #original_hash: 010b0e5
+      remove_avatar_reason: โปรดระบุเหตุผลในการลบ
       #original_hash: 141d1d7
       guidelines: แนวทาง
       avatar_guidelines:
@@ -2084,7 +2101,7 @@ th:
       series_more_than_one_accepted: คุณสามารถเข้าร่วมการแข่งขันซีรีส์ได้ครั้งละหนึ่งรายการเท่านั้น
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: คุณไม่สามารถลงทะเบียนประเภทการแข่งขันที่คุณไม่ผ่านการคัดเลือกได้
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         คุณจำเป็นต้องใส่ข้อความในช่องอธิบายเพิ่มเติม
         กรุณาอ่านข้อกำหนดการสมัครการแข่งขันว่าต้องใส่ข้อความอะไร (เช่น
@@ -2223,6 +2240,8 @@ th:
       approved_registrations: การสมัครที่ได้รับการยืนยันแล้ว
       #original_hash: bff04e8
       deleted_registrations: การสมัครที่ถูกลบ
+      #original_hash: e86b1e1
+      non_competing: การสมัครที่ไม่ได้เข้าแข่งขัน
       #original_hash: ac5d958
       not_paid: ยังไม่ชำระค่าสมัคร
       registered:
@@ -2294,6 +2313,12 @@ th:
       จำกัดจำนวนผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
       และมันได้ถึงจำนวนแล้ว ถ้าคุณสมัครการแข่งขัน
       การสมัครของคุณจะอยู่ในรายชื่อรอ ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      จำกัดผู้เข้าแข่งขันของการแข่งขันครั้งนี้คือ %{competitor_limit} คน
+      และมันอาจจะเต็มแล้ว หากคุณสมัครการแข่งขัน
+      การสมัครของคุณจะไปอยู่ในรายชื่อรอ
+      ซึ่งจะไม่ได้รับการยืนยันจนกว่าจะมีที่ว่าง
     #original_hash: 855ca9c
     can_register: 'คุณสามารถสมัครการแข่งขัน %{comp} ได้ที่ด้านล่าง'
     #original_hash: 4167ed7
@@ -2350,6 +2375,8 @@ th:
         card_information: ข้อมูลบัตร
         #original_hash: bc8091a
         cardholder_name: ผู้ถือบัตร
+        #original_hash: 919710d
+        show_donation: ฉันต้องการบริจาคเพิ่มเติม ซึ่งจะไปที่ทีมผู้จัดการแข่งขันเท่านั้น
       alerts:
         #original_hash: a34940e
         not_a_number: กรุณาใส่จำนวนให้ถูกต้อง
@@ -2481,7 +2508,7 @@ th:
       not_announced: การแข่งขันนี้ปรากฏต่อสาธารณชน แต่ยังไม่ได้ประกาศ
       #original_hash: ab61991
       announced: ประกาศผลการแข่งขันสำเร็จแล้ว!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         การแข่งขันนี้ถูกยกเลิก
         หากต้องการทราบรายละเอียดเพิ่มเติมกรุณาตรวจสอบที่ส่วนข้อมูล
@@ -2523,21 +2550,29 @@ th:
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
       tooltip_waiting_list: คุณกำลังอยู่ในรายชื่อรอ
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        ขออภัย การสมัครการแข่งขันของคุณถูกลบไปแล้ว
+        โปรดตรวจสอบอีเมลของคุณเพื่อดูรายละเอียด หรือติดต่อผู้จัดงาน
+      #original_hash: 1b6dc61
       confirmed_visible: การแข่งขันนี้ได้รับการยืนยันแล้วปรากฎต่อสาธารณะแล้ว
-      #original_hash: fa186a9
+      #original_hash: abc2f96
       confirmed_not_visible: การแข่งขันนี้ได้รับการยืนยันแล้ว แต่ยังไม่ปรากฎต่อสาธารณะ
-      #original_hash: a66bbe3
+      #original_hash: 6d6290b
       not_confirmed_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน แต่ปรากฎต่อสาธารณะแล้ว
-      #original_hash: 0f44e45
+      #original_hash: b299b27
       not_confirmed_not_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน และยังไม่ปรากฎต่อสาธารณะ
       #original_hash: a821396
       stripe_connected: >-
         คุณได้เชื่อมต่อ Stripe สำเร็จแล้ว
         และคุณสามารถรับการชำระค่าสมัครสำหรับการแข่งขันครั้งนี้ได้
+      #original_hash: b8fc60f
+      stripe_disconnected_success: ตัดการเชื่อมต่อบัญชี Stripe สำเร็จแล้ว
+      #original_hash: e1a250c
+      stripe_disconnected_failure: เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี Stripe
       #original_hash: 0a4bb53
       stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
-      #original_hash: 724cf0d
+      #original_hash: 1b92d16
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
       #original_hash: 0644bdc
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
@@ -3130,7 +3165,7 @@ th:
     cancel_mistake: ทำผิดพลาดหรือไม่?
     #original_hash: 0fb43d5
     note_before_cancel: 'Note: การแข่งขันที่ได้รับการยืนยันแล้วเท่านั้นที่ถูกยกเลิกได้'
-    #original_hash: 19a0ac2
+    #original_hash: b38ee61
     orga_close_reg: ปิดการรับสมัคร
     #original_hash: b2bfea9
     orga_close_reg_confirm: คุณแน่ใจหรือไม่ว่าต้องการปิดการรับสมัคร คุณจะไม่สามารถแก้ไขมันได้
@@ -3138,6 +3173,12 @@ th:
     note_reg_not_full_orga_close_reg: >-
       หมายเหตุ:
       คุณสามารถปิดการสมัครการแข่งขันได้เมื่อผู้เข้าแข่งขันเต็มแล้วเท่านั้น
+    #original_hash: 1ae594d
+    stripe_disconnect: ยกเลิกการเชื่อมต่อบัญชี Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี Stripe?
+      การดำเนินการนี้ไม่สามารถยกเลิกได้
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
@@ -3346,10 +3387,10 @@ th:
       title: สถิติ
     #original_hash: e02fccb
     last_updated_html: 'แก้ไขครั้งล่าสุดเมื่อ: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      โปรดทราบว่าตัวกรองบางตัว (เช่น ปีที่ผ่านมา) ถูกปิดใช้งานชั่วคราว
-      หากคุณมีประสบการณ์ในการเพิ่มประสิทธิภาพ SQL โปรดติดต่อ WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      ขอแจ้งให้ทราบว่า filter บางอย่า (เช่น ปีในอดีต) ไม่สามารถใช้ได้ชั่วคราว
+      ทาง Software Team กำลังพยายามแก้ไขอยู่ - ขออภัยในความไม่สะดวก
     #original_hash: e3710ed
     tooltip_no_years: ฐานข้อมูลของเราใหญ่เกินกว่าจะคำนวณข้อมูลย้อนหลังได้
     #original_hash: 357094b
@@ -5035,3 +5076,36 @@ th:
       ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Legal TNoodle version
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: WCA Results Export
+      #original_hash: f9fe9df
+      description: >-
+        ในหน้านี้ เรามีผลการแข่งขันของ WCA สำหรับดาวน์โหลดในหลายรูปแบบ
+        เพื่อให้คุณสามารถใช้/วิเคราะห์ผลโดยรวมได้
+        โดยปกติเราจะอัปเดตหลังจากการแข่งขันแต่ละสัปดาห์เมื่อสรุปผลเสร็จสิ้น
+        ไฟล์จะมีหมายเลขและวันที่ คุณจึงดูได้ว่าคุณมีเวอร์ชันล่าสุดแล้วหรือยัง
+      #original_hash: 4f59283
+      permalink: permalink
+      file_formats:
+        #original_hash: b086d79
+        sql: คำสั่ง SQL สำหรับการนำเข้าไปยังฐานข้อมูล SQL
+        #original_hash: 5f6fb6e
+        tsv: >-
+          ค่าที่คั่นเพื่อแบ่ง Tab สำหรับ spreadsheets ใน OpenOffice.org, Excel
+          เป็นต้น
+      #original_hash: 178506e
+      hint_readme_html: >-
+        ไฟล์ %{readme_filename} รวมถึงข้อกำหนดการใช้งานและคำอธิบายทั่วไป
+        (เป็นภาษาอังกฤษ ไม่มีการแปล):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Developer Export
+      #original_hash: eba769a
+      description_html: >-
+        ในหน้านี้ เรานำเสนอการ export WST develop
+        สำหรับการดาวน์โหลดเป็นการถ่ายโอนข้อมูล SQL ดูรายละเอียดได้ที่
+        %{github_link}
+      #original_hash: a479c9c
+      download: Download

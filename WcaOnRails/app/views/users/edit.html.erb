@@ -222,10 +222,23 @@
                 <label for="guidelines-confirmation"><%= t '.guidelines_confirmation' %></label>
               </div>
               <%= f.submit t('.save'), class: "btn btn-primary" %>
-              <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
-                <%= link_to t('.remove_avatar'), user_path(@user, user: { remove_avatar: true }), method: :patch,
-                                                 class: "btn btn-danger", data: { confirm: t('.remove_avatar_confirm') } %>
-              <% end %>
+            <% end %>
+            <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
+              <div class="btn btn-default btn-danger remove-avatar">
+                <%= t('.remove_avatar') %>
+              </div>
+
+              <div class="remove-avatar-confirm">
+                <%= form_with model: @user, method: :patch do |f| %>
+                  <%= f.text_area :removal_reason, class: 'form-control',
+                    placeholder: t('.remove_avatar_reason') %>
+
+                  <%= f.hidden_field :remove_avatar, value: true %>
+
+                  <%= f.submit t('.remove_avatar_confirm_button'), class: 'btn btn-danger',
+                    data: { confirm: t('.remove_avatar_confirm') } %>
+                <% end %>
+              </div>
             <% end %>
           </div>
           <div class="col-sm-6 text-center">

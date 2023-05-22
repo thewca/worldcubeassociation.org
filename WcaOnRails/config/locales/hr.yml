@@ -192,10 +192,10 @@ hr:
       #original_hash: 672b22c
       cellName: Finale
     g:
-      #original_hash: ccf6f8e
-      name: Treća runda
-      #original_hash: ccf6f8e
-      cellName: Treća runda
+      #original_hash: e2f74d2
+      name: Polufinale
+      #original_hash: e2f74d2
+      cellName: Polufinale
     h:
       #original_hash: 4d618bb
       name: Kvalifikacijska runda
@@ -510,6 +510,8 @@ hr:
         guests_enabled: Gosti
         #original_hash: 7d78478
         guests_per_registration_limit: Maksimalni broj gostiju po registraciji
+        #original_hash: 22516e1
+        events_per_registration_limit: Limit disciplina po registraciji
         #original_hash: 089cbfd
         receive_registration_emails: Obavijesti me e-mailom kada se netko registrira za ovo natjecanje
         #original_hash: d4aeed9
@@ -526,6 +528,8 @@ hr:
         enable_donations: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
         #original_hash: 556fda0
         extra_registration_requirements: Dodatni zahtjevi za registraciju
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: Komentar prilikom registracije je obavezan
         #original_hash: 2529d04
         on_the_spot_registration: Registracije na licu mjesta
         #original_hash: 69780b5
@@ -572,10 +576,10 @@ hr:
         #original_hash: 4baf44b
         championship_type: Tip prvenstva
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Ime
+        #original_hash: e2b4898
+        wcif_id: ID serije
+        #original_hash: 75ceb67
+        name: Ime serije
         #original_hash: 8a6bee1
         short_name: Nadimak serije
         #original_hash: af3d38e
@@ -814,13 +818,13 @@ hr:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Unesi svoj datum rođenja u formatu YYYY-MM-DD.
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: Unesi natjecateljev datum rođenja u formatu YYYY-MM-DD.
+        #original_hash: ac908c9
         name: >-
-          Unesi svoje puno ime točno, primjerice <strong>Pero Perić</strong>.
-          Nemoj unijeti loše kao <strong>p perić</strong>. <br/> Srednje ime ili
-          inicijali su neobavezni.
+          Unesi natjecateljevo puno ime točno, primjerice <strong>Pero
+          Perić</strong>. Nemoj unijeti loše kao <strong>p perić</strong>. <br/>
+          Srednje ime ili inicijali su neobavezni.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -962,11 +966,17 @@ hr:
         competitor_limit_reason: >-
           Koji je razlog ograničavanja broja natjecatelja? Ispuni na engleskom
           jeziku!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           Broj gostiju po registraciji je dozvoljen na ovom natjecanju.
           Registracije s previše gostiju će biti blokirane. Ostavi prazno ako
           nema limita.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Ukupan broj disciplina za koje se natjecatelj može prijaviti (obično
+          se koristi za natjecanja pod "Favoriti") je obavezan. Trebali biste
+          dodati discipline prije korištenja ovog polja. Prijave s previše
+          disciplina bit će blokirane. Ostavi prazno ako nema ograničenja.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1036,6 +1046,8 @@ hr:
         event_restrictions_reason: >-
           Objasni ovdje zašto želiš ograničiti neke kombinacije disciplina.
           Ispuni ovo na engleskom jeziku!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Pobjednik u ovoj disciplini je ujedno i pobjednik natjecanja.
         #original_hash: da39a3e
@@ -1521,6 +1533,17 @@ hr:
           few: 'Prijavnica sadrži %{count} grešaka.'
           many: 'Prijavnica sadrži %{count} grešaka.'
           other: 'Prijavnica sadrži %{count} grešaka.'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Žao nam je, no nešto je pošlo po krivu.'
+        #original_hash: d815249
+        500_contact: 'Ukoliko ovo šaljete Softver timu, napomenite i Request ID'
+        #original_hash: b61e305
+        400_error: Stranica koju ste tražili ne postoji.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Ukoliko mislite da je ovo greška, kontaktirajte Softver tim i
+          priložite Request ID
     doorkeeper:
       applications:
         help:
@@ -1556,11 +1579,13 @@ hr:
       welcome_back: >-
         Dobrodošli natrag! Da bismo napravili tvoj WCA korisnički račun, moramo
         znati tvoj WCA ID pod kojim si se natjecao/la.
-      #original_hash: 669fb57
+      #original_hash: ef8243e
       welcome_html: >-
-        Dobrodošli! Prije nego se možeš natjecati na prvom natjecanju, trebamo
-        neke dodatne informacije za bazu podataka. Upamti da se tvoj datum
-        rođenja neće nikada objaviti bez tvog dopuštenja.
+        Dobrodošli! Prije nego što se možete natjecati na svom prvom WCA
+        natjecanju, potrebne su nam neke dodatne informacije u svrhu vođenja
+        evidencije. Imajte na umu da vaš datum rođenja nikada neće biti
+        objavljen bez vašeg dopuštenja.<br/><br/>Ako se prijavljujete u tuđe
+        ime, navedite podatke o <strong>natjecatelju</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1865,6 +1890,24 @@ hr:
         more_info_html: 'Možete uređivati svoje email preference %{preferences_link}.'
         #original_hash: 7594a32
         regards_html: 'Lijep pozdrav, <br/>WCA Tim za rezultate u ime %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Resetiraj svoju lozinku WCA Računa
+        #original_hash: 65611e9
+        greeting: 'Pozdrav,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Primili smo zahtjev za ponovno postavljanje lozinke za WCA Račun
+          povezan s %{user_email}. Na vašem računu još nisu napravljene
+          promjene.
+        #original_hash: 60fef9e
+        instruction2: 'Možete resetirati svoju lozinku klikom na donju poveznicu:'
+        #original_hash: 00850c3
+        instruction3: 'Ako niste zatražili novu lozinku, zanemarite ovu e-poruku.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Imate još pitanja? Rado ćemo vam odgovoriti! Slobodno pošaljite poruku
+          na %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Zatraži WCA ID
@@ -1985,6 +2028,10 @@ hr:
       remove_avatar: Obriši avatar
       #original_hash: 4bd25cf
       remove_avatar_confirm: Jesi li siguran/na da želiš obrisati svoj avatar?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Potvrdi brisanje avatara
+      #original_hash: 010b0e5
+      remove_avatar_reason: Napišite razlog za brisanje
       #original_hash: 141d1d7
       guidelines: Smjernice
       avatar_guidelines:
@@ -2143,6 +2190,15 @@ hr:
       cannot_be_deleted_and_accepted: Registracija ne može biti obrisana i prihvaćena u isto vrijeme
       #original_hash: a38d024
       must_register: moraš se registrirati za bar jednu disciplinu
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: se može registrirati u točno 1 disciplini
+        one: možeš se samo registrirati u točno 1 disciplini
+        few: možeš se samo registrirati u točno 1 disciplini
+        many: možeš se samo registrirati u točno 1 disciplini
+        other: >-
+          možeš se samo registrirati u manje ili točno jednako %{count}
+          disciplina
       #original_hash: e78eec3
       banned_html: >-
         Zabranjen ti je pristup. Ukoliko misliš da je ovo pogreška, kontaktiraj
@@ -2154,6 +2210,11 @@ hr:
       series_more_than_one_accepted: Možeš biti prihvaćen samo za jednu Seriju natjecanja odjednom.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Ne možeš se registrirati za discipline za koje nisi kvalificiran.
+      #original_hash: 812cd02
+      cannot_register_without_comment: >-
+        Morate ostaviti komentar. Svakako pročitajte zahtjeve za registraciju
+        što sve mora biti uključeno (npr. u FMC na više lokacija, na kojoj
+        lokaciji ćete se natjecati).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2310,6 +2371,8 @@ hr:
       approved_registrations: Prihvaćene registracije
       #original_hash: bff04e8
       deleted_registrations: Obrisane registracije
+      #original_hash: e86b1e1
+      non_competing: Non-competing registrations
       #original_hash: ac5d958
       not_paid: Nije plaćeno
       registered:
@@ -2388,6 +2451,11 @@ hr:
       dostignut. Ukoliko si se registrirao/la, tvoja registracija će se
       zabilježiti na listu čekanja. Moguće je da neće biti prihvaćena ukoliko se
       ne oslobodi novo mjesto.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Limit natjecatelja za ovo natjecanje je %{competitor_limit} i moguće je da
+      se dostigao. Ako se prijavite, vaša će se registracija staviti na listu
+      čekanja. Možda neće biti odobrena osim ako se ne oslobodi mjesto.
     #original_hash: 855ca9c
     can_register: 'Ispod se možeš registrirati za %{comp}.'
     #original_hash: 4167ed7
@@ -2447,6 +2515,10 @@ hr:
         card_information: Kartične informacije
         #original_hash: bc8091a
         cardholder_name: Ime korisnika kartice
+        #original_hash: 919710d
+        show_donation: >-
+          Želim napraviti neobaveznu donaciju koja će ići samo organizacijskom
+          timu
       alerts:
         #original_hash: a34940e
         not_a_number: Unesi valjan iznos.
@@ -2640,10 +2712,18 @@ hr:
       stripe_connected: >-
         Uspješno si povezao/la svoj Stripe račun i možeš primati uplate
         kotizacija za ovo natjecanje.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Uspješno odspojen Stripe račun.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Dogodila se greška prilikom odspajanja sa Stripe računom.
       #original_hash: 0a4bb53
       stripe_not_connected: Dogodio se problem i nismo mogli spojiti tvoj Stripe račun.
       #original_hash: 724cf0d
       championship_exists: 'Već postoji %{championship_type} u %{year}'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Uspješno zatvorene registracije.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Nemoguće je zatvoriti registracije.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moja natjecanja
@@ -2736,6 +2816,8 @@ hr:
         samo jedna od tih registracija može biti potvrđena i prihvaćena.
         <b>Dozvoljeno je natjecati se samo na jednom od više natjecanja na
         Seriji natjecanja!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Limit natjecatelja
       #original_hash: 196725e
       competitor_limit_is: >-
         Postoji maksimalan broj natjecatelje od %{competitor_limit}
@@ -2802,6 +2884,13 @@ hr:
         few: Natjecatelji mogu povesti nekoliko gostiju.
         many: Natjecatelji mogu povesti nekoliko gostiju.
         other: 'Natjecatelji mogu povesti najviše %{count} gostiju.'
+      #original_hash: bad09c8
+      event_limit:
+        zero: Natjecatelj se može registrirati samo u 1 disciplini.
+        one: Natjecatelj se može registrirati samo u 1 disciplini.
+        few: Natjecatelj se može registrirati samo u nekoliko disciplina.
+        many: Natjecatelj se može registrirati samo u nekoliko disciplina.
+        other: 'Natjecatelj se može registrirati maksimalno u %{count} disciplina.'
       #original_hash: 64e0ddd
       require_qualification: >-
         Natjecatelji se mogu registrirati samo za discipline za koje su se već
@@ -3256,6 +3345,20 @@ hr:
     cancel_mistake: Napravljena pogreška?
     #original_hash: 0fb43d5
     note_before_cancel: 'Bilješka: moguće je otkazati samo već potvrđena natjecanja.'
+    #original_hash: b38ee61
+    orga_close_reg: Zatvori registracije
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: Jesi li siguran da želiš zatvoriti registracije? Nema povratka!
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Napomena: registracije se mogu zatvoriti samo ako je dosegnut limit
+      natjecatelja.
+    #original_hash: 1ae594d
+    stripe_disconnect: Odspoji Stripe račun
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: Jesi li siguran da želiš odspojiti Stripe račun? Nema povratka.
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Napomena: registracije su već zatvorene.'
     show:
       #original_hash: b0fe391
       general_info: Općenite informacije
@@ -3470,10 +3573,11 @@ hr:
       title: Rekordi
     #original_hash: e02fccb
     last_updated_html: 'Zadnje ažurirano: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Uzmite u obzit da neki filteri (poput prošlih godina) su trenutačno
-      onemogućeni. Ukoliko imate iskustva u SQL optimizaciji, kontaktirajte WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Imajte na umu da su neki filtri (kao što su prošle godina) privremeno
+      onemogućeni. Softverski tim radi na vraćanju ovih filtera - ispričavamo se
+      zbog neugodnosti.
     #original_hash: e3710ed
     tooltip_no_years: Naša baza je prevelika za kalkulaciju povijesnih podataka
     #original_hash: 357094b
@@ -4911,12 +5015,12 @@ hr:
     paragraph4:
       #original_hash: b6dca56
       title: Politika udaljenosti
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        WCA Natjecanja će biti prihvaćena ako su barem 100km ili 19 dana dalje
-        od bilo kojeg drugog natjecanja. WCAT mora obratiti posebnu pozornost
-        ukoliko je predloženo natjecanje koje je u krugu od 100km od drugog te
-        ukoliko je vremenska razlika između oba manja od 19 dana. Delegat koji
+        WCA Natjecanja će biti prihvaćena ako su barem 10 km ili 5 dana dalje od
+        bilo kojeg drugog natjecanja. WCAT mora obratiti posebnu pozornost
+        ukoliko je predloženo natjecanje koje je u krugu od 10 km od drugog te
+        ukoliko je vremenska razlika između oba manja od 5 dana. Delegat koji
         traži odobrenje takvog natjecanja mora imati jako dobar razlog zašto bi
         se to natjecanje trebalo potvrditi. Mogući argumenti koji mogu pomoći
         takvom natjecanju da bude prihvaćeno su:
@@ -4940,9 +5044,9 @@ hr:
             #original_hash: 75aa0c7
             1a: Vremenski okviri kada se oboje slavi se ne smiju preklapati.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Ukoliko je lokacija takvog natjecanja manja od 100km od bilo kojeg
+            Ukoliko je lokacija takvog natjecanja manja od 10 km od bilo kojeg
             drugog regularnog natjecanja, onda
           alist1:
             #original_hash: 8f532bb
@@ -5197,3 +5301,20 @@ hr:
     privacy: Privatnost
     #original_hash: 4c4a2e8
     disclaimer: Odricanje odgovornosti
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Idi na %{oauth_link} za upravljanje OAuth aplikacija.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Ovdje je primjer, koristeći curl, dobivanja pristupnog tokena pomoću
+      Apllication ID-a , Client Secreta, vaše WCA e-pošte i vaše lozinke:
+    #original_hash: 59d8cf3
+    user_email_placeholder: VAŠ_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: VAŠA_LOZINKA
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      OAuth pristupni token može se koristiti, dok ne istekne, za autorizirane
+      API zahtjeve. Na primjer, za pristup podacima o vašem računu:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Legalna TNoodle verzija

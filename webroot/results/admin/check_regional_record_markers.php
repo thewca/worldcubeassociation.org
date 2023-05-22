@@ -267,7 +267,6 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       $storedColor = $same ? '999' : 'F00';
       $calcedColor = $same ? '999' : '0E0';
       if( ! $same ){
-        $selectedIds[] = $resultId;
         $differencesWereFound = true;
       }
 
@@ -295,7 +294,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
       if( $announceEvent ){
         tableCaption( false, "$eventId $valueName" );
         tableHeader( explode( '|', 'Date|Competition|Round|Person|Event|Country|Continent|World|Value|Stored|Computed|Agree' ),
-                     array( 7 => "class='R2'" ) );
+                     array( 8 => "class='R2'" ) );
       }
 
       #--- If new round/competition inside an event, add a separator row.
@@ -328,7 +327,7 @@ function computeRegionalRecordMarkers ( $valueId, $valueName ) {
 #----------------------------------------------------------------------
 function handlePendingCompetition ( $pendingCompetition ) {
 #----------------------------------------------------------------------
-  global $previousRecord, $pendingCompetitions, $startDate;
+  global $previousRecord, $startDate;
 
   list( $endDate, $pendingRecord ) = $pendingCompetition;
   if ( $endDate >= $startDate ) return true;

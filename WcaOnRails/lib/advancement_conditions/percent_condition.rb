@@ -13,7 +13,9 @@ module AdvancementConditions
     end
 
     def max_advancing(results)
-      results.size * percent / 100
+      valid_results = results.select { |r| r.best > 0 }.size
+      proceeds = results.size * percent / 100
+      [valid_results, proceeds].min
     end
   end
 end

@@ -14,10 +14,10 @@ end
 
 RSpec.describe "DatabaseDumper" do
   it "defines sanitizers for precisely the tables that exist" do
-    expect(DatabaseDumper::TABLE_SANITIZERS.keys).to match_array ActiveRecord::Base.connection.data_sources
+    expect(DatabaseDumper::DEV_SANITIZERS.keys).to match_array ActiveRecord::Base.connection.data_sources
   end
 
-  DatabaseDumper::TABLE_SANITIZERS.each do |table_name, table_sanitizer|
+  DatabaseDumper::DEV_SANITIZERS.each do |table_name, table_sanitizer|
     it "defines a sanitizer of table '#{table_name}'" do
       unless table_sanitizer == :skip_all_rows
         where_clause = table_sanitizer[:where_clause]
@@ -45,7 +45,7 @@ RSpec.describe "DatabaseDumper" do
     dump_file.close
 
     with_database "wca_db_dump_test" do
-      expect(Timestamp.find_by_name(DatabaseDumper::DUMP_TIMESTAMP_NAME)).to be_nil
+      expect(Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME)).to be_nil
 
       DbHelper.execute_sql sql
 
@@ -53,7 +53,7 @@ RSpec.describe "DatabaseDumper" do
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"
       expect(CompetitionDelegate.find_by_competition_id(not_visible_competition.id)).to eq nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
-      expect(Timestamp.find_by_name(DatabaseDumper::DUMP_TIMESTAMP_NAME).date).to be >= before_dump
+      expect(Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME).date).to be >= before_dump
 
       # It's ok for the public to know about the existence of a hidden team,
       # but we don't want them to know about the *members* of that hidden team.

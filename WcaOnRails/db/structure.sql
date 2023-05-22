@@ -1162,6 +1162,8 @@ CREATE TABLE `registration_payments` (
   `registration_id` int(11) DEFAULT NULL,
   `amount_lowest_denomination` int(11) DEFAULT NULL,
   `currency_code` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `receipt_id` bigint DEFAULT NULL,
+  `receipt_type` varchar(191) DEFAULT NULL,
   `stripe_charge_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
@@ -1169,7 +1171,8 @@ CREATE TABLE `registration_payments` (
   `user_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `index_registration_payments_on_stripe_charge_id` (`stripe_charge_id`),
-  KEY `idx_reg_payments_on_refunded_registration_payment_id` (`refunded_registration_payment_id`)
+  KEY `idx_reg_payments_on_refunded_registration_payment_id` (`refunded_registration_payment_id`),
+  KEY `index_registration_payments_on_receipt` (`receipt_type`, `receipt_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `registrations`;
@@ -1189,6 +1192,7 @@ CREATE TABLE `registrations` (
   `deleted_at` datetime DEFAULT NULL,
   `deleted_by` int(11) DEFAULT NULL,
   `roles` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `is_competing` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_registrations_on_competition_id_and_user_id` (`competition_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1309,19 +1313,25 @@ CREATE TABLE `starburst_announcements` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
-DROP TABLE IF EXISTS `stripe_charges`;
+DROP TABLE IF EXISTS `stripe_transactions`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
-CREATE TABLE `stripe_charges` (
+CREATE TABLE `stripe_transactions` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `metadata` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `stripe_charge_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `api_type` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `stripe_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `parameters` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `amount_stripe_denomination` int(11) DEFAULT NULL,
+  `currency_code` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `status` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `error` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
+  `account_id` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` datetime NOT NULL,
   `updated_at` datetime NOT NULL,
+  `parent_transaction_id` bigint(20) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `index_stripe_charges_on_status` (`status`)
+  KEY `index_stripe_transactions_on_status` (`status`),
+  CONSTRAINT `fk_rails_6ad225b020` FOREIGN KEY (`parent_transaction_id`) REFERENCES `stripe_transactions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `team_members`;
@@ -1431,9 +1441,6 @@ CREATE TABLE `users` (
   `competition_notifications_enabled` tinyint(1) DEFAULT NULL,
   `receive_delegate_reports` tinyint(1) NOT NULL DEFAULT '0',
   `dummy_account` tinyint(1) NOT NULL DEFAULT '0',
-  `encrypted_otp_secret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `encrypted_otp_secret_iv` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `encrypted_otp_secret_salt` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `consumed_timestep` int(11) DEFAULT NULL,
   `otp_required_for_login` tinyint(1) DEFAULT '0',
   `otp_backup_codes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
@@ -1794,5 +1801,10 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20221121111430'),
 ('20221123090104'),
 ('20221123121220'),
+('20221224215048'),
 ('20230119115432'),
-('20230204111111');
+('20230204111111'),
+('20230303093411'),
+('20230311165116'),
+('20230311183558'),
+('20230517135741');

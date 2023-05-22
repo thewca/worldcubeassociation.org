@@ -6,7 +6,7 @@
   <strong><%= @confirmer.name %> has confirmed <%= link_to @competition.name, competition_url(@competition) %> in <%= @competition.cityName %>, <%= @competition.country.name %>.</strong>
 </p>
 
-<p class="<%= 'alert' if (@competition.start_date - Time.now.to_date).to_i <= 30 %>">
+<p class="<%= 'alert' if (@competition.days_until).to_i <= 30 %>">
   The competition will take place on <%= wca_date_range(@competition.start_date, @competition.end_date) %> in <%= (@competition.days_until).to_i %> days.
   <% if (@competition.days_until).to_i <= 30 %>
     There are less than 48 hours remaining for the competition to be announced. @<%= "Delegate".pluralize(@competition.delegates.count) %>: please respond to any WCAT concerns as soon as possible to ensure that the competition becomes announced. If the competition becomes less than 28 days away, the WCAT cannot announce it.

@@ -29,6 +29,8 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
+  has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -72,7 +74,7 @@ class Competition < ApplicationRecord
       ).group(:id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
-  scope :order_by_announcement_date, -> { order(announced_at: :desc) }
+  scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
@@ -373,7 +375,7 @@ class Competition < ApplicationRecord
   end
 
   def registration_full?
-    self.competitor_limit_enabled? && self.registrations.accepted.count >= self.competitor_limit
+    competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
 
   def country
@@ -423,7 +425,7 @@ class Competition < ApplicationRecord
       end
 
       if self.registration_full? && self.registration_opened?
-        warnings[:waiting_list] = I18n.t('registrations.registration_full', competitor_limit: self.competitor_limit)
+        warnings[:waiting_list] = registration_full_message
       end
 
     else
@@ -486,6 +488,14 @@ class Competition < ApplicationRecord
     end
 
     warnings
+  end
+
+  def registration_full_message
+    if registration_full? && registrations.accepted.count >= competitor_limit
+      I18n.t('registrations.registration_full', competitor_limit: competitor_limit)
+    else
+      I18n.t('registrations.registration_full_include_waiting_list', competitor_limit: competitor_limit)
+    end
   end
 
   def reg_warnings
@@ -566,7 +576,9 @@ class Competition < ApplicationRecord
              'bookmarked_competitions',
              'bookmarked_users',
              'competition_series',
-             'series_competitions'
+             'series_competitions',
+             'inbox_results',
+             'inbox_persons'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -671,7 +683,10 @@ class Competition < ApplicationRecord
   end
 
   def staff_delegates
-    delegates.select(&:staff_delegate?)
+    # If we filter `delegates` using the `staff_delegate?` method, we lose information
+    # about historical associations (which we unfortunately do not store in our DB yet).
+    # So we treat all non-trainees as Delegates, to ensure that even demoted/retired Delegates stay listed.
+    delegates - trainee_delegates
   end
 
   def trainee_delegates
@@ -1750,7 +1765,15 @@ class Competition < ApplicationRecord
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
-      next unless registration
+      # If no registration is found, assume that this is a non-competing staff member being added.
+      registration ||= registrations.create(
+        competition: self,
+        user_id: wcif_person["wcaUserId"],
+        created_at: DateTime,
+        updated_at: DateTime,
+        is_competing: false,
+      )
+      WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.

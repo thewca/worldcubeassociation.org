@@ -18,7 +18,7 @@ RSpec.describe ACV do
       [InboxResult, Result].flat_map { |model|
         [
           { competition_ids: [competition1.id, competition2.id], model: model },
-          { results: model.sorted_for_competitions([competition1.id, competition2.id]), model: model },
+          { results: model.where(competition_id: [competition1.id, competition2.id]), model: model },
         ]
       }
     }
@@ -122,9 +122,30 @@ RSpec.describe ACV do
                                   round_id: "333-f", actual: 9, expected: 4,
                                   condition: first_round2.advancement_condition.to_s(first_round2)),
       ]
-      acv = ACV.new.validate(competition_ids: [competition2, competition3], model: Result)
+      acv = ACV.new.validate(competition_ids: [competition2.id, competition3.id], model: Result)
       expect(acv.warnings).to match_array(expected_warnings)
       expect(acv.errors).to match_array(expected_errors)
+    end
+
+    it "ignores incomplete results when computing qualified people" do
+      first_round = FactoryBot.create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 1)
+      first_round.update(advancement_condition: AdvancementConditions::PercentCondition.new(75))
+      FactoryBot.create(:round, competition: competition2, event_id: "222", total_number_of_rounds: 2, number: 2)
+      # This creates 20 results: 10 complete, 10 DNF. With 75% proceeding it used to report a
+      # warning that 15 could have proceeded but only 10 did. Now we take into account
+      # the number of valid results when emitting the warning.
+      (1..20).each do |i|
+        fake_person = FactoryBot.create(:person)
+        value = i > 10 ? -1 : i * 100
+        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
+        if i <= 10
+          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
+        end
+      end
+
+      acv = ACV.new.validate(competition_ids: [competition2], model: Result)
+      expect(acv.warnings).to be_empty
+      expect(acv.errors).to be_empty
     end
 
     # Triggers:
@@ -178,11 +199,11 @@ RSpec.describe ACV do
 
   private
 
-  def build_person(result_kind, competition)
-    if result_kind == :result
-      FactoryBot.build(:person)
-    else
-      FactoryBot.build(:inbox_person, competitionId: competition.id)
+    def build_person(result_kind, competition)
+      if result_kind == :result
+        FactoryBot.build(:person)
+      else
+        FactoryBot.build(:inbox_person, competitionId: competition.id)
+      end
     end
-  end
 end

@@ -2,20 +2,20 @@
 
 module CompetitionsHelper
   def competition_message_for_user(competition, user)
-    messages = []
-    registration = competition.registrations.find_by_user_id(user.id)
-    if competition.cancelled?
-      messages << t('competitions.messages.cancelled')
-    elsif registration
-      messages << (registration.accepted? ? t('competitions.messages.tooltip_registered') : t('competitions.messages.tooltip_waiting_list'))
+    # Generates a list of messages, which will be combined and displayed in a tooltip to the user in their bookmarked
+    # competitions list when they hover over a competition.
+    # Message indicates the state of the competition, and the state of the user's registration.
+
+    messages_to_join = []
+
+    if competition.cancelled? # If the competition is cancelled, that's the only string we need to show the user.
+      return t('competitions.messages.cancelled')
     end
-    visible = competition.showAtAll?
-    messages << if competition.confirmed?
-                  visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
-                else
-                  visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
-                end
-    messages.join(' ')
+
+    messages_to_join << get_registration_status_message_if_registered(competition, user)
+    messages_to_join << get_competition_status_message(competition)
+
+    messages_to_join.join(' ')
   end
 
   def pretty_print_result(result, short: false)
@@ -128,18 +128,6 @@ module CompetitionsHelper
     end
 
     text
-  end
-
-  private def days_before_competition(date, competition)
-    date ? (competition.start_date - date.to_date).to_i : nil
-  end
-
-  private def days_after_competition(date, competition)
-    date ? (date.to_date - competition.end_date).to_i : nil
-  end
-
-  private def days_announced_before_competition(competition)
-    days_before_competition(competition.announced_at, competition)
   end
 
   def announced_content(competition)
@@ -336,4 +324,48 @@ module CompetitionsHelper
     results_updated_at = competition.results.order('updated_at desc').limit(1).pluck(:updated_at).first
     [competition.id, view, results_updated_at&.iso8601 || "", I18n.locale, is_admin]
   end
+
+  private
+
+    def get_registration_status_message_if_registered(competition, user)
+      # Helper function for `competition_message_for_user`
+      # Determines what message to display to the user based on the state of their registration.
+
+      registration_status = competition.registrations.find_by_user_id(user.id)
+      return unless registration_status.present?
+
+      if registration_status.accepted?
+        t('competitions.messages.tooltip_registered')
+      elsif registration_status.deleted?
+        t('competitions.messages.tooltip_deleted')
+      else # If not delted or accepted, assume user is on the waiting list
+        t('competitions.messages.tooltip_waiting_list')
+      end
+    end
+
+    def get_competition_status_message(competition)
+      # Helper function for `competition_message_for_user`
+      # Returns a string indicating (a) whether the competition is visible, and
+      # (b) whether the competition is confirmed, based on the competition's state.
+
+      visible = competition.showAtAll?
+
+      if competition.confirmed?
+        visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')
+      else
+        visible ? t('competitions.messages.not_confirmed_visible') : t('competitions.messages.not_confirmed_not_visible')
+      end
+    end
+
+    def days_before_competition(date, competition)
+      date ? (competition.start_date - date.to_date).to_i : nil
+    end
+
+    def days_after_competition(date, competition)
+      date ? (date.to_date - competition.end_date).to_i : nil
+    end
+
+    def days_announced_before_competition(competition)
+      days_before_competition(competition.announced_at, competition)
+    end
 end
