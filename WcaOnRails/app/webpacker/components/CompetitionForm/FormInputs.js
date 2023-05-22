@@ -16,7 +16,7 @@ import I18n from '../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { currenciesData } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { userApiUrl } from '../../lib/requests/routes.js.erb';
+import { competitionApiUrl, userApiUrl } from '../../lib/requests/routes.js.erb';
 import FormContext from './FormContext';
 
 export function useFormInputState(attribute, currentData, defaultVal = '') {
@@ -49,8 +49,8 @@ export function FieldWrapper({
   hint,
   children,
 }) {
-  const inputLabel = label || getInputStateLabel(inputState);
-  const inputHint = hint || getInputStateHint(inputState);
+  const inputLabel = (label === undefined && getInputStateLabel(inputState)) || label;
+  const inputHint = (hint === undefined && getInputStateHint(inputState)) || hint;
 
   return (
     <Form.Field>
@@ -302,6 +302,53 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
 
   return (
     <FieldWrapper inputState={inputState}>
+      {initialData
+        ? (
+          <input
+            ref={refWrapper}
+            defaultValue={inputState.value}
+            className={classNames}
+            type="text"
+            data-data={initialData}
+            id={inputState.attribute}
+            disabled={disabled}
+          />
+        ) : <Loading />}
+    </FieldWrapper>
+  );
+}
+
+export function CompetitionSearch({
+  inputState,
+  lock,
+  label,
+  hint,
+}) {
+  let classNames = 'form-control competition_id optional wca-autocomplete wca-autocomplete-competitions_search';
+  if (lock) classNames += ' wca-autocomplete-input_lock';
+
+  const [initialData, setInitialData] = useState(inputState.value ? null : '[]');
+  const { disabled } = useContext(FormContext);
+
+  useEffect(() => {
+    if (!inputState.value) return;
+
+    const ids = inputState.value.split(',');
+    const promises = ids.map((id) => fetchJsonOrError(competitionApiUrl(id)));
+
+    Promise.all(promises).then((reqs) => {
+      const comps = reqs.map((req) => req.data);
+      setInitialData(JSON.stringify(comps));
+    });
+  }, []);
+
+  const refWrapper = useCallback(() => {
+    $(`#${inputState.attribute}`).on('change', (e) => inputState.onChange(e.target.value));
+    $(`#${inputState.attribute}`).wcaAutocomplete();
+  }, []);
+
+  return (
+    <FieldWrapper inputState={inputState} label={label} hint={hint}>
       {initialData
         ? (
           <input

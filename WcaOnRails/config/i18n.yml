@@ -49,6 +49,7 @@ translations:
       - "*.simple_form.hints.competition.*"
       - "*.simple_form.options.competition.*"
       - "*.activerecord.attributes.competition.*"
+      - "*.activerecord.attributes.competition_series.*"
       - "*.activerecord.attributes.championship.*"
       - "*.datetime.*"
 

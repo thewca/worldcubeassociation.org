@@ -1,4 +1,5 @@
 <% is_actually_confirmed = @competition.persisted? ? Competition.find(@competition.id).confirmed? : false %>
+<% series = @competition.competition_series %>
 <% mail_to_wcat = mail_to Team.wcat.email, t("competitions.competition_form.wcat"), target: "_blank" %>
 <%= react_component("CompetitionForm/CompetitionForm", {
     competition: {
@@ -18,6 +19,13 @@
       longitude_degrees: @competition.longitude_degrees,
       start_date: @competition.start_date,
       end_date: @competition.end_date,
+      competition_series: series.nil? ? nil : {
+        persisted: series.persisted?,
+        wcif_id: series.wcif_id,
+        name: series.name,
+        short_name: series.short_name,
+        competition_ids: series.competition_ids
+      },
       registration_open: @competition.registration_open,
       registration_close: @competition.registration_close,
       information: @competition.information,

@@ -27,6 +27,7 @@ import ChampionshipInput from './ChampionshipInput';
 import RegistrationTable from './RegistrationTable';
 import DuesEstimate from './DuesEstimate';
 import FormContext from './FormContext';
+import SeriesInput from './SeriesInput';
 
 function AdminView({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
@@ -206,6 +207,8 @@ export default function CompetitionForm({
     regEndData.onChange(regEndData.value.slice(0, 16));
   }, [competition]);
 
+  const seriesData = useFormInputState('competition_series', competition);
+
   const informationData = useFormInputState('information', competition);
 
   const competitorLimitEnabledData = useFormInputState('competitor_limit_enabled', competition);
@@ -274,6 +277,7 @@ export default function CompetitionForm({
   return (
     <FormContext.Provider value={formContext}>
       <Form>
+        {JSON.stringify(competition.competition_series, null, 2)}
         {competition.persisted && adminView && <AdminView competition={competition} />}
         {competition.persisted && !adminView && (
           <AnnouncementDetails
@@ -311,18 +315,22 @@ export default function CompetitionForm({
           endDateData={endDateData}
           setCompMarkers={setCompMarkers}
         />
-        <SeriesComps
-          idData={idData}
-          latData={latData}
-          longData={longData}
-          startDateData={startDateData}
-          endDateData={endDateData}
-        />
+        {!seriesData.value && (
+          <SeriesComps
+            idData={idData}
+            latData={latData}
+            longData={longData}
+            startDateData={startDateData}
+            endDateData={endDateData}
+            seriesData={seriesData}
+          />
+        )}
 
         <hr />
 
         <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
         <RegistrationTable idData={idData} regStartData={regStartData} />
+        <SeriesInput inputState={seriesData} />
         <InputMarkdown inputState={informationData} />
         <CompetitorLimitInput
           competitorLimitEnabledData={competitorLimitEnabledData}
