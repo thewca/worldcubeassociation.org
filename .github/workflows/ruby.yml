@@ -11,6 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       RACK_ENV: test
+      RAILS_ENV: test
     defaults:
       run:
         working-directory: WcaOnRails
