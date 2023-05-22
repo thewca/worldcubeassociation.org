@@ -67,6 +67,8 @@
       event_restrictions_reason: @competition.event_restrictions_reason,
       events_per_registration_limit: @competition.events_per_registration_limit,
       force_comment_in_registration: @competition.force_comment_in_registration,
+      main_event_id: @competition.main_event_id,
+      main_event_options: @competition.events.map { |event| [event.name, event.id] },
       remarks: @competition.remarks,
     },
     adminView: @competition_admin_view,

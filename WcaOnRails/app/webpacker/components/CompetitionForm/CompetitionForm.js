@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   Form,
@@ -157,7 +157,7 @@ export default function CompetitionForm({
 }) {
   const countriesOptions = countries.map((c) => ({
     key: c.id,
-    value: c.name,
+    value: c.id,
     text: c.name,
   }));
 
@@ -183,6 +183,17 @@ export default function CompetitionForm({
     text: I18n.t('enums.competition.guest_entry_status.restricted'),
   }];
 
+  const mainEventOptions = competition.main_event_options.map((ev) => ({
+    key: ev[1],
+    value: ev[1],
+    text: ev[0],
+  }));
+  mainEventOptions.unshift({
+    key: '',
+    value: '',
+    text: '',
+  });
+
   const idData = useFormInputState('id', competition);
   const nameData = useFormInputState('name', competition);
   const cellNameData = useFormInputState('cellName', competition);
@@ -201,11 +212,6 @@ export default function CompetitionForm({
 
   const regStartData = useFormInputState('registration_open', competition);
   const regEndData = useFormInputState('registration_close', competition);
-
-  useEffect(() => { // TODO: This is bad
-    regStartData.onChange(regStartData.value.slice(0, 16));
-    regEndData.onChange(regEndData.value.slice(0, 16));
-  }, [competition]);
 
   const seriesData = useFormInputState('competition_series', competition);
 
@@ -266,6 +272,8 @@ export default function CompetitionForm({
 
   const forceCommentInRegData = useFormInputState('force_comment_in_registration', competition, false);
 
+  const mainEventIdData = useFormInputState('main_event_id', competition);
+
   const remarksData = useFormInputState('remarks', competition, '');
 
   const [compMarkers, setCompMarkers] = React.useState([]);
@@ -277,7 +285,6 @@ export default function CompetitionForm({
   return (
     <FormContext.Provider value={formContext}>
       <Form>
-        {JSON.stringify(competition.competition_series, null, 2)}
         {competition.persisted && adminView && <AdminView competition={competition} />}
         {competition.persisted && !adminView && (
           <AnnouncementDetails
@@ -416,13 +423,20 @@ export default function CompetitionForm({
         {eventRestrictionData.value && (
           <>
             <InputTextArea inputState={eventRestrictionReasonData} />
-            <InputNumber inputState={eventPerRegLimitData} />
+            <InputNumber inputState={eventPerRegLimitData} min="0" max={competition.persisted ? competition.length - 1 : null} />
           </>
         )}
 
         <InputBoolean inputState={forceCommentInRegData} />
 
         <hr />
+
+        {competition.persisted && (
+          <>
+            <InputSelect inputState={mainEventIdData} options={mainEventOptions} />
+            <hr />
+          </>
+        )}
 
         <InputTextArea inputState={remarksData} />
 

@@ -101,12 +101,19 @@ export function InputTextArea({ inputState }) {
   );
 }
 
-export function InputNumber({ inputState }) {
+export function InputNumber({ inputState, min, max }) {
   const { disabled } = useContext(FormContext);
 
   return (
     <FieldWrapper inputState={inputState}>
-      <Input type="number" value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
+      <Input
+        type="number"
+        value={inputState.value}
+        onChange={inputState.onChange}
+        disabled={disabled}
+        min={min}
+        max={max}
+      />
     </FieldWrapper>
   );
 }
@@ -250,11 +257,13 @@ export function InputDate({ inputState, onChange }) {
 export function InputDateTime({ inputState }) {
   const { disabled } = useContext(FormContext);
 
+  const time = inputState.value.slice(0, 16);
+
   return (
     <FieldWrapper inputState={inputState}>
       <Input
         type="datetime-local"
-        value={inputState.value}
+        value={time}
         onChange={inputState.onChange}
         style={{ width: 'full' }}
         label="UTC"
