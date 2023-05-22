@@ -30,7 +30,6 @@ export function useFormInputState(attribute, currentData, defaultVal = '') {
   };
 }
 
-// TODO: A better way of handling this is likely nessesary
 export function getInputStateLabel(inputState) {
   if (!inputState) return null;
   const translation = I18n.t(`activerecord.attributes.competition.${inputState.attribute}`);
