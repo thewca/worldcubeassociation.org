@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Continent < ReadonlyRecord
+class Continent < ApplicationRecord
   self.table_name = "Continents"
   NAME_LOOKUP_ATTRIBUTE = :name
   FICTIVE_IDS = ["_Multiple Continents"].freeze

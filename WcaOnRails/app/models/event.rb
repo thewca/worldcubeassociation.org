@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Event < ReadonlyRecord
+class Event < ApplicationRecord
   include Cachable
   self.table_name = "Events"
 
