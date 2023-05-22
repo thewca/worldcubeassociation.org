@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class RoundType < ReadonlyRecord
+class RoundType < ApplicationRecord
   include Cachable
   self.table_name = "RoundTypes"
 
