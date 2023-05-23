@@ -1,6 +1,3 @@
-# Currently (2.2023) we are setting the DB using db_url in the chef recipe
-# To make sure this also works when migrating into docker we additionally
-# define the host and password here via environment variables
 default: &default
   adapter: mysql2
   pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -10,17 +7,16 @@ default: &default
   host: <%= ENV['DATABASE_HOST'] || "127.0.0.1" %>
   port: 3306
   username: root
+  password: <%= ENV['DATABASE_PASSWORD'] || "" %>
 
 production:
   primary:
     <<: *default
     database: cubing
-    password: <%= ENV['DATABASE_PASSWORD'] || "" %>
   primary_replica:
     <<: *default
     database: cubing
     host: <%= ENV['READ_REPLICA_HOST'] || "127.0.0.1" %>
-    password: <%= ENV['DATABASE_PASSWORD'] || "" %>
     replica: true
 
 development:

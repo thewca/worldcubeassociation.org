@@ -3,7 +3,8 @@
 EnvVars = SuperConfig.new do
   if Rails.env.production?
     mandatory :SECRET_KEY_BASE, :string
-    mandatory :DATABASE_URL, :string
+    mandatory :DATABASE_HOST, :string
+    mandatory :DATABASE_PASSWORD, :string
     mandatory :SMTP_USERNAME, :string
     mandatory :SMTP_PASSWORD, :string
   end
