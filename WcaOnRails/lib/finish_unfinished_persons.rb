@@ -40,7 +40,9 @@ module FinishUnfinishedPersons
 
       semi_id, available_id_spots = self.compute_semi_id(competition_year, person_name, available_id_spots)
 
-      inbox_dob = res.inbox_person&.dob
+      inbox_person = InboxPerson.find_by(id: res.person_id, competition_id: res.competition_id)
+
+      inbox_dob = inbox_person&.dob
 
       similar_persons = compute_similar_persons(res)
 
