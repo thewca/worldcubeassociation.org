@@ -14,7 +14,7 @@ module FinishUnfinishedPersons
   MAX_PER_BATCH = 20
 
   def self.unfinished_results_scope(competition_ids = nil)
-    results_scope = Result.includes(:competition, :inbox_person)
+    results_scope = Result.includes(:competition)
                           .select(:personId, :personName, :competitionId, :countryId)
 
     results_scope = results_scope.where(competitionId: competition_ids) if competition_ids.present?

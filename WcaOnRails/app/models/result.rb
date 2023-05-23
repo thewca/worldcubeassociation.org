@@ -14,7 +14,9 @@ class Result < ApplicationRecord
   alias_attribute :country_id, :countryId
   has_one :continent, through: :country
   delegate :continent_id, :continent, to: :country
-  belongs_to :inbox_person, primary_key: :id, foreign_key: :personId, optional: true
+  has_one :inbox_person, ->(result) {
+    unscope(:where).where(id: result.personId).and(where(competitionId: result.competitionId))
+  }
 
   # NOTE: both nil and "" exist in the database, we may consider cleaning that up.
   MARKERS = [nil, "", "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
