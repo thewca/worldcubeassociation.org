@@ -159,11 +159,12 @@ class AdminController < ApplicationController
 
     ActiveRecord::Base.transaction do
       result_rows = @competition.inbox_results
-                                .joins("LEFT JOIN InboxPersons ON InboxPersons.id = InboxResults.personId AND InboxPersons.competitionId = InboxResults.competitionId")
-                                .select("InboxResults.*, InboxPersons.wcaId AS personWcaId, InboxPersons.countryId AS personCountryIso2")
+                                .includes(:inbox_person)
                                 .map do |inbox_res|
-        person_id = inbox_res.personWcaId.presence || inbox_res.personId
-        person_country = Country.find_by_iso2(inbox_res.personCountryIso2)
+        inbox_person = inbox_res.inbox_person
+
+        person_id = inbox_person&.wcaId.presence || inbox_res.personId
+        person_country = Country.find_by_iso2(inbox_person&.countryId)
 
         {
           pos: inbox_res.pos,
