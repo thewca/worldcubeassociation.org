@@ -14,7 +14,7 @@ module FinishUnfinishedPersons
   MAX_PER_BATCH = 20
 
   def self.unfinished_results_scope(competition_ids = nil)
-    results_scope = Result.includes(:competition)
+    results_scope = Result.includes(:competition, :inbox_person)
                           .select(:personId, :personName, :competitionId, :countryId)
 
     results_scope = results_scope.where(competitionId: competition_ids) if competition_ids.present?
@@ -40,9 +40,7 @@ module FinishUnfinishedPersons
 
       semi_id, available_id_spots = self.compute_semi_id(competition_year, person_name, available_id_spots)
 
-      inbox_person = InboxPerson.find_by(id: res.person_id, competition_id: res.competition_id)
-
-      inbox_dob = inbox_person&.dob
+      inbox_dob = res.inbox_person&.dob
 
       similar_persons = compute_similar_persons(res)
 
