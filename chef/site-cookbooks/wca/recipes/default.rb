@@ -124,7 +124,6 @@ else
     action :create
   end
 end
-db_url = "mysql2://#{db['user']}:#{db['password']}@#{db['host']}/cubing"
 read_replica = db["read_replica"]
 template "/etc/my.cnf" do
   source "my.cnf.erb"
@@ -321,7 +320,7 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
-              db_url: db_url,
+              db_host: db["host"],
               read_replica_host: read_replica
             })
 end
@@ -424,7 +423,7 @@ if node.chef_environment == "development"
   execute "bundle exec rake db:setup" do
     cwd rails_root
     environment({
-                  "DATABASE_URL" => db_url,
+                  "DATABASE_HOST" => db["host"],
                   "RACK_ENV" => rails_env,
                 })
     not_if { ::File.exist?(db_setup_lockfile) }
@@ -438,7 +437,7 @@ elsif node.chef_environment == "staging"
     cwd rails_root
     user username
     environment({
-                  "DATABASE_URL" => db_url,
+                  "DATABASE_HOST" => db["host"],
                   "RACK_ENV" => rails_env,
                 })
     not_if { ::File.exist?(db_setup_lockfile) }
@@ -469,7 +468,7 @@ template "/home/#{username}/wca.screenrc" do
   variables({
               rails_root: rails_root,
               rails_env: rails_env,
-              db_url: db_url,
+              db_host: db["host"],
               secrets: secrets,
             })
 end
