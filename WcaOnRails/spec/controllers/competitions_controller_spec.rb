@@ -1027,7 +1027,7 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #my_competitions' do
+  describe 'GET #my_competitions', clean_db_with_truncation: true do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
     let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
