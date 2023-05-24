@@ -1,8 +1,9 @@
 /* eslint import/prefer-default-export: "off" */
 export function getRecordClass(record) {
+  if (!record) {
+    return '';
+  }
   switch (record) {
-    case '':
-      return '';
     case 'WR': // Intentional fallthrough
     case 'NR':
       return record;
