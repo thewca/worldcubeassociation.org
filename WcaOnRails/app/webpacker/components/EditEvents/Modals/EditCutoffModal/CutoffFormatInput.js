@@ -19,7 +19,7 @@ export function CutoffFormatInput({
       value: parseInt(format, 10),
       text: `Best of ${format}`,
     })))
-    // If there are no cutoff options availabe, just show the "No cutoff" option
+    // If there are no cutoff options available, just show the "No cutoff" option
     : BaseCutoffOptions.filter(({ value }) => value > 0)
   ), [cutoffFormats]);
 
@@ -54,6 +54,9 @@ export default function CutoffFormatField({
 }) {
   return (
     <Form.Field inline>
+      <Label>
+        Cutoff Format
+      </Label>
       <Form.Input
         as={CutoffFormatInput}
         cutoffFormats={cutoffFormats}

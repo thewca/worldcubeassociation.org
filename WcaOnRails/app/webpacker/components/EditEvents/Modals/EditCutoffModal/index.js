@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
+import { Label } from 'semantic-ui-react';
 import { formats } from '../../../../lib/wca-data.js.erb';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
@@ -9,9 +10,10 @@ import CutoffFormatField from './CutoffFormatInput';
 import { useDispatch } from '../../../../lib/providers/StoreProvider';
 import { updateCutoff } from '../../store/actions';
 import AttemptResultField from '../../../Results/WCALive/AttemptResultField/AttemptResultField';
+import MbldPointsField from '../../../Results/WCALive/AttemptResultField/MbldPointsField';
 
 /**
- * Developer notes: "cutoffFormat" and "NumberOfAttempts" is used interchangably for written clarity
+ * Developer notes: "cutoffFormat" and "NumberOfAttempts" is used interchangeably for written clarity
  * A cutoff is made up of a number of attempts and a format.
  * This format is essentially a "number of attempts"
  * The cutoff format is stored as "cutoff.numberOfAttempts" in the round object in the wcif.
@@ -75,9 +77,6 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
       hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
     >
-      <div>
-        Cutoff format
-      </div>
       <CutoffFormatField
         cutoffFormats={cutoffFormats}
         cutoffFormat={numberOfAttempts}
@@ -86,17 +85,20 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
       />
       {
         numberOfAttempts > 0 && (
-          <>
-            <div>
-              Cutoff
-            </div>
-            <AttemptResultField
-              label="Result"
-              eventId={wcifEvent.id}
-              value={attemptResult}
-              onChange={setAttemptResult}
+          wcifEvent.id === '333mbf'
+            ? <MbldPointsField
+                label={<Label>Cutoff Result</Label>}
+                eventId={wcifEvent.id}
+                value={attemptResult}
+                onChange={setAttemptResult}
+              />
+            : <AttemptResultField
+                label={<Label>Cutoff Result</Label>}
+                eventId={wcifEvent.id}
+                value={attemptResult}
+                onChange={setAttemptResult}
+                resultType="single"
             />
-          </>
         )
       }
 
