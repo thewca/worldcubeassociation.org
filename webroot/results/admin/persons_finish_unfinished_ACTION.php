@@ -128,22 +128,6 @@ function completeId ( $newSemiId ) {
 }
 
 #----------------------------------------------------------------------
-function getIso2FromCountryId($countryId) {
-#----------------------------------------------------------------------
-  $country = dbQueryHandle("
-    SELECT iso2
-    FROM Countries
-    WHERE id='$countryId'
-  ");
-  $row = mysql_fetch_row( $country );
-  if ( !$row ){
-      showErrorMessage( "'$countryId' is not a known country ID'" );
-      return null;
-  }
-  return $row[0];
-}
-
-#----------------------------------------------------------------------
 function insertPerson( $person, $newName, $newCountry, $newId ) {
 #----------------------------------------------------------------------
 

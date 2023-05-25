@@ -3,6 +3,7 @@ import { Message, List } from 'semantic-ui-react';
 
 import {
   adminCheckExistingResultsUrl,
+  adminCheckRegionalRecordsUrl,
   adminCADUrl,
   competitionAllResultsUrl,
   personUrl,
@@ -43,7 +44,7 @@ function AfterActionMessage({
             </List.Item>
             <List.Item>
               <a
-                href={`/results/admin/check_regional_record_markers.php?competitionId=${competitionId}&show=Show`}
+                href={adminCheckRegionalRecordsUrl(competitionId, eventId)}
                 target="_blank"
                 rel="noreferrer"
               >

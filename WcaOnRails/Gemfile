@@ -95,6 +95,7 @@ gem 'icalendar'
 gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
 gem 'sprockets-rails'
+gem 'fuzzy-string-match'
 
 group :development, :test do
   gem 'spring'

@@ -1448,76 +1448,78 @@ class Competition < ApplicationRecord
   SortedRegistration = Struct.new(:registration, :tied_previous, :pos, keyword_init: true)
   PsychSheet = Struct.new(:sorted_registrations, :sort_by, :sort_by_second, keyword_init: true)
   def psych_sheet_event(event, sort_by)
-    competition_event = competition_events.find_by!(event_id: event.id)
-    joinsql = <<-SQL
-      JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
-      JOIN users ON users.id = registrations.user_id
-      JOIN Countries ON Countries.iso2 = users.country_iso2
-      LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
-      LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
-    SQL
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_event = competition_events.find_by!(event_id: event.id)
+      joinsql = <<-SQL
+        JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
+        JOIN users ON users.id = registrations.user_id
+        JOIN Countries ON Countries.iso2 = users.country_iso2
+        LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
+        LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
+      SQL
 
-    selectsql = <<-SQL
-      registrations.id,
-      users.name select_name,
-      users.wca_id select_wca_id,
-      registrations.accepted_at,
-      registrations.deleted_at,
-      Countries.id select_country_id,
-      registration_competition_events.competition_event_id,
-      RanksAverage.worldRank average_rank,
-      ifnull(RanksAverage.best, 0) average_best,
-      RanksSingle.worldRank single_rank,
-      ifnull(RanksSingle.best, 0) single_best
-    SQL
+      selectsql = <<-SQL
+        registrations.id,
+        users.name select_name,
+        users.wca_id select_wca_id,
+        registrations.accepted_at,
+        registrations.deleted_at,
+        Countries.id select_country_id,
+        registration_competition_events.competition_event_id,
+        RanksAverage.worldRank average_rank,
+        ifnull(RanksAverage.best, 0) average_best,
+        RanksSingle.worldRank single_rank,
+        ifnull(RanksSingle.best, 0) single_best
+      SQL
 
-    if sort_by == event.recommended_format.sort_by_second
-      sort_by_second = event.recommended_format.sort_by
-    else
-      sort_by = event.recommended_format.sort_by
-      sort_by_second = event.recommended_format.sort_by_second
-    end
-    sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
-
-    registrations = self.registrations
-                        .accepted
-                        .joins(joinsql)
-                        .where("registration_competition_events.competition_event_id=?", competition_event.id)
-                        .order(sort_clause)
-                        .select(selectsql)
-                        .to_a
-
-    prev_sorted_registration = nil
-    sorted_registrations = []
-    registrations.each_with_index do |registration, i|
-      if sort_by == 'single'
-        rank = registration.single_rank
-        prev_rank = prev_sorted_registration&.registration&.single_rank
+      if sort_by == event.recommended_format.sort_by_second
+        sort_by_second = event.recommended_format.sort_by
       else
-        rank = registration.average_rank
-        prev_rank = prev_sorted_registration&.registration&.average_rank
+        sort_by = event.recommended_format.sort_by
+        sort_by_second = event.recommended_format.sort_by_second
       end
-      if rank
-        tied_previous = rank == prev_rank
-        pos = tied_previous ? prev_sorted_registration.pos : i + 1
-      else
-        # Hasn't competed in this event yet.
-        tied_previous = nil
-        pos = nil
+      sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
+
+      registrations = self.registrations
+                          .accepted
+                          .joins(joinsql)
+                          .where("registration_competition_events.competition_event_id=?", competition_event.id)
+                          .order(sort_clause)
+                          .select(selectsql)
+                          .to_a
+
+      prev_sorted_registration = nil
+      sorted_registrations = []
+      registrations.each_with_index do |registration, i|
+        if sort_by == 'single'
+          rank = registration.single_rank
+          prev_rank = prev_sorted_registration&.registration&.single_rank
+        else
+          rank = registration.average_rank
+          prev_rank = prev_sorted_registration&.registration&.average_rank
+        end
+        if rank
+          tied_previous = rank == prev_rank
+          pos = tied_previous ? prev_sorted_registration.pos : i + 1
+        else
+          # Hasn't competed in this event yet.
+          tied_previous = nil
+          pos = nil
+        end
+        sorted_registration = SortedRegistration.new(
+          registration: registration,
+          tied_previous: tied_previous,
+          pos: pos,
+        )
+        sorted_registrations << sorted_registration
+        prev_sorted_registration = sorted_registration
       end
-      sorted_registration = SortedRegistration.new(
-        registration: registration,
-        tied_previous: tied_previous,
-        pos: pos,
+      PsychSheet.new(
+        sorted_registrations: sorted_registrations,
+        sort_by: sort_by,
+        sort_by_second: sort_by_second,
       )
-      sorted_registrations << sorted_registration
-      prev_sorted_registration = sorted_registration
     end
-    PsychSheet.new(
-      sorted_registrations: sorted_registrations,
-      sort_by: sort_by,
-      sort_by_second: sort_by_second,
-    )
   end
 
   # For associated_events_picker

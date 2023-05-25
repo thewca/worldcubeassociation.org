@@ -79,6 +79,11 @@ Rails.application.routes.draw do
     post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
+    get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
+    get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
+    post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
+    delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
+    delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
 
@@ -214,6 +219,15 @@ Rails.application.routes.draw do
   get '/admin/generate_exports' => 'admin#generate_exports'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
+  get '/admin/check_regional_records' => 'admin#check_regional_records'
+  get '/admin/override_regional_records' => 'admin#override_regional_records'
+  post '/admin/override_regional_records' => 'admin#do_override_regional_records'
+  get '/admin/finish_persons' => 'admin#finish_persons'
+  post '/admin/finish_persons' => 'admin#do_finish_persons'
+  get '/admin/finish_unfinished_persons' => 'admin#finish_unfinished_persons'
+  get '/admin/complete_persons' => 'admin#complete_persons'
+  post '/admin/complete_persons' => 'admin#do_complete_persons'
+  get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'

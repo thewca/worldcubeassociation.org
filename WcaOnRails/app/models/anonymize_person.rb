@@ -106,19 +106,11 @@ class AnonymizePerson
   end
 
   def generate_new_wca_id
-    # generate new wcaid
-    semiId = person_wca_id[0..3] + "ANON"
-    similarWcaIds = Person.where("wca_id LIKE ?", semiId + '%')
+    competition_year = person_wca_id[0..3]
 
-    (1..99).each do |i|
-      new_wca_id = semiId + i.to_s.rjust(2, "0")
+    semi_id, = FinishUnfinishedPersons.compute_semi_id(competition_year, ANONYMIZED_NAME)
+    wca_id, = FinishUnfinishedPersons.complete_wca_id(semi_id)
 
-      unless similarWcaIds.where(wca_id: new_wca_id).any?
-        return new_wca_id
-      end
-    end
-
-    # Semi Id doesn't work
-    nil
+    wca_id
   end
 end

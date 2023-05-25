@@ -31,78 +31,67 @@
   <% end %>
 
   <script>
-    function reloadForm(clearCompetition, clearEvent, clearRoundType) {
-      var obj = $('#fix-selector-form').serializeJSON();
+    var $personIdInput = $('input[name="fix_results_selector[person_id]"]');
+    var $competitionIdSelect = $('select[name="fix_results_selector[competition_id]"]');
+    var $eventIdSelect = $('select[name="fix_results_selector[event_id]"]');
+    var $roundTypeIdSelect = $('select[name="fix_results_selector[round_type_id]"]');
 
+    function reloadForm(clearCompetition, clearEvent, clearRoundType) {
       $('input[type=submit]').hide();
       $('div.progress').show();
 
-      if (clearCompetition) {
-        delete obj['fix_results_selector[competition_id]'];
-      }
-
-      if (clearEvent) {
-        delete obj['fix_results_selector[event_id]'];
-      }
-
-      if (clearRoundType) {
-        delete obj['fix_results_selector[round_type_id]'];
-      }
-
       window.wca.cancelPendingAjaxAndAjax('fix_results_selector', {
         url: '<%= admin_fix_results_ajax_path %>',
-        data: obj,
+        data: {
+          'fix_results_selector[person_id]': $personIdInput.val(),
+          'fix_results_selector[competition_id]': clearCompetition ? null : $competitionIdSelect.val(),
+          'fix_results_selector[event_id]': clearEvent ? null : $eventIdSelect.val(),
+          'fix_results_selector[round_type_id]': clearRoundType ? null : $roundTypeIdSelect.val(),
+        },
         success: function (data) {
           $('#fix-results-selector').replaceWith(data);
 
           if (<%= @result_selector.person.nil?.to_json %>) {
-            var nameInput = $('input[name="fix_results_selector[person_id]"]');
-
-            if (nameInput.val().length === 10) {
-              nameInput.focus();
-              nameInput[0].setSelectionRange(10, 10);
+            if ($personIdInput.val().length === 10) {
+              $personIdInput.focus();
+              $personIdInput[0].setSelectionRange(10, 10);
             }
           }
         }
       });
     }
 
-    $('input[name="fix_results_selector[person_id]"]')
-      .on('input', function (e) {
-        this.value = this.value.toUpperCase();
+    $personIdInput.on('input', function (e) {
+      this.value = this.value.toUpperCase();
 
-        // only using a simple, naive WCA ID regex because this feature will be used by WRT members who know what they're doing
-        var matchesWcaId = this.value.match(/^\d{4}\w{4}\d{2}$/);
+      // only using a simple, naive WCA ID regex because this feature will be used by WRT members who know what they're doing
+      var matchesWcaId = this.value.match(/^\d{4}\w{4}\d{2}$/);
 
-        var isBackstroke = e.originalEvent.inputType === 'deleteContentBackward' || e.originalEvent.inputType === 'deleteWordBackward'
-        var isDeletingCompletedWcaId = this.value.length < 10 && isBackstroke;
+      var isBackstroke = e.originalEvent.inputType === 'deleteContentBackward' || e.originalEvent.inputType === 'deleteWordBackward';
+      var isDeletingCompletedWcaId = this.value.length < 10 && isBackstroke;
 
-        if (matchesWcaId) {
-          reloadForm(true, true, true);
-        } else if (isDeletingCompletedWcaId) {
-          $('#selector-result-details').hide();
-          $('p.help-block').hide();
-        }
-      })
-      .on('keypress', function (e) {
-        if (e.which === 13 && !e.ctrlKey) {
-          e.preventDefault();
-        }
-      });
+      if (matchesWcaId) {
+        reloadForm(true, true, true);
+      } else if (isDeletingCompletedWcaId) {
+        $('#selector-result-details').hide();
+        $('p.help-block').hide();
+      }
+    }).on('keypress', function (e) {
+      if (e.which === 13 && !e.ctrlKey) {
+        e.preventDefault();
+      }
+    });
 
-    $('select[name="fix_results_selector[competition_id]"]')
-      .on('change', function () {
-        reloadForm(false, true, true);
-      });
+    $competitionIdSelect.on('change', function () {
+      reloadForm(false, true, true);
+    });
 
-    $('select[name="fix_results_selector[event_id]"]')
-      .on('change', function () {
-        reloadForm(false, false, true);
-      });
+    $eventIdSelect.on('change', function () {
+      reloadForm(false, false, true);
+    });
 
-    $('select[name="fix_results_selector[round_type_id]"]')
-      .on('change', function () {
-        reloadForm(false, false, false);
-      });
+    $roundTypeIdSelect.on('change', function () {
+      reloadForm(false, false, false);
+    });
   </script>
 </div>

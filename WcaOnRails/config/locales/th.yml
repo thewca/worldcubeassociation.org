@@ -1558,8 +1558,10 @@ th:
       statistics: สถิติ
       #original_hash: 82dabd0
       multimedia: มัลติมีเดีย
-      #original_hash: 4fd2a7f
-      db_export: Database Export
+      #original_hash: cfde9db
+      db_results_export: Results Export
+      #original_hash: 7533c29
+      db_dev_export: Developer Export
       #original_hash: 1fa73f3
       regulations: กติกา
       #original_hash: 6bce1b5
@@ -5074,3 +5076,36 @@ th:
       ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Legal TNoodle version
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: WCA Results Export
+      #original_hash: f9fe9df
+      description: >-
+        ในหน้านี้ เรามีผลการแข่งขันของ WCA สำหรับดาวน์โหลดในหลายรูปแบบ
+        เพื่อให้คุณสามารถใช้/วิเคราะห์ผลโดยรวมได้
+        โดยปกติเราจะอัปเดตหลังจากการแข่งขันแต่ละสัปดาห์เมื่อสรุปผลเสร็จสิ้น
+        ไฟล์จะมีหมายเลขและวันที่ คุณจึงดูได้ว่าคุณมีเวอร์ชันล่าสุดแล้วหรือยัง
+      #original_hash: 4f59283
+      permalink: permalink
+      file_formats:
+        #original_hash: b086d79
+        sql: คำสั่ง SQL สำหรับการนำเข้าไปยังฐานข้อมูล SQL
+        #original_hash: 5f6fb6e
+        tsv: >-
+          ค่าที่คั่นเพื่อแบ่ง Tab สำหรับ spreadsheets ใน OpenOffice.org, Excel
+          เป็นต้น
+      #original_hash: 178506e
+      hint_readme_html: >-
+        ไฟล์ %{readme_filename} รวมถึงข้อกำหนดการใช้งานและคำอธิบายทั่วไป
+        (เป็นภาษาอังกฤษ ไม่มีการแปล):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Developer Export
+      #original_hash: eba769a
+      description_html: >-
+        ในหน้านี้ เรานำเสนอการ export WST develop
+        สำหรับการดาวน์โหลดเป็นการถ่ายโอนข้อมูล SQL ดูรายละเอียดได้ที่
+        %{github_link}
+      #original_hash: a479c9c
+      download: Download

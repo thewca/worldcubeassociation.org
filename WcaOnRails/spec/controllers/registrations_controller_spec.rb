@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController do
+RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as organizer" do
     let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }

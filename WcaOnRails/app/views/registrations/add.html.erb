@@ -27,6 +27,10 @@
       <%= f.input :wca_id, as: :wca_id,
                            input_html: { value: params.dig(:registration_data, :wca_id) },
                            label: t('activerecord.attributes.user.wca_id') %>
+      <% if @competition.force_comment_in_registration %>
+        <%= f.input :comments, input_html: { value: params.dig(:registration_data, :comments) },
+                               label: t('activerecord.attributes.registration.comments') %>
+      <% end %>
 
       <div class="form-group">
         <%= label_tag "events" do %>

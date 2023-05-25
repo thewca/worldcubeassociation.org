@@ -23,7 +23,7 @@ module ResultsValidators
     MISSING_CUMULATIVE_ROUND_ID_ERROR = "[%{original_round_id}] Unable to find the round %{wcif_id} for the cumulative time limit specified in the WCIF. " \
                                         "Please go to the competition's Manage Events page and remove %{wcif_id} from the cumulative time limit for %{original_round_id}. WST knows about this bug (GitHub issue #3254)."
 
-    @@desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
+    @desc = "This validator checks that all results respect the format, time limit, and cutoff information if available. It also looks for similar results within the round."
 
     def self.has_automated_fix?
       false

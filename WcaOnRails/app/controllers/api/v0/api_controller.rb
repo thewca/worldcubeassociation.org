@@ -90,13 +90,15 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def search(*models)
-    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
-    unless query
-      render status: :bad_request, json: { error: "No query specified" }
-      return
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+      unless query
+        render status: :bad_request, json: { error: "No query specified" }
+        return
+      end
+      result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
+      render status: :ok, json: { result: result }
     end
-    result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
-    render status: :ok, json: { result: result }
   end
 
   def posts_search

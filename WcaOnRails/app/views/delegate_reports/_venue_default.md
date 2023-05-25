@@ -8,6 +8,6 @@
 
 * **Temperature:** [Rate the temperature. Did it change throughout the competition day(s)?]
 
-* **Accessibility:** [How can you reach the venue by public transport / by car? Were there accomodation spots nearby?]
+* **Accessibility:** [How can you reach the venue by public transport / by car? Were there accommodation spots nearby?]
 
 * **Setup:** [Use of graphics / photos is highly encouraged!]

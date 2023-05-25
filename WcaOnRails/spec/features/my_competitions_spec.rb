@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.feature "My competitions page" do
+RSpec.feature "My competitions page", clean_db_with_truncation: true do
   context "when signed in as user" do
     let!(:user) { FactoryBot.create :user }
 
