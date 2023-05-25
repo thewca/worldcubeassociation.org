@@ -30,14 +30,14 @@ export default function AdvancementTypeField({
 }) {
   return (
     <Form.Field inline>
+      <Label>
+        Type
+      </Label>  
       <Form.Input
         as={AdvancementTypeInput}
         advancementType={advancementType}
         onChange={onChange}
       />
-      <Label pointing>
-        Type
-      </Label>
     </Form.Field>
   );
 }

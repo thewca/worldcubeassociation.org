@@ -3,7 +3,7 @@ import React from 'react';
 import { Segment, Table } from 'semantic-ui-react';
 import { events } from '../../../lib/wca-data.js.erb';
 
-import Round from './RoundRow';
+import RoundRow from './RoundRow';
 
 export default function RoundsTable({ wcifEvent, disabled }) {
   const event = events.byId[wcifEvent.id];
@@ -39,7 +39,7 @@ export default function RoundsTable({ wcifEvent, disabled }) {
         </Table.Header>
         <Table.Body>
           {wcifEvent.rounds.map((wcifRound, index) => (
-            <Round
+            <RoundRow
               key={wcifRound.id}
               index={index}
               wcifEvent={wcifEvent}

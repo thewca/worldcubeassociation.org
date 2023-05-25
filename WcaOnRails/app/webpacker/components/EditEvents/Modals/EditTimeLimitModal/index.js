@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import _ from 'lodash';
-import { Button, Form, Radio } from 'semantic-ui-react';
+import { Form, Label, Radio } from 'semantic-ui-react';
 import { events } from '../../../../lib/wca-data.js.erb';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import { centisecondsToClockFormat } from '../../../../lib/wca-live/attempts';
@@ -9,7 +9,6 @@ import TimeField from '../../../Results/WCALive/AttemptResultField/TimeField';
 import { updateTimeLimit } from '../../store/actions';
 import ButtonActivatedModal from '../ButtonActivatedModal';
 import TimeLimitDescription from './TimeLimitDescription';
-import SelectRoundsModal from './SelectRoundsModal';
 
 /**
  * Shows a modal to edit the time limit of a round.
@@ -86,8 +85,10 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
       closeOnDocumentClick={false}
       closeOnDimmerClick={false}
     >
+      <Label>
+        Time Limit
+      </Label>
       <TimeField
-        label="Time Limit"
         value={centiseconds}
         onChange={setCentiseconds}
         disabled={disabled}
