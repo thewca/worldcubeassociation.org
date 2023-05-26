@@ -22,6 +22,7 @@ EnvVars = SuperConfig.new do
     mandatory :RECAPTCHA_PRIVATE_KEY, :string
     mandatory :SECRET_KEY_BASE, :string
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
+    optional :READ_REPLICA_HOST, :string, ''
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
     optional :CRONJOB_POLLING_SECONDS, :int, 0

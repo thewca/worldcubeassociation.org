@@ -13,7 +13,7 @@ CarrierWave.configure do |config|
   config.aws_acl = 'public-read'
 
   aws_credentials = {
-    region: EnvVars.S3_AVATARS_REGION,
+    region: EnvVars.AWS_REGION,
   }
 
   # only development needs explicit credentials to access AWS.

@@ -11,6 +11,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 require_relative '../env_vars'
+require_relative '../config/initializers/_vault'
 
 module WcaOnRails
   BOOTED_AT = Time.now

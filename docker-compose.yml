@@ -24,8 +24,6 @@ services:
       CACHE_REDIS_URL: redis://wca_redis:6379/0
       SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
       MAILCATCHER_SMTP_HOST: wca_mailcatcher
-      VAULT_DEV_ROOT_TOKEN_ID: aDGdUASDGIUASGDKI
-      VAULT_ADDR: http://wca-vault
     tty: true
     # First, install Ruby and Node dependencies
     # Next, load the database if it does not exist yet
@@ -50,8 +48,6 @@ services:
         condition: 'service_healthy'
       wca_redis:
         condition: 'service_started'
-      wca_vault:
-        condition: 'service_started'
 
   wca_webpacker:
     <<: *app
@@ -61,7 +57,6 @@ services:
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
-      VAULT_DEV_ROOT_TOKEN_ID: aDGdUASDGIUASGDKI
     command: >
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'
@@ -135,15 +130,6 @@ services:
     command: redis-server --loglevel warning
     volumes:
       - cache_volume:/data
-    networks:
-      - wca-main
-
-  wca_vault:
-    image: hashicorp/vault
-    environment:
-      - VAULT_DEV_ROOT_TOKEN_ID=aDGdUASDGIUASGDKI
-    ports:
-      - "8200:8200"
     networks:
       - wca-main
 
