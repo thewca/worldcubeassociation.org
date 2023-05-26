@@ -32,7 +32,7 @@ export default function AdvancementTypeField({
     <Form.Field inline>
       <Label>
         Type
-      </Label>  
+      </Label>
       <Form.Input
         as={AdvancementTypeInput}
         advancementType={advancementType}
