@@ -357,7 +357,7 @@ class CompetitionsController < ApplicationController
       auth_scheme: :request_body,
     }
 
-    OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
+    OAuth2::Client.new(read_secret("STRIPE_CLIENT_ID"), read_secret("STRIPE_API_KEY"), options)
   end
 
   def disconnect_stripe

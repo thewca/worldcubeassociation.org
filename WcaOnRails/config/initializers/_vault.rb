@@ -39,9 +39,9 @@ Vault.configure do |vault|
     # Assume the correct role from the underlying instance
     role_credentials = Aws::InstanceProfileCredentials.new
 
-    Vault.auth.aws_iam(ENV["INSTANCE_ROLE"], role_credentials, nil, "https://sts.#{ENV["AWS_REGION"]}.amazonaws.com")
+    Vault.auth.aws_iam(ENV.fetch("INSTANCE_ROLE", nil), role_credentials, nil, "https://sts.#{ENV.fetch("AWS_REGION", nil)}.amazonaws.com")
   else
-    vault.token = ENV["VAULT_DEV_ROOT_TOKEN_ID"]
+    vault.token = ENV.fetch("VAULT_DEV_ROOT_TOKEN_ID", nil)
   end
 
 
@@ -81,9 +81,20 @@ def create_secret(secret_name, value)
   end
 end
 
-# Initialize secrets for dev and test
+# Initialize secrets for dev and test, these are saved in .env.development and .env.test
 def init
-  create_secret("SECRET_KEY_BASE","a003fdc6f113ff7d295596a02192c7116a76724ba6d3071043eefdd16f05971be0dc58f244e67728757b2fb55ae7a41e1eb97c1fe247ddaeb6caa97cea32120c")
+  create_secret("DATABASE_PASSWORD", EnvVars.DATABASE_PASSWORD)
+  create_secret("RECAPTCHA_PRIVATE_KEY", EnvVars.RECAPTCHA_PRIVATE_KEY)
+  create_secret("GOOGLE_MAPS_API_KEY", EnvVars.GOOGLE_MAPS_API_KEY)
+  create_secret("GITHUB_CREATE_PR_ACCESS_TOKEN", EnvVars.GITHUB_CREATE_PR_ACCESS_TOKEN)
+  create_secret("STRIPE_API_KEY", EnvVars.STRIPE_API_KEY)
+  create_secret("STRIPE_CLIENT_ID", EnvVars.STRIPE_CLIENT_ID)
+  create_secret("OTP_ENCRYPTION_KEY", EnvVars.OTP_ENCRYPTION_KEY)
+  create_secret("DISCOURSE_SECRET", EnvVars.DISCOURSE_SECRET)
+  create_secret("ACTIVERECORD_PRIMARY_KEY", EnvVars.ACTIVERECORD_PRIMARY_KEY)
+  create_secret("ACTIVERECORD_DETERMINISTIC_KEY", EnvVars.ACTIVERECORD_DETERMINISTIC_KEY)
+  create_secret("ACTIVERECORD_KEY_DERIVATION_SALT", EnvVars.ACTIVERECORD_KEY_DERIVATION_SALT)
+  create_secret("SURVEY_SECRET", EnvVars.SURVEY_SECRET)
 end
 
 unless Rails.env.production?

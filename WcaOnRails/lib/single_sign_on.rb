@@ -55,7 +55,7 @@ class SingleSignOn
   attr_writer :sso_secret, :sso_url
 
   def self.sso_secret
-    EnvVars.DISCOURSE_SECRET
+    read_secret("DISCOURSE_SECRET")
   end
 
   def self.sso_url

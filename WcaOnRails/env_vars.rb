@@ -2,26 +2,38 @@
 
 EnvVars = SuperConfig.new do
   if Rails.env.production?
-    mandatory :SECRET_KEY_BASE, :string
-    mandatory :DATABASE_HOST, :string
-    mandatory :DATABASE_PASSWORD, :string
-    mandatory :CACHE_REDIS_URL, :string
-    mandatory :SIDEKIQ_REDIS_URL, :string
-    mandatory :SMTP_USERNAME, :string
-    mandatory :SMTP_PASSWORD, :string
-  end
-
-  unless Rails.env.production?
+    mandatory :READ_REPLICA_HOST, :string
+    mandatory :CACHE_REDIS_URL, :string, ''
+    mandatory :SIDEKIQ_REDIS_URL, :string, ''
+  else
+    # Outside of Production secrets are defined in .env.development and .env.test
     mandatory :ENABLE_BULLET, :bool
-
+    mandatory :DATABASE_PASSWORD, :string
+    mandatory :GOOGLE_MAPS_API_KEY, :string
+    mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
+    mandatory :STRIPE_API_KEY, :string
+    mandatory :OTP_ENCRYPTION_KEY, :string
+    mandatory :STRIPE_CLIENT_ID, :string
+    mandatory :DISCOURSE_SECRET, :string
+    mandatory :SURVEY_SECRET, :string
+    mandatory :ACTIVERECORD_PRIMARY_KEY, :string
+    mandatory :ACTIVERECORD_DETERMINISTIC_KEY, :string
+    mandatory :ACTIVERECORD_KEY_DERIVATION_SALT, :string
+    mandatory :RECAPTCHA_PRIVATE_KEY, :string
+    mandatory :SECRET_KEY_BASE, :string
+    mandatory :STRIPE_PUBLISHABLE_KEY, :string
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
     optional :CRONJOB_POLLING_SECONDS, :int, 0
+    optional :STRIPE_WEBHOOK_SECRET, :string, ''
+    optional :CACHE_REDIS_URL, :string, ''
+    optional :SIDEKIQ_REDIS_URL, :string, ''
   end
 
   # Set WCA_LIVE_SITE to enable Google Analytics
   # and allow all on robots.txt.
   mandatory :WCA_LIVE_SITE, :bool
+  mandatory :DATABASE_HOST, :string
 
   # ROOT_URL is used when generating full urls (rather than relative urls).
   # Trick to discover the port we're set to run on from
@@ -41,28 +53,13 @@ EnvVars = SuperConfig.new do
   optional :ROOT_URL, :string, default_root_url
 
   optional :RECAPTCHA_PUBLIC_KEY, :string, ''
-  optional :RECAPTCHA_PRIVATE_KEY, :string, ''
-  optional :NEW_RELIC_LICENSE_KEY, :string, ''
   optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
-  optional :STRIPE_WEBHOOK_SECRET, :string, ''
-  optional :CACHE_REDIS_URL, :string, ''
-  optional :SIDEKIQ_REDIS_URL, :string, ''
   optional :STAGING_PASSWORD, :string, ''
   optional :MAILCATCHER_SMTP_HOST, :string, ''
 
-  mandatory :GOOGLE_MAPS_API_KEY, :string
-  mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
-  mandatory :STRIPE_API_KEY, :string
-  mandatory :STRIPE_PUBLISHABLE_KEY, :string
-  mandatory :STRIPE_CLIENT_ID, :string
-  mandatory :OTP_ENCRYPTION_KEY, :string
-  mandatory :DISCOURSE_SECRET, :string
   mandatory :DISCOURSE_URL, :string
-  mandatory :SURVEY_SECRET, :string
+
   mandatory :S3_AVATARS_BUCKET, :string
   mandatory :S3_AVATARS_ASSET_HOST, :string
   mandatory :S3_AVATARS_REGION, :string
-  mandatory :ACTIVERECORD_PRIMARY_KEY, :string
-  mandatory :ACTIVERECORD_DETERMINISTIC_KEY, :string
-  mandatory :ACTIVERECORD_KEY_DERIVATION_SALT, :string
 end

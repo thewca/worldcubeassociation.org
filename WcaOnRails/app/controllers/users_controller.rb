@@ -262,7 +262,7 @@ class UsersController < ApplicationController
     # WAC does not know the contents of SURVEY_SECRET, so they cannot (reasonably) brute-force any hashes.
     # But once the survey is over, they can give us a list of tokens and we can easily verify whether they are legit.
     token_payload = current_user.id.to_s
-    wca_token = OpenSSL::HMAC.hexdigest("sha256", EnvVars.SURVEY_SECRET, token_payload)
+    wca_token = OpenSSL::HMAC.hexdigest("sha256", read_secret("SURVEY_SECRET"), token_payload)
 
     survey_url = "#{survey_base_url}?wca_token=#{wca_token}"
 

@@ -91,8 +91,8 @@ module WcaOnRails
     config.action_mailer.deliver_later_queue_name = :mailers
 
     # Activate ActiveRecord attribute encryption for use with the Devise 2FA gem
-    config.active_record.encryption.primary_key = EnvVars.ACTIVERECORD_PRIMARY_KEY
-    config.active_record.encryption.deterministic_key = EnvVars.ACTIVERECORD_DETERMINISTIC_KEY
-    config.active_record.encryption.key_derivation_salt = EnvVars.ACTIVERECORD_KEY_DERIVATION_SALT
+    config.active_record.encryption.primary_key = read_secret("ACTIVERECORD_PRIMARY_KEY")
+    config.active_record.encryption.deterministic_key = read_secret("ACTIVERECORD_DETERMINISTIC_KEY")
+    config.active_record.encryption.key_derivation_salt = read_secret("ACTIVERECORD_KEY_DERIVATION_SALT")
   end
 end
