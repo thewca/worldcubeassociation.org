@@ -10,9 +10,7 @@ if Rails.env.production?
     # algorithm to Vault. The in-memory store uses a predictable encryption
     # which is great for development and test, but should _never_ be used in
     # production. Default: ENV["VAULT_RAILS_ENABLED"].
-    # Don't be confused even if this is disabled in dev, we still need a vault server as
-    # this is for rails specific active record encryption
-    vault.enabled = Rails.env.production?
+    vault.enabled = true
 
     # The name of the application. All encrypted keys in Vault will be
     # prefixed with this application name. If you change the name of the
@@ -38,6 +36,7 @@ if Rails.env.production?
 
 
     # Use SSL verification, also read as ENV["VAULT_SSL_VERIFY"]
+    # We are using Vault in internal AWS Traffic only
     vault.ssl_verify = false
 
     # Timeout the connection after a certain amount of time (seconds), also read
