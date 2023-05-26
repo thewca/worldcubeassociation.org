@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import _ from 'lodash';
+import { Label } from 'semantic-ui-react';
 import useInputState from '../../../../lib/hooks/useInputState';
 import { roundIdToString } from '../../../../lib/utils/wcif';
 import ButtonActivatedModal from '../ButtonActivatedModal';
@@ -8,6 +9,7 @@ import { updateAdvancementCondition } from '../../store/actions';
 import AttemptResultField from '../../../Results/WCALive/AttemptResultField/AttemptResultField';
 import { matchResult } from '../../../../lib/utils/edit-events';
 import AdvancementTypeField from './AdvancementTypeInput';
+import MbldPointsField from '../../../Results/WCALive/AttemptResultField/MbldPointsField';
 
 const MIN_ADVANCE_PERCENT = 1;
 const MAX_ADVANCE_PERCENT = 75;
@@ -56,36 +58,52 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
   }
 };
 
-function AdvancementInput({ type, level, onChange }) {
+function AdvancementInput({ eventId, type, level, onChange }) {
   switch (type) {
     case 'ranking':
       return (
-        <input
-          type="number"
-          min={1}
-          value={level}
-          onChange={(e) => onChange(parseInt(e.target.value, 10))}
-          label="Ranking"
-        />
+        <>
+          <Label>Rank</Label>
+          <input
+            type="number"
+            min={1}
+            value={level}
+            onChange={(e) => onChange(parseInt(e.target.value, 10))}
+            label="Ranking"
+          />
+        </>
       );
     case 'percent':
       return (
-        <input
-          type="number"
-          min={MIN_ADVANCE_PERCENT}
-          max={MAX_ADVANCE_PERCENT}
-          value={level}
-          onChange={(e) => onChange(parseInt(e.target.value, 10))}
-          label="Percent"
-        />
+        <>
+          <Label>Percent</Label>
+          <input
+            type="number"
+            min={MIN_ADVANCE_PERCENT}
+            max={MAX_ADVANCE_PERCENT}
+            value={level}
+            onChange={(e) => onChange(parseInt(e.target.value, 10))}
+            label="Percent"
+          />
+        </>
       );
     case 'attemptResult':
       return (
-        <AttemptResultField
-          value={level}
-          onChange={(value) => onChange(value)}
-          label="Result"
-        />
+        eventId === '333mbf'
+            ? <MbldPointsField
+                label={<Label>Result</Label>}
+                eventId={eventId}
+                value={level}
+                onChange={onChange}
+                resultType="single"
+              />
+            : <AttemptResultField
+                label={<Label>Result</Label>}
+                eventId={eventId}
+                value={level}
+                onChange={onChange}
+                resultType="single"
+              />
       );
     default:
       return null;
@@ -143,7 +161,7 @@ export default function EditAdvancementConditionModal({
       />
       {!!type && (
         <>
-          <AdvancementInput type={type} level={level} onChange={setLevel} />
+          <AdvancementInput eventId={wcifEvent.id} type={type} level={level} onChange={setLevel} />
           <br />
           <p>
             {advanceReqToExplanationText(wcifEvent, roundNumber, { type, level })}
