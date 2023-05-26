@@ -51,7 +51,7 @@
     // Init Stripe PaymentElement
     // ----------
 
-    const stripe = Stripe('<%= EnvVars.STRIPE_PUBLISHABLE_KEY %>', {
+    const stripe = Stripe('<%= read_secret("STRIPE_PUBLISHABLE_KEY") %>', {
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
       stripeAccount: '<%= @competition.connected_stripe_account_id %>',
     });
