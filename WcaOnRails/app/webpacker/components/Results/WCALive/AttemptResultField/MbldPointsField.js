@@ -7,6 +7,8 @@ import {
   mbPointsToAttemptResultWithUnknownTime,
 } from '../../../../lib/utils/edit-events';
 
+const MAX_POINTS = 99;
+
 function numberToInput(number) {
   if (number === SKIPPED_VALUE) return '';
   return number.toString();
@@ -29,7 +31,7 @@ function MbldPointsField({
 
   const handleChange = useCallback((event) => {
     const newValue = _.toInteger(event.target.value.replace(/\D/g, '')) || SKIPPED_VALUE;
-    setDraftValue(newValue);
+    setDraftValue(Math.min(MAX_POINTS, newValue));
   }, [setDraftValue]);
 
   const handleBlur = useCallback(() => {
