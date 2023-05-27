@@ -88,8 +88,8 @@ Rails.application.configure do
       address: "email-smtp.us-west-2.amazonaws.com",
       port: 587,
       enable_starttls_auto: true,
-      user_name: EnvVars.SMTP_USERNAME,
-      password: EnvVars.SMTP_PASSWORD,
+      user_name: read_secret("SMTP_USERNAME"),
+      password: read_secret("SMTP_PASSWORD"),
       authentication: 'login',
       domain: root_url.host,
     }
