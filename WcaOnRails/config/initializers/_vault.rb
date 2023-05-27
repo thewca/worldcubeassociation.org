@@ -1,5 +1,5 @@
 # This file starts with _ because it has to be the first one run
-#frozen_string_literal: true
+# frozen_string_literal: true
 
 require "vault/rails"
 
@@ -25,15 +25,12 @@ if Rails.env.production?
     end
     vault.application = @vault_application
 
-    # The address of the Vault server, also read as ENV["VAULT_ADDR"]
-    # TODO This is technically redundant, but should we still be explicit here?
-    vault.address = ENV.fetch("VAULT_ADDR")
+    # The address of the Vault server, is read as ENV["VAULT_ADDR"]
 
     # Assume the correct role from the underlying instance
     role_credentials = Aws::InstanceProfileCredentials.new
 
     Vault.auth.aws_iam(ENV.fetch("INSTANCE_ROLE", nil), role_credentials, nil, "https://sts.#{ENV.fetch("AWS_REGION", nil)}.amazonaws.com")
-
 
     # Use SSL verification, also read as ENV["VAULT_SSL_VERIFY"]
     # We are using Vault in internal AWS Traffic only
@@ -61,11 +58,11 @@ def read_secret(secret_name)
       secret = Vault.logical.read("secret/data/#{@vault_application}/#{secret_name}")
       if secret.present?
         secret.data[:data][:value]
-      else # TODO should we hard error out here?
-        puts "Tried to read #{secret_name}, but doesn´t exist"
+      else
+        raise "Tried to read #{secret_name}, but doesn´t exist"
       end
     end
   else
-    ENV[secret_name]
+    ENV.fetch(secret_name, nil)
   end
 end
