@@ -120,7 +120,7 @@ RSpec.feature "Competition events management" do
       end
 
       scenario "change qualification time to any result", js: true, retry: 3 do
-        find_event_panel("333").find("[name=qualification]").click
+        find_event_panel("333").find("[name='qualification']").click
 
         qualification_date = 7.days.from_now.to_date
 
