@@ -110,7 +110,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     cache_key = "wcif/#{id}"
     render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
-    competition = competition_from_params
+      competition = competition_from_params
       competition.to_wcif
     }
   end
