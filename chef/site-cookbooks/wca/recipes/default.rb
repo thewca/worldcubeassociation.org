@@ -90,8 +90,7 @@ end
 #### Mysql
 package 'mysql-client-8.0'
 db = {
-  'user' => 'root',
-  'password' => secrets['mysql_password']
+  'user' => 'root'
 }
 if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
@@ -101,6 +100,15 @@ elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon RDS.
   db['host'] = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+end
+template "/etc/my.cnf" do
+  source "my.cnf.erb"
+  mode 0644
+  owner 'root'
+  group 'root'
+  variables({
+              db: db
+            })
 end
 
 ### Fonts for generating PDFs
