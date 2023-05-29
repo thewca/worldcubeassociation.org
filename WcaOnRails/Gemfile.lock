@@ -60,6 +60,9 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    RubyInline (3.13.0)
+      ZenTest (~> 4.3)
+    ZenTest (4.12.1)
     actioncable (7.0.4.3)
       actionpack (= 7.0.4.3)
       activesupport (= 7.0.4.3)
@@ -285,6 +288,8 @@ GEM
       faraday (~> 2.0)
     ffi (1.15.5)
     formatador (0.3.0)
+    fuzzy-string-match (1.0.1)
+      RubyInline (>= 3.8.6)
     glob (0.4.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
@@ -755,6 +760,7 @@ DEPENDENCIES
   faker
   faraday
   faraday-retry
+  fuzzy-string-match
   google-apis-admin_directory_v1
   guard-rspec
   high_voltage

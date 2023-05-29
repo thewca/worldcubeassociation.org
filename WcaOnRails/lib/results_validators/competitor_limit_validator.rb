@@ -5,7 +5,7 @@ module ResultsValidators
     COMPETITOR_LIMIT_WARNING = "The number of persons in the competition (%{n_competitors}) is above the competitor limit (%{competitor_limit}). " \
                                "The results of the competitors registered after the competitor limit was reached must be removed."
 
-    @@desc = "For competition with a competitor limit, this validator checks that this limit is respected."
+    @desc = "For competition with a competitor limit, this validator checks that this limit is respected."
 
     def self.has_automated_fix?
       false

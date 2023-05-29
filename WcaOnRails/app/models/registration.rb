@@ -277,7 +277,7 @@ class Registration < ApplicationRecord
 
   validate :forcing_competitors_to_add_comment, if: :is_competing?
   private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && comments.strip.empty?
+    if competition&.force_comment_in_registration.present? && !comments&.strip&.present?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end

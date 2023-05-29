@@ -1669,8 +1669,10 @@ de:
       statistics: Statistiken
       #original_hash: 82dabd0
       multimedia: Multimedia
-      #original_hash: 4fd2a7f
-      db_export: Datenbank-Export
+      #original_hash: cfde9db
+      db_results_export: Results-Export
+      #original_hash: 7533c29
+      db_dev_export: Entwickler-Export
       #original_hash: 1fa73f3
       regulations: Regeln
       #original_hash: 6bce1b5
@@ -2282,7 +2284,7 @@ de:
         Du musst einen Kommentar hinzufügen. Stelle sicher, dass du die
         Anmeldevoraussetzungen gelesen hast, um zu wissen, was in diesem Feld
         eingetragen werden muss (z.B. für eine FM Multi-Location Competition, an
-        welchem Ort zu teilnehmen wirst).
+        welchem Ort du teilnehmen wirst).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -3436,8 +3438,6 @@ de:
     cancelled_by_html: 'Abgesagt von %{name} am %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: 'Bist du sicher, dass du den Wettbewerb absagen willst?'
-    #original_hash: 9a42672
-    upload_results: Die Ergebnisse hochladen
     #original_hash: 01de5ee
     post_results: Versende die Ergebnisse
     #original_hash: b6513f1
@@ -3966,8 +3966,8 @@ de:
             Verständnis der <a
             href='https://www.worldcubeassociation.org/regulations/'>WCA-Regeln</a>
             erwartet. Die deutsche Übersetzung der Regeln ist <a
-            href='https://www.worldcubeassociation.org/regulations/translations/german/'>hier</a>
-            zu finden.
+            href='https://www.germancubeassociation.de/anleitungen/'>hier</a> zu
+            finden.
       '5':
         #original_hash: 3b657aa
         title: Wie kann ich einen Wettbewerb in meinem Heimatort ermöglichen?
@@ -5526,3 +5526,38 @@ de:
       zu deinen Account zuzugreifen:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Zugelassene TNoodle-Version
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: WCA Results-Export
+      #original_hash: f9fe9df
+      description: >-
+        Auf dieser Seite bieten wir die WCA Ergebnisse zum Download in
+        verschiedenen Formaten an, sodass du diese im Ganzen nutzen /
+        analysieren kannst. Wir aktualisieren dies normalerweise nach jedem
+        Competition-Wochenende wenn die Ergebnisse bereitgestellt werden. Die
+        Dateien sind durchnummeriert und datiert, so kannst du prüfen, ob du die
+        neueste Version bereits hast.
+      #original_hash: 4f59283
+      permalink: Permalink
+      file_formats:
+        #original_hash: b086d79
+        sql: 'SQL Befehle, zum Import in SQL-Datenbanken.'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Tabulator-getrennte Werte, für Tabellenkalkulation in OpenOffice.org,
+          Excel, etc.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        Die enthaltene %{readme_filename} Datei beinhaltet die
+        Nutzungsbedingungen und eine allgemeine Beschreibung (in Englisch, nicht
+        übersetzt).
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Entwickler-Export
+      #original_hash: eba769a
+      description_html: >-
+        Auf dieser Seite stellen wir den WST Entwickler-Export zum Download als
+        SQL dump bereit. Details sind auf %{github_link} zu finden.
+      #original_hash: a479c9c
+      download: Download

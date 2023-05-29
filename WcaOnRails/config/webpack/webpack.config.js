@@ -45,7 +45,8 @@ const customConfig = {
         },
       }
     }
-  }
+  },
+  ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
 };
 
 module.exports = merge(webpackConfig, customConfig);

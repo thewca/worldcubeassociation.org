@@ -118,9 +118,127 @@ class AdminController < ApplicationController
       @competition.update(results_submitted_at: nil)
       flash[:success] = "Results submission cleared."
     else
-      flash[:danger] = "Could not clear the results submission. Maybe results are alredy posted, or there is no submission."
+      flash[:danger] = "Could not clear the results submission. Maybe results are already posted, or there is no submission."
     end
     redirect_to competition_admin_upload_results_edit_path
+  end
+
+  # The order of this array has to follow the steps in which results have to be imported.
+  RESULTS_POSTING_STEPS = %i[inbox_result inbox_person].freeze
+
+  private def load_result_posting_steps
+    @competition = competition_from_params(associations: [:events, :rounds])
+
+    data_tables = {
+      result: Result,
+      scramble: Scramble,
+      inbox_result: InboxResult,
+      inbox_person: InboxPerson,
+      newcomer_person: InboxPerson.where(wcaId: ''),
+      newcomer_result: Result.select(:personId).distinct.where("personId REGEXP '^[0-9]+$'"),
+    }
+
+    @existing_data = data_tables.transform_values { |table| table.where(competitionId: @competition.id).count }
+    @inbox_step = RESULTS_POSTING_STEPS.find { |inbox| @existing_data[inbox] > 0 }
+
+    yield if block_given?
+  end
+
+  def import_results
+    load_result_posting_steps
+  end
+
+  def result_inbox_steps
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
+  end
+
+  def import_inbox_results
+    @competition = competition_from_params
+
+    ActiveRecord::Base.transaction do
+      result_rows = @competition.inbox_results
+                                .includes(:inbox_person)
+                                .map do |inbox_res|
+        inbox_person = inbox_res.inbox_person
+
+        person_id = inbox_person&.wcaId.presence || inbox_res.personId
+        person_country = Country.find_by_iso2(inbox_person&.countryId)
+
+        {
+          pos: inbox_res.pos,
+          personId: person_id,
+          personName: inbox_res.personName,
+          countryId: person_country.id,
+          competitionId: inbox_res.competitionId,
+          eventId: inbox_res.eventId,
+          roundTypeId: inbox_res.roundTypeId,
+          formatId: inbox_res.formatId,
+          value1: inbox_res.value1,
+          value2: inbox_res.value2,
+          value3: inbox_res.value3,
+          value4: inbox_res.value4,
+          value5: inbox_res.value5,
+          best: inbox_res.best,
+          average: inbox_res.average,
+        }
+      end
+
+      Result.insert_all!(result_rows)
+      @competition.inbox_results.destroy_all
+    end
+
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
+  end
+
+  def delete_inbox_data
+    @competition = competition_from_params
+
+    inbox_model = params.require(:model).to_sym
+
+    case inbox_model
+    when :inbox_result
+      @competition.inbox_results.destroy_all
+    when :inbox_person
+      # Ugly hack because we don't have primary keys on InboxPerson, also see comment on `InboxPerson#delete`
+      @competition.inbox_persons.each(&:delete)
+    else
+      raise "Invalid model association: #{inbox_model}"
+    end
+
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
+  end
+
+  def delete_results_data
+    @competition = competition_from_params
+
+    model = params.require(:model)
+
+    if model == 'All'
+      @competition.results.destroy_all
+      @competition.scrambles.destroy_all
+    else
+      event_id = params.require(:event_id)
+      round_type_id = params.require(:round_type_id)
+
+      case model
+      when Result.name
+        Result.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+      when Scramble.name
+        Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+      else
+        raise "Invalid table: #{params[:table]}"
+      end
+    end
+
+    load_result_posting_steps do
+      render partial: 'import_results_steps'
+    end
   end
 
   def create_results
@@ -181,7 +299,7 @@ class AdminController < ApplicationController
           flash.now[:success] = "Successfully fixed #{@person.name}."
           if @person.saved_change_to_countryId?
             flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
-            <a href='/results/admin/check_regional_record_markers.php'>check_regional_record_markers</a>.".html_safe
+            <a href='#{admin_check_regional_records_path}'>check_regional_record_markers</a>.".html_safe
           end
         else
           flash.now[:danger] = "Error while fixing #{@person.name}."
@@ -244,6 +362,41 @@ class AdminController < ApplicationController
     redirect_to admin_generate_exports_path
   end
 
+  def check_regional_records
+    @check_records_request = CheckRegionalRecordsForm.new(
+      competition_id: params[:competition_id] || nil,
+      event_id: params[:event_id] || nil,
+    )
+  end
+
+  def override_regional_records
+    action_params = params.require(:check_regional_records_form)
+                          .permit(:competition_id, :event_id)
+
+    @check_records_request = CheckRegionalRecordsForm.new(action_params)
+    @check_results = @check_records_request.run_check
+  end
+
+  def do_override_regional_records
+    ActiveRecord::Base.transaction do
+      params[:regional_record_overrides].each do |id_and_type, marker|
+        next if [:competition_id, :event_id].include? id_and_type.to_sym
+
+        next unless marker.present?
+
+        result_id, result_type = id_and_type.split('-')
+        record_marker = "regional#{result_type}Record".to_sym
+
+        Result.where(id: result_id).update_all(record_marker => marker)
+      end
+    end
+
+    competition_id = params.dig(:regional_record_overrides, :competition_id)
+    event_id = params.dig(:regional_record_overrides, :event_id)
+
+    redirect_to action: :check_regional_records, competition_id: competition_id, event_id: event_id
+  end
+
   def all_voters
     voters User.eligible_voters, "all-wca-voters"
   end
@@ -263,8 +416,8 @@ class AdminController < ApplicationController
     send_data csv, filename: "#{filename}-#{Time.now.utc.iso8601}.csv", type: :csv
   end
 
-  private def competition_from_params
-    Competition.find_by_id!(params[:competition_id])
+  private def competition_from_params(associations: {})
+    Competition.includes(associations).find_by_id!(params[:competition_id])
   end
 
   def anonymize_person
@@ -301,6 +454,105 @@ class AdminController < ApplicationController
     end
 
     render 'anonymize_person'
+  end
+
+  def finish_unfinished_persons
+    @finish_persons = FinishPersonsForm.new(
+      competition_ids: params[:competition_ids] || nil,
+    )
+  end
+
+  def complete_persons
+    action_params = params.require(:finish_persons_form)
+                          .permit(:competition_ids)
+
+    @finish_persons = FinishPersonsForm.new(action_params)
+    @persons_to_finish = @finish_persons.search_persons
+
+    if @persons_to_finish.empty?
+      flash[:warning] = "There are no persons to complete for the selected competition"
+      redirect_to action: :finish_unfinished_persons
+    end
+  end
+
+  def do_complete_persons
+    # memoize all WCA IDs, especially useful if we have several identical semi-IDs in the same batch
+    # (siblings with the same last name competing as newcomers at the same competition etc.)
+    wca_id_index = Person.pluck(:wca_id)
+
+    ActiveRecord::Base.transaction do
+      params[:person_completions].each do |person_key, procedure|
+        next if [:competition_ids, :continue_batch].include? person_key.to_sym
+
+        old_name, old_country, pending_person_id, pending_competition_id = person_key.split '|'
+
+        case procedure[:action]
+        when "skip"
+          next
+        when "create"
+          new_semi_id = procedure[:new_semi_id]
+
+          new_id, wca_id_index = FinishUnfinishedPersons.complete_wca_id(new_semi_id, wca_id_index)
+
+          new_name = procedure[:new_name]
+          new_country = procedure[:new_country]
+
+          inbox_person = nil
+
+          if pending_person_id.present?
+            inbox_person = InboxPerson.find_by(id: pending_person_id, competition_id: pending_competition_id)
+
+            old_name = inbox_person.name
+            old_country = inbox_person.countryId
+          end
+
+          FinishUnfinishedPersons.insert_person(inbox_person, new_name, new_country, new_id)
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_id, new_name, new_country, pending_competition_id)
+        else
+          action, merge_id = procedure[:action].split '-'
+          raise "Invalid action: #{action}" unless action == "merge"
+
+          # Has to exist because otherwise there would be nothing to merge
+          new_person = Person.find(merge_id)
+
+          FinishUnfinishedPersons.adapt_results(pending_person_id.presence, old_name, old_country, new_person.wca_id, new_person.name, new_person.countryId, pending_competition_id)
+        end
+      end
+    end
+
+    continue_batch = params.dig(:person_completions, :continue_batch)
+    continue_batch = ActiveRecord::Type::Boolean.new.cast(continue_batch)
+
+    competition_ids = params.dig(:person_completions, :competition_ids)
+
+    if continue_batch
+      finish_persons = FinishPersonsForm.new(competition_ids: competition_ids)
+      can_continue = FinishUnfinishedPersons.unfinished_results_scope(finish_persons.competitions).any?
+
+      if can_continue
+        return redirect_to action: :complete_persons, finish_persons_form: { competition_ids: competition_ids }
+      end
+    end
+
+    redirect_to action: :finish_unfinished_persons, competition_ids: competition_ids
+  end
+
+  def peek_unfinished_results
+    @person_name = params.require(:person_name)
+    @country_id = params.require(:country_id)
+    @person_id = params.require(:person_id)
+
+    all_results = Result.select("Results.*, FALSE AS `muted`")
+                        .joins(:event, :round_type)
+                        .where(
+                          personName: @person_name,
+                          countryId: @country_id,
+                          personId: @person_id,
+                        )
+                        .order("Events.rank, RoundTypes.rank DESC")
+
+    @results_by_competition = all_results.group_by(&:competition_id)
+                                         .transform_keys { |id| Competition.find(id) }
   end
 
   def reassign_wca_id

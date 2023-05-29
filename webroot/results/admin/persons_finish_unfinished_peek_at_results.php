@@ -15,20 +15,22 @@ require( '../includes/_footer.php' );
 #----------------------------------------------------------------------
 function analyzeChoices () {
 #----------------------------------------------------------------------
-  global $chosenNameHtml, $chosenNameMysql, $chosenCountryIdHtml, $chosenCountryIdMysql;
+  global $chosenNameHtml, $chosenNameMysql, $chosenCountryIdHtml, $chosenCountryIdMysql, $chosenPersonIdHtml, $chosenPersonIdMysql;
 
   $chosenNameHtml       = getHtmlParam(  'name' );
   $chosenNameMysql      = getMysqlParam( 'name' );
   $chosenCountryIdHtml  = getHtmlParam(  'countryId' );
   $chosenCountryIdMysql = getMysqlParam( 'countryId' );
+  $chosenPersonIdHtml       = getHtmlParam(  'personId' );
+  $chosenPersonIdMysql      = getMysqlParam( 'personId' );
 }
 
 #----------------------------------------------------------------------
 function showDescription () {
 #----------------------------------------------------------------------
-  global $chosenNameHtml, $chosenCountryIdHtml;
+  global $chosenNameHtml, $chosenCountryIdHtml, $chosenPersonIdHtml;
 
-  echo "<p>This page shows results where...<ul><li>personName = <b>$chosenNameHtml</b></li><li>countryId = <b>$chosenCountryIdHtml</b></li><li>personId is missing</li></ul></p>";
+  echo "<p>This page shows results where...<ul><li>personName = <b>$chosenNameHtml</b></li><li>countryId = <b>$chosenCountryIdHtml</b></li><li>personId = <b>$chosenPersonIdHtml</b></li></ul></p>";
 
   echo "<hr>";
 }
@@ -36,7 +38,7 @@ function showDescription () {
 #----------------------------------------------------------------------
 function showResults () {
 #----------------------------------------------------------------------
-  global $chosenNameMysql, $chosenCountryIdMysql;
+  global $chosenNameMysql, $chosenCountryIdMysql, $chosenPersonIdMysql;
 
   $results = dbQuery("
     SELECT
@@ -53,7 +55,7 @@ function showResults () {
     WHERE ".randomDebug()."
       AND result.personName = '$chosenNameMysql'
       AND result.countryId  = '$chosenCountryIdMysql'
-      AND result.personId = ''
+      AND result.personId = '$chosenPersonIdMysql'
       AND event.id = eventId
       AND event.rank < 990
       AND competition.id = competitionId

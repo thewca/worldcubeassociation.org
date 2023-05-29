@@ -23,7 +23,7 @@ module ResultsValidators
     # They are not taken into account in advancement conditions.
     IGNORE_ROUND_TYPES = ["0", "h", "b"].freeze
 
-    @@desc = "This validator checks that advancement between rounds is correct according to the regulations."
+    @desc = "This validator checks that advancement between rounds is correct according to the regulations."
 
     def self.has_automated_fix?
       false
