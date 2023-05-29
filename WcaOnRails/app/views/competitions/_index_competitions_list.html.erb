@@ -23,22 +23,39 @@
       </div>
     <% elsif @by_announcement_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.by_announcement') %>
+        <%= react_component("CompetitionOverview/CompetitionTable", {
+          competitions: competitions,
+          title: t('competitions.index.titles.by_announcement'),
+          showRegistrationStatus: @show_registration_status,
+          sortByAnnouncement: true,
+        }) %>
       </div>
     <% elsif @custom_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.custom') %>
+        <%= react_component("CompetitionOverview/CompetitionTable", {
+          competitions: competitions,
+          title: t('competitions.index.titles.custom'),
+          showRegistrationStatus: @show_registration_status,
+        }) %>
       </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
       <% unless in_progress_competitions.empty? %>
         <div class="col-md-12" id="in-progress-comps">
-          <%= render 'index_table', competitions: in_progress_competitions, title: t('competitions.index.titles.in_progress') %>
+          <%= react_component("CompetitionOverview/CompetitionTable", {
+            competitions: in_progress_competitions,
+            title: t('competitions.index.titles.in_progress'),
+            showRegistrationStatus: @show_registration_status,
+          }) %>
         </div>
       <% end %>
       <% unless upcoming_competitions.empty? %>
         <div class="col-md-12" id="upcoming-comps">
-          <%= render 'index_table', competitions: upcoming_competitions, title: t('competitions.index.titles.upcoming') %>
+          <%= react_component("CompetitionOverview/CompetitionTable", {
+            competitions: upcoming_competitions,
+            title: t('competitions.index.titles.upcoming'),
+            showRegistrationStatus: @show_registration_status,
+          }) %>
         </div>
       <% end %>
     <% end %>
