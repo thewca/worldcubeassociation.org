@@ -543,7 +543,6 @@ RSpec.describe "registrations" do
         it "rejects insufficient payment" do
           outstanding_fees_money = registration.outstanding_entry_fees
           post registration_payment_intent_path(registration.id), params: {
-            _test_payment_method: 'pm_card_visa',
             amount: outstanding_fees_money / 2,
           }
           expect_error_to_be(response, I18n.t("registrations.payment_form.alerts.amount_too_low"))
@@ -797,6 +796,61 @@ RSpec.describe "registrations" do
           expect(payment_intent.confirmed_at).to be_nil
           expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
           expect(payment_intent.stripe_transaction.error).to eq('incorrect_cvc')
+        end
+
+        it "rejects payment due to fraud protection" do
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_radarBlock' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          expect {
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_success_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
+            }
+          }.to_not change { registration.reload.outstanding_entry_fees }
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_transaction.error).to eq('card_declined')
+        end
+
+        it "rejects payment despite successful 3DSecure" do
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_authenticationRequiredChargeDeclinedInsufficientFunds' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_success_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
+            }
+          }.to_not change { registration.reload.outstanding_entry_fees }
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_action')
+          expect(payment_intent.stripe_transaction.error).to be_nil
         end
 
         it "records a failure in the stripe journal" do
