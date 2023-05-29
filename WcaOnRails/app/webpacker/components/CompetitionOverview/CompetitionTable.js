@@ -15,7 +15,7 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
     if (comp.resultsPosted) {
       return <i className="icon check circle result-posted-indicator" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.posted')} />;
     }
-    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: 1 }) })} />;
+    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: comp.dateCount }) })} />;
   }
   if (comp.inProgress) {
     return <i className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
@@ -26,7 +26,8 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
   if (showRegistrationStatus) {
     return null;
   }
-  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.start_in', { days: I18n.t('common.days', { count: 1 }) })} />;
+
+  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: comp.dateCount }) })} />;
 }
 
 function CompetitionTable({
