@@ -21,7 +21,7 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
     return <i className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
   }
   if (sortByAnnouncement) {
-    return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: '' })} />;
+    return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate })} />;
   }
   if (showRegistrationStatus) {
     return null;
