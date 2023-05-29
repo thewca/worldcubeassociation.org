@@ -20,7 +20,7 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_success, :load_payment_intent, :stripe_webhook, :destroy, :update]
+                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_completion, :load_payment_intent, :stripe_webhook, :destroy, :update]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook]
   private def competition_must_be_using_wca_registration!
@@ -520,7 +520,7 @@ class RegistrationsController < ApplicationController
     head :ok
   end
 
-  def payment_success
+  def payment_completion
     registration = Registration.includes(:competition).find(params[:id])
     @competition = registration.competition
 
@@ -585,7 +585,7 @@ class RegistrationsController < ApplicationController
   # It essentially creates a PaymentIntent for the current user-specified amount.
   # Everything after the creation of the intent is handled by Stripe through their JS integration.
   # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
-  # This return URL handles record keeping and stuff at `payment_success` above.
+  # This return URL handles record keeping and stuff at `payment_completion` above.
   def load_payment_intent
     registration = Registration.includes(:user, :competition).find(params[:id])
     user = registration.user

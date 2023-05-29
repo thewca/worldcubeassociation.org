@@ -119,7 +119,7 @@
       const { error } = await stripe.confirmPayment({
         elements,
         confirmParams: {
-          return_url: '<%= registration_payment_success_url(@registration, host: EnvVars.ROOT_URL) %>',
+          return_url: '<%= registration_payment_completion_url(@registration, host: EnvVars.ROOT_URL) %>',
         }
       });
 

@@ -7,7 +7,7 @@
     <%= alert alert_status do %>
       <b><%= wca_local_time(payment_intent.created_at) %></b>
       <%# Abusing the payment success callback that is used after a user walks through the Stripe payment flow, because it already handles fetching. %>
-      <%= link_to ui_icon('refresh'), registration_payment_success_path(@registration, payment_intent: payment_intent.stripe_id, payment_intent_client_secret: payment_intent.client_secret) %>
+      <%= link_to ui_icon('refresh'), registration_payment_completion_path(@registration, payment_intent: payment_intent.stripe_id, payment_intent_client_secret: payment_intent.client_secret) %>
       <br/>
       Amount: <%= format_money payment_intent.money_amount %>
       <br/>

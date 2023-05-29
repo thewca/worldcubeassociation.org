@@ -26,7 +26,7 @@ Rails.application.routes.draw do
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
-  get 'registration/:id/payment-success' => 'registrations#payment_success', as: :registration_payment_success
+  get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
