@@ -334,6 +334,7 @@ id:
     #original_hash: 49d0140
     days:
       zero: '%{count} hari'
+      one: '%{count} hari'
       other: '%{count} hari'
     #original_hash: 203e1b3
     these_events:

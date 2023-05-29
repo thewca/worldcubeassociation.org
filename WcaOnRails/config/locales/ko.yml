@@ -222,6 +222,7 @@ ko:
     #original_hash: 49d0140
     days:
       zero: 0일
+      one: '%{count}일'
       other: '%{count}일'
     #original_hash: 203e1b3
     these_events:

@@ -333,7 +333,8 @@ zh-TW:
       invalid: 無效的
     #original_hash: 49d0140
     days:
-      zero: 0天
+      zero: 0 天
+      one: 1 天
       other: '%{count}天'
     #original_hash: 203e1b3
     these_events:

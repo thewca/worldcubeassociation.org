@@ -279,7 +279,8 @@ vi:
       invalid: không hợp lệ
     #original_hash: 49d0140
     days:
-      zero: 1 ngày
+      zero: 0 ngày
+      one: '%{count} ngày'
       other: '%{count} ngày'
     #original_hash: 203e1b3
     these_events:
