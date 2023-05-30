@@ -22,18 +22,20 @@
   </div>
 
   <script src="https://js.stripe.com/v3/"></script>
+
   <script>
     // From https://stripe.com/docs/js/appendix/supported_locales
-    var supported_locales = ['ar', 'bg', 'cs', 'da', 'de', 'el', 'en', 'en-GB', 'es', 'es-419', 'et', 'fi', 'fil', 'fr', 'fr-CA', 'he', 'hr', 'hu', 'id', 'it', 'ja', 'ko', 'lt', 'lv', 'ms', 'mt', 'nb', 'nl', 'pl', 'pt-BR', 'pt', 'ro', 'ru', 'sk', 'sl', 'sv', 'th', 'tr', 'vi', 'zh', 'zh-HK', 'zh-TW'];
-    var wca_locale = '<%= I18n.locale %>';
-    var stripe = Stripe('<%= EnvVars.STRIPE_PUBLISHABLE_KEY %>', {
+    const supported_locales = ['ar', 'bg', 'cs', 'da', 'de', 'el', 'en', 'en-GB', 'es', 'es-419', 'et', 'fi', 'fil', 'fr', 'fr-CA', 'he', 'hr', 'hu', 'id', 'it', 'ja', 'ko', 'lt', 'lv', 'ms', 'mt', 'nb', 'nl', 'pl', 'pt-BR', 'pt', 'ro', 'ru', 'sk', 'sl', 'sv', 'th', 'tr', 'vi', 'zh', 'zh-HK', 'zh-TW'];
+    const wca_locale = '<%= I18n.locale %>';
+
+    const stripe = Stripe('<%= EnvVars.STRIPE_PUBLISHABLE_KEY %>', {
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
       stripeAccount: '<%= @competition.connected_stripe_account_id %>',
     });
 
     // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)
     // as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment
-    var elements = stripe.elements({
+    const elements = stripe.elements({
       mode: 'payment',
       amount: <%= StripeTransaction.amount_to_stripe(@registration.outstanding_entry_fees.cents, @competition.currency_code) %>,
       currency: '<%= @competition.currency_code.downcase %>',
@@ -43,7 +45,7 @@
     const paymentElement = elements.create("payment");
     paymentElement.mount("#payment-element");
 
-    var $paymentButton = $('#payment-button');
+    const $paymentButton = $('#payment-button');
     $paymentButton.on('click', function(e) {
       e.preventDefault();
 
@@ -51,26 +53,26 @@
       createAndSubmitPaymentIntent();
     });
 
-    var $ajaxErrorRow = $('#wca-error-wrapper');
+    const $ajaxErrorRow = $('#wca-error-wrapper');
     $ajaxErrorRow.hide();
 
-    var $stripeErrorRow = $('#stripe-error-wrapper');
+    const $stripeErrorRow = $('#stripe-error-wrapper');
     $stripeErrorRow.hide();
 
-    var $paymentElementRow = $('#payment-element-wrapper');
+    const $paymentElementRow = $('#payment-element-wrapper');
     $paymentElementRow.removeClass("has-error");
 
-    var $donationFormRow = $('#donation-amount-wrapper');
+    const $donationFormRow = $('#donation-amount-wrapper');
     $donationFormRow.hide();
 
-    var $donationToggle = $('#toggle-show-donation');
+    const $donationToggle = $('#toggle-show-donation');
 
     // we use a custom RubyMoney input that works with JS auto_numeric
     // unfortunately, it doesn't support simple_form's usual input_html options
     // and I am too afraid to change it (at the risk of breaking other parts of the website)
     // so we resort to manually fetching the input and its backing money field
-    var $donationAmountField = $('input[name="payment[donation]"]');
-    var $donationInputField = $(`input[data-target="#${$donationAmountField.attr('id')}"]`);
+    const $donationAmountField = $('input[name="payment[donation]"]');
+    const $donationInputField = $(`input[data-target="#${$donationAmountField.attr('id')}"]`);
 
     function toggleSaving(saving) {
       $paymentButton.prop("disabled", saving);
@@ -87,17 +89,28 @@
       }
     }
 
+    paymentElement.on('change', function(e) {
+      $ajaxErrorRow.hide();
+      $stripeErrorRow.hide();
+
+      if (e.complete) {
+        $paymentElementRow.removeClass("has-error");
+      }
+
+      $paymentButton.prop("disabled", !e.complete);
+    });
+
     async function createAndSubmitPaymentIntent() {
-      var amount = getCurrentRubyAmount();
+      const amount = getCurrentRubyAmount();
 
       if (isNaN(amount)) {
         alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
       } else {
         // Trigger form validation and wallet collection
-        const { error } = await elements.submit();
+        const { error: userInputError } = await elements.submit();
 
-        if (error) {
-          handleStripeError(error);
+        if (userInputError) {
+          handleStripeError(userInputError);
         } else {
           // Fetches a payment intent and captures the client secret
           window.wca.cancelPendingAjaxAndAjax('load-payment-intent', {
@@ -115,7 +128,7 @@
     async function submitPaymentIntent(data) {
       const { client_secret: clientSecret } = data;
 
-      const { error } = await stripe.confirmPayment({
+      const { error: stripeBackendError } = await stripe.confirmPayment({
         elements,
         clientSecret,
         confirmParams: {
@@ -123,17 +136,17 @@
         }
       });
 
-      if (error) {
-        handleStripeError(error);
+      if (stripeBackendError) {
+        handleStripeError(stripeBackendError);
       }
     }
 
     async function handleAjaxError(errorData) {
       toggleSaving(false);
 
-      var $ajaxErrorDiv = $('#wca-ajax-error');
+      const $ajaxErrorDiv = $('#wca-ajax-error');
 
-      var requestId = errorData.getResponseHeader('X-Request-Id');
+      const requestId = errorData.getResponseHeader('X-Request-Id');
       $ajaxErrorDiv.text(`${errorData.statusText}: ${requestId}`);
 
       $ajaxErrorRow.show();
@@ -142,9 +155,7 @@
     function handleStripeError(error) {
       toggleSaving(false);
 
-      $paymentElementRow.addClass("has-error");
-
-      var $stripeErrorDiv = $('#stripe-sdk-error');
+      const $stripeErrorDiv = $('#stripe-sdk-error');
 
       if (error.type === 'card_error' || error.type === 'validation_error') {
         $stripeErrorDiv.text(error.message);
@@ -152,14 +163,15 @@
         $stripeErrorDiv.text('<%= t("registrations.payment_form.errors.stripe_failed") %>');
       }
 
+      $paymentElementRow.addClass("has-error");
       $stripeErrorRow.show();
     }
 
     function getCurrentRubyAmount() {
-      var registration_fees_to_pay = parseInt('<%= @registration.outstanding_entry_fees.cents %>');
+      const registration_fees_to_pay = parseInt('<%= @registration.outstanding_entry_fees.cents %>');
 
       if ($donationToggle.is(':checked')) {
-        var donation = parseInt($donationAmountField.val() || 0);
+        const donation = parseInt($donationAmountField.val() || 0);
 
         return registration_fees_to_pay + donation;
       }
@@ -172,8 +184,8 @@
     });
 
     $donationAmountField.on('change', function() {
-      var amount = getCurrentRubyAmount();
-      var currencyIso = '<%= @registration.outstanding_entry_fees.currency.iso_code %>';
+      const amount = getCurrentRubyAmount();
+      const currencyIso = '<%= @registration.outstanding_entry_fees.currency.iso_code %>';
 
       window.wca.cancelPendingAjaxAndAjax('refresh-stripe-amount', {
         url: '<%= registration_stripe_denomination_path %>',
