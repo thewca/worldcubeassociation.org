@@ -20,7 +20,7 @@
   <%# If there are no entry fees, no need to display this information %>
   <% unless @registration.show_payment_form? || !@competition.has_fees? %>
     <% fees_hint, hint_context = fees_hint_and_context(@registration) %>
-    <%= render 'entry_fee', hint: fees_hint, hint_context: hint_context %>
+    <%= render 'entry_fee', f: f, hint: fees_hint, hint_context: hint_context %>
   <% end %>
 
   <% if @competition.part_of_competition_series? %>

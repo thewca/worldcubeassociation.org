@@ -1,21 +1,18 @@
 <%
-  label ||= t('registrations.payment_form.labels.entry_fees')
+  # expects a variable "f" as simple_form helper.
+
   money_amount ||= @registration.entry_fee
+
+  label ||= t('registrations.payment_form.labels.entry_fees')
+
   hint ||= ""
   hint_context ||= ""
-  hint_context_attribute = hint_context.blank? ? "" : "class=\"text-#{hint_context} bg-#{hint_context}\""
+
+  hint_html_context = hint_context.blank? ? nil : { class: "text-#{hint_context} bg-#{hint_context}" }
 %>
 
 <% if money_amount %>
-  <div class="simple_form form-horizontal">
-    <div class="form-group">
-      <label class="col-sm-2 control-label" for="entry_fees"><%= label %></label>
-      <div class="col-sm-9">
-        <p class="form-control-static"><%= format_money(money_amount) %></p>
-        <% unless hint.blank? %>
-          <p class="help-block"><span <%= raw(hint_context_attribute) %>><%= hint %></span></p>
-        <% end %>
-      </div>
-    </div>
-  </div>
+  <%= f.input :entry_fees, label: label, hint: hint, hint_html: hint_html_context do %>
+    <p class="form-control-static"><%= format_money(money_amount) %></p>
+  <% end %>
 <% end %>
