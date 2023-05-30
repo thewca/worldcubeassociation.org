@@ -1305,9 +1305,11 @@ en:
         payment_button: "Pay your fees with Stripe"
         ajax_error: "WCA server error"
         stripe_error: "Stripe error"
+        subtotal: "Subtotal"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
+        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed. Please confirm the payment by pressing OK."
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
         not_allowed: "You can't pay for that registration."

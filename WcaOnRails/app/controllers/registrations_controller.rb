@@ -449,7 +449,10 @@ class RegistrationsController < ApplicationController
 
     stripe_amount = StripeTransaction.amount_to_stripe(ruby_denomination, currency_iso.downcase)
 
-    render json: { stripe_amount: stripe_amount }
+    ruby_money = Money.new(ruby_denomination, currency_iso)
+    human_amount = helpers.format_money(ruby_money)
+
+    render json: { stripe_amount: stripe_amount, human_amount: human_amount }
   end
 
   # Respond to asynchronous payment updates from Stripe.
