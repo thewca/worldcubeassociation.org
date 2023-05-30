@@ -1908,7 +1908,6 @@ class Competition < ApplicationRecord
       resultsPosted: results_posted?,
       inProgress: in_progress?,
       dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
-      dateCount: (is_probably_over? ? (Date.today - end_date) : (start_date - Date.today)).to_i, # Comp starts in X days / Comp ended X days ago. Calculating here because too nasty in ReactJS.
       announcedDate: announced_at.strftime(" %F %H:%M:%S"),
     )
   end
