@@ -28,6 +28,7 @@ Rails.application.routes.draw do
   post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
   get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
+  get 'registration/stripe-denomination' => 'registrations#stripe_denomination', as: :registration_stripe_denomination
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'

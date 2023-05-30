@@ -88,7 +88,7 @@ class StripeTransaction < ApplicationRecord
     # that need to be submitted as multiples of 100 even though they technically have subunits.
     # The details are documented at https://stripe.com/docs/currencies#special-cases
     if ZERO_DECIMAL_CURRENCIES.include?(iso_currency.upcase)
-      amount_times_hundred = amount_lowest_denomination * 100
+      amount_times_hundred = amount_lowest_denomination.to_f * 100
 
       # Stripe API rejects payments that are below the hundreds sub-unit.
       # In practice this should never happen because the inflation on those currencies
@@ -102,7 +102,7 @@ class StripeTransaction < ApplicationRecord
     end
 
     # Stripe API will be happy as-is.
-    amount_lowest_denomination
+    amount_lowest_denomination.to_i
   end
 
   def self.amount_to_ruby(amount_stripe_denomination, iso_currency)
@@ -121,7 +121,7 @@ class StripeTransaction < ApplicationRecord
     end
 
     # Stripe and ruby-money agree. All good.
-    amount_stripe_denomination
+    amount_stripe_denomination.to_i
   end
 
   def self.create_from_api(api_transaction, parameters, account_id = nil)
