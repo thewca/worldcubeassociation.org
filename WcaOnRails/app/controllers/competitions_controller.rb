@@ -114,7 +114,7 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.not_cancelled
     end
 
-    @competitions = @competitions.includes(:country).where(showAtAll: true)
+    @competitions = @competitions.includes(:country).where(show_at_all: true)
     @competitions = if @by_announcement_selected
                       @competitions.order_by_announcement_date
                     else
@@ -612,7 +612,7 @@ class CompetitionsController < ApplicationController
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
       if current_user.person
-        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
+        competition_ids.concat(current_user.person.competitions.ids)
       end
       # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
       # For example, mailing all competitors about the cancellation.
@@ -665,14 +665,14 @@ class CompetitionsController < ApplicationController
         :id,
         :name,
         :name_reason,
-        :cellName,
-        :countryId,
-        :cityName,
+        :cell_name,
+        :country_id,
+        :city_name,
         :venue,
-        :venueAddress,
+        :venue_address,
         :latitude_degrees,
         :longitude_degrees,
-        :venueDetails,
+        :venue_details,
         :start_date,
         :end_date,
         :information,
@@ -722,7 +722,7 @@ class CompetitionsController < ApplicationController
       if current_user.can_admin_competitions?
         permitted_competition_params += [
           :confirmed,
-          :showAtAll,
+          :show_at_all,
         ]
       end
     end

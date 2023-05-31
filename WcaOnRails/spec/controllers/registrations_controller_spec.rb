@@ -232,7 +232,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "can register for their own competition that is not yet visible" do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
@@ -261,8 +261,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     let!(:delegate) { FactoryBot.create(:delegate) }
     let!(:other_delegate) { FactoryBot.create(:delegate) }
 
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
-    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], show_at_all: true) }
+    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], show_at_all: true) }
 
     before :each do
       sign_in delegate
@@ -364,7 +364,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as competitor" do
     let!(:user) { FactoryBot.create(:user, :wca_id) }
     let!(:delegate) { FactoryBot.create(:delegate) }
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], show_at_all: true) }
     let(:threes_comp_event) { competition.competition_events.find_by(event_id: "333") }
 
     before :each do
@@ -445,7 +445,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "cannot create registration when competition is not visible" do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
 
       expect {
         post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted } }
@@ -585,7 +585,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
   context "competition not visible" do
     let!(:organizer) { FactoryBot.create :user }
-    let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), showAtAll: false, organizers: [organizer]) }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), show_at_all: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do
       expect {

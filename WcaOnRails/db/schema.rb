@@ -11,17 +11,17 @@
 # It's strongly recommended that you check this file into your version control system.
 
 ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
-  create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
-    t.string "cityName", limit: 50, default: "", null: false
-    t.string "countryId", limit: 50, default: "", null: false
+    t.string "city_name", limit: 50, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
     t.text "information", size: :medium
     t.string "venue", limit: 240, default: "", null: false
-    t.string "venueAddress", limit: 120
-    t.string "venueDetails", limit: 120
+    t.string "venue_address", limit: 120
+    t.string "venue_details", limit: 120
     t.string "external_website", limit: 200
-    t.string "cellName", limit: 45, default: "", null: false
-    t.boolean "showAtAll", default: false, null: false
+    t.string "cell_name", limit: 45, default: "", null: false
+    t.boolean "show_at_all", default: false, null: false
     t.integer "latitude"
     t.integer "longitude"
     t.string "contact", limit: 255
@@ -79,7 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.integer "events_per_registration_limit"
     t.boolean "force_comment_in_registration"
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
-    t.index ["countryId"], name: "index_Competitions_on_countryId"
+    t.index ["country_id"], name: "index_Competitions_on_country_id"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
     t.index ["start_date"], name: "index_Competitions_on_start_date"
   end

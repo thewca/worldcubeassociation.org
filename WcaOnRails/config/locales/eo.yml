@@ -447,23 +447,23 @@ eo:
         #original_hash: 7f3d889
         confirmed: Malpermesi redakton de tiu konkurso al organizantoj
         #original_hash: d493e6a
-        showAtAll: Videbliĝu tiu konkurso publike
+        show_at_all: Videbliĝu tiu konkurso publike
         #original_hash: 709a232
         name: Nomo
         #original_hash: f91b080
         name_reason: Kialo de la nomo
         #original_hash: b649210
-        cellName: Kromnomo de la konkurso
+        cell_name: Kromnomo de la konkurso
         #original_hash: d523ebb
-        countryId: Lando
+        country_id: Lando
         #original_hash: 25b7b06
-        cityName: Urbonomo
+        city_name: Urbonomo
         #original_hash: 67cd406
         venue: Konkursejo
         #original_hash: 486f8fb
-        venueAddress: Konkurseja adreso
+        venue_address: Konkurseja adreso
         #original_hash: 08767af
-        venueDetails: Detaloj pri la konkursejo
+        venue_details: Detaloj pri la konkursejo
         #original_hash: ff99f5b
         start_date: Komencdato
         #original_hash: 89d10cd
@@ -871,11 +871,11 @@ eo:
           streketojn (-), kaj-signojn (&), punktojn (.), dupunktojn (:),
           apostrofojn ('), kaj spacetojn ( ).
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Mallonga nomo por elmontri. Se la nomo jam estas mallonga, vi povas
           reuzi la nomon (ekz, Eŭropo 2006).
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Urbonomo kaj ŝtatnomo (se aplikebla) kie la konkurso okazas. Ne
           inkluzivigu la landon (ekz., Paris AŬ San Francisco, California).
         #original_hash: bb470cc
@@ -907,7 +907,7 @@ eo:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -939,7 +939,7 @@ eo:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -970,7 +970,7 @@ eo:
           konkurserojn antaŭ ol uzi ĉi tiun kampon. Registriĝoj kun tro da
           konkurseroj estos blokitaj. Lasu tion malplena se ne estas limo.
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Bonvolu indiki tie iajn pliajn registriĝajn postulojn kiuj ne estis

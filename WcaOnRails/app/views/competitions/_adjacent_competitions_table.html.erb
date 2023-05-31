@@ -38,7 +38,7 @@
       <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= tooltip_title %>">
         <%= t('datetime.distance_in_words.x_days', count: days_until.abs) %> <%= days_until < 0 ? t('competitions.adjacent_competitions.before') : t('competitions.adjacent_competitions.after') %>
       </td>
-      <td><%= c.cityName %>, <%= c.countryId %></td>
+      <td><%= c.city_name %>, <%= c.country_id %></td>
       <td class="text-nowrap text-right">
         <%= link_to_google_maps_dir "#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees %>
       </td>

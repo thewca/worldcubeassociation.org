@@ -184,8 +184,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     let(:trainee_delegate) { FactoryBot.create(:trainee_delegate, senior_delegate_id: senior.id) }
     let(:competition) do
       competition = FactoryBot.create(:competition, :with_delegate_report,
-                                      countryId: "Australia",
-                                      cityName: "Perth, Western Australia",
+                                      country_id: "Australia",
+                                      city_name: "Perth, Western Australia",
                                       name: "Comp of the Future 2016",
                                       delegates: [delegate, trainee_delegate],
                                       starts: Date.new(2016, 2, 1),
@@ -283,7 +283,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "wrc_delegate_report_followup" do
     let(:competition) do
-      competition = FactoryBot.create(:competition, :with_delegate_report, countryId: "Australia", cityName: "Perth, Western Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
+      competition = FactoryBot.create(:competition, :with_delegate_report, country_id: "Australia", city_name: "Perth, Western Australia", name: "Comp of the Future 2016", starts: Date.new(2016, 2, 1), ends: Date.new(2016, 2, 2))
       competition.delegate_report.update!(remarks: "This was a great competition")
       competition.delegate_report.wrc_primary_user = FactoryBot.create :user, :wrc_member, name: "Jean"
       competition.delegate_report.wrc_secondary_user = FactoryBot.create :user, :wrc_member, name: "Michel"

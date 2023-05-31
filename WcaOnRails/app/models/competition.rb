@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  self.table_name = "Competitions"
-
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
@@ -21,7 +19,7 @@ class Competition < ApplicationRecord
   has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
   has_one :delegate_report, dependent: :destroy
   has_many :competition_venues, dependent: :destroy
-  belongs_to :country, foreign_key: :countryId
+  belongs_to :country
   has_one :continent, foreign_key: :continentId, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
@@ -43,31 +41,31 @@ class Competition < ApplicationRecord
            with_model_currency: :currency_code
 
   scope :not_cancelled, -> { where(cancelled_at: nil) }
-  scope :visible, -> { where(showAtAll: true) }
-  scope :not_visible, -> { where(showAtAll: false) }
+  scope :visible, -> { where(show_at_all: true) }
+  scope :not_visible, -> { where(show_at_all: false) }
   scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      "country_id = :region_id OR Countries.continentId = :region_id", region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|
     where(
-      "Competitions.name like :search_term or
-      Competitions.cityName like :search_term",
+      "competitions.name like :search_term or
+      competitions.city_name like :search_term",
       search_term: "%#{search_term}%",
     )
   }
   scope :has_event, lambda { |event_id|
     joins(
-      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = Competitions.id
+      "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
       join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
+    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = competitions.id")
+      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = competitions.id")
       .where(
         "delegate_id = :user_id OR organizer_id = :user_id",
         user_id: user_id,
@@ -85,12 +83,12 @@ class Competition < ApplicationRecord
   }, _prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
-    cityName
-    countryId
+    city_name
+    country_id
     information
     venue
-    venueAddress
-    venueDetails
+    venue_address
+    venue_details
     generate_website
     external_website
     latitude
@@ -123,8 +121,8 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    cellName
-    showAtAll
+    cell_name
+    show_at_all
     external_registration_page
     confirmed_at
     registration_open
@@ -178,8 +176,8 @@ class Competition < ApplicationRecord
   end
   validates :name, length: { maximum: MAX_NAME_LENGTH },
                    format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
-  validates :cellName, length: { maximum: MAX_CELL_NAME_LENGTH },
-                       format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
+  validates :cell_name, length: { maximum: MAX_CELL_NAME_LENGTH },
+                        format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }, if: :name_valid_or_updating?
   validates :venue, format: { with: PATTERN_TEXT_WITH_LINKS_RE }
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
@@ -262,10 +260,10 @@ class Competition < ApplicationRecord
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
-  validates :cityName, city: true
+  validates :city_name, city: true
 
   # We have stricter validations for confirming a competition
-  validates :cityName, :countryId, :venue, :venueAddress, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
+  validates :city_name, :country_id, :venue, :venue_address, :latitude, :longitude, presence: true, if: :confirmed_or_visible?
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
@@ -369,7 +367,7 @@ class Competition < ApplicationRecord
   end
 
   def confirmed_or_visible?
-    self.confirmed? || self.showAtAll
+    self.confirmed? || self.show_at_all?
   end
 
   def registration_full?
@@ -377,7 +375,7 @@ class Competition < ApplicationRecord
   end
 
   def country
-    Country.c_find(self.countryId)
+    Country.c_find(self.country_id)
   end
 
   def continent
@@ -413,7 +411,7 @@ class Competition < ApplicationRecord
 
   def warnings_for(user)
     warnings = {}
-    if self.showAtAll
+    if self.show_at_all
       unless self.announced?
         warnings[:announcement] = I18n.t('competitions.messages.not_announced')
       end
@@ -632,9 +630,9 @@ class Competition < ApplicationRecord
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank? || force_override
+      if cell_name.blank? || force_override
         year = " " + year
-        self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
+        self.cell_name = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
     end
   end
@@ -732,7 +730,7 @@ class Competition < ApplicationRecord
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      if ["competition_id", "competitionId"].include?(foreign_key)
+      if foreign_key == "competition_id"
         association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id)
       end
     end
@@ -1178,7 +1176,7 @@ class Competition < ApplicationRecord
 
   def has_date_errors?
     valid?
-    !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
+    !errors[:start_date].empty? || !errors[:end_date].empty? || (!show_at_all && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
   end
 
   # The competition must be at least 28 days in advance in order to confirm it. Admins are able to modify the competition despite being less than 28 days in advance.
@@ -1264,7 +1262,7 @@ class Competition < ApplicationRecord
   end
 
   def display_name(short: false)
-    data = short ? cellName : name
+    data = short ? cell_name : name
     if cancelled?
       I18n.t("competitions.competition_info.display_name", name: data)
     else
@@ -1298,7 +1296,7 @@ class Competition < ApplicationRecord
   end
 
   def user_can_view?(user)
-    self.showAtAll || user&.can_manage_competition?(self)
+    self.show_at_all || user&.can_manage_competition?(self)
   end
 
   def user_can_view_results?(user)
@@ -1355,7 +1353,7 @@ class Competition < ApplicationRecord
   end
 
   def city_and_country
-    [cityName, country&.name].compact.join(', ')
+    [city_name, country&.name].compact.join(', ')
   end
 
   def events_with_podium_results
@@ -1510,7 +1508,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
+    Competition.where(show_at_all: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1529,7 +1527,7 @@ class Competition < ApplicationRecord
       if !country
         raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
       end
-      competitions = competitions.where(countryId: country.id)
+      competitions = competitions.where(country_id: country.id)
     end
 
     if params[:start].present?
@@ -1557,7 +1555,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| column + " LIKE :part" }.join(" OR ")
+      like_query = %w(id name cell_name city_name country_id).map { |column| column + " LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1591,7 +1589,7 @@ class Competition < ApplicationRecord
       "formatVersion" => "1.0",
       "id" => id,
       "name" => name,
-      "shortName" => cellName,
+      "shortName" => cell_name,
       "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
@@ -1864,10 +1862,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  alias_attribute :venue_address, :venueAddress
-  alias_attribute :venue_details, :venueDetails
-  alias_attribute :short_name, :cellName
-  alias_attribute :city, :cityName
+  alias_attribute :short_name, :cell_name
+  alias_attribute :city, :city_name
 
   def country_iso2
     country&.iso2
@@ -1918,7 +1914,7 @@ class Competition < ApplicationRecord
   end
 
   def multi_country_fmc_competition?
-    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(countryId)
+    events.length == 1 && events[0].fewest_moves? && Country::FICTIVE_IDS.include?(country_id)
   end
 
   def exempt_from_wca_dues?

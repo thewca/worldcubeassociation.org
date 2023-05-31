@@ -411,23 +411,23 @@ uk:
         #original_hash: 7f3d889
         confirmed: Не дозволяти організаторам редагувати ці змагання
         #original_hash: d493e6a
-        showAtAll: Опублікувати змагання
+        show_at_all: Опублікувати змагання
         #original_hash: 709a232
         name: Назва
         #original_hash: f91b080
         name_reason: Обгрунтування імені
         #original_hash: b649210
-        cellName: Стисла назва змагання
+        cell_name: Стисла назва змагання
         #original_hash: d523ebb
-        countryId: Країна
+        country_id: Країна
         #original_hash: 25b7b06
-        cityName: Місто
+        city_name: Місто
         #original_hash: 67cd406
         venue: Місце проведення
         #original_hash: 486f8fb
-        venueAddress: Адреса місця проведення
+        venue_address: Адреса місця проведення
         #original_hash: 08767af
-        venueDetails: Опис місця проведення
+        venue_details: Опис місця проведення
         #original_hash: ff99f5b
         start_date: Дата початку
         #original_hash: 89d10cd
@@ -796,11 +796,11 @@ uk:
           містити лише букви, цифри, дефіси(-), амперсанди(&), крапки(.),
           двокрапки(:), апострофи(') та пробіли( ).
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Скорочена назва для відображення. Якщо основна назва достатньо
           коротка, можна її продублювати.
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Назва міста та району/області (якщо треба) де буде відбуватись
           змагання (наприклад, Sultan-Sarai, Bilogirs'kyi, Crimea). Країну
           вказувати не потрібно.
@@ -825,7 +825,7 @@ uk:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -854,7 +854,7 @@ uk:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -873,7 +873,7 @@ uk:
           Обгрунтування ліміту учасників. Будь ласка, заповніть це поле
           англійською!
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b

@@ -448,23 +448,23 @@ de:
         #original_hash: 7f3d889
         confirmed: Lasse dieser Turnier nicht von Organisatoren editieren
         #original_hash: d493e6a
-        showAtAll: Wettbewerb öffentlich sichtbar machen
+        show_at_all: Wettbewerb öffentlich sichtbar machen
         #original_hash: 709a232
         name: Name
         #original_hash: f91b080
         name_reason: Der Grund für diesen Namen
         #original_hash: b649210
-        cellName: Spitzname
+        cell_name: Spitzname
         #original_hash: d523ebb
-        countryId: Land
+        country_id: Land
         #original_hash: 25b7b06
-        cityName: Name der Stadt
+        city_name: Name der Stadt
         #original_hash: 67cd406
         venue: Veranstaltungsort
         #original_hash: 486f8fb
-        venueAddress: Adresse des Veranstaltungsortes
+        venue_address: Adresse des Veranstaltungsortes
         #original_hash: 08767af
-        venueDetails: Details zum Veranstaltungsort
+        venue_details: Details zum Veranstaltungsort
         #original_hash: ff99f5b
         start_date: Startdatum
         #original_hash: 89d10cd
@@ -885,11 +885,11 @@ de:
           alphanumerische Zeichen, Bindestriche(-), Und-Zeichen(&), Punkte(.),
           Doppelpunkte(:), Apostrophe(') und Leerzeichen( ) enthalten.
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Ein Spitzname für die Anzeige. Wenn der volle Name bereits kurz ist,
           kannst Du ihn wiederverwenden (z.B. Europe 2006).
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Name der Stadt und des Verwaltungsbezirks (wenn möglich) in dem der
           Wettbewerb stattfindet. Lasse hierbei das Land aus (z.B. Paris ODER
           San Francisco, Kalifornien).
@@ -917,7 +917,7 @@ de:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -950,7 +950,7 @@ de:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -984,7 +984,7 @@ de:
           Anmeldungen mit zu vielen Events werden blockiert. Lasse dies frei,
           wenn es kein Limit gibt.
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: 3de153b
         extra_registration_requirements: >-
           Bitte führe hier zusätzliche Registrierungsbedingungen auf, die oben

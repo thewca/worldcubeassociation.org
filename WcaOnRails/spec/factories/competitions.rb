@@ -4,9 +4,9 @@ FactoryBot.define do
   factory :competition do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
-    cityName { "San Francisco, California" }
+    city_name { "San Francisco, California" }
     name_reason { "Foo sounds cool, right?" }
-    countryId { "USA" }
+    country_id { "USA" }
     currency_code { "USD" }
     base_entry_fee_lowest_denomination { 1000 }
     information { "Information!" }
@@ -49,9 +49,9 @@ FactoryBot.define do
     main_event_id { events.first.id if events.any? }
 
     venue { "My backyard" }
-    venueAddress { "My backyard street" }
+    venue_address { "My backyard street" }
     external_website { "https://www.worldcubeassociation.org" }
-    showAtAll { false }
+    show_at_all { false }
     confirmed_at { nil }
 
     external_registration_page { "https://www.worldcubeassociation.org" }
@@ -133,12 +133,12 @@ FactoryBot.define do
     end
 
     trait :not_visible do
-      showAtAll { false }
+      show_at_all { false }
     end
 
     trait :visible do
       with_delegate
-      showAtAll { true }
+      show_at_all { true }
     end
 
     trait :announced do

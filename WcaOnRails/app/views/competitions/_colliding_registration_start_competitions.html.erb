@@ -46,7 +46,7 @@
               <td data-toggle="tooltip" data-placement="top" data-container="body" title="<%= tooltip_title %>">
                 <%= t('datetime.distance_in_words.x_minutes', count: minutes_until.abs) %> <%= minutes_until < 0 ? t('competitions.adjacent_competitions.before') : t('competitions.adjacent_competitions.after') %>
               </td>
-              <td><%= c.cityName %>, <%= c.countryId %></td>
+              <td><%= c.city_name %>, <%= c.country_id %></td>
               <td class="wca-adjacent-competitions-show-events">
                 <% c.events.each do |event| %>
                   <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>

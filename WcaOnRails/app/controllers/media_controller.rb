@@ -29,7 +29,7 @@ class MediaController < ApplicationController
     params[:region] ||= "all"
 
     media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(timestampSubmitted: :desc)
-    media = media.joins(:competition).where("YEAR(Competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
+    media = media.joins(:competition).where("YEAR(competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
     media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
 
     media

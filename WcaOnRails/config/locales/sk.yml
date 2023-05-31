@@ -289,21 +289,21 @@ sk:
         #original_hash: 7f3d889
         isConfirmed: Nenechaj organizátorov pozmeniť túto súťaž
         #original_hash: d493e6a
-        showAtAll: Zverejni súťaž
+        show_at_all: Zverejni súťaž
         #original_hash: 709a232
         name: Meno
         #original_hash: b649210
-        cellName: Prezývka súťaže
+        cell_name: Prezývka súťaže
         #original_hash: d523ebb
-        countryId: Krajina
+        country_id: Krajina
         #original_hash: 25b7b06
-        cityName: Meno mesta
+        city_name: Meno mesta
         #original_hash: 67cd406
         venue: Destinácia
         #original_hash: 486f8fb
-        venueAddress: Adresa destinácie
+        venue_address: Adresa destinácie
         #original_hash: 08767af
-        venueDetails: Detaily destinácie
+        venue_details: Detaily destinácie
         #original_hash: ff99f5b
         start_date: Dátum začiatku
         #original_hash: 89d10cd
@@ -583,11 +583,11 @@ sk:
           alfanumerické znaky, pomlčky(-), ampersandy(&), bodky(.),
           dvojbodky(:), apostrofy(') a medzery( ).
         #original_hash: 525fcc8
-        cellName: >-
+        cell_name: >-
           Krátke meno pre súťaž, na zobrazenie. Ak je meno súťaže dostatočne
           krátke, môžete ho znovu použiť(napr. Europe 2006).
         #original_hash: bce4589
-        cityName: >-
+        city_name: >-
           Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. Nepíšte
           krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
         #original_hash: 3d99319
@@ -608,7 +608,7 @@ sk:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -633,7 +633,7 @@ sk:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -650,7 +650,7 @@ sk:
           Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím v
           angličtine.
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         championship_type: ''
       website_contact:

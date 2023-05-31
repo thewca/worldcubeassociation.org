@@ -33,7 +33,7 @@
         <% competitions.each do |competition| %>
           <% registration = registrations_by_competition_id[competition.id] %>
           <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
-                          competition.showAtAll? ? "visible" : "not-visible",
+                          competition.show_at_all? ? "visible" : "not-visible",
                           competition.cancelled? ? "cancelled" : "",
                           past ? "past" : "not-past" ].join(' ') %>
           <tr class="<%= tr_classes %>"

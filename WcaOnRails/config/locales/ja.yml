@@ -393,23 +393,23 @@ ja:
         #original_hash: 7f3d889
         confirmed: 運営メンバー (代理人除く) による大会編集を許可しない。
         #original_hash: d493e6a
-        showAtAll: 大会を一般公開する
+        show_at_all: 大会を一般公開する
         #original_hash: 709a232
         name: 大会名
         #original_hash: f91b080
         name_reason: 大会名の由来 (命名理由)
         #original_hash: b649210
-        cellName: 大会名略称
+        cell_name: 大会名略称
         #original_hash: d523ebb
-        countryId: 開催国
+        country_id: 開催国
         #original_hash: 25b7b06
-        cityName: 都市名
+        city_name: 都市名
         #original_hash: 67cd406
         venue: 会場
         #original_hash: 486f8fb
-        venueAddress: 会場所在地
+        venue_address: 会場所在地
         #original_hash: 08767af
-        venueDetails: 会場詳細
+        venue_details: 会場詳細
         #original_hash: ff99f5b
         start_date: 開始日
         #original_hash: 89d10cd
@@ -767,9 +767,9 @@ ja:
           大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
           (2) 語頭を大文字にする</p><p> (3) 英数字と - & . : ' および半角スペースのみ使用可。</p>
         #original_hash: 525fcc8
-        cellName: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
+        cell_name: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
         #original_hash: bce4589
-        cityName: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
+        city_name: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
         #original_hash: bb470cc
         information: >-
           大会の概要 (例 : UT Open 2010 is the first students-organized competition in
@@ -789,7 +789,7 @@ ja:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -813,7 +813,7 @@ ja:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -825,7 +825,7 @@ ja:
         #original_hash: 4bd7102
         competitor_limit_reason: 大会定員設定の理由 (英語で記入してください)
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b

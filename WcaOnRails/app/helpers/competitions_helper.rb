@@ -197,7 +197,7 @@ module CompetitionsHelper
         name: c.name,
         latitude_degrees: c.latitude_degrees,
         longitude_degrees: c.longitude_degrees,
-        cityName: c.cityName,
+        city_name: c.city_name,
         marker_date: wca_date_range(c.start_date, c.end_date),
         is_probably_over: c.is_probably_over?,
         url: competition_path(c),
@@ -347,7 +347,7 @@ module CompetitionsHelper
       # Returns a string indicating (a) whether the competition is visible, and
       # (b) whether the competition is confirmed, based on the competition's state.
 
-      visible = competition.showAtAll?
+      visible = competition.show_at_all?
 
       if competition.confirmed?
         visible ? t('competitions.messages.confirmed_visible') : t('competitions.messages.confirmed_not_visible')

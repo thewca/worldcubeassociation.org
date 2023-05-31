@@ -53,7 +53,7 @@ class Country < ApplicationRecord
 
   belongs_to :continent, foreign_key: :continentId
   alias_attribute :continent_id, :continentId
-  has_many :competitions, foreign_key: :countryId
+  has_many :competitions, foreign_key: :country_id
   has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
 
   def continent

@@ -17,7 +17,7 @@
       <div>
         <%= md @competition.venue %>
         <p>
-          <%= @competition.venueAddress %>
+          <%= @competition.venue_address %>
         </p>
         (<%= link_to_google_maps_place "#{@competition.latitude_degrees}, #{@competition.longitude_degrees}", @competition.latitude_degrees, @competition.longitude_degrees %>)
       </div>

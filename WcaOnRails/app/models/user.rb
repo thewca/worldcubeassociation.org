@@ -848,7 +848,7 @@ class User < ApplicationRecord
     # Only allow results admins and competition delegates to delete competitions.
     if !can_manage_competition?(competition)
       I18n.t('competitions.errors.cannot_manage')
-    elsif competition.showAtAll
+    elsif competition.show_at_all
       I18n.t('competitions.errors.cannot_delete_public')
     elsif competition.confirmed? && !self.can_admin_results?
       I18n.t('competitions.errors.cannot_delete_confirmed')

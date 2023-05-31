@@ -354,23 +354,23 @@ zh-CN:
         #original_hash: 7f3d889
         confirmed: 不要让组织者编辑这个比赛
         #original_hash: d493e6a
-        showAtAll: 公开比赛
+        show_at_all: 公开比赛
         #original_hash: 709a232
         name: 名字
         #original_hash: f91b080
         name_reason: 命名的原因
         #original_hash: b649210
-        cellName: 比赛昵称
+        cell_name: 比赛昵称
         #original_hash: d523ebb
-        countryId: 国家/地区
+        country_id: 国家/地区
         #original_hash: 25b7b06
-        cityName: 城市
+        city_name: 城市
         #original_hash: 67cd406
         venue: 地点
         #original_hash: 486f8fb
-        venueAddress: 地址
+        venue_address: 地址
         #original_hash: 08767af
-        venueDetails: 地点详情
+        venue_details: 地点详情
         #original_hash: ff99f5b
         start_date: 开始日期
         #original_hash: 89d10cd
@@ -606,9 +606,9 @@ zh-CN:
         #original_hash: 2c812a0
         name: '比赛全名需在结尾包含年份（例：Danish Open 2016）。注意大小写。名字只能包含字母、数字、标点（-&.:''）和空格。'
         #original_hash: 525fcc8
-        cellName: 用于显示的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
+        cell_name: 用于显示的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
         #original_hash: bce4589
-        cityName: '比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。'
+        city_name: '比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。'
         #original_hash: bb470cc
         information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
         #original_hash: b4d020f
@@ -624,7 +624,7 @@ zh-CN:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -649,7 +649,7 @@ zh-CN:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -663,7 +663,7 @@ zh-CN:
         #original_hash: 4bd7102
         competitor_limit_reason: 为啥限制比赛人数？请使用英文填写！
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         on_the_spot_registration: ''
         #original_hash: da39a3e

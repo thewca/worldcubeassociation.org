@@ -32,7 +32,7 @@
           <%= link_to competition.display_name(short: true), competition_path(competition) %>
         </div>
         <div class="location">
-          <strong><%= competition.country.name %></strong>, <%= competition.cityName %>
+          <strong><%= competition.country.name %></strong>, <%= competition.city_name %>
         </div>
         <div class="venue-link">
           <%=md(competition.venue, target_blank: true) %>

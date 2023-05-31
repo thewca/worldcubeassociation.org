@@ -30,7 +30,7 @@
           <tr>
             <td>
               <%= flag_icon competition.country.iso2 %><%= link_to competition.display_name(short: true), competition_path(competition) %>
-              <br /><strong><%= competition.country.name_in(:en) %></strong>, <%= competition.cityName %>
+              <br /><strong><%= competition.country.name_in(:en) %></strong>, <%= competition.city_name %>
             </td>
             <td class="admin-delegate">
               <%= users_to_sentence competition.delegates %>

@@ -5,7 +5,7 @@ require "rails_helper"
 RSpec.feature "Registering for a competition" do
   let!(:user) { FactoryBot.create :user }
   let!(:delegate) { FactoryBot.create :delegate }
-  let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate], showAtAll: true }
+  let(:competition) { FactoryBot.create :competition, :registration_open, delegates: [delegate], show_at_all: true }
 
   context "signed in as user" do
     before :each do
