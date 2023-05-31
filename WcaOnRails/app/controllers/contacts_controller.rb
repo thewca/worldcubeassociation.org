@@ -3,8 +3,8 @@
 class ContactsController < ApplicationController
   def website
     @contact = WebsiteContact.new(your_email: current_user&.email, name: current_user&.name,
-                                  competition_id: params[:competitionId],
-                                  inquiry: params[:competitionId] ? "competition" : nil)
+                                  competition_id: params[:competition_id],
+                                  inquiry: params[:competition_id] ? "competition" : nil)
   end
 
   def website_create

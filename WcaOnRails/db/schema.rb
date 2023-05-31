@@ -84,16 +84,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.index ["start_date"], name: "index_Competitions_on_start_date"
   end
 
-  create_table "CompetitionsMedia", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competitionId", limit: 32, default: "", null: false
-    t.string "type", limit: 15, default: "", null: false
+  create_table "competition_media", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", limit: 32, default: "", null: false
+    t.string "media_type", limit: 15, default: "", null: false
     t.string "text", limit: 100, default: "", null: false
     t.text "uri"
-    t.string "submitterName", default: "", null: false
-    t.text "submitterComment"
-    t.string "submitterEmail", default: "", null: false
-    t.timestamp "timestampSubmitted", default: -> { "CURRENT_TIMESTAMP" }, null: false
-    t.timestamp "timestampDecided"
+    t.string "submitter_name", default: "", null: false
+    t.text "submitter_comment"
+    t.string "submitter_email", default: "", null: false
+    t.timestamp "submitted_at", default: -> { "CURRENT_TIMESTAMP" }, null: false
+    t.timestamp "decided_at"
     t.string "status", limit: 10, default: "", null: false
   end
 

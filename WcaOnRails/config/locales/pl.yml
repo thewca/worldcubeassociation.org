@@ -631,19 +631,19 @@ pl:
         competition_id: Miał miejsce podczas
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Zawody
+        competition_id: Zawody
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Tekst
         #original_hash: d051707
         uri: Link
         #original_hash: 1be755a
-        submitterName: Imię i nazwisko zgłaszającego
+        submitter_name: Imię i nazwisko zgłaszającego
         #original_hash: 78cdfee
-        submitterEmail: Email zgłaszającego
+        submitter_email: Email zgłaszającego
         #original_hash: 0d31f23
-        submitterComment: Komentarz zgłaszającego
+        submitter_comment: Komentarz zgłaszającego
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -709,7 +709,7 @@ pl:
         accepted: Zaakceptowane
         #original_hash: 96f608c
         pending: Oczekujące
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Reportaż
         #original_hash: 4360c2d
@@ -1119,19 +1119,19 @@ pl:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

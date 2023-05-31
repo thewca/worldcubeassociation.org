@@ -679,19 +679,19 @@ sv:
         competition_id: Inträffade under
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Tävling
+        competition_id: Tävling
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Länk
         #original_hash: 1be755a
-        submitterName: Inskickarens namn
+        submitter_name: Inskickarens namn
         #original_hash: 78cdfee
-        submitterEmail: Inskickarens e-post
+        submitter_email: Inskickarens e-post
         #original_hash: 0d31f23
-        submitterComment: Inskickarens kommentar
+        submitter_comment: Inskickarens kommentar
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -757,7 +757,7 @@ sv:
         accepted: Accepterad
         #original_hash: 96f608c
         pending: Väntar
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Rapport
         #original_hash: 4360c2d
@@ -1203,19 +1203,19 @@ sv:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

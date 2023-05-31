@@ -684,19 +684,19 @@ cs:
         competition_id: Stalo se během
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Soutěž
+        competition_id: Soutěž
         #original_hash: 3deb745
-        type: Typ
+        media_type: Typ
         #original_hash: c3328c3
         text: Text
         #original_hash: d051707
         uri: Odkaz
         #original_hash: 1be755a
-        submitterName: Jméno zadavatele
+        submitter_name: Jméno zadavatele
         #original_hash: 78cdfee
-        submitterEmail: E-mail zadavatele
+        submitter_email: E-mail zadavatele
         #original_hash: 0d31f23
-        submitterComment: Komentář zadavatele
+        submitter_comment: Komentář zadavatele
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -762,7 +762,7 @@ cs:
         accepted: Přijato
         #original_hash: 96f608c
         pending: Čeká na vyřízení
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Report
         #original_hash: 4360c2d
@@ -1200,19 +1200,19 @@ cs:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

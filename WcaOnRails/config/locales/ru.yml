@@ -687,19 +687,19 @@ ru:
         competition_id: Произошло во время
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Соревнование
+        competition_id: Соревнование
         #original_hash: 3deb745
-        type: Тип
+        media_type: Тип
         #original_hash: c3328c3
         text: Текст
         #original_hash: d051707
         uri: Ссылка
         #original_hash: 1be755a
-        submitterName: Имя отправителя
+        submitter_name: Имя отправителя
         #original_hash: 78cdfee
-        submitterEmail: Email отправителя
+        submitter_email: Email отправителя
         #original_hash: 0d31f23
-        submitterComment: Комментарий отправителя
+        submitter_comment: Комментарий отправителя
         #original_hash: bae7d5b
         status: Статус
       regional_organization:
@@ -765,7 +765,7 @@ ru:
         accepted: Одобрено
         #original_hash: 96f608c
         pending: В ожидании
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Отчёт
         #original_hash: 4360c2d
@@ -1221,19 +1221,19 @@ ru:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

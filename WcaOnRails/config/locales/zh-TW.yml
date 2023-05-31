@@ -664,19 +664,19 @@ zh-TW:
         competition_id: 發生於
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 比賽
+        competition_id: 比賽
         #original_hash: 3deb745
-        type: 種類
+        media_type: 種類
         #original_hash: c3328c3
         text: 內容
         #original_hash: d051707
         uri: 連結
         #original_hash: 1be755a
-        submitterName: 提交者姓名
+        submitter_name: 提交者姓名
         #original_hash: 78cdfee
-        submitterEmail: 提交者電子郵件
+        submitter_email: 提交者電子郵件
         #original_hash: 0d31f23
-        submitterComment: 提交者意見
+        submitter_comment: 提交者意見
         #original_hash: bae7d5b
         status: 狀態
       regional_organization:
@@ -742,7 +742,7 @@ zh-TW:
         accepted: 成功
         #original_hash: 96f608c
         pending: 待審核
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 報導
         #original_hash: 4360c2d
@@ -1066,19 +1066,19 @@ zh-TW:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

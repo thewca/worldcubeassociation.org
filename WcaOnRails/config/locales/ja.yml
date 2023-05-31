@@ -596,19 +596,19 @@ ja:
         competition_id: 発生した大会
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 大会
+        competition_id: 大会
         #original_hash: 3deb745
-        type: 記録種別
+        media_type: 記録種別
         #original_hash: c3328c3
         text: 本文
         #original_hash: d051707
         uri: リンク
         #original_hash: 1be755a
-        submitterName: 送信者氏名
+        submitter_name: 送信者氏名
         #original_hash: 78cdfee
-        submitterEmail: 送信者メールアドレス
+        submitter_email: 送信者メールアドレス
         #original_hash: 0d31f23
-        submitterComment: 送信者コメント
+        submitter_comment: 送信者コメント
         #original_hash: bae7d5b
         status: 状態
       regional_organization:
@@ -674,7 +674,7 @@ ja:
         accepted: 受理済
         #original_hash: 96f608c
         pending: 保留中
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 報告
         #original_hash: 4360c2d
@@ -972,19 +972,19 @@ ja:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

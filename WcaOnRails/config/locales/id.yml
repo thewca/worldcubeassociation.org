@@ -674,19 +674,19 @@ id:
         competition_id: Terjadi pada saat
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Kompetisi
+        competition_id: Kompetisi
         #original_hash: 3deb745
-        type: Tipe
+        media_type: Tipe
         #original_hash: c3328c3
         text: Teks
         #original_hash: d051707
         uri: Tautan
         #original_hash: 1be755a
-        submitterName: Nama pengirim
+        submitter_name: Nama pengirim
         #original_hash: 78cdfee
-        submitterEmail: Email pengirim
+        submitter_email: Email pengirim
         #original_hash: 0d31f23
-        submitterComment: Komentar pengirim
+        submitter_comment: Komentar pengirim
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -752,7 +752,7 @@ id:
         accepted: Diterima
         #original_hash: 96f608c
         pending: Menunggu
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Laporan
         #original_hash: 4360c2d
@@ -1198,19 +1198,19 @@ id:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

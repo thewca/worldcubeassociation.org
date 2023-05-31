@@ -610,19 +610,19 @@ uk:
         competition_id: Сталося протягом
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Змагання
+        competition_id: Змагання
         #original_hash: 3deb745
-        type: Тип
+        media_type: Тип
         #original_hash: c3328c3
         text: Текст
         #original_hash: d051707
         uri: Посилання
         #original_hash: 1be755a
-        submitterName: Ім’я подавця
+        submitter_name: Ім’я подавця
         #original_hash: 78cdfee
-        submitterEmail: E-mail подавця
+        submitter_email: E-mail подавця
         #original_hash: 0d31f23
-        submitterComment: Коментар подавця
+        submitter_comment: Коментар подавця
         #original_hash: bae7d5b
         status: Статус
       regional_organization:
@@ -686,7 +686,7 @@ uk:
         accepted: Прийнято
         #original_hash: 96f608c
         pending: Очікує
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Звітувати
         #original_hash: 4360c2d
@@ -1053,19 +1053,19 @@ uk:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

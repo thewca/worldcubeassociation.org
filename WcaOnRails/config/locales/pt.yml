@@ -683,19 +683,19 @@ pt:
         competition_id: Aconteceu durante
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Competição
+        competition_id: Competição
         #original_hash: 3deb745
-        type: Tipo
+        media_type: Tipo
         #original_hash: c3328c3
         text: Texto
         #original_hash: d051707
         uri: Hiperligação
         #original_hash: 1be755a
-        submitterName: Nome de quem submete
+        submitter_name: Nome de quem submete
         #original_hash: 78cdfee
-        submitterEmail: Email de quem submete
+        submitter_email: Email de quem submete
         #original_hash: 0d31f23
-        submitterComment: Comentário de quem submete
+        submitter_comment: Comentário de quem submete
         #original_hash: bae7d5b
         status: Estado
       regional_organization:
@@ -763,7 +763,7 @@ pt:
         accepted: Aceite
         #original_hash: 96f608c
         pending: Pendente
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Relatório
         #original_hash: 4360c2d
@@ -1211,19 +1211,19 @@ pt:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

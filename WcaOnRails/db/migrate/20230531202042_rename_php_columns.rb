@@ -12,5 +12,17 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :Competitions, :competitions
+
+    change_table :CompetitionsMedia do |t|
+      t.rename :type, :media_type
+      t.rename :competitionId, :competition_id
+      t.rename :submitterName, :submitter_name
+      t.rename :submitterComment, :submitter_comment
+      t.rename :submitterEmail, :submitter_email
+      t.rename :timestampSubmitted, :submitted_at
+      t.rename :timestampDecided, :decided_at
+    end
+
+    rename_table :CompetitionsMedia, :competition_media
   end
 end

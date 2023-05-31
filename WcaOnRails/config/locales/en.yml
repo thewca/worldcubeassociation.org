@@ -423,13 +423,13 @@ en:
         tags: "Tags"
         competition_id: "Happened during"
       competition_medium:
-        competitionId: "Competition"
-        type: "Type"
+        competition_id: "Competition"
+        media_type: "Type"
         text: "Text"
         uri: "Link"
-        submitterName: "Submitter name"
-        submitterEmail: "Submitter email"
-        submitterComment: "Submitter comment"
+        submitter_name: "Submitter name"
+        submitter_email: "Submitter email"
+        submitter_comment: "Submitter comment"
         status: "Status"
       regional_organization:
         name: "Name"
@@ -467,7 +467,7 @@ en:
       status:
         accepted: "Accepted"
         pending: "Pending"
-      type:
+      media_type:
         report: "Report"
         article: "Article"
         multimedia: "Multimedia"
@@ -644,13 +644,13 @@ en:
       vote:
         comment: ""
       competition_medium:
-        competitionId: ""
-        type: ""
+        competition_id: ""
+        media_type: ""
         text: ""
         uri: ""
-        submitterName: ""
-        submitterEmail: ""
-        submitterComment: ""
+        submitter_name: ""
+        submitter_email: ""
+        submitter_comment: ""
         status: ""
       results_submission:
         schedule_url: ""

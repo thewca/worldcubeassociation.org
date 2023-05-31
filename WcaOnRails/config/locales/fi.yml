@@ -654,19 +654,19 @@ fi:
         competition_id: Minkä aikana tapahtui
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Kilpailu
+        competition_id: Kilpailu
         #original_hash: 3deb745
-        type: Tyyppi
+        media_type: Tyyppi
         #original_hash: c3328c3
         text: Teksti
         #original_hash: d051707
         uri: Linkki
         #original_hash: 1be755a
-        submitterName: Lähettäjän nimi
+        submitter_name: Lähettäjän nimi
         #original_hash: 78cdfee
-        submitterEmail: Lähettäjän sähköposti
+        submitter_email: Lähettäjän sähköposti
         #original_hash: 0d31f23
-        submitterComment: Lähettäjän kommentti
+        submitter_comment: Lähettäjän kommentti
         #original_hash: bae7d5b
         status: Tila
       regional_organization:
@@ -732,7 +732,7 @@ fi:
         accepted: Hyväksytty
         #original_hash: 96f608c
         pending: Odottaa
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Raportti
         #original_hash: 4360c2d
@@ -1135,19 +1135,19 @@ fi:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

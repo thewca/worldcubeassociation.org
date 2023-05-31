@@ -115,23 +115,23 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "CompetitionsMedia" => {
+    "competition_media" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          competitionId
-          type
+          competition_id
+          media_type
           text
           uri
-          timestampSubmitted
-          timestampDecided
+          submitted_at
+          decided_at
           status
         ),
         fake_values: {
-          "submitterName" => "'mr. media submitter'",
-          "submitterComment" => "'a comment about this media'",
-          "submitterEmail" => "'mediasubmitter@example.com'",
+          "submitter_name" => "'mr. media submitter'",
+          "submitter_comment" => "'a comment about this media'",
+          "submitter_email" => "'mediasubmitter@example.com'",
         },
       ),
     }.freeze,

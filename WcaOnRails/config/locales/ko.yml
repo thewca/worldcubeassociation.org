@@ -492,19 +492,19 @@ ko:
         competition_id: 중에 발생
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 대회
+        competition_id: 대회
         #original_hash: 3deb745
-        type: 종류
+        media_type: 종류
         #original_hash: c3328c3
         text: 글
         #original_hash: d051707
         uri: 링크
         #original_hash: 1be755a
-        submitterName: 제출자
+        submitter_name: 제출자
         #original_hash: 78cdfee
-        submitterEmail: 제출자 이메일
+        submitter_email: 제출자 이메일
         #original_hash: 0d31f23
-        submitterComment: 제출자 코멘트
+        submitter_comment: 제출자 코멘트
         #original_hash: bae7d5b
         status: 상태
   enums:
@@ -537,7 +537,7 @@ ko:
         accepted: 승락
         #original_hash: 96f608c
         pending: 대기
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 보고
         #original_hash: 4360c2d
@@ -730,19 +730,19 @@ ko:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

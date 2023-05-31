@@ -687,19 +687,19 @@ hr:
         competition_id: Dogodilo se tokom
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: Natjecanje
+        competition_id: Natjecanje
         #original_hash: 3deb745
-        type: Tip
+        media_type: Tip
         #original_hash: c3328c3
         text: Tekst
         #original_hash: d051707
         uri: Poveznica
         #original_hash: 1be755a
-        submitterName: Ime osobe koja prilaže
+        submitter_name: Ime osobe koja prilaže
         #original_hash: 78cdfee
-        submitterEmail: E-mail osobe koja prilaže
+        submitter_email: E-mail osobe koja prilaže
         #original_hash: 0d31f23
-        submitterComment: Komentar osobe koja prilaže
+        submitter_comment: Komentar osobe koja prilaže
         #original_hash: bae7d5b
         status: Status
       regional_organization:
@@ -765,7 +765,7 @@ hr:
         accepted: Prihvaćeno
         #original_hash: 96f608c
         pending: U tijeku
-      type:
+      media_type:
         #original_hash: ee45c30
         report: Prijavi
         #original_hash: 4360c2d
@@ -1211,19 +1211,19 @@ hr:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:
