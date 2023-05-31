@@ -24,5 +24,11 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :CompetitionsMedia, :competition_media
+
+    change_table :Continents do |t|
+      t.rename :recordName, :record_name
+    end
+
+    rename_table :Continents, :continents
   end
 end

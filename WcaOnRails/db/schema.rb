@@ -123,9 +123,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
   end
 
-  create_table "Continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "continents", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
-    t.string "recordName", limit: 3, default: "", null: false
+    t.string "record_name", limit: 3, default: "", null: false
     t.integer "latitude", default: 0, null: false
     t.integer "longitude", default: 0, null: false
     t.integer "zoom", limit: 1, default: 0, null: false

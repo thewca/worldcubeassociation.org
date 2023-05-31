@@ -169,7 +169,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Continents" => {
+    "continents" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -177,7 +177,7 @@ module DatabaseDumper
           latitude
           longitude
           name
-          recordName
+          record_name
           zoom
         ),
       ),
