@@ -33,7 +33,7 @@ class PersonsController < ApplicationController
     @ranks_average = @person.ranksAverage.select { |r| r.event.official? }
     @medals = @person.medals
     @records = @person.records
-    @results = @person.results.includes(:competition, :event, :format, :round_type).order("Events.rank, competitions.start_date DESC, competitions.id, RoundTypes.rank DESC")
+    @results = @person.results.includes(:competition, :event, :format, :round_type).order("events.rank, competitions.start_date DESC, competitions.id, RoundTypes.rank DESC")
     @championship_podiums = @person.championship_podiums
     params[:event] ||= @results.first.event.id
   end

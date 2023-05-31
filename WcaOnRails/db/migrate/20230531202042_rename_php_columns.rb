@@ -36,5 +36,11 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :Countries, :countries
+
+    change_table :Events do |t|
+      t.rename :cellName, :cell_name
+    end
+
+    rename_table :Events, :events
   end
 end

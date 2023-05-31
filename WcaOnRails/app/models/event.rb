@@ -2,7 +2,6 @@
 
 class Event < ApplicationRecord
   include Cachable
-  self.table_name = "Events"
 
   has_many :competition_events
   has_many :competitions, through: :competition_events
@@ -23,8 +22,8 @@ class Event < ApplicationRecord
     I18n.t(id, scope: :events, locale: locale)
   end
 
-  def cellName
-    raise "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
+  def cell_name
+    raise "#cell_name is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
   end
 
   # 'rank' is a reserved keywords from MySQL 8.0 onwards:

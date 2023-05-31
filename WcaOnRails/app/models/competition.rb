@@ -60,7 +60,7 @@ class Competition < ApplicationRecord
   scope :has_event, lambda { |event_id|
     joins(
       "join competition_events ce#{event_id} ON ce#{event_id}.competition_id = competitions.id
-      join Events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
+      join events e#{event_id} ON e#{event_id}.id = ce#{event_id}.event_id",
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|

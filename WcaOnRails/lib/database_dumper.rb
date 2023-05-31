@@ -193,12 +193,12 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Events" => {
+    "events" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
+          cell_name
           format
           name
           rank

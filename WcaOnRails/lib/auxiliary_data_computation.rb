@@ -37,7 +37,7 @@ module AuxiliaryDataComputation
             JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN competitions ON competitions.id = competitionId
             JOIN countries ON countries.id = result.countryId
-            JOIN Events event ON event.id = eventId
+            JOIN events ON events.id = eventId
         SQL
       end
     end

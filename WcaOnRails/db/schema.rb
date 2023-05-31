@@ -139,11 +139,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.index ["iso2"], name: "iso2", unique: true
   end
 
-  create_table "Events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
+  create_table "events", id: { type: :string, limit: 6, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=0", force: :cascade do |t|
     t.string "name", limit: 54, default: "", null: false
     t.integer "rank", default: 0, null: false
     t.string "format", limit: 10, default: "", null: false
-    t.string "cellName", limit: 45, default: "", null: false
+    t.string "cell_name", limit: 45, default: "", null: false
   end
 
   create_table "Formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
