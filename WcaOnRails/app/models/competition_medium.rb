@@ -18,7 +18,7 @@ class CompetitionMedium < ApplicationRecord
 
   scope :belongs_to_region, lambda { |region_id|
     joins(competition: [:country]).where(
-      "country_id = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id
     )
   }
 

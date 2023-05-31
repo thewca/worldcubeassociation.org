@@ -3,7 +3,6 @@
 class Country < ApplicationRecord
   include Cachable
   WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
-  self.table_name = "Countries"
 
   ALL_TIMEZONES_MAPPING = begin
     all_tz = ActiveSupport::TimeZone::MAPPING
@@ -24,14 +23,14 @@ class Country < ApplicationRecord
   end.freeze
 
   MULTIPLE_COUNTRIES = [
-    { id: 'XF', name: 'Multiple Countries (Africa)', continentId: '_Africa', iso2: 'XF' },
-    { id: 'XM', name: 'Multiple Countries (Americas)', continentId: '_Multiple Continents', iso2: 'XM' },
-    { id: 'XA', name: 'Multiple Countries (Asia)', continentId: '_Asia', iso2: 'XA' },
-    { id: 'XE', name: 'Multiple Countries (Europe)', continentId: '_Europe', iso2: 'XE' },
-    { id: 'XN', name: 'Multiple Countries (North America)', continentId: '_North America', iso2: 'XN' },
-    { id: 'XO', name: 'Multiple Countries (Oceania)', continentId: '_Oceania', iso2: 'XO' },
-    { id: 'XS', name: 'Multiple Countries (South America)', continentId: '_South America', iso2: 'XS' },
-    { id: 'XW', name: 'Multiple Countries (World)', continentId: '_Multiple Continents', iso2: 'XW' },
+    { id: 'XF', name: 'Multiple Countries (Africa)', continent_id: '_Africa', iso2: 'XF' },
+    { id: 'XM', name: 'Multiple Countries (Americas)', continent_id: '_Multiple Continents', iso2: 'XM' },
+    { id: 'XA', name: 'Multiple Countries (Asia)', continent_id: '_Asia', iso2: 'XA' },
+    { id: 'XE', name: 'Multiple Countries (Europe)', continent_id: '_Europe', iso2: 'XE' },
+    { id: 'XN', name: 'Multiple Countries (North America)', continent_id: '_North America', iso2: 'XN' },
+    { id: 'XO', name: 'Multiple Countries (Oceania)', continent_id: '_Oceania', iso2: 'XO' },
+    { id: 'XS', name: 'Multiple Countries (South America)', continent_id: '_South America', iso2: 'XS' },
+    { id: 'XW', name: 'Multiple Countries (World)', continent_id: '_Multiple Continents', iso2: 'XW' },
   ].freeze
 
   FICTIVE_IDS = MULTIPLE_COUNTRIES.map { |c| c[:id] }.freeze
@@ -44,20 +43,19 @@ class Country < ApplicationRecord
     WCA_STATES["states_lists"].map do |list|
       list["states"].map do |state|
         state_id = state["id"] || I18n.transliterate(state["name"]).tr("'", "_")
-        { id: state_id, continentId: state["continent_id"],
+        { id: state_id, continent_id: state["continent_id"],
           iso2: state["iso2"], name: state["name"] }
       end
     end,
     MULTIPLE_COUNTRIES,
   ].flatten.map { |c| Country.new(c) }.freeze
 
-  belongs_to :continent, foreign_key: :continentId
-  alias_attribute :continent_id, :continentId
+  belongs_to :continent
   has_many :competitions, foreign_key: :country_id
   has_one :band, foreign_key: :iso2, primary_key: :iso2, class_name: "CountryBand"
 
   def continent
-    Continent.c_find(self.continentId)
+    Continent.c_find(self.continent_id)
   end
 
   def self.find_by_iso2(iso2)

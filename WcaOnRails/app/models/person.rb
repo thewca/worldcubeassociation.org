@@ -212,18 +212,18 @@ class Person < ApplicationRecord
     {}.tap do |podiums|
       podiums[:world] = world_championship_podiums
       podiums[:continental] = championship_podiums_with_condition do |results|
-        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = countries.continent_id")
       end
       EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
             .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
-            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
+            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = countries.iso2")
         end
       end
       podiums[:national] = championship_podiums_with_condition do |results|
-        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.iso2")
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = countries.iso2")
       end
     end
   end

@@ -30,5 +30,11 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :Continents, :continents
+
+    change_table :Countries do |t|
+      t.rename :continentId, :continent_id
+    end
+
+    rename_table :Countries, :countries
   end
 end

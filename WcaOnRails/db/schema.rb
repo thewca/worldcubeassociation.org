@@ -131,11 +131,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.integer "zoom", limit: 1, default: 0, null: false
   end
 
-  create_table "Countries", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "countries", id: { type: :string, limit: 50, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
-    t.string "continentId", limit: 50, default: "", null: false
+    t.string "continent_id", limit: 50, default: "", null: false
     t.string "iso2", limit: 2
-    t.index ["continentId"], name: "fk_continents"
+    t.index ["continent_id"], name: "fk_continents"
     t.index ["iso2"], name: "iso2", unique: true
   end
 

@@ -20,7 +20,7 @@ class Competition < ApplicationRecord
   has_one :delegate_report, dependent: :destroy
   has_many :competition_venues, dependent: :destroy
   belongs_to :country
-  has_one :continent, foreign_key: :continentId, through: :country
+  has_one :continent, through: :country
   has_many :championships, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :bookmarked_competitions, dependent: :delete_all
@@ -47,7 +47,7 @@ class Competition < ApplicationRecord
   scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "country_id = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      "country_id = :region_id OR countries.continent_id = :region_id", region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|
@@ -1434,7 +1434,7 @@ class Competition < ApplicationRecord
       joinsql = <<-SQL
         JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
         JOIN users ON users.id = registrations.user_id
-        JOIN Countries ON Countries.iso2 = users.country_iso2
+        JOIN countries ON countries.iso2 = users.country_iso2
         LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
         LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
       SQL
@@ -1445,7 +1445,7 @@ class Competition < ApplicationRecord
         users.wca_id select_wca_id,
         registrations.accepted_at,
         registrations.deleted_at,
-        Countries.id select_country_id,
+        countries.id select_country_id,
         registration_competition_events.competition_event_id,
         RanksAverage.worldRank average_rank,
         ifnull(RanksAverage.best, 0) average_best,

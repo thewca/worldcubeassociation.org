@@ -180,7 +180,7 @@ class ResultsController < ApplicationController
           result.personId        personId,
           result.personName      personName,
           result.countryId       countryId,
-          country.name           countryName,
+          countries.name         countryName,
           competitions.id        competitionId,
           competitions.cell_name competitionName,
           value1, value2, value3, value4, value5
@@ -191,12 +191,12 @@ class ResultsController < ApplicationController
           Events event,
           RoundTypes roundType,
           competitions,
-          Countries country
+          countries
         WHERE event.id = eventId
           AND event.`rank` < 1000
           AND roundType.id = roundTypeId
           AND competitions.id = competitionId
-          AND country.id = result.countryId
+          AND countries.id = result.countryId
           #{@region_condition}
           #{@event_condition}
           #{@years_condition_competition}
@@ -226,7 +226,7 @@ class ResultsController < ApplicationController
         event.name             eventName,
         event.cellName         eventCellName,
                                format,
-        country.name           countryName,
+        countries.name         countryName,
         competitions.cell_name competitionName,
                                `rank`,
         competitions.start_date,
@@ -246,7 +246,7 @@ class ResultsController < ApplicationController
         Results result
         #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.subId = 1," : ","}
         Events event,
-        Countries country,
+        countries,
         competitions
       WHERE result.#{value} = value
         #{@event_condition}
@@ -255,7 +255,7 @@ class ResultsController < ApplicationController
         #{@gender_condition}
         AND result.eventId  = recordEventId
         AND event.id        = result.eventId
-        AND country.id      = result.countryId
+        AND countries.id       = result.country_id
         AND competitions.id = result.competitionId
         AND event.`rank` < 990
     SQL

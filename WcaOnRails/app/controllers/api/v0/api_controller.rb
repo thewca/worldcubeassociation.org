@@ -177,7 +177,7 @@ class Api::V0::ApiController < ApplicationController
       records = records.to_a
       {
         world_records: records_by_event(records),
-        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
+        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continent_id }.transform_values!(&method(:records_by_event)),
         national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
       }
     end
