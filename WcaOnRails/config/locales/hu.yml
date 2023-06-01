@@ -101,57 +101,57 @@ hu:
       #original_hash: 4d618bb
       name: Kvalifikációs forduló
       #original_hash: 2ffe44e
-      cellName: Kvalifikáció
+      cell_name: Kvalifikáció
     '1':
       #original_hash: 1e725b6
       name: Első forduló
       #original_hash: 916a78d
-      cellName: Első
+      cell_name: Első
     '2':
       #original_hash: 985c8d0
       name: Második forduló
       #original_hash: 2a4bcae
-      cellName: Második
+      cell_name: Második
     '3':
       #original_hash: e2f74d2
       name: Elődöntő
       #original_hash: e2f74d2
-      cellName: Elődöntő
+      cell_name: Elődöntő
     b:
       #original_hash: 327c999
       name: B döntő
       #original_hash: 327c999
-      cellName: B döntő
+      cell_name: B döntő
     c:
       #original_hash: b2d26f4
       name: Kombinált döntő
       #original_hash: b2d26f4
-      cellName: Kombinált döntő
+      cell_name: Kombinált döntő
     d:
       #original_hash: c6136b1
       name: Kombinált első forduló
       #original_hash: dffa9ea
-      cellName: Kombinált első
+      cell_name: Kombinált első
     e:
       #original_hash: 659c53f
       name: Kombinált második forduló
       #original_hash: b6e1e1c
-      cellName: Kombinált második
+      cell_name: Kombinált második
     f:
       #original_hash: 672b22c
       name: Döntő
       #original_hash: 672b22c
-      cellName: Döntő
+      cell_name: Döntő
     g:
       #original_hash: e861dcf
       name: Kombinált harmadik forduló
       #original_hash: 86f4b05
-      cellName: Kombinált harmadik
+      cell_name: Kombinált harmadik
     h:
       #original_hash: 4c66ad0
       name: Kombinált kvalifikáció
       #original_hash: 4c66ad0
-      cellName: Kombinált kvalifikáció
+      cell_name: Kombinált kvalifikáció
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}. kirakás'

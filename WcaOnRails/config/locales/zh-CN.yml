@@ -126,57 +126,57 @@ zh-CN:
       #original_hash: 4d618bb
       name: 资格赛
       #original_hash: 4d618bb
-      cellName: 资格赛
+      cell_name: 资格赛
     '1':
       #original_hash: 1e725b6
       name: 初赛
       #original_hash: 1e725b6
-      cellName: 初赛
+      cell_name: 初赛
     '2':
       #original_hash: 985c8d0
       name: 复赛
       #original_hash: 985c8d0
-      cellName: 复赛
+      cell_name: 复赛
     '3':
       #original_hash: e2f74d2
       name: 半决赛
       #original_hash: e2f74d2
-      cellName: 半决赛
+      cell_name: 半决赛
     b:
       #original_hash: 327c999
       name: B组决赛
       #original_hash: 327c999
-      cellName: B组决赛
+      cell_name: B组决赛
     c:
       #original_hash: 672b22c
       name: 组合制决赛
       #original_hash: 672b22c
-      cellName: 组合制决赛
+      cell_name: 组合制决赛
     d:
       #original_hash: 1e725b6
       name: 组合制初赛
       #original_hash: 1e725b6
-      cellName: 组合制初赛
+      cell_name: 组合制初赛
     e:
       #original_hash: 985c8d0
       name: 组合制复赛
       #original_hash: 985c8d0
-      cellName: 组合制复赛
+      cell_name: 组合制复赛
     f:
       #original_hash: 672b22c
       name: 决赛
       #original_hash: 672b22c
-      cellName: 决赛
+      cell_name: 决赛
     g:
       #original_hash: ccf6f8e
       name: 组合制半决赛
       #original_hash: ccf6f8e
-      cellName: 组合制半决赛
+      cell_name: 组合制半决赛
     h:
       #original_hash: 4d618bb
       name: 组合制资格赛
       #original_hash: 4d618bb
-      cellName: 组合制资格赛
+      cell_name: 组合制资格赛
   cutoff:
     #original_hash: cf458e7
     time:

@@ -33,7 +33,7 @@
                     <%= result.average_solve.clock_format if record_types.include? result.regionalAverageRecord %>
                   </td>
                   <td class="competition"><%= link_to result.competition.name, result.competition %></td>
-                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
+                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cell_name" %></td>
                   <% if record_types.include? result.regionalAverageRecord # Show all solves for average only. %>
                     <%= solve_tds_for_result(result) %>
                   <% else %>

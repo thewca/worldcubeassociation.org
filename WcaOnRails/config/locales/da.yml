@@ -152,57 +152,57 @@ da:
       #original_hash: 4d618bb
       name: Kvalificerende runde
       #original_hash: 4d618bb
-      cellName: Kvalifikationsrunde
+      cell_name: Kvalifikationsrunde
     '1':
       #original_hash: 1e725b6
       name: Første runde
       #original_hash: 1e725b6
-      cellName: Første runde
+      cell_name: Første runde
     '2':
       #original_hash: 985c8d0
       name: Anden runde
       #original_hash: 985c8d0
-      cellName: Anden runde
+      cell_name: Anden runde
     '3':
       #original_hash: e2f74d2
       name: Semi Finale
       #original_hash: e2f74d2
-      cellName: Semi Finale
+      cell_name: Semi Finale
     b:
       #original_hash: 327c999
       name: B Finale
       #original_hash: 327c999
-      cellName: B Finale
+      cell_name: B Finale
     c:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     d:
       #original_hash: 1e725b6
       name: Første runde
       #original_hash: 1e725b6
-      cellName: Første runde
+      cell_name: Første runde
     e:
       #original_hash: 985c8d0
       name: Anden runde
       #original_hash: 985c8d0
-      cellName: Anden runde
+      cell_name: Anden runde
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: ccf6f8e
       name: Tredje runde
       #original_hash: ccf6f8e
-      cellName: Tredje runde
+      cell_name: Tredje runde
     h:
       #original_hash: 4d618bb
       name: Kvalifikationsrunde
       #original_hash: 4d618bb
-      cellName: Kvalifikationsrunde
+      cell_name: Kvalifikationsrunde
   attempts:
     #original_hash: 17dae1e
     attempt_name: '%{number}. forsøg'

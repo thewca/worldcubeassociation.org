@@ -266,10 +266,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.index ["roundTypeId"], name: "Results_fk_round"
   end
 
-  create_table "RoundTypes", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "round_types", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "rank", default: 0, null: false
     t.string "name", limit: 50, default: "", null: false
-    t.string "cellName", limit: 45, default: "", null: false
+    t.string "cell_name", limit: 45, default: "", null: false
     t.boolean "final", null: false
   end
 

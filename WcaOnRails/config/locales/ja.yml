@@ -152,57 +152,57 @@ ja:
       #original_hash: 4d618bb
       name: 予選ラウンド
       #original_hash: 4d618bb
-      cellName: 予選ラウンド
+      cell_name: 予選ラウンド
     '1':
       #original_hash: 1e725b6
       name: 1 回戦
       #original_hash: 1e725b6
-      cellName: 1 回戦
+      cell_name: 1 回戦
     '2':
       #original_hash: 985c8d0
       name: 2 回戦
       #original_hash: 985c8d0
-      cellName: 2 回戦
+      cell_name: 2 回戦
     '3':
       #original_hash: e2f74d2
       name: 準決勝
       #original_hash: e2f74d2
-      cellName: 準決勝
+      cell_name: 準決勝
     b:
       #original_hash: 327c999
       name: B 決勝
       #original_hash: 327c999
-      cellName: B 決勝
+      cell_name: B 決勝
     c:
       #original_hash: 672b22c
       name: 決勝
       #original_hash: 672b22c
-      cellName: 決勝
+      cell_name: 決勝
     d:
       #original_hash: 1e725b6
       name: 1 回戦
       #original_hash: 1e725b6
-      cellName: 1 回戦
+      cell_name: 1 回戦
     e:
       #original_hash: 985c8d0
       name: 2 回戦
       #original_hash: 985c8d0
-      cellName: 2 回戦
+      cell_name: 2 回戦
     f:
       #original_hash: 672b22c
       name: 決勝
       #original_hash: 672b22c
-      cellName: 決勝
+      cell_name: 決勝
     g:
       #original_hash: ccf6f8e
       name: 第３回戦
       #original_hash: ccf6f8e
-      cellName: 第３回戦
+      cell_name: 第３回戦
     h:
       #original_hash: 4d618bb
       name: 予選ラウンド
       #original_hash: 4d618bb
-      cellName: 予選ラウンド
+      cell_name: 予選ラウンド
   attempts:
     #original_hash: 17dae1e
     attempt_name: '第%{number}試技'

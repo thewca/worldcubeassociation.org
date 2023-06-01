@@ -101,57 +101,57 @@ sl:
       #original_hash: 4d618bb
       name: Kvalifikacijski krog
       #original_hash: 2ffe44e
-      cellName: Kvalifikacije
+      cell_name: Kvalifikacije
     '1':
       #original_hash: 1e725b6
       name: Prvi krog
       #original_hash: 916a78d
-      cellName: Prvi
+      cell_name: Prvi
     '2':
       #original_hash: 985c8d0
       name: Drugi krog
       #original_hash: 2a4bcae
-      cellName: Drugi
+      cell_name: Drugi
     '3':
       #original_hash: e2f74d2
       name: Polfinale
       #original_hash: e2f74d2
-      cellName: Polfinale
+      cell_name: Polfinale
     b:
       #original_hash: 327c999
       name: B finale
       #original_hash: 327c999
-      cellName: B finale
+      cell_name: B finale
     c:
       #original_hash: b2d26f4
       name: Kombinirano finale
       #original_hash: b2d26f4
-      cellName: Kombinirano finale
+      cell_name: Kombinirano finale
     d:
       #original_hash: c6136b1
       name: Kombiniran prvi krog
       #original_hash: dffa9ea
-      cellName: Kombiniran prvi
+      cell_name: Kombiniran prvi
     e:
       #original_hash: 659c53f
       name: Kombiniran drugi krog
       #original_hash: b6e1e1c
-      cellName: Kombiniran drugi
+      cell_name: Kombiniran drugi
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: e861dcf
       name: Kombiniran tretji krog
       #original_hash: 86f4b05
-      cellName: Kombiniran tretji
+      cell_name: Kombiniran tretji
     h:
       #original_hash: 4c66ad0
       name: Kombinirane kvalifikacije
       #original_hash: 4c66ad0
-      cellName: Kombinirane kvalifikacije
+      cell_name: Kombinirane kvalifikacije
   round:
     #original_hash: 236c41d
     name: '%{event_name} %{round_name}'

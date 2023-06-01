@@ -44,5 +44,11 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     rename_table :Events, :events
 
     rename_table :Formats, :formats
+
+    change_table :RoundTypes do |t|
+      t.rename :cellName, :cell_name
+    end
+
+    rename_table :RoundTypes, :round_types
   end
 end

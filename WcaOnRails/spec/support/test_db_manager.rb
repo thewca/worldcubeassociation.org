@@ -8,7 +8,7 @@ class TestDbManager
     events
     formats
     preferred_formats
-    RoundTypes
+    round_types
     teams
     timestamps
   ).freeze

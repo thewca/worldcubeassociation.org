@@ -152,57 +152,57 @@ nl:
       #original_hash: 4d618bb
       name: Kwalificatieronde
       #original_hash: 4d618bb
-      cellName: Kwalificatie
+      cell_name: Kwalificatie
     '1':
       #original_hash: 1e725b6
       name: Eerste ronde
       #original_hash: 1e725b6
-      cellName: Eerste ronde
+      cell_name: Eerste ronde
     '2':
       #original_hash: 985c8d0
       name: Tweede ronde
       #original_hash: 985c8d0
-      cellName: Tweede ronde
+      cell_name: Tweede ronde
     '3':
       #original_hash: e2f74d2
       name: Halve finale
       #original_hash: e2f74d2
-      cellName: Halve finale
+      cell_name: Halve finale
     b:
       #original_hash: 327c999
       name: B finale
       #original_hash: 327c999
-      cellName: B finale
+      cell_name: B finale
     c:
       #original_hash: 672b22c
       name: Gecombineerde finale
       #original_hash: 672b22c
-      cellName: Gecombineerde finale
+      cell_name: Gecombineerde finale
     d:
       #original_hash: 1e725b6
       name: Eerste ronde
       #original_hash: 1e725b6
-      cellName: Eerste ronde
+      cell_name: Eerste ronde
     e:
       #original_hash: 985c8d0
       name: Tweede ronde
       #original_hash: 985c8d0
-      cellName: Tweede ronde
+      cell_name: Tweede ronde
     f:
       #original_hash: 672b22c
       name: Finale
       #original_hash: 672b22c
-      cellName: Finale
+      cell_name: Finale
     g:
       #original_hash: ccf6f8e
       name: Derde ronde
       #original_hash: ccf6f8e
-      cellName: Derde ronde
+      cell_name: Derde ronde
     h:
       #original_hash: 4d618bb
       name: Kwalificatie
       #original_hash: 4d618bb
-      cellName: Kwalificatie
+      cell_name: Kwalificatie
   attempts:
     #original_hash: 17dae1e
     attempt_name: 'Poging %{number}'

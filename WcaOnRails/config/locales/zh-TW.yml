@@ -152,57 +152,57 @@ zh-TW:
       #original_hash: 4d618bb
       name: 資格賽
       #original_hash: 4d618bb
-      cellName: 資格賽
+      cell_name: 資格賽
     '1':
       #original_hash: 1e725b6
       name: 首輪
       #original_hash: 1e725b6
-      cellName: 首輪
+      cell_name: 首輪
     '2':
       #original_hash: 985c8d0
       name: 第二輪
       #original_hash: 985c8d0
-      cellName: 第二輪
+      cell_name: 第二輪
     '3':
       #original_hash: e2f74d2
       name: 準決賽
       #original_hash: e2f74d2
-      cellName: 準決賽
+      cell_name: 準決賽
     b:
       #original_hash: 327c999
       name: B組決賽
       #original_hash: 327c999
-      cellName: B組決賽
+      cell_name: B組決賽
     c:
       #original_hash: 672b22c
       name: 決賽
       #original_hash: 672b22c
-      cellName: 決賽
+      cell_name: 決賽
     d:
       #original_hash: 1e725b6
       name: 首輪
       #original_hash: 1e725b6
-      cellName: 首輪
+      cell_name: 首輪
     e:
       #original_hash: 985c8d0
       name: 第二輪
       #original_hash: 985c8d0
-      cellName: 第二輪
+      cell_name: 第二輪
     f:
       #original_hash: 672b22c
       name: 決賽
       #original_hash: 672b22c
-      cellName: 決賽
+      cell_name: 決賽
     g:
       #original_hash: e2f74d2
       name: 準決賽
       #original_hash: e2f74d2
-      cellName: 準決賽
+      cell_name: 準決賽
     h:
       #original_hash: 4d618bb
       name: 資格賽
       #original_hash: 4d618bb
-      cellName: 資格賽
+      cell_name: 資格賽
   attempts:
     #original_hash: 17dae1e
     attempt_name: '第%{number}次還原'

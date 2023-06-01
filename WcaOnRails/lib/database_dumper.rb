@@ -316,12 +316,12 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
+          cell_name
           final
           name
           rank
