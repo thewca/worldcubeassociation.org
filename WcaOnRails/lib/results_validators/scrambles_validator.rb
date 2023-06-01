@@ -46,7 +46,7 @@ module ResultsValidators
         end
 
         # Group scramble by round_id
-        scrambles_by_round_id = scrambles.group_by { |s| "#{s.eventId}-#{s.roundTypeId}" }
+        scrambles_by_round_id = scrambles.group_by { |s| "#{s.event_id}-#{s.round_type_id}" }
         detected_scrambles_rounds_ids = scrambles_by_round_id.keys
         (rounds_ids - detected_scrambles_rounds_ids).each do |round_id|
           @errors << ValidationError.new(:scrambles, competition.id,
@@ -67,11 +67,11 @@ module ResultsValidators
         (detected_scrambles_rounds_ids & rounds_info_by_ids.keys).each do |round_id|
           format = rounds_info_by_ids[round_id].format
           expected_number_of_scrambles = format.expected_solve_count
-          scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:groupId)
+          scrambles_by_group_id = scrambles_by_round_id[round_id].group_by(&:group_id)
           errors_for_round = []
           scrambles_by_group_id.each do |group_id, scrambles_for_group|
             # filter out extra scrambles
-            actual_number_of_scrambles = scrambles_for_group.reject(&:isExtra).size
+            actual_number_of_scrambles = scrambles_for_group.reject(&:is_extra).size
             if actual_number_of_scrambles < expected_number_of_scrambles
               errors_for_round << ValidationError.new(:scrambles, competition.id,
                                                       MISSING_SCRAMBLES_FOR_GROUP_ERROR,

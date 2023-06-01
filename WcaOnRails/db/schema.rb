@@ -273,15 +273,15 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.boolean "final", null: false
   end
 
-  create_table "Scrambles", primary_key: "scrambleId", id: { type: :integer, unsigned: true }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competitionId", limit: 32, null: false
-    t.string "eventId", limit: 6, null: false
-    t.string "roundTypeId", limit: 1, null: false
-    t.string "groupId", limit: 3, null: false
-    t.boolean "isExtra", null: false
-    t.integer "scrambleNum", null: false
+  create_table "scrambles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "competition_id", limit: 32, null: false
+    t.string "event_id", limit: 6, null: false
+    t.string "round_type_id", limit: 1, null: false
+    t.string "group_id", limit: 3, null: false
+    t.boolean "is_extra", null: false
+    t.integer "scramble_num", null: false
     t.text "scramble", null: false
-    t.index ["competitionId", "eventId"], name: "competitionId"
+    t.index ["competition_id", "event_id"], name: "competition_id"
   end
 
   create_table "active_storage_attachments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

@@ -230,7 +230,7 @@ class AdminController < ApplicationController
       when Result.name
         Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
       when Scramble.name
-        Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+        Scramble.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
       else
         raise "Invalid table: #{params[:table]}"
       end

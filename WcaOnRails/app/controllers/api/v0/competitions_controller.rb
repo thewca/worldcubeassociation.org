@@ -69,7 +69,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
     scrambles_by_round = competition.scrambles
-                                    .where(eventId: event.id)
+                                    .where(event_id: event.id)
                                     .group_by(&:round_type)
                                     .sort_by { |round_type, _| -round_type.rank }
     rounds = scrambles_by_round.map do |round_type, scrambles|

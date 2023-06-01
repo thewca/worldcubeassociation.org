@@ -690,10 +690,10 @@ RSpec.describe Competition do
       expect(r2.reload.competition_id).to eq "NewID2015"
     end
 
-    it "changes the competitionId of scrambles" do
-      scramble1 = FactoryBot.create(:scramble, competitionId: competition.id)
+    it "changes the competition_id of scrambles" do
+      scramble1 = FactoryBot.create(:scramble, competition_id: competition.id)
       competition.update_attribute(:id, "NewID2015")
-      expect(scramble1.reload.competitionId).to eq "NewID2015"
+      expect(scramble1.reload.competition_id).to eq "NewID2015"
     end
 
     it "can set competition_events_attributes" do

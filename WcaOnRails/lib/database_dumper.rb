@@ -328,18 +328,18 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Scrambles" => {
+    "scrambles" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
+          id
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
           scramble
-          scrambleId
-          scrambleNum
+          scramble_num
         ),
       ),
     }.freeze,

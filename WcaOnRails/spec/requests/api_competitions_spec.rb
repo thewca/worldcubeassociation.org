@@ -60,7 +60,7 @@ RSpec.describe "API Competitions" do
       get api_v0_competition_scrambles_path(competition)
       expect(response).to be_successful
       json = JSON.parse(response.body)
-      expect(json[0]["scrambleId"]).to eq scramble.scrambleId
+      expect(json[0]["id"]).to eq scramble.id
     end
   end
 
