@@ -97,27 +97,27 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.string "status", limit: 10, default: "", null: false
   end
 
-  create_table "ConciseAverageResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "concise_average_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "id", default: 0, null: false
     t.integer "average", default: 0, null: false
-    t.bigint "valueAndId"
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.string "countryId", limit: 50, default: "", null: false
-    t.string "continentId", limit: 50, default: "", null: false
+    t.bigint "value_and_id"
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
+    t.string "continent_id", limit: 50, default: "", null: false
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true
   end
 
-  create_table "ConciseSingleResults", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "concise_single_results", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "id", default: 0, null: false
     t.integer "best", default: 0, null: false
-    t.bigint "valueAndId"
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
-    t.string "countryId", limit: 50, default: "", null: false
-    t.string "continentId", limit: 50, default: "", null: false
+    t.bigint "value_and_id"
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
+    t.string "country_id", limit: 50, default: "", null: false
+    t.string "continent_id", limit: 50, default: "", null: false
     t.integer "year", limit: 2, default: 0, null: false, unsigned: true
     t.integer "month", limit: 2, default: 0, null: false, unsigned: true
     t.integer "day", limit: 2, default: 0, null: false, unsigned: true

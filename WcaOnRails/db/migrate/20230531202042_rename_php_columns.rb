@@ -121,5 +121,25 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :RanksAverage, :ranks_average
+
+    change_table :ConciseSingleResults do |t|
+      t.rename :valueAndId, :value_and_id
+      t.rename :personId, :person_id
+      t.rename :eventId, :event_id
+      t.rename :countryId, :country_id
+      t.rename :continentId, :continent_id
+    end
+
+    rename_table :ConciseSingleResults, :concise_single_results
+
+    change_table :ConciseAverageResults do |t|
+      t.rename :valueAndId, :value_and_id
+      t.rename :personId, :person_id
+      t.rename :eventId, :event_id
+      t.rename :countryId, :country_id
+      t.rename :continentId, :continent_id
+    end
+
+    rename_table :ConciseAverageResults, :concise_average_results
   end
 end

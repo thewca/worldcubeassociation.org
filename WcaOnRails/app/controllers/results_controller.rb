@@ -22,7 +22,7 @@ class ResultsController < ApplicationController
     end
     @is_average = params[:type] == @types[1]
     value = @is_average ? "average" : "best"
-    capitalized_type_param = params[:type].capitalize
+    type_param = params[:type]
 
     @is_by_region = params[:show] == "by region"
     splitted_show_param = params[:show].split
@@ -39,19 +39,19 @@ class ResultsController < ApplicationController
           results.*,
           results.#{value} value
         FROM (
-          SELECT MIN(valueAndId) valueAndId
-          FROM Concise#{capitalized_type_param}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.sub_id = 1" : ""}
+          SELECT MIN(value_and_id) value_and_id
+          FROM concise_#{type_param}_results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.sub_id = 1" : ""}
           WHERE #{value} > 0
             #{@event_condition}
             #{@years_condition_result}
             #{@region_condition}
             #{@gender_condition}
-          GROUP BY personId
-          ORDER BY valueAndId
+          GROUP BY person_id
+          ORDER BY value_and_id
           #{limit_condition}
         ) top
-        JOIN results ON results.id = valueAndId % 1000000000
+        JOIN results ON results.id = value_and_id % 1000000000
         ORDER BY value, person_name
       SQL
 
@@ -107,17 +107,17 @@ class ResultsController < ApplicationController
           result.#{value} value
         FROM (
           SELECT
-            result.countryId recordCountryId,
+            result.country_id record_country_id,
             MIN(#{value}) recordValue
-          FROM Concise#{capitalized_type_param}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.sub_id = 1" : ""}
+          FROM concise_#{type_param}_results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.sub_id = 1" : ""}
           WHERE 1
             #{@event_condition}
             #{@years_condition_result}
             #{@gender_condition}
-          GROUP BY result.countryId
+          GROUP BY result.country_id
         ) record
-        JOIN results ON results.#{value} = recordValue AND results.country_id = recordCountryId
+        JOIN results ON results.#{value} = recordValue AND results.country_id = record_country_id
         JOIN competitions on competitions.id = results.competition_id
         #{@gender_condition.present? ? "JOIN Persons persons ON results.person_id = persons.wca_id and persons.sub_id = 1" : ""}
         WHERE 1
@@ -234,15 +234,15 @@ class ResultsController < ApplicationController
         MONTH(competitions.start_date) month,
         DAY(competitions.start_date)   day
       FROM
-        (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
-          FROM Concise#{type.capitalize}Results result
-          #{@gender_condition.present? ? "JOIN Persons persons ON result.personId = persons.wca_id and persons.sub_id = 1" : ""}
+        (SELECT event_id recordEventId, MIN(value_and_id) DIV 1000000000 value
+          FROM concise_#{type}_results result
+          #{@gender_condition.present? ? "JOIN Persons persons ON result.person_id = persons.wca_id and persons.sub_id = 1" : ""}
           WHERE 1
           #{@event_condition}
           #{@region_condition}
           #{@years_condition_result}
           #{@gender_condition}
-          GROUP BY eventId) record,
+          GROUP BY event_id) record,
         results
         #{@gender_condition.present? ? "JOIN Persons persons ON results.person_id = persons.wca_id and persons.sub_id = 1," : ","}
         events,
