@@ -7,9 +7,9 @@ FactoryBot.define do
     end
 
     best { rank * 100 }
-    worldRank { rank }
-    continentRank { rank }
-    countryRank { rank }
+    world_rank { rank }
+    continent_rank { rank }
+    country_rank { rank }
   end
 
   factory :ranks_single do
@@ -18,8 +18,8 @@ FactoryBot.define do
     end
 
     best { rank * 100 }
-    worldRank { rank }
-    continentRank { rank }
-    countryRank { rank }
+    world_rank { rank }
+    continent_rank { rank }
+    country_rank { rank }
   end
 end

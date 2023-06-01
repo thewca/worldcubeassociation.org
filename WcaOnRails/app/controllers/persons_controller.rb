@@ -27,10 +27,10 @@ class PersonsController < ApplicationController
   end
 
   def show
-    @person = Person.current.includes(:user, :ranksSingle, :ranksAverage, :competitions).find_by_wca_id!(params[:id])
+    @person = Person.current.includes(:user, :ranks_single, :ranks_average, :competitions).find_by_wca_id!(params[:id])
     @previous_persons = Person.where(wca_id: params[:id]).where.not(sub_id: 1).order(:sub_id)
-    @ranks_single = @person.ranksSingle.select { |r| r.event.official? }
-    @ranks_average = @person.ranksAverage.select { |r| r.event.official? }
+    @ranks_single = @person.ranks_single.select { |r| r.event.official? }
+    @ranks_average = @person.ranks_average.select { |r| r.event.official? }
     @medals = @person.medals
     @records = @person.records
     @results = @person.results.includes(:competition, :event, :format, :round_type).order("events.rank, competitions.start_date DESC, competitions.id, round_types.rank DESC")

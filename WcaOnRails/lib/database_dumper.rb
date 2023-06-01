@@ -242,31 +242,31 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,

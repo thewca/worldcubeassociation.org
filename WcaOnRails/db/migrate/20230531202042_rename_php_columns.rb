@@ -101,5 +101,25 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :Scrambles, :scrambles
+
+    change_table :RanksSingle do |t|
+      t.rename :personId, :person_id
+      t.rename :eventId, :event_id
+      t.rename :worldRank, :world_rank
+      t.rename :continentRank, :continent_rank
+      t.rename :countryRank, :country_rank
+    end
+
+    rename_table :RanksSingle, :ranks_single
+
+    change_table :RanksAverage do |t|
+      t.rename :personId, :person_id
+      t.rename :eventId, :event_id
+      t.rename :worldRank, :world_rank
+      t.rename :continentRank, :continent_rank
+      t.rename :countryRank, :country_rank
+    end
+
+    rename_table :RanksAverage, :ranks_average
   end
 end

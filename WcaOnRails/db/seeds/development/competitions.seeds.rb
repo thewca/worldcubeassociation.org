@@ -144,21 +144,21 @@ after "development:users" do
 
   users.each_with_index do |user, i|
     RanksAverage.create!(
-      personId: user.wca_id,
-      eventId: "333",
+      person_id: user.wca_id,
+      event_id: "333",
       best: "4242",
-      worldRank: i,
-      continentRank: i,
-      countryRank: i,
+      world_rank: i,
+      continent_rank: i,
+      country_rank: i,
     )
 
     RanksSingle.create!(
-      personId: user.wca_id,
-      eventId: "333",
+      person_id: user.wca_id,
+      event_id: "333",
       best: "2000",
-      worldRank: i,
-      continentRank: i,
-      countryRank: i,
+      world_rank: i,
+      continent_rank: i,
+      country_rank: i,
     )
   end
 

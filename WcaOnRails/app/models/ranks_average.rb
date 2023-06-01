@@ -1,8 +1,10 @@
 # frozen_string_literal: true
 
 class RanksAverage < ApplicationRecord
+  # ActiveRecord inflects the last word, so by default, this would be 'ranks_averages'
+  self.table_name = 'ranks_average'
+
   include PersonalBest
-  self.table_name = "RanksAverage"
 
   def to_wcif
     rank_to_wcif("average")
@@ -13,16 +15,10 @@ class RanksAverage < ApplicationRecord
   end
 
   def solve_time
-    SolveTime.new(eventId, :average, best)
+    SolveTime.new(event_id, :average, best)
   end
 
   def event
-    Event.c_find(eventId)
+    Event.c_find(event_id)
   end
-
-  # Alises for SQL camelCase columns
-  alias_attribute :event_id, :eventId
-  alias_attribute :country_rank, :countryRank
-  alias_attribute :continent_rank, :continentRank
-  alias_attribute :world_rank, :worldRank
 end

@@ -205,26 +205,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.index ["wca_id"], name: "index_persons_on_wca_id"
   end
 
-  create_table "RanksAverage", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
+  create_table "ranks_average", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
     t.integer "best", default: 0, null: false
-    t.integer "worldRank", default: 0, null: false
-    t.integer "continentRank", default: 0, null: false
-    t.integer "countryRank", default: 0, null: false
-    t.index ["eventId"], name: "fk_events"
-    t.index ["personId"], name: "fk_persons"
+    t.integer "world_rank", default: 0, null: false
+    t.integer "continent_rank", default: 0, null: false
+    t.integer "country_rank", default: 0, null: false
+    t.index ["event_id"], name: "fk_events"
+    t.index ["person_id"], name: "fk_persons"
   end
 
-  create_table "RanksSingle", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "personId", limit: 10, default: "", null: false
-    t.string "eventId", limit: 6, default: "", null: false
+  create_table "ranks_single", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "person_id", limit: 10, default: "", null: false
+    t.string "event_id", limit: 6, default: "", null: false
     t.integer "best", default: 0, null: false
-    t.integer "worldRank", default: 0, null: false
-    t.integer "continentRank", default: 0, null: false
-    t.integer "countryRank", default: 0, null: false
-    t.index ["eventId"], name: "fk_events"
-    t.index ["personId"], name: "fk_persons"
+    t.integer "world_rank", default: 0, null: false
+    t.integer "continent_rank", default: 0, null: false
+    t.integer "country_rank", default: 0, null: false
+    t.index ["event_id"], name: "fk_events"
+    t.index ["person_id"], name: "fk_persons"
   end
 
   create_table "results", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", options: "ENGINE=InnoDB PACK_KEYS=1", force: :cascade do |t|

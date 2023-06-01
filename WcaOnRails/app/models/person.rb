@@ -7,8 +7,8 @@ class Person < ApplicationRecord
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
   has_many :results, primary_key: "wca_id"
   has_many :competitions, -> { distinct }, through: :results
-  has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
-  has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
+  has_many :ranks_average, primary_key: "wca_id", foreign_key: "person_id", class_name: "RanksAverage"
+  has_many :ranks_single, primary_key: "wca_id", foreign_key: "person_id", class_name: "RanksSingle"
 
   enum gender: (User::ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
 
@@ -147,9 +147,9 @@ class Person < ApplicationRecord
   private def rank_for_event_type(event, type)
     case type
     when :single
-      ranksSingle.find_by_eventId(event.id)
+      ranks_single.find_by_event_id(event.id)
     when :average
-      ranksAverage.find_by_eventId(event.id)
+      ranks_average.find_by_event_id(event.id)
     else
       raise "Unrecognized type #{type}"
     end
@@ -157,7 +157,7 @@ class Person < ApplicationRecord
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank ? rank.worldRank : nil
+    rank ? rank.world_rank : nil
   end
 
   def best_solve(event, type)

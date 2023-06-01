@@ -1435,8 +1435,8 @@ class Competition < ApplicationRecord
         JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
         JOIN users ON users.id = registrations.user_id
         JOIN countries ON countries.iso2 = users.country_iso2
-        LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
-        LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
+        LEFT JOIN ranks_single ON ranks_single.person_id = users.wca_id AND ranks_single.event_id = '#{event.id}'
+        LEFT JOIN ranks_average ON ranks_average.person_id = users.wca_id AND ranks_average.event_id = '#{event.id}'
       SQL
 
       selectsql = <<-SQL
@@ -1447,10 +1447,10 @@ class Competition < ApplicationRecord
         registrations.deleted_at,
         countries.id select_country_id,
         registration_competition_events.competition_event_id,
-        RanksAverage.worldRank average_rank,
-        ifnull(RanksAverage.best, 0) average_best,
-        RanksSingle.worldRank single_rank,
-        ifnull(RanksSingle.best, 0) single_best
+        ranks_average.world_rank average_rank,
+        ifnull(ranks_average.best, 0) average_best,
+        ranks_single.world_rank single_rank,
+        ifnull(ranks_single.best, 0) single_best
       SQL
 
       if sort_by == event.recommended_format.sort_by_second
@@ -1609,7 +1609,7 @@ class Competition < ApplicationRecord
       :events,
       { assignments: [:schedule_activity] },
       { user: {
-        person: [:ranksSingle, :ranksAverage],
+        person: [:ranks_single, :ranks_average],
       } },
       :wcif_extensions,
     ]

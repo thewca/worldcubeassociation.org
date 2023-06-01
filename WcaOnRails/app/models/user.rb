@@ -1132,7 +1132,7 @@ class User < ApplicationRecord
   end
 
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
-    person_pb = [person&.ranksAverage, person&.ranksSingle].compact.flatten
+    person_pb = [person&.ranks_average, person&.ranks_single].compact.flatten
     roles = registration&.roles || []
     roles << "delegate" if competition.staff_delegates.include?(self)
     roles << "trainee-delegate" if competition.trainee_delegates.include?(self)
