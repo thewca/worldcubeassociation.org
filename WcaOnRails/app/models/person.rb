@@ -5,7 +5,7 @@ class Person < ApplicationRecord
   self.table_name = 'persons'
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
-  has_many :results, primary_key: "wca_id", foreign_key: "personId"
+  has_many :results, primary_key: "wca_id"
   has_many :competitions, -> { distinct }, through: :results
   has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
   has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
@@ -76,8 +76,8 @@ class Person < ApplicationRecord
   after_update :update_results_table_and_associated_user
   private def update_results_table_and_associated_user
     unless @updating_using_sub_id
-      results_for_most_recent_sub_id = results.where(personName: name_before_last_save, countryId: country_id_before_last_save)
-      results_for_most_recent_sub_id.update_all(personName: name, countryId: country_id) if saved_change_to_name? || saved_change_to_country_id?
+      results_for_most_recent_sub_id = results.where(person_name: name_before_last_save, country_id: country_id_before_last_save)
+      results_for_most_recent_sub_id.update_all(person_name: name, country_id: country_id) if saved_change_to_name? || saved_change_to_country_id?
     end
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
@@ -192,7 +192,7 @@ class Person < ApplicationRecord
             .joins(:event)
             .order("events.rank, pos")
             .includes(:format, :competition)
-            .group_by(&:eventId)
+            .group_by(&:event_id)
             .each_value do |final_results|
               previous_old_pos = nil
               previous_new_pos = nil
@@ -202,7 +202,7 @@ class Person < ApplicationRecord
                 previous_old_pos = old_pos
                 previous_new_pos = result.pos
                 break if result.pos > 3
-                championship_podium_results.push result if result.personId == self.wca_id
+                championship_podium_results.push result if result.person_id == self.wca_id
               end
             end
         end
@@ -240,7 +240,7 @@ class Person < ApplicationRecord
   end
 
   def records
-    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
+    records = results.pluck(:regional_single_record, :regional_average_record).flatten.select(&:present?)
     {
       national: records.count("NR"),
       continental: records.reject { |record| %w(NR WR).include?(record) }.count,

@@ -9,6 +9,6 @@ RSpec.describe InboxResult do
     FactoryBot.create(:inbox_person, competition_id: c1.id, id: "1")
     p2 = FactoryBot.create(:inbox_person, competition_id: c2.id, id: "1")
     result = FactoryBot.create(:inbox_result, person: p2, competition: c2)
-    expect(result.personName).to eq p2.name
+    expect(result.person_name).to eq p2.name
   end
 end

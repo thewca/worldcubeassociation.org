@@ -15,13 +15,13 @@ module FinishUnfinishedPersons
 
   def self.unfinished_results_scope(competition_ids = nil)
     results_scope = Result.includes(:competition, :inbox_person)
-                          .select(:personId, :personName, :competitionId, :countryId)
+                          .select(:person_id, :person_name, :competition_id, :country_id)
 
-    results_scope = results_scope.where(competitionId: competition_ids) if competition_ids.present?
+    results_scope = results_scope.where(competition_id: competition_ids) if competition_ids.present?
 
-    results_scope.where("(personId = '' OR personId REGEXP '^[0-9]+$')")
-                 .group(:personId, :personName, :competitionId, :countryId)
-                 .order(:personName)
+    results_scope.where("(person_id = '' OR person_id REGEXP '^[0-9]+$')")
+                 .group(:person_id, :person_name, :competition_id, :country_id)
+                 .order(:person_name)
   end
 
   def self.search_persons(competition_ids = nil)
@@ -205,18 +205,18 @@ module FinishUnfinishedPersons
       raise "Must supply a competition ID for updating newcomer results!" unless pending_comp_id.present?
 
       results_scope = results_scope.where(
-        personId: pending_id,
+        person_id: pending_id,
         competition_id: pending_comp_id,
       )
     else
       results_scope = results_scope.where(
-        personName: pending_name,
-        countryId: pending_country,
-        personId: '', # personId is empty when splitting profiles
+        person_name: pending_name,
+        country_id: pending_country,
+        person_id: '', # person_id is empty when splitting profiles
       )
     end
 
-    results_scope.update_all(personName: new_name, countryId: new_country, personId: new_wca_id)
+    results_scope.update_all(person_name: new_name, country_id: new_country, person_id: new_wca_id)
   end
 
   # rubocop:enable Metrics/ParameterLists

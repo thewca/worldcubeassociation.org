@@ -2,11 +2,11 @@
 
 <%= render layout: 'results_nav' do %>
   <% cache result_cache_key(@competition, "by_person", is_admin: current_user&.can_admin_results? || false) do %>
-    <% @competition.person_ids_with_results.each do |personId, results| %>
+    <% @competition.person_ids_with_results.each do |person_id, results| %>
       <h3>
         <% first_result = results.first %>
-        <%= anchorable "#{first_result.personName} - #{first_result.country.name}", personId %>
-        <%= link_to t('competitions.results_table.wca_profile'), person_path(personId) %>
+        <%= anchorable "#{first_result.person_name} - #{first_result.country.name}", person_id %>
+        <%= link_to t('competitions.results_table.wca_profile'), person_path(person_id) %>
       </h3>
       <%= render "results_table", results: results, hide_name: true, hide_country: true %>
     <% end %>

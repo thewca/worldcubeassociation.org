@@ -9,7 +9,7 @@ class ComputeAuxiliaryData < ApplicationJob
   queue_as :default
 
   def self.reason_not_to_run
-    if Result.exists?(personId: "")
+    if Result.exists?(person_id: "")
       "Some results are missing their corresponding WCA ID, which means that someone hasn't finished submitting results."
     end
   end

@@ -13,7 +13,7 @@
   </div>
   <% cache [*@cache_params, ranking_timestamp, I18n.locale] do %>
     <%
-      comp_ids = @rows.map { |r| r["competitionId"] }.uniq
+      comp_ids = @rows.map { |r| r["competition_id"] }.uniq
       @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
     %>
     <div id="search-results" class="results">

@@ -36,7 +36,7 @@ module ResultsValidators
         scrambles = competition.scrambles
 
         # Get actual round ids from results
-        rounds_ids = results_for_comp.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+        rounds_ids = results_for_comp.map { |r| "#{r.event_id}-#{r.round_type_id}" }.uniq
 
         if results_for_comp.any? && !scrambles.any?
           @errors << ValidationError.new(:scrambles, competition.id,

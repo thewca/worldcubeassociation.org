@@ -244,7 +244,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_admin_import_results_path(comp)
     end
 
-    if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
+    if comp.main_event && comp.results.where(event_id: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
       return redirect_to competition_admin_import_results_path(comp)
     end

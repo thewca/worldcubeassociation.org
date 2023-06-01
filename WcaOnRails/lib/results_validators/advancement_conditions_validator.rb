@@ -42,9 +42,9 @@ module ResultsValidators
         competition = competition_data.competition
         comp_start_date = competition.start_date
 
-        results_by_event_id = competition_data.results.group_by(&:eventId)
+        results_by_event_id = competition_data.results.group_by(&:event_id)
         results_by_event_id.each do |event_id, results_for_event|
-          results_by_round_type_id = results_for_event.group_by(&:roundTypeId)
+          results_by_round_type_id = results_for_event.group_by(&:round_type_id)
 
           round_types_in_results = results_by_round_type_id.keys.reject do |round_type_id|
             IGNORE_ROUND_TYPES.include?(round_type_id)

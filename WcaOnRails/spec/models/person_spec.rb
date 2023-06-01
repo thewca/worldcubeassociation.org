@@ -21,12 +21,12 @@ RSpec.describe Person, type: :model do
       expect(person.likely_delegates).to eq [delegate]
 
       competition2 = FactoryBot.create :competition, delegates: [delegate], starts: 3.days.ago
-      FactoryBot.create :result, person: person, competitionId: competition2.id
+      FactoryBot.create :result, person: person, competition_id: competition2.id
       expect(person.likely_delegates).to eq [delegate]
 
       new_delegate = FactoryBot.create :delegate
       competition3 = FactoryBot.create :competition, delegates: [new_delegate], starts: 2.days.ago
-      FactoryBot.create :result, person: person, competitionId: competition3.id
+      FactoryBot.create :result, person: person, competition_id: competition3.id
       expect(person.likely_delegates).to eq [delegate, new_delegate]
     end
   end
@@ -42,17 +42,17 @@ RSpec.describe Person, type: :model do
         expect(person).to be_invalid_with_errors(country_id: ["Cannot change the region to a region the person has already represented in the past."])
       end
 
-      it "updates personName and country_id columns in the results table" do
+      it "updates person_name and country_id columns in the results table" do
         person.update!(name: "New Name", country_id: "New Zealand")
-        expect(person.results.pluck(:personName).uniq).to eq ["New Name"]
-        expect(person.results.pluck(:countryId).uniq).to eq ["New Zealand"]
+        expect(person.results.pluck(:person_name).uniq).to eq ["New Name"]
+        expect(person.results.pluck(:country_id).uniq).to eq ["New Zealand"]
       end
 
-      it "doesn't update personName and countryId columns in the results table if they differ from the current ones" do
+      it "doesn't update person_name and country_id columns in the results table if they differ from the current ones" do
         FactoryBot.create(:person_who_has_competed_once, wca_id: person.wca_id, sub_id: 2, name: "Old Name", country_id: "France")
         person.update!(name: "New Name", country_id: "New Zealand")
-        expect(person.results.pluck(:personName).uniq).to match_array ["Old Name", "New Name"]
-        expect(person.results.pluck(:countryId).uniq).to match_array ["France", "New Zealand"]
+        expect(person.results.pluck(:person_name).uniq).to match_array ["Old Name", "New Name"]
+        expect(person.results.pluck(:country_id).uniq).to match_array ["France", "New Zealand"]
       end
 
       it "updates the associated user" do
@@ -76,8 +76,8 @@ RSpec.describe Person, type: :model do
 
       it "doesn't update the results table" do
         person.update_using_sub_id(name: "New Name", country_id: "New Zealand")
-        expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
-        expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
+        expect(person.results.pluck(:person_name).uniq).to eq ["Feliks Zemdegs"]
+        expect(person.results.pluck(:country_id).uniq).to eq ["Australia"]
       end
 
       it "creates a new Person with sub_id equal to 2 containing the old data" do
@@ -97,8 +97,8 @@ RSpec.describe Person, type: :model do
       it "does not affect old results" do
         person.update_using_sub_id!(country_id: "New Zealand")
         person.update!(name: "Felix Zemdegs")
-        expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
-        expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
+        expect(person.results.pluck(:person_name).uniq).to eq ["Feliks Zemdegs"]
+        expect(person.results.pluck(:country_id).uniq).to eq ["Australia"]
       end
     end
 
@@ -106,8 +106,8 @@ RSpec.describe Person, type: :model do
       it "does not affect old results" do
         person.update_using_sub_id!(name: "Felix Zemdegs")
         person.update!(country_id: "New Zealand")
-        expect(person.results.pluck(:personName).uniq).to eq ["Feliks Zemdegs"]
-        expect(person.results.pluck(:countryId).uniq).to eq ["Australia"]
+        expect(person.results.pluck(:person_name).uniq).to eq ["Feliks Zemdegs"]
+        expect(person.results.pluck(:country_id).uniq).to eq ["Australia"]
       end
     end
   end
@@ -115,9 +115,9 @@ RSpec.describe Person, type: :model do
   describe "#world_championship_podiums" do
     let!(:wc2015) { FactoryBot.create :competition, championship_types: ["world"], starts: Date.new(2015, 1, 1) }
     let!(:wc2017) { FactoryBot.create :competition, championship_types: ["world"], starts: Date.new(2017, 1, 1) }
-    let!(:result1) { FactoryBot.create :result, person: person, competition: wc2015, pos: 2, eventId: "333" }
-    let!(:result2) { FactoryBot.create :result, person: person, competition: wc2015, pos: 1, eventId: "333oh" }
-    let!(:result3) { FactoryBot.create :result, person: person, competition: wc2017, pos: 3, eventId: "444" }
+    let!(:result1) { FactoryBot.create :result, person: person, competition: wc2015, pos: 2, event_id: "333" }
+    let!(:result2) { FactoryBot.create :result, person: person, competition: wc2015, pos: 1, event_id: "333oh" }
+    let!(:result3) { FactoryBot.create :result, person: person, competition: wc2017, pos: 3, event_id: "444" }
 
     it "return results ordered by year and event" do
       expect(person.world_championship_podiums.to_a).to eq [result3, result1, result2]
@@ -129,19 +129,19 @@ RSpec.describe Person, type: :model do
     let!(:us_nationals2017) { FactoryBot.create :competition, championship_types: ["US"], starts: Date.new(2017, 1, 1) }
     let!(:fr_competitor) do
       FactoryBot.create(:person, country_id: "France").tap do |fr_competitor|
-        FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, eventId: "333"
-        FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "333"
+        FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2016, pos: 1, event_id: "333"
+        FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "333"
       end
     end
     let!(:us_competitor) do
       FactoryBot.create(:person, country_id: "USA").tap do |us_competitor|
-        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, eventId: "333"
+        FactoryBot.create :result, person: us_competitor, competition: us_nationals2017, pos: 2, event_id: "333"
       end
     end
 
     context "when a foreigner does compete" do
       it "cannot gain a champion title" do
-        expect(fr_competitor.championship_podiums[:national].map(&:countryId)).to eq %w(France)
+        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w(France)
       end
 
       it "is ignored when computing others' position" do
@@ -152,7 +152,7 @@ RSpec.describe Person, type: :model do
     it "ignores DNF results on the podium" do
       expect do
         FactoryBot.create :result, :blind_dnf_mo3, person: us_competitor, competition: us_nationals2017,
-                                                   pos: 2, eventId: "555bf", best: SolveTime::DNF_VALUE
+                                                   pos: 2, event_id: "555bf", best: SolveTime::DNF_VALUE
       end.to_not change { us_competitor.championship_podiums[:national] }
     end
 
@@ -160,20 +160,20 @@ RSpec.describe Person, type: :model do
       before { fr_competitor.update_using_sub_id! country_id: "USA" }
 
       it "includes championship titles related to the previous nationality" do
-        expect(fr_competitor.championship_podiums[:national].map(&:countryId)).to eq %w(France)
+        expect(fr_competitor.championship_podiums[:national].map(&:country_id)).to eq %w(France)
       end
 
       it "does no longer treat the person as eligible for championship title related to previous nationality" do
         expect do
           fr_nationals2017 = FactoryBot.create :competition, championship_types: ["FR"], starts: Date.new(2017, 1, 1)
-          FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, eventId: "333"
+          FactoryBot.create :result, person: fr_competitor, competition: fr_nationals2017, pos: 1, event_id: "333"
         end.to_not change { fr_competitor.championship_podiums[:national] }
       end
 
       it "is eligible for championship title of the current continent" do
         expect do
           na_championship2017 = FactoryBot.create :competition, championship_types: ["_North America"], starts: Date.new(2017, 1, 1)
-          FactoryBot.create :result, person: fr_competitor, competition: na_championship2017, pos: 1, eventId: "333"
+          FactoryBot.create :result, person: fr_competitor, competition: na_championship2017, pos: 1, event_id: "333"
         end.to change { fr_competitor.championship_podiums[:continental].count }.by 1
       end
     end
@@ -182,10 +182,10 @@ RSpec.describe Person, type: :model do
       us_competitor1 = FactoryBot.create :person, country_id: "USA"
       us_competitor2 = FactoryBot.create :person, country_id: "USA"
       us_competitor3 = FactoryBot.create :person, country_id: "USA"
-      FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, eventId: "222"
-      FactoryBot.create :result, person: us_competitor1, competition: us_nationals2017, pos: 2, eventId: "222"
-      FactoryBot.create :result, person: us_competitor2, competition: us_nationals2017, pos: 2, eventId: "222"
-      FactoryBot.create :result, person: us_competitor3, competition: us_nationals2017, pos: 4, eventId: "222"
+      FactoryBot.create :result, person: fr_competitor, competition: us_nationals2017, pos: 1, event_id: "222"
+      FactoryBot.create :result, person: us_competitor1, competition: us_nationals2017, pos: 2, event_id: "222"
+      FactoryBot.create :result, person: us_competitor2, competition: us_nationals2017, pos: 2, event_id: "222"
+      FactoryBot.create :result, person: us_competitor3, competition: us_nationals2017, pos: 4, event_id: "222"
 
       expect(us_competitor1.championship_podiums[:national].first.pos).to eq 1
       expect(us_competitor2.championship_podiums[:national].first.pos).to eq 1

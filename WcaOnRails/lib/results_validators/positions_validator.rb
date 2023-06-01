@@ -16,7 +16,7 @@ module ResultsValidators
         competition = competition_data.competition
         results_for_comp = competition_data.results
 
-        results_for_comp.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }.each do |round_id, results_for_round|
+        results_for_comp.group_by { |r| "#{r.event_id}-#{r.round_type_id}" }.each do |round_id, results_for_round|
           expected_pos = 0
           last_result = nil
           # Number of tied competitors, *without* counting the first one
@@ -29,7 +29,7 @@ module ResultsValidators
             # Unless we find two exact same results, we increase the expected position
             tied = false
             if last_result
-              if %w[a m].include?(result.formatId)
+              if %w[a m].include?(result.format_id)
                 # If the ranking is based on average, look at both average and best.
                 tied = result.average == last_result.average && result.best == last_result.best
               else
@@ -51,7 +51,7 @@ module ResultsValidators
                 @infos << ValidationInfo.new(:results, competition.id,
                                              POSITION_FIXED_INFO,
                                              round_id: round_id,
-                                             person_name: result.personName,
+                                             person_name: result.person_name,
                                              expected_pos: expected_pos,
                                              pos: result.pos)
                 result.update!(pos: expected_pos)
@@ -59,7 +59,7 @@ module ResultsValidators
                 @errors << ValidationError.new(:results, competition.id,
                                                WRONG_POSITION_IN_RESULTS_ERROR,
                                                round_id: round_id,
-                                               person_name: result.personName,
+                                               person_name: result.person_name,
                                                expected_pos: expected_pos,
                                                pos: result.pos)
               end

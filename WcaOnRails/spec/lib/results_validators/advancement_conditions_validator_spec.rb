@@ -32,12 +32,12 @@ RSpec.describe ACV do
         fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += FactoryBot.build_list(result_kind, 100, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 16, competition: competition1, eventId: "333oh", roundTypeId: "2", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 8, competition: competition1, eventId: "333oh", roundTypeId: "3", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 8, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 5, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 16, competition: competition1, event_id: "333oh", round_type_id: "2", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 8, competition: competition1, event_id: "333oh", round_type_id: "3", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 5, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person)
         model.import(results)
       end
 
@@ -55,9 +55,9 @@ RSpec.describe ACV do
       fake_person = build_person(:result, competition1)
       # Collecting all the results and using bulk import for better performance.
       results = []
-      results += FactoryBot.build_list(:result, 100, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
-      results += FactoryBot.build_list(:result, 8, competition: competition1, eventId: "333oh", roundTypeId: "b", person: fake_person)
-      results += FactoryBot.build_list(:result, 32, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
+      results += FactoryBot.build_list(:result, 100, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person)
+      results += FactoryBot.build_list(:result, 8, competition: competition1, event_id: "333oh", round_type_id: "b", person: fake_person)
+      results += FactoryBot.build_list(:result, 32, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person)
       Result.import(results, validate: false)
 
       validator_args.each do |arg|
@@ -93,15 +93,15 @@ RSpec.describe ACV do
       (1..20).each do |i|
         fake_person = FactoryBot.create(:person)
         value = i * 100
-        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
-        FactoryBot.create(:result, competition: competition3, eventId: "333", roundTypeId: "1", person: fake_person, best: value, average: value)
+        FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person, best: value, average: value)
+        FactoryBot.create(:result, competition: competition3, event_id: "333", round_type_id: "1", person: fake_person, best: value, average: value)
         if i < 10
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
-          FactoryBot.create(:result, competition: competition3, eventId: "333", roundTypeId: "f", person: fake_person, best: value, average: value)
+          FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: value, average: value)
+          FactoryBot.create(:result, competition: competition3, event_id: "333", round_type_id: "f", person: fake_person, best: value, average: value)
         end
         if i == 20
           # Create a single attempt result over the attempt result condition.
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: 1800, average: 1800)
+          FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: 1800, average: 1800)
           expected_errors << RV::ValidationError.new(:rounds, competition2.id,
                                                      ACV::COMPETED_NOT_QUALIFIED_ERROR,
                                                      round_id: "222-f",
@@ -137,9 +137,9 @@ RSpec.describe ACV do
       (1..20).each do |i|
         fake_person = FactoryBot.create(:person)
         value = i > 10 ? -1 : i * 100
-        FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person, best: value, average: value)
+        FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person, best: value, average: value)
         if i <= 10
-          FactoryBot.create(:result, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person, best: value, average: value)
+          FactoryBot.create(:result, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person, best: value, average: value)
         end
       end
 
@@ -163,12 +163,12 @@ RSpec.describe ACV do
         fake_person = build_person(result_kind, competition1)
         # Collecting all the results and using bulk import for better performance.
         results = []
-        results += FactoryBot.build_list(result_kind, 99, competition: competition1, eventId: "333oh", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 15, competition: competition1, eventId: "333oh", roundTypeId: "2", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition1, eventId: "333oh", roundTypeId: "3", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition1, eventId: "333oh", roundTypeId: "f", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 8, competition: competition2, eventId: "222", roundTypeId: "1", person: fake_person)
-        results += FactoryBot.build_list(result_kind, 7, competition: competition2, eventId: "222", roundTypeId: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 99, competition: competition1, event_id: "333oh", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 15, competition: competition1, event_id: "333oh", round_type_id: "2", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "3", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition1, event_id: "333oh", round_type_id: "f", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 8, competition: competition2, event_id: "222", round_type_id: "1", person: fake_person)
+        results += FactoryBot.build_list(result_kind, 7, competition: competition2, event_id: "222", round_type_id: "f", person: fake_person)
         model.import(results, validate: false)
       end
       expected_errors = [

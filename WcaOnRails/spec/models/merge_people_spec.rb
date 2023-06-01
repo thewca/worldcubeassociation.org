@@ -62,10 +62,10 @@ RSpec.describe MergePeople do
     result2 = FactoryBot.create(:result, person: person2)
     decoy_result = FactoryBot.create(:result)
 
-    old_decoy_personId = decoy_result.personId
+    old_decoy_person_id = decoy_result.person_id
     expect(merge_people.do_merge).to eq true
-    expect(result1.reload.personId).to eq person1.wca_id
-    expect(result2.reload.personId).to eq person1.wca_id
-    expect(decoy_result.reload.personId).to eq old_decoy_personId
+    expect(result1.reload.person_id).to eq person1.wca_id
+    expect(result2.reload.person_id).to eq person1.wca_id
+    expect(decoy_result.reload.person_id).to eq old_decoy_person_id
   end
 end

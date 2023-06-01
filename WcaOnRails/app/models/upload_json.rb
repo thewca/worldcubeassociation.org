@@ -59,7 +59,7 @@ class UploadJson
       parsed_json["events"].each do |event|
         competition_event = competition.competition_events.find { |ce| ce.event_id == event["eventId"] }
         event["rounds"].each do |round|
-          # Find the corresponding competition round and get the actual roundTypeId
+          # Find the corresponding competition round and get the actual round_type_id
           # (in case the incoming one doesn't correspond to cutoff presence).
           incoming_round_type_id = round["roundId"]
           competition_round = competition_event.rounds.find do |cr|
@@ -73,11 +73,11 @@ class UploadJson
             # Pad the results with 0 up to 5 results
             individual_results.fill(0, individual_results.length...5)
             new_result_attributes = {
-              personId: result["personId"],
+              person_id: result["personId"],
               pos: result["position"],
-              eventId: event["eventId"],
-              roundTypeId: round_type_id,
-              formatId: round["formatId"],
+              event_id: event["eventId"],
+              round_type_id: round_type_id,
+              format_id: round["formatId"],
               best: result["best"],
               average: result["average"],
               value1: individual_results[0],
@@ -116,7 +116,7 @@ class UploadJson
       begin
         ActiveRecord::Base.transaction do
           InboxPerson.where(competition_id: competition_id).delete_all
-          InboxResult.where(competitionId: competition_id).delete_all
+          InboxResult.where(competition_id: competition_id).delete_all
           Scramble.where(competitionId: competition_id).delete_all
           InboxPerson.import!(persons_to_import)
           Scramble.import!(scrambles_to_import)
@@ -133,7 +133,7 @@ class UploadJson
         elsif object.instance_of?(InboxPerson)
           errors.add(:results_file, "Person #{object.name} is invalid (#{e.message}), please fix it!")
         elsif object.instance_of?(InboxResult)
-          errors.add(:results_file, "Result for person #{object.personId} in '#{Round.name_from_attributes_id(object.eventId, object.roundTypeId)}' is invalid (#{e.message}), please fix it!")
+          errors.add(:results_file, "Result for person #{object.person_id} in '#{Round.name_from_attributes_id(object.event_id, object.round_type_id)}' is invalid (#{e.message}), please fix it!")
         else
           errors.add(:results_file, "An invalid record prevented the results from being created: #{e.message}")
         end

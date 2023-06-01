@@ -62,7 +62,7 @@ module ResultsValidators
         # Check for missing/unexpected events.
         # As events must be validated by WCAT, any missing or unexpected event should lead to an error.
         expected = competition.events.map(&:id)
-        real = results.map(&:eventId).uniq
+        real = results.map(&:event_id).uniq
 
         (real - expected).each do |event_id|
           @errors << ValidationError.new(:events, competition.id,
@@ -84,7 +84,7 @@ module ResultsValidators
         expected_rounds_by_ids = competition.competition_events.map(&:rounds).flatten.to_h { |r| ["#{r.event.id}-#{r.round_type_id}", r] }
 
         expected = expected_rounds_by_ids.keys
-        real = results.map { |r| "#{r.eventId}-#{r.roundTypeId}" }.uniq
+        real = results.map { |r| "#{r.event_id}-#{r.round_type_id}" }.uniq
         unexpected = real - expected
         missing = expected - real
 

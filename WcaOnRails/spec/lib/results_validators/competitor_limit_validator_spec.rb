@@ -26,8 +26,8 @@ RSpec.describe CLV do
       before(:example) do
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create_list(result_kind, 10, competition: competition1, eventId: "333oh")
-          FactoryBot.create_list(result_kind, 10, competition: competition2, eventId: "222")
+          FactoryBot.create_list(result_kind, 10, competition: competition1, event_id: "333oh")
+          FactoryBot.create_list(result_kind, 10, competition: competition2, event_id: "222")
         end
       end
 
@@ -42,8 +42,8 @@ RSpec.describe CLV do
       # Triggers:
       # COMPETITOR_LIMIT_WARNING
       it "complains when it should" do
-        FactoryBot.create(:result, competition: competition2, eventId: "222")
-        FactoryBot.create(:inbox_result, competition: competition2, eventId: "222")
+        FactoryBot.create(:result, competition: competition2, event_id: "222")
+        FactoryBot.create(:inbox_result, competition: competition2, event_id: "222")
         expected_warnings = [
           RV::ValidationWarning.new(:persons, competition2.id,
                                     CLV::COMPETITOR_LIMIT_WARNING,
@@ -66,8 +66,8 @@ RSpec.describe CLV do
 
         [Result, InboxResult].each do |model|
           result_kind = model.model_name.singular.to_sym
-          FactoryBot.create_list(result_kind, 12, competition: competition1, eventId: "333oh")
-          FactoryBot.create_list(result_kind, 12, competition: competition2, eventId: "222")
+          FactoryBot.create_list(result_kind, 12, competition: competition1, event_id: "333oh")
+          FactoryBot.create_list(result_kind, 12, competition: competition2, event_id: "222")
         end
 
         validator_args.each do |arg|

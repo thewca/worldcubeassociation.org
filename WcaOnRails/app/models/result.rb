@@ -3,47 +3,39 @@
 class Result < ApplicationRecord
   include Resultable
 
-  self.table_name = "Results"
-
-  belongs_to :person, -> { current }, primary_key: :wca_id, foreign_key: :personId, optional: true
-  alias_attribute :person_name, :personName
-  validates :personName, presence: true
-  alias_attribute :person_id, :personId
-  alias_attribute :person_name, :personName
-  belongs_to :country, foreign_key: :countryId
-  alias_attribute :country_id, :countryId
+  belongs_to :person, -> { current }, primary_key: :wca_id, optional: true
+  validates :person_name, presence: true
+  belongs_to :country
   has_one :continent, through: :country
   delegate :continent_id, :continent, to: :country
   # InboxPerson IDs are only unique per competition. So in addition to querying the ID itself (which is guaranteed by :foreign_key)
   # we also need sure to query the correct competition as well through a custom scope.
-  belongs_to :inbox_person, ->(res) { where(competition_id: res.competitionId) }, primary_key: :id, foreign_key: :personId, optional: true
+  belongs_to :inbox_person, ->(res) { where(competition_id: res.competition_id) }, primary_key: :id, foreign_key: :person_id, optional: true
 
   MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
-  validates_inclusion_of :regionalSingleRecord, in: MARKERS
-  validates_inclusion_of :regionalAverageRecord, in: MARKERS
-  alias_attribute :regional_single_record, :regionalSingleRecord
-  alias_attribute :regional_average_record, :regionalAverageRecord
+  validates_inclusion_of :regional_single_record, in: MARKERS
+  validates_inclusion_of :regional_average_record, in: MARKERS
 
   def country
-    Country.c_find(self.countryId)
+    Country.c_find(self.country_id)
   end
 
-  # If saving changes to personId, make sure that there is no results for
+  # If saving changes to person_id, make sure that there is no results for
   # that person yet for the round.
   validate :unique_result_per_round, if: lambda {
-    will_save_change_to_personId? || will_save_change_to_competitionId? || will_save_change_to_eventId? || will_save_change_to_roundTypeId?
+    will_save_change_to_person_id? || will_save_change_to_competition_id? || will_save_change_to_event_id? || will_save_change_to_round_type_id?
   }
 
   def unique_result_per_round
-    has_result = Result.where(competitionId: competitionId,
-                              personId: personId,
-                              eventId: eventId,
-                              roundTypeId: roundTypeId).any?
-    errors.add(:personId, "this WCA ID already has a result for that round") if has_result
+    has_result = Result.where(competition_id: competition_id,
+                              person_id: person_id,
+                              event_id: event_id,
+                              round_type_id: round_type_id).any?
+    errors.add(:person_id, "this WCA ID already has a result for that round") if has_result
   end
 
-  scope :final, -> { where(roundTypeId: RoundType.final_rounds.map(&:id)) }
+  scope :final, -> { where(round_type_id: RoundType.final_rounds.pluck(:id)) }
   scope :succeeded, -> { where("best > 0") }
   scope :average_succeeded, -> { where("average > 0") }
   scope :podium, -> { final.succeeded.where(pos: [1..3]) }
@@ -51,10 +43,10 @@ class Result < ApplicationRecord
   scope :before, ->(date) { joins(:competition).where("end_date < ?", date) }
   scope :single_better_than, ->(time) { where("best < ? AND best > 0", time) }
   scope :average_better_than, ->(time) { where("average < ? AND average > 0", time) }
-  scope :in_event, ->(event_id) { where(eventId: event_id) }
+  scope :in_event, ->(event_id) { where(event_id: event_id) }
 
-  alias_attribute :name, :personName
-  alias_attribute :wca_id, :personId
+  alias_attribute :name, :person_name
+  alias_attribute :wca_id, :person_id
 
   def attempts
     [value1, value2, value3, value4, value5]

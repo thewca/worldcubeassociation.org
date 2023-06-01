@@ -87,7 +87,7 @@
                 <td class="<%= "active" unless announced_event %>"><%= r.round_type.name %></td>
 
                 <% [Result, Scramble].each do |model| %>
-                  <% assoc_count = model.where(competitionId: @competition.id, eventId: e.id, roundTypeId: r.round_type.id).count %>
+                  <% assoc_count = model.where(competition_id: @competition.id, event_id: e.id, round_type_id: r.round_type.id).count %>
                   <% has_assoc = assoc_count > 0 %>
 
                   <td class="text-center <%= has_assoc ? "success" : "warning" %>">

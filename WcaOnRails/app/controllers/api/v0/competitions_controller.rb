@@ -36,7 +36,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
     results_by_round = competition.results
-                                  .where(eventId: event.id)
+                                  .where(event_id: event.id)
                                   .group_by(&:round_type)
                                   .sort_by { |round_type, _| -round_type.rank }
     rounds = results_by_round.map do |round_type, results|
@@ -49,7 +49,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
         roundTypeId: round_type.id,
         # Also include the (localized) name here, we don't have i18n in js yet.
         name: round&.name || "#{event.name} #{round_type.name}",
-        results: results.sort_by { |r| [r.pos, r.personName] },
+        results: results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
     render json: {

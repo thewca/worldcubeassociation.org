@@ -950,7 +950,7 @@ RSpec.describe CompetitionsController do
 
       it "sends the notification emails to users that competed" do
         FactoryBot.create_list(:user_with_wca_id, 4, results_notifications_enabled: true).each do |user|
-          FactoryBot.create(:result, person: user.person, competitionId: competition.id, eventId: "333")
+          FactoryBot.create(:result, person: user.person, competition_id: competition.id, event_id: "333")
         end
 
         expect(competition.results_posted_at).to be nil
@@ -970,7 +970,7 @@ RSpec.describe CompetitionsController do
         FactoryBot.create_list(:registration, 3, :pending, :newcomer, competition: competition)
         FactoryBot.create_list(:registration, 4, :accepted, competition: competition)
         FactoryBot.create_list(:user_with_wca_id, 4).each do |user|
-          FactoryBot.create(:result, person: user.person, competitionId: competition.id, eventId: "333")
+          FactoryBot.create(:result, person: user.person, competition_id: competition.id, event_id: "333")
         end
 
         expect(CompetitionsMailer).to receive(:notify_users_of_id_claim_possibility).and_call_original.exactly(2).times
@@ -982,7 +982,7 @@ RSpec.describe CompetitionsController do
       it "assigns wca id when user matches one person in results" do
         competition = FactoryBot.create(:competition, :registration_open)
         reg = FactoryBot.create(:registration, :accepted, competition: competition)
-        FactoryBot.create(:result, competition: competition, person: reg.person, eventId: "333")
+        FactoryBot.create(:result, competition: competition, person: reg.person, event_id: "333")
 
         wca_id = reg.user.wca_id
         reg.user.update(wca_id: nil)
@@ -997,9 +997,9 @@ RSpec.describe CompetitionsController do
         user = FactoryBot.create(:user_with_wca_id)
         person = user.person
         FactoryBot.create(:registration, :accepted, competition: competition, user: user)
-        FactoryBot.create(:result, competition: competition, person: person, eventId: "333")
+        FactoryBot.create(:result, competition: competition, person: person, event_id: "333")
         another_person = FactoryBot.create(:person, name: person.name, country_id: person.country_id, gender: person.gender, dob: person.dob)
-        FactoryBot.create(:result, competition: competition, person: another_person, eventId: "333")
+        FactoryBot.create(:result, competition: competition, person: another_person, event_id: "333")
 
         user.update(wca_id: nil)
 
@@ -1013,7 +1013,7 @@ RSpec.describe CompetitionsController do
         user = FactoryBot.create(:user_with_wca_id)
         user2 = FactoryBot.create(:user_with_wca_id)
         FactoryBot.create(:registration, :accepted, competition: competition, user: user)
-        FactoryBot.create(:result, competition: competition, person: user.person, eventId: "333")
+        FactoryBot.create(:result, competition: competition, person: user.person, event_id: "333")
 
         wca_id = user.wca_id
         user.update(wca_id: nil)
@@ -1046,7 +1046,7 @@ RSpec.describe CompetitionsController do
     let!(:registration5) { FactoryBot.create(:registration, :accepted, competition: future_competition3, user: delegate) }
     let!(:results_person) { FactoryBot.create(:person, wca_id: "2014PLUM01", name: "Jeff Plumb") }
     let!(:results_user) { FactoryBot.create :user, name: "Jeff Plumb", wca_id: "2014PLUM01" }
-    let!(:result) { FactoryBot.create(:result, person: results_person, competitionId: past_competition1.id) }
+    let!(:result) { FactoryBot.create(:result, person: results_person, competition_id: past_competition1.id) }
 
     context 'when not signed in' do
       sign_out

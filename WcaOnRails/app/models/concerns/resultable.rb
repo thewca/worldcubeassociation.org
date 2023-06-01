@@ -8,15 +8,11 @@ module Resultable
 
   included do
     # NOTE: We use cached values instead of belongs_to to improve performances.
-    belongs_to :competition, foreign_key: :competitionId
-    alias_attribute :competition_id, :competitionId
-    belongs_to :round_type, foreign_key: :roundTypeId
-    alias_attribute :round_type_id, :roundTypeId
+    belongs_to :competition
+    belongs_to :round_type
     # FIXME: shouldn't we take advantage of the fact that these are cached?
-    belongs_to :event, foreign_key: :eventId
-    alias_attribute :event_id, :eventId
-    belongs_to :format, foreign_key: :formatId
-    alias_attribute :format_id, :formatId
+    belongs_to :event
+    belongs_to :format
 
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
@@ -25,15 +21,15 @@ module Resultable
 
     # Define cached stuff with the same name as the associations for validation
     def round_type
-      RoundType.c_find(roundTypeId)
+      RoundType.c_find(round_type_id)
     end
 
     def event
-      Event.c_find(eventId)
+      Event.c_find(event_id)
     end
 
     def format
-      Format.c_find(formatId)
+      Format.c_find(format_id)
     end
 
     def round
@@ -54,7 +50,7 @@ module Resultable
     def belongs_to_a_round
       if round.blank?
         errors.add(:round_type,
-                   "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
+                   "Result must belong to a valid round. Please check that the tuple (competition_id, event_id, round_type_id, format_id) matches an existing round.")
       end
     end
 
@@ -143,7 +139,7 @@ module Resultable
     #    - All events that allow "mean of 3" no longer allow "best of 3".
     #  - May 1, 2019
     #    - 444bf and 555bf mean are officially recognized
-    formatId == "a" || formatId == "m" || (formatId == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(eventId))
+    format_id == "a" || format_id == "m" || (format_id == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(event_id))
   end
 
   def compute_correct_best
@@ -157,7 +153,7 @@ module Resultable
     else
       if counting_solve_times.any?(&:incomplete?)
         SolveTime::DNF_VALUE
-      elsif eventId == "333fm"
+      elsif event_id == "333fm"
         sum_moves = counting_solve_times.sum(&:move_count).to_f
         (100 * sum_moves / counting_solve_times.length).round
       else
@@ -173,7 +169,7 @@ module Resultable
   end
 
   def to_solve_time(field)
-    SolveTime.new(eventId, field, send(field))
+    SolveTime.new(event_id, field, send(field))
   end
 
   def to_s(field)

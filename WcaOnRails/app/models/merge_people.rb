@@ -71,7 +71,7 @@ class MergePeople
     end
 
     ActiveRecord::Base.transaction do
-      Result.where(personId: person2.wca_id).update_all(personId: person1.wca_id)
+      Result.where(person_id: person2.wca_id).update_all(person_id: person1.wca_id)
       person2.destroy!
     end
 

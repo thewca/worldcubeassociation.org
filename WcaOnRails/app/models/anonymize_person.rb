@@ -76,7 +76,7 @@ class AnonymizePerson
       end
 
       # Anonymize person's data in Results
-      person.results.update_all(personId: new_wca_id, personName: ANONYMIZED_NAME)
+      person.results.update_all(person_id: new_wca_id, person_name: ANONYMIZED_NAME)
 
       # Anonymize person's data in Persons
       if person.sub_ids.length > 1

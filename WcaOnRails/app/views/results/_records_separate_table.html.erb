@@ -21,7 +21,7 @@
     <% rows.each do |row| %>
       <% result = LightResult.new(row) %>
       <% value = row["value"] %>
-      <% competition = @competitions_by_id[row["competitionId"]] %>
+      <% competition = @competitions_by_id[row["competition_id"]] %>
 
       <tr>
         <% if !shown_event[result.event.id] %>
@@ -36,7 +36,7 @@
           <td class="event tied-previous"> <%= cubing_icon result.event.id %> <%= result.event.name %> </td>
         <% end %>
         <td class="result"> <%= SolveTime.new(result.event.id, type.to_sym, value).clock_format %> </td>
-        <td class="name"> <%= link_to result.personName, person_path(result.personId) %> </td>
+        <td class="name"> <%= link_to result.person_name, person_path(result.person_id) %> </td>
         <td class="country"> <%= flag_icon result.country.iso2 %> <%= result.country.name %> </td>
         <td class="competition"> <%= flag_icon competition.country.iso2 if competition.country.real? %> <%= link_to competition.name, competition_path(competition.id) %> </td>
         <% unless is_single %>

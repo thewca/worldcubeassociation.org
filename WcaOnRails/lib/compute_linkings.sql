@@ -2,8 +2,8 @@
 
 DROP TABLE IF EXISTS wca_id_with_competition;
 CREATE TABLE wca_id_with_competition AS (
-  SELECT DISTINCT personId wca_id, competitionId competition_id
-  FROM Results
+  SELECT DISTINCT person_id wca_id, competition_id
+  FROM results
 );
 
 CREATE INDEX index_wca_id_with_competition_on_competition_id_and_wca_id ON wca_id_with_competition (competition_id, wca_id);

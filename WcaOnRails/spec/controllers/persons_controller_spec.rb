@@ -17,7 +17,7 @@ RSpec.describe PersonsController, type: :controller do
       let!(:person1) { FactoryBot.create(:person, name: "Jennifer Lawrence", country_id: "USA", wca_id: "2016LAWR01") }
       let!(:person2) { FactoryBot.create(:person, name: "Benedict Cumberbatch", country_id: "United Kingdom", wca_id: "2016CUMB01") }
       let!(:competition) { FactoryBot.create(:competition) }
-      let!(:result) { FactoryBot.create(:result, pos: 1, roundTypeId: "f", competitionId: competition.id, person: person1) }
+      let!(:result) { FactoryBot.create(:result, pos: 1, round_type_id: "f", competition_id: competition.id, person: person1) }
 
       it "responds with correct JSON when region and search are specified" do
         get :index, params: { search: "Jennifer", region: "USA" }, xhr: true

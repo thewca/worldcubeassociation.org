@@ -72,7 +72,7 @@ module ResultsHelper
     single_rows = []
     average_rows = []
     rows
-      .group_by { |row| row["eventId"] }
+      .group_by { |row| row["event_id"] }
       .each do |event_id, event_rows|
         singles, averages = event_rows.partition { |row| row["type"] == "single" }
         balance = singles.size - averages.size

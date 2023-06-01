@@ -17,7 +17,7 @@ module AuxiliaryDataComputation
         ActiveRecord::Base.connection.execute <<-SQL
           INSERT INTO #{table_name} (id, #{field}, valueAndId, personId, eventId, countryId, continentId, year, month, day)
           SELECT
-            result.id,
+            results.id,
             #{field},
             valueAndId,
             personId,
@@ -28,16 +28,16 @@ module AuxiliaryDataComputation
             MONTH(start_date),
             DAY(start_date)
           FROM (
-              SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
-              FROM Results result
-              JOIN competitions ON competitions.id = competitionId
+              SELECT MIN(#{field} * 1000000000 + results.id) valueAndId
+              FROM results
+              JOIN competitions ON competitions.id = competition_id
               WHERE #{field} > 0
-              GROUP BY personId, result.countryId, eventId, YEAR(start_date)
+              GROUP BY person_id, results.country_id, event_id, YEAR(start_date)
             ) MinValuesWithId
-            JOIN Results result ON result.id = valueAndId % 1000000000
-            JOIN competitions ON competitions.id = competitionId
-            JOIN countries ON countries.id = result.countryId
-            JOIN events ON events.id = eventId
+            JOIN results ON results.id = valueAndId % 1000000000
+            JOIN competitions ON competitions.id = results.competition_id
+            JOIN countries ON countries.id = results.country_id
+            JOIN events ON events.id = results.event_id
         SQL
       end
     end

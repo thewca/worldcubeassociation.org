@@ -135,7 +135,7 @@ class AdminController < ApplicationController
       inbox_result: InboxResult,
       inbox_person: InboxPerson,
       newcomer_person: InboxPerson.where(wca_id: ''),
-      newcomer_result: Result.select(:personId).distinct.where("personId REGEXP '^[0-9]+$'"),
+      newcomer_result: Result.select(:person_id).distinct.where("person_id REGEXP '^[0-9]+$'"),
     }
 
     @existing_data = data_tables.transform_values { |table| table.where(competition_id: @competition.id).count }
@@ -163,18 +163,18 @@ class AdminController < ApplicationController
                                 .map do |inbox_res|
         inbox_person = inbox_res.inbox_person
 
-        person_id = inbox_person&.wca_id.presence || inbox_res.personId
+        person_id = inbox_person&.wca_id.presence || inbox_res.person_id
         person_country = Country.find_by_iso2(inbox_person&.country_iso2)
 
         {
           pos: inbox_res.pos,
-          personId: person_id,
-          personName: inbox_res.personName,
-          countryId: person_country.id,
-          competitionId: inbox_res.competitionId,
-          eventId: inbox_res.eventId,
-          roundTypeId: inbox_res.roundTypeId,
-          formatId: inbox_res.formatId,
+          person_id: person_id,
+          person_name: inbox_res.person_name,
+          country_id: person_country.id,
+          competition_id: inbox_res.competition_id,
+          event_id: inbox_res.event_id,
+          round_type_id: inbox_res.round_type_id,
+          format_id: inbox_res.format_id,
           value1: inbox_res.value1,
           value2: inbox_res.value2,
           value3: inbox_res.value3,
@@ -228,7 +228,7 @@ class AdminController < ApplicationController
 
       case model
       when Result.name
-        Result.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
+        Result.where(competition_id: @competition.id, event_id: event_id, round_type_id: round_type_id).destroy_all
       when Scramble.name
         Scramble.where(competitionId: @competition.id, eventId: event_id, roundTypeId: round_type_id).destroy_all
       else
@@ -542,12 +542,12 @@ class AdminController < ApplicationController
     @country_id = params.require(:country_id)
     @person_id = params.require(:person_id)
 
-    all_results = Result.select("Results.*, FALSE AS `muted`")
+    all_results = Result.select("results.*, FALSE AS `muted`")
                         .joins(:event, :round_type)
                         .where(
-                          personName: @person_name,
-                          countryId: @country_id,
-                          personId: @person_id,
+                          person_name: @person_name,
+                          country_id: @country_id,
+                          person_id: @person_id,
                         )
                         .order("events.rank, round_types.rank DESC")
 

@@ -460,7 +460,7 @@ RSpec.describe Competition do
 
     it "warns if competition has results and haven't been posted" do
       competition = FactoryBot.create :competition, :confirmed, :visible, results_posted_at: nil, results_posted_by: nil
-      FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
+      FactoryBot.create(:result, person: FactoryBot.create(:person), competition_id: competition.id)
 
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:results]).to eq "This competition's results are visible but haven't been posted yet."
@@ -682,12 +682,12 @@ RSpec.describe Competition do
       expect(reg1.reload.competition_id).to eq "NewID2015"
     end
 
-    it "changes the competitionId of results" do
-      r1 = FactoryBot.create(:result, competitionId: competition.id)
-      r2 = FactoryBot.create(:result, competitionId: competition.id)
+    it "changes the competition_id of results" do
+      r1 = FactoryBot.create(:result, competition_id: competition.id)
+      r2 = FactoryBot.create(:result, competition_id: competition.id)
       competition.update_attribute(:id, "NewID2015")
-      expect(r1.reload.competitionId).to eq "NewID2015"
-      expect(r2.reload.competitionId).to eq "NewID2015"
+      expect(r1.reload.competition_id).to eq "NewID2015"
+      expect(r2.reload.competition_id).to eq "NewID2015"
     end
 
     it "changes the competitionId of scrambles" do
@@ -909,17 +909,17 @@ RSpec.describe Competition do
     let(:person_three) { FactoryBot.create :person, name: "Three" }
     let(:person_four) { FactoryBot.create :person, name: "Four" }
 
-    let!(:r_333_1_first) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 1, person: person_one }
-    let!(:r_333_1_second) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 2, person: person_two }
-    let!(:r_333_1_third) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 3, person: person_three }
-    let!(:r_333_1_fourth) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "1", pos: 4, person: person_four }
+    let!(:r_333_1_first) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "1", pos: 1, person: person_one }
+    let!(:r_333_1_second) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "1", pos: 2, person: person_two }
+    let!(:r_333_1_third) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "1", pos: 3, person: person_three }
+    let!(:r_333_1_fourth) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "1", pos: 4, person: person_four }
 
-    let!(:r_333_f_first) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 1, person: person_one }
-    let!(:r_333_f_second) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 2, person: person_two }
-    let!(:r_333_f_third) { FactoryBot.create :result, competition: competition, eventId: "333", roundTypeId: "f", pos: 3, person: person_three }
+    let!(:r_333_f_first) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "f", pos: 1, person: person_one }
+    let!(:r_333_f_second) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "f", pos: 2, person: person_two }
+    let!(:r_333_f_third) { FactoryBot.create :result, competition: competition, event_id: "333", round_type_id: "f", pos: 3, person: person_three }
 
-    let!(:r_222_c_second_tied) { FactoryBot.create :result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_two }
-    let!(:r_222_c_first_tied) { FactoryBot.create :result, competition: competition, eventId: "222", roundTypeId: "c", pos: 1, person: person_one }
+    let!(:r_222_c_second_tied) { FactoryBot.create :result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_two }
+    let!(:r_222_c_first_tied) { FactoryBot.create :result, competition: competition, event_id: "222", round_type_id: "c", pos: 1, person: person_one }
 
     it "events_with_podium_results" do
       result = competition.events_with_podium_results
@@ -934,20 +934,20 @@ RSpec.describe Competition do
     it "winning_results" do
       result = competition.winning_results
       expect(result.size).to eq 3
-      expect(result.first.eventId).to eq "333"
+      expect(result.first.event_id).to eq "333"
       expect(result.first.best).to eq 3000
-      expect(result.first.roundTypeId).to eq "f"
+      expect(result.first.round_type_id).to eq "f"
 
-      expect(result.last.eventId).to eq "222"
+      expect(result.last.event_id).to eq "222"
       expect(result.last.best).to eq 3000
-      expect(result.last.roundTypeId).to eq "c"
+      expect(result.last.round_type_id).to eq "c"
     end
 
     it "person_ids_with_results" do
       result = competition.person_ids_with_results
       expect(result.size).to eq 4
       expect(result.map(&:first)).to eq [person_four, person_one, person_three, person_two].map(&:wca_id)
-      expect(result.second.last.map(&:roundTypeId)).to eq %w(f 1 c)
+      expect(result.second.last.map(&:round_type_id)).to eq %w(f 1 c)
 
       expect(result[1][1][1].muted).to eq true
       expect(result[1][1][2].muted).to eq false
@@ -962,7 +962,7 @@ RSpec.describe Competition do
       expect(results[0].first).to eq three_by_three
       expect(results[0].second.first.first).to eq RoundType.find("f")
       expect(results[0].second.first.last.map(&:value1)).to eq [3000] * 3
-      expect(results[0].second.first.last.map(&:eventId)).to eq ["333"] * 3
+      expect(results[0].second.first.last.map(&:event_id)).to eq ["333"] * 3
       expect(results[0].second.second.last.map(&:value1)).to eq [3000] * 4
 
       expect(results[1].first).to eq two_by_two
@@ -970,11 +970,11 @@ RSpec.describe Competition do
       expect(results[1].second.first.last.map(&:value1)).to eq [3000, 3000]
 
       # Orders results which tied by person name.
-      expect(results[1].second.first.last.map(&:personName)).to eq %w(One Two)
+      expect(results[1].second.first.last.map(&:person_name)).to eq %w(One Two)
     end
 
     it "winning_results and events_with_podium_results don't include results with DNF as best" do
-      competition.results.where(eventId: "222").update_all(best: SolveTime::DNF_VALUE)
+      competition.results.where(event_id: "222").update_all(best: SolveTime::DNF_VALUE)
       expect(competition.winning_results.map(&:event).uniq).to eq [three_by_three]
       expect(competition.events_with_podium_results.map(&:first).uniq).to eq [three_by_three]
     end
@@ -982,7 +982,7 @@ RSpec.describe Competition do
 
   it "when id is changed, foreign keys are updated as well" do
     competition = FactoryBot.create(:competition, :with_delegate, :with_organizer, :with_delegate_report, :registration_open)
-    FactoryBot.create(:result, competitionId: competition.id)
+    FactoryBot.create(:result, competition_id: competition.id)
     FactoryBot.create(:competition_tab, competition: competition)
     FactoryBot.create(:registration, competition: competition)
 

@@ -220,7 +220,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "inbox_persons" => :skip_all_rows,
-    "InboxResults" => :skip_all_rows,
+    "inbox_results" => :skip_all_rows,
     "persons" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -270,23 +270,23 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Results" => {
+    "results" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           average
           best
-          competitionId
-          countryId
-          eventId
-          formatId
-          personId
-          personName
+          competition_id
+          country_id
+          event_id
+          format_id
+          person_id
+          person_name
           pos
-          regionalAverageRecord
-          regionalSingleRecord
-          roundTypeId
+          regional_average_record
+          regional_single_record
+          round_type_id
           updated_at
           value1
           value2
