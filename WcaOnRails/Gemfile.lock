@@ -293,7 +293,7 @@ GEM
     glob (0.4.0)
     globalid (1.1.0)
       activesupport (>= 5.0)
-    google-apis-admin_directory_v1 (0.42.0)
+    google-apis-admin_directory_v1 (0.43.0)
       google-apis-core (>= 0.11.0, < 2.a)
     google-apis-core (0.11.0)
       addressable (~> 2.5, >= 2.5.1)
