@@ -98,7 +98,7 @@ FactoryBot.define do
   factory :inbox_result do
     instance_eval(&resultable_instance_members)
     transient do
-      person { FactoryBot.create(:inbox_person, competitionId: competition.id) }
+      person { FactoryBot.create(:inbox_person, competition_id: competition.id) }
     end
 
     trait :for_existing_person do
@@ -107,10 +107,10 @@ FactoryBot.define do
       end
       person {
         FactoryBot.create(:inbox_person,
-                          competitionId: competition.id,
-                          name: real_person.name, wcaId: real_person.wca_id,
+                          competition_id: competition.id,
+                          name: real_person.name, wca_id: real_person.wca_id,
                           gender: real_person.gender, dob: real_person.dob,
-                          countryId: real_person.country.iso2)
+                          country_iso2: real_person.country.iso2)
       }
     end
 
@@ -125,7 +125,7 @@ FactoryBot.define do
 
     personId { person.wca_id }
     personName { person.name }
-    countryId { person.countryId }
+    countryId { person.country_id }
     regionalSingleRecord { nil }
     regionalAverageRecord { nil }
   end

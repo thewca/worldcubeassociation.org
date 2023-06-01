@@ -16,8 +16,8 @@ class User < ApplicationRecord
   has_many :votes
   has_many :registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
-  belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
-  belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
+  belongs_to :person, -> { where(sub_id: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
+  belongs_to :unconfirmed_person, -> { where(sub_id: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
@@ -1003,7 +1003,7 @@ class User < ApplicationRecord
     if !wca_id && !unconfirmed_wca_id
       matches = []
       unless country.nil? || dob.nil?
-        matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a
+        matches = competition.competitors.where(name: name, dob: dob, gender: gender, country_id: country.id).to_a
       end
       if matches.size == 1 && matches.first.user.nil?
         update(wca_id: matches.first.wca_id)

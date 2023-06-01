@@ -627,7 +627,7 @@ sv:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: fa4c045
-        countryId: Representerar
+        country_id: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 8a754c6
@@ -1165,7 +1165,7 @@ sv:
         #original_hash: 498f4c5
         dob: Födelsedatumet ska ha formatet ÅÅÅÅ-MM-DD.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

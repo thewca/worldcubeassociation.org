@@ -549,7 +549,7 @@ kk:
         #original_hash: 8c41ae8
         wca_id: Қатысушы
         #original_hash: d523ebb
-        countryId: Ел
+        country_id: Ел
         #original_hash: ab58155
         dob: Туған күні
         #original_hash: 8a754c6
@@ -1011,7 +1011,7 @@ kk:
         #original_hash: 498f4c5
         dob: ЖЖЖЖ-АА-КК форматында туған күні болуы тиіс.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

@@ -558,7 +558,7 @@ uk:
         #original_hash: 8c41ae8
         wca_id: Особа
         #original_hash: d523ebb
-        countryId: Країна
+        country_id: Країна
         #original_hash: ab58155
         dob: Дата народження
         #original_hash: 8a754c6
@@ -1021,7 +1021,7 @@ uk:
         #original_hash: 498f4c5
         dob: Дата народження повинна мати формат РРРР-ММ-ДД
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

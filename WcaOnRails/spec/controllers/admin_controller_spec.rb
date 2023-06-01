@@ -34,7 +34,7 @@ RSpec.describe AdminController, type: :controller do
     sign_in { FactoryBot.create :admin }
 
     let(:person1) { FactoryBot.create(:person) }
-    let(:person2) { FactoryBot.create(:person, person1.attributes.symbolize_keys!.slice(:name, :countryId, :gender, :dob)) }
+    let(:person2) { FactoryBot.create(:person, person1.attributes.symbolize_keys!.slice(:name, :country_id, :gender, :dob)) }
 
     it 'can merge people' do
       post :do_merge_people, params: { merge_people: { person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id } }
@@ -85,10 +85,10 @@ RSpec.describe AdminController, type: :controller do
   describe 'PATCH #update person' do
     sign_in { FactoryBot.create :admin }
 
-    let(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", countryId: "Australia") }
+    let(:person) { FactoryBot.create(:person_who_has_competed_once, name: "Feliks Zemdegs", country_id: "Australia") }
 
-    it "shows a message with link to the check_regional_record_markers script if the person has been fixed and countryId has changed" do
-      patch :update_person, params: { method: "fix", person: { wca_id: person.wca_id, countryId: "New Zealand" } }
+    it "shows a message with link to the check_regional_record_markers script if the person has been fixed and country_id has changed" do
+      patch :update_person, params: { method: "fix", person: { wca_id: person.wca_id, country_id: "New Zealand" } }
       expect(flash[:warning]).to include "check_regional_record_markers"
       expect(response).to render_template :edit_person
     end

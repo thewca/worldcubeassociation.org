@@ -634,7 +634,7 @@ de:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: d523ebb
-        countryId: Land
+        country_id: Land
         #original_hash: ab58155
         dob: Geburtsdatum
         #original_hash: 8a754c6
@@ -1192,7 +1192,7 @@ de:
         #original_hash: 498f4c5
         dob: Geburtsdaten sollten dem Format JJJJ-MM-TT folgen.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

@@ -602,7 +602,7 @@ fi:
         #original_hash: 8c41ae8
         wca_id: Henkilö
         #original_hash: d523ebb
-        countryId: Kansalaisuus
+        country_id: Kansalaisuus
         #original_hash: ab58155
         dob: Syntymäaika
         #original_hash: 8a754c6
@@ -1101,7 +1101,7 @@ fi:
         #original_hash: 498f4c5
         dob: Syntymäpäivän tulisi olla muotoa VVVV-KK-PP.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

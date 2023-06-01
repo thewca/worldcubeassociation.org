@@ -627,7 +627,7 @@ eo:
         #original_hash: 8c41ae8
         wca_id: Persono
         #original_hash: d523ebb
-        countryId: Lando
+        country_id: Lando
         #original_hash: ab58155
         dob: Naskiĝtago
         #original_hash: 8a754c6
@@ -1161,7 +1161,7 @@ eo:
         #original_hash: 498f4c5
         dob: Naskiĝdato devus esti skribita kiel JJJJ-MM-TT.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

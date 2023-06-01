@@ -612,7 +612,7 @@ zh-TW:
         #original_hash: 8c41ae8
         wca_id: 人
         #original_hash: fa4c045
-        countryId: 代表
+        country_id: 代表
         #original_hash: ab58155
         dob: 生日
         #original_hash: 8a754c6
@@ -1030,7 +1030,7 @@ zh-TW:
         #original_hash: 498f4c5
         dob: 生日請按照YYYY-MM-DD的格式。
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

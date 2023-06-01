@@ -622,7 +622,7 @@ id:
         #original_hash: 8c41ae8
         wca_id: Orang
         #original_hash: d523ebb
-        countryId: Negara
+        country_id: Negara
         #original_hash: ab58155
         dob: Tanggal lahir
         #original_hash: 8a754c6
@@ -1164,7 +1164,7 @@ id:
         #original_hash: 498f4c5
         dob: Tanggal lahir harus ditulis dengan format YYYY-MM-DD.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

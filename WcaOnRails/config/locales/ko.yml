@@ -444,7 +444,7 @@ ko:
         #original_hash: 8c41ae8
         wca_id: 선수
         #original_hash: d523ebb
-        countryId: 국적
+        country_id: 국적
         #original_hash: ab58155
         dob: 생년월일
         #original_hash: 8a754c6
@@ -700,7 +700,7 @@ ko:
         #original_hash: 498f4c5
         dob: 생년월일의 형식은 YYYY-MM-DD입니다.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

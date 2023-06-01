@@ -69,7 +69,7 @@
           <% name_identical = FinishUnfinishedPersons.extract_roman_name(sim.name) == FinishUnfinishedPersons.extract_roman_name(p[:person_name]) %>
 
           <% dob_identical = sim.dob == p[:person_dob] %>
-          <% country_identical = sim.countryId == p[:country_id] %>
+          <% country_identical = sim.country_id == p[:country_id] %>
 
           <% exact_match = name_identical && dob_identical && country_identical %>
 
@@ -85,7 +85,7 @@
               <% if sim.wca_id.present? %>
                 <%= link_to sim.wca_id, person_path(sim.wca_id) %>
               <% else %>
-                <%= link_to "(results)", admin_peek_unfinished_results_path(person_name: sim.name, country_id: sim.countryId, person_id: sim.wca_id), target: '_blank' %>
+                <%= link_to "(results)", admin_peek_unfinished_results_path(person_name: sim.name, country_id: sim.country_id, person_id: sim.wca_id), target: '_blank' %>
               <% end %>
             </td>
             <td><%= sim.dob %></td>

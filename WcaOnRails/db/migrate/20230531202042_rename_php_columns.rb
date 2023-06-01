@@ -50,5 +50,20 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :RoundTypes, :round_types
+
+    change_table :Persons do |t|
+      t.rename :subId, :sub_id
+      t.rename :countryId, :country_id
+    end
+
+    rename_table :Persons, :persons
+
+    change_table :InboxPersons do |t|
+      t.rename :wcaId, :wca_id
+      t.rename :countryId, :country_iso2
+      t.rename :competitionId, :competition_id
+    end
+
+    rename_table :InboxPersons, :inbox_persons
   end
 end

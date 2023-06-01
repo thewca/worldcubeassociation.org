@@ -71,8 +71,8 @@ RSpec.describe PV do
       # NON_MATCHING_NAME_WARNING
       # NON_MATCHING_COUNTRY_WARNING
       it "validates against existing person data" do
-        person = FactoryBot.create(:person, countryId: "Spain")
-        dup_name = FactoryBot.create(:inbox_person, name: person.name, competitionId: competition1.id)
+        person = FactoryBot.create(:person, country_id: "Spain")
+        dup_name = FactoryBot.create(:inbox_person, name: person.name, competition_id: competition1.id)
         FactoryBot.create(:inbox_result,
                           person: dup_name, competition: competition1,
                           eventId: "333oh")
@@ -80,7 +80,7 @@ RSpec.describe PV do
                                  :for_existing_person,
                                  real_person: person,
                                  competition: competition2, eventId: "222")
-        res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", countryId: "FR")
+        res1.person.update(dob: 90.years.ago, gender: "a", name: "Hey", country_iso2: "FR")
 
         expected_warnings = [
           RV::ValidationWarning.new(:persons, competition1.id,
@@ -191,7 +191,7 @@ RSpec.describe PV do
         res_wrong_wca_id = FactoryBot.create(:inbox_result,
                                              competition: competition1,
                                              eventId: "333oh")
-        res_wrong_wca_id.person.update(wcaId: "ERR")
+        res_wrong_wca_id.person.update(wca_id: "ERR")
 
         expected_errors = [
           RV::ValidationError.new(:persons, competition2.id,

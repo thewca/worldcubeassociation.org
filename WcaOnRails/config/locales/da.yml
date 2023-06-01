@@ -561,7 +561,7 @@ da:
         #original_hash: 8c41ae8
         wca_id: Person
         #original_hash: d523ebb
-        countryId: Land
+        country_id: Land
         #original_hash: ab58155
         dob: Fødselsdag
         #original_hash: 8a754c6
@@ -1048,7 +1048,7 @@ da:
         #original_hash: 498f4c5
         dob: Fødselsdatoer skal have formatet ÅÅÅÅ-MM-DD
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

@@ -41,7 +41,15 @@ class UploadJson
       competition = Competition.includes(competition_events: [:rounds]).find(competition_id)
       persons_to_import = []
       parsed_json["persons"].each do |p|
-        new_person_attributes = p.merge(competitionId: competition_id)
+        new_person_attributes = {
+          id: p["id"],
+          wca_id: p["wcaId"],
+          competition_id: competition_id,
+          name: p["name"],
+          country_iso2: p["countryId"],
+          gender: p["gender"],
+          dob: p["dob"],
+        }
         # mask uploaded DOB on staging to avoid accidentally importing PII
         new_person_attributes["dob"] = "1954-12-04" if Rails.env.production? && !EnvVars::WCA_LIVE_SITE?
         persons_to_import << InboxPerson.new(new_person_attributes)
@@ -107,7 +115,7 @@ class UploadJson
       end
       begin
         ActiveRecord::Base.transaction do
-          InboxPerson.where(competitionId: competition_id).delete_all
+          InboxPerson.where(competition_id: competition_id).delete_all
           InboxResult.where(competitionId: competition_id).delete_all
           Scramble.where(competitionId: competition_id).delete_all
           InboxPerson.import!(persons_to_import)

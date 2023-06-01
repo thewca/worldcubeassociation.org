@@ -43,7 +43,7 @@ module Admin
     end
 
     private def person_params
-      params.require(:person).permit(:name, :wca_id, :dob, :gender, :countryId)
+      params.require(:person).permit(:name, :wca_id, :dob, :gender, :country_id)
     end
   end
 end

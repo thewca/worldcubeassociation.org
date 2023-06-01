@@ -99,10 +99,8 @@ class Registration < ApplicationRecord
     user.wca_id
   end
 
-  alias personId wca_id
-
   def person
-    Person.find_by_wca_id(personId)
+    Person.find_by_wca_id(wca_id)
   end
 
   def world_rank(event, type)

@@ -104,7 +104,7 @@ FactoryBot.define do
       with_rounds { true }
       results_submitted_at { Time.now }
       after(:create) do |competition|
-        person = FactoryBot.create(:inbox_person, competitionId: competition.id)
+        person = FactoryBot.create(:inbox_person, competition_id: competition.id)
         rounds = competition.competition_events.map(&:rounds).flatten
         rounds.each do |round|
           FactoryBot.create(:inbox_result, competitionId: competition.id, personId: person.id, eventId: round.event.id, formatId: round.format.id)

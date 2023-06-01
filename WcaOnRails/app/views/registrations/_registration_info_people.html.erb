@@ -1,4 +1,4 @@
-<% with_wca_id, without_wca_id = registrations.partition { |r| r.personId.present? } %>
+<% with_wca_id, without_wca_id = registrations.partition { |r| r.wca_id.present? } %>
 <%= without_wca_id.length %> <%= t('.newcomer', count: without_wca_id.length) %> +
 <%= with_wca_id.length %> <%= t('.returner', count: with_wca_id.length) %> =
 <%= registrations.length %> <%= t('.person', count: registrations.length) %>

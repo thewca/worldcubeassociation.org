@@ -998,7 +998,7 @@ RSpec.describe CompetitionsController do
         person = user.person
         FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         FactoryBot.create(:result, competition: competition, person: person, eventId: "333")
-        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, dob: person.dob)
+        another_person = FactoryBot.create(:person, name: person.name, country_id: person.country_id, gender: person.gender, dob: person.dob)
         FactoryBot.create(:result, competition: competition, person: another_person, eventId: "333")
 
         user.update(wca_id: nil)

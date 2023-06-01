@@ -470,7 +470,7 @@ hu:
         #original_hash: 8c41ae8
         wca_id: Személy
         #original_hash: d523ebb
-        countryId: Ország
+        country_id: Ország
         #original_hash: ab58155
         dob: Születési dátum
         #original_hash: 8a754c6
@@ -890,7 +890,7 @@ hu:
         #original_hash: 498f4c5
         dob: A születési dátumnak ÉÉÉÉ-HH-NN formában kell szerepelnie.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

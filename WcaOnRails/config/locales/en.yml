@@ -389,7 +389,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Representing"
+        country_id: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -624,7 +624,7 @@ en:
       #context: for a person
       person:
         dob: "Date of birth should have the format YYYY-MM-DD."
-        countryId: ""
+        country_id: ""
         gender: ""
         name: ""
         person1_wca_id: ""

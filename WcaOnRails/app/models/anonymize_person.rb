@@ -50,7 +50,7 @@ class AnonymizePerson
     new_wca_id = generate_new_wca_id
     unless new_wca_id
       wca_id_year = person_wca_id[0..3]
-      return { error: "Error anonymizing: SubIds " + wca_id_year + "ANON00 to " + wca_id_year + "ANON99 are already taken." }
+      return { error: "Error anonymizing: ID counters " + wca_id_year + "ANON00 to " + wca_id_year + "ANON99 are already taken." }
     end
 
     ActiveRecord::Base.transaction do
@@ -81,24 +81,24 @@ class AnonymizePerson
       # Anonymize person's data in Persons
       if person.sub_ids.length > 1
         # if an updated person is due to a name change, this will delete the previous person.
-        # if an updated person is due to a country change, this will keep the sub person with an appropriate subId
-        previous_persons = Person.where(wca_id: person_wca_id).where.not(subId: 1).order(:subId)
+        # if an updated person is due to a country change, this will keep the sub person with an appropriate sub_id
+        previous_persons = Person.where(wca_id: person_wca_id).where.not(sub_id: 1).order(:sub_id)
         current_sub_id = 1
-        current_country_id = person.countryId
+        current_country_id = person.country_id
 
         previous_persons.each do |p|
-          if p.countryId == current_country_id
+          if p.country_id == current_country_id
             p.delete
           else
             current_sub_id += 1
-            current_country_id = p.countryId
-            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil, subId: current_sub_id)
+            current_country_id = p.country_id
+            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil, sub_id: current_sub_id)
           end
         end
 
       end
 
-      # Anonymize person's data in Persons for subid 1
+      # Anonymize person's data in Persons for sub_id 1
       person.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil)
     end
 

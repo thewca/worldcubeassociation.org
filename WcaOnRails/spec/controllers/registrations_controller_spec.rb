@@ -629,8 +629,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
     it "does not show pending registrations" do
       pending_registration = FactoryBot.create(:registration, competition: competition)
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "333", personId: pending_registration.personId
-      FactoryBot.create :ranks_average, rank: 10, best: 2000, eventId: "333", personId: pending_registration.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "333", personId: pending_registration.wca_id
+      FactoryBot.create :ranks_average, rank: 10, best: 2000, eventId: "333", personId: pending_registration.wca_id
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       psych_sheet = assigns(:psych_sheet)
@@ -650,24 +650,24 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       user_b = FactoryBot.create(:user, :wca_id, name: 'B')
 
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 1, best: 2000, eventId: "444", personId: registration1.personId
-      FactoryBot.create :ranks_single, rank: 1, best: 1500, eventId: "444", personId: registration1.personId
+      FactoryBot.create :ranks_average, rank: 1, best: 2000, eventId: "444", personId: registration1.wca_id
+      FactoryBot.create :ranks_single, rank: 1, best: 1500, eventId: "444", personId: registration1.wca_id
 
       registration2 = FactoryBot.create(:registration, :accepted, user: user_a, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
-      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.wca_id
+      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.wca_id
 
       registration3 = FactoryBot.create(:registration, :accepted, user: user_b, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration3.personId
-      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration3.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration3.wca_id
+      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration3.wca_id
 
       registration4 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration4.personId
-      FactoryBot.create :ranks_single, rank: 30, best: 2500, eventId: "444", personId: registration4.personId
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration4.wca_id
+      FactoryBot.create :ranks_single, rank: 30, best: 2500, eventId: "444", personId: registration4.wca_id
 
       registration5 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration5.personId
-      FactoryBot.create :ranks_single, rank: 31, best: 2600, eventId: "444", personId: registration5.personId
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration5.wca_id
+      FactoryBot.create :ranks_single, rank: 31, best: 2600, eventId: "444", personId: registration5.wca_id
 
       registration6 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
@@ -687,11 +687,11 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "handles missing average" do
       # Missing an average
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_single, rank: 2, best: 200, eventId: "444", personId: registration1.personId
+      FactoryBot.create :ranks_single, rank: 2, best: 200, eventId: "444", personId: registration1.wca_id
 
       registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
-      FactoryBot.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.wca_id
+      FactoryBot.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.wca_id
 
       # Never competed
       registration3 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
@@ -705,7 +705,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "handles 1 registration" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
-        personId: registration.personId,
+        personId: registration.wca_id,
         eventId: "444",
         best: "4242",
         worldRank: 10,
@@ -722,7 +722,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "sorts 333bf by single" do
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
-        personId: registration1.personId,
+        personId: registration1.wca_id,
         eventId: "333bf",
         best: "4242",
         worldRank: 10,
@@ -730,7 +730,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         countryRank: 10,
       )
       RanksSingle.create!(
-        personId: registration1.personId,
+        personId: registration1.wca_id,
         eventId: "333bf",
         best: "2000",
         worldRank: 1,
@@ -740,7 +740,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
-        personId: registration2.personId,
+        personId: registration2.wca_id,
         eventId: "333bf",
         best: "4242",
         worldRank: 1,
@@ -748,7 +748,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         countryRank: 1,
       )
       RanksSingle.create!(
-        personId: registration2.personId,
+        personId: registration2.wca_id,
         eventId: "333bf",
         best: "2000",
         worldRank: 2,
@@ -770,7 +770,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "shows first timers on bottom" do
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
-        personId: registration1.personId,
+        personId: registration1.wca_id,
         eventId: "333bf",
         best: "4242",
         worldRank: 10,
@@ -778,7 +778,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         countryRank: 10,
       )
       RanksSingle.create!(
-        personId: registration1.personId,
+        personId: registration1.wca_id,
         eventId: "333bf",
         best: "2000",
         worldRank: 1,
@@ -803,7 +803,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "handles 1 registration" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
-        personId: registration.personId,
+        personId: registration.wca_id,
         eventId: "444",
         best: "4242",
         worldRank: 10,

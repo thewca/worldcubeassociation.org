@@ -544,7 +544,7 @@ ja:
         #original_hash: 8c41ae8
         wca_id: 個人
         #original_hash: d523ebb
-        countryId: 国
+        country_id: 国
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 8a754c6
@@ -938,7 +938,7 @@ ja:
         #original_hash: 498f4c5
         dob: '生年月日は半角英数で (西暦)-(月)-(日) の形式で記入してください (2000年1月23日生の場合: 2000-01-23)。'
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

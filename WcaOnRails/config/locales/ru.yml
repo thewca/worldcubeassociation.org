@@ -635,7 +635,7 @@ ru:
         #original_hash: 8c41ae8
         wca_id: Участник
         #original_hash: d523ebb
-        countryId: Страна
+        country_id: Страна
         #original_hash: ab58155
         dob: День рождения
         #original_hash: 8a754c6
@@ -1187,7 +1187,7 @@ ru:
         #original_hash: 498f4c5
         dob: День рождения должен быть в формате ГГГГ-ММ-ДД.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

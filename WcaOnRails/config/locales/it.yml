@@ -629,7 +629,7 @@ it:
         #original_hash: 8c41ae8
         wca_id: Persona
         #original_hash: d523ebb
-        countryId: Nazione
+        country_id: Nazione
         #original_hash: ab58155
         dob: Data di nascita
         #original_hash: 8a754c6
@@ -1178,7 +1178,7 @@ it:
         #original_hash: 498f4c5
         dob: La data di nascita dovrebbe avere il formato AAAA-MM-GG
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

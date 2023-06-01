@@ -528,7 +528,7 @@ vi:
         #original_hash: 8c41ae8
         wca_id: Cá nhân
         #original_hash: d523ebb
-        countryId: Quốc gia
+        country_id: Quốc gia
         #original_hash: ab58155
         dob: Ngày sinh
         #original_hash: 8a754c6
@@ -993,7 +993,7 @@ vi:
         #original_hash: 498f4c5
         dob: Ngày sinh phải được viết dưới dạng YYYY-MM-DD (năm-tháng-ngày).
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

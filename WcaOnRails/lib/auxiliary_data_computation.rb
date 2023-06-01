@@ -51,7 +51,7 @@ module AuxiliaryDataComputation
     ].each do |field, table_name, concise_table_name|
       ActiveRecord::Base.transaction do
         ActiveRecord::Base.connection.execute "DELETE FROM #{table_name}"
-        current_country_by_wca_id = Person.current.pluck(:wca_id, :countryId).to_h
+        current_country_by_wca_id = Person.current.pluck(:wca_id, :country_id).to_h
         # Get all personal records (note: people that changed their country appear once for each country).
         personal_records_with_event = ActiveRecord::Base.connection.execute <<-SQL
           SELECT eventId, personId, countryId, continentId, min(#{field}) value

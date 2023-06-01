@@ -75,7 +75,7 @@ module FinishUnfinishedPersons
   end
 
   def self.persons_cache
-    @persons_cache ||= Person.select(:id, :wca_id, :name, :dob, :countryId)
+    @persons_cache ||= Person.select(:id, :wca_id, :name, :dob, :country_id)
   end
 
   def self.compute_similar_persons(result, n = 5)
@@ -89,7 +89,7 @@ module FinishUnfinishedPersons
       p_roman_name = self.extract_roman_name(p.name)
 
       name_similarity = self.string_similarity(res_roman_name, p_roman_name)
-      country_similarity = result.country_id == p.countryId ? 1 : 0
+      country_similarity = result.country_id == p.country_id ? 1 : 0
 
       only_probas.push name_similarity
       persons_with_probas.push [p, name_similarity, country_similarity]
@@ -180,9 +180,9 @@ module FinishUnfinishedPersons
   def self.insert_person(inbox_person, new_name, new_country, new_wca_id)
     Person.create!(
       wca_id: new_wca_id,
-      subId: 1,
+      sub_id: 1,
       name: new_name,
-      countryId: new_country,
+      country_id: new_country,
       gender: inbox_person&.gender || :o,
       dob: inbox_person&.dob,
       comments: '',

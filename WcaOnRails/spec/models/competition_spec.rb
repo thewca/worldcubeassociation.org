@@ -1046,7 +1046,7 @@ RSpec.describe Competition do
       expect(competition.competitors.count).to eq 2
     end
 
-    it "handles competitors with multiple subIds" do
+    it "handles competitors with multiple sub_ids" do
       person_with_sub_ids = FactoryBot.create :person_with_multiple_sub_ids
       FactoryBot.create :result, competition: competition, person: person_with_sub_ids
       FactoryBot.create :result, competition: competition

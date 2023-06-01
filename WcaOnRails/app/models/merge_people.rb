@@ -31,12 +31,12 @@ class MergePeople
     if !person1
       errors.add(:person1_wca_id, "Not found")
     elsif person1.sub_ids.length > 1
-      errors.add(:person1_wca_id, "This person has multiple subIds")
+      errors.add(:person1_wca_id, "This person has multiple sub_ids")
     end
     if !person2
       errors.add(:person2_wca_id, "Not found")
     elsif person2.sub_ids.length > 1
-      errors.add(:person2_wca_id, "This person has multiple subIds")
+      errors.add(:person2_wca_id, "This person has multiple sub_ids")
     end
   end
 
@@ -46,7 +46,7 @@ class MergePeople
       if person1.name != person2.name
         errors.add(:person2_wca_id, "Names don't match")
       end
-      if person1.countryId != person2.countryId
+      if person1.country_id != person2.country_id
         errors.add(:person2_wca_id, "Countries don't match")
       end
       if person1.gender != person2.gender

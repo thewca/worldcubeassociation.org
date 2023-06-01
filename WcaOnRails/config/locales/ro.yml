@@ -642,7 +642,7 @@ ro:
         #original_hash: 8c41ae8
         wca_id: Persoană
         #original_hash: d523ebb
-        countryId: Țară
+        country_id: Țară
         #original_hash: ab58155
         dob: Data nașterii
         #original_hash: 8a754c6
@@ -1191,7 +1191,7 @@ ro:
         #original_hash: 498f4c5
         dob: Data nașterii trebuie să fie în formatul an-lună-zi (AAAA-LL-ZZ)
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e

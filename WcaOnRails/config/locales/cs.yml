@@ -632,7 +632,7 @@ cs:
         #original_hash: 8c41ae8
         wca_id: Osoba
         #original_hash: d523ebb
-        countryId: Země
+        country_id: Země
         #original_hash: ab58155
         dob: Datum narození
         #original_hash: 8a754c6
@@ -1164,7 +1164,7 @@ cs:
         #original_hash: 498f4c5
         dob: Datum narození by mělo být uvedeno ve formátu RRRR-MM-DD.
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e
