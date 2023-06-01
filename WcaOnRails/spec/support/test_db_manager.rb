@@ -6,7 +6,7 @@ class TestDbManager
     countries
     eligible_country_iso2s_for_championship
     events
-    Formats
+    formats
     preferred_formats
     RoundTypes
     teams

@@ -42,5 +42,7 @@ class RenamePhpColumns < ActiveRecord::Migration[7.0]
     end
 
     rename_table :Events, :events
+
+    rename_table :Formats, :formats
   end
 end

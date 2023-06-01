@@ -2,7 +2,6 @@
 
 class Format < ApplicationRecord
   include Cachable
-  self.table_name = "Formats"
 
   has_many :preferred_formats
   has_many :events, through: :preferred_formats

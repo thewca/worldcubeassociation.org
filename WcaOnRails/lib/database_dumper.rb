@@ -205,7 +205,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "Formats" => {
+    "formats" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(

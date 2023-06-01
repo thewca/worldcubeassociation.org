@@ -146,7 +146,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.string "cell_name", limit: 45, default: "", null: false
   end
 
-  create_table "Formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "formats", id: { type: :string, limit: 1, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "sort_by", limit: 255, null: false
     t.string "sort_by_second", limit: 255, null: false

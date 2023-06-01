@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-sql = "INSERT INTO Formats
+sql = "INSERT INTO formats
 (id, name, sort_by, sort_by_second, expected_solve_count,
 trim_fastest_n, trim_slowest_n)
 VALUES
