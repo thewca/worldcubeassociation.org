@@ -252,7 +252,7 @@
             var compLimit = compLimitEnabled ? $("#competition_competitor_limit").val() : null;
             var currencyCode = $("#competition_currency_code").val();
             var countryId = $("#competition_countryId").val();
-            var entryFee = $("#base_entry_fee_lowest_denomination_input_field").val();
+            var entryFee = $("#competition_base_entry_fee_lowest_denomination").val();
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
               url: '<%= calculate_dues_path %>',
               data: {
