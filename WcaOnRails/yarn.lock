@@ -6110,10 +6110,10 @@ react@^16.14.0:
     object-assign "^4.1.1"
     prop-types "^15.6.2"
 
-react_ujs@^2.7.0:
-  version "2.7.0"
-  resolved "https://registry.yarnpkg.com/react_ujs/-/react_ujs-2.7.0.tgz#988ebfb57f0ad9e7fb1e0109021bba7f6526f756"
-  integrity sha512-uCYdLT6rDQnnrwZorFo+oHddvuJzt/At3Avl+vy2hfp1fZPqkOjSWlvnCVglNS8+qhMaY3tKCg2P5cjqhpHSYw==
+react_ujs@^2.7.1:
+  version "2.7.1"
+  resolved "https://registry.yarnpkg.com/react_ujs/-/react_ujs-2.7.1.tgz#d87cbcb82593fe59d30fc5dbc51800d1571001a8"
+  integrity sha512-nQ/y/Vn2hZQXjNxFKY4pV5hAQbG3o/8yaRzq3nJAAdk7tMgey/EsMKoDOWlEQxZ+D3J4BtwquW1oCESMiHSHnQ==
 
 read-cache@^1.0.0:
   version "1.0.0"
