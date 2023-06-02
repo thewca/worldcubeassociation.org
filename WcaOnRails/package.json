@@ -64,7 +64,7 @@
     "sass-loader": "^13.3.1",
     "semantic-ui-react": "^2.1.4",
     "shakapacker": "6.6.0",
-    "style-loader": "^3.3.2",
+    "style-loader": "^3.3.3",
     "terser-webpack-plugin": "^5.3.8",
     "webpack": "^5.85.0",
     "webpack-assets-manifest": "^5.1.0",
