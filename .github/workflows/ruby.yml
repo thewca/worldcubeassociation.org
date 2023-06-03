@@ -22,9 +22,6 @@ jobs:
         run: bin/yarn
       - uses: actions/checkout@v3
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
-      - name: Activate MySQL # as per https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#mysql
-        run: |
-          sudo systemctl start mysql.service
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -43,17 +40,22 @@ jobs:
         with:
           path: '~/.cache/yarn'
           key: ${{ runner.os }}-yarn
+      - name: Install fresh Yarn packages
+        run: bundle exec rake yarn:install
+      - name: Run Overcommit commit hooks
+        working-directory: ${{ env.GITHUB_WORKSPACE }}
+        env:
+          BUNDLE_GEMFILE: WcaOnRails/Gemfile
+        run: bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && bundle exec overcommit --run
+      - name: Activate MySQL # as per https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#mysql
+        run: |
+          sudo systemctl start mysql.service
       - name: Populate database with seeds
         run: bundle exec rake db:reset
       - name: Pre-compile assets for frontend tests
         env:
           DISABLE_SPRING: 1
         run: bundle exec i18n export && bundle exec rake assets:precompile
-      - name: Run Overcommit commit hooks
-        working-directory: ${{ env.GITHUB_WORKSPACE }}
-        env:
-          BUNDLE_GEMFILE: WcaOnRails/Gemfile
-        run: bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && bundle exec overcommit --run
       - name: Run tests
         id: rspec
         run: bundle exec rake
