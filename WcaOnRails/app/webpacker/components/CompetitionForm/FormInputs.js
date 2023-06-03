@@ -16,7 +16,7 @@ import I18n from '../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { currenciesData } from '../../lib/wca-data.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import { userApiUrl } from '../../lib/requests/routes.js.erb';
+import { competitionApiUrl, userApiUrl } from '../../lib/requests/routes.js.erb';
 import FormContext from './FormContext';
 
 export function useFormInputState(attribute, currentData, defaultVal = '') {
@@ -30,15 +30,14 @@ export function useFormInputState(attribute, currentData, defaultVal = '') {
   };
 }
 
-// TODO: A better way of handling this is likely nessesary
-export function getInputStateLabel(inputState) {
+function getInputStateLabel(inputState) {
   if (!inputState) return null;
   const translation = I18n.t(`activerecord.attributes.competition.${inputState.attribute}`);
   if (translation) return translation;
   return inputState.attribute;
 }
 
-export function getInputStateHint(inputState) {
+function getInputStateHint(inputState) {
   if (!inputState) return null;
   return I18n.t(`simple_form.hints.competition.${inputState.attribute}`);
 }
@@ -49,8 +48,8 @@ export function FieldWrapper({
   hint,
   children,
 }) {
-  const inputLabel = label || getInputStateLabel(inputState);
-  const inputHint = hint || getInputStateHint(inputState);
+  const inputLabel = (label === undefined && getInputStateLabel(inputState)) || label;
+  const inputHint = (hint === undefined && getInputStateHint(inputState)) || hint;
 
   return (
     <Form.Field>
@@ -83,7 +82,7 @@ export function InputString({
   );
 }
 
-export function InputTextArea({ inputState }) {
+export function InputTextArea({ inputState, forceDisable = false }) {
   const { disabled } = useContext(FormContext);
 
   return (
@@ -95,23 +94,40 @@ export function InputTextArea({ inputState }) {
         }}
         className="no-autosize"
         rows={2}
-        disabled={disabled}
+        disabled={disabled || forceDisable}
       />
     </FieldWrapper>
   );
 }
 
-export function InputNumber({ inputState }) {
+export function InputMarkdown({ inputState }) {
   const { disabled } = useContext(FormContext);
 
   return (
     <FieldWrapper inputState={inputState}>
-      <Input type="number" value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
+      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
     </FieldWrapper>
   );
 }
 
-export function InputCurrency({ inputState, currency }) {
+export function InputNumber({ inputState, min, max }) {
+  const { disabled } = useContext(FormContext);
+
+  return (
+    <FieldWrapper inputState={inputState}>
+      <Input
+        type="number"
+        value={inputState.value}
+        onChange={inputState.onChange}
+        disabled={disabled}
+        min={min}
+        max={max}
+      />
+    </FieldWrapper>
+  );
+}
+
+export function InputCurrency({ inputState, currency, forceDisable = false }) {
   const [autoNumeric, setAutoNumeric] = useState();
   const { disabled } = useContext(FormContext);
 
@@ -145,12 +161,12 @@ export function InputCurrency({ inputState, currency }) {
 
   return (
     <FieldWrapper inputState={inputState}>
-      <Input ref={inputComponentRef} type="text" onChange={onChange} disabled={disabled} />
+      <Input ref={inputComponentRef} type="text" onChange={onChange} disabled={disabled || forceDisable} />
     </FieldWrapper>
   );
 }
 
-export function InputSelect({ inputState, options }) {
+export function InputSelect({ inputState, options, forceDisable = false }) {
   const { disabled } = useContext(FormContext);
 
   return (
@@ -160,7 +176,7 @@ export function InputSelect({ inputState, options }) {
         value={inputState.value}
         onChange={inputState.onChange}
         basic
-        disabled={disabled}
+        disabled={disabled || forceDisable}
       />
     </FieldWrapper>
   );
@@ -181,19 +197,7 @@ export function InputBooleanSelect({ inputState }) {
       text: I18n.t(`simple_form.options.competition.${inputState.attribute}.false`),
     }];
 
-  const { disabled } = useContext(FormContext);
-
-  return (
-    <FieldWrapper inputState={inputState}>
-      <Select
-        options={options}
-        value={inputState.value}
-        onChange={inputState.onChange}
-        basic
-        disabled={disabled}
-      />
-    </FieldWrapper>
-  );
+  return <InputSelect inputState={inputState} options={options} />;
 }
 
 export function InputBoolean({ inputState, ignoreDisabled }) {
@@ -247,14 +251,41 @@ export function InputDate({ inputState, onChange }) {
   );
 }
 
+export function InputDateRange({ startDateData, endDateData }) {
+  const onChangeStart = (_, v) => {
+    const val = v.value;
+    if (endDateData.value < val) {
+      endDateData.onChange(val);
+    }
+    startDateData.onChange(val);
+  };
+
+  const onChangeEnd = (_, v) => {
+    const val = v.value;
+    if (startDateData.value > val) {
+      startDateData.onChange(val);
+    }
+    endDateData.onChange(val);
+  };
+
+  return (
+    <Form.Group widths="equal">
+      <InputDate inputState={startDateData} onChange={onChangeStart} />
+      <InputDate inputState={endDateData} onChange={onChangeEnd} />
+    </Form.Group>
+  );
+}
+
 export function InputDateTime({ inputState }) {
   const { disabled } = useContext(FormContext);
+
+  const time = inputState.value.slice(0, 16);
 
   return (
     <FieldWrapper inputState={inputState}>
       <Input
         type="datetime-local"
-        value={inputState.value}
+        value={time}
         onChange={inputState.onChange}
         style={{ width: 'full' }}
         label="UTC"
@@ -264,13 +295,12 @@ export function InputDateTime({ inputState }) {
   );
 }
 
-export function InputMarkdown({ inputState }) {
-  const { disabled } = useContext(FormContext);
-
+export function InputDateTimeRange({ startTimeData, endTimeData }) {
   return (
-    <FieldWrapper inputState={inputState}>
-      <MarkdownEditor value={inputState.value} onChange={inputState.onChange} disabled={disabled} />
-    </FieldWrapper>
+    <Form.Group widths="equal">
+      <InputDateTime inputState={startTimeData} />
+      <InputDateTime inputState={endTimeData} />
+    </Form.Group>
   );
 }
 
@@ -302,6 +332,53 @@ export function UserSearch({ inputState, delegateOnly = false, traineeOnly = fal
 
   return (
     <FieldWrapper inputState={inputState}>
+      {initialData
+        ? (
+          <input
+            ref={refWrapper}
+            defaultValue={inputState.value}
+            className={classNames}
+            type="text"
+            data-data={initialData}
+            id={inputState.attribute}
+            disabled={disabled}
+          />
+        ) : <Loading />}
+    </FieldWrapper>
+  );
+}
+
+export function CompetitionSearch({
+  inputState,
+  lock,
+  label,
+  hint,
+}) {
+  let classNames = 'form-control competition_id optional wca-autocomplete wca-autocomplete-competitions_search';
+  if (lock) classNames += ' wca-autocomplete-input_lock';
+
+  const [initialData, setInitialData] = useState(inputState.value ? null : '[]');
+  const { disabled } = useContext(FormContext);
+
+  useEffect(() => {
+    if (!inputState.value) return;
+
+    const ids = inputState.value.split(',');
+    const promises = ids.map((id) => fetchJsonOrError(competitionApiUrl(id)));
+
+    Promise.all(promises).then((reqs) => {
+      const comps = reqs.map((req) => req.data);
+      setInitialData(JSON.stringify(comps));
+    });
+  }, []);
+
+  const refWrapper = useCallback(() => {
+    $(`#${inputState.attribute}`).on('change', (e) => inputState.onChange(e.target.value));
+    $(`#${inputState.attribute}`).wcaAutocomplete();
+  }, []);
+
+  return (
+    <FieldWrapper inputState={inputState} label={label} hint={hint}>
       {initialData
         ? (
           <input

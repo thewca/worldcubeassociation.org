@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   Form,
@@ -9,8 +9,9 @@ import {
   InputBoolean,
   InputBooleanSelect,
   InputCurrency,
-  InputDate,
+  InputDateRange,
   InputDateTime,
+  InputDateTimeRange,
   InputMarkdown,
   InputNumber,
   InputRadio,
@@ -27,8 +28,9 @@ import ChampionshipInput from './ChampionshipInput';
 import RegistrationTable from './RegistrationTable';
 import DuesEstimate from './DuesEstimate';
 import FormContext from './FormContext';
+import SeriesInput from './SeriesInput';
 
-function AdminView({ competition }) {
+function CompVisibilitySettings({ competition }) {
   const confirmedData = useFormInputState('confirmed', competition);
   const showAtAllData = useFormInputState('showAtAll', competition);
 
@@ -76,40 +78,6 @@ function CoordinatesInput({ latData, longData }) {
   );
 }
 
-function DatesRange({ startDateData, endDateData }) {
-  const onChangeStart = (_, v) => {
-    const val = v.value;
-    if (endDateData.value < val) {
-      endDateData.onChange(val);
-    }
-    startDateData.onChange(val);
-  };
-
-  const onChangeEnd = (_, v) => {
-    const val = v.value;
-    if (startDateData.value > val) {
-      startDateData.onChange(val);
-    }
-    endDateData.onChange(val);
-  };
-
-  return (
-    <Form.Group widths="equal">
-      <InputDate inputState={startDateData} onChange={onChangeStart} />
-      <InputDate inputState={endDateData} onChange={onChangeEnd} />
-    </Form.Group>
-  );
-}
-
-function DateTimeRange({ startTimeData, endTimeData }) {
-  return (
-    <Form.Group widths="equal">
-      <InputDateTime inputState={startTimeData} />
-      <InputDateTime inputState={endTimeData} />
-    </Form.Group>
-  );
-}
-
 function CompetitorLimitInput({
   competitorLimitEnabledData,
   competitorLimitData,
@@ -144,6 +112,14 @@ function GuestsEnabledInput({ inputState }) {
   );
 }
 
+function ActionButtons({ competition }) {
+  return (
+    <Button color="blue" type="button">
+      {I18n.t(`competitions.competition_form.submit_${competition.persisted ? 'update' : 'create'}_value`)}
+    </Button>
+  );
+}
+
 export default function CompetitionForm({
   competition,
   adminView,
@@ -156,7 +132,7 @@ export default function CompetitionForm({
 }) {
   const countriesOptions = countries.map((c) => ({
     key: c.id,
-    value: c.name,
+    value: c.id,
     text: c.name,
   }));
 
@@ -182,10 +158,22 @@ export default function CompetitionForm({
     text: I18n.t('enums.competition.guest_entry_status.restricted'),
   }];
 
+  const mainEventOptions = competition.main_event_options.map((ev) => ({
+    key: ev[1],
+    value: ev[1],
+    text: ev[0],
+  }));
+  mainEventOptions.unshift({
+    key: '',
+    value: '',
+    text: '',
+  });
+
   const idData = useFormInputState('id', competition);
   const nameData = useFormInputState('name', competition);
   const cellNameData = useFormInputState('cellName', competition);
   const nameReasonData = useFormInputState('name_reason', competition);
+
   const countryData = useFormInputState('countryId', competition);
   const cityNameData = useFormInputState('cityName', competition);
   const venueData = useFormInputState('venue', competition);
@@ -201,10 +189,7 @@ export default function CompetitionForm({
   const regStartData = useFormInputState('registration_open', competition);
   const regEndData = useFormInputState('registration_close', competition);
 
-  useEffect(() => { // TODO: This is bad
-    regStartData.onChange(regStartData.value.slice(0, 16));
-    regEndData.onChange(regEndData.value.slice(0, 16));
-  }, [competition]);
+  const seriesData = useFormInputState('competition_series', competition);
 
   const informationData = useFormInputState('information', competition);
 
@@ -212,7 +197,7 @@ export default function CompetitionForm({
   const competitorLimitData = useFormInputState('competitor_limit', competition);
   const competitorLimitReasonData = useFormInputState('competitor_limit_reason', competition);
 
-  const staffDelegateData = useFormInputState('staff_delegate_ids', competition); // TODO: This should include the current delegate
+  const staffDelegateData = useFormInputState('staff_delegate_ids', competition);
   const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
   const organizerData = useFormInputState('organizer_ids', competition);
   const contactData = useFormInputState('contact', competition);
@@ -263,7 +248,11 @@ export default function CompetitionForm({
 
   const forceCommentInRegData = useFormInputState('force_comment_in_registration', competition, false);
 
+  const mainEventIdData = useFormInputState('main_event_id', competition);
+
   const remarksData = useFormInputState('remarks', competition, '');
+
+  const cloneTabsData = useFormInputState('clone_tabs', competition, false);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
@@ -271,10 +260,12 @@ export default function CompetitionForm({
     disabled: isActuallyConfirmed && !adminView,
   }), [adminView, isActuallyConfirmed]);
 
+  const disableMoneyInput = !competition.can_edit_registration_fees;
+
   return (
     <FormContext.Provider value={formContext}>
       <Form>
-        {competition.persisted && adminView && <AdminView competition={competition} />}
+        {competition.persisted && adminView && <CompVisibilitySettings competition={competition} />}
         {competition.persisted && !adminView && (
           <AnnouncementDetails
             competition={competition}
@@ -287,6 +278,7 @@ export default function CompetitionForm({
         <InputString inputState={nameData} />
         {competition.persisted && <InputString inputState={cellNameData} />}
         <InputString inputState={nameReasonData} hint={I18n.t('competitions.competition_form.name_reason_html')} />
+
         <InputSelect inputState={countryData} options={countriesOptions} />
         <InputString inputState={cityNameData} />
         <InputString inputState={venueData} hint={I18n.t('competitions.competition_form.venue_html', { md: I18n.t('competitions.competition_form.supports_md_html') })} />
@@ -302,7 +294,7 @@ export default function CompetitionForm({
       />
       <Form>
         <CoordinatesInput latData={latData} longData={longData} />
-        <DatesRange startDateData={startDateData} endDateData={endDateData} />
+        <InputDateRange startDateData={startDateData} endDateData={endDateData} />
         <NearbyComps
           idData={idData}
           latData={latData}
@@ -311,24 +303,31 @@ export default function CompetitionForm({
           endDateData={endDateData}
           setCompMarkers={setCompMarkers}
         />
-        <SeriesComps
-          idData={idData}
-          latData={latData}
-          longData={longData}
-          startDateData={startDateData}
-          endDateData={endDateData}
-        />
+        {!seriesData.value && (
+          <SeriesComps
+            idData={idData}
+            latData={latData}
+            longData={longData}
+            startDateData={startDateData}
+            endDateData={endDateData}
+            seriesData={seriesData}
+          />
+        )}
 
         <hr />
 
-        <DateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
+        <InputDateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
         <RegistrationTable idData={idData} regStartData={regStartData} />
+
+        <SeriesInput inputState={seriesData} />
+
         <InputMarkdown inputState={informationData} />
         <CompetitorLimitInput
           competitorLimitEnabledData={competitorLimitEnabledData}
           competitorLimitData={competitorLimitData}
           competitorLimitReasonData={competitorLimitReasonData}
         />
+
         <UserSearch inputState={staffDelegateData} delegateOnly />
         <UserSearch inputState={traineeDelegateData} traineeOnly />
         <UserSearch inputState={organizerData} />
@@ -354,10 +353,19 @@ export default function CompetitionForm({
         <InputBoolean inputState={useWCALiveForScoretakingData} />
         {!useWCARegData.value && <InputString inputState={regPageData} />}
 
-        <InputBoolean inputState={receiveRegEmailsData} ignoreDisabled />
+        {competition.can_receive_registration_emails
+          && <InputBoolean inputState={receiveRegEmailsData} ignoreDisabled />}
 
-        <InputSelect inputState={currencyCodeData} options={currenciesOptions} />
-        <InputCurrency inputState={baseEntryFeeData} currency={currencyCodeData.value} />
+        <InputSelect
+          inputState={currencyCodeData}
+          options={currenciesOptions}
+          forceDisable={disableMoneyInput}
+        />
+        <InputCurrency
+          inputState={baseEntryFeeData}
+          currency={currencyCodeData.value}
+          forceDisable={disableMoneyInput}
+        />
         <DuesEstimate
           country={countryData.value}
           currency={currencyCodeData.value}
@@ -369,8 +377,7 @@ export default function CompetitionForm({
 
         <GuestsEnabledInput inputState={guestsEnabledData} />
         <InputCurrency inputState={guestsEntryFeeData} currency={currencyCodeData.value} />
-        {/* {console.log(guestsEntryFeeData.value)}
-        {console.log((!(guestsEntryFeeData.value > 0)))} */}
+
         {!(guestsEntryFeeData.value > 0)
           && <InputSelect inputState={guestEntryStatusData} options={guestMessageOptions} />}
         {!(guestsEntryFeeData.value > 0)
@@ -408,7 +415,7 @@ export default function CompetitionForm({
         {eventRestrictionData.value && (
           <>
             <InputTextArea inputState={eventRestrictionReasonData} />
-            <InputNumber inputState={eventPerRegLimitData} />
+            <InputNumber inputState={eventPerRegLimitData} min="0" max={competition.persisted ? competition.length - 1 : null} />
           </>
         )}
 
@@ -416,13 +423,21 @@ export default function CompetitionForm({
 
         <hr />
 
-        <InputTextArea inputState={remarksData} />
+        {competition.persisted && (
+          <>
+            <InputSelect inputState={mainEventIdData} options={mainEventOptions} />
+            <hr />
+          </>
+        )}
+
+        {/* TODO: Figue out why is this specificly disabled */}
+        <InputTextArea inputState={remarksData} forceDisable={isActuallyConfirmed} />
+
+        {competition.can_clone_tabs && <InputBoolean inputState={cloneTabsData} />}
 
         <hr />
 
-        <Button color="blue" type="button">
-          {I18n.t('competitions.competition_form.submit_create_value')}
-        </Button>
+        <ActionButtons competition={competition} />
       </Form>
     </FormContext.Provider>
   );

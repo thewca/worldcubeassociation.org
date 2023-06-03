@@ -13,6 +13,7 @@ export default function SeriesComps({
   longData,
   startDateData,
   endDateData,
+  seriesData,
 }) {
   // TODO: I think there is a bug where a comp shows up which is the current comp in edit mode
   const [nearby, setNearby] = useState();
@@ -50,7 +51,15 @@ export default function SeriesComps({
         loading={loading}
         action={disabled ? null : {
           label: 'Add to series',
-          onClick: () => {},
+          onClick: (comp) => {
+            const ids = [];
+            if (idData.value) ids.push(idData.value);
+            ids.push(comp.id);
+
+            seriesData.onChange({
+              competition_ids: ids.join(','),
+            });
+          },
         }}
       />
     </FieldWrapper>
