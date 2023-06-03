@@ -69,7 +69,7 @@ namespace :db do
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dev_db_dump_url = "https://www.worldcubeassociation.org/wst/wca-developer-database-dump.zip"
+          dev_db_dump_url = "https://www.worldcubeassociation.org/export/developer/wca-developer-database-dump.zip"
           dump_filename = "wca-developer-database-dump.sql"
           zip_filename = "wca-developer-database-dump.zip"
 
