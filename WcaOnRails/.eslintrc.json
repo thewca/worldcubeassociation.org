@@ -6,13 +6,16 @@
     },
     "extends": [
         "plugin:react/recommended",
-        "airbnb"
+        "airbnb",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
     ],
     "globals": {
         "Atomics": "readonly",
         "SharedArrayBuffer": "readonly",
         "_": true
     },
+    "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaFeatures": {
             "jsx": true
@@ -22,14 +25,41 @@
     },
     "plugins": [
         "react",
-        "jquery"
+        "jquery",
+        "@typescript-eslint",
+        "simple-import-sort",
+        "unused-imports"
     ],
     "rules": {
         "react/prop-types": "off",
         "react/jsx-filename-extension": "off",
+        "import/extensions": [
+            "error",
+            "ignorePackages",
+            {
+                "js": "never",
+                "jsx": "never",
+                "ts": "never",
+                "tsx": "never"
+            }
+        ],
         "import/no-unresolved": ["error", {
             "ignore": ["semantic-css/"]
         }],
-        "no-console": ["error", { "allow": ["warn", "error"] }]
+        "no-console": ["error", { "allow": ["warn", "error"] }],
+        "simple-import-sort/imports": [
+            "error",
+            {
+                "groups": [["^react"], ["^@?\\w"], ["@/(.*)"], ["^[./]"]]
+            }
+        ],
+        "unused-imports/no-unused-imports": "error"
+    },
+    "settings": {
+        "import/resolver": {
+            "node": {
+                "extensions": [".js", ".jsx", ".ts", ".tsx"]
+            }
+        }
     }
 }
