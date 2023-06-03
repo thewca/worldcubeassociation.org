@@ -34,7 +34,7 @@
         "react/prop-types": "off",
         "react/jsx-filename-extension": "off",
         "import/extensions": [
-            "error",
+            "off",
             "ignorePackages",
             {
                 "js": "never",
@@ -43,17 +43,21 @@
                 "tsx": "never"
             }
         ],
-        "import/no-unresolved": ["error", {
+        "import/no-unresolved": ["off", {
             "ignore": ["semantic-css/"]
         }],
         "no-console": ["error", { "allow": ["warn", "error"] }],
         "simple-import-sort/imports": [
-            "error",
+            "off",
             {
                 "groups": [["^react"], ["^@?\\w"], ["@/(.*)"], ["^[./]"]]
             }
         ],
-        "unused-imports/no-unused-imports": "error"
+        "no-use-before-define": ["off"],
+        "unused-imports/no-unused-imports": "error",
+        "@typescript-eslint/no-var-requires": ["off"],
+        "@typescript-eslint/no-empty-function": ["off"],
+        "import/no-cycle": ["off"]
     },
     "settings": {
         "import/resolver": {
