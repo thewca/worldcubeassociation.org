@@ -16,10 +16,6 @@ jobs:
       run:
         working-directory: WcaOnRails
     steps:
-      - name: Install node modules
-        with:
-          working-directory: WcaOnRails
-        run: bin/yarn
       - uses: actions/checkout@v3
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up Ruby
