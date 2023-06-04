@@ -248,7 +248,12 @@
             <% if @user.avatar? %>
               <h4><%= t('.your_thumbnail') %></h4>
               <%= link_to users_avatar_thumbnail_edit_path(@user) do %>
-                <%= render "shared/user_avatar", user: @user, title: "Click to edit thumbnail", break_cache: true %>
+                <%= react_component("UserAvatar", {
+                  avatar: @user.avatar,
+                  size: "small",
+                  title: "Click to edit thumbnail",
+                  breakCache: true
+                }) %>
               <% end %>
             <% end %>
           </div>

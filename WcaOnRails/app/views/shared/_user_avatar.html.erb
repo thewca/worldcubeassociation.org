@@ -1,3 +1,4 @@
+<%# React migration of this file is partially done and is available in components/UserAvatar.js %>
 <% avatar_symbol = defined?(show_pending) && show_pending ? :pending_avatar : :avatar %>
   <% url = user.send(avatar_symbol).url(:thumb) + ( defined?(break_cache) ? "?#{Time.now.to_f}" : "" ) %>
 <div class="avatar-thumbnail <%= defined?(avatar_class) ? avatar_class : "" %>"
