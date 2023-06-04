@@ -11,7 +11,7 @@ class StripePaymentIntent < ApplicationRecord
   scope :started, -> { joins(:stripe_transaction).where.not(stripe_transaction: { status: 'requires_payment_method' }) }
   scope :processing, -> { started.merge(pending) }
 
-  delegate :stripe_id, :status, :money_amount, to: :stripe_transaction
+  delegate :stripe_id, :status, :parameters, :money_amount, to: :stripe_transaction
 
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
@@ -41,7 +41,7 @@ class StripePaymentIntent < ApplicationRecord
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
     case api_intent.status
     when 'succeeded'
-      # The payment didn’t need any additional actions and is completed!
+      # The payment didn't need any additional actions and is completed!
 
       # Record the success timestamp if not already done
       self.update!(confirmed_at: DateTime.current, confirmed_by: action_source) if self.pending?

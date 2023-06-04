@@ -889,6 +889,146 @@ RSpec.describe "registrations" do
           metadata = stripe_transaction.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
+
+        it "recycles a PI when the previous payment was unsuccessful" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          first_pi_stripe_id = payment_intent.stripe_id
+          first_pi_parameters = payment_intent.parameters
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclined' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          # Try to pay again. The old PI should be fetched as "not pending", so we expect that no new PI is being created
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          new_payment_intents = registration.reload.stripe_payment_intents
+          expect(new_payment_intents.size).to eq(1)
+
+          # This _should_ be the same intent as the one we previously sent. Check that it really is.
+          recycled_intent = new_payment_intents.first
+
+          expect(recycled_intent.stripe_id).to eq(first_pi_stripe_id)
+          expect(recycled_intent.parameters).to eq(first_pi_parameters)
+        end
+
+        it "recycles a PI even when the amount was updated" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          first_pi_stripe_id = payment_intent.stripe_id
+          first_pi_parameters = payment_intent.parameters
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclined' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          # Try to pay again. The old PI should be fetched as "not pending", so we expect that no new PI is being created
+          post registration_payment_intent_path(registration.id), params: {
+            # Pay some non-zero additional amount / donations.
+            amount: registration.outstanding_entry_fees.cents * 2,
+          }
+          new_payment_intents = registration.reload.stripe_payment_intents
+          expect(new_payment_intents.size).to eq(1)
+
+          # This _should_ be the same intent as the one we previously sent. Check that it really is.
+          recycled_intent = new_payment_intents.first
+
+          expect(recycled_intent.stripe_id).to eq(first_pi_stripe_id)
+          # The amount is supposed to have changed!
+          expect(recycled_intent.parameters).not_to eq(first_pi_parameters)
+        end
+
+        it "does NOT recycle a PI when the payment is successful" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          first_pi_stripe_id = payment_intent.stripe_id
+          first_pi_parameters = payment_intent.parameters
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          expect(registration.registration_payments.size).to eq(1)
+
+          # The entry fee changed. Simulate a valid reason for the user having to pay again.
+          competition.update!(base_entry_fee_lowest_denomination: 2000)
+
+          # Try to pay again. The old PI should be fetched as "completed", so we expect that a new PI is being created
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          new_payment_intents = registration.reload.stripe_payment_intents
+          expect(new_payment_intents.size).to eq(2)
+
+          # This should _not_ be the same intent as the one we previously sent.
+          recycled_intent = new_payment_intents.last
+
+          expect(recycled_intent.stripe_id).not_to eq(first_pi_stripe_id)
+          # The parameters should be the same, because
+          #   (a) we're working on the same registration, so metadata is equal
+          #   (b) the amount has doubled, so we're paying the same amount again that we already paid before
+          expect(recycled_intent.parameters).to eq(first_pi_parameters)
+        end
       end
     end
   end
