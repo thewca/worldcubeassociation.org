@@ -50,8 +50,10 @@ function UserBadge({
   badgeClasses = '',
   senior = false,
   leader = false,
+  hideBorder = false,
+  leftAlign = false,
 }) {
-  const classes = classnames('user-badge', badgeClasses, { senior, leader });
+  const classes = classnames('user-badge', badgeClasses, { senior, leader, leftAlign });
 
   const subtext = subtexts.length ? (
     <div className="subtext">
@@ -76,7 +78,7 @@ function UserBadge({
             <Button
               as="a"
               href={`/persons/${user.wca_id}`}
-              className="user-name"
+              className={`user-name ${!hideBorder ? 'show-border' : ''}`}
             >
               <b>
                 {user.name}
