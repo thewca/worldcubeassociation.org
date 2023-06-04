@@ -81,7 +81,7 @@ class StripeTransaction < ApplicationRecord
   # In other words, `Money::Currency.find(iso_code).subunit_to_unit`
   # is not what the Stripe API expects in these cases.
   # Note that TWD from the Stripe docs is not listed here because it is implemented with cents in RubyMoney.
-  ZERO_DECIMAL_CURRENCIES = %w[HUF UGX].freeze
+  ZERO_DECIMAL_CURRENCIES = %w[HUF UGX ISK].freeze
 
   def self.amount_to_stripe(amount_lowest_denomination, iso_currency)
     # Stripe has a small handful of fancy snowflake currencies
