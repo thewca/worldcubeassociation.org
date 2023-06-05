@@ -7,16 +7,17 @@ DEPENDENCIES
   nodejs
   openssh
   openssl
+  php-fpm
   ruby_rbenv
   ssh_known_hosts
   sudo
   timezone_lwrp
 
 GRAPH
-  apparmor (4.1.0)
+  apparmor (4.1.8)
     line (>= 0.0.0)
-  apt (7.4.2)
-  ark (6.0.4)
+  apt (7.5.13)
+  ark (6.0.22)
     seven_zip (>= 3.1)
   chocolatey (3.0.0)
   exim4-light (0.1.3)
@@ -24,18 +25,21 @@ GRAPH
     hostsfile (>= 0.0.0)
   hostsfile (3.0.1)
   iptables (8.0.0)
-  line (4.4.4)
-  logrotate (3.0.9)
-  mysql (11.0.4)
+  line (4.5.12)
+  logrotate (3.0.20)
+  mysql (11.0.14)
     apparmor (>= 0.0.0)
-  nodejs (9.0.2)
+  nodejs (10.1.12)
     ark (>= 2.0.2)
     chocolatey (>= 3.0)
-  openssh (2.10.3)
+    yum (>= 7.2)
+  openssh (2.10.17)
     iptables (>= 7.0)
   openssl (8.5.5)
-  ruby_rbenv (5.0.1)
-  seven_zip (4.2.2)
+  php-fpm (0.8.0)
+  ruby_rbenv (5.0.15)
+  seven_zip (4.2.8)
   ssh_known_hosts (7.0.0)
   sudo (5.4.7)
   timezone_lwrp (0.2.2)
+  yum (7.4.13)
