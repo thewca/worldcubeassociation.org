@@ -126,7 +126,7 @@ FactoryBot.define do
     personId { person.wca_id }
     personName { person.name }
     countryId { person.countryId }
-    regionalSingleRecord { "" }
-    regionalAverageRecord { "" }
+    regionalSingleRecord { nil }
+    regionalAverageRecord { nil }
   end
 end

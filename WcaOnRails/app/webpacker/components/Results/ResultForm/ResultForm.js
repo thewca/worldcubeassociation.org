@@ -29,8 +29,8 @@ const attemptsDataFromResult = (result) => ({
     getExpectedSolveCount(result.format_id),
     (index) => (result.attempts && result.attempts[index]) || 0,
   ),
-  markerBest: result.regional_single_record || '',
-  markerAvg: result.regional_average_record || '',
+  markerBest: result.regional_single_record,
+  markerAvg: result.regional_average_record,
 });
 
 const personDataFromResult = (result) => ({
