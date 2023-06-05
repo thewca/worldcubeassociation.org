@@ -11,7 +11,7 @@ class StripePaymentIntent < ApplicationRecord
   scope :started, -> { joins(:stripe_transaction).where.not(stripe_transaction: { status: 'requires_payment_method' }) }
   scope :processing, -> { started.merge(pending) }
 
-  delegate :stripe_id, :status, :parameters, :money_amount, to: :stripe_transaction
+  delegate :stripe_id, :status, :parameters, :money_amount, :find_account_id, to: :stripe_transaction
 
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
@@ -28,9 +28,9 @@ class StripePaymentIntent < ApplicationRecord
 
   def retrieve_intent
     Stripe::PaymentIntent.retrieve(
-      stripe_transaction.stripe_id,
+      self.stripe_id,
       client_secret: client_secret,
-      stripe_account: stripe_transaction.find_account_id,
+      stripe_account: self.find_account_id,
     )
   end
 
@@ -47,7 +47,12 @@ class StripePaymentIntent < ApplicationRecord
         # Record the success timestamp if not already done
         self.update!(confirmed_at: DateTime.current, confirmed_by: action_source) if self.pending?
 
-        api_intent.charges.data.each do |charge|
+        intent_charges = Stripe::Charge.list(
+          { payment_intent: self.stripe_id },
+          stripe_account: self.find_account_id,
+        )
+
+        intent_charges.data.each do |charge|
           recorded_transaction = StripeTransaction.find_by(stripe_id: charge.id)
 
           if recorded_transaction.present?
