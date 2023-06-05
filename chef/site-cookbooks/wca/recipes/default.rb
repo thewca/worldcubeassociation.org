@@ -300,17 +300,6 @@ template "etc/phpmyadmin/conf.d/wca.php" do
             })
 end
 
-template "#{repo_root}/webroot/results/includes/_config.php" do
-  source "results_config.php.erb"
-  mode 0644
-  owner username
-  group username
-  variables({
-              secrets: secrets,
-              db: db,
-            })
-end
-
 #### Initialize rails gems/database
 execute "bundle config set --local path '/home/#{username}/.bundle'" do
   user username
