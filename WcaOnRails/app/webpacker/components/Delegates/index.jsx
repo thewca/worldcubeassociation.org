@@ -13,7 +13,7 @@ export default function Delegates({
   delegates,
   isEditVisible,
 }) {
-  const getSeniorDelegates = () => delegates
+  const seniorDelegates = React.useMemo(() => delegates
     .filter((user) => user.delegate_status === 'senior_delegate')
     .sort((user1, user2) => {
       if (user1.region < user2.region) {
@@ -22,9 +22,7 @@ export default function Delegates({
         return 1;
       }
       return 0;
-    });
-
-  const [seniorDelegates] = React.useState(getSeniorDelegates());
+    }), [delegates]);
 
   // TO_VERIFY: I assume there are no cases where there are no delegates without
   // senior delegate unless they are senior delegate
