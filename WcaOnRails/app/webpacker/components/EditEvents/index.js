@@ -114,7 +114,7 @@ export default function Wrapper({
   competitionId,
   canAddAndRemoveEvents,
   canUpdateEvents,
-  canUseQualifications,
+  canUpdateQualifications,
   wcifEvents,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
@@ -126,7 +126,7 @@ export default function Wrapper({
         competitionId,
         canAddAndRemoveEvents,
         canUpdateEvents,
-        canUseQualifications,
+        canUpdateQualifications,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
         unsavedChanges: false,

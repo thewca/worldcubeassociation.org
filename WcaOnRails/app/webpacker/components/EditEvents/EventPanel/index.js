@@ -20,7 +20,7 @@ export default function EventPanel({
   wcifEvent,
 }) {
   const {
-    wcifEvents, canAddAndRemoveEvents, canUpdateEvents, canUseQualifications,
+    wcifEvents, canAddAndRemoveEvents, canUpdateEvents, canUpdateQualifications,
   } = useStore();
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -171,11 +171,11 @@ export default function EventPanel({
               <EditQualificationModal
                 wcifEvent={wcifEvent}
                 disabled={
-                  disabled || !canAddAndRemoveEvents || !canUseQualifications
+                  disabled || !canAddAndRemoveEvents || !canUpdateQualifications
                 }
                 disabledReason={
                   // todo: translations?
-                  canUseQualifications
+                  canUpdateQualifications
                     ? undefined
                     : 'Turn on Qualifications under Edit > Organizer View and add a reason.'
                 }

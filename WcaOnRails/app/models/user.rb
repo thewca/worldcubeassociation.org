@@ -762,7 +762,7 @@ class User < ApplicationRecord
   end
 
   def can_update_qualifications?(competition)
-    can_update_events?(competition) && competition.qualification_results? && competition.qualification_results_reason != ''
+    can_update_events?(competition) && competition.qualification_results? && competition.qualification_results_reason.present?
   end
 
   def can_update_competition_series?(competition)
