@@ -816,15 +816,20 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       context "processes a payment" do
         before :each do
           sign_in organizer
-          card = FactoryBot.create(:credit_card)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
+          post :load_payment_intent, params: {
+            id: registration.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
             stripe_account: competition.connected_stripe_account_id,
           )
-          post :process_payment_intent, params: {
+          get :payment_completion, params: {
             id: registration.id,
-            payment_method_id: pm.id,
-            amount: registration.outstanding_entry_fees.cents,
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
           }
           @payment = registration.reload.registration_payments.first
         end
@@ -832,7 +837,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         it 'issues a full refund' do
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
           expect(refund.amount).to eq competition.base_entry_fee.cents
@@ -846,7 +851,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
           expect(refund.amount).to eq competition.base_entry_fee.cents / 2
