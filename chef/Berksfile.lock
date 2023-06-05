@@ -7,7 +7,6 @@ DEPENDENCIES
   nodejs
   openssh
   openssl
-  php-fpm
   ruby_rbenv
   ssh_known_hosts
   sudo
@@ -35,7 +34,6 @@ GRAPH
   openssh (2.10.3)
     iptables (>= 7.0)
   openssl (8.5.5)
-  php-fpm (0.8.0)
   ruby_rbenv (5.0.1)
   seven_zip (4.2.2)
   ssh_known_hosts (7.0.0)

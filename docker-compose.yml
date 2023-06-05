@@ -1,4 +1,5 @@
-version: "3"
+version: "3.7"
+
 services:
   wca_on_rails:
     build:

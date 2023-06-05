@@ -229,38 +229,33 @@ server {
     try_files $uri @app;
   }
 
-  location /results {
-    alias <%= @repo_root %>/webroot/results;
+  location /results/database {
+    alias /usr/share/phpmyadmin;
     index index.php index.html;
 
-    include fcgi.conf;
+    # Delegate to Rails to determine if the client is authorized to administer
+    # results. This is kind of painful, as it results in an extra request for every
+    # single request, but this way we can avoid editing the existing PHP code.
+    auth_request /api/v0/auth/results;
 
-    location ^~ /results/admin {
-      # Delegate to Rails to determine if the client is authorized to administer
-      # results. This is kind of painful, as it results in an extra request for every
-      # single request, but this way we can avoid editing the existing PHP code.
-      auth_request /api/v0/auth/results;
+    location ~ \.php$ {
+      # NOTE: Despite what many guides recommend, we are leaving
+      # cgi.fix_pathinfo = 1; in php.ini. See http://serverfault.com/a/625953
+      fastcgi_split_path_info ^(.+\.php)(/.+)$;
+      fastcgi_pass unix:/run/php/php-fpm.sock;
+      fastcgi_index index.php;
 
-      include fcgi.conf;
-      # Some of our administration scripts take entirely too long to run. Bump
-      # the timeout to 10 minutes.
-      fastcgi_read_timeout 10m;
+      # See https://blog.martinfjordvald.com/2013/04/nginx-config-history-fastcgi_params-versus-fastcgi-conf/
+      fastcgi_param SCRIPT_FILENAME $request_filename;
+      include fastcgi_params;
     }
 
     # As recommended by http://docs.phpmyadmin.net/en/latest/setup.html#using-setup-script,
     # prevent access to /libraries and /setup/lib.
-    location ^~ /results/admin/phpMyAdmin/libraries {
+    location ^~ /results/database/libraries {
       deny all;
     }
-    location ^~ /results/admin/phpMyAdmin/setup/lib {
-      deny all;
-    }
-
-    location ^~ /results/includes {
-      deny all;
-    }
-
-    location ^~ /results/generated {
+    location ^~ /results/database/setup/lib {
       deny all;
     }
   }
