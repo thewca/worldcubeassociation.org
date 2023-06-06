@@ -1,3 +1,5 @@
+/* eslint-disable no-console */
+// TODO: Remove this eslint disable
 import React, { useMemo } from 'react';
 import {
   Button,
@@ -21,6 +23,7 @@ import {
   UserSearch,
   useFormInputState,
 } from './FormInputs';
+import { competitionUrl, competitionsUrl } from '../../lib/requests/routes.js.erb';
 import VenueMap from './VenueMap';
 import NearbyComps from './NearbyComps';
 import SeriesComps from './SeriesComps';
@@ -29,10 +32,11 @@ import RegistrationTable from './RegistrationTable';
 import DuesEstimate from './DuesEstimate';
 import FormContext from './FormContext';
 import SeriesInput from './SeriesInput';
+import useSaveAction from '../../lib/hooks/useSaveAction';
 
-function CompVisibilitySettings({ competition }) {
-  const confirmedData = useFormInputState('confirmed', competition);
-  const showAtAllData = useFormInputState('showAtAll', competition);
+function CompVisibilitySettings({ competition, setFormData }) {
+  const confirmedData = useFormInputState(setFormData, 'confirmed', competition);
+  const showAtAllData = useFormInputState(setFormData, 'showAtAll', competition);
 
   return (
     <>
@@ -112,9 +116,23 @@ function GuestsEnabledInput({ inputState }) {
   );
 }
 
-function ActionButtons({ competition }) {
+function ActionButtons({ competition, formData, save }) {
+  const url = competitionUrl(competition.id);
+
+  // Set the request payload to formData
+  console.log(competitionsUrl);
+  let submit;
+  if (competition.persisted) {
+    submit = async () => {
+      save(url, { ...competition, ...formData }, () => console.log('Success'), { method: 'PATCH' }, () => console.log('Error'));
+    };
+  } else {
+    submit = async () => {
+      save(competitionsUrl, { ...competition, ...formData }, (d) => console.log('Success', d), { method: 'POST' }, (e) => console.log('Error', e));
+    };
+  }
   return (
-    <Button color="blue" type="button">
+    <Button color="blue" type="button" onClick={submit}>
       {I18n.t(`competitions.competition_form.submit_${competition.persisted ? 'update' : 'create'}_value`)}
     </Button>
   );
@@ -169,103 +187,113 @@ export default function CompetitionForm({
     text: '',
   });
 
-  const idData = useFormInputState('id', competition);
-  const nameData = useFormInputState('name', competition);
-  const cellNameData = useFormInputState('cellName', competition);
-  const nameReasonData = useFormInputState('name_reason', competition);
+  const [formData, setFormData] = React.useState({});
 
-  const countryData = useFormInputState('countryId', competition);
-  const cityNameData = useFormInputState('cityName', competition);
-  const venueData = useFormInputState('venue', competition);
-  const venueDetailsData = useFormInputState('venueDetails', competition);
-  const venueAddressData = useFormInputState('venueAddress', competition);
+  const { save, saving } = useSaveAction();
 
-  const latData = useFormInputState('latitude_degrees', competition);
-  const longData = useFormInputState('longitude_degrees', competition);
+  const idData = useFormInputState(setFormData, 'id', competition);
+  const nameData = useFormInputState(setFormData, 'name', competition);
+  const cellNameData = useFormInputState(setFormData, 'cellName', competition);
+  const nameReasonData = useFormInputState(setFormData, 'name_reason', competition);
 
-  const startDateData = useFormInputState('start_date', competition);
-  const endDateData = useFormInputState('end_date', competition);
+  const countryData = useFormInputState(setFormData, 'countryId', competition);
+  const cityNameData = useFormInputState(setFormData, 'cityName', competition);
+  const venueData = useFormInputState(setFormData, 'venue', competition);
+  const venueDetailsData = useFormInputState(setFormData, 'venueDetails', competition);
+  const venueAddressData = useFormInputState(setFormData, 'venueAddress', competition);
 
-  const regStartData = useFormInputState('registration_open', competition);
-  const regEndData = useFormInputState('registration_close', competition);
+  const latData = useFormInputState(setFormData, 'latitude_degrees', competition);
+  const longData = useFormInputState(setFormData, 'longitude_degrees', competition);
 
-  const seriesData = useFormInputState('competition_series', competition);
+  const startDateData = useFormInputState(setFormData, 'start_date', competition);
+  const endDateData = useFormInputState(setFormData, 'end_date', competition);
 
-  const informationData = useFormInputState('information', competition);
+  const regStartData = useFormInputState(setFormData, 'registration_open', competition);
+  const regEndData = useFormInputState(setFormData, 'registration_close', competition);
 
-  const competitorLimitEnabledData = useFormInputState('competitor_limit_enabled', competition);
-  const competitorLimitData = useFormInputState('competitor_limit', competition);
-  const competitorLimitReasonData = useFormInputState('competitor_limit_reason', competition);
+  const seriesData = useFormInputState(setFormData, 'competition_series', competition);
 
-  const staffDelegateData = useFormInputState('staff_delegate_ids', competition);
-  const traineeDelegateData = useFormInputState('trainee_delegate_ids', competition);
-  const organizerData = useFormInputState('organizer_ids', competition);
-  const contactData = useFormInputState('contact', competition);
+  const informationData = useFormInputState(setFormData, 'information', competition);
 
-  const generateWebsiteData = useFormInputState('generate_website', competition, false);
-  const externalWebsiteData = useFormInputState('external_website', competition);
+  const competitorLimitEnabledData = useFormInputState(setFormData, 'competitor_limit_enabled', competition);
+  const competitorLimitData = useFormInputState(setFormData, 'competitor_limit', competition);
+  const competitorLimitReasonData = useFormInputState(setFormData, 'competitor_limit_reason', competition);
 
-  const championshipsData = useFormInputState('championships', competition, []);
+  const staffDelegateData = useFormInputState(setFormData, 'staff_delegate_ids', competition);
+  const traineeDelegateData = useFormInputState(setFormData, 'trainee_delegate_ids', competition);
+  const organizerData = useFormInputState(setFormData, 'organizer_ids', competition);
+  const contactData = useFormInputState(setFormData, 'contact', competition);
 
-  const useWCARegData = useFormInputState('use_wca_registration', competition, true);
-  const useWCALiveForScoretakingData = useFormInputState('use_wca_live_for_scoretaking', competition, true);
-  const regPageData = useFormInputState('external_registration_page', competition);
+  const generateWebsiteData = useFormInputState(setFormData, 'generate_website', competition, false);
+  const externalWebsiteData = useFormInputState(setFormData, 'external_website', competition);
 
-  const receiveRegEmailsData = useFormInputState('receive_registration_emails', competition, true);
+  const championshipsData = useFormInputState(setFormData, 'championships', competition, []);
 
-  const currencyCodeData = useFormInputState('currency_code', competition, 'USD');
+  const useWCARegData = useFormInputState(setFormData, 'use_wca_registration', competition, true);
+  const useWCALiveForScoretakingData = useFormInputState(setFormData, 'use_wca_live_for_scoretaking', competition, true);
+  const regPageData = useFormInputState(setFormData, 'external_registration_page', competition);
 
-  const baseEntryFeeData = useFormInputState('base_entry_fee_lowest_denomination', competition);
-  const enableDonationsData = useFormInputState('enable_donations', competition, false);
+  const receiveRegEmailsData = useFormInputState(setFormData, 'receive_registration_emails', competition, true);
 
-  const guestsEnabledData = useFormInputState('guests_enabled', competition, true);
-  const guestsEntryFeeData = useFormInputState('guests_entry_fee_lowest_denomination', competition);
-  const guestEntryStatusData = useFormInputState('guest_entry_status', competition, guestMessageOptions[0].value);
-  const guestsPerRegLimitData = useFormInputState('guests_per_registration_limit', competition);
+  const currencyCodeData = useFormInputState(setFormData, 'currency_code', competition, 'USD');
 
-  const refundPercentData = useFormInputState('refund_policy_percent', competition);
-  const refundDeadlineData = useFormInputState('refund_policy_limit_date', competition);
-  const waitingListDeadlineData = useFormInputState('waiting_list_deadline_date', competition);
-  const eventChangeDeadlineData = useFormInputState('event_change_deadline_date', competition);
+  const baseEntryFeeData = useFormInputState(setFormData, 'base_entry_fee_lowest_denomination', competition);
+  const enableDonationsData = useFormInputState(setFormData, 'enable_donations', competition, false);
 
-  const onSiteRegData = useFormInputState('on_the_spot_registration', competition);
-  const onSiteRegFeeData = useFormInputState('on_the_spot_entry_fee_lowest_denomination', competition);
+  const guestsEnabledData = useFormInputState(setFormData, 'guests_enabled', competition, true);
+  const guestsEntryFeeData = useFormInputState(setFormData, 'guests_entry_fee_lowest_denomination', competition);
+  const guestEntryStatusData = useFormInputState(setFormData, 'guest_entry_status', competition, guestMessageOptions[0].value);
+  const guestsPerRegLimitData = useFormInputState(setFormData, 'guests_per_registration_limit', competition);
 
-  const allowEditRegEventsData = useFormInputState('allow_registration_edits', competition, false);
-  const allowDeleteRegData = useFormInputState('allow_registration_self_delete_after_acceptance', competition, false);
-  const extraRegRequirementData = useFormInputState('extra_registration_requirements', competition);
+  const refundPercentData = useFormInputState(setFormData, 'refund_policy_percent', competition);
+  const refundDeadlineData = useFormInputState(setFormData, 'refund_policy_limit_date', competition);
+  const waitingListDeadlineData = useFormInputState(setFormData, 'waiting_list_deadline_date', competition);
+  const eventChangeDeadlineData = useFormInputState(setFormData, 'event_change_deadline_date', competition);
 
-  const earlyPuzzleSubmissionData = useFormInputState('early_puzzle_submission', competition, false);
-  const earlyPuzzleSubmissionReasonData = useFormInputState('early_puzzle_submission_reason', competition);
+  const onSiteRegData = useFormInputState(setFormData, 'on_the_spot_registration', competition);
+  const onSiteRegFeeData = useFormInputState(setFormData, 'on_the_spot_entry_fee_lowest_denomination', competition);
 
-  const qualificationData = useFormInputState('qualification_results', competition, false);
-  const qualificationReasonData = useFormInputState('qualification_results_reason', competition);
-  const allowRegWithoutQualificationData = useFormInputState('allow_registration_without_qualification', competition, false);
+  const allowEditRegEventsData = useFormInputState(setFormData, 'allow_registration_edits', competition, false);
+  const allowDeleteRegData = useFormInputState(setFormData, 'allow_registration_self_delete_after_acceptance', competition, false);
+  const extraRegRequirementData = useFormInputState(setFormData, 'extra_registration_requirements', competition);
 
-  const eventRestrictionData = useFormInputState('event_restrictions', competition, false);
-  const eventRestrictionReasonData = useFormInputState('event_restrictions_reason', competition);
-  const eventPerRegLimitData = useFormInputState('events_per_registration_limit', competition);
+  const earlyPuzzleSubmissionData = useFormInputState(setFormData, 'early_puzzle_submission', competition, false);
+  const earlyPuzzleSubmissionReasonData = useFormInputState(setFormData, 'early_puzzle_submission_reason', competition);
 
-  const forceCommentInRegData = useFormInputState('force_comment_in_registration', competition, false);
+  const qualificationData = useFormInputState(setFormData, 'qualification_results', competition, false);
+  const qualificationReasonData = useFormInputState(setFormData, 'qualification_results_reason', competition);
+  const allowRegWithoutQualificationData = useFormInputState(setFormData, 'allow_registration_without_qualification', competition, false);
 
-  const mainEventIdData = useFormInputState('main_event_id', competition);
+  const eventRestrictionData = useFormInputState(setFormData, 'event_restrictions', competition, false);
+  const eventRestrictionReasonData = useFormInputState(setFormData, 'event_restrictions_reason', competition);
+  const eventPerRegLimitData = useFormInputState(setFormData, 'events_per_registration_limit', competition);
 
-  const remarksData = useFormInputState('remarks', competition, '');
+  const forceCommentInRegData = useFormInputState(setFormData, 'force_comment_in_registration', competition, false);
 
-  const cloneTabsData = useFormInputState('clone_tabs', competition, false);
+  const mainEventIdData = useFormInputState(setFormData, 'main_event_id', competition);
+
+  const remarksData = useFormInputState(setFormData, 'remarks', competition, '');
+
+  const cloneTabsData = useFormInputState(setFormData, 'clone_tabs', competition, false);
 
   const [compMarkers, setCompMarkers] = React.useState([]);
 
   const formContext = useMemo(() => ({
-    disabled: isActuallyConfirmed && !adminView,
-  }), [adminView, isActuallyConfirmed]);
+    disabled: saving || (isActuallyConfirmed && !adminView),
+  }), [adminView, isActuallyConfirmed, saving]);
 
   const disableMoneyInput = !competition.can_edit_registration_fees;
 
   return (
     <FormContext.Provider value={formContext}>
+      <code>{JSON.stringify(formData, null, 2)}</code>
       <Form>
-        {competition.persisted && adminView && <CompVisibilitySettings competition={competition} />}
+        {competition.persisted && adminView && (
+          <CompVisibilitySettings
+            competition={competition}
+            setFormData={setFormData}
+          />
+        )}
         {competition.persisted && !adminView && (
           <AnnouncementDetails
             competition={competition}
@@ -437,7 +465,7 @@ export default function CompetitionForm({
 
         <hr />
 
-        <ActionButtons competition={competition} />
+        <ActionButtons competition={competition} formData={formData} save={save} />
       </Form>
     </FormContext.Provider>
   );

@@ -82,6 +82,7 @@ Rails.application.routes.draw do
   end
   post 'admin/check-existing-results' => "admin#run_validators", as: :admin_run_validators
 
+  post 'competitions' => 'competitions#create', as: :create_competition
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'

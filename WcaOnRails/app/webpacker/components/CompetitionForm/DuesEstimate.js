@@ -41,7 +41,7 @@ export default function DuesEstimate({
           }
           setDuesText(text);
         }));
-  });
+  }, [country, currency, feeCents, compLimitEnabled, compLimit]);
 
   return !duesText ? null : (
     <p className="help-block">

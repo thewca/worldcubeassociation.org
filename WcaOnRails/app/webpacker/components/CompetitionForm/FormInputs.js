@@ -11,7 +11,6 @@ import {
 import AutoNumeric from 'autonumeric';
 import TextareaAutosize from 'react-autosize-textarea';
 import Loading from '../Requests/Loading';
-import useInputState from '../../lib/hooks/useInputState';
 import I18n from '../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { currenciesData } from '../../lib/wca-data.js.erb';
@@ -19,14 +18,20 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import { competitionApiUrl, userApiUrl } from '../../lib/requests/routes.js.erb';
 import FormContext from './FormContext';
 
-export function useFormInputState(attribute, currentData, defaultVal = '') {
+export function useFormInputState(setFormData, attribute, currentData, defaultVal = '') {
   const initialValue = currentData[attribute] || defaultVal;
+  const [value, setValue] = useState(initialValue);
 
-  const [value, setValueFromChange] = useInputState(initialValue);
+  const updateFromOnChange = useCallback((ev, data = undefined) => {
+    const newValue = data ? data.value : ev;
+    setFormData((prev) => ({ ...prev, [attribute]: newValue }));
+    setValue(newValue);
+  });
+
   return {
     attribute,
     value,
-    onChange: setValueFromChange,
+    onChange: updateFromOnChange,
   };
 }
 
