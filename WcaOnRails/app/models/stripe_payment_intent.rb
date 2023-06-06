@@ -61,7 +61,11 @@ class StripePaymentIntent < ApplicationRecord
             fresh_transaction = StripeTransaction.create_from_api(charge, {})
             fresh_transaction.update!(parent_transaction: self.stripe_transaction)
 
-            yield fresh_transaction if block_given?
+            # Only trigger outer update blocks for charges that are actually successful. This is reasonable
+            # because we only ever trigger this block for PIs that are marked "successful" in the first place
+            charge_successful = fresh_transaction.status == "succeeded"
+
+            yield fresh_transaction if block_given? && charge_successful
           end
         end
       when 'canceled'
