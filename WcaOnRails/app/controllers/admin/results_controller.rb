@@ -59,7 +59,7 @@ module Admin
         validator.validate(competition_ids: [result.competitionId])
         json[:messages] = ["Result inserted!"].concat(validator.infos.map(&:to_s))
       else
-        json[:errors] = result.errors.map { |key, msg| "#{key}: #{msg}" }
+        json[:errors] = result.errors.map(&:full_message)
       end
       render json: json
     end
@@ -89,7 +89,7 @@ module Admin
         }
       else
         render json: {
-          errors: result.errors.map { |key, msg| "#{key}: #{msg}" },
+          errors: result.errors.map(&:full_message),
         }
       end
     end
