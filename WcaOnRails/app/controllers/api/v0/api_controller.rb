@@ -29,6 +29,13 @@ class Api::V0::ApiController < ApplicationController
 
     render json: { status: "ok" }
   end
+  def jwt
+    if !current_user
+      return render status: :unauthorized, json: { error: "Please log in" }
+    end
+
+    render json: { status: "ok" }
+  end
 
   def scramble_program
     begin

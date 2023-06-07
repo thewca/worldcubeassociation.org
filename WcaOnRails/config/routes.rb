@@ -273,6 +273,7 @@ Rails.application.routes.draw do
       get '/' => 'api#help'
       get '/me' => 'api#me'
       get '/auth/results' => 'api#auth_results'
+      get '/auth/jwt' => 'api#jwt'
       get '/export/public' => 'api#export_public'
       get '/scramble-program' => 'api#scramble_program'
       get '/search' => 'api#omni_search'

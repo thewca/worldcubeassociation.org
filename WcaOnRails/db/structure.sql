@@ -950,6 +950,16 @@ CREATE TABLE `incidents` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `jwt_denylist`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `jwt_denylist` (
+                              `id` bigint NOT NULL AUTO_INCREMENT,
+                              `jti` varchar(191) NOT NULL,
+                              `exp` datetime(6) NOT NULL,
+                              PRIMARY KEY (`id`),
+                              KEY `index_jwt_denylist_on_jti` (`jti`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 DROP TABLE IF EXISTS `linkings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;

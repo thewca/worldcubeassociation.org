@@ -77,6 +77,11 @@ class User < ApplicationRecord
   devise :two_factor_backupable,
          otp_backup_code_length: BACKUP_CODES_LENGTH,
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
+  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+
+  def jwt_payload
+    { 'wca_id' => wca_id, 'user_id' => id }
+  end
 
   # Backup OTP are stored as a string array in the db
   serialize :otp_backup_codes
