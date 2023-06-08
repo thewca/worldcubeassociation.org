@@ -137,7 +137,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = @competitions.where("end_date < ?", Date.today).reverse_order
       unless params[:year] == "all years"
-        @competitions = @competitions.where('YEAR(start_date)': params[:year])
+        @competitions = @competitions.where("YEAR(start_date) = :comp_year", comp_year: params[:year])
       end
     end
 

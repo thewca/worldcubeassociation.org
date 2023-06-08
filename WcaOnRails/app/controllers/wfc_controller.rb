@@ -12,7 +12,7 @@ class WfcController < ApplicationController
       :id, :name, :start_date, :end_date,
       :countryId, :announced_at, :results_posted_at,
       :currency_code, :base_entry_fee_lowest_denomination,
-      "count(distinct rails_persons.id) as num_competitors"
+      "count(distinct Persons.id) as num_competitors"
     ]
     from = params.require(:from_date)
     to = params.require(:to_date)

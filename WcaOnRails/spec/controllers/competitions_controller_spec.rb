@@ -317,9 +317,8 @@ RSpec.describe CompetitionsController do
         expect(new_comp.confirmed?).to eq false
         expect(new_comp.results_posted_at).to eq nil
         # We don't want to clone its dates.
-        %w(year month day endYear endMonth endDay).each do |attribute|
-          expect(new_comp.send(attribute)).to eq 0
-        end
+        expect(new_comp.start_date).to be_nil
+        expect(new_comp.end_date).to be_nil
 
         # Cloning a competition should clone its events.
         expect(new_comp.events.sort_by(&:id)).to eq competition.events.sort_by(&:id)

@@ -47,12 +47,6 @@ module DatabaseDumper
           cityName
           countryId
           information
-          year
-          month
-          day
-          endYear
-          endMonth
-          endDay
           start_date
           end_date
           venue
@@ -232,11 +226,11 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          wca_id
           comments
           countryId
           gender
           name
-          rails_id
           subId
         ),
         db_default: %w(
@@ -244,9 +238,7 @@ module DatabaseDumper
           incorrect_wca_id_claim_count
         ),
         fake_values: {
-          "year" => "1954",
-          "month" => "12",
-          "day" => "4",
+          "dob" => "'1954-12-04'",
         },
       ),
     }.freeze,
@@ -547,7 +539,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "rails_persons" => :skip_all_rows,
     "regional_organizations" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
