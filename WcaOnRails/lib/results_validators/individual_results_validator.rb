@@ -159,7 +159,7 @@ module ResultsValidators
         # Now let's try to find a DNS result followed by a non-DNS result
         first_index = all_solve_times.find_index(SolveTime::DNS)
         # Just use '5' here to get all of them
-        if first_index && all_solve_times[first_index, 5].select(&:complete?).any?
+        if first_index && all_solve_times[first_index, 5].any?(&:complete?)
           competition_id, result, round_id, = context
           @warnings << ValidationWarning.new(:results, competition_id,
                                              RESULT_AFTER_DNS_WARNING,
@@ -193,7 +193,7 @@ module ResultsValidators
         # Get the remaining attempt according to the expected solve count given the format
         other_results = solve_times[number_of_attempts, round.format.expected_solve_count - number_of_attempts]
 
-        if maybe_qualifying_results.select(&:skipped?).any?
+        if maybe_qualifying_results.any?(&:skipped?)
           # There are at least one skipped results among those in the first phase.
           @errors << ValidationError.new(:results, competition_id,
                                          WRONG_ATTEMPTS_FOR_CUTOFF_ERROR,

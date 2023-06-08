@@ -18,11 +18,12 @@ class Result < ApplicationRecord
   # we also need sure to query the correct competition as well through a custom scope.
   belongs_to :inbox_person, ->(res) { where(competitionId: res.competitionId) }, primary_key: :id, foreign_key: :personId, optional: true
 
-  # NOTE: both nil and "" exist in the database, we may consider cleaning that up.
-  MARKERS = [nil, "", "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
+  MARKERS = [nil, "NR", "ER", "WR", "AfR", "AsR", "NAR", "OcR", "SAR"].freeze
 
   validates_inclusion_of :regionalSingleRecord, in: MARKERS
   validates_inclusion_of :regionalAverageRecord, in: MARKERS
+  alias_attribute :regional_single_record, :regionalSingleRecord
+  alias_attribute :regional_average_record, :regionalAverageRecord
 
   def country
     Country.c_find(self.countryId)
@@ -61,14 +62,6 @@ class Result < ApplicationRecord
 
   def country_iso2
     country.iso2
-  end
-
-  def regional_single_record
-    regionalSingleRecord || ""
-  end
-
-  def regional_average_record
-    regionalAverageRecord || ""
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

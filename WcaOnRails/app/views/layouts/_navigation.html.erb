@@ -241,7 +241,7 @@
               </li>
               <li><%= link_to t('.results_admin'), admin_path %></li>
               <li><%= link_to t('.competitions'), competitions_path %></li>
-              <li><%= link_to t('.results_phpmyadmin'), '/results/admin/phpMyAdmin/' %></li>
+              <li><%= link_to t('.results_database'), '/results/database/' %></li>
             <% end %>
 
             <% if current_user.can_create_posts? %>

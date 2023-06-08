@@ -75,7 +75,7 @@ class ApplicationController < ActionController::Base
   end
 
   private def redirect_to_root_unless_user(action, *args)
-    redirecting = !current_user&.send(action, *args)
+    redirecting = !current_user&.send(action, *args) # rubocop:disable Lint/RedundantSafeNavigation
     if redirecting
       flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
       redirect_to root_url
