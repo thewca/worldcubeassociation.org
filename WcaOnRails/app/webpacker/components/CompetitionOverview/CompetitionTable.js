@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
 
 import I18n from '../../lib/i18n';
 
@@ -71,7 +72,7 @@ function CompetitionTable({
                 {`, ${comp.cityName}`}
               </div>
               <div className="venue-link">
-                123
+                <ReactMarkdown linkTarget="_blank">{comp.venue}</ReactMarkdown>
               </div>
             </span>
           </li>

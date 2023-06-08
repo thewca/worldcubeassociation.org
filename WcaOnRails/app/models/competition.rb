@@ -1909,6 +1909,7 @@ class Competition < ApplicationRecord
       inProgress: in_progress?,
       dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
       announcedDate: announced_at.strftime(" %F %H:%M:%S"),
+      venue: venue,
     )
   end
 
