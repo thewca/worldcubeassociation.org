@@ -19,10 +19,10 @@ export default {
 
       switch(advancementCondition.type) {
         case "ranking":
-          return `Top ${advancementCondition.level}`;
+          return `Up to top ${advancementCondition.level}`;
           break;
         case "percent":
-          return `Top ${advancementCondition.level}%`;
+          return `Up to top ${advancementCondition.level}%`;
           break;
         case "attemptResult":
           return matchResult(advancementCondition.level, wcifEvent.id, { short: true });
