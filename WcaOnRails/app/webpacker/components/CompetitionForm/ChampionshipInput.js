@@ -14,10 +14,10 @@ function ChampionshipSelect({
   inputState, index, regions, disabled,
 }) {
   const localState = {
-    value: inputState.value[index].region,
+    value: inputState.value[index] || '',
     onChange: (e, { value }) => {
       const newValue = [...inputState.value];
-      newValue[index].region = value;
+      newValue[index] = value;
       inputState.onChange(newValue);
     },
   };
@@ -48,15 +48,8 @@ function ChampionshipSelect({
   );
 }
 
-function getAvailibleId(data) {
-  const ids = data.map((championship) => championship.id);
-  let id = 0;
-  while (ids.includes(id)) id += 1;
-  return id;
-}
-
 export default function ChampionshipInput({ inputState }) {
-  const [regions, setRegions] = useState();
+  const [regions, setRegions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { disabled } = useContext(FormContext);
@@ -88,10 +81,7 @@ export default function ChampionshipInput({ inputState }) {
 
   const onClick = async () => {
     const champs = [...inputState.value];
-    champs.push({
-      id: getAvailibleId(champs),
-      region: regions.find((region) => !region.disabled).value,
-    });
+    champs.push(regions.find((region) => !region.disabled).value);
     inputState.onChange(champs);
   };
 
@@ -100,7 +90,7 @@ export default function ChampionshipInput({ inputState }) {
     <>
       {inputState.value.map((_, index) => (
         <ChampionshipSelect
-          key={inputState.value[index].id}
+          key={inputState.value[index]}
           inputState={inputState}
           index={index}
           regions={regions}

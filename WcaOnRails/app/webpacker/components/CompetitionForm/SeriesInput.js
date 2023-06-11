@@ -1,6 +1,10 @@
 import React from 'react';
 import { Button, Form } from 'semantic-ui-react';
-import { CompetitionSearch, InputString, useFormInputState } from './FormInputs';
+import {
+  CompetitionSearch,
+  InputString,
+  useNestedFormInputState,
+} from './FormInputs';
 import I18n from '../../lib/i18n';
 
 function labelText(attribute) {
@@ -11,14 +15,19 @@ function hintText(attribute) {
   return I18n.t(`simple_form.hints.competition.competition_series.${attribute}`) || '';
 }
 
-export default function SeriesInput({ inputState }) {
+export default function SeriesInput({
+  inputState,
+  setFormData,
+  competition,
+}) {
+  const rootAttribute = inputState.attribute;
   const series = inputState.value;
   if (!series) return null;
 
-  const idData = useFormInputState('wcif_id', series);
-  const nameData = useFormInputState('name', series);
-  const shortNameData = useFormInputState('short_name', series);
-  const compIdsData = useFormInputState('competition_ids', series);
+  const idData = useNestedFormInputState(setFormData, rootAttribute, 'wcif_id', competition);
+  const nameData = useNestedFormInputState(setFormData, rootAttribute, 'name', competition);
+  const shortNameData = useNestedFormInputState(setFormData, rootAttribute, 'short_name', competition);
+  const compIdsData = useNestedFormInputState(setFormData, rootAttribute, 'competition_ids', competition);
 
   const removeFromSeries = () => {
     inputState.onChange(null);

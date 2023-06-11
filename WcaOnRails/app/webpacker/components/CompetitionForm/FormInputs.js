@@ -1,5 +1,5 @@
 import React, {
-  useCallback, useContext, useEffect, useRef, useState,
+  useCallback, useContext, useEffect, useMemo, useRef, useState,
 } from 'react';
 import {
   Checkbox,
@@ -26,13 +26,48 @@ export function useFormInputState(setFormData, attribute, currentData, defaultVa
     const newValue = data ? data.value : ev;
     setFormData((prev) => ({ ...prev, [attribute]: newValue }));
     setValue(newValue);
-  });
+  }, [attribute, setFormData]);
 
-  return {
+  return useMemo(() => ({
     attribute,
     value,
     onChange: updateFromOnChange,
-  };
+  }), [attribute, value, updateFromOnChange]);
+}
+
+export function useNestedFormInputState(
+  setFormData,
+  rootAttribute,
+  attribute,
+  currentData,
+  defaultVal = {},
+) {
+  const initialValue = (
+    currentData && currentData[rootAttribute] && currentData[rootAttribute][attribute]
+  ) || defaultVal;
+
+  const [value, setValue] = useState(initialValue);
+
+  const updateFromOnChange = useCallback((ev, data = undefined) => {
+    const newValue = data ? data.value : ev;
+    setFormData((prev) => {
+      const prevRoot = prev[rootAttribute] || {};
+      return {
+        ...prev,
+        [rootAttribute]: {
+          ...prevRoot,
+          [attribute]: newValue,
+        },
+      };
+    });
+    setValue(newValue);
+  }, [rootAttribute, attribute, setFormData]);
+
+  return useMemo(() => ({
+    attribute,
+    value,
+    onChange: updateFromOnChange,
+  }), [attribute, value, updateFromOnChange]);
 }
 
 function getInputStateLabel(inputState) {

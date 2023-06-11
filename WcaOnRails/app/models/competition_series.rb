@@ -116,6 +116,15 @@ class CompetitionSeries < ApplicationRecord
     }
   end
 
+  def to_comp_form
+    {
+      "wcif_id" => wcif_id,
+      "name" => name,
+      "short_name" => short_name,
+      "competition_ids" => competition_ids,
+    }
+  end
+
   before_save :unpack_competition_ids
   private def unpack_competition_ids
     if @competition_ids

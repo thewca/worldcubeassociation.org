@@ -140,6 +140,7 @@ function ActionButtons({ competition, formData, save }) {
 
 export default function CompetitionForm({
   competition,
+  regEmails,
   adminView,
   isActuallyConfirmed,
   mailToWCAT,
@@ -233,7 +234,7 @@ export default function CompetitionForm({
   const useWCALiveForScoretakingData = useFormInputState(setFormData, 'use_wca_live_for_scoretaking', competition, true);
   const regPageData = useFormInputState(setFormData, 'external_registration_page', competition);
 
-  const receiveRegEmailsData = useFormInputState(setFormData, 'receive_registration_emails', competition, true);
+  const receiveRegEmailsData = useFormInputState(setFormData, 'receive_registration_emails', regEmails, true);
 
   const currencyCodeData = useFormInputState(setFormData, 'currency_code', competition, 'USD');
 
@@ -347,7 +348,11 @@ export default function CompetitionForm({
         <InputDateTimeRange startTimeData={regStartData} endTimeData={regEndData} />
         <RegistrationTable idData={idData} regStartData={regStartData} />
 
-        <SeriesInput inputState={seriesData} />
+        <SeriesInput
+          inputState={seriesData}
+          setFormData={setFormData}
+          competition={competition}
+        />
 
         <InputMarkdown inputState={informationData} />
         <CompetitorLimitInput
@@ -381,7 +386,7 @@ export default function CompetitionForm({
         <InputBoolean inputState={useWCALiveForScoretakingData} />
         {!useWCARegData.value && <InputString inputState={regPageData} />}
 
-        {competition.can_receive_registration_emails
+        {regEmails.can_receive_registration_emails
           && <InputBoolean inputState={receiveRegEmailsData} ignoreDisabled />}
 
         <InputSelect
