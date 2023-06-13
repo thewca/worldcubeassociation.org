@@ -1899,7 +1899,7 @@ class Competition < ApplicationRecord
     # we want to change the existing behavior of our API which returns a string.
     json.merge!(
       class: self.class.to_s.downcase,
-      displayName: display_name,
+      displayName: display_name(short: true),
       countryName: country ? country.name : nil,
       cityName: cityName,
       year: year,
