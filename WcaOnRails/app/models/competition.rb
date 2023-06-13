@@ -1910,6 +1910,8 @@ class Competition < ApplicationRecord
       dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
       announcedDate: announced_at.strftime(" %F %H:%M:%S"),
       venue: venue,
+      url: url,
+      country_iso2: country_iso2.downcase,
     )
   end
 

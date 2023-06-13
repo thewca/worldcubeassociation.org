@@ -65,7 +65,9 @@ function CompetitionTable({
             </span>
             <span className="competition-info">
               <div className="competition-link">
-                {comp.displayName}
+                <span className={` fi fi-${comp.country_iso2}`} />
+                &nbsp;
+                <a href={comp.url}>{comp.displayName}</a>
               </div>
               <div className="location">
                 <strong>{comp.countryName}</strong>
