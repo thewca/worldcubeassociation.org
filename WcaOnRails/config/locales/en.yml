@@ -1353,7 +1353,7 @@ en:
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
-      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is less than the time limit."
+      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is not greater than the time limit."
       cutoff_is_too_fast: "Round %{round_number} in %{event} has a cutoff less than 5 seconds. Please make sure that it is correct."
       cutoff_is_too_slow: "Round %{round_number} in %{event} has a cutoff more than 10 minutes. Please make sure that it is correct."
       time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
