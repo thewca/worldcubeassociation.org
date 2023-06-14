@@ -12,12 +12,6 @@ export default function RoundsTable({ wcifEvent, disabled }) {
     <Segment
       basic
       compact
-      style={{
-        width: '100%',
-        padding: '0.5em',
-        fontSize: '0.85em',
-        position: 'relative',
-      }}
       className="event-panel__rounds-table"
     >
       <Table
