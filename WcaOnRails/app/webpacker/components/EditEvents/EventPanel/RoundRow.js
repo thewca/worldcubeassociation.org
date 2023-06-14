@@ -47,7 +47,7 @@ export default function RoundRow({
   };
 
   const scrambleSetCountChanged = (e) => {
-    dispatch(setScrambleSetCount(wcifRound.id, parseInt(e.target.value, 10))); // XXX
+    dispatch(setScrambleSetCount(wcifRound.id, parseInt(e.target.value, 10)));
   };
 
   return (
@@ -108,7 +108,7 @@ export default function RoundRow({
         </Table.Cell>
       )}
 
-      <Table.Cell className="round-row_advancementCondition">
+      <Table.Cell className="round-row__advancement-condition">
         {!isLastRound && (
           <EditAdvancementConditionModal
             wcifEvent={wcifEvent}

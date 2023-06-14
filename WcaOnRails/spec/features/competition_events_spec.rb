@@ -107,7 +107,7 @@ RSpec.feature "Competition events management" do
         event_panel = find_event_panel("333")
         select_from_ui(event_panel, "selectRoundCount", "2 rounds")
 
-        find_round("333", 1).find(".round-row_advancementCondition").find("button").click
+        find_round("333", 1).find(".round-row__advancement-condition").find("button").click
 
         modal = find_modal
         select_from_ui(modal, "advancementType", "Ranking")
@@ -236,7 +236,7 @@ RSpec.feature "Competition events management" do
       expect(round.find(".round-row__scramble-set-count").find("input").disabled?).to be
       expect(round.find(".round-row__time-limit").find("button").disabled?).to be
       expect(round.find(".round-row__cutoff").find("button").disabled?).to be
-      expect(round.find(".round-row_advancementCondition").find("button").disabled?).to be
+      expect(round.find(".round-row__advancement-condition").find("button").disabled?).to be
     end
 
     scenario "board member can update events", js: true do
