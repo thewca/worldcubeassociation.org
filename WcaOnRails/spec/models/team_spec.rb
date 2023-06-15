@@ -3,15 +3,8 @@
 require 'rails_helper'
 
 RSpec.describe Team do
-  let(:names) { ["Larry Ullrich", "Jeffry Kiehn", "Colby Nader", "Lakia Cremin", "Shanae Price", "Ka Hermiston", "Milton Pfeffer", "Jolie Cartwright", "Alana Monahan", "Elden Cruickshank"] }
-  let(:users) { [] }
+  let(:users) { FactoryBot.create_list(:user_with_wca_id, 10) }
   let(:wrt_team) { FactoryBot.create :team, friendly_id: 'wrt' }
-
-  before(:each) do
-    names.each do |name|
-      users.append(FactoryBot.create(:user, name: name))
-    end
-  end
 
   before do
     FactoryBot.create :team_member, user_id: users[0].id, team_id: wrt_team.id, start_date: Time.now - 10.months, team_leader: true, updated_at: Time.now - 10.months
@@ -31,9 +24,7 @@ RSpec.describe Team do
       "Changes in WCA Results Team",
       "",
       "New Members",
-      "Jolie Cartwright",
-      "Milton Pfeffer",
-      "",
+      *[users[6].name, users[7].name].sort,
     ].join("\n")
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
@@ -47,8 +38,7 @@ RSpec.describe Team do
       "Changes in WCA Results Team",
       "",
       "Promoted Senior Members",
-      "Lakia Cremin",
-      "",
+      team_member.name,
     ].join("\n")
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
@@ -65,11 +55,9 @@ RSpec.describe Team do
       "Changes in WCA Results Team",
       "",
       "Leaders",
-      "Jeffry Kiehn has been appointed as the new Leader.",
-      "Larry Ullrich is no longer the Leader, but will continue as Senior member.",
-      "",
+      "#{new_leader.name} has been appointed as the new Leader.",
+      "#{cur_leader.name} is no longer the Leader, but will continue as Senior member.",
     ].join("\n")
-    puts(wrt_team.reload.changes_in_team)
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 end

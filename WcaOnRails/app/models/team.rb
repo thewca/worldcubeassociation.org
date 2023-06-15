@@ -322,32 +322,32 @@ class Team < ApplicationRecord
       end
     end
 
-    changes_of_last_month = ""
+    changes_of_last_month = []
     if leader_changes.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
-      changes_of_last_month = "Changes in #{self.name}\n"
+      changes_of_last_month.push("Changes in #{self.name}")
       if leader_changes.count > 0
-        changes_of_last_month += "\nLeaders\n#{leader_changes.join("\n")}\n"
+        changes_of_last_month.push("\nLeaders\n#{leader_changes.join("\n")}")
       end
       if promoted_senior_members.count > 0
-        changes_of_last_month += "\nPromoted Senior Members\n#{promoted_senior_members.join("\n")}\n"
+        changes_of_last_month.push("\nPromoted Senior Members\n#{promoted_senior_members.join("\n")}")
       end
       if new_senior_members.count > 0
-        changes_of_last_month += "\nNew Senior Members\n#{new_senior_members.join("\n")}\n"
+        changes_of_last_month.push("\nNew Senior Members\n#{new_senior_members.join("\n")}")
       end
       if new_members.count > 0
-        changes_of_last_month += "\nNew Members\n#{new_members.join("\n")}\n"
+        changes_of_last_month.push("\nNew Members\n#{new_members.join("\n")}")
       end
       if demoted_senior_members.count > 0
-        changes_of_last_month += "\nDemotions from Senior Member to Member\n#{demoted_senior_members.join("\n")}\n"
+        changes_of_last_month.push("\nDemotions from Senior Member to Member\n#{demoted_senior_members.join("\n")}")
       end
       if no_more_senior_members.count > 0
-        changes_of_last_month += "\nResigned/Demoted Senior Members\n#{no_more_senior_members.join("\n")}\n"
+        changes_of_last_month.push("\nResigned/Demoted Senior Members\n#{no_more_senior_members.join("\n")}")
       end
       if no_more_members.count > 0
-        changes_of_last_month += "\nResigned/Demoted Members\n#{no_more_members.join("\n")}\n"
+        changes_of_last_month.push("\nResigned/Demoted Members\n#{no_more_members.join("\n")}")
       end
     end
-    changes_of_last_month
+    changes_of_last_month.join("\n")
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
