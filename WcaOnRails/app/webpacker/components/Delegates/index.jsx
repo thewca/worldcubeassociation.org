@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
-import { Button } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import UserBadge from '../UserBadge';
 
@@ -15,14 +15,7 @@ export default function Delegates({
 }) {
   const seniorDelegates = React.useMemo(() => delegates
     .filter((user) => user.delegate_status === 'senior_delegate')
-    .sort((user1, user2) => {
-      if (user1.region < user2.region) {
-        return -1;
-      } if (user1.region > user2.region) {
-        return 1;
-      }
-      return 0;
-    }), [delegates]);
+    .sort((user1, user2) => user1.region.localeCompare(user2.region)), [delegates]);
 
   // TO_VERIFY: I assume there are no cases where there are no delegates without
   // senior delegate unless they are senior delegate
@@ -47,57 +40,57 @@ export default function Delegates({
         className="table-responsive"
         key={`region-${seniorDelegate.id}`}
       >
-        <table className="table delegates-table">
-          <colgroup>
-            <col />
-            <col className="col-md-4" />
-            <col className="col-md-4" />
-            <col className="col-md-4" />
-          </colgroup>
-          <thead>
-            <tr>
-              <th />
-              <th>{I18n.t('delegates_page.table.name')}</th>
-              <th>{I18n.t('delegates_page.table.role')}</th>
-              <th>{I18n.t('delegates_page.table.region')}</th>
-            </tr>
-          </thead>
-          <tbody>
+
+        <Table className='delegates-table'>
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell width={5}>{I18n.t('delegates_page.table.name')}</Table.HeaderCell>
+              <Table.HeaderCell width={2}>{I18n.t('delegates_page.table.role')}</Table.HeaderCell>
+              <Table.HeaderCell width={2}>{I18n.t('delegates_page.table.region')}</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+
+          <Table.Body>
             {delegatesUnderSenior.map((delegate) => (
-              <tr
-                className={dasherize(delegate.delegate_status)}
-                key={delegate.id}
-              >
-                <td>
-                  <Button
-                    href={`mailto:${delegate.email}`}
-                    className="ui icon button"
-                  >
-                    <i className="envelope icon" />
-                  </Button>
-                  {isEditVisible && (
-                  <Button
-                    href={`users/${delegate.id}/edit`}
-                    className="ui icon button"
-                  >
-                    <i className="edit icon" />
-                  </Button>
-                  )}
-                </td>
-                <td>
-                  <UserBadge
-                    user={delegate}
-                    hideBorder
-                    leftAlign
-                    subtexts={delegate.wca_id ? [delegate.wca_id] : []}
-                  />
-                </td>
-                <td>{I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}</td>
-                <td>{delegate.region}</td>
-              </tr>
+              <Table.Row className={`${dasherize(delegate.delegate_status)}`}
+                  key={delegate.id}>
+                <Table.Cell>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}>
+                    <Button
+                      href={`mailto:${delegate.email}`}
+                      className="ui icon button"
+                    >
+                      <i className="envelope icon" />
+                    </Button>
+                    {isEditVisible && (
+                    <Button
+                      href={`users/${delegate.id}/edit`}
+                      className="ui icon button"
+                    >
+                      <i className="edit icon" />
+                    </Button>
+                    )}
+                    <UserBadge
+                      user={delegate}
+                      hideBorder
+                      leftAlign
+                      subtexts={delegate.wca_id ? [delegate.wca_id] : []}
+                    />
+                  </div>
+                </Table.Cell>
+                <Table.Cell>
+                  {I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}
+                </Table.Cell>
+                <Table.Cell>
+                  {delegate.region}
+                </Table.Cell>
+              </Table.Row>
             ))}
-          </tbody>
-        </table>
+          </Table.Body>
+        </Table>
       </div>
     );
   });
