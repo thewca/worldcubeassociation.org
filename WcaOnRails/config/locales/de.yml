@@ -2572,15 +2572,15 @@ de:
       #original_hash: 92dde77
       payment_processing: 'Deine Zahlung wurde bestätigt, aber die Transaktion steht noch aus.'
       #original_hash: 62d7351
-      button_text: Zahle jetzt!
+      button_text: Jetzt zahlen!
       hints:
         #original_hash: bf3a39e
         donation: Zusätzliche Spenden gehen nur an das Organisationsteam
         #original_hash: f7fa263
         payment_button: >-
-          Deine Zahlungsinformationen gelangen niemals zur WCA Website. Sie
-          werden verschlüsselt an Stripe übertragen, welches den Zahlungsprozess
-          abwickelt und an uns weiterleitet.
+          Deine Zahlungsinformationen erreichen niemals die WCA Website. Sie
+          werden verschlüsselt an Stripe übertragen, wo der Zahlungsprozess
+          abwickelt wird und anschließend eine Weiterleitung an uns erfolgt.
       labels:
         #original_hash: 4de825f
         entry_fees: Eintrittsgebühren
@@ -2599,9 +2599,9 @@ de:
         #original_hash: de0fc95
         payment_button: Zahle deine Gebühren mit Stripe
         #original_hash: f94d00f
-        ajax_error: WCA Server Error
+        ajax_error: WCA Server Fehler
         #original_hash: e62c56c
-        stripe_error: Stripe Error
+        stripe_error: Stripe Fehler
         #original_hash: 97f7359
         subtotal: Zwischensumme
       alerts:
@@ -2611,7 +2611,7 @@ de:
         amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende Eintrittsgebühr sein.
         #original_hash: 5cf6ce2
         amount_rather_high: >-
-          Du bist dabei, mindestens den zweifachen des notwendigen Betrages für
+          Du bist dabei, mindestens das Doppelte des notwendigen Betrages für
           die Anmeldung zu zahlen. Bitte bestätige die Zahlung mit Klick auf OK.
       errors:
         #original_hash: 166d48c
@@ -2628,8 +2628,8 @@ de:
           werden konnte.
         #original_hash: aaa8ab7
         stripe_secret_invalid: >-
-          Stripe hat ein Transaktion-Secret zurückgegeben, welches nicht unseren
-          Daten entspricht.
+          Stripe hat ein Transaktions-Secret zurückgegeben, welches nicht
+          unseren Daten entspricht.
         #original_hash: 8d1a199
         payment_reset: Die Zahlung wurde von Stripe abgelehnt.
         #original_hash: bcf6a93
