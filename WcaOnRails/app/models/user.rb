@@ -1083,7 +1083,7 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "wca_id", "name", "gender",
            "country_iso2", "delegate_status", "created_at", "updated_at"],
-    methods: ["url", "country", "avatar", "pending_avatar"],
+    methods: ["url", "country"],
     include: ["avatar", "teams"],
   }.freeze
 
