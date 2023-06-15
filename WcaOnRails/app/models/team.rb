@@ -227,7 +227,8 @@ class Team < ApplicationRecord
     sorted_users = []
     team_member_changes = {}
 
-    leader_changes = []
+    leader_appointments = []
+    no_more_leaders = []
     promoted_senior_members = []
     new_senior_members = []
     new_members = []
@@ -281,22 +282,22 @@ class Team < ApplicationRecord
       name = user.name
       if new_leader || ex_leader || new_and_ex_leader
         if new_leader
-          leader_changes.append("#{name} has been appointed as the new Leader.")
+          leader_appointments.append("#{name} has been appointed as the new Leader.")
         elsif ex_leader
           if new_member
-            leader_changes.append("#{name} is no longer the Leader, but will continue as member.")
+            no_more_leaders.append("#{name} is no longer the Leader, but will continue as member.")
           elsif new_senior_member
-            leader_changes.append("#{name} is no longer the Leader, but will continue as Senior member.")
+            no_more_leaders.append("#{name} is no longer the Leader, but will continue as Senior member.")
           else
-            leader_changes.append("#{name} is no longer the Leader and no longer a member.")
+            no_more_leaders.append("#{name} is no longer the Leader and no longer a member.")
           end
         else
           if new_member
-            leader_changes.append("#{name} was the Leader for few days and is continuing as member.")
+            no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
           elsif new_senior_member
-            leader_changes.append("#{name} was the Leader for few days and is continuing as Senior member.")
+            no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
           else
-            leader_changes.append("#{name} was the Leader for few days and is no longer a member.")
+            no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
           end
         end
       else
@@ -323,10 +324,16 @@ class Team < ApplicationRecord
     end
 
     changes_of_last_month = []
-    if leader_changes.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
+    if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
       changes_of_last_month.push("Changes in #{self.name}")
-      if leader_changes.count > 0
-        changes_of_last_month.push("\nLeaders\n#{leader_changes.join("\n")}")
+      if leader_appointments.count + no_more_leaders.count > 0
+        changes_of_last_month.push("\nLeaders")
+        if leader_appointments.count > 0
+          changes_of_last_month.push(leader_appointments.join("\n"))
+        end
+        if no_more_leaders.count > 0
+          changes_of_last_month.push(no_more_leaders.join("\n"))
+        end
       end
       if promoted_senior_members.count > 0
         changes_of_last_month.push("\nPromoted Senior Members\n#{promoted_senior_members.join("\n")}")
