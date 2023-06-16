@@ -872,6 +872,17 @@ class Competition < ApplicationRecord
     true
   end
 
+  def registration_status
+    if registration_not_yet_opened?
+      return "not_yet_opened"
+    elsif registration_past?
+      return "past"
+    elsif registration_full?
+      return "full"
+    end
+    "open"
+  end
+
   def registration_opened?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
@@ -1912,6 +1923,8 @@ class Competition < ApplicationRecord
       venue: venue,
       url: url,
       country_iso2: country_iso2.downcase,
+      timeUntilRegistration: ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open),
+      registration_status: registration_status,
     )
   end
 

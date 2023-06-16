@@ -3,6 +3,25 @@ import ReactMarkdown from 'react-markdown';
 
 import I18n from '../../lib/i18n';
 
+function calculateDate(comp, mode) {
+  const dateToday = new Date();
+  const startDate = new Date(comp.start_date);
+  const endDate = new Date(comp.end_date);
+
+  if (mode === 'future') {
+    const msDifference = startDate.getTime() - dateToday.getTime();
+    const dayDifference = Math.ceil(msDifference / (1000 * 3600 * 24));
+    return dayDifference;
+  }
+  if (mode === 'past') {
+    const msDifference = dateToday.getTime() - endDate.getTime();
+    const dayDifference = Math.floor(msDifference / (1000 * 3600 * 24));
+    return dayDifference;
+  }
+
+  return -1;
+}
+
 function renderYearHeader(competitions, index, sortByAnnouncement) {
   if (index > 0 && competitions[index].year !== competitions[index - 1].year
     && !sortByAnnouncement) {
@@ -11,18 +30,27 @@ function renderYearHeader(competitions, index, sortByAnnouncement) {
   return null;
 }
 
+function renderRegistrationStatus(comp) {
+  if (comp.registration_status === 'not_yet_opened') {
+    return <i className="icon clock blue" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })} />;
+  }
+  if (comp.registration_status === 'past') {
+    return <i className="icon user times red" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDate(comp, 'future') }) })} />;
+  }
+  if (comp.registration_status === 'full') {
+    return <i className="icon user clock orange" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.full')} />;
+  }
+
+  return <i className="icon user plus green" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.open')} />;
+}
+
 function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
   if (comp.isProbablyOver) {
     if (comp.resultsPosted) {
       return <i className="icon check circle result-posted-indicator" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.posted')} />;
     }
 
-    const dateToday = new Date();
-    const endDate = new Date(comp.end_date);
-    const msDifference = dateToday.getTime() - endDate.getTime();
-    const dayDifference = Math.floor(msDifference / (1000 * 3600 * 24));
-
-    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: dayDifference }) })} />;
+    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDate(comp, 'past') }) })} />;
   }
   if (comp.inProgress) {
     return <i className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
@@ -31,15 +59,10 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
     return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate })} />;
   }
   if (showRegistrationStatus) {
-    return null;
+    return renderRegistrationStatus(comp);
   }
 
-  const dateToday = new Date();
-  const startDate = new Date(comp.start_date);
-  const msDifference = startDate.getTime() - dateToday.getTime();
-  const dayDifference = Math.ceil(msDifference / (1000 * 3600 * 24));
-
-  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifference }) })} />;
+  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDate(comp, 'future') }) })} />;
 }
 
 function CompetitionTable({
