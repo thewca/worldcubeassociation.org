@@ -1703,8 +1703,8 @@ de:
       results_team: Results-Team
       #original_hash: 4e7afeb
       results_admin: Administrator
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Datenbank
       #original_hash: aee74b8
       new_post: Neuer Post
       #original_hash: 0d67445
@@ -2569,48 +2569,71 @@ de:
       payment_successful: >-
         Deine Zahlung war erfolgreich und deine Zahlung sollte unten als bezahlt
         markiert sein.
+      #original_hash: 92dde77
+      payment_processing: 'Deine Zahlung wurde bestätigt, aber die Transaktion steht noch aus.'
+      #original_hash: 62d7351
+      button_text: Jetzt zahlen!
       hints:
         #original_hash: bf3a39e
         donation: Zusätzliche Spenden gehen nur an das Organisationsteam
-        #original_hash: 16cf92d
-        card_information: >-
-          Deine Karteninformationen werden nicht an die WCA Website übertragen.
-          Sie werden verschlüsselt an Stripe übertragen, welches die Abwicklung
-          der Zahlung übernimmt und an uns weiterleitet.
+        #original_hash: f7fa263
+        payment_button: >-
+          Deine Zahlungsinformationen erreichen niemals die WCA Website. Sie
+          werden verschlüsselt an Stripe übertragen, wo der Zahlungsprozess
+          abwickelt wird und anschließend eine Weiterleitung an uns erfolgt.
       labels:
         #original_hash: 4de825f
         entry_fees: Eintrittsgebühren
+        #original_hash: dc9d458
+        fees_paid: Bezahlt
+        #original_hash: cc632b5
+        fees_remaining: Ausstehend
         #original_hash: 2c09302
         donation: Spende
-        #original_hash: 184150d
-        card_information: Karteninformationen
-        #original_hash: bc8091a
-        cardholder_name: Name des Karteninhaber
         #original_hash: 919710d
         show_donation: >-
           Ich würde dem Organisationsteam gerne eine zusätzliche, optionale
           Spende zukommen lassen
+        #original_hash: 4930c06
+        payment_information: Zahlungsinformationen
+        #original_hash: de0fc95
+        payment_button: Zahle deine Gebühren mit Stripe
+        #original_hash: f94d00f
+        ajax_error: WCA Server Fehler
+        #original_hash: e62c56c
+        stripe_error: Stripe Fehler
+        #original_hash: 97f7359
+        subtotal: Zwischensumme
       alerts:
         #original_hash: a34940e
         not_a_number: Bitte gebe einen gültigen Betrag ein
         #original_hash: 707b9ca
         amount_too_low: Der Gesamtbetrag muss mindestens die zu zahlende Eintrittsgebühr sein.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Du bist dabei, mindestens das Doppelte des notwendigen Betrages für
+          die Anmeldung zu zahlen. Bitte bestätige die Zahlung mit Klick auf OK.
       errors:
         #original_hash: 166d48c
         already_paid: >-
           Die Gebühr wurde nicht erhoben da die Anmeldegebühren bereits
           beglichen wurden.
-        #original_hash: b2bc8ed
+        #original_hash: f10c80c
         not_allowed: Du kannst für diese Anmeldung nicht zahlen.
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          Wir konnten den Anlass der Zahlung nicht auf unserem Server
-          bestätigen. Der Zahlungsprozess wurde abgebrochen und deine Karte
-          wurde nicht belastet.
-        #original_hash: 63e0ec1
-        cardholder_name: Bitte überprüfe den Namen des Karteninhabers.
-    #original_hash: 8607a87
-    payment_button_text: Bezahle dein Eintrittsgeld mit Karte
+        #original_hash: a073600
+        stripe_failed: Bitte prüfe die Stripe-Transaktion.
+        #original_hash: a32e40f
+        stripe_not_found: >-
+          Stripe hat eine Transaktions-ID zurückgegeben, die nicht gefunden
+          werden konnte.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe hat ein Transaktions-Secret zurückgegeben, welches nicht
+          unseren Daten entspricht.
+        #original_hash: 8d1a199
+        payment_reset: Die Zahlung wurde von Stripe abgelehnt.
+        #original_hash: bcf6a93
+        payment_pending: Die Zahlung wurde noch nicht abgeschlossen.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Um weitere Anmeldungen in der Zukunft zu beschleunigen, kannst Du deine
@@ -2705,10 +2728,11 @@ de:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Bitte vergewissere dich, dass alle nicht-finalen Runden eine Bedingung
         zum Weiterkommen erhalten haben.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Runde %{round_number} in %{event} hat ein größeres Cutoff als das
-        Zeitlimit. Stelle sicher, dass das Cutoff unter dem Zeitlimit liegt.
+        Zeitlimit. Bitte vergewissere dich, dass das Cutoff nicht größer als das
+        Zeitlimit ist.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Runde %{round_number} in %{event} hat ein Cutoff von weniger als 5
@@ -2850,7 +2874,7 @@ de:
       #original_hash: eb9a4bc
       date: Datum
       #original_hash: 4f05cd6
-      add_to_calendar: Zum Kalender hinzufgen
+      add_to_calendar: Zum Kalender hinzufügen
       #original_hash: 4271627
       city: Stadt
       #original_hash: 67cd406
