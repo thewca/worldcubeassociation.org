@@ -370,6 +370,10 @@ table.wca-results {
     border: 1px solid;
     border-image: linear-gradient(to right, red, blue) 1;
   }
+  &.fi-tw {
+    background-color: white;
+    background-image: url("ChineseTaipei.svg");
+  }
 }
 
 // Textarea resizes dynamically, so changing its size manually is no longer necessary.
