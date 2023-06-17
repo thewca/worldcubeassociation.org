@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
@@ -96,8 +97,7 @@ class User < ApplicationRecord
 
   # Very simple (and permissive) regexp, the goal is just to avoid silly typo
   # like "aaa@bbb,com", or forgetting the '@'.
-  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/
-  validates :email, format: { with: EMAIL_RE }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login

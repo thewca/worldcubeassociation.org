@@ -55,6 +55,9 @@ RSpec.describe User, type: :model do
 
     user = FactoryBot.build(:user, email: "aabbb.com")
     expect(user).to be_invalid_with_errors(email: ["is invalid"])
+
+    user = FactoryBot.build(:user, email: "john@gmail..com")
+    expect(user).to be_invalid_with_errors(email: ["is invalid"])
   end
 
   it "can confirm a user who has never competed before" do
