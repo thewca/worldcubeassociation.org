@@ -362,6 +362,7 @@ en:
         comments: "Comments"
         paid_entry_fees: "Paid"
         status: "Status"
+        administrative_notes: "Administrative notes"
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
@@ -638,6 +639,7 @@ en:
         comments: ""
         guests: ""
         status: ""
+        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:

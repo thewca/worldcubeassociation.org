@@ -786,6 +786,7 @@ class RegistrationsController < ApplicationController
         :deleted_at,
         :accepted_by,
         :deleted_by,
+        :administrative_notes,
       ]
       params[:registration].merge! case params[:registration][:status]
                                    when "accepted"

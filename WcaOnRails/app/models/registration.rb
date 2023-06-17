@@ -199,6 +199,7 @@ class Registration < ApplicationRecord
     authorized_fields = {
       "guests" => guests,
       "comments" => comments || '',
+      "administrativeNotes" => administrative_notes || '',
     }
     {
       "wcaRegistrationId" => id,
@@ -222,6 +223,7 @@ class Registration < ApplicationRecord
         "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
+        "administrativeNotes" => { "type" => "string" },
       },
     }
   end

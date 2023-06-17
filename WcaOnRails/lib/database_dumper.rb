@@ -603,6 +603,7 @@ module DatabaseDumper
         db_default: %w(ip),
         fake_values: {
           "comments" => "''", # Can't use :db_default here because comments does not have a default value.
+          "administrative_notes" => "''", # Can't use :db_default here because administrative_notes does not have a default value.
         },
       ),
     }.freeze,

@@ -1193,6 +1193,7 @@ CREATE TABLE `registrations` (
   `deleted_by` int(11) DEFAULT NULL,
   `roles` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `is_competing` tinyint(1) DEFAULT '1',
+  `administrative_notes` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_registrations_on_competition_id_and_user_id` (`competition_id`,`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -1854,4 +1855,5 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20230311183558'),
 ('20230312182740'),
 ('20230315170143'),
+('20230515103948'),
 ('20230517135741');
