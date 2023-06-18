@@ -192,10 +192,10 @@ eo:
       #original_hash: 672b22c
       cellName: Finalo
     g:
-      #original_hash: ccf6f8e
-      name: Tria raŭndo
-      #original_hash: ccf6f8e
-      cellName: Tria raŭndo
+      #original_hash: e2f74d2
+      name: Duonfinalo
+      #original_hash: e2f74d2
+      cellName: Duonfinalo
     h:
       #original_hash: 4d618bb
       name: Kvalifika raŭndo
@@ -418,9 +418,9 @@ eo:
         #original_hash: ced7b30
         remember_me: Memoru min
         #original_hash: 102efae
-        pending_avatar: Alŝuti novan uzantobildon
+        pending_avatar: Alŝuti novan profilbildon
         #original_hash: 58e0c56
-        remove_avatar: Forigi uzantobildon
+        remove_avatar: Forigi profilbildon
         #original_hash: 9af9099
         results_notifications_enabled: Retpoŝtu min kiam miaj rezultoj estas enretaj.
         #original_hash: 29ce2ff
@@ -493,17 +493,17 @@ eo:
         #original_hash: 8020e88
         external_registration_page: Paĝo por la registriĝoj
         #original_hash: 9bb1965
-        competitor_limit_enabled: Limo da konkursantoj
+        competitor_limit_enabled: Limo de konkursantoj
         #original_hash: 749f4c9
         competitor_limit: Plej alta kvanto da konkursantoj
         #original_hash: 4a8b6f1
-        competitor_limit_reason: Kialo por tiu limo da konkursantoj
+        competitor_limit_reason: Kialo por tiu limo de konkursantoj
         #original_hash: 3c23a67
         guests_enabled: Akompanantoj
         #original_hash: 7d78478
         guests_per_registration_limit: Maksimuma nombro da gastoj per registriĝo
         #original_hash: 22516e1
-        events_per_registration_limit: Limo da konkurseroj por registriĝo
+        events_per_registration_limit: Limo de konkurseroj por registriĝo
         #original_hash: 089cbfd
         receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas por tiu konkurso
         #original_hash: d4aeed9
@@ -520,6 +520,8 @@ eo:
         enable_donations: 'Mi volas ebligi donacojn, aldone al la baza registriĝkosto'
         #original_hash: 556fda0
         extra_registration_requirements: Aldonaj registriĝaj postuloj
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: Devigi al konkursantoj skribi komenton dum registrado
         #original_hash: 2529d04
         on_the_spot_registration: Surlokaj registriĝoj
         #original_hash: 69780b5
@@ -564,10 +566,10 @@ eo:
         #original_hash: 4baf44b
         championship_type: Tipo de ĉampionado
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: Identigilo
-        #original_hash: 709a232
-        name: Nomo
+        #original_hash: e2b4898
+        wcif_id: Identigilo de serio
+        #original_hash: 75ceb67
+        name: Nomo de serio
         #original_hash: 8a6bee1
         short_name: Kromnomo de serio
         #original_hash: af3d38e
@@ -581,6 +583,8 @@ eo:
         paid_entry_fees: Pagita
         #original_hash: bae7d5b
         status: Stato
+        #original_hash: a6e8a0b
+        administrative_notes: Administraj notoj
         #original_hash: 709a232
         name: Nomo
         #original_hash: a6b9d69
@@ -952,7 +956,7 @@ eo:
           postulas antaŭan laboron.
         #original_hash: 4bd7102
         competitor_limit_reason: Kial estas limo de konkursantoj? Bonvolu plenigi tion en la angla!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           La nombro da gastoj permesitaj per registriĝo ĉe ĉi tiu konkurso.
           Registriĝo kun tro da gastoj estos blokita. Lasu tion malplena se ne
@@ -1028,6 +1032,8 @@ eo:
         event_restrictions_reason: >-
           Bonvolu detali tie kial vi ŝatus limigi specifajn kombinadojn de
           konkurseroj. Bonvolu plenigi tion en la angla!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: La venkinto de tiu konkursero estos la venkinto de la konkurso.
         #original_hash: da39a3e
@@ -1182,6 +1188,10 @@ eo:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Pliaj notoj konservitaj kiel parto de administrado de ĉi tiu
+          registrado. Tiuj ĉi ne povas esti vidataj de la konkursanto.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1508,6 +1518,19 @@ eo:
           zero: 'La formularo enhavas %{count} erarojn'
           one: La formularo enhavas unu eraron
           other: 'La formularo enhavas %{count} erarojn'
+      error_pages:
+        #original_hash: 1042478
+        500_error: Pardonu sed io fuŝiĝis.
+        #original_hash: d815249
+        500_contact: >-
+          Se vi raportas ĉi tiun eraron al la Programara Teamo, bonvolu mencii
+          la Peton-ID (Request ID)
+        #original_hash: b61e305
+        400_error: 'La paĝo, kiun vi serĉis, ne ekzistas.'
+        #original_hash: 8b309f5
+        400_contact: >-
+          Se vi pensas ke tio estas eraro, bonvolu kontakti la Programaran
+          Teamon kaj inkluzivi la Peton-ID (Request ID)
     doorkeeper:
       applications:
         help:
@@ -1543,12 +1566,12 @@ eo:
       welcome_back: >-
         Rebonvenon! Por krei vian WCA-konton, ni bezonas koni la WCA-ID kun kiu
         vi konkursis.
-      #original_hash: 3b2bcea
+      #original_hash: ef8243e
       welcome_html: >-
         Bonvenon! Antaŭ ol konkursi en via unua konkurso de la WCA, ni bezonas
         kromajn informaciojn por datumrikordaj celoj. Atentu ke via naskiĝtago
-        neniam estos publikigita sen via konsento.<br/><br/>Se vi aliĝas nome de iu
-        alia, bonvolu doni la detalojn de la <strong>konkursanto</strong>.
+        neniam estos publikigita sen via konsento.<br/><br/>Se vi aliĝas nome de
+        iu alia, bonvolu doni la detalojn de la <strong>konkursanto</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1599,8 +1622,10 @@ eo:
       statistics: Statistikoj
       #original_hash: 82dabd0
       multimedia: Plurmedio
-      #original_hash: 4fd2a7f
-      db_export: Eksportado de la datumbazo
+      #original_hash: cfde9db
+      db_results_export: Eksporto de rezultoj
+      #original_hash: 7533c29
+      db_dev_export: Eksporto por programistoj
       #original_hash: 1fa73f3
       regulations: Regularo
       #original_hash: 6bce1b5
@@ -1631,8 +1656,8 @@ eo:
       results_team: Rezulta Teamo
       #original_hash: 4e7afeb
       results_admin: Administranto
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Datumbazo
       #original_hash: aee74b8
       new_post: Nova afiŝo
       #original_hash: 0d67445
@@ -1930,7 +1955,7 @@ eo:
       #original_hash: 8a770cf
       pending_mail_confirmation: 'Tiu konto atendas konfirmon de la nova retpoŝtadreso %{email}'
       #original_hash: 0340b0b
-      pending_avatar_confirmation: Tiu konto atendas konfirmon de nova profilbildo
+      pending_avatar_confirmation: Tiu konto atendas konfirmon de nova profilbildo.
       #original_hash: 7b06f03
       pending_claim_confirmation_html: >-
         Tiu konto atendas la konfirmon de %{delegate} por la petita WCA-ID-n
@@ -1945,7 +1970,7 @@ eo:
       #original_hash: af18820
       edit_thumbnail: Alklaku por redakti bildeton
       #original_hash: cf65c6e
-      manage_pending: Administri atendantajn bildojn
+      manage_pending: Administri atendantajn profilbildojn
       #original_hash: 2d2ae5d
       have_no_wca_id_html: >-
         Vi ankoraŭ ne havas asignitan WCA-ID-n. Se vi konkursis antaŭe, petu
@@ -1985,6 +2010,10 @@ eo:
       remove_avatar: Forigi profilbildon
       #original_hash: 4bd25cf
       remove_avatar_confirm: Ĉu vi certas ke vi volas forigi vian profilbildon?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Konfirmu forigon de profilbildo
+      #original_hash: 010b0e5
+      remove_avatar_reason: Bonvolu doni la kialon de forigo
       #original_hash: 141d1d7
       guidelines: Gvidlinioj
       avatar_guidelines:
@@ -2166,6 +2195,11 @@ eo:
       series_more_than_one_accepted: Vi povas esti akceptita nur en unu Seria konkurso samtempe.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Vi ne povas registriĝi por konkurseroj por kiuj vi ne estas kvalifikita.
+      #original_hash: 22ca413
+      cannot_register_without_comment: >-
+        Vi devas skribi komenton. Kontrolu en la registriĝaj postuloj kion vi
+        devas skribi (ekz. por samtempa konkurso de FM, en kiu loko vi
+        konkursos).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2308,6 +2342,8 @@ eo:
       approved_registrations: Akceptitaj registriĝoj
       #original_hash: bff04e8
       deleted_registrations: Forigitaj registriĝoj
+      #original_hash: e86b1e1
+      non_competing: Nekonkursantaj registriĝoj
       #original_hash: ac5d958
       not_paid: Ne pagata
       registered:
@@ -2387,6 +2423,11 @@ eo:
       La limo de konkursantoj por tiu konkurso estas %{competitor_limit} kaj ĝi
       estis jam atingita. Se vi registriĝas, via registriĝo estos en
       atendolisto. Ĝi ne povos esti aprobita antaŭ retiron de alia persono.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      La limo de konkursantoj por ĉi tiu konkurso estas %{competitor_limit} kaj
+      eblas ke ĝi estis atingita. Se vi registriĝas, via registriĝo estos metita
+      en atendolisto. Ĝi eble ne estos aprobita krom se loko liberiĝas.
     #original_hash: 855ca9c
     can_register: 'Vi povas registriĝi por %{comp} malsupre.'
     #original_hash: 4167ed7
@@ -2429,40 +2470,67 @@ eo:
       payment_successful: >-
         Via pago estis sukcesa kaj via registriĝo devus aperi kiel pagita
         malsupre.
+      #original_hash: 92dde77
+      payment_processing: 'Via pago estis konfirmita, sed la transakcio ankoraŭ atendas.'
+      #original_hash: 62d7351
+      button_text: Pagu nun!
       hints:
         #original_hash: bf3a39e
         donation: Fakultativa donaco kiu iros nur al la organizanta teamo
-        #original_hash: 16cf92d
-        card_information: >-
-          La datumoj de via karto neniam atingas la retejo de la WCA. Ili estas
-          sekure sendataj al Stripe kiu traktas la pagon kaj respondas al ni.
+        #original_hash: f7fa263
+        payment_button: >-
+          Viaj datumoj pri pago neniam atingas la retejon de la WCA. Ĝi estas
+          sekure sendita al Stripe, kiu pritraktas la pagprocezon kaj revenas al
+          ni.
       labels:
         #original_hash: 4de825f
         entry_fees: Registriĝkosto
+        #original_hash: dc9d458
+        fees_paid: Pagita
+        #original_hash: cc632b5
+        fees_remaining: Restanta
         #original_hash: 2c09302
         donation: Donaco
-        #original_hash: 184150d
-        card_information: Datumoj de karto
-        #original_hash: bc8091a
-        cardholder_name: Nomo de la posedanto de la karto
+        #original_hash: 919710d
+        show_donation: >-
+          Mi ŝatus fari plian laŭvolan donacon, kiu iros nur al la organiza
+          teamo
+        #original_hash: 4930c06
+        payment_information: Pagdatumoj
+        #original_hash: de0fc95
+        payment_button: Pagu vian registriĝkoston per Stripe
+        #original_hash: f94d00f
+        ajax_error: Eraro de WCA-servilo
+        #original_hash: e62c56c
+        stripe_error: Eraro de Stripe
+        #original_hash: 97f7359
+        subtotal: Subtotalo
       alerts:
         #original_hash: a34940e
         not_a_number: Bonvolu enigi validan sumon.
         #original_hash: 707b9ca
         amount_too_low: La tuta sumo devas esti almenaŭ tiu de la registriĝkosto.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Konfirmante tion, vi pagos almenaŭ la duoblon de la postulata sumo por
+          ke via registriĝo daŭrigu. Bonvolu konfirmi la pagon premante OK.
       errors:
         #original_hash: 166d48c
         already_paid: La pago ne estis farita ĉar la registriĝkosto estas jam pagita.
-        #original_hash: b2bc8ed
-        not_allowed: Vi ne povas pagi por tiu registriĝo
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          Ni ne trovis la provon de pago por konfirmi ĝin en nia servilo. Trakto
-          de via pago estis ĉesigita kaj via karto pagis nenion.
-        #original_hash: 63e0ec1
-        cardholder_name: Bonvolu kontroli la nomon de la posedanto de la karto.
-    #original_hash: 8607a87
-    payment_button_text: Pagu vian registriĝon per karto
+        #original_hash: f10c80c
+        not_allowed: Vi ne povas pagi por tiu registriĝo.
+        #original_hash: a073600
+        stripe_failed: Bonvolu kontroli la transakcion de Stripe.
+        #original_hash: a32e40f
+        stripe_not_found: Stripe raportis transakcian ID kiu ne estis trovita.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe raportis transakcian sekreton kiu ne kongruas kun niaj
+          rikordoj.
+        #original_hash: 8d1a199
+        payment_reset: La pago estis malakceptita de Stripe.
+        #original_hash: bcf6a93
+        payment_pending: La pago ankoraŭ ne estas finita.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Por rapidigi venontajn registriĝojn, vi povas elekti viajn plej ŝatatajn
@@ -2551,9 +2619,9 @@ eo:
         deklaris antaŭ ol konfirmi la konkurson.
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: Bonvolu atenti ke ĉiuj nefinalaj raŭndoj havu kvalifikajn kondiĉojn.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
-        Raŭndo %{round_number} en %{event} havas interromptempon kiu estas pli
+        Raŭndo %{round_number} de %{event} havas interromptempon kiu estas pli
         alta ol la tempolimo. Bonvolu ŝanĝi ĝin por ke ĝi estu pli malalta ol la
         tempolimo.
       #original_hash: c1580b1
@@ -2584,7 +2652,7 @@ eo:
       not_announced: Tiu konkurso publike videblas sed ĝi ankoraŭ ne estis anoncita.
       #original_hash: ab61991
       announced: Konkurso sukcese anoncita!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Tiu konkurso estis nuligita. Bonvolu kontroli la informaj sekcioj por
         pli da detaloj.
@@ -2628,22 +2696,30 @@ eo:
       tooltip_registered: Vi estas registrita.
       #original_hash: f2d092f
       tooltip_waiting_list: Vi nuntempe estas en la atendolisto.
-      #original_hash: 9ecd976
-      confirmed_visible: Tiu konkurso estas konfirmita kaj videbla
-      #original_hash: fa186a9
-      confirmed_not_visible: Tiu konkurso estas konfirmita sed ne videbla
-      #original_hash: a66bbe3
-      not_confirmed_visible: Tiu konkurso ne estas konfirmita sed videbla
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: Tiu konkurso estas nek konfirmita nek videbla
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Bedaŭrinde via registriĝo estas forigita. Bonvolu kontroli vian
+        retpoŝton por detaloj, aŭ kontakti la organizanto(j)n.
+      #original_hash: 1b6dc61
+      confirmed_visible: Tiu konkurso estas konfirmita kaj videbla.
+      #original_hash: abc2f96
+      confirmed_not_visible: Tiu konkurso estas konfirmita sed ne videbla.
+      #original_hash: 6d6290b
+      not_confirmed_visible: Tiu konkurso ne estas konfirmita sed videbla.
+      #original_hash: b299b27
+      not_confirmed_not_visible: Tiu konkurso estas nek konfirmita nek videbla.
       #original_hash: a821396
       stripe_connected: >-
         Vi nun sukcese ligis vian Stripe-konton kaj vi nun povas ricevi
         registriĝpagojn por tiu konkurso.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Sukcese malkonektis la Stripe-konton.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Okazis eraro dum malkonekto de la Stripe-konto.
       #original_hash: 0a4bb53
       stripe_not_connected: Problemo okazis kaj ni ne povis ligi vian Stripe-konton.
-      #original_hash: 724cf0d
-      championship_exists: '%{championship_type} jam ekzistas en %{year}'
+      #original_hash: 1b92d16
+      championship_exists: '%{championship_type} jam ekzistas en %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Registriĝoj sukcese fermitaj.
       #original_hash: 7f197a0
@@ -2736,7 +2812,7 @@ eo:
         unu el tiuj registriĝoj povas esti konfirmita kaj akceptita. <b>Vi nur
         rajtos konkursi en unu el la Seriokonkursoj!</b>
       #original_hash: 9bb1965
-      competitor_limit: Limo da konkursantoj
+      competitor_limit: Limo de konkursantoj
       #original_hash: 196725e
       competitor_limit_is: 'Estas limo de %{competitor_limit} konkursantoj.'
       #original_hash: 5101f65
@@ -2963,7 +3039,7 @@ eo:
           open: Registriĝi nuntempe eblas!
           #original_hash: c098975
           full: >-
-            Limo da konkursantoj estis atingita, novaj registriĝoj iros al la
+            Limo de konkursantoj estis atingita, novaj registriĝoj iros al la
             atendolisto
       #original_hash: 8b09d74
       no_comp_found: Neniu konkurso trovita.
@@ -3243,8 +3319,6 @@ eo:
     cancelled_by_html: 'Nuligita de %{name} la %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Ĉu vi certas ke vi volas nuligi tiun konkurson?
-    #original_hash: 9a42672
-    upload_results: Alŝuti la rezultojn
     #original_hash: 01de5ee
     post_results: Poŝti la rezultojn
     #original_hash: b6513f1
@@ -3253,14 +3327,20 @@ eo:
     cancel_mistake: Ĉu vi eraris?
     #original_hash: 0fb43d5
     note_before_cancel: 'Noto: nur konfirmitaj konkursoj povas esti nuligitaj.'
-    #original_hash: 19a0ac2
+    #original_hash: b38ee61
     orga_close_reg: Fermi registriĝojn.
     #original_hash: b2bfea9
     orga_close_reg_confirm: Ĉu vi certas ke vi volas fermi registriĝojn? Vi ne povos malfari ĉi tion.
     #original_hash: ce5686a
     note_reg_not_full_orga_close_reg: >-
-      Noto: vi povas fermi registriĝojn nur post kiam la limo da konkursantoj
+      Noto: vi povas fermi registriĝojn nur post kiam la limo de konkursantoj
       estas atingita.
+    #original_hash: 1ae594d
+    stripe_disconnect: Malkonekti Stripe-konton
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Ĉu vi certas, ke vi volas malkonekti la Stripe-konton? Ĉi tiu ago ne povas
+      esti malfarita.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Noto: registriĝoj jam estas fermitaj.'
     show:
@@ -3304,12 +3384,14 @@ eo:
           de ĉiu formato.
         #original_hash: fa50f5c
         qualification_html: >-
-          Kvalifikaj tempoj devas esti faritaj en aliaj WCA-konkursoj por povi
+          Kvalifikaj rezultoj devas esti faritaj en aliaj WCA-konkursoj por povi
           partopreni.
-        #original_hash: 3b524fd
-        qualification_all_events_html: 'La limdato por kvalifiki estas <b>%{date}</b>.'
-        #original_hash: 0d791e9
-        qualification_some_events_html: 'La limdato por kvalifiki por %{events} estas <b>%{date}</b>.'
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Kvalifikaj rezultoj devas esti faritaj antaŭ <b>%{date}</b>.'
+        #original_hash: 5eac9e5
+        qualification_some_events_html: >-
+          Kvalifikaj rezultoj de %{events} devas esti faritaj antaŭ
+          <b>%{date}</b>.
       #original_hash: 041a5de
       format: Formato
       #original_hash: 0d1fcc3
@@ -3474,11 +3556,11 @@ eo:
       title: Rekordoj
     #original_hash: e02fccb
     last_updated_html: 'Lasta ĝisdatigo: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Bonvolu memori, ke iuj filtroj (kiel pasintaj jaroj) estas provizore
-      malŝaltitaj. Se vi havas sperton pri SQL-optimumigo, bonvolu kontakti la
-      WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Bonvolu noti, ke iuj filtriloj (kiel pasintaj jaroj) estas provizore
+      neuzeblaj. La Programara Teamo laboras por restarigi ĉi tiujn filtrilojn -
+      ni bedaŭras la ĝenon.
     #original_hash: e3710ed
     tooltip_no_years: Nia datumbazo estas tro granda por komputi historiajn datumojn
     #original_hash: 357094b
@@ -3610,7 +3692,7 @@ eo:
         #original_hash: 868be55
         greater_china: Podioj de Granda Ĉinaj Ĉampionadoj
       #original_hash: c32a014
-      place: Loko
+      place: Pozicio
       #original_hash: ddb18c1
       medal_collection: Medalaro
       #original_hash: 9e69e13
@@ -4928,13 +5010,13 @@ eo:
     paragraph4:
       #original_hash: b6dca56
       title: Politiko de proksimeco
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        Konkursoj de la WCA estos akceptitaj se ili estas almenaŭ 100 km aŭ 19
+        Konkursoj de la WCA estos akceptitaj se ili estas almenaŭ 10 km aŭ 5
         tagoj for de aliaj konkursoj. La WCAT devas speciale ekzameni proponitan
-        konkurson se ekzistas alia konkurso kiu estas malpli da 100 km kaj
-        malpli da 19 tagoj for. Delegito petante aprobon de tiu konkurso devas
-        doni pliajn informojn pri kial la konkurso devus esti akceptata. Eblaj
+        konkurson se ekzistas alia konkurso kiu estas malpli da 10 km kaj malpli
+        da 5 tagoj for. Delegito petante aprobon de tiu konkurso devas doni
+        pliajn informojn pri kial la konkurso devus esti akceptata. Eblaj
         argumentoj povas esti la jenaj:
       olist1:
         #original_hash: de00462
@@ -4956,9 +5038,9 @@ eo:
             #original_hash: 75aa0c7
             1a: Tempoperiodoj kiam ili okazas ne povas koincidi.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Se iu loko de tiuj konkursoj estas pli proksima ol 100 km de iu alia
+            Se iu loko de tiuj konkursoj estas pli proksima ol 10 km de iu alia
             konkurso, tiuokaze
           alist1:
             #original_hash: 8f532bb
@@ -4980,14 +5062,14 @@ eo:
       title: Limoj da konkursantoj
       #original_hash: bd8e6ee
       content_html: >-
-        La nombro da konkursantoj povas esti limigita po konkursero aŭ po
+        La nombro de konkursantoj povas esti limigita po konkursero aŭ po
         konkurso (vidu <a
         href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>la
         Postulojn de Konkursoj</a>). La Delegito de la konkurso devas ricevi
         aprobon de la WCAT por la limo de konkursantoj. Limoj de konkursantoj
         devas esti elektitaj prudente kaj konforme al la atendita intereso. La
         limiga nombro ne devus esti malalta pro negravaj kialoj. Vi devus jam
-        pripensi la limon kiam vi serĉas taŭgan konkursejon. La limo da
+        pripensi la limon kiam vi serĉas taŭgan konkursejon. La limo de
         konkursantoj devas esti klare skribita en la konkurspaĝo ĉe la retejo de
         la WCA.
     paragraph6:
@@ -5218,3 +5300,52 @@ eo:
     privacy: Privateco
     #original_hash: 4c4a2e8
     disclaimer: Malpretendo
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Iru al %{oauth_link} por administri viajn OAuth-aplikaĵojn.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Jen ekzemplo, uzante curl, de akiro de alirĵetono per Aplika ID,
+      Kliento-Sekreto, via WCA-retpoŝto kaj via pasvorto:
+    #original_hash: 59d8cf3
+    user_email_placeholder: VIA_RETPOŜTO
+    #original_hash: 981eb7e
+    user_password_placeholder: VIA_PASVORTO
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      OAuth-alirĵetono povas esti uzata, ĝis ĝi eksvalidiĝas, por fari
+      aprobitajn API-petojn. Ekzemple, por aliri informojn pri via konto:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Laŭleĝa versio de TNoodle
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Eksporto de WCA-Rezultoj
+      #original_hash: f9fe9df
+      description: >-
+        En ĉi tiu paĝo ni proponas elŝuteblajn WCA-rezultojn en pluraj formatoj,
+        por ke vi povu uzi/analizi ilin ĝenerale. Ni kutime ĝisdatigos post ĉiu
+        konkursa semajnfino kiam la rezultoj pretas. La dosieroj estas numeritaj
+        kaj datitaj por ke vi povu vidi ĉu vi jam havas la plej novan version.
+      #original_hash: 4f59283
+      permalink: fiksligilo
+      file_formats:
+        #original_hash: b086d79
+        sql: 'SQL-instrukcioj, por importi en SQL-datumbazojn.'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Tab-disigitaj valoroj, por kalkultabeloj en OpenOffice.org, Excel,
+          ktp.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        La inkludita %{readme_filename} dosiero enhavas la uzkondiĉojn kaj
+        ĝeneralan priskribon (en la angla, ne tradukita):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Eksporto por programistoj
+      #original_hash: eba769a
+      description_html: >-
+        Sur ĉi tiu paĝo vi povas elŝuti la eksporton por programistoj de la WST
+        kiel SQL-dump. Detaloj troveblas ĉe %{github_link}.
+      #original_hash: a479c9c
+      download: Elŝuti
