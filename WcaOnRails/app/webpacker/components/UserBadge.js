@@ -53,7 +53,7 @@ function UserBadge({
   hideBorder = false,
   leftAlign = false,
 }) {
-  const classes = classnames('user-badge', badgeClasses, { senior, leader, leftAlign });
+  const classes = classnames('user-badge', badgeClasses, { senior, leader, 'left-align': leftAlign });
 
   const subtext = subtexts.length ? (
     <div className="subtext">
