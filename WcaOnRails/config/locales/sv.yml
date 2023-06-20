@@ -583,6 +583,8 @@ sv:
         paid_entry_fees: Betald
         #original_hash: bae7d5b
         status: Status
+        #original_hash: a6e8a0b
+        administrative_notes: Administrativa kommentarer
         #original_hash: 709a232
         name: Namn
         #original_hash: a6b9d69
@@ -1189,6 +1191,10 @@ sv:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Ytterligare kommentarer för hanteringen av den här anmälan. Dessa är
+          inte synliga för den tävlande.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1652,8 +1658,8 @@ sv:
       results_team: Results Team
       #original_hash: 4e7afeb
       results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Databas
       #original_hash: aee74b8
       new_post: Nytt inlägg
       #original_hash: 0d67445
@@ -2464,28 +2470,43 @@ sv:
       title: Anmälningsavgift
       #original_hash: d1569e6
       payment_successful: Din betalning lyckades och din anmälan bör stå som betald nedan.
+      #original_hash: 92dde77
+      payment_processing: 'Din betalning har bekräftats, men transaktionen är fortfarande pågående.'
+      #original_hash: 62d7351
+      button_text: Betala nu!
       hints:
         #original_hash: bf3a39e
         donation: >-
           Frivillig donation utöver anmälningsavgiften, som går till
           arrangörerna (för svenska tävlingar går dessa donationer till SveKub)
-        #original_hash: 16cf92d
-        card_information: >-
-          Din kortinformation når aldrig WCA:s hemsida. Den skickas säkert till
-          Stripe som hanterar betalningsprocessen och återkommer till oss.
+        #original_hash: f7fa263
+        payment_button: >-
+          Din betalningsinformation når aldrig WCA:s webbplats. Den skickas på
+          ett säkert sätt till Stripe som hanterar betalningsprocessen och
+          rapporterar tillbaka till oss.
       labels:
         #original_hash: 4de825f
         entry_fees: Anmälningsavgift
+        #original_hash: dc9d458
+        fees_paid: Betalat
+        #original_hash: cc632b5
+        fees_remaining: Återstående
         #original_hash: 2c09302
         donation: Donation
-        #original_hash: 184150d
-        card_information: Kortinformation
-        #original_hash: bc8091a
-        cardholder_name: Kortinnehavarens namn
         #original_hash: 919710d
         show_donation: >-
           Jag vill göra en extra frivillig donation till arrangörsteamet (för
           svenska tävlingar tillfaller donationerna SveKub)
+        #original_hash: 4930c06
+        payment_information: Betalningsinformation
+        #original_hash: de0fc95
+        payment_button: Betala avgifter med Stripe
+        #original_hash: f94d00f
+        ajax_error: WCA server-error
+        #original_hash: e62c56c
+        stripe_error: Stripe-error
+        #original_hash: 97f7359
+        subtotal: Summa
       alerts:
         #original_hash: a34940e
         not_a_number: Ange ett giltigt belopp.
@@ -2493,19 +2514,29 @@ sv:
         amount_too_low: >-
           Det totala beloppet måste vara minst de anmälningsavgifter som ska
           betalas.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Du håller på att betala minst dubbelt så mycket som krävs för din
+          anmälan. Bekräfta betalningen genom att trycka på OK.
       errors:
         #original_hash: 166d48c
         already_paid: Avgiften drogs inte eftersom anmälningsavgiften redan har betalats.
-        #original_hash: b2bc8ed
-        not_allowed: Du kan inte betala för den anmälan
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          "Payment intent" kunde inte hittas för att bekräfta på vår server.
-          Betalningsprocessen avbryts och ditt kort debiterades inte.
-        #original_hash: 63e0ec1
-        cardholder_name: Kontrollera kortinnehavarens namn.
-    #original_hash: 8607a87
-    payment_button_text: Betala avgiften med kort
+        #original_hash: f10c80c
+        not_allowed: Du kan inte betala för den anmälan.
+        #original_hash: a073600
+        stripe_failed: Var vänlig kontrollera Stripe-transaktionen
+        #original_hash: a32e40f
+        stripe_not_found: >-
+          Stripe rapporterade tillbaka ett transaktions-ID som inte kunde
+          hittas.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe rapporterade tillbaka en transaction secret som inte matchar
+          våra uppgifter.
+        #original_hash: 8d1a199
+        payment_reset: Betalningen avvisades av Stripe.
+        #original_hash: bcf6a93
+        payment_pending: Betalningen har inte genomförts ännu.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       För att göra anmälan snabbare i framtiden kan du välja dina favoritgrenar
@@ -2594,10 +2625,10 @@ sv:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Se till att alla icke-finalomgångar har ett specificerat villkor för
         vilka som går vidare.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Omgång %{round_number} i %{event} har en cutoff som är högre än
-        tidsgränsen, vänligen se till att cutoffen är lägre än tidsgränsen.
+        tidsgränsen, vänligen se till att cutoffen inte är högre än tidsgränsen.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Omgång %{round_number} i %{event} har en cutoff under 5 sekunder.
@@ -2945,7 +2976,7 @@ sv:
       #original_hash: 769bb19
       state: När
       #original_hash: 4e9f7a3
-      present: Nuvarande
+      present: Kommande
       #original_hash: 76eec76
       recent: Nyligen
       #original_hash: 405c12f
@@ -3291,8 +3322,6 @@ sv:
     cancelled_by_html: 'Ställdes in av %{name} %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Är du säker på att du vill ställa in tävlingen?
-    #original_hash: 9a42672
-    upload_results: Ladda upp resultaten
     #original_hash: 01de5ee
     post_results: Publicera resultaten
     #original_hash: b6513f1
@@ -3357,11 +3386,11 @@ sv:
         qualification_html: >-
           Kvalificeringstider måste uppnås på andra WCA-tävlingar för att få
           tävla.
-        #original_hash: 3b524fd
-        qualification_all_events_html: 'Deadline för att uppnå kvalificeringstider är <b>%{date}</b>.'
-        #original_hash: 0d791e9
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Kvalificeringstider måste vara uppnådda före <b>%{date}</b>.'
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
-          Deadline för att uppnå kvalificeringstider i %{events} är
+          Kvalificeringstider för %{events} måste vara uppnådda före
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
