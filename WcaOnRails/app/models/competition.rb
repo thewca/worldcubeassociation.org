@@ -1642,7 +1642,7 @@ class Competition < ApplicationRecord
                                 .includes(includes_associations)
                                 .to_enum
                                 .with_index(1)
-                                .select { |r, registrant_id| authorized || r.accepted? }
+                                .select { |r, registrant_id| authorized || r.accepted? || !r.is_competing? }
                                 .map do |r, registrant_id|
                                   managers.delete(r.user)
                                   r.user.to_wcif(self, r, registrant_id, authorized: authorized)
