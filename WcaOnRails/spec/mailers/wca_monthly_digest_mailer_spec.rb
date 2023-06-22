@@ -7,8 +7,8 @@ RSpec.describe WcaMonthlyDigestMailer, type: :mailer do
     let(:mail) { WcaMonthlyDigestMailer.send_weat_digest_content }
 
     it "renders the headers" do
-      expect(mail.to).to eq(["board@worldcubeassociation.org", "assistants@worldcubeassociation.org"])
-      expect(mail.reply_to).to eq(["board@worldcubeassociation.org", "assistants@worldcubeassociation.org"])
+      expect(mail.to).to eq(["assistants@worldcubeassociation.org"])
+      expect(mail.reply_to).to eq(["assistants@worldcubeassociation.org"])
       expect(mail.subject).to eq("WCA Monthly Digest Draft")
     end
   end
