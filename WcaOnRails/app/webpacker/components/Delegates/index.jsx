@@ -23,25 +23,16 @@ export default function Delegates({
   return seniorDelegates.map((seniorDelegate) => {
     const delegatesUnderSenior = [seniorDelegate, ...delegates
       .filter((user) => user.senior_delegate_id === seniorDelegate.id && user.delegate_status !== 'trainee_delegate')
-      .sort((user1, user2) => {
-        if (user1.region < user2.region) {
-          return -1;
-        } if (user1.region > user2.region) {
-          return 1;
-        } if (user1.name < user2.name) {
-          return -1;
-        } if (user1.name > user2.name) {
-          return 1;
-        }
-        return 0;
-      })];
+      .sort((user1, user2) => ((user1.region !== user2.region)
+        ? user1.region.localeCompare(user2.region)
+        : user1.name.localeCompare(user2.name)))];
     return (
       <div
         className="table-responsive"
         key={`region-${seniorDelegate.id}`}
       >
 
-        <Table className='delegates-table'>
+        <Table className="delegates-table">
           <Table.Header>
             <Table.Row>
               <Table.HeaderCell width={5}>{I18n.t('delegates_page.table.name')}</Table.HeaderCell>
@@ -52,13 +43,16 @@ export default function Delegates({
 
           <Table.Body>
             {delegatesUnderSenior.map((delegate) => (
-              <Table.Row className={`${dasherize(delegate.delegate_status)}`}
-                  key={delegate.id}>
+              <Table.Row
+                className={`${dasherize(delegate.delegate_status)}`}
+                key={delegate.id}
+              >
                 <Table.Cell>
                   <div style={{
                     display: 'flex',
                     alignItems: 'center',
-                  }}>
+                  }}
+                  >
                     <Button
                       href={`mailto:${delegate.email}`}
                       className="ui icon button"
