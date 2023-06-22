@@ -2,10 +2,6 @@
 
 <p>Here's the draft for this month digest (Please verify whether all the changes were informed to the WCA Board):</p>
 
-<% @teams = Team.unscoped.all %>
-
 <div><b>Changes in Teams/Committees/Councils</b></div>
 
-<% @teams.each do |team| %>
-  <% team.changes_in_team %>
-<% end %>
+<%= Team.changes_in_all_teams %>

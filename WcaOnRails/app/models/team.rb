@@ -220,6 +220,21 @@ class Team < ApplicationRecord
     super(options)
   end
 
+  def self.changes_in_all_teams
+    team_changes = []
+    all_teams = Team.unscoped.all
+    all_teams.each do |team|
+      current_team_changes = team.changes_in_team
+      if !current_team_changes.empty?
+        team_changes.push(current_team_changes)
+      end
+    end
+    if team_changes.empty?
+      team_changes.push("There are no changes to show.")
+    end
+    team_changes.join("\n")
+  end
+
   # rubocop:disable Metrics/CyclomaticComplexity
   # rubocop:disable Metrics/PerceivedComplexity
   def changes_in_team
