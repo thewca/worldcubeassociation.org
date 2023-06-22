@@ -1275,10 +1275,6 @@ class Competition < ApplicationRecord
     seconds_until / 60
   end
 
-  def announced_date_formatted
-    announced_at.strftime(" %F %H:%M:%S")
-  end
-
   def announced?
     announced_at.present? && announced_by.present?
   end
@@ -1923,10 +1919,10 @@ class Competition < ApplicationRecord
       resultsPosted: results_posted?,
       inProgress: in_progress?,
       dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
-      announcedDate: announced_date_formatted,
+      announcedDate: announced_at ? announced_at.strftime(" %F %H:%M:%S") : nil,
       venue: venue,
       url: url,
-      country_iso2: country_iso2.downcase,
+      country_iso2: country_iso2 ? country_iso2.downcase : nil,
       timeUntilRegistration: ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open),
       registration_status: registration_status,
     )
