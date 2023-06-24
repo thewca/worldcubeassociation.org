@@ -59,7 +59,7 @@ export default function Delegates({
                     />
                     {isEditVisible && (
                       <Button
-                        href={`mailto:${delegate.email}`}
+                        href={`users/${delegate.id}/edit`}
                         icon="edit"
                       />
                     )}
