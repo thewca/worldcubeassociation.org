@@ -113,7 +113,7 @@ RSpec.feature "Competition management" do
       expect(c).not_to be_nil
     end
 
-    scenario "cannot change id of short name from orga view" do
+    scenario "cannot change id of short name from organizer view" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       expect { fill_in "ID", with: "NewId2016" }.to raise_error(Capybara::ElementNotFound)
@@ -177,8 +177,8 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario "id and cellname changes for short comp name" do
-      competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionanmeshort2016", name: "competition name short 2016")
+    scenario "id and cellName changes for short comp name" do
+      competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionnameshort2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       fill_in "Name", with: "New Id 2016"
 
