@@ -20,7 +20,12 @@
     <%= alert :warning do %>
       <%= t '.pending_avatar_confirmation' %>
       <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
-        <%= render "shared/user_avatar", user: @user, show_pending: true, title: t('.edit_thumbnail'), break_cache: true %>
+        <%= react_component("UserAvatar", {
+          avatar: @user.pending_avatar,
+          size: "small",
+          title: t('.edit_thumbnail'),
+          breakCache: true
+        }, class: 'avatar-thumbnail') %>
       <% end %>
       <% if current_user.can_admin_results? %>
         <%= link_to t('.manage_pending'), admin_avatars_path %>
@@ -251,7 +256,7 @@
                 <%= react_component("UserAvatar", {
                   avatar: @user.avatar,
                   size: "small",
-                  title: "Click to edit thumbnail",
+                  title: t('.edit_thumbnail'),
                   breakCache: true
                 }) %>
               <% end %>
