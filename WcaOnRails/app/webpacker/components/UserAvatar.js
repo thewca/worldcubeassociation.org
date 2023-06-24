@@ -15,7 +15,7 @@ function UserAvatar({
   // The avatar thumbnail url is at thumb_url for officers but at thumb.url for team members.
   const thumbnailUrl = `${thumbUrl || thumb.url || url}${breakCache ? `?${Date.now() / 1000}` : ''}`;
 
-  if (!['small', 'medium', 'large'].includes(size)) {
+  if (!['tiny', 'small', 'medium', 'large'].includes(size)) {
     throw new Error(`Invalid size: ${size} must be one of 'small', 'medium', or 'large'`);
   }
 
