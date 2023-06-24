@@ -1,5 +1,8 @@
 <div class="wca-user">
-  <%= render "shared/user_avatar", user: user %>
+  <%= react_component("UserAvatar", {
+    avatar: user.avatar,
+    size: "small",
+  }, class: 'avatar-thumbnail') %>
   <div class="info">
     <div class="name"><%= user.name %></div>
     <% if user.wca_id %>
