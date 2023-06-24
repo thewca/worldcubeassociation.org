@@ -17,8 +17,8 @@ export default function Delegates({
     .filter((user) => user.delegate_status === 'senior_delegate')
     .sort((user1, user2) => user1.region.localeCompare(user2.region)), [delegates]);
 
-  // TO_VERIFY: I assume there are no cases where there are no delegates without
-  // senior delegate unless they are senior delegate
+  // NOTE: The UI currently assumes that the delegates always have a
+  // senior delegate unless they themselves are a senior delegate.
 
   return seniorDelegates.map((seniorDelegate) => {
     const delegatesUnderSenior = [seniorDelegate, ...delegates
@@ -55,17 +55,13 @@ export default function Delegates({
                   >
                     <Button
                       href={`mailto:${delegate.email}`}
-                      className="ui icon button"
-                    >
-                      <i className="envelope icon" />
-                    </Button>
+                      icon="envelope"
+                    />
                     {isEditVisible && (
-                    <Button
-                      href={`users/${delegate.id}/edit`}
-                      className="ui icon button"
-                    >
-                      <i className="edit icon" />
-                    </Button>
+                      <Button
+                        href={`mailto:${delegate.email}`}
+                        icon="edit"
+                      />
                     )}
                     <UserBadge
                       user={delegate}
