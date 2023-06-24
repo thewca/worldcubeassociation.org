@@ -1,19 +1,12 @@
 # frozen_string_literal: true
 
 class DelegateStatusChangeMailer < ApplicationMailer
-  def notify_board_and_assistants_of_delegate_status_change(user_whose_delegate_status_changed, user_who_made_the_change)
+  def notify_board_and_assistants_of_delegate_status_change(user_whose_delegate_status_changed, user_who_made_the_change, user_senior_delegate)
     I18n.with_locale :en do
       @user_whose_delegate_status_changed = user_whose_delegate_status_changed
       @user_who_made_the_change = user_who_made_the_change
-      if user_whose_delegate_status_changed.delegate_status
-        if user_whose_delegate_status_changed.delegate_status == "senior_delegate"
-          @user_senior_delegate = user_whose_delegate_status_changed
-        else
-          @user_senior_delegate = user_whose_delegate_status_changed.senior_delegate
-        end
-      else
-        @user_senior_delegate = User.find_by_id!(user_whose_delegate_status_changed.senior_delegate_id_before_last_save)
-      end
+      @user_senior_delegate = user_senior_delegate
+      @is_changed_by_senior_of_user = user_who_made_the_change.id == user_senior_delegate.id
       to = ["board@worldcubeassociation.org"]
       cc = ["assistants@worldcubeassociation.org", "finance@worldcubeassociation.org", user_who_made_the_change.email, @user_senior_delegate.email]
       mail(

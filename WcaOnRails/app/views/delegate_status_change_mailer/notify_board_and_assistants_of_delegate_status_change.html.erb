@@ -3,7 +3,7 @@
   <% new_status = @user_whose_delegate_status_changed.delegate_status_i18n || 'Registered Speedcuber' %>
   <%= @user_who_made_the_change.name %> has changed the Delegate status of <%= @user_whose_delegate_status_changed.name %> from <%= old_status %> to <%= new_status %>.
 </h1>
-<% if @user_who_made_the_change.name != @user_senior_delegate.name %>
+<% if !@is_changed_by_senior_of_user %>
   <h2 class="alert">
     Warning: <%= @user_who_made_the_change.name %> is not <%= @user_whose_delegate_status_changed.name %>'s Senior Delegate.
   </h2>
