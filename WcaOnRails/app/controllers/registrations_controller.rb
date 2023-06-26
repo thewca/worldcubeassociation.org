@@ -221,7 +221,8 @@ class RegistrationsController < ApplicationController
     registration_row[:wca_id]&.upcase!
     registration_row[:email]&.downcase!
     person_details = {
-      name: registration_row[:name],
+      first_name, last_name = registration_row[:name].split(' ', 2),
+      name = [first_name, last_name].compact.join(' '),
       country_iso2: Country.c_find(registration_row[:country]).iso2,
       gender: registration_row[:gender],
       dob: registration_row[:birth_date],
