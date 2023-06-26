@@ -147,14 +147,14 @@ en:
   #context: Words used to describe the requirement to advance to the next round
   advancement_condition:
     short:
-      ranking: "Top %{ranking}"
-      percent: "Top %{percent}%"
+      ranking: "Up to Top %{ranking}"
+      percent: "Up to Top %{percent}%"
       attempt_result:
         time: "%{round_format} < %{time}"
         moves: "%{round_format} < %{moves}"
         points: "%{round_format} > %{points}"
-    ranking: "Top %{ranking} advance to next round"
-    percent: "Top %{percent}% advance to next round"
+    ranking: "Up to Top %{ranking} advance to next round"
+    percent: "Up to Top %{percent}% advance to next round"
     attempt_result:
       time: "%{round_format} < %{time} advances to next round"
       moves: "%{round_format} < %{moves} moves advances to next round"
