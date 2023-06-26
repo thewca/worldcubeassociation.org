@@ -1193,7 +1193,7 @@ en:
       #context: when registration is accepted
       accepted:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} has been accepted"
+        mail_subject: "Registration Accepted: %{comp_name}"
         #context: "comp_name" contains the competition's name, and "here" is replaced by a link to edit the registration
         message_html: "Your registration for %{comp_name} has been accepted. As always, you can check the status of your registration %{here}."
         #context: "comp_name" contains the competition's name
@@ -1201,7 +1201,7 @@ en:
       #context: when registration is moved to waiting list
       pending:
         #context: "comp_name" contains the competition's name
-        mail_subject: "You have been moved to the waiting list for %{comp_name}"
+        mail_subject: "Registration Moved to Waitlist: %{comp_name}"
         #context: "comp_name" contains the competition's name
         moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
@@ -1212,7 +1212,7 @@ en:
       #context: when registration is deleted
       deleted:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} has been deleted"
+        mail_subject: "Registration Deleted: %{comp_name}"
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
