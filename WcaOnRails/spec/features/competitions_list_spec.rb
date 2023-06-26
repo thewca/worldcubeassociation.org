@@ -14,7 +14,7 @@ RSpec.feature "Competitions list" do
         expect(page.find("#competition-query-form #delegate")).to have_text(delegate.name)
       end
 
-      it "only competitions delegated by the given delegate are shown" do
+      it "only competitions delegated by the given delegate are shown", js: true do
         expect(page).to have_selector("#competitions-list .competition-info", count: 1)
       end
     end
