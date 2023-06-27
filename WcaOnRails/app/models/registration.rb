@@ -204,12 +204,10 @@ class Registration < ApplicationRecord
     {
       "wcaRegistrationId" => id,
       "eventIds" => events.map(&:id).sort,
-      "status" => if accepted?
+      "status" => if accepted? || !is_competing?
                     'accepted'
                   elsif deleted?
                     'deleted'
-                  elsif !is_competing?
-                    'noncompeting'
                   else
                     'pending'
                   end,
@@ -222,7 +220,7 @@ class Registration < ApplicationRecord
       "properties" => {
         "wcaRegistrationId" => { "type" => "integer" },
         "eventIds" => { "type" => "array", "items" => { "type" => "string", "enum" => Event.pluck(:id) } },
-        "status" => { "type" => "string", "enum" => %w(accepted deleted pending noncompeting) },
+        "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
         "administrativeNotes" => { "type" => "string" },
