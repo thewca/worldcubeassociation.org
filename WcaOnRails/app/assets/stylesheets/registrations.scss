@@ -4,7 +4,8 @@ table.registrations-table {
   td {
     white-space: nowrap;
     &.comments,
-    &.guests {
+    &.guests,
+    &.administrative-notes {
       max-width: 50px;
       overflow: hidden;
       text-overflow: ellipsis;
