@@ -71,7 +71,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id to invalid id" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as non admin 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId With Spaces"
       click_button "Update Competition"
@@ -84,7 +84,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "change competition id with validation error" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as non admin 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       fill_in "Name", with: "Name that does not end in a year but is long"
