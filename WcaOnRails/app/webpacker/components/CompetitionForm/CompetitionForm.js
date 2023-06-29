@@ -3,7 +3,7 @@
 import React, { useMemo } from 'react';
 import {
   Button,
-  Form,
+  Form, Message,
 } from 'semantic-ui-react';
 import { Alert } from 'react-bootstrap';
 import I18n from '../../lib/i18n';
@@ -32,7 +32,7 @@ import RegistrationTable from './RegistrationTable';
 import DuesEstimate from './DuesEstimate';
 import FormContext from './FormContext';
 import SeriesInput from './SeriesInput';
-import useSaveAction from '../../lib/hooks/useSaveAction';
+import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
 
 function CompVisibilitySettings({ competition, setFormData }) {
   const confirmedData = useFormInputState(setFormData, 'confirmed', competition);
@@ -116,20 +116,57 @@ function GuestsEnabledInput({ inputState }) {
   );
 }
 
-function ActionButtons({ competition, formData, save }) {
+function ActionButtons({
+  competition,
+  formData,
+  setError,
+}) {
   const url = competitionsNewCreateUrl;
 
   // Set the request payload to formData
   console.log(url);
 
   const submit = async () => {
-    save(url, { ...competition, ...formData }, (d) => console.log('Success', d), { method: 'POST' }, (e) => console.log('Error', e));
+    fetchWithAuthenticityToken(url, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ ...competition, ...formData }),
+    }).then((response) => {
+      response.json().then((data) => {
+        console.log(JSON.stringify(data));
+        setError(JSON.stringify(data));
+      });
+    });
   };
 
   return (
     <Button color="blue" type="button" onClick={submit}>
       {I18n.t(`competitions.competition_form.submit_${competition.persisted ? 'update' : 'create'}_value`)}
     </Button>
+  );
+}
+
+function ErrorMessage({ error }) {
+  if (!error) return null;
+
+  const content = Object.keys(error).map((key) => {
+    const fieldName = I18n.t(`activerecord.attributes.competition.${key}`, { defaultValue: key });
+    return (
+      <span>
+        {`${fieldName} ${error[key]}`}
+        <br />
+      </span>
+    );
+  });
+
+  return (
+    <Message
+      visible
+      error
+      content={content}
+    />
   );
 }
 
@@ -185,7 +222,14 @@ export default function CompetitionForm({
 
   const [formData, setFormData] = React.useState({});
 
-  const { save, saving } = useSaveAction();
+  const [error, setError] = React.useState({
+    country: ['must exist'],
+    name: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"],
+    registration_open: ['required'],
+    registration_close: ['required'],
+  });
+
+  const saving = false;
 
   const idData = useFormInputState(setFormData, 'id', competition);
   const nameData = useFormInputState(setFormData, 'name', competition);
@@ -284,6 +328,7 @@ export default function CompetitionForm({
     <FormContext.Provider value={formContext}>
       <code>{JSON.stringify(formData, null, 2)}</code>
       <Form>
+        <ErrorMessage error={error} />
         {competition.persisted && adminView && (
           <CompVisibilitySettings
             competition={competition}
@@ -465,7 +510,11 @@ export default function CompetitionForm({
 
         <hr />
 
-        <ActionButtons competition={competition} formData={formData} save={save} />
+        <ActionButtons
+          competition={competition}
+          formData={formData}
+          setError={setError}
+        />
       </Form>
     </FormContext.Provider>
   );

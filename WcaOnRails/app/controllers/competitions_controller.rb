@@ -698,7 +698,16 @@ class CompetitionsController < ApplicationController
   end
 
   def new_create
-    puts params.inspect
+    @competition = Competition.new(competition_params)
+
+    if @competition.save
+      render json: @competition
+    else
+      # Show id errors under name, since we don't actually show an
+      # id field to the user, so they wouldn't see any id errors.
+      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
+      render json: @competition.errors, status: :forbidden
+    end
   end
 
   private def confirming?
