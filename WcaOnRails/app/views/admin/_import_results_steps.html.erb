@@ -78,7 +78,7 @@
           <tbody>
           <% rounds_by_event = @competition.rounds.group_by(&:event) %>
 
-          <% @competition.events.sort_by(&:rank).each do |e| %>
+          <% @competition.events.select { |e| rounds_by_event.key?(e) }.sort_by(&:rank).each do |e| %>
             <% announced_event = false %>
 
             <% rounds_by_event[e].sort_by { |r| r.round_type.rank }.each do |r| %>
