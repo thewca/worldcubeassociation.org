@@ -90,13 +90,15 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def search(*models)
-    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
-    unless query
-      render status: :bad_request, json: { error: "No query specified" }
-      return
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+      unless query
+        render status: :bad_request, json: { error: "No query specified" }
+        return
+      end
+      result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
+      render status: :ok, json: { result: result }
     end
-    result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
-    render status: :ok, json: { result: result }
   end
 
   def posts_search
@@ -179,18 +181,15 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    sql_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.sql.zip")).sort!
-    tsv_zips = Dir.glob(Rails.root.join("../webroot/results/misc/*.tsv.zip")).sort!
+    sql_perma_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK
+    tsv_perma_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK
 
-    last_sql = File.basename(sql_zips.last)
-    last_tsv = File.basename(tsv_zips.last)
-    m = /WCA_export(\d+)_(.*).sql.zip/.match(last_sql)
-    date = Time.parse(m[2])
+    timestamp = Timestamp.find_by(name: DumpPublicResultsDatabase::TIMESTAMP_NAME)
 
     render json: {
-      export_date: date.iso8601,
-      sql_url: "#{root_url}results/misc/#{last_sql}",
-      tsv_url: "#{root_url}results/misc/#{last_tsv}",
+      export_date: timestamp&.date&.iso8601,
+      sql_url: "#{root_url}#{sql_perma_path.delete_prefix '/'}",
+      tsv_url: "#{root_url}#{tsv_perma_path.delete_prefix '/'}",
     }
   end
 

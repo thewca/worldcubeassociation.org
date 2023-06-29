@@ -362,6 +362,7 @@ en:
         comments: "Comments"
         paid_entry_fees: "Paid"
         status: "Status"
+        administrative_notes: "Administrative notes"
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
@@ -638,6 +639,7 @@ en:
         comments: ""
         guests: ""
         status: ""
+        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:
@@ -863,7 +865,8 @@ en:
       my_results: "My Results"
       statistics: "Statistics"
       multimedia: "Multimedia"
-      db_export: "Database Export"
+      db_results_export: "Results Export"
+      db_dev_export: "Developer Export"
       regulations: "Regulations"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
@@ -879,7 +882,7 @@ en:
       polls: "Polls"
       results_team: "Results team"
       results_admin: "Admin"
-      results_phpmyadmin: "phpMyAdmin"
+      results_database: "Database"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
@@ -1132,7 +1135,7 @@ en:
       undelete_banned: "is a banned competitor and cannot be undeleted"
       series_more_than_one_accepted: "You can only be accepted for one Series competition at a time."
       can_only_register_for_qualified_events: "You cannot register for events you are not qualified for."
-      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simutaneous competition, which location you will compete at)."
+      cannot_register_without_comment: "You must make a comment. Make sure to read the registration requirements what has to be included (e.g. in a FM simultaneous competition, which location you will compete at)."
     registration_info_people:
       #context: pluralization of "x first-timer(s)"
       newcomer:
@@ -1289,24 +1292,34 @@ en:
     payment_form:
       title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up paid below."
+      payment_processing: "Your payment has been confirmed, but the transaction is still pending."
+      button_text: "Pay now!"
       hints:
         donation: "Optional donation that will go only to the organization team"
-        card_information: "Your card information never reaches the WCA website. It is securely sent to Stripe which handles the payment process and gets back to us."
+        payment_button: "Your payment information never reaches the WCA website. It is securely sent to Stripe which handles the payment process and gets back to us."
       labels:
         entry_fees: "Registration fees"
+        fees_paid: "Paid"
+        fees_remaining: "Remaining"
         donation: "Donation"
-        card_information: "Card information"
-        cardholder_name: "Cardholder name"
         show_donation: "I would like to make an additional optional donation that will go only to the organization team"
+        payment_information: "Payment information"
+        payment_button: "Pay your fees with Stripe"
+        ajax_error: "WCA server error"
+        stripe_error: "Stripe error"
+        subtotal: "Subtotal"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
+        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed. Please confirm the payment by pressing OK."
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
-        not_allowed: "You can't pay for that registration"
-        intent_not_found: "We could not find the payment intent to confirm on our server. The payment process is aborted and your card was not charged."
-        cardholder_name: "Please check the cardholder name."
-    payment_button_text: "Pay your fees with card"
+        not_allowed: "You can't pay for that registration."
+        stripe_failed: "Please check the Stripe transaction."
+        stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
+        stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
+        payment_reset: "The payment was rejected by Stripe."
+        payment_pending: "The payment has not been completed yet."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1342,7 +1355,7 @@ en:
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
-      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is less than the time limit."
+      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is not greater than the time limit."
       cutoff_is_too_fast: "Round %{round_number} in %{event} has a cutoff less than 5 seconds. Please make sure that it is correct."
       cutoff_is_too_slow: "Round %{round_number} in %{event} has a cutoff more than 10 minutes. Please make sure that it is correct."
       time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
@@ -1351,7 +1364,7 @@ en:
       registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
       not_announced: "This competition is visible to the public but hasn't been announced yet."
       announced: "Successfully announced competition!"
-      cancelled: "This competition has been cancelled. Please checkout the information section for more details."
+      cancelled: "This competition has been cancelled. Please check the information section for more details."
       cancel_success: "Successfully cancelled competition!"
       cancel_failure: "Cannot cancel the competition."
       uncancel_success: "Successfully uncancelled competition!"
@@ -1369,15 +1382,16 @@ en:
       reg_opens_too_early: "Registration is set to start in less than the required 48 hours."
       tooltip_registered: "You are registered."
       tooltip_waiting_list: "You are currently on the waiting list."
-      confirmed_visible: "This competition is confirmed and visible"
-      confirmed_not_visible: "This competition is confirmed but not visible"
-      not_confirmed_visible: "This competition is not confirmed but visible"
-      not_confirmed_not_visible: "This competition is not confirmed and not visible"
+      tooltip_deleted: "Unfortunately your registration has been deleted. Please check your email for details, or contact the organiser(s)."
+      confirmed_visible: "This competition is confirmed and visible."
+      confirmed_not_visible: "This competition is confirmed but not visible."
+      not_confirmed_visible: "This competition is not confirmed but visible."
+      not_confirmed_not_visible: "This competition is not confirmed and not visible."
       stripe_connected: "You have now successfully connected your Stripe account and can now receive registration payments for this competition."
       stripe_disconnected_success: "Sucessfully disconnected the Stripe account."
       stripe_disconnected_failure: "There was an error with disconnecting the Stripe account."
       stripe_not_connected: "There was a problem and we could not connect your Stripe account."
-      championship_exists: "There is already a %{championship_type} in %{year}"
+      championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
     #context: on the "My competitions" page
@@ -1672,7 +1686,6 @@ en:
     uncancel: "Uncancel the competition"
     cancelled_by_html: "Cancelled by %{name} on %{date_time}"
     cancel_confirm: "Are you sure you want to cancel that competition?"
-    upload_results: "Upload the results"
     post_results: "Post the results"
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
     cancel_mistake: "Made a mistake?"
@@ -1704,8 +1717,8 @@ en:
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
-        qualification_all_events_html: "The deadline for setting qualification times is <b>%{date}</b>."
-        qualification_some_events_html: "The deadline for setting qualification times in %{events} is <b>%{date}</b>."
+        qualification_all_events_html: "Qualification times must be set before <b>%{date}</b>."
+        qualification_some_events_html: "Qualification times in %{events} must be set before <b>%{date}</b>."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"
@@ -2566,4 +2579,17 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
-
+  database:
+    results_export:
+      heading: "WCA Results Export"
+      description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
+      permalink: "permalink"
+      file_formats:
+        sql: "SQL statements, for import into SQL databases."
+        tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."
+      hint_readme_html: "The included %{readme_filename} file contains the terms of use and a general description (in English, not translated):"
+    developer_export:
+      heading: "WST Developer Export"
+      description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
+      #context: The button that is clicked to download the file
+      download: "Download"

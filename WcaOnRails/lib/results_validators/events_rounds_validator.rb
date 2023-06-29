@@ -13,34 +13,27 @@ module ResultsValidators
     MISSING_ROUND_RESULTS_ERROR = "There are no results for round %{round_id} but it is listed in the events tab. If this round was not held, please remove the round in the competition's manage events page."
     UNEXPECTED_COMBINED_ROUND_ERROR = "No cutoff was announced for '%{round_name}', but it has been detected as a cutoff round in the results. Please update the round's information in the competition's manage events page."
 
-    @@desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
+    @desc = "This validator checks that all events and rounds match between what has been announced and what is present in the results. It also check for a main event and emit a warning if there is none (and if 3x3 is not in the results)."
 
     def self.has_automated_fix?
       false
     end
 
-    def validate(competition_ids: [], model: Result, results: nil)
-      reset_state
-      # Get all results if not provided.
-      results ||= model.sorted_for_competitions(competition_ids)
-
-      associations = {
+    def competition_associations
+      {
         events: [],
         competition_events: {
           rounds: [:competition_event],
         },
       }
+    end
 
-      results_by_competition_id = results.group_by(&:competitionId)
+    def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        competition = competition_data.competition
+        results_for_comp = competition_data.results
 
-      competitions = Competition.includes(associations).where(id: results_by_competition_id.keys).to_h do |c|
-        [c.id, c]
-      end
-
-      results_by_competition_id.each do |competition_id, results_for_comp|
-        competition = competitions[competition_id]
-
-        check_main_event(competition, results_for_comp)
+        check_main_event(competition)
 
         check_events_match(competition, results_for_comp)
 
@@ -48,12 +41,11 @@ module ResultsValidators
           check_rounds_match(competition, results_for_comp)
         end
       end
-      self
     end
 
     private
 
-      def check_main_event(competition, results)
+      def check_main_event(competition)
         if competition.main_event
           if competition.main_event_id != "333"
             @warnings << ValidationWarning.new(:events, competition.id,

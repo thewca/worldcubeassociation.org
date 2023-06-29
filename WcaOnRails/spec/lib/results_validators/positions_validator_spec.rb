@@ -14,7 +14,7 @@ RSpec.describe ResultsValidators::PositionsValidator do
       [InboxResult, Result].flat_map { |model|
         [
           { competition_ids: [competition1.id, competition2.id], model: model },
-          { results: model.sorted_for_competitions([competition1.id, competition2.id]), model: model },
+          { results: model.where(competition_id: [competition1.id, competition2.id]), model: model },
         ]
       }
     }

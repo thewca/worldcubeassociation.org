@@ -5,8 +5,6 @@ module AuxiliaryDataComputation
     self.compute_concise_results
     self.compute_rank_tables
 
-    self.delete_php_cache # NOTE: this should go away together with the PHP code.
-
     self.delete_cached_results
   end
 
@@ -107,11 +105,6 @@ module AuxiliaryDataComputation
         end
       end
     end
-  end
-
-  def self.delete_php_cache
-    cache_files = Dir.glob(Rails.root.join("../webroot/results/generated/cache/*.cache"))
-    FileUtils.rm cache_files
   end
 
   def self.delete_cached_results

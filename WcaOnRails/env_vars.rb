@@ -3,13 +3,14 @@
 EnvVars = SuperConfig.new do
   if Rails.env.production?
     mandatory :SECRET_KEY_BASE, :string
-    mandatory :DATABASE_URL, :string
+    mandatory :DATABASE_HOST, :string
+    mandatory :DATABASE_PASSWORD, :string
     mandatory :SMTP_USERNAME, :string
     mandatory :SMTP_PASSWORD, :string
   end
 
   unless Rails.env.production?
-    mandatory :DISABLE_BULLET, :bool
+    mandatory :ENABLE_BULLET, :bool
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
@@ -40,6 +41,7 @@ EnvVars = SuperConfig.new do
   optional :RECAPTCHA_PRIVATE_KEY, :string, ''
   optional :NEW_RELIC_LICENSE_KEY, :string, ''
   optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
+  optional :STRIPE_WEBHOOK_SECRET, :string, ''
 
   mandatory :GOOGLE_MAPS_API_KEY, :string
   mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string

@@ -45,27 +45,6 @@ unless node.chef_environment.start_with?("development")
   end
 end
 
-html_format_envvars = {
-  "CONTENT_TYPE" => "text/html",
-  "CONTENT_TRANSFER_ENCODING" => "utf8",
-}
-init_php_commands = []
-init_php_commands << "#{repo_root}/scripts/cronned_results_scripts.sh"
-unless node.chef_environment.start_with?("development")
-  cron "cronned results scripts" do
-    minute '0'
-    hour '4'
-    weekday '*'
-
-    path path
-    mailto admin_email
-    environment html_format_envvars
-    user username
-    command init_php_commands.last
-  end
-end
-
-
 unless node.chef_environment.start_with?("development")
   cron "clear rails cache" do
     minute '0'
@@ -90,16 +69,15 @@ unless node.chef_environment.start_with?("development")
   end
 end
 
-# Run init-php-results on our first provisioning, but not on subsequent provisions.
-lockfile = '/tmp/php-results-initialized'
-init_php_commands.each do |cmd|
-  bash cmd do
-    code cmd
-    user username
-    not_if { ::File.exists?(lockfile) }
-  end
-end
+unless node.chef_environment.start_with?("development")
+  cron "Send WEAT the draft for monthly digest" do
+    minute '0'
+    hour '0'
+    day '1'
 
-file lockfile do
-  action :create_if_missing
+    path path
+    mailto admin_email
+    user username
+    command "(cd #{repo_root}/WcaOnRails; RACK_ENV=production bin/rake send_weat_digest_content:generate)"
+  end
 end

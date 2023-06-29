@@ -17,20 +17,6 @@
           </ul>
         <% end %>
       </li>
-      <li><%= link_to t('competitions.upload_results'), "/results/admin/upload_results.php?competitionId=#{@competition.id}" %></li>
-      <!-- TODO: This button should be integrated within the upload results process once it lives on the RoR side of the website -->
-      <li>
-        <%= button_to competition_post_results_path, class: 'btn', disabled: @competition.results_posted?, method: :post do %>
-          <%= t 'competitions.post_results' %>
-        <% end %>
-        <% if @competition.results_posted? %>
-          <ul>
-            <li>
-              <%= t 'competitions.results_posted_by_html', poster_name: User.find(@competition.results_posted_by).name, date_time: wca_local_time(@competition.results_posted_at) %>
-            </li>
-          </ul>
-        <% end %>
-      </li>
       <li>
         <%= button_to competition_cancel_path, class: 'btn btn-danger', disabled: !@competition.can_be_cancelled?, method: :post, data: { confirm: t('competitions.cancel_confirm') } do %>
           <%= t 'competitions.cancel' %>

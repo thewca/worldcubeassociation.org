@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController do
+RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as organizer" do
     let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
@@ -205,6 +205,11 @@ RSpec.describe RegistrationsController do
       expect(flash[:danger]).to include I18n.t('registrations.errors.undelete_banned')
     end
 
+    it "can edit administrative notes on registration" do
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq "admin notes"
+    end
+
     describe "with views" do
       render_views
       it "does not update registration that changed" do
@@ -347,6 +352,13 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.comments).to eq "new comment"
       expect(flash[:success]).to eq "Updated registration"
     end
+
+    it "cannot edit administrative notes on registration" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq ""
+    end
   end
 
   context "signed in as competitor" do
@@ -481,6 +493,13 @@ RSpec.describe RegistrationsController do
       registration = FactoryBot.create :registration, :accepted, competition: competition, user_id: user.id
       get :edit, params: { id: registration.id }
       expect(response).to redirect_to root_path
+    end
+
+    it "cannot edit administrative notes on registration" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq ""
     end
 
     it "cannot edit someone else's registration" do
@@ -816,15 +835,20 @@ RSpec.describe RegistrationsController do
       context "processes a payment" do
         before :each do
           sign_in organizer
-          card = FactoryBot.create(:credit_card)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
+          post :load_payment_intent, params: {
+            id: registration.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
             stripe_account: competition.connected_stripe_account_id,
           )
-          post :process_payment_intent, params: {
+          get :payment_completion, params: {
             id: registration.id,
-            payment_method_id: pm.id,
-            amount: registration.outstanding_entry_fees.cents,
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
           }
           @payment = registration.reload.registration_payments.first
         end
@@ -832,7 +856,7 @@ RSpec.describe RegistrationsController do
         it 'issues a full refund' do
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
           expect(refund.amount).to eq competition.base_entry_fee.cents
@@ -846,7 +870,7 @@ RSpec.describe RegistrationsController do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
           expect(refund.amount).to eq competition.base_entry_fee.cents / 2

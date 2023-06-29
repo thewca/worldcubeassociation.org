@@ -70,7 +70,9 @@
           <li class="divider"></li>
           <li><a href="https://statistics.worldcubeassociation.org/"><%= ui_icon('chart area') %> <%= t '.statistics' %></a></li>
           <li><a href="<%= media_path %>"><%= ui_icon('film') %> <%= t '.multimedia' %></a></li>
-          <li><a href="/results/misc/export.html"><%= ui_icon('download') %> <%= t '.db_export' %></a></li>
+          <li class="divider"></li>
+          <li><a href="<%= db_results_export_path %>"><%= ui_icon('download') %> <%= t '.db_results_export' %></a></li>
+          <li><a href="<%= db_dev_export_path %>"><%= ui_icon('computer') %> <%= t '.db_dev_export' %></a></li>
         </ul>
       </li>
       <li class="dropdown <%= Set['incidents', 'regulations', 'wdc'].include?(params[:controller]) ? 'active' : '' %>">
@@ -239,7 +241,7 @@
               </li>
               <li><%= link_to t('.results_admin'), admin_path %></li>
               <li><%= link_to t('.competitions'), competitions_path %></li>
-              <li><%= link_to t('.results_phpmyadmin'), '/results/admin/phpMyAdmin/' %></li>
+              <li><%= link_to t('.results_database'), '/results/database/' %></li>
             <% end %>
 
             <% if current_user.can_create_posts? %>

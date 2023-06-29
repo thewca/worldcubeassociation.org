@@ -214,23 +214,23 @@ ja:
       #original_hash: 0664a83
       percent: '上位%{percent}'
       attempt_result:
-        #original_hash: 482f137
-        time: '単発%{time}未満'
-        #original_hash: 3faa63e
-        moves: '単発%{moves}手未満'
-        #original_hash: c3133c2
-        points: '単発%{points}ポイント以上'
+        #original_hash: ac6a282
+        time: '%{round_format} < %{time}'
+        #original_hash: 45db130
+        moves: '%{round_format} < %{moves}'
+        #original_hash: 076911b
+        points: '%{round_format} > %{points}'
     #original_hash: 6e55337
     ranking: '上位%{ranking}名が次のラウンドに進出します。'
     #original_hash: 7ee969c
     percent: '上位%{percent}%が次のラウンドに進出します。'
     attempt_result:
-      #original_hash: b3c8a02
-      time: '単発%{time}未満の記録で次のラウンドに進出'
-      #original_hash: 07bca6c
-      moves: '単発%{moves}手未満で次のラウンドに進出'
-      #original_hash: 837083c
-      points: '単発%{points}ポイントを超える場合次のラウンドに進出'
+      #original_hash: 6173090
+      time: '%{time}未満の%{round_format}で次のラウンドに進出'
+      #original_hash: 581709d
+      moves: '%{moves}手未満の%{round_format}で次のラウンドに進出'
+      #original_hash: e9f0c92
+      points: '%{points}ポイントを超える%{round_format}で次のラウンドに進出'
   cutoff:
     #original_hash: cf458e7
     time:
@@ -254,6 +254,8 @@ ja:
     333fm: 1時間
     #original_hash: cc7d8bb
     333mbf: 1個あたり10分
+    #original_hash: da39a3e
+    333mbo: ''
   common:
     #original_hash: 70c07ec
     world: 世界
@@ -421,7 +423,7 @@ ja:
         #original_hash: 2e3ed8b
         staff_delegate_ids: WCA 代理人
         #original_hash: c0ddcd6
-        trainee_delegate_ids: フォーラム
+        trainee_delegate_ids: WCA 代理人候補
         #original_hash: 958562e
         organizer_ids: 主催者
         #original_hash: b37456c
@@ -460,12 +462,20 @@ ja:
         on_the_spot_registration: 会場申込について
         #original_hash: 69780b5
         on_the_spot_entry_fee_lowest_denomination: 会場申込の場合の参加費
+        #original_hash: 7e53b96
+        allow_registration_edits: 申し込み登録内容の編集
         #original_hash: efbdbab
         refund_policy_percent: キャンセル時返金率 (％)
         #original_hash: b332299
         refund_policy_limit_date: 返金可能なキャンセル期日
+        #original_hash: 16cf9a4
+        waiting_list_deadline_date: キャンセル待ちリストにいる競技者を繰り上げて承認できる締め切り日時
+        #original_hash: 99a9169
+        event_change_deadline_date: すでに登録済みの申込内容（参加種目など）を変更できる締切日時
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: 見学者の入場料
+        #original_hash: bb16247
+        free_guest_entry_status: 見学者や同伴者への対応
         #original_hash: 723cad9
         early_puzzle_submission: 競技の開始以前に特定の時点で、競技者のパズル提出を求める
         #original_hash: 78308cc
@@ -669,6 +679,14 @@ ja:
         article: 記事
         #original_hash: 82dabd0
         multimedia: マルチメディア
+    competition:
+      free_guest_entry_status:
+        #original_hash: 7e54323
+        unclear: 何も表示しない（あるいは、「その他の大会申し込み要件」の項目に記載する）
+        #original_hash: 694bce4
+        anyone: どなたでも無料で見学できます
+        #original_hash: 762c509
+        restricted: 見学は競技参加者の同伴者に限ります
   simple_form:
     #original_hash: 5397e05
     'yes': はい
@@ -736,9 +754,9 @@ ja:
         unconfirmed_wca_id: ''
         #original_hash: da39a3e
         wca_id: ''
-        #original_hash: d5ccc15
+        #original_hash: 81a76a3
         receive_delegate_reports: >-
-          あなたが準代理人、代理人候補、規則委員会、品質保証委員会のいずれかに属する場合、デフォルトの設定では代理人レポートを受け取る設定になっています。この設定変更後、反映にしばらく時間がかかることがあります。
+          あなたが準代理人、代理人候補、上級代理人、規則委員会、品質保証委員会のいずれかに属する場合、デフォルトの設定では代理人レポートを受け取る設定になっています。この設定変更後、反映にしばらく時間がかかることがあります。
         #original_hash: 0627e5c
         otp_attempt: 設定済みの携帯端末でワンタイムパスワードを確認するか、復旧コードを入力してください。
       competition:
@@ -815,16 +833,26 @@ ja:
         on_the_spot_registration: ''
         #original_hash: 8c4fdf8
         on_the_spot_entry_fee_lowest_denomination: 0 と入力した場合、「見学者は入場無料です。」と表示されます。
+        #original_hash: da39a3e
+        allow_registration_edits: ''
         #original_hash: 180b7b3
         refund_policy_percent: >-
           現在のところ返金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0
           と入力した場合、「キャンセル時の返金は行いません。」と表示されます。
         #original_hash: f64d853
         refund_policy_limit_date: 返金対応期限
+        #original_hash: 664db64
+        waiting_list_deadline_date: >-
+          キャンセル待ちリストにいる競技参加者を繰り上げ承認できる期限。もし返金にも期限を設けていれば、返金期限が先、繰り上げ期限はそれと同時か後の関係とする。
+        #original_hash: 75e6c1f
+        event_change_deadline_date: >-
+          参加種目や同伴者の人数など、いったん承認済みの登録内容でも実行委員に問い合わせることで変更を受け付けることができます。この期限は申込期間の終了時と同じか、あるいは終了後も一定の猶予を設けることが可能。このフィールドを空欄にした場合、大会当日に実際に試技をする直前まで変更可能なことになる。もし飛び込み参加可能な大会を企画する場合は空欄となるが、日本での前例はほとんどありません。
         #original_hash: 25a1324
         guests_entry_fee_lowest_denomination: >-
           現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
           と入力した場合、「見学者入場料は無料です。」と表示されます。
+        #original_hash: da39a3e
+        free_guest_entry_status: ''
         #original_hash: da39a3e
         early_puzzle_submission: ''
         #original_hash: 4e8488b
@@ -863,11 +891,6 @@ ja:
         document: >-
           本人確認のため、あなたの氏名と誕生日が英語で明記された公的証明書を添付する必要があります。（パスポートなどが該当。運転免許証などの日本語記載しかないものは不可）もし英語表記の証明書をお持ちでない場合、まず日本地域のDelegateにご相談ください。作業を代行致します。
       post:
-        #original_hash: 53c16eb
-        body: >-
-          Use the &lt;!-- break --&gt; tag to show a preview on the home page.
-          Any post on the home page will show all text before this divider. The
-          actual post will display the full body.
         #original_hash: da39a3e
         sticky: ''
         #original_hash: da39a3e
@@ -926,6 +949,8 @@ ja:
         wca_id: ''
         #original_hash: da39a3e
         incorrect_wca_id_claim_count: ''
+        #original_hash: da39a3e
+        person_wca_id: ''
       poll:
         #original_hash: da39a3e
         comment: ''
@@ -1030,6 +1055,11 @@ ja:
           'true': 会場申込を受け付ける
           #original_hash: 0f236df
           'false': 会場申込を受け付けない
+        allow_registration_edits:
+          #original_hash: 52a2f4a
+          'true': 承認済みの申し込み登録情報（参加種目や同伴者人数など）を変更したい場合は、申込期間内に実行委員あてに個別にご連絡ください。
+          #original_hash: 2cbb80e
+          'false': 承認済みの申し込み登録情報（参加種目や同伴者人数など）の変更はできません。
   mail_form:
     attributes:
       contact_form:
@@ -1102,16 +1132,6 @@ ja:
           otp_email:
             #original_hash: a20e037
             subject: あなたのワンタイムパスワード
-            #original_hash: f82488f
-            2fa_attempt: >-
-              You are attempting to authenticate on the WCA website. You have
-              two-factor authentication enabled and you just requested to be
-              sent a one-time password by email. Please find it below:
-            #original_hash: e27e540
-            disclaimer: >-
-              If you did not request that authentication code, please contact
-              the WST right away by replying to this email: you may have an open
-              session somewhere or your password may be compromized.
           #original_hash: 8c13694
           name: 二段階認証（2FA）
           #original_hash: d28c3b6
@@ -1119,8 +1139,6 @@ ja:
           options:
             #original_hash: 4f9dcb8
             app: 設定された二段階認証アプリケーションで生成されます（Authy、Google Authenticator等）
-            #original_hash: 34a7572
-            recovery: taken from the recovery codes generated when activating 2FA.
             #original_hash: eaee403
             email: ログイン時にメールにて送られています。
           #original_hash: 7ae99ae
@@ -1167,20 +1185,6 @@ ja:
           backup_codes_warning: バックアップコードは以下に表示されています。すぐに記録してください。これは暗号化され、再度表示することはできません。
           #original_hash: b5e3ad8
           email_auth_desc: ログイン時にワンタイムパスワードをメールにて発行することができます。
-          #original_hash: dd991ab
-          disable_section_title: Disable two-factor
-          #original_hash: 4569d81
-          disable_section_content: >-
-            The WST strongly advise you to not disable 2FA, but you can by
-            clicking the button below. Please note that if you reactivate 2FA
-            you will have to reconfigure your device(s).
-          #original_hash: ab1b77d
-          disabled_success: Successfully disabled two-factor authentication.
-          #original_hash: c36d556
-          disabled_failed: 'Couldn''t disable 2FA, please see errors below.'
-      destroy_other:
-        #original_hash: a768ea6
-        success: Successfully signed out of other devices.
     shared:
       links:
         #original_hash: ada2e9e
@@ -1211,21 +1215,7 @@ ja:
         help:
           #original_hash: 95c10ec
           https_info: ホストがlocalhostでない場合、HTTPSが必須です。
-          #original_hash: 62a0113
-          scopes_html: >-
-            Separate scopes with spaces. Leave blank to use the default
-            scope(s). See <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L2-L9"
-            target="_blank">here</a> for a list of supported scopes.
       scopes:
-        #original_hash: 1920e95
-        public: >-
-          Access your public data (name, WCA ID, gender, citizenship, and
-          profile picture)
-        #original_hash: d4003be
-        dob: Access your date of birth
-        #original_hash: 17aa24f
-        email: Access your email address
         #original_hash: e0d0654
         manage_competitions: これから予定されている主催大会を管理する
     devise:
@@ -1259,10 +1249,12 @@ ja:
       forum: フォーラム
       #original_hash: 3ad28c0
       teams: チーム、委員会、協議会
-      #original_hash: a979ffc
+      #original_hash: 7981fb3
       education: 研修資料
       #original_hash: a34b69f
       contact: お問い合わせ
+      #original_hash: 8e12c09
+      speedcubing_history: スピードキュービングの歴史と沿革
       #original_hash: 4fa8cc8
       tools: ツール
       #original_hash: 83fce83
@@ -1313,20 +1305,10 @@ ja:
       manage_users: ユーザー管理
       #original_hash: 12ab214
       delegate: 代理人で検索
-      #original_hash: 2f4bd74
-      panel: Panel
       #original_hash: db34e41
       polls: 投票
-      #original_hash: d3a928c
-      results_team: Results team
-      #original_hash: 4e7afeb
-      results_admin: Admin
       #original_hash: f158a5a
       results_phpmyadmin: phpMyAdmin
-      #original_hash: aee74b8
-      new_post: New Post
-      #original_hash: 0d67445
-      team_leader: Team leader
       #original_hash: 37b8fdc
       regional_organizations: 地域団体
       #original_hash: 6568fa0
@@ -1341,17 +1323,11 @@ ja:
       edit_profile: プロフィール編集
       #original_hash: d93d10f
       api: API
-      #original_hash: 5524aab
-      manage_app: Manage your applications
-      #original_hash: 0e8b212
-      manage_auth_app: Manage authorized applications
       #original_hash: acac109
       media_submission: メディア投稿
   homepage:
     #original_hash: 824d76b
     learn_more: もっと見る
-    #original_hash: d8f3ae6
-    title: Welcome to the World Cube Association
     #original_hash: d133986
     latest_news: 最新ニュース
     #original_hash: 06b01c4
@@ -1368,6 +1344,15 @@ ja:
       title: WCA大会
       #original_hash: 0ac88bc
       text_html: '世界中の大会スケジュールや結果を見てみましょう。また、まさに今行われている大会結果を%{wca_live_link}から生配信中です。'
+    merchandise:
+      #original_hash: 698cfc8
+      title: WCA 公式グッズ
+      #original_hash: 6403f2b
+      ad_new: New
+      #original_hash: 9ad68ce
+      text_html: Tシャツやパーカーなど、WCAの公式グッズをお買い求めいただけます。
+      #original_hash: b0fc6c4
+      link_title: もっと見る
     records:
       #original_hash: e51c552
       title: 世界記録とランキング
@@ -1477,8 +1462,8 @@ ja:
           の参加申し込みが24時間以内に開始されることをお知らせします。
         #original_hash: 2b93022
         not_accepted_html: すでに参加申し込み済みですが、まだ承認されていません。
-        #original_hash: 3724e7c
-        more_info_html: '<a href=%{competition_url}>大会ページ</a> をご確認ください。詳細な情報や参加申し込み要件が記載されています。'
+        #original_hash: d4087ee
+        more_info_html: '参加申込に関する詳細は<a href=%{competition_url}>WCA 大会ページ</a>をご確認ください。'
       results_presence_email:
         #original_hash: 7ce2558
         header: '%{competition}の結果がアップされました。'
@@ -1488,8 +1473,6 @@ ja:
         information_html: '%{result_link}より、あなたの全結果をご覧いただけます。'
         #original_hash: a585fca
         more_info_html: '%{preferences_link}より、メール通知設定を変更できます。'
-        #original_hash: 7594a32
-        regards_html: 'The WCA Results Team on behalf of %{managers}.'
     claim_wca_id:
       #original_hash: f28bf87
       title: WCA ID 連携
@@ -1506,6 +1489,10 @@ ja:
       #original_hash: f28bf87
       submit_value: WCA ID と連携する
     edit_avatar_thumbnail:
+      #original_hash: 4f76899
+      cdn_explanation: WCA プロフィールに登録したアイコン画像はクラウドに保存されるため、正しく反映されるまでにお時間がかかることがあります。
+      #original_hash: cc1d51b
+      cdn_warning: 登録から実際の反映までお時間を要することがあります。ご了承ください。
       #original_hash: 79f14eb
       current: '現在のプロフィール画像:'
       #original_hash: b42ba27
@@ -1549,12 +1536,14 @@ ja:
       your_thumbnail: 'サムネイル:'
       #original_hash: af18820
       edit_thumbnail: クリックでサムネイルの編集
-      #original_hash: cf65c6e
-      manage_pending: Manage pending avatars
       #original_hash: 2d2ae5d
       have_no_wca_id_html: 'WCA ID が連携されていません。大会に参加したことがある場合は、%{here} で WCA ID をアカウントと連携してください。'
       #original_hash: 29e25b5
       have_wca_id_html: 'あなたの WCA ID は %{link_id} です。'
+      #original_hash: bf654e1
+      account_is_special: >-
+        WCA IDと WCA アカウントが誤って連携しているのを見つけた場合は、お近くの WCA 代理人や WRT (WCA 競技結果チーム)
+        にお問い合わせください。
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
@@ -1642,10 +1631,6 @@ ja:
       must_have_a_change: 国名を変更してください。
       #original_hash: 012f032
       must_be_senior: 上級代理人でなくてはいけません
-      #original_hash: 2e582eb
-      must_not_be_present: must not be present
-      #original_hash: 5b4eac9
-      senior_has_delegate: cannot demote senior delegate with subordinate delegates
       #original_hash: 48653a9
       already_have_id: '既に WCA ID %{wca_id} が連携されているため、WCA ID の連携申請ができません'
       #original_hash: ec5db95
@@ -1692,12 +1677,11 @@ ja:
       already_assigned_html: >-
         WCA ID %{link_id} は既に別のアカウントと連携されています。これが誤りと思われる場合は <a
         href='%{link_delegate}' target='_blank'>WCA 代理人</a>にご連絡ください。
-      #original_hash: d26bfdc
-      missing_dob_html: 'WCA ID %{link_id} に生年月日が登録されていません。'
-      #original_hash: 5be6803
-      contact_results_team_html: >-
-        この問題を解決するために、<a href='mailto:results@worldcubeassociation.org'
-        target='_blank'>WCA 競技結果チーム</a> にお問い合わせください。
+      #original_hash: 498dc1e
+      missing_dob_html: >-
+        あなたのWCA ID%{link_id} には誕生日が登録されていません。<a
+        href="%{dob_form_path}">こちらのフォームより</a> WCA
+        競技結果チームにご連絡ください。方法がわからなければお近くの WCA 代理人にお問い合わせください。
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id} は存在しません'
   registrations:
@@ -1767,9 +1751,6 @@ ja:
       imported: 参加申込データをインポートしました。
       #original_hash: 3614fd1
       added: 参加申込情報を追加しました。
-    edit_registration:
-      #original_hash: 2d15eae
-      title: '%{person} for %{comp}'
     mailer:
       #original_hash: 72e2180
       regards_html: '%{people}'
@@ -1817,6 +1798,8 @@ ja:
           registrations_full: 参加申し込みが定員に達したため。
           #original_hash: 0d4cce9
           multiple_registrations: 複数回申し込みを行ったため。
+          #original_hash: 70b1e2c
+          competition_canceled: この大会は中止となりました。
     list:
       #original_hash: 8b7631c
       title: '%{comp} の参加申し込み一覧'
@@ -1851,6 +1834,8 @@ ja:
         with_stripe: に支払い済み
       #original_hash: ce53c71
       payment_requested_on: '支払い申請日時: %{date}'
+      #original_hash: f5b1b34
+      payment_completed_on: '%{date}　に支払い済み'
       #original_hash: b25928c
       total: 合計
       #original_hash: df036fe
@@ -2017,12 +2002,16 @@ ja:
       not_visible: この大会は非公開です。
       #original_hash: c1d4926
       name_too_long: 大会名が 32 文字を超えています。短い名前が好ましいので変更してください。
+      #original_hash: af27396
+      id_starts_with_lowercase: 大会 ID のアルファベットが小文字から始まっています。頭文字は大文字にしてください。
       #original_hash: 1a20fae
       must_have_events: 大会内容を確定する前に 1 個以上の競技種目を追加してください。
       #original_hash: a3aea56
       schedule_must_match_rounds: 各種目は少なくとも1ラウンドあり、またスケジュールはすべてのラウンドを含むことを確認してください。
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: 次ラウンドへの進出基準を明記してください。（決勝ラウンドを除く）
+      #original_hash: b73c67a
+      cutoff_is_greater_than_time_limit: 'エラー　%{event} 競技の  %{round_number} ラウンドで、カットオフが制限タイムよりも厳しく設定されています。'
       #original_hash: e390250
       create_success: 大会が新規作成されました！
       #original_hash: ba067f0
@@ -2162,6 +2151,11 @@ ja:
         までに申込みをキャンセルした場合、参加費の%{refund_policy_percent}が払い戻されます。
       #original_hash: 4aca553
       no_refunds: キャンセル時の返金は行いません。
+      #original_hash: b016d2f
+      waiting_list_deadline_html: >-
+        競技参加者が定員に達した場合でも、%{waiting_list_deadline}までにキャンセルがあればキャンセル待ちの方から先着順で繰り上げ承認されます。
+      #original_hash: 14c5699
+      event_change_deadline_html: 'すでに承認済みの登録内容（参加種目など）の変更を希望する場合、%{event_change_deadline}までに実行委員会にご連絡ください。'
       #original_hash: cf7be5d
       on_the_spot_registration_fee_html: '会場申し込みを基本参加費%{on_the_spot_base_entry_fee}にて受け付けます。'
       #original_hash: 1637bea
@@ -2170,8 +2164,9 @@ ja:
       no_on_the_spot_registration: 会場申込は受け付けません。
       #original_hash: 4df139d
       guests_pay: '見学者は入場料%{guests_base_fee}をお支払いください。'
-      #original_hash: b6c863e
-      guests_free: 見学者の入場は無料です。
+      guests_free:
+        #original_hash: 573eeb7
+        anyone: 見学者の入場は無料です。
       #original_hash: 97a31ee
       click_to_display_requirements_html: 'この大会は終了しています。 参加申し込み要件の表示は%{link_here}。'
       #original_hash: ff19a74
@@ -2199,35 +2194,6 @@ ja:
       average: average
       #original_hash: 083c83e
       mean: 平均
-      #original_hash: 22bee3a
-      result_sentence: 'with %{a_win_by_word} of %{result}'
-      #original_hash: 6c3b236
-      winner: '%{winner} won %{result_sentence} in the %{event_name} event.'
-      #original_hash: ec7f18a
-      first_runner_up: '%{first_runner_up} finished second (%{first_runner_up_result})'
-      #original_hash: cffa50a
-      and: and
-      #original_hash: 67d285c
-      second_runner_up: '%{second_runner_up} finished third (%{second_runner_up_result}).'
-      records:
-        #original_hash: 0658e11
-        wr: World records
-        #original_hash: 9d940bb
-        afr: African records
-        #original_hash: 56c95a8
-        asr: Asian records
-        #original_hash: 4cf3c13
-        ocr: Oceanian records
-        #original_hash: 1b9111e
-        er: European records
-        #original_hash: d26cf99
-        nar: North American records
-        #original_hash: 270c007
-        sar: South American records
-      #original_hash: 43d56f3
-      regional_single_record: '%{event_name} %{result} (single)'
-      #original_hash: 2444261
-      regional_average_record: '%{event_name} %{result} (average)'
       #original_hash: 8eda7ac
       bookmark: この大会をブックマークする
       #original_hash: 4dfea97
@@ -2237,6 +2203,8 @@ ja:
     index:
       #original_hash: db98a68
       title: 大会一覧
+      #original_hash: f483b9c
+      disclaimer: 世界的な新型コロナウイルス感染症 (COVID-19) の影響により、多くの国と地域でWCA大会の開催が困難な状況となっています。
       #original_hash: 6a72085
       all_events: 全種目
       #original_hash: 6d76b81
@@ -2265,10 +2233,6 @@ ja:
       by_announcement: 公表日の順
       #original_hash: b3946b2
       sort_by_announcement: 告知された日付順で並び替える
-      #original_hash: 3f66052
-      from_date: From
-      #original_hash: ae79ea1
-      to_date: To
       #original_hash: 52c30f8
       past_from: '%{year} 年の大会'
       #original_hash: 7cff459
@@ -2362,10 +2326,6 @@ ja:
       confirmed_but_not_visible_html: 'この大会の概要は確定済ですが未公開です。公開するには%{contact}に連絡してください。'
       #original_hash: e94cba8
       is_visible: この大会は公開済みです。内容の変更は公開情報に反映されます。
-      #original_hash: 1039850
-      pending_confirmation_html: >-
-        Fill in all the fields and make your Delegate click 'Confirm' when
-        you're ready for the %{contact} to approve this competition.
       #original_hash: 8966fd0
       submit_create_value: 大会を新規作成する
       #original_hash: 40b0dfd
@@ -2424,8 +2384,6 @@ ja:
       span_too_many_days: '%{max_days} 間を超える大会は開催できません。'
       #original_hash: cdcd288
       invalid_currency_code: 通貨コードが不適切です
-      #original_hash: 902a278
-      advancement_condition_must_be_present_for_all_non_final_rounds: must have an advancement condition to all non final rounds.
     new:
       #original_hash: 1208df7
       create_competition: 大会新規作成
@@ -2483,30 +2441,10 @@ ja:
       limit: 定員
       #original_hash: 855bd26
       competitors: 競技者
+      #original_hash: c5497bc
+      events: 種目
     #original_hash: 06b01c4
     announcements: 告知
-    #original_hash: a2b80b0
-    post_announcement: Announce the competition
-    #original_hash: b462eac
-    announced_by_html: 'Announced by %{announcer_name} on %{date_time}'
-    #original_hash: 375e17f
-    cancel: Cancel the competition
-    #original_hash: 7628a51
-    uncancel: Uncancel the competition
-    #original_hash: 9122a6c
-    cancelled_by_html: 'Cancelled by %{name} on %{date_time}'
-    #original_hash: 25e68c3
-    cancel_confirm: Are you sure you want to cancel that competition?
-    #original_hash: 9a42672
-    upload_results: Upload the results
-    #original_hash: 01de5ee
-    post_results: Post the results
-    #original_hash: b6513f1
-    results_posted_by_html: 'Posted by %{poster_name} on %{date_time}'
-    #original_hash: a6b5efe
-    cancel_mistake: Made a mistake?
-    #original_hash: 0fb43d5
-    note_before_cancel: 'Note: only confirmed competitions can be cancelled.'
     show:
       #original_hash: b0fe391
       general_info: お知らせ
@@ -2532,10 +2470,6 @@ ja:
         cumulative_one_round_html: '%{cumulative_time_limit}が採用される場合があります (%{regulation_link}参照)。'
         #original_hash: c6190b6
         cumulative_across_rounds_html: '%{cumulative_time_limit}がラウンドをまたいで採用される場合があります (%{guideline_link}参照)。'
-        #original_hash: e8d17df
-        cutoff_html: >-
-          The result to beat to proceed to the second phase of a cutoff round
-          (see %{regulation_link}).
         #original_hash: f571a30
         format_html: >-
           競技形式は、計測結果をどう計算して順位を決定するのかを決めたものです。競技形式の一覧は%{link_to_9b}をご覧ください。(Ao5 /
@@ -2622,6 +2556,8 @@ ja:
         register: 申し込む
         #original_hash: 855bd26
         competitors: 参加者一覧
+        #original_hash: c4622c3
+        scrambles: スクランブル
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA プロフィール
@@ -2631,6 +2567,18 @@ ja:
       round: ラウンド
       #original_hash: 709a232
       name: 名前
+      rank:
+        #original_hash: d4840ff
+        national: 国内ランキング
+        #original_hash: ca3ff98
+        continent: 大陸別ランキング
+        #original_hash: f6bcce7
+        world: 世界ランキング
+    scrambles_table:
+      #original_hash: 171a060
+      group: グループ
+      #original_hash: b7126cd
+      scramble: スクランブル
   competition_tabs:
     headers:
       #original_hash: 2a4d562
@@ -2863,12 +2811,6 @@ ja:
       title: 生年月日変更申請フォーム
       #original_hash: 8a4ced5
       description: WCA データベースに登録されている生年月日と正しい生年月日が異なる場合にこのフォームをご利用ください。
-      #original_hash: 0ac13b9
-      important_message_html: >-
-        <span class="text-danger">IMPORTANT</span>: Attach a picture of a
-        <u>legal document</u> (identity card, driver license, passport...)
-        showing your name AND date of birth; feel free to blur-out/obfuscate any
-        other personal data on the identification.
       #original_hash: 19c17ec
       submit: 申請する
     messages:
@@ -3090,11 +3032,9 @@ ja:
       年ごとに、我々は真に世界チャンピオンを決めるための大会を認定しています。これらのイベントには十分なボランティアスタッフによる非常に綿密な計画、会場確保のための支出、および必要な準備を求めています。</p>
     #original_hash: 1aa5344
     contributing_title: ご支援いただくには
-    #original_hash: e64beb7
+    #original_hash: 538a82f
     contributing_content_html: >-
-      クレジットカードによる寄付は、<a
-      href="https://www.nfggive.com/guidestar/82-3825954">Guidestar</a>より受け付けております。小切手の場合の宛先は以下の通りです
-      :
+      クレジットカードによる寄付は、%{here_credit}より受け付けております。ペイパルによる寄付は、%{here_paypal}より受け付けております。小切手の場合の宛先は以下の通りです:
     #original_hash: 2af9b71
     tax_deductible_note: 寄付はアメリカ合衆国内では課税控除対象です。
     #original_hash: 6026d35
@@ -3259,6 +3199,9 @@ ja:
       see_link_html: '(参照: %{link})'
       #original_hash: 5b01fcc
       members_html: すべての競技者は、最初に参加する WCA 公式大会で <strong> WCA メンバー</strong> になります。
+  speedcubing_history:
+    #original_hash: 431e667
+    title: WCA とスピードキュービングの沿革
   documents:
     #original_hash: 687c828
     title: 資料
@@ -3276,19 +3219,8 @@ ja:
     codeofethics: 倫理規程
     #original_hash: 2643980
     codeofconduct: 行動規範
-  education:
-    #original_hash: 41701c2
-    title: WCA Educational Documents
-    #original_hash: 081d65d
-    description: >-
-      The WQAC has published several documents for the community, you can
-      download them below.
-    #original_hash: d0a3812
-    competitor_tutorial: Competitor tutorial
-    #original_hash: 5ca0558
-    certificates: WCT's certificate templates
-    #original_hash: f580987
-    orga_guidelines: Organizer guidelines
+    #original_hash: 4f05e8f
+    finances: 財務
   delegates_page:
     #original_hash: d8fd3e4
     title: WCA 代理人
@@ -3434,112 +3366,6 @@ ja:
     wac:
       #original_hash: fb6cd86
       info_html: WCA コミュニティと WCA スタッフの間の意見交換の場の設置・維持に対し責任を負います。
-  score_tools:
-    #original_hash: 4fc2133
-    title: Software tools for WCA competitions
-    #original_hash: 6d2fe37
-    wca_icon_text: Developed and maintained by the WST
-    intro:
-      #original_hash: 0c5fab5
-      desc: >-
-        This page is a non exhaustive list of tools which are known to be used
-        to help with the organization of WCA competitions.
-      #original_hash: 479b542
-      disclaimer: >-
-        Not all tools on that page are maintained by the WST: it's definitely
-        fine! We don't have the manpower to manage all the WCA-related software
-        out there :)
-      #original_hash: 80f97b9
-      used: >-
-        All the programs on this list have been used during real WCA
-        competitions and integrate with the WCA website: they let you sign in
-        with your WCA account to be able to import (and sometimes update) your
-        upcoming competitions data. For each of them the maintainer(s) will be
-        clearly written.
-    before:
-      #original_hash: 9850344
-      title: Before the competition
-      #original_hash: 576e2f4
-      desc: >-
-        Managing competitors registrations can be done directly on the WCA
-        website. Since managing groups and staff manually can be time-consuming,
-        you may want to consider using one of the tools below.
-    during:
-      #original_hash: 9934200
-      title: During the competition
-      #original_hash: 2b0a6f6
-      desc: >-
-        You will find here tools that let you manage the results of the
-        competition while it's going on.
-    after:
-      #original_hash: d81b949
-      title: After the competition
-      #original_hash: b898460
-      desc: >-
-        While results validation occurs right there on the website, you will
-        have to use some tool to assign scrambles generated by TNoodle to the
-        actual results submitted to the WCA website.
-    tools:
-      age:
-        #original_hash: 4aaae5b
-        title: AGE
-        #original_hash: 2e4832d
-        description: >-
-          Tool for generating and editing groups/task assignments for WCA
-          competitions
-      certificates:
-        #original_hash: b3e4eb0
-        title: Certificates
-        #original_hash: f1a0731
-        description: Print certificates for WCA competitions using WCA Live
-      groupifier:
-        #original_hash: 8f55355
-        title: Groupifier
-        #original_hash: 24d4736
-        description: >-
-          Task and group management tool for WCA competition organizers. Among
-          the main features you will find: sorting competitors by rankings,
-          assigning tasks (judging, scrambling), deciding how many scrambles are
-          needed, generating score sheets, personal sheets, and summaries...
-          Check out the website to find out more.
-      scorecards:
-        #original_hash: aa1b64d
-        title: Scorecards
-        #original_hash: 2b8e373
-        description: Print scorecards for WCA competitions using WCA Live
-      tnoodle:
-        #original_hash: ba336a1
-        title: TNoodle (Scrambles)
-        #original_hash: 0a38b22
-        description: >-
-          TNoodle is the official scramble program which is used for WCA
-          competitions. It is typically used by WCA Delegates prior to WCA
-          competitions, but its user interface also allows anyone to generate
-          any kind of scrambles for all WCA events.
-      live:
-        #original_hash: c66444f
-        title: WCA Live
-        #original_hash: f122015
-        description: >-
-          Platform for running WCA competitions and sharing live results with
-          the world.
-      nightmare:
-        #original_hash: eebde3b
-        title: Results spreadsheet
-        #original_hash: 466f4c2
-        description: >-
-          Sometimes things happen... If you don't have network access, you will
-          have to use the good old spreadsheet.
-      matcher:
-        #original_hash: cc59bc9
-        title: Scrambles Matcher
-        #original_hash: a352bd1
-        description: >-
-          Can be used to assign scrambles generated by TNoodle to results.
-          Import results from the WCA website (when using WCA Live), a
-          spreadsheet, or a standalone WCIF file. Import scrambles from one or
-          more TNoodle json file(s). Export results to the appropriate format
-          for WCA submission.
   logo:
     #original_hash: c72c969
     title: WCA ロゴ
@@ -3569,101 +3395,22 @@ ja:
     title: WCA Workbook Assistant
     #original_hash: a7c307f
     download: WCA Workbook Assistant をダウンロードする
-    #original_hash: cf1b916
-    last_update: Last update
-    #original_hash: feece00
-    version_history: version history
     #original_hash: 8f3f4c0
     header: WCA 送信前の結果・スクランブルの処理のしかた
-    step1:
-      #original_hash: c0450b1
-      title: 'Step 1: Open the workbook with the results'
-      #original_hash: 656d70d
-      content_html: >-
-        Open the workbook using the <em>Open...</em> button or by dragging the
-        workbook file and dropping it on the application window.
-    step2:
-      #original_hash: 3ad9881
-      title: 'Step 2: Add the TNoodle scrambles'
-      #original_hash: 080acc0
-      content_html: >-
-        Add the TNoodle scrambles using the <em>Add...</em> button or by
-        dragging the TNoodle file and dropping it on the application window.
-        Make sure you use either the .zip file  or the .json file generated by
-        TNoodle.
-      #original_hash: 6cc90b8
-      content2_html: >-
-        You can add multiple scramble files in case the scrambles where
-        generated in parts or extra scrambles had to be generated during the
-        competition.
     step3:
-      #original_hash: b2d01b3
-      title: 'Step 3: Match the scrambles with the results'
       #original_hash: 36383b1
       content_html: >-
         WCA Workbook Assistant
         は開催されたラウンドのスクランブルを自動的に紐付けます。複数のスクランブルファイルが生成された場合など、手動での選別が必要なことがあります。
-      #original_hash: e869c1e
-      content2_html: >-
-        Manually selecting scrambles can be done by double clicking the
-        <em>Scrambles</em> cell in the sheet overview panel.
-      #original_hash: 8f4fdfd
-      content3_html: >-
-        It is only possible to select one round from the scramble files for each
-        round for which there are results. If a situation arises where scrambles
-        for a single round were generated as separate rounds in TNoodle, you can
-        use the <em>Edit groups...</em> button to edit the groups in the
-        scramble files and move them from one round to another or delete them.
-      #original_hash: 94353f2
-      content4_html: >-
-        In this example, an extra set scrambles was generated to have two groups
-        for the first round of skewb instead of one group.
-      #original_hash: 68c5b18
-      content5_html: >-
-        The scrambles for the additional group can be dragged and dropped on the
-        round that was generated originally. This moves the two groups together
-        in one round.
     step4:
-      #original_hash: ed940d2
-      title: 'Step 4: Fix any errors reported by the application'
-      #original_hash: df2cf58
-      content_html: >-
-        The results are checked for data entry mistakes. Rounds that have errors
-        will be marked with a red icon in the sheet overview panel.
-      #original_hash: 7fbf6b8
-      content2_html: >-
-        When selecting a sheet with errors in the sheet overview panel, the
-        application will list the details in the validation errors panel on the
-        bottom left.
       #original_hash: 0600502
       content3_html: >-
         誤りは、Workbook を表計算ソフトで開いて編集・保存することで修正できます。修正済みの Workbook は、 WCA Workbook
         Assistant 上で <em>Refresh</em>
         ボタンを押すことで読み込むことができます。これは競技結果のみを再読み込みし、追加されたスクランブルなど他の変更は保持されます。
     step5:
-      #original_hash: 536ec4d
-      title: 'Step 5: Select the competition ID'
-      #original_hash: 5aeb5bd
-      content_html: >-
-        Select the correct competition ID by clicking the <em>Select...</em>
-        button next to the <em>Competition ID</em> field.
-      #original_hash: 3acf7d0
-      content2_html: A dialog will show up with a list of competitions to choose from.
       #original_hash: ceeb6fe
       content3_html: 大会名または WCA 代理人の名前の一部を入力することでフィルターできます。
-      #original_hash: 5ca74eb
-      content4_html: >-
-        To start off with, only competitions that took place less than one week
-        ago or that will take place less than one week in the future will be
-        shown. If you need to select a competition outside of this time window,
-        deselect <em>Only show current competitions</em>.
-    step6:
-      #original_hash: 52bb1f6
-      title: 'Step 6: Export the results data to JSON'
-      #original_hash: 6bfee23
-      content_html: >-
-        Save the results data to a JSON file using the <em>Export results
-        JSON...</em> button on the bottom right.
     step7:
       #original_hash: 09fa37d
       title: 'Step 7 : 大会結果 JSON ファイルを WCA に送信する'
@@ -3674,8 +3421,6 @@ ja:
         に送信してください
   relations:
     relation:
-      #original_hash: 6519fe1
-      title: Relations
       #original_hash: 69ba020
       find_relations: キューバー同士のつながりを探してみよう
       #original_hash: 5d6056d
@@ -3692,8 +3437,6 @@ ja:
     index:
       #original_hash: db98a68
       competitions: 大会
-      #original_hash: b37554f
-      people: People
       #original_hash: 6db75ea
       advanced_search: 詳細検索
       #original_hash: a0ca0c3
@@ -3783,67 +3526,9 @@ ja:
       各国語訳の追加・更新に興味がおありでしたら、<a
       href="https://github.com/thewca/wca-regulations-translations#translation-instructions">GitHubの翻訳レポジトリのチュートリアル</a>をご覧ください（日本語版については、<a
       href="mailto:info@speedcubing.or.jp">スピードキュービングジャパン</a>にご連絡ください）。
-  full_organizer_guidelines:
-    #original_hash: 5d602df
-    description: >-
-      Welcome to the WQAC’s collection of Organizer Guidelines. If you’re
-      considering being an organizer then it is highly recommended that you read
-      these documents. They have been divided into essential and highly
-      recommended documents. Make sure you are familiar with the information
-      given as this will allow you to run a high-quality and enjoyable
-      competition!
-    #original_hash: e6f7d36
-    disclaimer_html: >-
-      <strong>Disclaimer</strong>: The WCA does not organize competitions. As an
-      organizer of a WCA sanctioned competition you <strong>must not</strong>
-      sign anything on behalf of the WCA. You should try reaching out to a
-      relevant regional or national cubing association who do organize or assist
-      with organizing competitions.
-    essential:
-      #original_hash: 44bd0ba
-      description: Essential documents
-      #original_hash: 1cf87ad
-      finding-venue: Finding a venue
-      #original_hash: 3ce0d9c
-      orga-team-delegate: Creating your organization team and approaching a Delegate
-      #original_hash: d3c693b
-      budget: Budgeting a competition
-      #original_hash: b1429a7
-      schedule: Scheduling
-      #original_hash: beea57d
-      checklist: Competition checklist
-      #original_hash: 9defcf1
-      registration: Handling registration
-      #original_hash: e298a56
-      venue-setup: Venue setup
-      #original_hash: 2b6a5dd
-      work-during-comp: Organizer work during the competition
-    recommended:
-      #original_hash: 6b843f3
-      title: Recommended documents
-      #original_hash: bfbd4bb
-      staff: Assigning staff
-      #original_hash: c346846
-      emails: Pre-competition email structure
-      #original_hash: 3212cc7
-      running-systems: Running systems
-      #original_hash: 2b31c89
-      new-competitors: Attitude to new competitors
-      #original_hash: 3408054
-      enhancing-experience: Enhancing competitor and staff experience
-      #original_hash: 2345aaa
-      reflection: Organizer reflection
   organizer_guidelines:
     #original_hash: 7486ac4
     title: WCA 大会運営ガイドライン
-    paragraph0:
-      #original_hash: ee36904
-      title: Short version
-      #original_hash: 60d9532
-      content: >-
-        Below you can find a short summary of key points for getting an idea of
-        how to organize a competition. If you think this is something for you,
-        please take a look at the documents above!
     paragraph1:
       #original_hash: e5f5329
       title: 大会運営のやり方
@@ -3988,13 +3673,8 @@ ja:
     index:
       #original_hash: 0c77aee
       title: メディア
-      #original_hash: df43670
-      validate_media: Validate media
       #original_hash: 9f2158f
       submit_media_html: 'メディア投稿する: <a href="/media/new">メディア投稿ページ</a>。'
-    validate:
-      #original_hash: 1e0eee6
-      title: Validate Media
     media_table:
       #original_hash: 879e323
       year: 年
@@ -4006,103 +3686,6 @@ ja:
       confirm_accept: このメディアを承認してよいですか？
       #original_hash: 5301648
       edit: 編集
-  media_and_instagram:
-    #original_hash: 1e9793e
-    page_title: Media and Instagram submission
-    general_media_submission:
-      #original_hash: 2b4c8c8
-      title: General media submission
-      #original_hash: 670a1a8
-      body_html: >-
-        The WCA shares articles and images from competitions provided by the
-        community on our <a href="/media">media page</a>. If you have something
-        you would like to share, please fill out our <a
-        href="/media/new">general media submission form</a>!
-    instagram_submission:
-      #original_hash: e01c612
-      title: Instagram submission
-      #original_hash: 1acd0d2
-      paragraph1_html: >-
-        As you may have seen, the WCA has an <a
-        href="https://www.instagram.com/thewcaofficial/">active Instagram</a>!
-        To best reflect the global cubing community, we post content submitted
-        to us by cubers from around the world.
-      #original_hash: 9b6abcd
-      paragraph2: >-
-        If you have high-quality photos or videos you would like us to post,
-        please click the button below and fill out the form! In order us to post
-        your content, you must own it and must give the WCA permission to post
-        it. Due to the large number of submissions we receive, we can not post
-        everything, but here are some tips to get your content posted:
-      #original_hash: cf5c955
-      photo_quality: >-
-        Make sure the photo/video quality is good. It doesn't have to be
-        professionally shot but the quality shouldn't detract from the photo or
-        video.
-      #original_hash: 0742378
-      photo_interest: >-
-        Try to make your content interesting to a broad audience. Content that
-        is only interesting for a few people does not belong here.
-      #original_hash: 497bc27
-      wca_related: >-
-        Post photos and videos that have to do with the WCA, as this is what our
-        account is all about! We love to see cubers having fun!
-      #original_hash: af882f2
-      submit_instagram_content: Submit Instagram content
-    instagram_hosting:
-      #original_hash: 5156783
-      title: Instagram hosting
-      #original_hash: 541106b
-      paragraph1_html: >-
-        Sometimes, we will allow community members to host the official WCA
-        Instagram story with a competition they are attending! If you&#39;re
-        interested, please click the button and fill out the form below.  The
-        WCA Communication Team will reach out to you after all information has
-        been submitted if you are approved for hosting. If you have any
-        questions, please <a
-        href="https://www.worldcubeassociation.org/contact/website">contact
-        us</a>.
-      #original_hash: aca6c32
-      paragraph2: >-
-        Our goal is to share a little personal side of every cuber and of every
-        competition. This is not supposed to be a huge burden over the weekend
-        and, of course, we want you to enjoy the competition first and then be
-        able to share it.
-      #original_hash: af023ed
-      paragraph3: 'The role of a host can be summarized as follows:'
-      #original_hash: 21efafe
-      short_intro: 'Make a short introduction, talk about yourself and the competition'
-      #original_hash: a053b5a
-      venue_feel: >-
-        Get some clips to get a feeling of the venue and the people, this could
-        be just a shot from the competitor area and solving area
-      #original_hash: d17fb2f
-      people_solving: >-
-        Try to get some shots of people solving (fast people at their main
-        events preferably)
-      #original_hash: 76d2358
-      mini_interviews: >-
-        You could try to get mini interviews of people (organizers, delegates,
-        etc...) saying what they are feeling about the competition
-      #original_hash: 6003b20
-      pictures_too: 'You can also send pictures, it doesn''t have to be only videos'
-      #original_hash: 8813619
-      paragraph4: >-
-        Our communications throughout the weekend typically go through a
-        WhatsApp group. Please ensure that you are familiar with this messaging
-        platform or let us know if you are not able to use it so that we can
-        arrange other plans.
-      #original_hash: 38191c1
-      apply_to_host: Apply to host
-    other_suggestions:
-      #original_hash: 730873b
-      title: Other suggestions?
-      #original_hash: aa7ab5c
-      body_html: >-
-        Do you have other suggestions for Instagram or other social media
-        content? <a
-        href="https://www.worldcubeassociation.org/contact/website">Let us
-        know</a>!
   footer:
     #original_hash: cf01481
     privacy: プライバシーポリシー

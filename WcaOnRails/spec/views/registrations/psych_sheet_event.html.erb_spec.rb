@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "registrations/psych_sheet_event" do
+RSpec.describe "registrations/psych_sheet_event", clean_db_with_truncation: true do
   it "works" do
     competition = FactoryBot.create(:competition, :registration_open)
     event = Event.find("333")

@@ -236,22 +236,22 @@ class CompetitionsController < ApplicationController
     comp = competition_from_params
     if ComputeAuxiliaryData.in_progress?
       flash[:danger] = t('competitions.messages.computing_auxiliary_data')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     unless comp.results.any?
       flash[:danger] = t('competitions.messages.no_results')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     if comp.results_posted?
       flash[:danger] = t('competitions.messages.results_already_posted')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     ActiveRecord::Base.transaction do
@@ -261,7 +261,7 @@ class CompetitionsController < ApplicationController
     end
 
     flash[:success] = t('competitions.messages.results_posted')
-    redirect_to admin_edit_competition_path(comp)
+    redirect_to competition_admin_import_results_path(comp)
   end
 
   def orga_close_reg_when_full_limit
@@ -666,28 +666,30 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    competition_ids = current_user.organized_competitions.pluck(:competition_id)
-    competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
-    registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-    @registered_for_by_competition_id = registrations.uniq.to_h do |r|
-      [r.competition.id, r]
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = current_user.organized_competitions.pluck(:competition_id)
+      competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+      registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+      @registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition.id, r]
+      end
+      competition_ids.concat(@registered_for_by_competition_id.keys)
+      if current_user.person
+        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
+      end
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.includes(:delegate_report, :delegates)
+                                .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
+      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+      bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
+      @bookmarked_competitions = Competition.not_over
+                                            .where(id: bookmarked_ids.uniq)
+                                            .sort_by(&:start_date)
     end
-    competition_ids.concat(@registered_for_by_competition_id.keys)
-    if current_user.person
-      competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
-    end
-    # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
-    # For example, mailing all competitors about the cancellation.
-    # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
-    competitions = Competition.includes(:delegate_report, :delegates)
-                              .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
-                              .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
-    @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
-    bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
-    @bookmarked_competitions = Competition.not_over
-                                          .where(id: bookmarked_ids.uniq)
-                                          .sort_by(&:start_date)
   end
 
   def for_senior

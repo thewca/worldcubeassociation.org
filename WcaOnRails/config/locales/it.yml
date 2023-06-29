@@ -964,7 +964,7 @@ it:
         competitor_limit_reason: >-
           Quale è la motivazione del limite massimo di partecipanti? Perfavore,
           scrivi la motivazione in inglese!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           Il numero di accompagnatori per iscrizione consentiti a questa
           competizione. Iscrizioni con troppi accompagnatori verranno respinte.
@@ -1547,6 +1547,19 @@ it:
           zero: Il form non contiene errori
           one: 'Il form contiene un errore:'
           other: 'Il form contiene %{count} errori:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: Siamo spiacenti. Qualcosa è andato storto.
+        #original_hash: d815249
+        500_contact: >-
+          Se intendi segnalare questo errore al Software Team, ti preghiamo di
+          menzionare il Request ID
+        #original_hash: b61e305
+        400_error: La pagina che stai cercando non esiste.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Se ritieni che questo sia un errore, ti preghiamo di contattare il
+          Software Team includendo il Request ID
     doorkeeper:
       applications:
         help:
@@ -2236,7 +2249,7 @@ it:
         Serie.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Non puoi registrarti a un evento per il quale non sei qualificato.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Devi lasciare un commento. Assicurati di leggere nei requisiti di
         registrazione quali informazioni sono richieste (es. in una competizione
@@ -2546,6 +2559,10 @@ it:
         card_information: Informazioni carta
         #original_hash: bc8091a
         cardholder_name: Nome titolare
+        #original_hash: 919710d
+        show_donation: >-
+          Desidero effettuare una donazione aggiuntiva che andrà interamente al
+          team organizzativo
       alerts:
         #original_hash: a34940e
         not_a_number: Inserisci una quantità valida.
@@ -2696,7 +2713,7 @@ it:
         annunciata.
       #original_hash: ab61991
       announced: Competizione annunciata con successo!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Questa competizione è stata cancellata. Controlla la sezione
         Informazioni per maggiori dettagli.
@@ -2744,24 +2761,32 @@ it:
       tooltip_registered: Sei iscritto.
       #original_hash: f2d092f
       tooltip_waiting_list: Al momento sei in lista d'attesa.
-      #original_hash: 9ecd976
-      confirmed_visible: Questa competizione è confermata e visibile al pubblico
-      #original_hash: fa186a9
-      confirmed_not_visible: Questa competizione è confermata ma non è visibile al pubblico
-      #original_hash: a66bbe3
-      not_confirmed_visible: Questa competizione non è confermata ma è visibile al pubblico
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: Questa competizione non è confermata e non è visibile al pubblico
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Purtroppo la tua registrazione è stata cancellata. Puoi trovare
+        ulteriori dettagli nella tua email, o contattare gli organizzatori.
+      #original_hash: 1b6dc61
+      confirmed_visible: Questa competizione è confermata e visibile al pubblico.
+      #original_hash: abc2f96
+      confirmed_not_visible: Questa competizione è confermata ma non è visibile al pubblico.
+      #original_hash: 6d6290b
+      not_confirmed_visible: Questa competizione non è confermata ma è visibile al pubblico.
+      #original_hash: b299b27
+      not_confirmed_not_visible: Questa competizione non è confermata e non è visibile al pubblico.
       #original_hash: a821396
       stripe_connected: >-
         Hai collegato con successo il tuo account Stripe. Ora puoi ricevere i
         pagamenti delle iscrizioni per questa competizione.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Account Stripe scollegato con successo.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Si è verificato un errore durante lo scollegamento dell'account Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: >-
         A causa di un problema non è stato possibile collegare il tuo account
         Stripe.
-      #original_hash: 724cf0d
-      championship_exists: 'Esiste già un %{championship_type} per il %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Esiste già un %{championship_type} per il %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Iscrizioni chiuse con successo.
       #original_hash: 7f197a0
@@ -3401,8 +3426,8 @@ it:
     note_before_cancel: >-
       Nota: possono essere cancellate soltanto le competizioni precedentemente
       confermate.
-    #original_hash: 19a0ac2
-    orga_close_reg: Chiudi registrazioni.
+    #original_hash: b38ee61
+    orga_close_reg: Chiudi registrazioni
     #original_hash: b2bfea9
     orga_close_reg_confirm: >-
       Sei sicuro di voler chiudere le registrazioni? Non è possibile annullare
@@ -3411,6 +3436,12 @@ it:
     note_reg_not_full_orga_close_reg: >-
       Nota: puoi chiudere le registrazioni soltanto dopo che il limite di
       partecipanti è stato raggiunto.
+    #original_hash: 1ae594d
+    stripe_disconnect: Scollega account Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Sei sicuro di voler scollegare l'account Stripe? Questa azione non può
+      essere annullata.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Nota: le registrazioni sono già chiuse.'
     show:
@@ -3630,10 +3661,10 @@ it:
       title: Record
     #original_hash: e02fccb
     last_updated_html: 'Ultimo aggiornamento: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Nota: alcuni filtri sono temporaneamente disabilitati. Se hai esperienza
-      in ottimizzazione SQL, contatta il WCA Software Team (WST)!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Nota: alcuni filtri sono temporaneamente disabilitati. Il Software Team
+      sta lavorando per ripristinarli. Ci scusiamo per il disagio.
     #original_hash: e3710ed
     tooltip_no_years: Il nostro database è troppo grande per elaborare dati storici
     #original_hash: 357094b

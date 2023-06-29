@@ -18,6 +18,7 @@ class Registration < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :assignments, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :stripe_payment_intents, as: :holder, dependent: :delete_all
 
   serialize :roles, Array
 
@@ -198,6 +199,7 @@ class Registration < ApplicationRecord
     authorized_fields = {
       "guests" => guests,
       "comments" => comments || '',
+      "administrativeNotes" => administrative_notes || '',
     }
     {
       "wcaRegistrationId" => id,
@@ -221,6 +223,7 @@ class Registration < ApplicationRecord
         "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
+        "administrativeNotes" => { "type" => "string" },
       },
     }
   end
@@ -270,14 +273,14 @@ class Registration < ApplicationRecord
     if competition && competition.allow_registration_without_qualification
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }.any?
+    if registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
       errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
     end
   end
 
   validate :forcing_competitors_to_add_comment, if: :is_competing?
   private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && comments.strip.empty?
+    if competition&.force_comment_in_registration.present? && !comments&.strip&.present?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end

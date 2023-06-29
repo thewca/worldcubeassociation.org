@@ -1,4 +1,5 @@
 <%# Locals required: results_validator %>
+<% display_competition ||= false %>
 <p>
   <% if results_validator.validators == ResultsValidators::Utils::ALL_VALIDATORS %>
     All validators were ran.
@@ -15,7 +16,13 @@
       <h4>Information for <%= type %></h4>
       <ul>
         <% infos.each do |info| %>
-          <li><%= info %></li>
+          <li>
+            <% if display_competition %>
+              [<%= link_to info.competition_id, competition_path(info.competition_id) %>]
+            <% end %>
+
+            <%= info %>
+          </li>
         <% end %>
       </ul>
     <% end %>
@@ -29,7 +36,13 @@
       <h4>Errors detected in <%= type %></h4>
       <ul>
         <% errors.each do |error| %>
-          <li><%= error %></li>
+          <li>
+            <% if display_competition %>
+              [<%= link_to error.competition_id, competition_path(error.competition_id) %>]
+            <% end %>
+
+            <%= error %>
+          </li>
         <% end %>
       </ul>
     <% end %>
@@ -58,7 +71,13 @@
       <h4>Warnings detected in <%= type %></h4>
       <ul>
         <% warnings.each do |warning| %>
-          <li><%= warning %></li>
+          <li>
+            <% if display_competition %>
+              [<%= link_to warning.competition_id, competition_path(warning.competition_id) %>]
+            <% end %>
+
+            <%= warning %>
+          </li>
         <% end %>
       </ul>
     <% end %>
