@@ -550,7 +550,7 @@ class CompetitionsController < ApplicationController
       end
     elsif @competition.update(comp_params_minus_id)
       # Automatically compute the cellName and ID for competitions with a short name.
-      if @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+      if !@competition.confirmed? && @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
         old_competition_id = @competition.id
         @competition.create_id_and_cell_name(force_override: true)
 
