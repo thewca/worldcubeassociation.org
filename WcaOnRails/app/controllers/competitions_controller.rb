@@ -532,7 +532,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
-    @actually_using_organizer_view = !params.key?(:competition_admin_view) # If the edit is done through this view
 
     comp_params_minus_id = competition_params
     new_id = comp_params_minus_id.delete(:id)
@@ -550,18 +549,20 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update(comp_params_minus_id)
-      # The two extra updates here are done to automatically compute the cellname and ID for competitions with a short name.
-      m = Competition::VALID_NAME_RE.match(@competition.name) # These three lines are from models/competition.rb
-      name_without_year = m[1]
-      year = m[2]
-      year_space = " " + year
-      if @actually_using_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
-        @competition.update(cellName: name_without_year.truncate(Competition::MAX_CELL_NAME_LENGTH - year_space.length) + year_space)
+      # Automatically compute the cellName and ID for competitions with a short name.
+      if @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        old_competition_id = @competition.id
+        @competition.create_id_and_cell_name(force_override: true)
 
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
-        inferred_id = safe_name_without_year[0...(Competition::MAX_ID_LENGTH - year.length)] + year
-        @competition.update(id: inferred_id)
-      elsif new_id && !@competition.update(id: new_id)
+        # Save the newly computed cellName without breaking the ID associations
+        # (which in turn is handled by a hack in the next if-block below)
+        @competition.with_old_id { @competition.save! }
+
+        # Try to update the ID only if it _actually_ changed
+        new_id = @competition.id unless @competition.id == old_competition_id
+      end
+
+      if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with
