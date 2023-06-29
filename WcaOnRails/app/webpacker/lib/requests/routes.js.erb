@@ -1,3 +1,5 @@
+export const competitionsNewCreateUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.new_create_competition_path) %>`;
+
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
 
 export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;

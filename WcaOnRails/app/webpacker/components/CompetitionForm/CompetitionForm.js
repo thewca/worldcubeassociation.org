@@ -23,7 +23,7 @@ import {
   UserSearch,
   useFormInputState,
 } from './FormInputs';
-import { competitionUrl, competitionsUrl } from '../../lib/requests/routes.js.erb';
+import { competitionsNewCreateUrl } from '../../lib/requests/routes.js.erb';
 import VenueMap from './VenueMap';
 import NearbyComps from './NearbyComps';
 import SeriesComps from './SeriesComps';
@@ -117,20 +117,15 @@ function GuestsEnabledInput({ inputState }) {
 }
 
 function ActionButtons({ competition, formData, save }) {
-  const url = competitionUrl(competition.id);
+  const url = competitionsNewCreateUrl;
 
   // Set the request payload to formData
-  console.log(competitionsUrl);
-  let submit;
-  if (competition.persisted) {
-    submit = async () => {
-      save(url, { ...competition, ...formData }, () => console.log('Success'), { method: 'PATCH' }, () => console.log('Error'));
-    };
-  } else {
-    submit = async () => {
-      save(competitionsUrl, { ...competition, ...formData }, (d) => console.log('Success', d), { method: 'POST' }, (e) => console.log('Error', e));
-    };
-  }
+  console.log(url);
+
+  const submit = async () => {
+    save(url, { ...competition, ...formData }, (d) => console.log('Success', d), { method: 'POST' }, (e) => console.log('Error', e));
+  };
+
   return (
     <Button color="blue" type="button" onClick={submit}>
       {I18n.t(`competitions.competition_form.submit_${competition.persisted ? 'update' : 'create'}_value`)}

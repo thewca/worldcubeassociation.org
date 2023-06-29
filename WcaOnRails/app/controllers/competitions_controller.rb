@@ -697,6 +697,10 @@ class CompetitionsController < ApplicationController
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
   end
 
+  def new_create
+    puts params.inspect
+  end
+
   private def confirming?
     params[:commit] == "Confirm"
   end

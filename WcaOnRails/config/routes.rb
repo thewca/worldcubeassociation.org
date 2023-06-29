@@ -51,6 +51,8 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
+  post 'competitions/new_create' => 'competitions#new_create', as: :new_create_competition
+
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
