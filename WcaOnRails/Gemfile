@@ -62,7 +62,7 @@ gem 'aws-sdk-cloudfront'
 
 # Pointing to thewca/carrierwave-crop which has a workaround for
 #  https://github.com/kirtithorat/carrierwave-crop/issues/17
-#  and also remove jquery from dependencies (because we add it through webpacker)
+#  and also remove jquery from dependencies (because we add it through webpack)
 gem 'carrierwave-crop', github: 'thewca/carrierwave-crop'
 
 gem 'mini_magick'
@@ -81,7 +81,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '6.6.0'
+gem 'shakapacker', '7.0.1'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'

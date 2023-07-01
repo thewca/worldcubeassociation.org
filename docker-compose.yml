@@ -8,7 +8,7 @@ services:
       - "3000:3000"
     environment:
       DATABASE_HOST: wca_db
-      WEBPACKER_DEV_SERVER_HOST: wca_webpacker
+      SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
     working_dir: /app/WcaOnRails
     volumes:
       - .:/app
@@ -40,14 +40,14 @@ services:
       - "3035:3035"
     environment:
       DATABASE_HOST: wca_db
-      WEBPACKER_DEV_SERVER_HOST: 0.0.0.0
+      SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
     working_dir: /app/WcaOnRails
     volumes:
       - .:/app
       - gems_volume:/usr/local/bundle
     command: >
       bash -c 'bundle install && yarn install &&
-      bin/webpacker-dev-server'
+      bin/shakapacker-dev-server'
     depends_on:
       - wca_on_rails
     networks:
