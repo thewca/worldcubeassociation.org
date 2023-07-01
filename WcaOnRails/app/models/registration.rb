@@ -211,6 +211,7 @@ class Registration < ApplicationRecord
                   else
                     'pending'
                   end,
+      "isCompeting" => is_competing?,
     }.merge(authorized ? authorized_fields : {})
   end
 
@@ -224,6 +225,7 @@ class Registration < ApplicationRecord
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
         "administrativeNotes" => { "type" => "string" },
+        "isCompeting" => { "type" => "boolean" },
       },
     }
   end
