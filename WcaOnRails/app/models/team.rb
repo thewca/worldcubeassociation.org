@@ -222,7 +222,7 @@ class Team < ApplicationRecord
 
   def self.changes_in_all_teams
     team_changes = []
-    all_teams = Team.unscoped.all
+    all_teams = Team.all_official_and_councils
     all_teams.each do |team|
       current_team_changes = team.changes_in_team
       if !current_team_changes.empty?
@@ -232,7 +232,7 @@ class Team < ApplicationRecord
     if team_changes.empty?
       team_changes.push("There are no changes to show.")
     end
-    team_changes.join("\n")
+    team_changes.join("<br>")
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
@@ -340,36 +340,36 @@ class Team < ApplicationRecord
 
     changes_of_last_month = []
     if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
-      changes_of_last_month.push("Changes in #{self.name}")
+      changes_of_last_month.push("<b>Changes in #{self.name}</b>")
       if leader_appointments.count + no_more_leaders.count > 0
-        changes_of_last_month.push("\nLeaders")
+        changes_of_last_month.push("<br><b>Leaders</b>")
         if leader_appointments.count > 0
-          changes_of_last_month.push(leader_appointments.join("\n"))
+          changes_of_last_month.push(leader_appointments.join("<br>"))
         end
         if no_more_leaders.count > 0
-          changes_of_last_month.push(no_more_leaders.join("\n"))
+          changes_of_last_month.push(no_more_leaders.join("<br>"))
         end
       end
       if promoted_senior_members.count > 0
-        changes_of_last_month.push("\nPromoted Senior Members\n#{promoted_senior_members.join("\n")}")
+        changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}")
       end
       if new_senior_members.count > 0
-        changes_of_last_month.push("\nNew Senior Members\n#{new_senior_members.join("\n")}")
+        changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}")
       end
       if new_members.count > 0
-        changes_of_last_month.push("\nNew Members\n#{new_members.join("\n")}")
+        changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}")
       end
       if demoted_senior_members.count > 0
-        changes_of_last_month.push("\nDemotions from Senior Member to Member\n#{demoted_senior_members.join("\n")}")
+        changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}")
       end
       if no_more_senior_members.count > 0
-        changes_of_last_month.push("\nResigned/Demoted Senior Members\n#{no_more_senior_members.join("\n")}")
+        changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}")
       end
       if no_more_members.count > 0
-        changes_of_last_month.push("\nResigned/Demoted Members\n#{no_more_members.join("\n")}")
+        changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}")
       end
     end
-    changes_of_last_month.join("\n")
+    changes_of_last_month.join("<br>")
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity
