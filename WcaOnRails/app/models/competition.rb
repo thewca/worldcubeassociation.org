@@ -1771,7 +1771,8 @@ class Competition < ApplicationRecord
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
-      # If no registration is found, assume that this is a non-competing staff member being added.
+      # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
+      next unless registration || !wcif_person["registration"] || wcif_person["registration"]["is_competing"] != false
       registration ||= registrations.create(
         competition: self,
         user_id: wcif_person["wcaUserId"],
