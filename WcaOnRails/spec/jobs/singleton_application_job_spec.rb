@@ -2,7 +2,9 @@
 
 require 'rails_helper'
 
-class ExampleJob < SingletonApplicationJob
+class ExampleJob < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def perform
@@ -10,7 +12,9 @@ class ExampleJob < SingletonApplicationJob
   end
 end
 
-class ExampleJob2 < SingletonApplicationJob
+class ExampleJob2 < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def perform
