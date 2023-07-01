@@ -334,7 +334,7 @@ GEM
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
     httpclient (2.8.3)
-    i18n (1.14.0)
+    i18n (1.14.1)
       concurrent-ruby (~> 1.0)
     i18n-js (4.2.3)
       glob (>= 0.4.0)
@@ -417,7 +417,7 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.2)
-    minitest (5.18.0)
+    minitest (5.18.1)
     monetize (1.11.0)
       money (~> 6.12)
     money (6.16.0)
@@ -486,7 +486,7 @@ GEM
     psych (5.1.0)
       stringio
     public_suffix (5.0.1)
-    racc (1.6.2)
+    racc (1.7.1)
     rack (2.2.7)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
@@ -512,8 +512,9 @@ GEM
       actionpack (>= 5.0.1.rc1)
       actionview (>= 5.0.1.rc1)
       activesupport (>= 5.0.1.rc1)
-    rails-dom-testing (2.0.3)
-      activesupport (>= 4.2.0)
+    rails-dom-testing (2.1.1)
+      activesupport (>= 5.0.0)
+      minitest
       nokogiri (>= 1.6)
     rails-html-sanitizer (1.6.0)
       loofah (~> 2.21)
@@ -627,7 +628,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.0.0)
-    shakapacker (6.6.0)
+    shakapacker (7.0.1)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -808,7 +809,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 6.6.0)
+  shakapacker (= 7.0.1)
   simple_form
   simplecov
   simplecov-lcov
