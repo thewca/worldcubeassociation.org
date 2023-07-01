@@ -8,12 +8,14 @@ sl:
     XS: Več držav (Južna Amerika)
     #original_hash: 374ac0d
     XM: Več držav (Amerika)
-    #original_hash: 918c53a
-    MO: Macau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: 77e4070
+    MO: Macau, Kitajska
+    #original_hash: e758117
+    HK: Hong Kong, Kitajska
     #original_hash: 4e8bd04
     KR: Koreja
+    #original_hash: fefc818
+    TW: Kitajski Tajpej
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Več kontinentov

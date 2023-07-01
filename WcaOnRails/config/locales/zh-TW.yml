@@ -16,8 +16,8 @@ zh-TW:
     FM: 密克羅尼西亞
     #original_hash: db871b0
     GW: 幾內亞比索
-    #original_hash: 2f488ff
-    HK: 香港
+    #original_hash: e758117
+    HK: 香港，中國
     #original_hash: 3ad2dd8
     KN: 聖克里斯多福
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ zh-TW:
     MK: 北馬其頓
     #original_hash: 928b7c4
     MM: 緬甸
-    #original_hash: d887137
-    MO: 澳門
+    #original_hash: 77e4070
+    MO: 澳門，中國
     #original_hash: 05a15c1
     PS: 巴勒斯坦
     #original_hash: 655191a
@@ -40,6 +40,8 @@ zh-TW:
     SZ: 史瓦帝尼
     #original_hash: 4d206a8
     TT: 千里達
+    #original_hash: fefc818
+    TW: 中華台北
     #original_hash: 3fa9b2d
     VC: 聖文森國
     #original_hash: 9af4622

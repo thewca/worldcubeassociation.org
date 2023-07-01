@@ -16,8 +16,8 @@ th:
     FM: สหพันธรัฐไมโครนีเซีย
     #original_hash: db871b0
     GW: สาธารณรัฐกินี-บิสเซา
-    #original_hash: 2f488ff
-    HK: ฮ่องกง
+    #original_hash: e758117
+    HK: ฮ่องกง, จีน
     #original_hash: 3ad2dd8
     KN: สหพันธรัฐเซนต์คิตส์และเนวิส
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ th:
     MK: สาธารณรัฐนอร์ทมาซิโดเนีย
     #original_hash: 928b7c4
     MM: สาธารณรัฐแห่งสหภาพพม่า
-    #original_hash: d887137
-    MO: มาเก๊า
+    #original_hash: 77e4070
+    MO: มาเก๊า, จีน
     #original_hash: 05a15c1
     PS: รัฐปาเลสไตน์
     #original_hash: 655191a
@@ -42,6 +42,8 @@ th:
     SZ: ราชอาณาจักรเอสวาตีนี
     #original_hash: 4d206a8
     TT: สาธารณรัฐตรินิแดดและโตเบโก
+    #original_hash: fefc818
+    TW: จีนไทเป
     #original_hash: 3fa9b2d
     VC: เซนต์วินเซนต์และเกรนาดีนส์
     #original_hash: 9af4622
