@@ -17,7 +17,7 @@ pt:
     #original_hash: db871b0
     GW: Guiné-Bissau
     #original_hash: e758117
-    HK: Hong Kong, China
+    HK: 'Hong Kong, China'
     #original_hash: 3ad2dd8
     KN: São Cristóvão e Névis
     #original_hash: 5c34abb
@@ -31,7 +31,7 @@ pt:
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: 77e4070
-    MO: Macau, China
+    MO: 'Macau, China'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -41,7 +41,7 @@ pt:
     #original_hash: 4d206a8
     TT: Trinidad e Tobago
     #original_hash: fefc818
-    TW: Taipé Chinesa
+    TW: Taipé Chinês
     #original_hash: 3fa9b2d
     VC: São Vicente e Granadinas
     #original_hash: 9af4622
@@ -279,13 +279,13 @@ pt:
       any_result: Qualquer resultado
     single:
       #original_hash: d596f44
-      time: 'Tempo único abaixo de %{time}'
+      time: 'Singular abaixo de %{time}'
       #original_hash: 52ba186
       moves: 'Resolução única abaixo de %{moves} movimentos'
       #original_hash: b1993ae
       points: 'Resolução única acima de %{points} pontos'
       #original_hash: ed2b051
-      ranking: 'Top %{ranking} por tempo único'
+      ranking: 'Top %{ranking} por singular'
       #original_hash: 933b7dc
       any_result: Qualquer resolução única
     average:
@@ -316,7 +316,7 @@ pt:
     #original_hash: 77003d0
     best: Melhor
     #original_hash: dd11868
-    single: Tempo Único
+    single: Singular
     #original_hash: 15f86c0
     average: Média
     #original_hash: e7f6fc5
