@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class GenerateChore < SingletonApplicationJob
+class GenerateChore < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def perform

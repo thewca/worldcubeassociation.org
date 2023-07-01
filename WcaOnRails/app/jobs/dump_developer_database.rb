@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class DumpDeveloperDatabase < SingletonApplicationJob
+class DumpDeveloperDatabase < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def perform(force_export: false)

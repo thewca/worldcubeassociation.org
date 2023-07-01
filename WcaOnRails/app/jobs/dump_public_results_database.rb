@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class DumpPublicResultsDatabase < SingletonApplicationJob
+class DumpPublicResultsDatabase < ApplicationJob
+  include SingletonApplicationJob
+
   TIMESTAMP_NAME = 'public_results_dump'
 
   queue_as :default

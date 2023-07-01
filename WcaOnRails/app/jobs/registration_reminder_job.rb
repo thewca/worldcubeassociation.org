@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class RegistrationReminderJob < SingletonApplicationJob
+class RegistrationReminderJob < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def should_send_reminder(competition)

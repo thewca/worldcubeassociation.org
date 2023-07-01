@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class ComputeLinkings < SingletonApplicationJob
+class ComputeLinkings < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def perform
