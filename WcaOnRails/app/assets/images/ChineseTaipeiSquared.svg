@@ -2,11 +2,11 @@
 <svg
   id="图层_1"
   data-name="图层 1"
-  viewBox="0 0 640 480.00001"
+  viewBox="0 0 512 512.00001"
   version="1.1"
-  sodipodi:docname="ChineseTaipei_4x3.svg"
-  width="640"
-  height="480"
+  sodipodi:docname="ChineseTaipei_1x1.svg"
+  width="512"
+  height="512"
   inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
@@ -43,7 +43,7 @@
     id="title6">ChineseTaipei</title>
   <g
     id="g751"
-    transform="matrix(1.0265294,0,0,1.0265294,77.028546,7.9202053e-6)">
+    transform="matrix(1.0815737,0,0,1.0815737,-8.3342976e-6,3.130789)">
     <path
       class="cls-1"
       d="m 473.38428,211.3334 a 127.3,127.3 0 0 0 -116.79,-126.929999 127.35,127.35 0 0 0 -239.78,0 127.3,127.3 0 0 0 -71.120002,224.569999 127.38,127.38 0 0 0 191.000002,139.26 127.42,127.42 0 0 0 191,-139.26 127,127 0 0 0 45.69,-97.64 z"
@@ -118,7 +118,7 @@
       id="path42" />
     <polygon
       class="cls-5"
-      points="328.77,376.47 283.33,402.75 237.83,376.47 237.89,323.84 283.45,297.62 328.85,323.87 "
+      points="237.89,323.84 283.45,297.62 328.85,323.87 328.77,376.47 283.33,402.75 237.83,376.47 "
       id="polygon44"
       transform="translate(-46.775722,-49.666599)" />
     <path
