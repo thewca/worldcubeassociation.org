@@ -103,6 +103,15 @@ RSpec.feature "Competition management" do
       expect(c.name).to eq "Name that is long and does end in year 2016"
     end
 
+    scenario "custom approved ID not changing on confirmed competitions from organizer view" do
+      competition = FactoryBot.create(:competition, :confirmed, id: "OldId2016", name: "competition name short 2016")
+      visit edit_competition_path(competition)
+      click_button "Update Competition"
+
+      c = Competition.find("OldId2016")
+      expect(c).not_to be_nil
+    end
+
     scenario "can change id of short name from admin view" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
       visit admin_edit_competition_path(competition)
