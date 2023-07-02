@@ -2,7 +2,7 @@
 
 class ChangeDayMonthYearToDate < ActiveRecord::Migration[7.0]
   def change
-    add_column :Persons, :dob, :date, null: true
+    add_column :Persons, :dob, :date, null: true, after: :gender
     execute "UPDATE Persons SET dob = IF(year=0 OR month=0 OR day=0, NULL, DATE(CONCAT_WS('-', year, month, day))) WHERE 1;"
     remove_column :Persons, :day
     remove_column :Persons, :month
