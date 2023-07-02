@@ -1637,6 +1637,7 @@ class Competition < ApplicationRecord
       { user: {
         person: [:ranksSingle, :ranksAverage],
       } },
+      :wcif_extensions,
     ]
     persons_wcif = registrations.order(:id)
                                 .includes(includes_associations)
@@ -1734,7 +1735,7 @@ class Competition < ApplicationRecord
 
     # Create missing events.
     wcif_events.each do |wcif_event|
-      event_found = competition_events.find_by_event_id(wcif_event["id"])
+      event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
       event_to_be_added = wcif_event["rounds"]
       if !event_found && event_to_be_added
         unless current_user.can_add_and_remove_events?(self)
@@ -1751,7 +1752,7 @@ class Competition < ApplicationRecord
         unless current_user.can_update_events?(self)
           raise WcaExceptions::BadApiParameter.new("Cannot update events")
         end
-        competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
+        competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
       end
     end
 
@@ -1783,7 +1784,9 @@ class Competition < ApplicationRecord
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
-        registration.update!(roles: roles)
+        # The additional roles are only for WCIF purposes and we don't validate them,
+        # so we can safely skip validations by using update_attribute
+        registration.update_attribute(:roles, roles)
       end
       if wcif_person["assignments"]
         wcif_person["assignments"].each do |assignment_wcif|
