@@ -916,12 +916,14 @@ module DatabaseDumper
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           subid
           name
           countryId
           gender
         ),
+        fake_values: {
+          "id" => "wca_id",
+        },
       ),
     }.freeze,
     "Competitions" => {
@@ -933,11 +935,6 @@ module DatabaseDumper
           cityName
           countryId
           information
-          year
-          month
-          day
-          endMonth
-          endDay
           venue
           venueAddress
           venueDetails
@@ -951,6 +948,11 @@ module DatabaseDumper
           "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
           "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+          "year" => "YEAR(start_date)",
+          "month" => "MONTH(start_date)",
+          "day" => "DAY(start_date)",
+          "endMonth" => "MONTH(end_date)",
+          "endDay" => "DAY(end_date)",
         }.freeze,
       ),
       tsv_sanitizers: actions_to_column_sanitizers(
