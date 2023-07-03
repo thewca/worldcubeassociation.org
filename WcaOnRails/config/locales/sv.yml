@@ -17,7 +17,7 @@ sv:
     #original_hash: db871b0
     GW: Guinea-Bissau
     #original_hash: e758117
-    HK: Hongkong, Kina
+    HK: 'Hongkong, Kina'
     #original_hash: 3ad2dd8
     KN: Saint Kitts och Nevis
     #original_hash: 5c34abb
@@ -31,7 +31,7 @@ sv:
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: 77e4070
-    MO: Macau, Kina
+    MO: 'Macau, Kina'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -450,8 +450,8 @@ sv:
         name: Namn
         #original_hash: f91b080
         name_reason: Anledningen till namnet
-        #original_hash: b649210
-        cellName: Smeknamn för tävlingen
+        #original_hash: fdba578
+        cellName: Förkortat namn för tävlingen
         #original_hash: d523ebb
         countryId: Land
         #original_hash: 25b7b06
@@ -870,10 +870,11 @@ sv:
           Open 2016). Var noga med att använda stora bokstäver. Namnet får
           endast innehålla alfanumeriska tecken, bindestreck(-), och-tecken(&),
           punkt(.), Kolon(:), apostrofer('), och mellanslag().
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Ett kort namn för visning. Om namnet på tävlingen redan är kort kan du
-          återanvända namnet (t.ex. Europe 2006).
+          Ett kort namn för visning. Om namnet på tävlingen är under
+          %{short_name_limit} tecken bör detta inte ändras, utan bör vara samma
+          som det vanliga namnet.
         #original_hash: bce4589
         cityName: >-
           Namn på stad och stat (om tillämpligt) där tävlingen äger rum.
@@ -2729,6 +2730,12 @@ sv:
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Kunde inte stänga anmälan.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Denna tävling har ingen deadline för att acceptera anmälningar från
+        väntelistan. Om du använder en väntelista, vänligen ange en deadline. Om
+        du inte använder en väntelista, kom ihåg att ange detta i
+        anmälningsvillkoren.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mina tävlingar
