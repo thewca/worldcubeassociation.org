@@ -17,7 +17,7 @@ sv:
     #original_hash: db871b0
     GW: Guinea-Bissau
     #original_hash: e758117
-    HK: Hongkong, Kina
+    HK: 'Hongkong, Kina'
     #original_hash: 3ad2dd8
     KN: Saint Kitts och Nevis
     #original_hash: 5c34abb
@@ -31,7 +31,7 @@ sv:
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: 77e4070
-    MO: Macau, Kina
+    MO: 'Macau, Kina'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
