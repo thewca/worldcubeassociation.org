@@ -15,6 +15,14 @@ const currentElementsIds = {
   activity: 0,
 };
 
+function withNestedActivities(activities) {
+  if (activities.length === 0) return [];
+  return [
+    ...activities,
+    ...withNestedActivities(_.flatMap(activities, 'childActivities')),
+  ];
+}
+
 export function initElementsIds(venues) {
   // Explore the WCIF to get the highest ids.
   const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
@@ -38,14 +46,6 @@ export function newRoomId() {
 export function newActivityId() {
   currentElementsIds.activity += 1;
   return currentElementsIds.activity;
-}
-
-function withNestedActivities(activities) {
-  if (activities.length === 0) return [];
-  return [
-    ...activities,
-    ...withNestedActivities(_.flatMap(activities, 'childActivities')),
-  ];
 }
 
 export function convertVenueActivitiesToVenueTimezone(oldTZ, venueWcif) {
