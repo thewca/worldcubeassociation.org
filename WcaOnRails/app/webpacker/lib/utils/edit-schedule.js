@@ -19,7 +19,7 @@ export function initElementsIds(venues) {
   // Explore the WCIF to get the highest ids.
   const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
   const rooms = _.flatMap(venues, 'rooms');
-  const activities = _.flatMap(rooms, 'activities');
+  const activities = _.flatMap(rooms, (room) => withNestedActivities(room.activities));
   currentElementsIds.venue = maxId(venues);
   currentElementsIds.room = maxId(rooms);
   currentElementsIds.activity = maxId(activities);
