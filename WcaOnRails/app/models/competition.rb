@@ -447,6 +447,10 @@ class Competition < ApplicationRecord
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
 
+      if !self.waiting_list_deadline_date
+        warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified')
+      end
+
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
@@ -623,19 +627,19 @@ class Competition < ApplicationRecord
   before_validation :compute_coordinates
 
   before_validation :create_id_and_cell_name
-  def create_id_and_cell_name
+  def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
     if m
       name_without_year = m[1]
       year = m[2]
-      if id.blank?
+      if id.blank? || force_override
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank?
+      if cellName.blank? || force_override
         year = " " + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
