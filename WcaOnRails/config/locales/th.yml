@@ -17,7 +17,7 @@ th:
     #original_hash: db871b0
     GW: สาธารณรัฐกินี-บิสเซา
     #original_hash: e758117
-    HK: ฮ่องกง, จีน
+    HK: ฮ่องกง
     #original_hash: 3ad2dd8
     KN: สหพันธรัฐเซนต์คิตส์และเนวิส
     #original_hash: 5c34abb
@@ -31,7 +31,7 @@ th:
     #original_hash: 928b7c4
     MM: สาธารณรัฐแห่งสหภาพพม่า
     #original_hash: 77e4070
-    MO: มาเก๊า, จีน
+    MO: มาเก๊า
     #original_hash: 05a15c1
     PS: รัฐปาเลสไตน์
     #original_hash: 655191a
@@ -447,8 +447,8 @@ th:
         name: ชื่อ
         #original_hash: f91b080
         name_reason: เหตุผลของชื่อ
-        #original_hash: b649210
-        cellName: ชื่อเล่นของการแข่งขัน
+        #original_hash: fdba578
+        cellName: ชื่อของการแข่งขันแบบสั้น
         #original_hash: d523ebb
         countryId: ประเทศ
         #original_hash: 25b7b06
@@ -857,10 +857,11 @@ th:
           ต้องแน่ใจว่าเขียนขึ้นต้นด้วยตัวพิมใหญ่ ชื่อจะต้องประกอบด้วยตัวอักษร,
           ตัวเลข, เครื่องหมายขีดคั่น (-), เครื่องหมายและ (&), จุด (.),
           เครื่องหมายจุดคู่ (:), เครื่องหมายวรรคตอน (') และช่องว่าง ( )
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          ชื่อย่อสำหรับการแสดง หากชื่อของการแข่งขันสั้นอยู่แล้ว
-          คุณสามารถใช้ชื่อนั้นได้ (เช่น Europe 2006)
+          ชื่อแบบสั้นสำหรับการแสดง หากชื่อของการแข่งขันยาวน้อยกว่า
+          %{short_name_limit} อยู่แล้ว ไม่ควรจะไปแก้ไขมัน
+          และควรใช้ชื่อเดียวกับชื่อปกติ
         #original_hash: bce4589
         cityName: >-
           ชื่อของเมืองหรือรัฐ (ถ้ามี) ที่จะมีการแข่งขัน ไม่ต้องใส่ประเทศ (เช่น
@@ -2605,6 +2606,11 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
+        หากคุณกำลังใช้ waiting list โปรดระบุกำหนดเวลา หากคุณไม่ได้ใช้ waiting
+        list โปรดอย่าลืมระบุสิ่งนี้ในข้อกำหนดการลงทะเบียน
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
