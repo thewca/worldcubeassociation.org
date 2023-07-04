@@ -10,7 +10,7 @@ class DumpDeveloperDatabase < ApplicationJob
 
   def perform(force_export: false)
     # Create developer database dump every 3 days.
-    if force_export || self.start_timestamp.not_after?(3.days.ago.end_of_hour)
+    if force_export || self.class.start_timestamp.not_after?(3.days.ago.end_of_hour)
       running_on_dev_dump = Timestamp.exists?(name: DatabaseDumper::DEV_TIMESTAMP_NAME)
 
       unless running_on_dev_dump
