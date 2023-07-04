@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class UnstickPosts < SingletonApplicationJob
+class UnstickPosts < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def perform

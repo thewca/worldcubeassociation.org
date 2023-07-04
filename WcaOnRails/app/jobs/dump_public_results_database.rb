@@ -1,16 +1,17 @@
 # frozen_string_literal: true
 
-class DumpPublicResultsDatabase < SingletonApplicationJob
-  TIMESTAMP_NAME = 'public_results_dump'
+class DumpPublicResultsDatabase < ApplicationJob
+  extend TimedApplicationJob
+
+  include TimedApplicationJob
+  include SingletonApplicationJob
 
   queue_as :default
 
   def perform(force_export: false)
     # Create results database dump every day.
-    last_public_results_dump = Timestamp.find_or_create_by(name: TIMESTAMP_NAME)
-    if force_export || last_public_results_dump.not_after?(24.hours.ago)
+    if force_export || self.start_timestamp.not_after?(1.day.ago.end_of_hour)
       DbDumpHelper.dump_results_db
-      last_public_results_dump.touch :date
     end
   end
 end

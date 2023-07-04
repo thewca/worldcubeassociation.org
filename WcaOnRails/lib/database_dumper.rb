@@ -1059,7 +1059,7 @@ module DatabaseDumper
     # Unfortunately, MySQL has an embarassingly low default value for the max_length, so we steal the MariaDB default instead :)
     ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
 
-    self.with_dumped_db('wca_public_results_dump', 'public_results.sql', RESULTS_SANITIZERS) do |dump_db|
+    self.with_dumped_db('wca_public_results_dump', 'public_results.sql', RESULTS_SANITIZERS, RESULTS_TIMESTAMP_NAME) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end

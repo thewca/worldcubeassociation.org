@@ -504,7 +504,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   describe 'GET #export_public' do
     it 'returns information about latest public export' do
       export_timestamp = DateTime.current.utc
-      Timestamp.create(name: DumpPublicResultsDatabase::TIMESTAMP_NAME, date: export_timestamp)
+      DumpPublicResultsDatabase.end_timestamp.update(date: export_timestamp)
 
       get :export_public
       expect(response.status).to eq 200
