@@ -8,14 +8,18 @@ class DumpDeveloperDatabase < ApplicationJob
 
   queue_as :default
 
-  def perform(force_export: false)
+  before_enqueue do |job|
     # Create developer database dump every 3 days.
-    if force_export || self.class.start_timestamp.not_after?(3.days.ago.end_of_hour)
-      running_on_dev_dump = Timestamp.exists?(name: DatabaseDumper::DEV_TIMESTAMP_NAME)
+    should_export = self.class.start_timestamp.not_after?(3.days.ago.end_of_hour)
+    force_export = job.arguments.last&.fetch(:force_export, false)
 
-      unless running_on_dev_dump
-        DbDumpHelper.dump_developer_db
-      end
-    end
+    throw :abort unless should_export || force_export
+
+    running_on_dev_dump = Timestamp.exists?(name: DatabaseDumper::DEV_TIMESTAMP_NAME)
+    throw :abort if running_on_dev_dump
+  end
+
+  def perform
+    DbDumpHelper.dump_developer_db
   end
 end
