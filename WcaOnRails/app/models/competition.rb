@@ -1643,11 +1643,14 @@ class Competition < ApplicationRecord
       } },
       :wcif_extensions,
     ]
+    # NOTE: we're including non-competing registrations so that they can have job
+    # assignments as well. These registrations don't have accepted?, but they
+    # should appear in the WCIF.
     persons_wcif = registrations.order(:id)
                                 .includes(includes_associations)
                                 .to_enum
                                 .with_index(1)
-                                .select { |r, registrant_id| authorized || r.accepted? }
+                                .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
                                 .map do |r, registrant_id|
                                   managers.delete(r.user)
                                   r.user.to_wcif(self, r, registrant_id, authorized: authorized)
@@ -1776,14 +1779,18 @@ class Competition < ApplicationRecord
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
-      # If no registration is found, assume that this is a non-competing staff member being added.
-      registration ||= registrations.create(
-        competition: self,
-        user_id: wcif_person["wcaUserId"],
-        created_at: DateTime,
-        updated_at: DateTime,
-        is_competing: false,
-      )
+      # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
+      adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
+      if adding_non_competing
+        registration ||= registrations.create(
+          competition: self,
+          user_id: wcif_person["wcaUserId"],
+          created_at: DateTime.now,
+          updated_at: DateTime.now,
+          is_competing: false,
+        )
+      end
+      next unless registration.present?
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]

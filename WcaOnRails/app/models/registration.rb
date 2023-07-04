@@ -195,6 +195,17 @@ class Registration < ApplicationRecord
     Hash.new(index: index, length: pending_registrations.length)
   end
 
+  def wcif_status
+    # Non-competing staff are treated as accepted.
+    if accepted? || !is_competing?
+      'accepted'
+    elsif deleted?
+      'deleted'
+    else
+      'pending'
+    end
+  end
+
   def to_wcif(authorized: false)
     authorized_fields = {
       "guests" => guests,
@@ -204,13 +215,8 @@ class Registration < ApplicationRecord
     {
       "wcaRegistrationId" => id,
       "eventIds" => events.map(&:id).sort,
-      "status" => if accepted?
-                    'accepted'
-                  elsif deleted?
-                    'deleted'
-                  else
-                    'pending'
-                  end,
+      "status" => wcif_status,
+      "isCompeting" => is_competing?,
     }.merge(authorized ? authorized_fields : {})
   end
 
@@ -224,6 +230,7 @@ class Registration < ApplicationRecord
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
         "administrativeNotes" => { "type" => "string" },
+        "isCompeting" => { "type" => "boolean" },
       },
     }
   end
