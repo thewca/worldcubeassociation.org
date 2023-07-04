@@ -450,7 +450,7 @@ pt:
         name: Nome
         #original_hash: f91b080
         name_reason: A razão para o nome
-        #original_hash: b649210
+        #original_hash: fdba578
         cellName: Nome curto da competição
         #original_hash: d523ebb
         countryId: País
@@ -875,10 +875,11 @@ pt:
           Campeonato de Portugal 2017). Use corretamente letras maiúsculas. O
           nome deve conter apenas carateres alfanuméricos, traços(-), e
           comerciais(&), pontos(.), dois pontos(:), apóstrofos(') e espaços( ).
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Um nome curto para apresentação. Se o nome da competição já for curto,
-          pode usá-lo novamente (p. ex. Europeu 2006).
+          Um nome curto para apresentação. Se o nome da competição já tiver
+          menos que %{short_name_limit} caracteres, este não deve ser editado e
+          deve ser o mesmo do nome normal da competição.
         #original_hash: bce4589
         cityName: >-
           Nome da cidade onde a competição decorrerá. Não inclua o país
@@ -2762,6 +2763,12 @@ pt:
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Esta competição não tem prazo para a aceitação de competidores em lista
+        de espera. Se estiver a usar uma lista de espera, por favor especifique
+        um prazo. Se não estiver a usar uma lista de espera, lembre-se de
+        especificar isto nos requisitos de inscrição.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
