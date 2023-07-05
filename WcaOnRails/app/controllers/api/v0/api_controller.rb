@@ -90,14 +90,14 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def search(*models)
-    concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-    cache_key = ["search", concise_results_date.iso8601, query]
     ActiveRecord::Base.connected_to(role: :read_replica) do
       query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
       unless query
         render status: :bad_request, json: { error: "No query specified" }
         return
       end
+      concise_results_date = ComputeAuxiliaryData.end_date || Date.current
+      cache_key = ["search", concise_results_date.iso8601, query]
       result = Rails.cache.fetch(cache_key) do
         models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
       end
