@@ -72,10 +72,9 @@ services:
 
   wca_redis:
     image: redis:7.0
-    restart: always
-    ports:
-      - "6379:6379"
-    command: redis-server --save 20 1 --loglevel warning
+    expose:
+      - "6379"
+    command: redis-server --loglevel warning
     volumes:
       - cache:/data
     networks:

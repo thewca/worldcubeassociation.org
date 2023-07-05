@@ -321,7 +321,7 @@ module CompetitionsHelper
   end
 
   def result_cache_key(competition, view, is_admin: false)
-    [view, competition.id, competition.results || "", I18n.locale, is_admin]
+    [view, competition.id, competition.results || [], I18n.locale, is_admin]
   end
 
   private

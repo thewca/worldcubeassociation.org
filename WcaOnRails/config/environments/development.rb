@@ -23,12 +23,8 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
     # If the Developer is not running through Docker, Redis caching is disabled
-    redis_url = ENV.fetch("REDIS_URL", nil)
-    if redis_url.present?
-      config.cache_store = :redis_cache_store, { url: redis_urls }
-    else
-      config.cache_store = :memory_store
-    end
+    redis_url = EnvVars.REDIS_URL
+    config.cache_store = redis_url.empty? ? :memory_store : :redis_cache_store, { url: redis_url }
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}",
     }
