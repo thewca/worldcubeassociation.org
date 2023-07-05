@@ -16,7 +16,7 @@ class DumpPublicResultsDatabase < ApplicationJob
     throw :abort unless should_export || force_export
   end
 
-  def perform
+  def perform(force_export: false)
     DbDumpHelper.dump_results_db
   end
 end

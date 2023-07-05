@@ -19,7 +19,7 @@ class DumpDeveloperDatabase < ApplicationJob
     throw :abort if running_on_dev_dump
   end
 
-  def perform
+  def perform(force_export: false)
     DbDumpHelper.dump_developer_db
   end
 end
