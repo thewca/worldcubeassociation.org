@@ -293,6 +293,7 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
+              redis_url: redis_url,
               db_host: db["host"],
               read_replica_host: read_replica
             })
