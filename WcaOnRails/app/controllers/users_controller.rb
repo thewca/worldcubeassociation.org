@@ -171,13 +171,9 @@ class UsersController < ApplicationController
     if @user.update(user_params)
       if @user.saved_change_to_delegate_status
         if @user.delegate_status
-          if @user.delegate_status == "senior_delegate"
-            @user_senior_delegate = @user
-          else
-            @user_senior_delegate = @user.senior_delegate
-          end
+          @user_senior_delegate = @user.senior_or_self
         else
-          @user_senior_delegate = User.find_by_id!(@user.senior_delegate_id_before_last_save)
+          @user_senior_delegate = User.find!(@user.senior_delegate_id_before_last_save)
         end
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user, @user_senior_delegate).deliver_later
       end
