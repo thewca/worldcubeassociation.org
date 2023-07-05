@@ -1240,4 +1240,9 @@ class User < ApplicationRecord
         .includes(competition: [:delegates, :organizers, :events])
         .map(&:competition)
   end
+
+  def senior_or_self
+    return nil unless self.delegate_status.present?
+    self.delegate_status == "senior_delegate" ? self : self.senior_delegate
+  end
 end
