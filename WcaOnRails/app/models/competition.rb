@@ -123,12 +123,6 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    year
-    month
-    day
-    endYear
-    endMonth
-    endDay
     cellName
     showAtAll
     external_registration_page
@@ -619,7 +613,6 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report!
 
-  before_validation :unpack_dates
   validate :dates_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
@@ -1058,24 +1051,6 @@ class Competition < ApplicationRecord
   # can competitors delete their own registration after it has been accepetd
   def registration_delete_after_acceptance_allowed?
     self.allow_registration_self_delete_after_acceptance
-  end
-
-  private def unpack_dates
-    if start_date
-      self.year = start_date.year
-      self.month = start_date.month
-      self.day = start_date.day
-    else
-      self.year = self.month = self.day = 0
-    end
-
-    if end_date
-      self.endYear = end_date.year
-      self.endMonth = end_date.month
-      self.endDay = end_date.day
-    else
-      self.endYear = self.endMonth = self.endDay = 0
-    end
   end
 
   private def dates_must_be_valid
@@ -1538,7 +1513,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:year).uniq.sort!.reverse!
+    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years

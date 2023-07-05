@@ -255,19 +255,6 @@ RSpec.describe Competition do
     expect(competition).to be_invalid_with_errors(cellName: ["must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"])
   end
 
-  it "populates year, month, day, endYear, endMonth, endDay" do
-    competition = FactoryBot.create :competition
-    competition.start_date = "1987-12-31"
-    competition.end_date = "1988-01-01"
-    competition.save!
-    expect(competition.year).to eq 1987
-    expect(competition.month).to eq 12
-    expect(competition.day).to eq 31
-    expect(competition.endYear).to eq 1988
-    expect(competition.endMonth).to eq 1
-    expect(competition.endDay).to eq 1
-  end
-
   describe "invalid date formats become nil" do
     let(:competition) { FactoryBot.create :competition }
 

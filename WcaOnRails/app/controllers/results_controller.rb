@@ -157,16 +157,14 @@ class ResultsController < ApplicationController
 
     if @is_histories
       if @is_history
-        order = 'event.`rank`, type desc, value, year desc, month desc, day desc, roundType.`rank` desc'
+        order = 'event.`rank`, type desc, value, start_date desc, roundType.`rank` desc'
       else
-        order = 'year desc, month desc, day desc, event.`rank`, type desc, value, roundType.`rank` desc'
+        order = 'start_date desc, event.`rank`, type desc, value, roundType.`rank` desc'
       end
 
       @query = <<-SQL
         SELECT
-          competition.year,
-          competition.month,
-          competition.day,
+          competition.start_date,
           event.id             eventId,
           event.name           eventName,
           event.cellName       eventCellName,
@@ -211,7 +209,7 @@ class ResultsController < ApplicationController
           UNION
           #{current_records_query("average", "average")}) helper
         ORDER BY
-          `rank`, type DESC, year, month, day, roundTypeId, personName
+          `rank`, type DESC, start_date, roundTypeId, personName
       SQL
     end
   end
@@ -227,7 +225,7 @@ class ResultsController < ApplicationController
                              format,
         country.name         countryName,
         competition.cellName competitionName,
-                             `rank`, competition.year, competition.month, competition.day
+                             `rank`, competition.start_date
       FROM
         (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
           FROM Concise#{type.capitalize}Results result
@@ -297,10 +295,10 @@ class ResultsController < ApplicationController
     @year = splitted_years_param[1].to_i
 
     if @is_only
-      @years_condition_competition = "AND competition.year = #{@year}"
+      @years_condition_competition = "AND YEAR(competition.start_date) = #{@year}"
       @years_condition_result = "AND result.year = #{@year}"
     elsif @is_until
-      @years_condition_competition = "AND competition.year <= #{@year}"
+      @years_condition_competition = "AND YEAR(competition.start_date) <= #{@year}"
       @years_condition_result = "AND result.year <= #{@year}"
     else
       @years_condition_competition = ""

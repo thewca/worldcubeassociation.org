@@ -255,7 +255,7 @@ RSpec.describe User, type: :model do
 
     it "does not allows assigning WCA ID if user and person details don't match" do
       user = FactoryBot.create(:user, name: "Whatever", country_iso2: "US", dob: Date.new(1950, 12, 12), gender: "m")
-      person = FactoryBot.create(:person, name: "Else", countryId: "United Kingdom", year: 1900, gender: "f")
+      person = FactoryBot.create(:person, name: "Else", countryId: "United Kingdom", dob: '1900-01-01', gender: "f")
       user.wca_id = person.wca_id
       expect(user).to be_invalid_with_errors(
         name: [I18n.t('users.errors.must_match_person')],
@@ -392,7 +392,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "unconfirmed_wca_id" do
-    let!(:person) { FactoryBot.create :person, year: 1990, month: 1, day: 2 }
+    let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
     let!(:senior_delegate) { FactoryBot.create :senior_delegate }
     let!(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let!(:user) do
@@ -402,7 +402,7 @@ RSpec.describe User, type: :model do
                                dob_verification: "1990-01-2")
     end
 
-    let!(:person_without_dob) { FactoryBot.create :person, :skip_validation, year: 0, month: 0, day: 0 }
+    let!(:person_without_dob) { FactoryBot.create :person, :skip_validation, dob: nil }
     let!(:person_without_gender) { FactoryBot.create :person, gender: nil }
     let!(:user_with_wca_id) { FactoryBot.create :user_with_wca_id }
 
@@ -417,7 +417,7 @@ RSpec.describe User, type: :model do
     it "doesn't allow user to change unconfirmed_wca_id" do
       expect(user).to be_valid
       user.claiming_wca_id = false
-      other_person = FactoryBot.create :person, year: 1980, month: 2, day: 1
+      other_person = FactoryBot.create :person, dob: '1980-02-01'
       user.unconfirmed_wca_id = other_person.wca_id
       expect(user).to be_invalid_with_errors(dob_verification: [I18n.t("users.errors.dob_incorrect_html", dob_form_path: dob_form_path)])
     end

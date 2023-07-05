@@ -35,7 +35,7 @@ module FinishUnfinishedPersons
     unfinished_person_results.each do |res|
       next if unfinished_persons.length >= MAX_PER_BATCH
 
-      competition_year = res.competition.year
+      competition_year = res.competition.start_date.year
       person_name = res.person_name
 
       semi_id, available_id_spots = self.compute_semi_id(competition_year, person_name, available_id_spots)
@@ -75,7 +75,7 @@ module FinishUnfinishedPersons
   end
 
   def self.persons_cache
-    @persons_cache ||= Person.select(:id, :wca_id, :name, :year, :month, :day, :countryId)
+    @persons_cache ||= Person.select(:id, :wca_id, :name, :dob, :countryId)
   end
 
   def self.compute_similar_persons(result, n = 5)
@@ -184,9 +184,7 @@ module FinishUnfinishedPersons
       name: new_name,
       countryId: new_country,
       gender: inbox_person&.gender || :o,
-      year: inbox_person&.dob&.year || 1954,
-      month: inbox_person&.dob&.month || 12,
-      day: inbox_person&.dob&.day || 4,
+      dob: inbox_person&.dob,
       comments: '',
     )
   end
