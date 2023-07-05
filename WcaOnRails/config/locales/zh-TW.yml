@@ -1636,8 +1636,9 @@ zh-TW:
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
-          您無法更改您的姓名、生日、性別或國籍，原因：%{reason}。如果您需要更改以上資料，請聯絡您的<a
-          href='%{delegate_url}'>代表</a>。
+          您無法更改您的姓名、生日、性別或國籍，原因：%{reason}。如果您需要更改以上資料，請聯絡<a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/您的 <a
+          href='%{delegate_url}'>代表</a>。 
         reason:
           #original_hash: 370ff12
           assigned: 您已經有WCA ID了

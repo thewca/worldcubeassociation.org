@@ -1333,6 +1333,8 @@ hu:
         msg: >-
           A nevedet, születési dátumodat, nemedet és nemzetiségedet nem tudod
           módosítani. Ennek az oka: %{reason}. Lépj kapcsolatba a <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+          Results Team</a>/<a
           href='%{delegate_url}'>Delegáltaddal</a> ha ezek közül valamelyiket
           módosítani szeretnéd.
         reason:

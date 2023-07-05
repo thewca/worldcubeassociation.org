@@ -1548,7 +1548,8 @@ ja:
         #original_hash: 13e8b80
         msg: >-
           氏名、生年月日、性別、国籍は変更できません。理由: %{reason}。変更が必要な場合は、<a
-          href='%{delegate_url}'>WCA 代理人</a>に連絡してください。
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA 競技結果チーム</a>/<a
+          href='%{delegate_url}'>WCA 代理人</a> に連絡してください。
         reason:
           #original_hash: 370ff12
           assigned: 既に WCA ID が連携されています

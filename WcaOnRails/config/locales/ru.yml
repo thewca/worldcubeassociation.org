@@ -2009,7 +2009,9 @@ ru:
         #original_hash: 13e8b80
         msg: >-
           Вы не можете изменить своё имя, день рождения, пол или страну, потому
-          что %{reason}. Свяжитесь с вашим <a
+          что %{reason}. Свяжитесь с <a
+          href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Results Team</a>/вашим <a
           href='%{delegate_url}'>Делегатом</a>, если хотите внести изменения.
         reason:
           #original_hash: 370ff12

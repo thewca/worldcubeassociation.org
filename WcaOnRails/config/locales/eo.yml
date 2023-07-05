@@ -1987,8 +1987,8 @@ eo:
         #original_hash: 13e8b80
         msg: >-
           Vi ne povas ŝanĝi vian nomon, naskiĝdaton, genron aŭ landon. Kialo:
-          %{reason}. Kontaktu vian <a href='%{delegate_url}'>Delegiton</a> se vi
-          bezonas ŝanĝi iun ajn el tiuj datumoj.
+          %{reason}. Kontaktu <a href='mailto:results@worldcubeassociation.org' target='_blank'>Rezultan
+          Teamon de la WCA</a>/vian <a href='%{delegate_url}'>Delegiton</a> se vi bezonas ŝanĝi iun ajn el tiuj datumoj.
         reason:
           #original_hash: 370ff12
           assigned: vi havas atribuitan WCA-ID-n

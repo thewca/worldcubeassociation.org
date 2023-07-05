@@ -1916,7 +1916,7 @@ th:
         #original_hash: 13e8b80
         msg: >-
           คุณไม่สามารถแก้ไขชื่อ วันเกิด เพศ หรือประเทศได้ เนื่องจาก %{reason}
-          กรุณาติดต่อ <a href='%{delegate_url}'>Delegate</a> ถ้าคุณต้องการแก้ไข
+          กรุณาติดต่อ <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/<a href='%{delegate_url}'>Delegate</a> ถ้าคุณต้องการแก้ไข
         reason:
           #original_hash: 370ff12
           assigned: คุณได้รับ WCA ID แล้ว

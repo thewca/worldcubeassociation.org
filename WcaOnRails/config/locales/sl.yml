@@ -1228,9 +1228,7 @@ sl:
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
-          Imena, datuma rojstva, spola ali države ne morete spremeniti. Razlog:
-          %{reason}. Če želite spremeniti naveden stvari, kontaktirajte svojega
-          <a href='%{delegate_url}'>delegata</a>.
+          Imena, datuma rojstva, spola ali države ne morete spremeniti. Razlog: %{reason}. Če želite spremeniti naveden stvari, kontaktirajte <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA ekipi za rezultate</a>/svojega <a href='%{delegate_url}'>delegata</a>.
         reason:
           #original_hash: 370ff12
           assigned: WCA ID vam je že dodeljen

@@ -1873,7 +1873,9 @@ fi:
         msg: >-
           Et voi muuttaa nimeäsi, syntymäaikaasi, sukupuoltasi tai
           kansalaisuuttasi. Syy: %{reason}. Ota yhteyttä <a
-          href='%{delegate_url}'>delegaattiisi</a> jos sinun täytyy muuttaa
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+          Results Teamiin</a>/<a
+          href='%{delegate_url}'>Delegaattiisi</a> jos sinun täytyy muuttaa
           jotakin näistä.
         reason:
           #original_hash: 370ff12

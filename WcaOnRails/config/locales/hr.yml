@@ -2007,8 +2007,8 @@ hr:
         #original_hash: 13e8b80
         msg: >-
           Ne možeš mijenjati svoje ime, datum rođenja, spol ili državu. Razlog:
-          %{reason}. Kontaktiraj svog <a href='%{delegate_url}'>Delegata</a>
-          ukoliko trebaš nešto promijeniti.
+          %{reason}. Kontaktiraj <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Timu
+          za rezultate</a>/svog <a href='%{delegate_url}'>Delegata</a> ukoliko trebaš nešto promijeniti.
         reason:
           #original_hash: 370ff12
           assigned: imaš WCA ID spojen

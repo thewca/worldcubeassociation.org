@@ -1828,8 +1828,10 @@ nl:
         #original_hash: 13e8b80
         msg: >-
           Naam, geboortedatum of land kan niet worden gewijzigd. Reden:
-          %{reason}. Neem contact op met je <a
-          href='%{delegate_url}'>delegate</a> als je iets wilt wijzigen,
+          %{reason}. Neem contact <a
+          href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA-resultatenteam</a>/op met je <a
+          href='%{delegate_url}'>Delegate</a> als je iets wilt wijzigen.
         reason:
           #original_hash: 370ff12
           assigned: je hebt al een toegekende WCA-id

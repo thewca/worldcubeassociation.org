@@ -1973,6 +1973,7 @@ id:
         msg: >-
           Anda tidak dapat mengubah nama, tanggal lahir, jenis kelamin, atau
           negara Anda. Alasan: %{reason}. Kontak <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/<a
           href='%{delegate_url}'>Delegate</a> Anda jika ingin mengubahnya.
         reason:
           #original_hash: 370ff12

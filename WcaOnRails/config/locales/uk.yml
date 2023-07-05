@@ -1663,7 +1663,8 @@ uk:
         #original_hash: 13e8b80
         msg: >-
           Ви не можете змінювати ім’я, дату народження, гендер або країну.
-          Прчиина: %{reason}. Зв’яжіться з Вашим <a
+          Прчиина: %{reason}. Зв’яжіться з <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>Команді результатів WCA</a>/bаши <a
           href='%{delegate_url}'>Делегатом</a>, якщо Ви хочете змінити щось з
           переліченого.
         reason:

@@ -1985,7 +1985,7 @@ sv:
         #original_hash: 13e8b80
         msg: >-
           Du kan inte ändra namn, födelsedatum, kön eller land. Orsak:
-          %{reason}. Kontakta din <a href='%{delegate_url}'>Delegat</a> om du
+          %{reason}. Kontakta <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/din <a href='%{delegate_url}'>Delegat</a> om du
           behöver ändra något av dessa.
         reason:
           #original_hash: 370ff12

@@ -1347,7 +1347,8 @@ zh-CN:
       cannot_edit:
         #original_hash: 13e8b80
         msg: >-
-          你无法变更你的姓名、生日、性别以及地区。原因如下：%{reason}。如有需要请联系你的<a
+          你无法变更你的姓名、生日、性别以及地区。原因如下：%{reason}。如有需要请联系<a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/你的 <a
           href='%{delegate_url}'>代表</a>。
         reason:
           #original_hash: 370ff12

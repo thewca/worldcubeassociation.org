@@ -1867,7 +1867,9 @@ pl:
         #original_hash: 13e8b80
         msg: >-
           Nie możesz zmienić swojego imienia, daty urodzin, płci oraz państwa.
-          Powód: %{reason}. Skontaktuj się z twoim <a
+          Powód: %{reason}. Skontaktuj <a
+          href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Zespołem do spraw wyników</a>/się z twoim <a
           href='%{delegate_url}'>Delegatem</a>, jeżeli potrzebujesz zmienić
           którekolwiek z nich.
         reason:

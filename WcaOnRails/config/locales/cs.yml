@@ -1980,7 +1980,8 @@ cs:
         #original_hash: 13e8b80
         msg: >-
           Nemůžete změnit své jméno, datum narození, pohlaví, ani stát. Důvod:
-          %{reason}. Kontaktujte svého <a href='%{delegate_url}'>Delegáta</a>,
+          %{reason}. Kontaktujte <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+          Results Teamu</a>/svého <a href='%{delegate_url}'>Delegáta</a>
           pokud potřebujete změnit některý z těchto údajů.
         reason:
           #original_hash: 370ff12

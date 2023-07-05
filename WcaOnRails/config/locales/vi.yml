@@ -1475,7 +1475,8 @@ vi:
         #original_hash: 13e8b80
         msg: >-
           Bạn không thể thay đổi tên, ngày sinh, giới tính, hay quốc gia. Lý do:
-          %{reason}. Liên hệ <a href='%{delegate_url}'>Delegate</a> nếu bạn cần
+          %{reason}. Liên hệ <a href='mailto:results@worldcubeassociation.org'
+          target='_blank'>Đội ngũ Kết quả của WCA</a>/<a href='%{delegate_url}'>Delegate</a> nếu bạn cần
           thay đổi bất kỳ phần nào.
         reason:
           #original_hash: 370ff12

@@ -2058,7 +2058,9 @@ de:
         #original_hash: 13e8b80
         msg: >-
           Du kannst deinen Namen, dein Geburtsdatum, Geschlecht oder Land nicht
-          bearbeiten. Grund: %{reason}. Kontaktiere deinen <a
+          bearbeiten. Grund: %{reason}. Kontaktiere <a
+          href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Results Team</a>/deinen <a
           href='%{delegate_url}'>Delegierten</a> wenn Du etwas davon ändern
           musst.
         reason:

@@ -1058,7 +1058,8 @@ ko:
         #original_hash: 13e8b80
         msg: >-
           성명, 생년월일, 성별, 국적을 변경하실 수 없습니다. 사유: %{reason}. 변경을 하셔야하면 <a
-          href='%{delegate_url}'>WCA 파견위원</a>에게 연락하세요.
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA 결과팀</a>/<a
+          href='%{delegate_url}'>WCA 파견위원</a> 에게 연락하세요.
         reason:
           #original_hash: 370ff12
           assigned: 이미 연결된 WCA ID가 있습니다

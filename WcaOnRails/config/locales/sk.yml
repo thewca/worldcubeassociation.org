@@ -1063,8 +1063,8 @@ sk:
         #original_hash: 8501c74
         msg: >-
           Nemôžete meniť meno, dátum narodenia, pohlavie alebo krajinu. Dôvod:
-          %{reason}. Kontaktujte vášho <a href='%{delegate_url}'>delegate</a> ak
-          chcete zmeniť niečo z uvedených vecí.
+          %{reason}. Kontaktujte <a href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Výsledkový Tím</a>/vášho <a href='%{delegate_url}'>Delegate</a> ak chcete zmeniť niečo z uvedených vecí.
         reason:
           #original_hash: 370ff12
           assigned: máte pridelené WCA ID

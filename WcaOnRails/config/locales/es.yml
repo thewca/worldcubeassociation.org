@@ -2024,7 +2024,9 @@ es:
         #original_hash: 13e8b80
         msg: >-
           No puedes modificar tu nombre, fecha de nacimiento, sexo ni país.
-          Motivo: %{reason}. Ponte en contacto con tu <a
+          Motivo: %{reason}. Ponte en contacto con <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>Equipo de
+          Resultados de la WCA</a>/tu <a
           href='%{delegate_url}'>Delegado</a> si necesitas cambiar alguno de
           estos campos.
         reason:

@@ -1887,9 +1887,9 @@ fr:
         #original_hash: 13e8b80
         msg: >-
           Vous ne pouvez pas changer votre nom, date de naissance, genre, ou
-          pays. Raison : %{reason}. Contactez votre <a
-          href='%{delegate_url}'>Délégué</a> si vous devez changer l'une de ces
-          informations.
+          pays. Raison : %{reason}. Contactez <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/votre <a
+          href='%{delegate_url}'>Délégué</a> si vous devez changer l'une de ces informations.
         reason:
           #original_hash: 370ff12
           assigned: vous avez déjà un ID WCA qui vous est assigné

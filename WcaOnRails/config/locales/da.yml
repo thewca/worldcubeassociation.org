@@ -1824,8 +1824,7 @@ da:
         #original_hash: 13e8b80
         msg: >-
           Du kan ikke ændre dit navn, fødselsdato, køn eller land. Årsag:
-          %{reason}. Kontakt din lokale <a href='%{delegate_url}'>Delegerede</a>
-          hvis du har brug for at ændre noget af det.
+          %{reason}. Kontakt <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA's Resultathold</a>/din lokale <a href='%{delegate_url}'>Delegerede</a> hvis du har brug for at ændre noget af det.
         reason:
           #original_hash: 370ff12
           assigned: Du har et WCA ID tilknyttet

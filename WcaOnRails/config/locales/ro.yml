@@ -1968,8 +1968,8 @@ ro:
         #original_hash: 13e8b80
         msg: >-
           Nu îți poți schimba singur numele, data nașterii, genul sau țara.
-          Motiv: %{reason}. Contactează <a href='%{delegate_url}'>delegatul</a>
-          tău dacă ai nevoie să schimbi aceste date.
+          Motiv: %{reason}. Contactează <a href='mailto:results@worldcubeassociation.org'
+          target='_blank'>Echipa de Rezultate WCA</a>/<a href='%{delegate_url}'>Delegatul</a> tău dacă ai nevoie să schimbi aceste date.
         reason:
           #original_hash: 370ff12
           assigned: ai un Id WCA alocat.

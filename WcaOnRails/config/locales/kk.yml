@@ -1746,7 +1746,8 @@ kk:
         #original_hash: 13e8b80
         msg: >-
           Сіз өзіңіздің атыңызды, туған күніңізді, жынысыңызды немесе еліңізді
-          өзгерте алмайсыз, себебі %{reason}. Егер өзгеріс жасағыңыз келсе, <a
+          өзгерте алмайсыз, себебі %{reason}. Егер\ өзгеріс жасағыңыз келсе, <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a>/<a
           href='%{delegate_url}'>Делегатқа</a> хабарласыңыз.
         reason:
           #original_hash: 370ff12
