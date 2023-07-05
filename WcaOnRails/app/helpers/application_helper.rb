@@ -3,7 +3,7 @@
 module ApplicationHelper
   include MarkdownHelper
   include MoneyRails::ActionViewExtension
-  include Webpacker::Helper
+  include Shakapacker::Helper
 
   def full_title(page_title = '')
     base_title = WcaOnRails::Application.config.site_name
@@ -241,7 +241,7 @@ module ApplicationHelper
   end
 
   def filter_css_packs(*names)
-    names.select { |pack| !current_webpacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
+    names.select { |pack| !current_shakapacker_instance.manifest.lookup_pack_with_chunks(pack, type: :stylesheet).nil? }
   end
 
   def add_to_css_assets(name)

@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
-class ClearConnectedStripeAccount < SingletonApplicationJob
+class ClearConnectedStripeAccount < ApplicationJob
+  include SingletonApplicationJob
+
   DELAY_IN_DAYS = 21
+
   queue_as :default
 
   def perform

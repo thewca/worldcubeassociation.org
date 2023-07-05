@@ -16,8 +16,8 @@ vi:
     FM: Liên bang Micronesia
     #original_hash: db871b0
     GW: Guiné-Bissau
-    #original_hash: 2f488ff
-    HK: Hồng Kông
+    #original_hash: e758117
+    HK: Hồng Kông, Trung Quốc
     #original_hash: 3ad2dd8
     KN: Saint Kitts và Nevis
     #original_hash: 7184d1a
@@ -30,8 +30,8 @@ vi:
     MK: Bắc Macedonia
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Ma Cao
+    #original_hash: 77e4070
+    MO: Ma Cao, Trung Quốc
     #original_hash: 05a15c1
     PS: Palestine
     #original_hash: 655191a
@@ -40,6 +40,8 @@ vi:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trinidad và Tobago
+    #original_hash: fefc818
+    TW: Trung Hoa Đài Bắc
     #original_hash: 0f3f60b
     VA: Holy See
     #original_hash: 3fa9b2d

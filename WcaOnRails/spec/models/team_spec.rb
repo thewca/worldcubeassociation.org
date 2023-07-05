@@ -21,11 +21,11 @@ RSpec.describe Team do
     FactoryBot.create :team_member, user_id: users[7].id, team_id: wrt_team.id, start_date: Time.now - 4.days
 
     expected_output = [
-      "Changes in WCA Results Team",
+      "<b>Changes in WCA Results Team</b>",
       "",
-      "New Members",
+      "<b>New Members</b>",
       *[users[6].name, users[7].name].sort,
-    ].join("\n")
+    ].join("<br>")
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 
@@ -35,11 +35,11 @@ RSpec.describe Team do
     FactoryBot.create :team_member, user_id: team_member.user.id, team_id: wrt_team.id, start_date: Time.now - 5.days, team_senior_member: true
 
     expected_output = [
-      "Changes in WCA Results Team",
+      "<b>Changes in WCA Results Team</b>",
       "",
-      "Promoted Senior Members",
+      "<b>Promoted Senior Members</b>",
       team_member.name,
-    ].join("\n")
+    ].join("<br>")
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 
@@ -52,12 +52,12 @@ RSpec.describe Team do
     FactoryBot.create :team_member, user_id: new_leader.user.id, team_id: wrt_team.id, start_date: Time.now - 10.days, team_leader: true
 
     expected_output = [
-      "Changes in WCA Results Team",
+      "<b>Changes in WCA Results Team</b>",
       "",
-      "Leaders",
+      "<b>Leaders</b>",
       "#{new_leader.name} has been appointed as the new Leader.",
       "#{cur_leader.name} is no longer the Leader, but will continue as Senior member.",
-    ].join("\n")
+    ].join("<br>")
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 end

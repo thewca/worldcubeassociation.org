@@ -16,8 +16,8 @@ kk:
     FM: Микронезия Федеративтік Штаттары
     #original_hash: db871b0
     GW: Гвинея-Бисау
-    #original_hash: 2f488ff
-    HK: Гонконг
+    #original_hash: e758117
+    HK: Гонконг, Қытай
     #original_hash: 3ad2dd8
     KN: Сент-Китс және Невис
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ kk:
     MK: Солтүстік Македония
     #original_hash: 928b7c4
     MM: Мьянма
-    #original_hash: d887137
-    MO: Макао
+    #original_hash: 77e4070
+    MO: Макао, Қытай
     #original_hash: 05a15c1
     PS: Палестина
     #original_hash: 655191a
@@ -40,6 +40,8 @@ kk:
     SZ: Эсватини
     #original_hash: 4d206a8
     TT: Тринидад және Тобаго
+    #original_hash: fefc818
+    TW: Қытай Тайпейі
     #original_hash: 3fa9b2d
     VC: Сент-Винсент және Гренадин
     #original_hash: 9af4622

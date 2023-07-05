@@ -8,12 +8,14 @@ hu:
     XS: Több ország (Dél-Amerika)
     #original_hash: 374ac0d
     XM: Több ország (Amerika)
-    #original_hash: 918c53a
-    MO: Makaó
-    #original_hash: 2f488ff
-    HK: Hongkong
+    #original_hash: 77e4070
+    MO: Makaó, Kína
+    #original_hash: e758117
+    HK: Hongkong, Kína
     #original_hash: 4e8bd04
     KR: Korea
+    #original_hash: fefc818
+    TW: Kínai Tajpej
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Több kontinens

@@ -16,8 +16,8 @@ hr:
     FM: Savezne Države Mikronezije
     #original_hash: db871b0
     GW: Gvineja Bisau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: Hong Kong, Kina
     #original_hash: 3ad2dd8
     KN: Sveti Kristofor i Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ hr:
     MK: Sjeverna Makedonija
     #original_hash: 928b7c4
     MM: Mjanmar
-    #original_hash: d887137
-    MO: Makao
+    #original_hash: 77e4070
+    MO: Makao, Kina
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ hr:
     SZ: Esvatini
     #original_hash: 4d206a8
     TT: Trinidad i Tobago
+    #original_hash: fefc818
+    TW: Kineski Tajpej
     #original_hash: 3fa9b2d
     VC: Sveti Vincent i Grenadini
     #original_hash: 9af4622

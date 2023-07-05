@@ -16,8 +16,8 @@ eo:
     FM: Federaciaj Ŝtatoj de Mikronezio
     #original_hash: db871b0
     GW: Gvineo Bisaŭa
-    #original_hash: 2f488ff
-    HK: Honkongo
+    #original_hash: e758117
+    HK: Honkongo, Ĉinio
     #original_hash: 3ad2dd8
     KN: Sankta-Kito kaj Neviso
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ eo:
     MK: Nord-Makedonio
     #original_hash: 928b7c4
     MM: Birmo
-    #original_hash: d887137
-    MO: Makao
+    #original_hash: 77e4070
+    MO: Makao, Ĉinio
     #original_hash: 05a15c1
     PS: Palestino
     #original_hash: 655191a
@@ -40,6 +40,8 @@ eo:
     SZ: Svazilando
     #original_hash: 4d206a8
     TT: Trinidado kaj Tobago
+    #original_hash: fefc818
+    TW: Ĉina Tajpeo
     #original_hash: 3fa9b2d
     VC: Sankta Vincento kaj Grenadinoj
     #original_hash: 9af4622

@@ -615,7 +615,7 @@
         },
         {
           "info": "",
-          "name": "Hong Kong",
+          "name": "Hong Kong, China",
           "continent_id": "_Asia",
           "class": "state",
           "iso2": "HK",
@@ -839,7 +839,7 @@
         },
         {
           "info": "",
-          "name": "Macau",
+          "name": "Macau, China",
           "continent_id": "_Asia",
           "class": "state",
           "iso2": "MO",
@@ -1391,7 +1391,7 @@
         },
         {
           "info": "",
-          "name": "Taiwan",
+          "name": "Chinese Taipei",
           "continent_id": "_Asia",
           "class": "state",
           "iso2": "TW",

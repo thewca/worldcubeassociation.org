@@ -16,8 +16,8 @@ pt:
     FM: Micronésia
     #original_hash: db871b0
     GW: Guiné-Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: 'Hong Kong, China'
     #original_hash: 3ad2dd8
     KN: São Cristóvão e Névis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ pt:
     MK: Macedónia do Norte
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macau
+    #original_hash: 77e4070
+    MO: 'Macau, China'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ pt:
     SZ: Suazilândia
     #original_hash: 4d206a8
     TT: Trinidad e Tobago
+    #original_hash: fefc818
+    TW: Taipé Chinês
     #original_hash: 3fa9b2d
     VC: São Vicente e Granadinas
     #original_hash: 9af4622
@@ -277,13 +279,13 @@ pt:
       any_result: Qualquer resultado
     single:
       #original_hash: d596f44
-      time: 'Tempo único abaixo de %{time}'
+      time: 'Singular abaixo de %{time}'
       #original_hash: 52ba186
       moves: 'Resolução única abaixo de %{moves} movimentos'
       #original_hash: b1993ae
       points: 'Resolução única acima de %{points} pontos'
       #original_hash: ed2b051
-      ranking: 'Top %{ranking} por tempo único'
+      ranking: 'Top %{ranking} por singular'
       #original_hash: 933b7dc
       any_result: Qualquer resolução única
     average:
@@ -314,7 +316,7 @@ pt:
     #original_hash: 77003d0
     best: Melhor
     #original_hash: dd11868
-    single: Tempo Único
+    single: Singular
     #original_hash: 15f86c0
     average: Média
     #original_hash: e7f6fc5
@@ -448,7 +450,7 @@ pt:
         name: Nome
         #original_hash: f91b080
         name_reason: A razão para o nome
-        #original_hash: b649210
+        #original_hash: fdba578
         cellName: Nome curto da competição
         #original_hash: d523ebb
         countryId: País
@@ -873,10 +875,11 @@ pt:
           Campeonato de Portugal 2017). Use corretamente letras maiúsculas. O
           nome deve conter apenas carateres alfanuméricos, traços(-), e
           comerciais(&), pontos(.), dois pontos(:), apóstrofos(') e espaços( ).
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Um nome curto para apresentação. Se o nome da competição já for curto,
-          pode usá-lo novamente (p. ex. Europeu 2006).
+          Um nome curto para apresentação. Se o nome da competição já tiver
+          menos que %{short_name_limit} caracteres, este não deve ser editado e
+          deve ser o mesmo do nome normal da competição.
         #original_hash: bce4589
         cityName: >-
           Nome da cidade onde a competição decorrerá. Não inclua o país
@@ -2762,6 +2765,12 @@ pt:
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Esta competição não tem prazo para a aceitação de competidores em lista
+        de espera. Se estiver a usar uma lista de espera, por favor especifique
+        um prazo. Se não estiver a usar uma lista de espera, lembre-se de
+        especificar isto nos requisitos de inscrição.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
