@@ -1,6 +1,6 @@
 <% provide(:title, t(".title")) %>
 
-<% ranking_timestamp = Timestamp.find_by(name: "compute_auxiliary_data_end")&.date || Date.current %>
+<% ranking_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
 <% @rows = execute_cached_query([*@cache_params, ranking_timestamp], @query) %>
 
 <div class="container">
