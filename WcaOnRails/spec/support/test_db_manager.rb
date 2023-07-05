@@ -10,6 +10,7 @@ class TestDbManager
     preferred_formats
     RoundTypes
     teams
+    timestamps
   ).freeze
 
   def self.fill_tables
