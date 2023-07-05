@@ -9,53 +9,55 @@
       </span>
     <% end %>
   </div>
-  <div class="table-responsive">
-    <table class="table table-striped floatThead">
-      <thead>
-        <tr>
-          <th class="competition"><%= t 'persons.show.competition' %></th>
-          <th class="round"><%= t 'competitions.results_table.round' %></th>
-          <th class="place"><%= t 'persons.show.place' %></th>
-          <th class="single"><%= t 'common.single' %></th>
-          <th class="regional-single-record"></th>
-          <th class="average"><%= t 'common.average' %></th>
-          <th class="regional-average-record"></th>
-          <th class="solves" colspan="5"><%= t 'common.solves' %></th>
-        </tr>
-      </thead>
-      <% @results.group_by(&:event).each do |event, results| %>
-        <tbody class="event-<%= event.id %>">
+  <% cache ["results_by_event", @person.wca_id, @results.map(&:updated_at).max, I18n.locale] do %>
+    <div class="table-responsive">
+      <table class="table table-striped floatThead">
+        <thead>
           <tr>
-            <td colspan="12" class="event">
-              <%= cubing_icon event.id %>
-              <%= t "events.#{event.id}" %>
-            </td>
+            <th class="competition"><%= t 'persons.show.competition' %></th>
+            <th class="round"><%= t 'competitions.results_table.round' %></th>
+            <th class="place"><%= t 'persons.show.place' %></th>
+            <th class="single"><%= t 'common.single' %></th>
+            <th class="regional-single-record"></th>
+            <th class="average"><%= t 'common.average' %></th>
+            <th class="regional-average-record"></th>
+            <th class="solves" colspan="5"><%= t 'common.solves' %></th>
           </tr>
-          <% pb_markers = historical_pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
-          <% results.group_by(&:competitionId).each do |_, results| %>
-            <% results.each_with_index do |result, index| %>
-              <tr class="result <%= return_podium_class result %>">
-                <td class="competition">
-                  <% if index == 0 # Show each competition name only once to avoid redundancy. %>
-                    <%= link_to result.competition.name, result.competition %>
-                  <% end %>
-                </td>
-                <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
-                <td class="place"><%= result.pos %></td>
-                <td class="single <%= pb_type_class_for_result(result.regionalSingleRecord, pb_markers[result.id][:single]) %>">
-                  <%= result.best_solve.clock_format %>
-                </td>
-                <td class="regional-single-record"><%= result.regionalSingleRecord %></td>
-                <td class="average <%= pb_type_class_for_result(result.regionalAverageRecord, pb_markers[result.id][:average]) %>">
-                  <%= result.average_solve.clock_format %>
-                </td>
-                <td class="regional-average-record"><%= result.regionalAverageRecord %></td>
-                <%= solve_tds_for_result(result) %>
-              </tr>
+        </thead>
+        <% @results.group_by(&:event).each do |event, results| %>
+          <tbody class="event-<%= event.id %>">
+            <tr>
+              <td colspan="12" class="event">
+                <%= cubing_icon event.id %>
+                <%= t "events.#{event.id}" %>
+              </td>
+            </tr>
+            <% pb_markers = historical_pb_markers(results.reverse) # Compute pb markers for results in the chronological order. %>
+            <% results.group_by(&:competitionId).each do |_, results| %>
+              <% results.each_with_index do |result, index| %>
+                <tr class="result <%= return_podium_class result %>">
+                  <td class="competition">
+                    <% if index == 0 # Show each competition name only once to avoid redundancy. %>
+                      <%= link_to result.competition.name, result.competition %>
+                    <% end %>
+                  </td>
+                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
+                  <td class="place"><%= result.pos %></td>
+                  <td class="single <%= pb_type_class_for_result(result.regionalSingleRecord, pb_markers[result.id][:single]) %>">
+                    <%= result.best_solve.clock_format %>
+                  </td>
+                  <td class="regional-single-record"><%= result.regionalSingleRecord %></td>
+                  <td class="average <%= pb_type_class_for_result(result.regionalAverageRecord, pb_markers[result.id][:average]) %>">
+                    <%= result.average_solve.clock_format %>
+                  </td>
+                  <td class="regional-average-record"><%= result.regionalAverageRecord %></td>
+                  <%= solve_tds_for_result(result) %>
+                </tr>
+              <% end %>
             <% end %>
-          <% end %>
-        </tbody>
-      <% end %>
-    </table>
-  </div>
+          </tbody>
+        <% end %>
+      </table>
+    </div>
+  <% end %>
 </div>
