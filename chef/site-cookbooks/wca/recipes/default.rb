@@ -274,10 +274,10 @@ redis = {
 
 if node.chef_environment == "production"
   # In production mode, we use Amazon ElasticCache.
-  redis['host'] = "redisprod.iebvzt.ng.0001.usw2.cache.amazonaws.com"
+  redis['host'] = "redis-main-prod-001.iebvzt.0001.usw2.cache.amazonaws.com"
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon ElasticCache.
-  redis['host'] = "redisstaging.iebvzt.ng.0001.usw2.cache.amazonaws.com"
+  redis['host'] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
 end
 
 redis_url = "redis://#{redis['host']}:#{redis['port']}"
