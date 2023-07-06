@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+
 Rails.application.routes.draw do
   use_doorkeeper do
     controllers applications: 'oauth/applications'
@@ -7,6 +9,11 @@ Rails.application.routes.draw do
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
   mount Starburst::Engine => '/starburst'
+
+  # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
+  authenticate :user, ->(user) { user.admin? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
