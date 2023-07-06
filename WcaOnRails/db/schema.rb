@@ -726,6 +726,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_135843) do
     t.datetime "digest_sent_at", precision: nil
   end
 
+  create_table "job_statistics", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "run_start", precision: nil
+    t.datetime "run_end", precision: nil
+    t.boolean "last_run_successful", default: false
+    t.text "last_error_message"
+    t.datetime "enqueued_at", precision: nil
+    t.integer "recently_rejected"
+    t.integer "recently_errored"
+    t.integer "times_completed"
+    t.bigint "average_runtime"
+  end
+
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "latitude_microdegrees"

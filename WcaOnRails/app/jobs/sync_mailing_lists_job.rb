@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
 class SyncMailingListsJob < ApplicationJob
-  include SingletonApplicationJob
-
-  queue_as :default
-
   SENIOR_DELEGATES_REGIONS_INFO = [
     {
       mailing_list: "delegates.africa@worldcubeassociation.org",

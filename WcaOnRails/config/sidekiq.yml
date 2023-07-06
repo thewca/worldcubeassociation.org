@@ -1,0 +1,8 @@
+:queues:
+  - critical
+  - default
+  - wca_jobs
+  - mailers
+development:
+  :concurrency: 5
+  :verbose: true
