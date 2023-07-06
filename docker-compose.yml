@@ -12,7 +12,7 @@ services:
     networks:
       - wca-main
     depends_on:
-      wca_db:
+      database:
         condition: 'service_healthy'
 
   wca_on_rails:
@@ -20,26 +20,26 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_HOST: wca_db
-      SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
-      REDIS_URL: redis://wca_redis:6379/0
+      DATABASE_HOST: database
+      SHAKAPACKER_DEV_SERVER_HOST: webpacker
+      REDIS_URL: redis://redis:6379/0
     tty: true
     # First, install Ruby and Node dependencies
     # Next, load the database if it does not exist yet
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: >
       bash -c 'bundle install && yarn install &&
-      if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
+      if ! [[ "`mysqlshow --user=root --host=database wca_development`" =~ "Tables" ]] ;
         then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
       bin/rails server -b 0.0.0.0'
 
-  wca_webpacker:
+  webpacker:
     <<: *app
     expose:
       - "3035"
     environment:
-      DATABASE_HOST: wca_db
+      DATABASE_HOST: database
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
     command: >
       bash -c 'bundle install && yarn install &&
@@ -47,7 +47,7 @@ services:
     depends_on:
       - wca_on_rails
 
-  wca_db:
+  database:
     image: mysql:8.0
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
@@ -55,7 +55,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - wca_db_volume:/var/lib/mysql
+      - database_volume:/var/lib/mysql
       - ./docker/my.cnf:/etc/my.cnf
     # Suppress unneeded messages via https://stackoverflow.com/a/55706057/2558618
     cap_add:
@@ -68,7 +68,7 @@ services:
       timeout: 5s
       retries: 20
 
-  wca_redis:
+  redis:
     image: redis:7.0-alpine
     expose:
       - "6379"
@@ -79,7 +79,7 @@ services:
       - wca-main
 
 volumes:
-  wca_db_volume:
+  database_volume:
     driver: local
   gems_volume:
     driver: local
