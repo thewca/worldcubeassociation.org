@@ -57,7 +57,7 @@ services:
     image: mysql:8.0
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    command: --default-authentication-plugin=mysql_native_password
+    command: --authentication-policy=mysql_native_password
     ports:
       - "3306:3306"
     volumes:
