@@ -8,6 +8,7 @@ services:
     volumes:
       - .:/app
       - gems_volume:/usr/local/bundle
+      - node_volume:/app/node_modules
     networks:
       - wca-main
 
@@ -76,7 +77,7 @@ services:
       - "6379"
     command: redis-server --loglevel warning
     volumes:
-      - cache:/data
+      - cache_volume:/data
     networks:
       - wca-main
 
@@ -85,7 +86,9 @@ volumes:
     driver: local
   gems_volume:
     driver: local
-  cache:
+  yarn_volume:
+    driver: local
+  cache_volume:
     driver: local
 
 networks:
