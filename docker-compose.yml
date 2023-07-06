@@ -5,6 +5,9 @@ services:
     build:
       context: WcaOnRails
     working_dir: /app/WcaOnRails
+    environment:
+      DATABASE_HOST: database
+      SHAKAPACKER_DEV_SERVER_HOST: webpacker
     volumes:
       - .:/app
       - gems_volume:/usr/local/bundle
@@ -20,8 +23,7 @@ services:
     ports:
       - "3000:3000"
     environment:
-      DATABASE_HOST: database
-      SHAKAPACKER_DEV_SERVER_HOST: webpacker
+      RAILS_ENV: development
       REDIS_URL: redis://redis:6379/0
     tty: true
     # First, install Ruby and Node dependencies
@@ -38,9 +40,6 @@ services:
     <<: *app
     expose:
       - "3035"
-    environment:
-      DATABASE_HOST: database
-      SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
     command: >
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'
