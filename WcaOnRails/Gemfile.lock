@@ -644,6 +644,11 @@ GEM
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     shellany (0.0.1)
+    sidekiq (7.0.9)
+      concurrent-ruby (< 2)
+      connection_pool (>= 2.3.0)
+      rack (>= 2.2.4)
+      redis-client (>= 0.11.0)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -822,6 +827,7 @@ DEPENDENCIES
   seedbank
   selectize-rails!
   shakapacker (= 7.0.3)
+  sidekiq
   simple_form
   simplecov
   simplecov-lcov

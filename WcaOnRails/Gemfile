@@ -99,6 +99,7 @@ gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
 gem 'sprockets-rails'
 gem 'fuzzy-string-match'
+gem 'sidekiq'
 
 group :development, :test do
   gem 'spring'
