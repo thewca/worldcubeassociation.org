@@ -269,6 +269,8 @@ GEM
     enum_help (0.0.19)
       activesupport (>= 3.0.0)
     erubi (1.12.0)
+    et-orbi (1.2.7)
+      tzinfo
     eu_central_bank (1.7.0)
       money (~> 6.13, >= 6.13.6)
       nokogiri (~> 1.9)
@@ -288,6 +290,9 @@ GEM
       faraday (~> 2.0)
     ffi (1.15.5)
     formatador (0.3.0)
+    fugit (1.8.1)
+      et-orbi (~> 1, >= 1.2.7)
+      raabro (~> 1.4)
     fuzzy-string-match (1.0.1)
       RubyInline (>= 3.8.6)
     glob (0.4.0)
@@ -490,6 +495,7 @@ GEM
     psych (5.1.0)
       stringio
     public_suffix (5.0.3)
+    raabro (1.4.0)
     racc (1.7.1)
     rack (2.2.8)
     rack-cors (2.0.1)
@@ -649,6 +655,10 @@ GEM
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
       redis-client (>= 0.11.0)
+    sidekiq-cron (1.10.1)
+      fugit (~> 1.8)
+      globalid (>= 1.0.1)
+      sidekiq (>= 6)
     signet (0.17.0)
       addressable (~> 2.8)
       faraday (>= 0.17.5, < 3.a)
@@ -828,6 +838,7 @@ DEPENDENCIES
   selectize-rails!
   shakapacker (= 7.0.3)
   sidekiq
+  sidekiq-cron
   simple_form
   simplecov
   simplecov-lcov
