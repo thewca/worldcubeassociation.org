@@ -11,6 +11,9 @@ services:
       - node_volume:/app/node_modules
     networks:
       - wca-main
+    depends_on:
+      wca_db:
+        condition: 'service_healthy'
 
   wca_on_rails:
     <<: *app
@@ -30,9 +33,6 @@ services:
         then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
       bin/rails server -b 0.0.0.0'
-    depends_on:
-      wca_db:
-        condition: 'service_healthy'
 
   wca_webpacker:
     <<: *app
@@ -45,10 +45,7 @@ services:
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'
     depends_on:
-      wca_on_rails:
-        condition: 'service_started'
-      wca_db:
-        condition: 'service_healthy'
+      - wca_on_rails
 
   wca_db:
     image: mysql:8.0
