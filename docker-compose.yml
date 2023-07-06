@@ -35,6 +35,8 @@ services:
         then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
       bin/rails server -b 0.0.0.0'
+    depends_on:
+      - redis
 
   webpacker:
     <<: *app
