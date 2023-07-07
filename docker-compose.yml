@@ -1,66 +1,68 @@
-version: "3.7"
+version: "3.8"
+
+x-app: &app
+  build:
+    context: WcaOnRails
+  working_dir: /app/WcaOnRails
+  volumes:
+    - .:/app
+    - gems_volume:/usr/local/bundle
+    - yarn_volume:/app/node_modules
+  networks:
+    - wca-main
 
 services:
   wca_on_rails:
-    build:
-      context: WcaOnRails
+    <<: *app
+    container_name: "rails"
     ports:
       - "3000:3000"
     environment:
+      RAILS_ENV: development
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       REDIS_URL: redis://wca_redis:6379/0
-    working_dir: /app/WcaOnRails
-    volumes:
-      - .:/app
-      - gems_volume:/usr/local/bundle
     tty: true
     # First, install Ruby and Node dependencies
-    # Next, wait for the database to be ready for queries via https://stackoverflow.com/a/53717981/2558618
-    # Load the database if it does not exist yet
+    # Next, load the database if it does not exist yet
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: >
       bash -c 'bundle install && yarn install &&
-      while ! mysql --host=wca_db --user=root -e "SELECT 1" >/dev/null 2>&1; do
-        echo "Waiting for MySQL to be ready" && sleep 5 ;
-      done &&
-      echo "MySQL is ready!" &&
       if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
         then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
       bin/rails server -b 0.0.0.0'
     depends_on:
-      - wca_db
-    networks:
-      - wca-main
+      wca_db:
+        condition: 'service_healthy'
+      wca_redis:
+        condition: 'service_started'
 
   wca_webpacker:
-    build:
-      context: WcaOnRails
-    ports:
-      - "3035:3035"
+    <<: *app
+    container_name: "webpacker"
+    expose:
+      - "3035"
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
-    working_dir: /app/WcaOnRails
-    volumes:
-      - .:/app
-      - gems_volume:/usr/local/bundle
     command: >
       bash -c 'bundle install && yarn install &&
       bin/shakapacker-dev-server'
     depends_on:
-      - wca_on_rails
-    networks:
-      - wca-main
+      wca_db:
+        condition: 'service_healthy'
+      wca_on_rails:
+        condition: 'service_started'
 
   wca_db:
     image: mysql:8.0
+    container_name: "database"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-    command: --default-authentication-plugin=mysql_native_password
-    expose:
-      - "3306"
+    command: --authentication-policy=mysql_native_password
+    ports:
+      - "3306:3306"
     volumes:
       - wca_db_volume:/var/lib/mysql
       - ./docker/my.cnf:/etc/my.cnf
@@ -69,14 +71,20 @@ services:
       - SYS_NICE
     networks:
       - wca-main
+    healthcheck:
+      test: [ "CMD", "mysql", "-u", "root", "-e", "SELECT 1;" ]
+      interval: 5s
+      timeout: 5s
+      retries: 20
 
   wca_redis:
-    image: redis:7.0
+    image: redis:7.0-alpine
+    container_name: "redis"
     expose:
       - "6379"
     command: redis-server --loglevel warning
     volumes:
-      - cache:/data
+      - cache_volume:/data
     networks:
       - wca-main
 
@@ -85,7 +93,9 @@ volumes:
     driver: local
   gems_volume:
     driver: local
-  cache:
+  yarn_volume:
+    driver: local
+  cache_volume:
     driver: local
 
 networks:
