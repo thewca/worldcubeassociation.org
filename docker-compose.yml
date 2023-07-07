@@ -14,6 +14,7 @@ x-app: &app
 services:
   wca_on_rails:
     <<: *app
+    container_name: "rails"
     ports:
       - "3000:3000"
     environment:
@@ -39,6 +40,7 @@ services:
 
   wca_webpacker:
     <<: *app
+    container_name: "webpacker"
     expose:
       - "3035"
     environment:
@@ -55,6 +57,7 @@ services:
 
   wca_db:
     image: mysql:8.0
+    container_name: "database"
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
     command: --authentication-policy=mysql_native_password
@@ -76,6 +79,7 @@ services:
 
   wca_redis:
     image: redis:7.0-alpine
+    container_name: "redis"
     expose:
       - "6379"
     command: redis-server --loglevel warning
