@@ -147,11 +147,6 @@ update_docs() {
   mv $tmp_dir/documents $tmp_dir/edudoc $public_dir
 }
 
-restart_dj() {
-  sudo supervisorctl update
-  sudo supervisorctl restart workers:*
-}
-
 rebuild_rails() {
   (
     cd WcaOnRails
@@ -168,7 +163,6 @@ rebuild_rails() {
     # Note that we are intentionally not automating database migrations.
   )
 
-  restart_dj
   restart_app
 
   echo "/!\\ Cleaning assets automatically has been disabled /!\\"
@@ -191,5 +185,5 @@ export RAILS_ENV=${RACK_ENV}
 # load rbenv into PATH
 eval "$("$HOME/.rbenv/bin/rbenv" init -)"
 
-allowed_commands="pull_latest restart_app restart_dj rebuild_rails rebuild_regs update_docs"
+allowed_commands="pull_latest restart_app rebuild_rails rebuild_regs update_docs"
 source scripts/_parse_args.sh
