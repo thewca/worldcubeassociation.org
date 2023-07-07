@@ -1683,8 +1683,8 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
-    unless current_user.can_admin_competitions? || !confirmed?
-      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit")
+    if confirmed? && !current_user.can_admin_competitions?
+      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
     end
 
     unless competitor_limit_enabled?
