@@ -10,7 +10,7 @@ import { List } from 'semantic-ui-react';
  */
 function Disclaimer() {
   return (
-    <>
+    <div className="container">
       <h1>Disclaimer</h1>
       <List as="ul">
         <List.Item as="li">
@@ -35,7 +35,7 @@ function Disclaimer() {
           without explicit permission from the WCA Board of Directors.
         </List.Item>
       </List>
-    </>
+    </div>
   );
 }
 

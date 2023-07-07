@@ -173,7 +173,6 @@ Rails.application.routes.draw do
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
-  get 'disclaimer' => 'static_pages#disclaimer'
   get 'contact' => 'static_pages#contact'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
   get 'privacy' => 'static_pages#privacy'
@@ -305,4 +304,6 @@ Rails.application.routes.draw do
       get '/records' => "api#records"
     end
   end
+
+  get '*path' => "react_routes#index"
 end
