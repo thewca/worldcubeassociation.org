@@ -164,7 +164,9 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL
         SELECT
-          competition.start_date,
+          YEAR(competition.start_date)  year,
+          MONTH(competition.start_date) month,
+          DAY(competition.start_date)   day,
           event.id             eventId,
           event.name           eventName,
           event.cellName       eventCellName,
@@ -225,7 +227,10 @@ class ResultsController < ApplicationController
                              format,
         country.name         countryName,
         competition.cellName competitionName,
-                             `rank`, competition.start_date
+                             `rank`,
+        YEAR(competition.start_date)  year,
+        MONTH(competition.start_date) month,
+        DAY(competition.start_date)   day
       FROM
         (SELECT eventId recordEventId, MIN(valueAndId) DIV 1000000000 value
           FROM Concise#{type.capitalize}Results result
