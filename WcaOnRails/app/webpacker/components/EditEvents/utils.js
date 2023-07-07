@@ -29,17 +29,32 @@ export const generateWcifRound = (eventId, roundNumber) => {
  * Removes the roundIds from the cumulativeRoundIds of the specified event.
  *
  * @param {collection} wcifEvents Will be modified in place.
- * @param {Array}      wcifRounds Rounds to be removed from all cumulativeRoundIds.
+ * @param {Array}      roundIdsToRemove Rounds to be removed from all cumulativeRoundIds.
  */
-export const removeSharedTimeLimits = (event, wcifRoundIds) => ({
-  ...event,
-  timeLimit: event.timeLimit ? {
-    ...event.timeLimit,
-    cumulativeRoundIds: event.cumulativeRoundIds.filter((wcifRoundId) => (
-      !wcifRoundIds.includes(wcifRoundId)
-    )),
-  } : null,
-});
+export const removeSharedTimeLimits = (event, roundIdsToRemove) => {
+  if (event.rounds) {
+    return {
+      ...event,
+      rounds: event.rounds.map((round) => removeSharedTimeLimitsFromRound(round, roundIdsToRemove)),
+    };
+  };
+  return event;
+};
+
+const removeSharedTimeLimitsFromRound = (round, roundIdsToRemove) => {
+  if (round.timeLimit) {
+    return {
+      ...round,
+      timeLimit: {
+        ...round.timeLimit,
+        cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter((wcifRoundId) => (
+          !roundIdsToRemove.includes(wcifRoundId)
+        )),
+      },
+    };
+  };
+  return round;
+};
 
 export const roundCutoffToString = (wcifRound, { short } = {}) => {
   const { cutoff } = wcifRound;
