@@ -25,9 +25,5 @@ class ApplicationJob < ActiveJob::Base
     def finished?
       self.end_date.present?
     end
-
-    def start_not_after?(other_date)
-      self.start_date.nil? || self.start_date < other_date
-    end
   end
 end

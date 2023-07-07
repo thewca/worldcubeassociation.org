@@ -42,6 +42,11 @@ class SyncMailingListsJob < ApplicationJob
     },
   ].freeze
 
+  before_enqueue do
+    # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
+    throw :abort unless EnvVars.WCA_LIVE_SITE?
+  end
+
   def perform
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", User.staff_delegates.map(&:email))
     GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", User.trainee_delegates.map(&:email))
