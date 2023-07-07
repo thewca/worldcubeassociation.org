@@ -164,6 +164,7 @@ class ResultsController < ApplicationController
 
       @query = <<-SQL
         SELECT
+          competition.start_date,
           YEAR(competition.start_date)  year,
           MONTH(competition.start_date) month,
           DAY(competition.start_date)   day,
@@ -228,6 +229,7 @@ class ResultsController < ApplicationController
         country.name         countryName,
         competition.cellName competitionName,
                              `rank`,
+        competition.start_date,
         YEAR(competition.start_date)  year,
         MONTH(competition.start_date) month,
         DAY(competition.start_date)   day
