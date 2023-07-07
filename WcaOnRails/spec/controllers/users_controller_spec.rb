@@ -188,7 +188,13 @@ RSpec.describe UsersController do
 
       it "notifies the board and the wqac via email" do
         sign_in user_who_makes_the_change
-        expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(user_whose_delegate_status_changes, user_who_makes_the_change, user_senior_delegate).and_call_original
+        expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(
+          user_whose_delegate_status_changes,
+          user_who_makes_the_change,
+          user_senior_delegate,
+          "candidate_delegate",
+          "delegate",
+        ).and_call_original
         expect do
           patch :update, params: { id: user_whose_delegate_status_changes.id, user: { delegate_status: "delegate" } }
         end.to change { enqueued_jobs.size }.by(1)
