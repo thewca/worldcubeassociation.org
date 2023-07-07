@@ -173,9 +173,15 @@ class UsersController < ApplicationController
         if @user.delegate_status
           @user_senior_delegate = @user.senior_or_self
         else
-          @user_senior_delegate = User.find!(@user.senior_delegate_id_before_last_save)
+          @user_senior_delegate = User.find(@user.senior_delegate_id_before_last_save)
         end
-        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user, @user_senior_delegate).deliver_later
+        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(
+          @user,
+          current_user,
+          @user_senior_delegate,
+          @user.delegate_status_before_last_save,
+          @user.delegate_status,
+        ).deliver_later
       end
       if current_user == @user
         # Sign in the user, bypassing validation in case their password changed
