@@ -162,6 +162,10 @@ FactoryBot.define do
       connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
     end
 
+    trait :accepts_donations do
+      enable_donations { true }
+    end
+
     trait :with_valid_schedule do
       with_rounds { true }
       with_schedule { true }

@@ -1,5 +1,0 @@
-#--- Require valid user
-AuthType Basic
-AuthName "Only access to WCA admins!"
-AuthUserFile /path/outside/documenttree/to/your/.htpasswd
-Require valid-user

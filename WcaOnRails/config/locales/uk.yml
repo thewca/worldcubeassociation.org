@@ -16,8 +16,8 @@ uk:
     FM: 'Мікронезія, Федеративні Штати'
     #original_hash: db871b0
     GW: Гвінея-Бісау
-    #original_hash: 2f488ff
-    HK: Гонконг
+    #original_hash: e758117
+    HK: Гонконг, Китай
     #original_hash: 3ad2dd8
     KN: Сент-Кіттс і Невіс
     #original_hash: 7184d1a
@@ -30,8 +30,8 @@ uk:
     MK: Македонія Північна
     #original_hash: 928b7c4
     MM: М’янма
-    #original_hash: d887137
-    MO: Макао
+    #original_hash: 77e4070
+    MO: Макао, Китай
     #original_hash: 05a15c1
     PS: Палестина
     #original_hash: 655191a
@@ -40,6 +40,8 @@ uk:
     SZ: Есватіні
     #original_hash: 4d206a8
     TT: Тринідад і Тобаго
+    #original_hash: fefc818
+    TW: Кита́йський Тайбе́й
     #original_hash: 0f3f60b
     VA: Ватикан
     #original_hash: 3fa9b2d

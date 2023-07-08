@@ -45,7 +45,10 @@
           <% @persons.includes(:user).each do |person| %>
             <tr>
               <td>
-                <%= render "shared/user_avatar", user: (person.user || User.new) %>
+                <%= react_component("UserAvatar", {
+                  avatar: (person.user || User.new).avatar,
+                  size: "small"
+                }) %>
               </td>
               <td>
                 <span class="wca-id"><%= wca_highlight(person.wca_id, query_parts) %></span>

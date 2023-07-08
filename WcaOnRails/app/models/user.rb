@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
@@ -31,6 +32,8 @@ class User < ApplicationRecord
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
   has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
+  has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
+  has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -94,8 +97,7 @@ class User < ApplicationRecord
 
   # Very simple (and permissive) regexp, the goal is just to avoid silly typo
   # like "aaa@bbb,com", or forgetting the '@'.
-  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/
-  validates :email, format: { with: EMAIL_RE }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
@@ -1005,7 +1007,7 @@ class User < ApplicationRecord
     if !wca_id && !unconfirmed_wca_id
       matches = []
       unless country.nil? || dob.nil?
-        matches = competition.competitors.where(name: name, year: dob.year, month: dob.month, day: dob.day, gender: gender, countryId: country.id).to_a
+        matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a
       end
       if matches.size == 1 && matches.first.user.nil?
         update(wca_id: matches.first.wca_id)
@@ -1241,5 +1243,10 @@ class User < ApplicationRecord
     self.accepted_registrations
         .includes(competition: [:delegates, :organizers, :events])
         .map(&:competition)
+  end
+
+  def senior_or_self
+    return nil unless self.delegate_status.present?
+    self.delegate_status == "senior_delegate" ? self : self.senior_delegate
   end
 end

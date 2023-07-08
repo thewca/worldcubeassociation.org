@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe MergePeople do
   let(:person1) { FactoryBot.create(:person, countryId: "USA") }
-  let(:shared_attributes) { person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :year, :month, :day) }
+  let(:shared_attributes) { person1.attributes.symbolize_keys.slice(:name, :countryId, :gender, :dob) }
   let(:person2) { FactoryBot.create(:person, shared_attributes) }
   let(:merge_people) { MergePeople.new(person1_wca_id: person1.wca_id, person2_wca_id: person2.wca_id) }
 
@@ -43,7 +43,7 @@ RSpec.describe MergePeople do
   end
 
   it "requires same dob" do
-    person2.update_attribute(:year, person1.year + 1)
+    person2.update_attribute(:dob, person1.dob + 1.year)
     expect(merge_people).to be_invalid_with_errors(person2_wca_id: ["Birthdays don't match"])
   end
 

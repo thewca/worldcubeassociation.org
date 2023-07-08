@@ -16,8 +16,8 @@ th:
     FM: สหพันธรัฐไมโครนีเซีย
     #original_hash: db871b0
     GW: สาธารณรัฐกินี-บิสเซา
-    #original_hash: 2f488ff
-    HK: ฮ่องกง
+    #original_hash: e758117
+    HK: 'ฮ่องกง, จีน'
     #original_hash: 3ad2dd8
     KN: สหพันธรัฐเซนต์คิตส์และเนวิส
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ th:
     MK: สาธารณรัฐนอร์ทมาซิโดเนีย
     #original_hash: 928b7c4
     MM: สาธารณรัฐแห่งสหภาพพม่า
-    #original_hash: d887137
-    MO: มาเก๊า
+    #original_hash: 77e4070
+    MO: 'มาเก๊า, จีน'
     #original_hash: 05a15c1
     PS: รัฐปาเลสไตน์
     #original_hash: 655191a
@@ -42,6 +42,8 @@ th:
     SZ: ราชอาณาจักรเอสวาตีนี
     #original_hash: 4d206a8
     TT: สาธารณรัฐตรินิแดดและโตเบโก
+    #original_hash: fefc818
+    TW: จีนไทเป
     #original_hash: 3fa9b2d
     VC: เซนต์วินเซนต์และเกรนาดีนส์
     #original_hash: 9af4622
@@ -445,8 +447,8 @@ th:
         name: ชื่อ
         #original_hash: f91b080
         name_reason: เหตุผลของชื่อ
-        #original_hash: b649210
-        cellName: ชื่อเล่นของการแข่งขัน
+        #original_hash: fdba578
+        cellName: ชื่อของการแข่งขันแบบสั้น
         #original_hash: d523ebb
         countryId: ประเทศ
         #original_hash: 25b7b06
@@ -572,6 +574,8 @@ th:
         paid_entry_fees: จ่าย
         #original_hash: bae7d5b
         status: สถานะ
+        #original_hash: a6e8a0b
+        administrative_notes: บันทึกการจัดการ
         #original_hash: 709a232
         name: ชื่อ
         #original_hash: a6b9d69
@@ -853,10 +857,11 @@ th:
           ต้องแน่ใจว่าเขียนขึ้นต้นด้วยตัวพิมใหญ่ ชื่อจะต้องประกอบด้วยตัวอักษร,
           ตัวเลข, เครื่องหมายขีดคั่น (-), เครื่องหมายและ (&), จุด (.),
           เครื่องหมายจุดคู่ (:), เครื่องหมายวรรคตอน (') และช่องว่าง ( )
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          ชื่อย่อสำหรับการแสดง หากชื่อของการแข่งขันสั้นอยู่แล้ว
-          คุณสามารถใช้ชื่อนั้นได้ (เช่น Europe 2006)
+          ชื่อแบบสั้นสำหรับการแสดง หากชื่อของการแข่งขันยาวน้อยกว่า
+          %{short_name_limit} อยู่แล้ว ไม่ควรจะไปแก้ไขมัน
+          และควรใช้ชื่อเดียวกับชื่อปกติ
         #original_hash: bce4589
         cityName: >-
           ชื่อของเมืองหรือรัฐ (ถ้ามี) ที่จะมีการแข่งขัน ไม่ต้องใส่ประเทศ (เช่น
@@ -1156,6 +1161,10 @@ th:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          หมายเหตุเพิ่มเติมเก็บไว้เป็นส่วนหนึ่งของการจัดการการลงทะเบียนนี้
+          ผู้สมัครการแข่งขันจะไม่เห็นสิ่งนี้
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1592,8 +1601,8 @@ th:
       results_team: Results team
       #original_hash: 4e7afeb
       results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Database
       #original_hash: aee74b8
       new_post: New post
       #original_hash: 0d67445
@@ -2358,43 +2367,62 @@ th:
       title: ค่าสมัครแข่งขัน
       #original_hash: d1569e6
       payment_successful: การชำระค่าสมัครของคุณสำเร็จแล้ว การสมัครของคุณจะแสดงว่าจ่ายแล้วด้านล่าง
+      #original_hash: 92dde77
+      payment_processing: การชำระเงินของคุณได้รับการยืนยันแล้ว แต่ธุรกรรมยังอยู่ระหว่างดำเนินการ
+      #original_hash: 62d7351
+      button_text: จ่ายตอนนี้!
       hints:
         #original_hash: bf3a39e
         donation: ทางเลือกการบริจาคให้ผู้จัดการแข่งขัน
-        #original_hash: 16cf92d
-        card_information: >-
-          ข้อมูลบัตรของคุณไม่เคยถูกใข้กับ WCA มาก่อน
-          มันจะถูกดำเนินการอย่างเป็นความลับด้วย Stripe
-          ซึ่งจะประมวลผลและส่งผลกลับมาให้เรา
+        #original_hash: f7fa263
+        payment_button: >-
+          ข้อมูลการชำระเงินของคุณจะไม่ถูกรับรู้โดยเว็บไซต์ WCA มันถูกส่งไปยัง
+          Stripe อย่างปลอดภัยซึ่งจะจัดการกระบวนการชำระเงินและติดต่อกลับมาหาเรา
       labels:
         #original_hash: 4de825f
         entry_fees: ค่าสมัครแข่งขัน
+        #original_hash: dc9d458
+        fees_paid: จ่าย
+        #original_hash: cc632b5
+        fees_remaining: ที่เหลืออยู่
         #original_hash: 2c09302
         donation: บริจาค
-        #original_hash: 184150d
-        card_information: ข้อมูลบัตร
-        #original_hash: bc8091a
-        cardholder_name: ผู้ถือบัตร
         #original_hash: 919710d
         show_donation: ฉันต้องการบริจาคเพิ่มเติม ซึ่งจะไปที่ทีมผู้จัดการแข่งขันเท่านั้น
+        #original_hash: 4930c06
+        payment_information: ข้อมูลการชำระเงิน
+        #original_hash: de0fc95
+        payment_button: ชำระค่าสมัครของคุณด้วย Stripe
+        #original_hash: f94d00f
+        ajax_error: WCA server error
+        #original_hash: e62c56c
+        stripe_error: Stripe error
+        #original_hash: 97f7359
+        subtotal: Subtotal
       alerts:
         #original_hash: a34940e
         not_a_number: กรุณาใส่จำนวนให้ถูกต้อง
         #original_hash: 707b9ca
         amount_too_low: จำนวนต้องอย่างน้อยเท่ากับค่าสมัครการแข่งขัน
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          คุณกำลังจะชำระเงินอย่างน้อยสองเท่าของจำนวนเงินที่จำเป็นสำหรับการลงทะเบียนของคุณเพื่อดำเนินการต่อ
+          กรุณายืนยันการชำระเงินโดยกดตกลง
       errors:
         #original_hash: 166d48c
         already_paid: การเปลี่ยนแปลงไม่สามารถทำได้ เนื่องจากค่าสมัครได้ถูกชำระแล้ว
-        #original_hash: b2bc8ed
+        #original_hash: f10c80c
         not_allowed: คุณไม่สามารถชำระค่าสมัครการแข่งขันนั้นได้
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          เราไม่พบหลักฐานการชำระค่าสมัครจากระบบ
-          การชำระค่าสมัครอาจเกิดความผิดพลาดหรือบัตรของคุณไม่ถูกเรียกเก็บค่าสมัคร
-        #original_hash: 63e0ec1
-        cardholder_name: กรุณาตรวจสอบผู้ถือบัตร
-    #original_hash: 8607a87
-    payment_button_text: ชำระค่าสมัครด้วยบัตร
+        #original_hash: a073600
+        stripe_failed: โปรดตรวจสอบธุรกรรมของ Stripe
+        #original_hash: a32e40f
+        stripe_not_found: Stripe รายงานกลับว่าไม่พบ Transaction ID ดังกล่าว
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: Stripe รายงานว่า transaction secret ไม่ตรงกับค่าของเรา
+        #original_hash: 8d1a199
+        payment_reset: การชำระเงินถูกปฏิเสธโดย Stripe
+        #original_hash: bcf6a93
+        payment_pending: การชำระเงินยังไม่เสร็จสมบูรณ์
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       เพื่อให้การสมัครครั้งต่อไปเร็วขึ้น คุณสามารถเลือกประเภทการแข่งขันที่ชอบได้
@@ -2476,7 +2504,7 @@ th:
       #original_hash: aeb5f2a
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         โปรดตรวจสอบให้แน่ใจว่าทุกรอบที่ไม่ใช่รอบชิงชนะเลิศมีเงื่อนไขการผ่านเข้ารอบระบุไว้
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         รอบที่ %{round_number} ในประเภท %{event} มีเวลา cutoff มากกว่า time
         limit กรุณาแน่ใจว่าเวลา cutoff นั้นน้อยกว่า time limit
@@ -2578,6 +2606,11 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
+        หากคุณกำลังใช้ waiting list โปรดระบุกำหนดเวลา หากคุณไม่ได้ใช้ waiting
+        list โปรดอย่าลืมระบุสิ่งนี้ในข้อกำหนดการลงทะเบียน
     my_competitions:
       #original_hash: 5c6d3ea
       title: การแข่งขันของฉัน
@@ -3155,8 +3188,6 @@ th:
     cancelled_by_html: 'ยกเลิกโดย %{name} เมื่อ %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: คุณแน่ใจที่จะยกเลิกการแข่งขันใช่หรือไม่?
-    #original_hash: 9a42672
-    upload_results: อัพโหลดผลการแข่งขัน
     #original_hash: 01de5ee
     post_results: โพสต์ผลการแข่งขัน
     #original_hash: b6513f1
@@ -3221,9 +3252,9 @@ th:
         qualification_html: >-
           ต้องทำเวลาผ่านเวลาคัดเลือกในการแข่งขัน WCA การแข่งขันครั้งอื่น ๆ
           เพื่อเข้าแข่งขันในการแข่งขันครั้งนี้
-        #original_hash: 3b524fd
+        #original_hash: 51dfad5
         qualification_all_events_html: 'ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่ <b>%{date}</b>'
-        #original_hash: 0d791e9
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
           สำหรับประเภท %{events} ต้องทำเวลาให้ผ่านการคัดเลือกก่อนวันที่
           <b>%{date}</b>.

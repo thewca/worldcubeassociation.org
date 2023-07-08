@@ -215,49 +215,8 @@ server_name = {
 }[node.chef_environment]
 
 #### Nginx
-# Unfortunately, we have to compile nginx from source to get the auth request module
-# See: https://bugs.launchpad.net/ubuntu/+source/nginx/+bug/1323387
+package "nginx"
 
-# Nginx dependencies copied from https://www.alibabacloud.com/blog/how-to-build-nginx-from-source-on-ubuntu-20-04-lts_597793
-package 'libpcre3'
-package 'libpcre3-dev'
-package 'zlib1g'
-package 'zlib1g-dev'
-package 'libssl-dev'
-package 'libgd-dev'
-package 'libxml2'
-package 'libxml2-dev'
-package 'uuid-dev'
-
-bash "build nginx" do
-  code <<-EOH
-    set -e # exit on error
-    cd /tmp
-    wget http://nginx.org/download/nginx-1.21.1.tar.gz
-    tar xvf nginx-1.21.1.tar.gz
-    cd nginx-1.21.1
-    ./configure --sbin-path=/usr/local/sbin --with-http_ssl_module --with-http_auth_request_module --with-http_gzip_static_module --conf-path=/etc/nginx/nginx.conf --error-log-path=/var/log/nginx/error.log --http-log-path=/var/log/nginx/access.log
-    make
-    sudo make install
-  EOH
-
-  # Don't build nginx if we've already built it.
-  not_if { ::File.exist?('/usr/local/sbin/nginx') }
-end
-template "/etc/nginx/fcgi.conf" do
-  source "fcgi.conf.erb"
-  variables({
-              username: username,
-            })
-  notifies :run, 'execute[reload-nginx]', :delayed
-end
-template "/etc/init.d/nginx" do
-  source "nginx.erb"
-  mode 0755
-  owner 'root'
-  group 'root'
-  notifies :run, 'execute[update-rc]', :delayed
-end
 template "/etc/nginx/nginx.conf" do
   source "nginx.conf.erb"
   mode 0644
@@ -308,6 +267,20 @@ execute "update-rc" do
   action :nothing
 end
 
+### Redis
+redis = {
+  port: 6379
+}
+
+if node.chef_environment == "production"
+  # In production mode, we use Amazon ElasticCache.
+  redis[:host] = "redis-main-prod-001.iebvzt.0001.usw2.cache.amazonaws.com"
+elsif node.chef_environment == "staging"
+  # In staging mode, we use Amazon ElasticCache.
+  redis[:host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
+end
+
+redis_url = "redis://#{redis[:host]}:#{redis[:port]}"
 
 #### Rails secrets
 # Don't be confused by the name of this file! This is used by both our staging
@@ -320,82 +293,22 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
+              redis_url: redis_url,
               db_host: db["host"],
               read_replica_host: read_replica
             })
 end
 
 #### phpMyAdmin
-pma_path = "#{repo_root}/webroot/results/admin/phpMyAdmin"
-bash 'install phpMyAdmin' do
-  cwd ::File.dirname("/tmp")
-  code <<-EOH
-    cd /tmp
-    wget https://files.phpmyadmin.net/phpMyAdmin/4.9.7/phpMyAdmin-4.9.7-english.tar.gz
-    tar xvf phpMyAdmin-4.9.7-english.tar.gz
-    mv phpMyAdmin-4.9.7-english #{pma_path}
-  EOH
-  not_if { ::File.exist?(pma_path) }
-end
-template "#{repo_root}/webroot/results/admin/phpMyAdmin/config.inc.php" do
-  source "phpMyAdmin_config.inc.php.erb"
-  variables({
-              secrets: secrets,
-              db: db,
-            })
+package "phpmyadmin" do
+  # skipping recommends because otherwise it will install an entire apache2 server…
+  options ["--no-install-recommends"]
 end
 
-#### Legacy PHP results system
-PHP_MEMORY_LIMIT = '768M'
-PHP_IDLE_TIMEOUT_SECONDS = 120
-PHP_POST_MAX_SIZE = '20M'
-PHP_MAX_INPUT_VARS = 5000
-apt_repository 'legacy-php' do
-  uri 'ppa:ondrej/php'
-end
-package 'php5.6-cli'
-package 'php5.6-mbstring' # gregorbg necessary for results posting when competitors have non-ASCII names
-node.default['php-fpm']['skip_repository_install'] = true
-node.default['php-fpm']['package_name'] = 'php5.6-fpm'
-node.default['php-fpm']['conf_dir'] = '/etc/php/5.6/fpm/conf.d'
-node.default['php-fpm']['pool_conf_dir'] = '/etc/php/5.6/fpm/pool.d'
-node.default['php-fpm']['conf_file'] = '/etc/php/5.6/fpm/php-fpm.conf'
-node.default['php-fpm']['error_log'] = '/var/log/php5.6-fpm.log'
-node.default['php-fpm']['pid'] = '/var/run/php/php5.6-fpm.pid'
-include_recipe 'php-fpm::install'
-php_fpm_pool "www" do
-  listen "/var/run/php/php5.6-fpm.#{username}.sock"
-  user username
-  group username
-  process_manager "dynamic"
-  max_children 9
-  min_spare_servers 2
-  max_spare_servers 4
-  start_servers 3
-  max_requests 200
-  php_options 'php_admin_flag[log_errors]' => 'on', 'php_admin_value[memory_limit]' => PHP_MEMORY_LIMIT
-end
-execute "sed -i -r 's/(; *)?memory_limit = .*/memory_limit = #{PHP_MEMORY_LIMIT}/g' /etc/php/5.6/fpm/php.ini" do
-  not_if "grep '^memory_limit = #{PHP_MEMORY_LIMIT}' /etc/php/5.6/fpm/php.ini"
-end
-execute "sed -i -r 's/(; *)?max_execution_time = .*/max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}/g' /etc/php/5.6/fpm/php.ini" do
-  not_if "grep '^max_execution_time = #{PHP_IDLE_TIMEOUT_SECONDS}' /etc/php/5.6/fpm/php.ini"
-end
-execute "sed -i -r 's/(; *)?post_max_size = .*/post_max_size = #{PHP_POST_MAX_SIZE}/g' /etc/php/5.6/fpm/php.ini" do
-  not_if "grep '^post_max_size = #{PHP_POST_MAX_SIZE}' /etc/php/5.6/fpm/php.ini"
-end
-execute "sed -i -r 's/(; *)?max_input_vars = .*/max_input_vars = #{PHP_MAX_INPUT_VARS}/g' /etc/php/5.6/fpm/php.ini" do
-  not_if "grep '^max_input_vars = #{PHP_MAX_INPUT_VARS}' /etc/php/5.6/fpm/php.ini"
-end
-# Install mysqli for php. See:
-#  http://stackoverflow.com/a/22525205
-package "php5.6-mysql"
-package "php5.6-mysqlnd-ms"
-template "#{repo_root}/webroot/results/includes/_config.php" do
-  source "results_config.php.erb"
-  mode 0644
-  owner username
-  group username
+package "php-fpm"
+
+template "etc/phpmyadmin/conf.d/wca.php" do
+  source "phpMyAdmin_config.inc.php.erb"
   variables({
               secrets: secrets,
               db: db,

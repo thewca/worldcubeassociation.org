@@ -22,6 +22,12 @@
     }
   }
 
+  &.left-align {
+    .user-name {
+      text-align: start;
+    }
+  }
+
   .user-name {
     .user-badge-subtext {
       font-style: oblique;
@@ -29,7 +35,6 @@
       font-size: 0.9em;
     }
 
-    border: 1px solid #e0e1e2 !important;
     background-color: transparent !important;
     width: 100%;
 
@@ -37,6 +42,10 @@
     align-content: center;
     justify-content: center;
     flex-direction: column;
+  }
+
+  .show-border {
+    border: 1px solid #e0e1e2 !important;
   }
 
   /* Stop this looking like you can click it */

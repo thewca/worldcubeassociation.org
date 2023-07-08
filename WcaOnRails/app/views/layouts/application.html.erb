@@ -32,7 +32,7 @@
   <% add_to_packs("lodash_utils") %>
 
   <%#
-    Our webpacker packs (automatically split in chunks).
+    Our webpack packs (automatically split in chunks).
     Always *prepend* application, so that we load jquery first.
     We can't just add_to_packs application, because the yielded block will be
     evaluated first, and any pack added (like schedule) will be loaded before application.

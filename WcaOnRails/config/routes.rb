@@ -25,7 +25,10 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
+  post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
+  get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
+  get 'registration/stripe-denomination' => 'registrations#stripe_denomination', as: :registration_stripe_denomination
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -65,7 +68,6 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
-    get 'payment-success' => 'registrations#payment_success'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder

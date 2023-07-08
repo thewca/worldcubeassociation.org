@@ -27,6 +27,17 @@ RSpec.describe StripeTransaction do
     expect(ruby_amount).to eq(sixty_thousand_ugx.cents)
   end
 
+  it "handles ISK as a special currency" do
+    two_thousand_isk = Money.from_amount(2_000, 'ISK')
+    expect(two_thousand_isk.cents).to eq(2_000)
+
+    stripe_amount = StripeTransaction.amount_to_stripe(two_thousand_isk.cents, two_thousand_isk.currency.iso_code)
+    expect(stripe_amount).to eq(200_000)
+
+    ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, two_thousand_isk.currency.iso_code)
+    expect(ruby_amount).to eq(two_thousand_isk.cents)
+  end
+
   it "throws exception when sub-hundred currency not divisible" do
     expect do
       # Funnily enough, our RubyMoney gem doesn't even support HUF sub-units, but Stripe still insists on

@@ -116,7 +116,7 @@ export function friendlyTimezoneName(id) {
 
 // ----- REGIONAL MARKERS -----
 
-export const regionalMarkers = <%= Result::MARKERS.compact %>;
+export const regionalMarkers = <%= Result::MARKERS.to_json.html_safe %>;
 
 // ----- VENUE ROOM COLORS -----
 

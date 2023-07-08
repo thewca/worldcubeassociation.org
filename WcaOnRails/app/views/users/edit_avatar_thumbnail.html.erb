@@ -21,7 +21,11 @@
       </div>
       <div class="col-md-6">
         <h2><%= t '.current' %></h2>
-        <%= render "shared/user_avatar", user: @user, show_pending: pending_avatar, break_cache: true, avatar_class: "avatar-thumbnail-lg"  %>
+        <%= react_component("UserAvatar", {
+          avatar: pending_avatar ? @user.pending_avatar : @user.avatar,
+          size: "large",
+          breakCache: true
+        }) %>
         <h2><%= t '.new' %></h2>
         <%= f.previewbox avatar_sym %>
 
