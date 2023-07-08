@@ -331,6 +331,19 @@ execute "bundle install #{'--deployment --without development test' if rails_env
               })
 end
 
+### Sidekiq
+template "/etc/systemd/user/sidekiq.service" do
+  source "sidekiq.service.erb"
+  variables({
+              username: username,
+              repo_root: repo_root,
+            })
+end
+execute "start-sidekiq" do
+  command "systemctl --user sidekiq start"
+  not_if "ps -efw | grep sidekiq"
+end
+
 if node.chef_environment == "development"
   db_setup_lockfile = '/tmp/rake-db-setup-run'
   execute "bundle exec rake db:setup" do
