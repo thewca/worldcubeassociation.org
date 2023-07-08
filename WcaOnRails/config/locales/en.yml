@@ -1053,7 +1053,7 @@ en:
       account_is_special: "The WCA ID and account are connected to special roles in the WCA (e.g. delegates, organizers, team members) and cannot be removed. Please email the WCA Results Team to help change the WCA ID to a different account."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your local <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
