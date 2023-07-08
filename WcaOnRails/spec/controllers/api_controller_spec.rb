@@ -375,9 +375,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
           :person,
           countryId: "USA",
           gender: "m",
-          year: 1987,
-          month: 12,
-          day: 4,
+          dob: '1987-12-04',
         )
       end
       let(:user) do

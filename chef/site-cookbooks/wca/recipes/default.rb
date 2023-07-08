@@ -267,6 +267,20 @@ execute "update-rc" do
   action :nothing
 end
 
+### Redis
+redis = {
+  port: 6379
+}
+
+if node.chef_environment == "production"
+  # In production mode, we use Amazon ElasticCache.
+  redis[:host] = "redis-main-prod-001.iebvzt.0001.usw2.cache.amazonaws.com"
+elsif node.chef_environment == "staging"
+  # In staging mode, we use Amazon ElasticCache.
+  redis[:host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
+end
+
+redis_url = "redis://#{redis[:host]}:#{redis[:port]}"
 
 #### Rails secrets
 # Don't be confused by the name of this file! This is used by both our staging
@@ -279,6 +293,7 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
+              redis_url: redis_url,
               db_host: db["host"],
               read_replica_host: read_replica
             })

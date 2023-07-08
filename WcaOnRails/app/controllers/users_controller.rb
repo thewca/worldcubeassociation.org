@@ -170,8 +170,18 @@ class UsersController < ApplicationController
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
       if @user.saved_change_to_delegate_status
-        # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
-        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
+        if @user.delegate_status
+          @user_senior_delegate = @user.senior_or_self
+        else
+          @user_senior_delegate = User.find(@user.senior_delegate_id_before_last_save)
+        end
+        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(
+          @user,
+          current_user,
+          @user_senior_delegate,
+          @user.delegate_status_before_last_save,
+          @user.delegate_status,
+        ).deliver_later
       end
       if current_user == @user
         # Sign in the user, bypassing validation in case their password changed
