@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import _ from 'lodash';
 import { Form, Label, Radio } from 'semantic-ui-react';
 import { events } from '../../../../lib/wca-data.js.erb';
@@ -57,10 +57,13 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
     !_.isEqual(timeLimit, { centiseconds, cumulativeRoundIds })
   );
 
-  const reset = () => {
+  const reset = useCallback(() => {
     setCentiseconds(timeLimit?.centiseconds ?? 0);
     setCumulativeRoundIds(timeLimit?.cumulativeRoundIds ?? []);
-  };
+  }, [timeLimit?.centiseconds, timeLimit?.cumulativeRoundIds]);
+
+  // if a different event updates cumulative time limits, these inputs need resetting
+  useEffect(reset, [reset]);
 
   const handleOk = () => {
     if (hasUnsavedChanges()) {
