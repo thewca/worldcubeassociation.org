@@ -55,3 +55,14 @@ test:
     <<: *default
     database: wca_test
     replica: true
+  # These two can have identical names to the config for normal development mode,
+  # because they are only temporary dump tables anyways that get dropped after every run.
+  developer_dump:
+    <<: *default
+    database: wca_dump_developer
+    database_tasks: false
+  results_dump:
+    <<: *default
+    database: wca_dump_results
+    database_tasks: false
+    migrations_paths: db/results_migrate
