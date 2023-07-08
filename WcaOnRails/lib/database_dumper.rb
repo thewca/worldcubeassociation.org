@@ -1023,18 +1023,21 @@ module DatabaseDumper
       dump_sanitizers.each do |table_name, table_sanitizer|
         next if table_sanitizer == :skip_all_rows
 
+        # Give an option to override source table name if schemas diverge
+        source_table = table_sanitizer[:source_table] || table_name
+
         column_sanitizers = table_sanitizer[:column_sanitizers].reject do |_, column_sanitizer|
           column_sanitizer == :db_default
         end
 
         column_expressions = column_sanitizers.map do |column_name, column_sanitizer|
-          column_sanitizer == :copy ? "#{table_name}.#{column_name}" : "#{column_sanitizer} AS #{ActiveRecord::Base.connection.quote_column_name column_name}"
+          column_sanitizer == :copy ? "#{source_table}.#{column_name}" : "#{column_sanitizer} AS #{ActiveRecord::Base.connection.quote_column_name column_name}"
         end.join(", ")
 
         # Some column names like "rank" are reserved keywords starting mysql 8.0 and require quoting.
         quoted_column_list = column_sanitizers.keys.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }.join(", ")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{table_name} #{table_sanitizer[:where_clause]}"
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{table_sanitizer[:where_clause]}"
         ActiveRecord::Base.connection.execute(populate_table_sql)
       end
 
