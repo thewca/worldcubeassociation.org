@@ -25,7 +25,7 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
   const handleOk = () => onOk(selectedRoundIds);
 
   const reset = () => {
-    setSelectedRoundIds(timeLimit?.cumulativeRoundId);
+    setSelectedRoundIds(timeLimit?.cumulativeRoundId ?? []);
   };
 
   const hasUnsavedChanges = () => !_.isEqual(selectedRoundIds, timeLimit.cumulativeRoundIds);
