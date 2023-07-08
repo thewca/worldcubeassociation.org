@@ -1017,6 +1017,10 @@ module DatabaseDumper
     ensure
       # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
       ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
+
+      # We use GROUP_CONCAT for some fields to maintain backwards compatibility with the Results Export schema.
+      # Unfortunately, MySQL has an embarrassingly low default value for the max_length, so we steal the MariaDB default instead :)
+      ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
@@ -1063,10 +1067,6 @@ module DatabaseDumper
   end
 
   def self.public_results_dump(dump_filename, tsv_folder)
-    # We use GROUP_CONCAT for some fields to maintain backwards compatibility with the Results Export schema.
-    # Unfortunately, MySQL has an embarrassingly low default value for the max_length, so we steal the MariaDB default instead :)
-    ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
-
     self.with_dumped_db(:results_dump, RESULTS_SANITIZERS) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
