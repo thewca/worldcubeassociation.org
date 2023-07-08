@@ -1113,7 +1113,7 @@ module DatabaseDumper
     # Use --set-gtid-purged=OFF to avoid having `SET @@GLOBAL.gtid_purged` and `SET @@SESSION.SQL_LOG_BIN`
     # in the resulting dump file, as setting these require additional parmissions
     # making it troublesome to import the dump into a managed databases like the staging one.
-    bash!("mysqldump --set-gtid-purged=OFF #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
+    bash!("mysqldump #{"--set-gtid-purged=OFF " if Rails.env.production?}#{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
     bash!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
   end
 
