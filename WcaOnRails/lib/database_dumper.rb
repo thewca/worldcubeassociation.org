@@ -1003,11 +1003,20 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
-  def self.with_dumped_db(dump_db_name, dump_schema_name, dump_sanitizers, dump_ts_name = nil)
+  # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
+  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil)
+    primary_db_config = ActiveRecord::Base.connection_db_config
+
+    config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
+    dump_db_name = config.configuration_hash[:database]
+
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
-      ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
-      ActiveRecord::Base.connection.execute("CREATE DATABASE #{dump_db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
-      self.mysql("SOURCE #{Rails.root.join('db', dump_schema_name)}", dump_db_name)
+      ActiveRecord::Tasks::DatabaseTasks.drop config
+      ActiveRecord::Tasks::DatabaseTasks.create config
+      ActiveRecord::Tasks::DatabaseTasks.load_schema config
+    ensure
+      # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
+      ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
     end
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
@@ -1036,11 +1045,14 @@ module DatabaseDumper
 
     yield dump_db_name
   ensure
-    ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
+    ActiveRecord::Tasks::DatabaseTasks.drop config
+
+    # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
+    ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
   end
 
   def self.development_dump(dump_filename)
-    self.with_dumped_db('wca_development_db_dump', 'structure.sql', DEV_SANITIZERS, DEV_TIMESTAMP_NAME) do |dump_db|
+    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end
@@ -1049,10 +1061,10 @@ module DatabaseDumper
 
   def self.public_results_dump(dump_filename, tsv_folder)
     # We use GROUP_CONCAT for some fields to maintain backwards compatibility with the Results Export schema.
-    # Unfortunately, MySQL has an embarassingly low default value for the max_length, so we steal the MariaDB default instead :)
+    # Unfortunately, MySQL has an embarrassingly low default value for the max_length, so we steal the MariaDB default instead :)
     ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
 
-    self.with_dumped_db('wca_public_results_dump', 'public_results.sql', RESULTS_SANITIZERS) do |dump_db|
+    self.with_dumped_db(:results_dump, RESULTS_SANITIZERS) do |dump_db|
       LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
         self.mysqldump(dump_db, dump_filename)
       end

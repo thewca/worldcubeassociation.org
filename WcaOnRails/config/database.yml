@@ -18,6 +18,15 @@ production:
     database: cubing
     host: <%= ENV['READ_REPLICA_HOST'] || "127.0.0.1" %>
     replica: true
+  developer_dump:
+    <<: *default
+    database: developer_dump
+    database_tasks: false
+  results_dump:
+    <<: *default
+    database: results_dump
+    database_tasks: false
+    migrations_paths: db/results_migrate
 
 development:
   primary:
@@ -27,6 +36,13 @@ development:
     <<: *default
     database: wca_development
     replica: true
+  developer_dump:
+    <<: *default
+    database: wca_dump_developer
+  results_dump:
+    <<: *default
+    database: wca_dump_results
+    migrations_paths: db/results_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
