@@ -41,7 +41,7 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
     return wcifEvent.rounds;
   }));
 
-  const handleChecked = (ev, data) => {
+  const handleChecked = (_ev, data) => {
     if (data.disabled) {
       return;
     }
