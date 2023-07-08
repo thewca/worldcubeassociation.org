@@ -118,8 +118,9 @@ const reducers = {
   }),
 
   [UpdateTimeLimit]: (state, { payload }) => {
-    // payload has a new group of round ids to share a cumulative time limit
-    // first, remove all those round ids from _all_ cumulative time limits
+    // payload may have a new group of round ids to share a cumulative time limit;
+    // if not, it itself may have formerly been in a cumulative time limit
+    // so first, remove all those rounds (or the round itself) from _all_ cumulative time limits
     const eventsWithRoundsRemovedFromCumulativeTimeLimits = updateForRounds(
       state.wcifEvents,
       state.wcifEvents.flatMap((event) => event.rounds?.map((round) => round.id) ?? []),
@@ -127,12 +128,12 @@ const reducers = {
         timeLimit: {
           ...round.timeLimit,
           cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter(
-            (roundId) => !payload.timeLimit.cumulativeRoundIds.includes(roundId)
+            (roundId) => ![payload.roundId, ...payload.timeLimit.cumulativeRoundIds].includes(roundId)
           ),
         },
       } : {})
     );
-    // then, add the new shared cumulative time limit to _all involved rounds_
+    // then, add the (potential) new shared cumulative time limit to _all involved rounds_
     return {
       ...state,
       wcifEvents: updateForRounds(
