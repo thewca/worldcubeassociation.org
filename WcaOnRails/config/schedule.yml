@@ -54,14 +54,9 @@ wst_chores:
   queue: wca_jobs
 
 weat_digest:
-  class: "ActionMailer::MailDeliveryJob"
+  class: "WeatMonthlyDigestJob"
   cron: "0 0 1 * *"
   queue: mailers
-  args:
-    - WcaMonthlyDigestMailer
-    - send_weat_digest_content
-    - deliver_now
-    - args: []
 
 clear_tmp_cache:
   class: "ClearTmpCache"
