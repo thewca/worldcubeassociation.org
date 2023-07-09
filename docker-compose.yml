@@ -28,10 +28,19 @@ services:
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: >
       bash -c 'bundle install && yarn install &&
+      rm -f .db-inited &&
       if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
         then echo "Populating development db, this will take a while" && bin/rake db:reset ;
       fi &&
+      touch .db-inited &&
       bin/rails server -b 0.0.0.0'
+    healthcheck:
+      test: ["CMD", "test", "-f", ".db-inited"]
+      interval: 5s
+      timeout: 2s
+      retries: 20
+      # Give the container some time to populate the database
+      start_period: 15m
     depends_on:
       wca_db:
         condition: 'service_healthy'
@@ -53,7 +62,9 @@ services:
       wca_db:
         condition: 'service_healthy'
       wca_on_rails:
-        condition: 'service_started'
+        # We need to make sure that the database is populated because our frontend code
+        # pulls stuff like WCA Events and Round formats from the DB when compiling assets
+        condition: 'service_healthy'
 
   wca_db:
     image: mysql:8.0
