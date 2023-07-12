@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
-import VenueInfo from './FormSections/VenueInfo';
 import FormContext from './State/FormContext';
-import BasicInfo from "./FormSections/BasicInfo";
+import BasicInfo from './FormSections/BasicInfo';
+import VenueInfo from './FormSections/VenueInfo';
 
 export default function NewCompForm() {
   const [formData, setFormData] = React.useState({});
@@ -13,7 +13,11 @@ export default function NewCompForm() {
 
   return (
     <FormContext.Provider value={formContext}>
-      <pre><code>{JSON.stringify(formData, null, 2)}</code></pre>
+      <pre>
+        <code>
+          {JSON.stringify(formData, null, 2)}
+        </code>
+      </pre>
       <BasicInfo />
       <VenueInfo />
     </FormContext.Provider>
