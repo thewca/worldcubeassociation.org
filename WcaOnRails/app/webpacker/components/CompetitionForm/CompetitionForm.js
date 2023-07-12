@@ -136,7 +136,7 @@ function ActionButtons({
     }).then((response) => {
       response.json().then((data) => {
         console.log(JSON.stringify(data));
-        setError(JSON.stringify(data));
+        setError(data);
       });
     });
   };
@@ -181,6 +181,7 @@ export default function CompetitionForm({
   dangerDistance,
   currencies,
 }) {
+  console.log(competition);
   const countriesOptions = countries.map((c) => ({
     key: c.id,
     value: c.id,

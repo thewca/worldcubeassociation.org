@@ -125,3 +125,9 @@ export const defaultRoomColor = "<%= VenueRoom::DEFAULT_ROOM_COLOR %>";
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';
+
+// ----- COMP RULES -----
+
+export const nearbyCompetitionDistanceWarning = <%=Competition::NEARBY_DISTANCE_KM_WARNING.to_json.html_safe %>
+
+export const nearbyCompetitionDistanceDanger = <%=Competition::NEARBY_DISTANCE_KM_DANGER.to_json.html_safe %>
