@@ -28,7 +28,18 @@
             <% found_delegate = true %>
           <% end %>
           <%= radio_button_tag "user[delegate_id_to_handle_wca_id_claim]", delegate.id, is_selected_delegate, class: "radio_buttons center-vertically", checked: is_selected_delegate %>
-          <%= render "shared/user", user: delegate %>
+          <div class="wca-user">
+            <%= react_component("UserAvatar", {
+              avatar: delegate.avatar,
+              size: "small",
+            }, class: 'avatar-thumbnail') %>
+            <div class="info">
+              <div class="name"><%= delegate.name %></div>
+              <% if delegate.wca_id %>
+                <div class="wca-id"><%= delegate.wca_id %></div>
+              <% end %>
+            </div>
+          </div>
         </label>
       </span>
     <% end %>

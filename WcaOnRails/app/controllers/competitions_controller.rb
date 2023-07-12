@@ -137,7 +137,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = @competitions.where("end_date < ?", Date.today).reverse_order
       unless params[:year] == "all years"
-        @competitions = @competitions.where(year: params[:year])
+        @competitions = @competitions.where("YEAR(start_date) = :comp_year", comp_year: params[:year])
       end
     end
 
@@ -626,6 +626,19 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update(comp_params_minus_id)
+      # Automatically compute the cellName and ID for competitions with a short name.
+      if !@competition.confirmed? && @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        old_competition_id = @competition.id
+        @competition.create_id_and_cell_name(force_override: true)
+
+        # Save the newly computed cellName without breaking the ID associations
+        # (which in turn is handled by a hack in the next if-block below)
+        @competition.with_old_id { @competition.save! }
+
+        # Try to update the ID only if it _actually_ changed
+        new_id = @competition.id unless @competition.id == old_competition_id
+      end
+
       if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view

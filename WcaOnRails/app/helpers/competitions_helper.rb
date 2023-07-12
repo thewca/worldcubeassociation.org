@@ -325,8 +325,7 @@ module CompetitionsHelper
   end
 
   def result_cache_key(competition, view, is_admin: false)
-    results_updated_at = competition.results.order('updated_at desc').limit(1).pluck(:updated_at).first
-    [competition.id, view, results_updated_at&.iso8601 || "", I18n.locale, is_admin]
+    [view, competition.id, competition.results || [], I18n.locale, is_admin]
   end
 
   private

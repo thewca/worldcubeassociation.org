@@ -28,14 +28,17 @@
       <% disable_form = !can_edit_competition %>
 
       <fieldset <%= disable_form && "disabled" %>>
+        <% disable_id_edit = @competition_organizer_view && (@competition.name.length <= Competition::MAX_CELL_NAME_LENGTH) %>
 
         <% if @competition.persisted? %>
-          <%= f.input :id %>
+          <%= f.input :id, disabled: disable_id_edit %>
         <% end %>
         <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
+
         <% if @competition.persisted? %>
-          <%= f.input :cellName %>
+          <%= f.input :cellName, disabled: disable_id_edit, hint: t('simple_form.hints.competition.cellName', short_name_limit: Competition::MAX_CELL_NAME_LENGTH) %>
         <% end %>
+
         <%= f.input :name_reason, hint: t('.name_reason_html') %>
 
         <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>

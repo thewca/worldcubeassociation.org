@@ -16,8 +16,8 @@ de:
     FM: Föderierte Staaten von Mikronesien
     #original_hash: db871b0
     GW: Guinea-Bissau
-    #original_hash: 2f488ff
-    HK: Hongkong
+    #original_hash: e758117
+    HK: Hongkong, China
     #original_hash: 3ad2dd8
     KN: St. Kitts and Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ de:
     MK: Nordmazedonien
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macau
+    #original_hash: 77e4070
+    MO: Macau, China
     #original_hash: 05a15c1
     PS: Palästina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ de:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trinidad und Tobago
+    #original_hash: fefc818
+    TW: Chinesisch Taipeh
     #original_hash: 3fa9b2d
     VC: St. Vincent und die Grenadinen
     #original_hash: 9af4622
