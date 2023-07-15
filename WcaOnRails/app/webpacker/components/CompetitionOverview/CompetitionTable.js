@@ -3,7 +3,7 @@ import ReactMarkdown from 'react-markdown';
 
 import I18n from '../../lib/i18n';
 
-function calculateDate(comp, mode) {
+function calculateDayDifference(comp, mode) {
   const dateToday = new Date();
   const startDate = new Date(comp.start_date);
   const endDate = new Date(comp.end_date);
@@ -35,7 +35,7 @@ function renderRegistrationStatus(comp) {
     return <i className="icon clock blue" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })} />;
   }
   if (comp.registration_status === 'past') {
-    return <i className="icon user times red" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDate(comp, 'future') }) })} />;
+    return <i className="icon user times red" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
   }
   if (comp.registration_status === 'full') {
     return <i className="icon user clock orange" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.full')} />;
@@ -50,7 +50,7 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
       return <i className="icon check circle result-posted-indicator" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.posted')} />;
     }
 
-    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDate(comp, 'past') }) })} />;
+    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) })} />;
   }
   if (comp.inProgress) {
     return <i className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
@@ -62,7 +62,7 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
     return renderRegistrationStatus(comp);
   }
 
-  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDate(comp, 'future') }) })} />;
+  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
 }
 
 function CompetitionTable({
