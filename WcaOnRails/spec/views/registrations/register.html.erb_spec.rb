@@ -48,7 +48,7 @@ RSpec.describe "registrations/register" do
 
   def setup(payment_status)
     competition = FactoryBot.create(:competition, :stripe_connected, :visible, :registration_open)
-    registration = FactoryBot.create(:registration, payment_status, competition: competition)
+    registration = FactoryBot.create(:registration, payment_status, competition: competition, administrative_notes: "👽")
     allow(view).to receive(:current_user) { registration.user }
     assign(:competition, competition)
     assign(:registration, registration)
@@ -64,5 +64,17 @@ RSpec.describe "registrations/register" do
   it "renders unpaid registrations and ask for payment" do
     setup :unpaid
     expect(rendered).to match(/Pay now!/)
+  end
+
+  it "only shows fields that are editable by a competitor" do
+    setup :paid
+    expect(rendered).to match(/Events/)
+    expect(rendered).to match(/Guests/)
+    expect(rendered).to match(/Comments/)
+
+    expect(rendered).not_to match(/Administrative [Nn]otes/)
+    expect(rendered).not_to match(/👽/)
+
+    expect(rendered).not_to match(/Status/)
   end
 end

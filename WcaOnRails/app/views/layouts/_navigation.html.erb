@@ -179,7 +179,11 @@
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
           <% if current_user %>
             <% notification_count = notifications_for_user(current_user).length %>
-            <%= render "shared/user_avatar", user: current_user, do_not_show_full_image_on_hover: true %>
+            <%= react_component("UserAvatar", {
+              avatar: (current_user || User.new).avatar,
+              size: "tiny",
+              disableHover: true,
+            }, class: 'avatar-thumbnail') %>
             <% if notification_count > 0 %>
               <span class="badge"><%= notification_count %></span>
             <% end %>

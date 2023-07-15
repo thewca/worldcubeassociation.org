@@ -30,18 +30,19 @@ en:
     CV: "Cabo Verde"
     FM: "Federated States of Micronesia"
     GW: "Guinea Bissau"
-    HK: "Hong Kong"
+    HK: "Hong Kong, China"
     KN: "Saint Kitts and Nevis"
     KP: "Democratic People's Republic of Korea"
     KR: "Republic of Korea"
     LC: "Saint Lucia"
     MK: "North Macedonia"
     MM: "Myanmar"
-    MO: "Macau"
+    MO: "Macau, China"
     PS: "Palestine"
     ST: "São Tomé and Príncipe"
     SZ: "Eswatini"
     TT: "Trinidad and Tobago"
+    TW: "Chinese Taipei"
     VC: "Saint Vincent and the Grenadines"
 
     XF: "Multiple Countries (Africa)"
@@ -296,7 +297,7 @@ en:
         showAtAll: "Make competition visible to the public"
         name: "Name"
         name_reason: "The reason for the name"
-        cellName: "Competition nickname"
+        cellName: "Competition short name"
         countryId: "Country"
         cityName: "City name"
         venue: "Venue"
@@ -362,6 +363,7 @@ en:
         comments: "Comments"
         paid_entry_fees: "Paid"
         status: "Status"
+        administrative_notes: "Administrative notes"
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
@@ -521,7 +523,7 @@ en:
       #context: for a competition
       competition:
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
-        cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
+        cellName: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         staff_delegate_ids: "WCA Delegates for the competition."
@@ -638,6 +640,7 @@ en:
         comments: ""
         guests: ""
         status: ""
+        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:
@@ -1353,7 +1356,7 @@ en:
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
-      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is less than the time limit."
+      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is not greater than the time limit."
       cutoff_is_too_fast: "Round %{round_number} in %{event} has a cutoff less than 5 seconds. Please make sure that it is correct."
       cutoff_is_too_slow: "Round %{round_number} in %{event} has a cutoff more than 10 minutes. Please make sure that it is correct."
       time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
@@ -1392,6 +1395,7 @@ en:
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
+      no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -1715,8 +1719,8 @@ en:
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
-        qualification_all_events_html: "The deadline for setting qualification times is <b>%{date}</b>."
-        qualification_some_events_html: "The deadline for setting qualification times in %{events} is <b>%{date}</b>."
+        qualification_all_events_html: "Qualification times must be set before <b>%{date}</b>."
+        qualification_some_events_html: "Qualification times in %{events} must be set before <b>%{date}</b>."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"

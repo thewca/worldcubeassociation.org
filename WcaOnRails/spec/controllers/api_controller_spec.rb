@@ -375,9 +375,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
           :person,
           countryId: "USA",
           gender: "m",
-          year: 1987,
-          month: 12,
-          day: 4,
+          dob: '1987-12-04',
         )
       end
       let(:user) do
@@ -504,7 +502,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   describe 'GET #export_public' do
     it 'returns information about latest public export' do
       export_timestamp = DateTime.current.utc
-      Timestamp.create(name: DumpPublicResultsDatabase::TIMESTAMP_NAME, date: export_timestamp)
+      DumpPublicResultsDatabase.end_timestamp.update(date: export_timestamp)
 
       get :export_public
       expect(response.status).to eq 200

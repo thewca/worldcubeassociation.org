@@ -6,7 +6,7 @@
 # For further information see the following documentation
 # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Content-Security-Policy
 
-# Rails.application.config.content_security_policy do |policy|  #   # If you are using webpack-dev-server then specify webpack-dev-server host
+# Rails.application.config.content_security_policy do |policy|  #   # If you are using shakapacker-dev-server then specify shakapacker-dev-server host
 #   policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
 
 #   policy.default_src :self, :https
@@ -15,7 +15,7 @@
 #   policy.object_src  :none
 #   policy.script_src  :self, :https
 #   policy.style_src   :self, :https
-#   # If you are using webpack-dev-server then specify webpack-dev-server host
+#   # If you are using shakapacker-dev-server then specify shakapacker-dev-server host
 #   policy.connect_src :self, :https, "http://localhost:3035", "ws://localhost:3035" if Rails.env.development?
 
 #   # Specify URI for violation reports

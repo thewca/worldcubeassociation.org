@@ -18,7 +18,7 @@ import { railsEnv } from '../wca-data.js.erb';
 import { redMarker, blueMarker } from './markers';
 import { searchProvider, userTileProvider } from './providers';
 
-// Leaflet and webpacker are not good friend, we need to require the images for
+// Leaflet and webpack are not good friend, we need to require the images for
 // the assets to be properly setup.
 /* eslint no-underscore-dangle: "off" */
 delete Icon.Default.prototype._getIconUrl;

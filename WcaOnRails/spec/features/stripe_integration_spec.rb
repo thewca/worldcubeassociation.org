@@ -24,7 +24,7 @@ RSpec.feature "Stripe PaymentElement integration" do
       expect(page).to have_selector("#payment-element iframe")
     end
 
-    it "loads the PaymentElement", js: true do
+    it "loads the PaymentElement", js: true, retry: 3 do
       # In the beginning, the button to pay should be disabled
       expect(page).to have_button('Pay now!', disabled: true)
 
@@ -42,7 +42,7 @@ RSpec.feature "Stripe PaymentElement integration" do
       expect(page).to have_button('Pay now!', disabled: false)
     end
 
-    it "changes subtotal when using a donation", js: true do
+    it "changes subtotal when using a donation", js: true, retry: 3 do
       subtotal_label = page.find('#money-subtotal')
 
       format_money = format_money(registration.outstanding_entry_fees)
@@ -61,7 +61,7 @@ RSpec.feature "Stripe PaymentElement integration" do
       expect(subtotal_label).to have_text(format_money)
     end
 
-    it "warns when the subtotal is too high", js: true do
+    it "warns when the subtotal is too high", js: true, retry: 3 do
       # (accidentally?) donate a ridiculously high amount of money
       donation_money = competition.base_entry_fee * competition.base_entry_fee.cents
 

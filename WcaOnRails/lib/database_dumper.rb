@@ -47,12 +47,6 @@ module DatabaseDumper
           cityName
           countryId
           information
-          year
-          month
-          day
-          endYear
-          endMonth
-          endDay
           start_date
           end_date
           venue
@@ -232,11 +226,11 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          wca_id
           comments
           countryId
           gender
           name
-          rails_id
           subId
         ),
         db_default: %w(
@@ -244,9 +238,7 @@ module DatabaseDumper
           incorrect_wca_id_claim_count
         ),
         fake_values: {
-          "year" => "1954",
-          "month" => "12",
-          "day" => "4",
+          "dob" => "'1954-12-04'",
         },
       ),
     }.freeze,
@@ -547,7 +539,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "rails_persons" => :skip_all_rows,
     "regional_organizations" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -603,6 +594,7 @@ module DatabaseDumper
         db_default: %w(ip),
         fake_values: {
           "comments" => "''", # Can't use :db_default here because comments does not have a default value.
+          "administrative_notes" => "''", # Can't use :db_default here because administrative_notes does not have a default value.
         },
       ),
     }.freeze,
@@ -924,12 +916,14 @@ module DatabaseDumper
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          id
           subid
           name
           countryId
           gender
         ),
+        fake_values: {
+          "id" => "wca_id",
+        },
       ),
     }.freeze,
     "Competitions" => {
@@ -941,11 +935,6 @@ module DatabaseDumper
           cityName
           countryId
           information
-          year
-          month
-          day
-          endMonth
-          endDay
           venue
           venueAddress
           venueDetails
@@ -959,6 +948,11 @@ module DatabaseDumper
           "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
           "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+          "year" => "YEAR(start_date)",
+          "month" => "MONTH(start_date)",
+          "day" => "DAY(start_date)",
+          "endMonth" => "MONTH(end_date)",
+          "endDay" => "DAY(end_date)",
         }.freeze,
       ),
       tsv_sanitizers: actions_to_column_sanitizers(

@@ -8,12 +8,14 @@ ko:
     XS: 여러 나라 (남미)
     #original_hash: 374ac0d
     XM: 여러 나라 (북미)
-    #original_hash: 918c53a
-    MO: 마카오
-    #original_hash: 2f488ff
-    HK: 홍콩
+    #original_hash: 77e4070
+    MO: 마카오, 중국
+    #original_hash: e758117
+    HK: 홍콩, 중국
     #original_hash: 4e8bd04
     KR: 대한민국
+    #original_hash: fefc818
+    TW: 차이니스 타이베이
   continents:
     #original_hash: 0f138c8
     Multiple Continents: 여러 대륙

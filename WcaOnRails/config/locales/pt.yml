@@ -16,8 +16,8 @@ pt:
     FM: Micronésia
     #original_hash: db871b0
     GW: Guiné-Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: 'Hong Kong, China'
     #original_hash: 3ad2dd8
     KN: São Cristóvão e Névis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ pt:
     MK: Macedónia do Norte
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macau
+    #original_hash: 77e4070
+    MO: 'Macau, China'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ pt:
     SZ: Suazilândia
     #original_hash: 4d206a8
     TT: Trinidad e Tobago
+    #original_hash: fefc818
+    TW: Taipé Chinês
     #original_hash: 3fa9b2d
     VC: São Vicente e Granadinas
     #original_hash: 9af4622
@@ -277,13 +279,13 @@ pt:
       any_result: Qualquer resultado
     single:
       #original_hash: d596f44
-      time: 'Tempo único abaixo de %{time}'
+      time: 'Singular abaixo de %{time}'
       #original_hash: 52ba186
       moves: 'Resolução única abaixo de %{moves} movimentos'
       #original_hash: b1993ae
       points: 'Resolução única acima de %{points} pontos'
       #original_hash: ed2b051
-      ranking: 'Top %{ranking} por tempo único'
+      ranking: 'Top %{ranking} por singular'
       #original_hash: 933b7dc
       any_result: Qualquer resolução única
     average:
@@ -314,7 +316,7 @@ pt:
     #original_hash: 77003d0
     best: Melhor
     #original_hash: dd11868
-    single: Tempo Único
+    single: Singular
     #original_hash: 15f86c0
     average: Média
     #original_hash: e7f6fc5
@@ -448,7 +450,7 @@ pt:
         name: Nome
         #original_hash: f91b080
         name_reason: A razão para o nome
-        #original_hash: b649210
+        #original_hash: fdba578
         cellName: Nome curto da competição
         #original_hash: d523ebb
         countryId: País
@@ -587,6 +589,8 @@ pt:
         paid_entry_fees: Pago
         #original_hash: bae7d5b
         status: Estado
+        #original_hash: a6e8a0b
+        administrative_notes: Notas administrativas
         #original_hash: 709a232
         name: Nome
         #original_hash: a6b9d69
@@ -871,10 +875,11 @@ pt:
           Campeonato de Portugal 2017). Use corretamente letras maiúsculas. O
           nome deve conter apenas carateres alfanuméricos, traços(-), e
           comerciais(&), pontos(.), dois pontos(:), apóstrofos(') e espaços( ).
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Um nome curto para apresentação. Se o nome da competição já for curto,
-          pode usá-lo novamente (p. ex. Europeu 2006).
+          Um nome curto para apresentação. Se o nome da competição já tiver
+          menos que %{short_name_limit} caracteres, este não deve ser editado e
+          deve ser o mesmo do nome normal da competição.
         #original_hash: bce4589
         cityName: >-
           Nome da cidade onde a competição decorrerá. Não inclua o país
@@ -1197,6 +1202,10 @@ pt:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Notas adicionais mantidas como parte da gestão deste registo. Estas
+          não são visíveis para o competidor.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1630,8 +1639,10 @@ pt:
       statistics: Estatísticas
       #original_hash: 82dabd0
       multimedia: Multimédia
-      #original_hash: 4fd2a7f
-      db_export: Exportação da Base de Dados
+      #original_hash: cfde9db
+      db_results_export: Exportação de Resultados
+      #original_hash: 7533c29
+      db_dev_export: Exportação para Desenvolvimento
       #original_hash: 1fa73f3
       regulations: Regulamento
       #original_hash: 6bce1b5
@@ -1662,8 +1673,8 @@ pt:
       results_team: Equipa de Resultados
       #original_hash: 4e7afeb
       results_admin: Administrador
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Base de dados
       #original_hash: aee74b8
       new_post: Novo artigo
       #original_hash: 0d67445
@@ -2492,46 +2503,67 @@ pt:
       payment_successful: >-
         O pagamento foi bem sucedido e no registo, abaixo, deverá constar como
         pago.
+      #original_hash: 92dde77
+      payment_processing: 'O seu pagamento foi confirmado, mas a transação ainda está pendente.'
+      #original_hash: 62d7351
+      button_text: Pagar agora!
       hints:
         #original_hash: bf3a39e
         donation: Donativo opcional que irá apenas para a equipa de organização
-        #original_hash: 16cf92d
-        card_information: >-
-          A informação do cartão nunca chega ao site da WCA. É enviado de forma
-          segura para o Stripe que gere o processo de pagamento e que
-          posteriormente nos dá essa indicação.
+        #original_hash: f7fa263
+        payment_button: >-
+          As suas informações de pagamento nunca chegam ao site da WCA. São
+          enviadas de forma segura para o Stripe, que trata do processo de
+          pagamento e nos reporta depois.
       labels:
         #original_hash: 4de825f
         entry_fees: Taxas de registo
+        #original_hash: dc9d458
+        fees_paid: Pago
+        #original_hash: cc632b5
+        fees_remaining: Em falta
         #original_hash: 2c09302
         donation: Donativo
-        #original_hash: 184150d
-        card_information: Informação do cartão
-        #original_hash: bc8091a
-        cardholder_name: Nome no cartão
         #original_hash: 919710d
         show_donation: >-
           Gostaria de fazer uma doação opcional adicional que irá apenas para a
           equipa de organização
+        #original_hash: 4930c06
+        payment_information: Informação de pagamento
+        #original_hash: de0fc95
+        payment_button: Pague as taxas com Stripe
+        #original_hash: f94d00f
+        ajax_error: Erro do servidor WCA
+        #original_hash: e62c56c
+        stripe_error: Erro do Stripe
+        #original_hash: 97f7359
+        subtotal: Subtotal
       alerts:
         #original_hash: a34940e
         not_a_number: Por favor introduza um montante válido.
         #original_hash: 707b9ca
         amount_too_low: O montante total deve ser pelo menos o montante da taxa de registo.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Está prestes a pagar pelo menos o dobro do valor necessário para que
+          seu registo prossiga. Por favor, confirme o pagamento pressionando OK.
       errors:
         #original_hash: 166d48c
         already_paid: O pagamento não foi realizado porque a taxa de registo já foi paga.
-        #original_hash: b2bc8ed
+        #original_hash: f10c80c
         not_allowed: Não pode pagar para esse registo
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          Não encontrámos informação de confirmação de pagamento no nosso
-          servidor. O processo de pagamento foi abortado e esse montante não foi
-          cobrado no cartão.
-        #original_hash: 63e0ec1
-        cardholder_name: Por favor verifique o nome da pessoa no cartão.
-    #original_hash: 8607a87
-    payment_button_text: Pagar a taxa de inscrição com cartão
+        #original_hash: a073600
+        stripe_failed: Por favor verifique a transação Stripe.
+        #original_hash: a32e40f
+        stripe_not_found: O Stripe reportou um ID de transação que não foi encontrado.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          O Stripe reportou um código secreto de transação que não corresponde
+          aos nossos registos.
+        #original_hash: 8d1a199
+        payment_reset: O pagamento foi rejeitado pelo Stripe.
+        #original_hash: bcf6a93
+        payment_pending: O pagamento ainda não foi concluído.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para agilizar a inscrição no futuro, pode escolher os seus eventos
@@ -2623,11 +2655,11 @@ pt:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Por favor garanta que todas as rondas não finais têm regras de avanço
         especificadas.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Ronda %{round_number} de %{event} tem tempo de corte superior ao tempo
-        limite. Faça alterações de forma a que o tempo de corte seja inferior ao
-        tempo limite.
+        limite. Faça alterações de forma a que o tempo de corte não seja
+        superior ao tempo limite.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Ronda %{round_number} em %{event} tem tempo de corte inferior a 5
@@ -2731,6 +2763,12 @@ pt:
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Esta competição não tem prazo para a aceitação de competidores em lista
+        de espera. Se estiver a usar uma lista de espera, por favor especifique
+        um prazo. Se não estiver a usar uma lista de espera, lembre-se de
+        especificar isto nos requisitos de inscrição.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Minhas competições
@@ -3336,8 +3374,6 @@ pt:
     cancelled_by_html: 'Cancelado por %{name} em %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Tem a certeza que pretende cancelar a competição?
-    #original_hash: 9a42672
-    upload_results: Carregar os resultados
     #original_hash: 01de5ee
     post_results: Submeter os resultados
     #original_hash: b6513f1
@@ -3405,11 +3441,11 @@ pt:
         qualification_html: >-
           Tempos de Qualificação têm que ser estabelecidos noutras competições
           da WCA para poder competir.
-        #original_hash: 3b524fd
-        qualification_all_events_html: 'A data limite para definir tempos de qualificação é <b>%{date}</b>.'
-        #original_hash: 0d791e9
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Tempos de qualificação têm que ser definidos antes de  <b>%{date}</b>.'
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
-          A data limite para definir tempos de qualificação em %{events} é
+          Tempos de qualificação em %{events} têm que ser obtidos antes de
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Formato
@@ -5378,3 +5414,37 @@ pt:
       sobre a sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão TNoodle legal
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Exportação de Resultados WCA
+      #original_hash: f9fe9df
+      description: >-
+        Nesta página oferecemos os resultados da WCA para download em diversos
+        formatos para que os possa utilizar/analisar em geral. Normalmente,
+        atualizaremos após cada fim de semana de competição, quando os
+        resultados forem finalizados. Os arquivos são numerados e datados para
+        que possa ver se já possui a versão mais recente.
+      #original_hash: 4f59283
+      permalink: link permanente
+      file_formats:
+        #original_hash: b086d79
+        sql: 'Instruções SQL, para importação em bases de dados SQL.'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Valores separados por tabulações, para folhas de cálculo no
+          OpenOffice.org, Excel, etc.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        O ficheiro %{readme_filename} incluído contém os termos de uso e uma
+        descrição geral (em inglês, não traduzido):
+    developer_export:
+      #original_hash: 97d6025
+      heading: Exportação de Desenvolvimento da WST
+      #original_hash: eba769a
+      description_html: >-
+        Nesta página, oferecemos a exportação de desenvolvimento da WST para
+        download como dump SQL. Os detalhes podem ser encontrados em
+        %{github_link}.
+      #original_hash: a479c9c
+      download: Download

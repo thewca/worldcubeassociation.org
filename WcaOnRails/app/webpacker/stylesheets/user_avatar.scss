@@ -13,6 +13,12 @@
   }
 }
 
+.user-avatar-image-tiny {
+  @extend .user-avatar-image;
+  width: 40px;
+  height: 40px;
+}
+
 .user-avatar-image-medium {
   @extend .user-avatar-image;
   width: 75px;

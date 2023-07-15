@@ -1,8 +1,8 @@
 <ul class="list-group">
   <li class="list-group-item"><strong><%= "#{title} (#{competitions.count})" %></strong></li>
   <% competitions.each_with_index do |competition, index| %>
-    <% if index > 0 && competition.year != competitions[index - 1].year && params[:event_ids].empty? && !@by_announcement_selected %>
-      <li class="list-group-item break"><%= competition.year %></li>
+    <% if index > 0 && competition.start_date.year != competitions[index - 1].start_date.year && params[:event_ids].empty? && !@by_announcement_selected %>
+      <li class="list-group-item break"><%= competition.start_date.year %></li>
     <% end %>
     <% li_classes = ["list-group-item"] %>
     <% li_classes << (competition.is_probably_over? ? "past" : "not-past") %>

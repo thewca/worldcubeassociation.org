@@ -123,12 +123,6 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    year
-    month
-    day
-    endYear
-    endMonth
-    endDay
     cellName
     showAtAll
     external_registration_page
@@ -238,6 +232,10 @@ class Competition < ApplicationRecord
 
   def number_of_events
     persisted_events_id.length
+  end
+
+  def has_administrative_notes?
+    registrations.any? { |registration| !registration.administrative_notes.blank? }
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -443,6 +441,10 @@ class Competition < ApplicationRecord
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
 
+      if !self.waiting_list_deadline_date
+        warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified')
+      end
+
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
@@ -611,7 +613,6 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report!
 
-  before_validation :unpack_dates
   validate :dates_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
@@ -619,19 +620,19 @@ class Competition < ApplicationRecord
   before_validation :compute_coordinates
 
   before_validation :create_id_and_cell_name
-  def create_id_and_cell_name
+  def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
     if m
       name_without_year = m[1]
       year = m[2]
-      if id.blank?
+      if id.blank? || force_override
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank?
+      if cellName.blank? || force_override
         year = " " + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
@@ -1061,24 +1062,6 @@ class Competition < ApplicationRecord
   # can competitors delete their own registration after it has been accepetd
   def registration_delete_after_acceptance_allowed?
     self.allow_registration_self_delete_after_acceptance
-  end
-
-  private def unpack_dates
-    if start_date
-      self.year = start_date.year
-      self.month = start_date.month
-      self.day = start_date.day
-    else
-      self.year = self.month = self.day = 0
-    end
-
-    if end_date
-      self.endYear = end_date.year
-      self.endMonth = end_date.month
-      self.endDay = end_date.day
-    else
-      self.endYear = self.endMonth = self.endDay = 0
-    end
   end
 
   private def dates_must_be_valid
@@ -1541,7 +1524,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:year).uniq.sort!.reverse!
+    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1644,12 +1627,16 @@ class Competition < ApplicationRecord
       { user: {
         person: [:ranksSingle, :ranksAverage],
       } },
+      :wcif_extensions,
     ]
+    # NOTE: we're including non-competing registrations so that they can have job
+    # assignments as well. These registrations don't have accepted?, but they
+    # should appear in the WCIF.
     persons_wcif = registrations.order(:id)
                                 .includes(includes_associations)
                                 .to_enum
                                 .with_index(1)
-                                .select { |r, registrant_id| authorized || r.accepted? }
+                                .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
                                 .map do |r, registrant_id|
                                   managers.delete(r.user)
                                   r.user.to_wcif(self, r, registrant_id, authorized: authorized)
@@ -1741,7 +1728,7 @@ class Competition < ApplicationRecord
 
     # Create missing events.
     wcif_events.each do |wcif_event|
-      event_found = competition_events.find_by_event_id(wcif_event["id"])
+      event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
       event_to_be_added = wcif_event["rounds"]
       if !event_found && event_to_be_added
         unless current_user.can_add_and_remove_events?(self)
@@ -1758,7 +1745,7 @@ class Competition < ApplicationRecord
         unless current_user.can_update_events?(self)
           raise WcaExceptions::BadApiParameter.new("Cannot update events")
         end
-        competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
+        competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
       end
     end
 
@@ -1778,19 +1765,25 @@ class Competition < ApplicationRecord
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
-      # If no registration is found, assume that this is a non-competing staff member being added.
-      registration ||= registrations.create(
-        competition: self,
-        user_id: wcif_person["wcaUserId"],
-        created_at: DateTime,
-        updated_at: DateTime,
-        is_competing: false,
-      )
+      # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
+      adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
+      if adding_non_competing
+        registration ||= registrations.create(
+          competition: self,
+          user_id: wcif_person["wcaUserId"],
+          created_at: DateTime.now,
+          updated_at: DateTime.now,
+          is_competing: false,
+        )
+      end
+      next unless registration.present?
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
-        registration.update!(roles: roles)
+        # The additional roles are only for WCIF purposes and we don't validate them,
+        # so we can safely skip validations by using update_attribute
+        registration.update_attribute(:roles, roles)
       end
       if wcif_person["assignments"]
         wcif_person["assignments"].each do |assignment_wcif|
