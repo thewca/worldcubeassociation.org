@@ -1,6 +1,6 @@
 <% provide(:title, t('merch.title')) %>
 
-<div class="ui container" id="merch-description">
+<div class="ui container" style="margin-top: 12vh">
   <h1 class="ui header">
     <%= t('merch.title') %>
   </h1>
@@ -9,13 +9,21 @@
     <p><%= paragraph %></p>
   <% end %>
 
-  <ul id="merch-stores">
-    <li>
-      <%= link_to "Worldwide Store", "www.shop.worldcubeassociation.org" %>
-    </li>
-    <li>
-      <%= link_to "Indian Store", "india-shop.worldcubeassociation.org" %>
-    </li>
-  </ul>
+  <div class="merch-stores" style="display: flex; align-items: center; flex-direction: column; margin-top: 5vh;">
+    <div style="display: flex">
+      <div style="width: 100%; height: 100%; text-align: center; margin-right: 5vw;">
+        <i class="icon world" style="font-size: 10em; line-height: 1em"></i>
+        <div style="margin-top: 3vh;">
+          <%= link_to "Worldwide Store", "https://shop.worldcubeassociation.org" %>
+        </div>
+      </div>
+      <div style="width: 100%; height: 100%; text-align: center">
+        <i class="fi fi-in" style="font-size: 10em; line-height: 1em"></i>
+        <div style="margin-top: 3vh;">
+          <%= link_to "Indian Store", "https://republi.cc/collections/wca" %>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>

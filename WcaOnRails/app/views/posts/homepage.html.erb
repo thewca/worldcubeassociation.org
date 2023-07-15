@@ -16,7 +16,7 @@
           <%= t('homepage.competitions.text_html',
                 wca_live_link: raw(link_to("WCA Live", "https://live.worldcubeassociation.org"))) %>
         <% end %>
-        <%= render "box", title: t('homepage.merchandise.title'), path: "https://shop.worldcubeassociation.org", link_title: t('homepage.merchandise.link_title') do %>
+        <%= render "box", title: t('homepage.merchandise.title'), path: '/merch', link_title: t('homepage.merchandise.link_title') do %>
           <%= t('homepage.merchandise.text_html') %>
         <% end %>
         <%= render "box", title: t('homepage.records.title'), path: records_path do %>
