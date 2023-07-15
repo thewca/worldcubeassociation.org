@@ -4,7 +4,7 @@ module ResultsValidators
   class GenericValidator
     attr_reader :errors, :warnings, :infos, :apply_fixes
 
-    @@desc = "Please override that class variable with a proper description when you inherit the class."
+    @desc = "Please override that class variable with a proper description when you inherit the class."
 
     def initialize(apply_fixes: false)
       @apply_fixes = apply_fixes
@@ -27,21 +27,51 @@ module ResultsValidators
     #   - 'competition_ids' and 'model' (Result | InboxResult)
     #   - 'results'
     def validate(competition_ids: [], model: Result, results: nil)
+      self.reset_state
+
+      if results.present?
+        validator_data = ValidatorData.from_results(self, results)
+
+        run_validation(validator_data)
+      end
+
+      if competition_ids.present?
+        unless competition_ids.respond_to? :each
+          competition_ids = [competition_ids]
+        end
+
+        check_real_results = model == Result
+
+        self.validate_competitions(competition_ids, check_real_results)
+      end
+
+      self
+    end
+
+    def run_validation(validator_data)
       raise NotImplementedError
     end
 
-    def description
-      @@desc
+    def self.description
+      @desc
     end
 
     def self.class_name
-      self.name.split('::').last
+      self.name.demodulize
     end
 
     def self.serialize
       {
         name: class_name,
       }
+    end
+
+    def competition_associations
+      {}
+    end
+
+    def include_persons?
+      false
     end
 
     private
@@ -53,6 +83,12 @@ module ResultsValidators
       end
 
     protected
+
+      def validate_competitions(competition_ids, check_real_results)
+        validator_data = ValidatorData.from_competitions(self, competition_ids, check_real_results)
+
+        run_validation(validator_data)
+      end
 
       def get_rounds_info(competition, round_ids_from_results)
         # Get rounds information from the competition, and detect a legitimate situation

@@ -6,6 +6,7 @@ FactoryBot.define do
     association :user, factory: [:user, :wca_id]
     guests { 10 }
     comments { "" }
+    administrative_notes { "" }
     transient do
       events { competition.events }
     end

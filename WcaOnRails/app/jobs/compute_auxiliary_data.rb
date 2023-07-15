@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
-class ComputeAuxiliaryData < TimedApplicationJob
+class ComputeAuxiliaryData < ApplicationJob
+  extend TimedApplicationJob
+
+  include TimedApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   def self.reason_not_to_run

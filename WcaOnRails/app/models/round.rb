@@ -142,7 +142,7 @@ class Round < ApplicationRecord
   end
 
   def cutoff_is_greater_than_time_limit?
-    cutoff && time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? ? cutoff.attempt_result >= time_limit.centiseconds : false
+    cutoff && time_limit != TimeLimit::UNDEF_TL && time_limit.cumulative_round_ids.empty? ? cutoff.attempt_result > time_limit.centiseconds : false
   end
 
   # cutoffs are too fast if they are less than 5 seconds

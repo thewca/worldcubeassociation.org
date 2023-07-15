@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Sign up" do
-  let!(:person) { FactoryBot.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
+  let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
   let!(:custom_delegate) { FactoryBot.create(:delegate) }
 
   before :each do

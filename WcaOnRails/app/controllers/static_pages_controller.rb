@@ -7,8 +7,7 @@ class StaticPagesController < ApplicationController
   end
 
   def delegates
-    @senior_delegates = User.where(delegate_status: "senior_delegate")
-    @delegates_without_senior_delegates = User.where(delegate_status: ["candidate_delegate", "delegate"], senior_delegate: nil)
+    @delegates = User.where.not(delegate_status: nil)
   end
 
   def score_tools

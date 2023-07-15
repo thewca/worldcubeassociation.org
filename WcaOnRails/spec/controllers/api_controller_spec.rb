@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V0::ApiController do
+RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 
@@ -375,9 +375,7 @@ RSpec.describe Api::V0::ApiController do
           :person,
           countryId: "USA",
           gender: "m",
-          year: 1987,
-          month: 12,
-          day: 4,
+          dob: '1987-12-04',
         )
       end
       let(:user) do
@@ -503,26 +501,17 @@ RSpec.describe Api::V0::ApiController do
 
   describe 'GET #export_public' do
     it 'returns information about latest public export' do
-      Dir.mktmpdir do |dir|
-        rails_root = Pathname.new(dir).join("WcaOnRails")
-        FileUtils.mkdir_p rails_root
-        expect(Rails).to receive(:root).twice.and_return(rails_root)
+      export_timestamp = DateTime.current.utc
+      DumpPublicResultsDatabase.end_timestamp.update(date: export_timestamp)
 
-        FileUtils.mkdir_p "#{dir}/webroot/results/misc"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export001_20171114T062335Z.sql.zip"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export002_20181114T062335Z.sql.zip"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export001_20171114T062335Z.tsv.zip"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export002_20181114T062335Z.tsv.zip"
-
-        get :export_public
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-        expect(json).to eq(
-          'export_date' => '2018-11-14T06:23:35Z',
-          'sql_url' => "#{root_url}results/misc/WCA_export002_20181114T062335Z.sql.zip",
-          'tsv_url' => "#{root_url}results/misc/WCA_export002_20181114T062335Z.tsv.zip",
-        )
-      end
+      get :export_public
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json).to eq(
+        'export_date' => export_timestamp.iso8601,
+        'sql_url' => "#{root_url}export/results/WCA_export.sql.zip",
+        'tsv_url' => "#{root_url}export/results/WCA_export.tsv.zip",
+      )
     end
   end
 end

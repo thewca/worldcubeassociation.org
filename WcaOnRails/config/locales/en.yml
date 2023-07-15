@@ -30,18 +30,19 @@ en:
     CV: "Cabo Verde"
     FM: "Federated States of Micronesia"
     GW: "Guinea Bissau"
-    HK: "Hong Kong"
+    HK: "Hong Kong, China"
     KN: "Saint Kitts and Nevis"
     KP: "Democratic People's Republic of Korea"
     KR: "Republic of Korea"
     LC: "Saint Lucia"
     MK: "North Macedonia"
     MM: "Myanmar"
-    MO: "Macau"
+    MO: "Macau, China"
     PS: "Palestine"
     ST: "São Tomé and Príncipe"
     SZ: "Eswatini"
     TT: "Trinidad and Tobago"
+    TW: "Chinese Taipei"
     VC: "Saint Vincent and the Grenadines"
 
     XF: "Multiple Countries (Africa)"
@@ -296,7 +297,7 @@ en:
         showAtAll: "Make competition visible to the public"
         name: "Name"
         name_reason: "The reason for the name"
-        cellName: "Competition nickname"
+        cellName: "Competition short name"
         countryId: "Country"
         cityName: "City name"
         venue: "Venue"
@@ -362,6 +363,7 @@ en:
         comments: "Comments"
         paid_entry_fees: "Paid"
         status: "Status"
+        administrative_notes: "Administrative notes"
         # We can remove the following 3 keys once https://github.com/thewca/worldcubeassociation.org/issues/275 is done! (spec will complain anyway)
         name: "Name"
         birthday: "Birthday"
@@ -521,7 +523,7 @@ en:
       #context: for a competition
       competition:
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
-        cellName: "A short name for displaying. If the name of the competition is already short, you can re-use the name (e.g., Europe 2006)."
+        cellName: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
         cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         staff_delegate_ids: "WCA Delegates for the competition."
@@ -638,6 +640,7 @@ en:
         comments: ""
         guests: ""
         status: ""
+        administrative_notes: "Additional notes kept as part of managing this registration. These can't be viewed by the competitor."
       vote:
         comment: ""
       competition_medium:
@@ -863,7 +866,8 @@ en:
       my_results: "My Results"
       statistics: "Statistics"
       multimedia: "Multimedia"
-      db_export: "Database Export"
+      db_results_export: "Results Export"
+      db_dev_export: "Developer Export"
       regulations: "Regulations"
       about_regulations: "About the Regulations"
       guidelines: "Guidelines"
@@ -879,7 +883,7 @@ en:
       polls: "Polls"
       results_team: "Results team"
       results_admin: "Admin"
-      results_phpmyadmin: "phpMyAdmin"
+      results_database: "Database"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
@@ -1289,24 +1293,34 @@ en:
     payment_form:
       title: "Registration fees"
       payment_successful: "Your payment was successful, and your registration should show up paid below."
+      payment_processing: "Your payment has been confirmed, but the transaction is still pending."
+      button_text: "Pay now!"
       hints:
         donation: "Optional donation that will go only to the organization team"
-        card_information: "Your card information never reaches the WCA website. It is securely sent to Stripe which handles the payment process and gets back to us."
+        payment_button: "Your payment information never reaches the WCA website. It is securely sent to Stripe which handles the payment process and gets back to us."
       labels:
         entry_fees: "Registration fees"
+        fees_paid: "Paid"
+        fees_remaining: "Remaining"
         donation: "Donation"
-        card_information: "Card information"
-        cardholder_name: "Cardholder name"
         show_donation: "I would like to make an additional optional donation that will go only to the organization team"
+        payment_information: "Payment information"
+        payment_button: "Pay your fees with Stripe"
+        ajax_error: "WCA server error"
+        stripe_error: "Stripe error"
+        subtotal: "Subtotal"
       alerts:
         not_a_number: "Please enter a valid amount."
         amount_too_low: "The total amount must be at least the registration fees to be paid."
+        amount_rather_high: "You are about to pay at least double the required amount for your registration to proceed. Please confirm the payment by pressing OK."
       errors:
         already_paid: "The charge was not placed because the registration fees are already paid."
-        not_allowed: "You can't pay for that registration"
-        intent_not_found: "We could not find the payment intent to confirm on our server. The payment process is aborted and your card was not charged."
-        cardholder_name: "Please check the cardholder name."
-    payment_button_text: "Pay your fees with card"
+        not_allowed: "You can't pay for that registration."
+        stripe_failed: "Please check the Stripe transaction."
+        stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
+        stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
+        payment_reset: "The payment was rejected by Stripe."
+        payment_pending: "The payment has not been completed yet."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
     preferred_events_populated_html: "We autopopulated this with your preferred events, which you can edit %{link}."
     registration_requirements: "Registration requirements for the competition:"
@@ -1342,7 +1356,7 @@ en:
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
       advancement_condition_must_be_present_for_all_non_final_rounds: "Please make sure that all non final rounds have advancement condition specified."
-      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is less than the time limit."
+      cutoff_is_greater_than_time_limit: "Round %{round_number} in %{event} has a cutoff greater than the time limit, Please make sure the cutoff is not greater than the time limit."
       cutoff_is_too_fast: "Round %{round_number} in %{event} has a cutoff less than 5 seconds. Please make sure that it is correct."
       cutoff_is_too_slow: "Round %{round_number} in %{event} has a cutoff more than 10 minutes. Please make sure that it is correct."
       time_limit_is_too_fast: "Round %{round_number} in %{event} has a time limit less than 10 seconds. Please make sure that it is correct."
@@ -1381,6 +1395,7 @@ en:
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
+      no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
       title: "My competitions"
@@ -1673,7 +1688,6 @@ en:
     uncancel: "Uncancel the competition"
     cancelled_by_html: "Cancelled by %{name} on %{date_time}"
     cancel_confirm: "Are you sure you want to cancel that competition?"
-    upload_results: "Upload the results"
     post_results: "Post the results"
     results_posted_by_html: "Posted by %{poster_name} on %{date_time}"
     cancel_mistake: "Made a mistake?"
@@ -1705,8 +1719,8 @@ en:
         cutoff_html: "The result to beat to proceed to the second phase of a cutoff round (see %{regulation_link})."
         format_html: "The format describes how to determine the ranking of competitors based on their results. The list of allowed formats per event is described in %{link_to_9b}. See %{link_to_9f} for a description of each format."
         qualification_html: "Qualification times must be set in other WCA competitions in order to compete."
-        qualification_all_events_html: "The deadline for setting qualification times is <b>%{date}</b>."
-        qualification_some_events_html: "The deadline for setting qualification times in %{events} is <b>%{date}</b>."
+        qualification_all_events_html: "Qualification times must be set before <b>%{date}</b>."
+        qualification_some_events_html: "Qualification times in %{events} must be set before <b>%{date}</b>."
       format: "Format"
       time_limit: "Time limit"
       cutoff: "Cutoff"
@@ -2573,4 +2587,17 @@ en:
         - 'The WCA has exclusive merchandise available to purchase! From T-Shirts, Hoodies, Stickers, Stackmats, Backpacks, and more! Our designs are constantly updated including the classic WCA logo, official World Championship merchandise, and World Record designs.'
         - 'Buying WCA Merch through our stores is one of the best ways for you to support the WCA - a non-profit, volunteer run organization. We use all profits from the merchandise to further fund championships, equipment and other WCA related activities.'
         - 'You can buy our merchandise all over the world -- with direct stores in Europe, America and India and more to come soon!'
-
+  database:
+    results_export:
+      heading: "WCA Results Export"
+      description: "On this page we offer the WCA results for download in several formats so you can use/analyze them at large. We will usually update after each competition weekend when the results are finalized. The files are numbered and dated so you can see whether you have the newest version already."
+      permalink: "permalink"
+      file_formats:
+        sql: "SQL statements, for import into SQL databases."
+        tsv: "Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc."
+      hint_readme_html: "The included %{readme_filename} file contains the terms of use and a general description (in English, not translated):"
+    developer_export:
+      heading: "WST Developer Export"
+      description_html: "On this page we offer the WST developer export for download as SQL dump. Details can be found at %{github_link}."
+      #context: The button that is clicked to download the file
+      download: "Download"

@@ -1,0 +1,134 @@
+<% provide(:title, 'Finish unfinished persons') %>
+
+<div class="container">
+  <% competition_ids = @finish_persons.competition_ids %>
+
+  <h2>
+    <%= yield(:title) %>
+    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_ids: competition_ids), class: "btn btn-default" %>
+  </h2>
+
+  <% if competition_ids.present? %>
+    <p>For competition(s):</p>
+
+    <ul>
+      <% @finish_persons.competitions.each do |competition_id| %>
+        <li><code><%= competition_id %></code></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <%= simple_form_for :person_completions, url: admin_complete_persons_path do |f| %>
+    <%= f.hidden_field :competition_ids, value: competition_ids %>
+
+    <%= wca_table table_class: 'wca-persons', striped: false, greedy: false do %>
+      <thead>
+      <tr>
+        <th></th><!-- Empty header for radio toggle -->
+        <th class="name col-md-2">Person Name</th>
+        <th class="country col-md-1">Country</th>
+        <th class="wca-id col-md-1">WCA ID</th>
+        <th class="dob col-md-1">Date of Birth</th>
+        <th class="name col-md-3">Person Name</th>
+        <th class="country col-md-2">Country ID</th>
+        <th class="wca-id col-md-2">Semi ID</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @persons_to_finish.each do |p| %>
+        <% country = Country.c_find(p[:country_id]) %>
+        <% case_id = "#{p[:person_name]}|#{p[:country_id]}|#{p[:person_id]}|#{p[:competition_id]}" %>
+
+        <tr class="active">
+          <td colspan="8" class="text-center">
+            <% if competition_ids.present? && @finish_persons.competitions.length == 1 %>
+              <b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>)
+            <% else %>
+              <b><%= p[:person_name] %></b> (ID <code><%= p[:person_id] %></code>, Competition <code><%= p[:competition_id] %></code>)
+            <% end %>
+          </td>
+        </tr>
+
+        <tr class="info">
+          <td>
+            <%= f.input "#{case_id}][action", label: false, hint: false do %>
+              <%= f.radio_button "#{case_id}][action", :create, checked: true %>
+            <% end %>
+          </td>
+          <td><%= display_string p[:person_name] %></td>
+          <td><%= country.name %></td>
+          <td><%= link_to "(results)", admin_peek_unfinished_results_path(**p.slice(:person_name, :country_id, :person_id)), target: '_blank' %></td>
+          <td><%= p[:person_dob] %></td>
+          <td><%= f.input "#{case_id}][new_name", input_html: { value: p[:person_name] }, label: false, hint: false %></td>
+          <td><%= f.input "#{case_id}][new_country", collection: Country.all_sorted_by(I18n.locale, real: true), value_method: :id, label_method: :name, selected: p[:country_id], label: false, hint: false %></td>
+          <td><%= f.input "#{case_id}][new_semi_id", input_html: { value: p[:computed_semi_id] }, maxlength: 8, label: false, hint: false %></td>
+        </tr>
+
+        <% p[:similar_persons].each do |sim, np, cp| %>
+          <% name_identical = FinishUnfinishedPersons.extract_roman_name(sim.name) == FinishUnfinishedPersons.extract_roman_name(p[:person_name]) %>
+
+          <% dob_identical = sim.dob == p[:person_dob] %>
+          <% country_identical = sim.countryId == p[:country_id] %>
+
+          <% exact_match = name_identical && dob_identical && country_identical %>
+
+          <tr class="<%= "danger" if exact_match %>">
+            <td>
+              <%= f.input "#{case_id}][action", label: false, hint: false do %>
+                <%= f.radio_button "#{case_id}][action", "merge-#{sim.id}", checked: exact_match %>
+              <% end %>
+            </td>
+            <td><%= display_string sim.name %></td>
+            <td><%= sim.country.name %></td>
+            <td>
+              <% if sim.wca_id.present? %>
+                <%= link_to sim.wca_id, person_path(sim.wca_id) %>
+              <% else %>
+                <%= link_to "(results)", admin_peek_unfinished_results_path(person_name: sim.name, country_id: sim.countryId, person_id: sim.wca_id), target: '_blank' %>
+              <% end %>
+            </td>
+            <td><%= sim.dob %></td>
+            <td class="text-right"><%= number_to_percentage np * 100 %></td>
+            <td class="text-right"><%= cp %></td>
+            <td></td>
+          </tr>
+        <% end %>
+
+        <tr class="warning">
+          <td>
+            <%= f.input "#{case_id}][action", label: false, hint: false do %>
+              <%= f.radio_button "#{case_id}][action", :skip %>
+            <% end %>
+          </td>
+          <td class="text-center">I'm not sure yet (skip)</td>
+          <td colspan="3"></td>
+          <td class="text-center">(name similarity percentage)</td>
+          <td class="text-center">(country match)</td>
+          <td></td>
+        </tr>
+
+        <tr>
+          <td colspan="8" style="padding: 10px;"></td>
+        </tr>
+      <% end %>
+      </tbody>
+    <% end %>
+    <%= f.input :continue_batch, as: :boolean, label: "Continue with the next batch of newcomers if there are more pending entries", hint: "If you are redirected to the 'Create Newcomers' entry point, it means that there are no more pending entries.", input_html: { checked: competition_ids.present? } %>
+    <%= f.button :submit, value: "Submit changes!", class: "btn-primary" %>
+    <%= link_to "Go back", admin_finish_unfinished_persons_path(competition_ids: competition_ids), class: "btn btn-default" %>
+  <% end %>
+</div>
+
+<style>
+  /* Bootstrap gives margin-bottom globally to all forms.
+   Normally, this is reasonable to make HTML forms look nice.
+   But we're hacking form elements into a table here, which makes the table unusually wide otherwise. */
+  table .form-group {
+    margin-bottom: 0;
+  }
+
+  tr.info > td {
+    vertical-align: middle !important;
+  }
+</style>

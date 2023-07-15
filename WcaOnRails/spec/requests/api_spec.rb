@@ -11,7 +11,6 @@ RSpec.describe "API misc" do
     it "renders current records", clean_db_with_truncation: true do
       # Compute necessary data.
       AuxiliaryDataComputation.compute_concise_results
-      Timestamp.create(name: "compute_auxiliary_data_end", date: Time.now)
 
       get api_v0_records_path
       expect(response.status).to eq 200
