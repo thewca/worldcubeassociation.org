@@ -125,15 +125,17 @@ function CompetitionsMap({
   );
 }
 
-export default function MapInput({
+export default function InputMap({
+  idLat,
+  idLong,
   markers,
 }) {
   const { formData, setFormData } = useContext(FormContext);
 
-  const lat = formData.lat || 0;
-  const long = formData.long || 0;
-  const setLat = (newLat) => setFormData((d) => ({ ...d, lat: newLat }));
-  const setLong = (newLong) => setFormData((d) => ({ ...d, long: newLong }));
+  const lat = formData[idLat] || 0;
+  const long = formData[idLong] || 0;
+  const setLat = (newLat) => setFormData((d) => ({ ...d, [idLat]: newLat }));
+  const setLong = (newLong) => setFormData((d) => ({ ...d, [idLong]: newLong }));
 
   const center = [lat, long];
 
@@ -141,7 +143,7 @@ export default function MapInput({
   const warningDist = nearbyCompetitionDistanceWarning;
 
   return (
-    <CompetitionsMap lat={formData.lat} long={long} setLat={setLat} setLong={setLong}>
+    <CompetitionsMap lat={lat} long={long} setLat={setLat} setLong={setLong}>
       <Circle
         center={center}
         fill={false}
