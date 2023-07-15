@@ -7,15 +7,16 @@ function calculateDayDifference(comp, mode) {
   const dateToday = new Date();
   const startDate = new Date(comp.start_date);
   const endDate = new Date(comp.end_date);
+  const msInADay = 1000 * 3600 * 24;
 
   if (mode === 'future') {
     const msDifference = startDate.getTime() - dateToday.getTime();
-    const dayDifference = Math.ceil(msDifference / (1000 * 3600 * 24));
+    const dayDifference = Math.ceil(msDifference / msInADay);
     return dayDifference;
   }
   if (mode === 'past') {
     const msDifference = dateToday.getTime() - endDate.getTime();
-    const dayDifference = Math.floor(msDifference / (1000 * 3600 * 24));
+    const dayDifference = Math.floor(msDifference / msInADay);
     return dayDifference;
   }
 
