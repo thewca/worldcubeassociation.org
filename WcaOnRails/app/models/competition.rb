@@ -1906,7 +1906,7 @@ class Competition < ApplicationRecord
       displayName: display_name(short: true),
       countryName: country ? country.name : nil,
       cityName: cityName,
-      year: year,
+      year: start_date.year,
       isProbablyOver: is_probably_over?,
       cancelled: cancelled?,
       resultsPosted: results_posted?,
