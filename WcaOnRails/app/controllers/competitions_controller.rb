@@ -180,20 +180,30 @@ class CompetitionsController < ApplicationController
   end
 
   def create
-    @competition = Competition.new(competition_params)
+    @competition = Competition.new(comp_params_form)
 
     if @competition.save
-      flash[:success] = t('competitions.messages.create_success')
-      @competition.organizers.each do |organizer|
-        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
-      end
-      redirect_to edit_competition_path(@competition)
+      render json: {
+        newPath: edit_competition_path(@competition),
+      }
     else
-      # Show id errors under name, since we don't actually show an
-      # id field to the user, so they wouldn't see any id errors.
-      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      render :new
+      render json: @competition.errors
     end
+
+    # @competition = Competition.new(competition_params)
+    #
+    # if @competition.save
+    #   flash[:success] = t('competitions.messages.create_success')
+    #   @competition.organizers.each do |organizer|
+    #     CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
+    #   end
+    #   redirect_to edit_competition_path(@competition)
+    # else
+    #   # Show id errors under name, since we don't actually show an
+    #   # id field to the user, so they wouldn't see any id errors.
+    #   @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
+    #   render :new
+    # end
   end
 
   def post_announcement
@@ -652,6 +662,93 @@ class CompetitionsController < ApplicationController
     if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
       Money.default_bank.update_rates
     end
+  end
+  
+  private def comp_params_form
+    comp_data = {
+      receive_registration_emails: params.dig('userSettings', 'receive_registration_emails'),
+      being_cloned_from_id: params.dig('cloning', 'being_cloned_from_id'),
+      clone_tabs: params.dig('cloning', 'clone_tabs'),
+    }
+
+    if @competition.nil? || @competition.can_edit_registration_fees?
+      additional_data = {
+        base_entry_fee_lowest_denomination: params.dig('entryFees', 'base_entry_fee_lowest_denomination'),
+        currency_code: params.dig('entryFees', 'currency_code'),
+      }
+      comp_data.merge! additional_data
+    end
+
+    if @competition&.confirmed? && !current_user.can_admin_competitions?
+      # If the competition is confirmed, non admins are not allowed to change anything.
+    else
+      additional_data = {
+        id: params['id'],
+        name: params['name'],
+        cellName: params['cellName'],
+        name_reason: params['name_reason'],
+        countryId: params.dig('venue', 'countryId'),
+        cityName: params.dig('venue', 'cityName'),
+        venue: params.dig('venue', 'venue'),
+        venueDetails: params.dig('venue', 'venueDetails'),
+        venueAddress: params.dig('venue', 'venueAddress'),
+        latitude_degrees: params.dig('venue', 'coordinates', 'lat'),
+        longitude_degrees: params.dig('venue', 'coordinates', 'long'),
+        start_date: params['start_date'],
+        end_date: params['end_date'],
+        registration_open: params['registration_open'],
+        registration_close: params['registration_close'],
+        information: params['information'],
+        competitor_limit_enabled: params.dig('competitorLimit', 'competitor_limit_enabled'),
+        competitor_limit: params.dig('competitorLimit', 'competitor_limit'),
+        competitor_limit_reason: params.dig('competitorLimit', 'competitor_limit_reason'),
+        staff_delegate_ids: params.dig('staff', 'staff_delegate_ids'),
+        trainee_delegate_ids: params.dig('staff', 'trainee_delegate_ids'),
+        organizer_ids: params.dig('staff', 'organizer_ids'),
+        contact: params.dig('staff', 'contact'),
+        # championships: params['championships'],
+        generate_website: params.dig('website', 'generate_website'),
+        external_website: params.dig('website', 'external_website'),
+        use_wca_registration: params.dig('website', 'use_wca_registration'),
+        external_registration_page: params.dig('website', 'external_registration_page'),
+        use_wca_live_for_scoretaking: params.dig('website', 'use_wca_live_for_scoretaking'),
+        currency_code: params.dig('entryFees', 'currency_code'),
+        base_entry_fee_lowest_denomination: params.dig('entryFees', 'base_entry_fee_lowest_denomination'),
+        enable_donations: params.dig('entryFees', 'enable_donations'),
+        guests_enabled: params.dig('entryFees', 'guests_enabled'),
+        guests_entry_fee_lowest_denomination: params.dig('entryFees', 'guests_entry_fee_lowest_denomination'),
+        guest_entry_status: params.dig('entryFees', 'guest_entry_status'),
+        guests_per_registration_limit: params.dig('entryFees', 'guests_per_registration_limit'),
+        allow_registration_self_delete_after_acceptance: params.dig('regDetails', 'allow_registration_self_delete_after_acceptance'),
+        refund_policy_percent: params.dig('regDetails', 'refund_policy_percent'),
+        on_the_spot_registration: params.dig('regDetails', 'on_the_spot_registration'),
+        refund_policy_limit_date: params.dig('regDetails', 'refund_policy_limit_date'),
+        waiting_list_deadline_date: params.dig('regDetails', 'waiting_list_deadline_date'),
+        event_change_deadline_date: params.dig('regDetails', 'event_change_deadline_date'),
+        allow_registration_edits: params.dig('regDetails', 'allow_registration_edits'),
+        extra_registration_requirements: params.dig('regDetails', 'extra_registration_requirements'),
+        force_comment_in_registration: params.dig('regDetails', 'force_comment_in_registration'),
+        early_puzzle_submission: params.dig('eventRestrictions', 'early_puzzle_submission'),
+        early_puzzle_submission_reason: params.dig('eventRestrictions', 'early_puzzle_submission_reason'),
+        qualification_results: params.dig('eventRestrictions', 'qualification_results'),
+        qualification_results_reason: params.dig('eventRestrictions', 'qualification_results_reason'),
+        allow_registration_without_qualification: params.dig('eventRestrictions', 'allow_registration_without_qualification'),
+        event_restrictions: params.dig('eventRestrictions', 'event_restrictions'),
+        event_restrictions_reason: params.dig('eventRestrictions', 'event_restrictions_reason'),
+        events_per_registration_limit: params.dig('eventRestrictions', 'events_per_registration_limit'),
+        main_event_id: params.dig('eventRestrictions', 'main_event_id'),
+        remarks: params['remarks'],
+      }
+      comp_data.merge! additional_data
+    end
+
+    if confirming? && current_user.can_confirm_competition?(@competition)
+      comp_data[:confirmed] = true
+    end
+
+    comp_data[:editing_user_id] = current_user.id
+
+    comp_data
   end
 
   private def competition_params

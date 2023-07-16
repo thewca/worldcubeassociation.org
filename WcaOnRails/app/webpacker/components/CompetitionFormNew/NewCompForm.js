@@ -15,15 +15,18 @@ import PerUserSettings from './FormSections/UserSettings';
 import RegistrationFee from './FormSections/RegistrationFees';
 import RegistrationDetails from './FormSections/RegistrationDetails';
 import EventRestrictions from './FormSections/EventRestrictions';
+import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
+
+function getRandomInt(min, max) {
+  return Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + Math.ceil(min);
+}
+
+const name = `Irish Championship ${getRandomInt(0, 254)} 2024`;
 
 const exampleFormData = {
-  // Basic Info
-  id: 'IrishChampionship2023',
-  name: 'Irish Championship 2023',
-  cellName: 'Irish Championship 2023',
-  name_reason: 'This is Ireland\'s national championship',
-
-  // Venue Info
+  name,
+  cellName: name,
+  name_reason: "This is Ireland's national championship",
   venue: {
     countryId: 'Ireland',
     cityName: 'Waterford',
@@ -97,8 +100,31 @@ const exampleFormData = {
   remarks: 'remarks to the board here',
 };
 
-export default function NewCompForm() {
-  const [formData, setFormData] = React.useState(exampleFormData);
+// TODO: Need to add cloning params
+
+function FormActions({ data }) {
+  const createComp = async () => {
+    const url = '/competitions';
+    const fetchOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      method: 'POST',
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetchWithAuthenticityToken(url, fetchOptions);
+    const json = await response.json();
+    console.log(json);
+  };
+
+  return (
+    <Button onClick={createComp} primary>Create Competition</Button>
+  );
+}
+
+export default function NewCompForm({ competition = null }) {
   const [showDebug, setShowDebug] = useState(false);
 
   const [formData, setFormData] = React.useState(competition || exampleFormData);
@@ -162,6 +188,9 @@ export default function NewCompForm() {
         <EventRestrictions />
 
         <InputTextArea id="remarks" />
+        <Divider />
+
+        <FormActions data={formData} />
       </Form>
     </FormContext.Provider>
   );
