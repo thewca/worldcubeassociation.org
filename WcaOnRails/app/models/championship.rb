@@ -54,10 +54,6 @@ class Championship < ApplicationRecord
     ]
   end
 
-  def to_comp_form
-    championship_type
-  end
-
   def <=>(other)
     self.to_a <=> other.to_a
   end

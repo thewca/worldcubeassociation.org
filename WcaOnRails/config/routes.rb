@@ -51,8 +51,6 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
-  post 'competitions/new_create' => 'competitions#new_create', as: :new_create_competition
-
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
@@ -91,7 +89,6 @@ Rails.application.routes.draw do
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
 
-  post 'competitions' => 'competitions#create', as: :create_competition
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
@@ -108,9 +105,6 @@ Rails.application.routes.draw do
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
   get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
 
-  get 'competitions/edit/nearby-competitions-json' => 'competitions#nearby_competitions_json', as: :nearby_competitions_json
-  get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
-  get 'competitions/edit/nearby-registrations-json' => 'competitions#nearby_registrations_json', as: :nearby_registrations_json
   get 'competitions/edit/championship-regions-json' => 'competitions#championship_regions_json', as: :championship_regions_json
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)

@@ -378,53 +378,12 @@ class CompetitionsController < ApplicationController
     render :new
   end
 
-  def competition_form_nearby_json(c)
-    if current_user.can_admin_results?
-      compLink = ActionController::Base.helpers.link_to(c.name, admin_edit_competition_path(c.id), target: "_blank")
-    else
-      compLink = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
-    end
-
-    days_until = @competition.days_until_competition?(c)
-
-    {
-      danger: @competition.dangerously_close_to?(c),
-      id: c.id,
-      name: c.name,
-      nameLink: compLink,
-      confirmed: c.confirmed?,
-      delegates: users_to_sentence(c.delegates),
-      days_until: days_until,
-      days_distance_in_words: t('datetime.distance_in_words.x_days', count: days_until.abs),
-      days_until_tooltip: "#{c.name} #{days_until < 0 ? t('competitions.adjacent_competitions.ends_on') + " " + c.end_date.to_fs : t('competitions.adjacent_competitions.starts_on') + " " + c.start_date.to_fs}",
-      location: "#{c.cityName}, #{c.countryId}",
-      distance: link_to_google_maps_dir("#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees),
-      limit: c.competitor_limit_enabled ? c.competitor_limit : "",
-      competitors: c.is_probably_over? ? c.competitors.count : "",
-      events: c.events.map { |event|
-        cubing_icon(event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name)
-      },
-      latitude_degrees: c.latitude_degrees,
-      longitude_degrees: c.longitude_degrees,
-    }
-  end
-
   def nearby_competitions
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @nearby_competitions = get_nearby_competitions(@competition)
     render partial: 'nearby_competitions'
-  end
-
-  def nearby_competitions_json
-    # Copied from nearby_competitions, but returns JSON instead of the HTML table.
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
-    @nearby_competitions = get_nearby_competitions(@competition)
-
-    render json: @nearby_competitions.map { |c| competition_form_nearby_json(c) }
   end
 
   def series_eligible_competitions_json
@@ -439,31 +398,6 @@ class CompetitionsController < ApplicationController
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
     @series_eligible_competitions = get_series_eligible_competitions(@competition)
     render partial: 'series_eligible_competitions'
-  end
-
-  def nearby_registrations_json
-    @competition = Competition.new(competition_params)
-    @competition.valid?
-    @colliding_registration_start_competitions = get_colliding_registration_start_competitions(@competition)
-
-    render json: @colliding_registration_start_competitions.map { |c|
-      if current_user.can_admin_results?
-        compLink = ActionController::Base.helpers.link_to(c.name, admin_edit_competition_path(c.id), target: "_blank")
-      else
-        compLink = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
-      end
-
-      {
-        danger: @competition.registration_open_adjacent_to?(c, Competition::REGISTRATION_COLLISION_MINUTES_DANGER),
-        name: c.name,
-        nameLink: compLink,
-        confirmed: c.confirmed?,
-        delegates: users_to_sentence(c.delegates),
-        minutesUntil: @competition.minutes_until_other_registration_starts(c),
-        registrationOpen: c.registration_open.to_s,
-        location: "#{c.cityName}, #{c.countryId}",
-      }
-    }
   end
 
   def colliding_registration_start_competitions
@@ -708,19 +642,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
-  end
-
-  def new_create
-    @competition = Competition.new(competition_params)
-
-    if @competition.save
-      render json: @competition
-    else
-      # Show id errors under name, since we don't actually show an
-      # id field to the user, so they wouldn't see any id errors.
-      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      render json: @competition.errors, status: :forbidden
-    end
   end
 
   private def confirming?
