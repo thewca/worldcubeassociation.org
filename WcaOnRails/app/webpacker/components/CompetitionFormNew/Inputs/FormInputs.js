@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import {
   Checkbox,
   Form,
-  Input,
+  Input, Radio,
   Select,
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
@@ -10,6 +10,7 @@ import I18n from '../../../lib/i18n';
 import FormContext from '../State/FormContext';
 import MarkdownEditor from './MarkdownEditor';
 import { UserSearch } from './WCASearch';
+import AutonumericField from './AutonumericField';
 
 function getFieldLabel(id) {
   return I18n.t(`activerecord.attributes.competition.${id}`);
@@ -119,6 +120,21 @@ export const InputSelect = wrapInput((props) => (
   <Select options={props.options} value={props.value} onChange={props.onChange} />
 ), ['options']);
 
+export const InputRadio = wrapInput((props) => (
+  <>
+    {props.options.map((option, idx) => (
+      <React.Fragment key={option.value}>
+        {idx !== 0 && <br />}
+        <Radio
+          label={option.text}
+          checked={props.value === option.value}
+          onChange={() => props.onChange(null, { value: option.value })}
+        />
+      </React.Fragment>
+    ))}
+  </>
+), ['options']);
+
 export const InputMarkdown = wrapInput((props) => (
   <MarkdownEditor value={props.value} onChange={props.onChange} />
 ), []);
@@ -131,6 +147,10 @@ export const InputUsers = wrapInput((props) => (
     traineeOnly={props.traineeOnly}
   />
 ), ['delegateOnly', 'traineeOnly']);
+
+export const InputCurrencyAmount = wrapInput((props) => (
+  <AutonumericField currency={props.currency} value={props.value} onChange={props.onChange} />
+), ['currency']);
 
 export function InputBoolean({ id }) {
   const { formData, setFormData } = useContext(FormContext);

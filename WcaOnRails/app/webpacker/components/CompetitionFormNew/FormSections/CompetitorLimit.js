@@ -4,9 +4,9 @@ import { InputBooleanSelect, InputNumber, InputTextArea } from '../Inputs/FormIn
 import FormContext from '../State/FormContext';
 
 export default function CompetitorLimit() {
-  const { formData } = useContext(FormContext);
+  const limitData = useContext(FormContext).formData.competitorLimit;
 
-  const hasLimit = formData.competitorLimit && formData.competitorLimit.competitor_limit_enabled === 'true';
+  const hasLimit = limitData && limitData.competitor_limit_enabled === 'true';
   return (
     <SubSection section="competitorLimit">
       <InputBooleanSelect id="competitor_limit_enabled" />

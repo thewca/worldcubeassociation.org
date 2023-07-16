@@ -5,12 +5,16 @@ import VenueInfo from './FormSections/VenueInfo';
 import {
   InputDate,
   InputMarkdown,
-  InputString,
+  InputString, InputTextArea,
 } from './Inputs/FormInputs';
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
 import Website from './FormSections/Website';
 import InputChampionship from './Inputs/InputChampionship';
+import PerUserSettings from './FormSections/UserSettings';
+import RegistrationFee from './FormSections/RegistrationFees';
+import RegistrationDetails from './FormSections/RegistrationDetails';
+import EventRestrictions from './FormSections/EventRestrictions';
 
 const exampleFormData = {
   // Basic Info
@@ -56,16 +60,62 @@ const exampleFormData = {
     contact: '',
   },
 
-  // Website
-  website: {
-    generate_website: 'true',
-    external_website: '',
-  },
-
   // Championships
   championships: [
     'IE',
   ],
+
+  // Website
+  website: {
+    generate_website: 'true',
+    external_website: '',
+    use_wca_registration: 'true',
+    external_registration_page: '',
+    use_wca_live_for_scoretaking: 'true',
+  },
+
+  // User Settings
+  userSettings: {
+    receive_registration_emails: 'true',
+  },
+
+  // Registration Fees
+  entryFees: {
+    currency_code: 'EUR',
+    base_entry_fee_lowest_denomination: 3500,
+    guests_enabled: 'true',
+    guest_entry_status: 'free',
+    guests_per_registration_limit: '0',
+  },
+
+  // Registration Details
+  regDetails: {
+    allow_registration_self_delete_after_acceptance: 'false',
+    refund_policy_percent: '70',
+    on_the_spot_registration: 'false',
+    refund_policy_limit_date: '2023-06-23T18:30',
+    waiting_list_deadline_date: '2023-06-23T18:30',
+    event_change_deadline_date: '2023-06-23T18:30',
+    allow_registration_edits: 'false',
+    extra_registration_requirements: '**Registration is not complete until the registration fee has been paid.** A spot is not guaranteed until the competitors name appears on the Competitors tab. Once the competitor limit has been reached, new registrations will be added to the waiting list in the order of payment. Waitlisted competitors will only be accepted provided one of the accepted competitors withdraws from the competition. \n\nAll competitors still on the waiting list after registration closes will be removed and a full refund issued.\n\nIf you can no longer attend the competition, please inform us ASAP. We can give the free spot to another person! Of course you will get a refund according to the refund policy for this competition.\n\nPlease allow up to 48 hours for your registration to be accepted. Registrations will not be accepted until the appropriate registration fee has been received.\n\nIf you wish to edit your registration, please contact the organisation team *via* the link above.',
+    force_comment_in_registration: 'false',
+  },
+
+  // Event Restrictions
+  eventRestrictions: {
+    early_puzzle_submission: 'true',
+    early_puzzle_submission_reason: 'Multiblind puzzles are to be submitted early to allow time for scrambling.',
+    qualification_results: 'false',
+    qualification_results_reason: '\n',
+    allow_registration_without_qualification: '',
+    event_restrictions: 'false',
+    event_restrictions_reason: '',
+    events_per_registration_limit: '',
+    main_event_id: '333',
+  },
+
+  // Remarks
+  remarks: 'BigBLD and MultiBLD each have a 20 person limit, due to the size of the side room, which will be filled in the order of completed registration. Our Irish champion may not have a success yet and so we felt this was the fairest solution.\nWe will be announcing the FMC championship shortly.',
 };
 
 export default function NewCompForm() {
@@ -75,6 +125,8 @@ export default function NewCompForm() {
     formData,
     setFormData,
   }), [formData, setFormData]);
+
+  const currency = formData.entryFees.currency_code || 'USD';
 
   return (
     <FormContext.Provider value={formContext}>
@@ -104,11 +156,22 @@ export default function NewCompForm() {
         <Staff />
         <Divider />
 
+        <InputChampionship id="championships" />
+        <Divider />
+
         <Website />
         <Divider />
 
-        <InputChampionship id="championships" />
+        <PerUserSettings />
         <Divider />
+
+        <RegistrationFee currency={currency} />
+        <RegistrationDetails currency={currency} />
+        <Divider />
+
+        <EventRestrictions />
+
+        <InputTextArea id="remarks" />
       </Form>
     </FormContext.Provider>
   );

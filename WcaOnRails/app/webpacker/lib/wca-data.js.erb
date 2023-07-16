@@ -35,7 +35,8 @@ function extendCountries(country) {
   currencies_info_hash = Hash[selected_currencies.map do |_,v|
     [v[:iso_code], {:symbol => v[:symbol],
                     :symbol_first => v[:symbol_first],
-                    :subunit_to_unit => v[:subunit_to_unit]}]
+                    :subunit_to_unit => v[:subunit_to_unit],
+                    :name => v[:name]}]
   end]
 %>
 

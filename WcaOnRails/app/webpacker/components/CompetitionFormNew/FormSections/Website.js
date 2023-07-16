@@ -4,13 +4,17 @@ import { InputBoolean, InputString } from '../Inputs/FormInputs';
 import FormContext from '../State/FormContext';
 
 export default function Website() {
-  const { formData } = useContext(FormContext);
+  const websiteData = useContext(FormContext).formData.website;
 
-  const usingExternalWebsite = formData.website && formData.website.generate_website === 'false';
+  const usingExternalWebsite = websiteData && websiteData.generate_website !== 'true';
+  const usingExternalRegistration = websiteData && websiteData.use_wca_registration !== 'true';
   return (
     <SubSection section="website">
       <InputBoolean id="generate_website" />
       {usingExternalWebsite && <InputString id="external_website" />}
+      <InputBoolean id="use_wca_registration" />
+      {usingExternalRegistration && <InputString id="external_registration_page" />}
+      <InputBoolean id="use_wca_live_for_scoretaking" />
     </SubSection>
   );
 }
