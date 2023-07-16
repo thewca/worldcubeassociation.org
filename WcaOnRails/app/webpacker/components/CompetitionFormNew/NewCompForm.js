@@ -1,5 +1,5 @@
-import React, { useMemo } from 'react';
-import { Divider, Form } from 'semantic-ui-react';
+import React, { useMemo, useState } from 'react';
+import { Button, Divider, Form } from 'semantic-ui-react';
 import FormContext from './State/FormContext';
 import VenueInfo from './FormSections/VenueInfo';
 import {
@@ -120,6 +120,7 @@ const exampleFormData = {
 
 export default function NewCompForm() {
   const [formData, setFormData] = React.useState(exampleFormData);
+  const [showDebug, setShowDebug] = useState(false);
 
   const formContext = useMemo(() => ({
     formData,
@@ -130,11 +131,19 @@ export default function NewCompForm() {
 
   return (
     <FormContext.Provider value={formContext}>
-      <pre>
-        <code>
-          {JSON.stringify(formData, null, 2)}
-        </code>
-      </pre>
+      <Button onClick={() => setShowDebug(!showDebug)}>
+        {showDebug ? 'Hide' : 'Show'}
+        {' '}
+        Debug
+      </Button>
+      {showDebug && (
+        <pre>
+          <code>
+            {JSON.stringify(formData, null, 2)}
+          </code>
+        </pre>
+      )}
+      <Divider />
       <Form>
         <InputString id="id" />
         <InputString id="name" />
