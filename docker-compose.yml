@@ -50,8 +50,8 @@ services:
   wca_webpacker:
     <<: *app
     container_name: "webpacker"
-    expose:
-      - "3035"
+    ports:
+      - "3035:3035"
     environment:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: 0.0.0.0
