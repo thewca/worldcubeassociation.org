@@ -15,7 +15,7 @@ const countriesOptions = Object.values(countries.byIso2).map((country) => ({
 export default function VenueInfo() {
   return (
     <SubSection section="venue">
-      <InputSelect id="countryId" options={countriesOptions} />
+      <InputSelect id="countryId" options={countriesOptions} search />
       <InputString id="cityName" />
       <InputString id="venue" mdHint />
       <InputString id="venueDetails" mdHint />
