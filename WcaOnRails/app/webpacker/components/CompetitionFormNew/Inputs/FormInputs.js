@@ -50,7 +50,11 @@ function FieldWrapper({
   );
 }
 
-const wrapInput = (WrappedInput, additionalPropNames) => function wrappedInput(props) {
+const wrapInput = (
+  WrappedInput,
+  additionalPropNames,
+  emptyStringForNull = false,
+) => function wrappedInput(props) {
   const { formData, setFormData } = useContext(FormContext);
 
   const inputProps = additionalPropNames.reduce((acc, propName) => {
@@ -61,7 +65,9 @@ const wrapInput = (WrappedInput, additionalPropNames) => function wrappedInput(p
   const onChange = useCallback((e, { value: newValue }) => {
     setFormData((previousData) => ({ ...previousData, [props.id]: newValue }));
   }, [props.id, setFormData]);
-  const value = formData[props.id] || '';
+  let value = formData[props.id];
+
+  if (emptyStringForNull && value === null) value = '';
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -85,7 +91,7 @@ const wrapInput = (WrappedInput, additionalPropNames) => function wrappedInput(p
 
 export const InputString = wrapInput((props) => (
   <Input label={props.attachedLabel} value={props.value} onChange={props.onChange} />
-), ['attachedLabel']);
+), ['attachedLabel'], true);
 
 export const InputTextArea = wrapInput((props) => (
   <TextareaAutosize
@@ -94,7 +100,7 @@ export const InputTextArea = wrapInput((props) => (
     className="no-autosize"
     rows={2}
   />
-), []);
+), [], true);
 
 export const InputNumber = wrapInput((props) => (
   <Input
@@ -104,21 +110,42 @@ export const InputNumber = wrapInput((props) => (
     min={props.min}
     max={props.max}
   />
-), ['min', 'max']);
+), ['min', 'max'], true);
 
-export const InputDate = wrapInput((props) => (
-  <Input
-    type={props.dateTime ? 'datetime-local' : 'date'}
-    value={props.value}
-    onChange={props.onChange}
-    style={{ width: 'full' }}
-    label={props.dateTime ? 'UTC' : null}
-  />
-), ['dateTime']);
+export const InputDate = wrapInput((props) => {
+  const date = props.value && new Date(props.value);
+
+  const onChange = useCallback((e, { value: newValue }) => {
+    if (!newValue || !props.dateTime) {
+      props.onChange(e, { value: newValue });
+      return;
+    }
+
+    const newDate = new Date(newValue);
+    newDate.getTimezoneOffset();
+    newDate.setMinutes(newDate.getMinutes() - newDate.getTimezoneOffset());
+    props.onChange(e, { value: newDate.toISOString() });
+  }, [props.onChange, props.dateTime]);
+
+  return (
+    <Input
+      type={props.dateTime ? 'datetime-local' : 'date'}
+      value={date && date.toISOString().slice(0, props.dateTime ? 16 : 10)}
+      onChange={onChange}
+      style={{ width: 'full' }}
+      label={props.dateTime ? 'UTC' : null}
+    />
+  );
+}, ['dateTime'], true);
 
 export const InputSelect = wrapInput((props) => (
-  <Select options={props.options} value={props.value} onChange={props.onChange} />
-), ['options']);
+  <Select
+    options={props.options}
+    value={props.value}
+    onChange={props.onChange}
+    search={props.search}
+  />
+), ['options', 'search']);
 
 export const InputRadio = wrapInput((props) => (
   <>
@@ -137,7 +164,7 @@ export const InputRadio = wrapInput((props) => (
 
 export const InputMarkdown = wrapInput((props) => (
   <MarkdownEditor value={props.value} onChange={props.onChange} />
-), []);
+), [], true);
 
 export const InputUsers = wrapInput((props) => (
   <UserSearch
@@ -155,8 +182,7 @@ export const InputCurrencyAmount = wrapInput((props) => (
 export function InputBoolean({ id }) {
   const { formData, setFormData } = useContext(FormContext);
 
-  const rawValue = formData[id];
-  const value = rawValue === undefined ? false : String(rawValue) === 'true';
+  const value = formData[id] || false;
   const onChange = useCallback((e, { checked: newValue }) => {
     setFormData((previousData) => ({ ...previousData, [id]: String(newValue) }));
   }, [id, setFormData]);
@@ -172,15 +198,15 @@ export function InputBoolean({ id }) {
 export function InputBooleanSelect({ id }) {
   const options = useMemo(() => [
     {
-      value: '',
+      value: null,
       text: '',
     },
     {
-      value: 'true',
+      value: true,
       text: I18n.t(`simple_form.options.competition.${id}.true`),
     },
     {
-      value: 'false',
+      value: false,
       text: I18n.t(`simple_form.options.competition.${id}.false`),
     }], [id]);
 

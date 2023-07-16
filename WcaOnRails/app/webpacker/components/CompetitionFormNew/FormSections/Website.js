@@ -6,8 +6,8 @@ import FormContext from '../State/FormContext';
 export default function Website() {
   const websiteData = useContext(FormContext).formData.website;
 
-  const usingExternalWebsite = websiteData && websiteData.generate_website !== 'true';
-  const usingExternalRegistration = websiteData && websiteData.use_wca_registration !== 'true';
+  const usingExternalWebsite = websiteData && !websiteData.generate_website;
+  const usingExternalRegistration = websiteData && !websiteData.use_wca_registration;
   return (
     <SubSection section="website">
       <InputBoolean id="generate_website" />

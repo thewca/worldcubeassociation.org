@@ -14,11 +14,11 @@ const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
 }));
 
 const guestsEnabledOptions = [{
-  value: 'true',
+  value: true,
   text: I18n.t('simple_form.options.competition.guests_enabled.true'),
 },
 {
-  value: 'false',
+  value: false,
   text: I18n.t('simple_form.options.competition.guests_enabled.false'),
 }];
 

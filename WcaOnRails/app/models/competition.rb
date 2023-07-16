@@ -1961,4 +1961,83 @@ class Competition < ApplicationRecord
         (format_id.nil? || format_id == r.format_id)
     end
   end
+
+  def to_comp_form
+    {
+      "id" => id,
+      "name" => name,
+      "cellName" => cellName,
+      "name_reason" => name_reason,
+      "venue" => {
+        "countryId" => countryId,
+        "cityName" => cityName,
+        "venue" => venue,
+        "venueDetails" => venueDetails,
+        "venueAddress" => venueAddress,
+        "coordinates" => {
+          "lat" => latitude_degrees,
+          "long" => longitude_degrees,
+        },
+      },
+      "start_date" => start_date,
+      "end_date" => end_date,
+      "registration_open" => registration_open,
+      "registration_close" => registration_close,
+      "information" => information,
+      "competitorLimit" => {
+        "competitor_limit_enabled" => competitor_limit_enabled,
+        "competitor_limit" => competitor_limit,
+        "competitor_limit_reason" => competitor_limit_reason,
+      },
+      "staff" => {
+        "staff_delegate_ids" => staff_delegate_ids,
+        "trainee_delegate_ids" => trainee_delegate_ids,
+        "organizer_ids" => organizer_ids,
+        "contact" => contact,
+      },
+      "championships" => championships.map(&:championship_type),
+      "website" => {
+        "generate_website" => generate_website,
+        "external_website" => external_website,
+        "use_wca_registration" => use_wca_registration,
+        "external_registration_page" => external_registration_page,
+        "use_wca_live_for_scoretaking" => use_wca_live_for_scoretaking,
+      },
+      "userSettings" => {
+        "receive_registration_emails" => receive_registration_emails,
+      },
+      "entryFees" => {
+        "currency_code" => currency_code,
+        "base_entry_fee_lowest_denomination" => base_entry_fee_lowest_denomination,
+        "enable_donations" => enable_donations,
+        "guests_enabled" => guests_enabled,
+        "guests_entry_fee_lowest_denomination" => guests_entry_fee_lowest_denomination,
+        "guest_entry_status" => guest_entry_status,
+        "guests_per_registration_limit" => guests_per_registration_limit,
+      },
+      "regDetails" => {
+        "allow_registration_self_delete_after_acceptance" => allow_registration_self_delete_after_acceptance,
+        "refund_policy_percent" => refund_policy_percent,
+        "on_the_spot_registration" => on_the_spot_registration,
+        "refund_policy_limit_date" => refund_policy_limit_date,
+        "waiting_list_deadline_date" => waiting_list_deadline_date,
+        "event_change_deadline_date" => event_change_deadline_date,
+        "allow_registration_edits" => allow_registration_edits,
+        "extra_registration_requirements" => extra_registration_requirements,
+        "force_comment_in_registration" => force_comment_in_registration,
+      },
+      "eventRestrictions" => {
+        "early_puzzle_submission" => early_puzzle_submission,
+        "early_puzzle_submission_reason" => early_puzzle_submission_reason,
+        "qualification_results" => qualification_results,
+        "qualification_results_reason" => qualification_results_reason,
+        "allow_registration_without_qualification" => allow_registration_without_qualification,
+        "event_restrictions" => event_restrictions,
+        "event_restrictions_reason" => event_restrictions_reason,
+        "events_per_registration_limit" => events_per_registration_limit,
+        "main_event_id" => main_event_id,
+      },
+      "remarks" => remarks,
+    }
+  end
 end

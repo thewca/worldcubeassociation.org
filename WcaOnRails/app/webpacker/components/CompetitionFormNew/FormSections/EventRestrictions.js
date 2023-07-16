@@ -26,9 +26,9 @@ mainEventOptions.unshift({
 export default function EventRestrictions() {
   const restrictionsData = useContext(FormContext).formData.eventRestrictions;
 
-  const earlySubmission = restrictionsData && restrictionsData.early_puzzle_submission === 'true';
-  const needQualification = restrictionsData && restrictionsData.qualification_results === 'true';
-  const restrictEvents = restrictionsData && restrictionsData.event_restrictions === 'true';
+  const earlySubmission = restrictionsData && restrictionsData.early_puzzle_submission;
+  const needQualification = restrictionsData && restrictionsData.qualification_results;
+  const restrictEvents = restrictionsData && restrictionsData.event_restrictions;
   return (
     <SubSection section="eventRestrictions">
       <InputBoolean id="early_puzzle_submission" />
