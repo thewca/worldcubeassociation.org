@@ -107,11 +107,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def show_wcif_public
     id = params[:competition_id] || params[:id]
-
     cache_key = "wcif/#{id}"
     expires_in 5.minutes, public: true
     render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
       competition = competition_from_params
+      fresh_when(:etag => competition, :last_modfied => competition.updated_at, :public => true)
       competition.to_wcif
     }
   end
