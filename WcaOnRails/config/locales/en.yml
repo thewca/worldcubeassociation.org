@@ -2584,9 +2584,9 @@ en:
   merch:
       title: 'WCA Merchandise'
       paragraphs:
-        - 'The WCA has exclusive merchandise available to purchase! From T-Shirts, Hoodies, Stickers, Stackmats, Backpacks, and more! Our designs are constantly updated including the classic WCA logo, official World Championship merchandise, and World Record designs.'
-        - 'Buying WCA Merch through our stores is one of the best ways for you to support the WCA - a non-profit, volunteer run organization. We use all profits from the merchandise to further fund championships, equipment and other WCA related activities.'
-        - 'You can buy our merchandise all over the world -- with direct stores in Europe, America and India and more to come soon!'
+        '1': 'The WCA has exclusive merchandise available to purchase! From T-Shirts, Hoodies, Stickers, Stackmats, Backpacks, and more! Our designs are constantly updated including the classic WCA logo, official World Championship merchandise, and World Record designs.'
+        '2': 'Buying WCA Merch through our stores is one of the best ways for you to support the WCA - a non-profit, volunteer run organization. We use all profits from the merchandise to further fund championships, equipment and other WCA related activities.'
+        '3': 'You can buy our merchandise all over the world -- with direct stores in Europe, America and India and more to come soon!'
   database:
     results_export:
       heading: "WCA Results Export"
