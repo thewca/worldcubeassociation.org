@@ -106,9 +106,11 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   def show_wcif_public
+    puts "public path accessed"
     competition = competition_from_params
 
     cache_key = "wcif/#{competition.id}"
+    puts "Cache key: #{cache_key}"
     render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
       competition.to_wcif
     }

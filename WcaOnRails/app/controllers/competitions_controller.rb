@@ -31,6 +31,8 @@ class CompetitionsController < ApplicationController
     :post_results,
   ]
 
+  after_action :refresh_cache_on_update, only: [:update]
+
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
       unless competition.user_can_view?(current_user)
@@ -529,6 +531,7 @@ class CompetitionsController < ApplicationController
   end
 
   def update
+    puts "running update"
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
@@ -549,6 +552,7 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update(comp_params_minus_id)
+      puts "competitions.update if block"
       if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
@@ -738,5 +742,14 @@ class CompetitionsController < ApplicationController
         end
       end
     end
+  end
+
+  private def refresh_cache_on_update
+    cache_key = "wcif/#{@competition.id}"
+    puts "deleting cache"
+    Rails.cache.delete(cache_key)
+
+    puts "warming cache"
+    Rails.cache.write(cache_key, @competition.to_wcif)
   end
 end

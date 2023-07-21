@@ -509,4 +509,60 @@ RSpec.describe "competitions" do
       end
     end
   end
+
+  describe "WCIF endpoint caching" do
+    # TODO: Figure out how to enable caching in this context only (change Rails.application.config.cache_store = :memory_cache didn't work)
+    context 'enable caching' do
+      before do
+        @competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule)
+      end
+      sign_in { FactoryBot.create :admin }
+      let(:cache_key) { "wcif/#{@competition.id}" }
+      let(:comp_name) { @competition.name }
+
+      it 'does not start with a warmed cache, but cache exists after wcif_public call' do
+        expect(Rails.cache.read(cache_key.to_s)).to be nil
+
+        get api_v0_competition_wcif_public_path(@competition)
+
+        expect(response.status).to be(200)
+        expect(Rails.cache.read(cache_key.to_s)).not_to be_nil
+      end
+
+      it 'refreshes the cache after an update to comp data' do
+        expect(Rails.cache.read(cache_key.to_s)).to be nil
+        get api_v0_competition_wcif_public_path(@competition)
+        expect(Rails.cache.read(cache_key)["name"]).to eq comp_name
+
+        new_comp_name = "New name for competition 2022"
+        patch competition_path(@competition), params:
+          {
+            'competition[name]' => new_comp_name,
+            'competition[staff_delegate_ids]' => @competition.staff_delegate_ids,
+            'commit' => 'Confirm',
+          }
+        expect(Competition.find(@competition.id).name).to eq new_comp_name
+        expect(Rails.cache.read(cache_key)["name"]).to eq new_comp_name
+      end
+
+      it 'identical payloads from manual cache update WCIF and show_wcif_public' do
+        expect(Rails.cache.read(cache_key.to_s)).to be nil
+        get api_v0_competition_wcif_public_path(@competition)
+        expect(Rails.cache.read(cache_key)["name"]).to eq comp_name
+
+        new_comp_name = "Another name for competition 2022"
+        patch competition_path(@competition), params:
+          {
+            'competition[name]' => new_comp_name,
+            'competition[staff_delegate_ids]' => @competition.staff_delegate_ids,
+            'commit' => 'Confirm',
+          }
+
+        # wcif_payload = Competition.find()
+      end
+
+      it 'show_public_wcif endpoint returns updated cache data' do
+      end
+    end
+  end
 end
