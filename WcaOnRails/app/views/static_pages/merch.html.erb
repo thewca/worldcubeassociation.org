@@ -1,0 +1,31 @@
+<div class="ui container">
+  <div class="merch-images">
+    <div style="display: flex; align-items: center; margin-right: 2vw;">
+      <%= image_tag "WMT Logo.jpg", class:"img-responsive wmt-logo", style: "margin-right: 5vw" %>
+    </div>
+    <div class="merch-stores" style="display: flex; align-items: center; flex-direction: column; margin-top: 5vh;">
+      <div style="display: flex">
+        <div style="width: 100%; height: 100%; text-align: center; margin-right: 5vw;">
+          <i class="icon world" style="font-size: 10em; line-height: 1em"></i>
+          <div style="margin-top: 3vh;">
+            <%= link_to("Worldwide Store", "https://shop.worldcubeassociation.org", class: "ui button primary") %>
+          </div>
+        </div>
+        <div style="width: 100%; height: 100%; text-align: center">
+          <i class="fi fi-in" style="font-size: 10em; line-height: 1em; clip-path: circle(42% at center);"></i>
+          <div style="margin-top: 3vh;">
+            <%= link_to("Indian Store", "https://republi.cc/collections/wca", class: "ui button primary") %>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1 class="ui header" style="text-align: center; margin-top: 3vh">
+    <%= t('merch.title') %>
+  </h1>
+
+  <% t('merch.paragraphs').each do |paragraph| %>
+    <p><%= paragraph %></p>
+  <% end %>
+
+</div>
