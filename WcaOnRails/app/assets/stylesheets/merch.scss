@@ -1,0 +1,9 @@
+@media screen and (max-width: 600px) {
+  .merch-images{
+    flex-direction: column;
+  }
+}
+.merch-images{
+  display: flex;
+  flex-direction: row
+}
