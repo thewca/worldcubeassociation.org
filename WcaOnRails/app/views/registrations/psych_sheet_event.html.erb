@@ -5,7 +5,10 @@
     <%= cubing_icon @event.id %> <%= @event.name %> Psych Sheet
   </h2>
   <p>
-  Sorted by: <%= @psych_sheet.sort_by %>, sort by <a href="<%= competition_psych_sheet_event_path(@competition, @event.id) %>?sort_by=<%= @psych_sheet.sort_by_second %>"><%= @psych_sheet.sort_by_second %></a>
+  Sorted by: <%= @psych_sheet.sort_by %>
+  <% if @event.id != "333mbf" %>
+  , sort by <a href="<%= competition_psych_sheet_event_path(@competition, @event.id) %>?sort_by=<%= @psych_sheet.sort_by_second %>"><%= @psych_sheet.sort_by_second %></a>
+  <% end %>
   </p>
 
   <%= wca_table table_class: "wca-results wca-results-sort-by-#{@sort_by}" do %>
