@@ -23,12 +23,9 @@ function calculateDayDifference(comp, mode) {
   return -1;
 }
 
-function renderYearHeader(competitions, index, sortByAnnouncement) {
-  if (index > 0 && competitions[index].year !== competitions[index - 1].year
-    && !sortByAnnouncement) {
-    return <li className="list-group-item break">{competitions[index].year}</li>;
-  }
-  return null;
+function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
+  return index > 0 && competitions[index].year !== competitions[index - 1].year
+  && !sortByAnnouncement;
 }
 
 function renderRegistrationStatus(comp) {
@@ -81,7 +78,7 @@ function CompetitionTable({
       </li>
       {competitions.map((comp, index) => (
         <>
-          {renderYearHeader(competitions, index, sortByAnnouncement)}
+          {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <li className="list-group-item break">{competitions[index].year}</li>}
           <li key={comp.id} className={`list-group-item${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
             <span className="date">
               {renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement)}
