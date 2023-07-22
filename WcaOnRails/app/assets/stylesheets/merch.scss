@@ -1,0 +1,16 @@
+@media screen and (max-width: 600px) {
+  .merch-images{
+    flex-direction: column !important;
+  }
+}
+@media screen and (min-width: 912px) {
+  .wmt-logo{
+    height: 35vh;
+    max-height: 250px;
+    min-height: 200px;
+  }
+}
+.merch-images{
+  display: flex;
+  flex-direction: row
+}
