@@ -1916,7 +1916,7 @@ class Competition < ApplicationRecord
       venue: venue,
       url: url,
       country_iso2: country_iso2 ? country_iso2.downcase : nil,
-      timeUntilRegistration: ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open),
+      timeUntilRegistration: registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil,
       registration_status: registration_status,
     )
   end
