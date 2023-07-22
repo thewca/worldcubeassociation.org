@@ -60,7 +60,7 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
     return renderRegistrationStatus(comp);
   }
 
-  return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
+  return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
 }
 
 function CompetitionTable({
