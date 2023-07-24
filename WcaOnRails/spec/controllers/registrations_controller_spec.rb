@@ -651,10 +651,12 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       FactoryBot.create :ranks_single, rank: 1, best: 1500, eventId: "444", personId: registration1.personId
 
       registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      registration2.person.update!(name: "A")
       FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.personId
 
       registration3 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      registration3.person.update!(name: "B")
       FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration3.personId
       FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration3.personId
 
