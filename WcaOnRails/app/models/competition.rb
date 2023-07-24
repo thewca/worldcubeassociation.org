@@ -1476,13 +1476,11 @@ class Competition < ApplicationRecord
       registrations.each_with_index do |registration, i|
         if sort_by == 'single'
           rank = registration.single_rank
-          prev_rank = prev_sorted_registration&.registration&.single_rank
         else
           rank = registration.average_rank
-          prev_rank = prev_sorted_registration&.registration&.average_rank
         end
         if rank
-          tied_previous = rank == prev_rank
+          tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank && registration.single_rank == prev_sorted_registration&.registration&.single_rank
           pos = tied_previous ? prev_sorted_registration.pos : i + 1
         else
           # Hasn't competed in this event yet.
