@@ -222,7 +222,7 @@ en:
       no_date: "No date"
     user:
       wca_id: "WCA ID"
-      citizen_of: "Citizen of"
+      representing: "Representing"
     all_regions: "All regions"
     errors:
       invalid: "invalid"
@@ -273,7 +273,7 @@ en:
         wca_id: "WCA ID"
         unconfirmed_wca_id: "Unconfirmed WCA ID"
         login: "Email or WCA ID"
-        country_iso2: "Citizenship"
+        country_iso2: "Representing"
         dob: "Birthdate"
         dob_verification: "Your Birthdate"
         gender: "Gender"
@@ -389,7 +389,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Country"
+        countryId: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -1507,7 +1507,7 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      disclaimer: "Please note that due to the COVID-19 pandemic, some countries are currently unable to host competitions."
+      disclaimer: "Please note that due to the COVID-19 pandemic, some regions are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
@@ -1859,7 +1859,7 @@ en:
     table_elements:
       name: "Name"
       result: "Result"
-      citizen_of: "Citizen of"
+      representing: "Representing"
       competition: "Competition"
       solves: "Solves"
       region: "Region"
@@ -1879,7 +1879,7 @@ en:
     index:
       name_or_wca_id: "Name parts or WCA ID"
       name: "Name"
-      country: "Country"
+      country: "Representing"
       podiums: "Podiums"
       no_persons_found: "No person matches the given criteria."
     #context: Person profile page
@@ -2042,7 +2042,7 @@ en:
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
-    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different countries and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
+    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
     world_championship_content_html: <p>Every two years, we sanction the competition that ultimately determines the world champion. These events require extremely careful planning by a number of volunteers, as well as a large financial commitment to reserve the venue and make necessary preparations.</p>
     contributing_title: Making a contribution
@@ -2195,7 +2195,7 @@ en:
     empty: "No Regional Organizations are currently acknowledged by the WCA."
     how_to:
       title: How to become an acknowledged WCA Regional Organization
-      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Countries wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
+      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Regions wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
     requirements:
       title: Requirements for WCA Regional Organizations
       list:
@@ -2467,7 +2467,7 @@ en:
       content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
-        '2': "The two competitions take place in different countries."
+        '2': "The two competitions take place in different regions."
       content2: '"3x3x3 Fewest Moves simultaneous competitions" are WCA competitions having only the 3x3x3 Fewest Moves event and taking place simultaneously in different locations.'
       olist2:
         '1':
