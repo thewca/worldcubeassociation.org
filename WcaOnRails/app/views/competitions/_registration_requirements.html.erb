@@ -83,22 +83,22 @@
   <%= t('competitions.competition_info.waiting_list_deadline_html', waiting_list_deadline: wca_local_time(@competition.waiting_list_deadline_date)) %>
   <br>
 <% end %>
-
-<% if @competition.has_event_change_deadline_date? %>
-  <% if @competition.event_change_deadline_date?  %>
-    <% if @competition.allow_registration_edits? %>
-      <%= t('competitions.competition_info.event_change_deadline_edits_allowed_html', event_change_deadline: wca_local_time(@competition.event_change_deadline_date), register: link_to(t('competitions.nav.menu.register'), competition_register_path(@competition))) %>
-      <br>
+<% if @competition.competition_events.length > 1 %>
+  <% if @competition.has_event_change_deadline_date? %>
+    <% if @competition.event_change_deadline_date?  %>
+      <% if @competition.allow_registration_edits? %>
+        <%= t('competitions.competition_info.event_change_deadline_edits_allowed_html', event_change_deadline: wca_local_time(@competition.event_change_deadline_date), register: link_to(t('competitions.nav.menu.register'), competition_register_path(@competition))) %>
+        <br>
+      <% else %>
+        <%= t('competitions.competition_info.event_change_deadline_html', event_change_deadline: wca_local_time(@competition.event_change_deadline_date)) %>
+        <br>
+      <% end %>
     <% else %>
-      <%= t('competitions.competition_info.event_change_deadline_html', event_change_deadline: wca_local_time(@competition.event_change_deadline_date)) %>
+      <%= t('competitions.competition_info.event_change_deadline_default_html') %>
       <br>
     <% end %>
-  <% else %>
-    <%= t('competitions.competition_info.event_change_deadline_default_html') %>
-    <br>
   <% end %>
 <% end %>
-
 <% if @competition.on_the_spot_registration.nil? %>
 <% elsif @competition.on_the_spot_registration? %>
   <% if @competition.on_the_spot_entry_fee_lowest_denomination? %>
