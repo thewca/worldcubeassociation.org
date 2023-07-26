@@ -142,6 +142,7 @@ group :test do
   gem 'simplecov', require: false
   gem 'simplecov-lcov', require: false
   gem 'timecop'
+  gem 'rspec-sidekiq'
 end
 
 group :production do
