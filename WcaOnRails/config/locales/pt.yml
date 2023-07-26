@@ -5414,6 +5414,27 @@ pt:
       sobre a sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão TNoodle legal
+  merch:
+    #original_hash: 96a95a1
+    title: Merchandise WCA
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        A WCA tem merchandise exclusivo disponível para compra! De t-shirts a
+        blusões, autocolantes, tapetes stackmat, mochilas e muito mais! Os
+        nossos designs são constantemente atualizados, incluindo o logótipo
+        clássico da WCA, merchandise oficial do Campeonato do Mundo e designs de
+        Recordes Mundiais.
+      #original_hash: 2865e1d
+      '2': >-
+        Comprar produtos da WCA nas nossas lojas é uma das melhores maneiras de
+        poder apoiar a WCA - uma organização sem fins lucrativos gerida por
+        voluntários. Usamos todos os lucros de merchandise para financiar
+        campeonatos, equipamentos e outras atividades relacionadas com a WCA.
+      #original_hash: 8e57552
+      '3': >-
+        Pode comprar os nossos produtos em todo o mundo - com lojas diretas na
+        Europa, América e Índia e mais para vir em breve!
   database:
     results_export:
       #original_hash: 15d00e1
