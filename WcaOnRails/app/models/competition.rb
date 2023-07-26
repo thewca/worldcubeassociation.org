@@ -1474,16 +1474,14 @@ class Competition < ApplicationRecord
       prev_sorted_registration = nil
       sorted_registrations = []
       registrations.each_with_index do |registration, i|
-        if sort_by == 'single'
-          rank = registration.single_rank
-        else
-          rank = registration.average_rank
-        end
-        if rank
-          tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank && registration.single_rank == prev_sorted_registration&.registration&.single_rank
-          pos = tied_previous ? prev_sorted_registration.pos : i + 1
-        else
-          # Hasn't competed in this event yet.
+        rank = sort_by == 'single' ? registration.single_rank : registration.average_rank
+        average_tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank
+        single_tied_previous = registration.single_rank == prev_sorted_registration&.registration&.single_rank
+        # Change position to previous if both single and average are tied with previous registration
+        tied_previous = single_tied_previous && average_tied_previous
+        pos = tied_previous ? prev_sorted_registration.pos : i + 1
+        # Hasn't competed in this event yet.
+        unless rank
           tied_previous = nil
           pos = nil
         end
