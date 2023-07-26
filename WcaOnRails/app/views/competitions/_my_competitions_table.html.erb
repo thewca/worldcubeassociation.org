@@ -35,7 +35,7 @@
       <tbody>
         <% competitions.each do |competition| %>
           <% registration = registrations_by_competition_id[competition.id] %>
-          <% opens_in_days = distance_of_time_in_words_to_now(competition.registration_open) %>
+          <% bookmarked && opens_in_days = distance_of_time_in_words_to_now(competition.registration_open) %>
           <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
                           competition.showAtAll? ? "visible" : "not-visible",
                           competition.cancelled? ? "cancelled" : "",
