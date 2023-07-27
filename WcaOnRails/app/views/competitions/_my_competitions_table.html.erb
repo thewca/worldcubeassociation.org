@@ -35,7 +35,6 @@
       <tbody>
         <% competitions.each do |competition| %>
           <% registration = registrations_by_competition_id[competition.id] %>
-          <% bookmarked && opens_in_days = distance_of_time_in_words_to_now(competition.registration_open) %>
           <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
                           competition.showAtAll? ? "visible" : "not-visible",
                           competition.cancelled? ? "cancelled" : "",
@@ -88,11 +87,6 @@
                 <% end %>
               <% end %>
             </td>
-            <% if bookmarked && competition.registration_not_yet_opened? %>
-              <td>
-                  <%= t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(competition.registration_open)) %>
-              </td>
-            <% end %>
             <td class="big-column"></td>
           </tr>
         <% end %>
