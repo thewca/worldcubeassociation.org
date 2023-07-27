@@ -30,37 +30,37 @@ function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
 
 function renderRegistrationStatus(comp) {
   if (comp.registration_status === 'not_yet_opened') {
-    return <i className="icon clock blue" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })} />;
+    return <i key={`${comp.id} status-icon`} className="icon clock blue" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })} />;
   }
   if (comp.registration_status === 'past') {
-    return <i className="icon user times red" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
+    return <i key={`${comp.id} status-icon`} className="icon user times red" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
   }
   if (comp.registration_status === 'full') {
-    return <i className="icon user clock orange" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.full')} />;
+    return <i key={`${comp.id} status-icon`} className="icon user clock orange" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.full')} />;
   }
 
-  return <i className="icon user plus green" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.open')} />;
+  return <i key={`${comp.id} status-icon`} className="icon user plus green" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.open')} />;
 }
 
 function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
   if (comp.isProbablyOver) {
     if (comp.resultsPosted) {
-      return <i className="icon check circle result-posted-indicator" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.posted')} />;
+      return <i key={`${comp.id} status-icon`} className="icon check circle result-posted-indicator" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.posted')} />;
     }
 
-    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) })} />;
+    return <i key={`${comp.id} status-icon`} className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) })} />;
   }
   if (comp.inProgress) {
-    return <i className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
+    return <i key={`${comp.id} status-icon`} className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
   }
   if (sortByAnnouncement) {
-    return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate })} />;
+    return <i key={`${comp.id} status-icon`} className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate })} />;
   }
   if (showRegistrationStatus) {
     return renderRegistrationStatus(comp);
   }
 
-  return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
+  return <i key={`${comp.id} status-icon`} className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
 }
 
 function CompetitionTable({
@@ -77,29 +77,29 @@ function CompetitionTable({
         </strong>
       </li>
       {competitions.map((comp, index) => (
-        <>
-          {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <li className="list-group-item break">{competitions[index].year}</li>}
-          <li key={comp.id} className={`list-group-item${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
-            <span className="date">
+        <React.Fragment key={comp.id}>
+          {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <li key={`${comp.id} ${comp.year} new-year-header`} className="list-group-item break">{comp.year}</li>}
+          <li key={`${comp.id} comp-li`} className={`list-group-item${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
+            <span key={`${comp.id} date-info`} className="date">
               {renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement)}
               {comp.dateRange}
             </span>
-            <span className="competition-info">
-              <div className="competition-link">
-                <span className={` fi fi-${comp.country_iso2}`} />
+            <span key={`${comp.id} comp-info`} className="competition-info">
+              <div key={`${comp.id} link`} className="competition-link">
+                <span key={`${comp.id} flag-icon`} className={` fi fi-${comp.country_iso2}`} />
                 &nbsp;
-                <a href={comp.url}>{comp.displayName}</a>
+                <a key={`${comp.id} name-url`} href={comp.url}>{comp.displayName}</a>
               </div>
-              <div className="location">
-                <strong>{comp.countryName}</strong>
+              <div key={`${comp.id} location`} className="location">
+                <strong key={`${comp.id} country-name`}>{comp.countryName}</strong>
                 {`, ${comp.cityName}`}
               </div>
-              <div className="venue-link">
-                <ReactMarkdown linkTarget="_blank">{comp.venue}</ReactMarkdown>
+              <div key={`${comp.id} venue`} className="venue-link">
+                <ReactMarkdown key={`${comp.id} venue-md`} linkTarget="_blank">{comp.venue}</ReactMarkdown>
               </div>
             </span>
           </li>
-        </>
+        </React.Fragment>
       ))}
     </ul>
   );
