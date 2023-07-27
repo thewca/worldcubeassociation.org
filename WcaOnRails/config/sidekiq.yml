@@ -6,3 +6,4 @@
 development:
   :concurrency: 5
   :verbose: true
+  :cron_poll_interval: <%= EnvVars.DISABLE_CRONJOBS? ? 0 : 30 %>

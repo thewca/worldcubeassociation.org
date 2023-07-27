@@ -85,12 +85,13 @@ services:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
       REDIS_URL: redis://wca_redis:6379/0
+      DISABLE_CRONJOBS: true
     command: >
       bash -c 'bundle install && yarn install &&
       bundle exec sidekiq'
     depends_on:
       wca_on_rails:
-        condition: 'service_started'
+        condition: 'service_healthy'
       wca_redis:
         condition: 'service_started'
       wca_db:
