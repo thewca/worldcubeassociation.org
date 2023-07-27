@@ -2011,10 +2011,12 @@ pt:
         removidos. Envie um email para a Equipa de Resultados da WCA para ajudar
         a mudar o ID da WCA para uma conta diferente.
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 6058443
         msg: >-
           Não pode alterar o seu nome, data de nascimento, género ou país.
-          Motivo: %{reason}. Entre em contacto com o seu <a
+          Motivo: %{reason}. Entre em contacto com a <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>Equipa
+          de Resultados da WCA</a> ou com o seu <a
           href='%{delegate_url}'>Delegado</a> para fazer algumas dessas
           mudanças.
         reason:
