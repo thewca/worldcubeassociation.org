@@ -16,6 +16,9 @@
     <table class="table competitions-table <%= past ? "table-striped" : "" %>">
       <thead>
         <tr>
+          <% if @show_registration_status && bookmarked %>
+            <th></th>
+          <% end %>
           <th><%= t 'competitions.adjacent_competitions.name' %></th>
           <th><%= t 'competitions.adjacent_competitions.location' %></th>
           <th><%= t 'competitions.adjacent_competitions.date' %></th>
@@ -36,6 +39,9 @@
           <tr class="<%= tr_classes %>"
               data-toggle="tooltip" data-placement="bottom" data-container="body"
               title="<%= competition_message_for_user(competition, current_user) unless past %>">
+            <% if @show_registration_status && bookmarked %>
+              <td><%= registration_status_icon(competition) %></td>
+            <% end %>
             <td>
               <%= link_to competition.display_name, competition_path(competition) %>
               <% if competition.championships.any? %>
