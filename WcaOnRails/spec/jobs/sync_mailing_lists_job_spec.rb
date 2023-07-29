@@ -9,24 +9,42 @@ RSpec.describe SyncMailingListsJob, type: :job do
     trainee_delegate = FactoryBot.create :trainee_delegate
     delegate = FactoryBot.create :delegate
     senior_delegate = FactoryBot.create :senior_delegate
+    africa_region = FactoryBot.create :africa_region
     africa_delegate = FactoryBot.create :delegate
-    africa_delegate.senior_delegate.update(region: "Africa (France)")
+    africa_delegate.update(region_id: africa_region.id)
+    africa_delegate.senior_delegate.update(region_id: africa_region.id)
+    asia_east_region = FactoryBot.create :asia_east_region
     asia_east_delegate = FactoryBot.create :delegate
-    asia_east_delegate.senior_delegate.update(region: "Asia East (Fujian, China)")
+    asia_east_delegate.update(region_id: asia_east_region.id)
+    asia_east_delegate.senior_delegate.update(region_id: asia_east_region.id)
+    asia_southeast_region = FactoryBot.create :asia_southeast_region
     asia_southeast_delegate = FactoryBot.create :delegate
-    asia_southeast_delegate.senior_delegate.update(region: "Asia Southeast (Philippines)")
+    asia_southeast_delegate.update(region_id: asia_southeast_region.id)
+    asia_southeast_delegate.senior_delegate.update(region_id: asia_southeast_region.id)
+    asia_west_south_region = FactoryBot.create :asia_west_south_region
     asia_west_south_delegate = FactoryBot.create :delegate
-    asia_west_south_delegate.senior_delegate.update(region: "Asia West & South (India)")
-    europe_central_eurasia_delegate = FactoryBot.create :delegate
-    europe_central_eurasia_delegate.senior_delegate.update(region: "Central Eurasia (Ukraine)")
+    asia_west_south_delegate.update(region_id: asia_west_south_region.id)
+    asia_west_south_delegate.senior_delegate.update(region_id: asia_west_south_region.id)
+    central_eurasia_region = FactoryBot.create :central_eurasia_region
+    central_eurasia_delegate = FactoryBot.create :delegate
+    central_eurasia_delegate.update(region_id: central_eurasia_region.id)
+    central_eurasia_delegate.senior_delegate.update(region_id: central_eurasia_region.id)
+    europe_region = FactoryBot.create :europe_region
     europe_delegate = FactoryBot.create :delegate
-    europe_delegate.senior_delegate.update(region: "Europe (Germany)")
+    europe_delegate.update(region_id: europe_region.id)
+    europe_delegate.senior_delegate.update(region_id: europe_region.id)
+    latin_america_region = FactoryBot.create :latin_america_region
     latin_america_delegate = FactoryBot.create :delegate
-    latin_america_delegate.senior_delegate.update(region: "Latin America (Peru)")
+    latin_america_delegate.update(region_id: latin_america_region.id)
+    latin_america_delegate.senior_delegate.update(region_id: latin_america_region.id)
+    oceania_region = FactoryBot.create :oceania_region
     oceania_delegate = FactoryBot.create :delegate
-    oceania_delegate.senior_delegate.update(region: "Oceania (Australia, Victoria)")
+    oceania_delegate.update(region_id: oceania_region.id)
+    oceania_delegate.senior_delegate.update(region_id: oceania_region.id)
+    usa_canada_region = FactoryBot.create :usa_canada_region
     usa_canada_delegate = FactoryBot.create :delegate
-    usa_canada_delegate.senior_delegate.update(region: "USA & Canada (USA, Oregon)")
+    usa_canada_delegate.update(region_id: usa_canada_region.id)
+    usa_canada_delegate.senior_delegate.update(region_id: usa_canada_region.id)
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates@worldcubeassociation.org",
@@ -36,7 +54,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
                                       africa_delegate.senior_delegate.email, asia_east_delegate.email, asia_east_delegate.senior_delegate.email,
                                       asia_southeast_delegate.email, asia_southeast_delegate.senior_delegate.email,
                                       asia_west_south_delegate.email, asia_west_south_delegate.senior_delegate.email,
-                                      europe_central_eurasia_delegate.email, europe_central_eurasia_delegate.senior_delegate.email,
+                                      central_eurasia_delegate.email, central_eurasia_delegate.senior_delegate.email,
                                       europe_delegate.email, europe_delegate.senior_delegate.email, latin_america_delegate.email,
                                       latin_america_delegate.senior_delegate.email, oceania_delegate.email, oceania_delegate.senior_delegate.email,
                                       usa_canada_delegate.email, usa_canada_delegate.senior_delegate.email),
@@ -53,7 +71,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(trainee_delegate.senior_delegate.email, candidate_delegate.senior_delegate.email, delegate.senior_delegate.email,
                                       senior_delegate.email, africa_delegate.senior_delegate.email, asia_east_delegate.senior_delegate.email,
                                       asia_southeast_delegate.senior_delegate.email,
-                                      asia_west_south_delegate.senior_delegate.email, europe_central_eurasia_delegate.senior_delegate.email,
+                                      asia_west_south_delegate.senior_delegate.email, central_eurasia_delegate.senior_delegate.email,
                                       europe_delegate.senior_delegate.email,
                                       latin_america_delegate.senior_delegate.email, oceania_delegate.senior_delegate.email, usa_canada_delegate.senior_delegate.email),
     )
@@ -240,7 +258,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # delegates.central-eurasia@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates.central-eurasia@worldcubeassociation.org",
-      a_collection_containing_exactly(europe_central_eurasia_delegate.email, europe_central_eurasia_delegate.senior_delegate.email),
+      a_collection_containing_exactly(central_eurasia_delegate.email, central_eurasia_delegate.senior_delegate.email),
     )
 
     # delegates.europe@ mailing list

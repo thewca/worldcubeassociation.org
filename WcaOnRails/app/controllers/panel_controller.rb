@@ -12,8 +12,10 @@ class PanelController < ApplicationController
   end
 
   def pending_claims_for_subordinate_delegates
-    # Show pending claims for a given user, or the current user, if they can see them
-    @user = User.includes(subordinate_delegates: [:confirmed_users_claiming_wca_id]).find_by_id!(params[:user_id] || current_user.id)
+    # TO_VERIFY
+    # Didn't understand what was the purpose of .includes(subordinate_delegates: [:confirmed_users_claiming_wca_id])
+    # but I think it's not important.
+    @user = User.find_by_id!(params[:user_id] || current_user.id)
     @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
   end
 

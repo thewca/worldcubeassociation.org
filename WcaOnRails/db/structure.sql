@@ -1116,6 +1116,20 @@ CREATE TABLE `regional_organizations` (
   KEY `index_regional_organizations_on_country` (`country`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
+DROP TABLE IF EXISTS `regions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `regions` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(191) NOT NULL,
+  `friendly_id` varchar(191) NOT NULL,
+  `parent_region_id` bigint DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `index_regions_on_parent_region_id` (`parent_region_id`),
+  KEY `index_regions_on_friendly_id` (`friendly_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
 DROP TABLE IF EXISTS `registration_competition_events`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -1468,6 +1482,7 @@ CREATE TABLE `users` (
   `cookies_acknowledged` tinyint(1) NOT NULL DEFAULT '0',
   `registration_notifications_enabled` tinyint(1) DEFAULT '0',
   `otp_secret` varchar(191) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `region_id` bigint DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `index_users_on_email` (`email`),
   UNIQUE KEY `index_users_on_reset_password_token` (`reset_password_token`),
@@ -1830,4 +1845,6 @@ INSERT INTO `schema_migrations` (version) VALUES
 ('20230517135741'),
 ('20230520171858'),
 ('20230520173123'),
-('20230701100417');
+('20230701100417'),
+('20230603154845'),
+('20230603170802');

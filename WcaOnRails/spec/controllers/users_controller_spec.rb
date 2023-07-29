@@ -182,18 +182,16 @@ RSpec.describe UsersController do
     end
 
     context "when the delegate status of a user is changed by a senior delegate" do
-      let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
-      let(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
-      let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate) }
+      let!(:dummy_region) { FactoryBot.create :dummy_region }
+      let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate, region_id: 5) }
+      let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", region_id: 5) }
 
-      it "notifies the board and the wqac via email" do
+      it "notifies the board and the weat via email" do
         sign_in user_who_makes_the_change
         expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(
           user_whose_delegate_status_changes,
           user_who_makes_the_change,
-          user_senior_delegate,
-          "candidate_delegate",
-          "delegate",
+          user_who_makes_the_change,
         ).and_call_original
         expect do
           patch :update, params: { id: user_whose_delegate_status_changes.id, user: { delegate_status: "delegate" } }

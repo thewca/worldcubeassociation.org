@@ -7,6 +7,7 @@
 
   <%= react_component("Delegates", {
     delegates: @delegates,
+    regionList: Region.all_active,
     isEditVisible: current_user&.can_view_all_users?
   }) %>
 </div>

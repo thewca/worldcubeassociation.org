@@ -170,10 +170,10 @@ class UsersController < ApplicationController
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
       if @user.saved_change_to_delegate_status
-        if @user.delegate_status
-          @user_senior_delegate = @user.senior_or_self
+        if @user.region_id
+          @user_senior_delegate = Region.find(@user.region_id).senior_delegate
         else
-          @user_senior_delegate = User.find(@user.senior_delegate_id_before_last_save)
+          @user_senior_delegate = Region.find(@user.region_id_before_last_save).senior_delegate
         end
         DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(
           @user,
@@ -287,9 +287,9 @@ class UsersController < ApplicationController
 
   private def user_params
     params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
-      if user_params.key?(:delegate_status) && !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
-        user_params["senior_delegate_id"] = nil
-      end
+      # TO_VERIFY
+      # I didn't understand why the senior_delegate_id was set to nil in user_params.
+      # I believe it's not needed for regions case.
       if user_params.key?(:wca_id)
         user_params[:wca_id] = user_params[:wca_id].upcase
       end

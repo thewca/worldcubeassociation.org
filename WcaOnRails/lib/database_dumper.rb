@@ -672,6 +672,7 @@ module DatabaseDumper
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
           senior_delegate_id unconfirmed_wca_id
+          region_id
           updated_at
           wca_id
           receive_delegate_reports
@@ -792,6 +793,18 @@ module DatabaseDumper
           id
           number
           iso2
+        ),
+      ),
+    }.freeze,
+    "regions" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          name
+          friendly_id
+          parent_region_id
+          is_active
         ),
       ),
     }.freeze,

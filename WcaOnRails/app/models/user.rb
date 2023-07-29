@@ -122,8 +122,13 @@ class User < ApplicationRecord
     delegate: "delegate",
     senior_delegate: "senior_delegate",
   }
-  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
+  belongs_to :region, class_name: "Region", optional: true
   belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true
+
+  def subordinate_delegates
+    return [] unless self.delegate_status == 'senior_delegate'
+    User.where.not(delegate_status: [nil, ""]).where(region_id: self.region_id)
+  end
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -165,12 +170,10 @@ class User < ApplicationRecord
     end
   end
 
-  validate :cannot_demote_senior_delegate_with_subordinate_delegates
-  def cannot_demote_senior_delegate_with_subordinate_delegates
-    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
-      errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
-    end
-  end
+  # Have to verify (maybe with Board) whether my understanding regarding this function is correct or not
+  # If my understanding is correct, if the Board has to change senior delegate status of anybody,
+  # they have to manually change senior delegate of all delegates of that region to new senior delegate
+  # and then remove from senior delegate. If that is the case, then this is no longer needed.
 
   attr_reader :claiming_wca_id
   def claiming_wca_id=(claiming_wca_id)
@@ -418,28 +421,7 @@ class User < ApplicationRecord
     end
   end
 
-  validate :senior_delegate_presence
-  def senior_delegate_presence
-    if !User.delegate_status_requires_senior_delegate(delegate_status) && senior_delegate
-      errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
-    end
-  end
-
-  validates :senior_delegate, presence: true, if: -> { User.delegate_status_requires_senior_delegate(delegate_status) && !senior_delegate }
-
-  # This is a copy of def self.delegate_status_requires_senior_delegate(delegate_status) in the user model
-  # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
-  # It is necessary to fix both files for changes to work
-  def self.delegate_status_requires_senior_delegate(delegate_status)
-    {
-      nil => false,
-      "" => false,
-      "trainee_delegate" => true,
-      "candidate_delegate" => true,
-      "delegate" => true,
-      "senior_delegate" => false,
-    }.fetch(delegate_status)
-  end
+  validates :region, presence: true, if: -> { !delegate_status.nil? && delegate_status != "" }
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
@@ -452,8 +434,8 @@ class User < ApplicationRecord
   private def remove_pending_wca_id_claims
     if saved_change_to_delegate_status? && !delegate_status
       confirmed_users_claiming_wca_id.each do |user|
-        senior_delegate = User.find_by_id(senior_delegate_id_before_last_save)
-        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
+        region = Region.find(self.region_id_before_last_save)
+        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, region.senior_delegate).deliver_later
       end
       # Clear all pending WCA IDs claims for the demoted Delegate
       User.where(delegate_to_handle_wca_id_claim: self.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
@@ -915,7 +897,7 @@ class User < ApplicationRecord
     fields += editable_avatar_fields(user)
     # Delegate Status Fields
     if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status senior_delegate_id region)
+      fields += %i(delegate_status region region_id)
     end
     fields
   end
@@ -1093,7 +1075,7 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if any_kind_of_delegate?
-      default_options[:methods].push("email", "region", "senior_delegate_id")
+      default_options[:methods].push("email", "region", "region_id")
     end
 
     options = default_options.merge(options || {})
@@ -1241,8 +1223,7 @@ class User < ApplicationRecord
         .map(&:competition)
   end
 
-  def senior_or_self
-    return nil unless self.delegate_status.present?
-    self.delegate_status == "senior_delegate" ? self : self.senior_delegate
+  def delegate_region
+    Region.where(id: self.region_id)
   end
 end

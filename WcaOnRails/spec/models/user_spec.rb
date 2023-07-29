@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
+  let(:africa_region) { FactoryBot.create :africa_region }
 
   it "defines a valid user" do
     user = FactoryBot.create :user
@@ -63,18 +64,6 @@ RSpec.describe User, type: :model do
   it "can confirm a user who has never competed before" do
     user = FactoryBot.build :user, unconfirmed_wca_id: ""
     user.confirm
-  end
-
-  it "doesn't allow demotion of a senior delegate with subordinate delegates" do
-    delegate = FactoryBot.create :delegate
-    senior_delegate = FactoryBot.create :senior_delegate
-
-    delegate.senior_delegate = senior_delegate
-    delegate.save!
-
-    senior_delegate.delegate_status = ""
-    expect(senior_delegate.save).to eq false
-    expect(senior_delegate.errors.messages[:delegate_status]).to eq ["cannot demote Senior Delegate with subordinate Delegates"]
   end
 
   it "allows demotion of a senior delegate with no subordinate delegates" do
@@ -356,7 +345,7 @@ RSpec.describe User, type: :model do
   end
 
   describe "#delegated_competitions" do
-    let(:delegate) { FactoryBot.create :delegate }
+    let(:delegate) { FactoryBot.create :delegate, region_id: africa_region.id }
     let(:other_delegate) { FactoryBot.create :delegate }
     let!(:confirmed_competition1) { FactoryBot.create :competition, delegates: [delegate] }
     let!(:confirmed_competition2) { FactoryBot.create :competition, delegates: [delegate] }
@@ -393,8 +382,8 @@ RSpec.describe User, type: :model do
 
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
-    let!(:senior_delegate) { FactoryBot.create :senior_delegate }
-    let!(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
+    let!(:senior_delegate) { FactoryBot.create :senior_delegate, region_id: africa_region.id }
+    let!(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate, region_id: africa_region.id }
     let!(:user) do
       FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
                                delegate_id_to_handle_wca_id_claim: delegate.id,
@@ -674,7 +663,7 @@ RSpec.describe User, type: :model do
       user = FactoryBot.create :user
       senior_delegate = FactoryBot.create :senior_delegate
       expect(senior_delegate.can_edit_user?(user)).to eq true
-      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :region)
+      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :region, :region_id)
     end
 
     it "disallows delegates to edit WCA IDs of special accounts" do

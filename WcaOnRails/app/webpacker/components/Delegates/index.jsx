@@ -11,25 +11,29 @@ const dasherize = (string) => string.replace(/_/g, '-');
 
 export default function Delegates({
   delegates,
+  regionList,
   isEditVisible,
 }) {
-  const seniorDelegates = React.useMemo(() => delegates
-    .filter((user) => user.delegate_status === 'senior_delegate')
-    .sort((user1, user2) => user1.region.localeCompare(user2.region)), [delegates]);
+  const sortedRegionList = React.useMemo(() => regionList
+    .sort((region1, region2) => region1.name.localeCompare(region2.name)), [regionList]);
 
-  // NOTE: The UI currently assumes that the delegates always have a
-  // senior delegate unless they themselves are a senior delegate.
-
-  return seniorDelegates.map((seniorDelegate) => {
-    const delegatesUnderSenior = [seniorDelegate, ...delegates
-      .filter((user) => user.senior_delegate_id === seniorDelegate.id && user.delegate_status !== 'trainee_delegate')
-      .sort((user1, user2) => ((user1.region !== user2.region)
-        ? user1.region.localeCompare(user2.region)
-        : user1.name.localeCompare(user2.name)))];
+  return sortedRegionList.map((region) => {
+    const delegatesUnderRegion = delegates
+      .filter((user) => user.region_id === region.id && user.delegate_status !== 'trainee_delegate')
+      .sort((user1, user2) => {
+        if (user1.delegate_status === 'senior_delegate') {
+          return -1;
+        } if (user2.delegate_status === 'senior_delegate') {
+          return 1;
+        }
+        return ((user1.region !== user2.region)
+          ? user1.region.localeCompare(user2.region)
+          : user1.name.localeCompare(user2.name));
+      });
     return (
       <div
         className="table-responsive"
-        key={`region-${seniorDelegate.id}`}
+        key={`region-${region.id}`}
       >
 
         <Table className="delegates-table">
@@ -42,7 +46,7 @@ export default function Delegates({
           </Table.Header>
 
           <Table.Body>
-            {delegatesUnderSenior.map((delegate) => (
+            {delegatesUnderRegion.map((delegate) => (
               <Table.Row
                 className={`${dasherize(delegate.delegate_status)}`}
                 key={delegate.id}

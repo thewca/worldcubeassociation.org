@@ -630,7 +630,10 @@ class CompetitionsController < ApplicationController
   end
 
   def for_senior
-    @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
+    # TO_VERIFY
+    # Didn't understand what was the purpose of .includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] })
+    # but I think it's not important.
+    @user = User.find_by_id!(params[:user_id] || current_user.id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
   end
 
