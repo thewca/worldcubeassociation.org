@@ -129,4 +129,8 @@ class CompetitionSeries < ApplicationRecord
     # reset them so that upon the next read they will be fetched based on what's just been written.
     @competition_ids = nil
   end
+
+  def all_competitions_public?
+    self.competitions.all?(&:showAtAll?)
+  end
 end

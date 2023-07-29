@@ -514,4 +514,48 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       )
     end
   end
+
+  describe 'GET #competition_series/:id' do
+    let!(:series) { FactoryBot.create :competition_series }
+    let!(:competition1) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902 }
+    let!(:competition2) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902 }
+    let!(:competition3) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902 }
+
+    it 'returns series portion of wcif json' do
+      get :competition_series, params: { id: series.wcif_id }
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json).to eq(
+        'id' => series.wcif_id,
+        'name' => series.name,
+        'shortName' => series.short_name,
+        'competitionIds' => [competition1.id, competition2.id, competition3.id],
+      )
+    end
+
+    it 'returns 404 when one competition in series is not visible' do
+      competition2.update_column(:showAtAll, false)
+      get :competition_series, params: { id: series.wcif_id }
+      expect(response.status).to eq 404
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq "Competition series with ID #{series.wcif_id} not found"
+    end
+
+    it 'returns 404 when all competitions in series are not visible' do
+      competition1.update_column(:showAtAll, false)
+      competition2.update_column(:showAtAll, false)
+      competition3.update_column(:showAtAll, false)
+      get :competition_series, params: { id: series.wcif_id }
+      expect(response.status).to eq 404
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq "Competition series with ID #{series.wcif_id} not found"
+    end
+
+    it 'returns 404 for unknown competition series id' do
+      get :competition_series, params: { id: 'UnknownSeries1989' }
+      expect(response.status).to eq 404
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq 'Competition series with ID UnknownSeries1989 not found'
+    end
+  end
 end
