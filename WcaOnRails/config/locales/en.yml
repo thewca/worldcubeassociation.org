@@ -1053,7 +1053,7 @@ en:
       account_is_special: "The WCA ID and account are connected to special roles in the WCA (e.g. delegates, organizers, team members) and cannot be removed. Please email the WCA Results Team to help change the WCA ID to a different account."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -2581,6 +2581,12 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
+  merch:
+      title: 'WCA Merchandise'
+      paragraphs:
+        '1': 'The WCA has exclusive merchandise available to purchase! From T-Shirts, Hoodies, Stickers, Stackmats, Backpacks, and more! Our designs are constantly updated including the classic WCA logo, official World Championship merchandise, and World Record designs.'
+        '2': 'Buying WCA Merch through our stores is one of the best ways for you to support the WCA - a non-profit, volunteer run organization. We use all profits from the merchandise to further fund championships, equipment and other WCA related activities.'
+        '3': 'You can buy our merchandise all over the world -- with direct stores in Europe, America and India and more to come soon!'
   database:
     results_export:
       heading: "WCA Results Export"

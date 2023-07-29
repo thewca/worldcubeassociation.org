@@ -646,6 +646,7 @@ class CompetitionsController < ApplicationController
       @bookmarked_competitions = Competition.not_over
                                             .where(id: bookmarked_ids.uniq)
                                             .sort_by(&:start_date)
+      @show_registration_status = params[:show_registration_status] == "on"
     end
   end
 
