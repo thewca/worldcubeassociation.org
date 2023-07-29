@@ -31,7 +31,7 @@ zh-TW:
     #original_hash: 928b7c4
     MM: 緬甸
     #original_hash: 77e4070
-    MO: 澳門特別行政區
+    MO: 中國澳門特別行政區
     #original_hash: 05a15c1
     PS: 巴勒斯坦
     #original_hash: 655191a
@@ -570,6 +570,8 @@ zh-TW:
         paid_entry_fees: 付款金額
         #original_hash: bae7d5b
         status: 狀態
+        #original_hash: a6e8a0b
+        administrative_notes: 管理用註記
         #original_hash: 709a232
         name: 姓名
         #original_hash: a6b9d69
@@ -896,6 +898,9 @@ zh-TW:
         competitor_limit_reason: 設定人數上限的理由是什麼？請用英文填寫！
         #original_hash: 4b51faa
         guests_per_registration_limit: 這個比賽每個參賽者所允許的陪同者人數。太多陪同者的報名會被擋下來。如果沒有人數限制，請留空白。
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          可以選擇性的方式，限制每一位參賽者可以報名的最多比賽項目數量（常用在較熱門的比賽）。您應該在比賽項目新增好後再編輯這個區域。報名太多的比賽項目時會被擋下。如果沒有限制，請留白。
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -947,6 +952,12 @@ zh-TW:
         competition_series:
           #original_hash: da39a3e
           wcif_id: ''
+          #original_hash: 77811b5
+          name: 系列賽比賽全名的最後有年份，（例如：Southern Australia 2022）。務必要首字母大寫。單獨比賽所用的名字規則也適用。
+          #original_hash: 778c20c
+          short_name: 用來顯示用的簡短名字。單獨比賽所用的名字規則也適用。
+          #original_hash: 3e27501
+          competition_ids: <b>這個區域不能被編輯！</b><br/>要在系列賽中增加比賽，您需要去想要加入的比賽頁面中的「編輯」頁面來增加。
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1048,6 +1059,8 @@ zh-TW:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: 附加註記來管理這些報名。參賽者看不到這些資訊。
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1139,6 +1152,8 @@ zh-TW:
           #original_hash: 0f236df
           'false': 不接受現場報名
         allow_registration_without_qualification:
+          #original_hash: 9697d98
+          'true': 參賽者將會被允許報名沒有取得資格的比賽項目（之後自行移除）
           #original_hash: 6509041
           'false': 參賽者必須要達到資格限制才能報名
         allow_registration_edits:
@@ -1314,8 +1329,12 @@ zh-TW:
       error_pages:
         #original_hash: 1042478
         500_error: 抱歉，出現問題了
+        #original_hash: d815249
+        500_contact: 如果您要把這個錯誤回報給軟體組，請告知Request ID
         #original_hash: b61e305
         400_error: 您要尋找的頁面並不存在
+        #original_hash: 8b309f5
+        400_contact: 如果您認為這是一個錯誤，請聯絡軟體組且附上Request ID
     doorkeeper:
       applications:
         help:
@@ -1464,6 +1483,8 @@ zh-TW:
       privacy: 隱私
       #original_hash: 4c4a2e8
       disclaimer: 免責聲明
+      #original_hash: d561f1a
+      find_us: 其他平台
   homepage:
     #original_hash: 824d76b
     learn_more: 了解更多
@@ -1699,10 +1720,11 @@ zh-TW:
         這個WCA ID 和帳號
         有連結到WCA的特殊職位(例如：代表，主辦團隊，團隊成員)，所以無法被移除。請用電子郵件聯絡WCA成績組來協助修改WCA ID到另一個帳號。
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 6058443
         msg: >-
-          您無法更改您的姓名、生日、性別或國籍，原因：%{reason}。如果您需要更改以上資料，請聯絡您的<a
-          href='%{delegate_url}'>代表</a>。
+          您無法更改您的姓名、生日、性別或國籍，原因：%{reason}。如果您需要更改以上資料，請聯絡<a
+          href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA成績組</a>或是您的<a href='%{delegate_url}'>WCA代表</a>。
         reason:
           #original_hash: 370ff12
           assigned: 您已經有WCA ID了
@@ -1852,12 +1874,22 @@ zh-TW:
       cannot_be_deleted_and_accepted: 報名不得同時被取消和核准。
       #original_hash: a38d024
       must_register: 必須報名至少一個項目
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: 您不能不報名任何項目。
+        other: '您不能報名超過%{count}個項目。'
       #original_hash: e78eec3
       banned_html: >-
         您被禁賽了。如果你認為有錯誤，請聯絡<a href='mailto:disciplinary@worldcubeassociation.org'
         target='_blank'>WCA紀律委員會</a>.
       #original_hash: 8d07e7f
       undelete_banned: 這位參賽者被禁賽且不能被反刪除。
+      #original_hash: 3de7c86
+      series_more_than_one_accepted: 您一次只能參加系列賽中的一場。
+      #original_hash: 13bfcd6
+      can_only_register_for_qualified_events: 您不能報名未達資格限制的比賽項目。
+      #original_hash: 22ca413
+      cannot_register_without_comment: 您必須要做註記。請確實閱讀報名的需要條件（例如：在多地區同時舉行的最少步數解比賽，註記您會參加哪個場地）。
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -1978,6 +2010,8 @@ zh-TW:
       approved_registrations: 核准的報名
       #original_hash: bff04e8
       deleted_registrations: 取消的報名
+      #original_hash: e86b1e1
+      non_competing: 無參賽的報名
       #original_hash: ac5d958
       not_paid: 尚未付款
       registered:
@@ -1989,6 +2023,10 @@ zh-TW:
       payment_requested_on: '於%{date}提出付款請求'
       #original_hash: f5b1b34
       payment_completed_on: '已在 %{date} 完成付款。'
+      #original_hash: 3141a14
+      series_registrations: 系列賽報名
+      #original_hash: 845bb47
+      series_registrations_hint_html: '提示：系列賽報名會以<i>%{description}</i>顯示。'
       #original_hash: b25928c
       total: 合計項目
       #original_hash: df036fe
@@ -2037,6 +2075,9 @@ zh-TW:
     #original_hash: f22ef22
     registration_full: >-
       這場比賽人數上限為%{competitor_limit}且已經額滿。若您仍報名，您的報名會被放置在候補名單。您的報名不會自動批准通過，除非有名額釋出。
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      這場比賽的參賽者人數上限是%{competitor_limit}人，且可能已經額滿。如果您現在報名，您會被排在候補名單中。如果沒有名額釋出，您的報名可能不會被核准。
     #original_hash: 855ca9c
     can_register: '您可以在底下報名%{comp}。'
     #original_hash: 4167ed7
@@ -2055,6 +2096,8 @@ zh-TW:
     will_pay_here: 在提交報名以後您需要在這裡繳交報名費
     #original_hash: b7ef562
     wont_pay_here: 請瀏覽比賽資訊以確認如何繳交報名費
+    #original_hash: be4b39d
+    not_qualified: 未達資格限制
     refund_form:
       hints:
         #original_hash: d97186d
@@ -2067,14 +2110,36 @@ zh-TW:
       title: 報名費
       #original_hash: d1569e6
       payment_successful: 您的付款已完成，您的報名應該會在下面顯示已付款。
+      #original_hash: 92dde77
+      payment_processing: 已確認您已支付款項，但交易仍在確認中。
+      #original_hash: 62d7351
+      button_text: 付款！
       hints:
         #original_hash: bf3a39e
         donation: 額外捐款僅限於主辦團隊使用
+        #original_hash: f7fa263
+        payment_button: 您的付款訊息不會被傳送到WCA網站。付款訊息以加密方式傳送到Stripe，交易內容由Stripe處理並回傳結果到WCA。
       labels:
         #original_hash: 4de825f
         entry_fees: 報名費
+        #original_hash: dc9d458
+        fees_paid: 已付款
+        #original_hash: cc632b5
+        fees_remaining: 剩餘
         #original_hash: 2c09302
         donation: 捐款
+        #original_hash: 919710d
+        show_donation: 我想要捐助額外只給組織團隊的款項。
+        #original_hash: 4930c06
+        payment_information: 付款訊息
+        #original_hash: de0fc95
+        payment_button: 用Stripe來付款
+        #original_hash: f94d00f
+        ajax_error: WCA伺服器錯誤
+        #original_hash: e62c56c
+        stripe_error: Stripe錯誤
+        #original_hash: 97f7359
+        subtotal: 小計
       alerts:
         #original_hash: a34940e
         not_a_number: 請輸入一個有效的金額。
@@ -2085,6 +2150,16 @@ zh-TW:
         already_paid: 並沒有扣款費用，因為報名費已付過了。
         #original_hash: f10c80c
         not_allowed: 您無法為這一個報名付費。
+        #original_hash: a073600
+        stripe_failed: 請確認Stripe的交易內容
+        #original_hash: a32e40f
+        stripe_not_found: 無法找到Stripe傳回的交易ID。
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: Stripe傳回的交易碼與我們的紀錄不相符。
+        #original_hash: 8d1a199
+        payment_reset: 付款被Stripe拒絕。
+        #original_hash: bcf6a93
+        payment_pending: 付款尚未完成。
     #original_hash: 4cf01a2
     preferred_events_prompt_html: '為了加速報名流程，您可以設定喜好的參賽項目%{link}。'
     #original_hash: 67d8734
@@ -2204,6 +2279,8 @@ zh-TW:
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
       tooltip_waiting_list: 您正在候補名單中。
+      #original_hash: f97246a
+      tooltip_deleted: 很遺憾，您的報名已被刪除。欲知詳情，請確認您的電子郵件或是聯絡比賽團隊。
       #original_hash: 1b6dc61
       confirmed_visible: 這場比賽已經確認且已經公開了。
       #original_hash: abc2f96
@@ -2222,6 +2299,12 @@ zh-TW:
       stripe_not_connected: 發生了一些問題，我們無法將您的Stripe帳號綁定。
       #original_hash: 1b92d16
       championship_exists: '%{year}已經有%{championship_type}了'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: 已成功關閉報名。
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: 無法關閉報名。
+      #original_hash: 74caf1a
+      no_waiting_list_specified: 這場比沒有接受候補名單的截止時間。如果您要使用候補名單功能，請指定一個截止日期。如果您沒有要使用候補名單功能，請記得在報名條件中指定。
     my_competitions:
       #original_hash: 5c6d3ea
       title: 我的比賽
@@ -2289,6 +2372,10 @@ zh-TW:
       register_link_html: '在%{here}報名本場比賽。'
       #original_hash: 45834fd
       register_below_html: 在底下報名本場比賽。
+      #original_hash: c5dfcc7
+      part_of_a_series: 這場比賽是系列賽中的其中一場。
+      #original_hash: 171e593
+      part_of_a_series_list: '這場比賽是%{name}系列賽的一部分。這個系列賽的其他比賽是：'
       #original_hash: 9bb1965
       competitor_limit: 參賽者人數上限
       #original_hash: 196725e
@@ -2328,6 +2415,10 @@ zh-TW:
         free: 觀眾都可免費入場。
         #original_hash: f1e6aef
         restricted: 只有參賽者的陪同者才能入場當觀眾
+      #original_hash: 35f892a
+      guest_limit:
+        zero: 比賽不能有陪同者。
+        other: '比賽最多可以有%{count}位陪同者。'
       #original_hash: 97a31ee
       click_to_display_requirements_html: '本場比賽已經結束，請點%{link_here}顯示報名條件。'
       #original_hash: ff19a74
@@ -2433,6 +2524,8 @@ zh-TW:
       past_from: '只顯示%{year}'
       #original_hash: 7cff459
       past_all: 過去所有年份
+      #original_hash: 819fe62
+      show_cancelled: 顯示被取消的比賽
       #original_hash: 0eda967
       show_registration_status: 顯示報名狀態標誌
       titles:
