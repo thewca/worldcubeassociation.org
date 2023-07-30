@@ -81,7 +81,7 @@ class CompetitionSeries < ApplicationRecord
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => (authorized ? competitions : public_competitions).map(&:id)
+      "competitionIds" => (authorized ? competitions : public_competitions).map(&:id),
     }
   end
 
