@@ -76,12 +76,12 @@ class CompetitionSeries < ApplicationRecord
     json
   end
 
-  def to_wcif
+  def to_wcif(authorized: false)
     {
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => competitions.map(&:id),
+      "competitionIds" => (authorized ? competitions : public_competitions).map(&:id)
     }
   end
 
@@ -130,7 +130,7 @@ class CompetitionSeries < ApplicationRecord
     @competition_ids = nil
   end
 
-  def all_competitions_public?
-    self.competitions.all?(&:showAtAll?)
+  def public_competitions
+    self.competitions.filter(&:showAtAll?)
   end
 end
