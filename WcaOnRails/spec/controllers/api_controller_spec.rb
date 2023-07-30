@@ -517,9 +517,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
   describe 'GET #competition_series/:id' do
     let!(:series) { FactoryBot.create :competition_series }
-    let!(:competition1) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902 }
-    let!(:competition2) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902 }
-    let!(:competition3) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902 }
+    let!(:competition1) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01' }
+    let!(:competition2) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02' }
+    let!(:competition3) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-03' }
 
     it 'returns series portion of wcif json' do
       get :competition_series, params: { id: series.wcif_id }
