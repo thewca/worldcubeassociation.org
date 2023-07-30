@@ -533,12 +533,17 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       )
     end
 
-    it 'returns 404 when one competition in series is not visible' do
+    it 'returns series portion of wcif json with only competitions that are publicly visible' do
       competition2.update_column(:showAtAll, false)
       get :competition_series, params: { id: series.wcif_id }
-      expect(response.status).to eq 404
+      expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json['error']).to eq "Competition series with ID #{series.wcif_id} not found"
+      expect(json).to eq(
+        'id' => series.wcif_id,
+        'name' => series.name,
+        'shortName' => series.short_name,
+        'competitionIds' => [competition1.id, competition3.id],
+      )
     end
 
     it 'returns 404 when all competitions in series are not visible' do
