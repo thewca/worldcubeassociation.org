@@ -7,6 +7,7 @@
 
 <% competition.start_date.upto(competition.end_date) do |date| %>
   <% activities_for_day = activities_by_day[date.to_fs] %>
+  <% grouped_activities = activities_for_day.group_by { |activity| activity[:title] } %>
   <% if activities_for_day&.any? %>
     <h3><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h3>
 
@@ -21,7 +22,8 @@
       <div class="col-md-1"><%= t("competitions.events.proceed") %></div>
     </div>
     <div class="schedule-table">
-      <% activities_for_day.each do |a| %>
+      <% grouped_activities.each do |title, activities| %>
+        <% a = activities.first %>
         <% activity_code_without_attempt = "#{a[:activityDetails][:event_id]}-r#{a[:activityDetails][:round_number]}" %>
         <% round_data = rounds_by_wcif_id[activity_code_without_attempt] || {} %>
         <div class="row room-<%= a[:roomId] %> event-<%= round_data[:event_id] %> room-selected event-selected">
@@ -44,7 +46,7 @@
             <%= a[:title] %>
           </div>
           <div class="col-xs-12 col-sm-4 col-md-2 room-name">
-            <%= a[:roomName] %>
+            <%= activities.map { |a| "#{a[:roomName]}" }.join(", ") %>
           </div>
           <div class="clearfix visible-xs visible-sm"></div>
           <% round_format = round_data[:format_name] %>
