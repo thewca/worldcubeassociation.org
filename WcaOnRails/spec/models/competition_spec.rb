@@ -497,6 +497,27 @@ RSpec.describe Competition do
       expect(competition.warnings_for(nil)[:id]).to eq nil
     end
 
+    it "warns if registration starts in less than 48 hours and competition hasn't been announced" do
+      competition = FactoryBot.create :competition, :confirmed, announced_at: nil, announced_by: nil, registration_open: 1.day.from_now, registration_close: 5.days.from_now, starts: 10.days.from_now, ends: 10.days.from_now
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:regearly]).to eq I18n.t('competitions.messages.reg_opens_too_early')
+    end
+
+    it "do not warn if registration starts in less than 48 hours and competition is announced" do
+      wcat_member = FactoryBot.create :user, :wcat_member
+      competition = FactoryBot.create :competition,
+                                      :confirmed,
+                                      :visible,
+                                      announced_at: 1.day.ago,
+                                      announced_by: wcat_member.id,
+                                      registration_open: 1.day.from_now,
+                                      registration_close: 5.days.from_now,
+                                      starts: 10.days.from_now,
+                                      ends: 10.days.from_now
+      expect(competition).to be_valid
+      expect(competition.warnings_for(nil)[:regearly]).to eq nil
+    end
+
     it "warns if advancement condition isn't present for a non final round" do
       FactoryBot.create :round, competition: competition, event_id: "333", number: 1
       FactoryBot.create :round, competition: competition, event_id: "333", number: 2
