@@ -8,8 +8,13 @@
 <% if job.respond_to?(:reason_not_to_run) && job.reason_not_to_run %>
   <%= alert :warning, job.reason_not_to_run %>
 <% else %>
-  <% if job.in_progress? %>
-    <%= alert :info, "The job is running. Thanks for checking =)" %>
+  <% if job.in_queue? %>
+    <%= alert :info, "The job is still in queue." %>
+  <% elsif job.in_progress? %>
+    <%= alert :info do %>
+      The job started <%= time_ago_in_words job.start_date %> ago
+      and is still running. Thanks for checking =)
+    <% end %>
   <% elsif job < TimedApplicationJob %>
     <% if job.finished? %>
       <%= alert :success do %>
