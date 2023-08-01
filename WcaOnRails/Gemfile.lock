@@ -418,8 +418,8 @@ GEM
     mime-types-data (3.2021.0704)
     mini_magick (4.12.0)
     mini_mime (1.1.2)
-    mini_portile2 (2.8.2)
-    minitest (5.18.1)
+    mini_portile2 (2.8.4)
+    minitest (5.19.0)
     monetize (1.11.0)
       money (~> 6.12)
     money (6.16.0)
@@ -490,7 +490,7 @@ GEM
       stringio
     public_suffix (5.0.1)
     racc (1.7.1)
-    rack (2.2.7)
+    rack (2.2.8)
     rack-cors (2.0.1)
       rack (>= 2.0.0)
     rack-proxy (0.7.6)
@@ -636,7 +636,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.0.0)
-    shakapacker (7.0.1)
+    shakapacker (7.0.2)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -727,7 +727,7 @@ GEM
       activesupport
     xpath (3.2.0)
       nokogiri (~> 1.8)
-    zeitwerk (2.6.8)
+    zeitwerk (2.6.10)
 
 PLATFORMS
   ruby
@@ -819,7 +819,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 7.0.1)
+  shakapacker (= 7.0.2)
   simple_form
   simplecov
   simplecov-lcov
