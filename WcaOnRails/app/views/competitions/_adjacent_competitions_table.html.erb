@@ -43,7 +43,7 @@
         <%= link_to_google_maps_dir "#{@competition.kilometers_to(c).round(2)} km", c.latitude_degrees, c.longitude_degrees, @competition.latitude_degrees, @competition.longitude_degrees %>
       </td>
       <td class="text-center"><%= c.competitor_limit if c.competitor_limit_enabled %></td>
-      <td class="text-center"><%= c.competitors.count if c.is_probably_over? %></td>
+      <td class="text-center"><%= c.results.select('DISTINCT personId').count if c.is_probably_over? %></td>
       <td class="wca-adjacent-competitions-show-events">
         <% c.events.each do |event| %>
           <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>

@@ -90,7 +90,7 @@
 
       <% if competition.results_posted? %>
         <dt><%= t 'competitions.nav.menu.competitors' %></dt>
-        <dd><%= @competition.competitors.count %></dd>
+        <dd><%= @competition.results.select('DISTINCT personId').count %></dd>
       <% end %>
     </dl>
 
