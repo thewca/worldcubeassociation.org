@@ -7,7 +7,7 @@ import VenueInfo from './FormSections/VenueInfo';
 import {
   InputDate,
   InputMarkdown,
-  InputString, InputTextArea,
+  InputTextArea,
 } from './Inputs/FormInputs';
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
@@ -19,7 +19,8 @@ import RegistrationDetails from './FormSections/RegistrationDetails';
 import EventRestrictions from './FormSections/EventRestrictions';
 import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
 import Admin from './FormSections/Admin';
-import NameDetails from "./FormSections/NameDetails";
+import NameDetails from './FormSections/NameDetails';
+import NearbyComps from './Tables/NearbyComps';
 
 // TODO: Need to add cloning params
 
@@ -84,6 +85,7 @@ export default function NewCompForm({
   const [showDebug, setShowDebug] = useState(false);
 
   const [formData, setFormData] = React.useState(competition);
+  const [markers, setMarkers] = React.useState([]);
 
   const formContext = useMemo(() => ({
     competition,
@@ -92,7 +94,18 @@ export default function NewCompForm({
     organizerView,
     formData,
     setFormData,
-  }), [competition, persisted, adminView, organizerView, formData, setFormData]);
+    markers,
+    setMarkers,
+  }), [
+    competition,
+    persisted,
+    adminView,
+    organizerView,
+    formData,
+    setFormData,
+    markers,
+    setMarkers,
+  ]);
 
   const currency = formData.entryFees.currency_code || 'USD';
 
@@ -120,6 +133,7 @@ export default function NewCompForm({
           <InputDate id="start_date" />
           <InputDate id="end_date" />
         </Form.Group>
+        <NearbyComps />
         <Divider />
 
         <Form.Group widths="equal">

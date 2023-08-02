@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Form } from 'semantic-ui-react';
 import { countries } from '../../../lib/wca-data.js.erb';
 import { InputSelect, InputString } from '../Inputs/FormInputs';
 import MapInput from '../Inputs/InputMap';
 import I18n from '../../../lib/i18n';
 import SubSection from './SubSection';
+import FormContext from '../State/FormContext';
 
 const countriesOptions = Object.values(countries.byIso2).map((country) => ({
   key: country.id,
@@ -13,6 +14,8 @@ const countriesOptions = Object.values(countries.byIso2).map((country) => ({
 })).sort((a, b) => a.text.localeCompare(b.text));
 
 export default function VenueInfo() {
+  const { markers } = useContext(FormContext);
+
   return (
     <SubSection section="venue">
       <InputSelect id="countryId" options={countriesOptions} search />
@@ -21,7 +24,7 @@ export default function VenueInfo() {
       <InputString id="venueDetails" mdHint />
       <InputString id="venueAddress" />
       <SubSection section="coordinates">
-        <MapInput idLat="lat" idLong="long" markers={[]} />
+        <MapInput idLat="lat" idLong="long" markers={markers} />
         <Form.Group widths="equal">
           <InputString id="lat" attachedLabel="Latitude" label={I18n.t('competitions.competition_form.coordinates')} noHint />
           <InputString id="long" attachedLabel="Longitude" noLabel noHint />

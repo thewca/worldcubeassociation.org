@@ -396,11 +396,58 @@ class CompetitionsController < ApplicationController
     render partial: 'nearby_competitions'
   end
 
-  def series_eligible_competitions_json
-    @competition = Competition.new(competition_params)
+  # @param [Competition] c
+  def competition_form_nearby_json(c)
+    if current_user.can_admin_results?
+      comp_link = ActionController::Base.helpers.link_to(c.name, admin_edit_competition_path(c.id), target: "_blank")
+    else
+      comp_link = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
+    end
+
+    days_until = @competition.days_until_competition?(c)
+
+    {
+      danger: @competition.dangerously_close_to?(c),
+      id: c.id,
+      name: c.name,
+      nameLink: comp_link,
+      confirmed: c.confirmed?,
+      delegates: users_to_sentence(c.delegates),
+      daysUntil: days_until,
+      location: "#{c.cityName}, #{c.countryId}",
+      distance: link_to_google_maps_dir(
+        "#{@competition.kilometers_to(c).round(2)} km",
+        c.latitude_degrees,
+        c.longitude_degrees,
+        @competition.latitude_degrees,
+        @competition.longitude_degrees,
+      ),
+      limit: c.competitor_limit_enabled ? c.competitor_limit : "",
+      competitors: c.is_probably_over? ? c.results.select('DISTINCT personId').count : "",
+      events: c.events.map { |event|
+        event.id
+      },
+      coordinates: {
+        lat: c.latitude_degrees,
+        long: c.longitude_degrees,
+      },
+    }
+  end
+
+  def nearby_competitions_json
+    # Copied from nearby_competitions, but returns JSON instead of the HTML table.
+    @competition = Competition.new
+    @competition.id = params[:id]
+    @competition.start_date = params[:start_date]
+    @competition.end_date = params[:end_date]
+    @competition.latitude_degrees = params[:coordinates_lat]
+    @competition.longitude_degrees = params[:coordinates_long]
+
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @series_eligible_competitions = get_series_eligible_competitions(@competition)
-    render json: @series_eligible_competitions.map { |c| competition_form_nearby_json(c) }
+    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
+    @nearby_competitions = get_nearby_competitions(@competition)
+
+    render json: @nearby_competitions.map { |c| competition_form_nearby_json(c) }
   end
 
   def series_eligible_competitions

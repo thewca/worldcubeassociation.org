@@ -157,8 +157,8 @@ export default function InputMap({
         color="#f0ad4e"
       />
       <DraggableMarker lat={lat} long={long} setLat={setLat} setLong={setLong} />
-      {markers.map((marker) => (
-        <StaticMarker key={marker.id} lat={marker.lat} lng={marker.lng} />
+      {markers && markers.map((marker) => (
+        <StaticMarker key={marker.id} lat={marker.lat} lng={marker.long} />
       ))}
     </CompetitionsMap>
   );

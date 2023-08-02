@@ -106,7 +106,8 @@ Rails.application.routes.draw do
   get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
 
   get 'competitions/edit/championship-regions-json' => 'competitions#championship_regions_json', as: :championship_regions_json
-
+  get 'competitions/edit/nearby-competitions-json' => 'competitions#nearby_competitions_json', as: :nearby_competitions_json
+  
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
       to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }

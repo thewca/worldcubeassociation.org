@@ -11,6 +11,7 @@ const exampleFormData = {
     confirmed: false,
     showAtAll: false,
   },
+  id: '',
   name: randomName,
   cellName: randomName,
   name_reason: "This is Ireland's national championship",
@@ -94,6 +95,12 @@ const FormContext = React.createContext({
   organizerView: false,
   formData: exampleFormData,
   setFormData: (data) => data,
+  markers: [{
+    id: '',
+    lat: 0,
+    long: 0,
+  }],
+  setMarkers: (data) => data,
 });
 
 export default FormContext;
