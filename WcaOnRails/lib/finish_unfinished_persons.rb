@@ -63,8 +63,7 @@ module FinishUnfinishedPersons
     #   so the regex captures the first group as romanized name,
     #   then the actual brackets (which have to be \ masked)
     #   and then the local name within those brackets
-    name_matches = person_name.match(/(.*)\((.*)\)$/)
-    name_matches ? name_matches[0] : person_name
+    person_name[/(.*)\((.*)\)$/, 1] || person_name
   end
 
   def self.remove_accents(name)
