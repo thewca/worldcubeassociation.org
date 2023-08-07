@@ -18,7 +18,7 @@ module CountryCityValidators
     Northwest\ Territories
     Nunavut
     Yukon
-  )
+  ).to_set
 
   class CaCityValidator < CityCommaRegionValidator
     def initialize
