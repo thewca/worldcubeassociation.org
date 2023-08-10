@@ -208,7 +208,7 @@ en:
   common:
     world: "World"
     continent: "Continent"
-    country: "Country"
+    country: "Region"
     #context: "here" is used in html links such as "You can create an account here".
     here: "here"
     best: "Best"
@@ -222,7 +222,7 @@ en:
       no_date: "No date"
     user:
       wca_id: "WCA ID"
-      citizen_of: "Citizen of"
+      representing: "Representing"
     all_regions: "All regions"
     errors:
       invalid: "invalid"
@@ -273,7 +273,7 @@ en:
         wca_id: "WCA ID"
         unconfirmed_wca_id: "Unconfirmed WCA ID"
         login: "Email or WCA ID"
-        country_iso2: "Citizenship"
+        country_iso2: "Representing"
         dob: "Birthdate"
         dob_verification: "Your Birthdate"
         gender: "Gender"
@@ -298,7 +298,7 @@ en:
         name: "Name"
         name_reason: "The reason for the name"
         cellName: "Competition short name"
-        countryId: "Country"
+        countryId: "Region"
         cityName: "City name"
         venue: "Venue"
         venueAddress: "Venue address"
@@ -389,7 +389,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Country"
+        countryId: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -433,7 +433,7 @@ en:
         status: "Status"
       regional_organization:
         name: "Name"
-        country: "Country"
+        country: "Region"
         website: "Website"
         logo: "Logo"
         email: "Email"
@@ -1053,7 +1053,7 @@ en:
       account_is_special: "The WCA ID and account are connected to special roles in the WCA (e.g. delegates, organizers, team members) and cannot be removed. Please email the WCA Results Team to help change the WCA ID to a different account."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -1096,8 +1096,8 @@ en:
       unique_html: "is already used by %{used_name} with %{used_email}. To free up the WCA ID, you can <a href=\"%{used_edit_path}\" target=\"_blank\">edit that account</a> and unassign the WCA ID."
       dob_past: "must be in the past"
       dob_recent: "must be at least two years old"
-      already_represented_country: "Cannot change the country to a country the person has already represented in the past."
-      must_have_a_change: "The name or the country must be different to update the person."
+      already_represented_country: "Cannot change the region to a region the person has already represented in the past."
+      must_have_a_change: "The name or the region must be different to update the person."
       must_be_senior: "must be a Senior Delegate"
       must_not_be_present: "must not be present"
       senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
@@ -1126,7 +1126,7 @@ en:
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
-      need_country: "Need a country"
+      need_country: "Need a region"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
       exceeds_event_limit:
@@ -1228,8 +1228,8 @@ en:
       edit: "Edit"
       #context: pluralization of "x country", used on its own, below registrations list
       country_plural:
-        one: "1 country"
-        other: "%{count} countries"
+        one: "1 region"
+        other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
@@ -1328,7 +1328,7 @@ en:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times, changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
-      registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
       errors:
         error: "Error importing %{registration}: %{error}."
@@ -1507,7 +1507,7 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      disclaimer: "Please note that due to the COVID-19 pandemic, some countries are currently unable to host competitions."
+      disclaimer: "Please note that due to the COVID-19 pandemic, some regions are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
@@ -1859,7 +1859,7 @@ en:
     table_elements:
       name: "Name"
       result: "Result"
-      citizen_of: "Citizen of"
+      representing: "Representing"
       competition: "Competition"
       solves: "Solves"
       region: "Region"
@@ -1879,7 +1879,7 @@ en:
     index:
       name_or_wca_id: "Name parts or WCA ID"
       name: "Name"
-      country: "Country"
+      country: "Representing"
       podiums: "Podiums"
       no_persons_found: "No person matches the given criteria."
     #context: Person profile page
@@ -1888,8 +1888,8 @@ en:
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       odd_rank_reason: >-
-        A missing rank or worse country rank than the continent one
-        is due to a change of country. Results from the previous region
+        A missing rank or worse regional rank than the continent one
+        is due to a change of region. Results from the previous region
         are not taken into account in the current region ranking.
       championship_podiums: "Championship Podiums"
       championship_podium_levels:
@@ -2042,7 +2042,7 @@ en:
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
-    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different countries and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
+    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
     world_championship_content_html: <p>Every two years, we sanction the competition that ultimately determines the world champion. These events require extremely careful planning by a number of volunteers, as well as a large financial commitment to reserve the venue and make necessary preparations.</p>
     contributing_title: Making a contribution
@@ -2195,7 +2195,7 @@ en:
     empty: "No Regional Organizations are currently acknowledged by the WCA."
     how_to:
       title: How to become an acknowledged WCA Regional Organization
-      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Countries wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
+      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Regions wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
     requirements:
       title: Requirements for WCA Regional Organizations
       list:
@@ -2467,7 +2467,7 @@ en:
       content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
-        '2': "The two competitions take place in different countries."
+        '2': "The two competitions take place in different regions."
       content2: '"3x3x3 Fewest Moves simultaneous competitions" are WCA competitions having only the 3x3x3 Fewest Moves event and taking place simultaneously in different locations.'
       olist2:
         '1':

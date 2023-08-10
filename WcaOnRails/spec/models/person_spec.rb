@@ -39,7 +39,7 @@ RSpec.describe Person, type: :model do
       it "fixing countryId fails if there exists an old person with the same wca id, greater subId and the same countryId" do
         FactoryBot.create(:person, wca_id: person.wca_id, subId: 2, name: person.name, countryId: "New Zealand")
         person.countryId = "New Zealand"
-        expect(person).to be_invalid_with_errors(countryId: ["Cannot change the country to a country the person has already represented in the past."])
+        expect(person).to be_invalid_with_errors(countryId: ["Cannot change the region to a region the person has already represented in the past."])
       end
 
       it "updates personName and countryId columns in the results table" do
@@ -66,12 +66,12 @@ RSpec.describe Person, type: :model do
     context "updating the person using sub id" do
       it "fails if both name and countryId haven't changed" do
         person.update_using_sub_id(name: "Feliks Zemdegs")
-        expect(person.errors[:base]).to eq ["The name or the country must be different to update the person."]
+        expect(person.errors[:base]).to eq ["The name or the region must be different to update the person."]
       end
 
       it "fails if both name and countryId haven't been passed" do
         person.update_using_sub_id(dob: "1990-10-10")
-        expect(person.errors[:base]).to eq ["The name or the country must be different to update the person."]
+        expect(person.errors[:base]).to eq ["The name or the region must be different to update the person."]
       end
 
       it "doesn't update the results table" do
