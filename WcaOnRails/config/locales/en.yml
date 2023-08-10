@@ -208,7 +208,7 @@ en:
   common:
     world: "World"
     continent: "Continent"
-    country: "Country"
+    country: "Region"
     #context: "here" is used in html links such as "You can create an account here".
     here: "here"
     best: "Best"
@@ -298,7 +298,7 @@ en:
         name: "Name"
         name_reason: "The reason for the name"
         cellName: "Competition short name"
-        countryId: "Country"
+        countryId: "Region"
         cityName: "City name"
         venue: "Venue"
         venueAddress: "Venue address"
@@ -433,7 +433,7 @@ en:
         status: "Status"
       regional_organization:
         name: "Name"
-        country: "Country"
+        country: "Region"
         website: "Website"
         logo: "Logo"
         email: "Email"
@@ -1053,7 +1053,7 @@ en:
       account_is_special: "The WCA ID and account are connected to special roles in the WCA (e.g. delegates, organizers, team members) and cannot be removed. Please email the WCA Results Team to help change the WCA ID to a different account."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -1096,8 +1096,8 @@ en:
       unique_html: "is already used by %{used_name} with %{used_email}. To free up the WCA ID, you can <a href=\"%{used_edit_path}\" target=\"_blank\">edit that account</a> and unassign the WCA ID."
       dob_past: "must be in the past"
       dob_recent: "must be at least two years old"
-      already_represented_country: "Cannot change the country to a country the person has already represented in the past."
-      must_have_a_change: "The name or the country must be different to update the person."
+      already_represented_country: "Cannot change the region to a region the person has already represented in the past."
+      must_have_a_change: "The name or the region must be different to update the person."
       must_be_senior: "must be a Senior Delegate"
       must_not_be_present: "must not be present"
       senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
@@ -1126,7 +1126,7 @@ en:
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
-      need_country: "Need a country"
+      need_country: "Need a region"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
       exceeds_event_limit:
@@ -1228,8 +1228,8 @@ en:
       edit: "Edit"
       #context: pluralization of "x country", used on its own, below registrations list
       country_plural:
-        one: "1 country"
-        other: "%{count} countries"
+        one: "1 region"
+        other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
@@ -1328,7 +1328,7 @@ en:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times, changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
-      registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
       errors:
         error: "Error importing %{registration}: %{error}."
@@ -1888,8 +1888,8 @@ en:
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       odd_rank_reason: >-
-        A missing rank or worse country rank than the continent one
-        is due to a change of country. Results from the previous region
+        A missing rank or worse regional rank than the continent one
+        is due to a change of region. Results from the previous region
         are not taken into account in the current region ranking.
       championship_podiums: "Championship Podiums"
       championship_podium_levels:
