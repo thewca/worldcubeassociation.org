@@ -1,3 +1,4 @@
 <%= react_component("CompetitionFormNew/NewCompForm", {
+  persisted: @competition.persisted?,
   competition: @competition.to_comp_form,
 }) %>

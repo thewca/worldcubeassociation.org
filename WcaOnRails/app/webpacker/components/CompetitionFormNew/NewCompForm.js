@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useContext, useMemo, useState } from 'react';
 import { Button, Divider, Form } from 'semantic-ui-react';
 import { Alert } from 'react-bootstrap';
 import I18n from '../../lib/i18n';
@@ -22,10 +22,18 @@ import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
 import RegistrationCollisions from './Tables/RegistrationCollisions';
+import Errors from './Errors';
 
 // TODO: Need to add cloning params
 
-function FormActions({ data }) {
+function FormActions() {
+  const {
+    persisted,
+    setErrors,
+    competition: ogData,
+    formData: data,
+  } = useContext(FormContext);
+
   const createComp = async () => {
     const url = '/competitions';
     const fetchOptions = {
@@ -38,10 +46,43 @@ function FormActions({ data }) {
     };
 
     const response = await fetchWithAuthenticityToken(url, fetchOptions);
+    if (response.redirected) {
+      window.location.replace(response.url);
+      return;
+    }
+
     const json = await response.json();
-    // eslint-disable-next-line no-console
-    console.log(json);
+
+    setErrors(json);
   };
+
+  const updateComp = async () => {
+    const url = `/competitions/${ogData.id}`;
+    const fetchOptions = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      credentials: 'include',
+      method: 'PATCH',
+      body: JSON.stringify(data),
+    };
+
+    const response = await fetchWithAuthenticityToken(url, fetchOptions);
+
+    if (response.redirected) {
+      window.location.replace(response.url);
+      return;
+    }
+
+    const json = await response.json();
+    setErrors(json);
+  };
+
+  if (persisted) {
+    return (
+      <Button onClick={updateComp} primary>Update Competition</Button>
+    );
+  }
 
   return (
     <Button onClick={createComp} primary>Create Competition</Button>
@@ -88,6 +129,8 @@ export default function NewCompForm({
   const [formData, setFormData] = React.useState(competition);
   const [markers, setMarkers] = React.useState([]);
 
+  const [errors, setErrors] = React.useState();
+
   const formContext = useMemo(() => ({
     competition,
     persisted,
@@ -97,6 +140,8 @@ export default function NewCompForm({
     setFormData,
     markers,
     setMarkers,
+    errors,
+    setErrors,
   }), [
     competition,
     persisted,
@@ -106,6 +151,8 @@ export default function NewCompForm({
     setFormData,
     markers,
     setMarkers,
+    errors,
+    setErrors,
   ]);
 
   const currency = formData.entryFees.currency_code || 'USD';
@@ -126,6 +173,7 @@ export default function NewCompForm({
       )}
       <Divider />
       <AnnouncementDetails competition={competition} />
+      <Errors />
       <Form>
         <Admin />
         <NameDetails />
@@ -165,7 +213,7 @@ export default function NewCompForm({
         <InputTextArea id="remarks" />
         <Divider />
 
-        <FormActions data={formData} />
+        <FormActions />
       </Form>
     </FormContext.Provider>
   );

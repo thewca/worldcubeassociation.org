@@ -183,27 +183,15 @@ class CompetitionsController < ApplicationController
     @competition = Competition.new(comp_params_form)
 
     if @competition.save
-      render json: {
-        newPath: edit_competition_path(@competition),
-      }
+      flash[:success] = t('competitions.messages.create_success')
+      @competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
+      end
+      redirect_to edit_competition_path(@competition)
     else
+      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
       render json: @competition.errors
     end
-
-    # @competition = Competition.new(competition_params)
-    #
-    # if @competition.save
-    #   flash[:success] = t('competitions.messages.create_success')
-    #   @competition.organizers.each do |organizer|
-    #     CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
-    #   end
-    #   redirect_to edit_competition_path(@competition)
-    # else
-    #   # Show id errors under name, since we don't actually show an
-    #   # id field to the user, so they wouldn't see any id errors.
-    #   @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-    #   render :new
-    # end
   end
 
   def post_announcement
@@ -639,7 +627,7 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
 
-    comp_params_minus_id = competition_params
+    comp_params_minus_id = comp_params_form
     new_id = comp_params_minus_id.delete(:id)
 
     old_organizers = @competition.organizers.to_a
@@ -749,7 +737,7 @@ class CompetitionsController < ApplicationController
       Money.default_bank.update_rates
     end
   end
-  
+
   private def comp_params_form
     comp_data = {
       receive_registration_emails: params.dig('userSettings', 'receive_registration_emails'),

@@ -101,6 +101,10 @@ const FormContext = React.createContext({
     long: 0,
   }],
   setMarkers: (data) => data,
+  /** @type {Object.<string, string[]>} */
+  errors: {
+  },
+  setErrors: (data) => data,
 });
 
 export default FormContext;

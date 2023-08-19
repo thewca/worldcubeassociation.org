@@ -2,8 +2,7 @@ import React, { useCallback, useContext, useMemo } from 'react';
 import {
   Checkbox,
   Form,
-  Input, Radio,
-  Select,
+  Radio,
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
 import I18n from '../../../lib/i18n';
@@ -34,13 +33,16 @@ function FieldWrapper({
   hint,
   noHint,
   mdHint,
+  error,
   children,
 }) {
   const htmlLabel = noLabel ? '&#8203;' : label || getFieldLabel(id);
   const htmlHint = noHint ? '&#8203;' : hint || getFieldHint(id, mdHint);
 
   return (
-    <Form.Field>
+    <Form.Field
+      error={error}
+    >
       {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
       <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />
       {children}
@@ -55,7 +57,7 @@ const wrapInput = (
   additionalPropNames,
   emptyStringForNull = false,
 ) => function wrappedInput(props) {
-  const { formData, setFormData } = useContext(FormContext);
+  const { formData, setFormData, errors } = useContext(FormContext);
 
   const inputProps = additionalPropNames.reduce((acc, propName) => {
     acc[propName] = props[propName];
@@ -69,6 +71,8 @@ const wrapInput = (
 
   if (emptyStringForNull && value === null) value = '';
 
+  const error = errors && errors[props.id] && errors[props.id].length > 0 && errors[props.id].join(', ');
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <FieldWrapper
@@ -78,11 +82,16 @@ const wrapInput = (
       hint={props.hint}
       noHint={props.noHint}
       mdHint={props.mdHint}
+      error={!!error}
     >
       <WrappedInput
         {...inputProps}
         value={value}
         onChange={onChange}
+        error={error && {
+          content: error,
+          pointing: 'above',
+        }}
       />
     </FieldWrapper>
   );
@@ -90,7 +99,12 @@ const wrapInput = (
 };
 
 export const InputString = wrapInput((props) => (
-  <Input label={props.attachedLabel} value={props.value} onChange={props.onChange} />
+  <Form.Input
+    label={props.attachedLabel}
+    value={props.value}
+    onChange={props.onChange}
+    error={props.error}
+  />
 ), ['attachedLabel'], true);
 
 export const InputTextArea = wrapInput((props) => (
@@ -103,12 +117,13 @@ export const InputTextArea = wrapInput((props) => (
 ), [], true);
 
 export const InputNumber = wrapInput((props) => (
-  <Input
+  <Form.Input
     type="number"
     value={props.value}
     onChange={props.onChange}
     min={props.min}
     max={props.max}
+    error={props.error}
   />
 ), ['min', 'max'], true);
 
@@ -128,22 +143,24 @@ export const InputDate = wrapInput((props) => {
   }, [props.onChange, props.dateTime]);
 
   return (
-    <Input
+    <Form.Input
       type={props.dateTime ? 'datetime-local' : 'date'}
       value={date && date.toISOString().slice(0, props.dateTime ? 16 : 10)}
       onChange={onChange}
       style={{ width: 'full' }}
       label={props.dateTime ? 'UTC' : null}
+      error={props.error}
     />
   );
 }, ['dateTime'], true);
 
 export const InputSelect = wrapInput((props) => (
-  <Select
+  <Form.Select
     options={props.options}
     value={props.value}
     onChange={props.onChange}
     search={props.search}
+    error={props.error}
   />
 ), ['options', 'search']);
 
