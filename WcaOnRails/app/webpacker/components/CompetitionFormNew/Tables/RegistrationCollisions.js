@@ -116,7 +116,7 @@ function CollisionsTableCompRow({ comp, showEvents }) {
   );
 }
 
-function CollisionsTableContent({ comps }) {
+function CollisionsTable({ comps }) {
   const [showEvents, setShowEvents] = useState(false);
 
   return (
@@ -159,7 +159,7 @@ function MissingInfo() {
   );
 }
 
-export default function RegistrationCollisions() {
+function RegistrationCollisionsContent() {
   const {
     formData: {
       id,
@@ -191,14 +191,8 @@ export default function RegistrationCollisions() {
       .finally(() => setLoading(false));
   }, [savedParams]);
 
-  const label = I18n.t('competitions.colliding_registration_start_competitions.label', { hours: 3 });
-
   if (loading) {
-    return (
-      <TableWrapper label={label}>
-        <Loading />
-      </TableWrapper>
-    );
+    return <Loading />;
   }
 
   if (!registration_open) return <MissingInfo />;
@@ -211,9 +205,15 @@ export default function RegistrationCollisions() {
     );
   }
 
+  return <CollisionsTable comps={collisions} />;
+}
+
+export default function RegistrationCollisions() {
+  const label = I18n.t('competitions.colliding_registration_start_competitions.label', { hours: 3 });
+
   return (
     <TableWrapper label={label}>
-      <CollisionsTableContent comps={collisions} />
+      <RegistrationCollisionsContent />
     </TableWrapper>
   );
 }

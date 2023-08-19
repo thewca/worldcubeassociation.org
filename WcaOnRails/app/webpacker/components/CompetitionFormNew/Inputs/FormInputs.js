@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useMemo } from 'react';
 import {
   Checkbox,
-  Form,
-  Radio,
+  Form, Input,
+  Radio, Select,
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
 import I18n from '../../../lib/i18n';
@@ -41,11 +41,14 @@ function FieldWrapper({
 
   return (
     <Form.Field
-      error={error}
+      error={!!error}
+      className={error && 'has-error'}
     >
       {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
       <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />
       {children}
+      {/* eslint-disable-next-line react/no-danger */}
+      {error && (<p dangerouslySetInnerHTML={{ __html: error || '' }} className="help-block" />)}
       {/* eslint-disable-next-line react/no-danger */}
       <p dangerouslySetInnerHTML={{ __html: htmlHint }} className="help-block" />
     </Form.Field>
@@ -82,16 +85,12 @@ const wrapInput = (
       hint={props.hint}
       noHint={props.noHint}
       mdHint={props.mdHint}
-      error={!!error}
+      error={error}
     >
       <WrappedInput
         {...inputProps}
         value={value}
         onChange={onChange}
-        error={error && {
-          content: error,
-          pointing: 'above',
-        }}
       />
     </FieldWrapper>
   );
@@ -99,11 +98,10 @@ const wrapInput = (
 };
 
 export const InputString = wrapInput((props) => (
-  <Form.Input
+  <Input
     label={props.attachedLabel}
     value={props.value}
     onChange={props.onChange}
-    error={props.error}
   />
 ), ['attachedLabel'], true);
 
@@ -117,13 +115,12 @@ export const InputTextArea = wrapInput((props) => (
 ), [], true);
 
 export const InputNumber = wrapInput((props) => (
-  <Form.Input
+  <Input
     type="number"
     value={props.value}
     onChange={props.onChange}
     min={props.min}
     max={props.max}
-    error={props.error}
   />
 ), ['min', 'max'], true);
 
@@ -143,24 +140,22 @@ export const InputDate = wrapInput((props) => {
   }, [props.onChange, props.dateTime]);
 
   return (
-    <Form.Input
+    <Input
       type={props.dateTime ? 'datetime-local' : 'date'}
       value={date && date.toISOString().slice(0, props.dateTime ? 16 : 10)}
       onChange={onChange}
       style={{ width: 'full' }}
       label={props.dateTime ? 'UTC' : null}
-      error={props.error}
     />
   );
 }, ['dateTime'], true);
 
 export const InputSelect = wrapInput((props) => (
-  <Form.Select
+  <Select
     options={props.options}
     value={props.value}
     onChange={props.onChange}
     search={props.search}
-    error={props.error}
   />
 ), ['options', 'search']);
 
