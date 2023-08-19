@@ -1,23 +1,14 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
 import React, { useContext, useEffect, useState } from 'react';
-import { Form, Message } from 'semantic-ui-react';
+import { Message } from 'semantic-ui-react';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { competitionNearbyJsonUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
 import FormContext from '../State/FormContext';
 import Loading from '../../Requests/Loading';
-
-function TableWrapper({ label, children }) {
-  return (
-    <Form.Field>
-      {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
-      <label dangerouslySetInnerHTML={{ __html: label }} />
-      {children}
-    </Form.Field>
-  );
-}
+import TableWrapper from './TableWrapper';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -46,13 +37,21 @@ export default function NearbyComps() {
 
   const [savedParams, setSavedParams] = useState(null);
 
+  const lat = parseFloat(coordinates.lat);
+  const long = parseFloat(coordinates.long);
+
+  const missingDate = !start_date || !end_date;
+  const missingLocation = !coordinates
+    || Number.isNaN(lat)
+    || Number.isNaN(long);
+
   useEffect(() => {
-    if (!coordinates || !coordinates.lat || !coordinates.long || !start_date || !end_date) return;
+    if (missingDate || missingLocation) return;
     setLoading(true);
     const params = new URLSearchParams();
     params.append('id', id);
-    params.append('coordinates_lat', coordinates.lat);
-    params.append('coordinates_long', coordinates.long);
+    params.append('coordinates_lat', lat.toString());
+    params.append('coordinates_long', long.toString());
     params.append('start_date', start_date);
     params.append('end_date', end_date);
 
@@ -72,7 +71,6 @@ export default function NearbyComps() {
         })));
       })
       .finally(() => setLoading(false));
-    console.log('sent req');
   }, [savedParams]);
 
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 5, kms: 10 });
@@ -85,8 +83,6 @@ export default function NearbyComps() {
     );
   }
 
-  const missingDate = !start_date || !end_date;
-  const missingLocation = !coordinates || !coordinates.lat || !coordinates.long;
   if (missingDate || missingLocation) {
     return (
       <TableWrapper label={label}>

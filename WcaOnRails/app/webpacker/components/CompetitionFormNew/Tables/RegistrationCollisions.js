@@ -1,9 +1,15 @@
 /* eslint-disable react/no-danger */
-import React, { useState } from 'react';
+/* eslint-disable camelcase */
+import React, { useContext, useEffect, useState } from 'react';
 import {
-  Button, Table, Message, Popup, TableCell,
+  Table, Message, Button, Popup,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
+import FormContext from '../State/FormContext';
+import Loading from '../../Requests/Loading';
+import TableWrapper from './TableWrapper';
+import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import { events } from '../../../lib/wca-data.js.erb';
 
 function NotConfirmedIcon() {
@@ -18,7 +24,7 @@ function NotConfirmedIcon() {
   );
 }
 
-function CompsTableHeaderRow({ showEvents }) {
+function CollisionsTableHeaderRow() {
   return (
     <Table.Row>
       <Table.HeaderCell name="name" width={3}>
@@ -27,26 +33,12 @@ function CompsTableHeaderRow({ showEvents }) {
       <Table.HeaderCell name="delegates" width={3}>
         {I18n.t('competitions.adjacent_competitions.delegates')}
       </Table.HeaderCell>
-      <Table.HeaderCell name="date" width={2}>
-        {I18n.t('competitions.adjacent_competitions.date')}
+      <Table.HeaderCell name="time" width={2}>
+        {I18n.t('competitions.adjacent_competitions.time')}
       </Table.HeaderCell>
       <Table.HeaderCell name="location" width={2}>
         {I18n.t('competitions.adjacent_competitions.location')}
       </Table.HeaderCell>
-      <Table.HeaderCell name="distance" width={1}>
-        {I18n.t('competitions.adjacent_competitions.distance')}
-      </Table.HeaderCell>
-      <Table.HeaderCell name="limit" width={1}>
-        {I18n.t('competitions.adjacent_competitions.limit')}
-      </Table.HeaderCell>
-      <Table.HeaderCell name="competitors" width={1}>
-        {I18n.t('competitions.adjacent_competitions.competitors')}
-      </Table.HeaderCell>
-      {showEvents && (
-        <Table.HeaderCell name="events" width={2}>
-          {I18n.t('competitions.adjacent_competitions.events')}
-        </Table.HeaderCell>
-      )}
     </Table.Row>
   );
 }
@@ -59,74 +51,48 @@ function CompsTableHeaderRow({ showEvents }) {
  * @property {string} nameLink
  * @property {boolean} confirmed
  * @property {string} delegates
- * @property {number} daysUntil
- * @property {string} startDate
- * @property {string} endDate
- * @property {string} location
- * @property {string} distance
- * @property {string} limit
- * @property {string} competitors
+ * @property {string} registrationOpen
+ * @property {number} minutesUntil
+ * @property {string} cityName
+ * @property {string} countryId
  * @property {string[]} events
- * @property {Object} coordinates
- * @property {number} coordinates.lat
- * @property {number} coordinates.long
  *
  * @param {CompetitionData} comp
- * @param action
- * @param showEvents
+ * @param {boolean} showEvents
  * @returns {JSX.Element}
  * @constructor
  */
-function CompsTableCompRow({ comp, action, showEvents }) {
+function CollisionsTableCompRow({ comp, showEvents }) {
   return (
     <Table.Row warning={!comp.danger} error={comp.danger}>
       <Table.Cell name="name" width={3}>
         <span dangerouslySetInnerHTML={{ __html: comp.nameLink }} />
         {!comp.confirmed && <NotConfirmedIcon />}
-        {action && (
-        <>
-          <br />
-          <Button
-            size="mini"
-            onClick={() => action.onClick(comp)}
-          >
-            {action.label}
-          </Button>
-        </>
-        )}
       </Table.Cell>
       <Table.Cell name="delegates" width={2}>
         <span dangerouslySetInnerHTML={{ __html: comp.delegates }} />
       </Table.Cell>
-      <TableCell name="date" width={2}>
+      <Table.Cell
+        name="time"
+        width={2}
+      >
         <Popup
-          content={
-            `${comp.name} ${comp.daysUntil < 0
-              ? `${I18n.t('competitions.adjacent_competitions.ends_on')} ${comp.endDate}`
-              : `${I18n.t('competitions.adjacent_competitions.starts_on')} ${comp.startDate}`}`
-          }
+          content={`${comp.name} ${I18n.t('competitions.colliding_registration_start_competitions.opens_registration_at')} ${new Date(comp.registrationOpen).toUTCString()}`}
           position="top center"
           size="tiny"
           trigger={(
             <span>
-              {I18n.t('datetime.distance_in_words.x_days', { count: Math.abs(comp.daysUntil) })}
+              {I18n.t('datetime.distance_in_words.x_minutes', { count: Math.abs(parseFloat(comp.minutesUntil)) })}
               {' '}
-              {comp.daysUntil < 0 ? I18n.t('competitions.adjacent_competitions.before') : I18n.t('competitions.adjacent_competitions.after')}
+              {comp.minutesUntil < 0 ? I18n.t('competitions.adjacent_competitions.before') : I18n.t('competitions.adjacent_competitions.after')}
             </span>
           )}
         />
-      </TableCell>
+      </Table.Cell>
       <Table.Cell name="location" width={2}>
-        {comp.location}
-      </Table.Cell>
-      <Table.Cell name="distance" width={2} singleLine>
-        <span dangerouslySetInnerHTML={{ __html: comp.distance }} />
-      </Table.Cell>
-      <Table.Cell name="limit" width={1}>
-        {comp.limit ? comp.limit : '-'}
-      </Table.Cell>
-      <Table.Cell name="competitors" width={1}>
-        {comp.competitors ? comp.competitors : '-'}
+        {comp.cityName}
+        {' '}
+        {comp.countryId}
       </Table.Cell>
       {showEvents && (
         <Table.Cell name="events" width={2}>
@@ -150,21 +116,20 @@ function CompsTableCompRow({ comp, action, showEvents }) {
   );
 }
 
-function CompsTableContent({ comps, action }) {
+function CollisionsTableContent({ comps }) {
   const [showEvents, setShowEvents] = useState(false);
 
   return (
     <Table structured>
       <Table.Header>
-        <CompsTableHeaderRow showEvents={showEvents} />
+        <CollisionsTableHeaderRow />
       </Table.Header>
       <Table.Body>
         {comps.slice().reverse().map((comp) => (
-          <CompsTableCompRow
+          <CollisionsTableCompRow
             key={comp.name}
             comp={comp}
             showEvents={showEvents}
-            action={action}
           />
         ))}
       </Table.Body>
@@ -186,16 +151,69 @@ function CompsTableContent({ comps, action }) {
   );
 }
 
-export default function CompsTable({
-  comps, action,
-}) {
-  if (!comps || comps.length === 0) {
+function MissingInfo() {
+  return (
+    <Message negative>
+      <p>{I18n.t('competitions.colliding_registration_start_competitions.no_registration_start_date_yet')}</p>
+    </Message>
+  );
+}
+
+export default function RegistrationCollisions() {
+  const {
+    formData: {
+      id,
+      registration_open,
+    },
+  } = useContext(FormContext);
+
+  const [loading, setLoading] = useState(false);
+  const [collisions, setCollisions] = useState();
+  const [savedParams, setSavedParams] = useState(null);
+
+  useEffect(() => {
+    if (!registration_open) return;
+    setLoading(true);
+    const params = new URLSearchParams();
+    params.append('id', id);
+    params.append('registration_open', registration_open);
+
+    setSavedParams(params);
+  }, [id, registration_open]);
+
+  useEffect(() => {
+    if (!savedParams) return;
+
+    fetchJsonOrError(`${registrationCollisionsJsonUrl}?${savedParams.toString()}`)
+      .then(({ data }) => {
+        setCollisions(data);
+      })
+      .finally(() => setLoading(false));
+  }, [savedParams]);
+
+  const label = I18n.t('competitions.colliding_registration_start_competitions.label', { hours: 3 });
+
+  if (loading) {
+    return (
+      <TableWrapper label={label}>
+        <Loading />
+      </TableWrapper>
+    );
+  }
+
+  if (!registration_open) return <MissingInfo />;
+
+  if (!collisions || collisions.length === 0) {
     return (
       <Message positive>
-        {I18n.t('competitions.adjacent_competitions.no_comp_nearby')}
+        {I18n.t('competitions.colliding_registration_start_competitions.no_comp_colliding')}
       </Message>
     );
   }
 
-  return <CompsTableContent comps={comps.reverse()} action={action} />;
+  return (
+    <TableWrapper label={label}>
+      <CollisionsTableContent comps={collisions} />
+    </TableWrapper>
+  );
 }

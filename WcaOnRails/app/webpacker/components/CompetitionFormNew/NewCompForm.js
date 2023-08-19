@@ -21,6 +21,7 @@ import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenti
 import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
+import RegistrationCollisions from './Tables/RegistrationCollisions';
 
 // TODO: Need to add cloning params
 
@@ -140,6 +141,7 @@ export default function NewCompForm({
           <InputDate id="registration_open" dateTime />
           <InputDate id="registration_close" dateTime />
         </Form.Group>
+        <RegistrationCollisions />
         <InputMarkdown id="information" />
         <CompetitorLimit />
         <Staff />

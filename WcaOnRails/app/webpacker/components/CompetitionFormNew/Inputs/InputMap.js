@@ -132,8 +132,9 @@ export default function InputMap({
 }) {
   const { formData, setFormData } = useContext(FormContext);
 
-  const lat = formData[idLat] || 0;
-  const long = formData[idLong] || 0;
+  const lat = Number.isNaN(parseFloat(formData[idLat])) ? 0 : Number(formData[idLat]);
+  const long = Number.isNaN(parseFloat(formData[idLong])) ? 0 : Number(formData[idLong]);
+
   const setLat = (newLat) => setFormData((d) => ({ ...d, [idLat]: newLat }));
   const setLong = (newLong) => setFormData((d) => ({ ...d, [idLong]: newLong }));
 
