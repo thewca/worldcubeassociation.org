@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import SubSection from './SubSection';
 import {
   InputBoolean, InputCurrencyAmount, InputNumber, InputRadio, InputSelect,
@@ -6,6 +6,8 @@ import {
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import FormContext from '../State/FormContext';
 import I18n from '../../../lib/i18n';
+import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -39,14 +41,60 @@ const guestMessageOptions = [{
 }];
 
 export default function RegistrationFees({ currency }) {
-  const feeData = useContext(FormContext).formData.entryFees;
+  const {
+    formData: {
+      venue: {
+        country,
+      },
+      entryFees,
+      competitorLimit,
+    },
+  } = useContext(FormContext);
 
-  const guestsGoFree = feeData && !(feeData.guests_entry_fee_lowest_denomination > 0);
-  const guestsRestricted = feeData && guestsGoFree && feeData.guest_entry_status === 'restricted';
+  const guestsGoFree = entryFees && !(entryFees.guests_entry_fee_lowest_denomination > 0);
+  const guestsRestricted = entryFees && guestsGoFree && entryFees.guest_entry_status === 'restricted';
+
+  const [duesText, setDuesText] = useState('');
+  useEffect(() => {
+    const params = new URLSearchParams();
+    params.append('competitor_limit_enabled', competitorLimit.competitor_limit_enabled);
+    params.append('competitor_limit', competitorLimit.competitor_limit);
+    params.append('currency_code', currency);
+    params.append('country_id', country);
+    params.append('entry_fee_cents', entryFees.base_entry_fee_lowest_denomination);
+
+    fetchWithAuthenticityToken(`${calculateDuesUrl}?${params.toString()}`)
+      .then((response) => response.json()
+        .then((json) => {
+          if (!response.ok) {
+            setDuesText(I18n.t('competitions.competition_form.dues_estimate.ajax_error'));
+            return;
+          }
+
+          let text;
+          if (competitorLimit.competitor_limit_enabled) {
+            text = `${I18n.t('competitions.competition_form.dues_estimate.calculated', {
+              limit: competitorLimit.competitor_limit,
+              estimate: json.dues_value,
+            })} (${currency})`;
+          } else {
+            text = `${I18n.t('competitions.competition_form.dues_estimate.per_competitor', {
+              estimate: json.dues_value,
+            })} (${currency})`;
+          }
+          setDuesText(text);
+        }));
+  }, [country, currency, competitorLimit, entryFees]);
+
   return (
     <SubSection section="entryFees">
       <InputSelect id="currency_code" options={currenciesOptions} />
       <InputCurrencyAmount id="base_entry_fee_lowest_denomination" currency={currency} />
+      <p className="help-block">
+        <b>
+          {duesText}
+        </b>
+      </p>
       <InputBoolean id="enable_donations" />
       <InputRadio id="guests_enabled" options={guestsEnabledOptions} />
       <InputCurrencyAmount id="guests_entry_fee_lowest_denomination" currency={currency} />
