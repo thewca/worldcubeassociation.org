@@ -1373,10 +1373,10 @@
   resolved "https://registry.yarnpkg.com/@csstools/selector-specificity/-/selector-specificity-3.0.0.tgz#798622546b63847e82389e473fd67f2707d82247"
   integrity sha512-hBI9tfBtuPIi885ZsZ32IMEU/5nlZH/KOVYJCOh7gyMxaVLGmLedYqFN6Ui1LXkI8JlC8IsuC0rF0btcRZKd5g==
 
-"@cubing/icons@^1.0.6":
-  version "1.0.6"
-  resolved "https://registry.yarnpkg.com/@cubing/icons/-/icons-1.0.6.tgz#c05fa19fb2036eea6d38a468a11c1c426400eded"
-  integrity sha512-V9iLA0H4iRQlrXzyr6xx8lCmO+Ur25DSOxHN+cZi1Uvb4i7TZe2zzt3YfdSVkYsxyBZmQ0RKdr8WSAf803JJFg==
+"@cubing/icons@^1.0.8":
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/@cubing/icons/-/icons-1.0.8.tgz#4f20f121b97458d249c1c624372b2eae537a8d12"
+  integrity sha512-2TpuqGONN5iJMtW4D0gw7W/ve2KxRhatPN5s6KEJ5A+KcAue6G2Kwc1dg/ZIruLfl8GLCUGOCdyDEMKChBCCDQ==
 
 "@discoveryjs/json-ext@0.5.7", "@discoveryjs/json-ext@^0.5.0":
   version "0.5.7"

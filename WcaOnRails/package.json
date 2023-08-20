@@ -19,7 +19,7 @@
     "@babel/preset-env": "^7.22.10",
     "@babel/preset-react": "^7.22.5",
     "@babel/runtime": "^7.22.6",
-    "@cubing/icons": "^1.0.6",
+    "@cubing/icons": "^1.0.8",
     "@rails/ujs": "^6.1.7",
     "autonumeric": "^4.9.0",
     "autoprefixer": "^10.4.14",
