@@ -131,6 +131,6 @@ class CompetitionSeries < ApplicationRecord
   end
 
   def public_competitions
-    self.competitions.filter(&:showAtAll?)
+    self.competitions.where(showAtAll: true)
   end
 end
