@@ -16,6 +16,8 @@ module DbDumpHelper
   DEVELOPER_EXPORT_SQL = "#{DEVELOPER_EXPORT_FILENAME}.sql".freeze
   DEVELOPER_EXPORT_SQL_PERMALINK = "#{DEVELOPER_EXPORT_FILENAME}.zip".freeze
 
+  DEFAULT_DEV_PASSWORD = 'wca'
+
   def self.dump_developer_db
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
@@ -85,5 +87,9 @@ module DbDumpHelper
         FileUtils.ln_s(zip_filename, permalink_zip_path, force: true)
       end
     end
+  end
+
+  def self.use_staging_password?
+    Rails.env.production? && !EnvVars.WCA_LIVE_SITE?
   end
 end

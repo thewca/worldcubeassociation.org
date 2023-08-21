@@ -36,7 +36,7 @@ RSpec.describe Registration do
     it "requires user country" do
       user = FactoryBot.create(:user, country_iso2: nil)
       registration.user = user
-      expect(registration).to be_invalid_with_errors(user_id: ["Need a country"])
+      expect(registration).to be_invalid_with_errors(user_id: ["Need a region"])
     end
 
     it "requires user gender" do

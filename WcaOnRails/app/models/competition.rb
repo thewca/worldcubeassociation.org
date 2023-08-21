@@ -1474,15 +1474,12 @@ class Competition < ApplicationRecord
       prev_sorted_registration = nil
       sorted_registrations = []
       registrations.each_with_index do |registration, i|
-        if sort_by == 'single'
-          rank = registration.single_rank
-          prev_rank = prev_sorted_registration&.registration&.single_rank
-        else
-          rank = registration.average_rank
-          prev_rank = prev_sorted_registration&.registration&.average_rank
-        end
+        rank = sort_by == 'single' ? registration.single_rank : registration.average_rank
         if rank
-          tied_previous = rank == prev_rank
+          # Change position to previous if both single and average are tied with previous registration.
+          average_tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank
+          single_tied_previous = registration.single_rank == prev_sorted_registration&.registration&.single_rank
+          tied_previous = single_tied_previous && average_tied_previous
           pos = tied_previous ? prev_sorted_registration.pos : i + 1
         else
           # Hasn't competed in this event yet.
@@ -1678,6 +1675,13 @@ class Competition < ApplicationRecord
       #   that have qualification requirements via a perfectly valid Events WCIF, but the competition itself
       #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
       save!
+
+      # After validations succeeded, and we know that we have a consistent competition state, mark the competition as updated.
+      # Context: As above, it is possible to make a PATCH call that _only_ updates associated models but not the competition
+      #   itself in the stricter sense (i.e. only changes stuff in the `assignments` table but not the `competitions` table itself).
+      #   But our API relies on the updated_at timestamp of the top-level Competition object to enable Conditional GET, so we
+      #   artificially pretend like the Competition object was updated anyways.
+      touch
     end
   end
 
