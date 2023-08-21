@@ -219,7 +219,7 @@ class Api::V0::ApiController < ApplicationController
 
   def competition_series
     competition_series = CompetitionSeries.find_by_wcif_id(params[:id])
-    if competition_series.blank? || competition_series.public_competitions.empty?
+    if !competition_series.present? || competition_series.public_competitions.empty?
       raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
     end
     render json: competition_series.to_wcif
