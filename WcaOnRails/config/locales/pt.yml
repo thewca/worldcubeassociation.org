@@ -2457,8 +2457,8 @@ pt:
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       O limite de competidores para esta competição é %{competitor_limit} e
-      poderá estar atingidoo. Se se inscrever, a sua inscrição será colocada
-      numa lista de espera. Poderá não ser aprovada a menos que uma vaga seja
+      poderá estar atingido. Se se inscrever, a sua inscrição será colocada numa
+      lista de espera. Poderá não ser aprovada a menos que uma vaga seja
       libertada.
     #original_hash: 855ca9c
     can_register: 'Pode inscrever-se em %{comp} abaixo.'
