@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_07_07_182015) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_22_155348) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -89,9 +89,9 @@ ActiveRecord::Schema[7.0].define(version: 2023_07_07_182015) do
     t.string "type", limit: 15, default: "", null: false
     t.string "text", limit: 100, default: "", null: false
     t.text "uri"
-    t.string "submitterName", limit: 50, default: "", null: false
+    t.string "submitterName", default: "", null: false
     t.text "submitterComment"
-    t.string "submitterEmail", limit: 45, default: "", null: false
+    t.string "submitterEmail", default: "", null: false
     t.timestamp "timestampSubmitted", default: -> { "CURRENT_TIMESTAMP" }, null: false
     t.timestamp "timestampDecided"
     t.string "status", limit: 10, default: "", null: false
