@@ -646,31 +646,42 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "sorts 444 by single, and average, and handles ties" do
-      registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration1.personId
-      FactoryBot.create :ranks_single, rank: 20, best: 2000, eventId: "444", personId: registration1.personId
+      user_a = FactoryBot.create(:user, :wca_id, name: 'A')
+      user_b = FactoryBot.create(:user, :wca_id, name: 'B')
 
-      registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      FactoryBot.create :ranks_average, rank: 1, best: 2000, eventId: "444", personId: registration1.personId
+      FactoryBot.create :ranks_single, rank: 1, best: 1500, eventId: "444", personId: registration1.personId
+
+      registration2 = FactoryBot.create(:registration, :accepted, user: user_a, competition: competition, events: [Event.find("444")])
       FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.personId
 
-      registration3 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 9, best: 3232, eventId: "444", personId: registration3.personId
+      registration3 = FactoryBot.create(:registration, :accepted, user: user_b, competition: competition, events: [Event.find("444")])
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration3.personId
+      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration3.personId
 
       registration4 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 11, best: 4545, eventId: "444", personId: registration4.personId
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration4.personId
+      FactoryBot.create :ranks_single, rank: 30, best: 2500, eventId: "444", personId: registration4.personId
+
+      registration5 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration5.personId
+      FactoryBot.create :ranks_single, rank: 31, best: 2600, eventId: "444", personId: registration5.personId
+
+      registration6 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration3.id, registration2.id, registration1.id, registration4.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4]
-      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false]
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id, registration3.id, registration4.id, registration5.id, registration6.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
+      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444", sort_by: :single }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id, registration3.id, registration4.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, nil, nil]
-      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, nil, nil]
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id, registration3.id, registration4.id, registration5.id, registration6.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
+      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
     end
 
     it "handles missing average" do

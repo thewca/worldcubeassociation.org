@@ -44,6 +44,7 @@ EnvVars = SuperConfig.new do
   optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
   optional :STRIPE_WEBHOOK_SECRET, :string, ''
   optional :REDIS_URL, :string, ''
+  optional :STAGING_PASSWORD, :string, ''
 
   mandatory :GOOGLE_MAPS_API_KEY, :string
   mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string

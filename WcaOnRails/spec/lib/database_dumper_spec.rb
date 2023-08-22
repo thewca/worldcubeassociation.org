@@ -4,12 +4,22 @@ require 'tempfile'
 require 'rails_helper'
 require 'database_dumper'
 
-def with_database(db_name)
-  ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
-  ActiveRecord::Base.connection.execute("CREATE DATABASE #{db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
-  yield
-ensure
-  ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{db_name}")
+def with_database(db_config_name)
+  current_db_config = ActiveRecord::Base.connection_db_config
+  desired_config = ActiveRecord::Base.configurations.configs_for(name: db_config_name.to_s, include_hidden: true)
+
+  begin
+    ActiveRecord::Tasks::DatabaseTasks.drop desired_config
+    ActiveRecord::Tasks::DatabaseTasks.create desired_config
+    ActiveRecord::Tasks::DatabaseTasks.load_schema desired_config
+
+    yield
+  ensure
+    ActiveRecord::Tasks::DatabaseTasks.drop desired_config
+
+    # Need to connect to primary database again
+    ActiveRecord::Base.establish_connection(current_db_config) if current_db_config
+  end
 end
 
 RSpec.describe "DatabaseDumper" do
@@ -44,7 +54,7 @@ RSpec.describe "DatabaseDumper" do
     sql = dump_file.read
     dump_file.close
 
-    with_database "wca_db_dump_test" do
+    with_database :developer_dump do
       expect(Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME)).to be_nil
 
       DbHelper.execute_sql sql

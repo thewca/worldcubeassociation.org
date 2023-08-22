@@ -590,6 +590,8 @@ cs:
         paid_entry_fees: Zaplaceno
         #original_hash: bae7d5b
         status: Status
+        #original_hash: a6e8a0b
+        administrative_notes: Administrativní poznámky
         #original_hash: 709a232
         name: Jméno
         #original_hash: a6b9d69
@@ -1191,6 +1193,8 @@ cs:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: Dodatečné poznámky pro správu registrace. Soutěžící je nevidí.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1655,8 +1659,8 @@ cs:
       results_team: Results team
       #original_hash: 4e7afeb
       results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Databáze
       #original_hash: aee74b8
       new_post: Nový příspěvek
       #original_hash: 0d67445
@@ -2471,26 +2475,41 @@ cs:
       payment_successful: >-
         Vaše platba byla úspěšná a Vaše registrace níže by se měla zobrazovat
         jako zaplacená.
+      #original_hash: 92dde77
+      payment_processing: 'Tvá platba byla potvrzena, ale transakce stále probíhá.'
+      #original_hash: 62d7351
+      button_text: Zaplatit nyní!
       hints:
         #original_hash: bf3a39e
         donation: 'Dobrovolný příspěvěk, který půjde jen organizačnímu týmu'
-        #original_hash: 16cf92d
-        card_information: >-
-          Informace o Vaší kartě se nikdy nedostanou k webu WCA. Vše je bezpečně
-          vyřízeno přes Stripe, který pro nás řeší platební proces.
+        #original_hash: f7fa263
+        payment_button: >-
+          Vaše platební informace se nikdy nedostanou na web WCA. Jsou bezpečně
+          odeslány Stripu, který transakci vyřídí a informuje nás o jejím
+          provedení.
       labels:
         #original_hash: 4de825f
         entry_fees: Registrační poplatky
+        #original_hash: dc9d458
+        fees_paid: Zaplaceno
+        #original_hash: cc632b5
+        fees_remaining: Zbývá
         #original_hash: 2c09302
         donation: Dar
-        #original_hash: 184150d
-        card_information: Informace o kartě
-        #original_hash: bc8091a
-        cardholder_name: Držitel karty
         #original_hash: 919710d
         show_donation: >-
           Rád bych přidal dobrovolný příspěvek, který půjde jen organizačnímu
           týmu
+        #original_hash: 4930c06
+        payment_information: Platební informace
+        #original_hash: de0fc95
+        payment_button: Zaplatit poplatky pomocí Stripu
+        #original_hash: f94d00f
+        ajax_error: WCA server error
+        #original_hash: e62c56c
+        stripe_error: Stripe error
+        #original_hash: 97f7359
+        subtotal: Mezisoučet
       alerts:
         #original_hash: a34940e
         not_a_number: 'Prosíme, zadejte platnou částku.'
@@ -2498,19 +2517,27 @@ cs:
         amount_too_low: >-
           Celková částka k zaplacení musí být minimálně v hodnotě registračního
           poplatku.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Chystáte se zaplatit nejméně dvojnásobek požadované částky. Pro
+          potvrzení stiskněte OK.
       errors:
         #original_hash: 166d48c
         already_paid: 'Poplatek nebyl účtován, protože registrační poplatek už je zaplacen'
-        #original_hash: b2bc8ed
+        #original_hash: f10c80c
         not_allowed: Nemůžete zaplatit za tuto registraci
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          Nenalezli jsme potvrzení platby na našem serveru. Platební proces byl
-          přerušen a nic Vám nebylo účtováno.
-        #original_hash: 63e0ec1
-        cardholder_name: 'Prosíme, zkontrolujte jméno držitele karty.'
-    #original_hash: 8607a87
-    payment_button_text: Zaplatit poplatky kreditní kartou
+        #original_hash: a073600
+        stripe_failed: Prosíme zkontrolujte Stripe transakci.
+        #original_hash: a32e40f
+        stripe_not_found: 'Stripe vrátilo ID transakce, které nebylo nalezeno.'
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe reported back a transaction secret that doesn't match our
+          records.
+        #original_hash: 8d1a199
+        payment_reset: Stripe odmítlo platbu.
+        #original_hash: bcf6a93
+        payment_pending: Platba ještě nebyla dokončena.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Abyste v budoucnu urychlili registraci, můžete si navolit své preferované
@@ -2598,7 +2625,7 @@ cs:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Prosíme ujistěte se, že všechna nefinálová kola mají specifikované
         postupové podmínky.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Kolo %{round_number} v %{event} má větší cutoff než time limit. Prosíme,
         ujistěte se, že je cutoff menší než time limit.
@@ -3289,8 +3316,6 @@ cs:
     cancelled_by_html: 'Zrušeno %{name} %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: 'Jste si jisti, že chcete zrušit soutěž?'
-    #original_hash: 9a42672
-    upload_results: Nahrát výsledky
     #original_hash: 01de5ee
     post_results: Sdílet výsledky
     #original_hash: b6513f1
@@ -3353,12 +3378,10 @@ cs:
         qualification_html: >-
           Kvalifikační časy musí být dosáhnuty v jiných soutěžích, abyste mohli
           soutěžit.
-        #original_hash: 3b524fd
-        qualification_all_events_html: 'Uzávěrka pro doszžení kvalifikačních časů je  <b>%{date}</b>.'
-        #original_hash: 0d791e9
-        qualification_some_events_html: >-
-          Uzávěrka pro nastavení kvalifikačních časů v %{events} je
-          <b>%{date}</b>.
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Kvalifikační časy musí být dosaženy před  <b>%{date}</b>.'
+        #original_hash: 5eac9e5
+        qualification_some_events_html: 'Kvalifikační časy v %{events} musí být dosaženy před <b>%{date}</b>.'
       #original_hash: 041a5de
       format: Formát
       #original_hash: 0d1fcc3

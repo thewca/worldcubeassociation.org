@@ -78,8 +78,14 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
 
   # Add an allow list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  def extension_white_list
+  def extension_allowlist
     %w(jpg jpeg gif png)
+  end
+
+  # Additionally filter uploads by content type,
+  # mainly to mitigate CVE-2016-3714
+  def content_type_allowlist
+    %r{image/}
   end
 
   # Override the filename of the uploaded files:

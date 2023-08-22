@@ -22,7 +22,7 @@
                 <% end %>
               </td>
               <td>
-                <%= wca_highlight(competition.countryId, query_parts) %>,
+                <%= wca_highlight(competition.country.name, query_parts) %>,
                 <%= wca_highlight(competition.cityName, query_parts) %>
               </td>
             </tr>
@@ -59,7 +59,7 @@
                 <% end %>
               </td>
               <td>
-                <%= person.countryId %>
+                <%= person.country.name %>
               </td>
             </tr>
           <% end %>
