@@ -65,7 +65,6 @@
     "react-leaflet": "^2.8.0",
     "react_ujs": "^2.7.1",
     "react-markdown": "^8.0.7",
-    "regenerator-runtime": "^0.13.11",
     "regenerator-runtime": "^0.14.0",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.66.1",
