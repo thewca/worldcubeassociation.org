@@ -13,7 +13,7 @@ function ResultRowHeader() {
       <Table.HeaderCell />
       <Table.HeaderCell>{I18n.t('common.average')}</Table.HeaderCell>
       <Table.HeaderCell />
-      <Table.HeaderCell>{I18n.t('common.user.citizen_of')}</Table.HeaderCell>
+      <Table.HeaderCell>{I18n.t('common.user.representing')}</Table.HeaderCell>
       <Table.HeaderCell>{I18n.t('common.solves')}</Table.HeaderCell>
     </Table.Row>
   );

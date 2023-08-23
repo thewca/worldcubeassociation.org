@@ -32,7 +32,7 @@
   <% add_to_packs("lodash_utils") %>
 
   <%#
-    Our webpacker packs (automatically split in chunks).
+    Our webpack packs (automatically split in chunks).
     Always *prepend* application, so that we load jquery first.
     We can't just add_to_packs application, because the yielded block will be
     evaluated first, and any pack added (like schedule) will be loaded before application.
@@ -64,6 +64,7 @@
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
   <% if EnvVars.WCA_LIVE_SITE? %>
     <script data-ad-client="ca-pub-8682718775826560" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Legacy GA property still active for transitioning numbers -->
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -73,6 +74,14 @@
       ga('create', 'UA-41256017-1', 'auto');
       ga("set", "anonymizeIp", true);
       ga('send', 'pageview');
+    </script>
+    <!-- New Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QB1H9R123K"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-QB1H9R123K', { 'anonymize_ip': true });
     </script>
   <% end %>
 </head>

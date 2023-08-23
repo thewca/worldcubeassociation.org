@@ -77,7 +77,11 @@
             </h4>
           </div>
           <div class="panel-body">
-            <%= render "payment_form" %>
+            <% if @registration.stripe_payment_intents.processing.any? %>
+              <%= render "payment_intents" %>
+            <% else %>
+              <%= render "payment_form" %>
+            <% end %>
           </div>
         </div>
       <% end %>

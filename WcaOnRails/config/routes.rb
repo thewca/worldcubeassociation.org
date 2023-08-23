@@ -25,7 +25,10 @@ Rails.application.routes.draw do
     delete 'users/sign-out-other' => 'sessions#destroy_other', as: :destroy_other_user_sessions
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
-  post 'registration/:id/process-payment-intent' => 'registrations#process_payment_intent', as: :registration_payment_intent
+  post 'registration/:id/load-payment-intent' => 'registrations#load_payment_intent', as: :registration_payment_intent
+  get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
+  get 'registration/stripe-denomination' => 'registrations#stripe_denomination', as: :registration_stripe_denomination
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -65,7 +68,6 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
-    get 'payment-success' => 'registrations#payment_success'
     get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
@@ -75,12 +77,17 @@ Rails.application.routes.draw do
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
     get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
-    get '/admin/check-existing-results' => "admin#check_results", as: :admin_check_existing_results
+    get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
+    post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
     post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
     post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
+    get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
+    get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
+    post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
+    delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
+    delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
-  post 'admin/check-existing-results' => "admin#run_validators", as: :admin_run_validators
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -113,6 +120,11 @@ Rails.application.routes.draw do
 
   get "media/validate" => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
+
+  get 'export/results' => 'database#results_export', as: :db_results_export
+  get 'export/developer' => 'database#developer_export', as: :db_dev_export
+  # redirect from the old path that used to be linked on GitHub
+  get 'wst/wca-developer-database-dump.zip', to: redirect('/export/developer/wca-developer-database-dump.zip')
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   resources :persons, only: [:index, :show]
@@ -157,22 +169,23 @@ Rails.application.routes.draw do
   patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
-  get 'teams-committees' => 'static_pages#teams_committees'
+  get 'contact' => 'static_pages#contact'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
-  get 'contact' => 'static_pages#contact'
-  get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'privacy' => 'static_pages#privacy'
   get 'faq' => 'static_pages#faq'
-  get 'score-tools' => 'static_pages#score_tools'
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
+  get 'merch' => 'static_pages#merch'
+  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'privacy' => 'static_pages#privacy'
+  get 'score-tools' => 'static_pages#score_tools'
+  get 'speedcubing-history' => 'static_pages#speedcubing_history'
+  get 'teams-committees' => 'static_pages#teams_committees'
+  get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
-  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
-  get 'tutorial' => redirect('/education', status: 302)
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
@@ -194,13 +207,30 @@ Rails.application.routes.draw do
   get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
+  get '/admin/check_results' => 'admin#check_results'
+  get '/admin/validation_competitions' => "admin#compute_validation_competitions"
+  post '/admin/check_results' => 'admin#do_check_results'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
   get '/admin/edit_person' => 'admin#edit_person'
+  get '/admin/fix_results' => 'admin#fix_results'
+  get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
   patch '/admin/update_person' => 'admin#update_person'
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
+  get '/admin/generate_exports' => 'admin#generate_exports'
+  get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
+  get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
+  get '/admin/check_regional_records' => 'admin#check_regional_records'
+  get '/admin/override_regional_records' => 'admin#override_regional_records'
+  post '/admin/override_regional_records' => 'admin#do_override_regional_records'
+  get '/admin/finish_persons' => 'admin#finish_persons'
+  post '/admin/finish_persons' => 'admin#do_finish_persons'
+  get '/admin/finish_unfinished_persons' => 'admin#finish_unfinished_persons'
+  get '/admin/complete_persons' => 'admin#complete_persons'
+  post '/admin/complete_persons' => 'admin#do_complete_persons'
+  get '/admin/peek_unfinished_results' => 'admin#peek_unfinished_results'
   get '/admin/anonymize_person' => 'admin#anonymize_person'
   post '/admin/anonymize_person' => 'admin#do_anonymize_person'
   get '/admin/reassign_wca_id' => 'admin#reassign_wca_id'
@@ -261,6 +291,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
+      get '/competition_series/:id' => 'api#competition_series'
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'

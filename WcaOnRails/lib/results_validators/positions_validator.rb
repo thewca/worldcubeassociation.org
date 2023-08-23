@@ -5,31 +5,31 @@ module ResultsValidators
     WRONG_POSITION_IN_RESULTS_ERROR = "[%{round_id}] %{person_name} is in the wrong position: expected %{expected_pos}, but got %{pos}."
     POSITION_FIXED_INFO = "[%{round_id}] Automatically fixed the position of %{person_name} from %{pos} to %{expected_pos}."
 
-    @@desc = "This validator checks that positions stored in results are correct with regard to the actual results."
+    @desc = "This validator checks that positions stored in results are correct with regard to the actual results."
 
     def self.has_automated_fix?
       true
     end
 
-    def validate(competition_ids: [], model: Result, results: nil)
-      reset_state
-      # Get all results if not provided
-      results ||= model.sorted_for_competitions(competition_ids)
-      results.group_by(&:competitionId).each do |competition_id, results_for_comp|
+    def run_validation(validator_data)
+      validator_data.each do |competition_data|
+        competition = competition_data.competition
+        results_for_comp = competition_data.results
+
         results_for_comp.group_by { |r| "#{r.eventId}-#{r.roundTypeId}" }.each do |round_id, results_for_round|
           expected_pos = 0
           last_result = nil
           # Number of tied competitors, *without* counting the first one
           number_of_tied = 0
-          results_for_round.each_with_index do |result, index|
+          results_for_round.each do |result|
             # Check for position in round
-            # The scope "InboxResult.sorted_for_competitions" already sorts by average then best,
+            # The validator data already sorts by average then best via ValidatorData#load_data,
             # so we simply need to check that the position stored matched the expected one
 
             # Unless we find two exact same results, we increase the expected position
             tied = false
             if last_result
-              if ["a", "m"].include?(result.formatId)
+              if %w[a m].include?(result.formatId)
                 # If the ranking is based on average, look at both average and best.
                 tied = result.average == last_result.average && result.best == last_result.best
               else
@@ -48,7 +48,7 @@ module ResultsValidators
 
             if expected_pos != result.pos
               if @apply_fixes
-                @infos << ValidationInfo.new(:results, competition_id,
+                @infos << ValidationInfo.new(:results, competition.id,
                                              POSITION_FIXED_INFO,
                                              round_id: round_id,
                                              person_name: result.personName,
@@ -56,7 +56,7 @@ module ResultsValidators
                                              pos: result.pos)
                 result.update!(pos: expected_pos)
               else
-                @errors << ValidationError.new(:results, competition_id,
+                @errors << ValidationError.new(:results, competition.id,
                                                WRONG_POSITION_IN_RESULTS_ERROR,
                                                round_id: round_id,
                                                person_name: result.personName,
@@ -67,7 +67,6 @@ module ResultsValidators
           end
         end
       end
-      self
     end
   end
 end

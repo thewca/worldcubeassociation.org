@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe RegistrationsController do
+RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as organizer" do
     let!(:organizer) { FactoryBot.create(:user) }
     let(:competition) { FactoryBot.create(:competition, :registration_open, organizers: [organizer], events: Event.where(id: %w(222 333))) }
@@ -205,6 +205,11 @@ RSpec.describe RegistrationsController do
       expect(flash[:danger]).to include I18n.t('registrations.errors.undelete_banned')
     end
 
+    it "can edit administrative notes on registration" do
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq "admin notes"
+    end
+
     describe "with views" do
       render_views
       it "does not update registration that changed" do
@@ -347,6 +352,13 @@ RSpec.describe RegistrationsController do
       expect(registration.reload.comments).to eq "new comment"
       expect(flash[:success]).to eq "Updated registration"
     end
+
+    it "cannot edit administrative notes on registration" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq ""
+    end
   end
 
   context "signed in as competitor" do
@@ -481,6 +493,13 @@ RSpec.describe RegistrationsController do
       registration = FactoryBot.create :registration, :accepted, competition: competition, user_id: user.id
       get :edit, params: { id: registration.id }
       expect(response).to redirect_to root_path
+    end
+
+    it "cannot edit administrative notes on registration" do
+      registration = FactoryBot.create :registration, :pending, competition: competition, user_id: user.id
+
+      patch :update, params: { id: registration.id, registration: { administrative_notes: "admin notes" } }
+      expect(registration.reload.administrative_notes).to eq ""
     end
 
     it "cannot edit someone else's registration" do
@@ -627,31 +646,42 @@ RSpec.describe RegistrationsController do
     end
 
     it "sorts 444 by single, and average, and handles ties" do
-      registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration1.personId
-      FactoryBot.create :ranks_single, rank: 20, best: 2000, eventId: "444", personId: registration1.personId
+      user_a = FactoryBot.create(:user, :wca_id, name: 'A')
+      user_b = FactoryBot.create(:user, :wca_id, name: 'B')
 
-      registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      FactoryBot.create :ranks_average, rank: 1, best: 2000, eventId: "444", personId: registration1.personId
+      FactoryBot.create :ranks_single, rank: 1, best: 1500, eventId: "444", personId: registration1.personId
+
+      registration2 = FactoryBot.create(:registration, :accepted, user: user_a, competition: competition, events: [Event.find("444")])
       FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
       FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.personId
 
-      registration3 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 9, best: 3232, eventId: "444", personId: registration3.personId
+      registration3 = FactoryBot.create(:registration, :accepted, user: user_b, competition: competition, events: [Event.find("444")])
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration3.personId
+      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration3.personId
 
       registration4 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 11, best: 4545, eventId: "444", personId: registration4.personId
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration4.personId
+      FactoryBot.create :ranks_single, rank: 30, best: 2500, eventId: "444", personId: registration4.personId
+
+      registration5 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration5.personId
+      FactoryBot.create :ranks_single, rank: 31, best: 2600, eventId: "444", personId: registration5.personId
+
+      registration6 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration3.id, registration2.id, registration1.id, registration4.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4]
-      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false]
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id, registration3.id, registration4.id, registration5.id, registration6.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
+      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444", sort_by: :single }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id, registration3.id, registration4.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, nil, nil]
-      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, nil, nil]
+      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id, registration3.id, registration4.id, registration5.id, registration6.id]
+      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
+      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
     end
 
     it "handles missing average" do
@@ -816,15 +846,20 @@ RSpec.describe RegistrationsController do
       context "processes a payment" do
         before :each do
           sign_in organizer
-          card = FactoryBot.create(:credit_card)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
+          post :load_payment_intent, params: {
+            id: registration.id,
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
             stripe_account: competition.connected_stripe_account_id,
           )
-          post :process_payment_intent, params: {
+          get :payment_completion, params: {
             id: registration.id,
-            payment_method_id: pm.id,
-            amount: registration.outstanding_entry_fees.cents,
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
           }
           @payment = registration.reload.registration_payments.first
         end
@@ -832,7 +867,7 @@ RSpec.describe RegistrationsController do
         it 'issues a full refund' do
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
           expect(refund.amount).to eq competition.base_entry_fee.cents
@@ -846,7 +881,7 @@ RSpec.describe RegistrationsController do
           refund_amount = competition.base_entry_fee.cents / 2
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: refund_amount } }
           expect(response).to redirect_to edit_registration_path(registration)
-          refund = Stripe::Refund.retrieve(registration.reload.registration_payments.last.receipt.stripe_id, stripe_account: competition.connected_stripe_account_id)
+          refund = registration.reload.registration_payments.last.receipt.retrieve_stripe
           expect(competition.base_entry_fee).to be > 0
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee / 2
           expect(refund.amount).to eq competition.base_entry_fee.cents / 2

@@ -16,8 +16,8 @@ pt-BR:
     FM: Estados Federados da Micronésia
     #original_hash: db871b0
     GW: Guiné Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: Hong Kong, China
     #original_hash: 3ad2dd8
     KN: São Cristóvão e Névis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ pt-BR:
     MK: Macedônia do Norte
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macau
+    #original_hash: 77e4070
+    MO: Macau, China
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ pt-BR:
     SZ: Suazilândia
     #original_hash: 4d206a8
     TT: Trindade e Tobago
+    #original_hash: fefc818
+    TW: Taipé Chinesa
     #original_hash: 3fa9b2d
     VC: São Vicente e Granadinas
     #original_hash: 9af4622
@@ -957,7 +959,7 @@ pt-BR:
         competitor_limit_reason: >-
           Qual a razão para o limite de competidores? Por favor preencha em
           inglês!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           O número máximo de convidados por competidor permitido nessa
           competição. Inscrições com convidados além desse número serão
@@ -1629,8 +1631,10 @@ pt-BR:
       statistics: Estatísticas
       #original_hash: 82dabd0
       multimedia: Multimídia
-      #original_hash: 4fd2a7f
-      db_export: Export do Banco de Dados
+      #original_hash: cfde9db
+      db_results_export: Export de Resultados
+      #original_hash: 7533c29
+      db_dev_export: Export de Desenvolvedor
       #original_hash: 1fa73f3
       regulations: Regulamento
       #original_hash: 6bce1b5
@@ -2203,7 +2207,7 @@ pt-BR:
       can_only_register_for_qualified_events: >-
         Você não pode se inscrever em eventos para os quais não está
         qualificado.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Você precisa deixar um comentário. Por favor leia as instruções de
         inscrição para verificar o que precisa ser incluído (p. ex. numa
@@ -2646,7 +2650,7 @@ pt-BR:
       not_announced: Essa competição está visível para o público mas ainda não foi anunciada.
       #original_hash: ab61991
       announced: Competição anunciada com sucesso!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Esta competição foi cancelada. Por favor verifique a seção de
         informações para mais detalhes.
@@ -2694,13 +2698,17 @@ pt-BR:
       tooltip_registered: Você está inscrito.
       #original_hash: f2d092f
       tooltip_waiting_list: Você está na lista de espera/não confirmado.
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Infelizmente sua inscrição foi excluída. Verifique seu e-mail para
+        detalhes, ou contate o(s) organizador(es).
+      #original_hash: 1b6dc61
       confirmed_visible: Está competição está confirmada e visível
-      #original_hash: fa186a9
+      #original_hash: abc2f96
       confirmed_not_visible: Esta competição está confirmada mas não está visível
-      #original_hash: a66bbe3
+      #original_hash: 6d6290b
       not_confirmed_visible: Esta competição não está confirmada mas está visível
-      #original_hash: 0f44e45
+      #original_hash: b299b27
       not_confirmed_not_visible: Esta competição não está confirmada nem visível
       #original_hash: a821396
       stripe_connected: >-
@@ -2712,7 +2720,7 @@ pt-BR:
       stripe_disconnected_failure: Houve um erro ao tentar desconectar a conta do Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: Houve um problema e não foi possível conectar sua conta do Stripe.
-      #original_hash: 724cf0d
+      #original_hash: 1b92d16
       championship_exists: 'Já existe um %{championship_type} em %{year}'
       #original_hash: 0644bdc
       orga_closed_reg_success: Inscrições encerradas com sucesso.
@@ -5346,3 +5354,36 @@ pt-BR:
       sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão Legal do TNoodle
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Export de Resultados da WCA
+      #original_hash: f9fe9df
+      description: >-
+        Nessa página oferecemos os resultados da WCA para download em vários
+        formatos, para que você possa usar ou analisar em grande escala.
+        Geralmente vamos atualizar após cada fim de semana de competições,
+        quando os resultados estiverem finalizados. Os arquivos são numerados e
+        datados para que você possa ver se já tem a última versão.
+      #original_hash: 4f59283
+      permalink: link permanente
+      file_formats:
+        #original_hash: b086d79
+        sql: 'Comandos SQL, para importar em bancos de dados SQL.'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Valores separados por tabulação, para planilhas no OpenOffice.org,
+          Excel, etc.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        O arquivo incluído %{readme_filename} contém os termos de uso e uma
+        descrição geral (em Inglês, não traduzida):
+    developer_export:
+      #original_hash: 97d6025
+      heading: Export de Desenvolvedor do WST
+      #original_hash: eba769a
+      description_html: >-
+        Nessa página oferecemos o export de desenvolvedor do WST para download
+        como um "dump" SQL. Detalhes podem ser encontrados em %{github_link}.
+      #original_hash: a479c9c
+      download: Baixar

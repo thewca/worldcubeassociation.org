@@ -31,8 +31,6 @@ class CompetitionsController < ApplicationController
     :post_results,
   ]
 
-  after_action :refresh_cache_on_update, only: [:update]
-
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
       unless competition.user_can_view?(current_user)
@@ -139,7 +137,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = @competitions.where("end_date < ?", Date.today).reverse_order
       unless params[:year] == "all years"
-        @competitions = @competitions.where(year: params[:year])
+        @competitions = @competitions.where("YEAR(start_date) = :comp_year", comp_year: params[:year])
       end
     end
 
@@ -238,22 +236,22 @@ class CompetitionsController < ApplicationController
     comp = competition_from_params
     if ComputeAuxiliaryData.in_progress?
       flash[:danger] = t('competitions.messages.computing_auxiliary_data')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     unless comp.results.any?
       flash[:danger] = t('competitions.messages.no_results')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     if comp.results_posted?
       flash[:danger] = t('competitions.messages.results_already_posted')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     ActiveRecord::Base.transaction do
@@ -263,7 +261,7 @@ class CompetitionsController < ApplicationController
     end
 
     flash[:success] = t('competitions.messages.results_posted')
-    redirect_to admin_edit_competition_path(comp)
+    redirect_to competition_admin_import_results_path(comp)
   end
 
   def orga_close_reg_when_full_limit
@@ -531,7 +529,6 @@ class CompetitionsController < ApplicationController
   end
 
   def update
-    puts "running update"
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
@@ -552,7 +549,19 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update(comp_params_minus_id)
-      puts "competitions.update if block"
+      # Automatically compute the cellName and ID for competitions with a short name.
+      if !@competition.confirmed? && @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        old_competition_id = @competition.id
+        @competition.create_id_and_cell_name(force_override: true)
+
+        # Save the newly computed cellName without breaking the ID associations
+        # (which in turn is handled by a hack in the next if-block below)
+        @competition.with_old_id { @competition.save! }
+
+        # Try to update the ID only if it _actually_ changed
+        new_id = @competition.id unless @competition.id == old_competition_id
+      end
+
       if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
@@ -593,28 +602,31 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    competition_ids = current_user.organized_competitions.pluck(:competition_id)
-    competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
-    registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-    @registered_for_by_competition_id = registrations.uniq.to_h do |r|
-      [r.competition.id, r]
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = current_user.organized_competitions.pluck(:competition_id)
+      competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+      registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+      @registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition.id, r]
+      end
+      competition_ids.concat(@registered_for_by_competition_id.keys)
+      if current_user.person
+        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
+      end
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.includes(:delegate_report, :delegates)
+                                .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
+      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+      bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
+      @bookmarked_competitions = Competition.not_over
+                                            .where(id: bookmarked_ids.uniq)
+                                            .sort_by(&:start_date)
+      @show_registration_status = params[:show_registration_status] == "on"
     end
-    competition_ids.concat(@registered_for_by_competition_id.keys)
-    if current_user.person
-      competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
-    end
-    # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
-    # For example, mailing all competitors about the cancellation.
-    # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
-    competitions = Competition.includes(:delegate_report, :delegates)
-                              .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
-                              .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
-    @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
-    bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
-    @bookmarked_competitions = Competition.not_over
-                                          .where(id: bookmarked_ids.uniq)
-                                          .sort_by(&:start_date)
   end
 
   def for_senior
@@ -742,14 +754,5 @@ class CompetitionsController < ApplicationController
         end
       end
     end
-  end
-
-  private def refresh_cache_on_update
-    cache_key = "wcif/#{@competition.id}"
-    puts "deleting cache"
-    Rails.cache.delete(cache_key)
-
-    puts "warming cache"
-    Rails.cache.write(cache_key, @competition.to_wcif)
   end
 end

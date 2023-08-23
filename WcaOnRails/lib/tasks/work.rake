@@ -9,6 +9,7 @@ namespace :work do
     SubmitReportNagJob.perform_later
     ComputeLinkings.perform_later
     DumpDeveloperDatabase.perform_later
+    DumpPublicResultsDatabase.perform_later
     UnstickPosts.perform_later
     RegistrationReminderJob.perform_later
     # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.

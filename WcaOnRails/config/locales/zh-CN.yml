@@ -16,8 +16,8 @@ zh-CN:
     FM: 密克罗尼西亚联邦
     #original_hash: db871b0
     GW: 几内亚比绍
-    #original_hash: 2f488ff
-    HK: 香港
+    #original_hash: e758117
+    HK: 香港，中国
     #original_hash: 3ad2dd8
     KN: 圣基茨和尼维斯
     #original_hash: 5c34abb
@@ -30,16 +30,18 @@ zh-CN:
     MK: 北马其顿
     #original_hash: 928b7c4
     MM: 缅甸
-    #original_hash: d887137
-    MO: 澳门
+    #original_hash: 77e4070
+    MO: 澳门，中国
     #original_hash: 05a15c1
-    PS: 巴基斯坦
+    PS: 巴勒斯坦
     #original_hash: 655191a
     ST: 圣多美和普林西比
     #original_hash: 16cc7f8
     SZ: 斯威士兰
     #original_hash: 4d206a8
     TT: 特立尼达和多巴哥
+    #original_hash: fefc818
+    TW: 中华台北
     #original_hash: 3fa9b2d
     VC: 圣文森特和格林纳丁斯
     #original_hash: 9af4622

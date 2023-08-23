@@ -1,0 +1,59 @@
+<% render_step ||= nil %>
+
+<% inbox_step_index = AdminController::RESULTS_POSTING_STEPS.index @inbox_step %>
+<% render_step_index = AdminController::RESULTS_POSTING_STEPS.index render_step %>
+
+<h2>
+  Import <code><%= render_step.to_s.camelize %>s</code>
+  <% if inbox_step_index >= render_step_index %>
+    <% if @existing_data[render_step] > 0 %>
+      <%= link_to ui_icon('trash'), competition_admin_delete_inbox_data_path(@competition, model: render_step), class: 'inbox-trigger', data: { jquery_method: :delete, jquery_confirm: delete_inbox_confirm_message(render_step) } %>
+    <% end %>
+
+    <% if inbox_step_index == render_step_index %>
+      <%= link_to ui_icon('refresh'), competition_admin_result_inbox_steps_path(@competition), class: 'inbox-trigger' %>
+    <% end %>
+  <% end %>
+</h2>
+
+<% if inbox_step_index < render_step_index %>
+  This step is still pending! <%= ui_icon('clock') %>
+<% elsif inbox_step_index == render_step_index %>
+  <% if render_step == :inbox_result %>
+    <p>There are a total of <b><%= @existing_data[:inbox_result] %></b> InboxResults pending.</p>
+    <p>There are a total of <b><%= @existing_data[:result] %></b> rows inserted into the Results table.</p>
+
+    <%# Small hack because I want to reuse the existing results preview panel, but it expects a @results_validator. %>
+    <%# So we just create one on the fly and "run" the checks without actually checking anything. %>
+    <% results_validator = ResultsValidators::CompetitionsResultsValidator.new %>
+    <% results_validator.validate [@competition.id] %>
+
+    <%= render "results_submission/results_preview_panel", results_validator: results_validator, max_height: "500px", expand_all: true, unindent_solves: true %>
+
+    <p>Please <%= link_to "finish importing results", competition_admin_import_inbox_results_path(@competition), class: 'inbox-trigger btn btn-primary', data: { jquery_method: :post } %>
+      to proceed to the next step</p>
+  <% elsif render_step == :inbox_person %>
+    <%# TODO: Redo link pending other PR %>
+    <p>There are a total of <b><%= @existing_data[:inbox_person] %></b> entries in InboxPersons pending for this competition.</p>
+
+    <ul>
+      <li><b><%= @existing_data[:newcomer_person] %></b> entries from InboxPersons for this competition are missing a WCA ID.</li>
+      <li>
+        <b style="color:<%= @existing_data[:newcomer_result] == 0 ? "#0B0" : "#F00" %>"><%= @existing_data[:newcomer_result] %></b>
+        competitors in the Results table for this competition still have to be assigned a WCA ID.
+      </li>
+    </ul>
+
+    <p>
+      <% if @existing_data[:newcomer_result] == 0 %>
+        All newcomers seem to have been assigned WCA IDs.
+        Please <%= link_to "delete the inbox rows", competition_admin_delete_inbox_data_path(@competition, model: :inbox_person), class: 'inbox-trigger btn btn-primary', data: { jquery_method: :delete } %>.
+      <% else %>
+        Please <%= link_to "assign WCA IDs to newcomers", admin_complete_persons_path(finish_persons_form: { competition_ids: @competition.id }), target: '_blank', class: 'btn btn-primary' %>
+        to proceed to the next step.
+      <% end %>
+    </p>
+  <% end %>
+<% else %>
+  This step has been completed! <%= ui_icon('check') %>
+<% end %>

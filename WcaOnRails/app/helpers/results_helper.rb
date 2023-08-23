@@ -106,12 +106,11 @@ module ResultsHelper
     record_class
   end
 
-  def execute_cached_query(cache_params, sql_query)
-    cache_key = cache_params.join('-')
-
-    CachedResult.find_or_create_by!(key_params: cache_key) do |cached_result|
-      db_rows = ActiveRecord::Base.connection.exec_query(sql_query)
-      cached_result.payload = db_rows.to_json
+  def execute_cached_query(cache_key, sql_query)
+    # As we are using the native Rails cache we set the expiry date to 7 days
+    # as CAD is ran usually before that
+    Rails.cache.fetch(cache_key, expires_in: 7.days) do
+      ActiveRecord::Base.connection.exec_query(sql_query)
     end
   end
 end

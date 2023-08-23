@@ -1,0 +1,97 @@
+<div id="fix-results-selector">
+  <%= simple_form_for @result_selector, url: @result_selector.result_or_repeat_link(self), method: :get, html: { id: "fix-selector-form" } do |f| %>
+    <%= f.input :person_id, as: :string, label: "WCA ID", hint: @result_selector.person_hint(self) %>
+
+    <div id="selector-result-details">
+      <% if @result_selector.person
+           # NOT querying person_id here, to make sure that user input exists %>
+        <% if @result_selector.eligible_competitions.any? %>
+          <%= f.input :competition_id, collection: @result_selector.eligible_competitions, value_method: :id, label_method: :name, label: "Competition", hint: false %>
+        <% end %>
+
+        <% if @result_selector.eligible_events.any? %>
+          <%= f.input :event_id, collection: @result_selector.eligible_events, value_method: :id, label_method: :name, label: "Event", hint: false %>
+        <% end %>
+
+        <% if @result_selector.eligible_round_types.any? %>
+          <%= f.input :round_type_id, collection: @result_selector.eligible_round_types, value_method: :id, label_method: :name, label: "Round", hint: false %>
+        <% end %>
+
+        <% if @result_selector.selected_result %>
+          <%= f.button :submit, value: "Edit result", class: "btn-primary" %>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="progress" style="display: none">
+      <div class="progress-bar progress-bar-striped progress-bar-success active" role="progressbar" style="width: 100%">
+        <span class="sr-only">LOADING</span>
+      </div>
+    </div>
+  <% end %>
+
+  <script>
+    var $personIdInput = $('input[name="fix_results_selector[person_id]"]');
+    var $competitionIdSelect = $('select[name="fix_results_selector[competition_id]"]');
+    var $eventIdSelect = $('select[name="fix_results_selector[event_id]"]');
+    var $roundTypeIdSelect = $('select[name="fix_results_selector[round_type_id]"]');
+
+    function reloadForm(clearCompetition, clearEvent, clearRoundType) {
+      $('input[type=submit]').hide();
+      $('div.progress').show();
+
+      window.wca.cancelPendingAjaxAndAjax('fix_results_selector', {
+        url: '<%= admin_fix_results_ajax_path %>',
+        data: {
+          'fix_results_selector[person_id]': $personIdInput.val(),
+          'fix_results_selector[competition_id]': clearCompetition ? null : $competitionIdSelect.val(),
+          'fix_results_selector[event_id]': clearEvent ? null : $eventIdSelect.val(),
+          'fix_results_selector[round_type_id]': clearRoundType ? null : $roundTypeIdSelect.val(),
+        },
+        success: function (data) {
+          $('#fix-results-selector').replaceWith(data);
+
+          if (<%= @result_selector.person.nil?.to_json %>) {
+            if ($personIdInput.val().length === 10) {
+              $personIdInput.focus();
+              $personIdInput[0].setSelectionRange(10, 10);
+            }
+          }
+        }
+      });
+    }
+
+    $personIdInput.on('input', function (e) {
+      this.value = this.value.toUpperCase();
+
+      // only using a simple, naive WCA ID regex because this feature will be used by WRT members who know what they're doing
+      var matchesWcaId = this.value.match(/^\d{4}\w{4}\d{2}$/);
+
+      var isBackstroke = e.originalEvent.inputType === 'deleteContentBackward' || e.originalEvent.inputType === 'deleteWordBackward';
+      var isDeletingCompletedWcaId = this.value.length < 10 && isBackstroke;
+
+      if (matchesWcaId) {
+        reloadForm(true, true, true);
+      } else if (isDeletingCompletedWcaId) {
+        $('#selector-result-details').hide();
+        $('p.help-block').hide();
+      }
+    }).on('keypress', function (e) {
+      if (e.which === 13 && !e.ctrlKey) {
+        e.preventDefault();
+      }
+    });
+
+    $competitionIdSelect.on('change', function () {
+      reloadForm(false, true, true);
+    });
+
+    $eventIdSelect.on('change', function () {
+      reloadForm(false, false, true);
+    });
+
+    $roundTypeIdSelect.on('change', function () {
+      reloadForm(false, false, false);
+    });
+  </script>
+</div>

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class SyncMailingListsJob < SingletonApplicationJob
+class SyncMailingListsJob < ApplicationJob
+  include SingletonApplicationJob
+
   queue_as :default
 
   SENIOR_DELEGATES_REGIONS_INFO = [

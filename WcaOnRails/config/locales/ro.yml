@@ -16,8 +16,8 @@ ro:
     FM: Statele Federale ale Microneziei
     #original_hash: db871b0
     GW: Guinea-Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: 'Hong Kong, China'
     #original_hash: 3ad2dd8
     KN: Federația Saint Kitts și Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ ro:
     MK: Macedonia de Nord
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macao
+    #original_hash: 77e4070
+    MO: 'Macao, China'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ ro:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trinidad și Tobago
+    #original_hash: fefc818
+    TW: Taipeiul Chinez
     #original_hash: 3fa9b2d
     VC: Saint Vincent și Grenadinele
     #original_hash: 9af4622
@@ -192,10 +194,10 @@ ro:
       #original_hash: 672b22c
       cellName: Finală
     g:
-      #original_hash: ccf6f8e
-      name: Runda 3
-      #original_hash: ccf6f8e
-      cellName: Runda 3
+      #original_hash: e2f74d2
+      name: Semifinală
+      #original_hash: e2f74d2
+      cellName: Semifinală
     h:
       #original_hash: 4d618bb
       name: Calificări
@@ -455,8 +457,8 @@ ro:
         name: Nume
         #original_hash: f91b080
         name_reason: Explicatie pentru nume
-        #original_hash: b649210
-        cellName: Nickname pentru competiție
+        #original_hash: fdba578
+        cellName: Apelativ pentru competiție
         #original_hash: d523ebb
         countryId: Țară
         #original_hash: 25b7b06
@@ -482,7 +484,7 @@ ro:
         #original_hash: 28a6fbb
         currency_code: RON
         #original_hash: 2e3ed8b
-        staff_delegate_ids: Delegați WCA
+        staff_delegate_ids: Delegat/Delegați WCA
         #original_hash: c0ddcd6
         trainee_delegate_ids: 'Delegați Candidați WCA:'
         #original_hash: 958562e
@@ -505,6 +507,10 @@ ro:
         competitor_limit_reason: Motivul pentru limita de concurenți
         #original_hash: 3c23a67
         guests_enabled: Însoțitori
+        #original_hash: 7d78478
+        guests_per_registration_limit: Numărul maxim de spectatori per înregistrare
+        #original_hash: 22516e1
+        events_per_registration_limit: Număr maxim de probe per înregistrare
         #original_hash: 089cbfd
         receive_registration_emails: >-
           Trimite-mi notificare pe e-mail când cineva se înregistrează pentru
@@ -527,6 +533,10 @@ ro:
           înregistrare.
         #original_hash: 556fda0
         extra_registration_requirements: Alte cerințe pentru înregistrare
+        #original_hash: 6c8e5bf
+        force_comment_in_registration: >-
+          Cere-le concurenților să scrie un comentariu obligatoriu la
+          înregistrare
         #original_hash: 2529d04
         on_the_spot_registration: Înregistrări pe loc
         #original_hash: 69780b5
@@ -546,7 +556,7 @@ ro:
         #original_hash: 3542671
         guests_entry_fee_lowest_denomination: Taxa de intrare pentru spectatori
         #original_hash: bb16247
-        guest_entry_status: Afișează mesaj pentru accesul gratuit al invitaților
+        guest_entry_status: Afișează mesaj pentru accesul gratuit al spectatorilor
         #original_hash: 723cad9
         early_puzzle_submission: >-
           Vreau să le cer concurenților să își depună puzzleurile la un moment
@@ -573,10 +583,10 @@ ro:
         #original_hash: 4baf44b
         championship_type: Tipul campionatului
       competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Nume
+        #original_hash: e2b4898
+        wcif_id: ID-ul Seriei
+        #original_hash: 75ceb67
+        name: Numele Seriei
         #original_hash: 8a6bee1
         short_name: Nickname pentru serie
         #original_hash: af3d38e
@@ -590,6 +600,8 @@ ro:
         paid_entry_fees: Plată efectuată
         #original_hash: bae7d5b
         status: Statut
+        #original_hash: a6e8a0b
+        administrative_notes: Note administrative
         #original_hash: 709a232
         name: Nume
         #original_hash: a6b9d69
@@ -773,12 +785,12 @@ ro:
       guest_entry_status:
         #original_hash: 7e54323
         unclear: >-
-          Nu afișa nimic (și, eventual, elaborează secțiunea "Cerințe
-          suplimentare pentru înscriere")
+          Nu afișa nimic (poate poți elabora în secțiunea "Cerințe suplimentare
+          pentru înregistrare")
         #original_hash: 694bce4
-        free: '"Orice spectator poate asista gratuit"'
+        free: '"Orice spectator poate participa gratuit"'
         #original_hash: 762c509
-        restricted: '"Doar însoțitorii concurenților pot fi spectatori"'
+        restricted: '"Accesul spectatorilor este permis doar dacă însoțesc un concurent"'
   simple_form:
     #original_hash: 5397e05
     'yes': Da
@@ -817,14 +829,16 @@ ro:
         #original_hash: da39a3e
         competition_id: ''
       user:
-        #original_hash: 87e1e6f
-        dob: Introdu data nașterii în formatul an-lună-zi (AAAA-LL-ZZ)
-        #original_hash: d0bb74a
+        #original_hash: 7588d71
+        dob: >-
+          Introdu data nașterii concurentului în formatul an-lună-zi
+          (AAAA-LL-ZZ)
+        #original_hash: ac908c9
         name: >-
-          Introdu numele tău complet și corect (de exemplu <strong>Stefan
-          Pochmann</strong>, nu <strong>stefan pochmann</strong> sau <strong>S.
-          Pochmann</strong>). Nu este obligatoriu să iți treci toate prenumele
-          (dacă vrei, le poți scrie, întregi sau doar inițialele).
+          Introdu, în mod corect, numele complet al concurentului, de exemplu
+          <strong>Stefan Pochmann</strong>. Nu introdu numele neglijent, de
+          exemplu <strong>s pochman</strong>.<br/> Prenumele suplimentare
+          (complete sau doar inițialele) sunt opționale.
         #original_hash: da39a3e
         email: ''
         #original_hash: 8a91e53
@@ -875,10 +889,11 @@ ro:
           exemplu U.R.A. Spring 2016). Asigură-te că începi cuvintele cu literă
           mare. Numele trebuie să conțină numai caractere alfanumerice, spații
           și următoareel caractere speciale  -  &  .  :  '
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Un nume mai scurt de afișat. Dacă numele competiției este scurt îl
-          puteți folosi chiar pe acesta (exemplu: Europe 2016).
+          Un nume mai scurt pentru a fi afișat. Dacă numele competiției are mai
+          puțin de %{short_name_limit} caractere, nu trebuie să editezi acest
+          câmp, întrucât trebuie să fie identic cu numele complet.
         #original_hash: bce4589
         cityName: >-
           Numele orașului și statului (unde este cazul) în care are loc
@@ -890,7 +905,7 @@ ro:
           pentru concurenți și spectatori și alte detalii relevante pentru
           pamenii ce vor să concureze sau să fie în public.
         #original_hash: b4d020f
-        staff_delegate_ids: Delegații WCA pentru competiție
+        staff_delegate_ids: Delegați WCA pentru competiție
         #original_hash: cb9882c
         trainee_delegate_ids: Delegați Candidați WCA pentru această competiție
         #original_hash: 517d376
@@ -918,7 +933,7 @@ ro:
         external_registration_page: >-
           Pagina unde concurenții se pot înregistra pentru competiție. Trebuie
           să fi un URL http(s) valid .
-        #original_hash: a6f6562
+        #original_hash: 82ea18a
         base_entry_fee_lowest_denomination: >-
           Taxa de înregistrare de bază. Va fi afișată pe pagina de informații a
           competiției și pe pagina de înregistrare, dacă există. Dacă este
@@ -926,10 +941,7 @@ ro:
           gratuit va fi afișat. <br><br><b>DISCLAIMER: Următorul estimat al
           Cotizațiilor WCA este doar o aproximație bazată pe cursul valutar
           curent și nu are sub nicio formă un caracter juridic obligatoriu
-          pentru plata Cotizațiilor </b><br>Apasă pe "Actualizare Competiție"
-          după schimbare codului valutei pentru a-l sincroniza cu estimarea.
-          Dacă nu este disponibil niciun curs valutar pentru valuta respectivă,
-          nu se va afișa nimic.
+          pentru plata Cotizațiilor </b>
         #original_hash: 9735ddf
         currency_code: Codul valutei pentru taxe
         #original_hash: da39a3e
@@ -966,6 +978,17 @@ ro:
         competitor_limit_reason: >-
           De ce există limita numărului de concurenți? Te rugăm să scrii în
           limba engleză!
+        #original_hash: 4b51faa
+        guests_per_registration_limit: >-
+          Numărul de spectatori per înregistrare permis în cadrul acestei
+          competiții. Înregistrările care au prea mulți spectatori asociați vor
+          fi blocate. Lasă câmpul gol dacă nu există limită.
+        #original_hash: d09af8f
+        events_per_registration_limit: >-
+          Opțional, setează numărul total de probe pentru care un concurent se
+          poate înregostra (folosit în mod uzual pentru competițiile din
+          categoria "Favorites"). Trebuie să adaugi probe înainte de a utiliza
+          acest câmp. Lasă câmpul gol dacă nu există nicio limită.
         #original_hash: da39a3e
         venueAddress: ''
         #original_hash: 3de153b
@@ -1032,6 +1055,8 @@ ro:
         event_restrictions_reason: >-
           Te rugăm să elaborezi aici de ce soliciți restricționarea participării
           la anumite combinații de probe. Completează în engleză!
+        #original_hash: da39a3e
+        force_comment_in_registration: ''
         #original_hash: 1067798
         main_event_id: Câștigătorul acestei probe va fi câștigătorul competiției.
         #original_hash: da39a3e
@@ -1195,6 +1220,10 @@ ro:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Note suplimentare cu privire la managementul acestei înregistrări.
+          Concurentul nu are acces la aceste note.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1527,6 +1556,19 @@ ro:
           one: 'Formularul conține o eroare:'
           few: 'Formularul conține %{count} erori:'
           other: 'Formularul conține %{count} erori:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Ne pare rău, a apărut o eroare.'
+        #original_hash: d815249
+        500_contact: >-
+          Dacă raportezi eroarea către Echipa de Software, te rugăm să
+          menționezi Request ID-ul.
+        #original_hash: b61e305
+        400_error: Pagina pe care o cauți nu există.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Dacă crezi că e vorba de o eroare, te rugăm să contactezi echipa de
+          Software și să incluzi Request ID-ul.
     doorkeeper:
       applications:
         help:
@@ -1562,12 +1604,14 @@ ro:
       welcome_back: >-
         Bine ai revenit! Pentru a-ți crea contul WCA trebuie să știm Id-ul WCA
         cu care ai participat la competiții.
-      #original_hash: 669fb57
+      #original_hash: ef8243e
       welcome_html: >-
-        Bine ai venit! înainte de a participa în prima ta competiție WCA avem
-        nevoie de câteva informații pentru a putea înregistra rezultatele tale.
-        Te asigurăm că data nașterii tale nu va fi niciodată vizibilă fără
-        permisiunea ta.
+        Bine ai venit! Înainte de a participa la prima ta competiție WCA, avem
+        nevoie de câteva informații suplimentare pentru administrarea
+        clasamentelor. Te asigurăm că data nașterii tale nu va fi niciodată
+        distribuită fără acordul tău. <br/><br/>Dacă înregistrezi un alt
+        concurent, te rugăm să completezi informațiile cu privire la
+        <strong>concurent</strong>.
   layouts:
     navigation:
       #original_hash: 0eb5ed5
@@ -1618,8 +1662,10 @@ ro:
       statistics: Statistici
       #original_hash: 82dabd0
       multimedia: Multimedia
-      #original_hash: 4fd2a7f
-      db_export: Export bază de date
+      #original_hash: cfde9db
+      db_results_export: Export Rezultate
+      #original_hash: 7533c29
+      db_dev_export: Export Dezvoltator
       #original_hash: 1fa73f3
       regulations: Regulament
       #original_hash: 6bce1b5
@@ -1650,8 +1696,8 @@ ro:
       results_team: Echipa de Rezultate
       #original_hash: 4e7afeb
       results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Baza de Date
       #original_hash: aee74b8
       new_post: Postare noua
       #original_hash: 0d67445
@@ -1676,6 +1722,12 @@ ro:
       manage_auth_app: Administrează aplicațiile autorizate
       #original_hash: acac109
       media_submission: Propuneri Media
+      #original_hash: cf01481
+      privacy: Confidențialitate
+      #original_hash: 4c4a2e8
+      disclaimer: Disclaimer
+      #original_hash: d561f1a
+      find_us: Contact
   homepage:
     #original_hash: 824d76b
     learn_more: Află mai multe
@@ -1867,6 +1919,24 @@ ro:
           %{preferences_link}.
         #original_hash: 7594a32
         regards_html: 'Toate cele bune, <br/>Echipa de Rezultate WCA din partea %{managers}.'
+      reset_password_instructions:
+        #original_hash: 3ffeb60
+        subject: Resetează parola contului WCA
+        #original_hash: 65611e9
+        greeting: 'Salutare,'
+        #original_hash: 7ea5bc8
+        instruction1: >-
+          Am primit o cerere pentru a reseta parola contului WCA asociată
+          adresei de e-mail %{user_email}. Deocamdată nu a fost operată nicio
+          schimbare asupra contului tău.
+        #original_hash: 60fef9e
+        instruction2: 'Îți poți reseta parola accesând linkul de mai jos:'
+        #original_hash: 00850c3
+        instruction3: 'Dacă nu ai cerut resetarea parolei, te rugăm să ignori acest e-mail.'
+        #original_hash: dbc2263
+        instruction4: >-
+          Ai vreo întrebare? Suntem bucuroși să îți răspundem! Te rugăm să ne
+          trimiți un mail la adresa %{contact_link}.
     claim_wca_id:
       #original_hash: f28bf87
       title: Obține Id-ul WCA
@@ -1991,12 +2061,16 @@ ro:
       remove_avatar: Înlătură avatarul
       #original_hash: 4bd25cf
       remove_avatar_confirm: Ești sigur că vrei să-ți ștergi avatarul?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Confirmă eliminarea avatarului
+      #original_hash: 010b0e5
+      remove_avatar_reason: Te rugăm să ne spui motivul pentru care dorești eliminarea.
       #original_hash: 141d1d7
       guidelines: Îndrumări
       avatar_guidelines:
         #original_hash: 255f28c
         '1': Toate avatarurile trebuie să fie poze cu persoane adevărate.
-        #original_hash: 9126b0c
+        #original_hash: b12d293
         '2': Tu trebuie să fii persoana afișată.
         #original_hash: de9b742
         '3': >-
@@ -2157,6 +2231,12 @@ ro:
       cannot_be_deleted_and_accepted: O înregistrare nu poate fi ștearsă și acceptată în același timp.
       #original_hash: a38d024
       must_register: trebuie să te înscrii la cel puțin un eveniment
+      #original_hash: abdc718
+      exceeds_event_limit:
+        zero: nu te poți înscrie la nicio probă
+        one: trebuie să te înscrii la o singură probă
+        few: trebuie să te înscrii la mai puține probe
+        other: 'trebuie să te înscrii la cel mult %{count} probe'
       #original_hash: e78eec3
       banned_html: >-
         Ai fost bannat. Dacă crezi că este o eroare, te rugăm să contactezi <a
@@ -2168,6 +2248,11 @@ ro:
       series_more_than_one_accepted: Poți fi acceptat doar pentru câte o competiție dintr-o Serie.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Nu te poți înregistra la probe pentru care nu ești calificat.
+      #original_hash: 22ca413
+      cannot_register_without_comment: >-
+        Trebuie să adaugi un comentariu. Te rugăm să completezi cu atenție
+        informațiile importante (de exemplu, într-o competiție FM simultană, la
+        ce locație vrei să concurezi).
     registration_info_people:
       #original_hash: bdf1f11
       newcomer:
@@ -2326,6 +2411,8 @@ ro:
       approved_registrations: Înregistrări aprobate
       #original_hash: bff04e8
       deleted_registrations: Înregistrări șterse
+      #original_hash: e86b1e1
+      non_competing: Înregistrare pentru spectatori
       #original_hash: ac5d958
       not_paid: Neplătit
       registered:
@@ -2406,6 +2493,13 @@ ro:
       %{competitor_limit} și a fost deja atinsă. Dacă te înregistrezi, vei fi
       adăugat pe o listă de așteptare. Este posibil ca înregistrarea ta să nu
       fie aprobată decât dacă se eliberează un loc.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      Limita numărului de concurenți pentru această competiție este 
+      %{competitor_limit} și este posibil să se fi atins deja. Dacă te
+      înregistrzi, vei fi pus într-o listă de așteptare. În acest caz, este
+      posibil ca participarea ta să fie aprobată doar în urma eliberării unui
+      loc.
     #original_hash: 855ca9c
     can_register: 'Te poți înregistra pentru %{comp} mai jos.'
     #original_hash: 4167ed7
@@ -2451,43 +2545,70 @@ ro:
       payment_successful: >-
         Plata a fost efectuată cu succes, iar înscrierea ta trebuie să apară cu
         statutul "plătit" mai jos.
+      #original_hash: 92dde77
+      payment_processing: 'Plata a fost confirmată, însă tranzacția este încă în derulare.'
+      #original_hash: 62d7351
+      button_text: Plătește acum!
       hints:
         #original_hash: bf3a39e
         donation: Donație opțională care va ajunga numai la echipa de organizare
-        #original_hash: 16cf92d
-        card_information: >-
-          Informațiile de pe cardul tău nu ajung niciodată la WCA. Ele sunt
-          transmise pe un canal sigur către Stripe, care se ocupă de procesul de
-          plată și ne contactează ulterior.
+        #original_hash: f7fa263
+        payment_button: >-
+          Informațiile de plată nu ajung niciodată pe site-ul WCA. În schimb,
+          sunt trimise securizat către Stripe, platformă ce se ocupă de procesul
+          de plată și ne comunică rezultatul.
       labels:
         #original_hash: 4de825f
         entry_fees: Taxe de înregistrare
+        #original_hash: dc9d458
+        fees_paid: Plătit
+        #original_hash: cc632b5
+        fees_remaining: Rest de plată
         #original_hash: 2c09302
         donation: Donație
-        #original_hash: 184150d
-        card_information: Informații despre card
-        #original_hash: bc8091a
-        cardholder_name: Numele de pe card
+        #original_hash: 919710d
+        show_donation: >-
+          Doresc să fac o donație suplimentară ce va ajunge exclusiv la echipa
+          de organizare.
+        #original_hash: 4930c06
+        payment_information: Informații pentru plată
+        #original_hash: de0fc95
+        payment_button: Plătește taxele de înregistrare prin Stripe
+        #original_hash: f94d00f
+        ajax_error: Eroare de server WCA
+        #original_hash: e62c56c
+        stripe_error: Eroare de la Stripe
+        #original_hash: 97f7359
+        subtotal: Subtotal
       alerts:
         #original_hash: a34940e
         not_a_number: Te rugăm să introduci o cantitate validă
         #original_hash: 707b9ca
         amount_too_low: Suma totală trebuie să fie cel puțin cât taxa de înregistrare.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Urmează să plătești o sumă cel puțin dublă față de totalul necesar ca
+          înregistrarea ta să continue. Te rugăm să confirmi plata, apăsând
+          butonul OK.
       errors:
         #original_hash: 166d48c
         already_paid: >-
           Suma nu a fost extrasă deoarece taxa de înregistrare a fost deja
           plătită
-        #original_hash: b2bc8ed
-        not_allowed: Nu poți plăti pentru acea înscriere
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          Nu am găsit solicitarea de plată pe serverul nostru. Tranzacția a fost
-          abandonată și nu am extras bani de pe cardul tău.
-        #original_hash: 63e0ec1
-        cardholder_name: Te rugăm să verifici numele de pe card.
-    #original_hash: 8607a87
-    payment_button_text: Plătește taxa de intrare cardul.
+        #original_hash: f10c80c
+        not_allowed: Nu poți plăti pentru acea înscriere.
+        #original_hash: a073600
+        stripe_failed: Te rugăm să verifici tranzacția Stripe
+        #original_hash: a32e40f
+        stripe_not_found: Stripe a raportat un ID de tranzacție ce nu poate fi identificat.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe a raportat un element secret al tranzacției care nu se
+          potrivește cu informațiile noastre.
+        #original_hash: 8d1a199
+        payment_reset: Plata a fost respinsă de către Stripe.
+        #original_hash: bcf6a93
+        payment_pending: Plata nu a fost încă completată.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Pentru a te înscrie mai repede în viitor, îți poți seta probele preferate
@@ -2582,10 +2703,11 @@ ro:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Asigură-te că toate rundele ne-finale au condiții de avansare
         specificate.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Runda %{round_number} în %{event} are un cutoff mai mare decât timpul
-        limită. Te rugăm să te asiguri că cutofful este mai mic decât limita.
+        limită. Te rugăm să te asiguri că cutofful nu este mai mare decât
+        limita.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Runda %{round_number} în %{event} are un cutoff mai mic de 5 secunde. Te
@@ -2614,7 +2736,7 @@ ro:
       not_announced: 'Această competiție este vizibilă, dar nu a fost încă anunțată.'
       #original_hash: ab61991
       announced: Competiție anunțată cu succes!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Această competiție a fost anulată. Verifică secțiunea de informații
         pentru mai multe detalii.
@@ -2662,22 +2784,41 @@ ro:
       tooltip_registered: Ești înregistrat(ă).
       #original_hash: f2d092f
       tooltip_waiting_list: Ești pe lista de așteptare.
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Din păcate înregistrarea ta a fost ștearsă. Te rugăm să-ți verifici
+        e-mailul pentru detali, sau să contactezi organizatorii.
+      #original_hash: 1b6dc61
       confirmed_visible: Competiția este confirmată și vizibilă.
-      #original_hash: fa186a9
+      #original_hash: abc2f96
       confirmed_not_visible: 'Competiția este confirmată, dar nu este vizibilă.'
-      #original_hash: a66bbe3
+      #original_hash: 6d6290b
       not_confirmed_visible: 'Competiția nu este confirmată, dar este vizibilă.'
-      #original_hash: 0f44e45
+      #original_hash: b299b27
       not_confirmed_not_visible: 'Competiția nu este nici confirmată, nici vizibilă.'
       #original_hash: a821396
       stripe_connected: >-
         Ai connectat cu cu succes contul tău Stripe, și acum poți primi plăți de
         înregistrare pentru această competiție.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Contul Stripe deconectat cu succes.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: A apărut o eroare la deconectarea contului Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: A apărut o problemă și nu am putut conecta contul tău Stripe.
-      #original_hash: 724cf0d
-      championship_exists: 'Există deja un %{championship_type} în %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Există deja un %{championship_type} în %{year}.'
+      #original_hash: 0644bdc
+      orga_closed_reg_success: Înregistrarile au fost închise cu succes.
+      #original_hash: 7f197a0
+      orga_closed_reg_failure: Înregistrările nu pot fi închise.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Această competiție nu are un termen limită pentru acceptarea
+        concurenților pe lista de așteptare. Dacă folosești o listă de
+        așteptare, te rugăm să specifici un termen limită. Dacă nu folosești o
+        listă de așteptare, te rugăm să specifici asta în informațiile despre
+        înregistrare.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Competițiile mele
@@ -2767,6 +2908,8 @@ ro:
         Notă: Te poți înscrie la toate competițiile dintr-o Serie, dar numai o
         singură participare poate fi confirmată și acceptată. <b> Este permisă
         participare la o singură competiție dintr-o Serie!</b>
+      #original_hash: 9bb1965
+      competitor_limit: Limită concurenți
       #original_hash: 196725e
       competitor_limit_is: 'Există o limită de %{competitor_limit} concurenți.'
       #original_hash: 5101f65
@@ -2819,9 +2962,21 @@ ro:
       guests_pay: 'Spectatorii pot urmări competiția, pentru o taxă de %{guests_base_fee}.'
       guests_free:
         #original_hash: 573eeb7
-        free: Orice spectator poate asista gratuit.
+        free: Orice spectator poate participa gratuit.
         #original_hash: f1e6aef
         restricted: Spectatorii pot fi doar însoțitori ai concurenților.
+      #original_hash: 35f892a
+      guest_limit:
+        zero: Concurenții nu pot veni însoțiți de niciun spectator.
+        one: Concurenții pot veni însoțiți un singur spectator.
+        few: 'Concurenții pot veni însoțiți de cel mult %{count} spectatori.'
+        other: 'Concurenții pot veni însoțiți de cel mult %{count} spectatori.'
+      #original_hash: bad09c8
+      event_limit:
+        zero: Concurenții nu se pot înscrie la nicio probă.
+        one: Concurenții se pot înscrie la o singură probă.
+        few: 'Concurenții se pot înscrie la cel mult %{count}  probe.'
+        other: 'Concurenții se pot înscrie la cel mult %{count} probe.'
       #original_hash: 64e0ddd
       require_qualification: Concurenții se pot înscrie doar la probele pentru care sunt calificați.
       #original_hash: 97a31ee
@@ -3102,10 +3257,10 @@ ro:
         calculated: 'Cotizațiile WCA estimate pentru %{limit} concurenți sunt %{estimate}'
         #original_hash: 5e8cffe
         per_competitor: 'Cotizațiile WCA estimate per concurent sunt %{estimate}'
-        #original_hash: 83d4cdc
+        #original_hash: 1b67d84
         ajax_error: >-
-          A apărut o eroare la estimare Cotizațiilor, setează la zero și
-          reintrodu taxa de înregistrare de bază.
+          A apărut o eroare la estimare Cotizațiilor, posibil din cauza faptului
+          că nu există un curs de schimb valabil pentru valuta selectată.
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3173,6 +3328,10 @@ ro:
       series_distance_km: 'Competiția se află prea departe de %{competition}.'
       #original_hash: 4a5d7c5
       series_distance_days: 'Competiția este programată prea târziu față de %{competition}.'
+      #original_hash: 7fc8fba
+      must_ask_about_guests_if_specifying_limit: >-
+        Trebuie cerute informații despre însoțitori, dacă există o limită de
+        spectatori.
     new:
       #original_hash: 1208df7
       create_competition: Creează competiție
@@ -3224,6 +3383,8 @@ ro:
       delegates: Delegat/ Delegați
       #original_hash: eb9a4bc
       date: Data
+      #original_hash: 6c82e6d
+      time: Ora
       #original_hash: d219c68
       location: Locație
       #original_hash: 4232080
@@ -3246,6 +3407,17 @@ ro:
       show_events: Arată probe
       #original_hash: 0df66f7
       hide_events: Ascunde probe
+    colliding_registration_start_competitions:
+      #original_hash: 8343ae2
+      label: 'Conflict cu privire la perioada înregistrărilor (încep în %{hours} ore)'
+      #original_hash: f1cecf1
+      no_comp_colliding: Nu există conflicte cu privire la perioada înregistrărilor!
+      #original_hash: 3e1051e
+      no_registration_start_date_yet: >-
+        Nu ai selectat o dată de începere a înregistrărilor pentru această
+        competiție.
+      #original_hash: c38824e
+      opens_registration_at: permite înregistrările începând cu
     #original_hash: 06b01c4
     announcements: Anunțuri
     #original_hash: a2b80b0
@@ -3260,8 +3432,6 @@ ro:
     cancelled_by_html: 'Anulată de %{name} în %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Ești sigur că vrei să anulezi competiția?
-    #original_hash: 9a42672
-    upload_results: Încarcă rezultatele
     #original_hash: 01de5ee
     post_results: Postează rezultatele
     #original_hash: b6513f1
@@ -3270,6 +3440,24 @@ ro:
     cancel_mistake: Ai făcut o greșeală?
     #original_hash: 0fb43d5
     note_before_cancel: 'Notă: doar competițiile confirmate pot fi anulate'
+    #original_hash: b38ee61
+    orga_close_reg: Închide înregistrările
+    #original_hash: b2bfea9
+    orga_close_reg_confirm: >-
+      Ești sigur că vrei să oprești înregistrările? Această acțiune nu este
+      reversibilă!
+    #original_hash: ce5686a
+    note_reg_not_full_orga_close_reg: >-
+      Notă: poți opri înregistrările doar după ce s-a atins limita numărului de
+      concurenți.
+    #original_hash: 1ae594d
+    stripe_disconnect: Deconectează contul Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      Ești sigur că vrei să deconectezi contul Stripe? Această acțiune este
+      ireversibilă!
+    #original_hash: 9d473a2
+    note_reg_closed_orga_close_reg: 'Notă: înregistrările sunt deja oprite.'
     show:
       #original_hash: b0fe391
       general_info: Informații generale
@@ -3311,11 +3499,11 @@ ro:
         qualification_html: >-
           Timpii de calificare trebuie să fie obținuți în alte competiții WCA
           pentru a permite participarea.
-        #original_hash: 3b524fd
-        qualification_all_events_html: 'Termenul pentru setarea timpilor de calificare este <b>%{date}</b>.'
-        #original_hash: 0d791e9
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Timpii de calificare trebuie setați înainte de <b>%{date}</b>.'
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
-          Termenul pentru setarea timpilor de calificare la %{events}  este
+          Timpii de calificare pentru %{events}  trebuie setați înainte de
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
@@ -3481,10 +3669,11 @@ ro:
       title: Recorduri
     #original_hash: e02fccb
     last_updated_html: 'Actualizat la: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Unele filtre (precum anii anteriori) sunt temporar dezactivate. Dacă ai
-      experiență în optimizări SQL, te rugăm să contactezi WST!
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Unele filtre (cum ar fi anii anteriori) sunt dezactivate temporar. Echipa
+      de Software lucrează pentru remedierea filtrelor - ne cerem scuze pentru
+      inconvenient.
     #original_hash: e3710ed
     tooltip_no_years: >-
       Baza noastră de date este prea mare pentru a calcula informații cu
@@ -4588,6 +4777,11 @@ ro:
           independent WCIF. Importă scramble-urile dintr-unul sau mai multe
           fișiere json. Exportă rezultatele în formatul corespunzător pentru a
           le tranmite către WCA.
+      groups:
+        #original_hash: 311a3f6
+        title: Grupe de concurs
+        #original_hash: 74a0926
+        description: Vezi grupele de concurs pentru orice competiție în desfășurare
   logo:
     #original_hash: c72c969
     title: Logoul WCA
@@ -4973,14 +5167,13 @@ ro:
     paragraph4:
       #original_hash: b6dca56
       title: Reguli privind distanța
-      #original_hash: 79ed06e
+      #original_hash: f5eeb95
       content1: >-
-        Ca regulă generală, Competițiile WCA sunt acceptate dacă sunt la cel
-        puțin 100 km sau 19 zile distanță de altă competiție. WCAT trebuie să
-        aprobe separat competițiile care nu îndeplinesc aceste criterii.
-        Delegatul care cere aprobarea unei astfel de competiții trebuie să ofere
-        informații suplimentare. Argumente posibile pentru aprobarea unei
-        asemenea competiții:
+        Competițiile WCA vor fi aprobate dacă sunt la cel puțin 10 km sau 5 zile
+        distanță de altă competiție. WCAT trebuie să aprobe separat competițiile
+        care nu îndeplinesc aceste criterii. Delegatul care cere aprobarea unei
+        astfel de competiții trebuie să ofere informații suplimentare. Argumente
+        posibile pentru aprobarea unei asemenea competiții:
       olist1:
         #original_hash: de00462
         '1': Cele două competiții nu au probe comune
@@ -5000,10 +5193,10 @@ ro:
             #original_hash: 75aa0c7
             1a: Time frames when both are celebrated can’t overlap.
         '2':
-          #original_hash: 8d9c548
+          #original_hash: b2b8004
           content1: >-
-            Dacă locația unei astfel de competiții este la mai puțin de 100 km
-            de orice altă competiție obișnuită, atunci
+            Dacă locația unei astfel de competiții este la mai puțin de 10 km de
+            orice altă competiție obișnuită, atunci
           alist1:
             #original_hash: 8f532bb
             2a: 'trebuie să existe minim 5 zile între cele două competiții, sau'
@@ -5264,3 +5457,75 @@ ro:
     privacy: Confidențialitate
     #original_hash: 4c4a2e8
     disclaimer: Disclaimer
+  api:
+    #original_hash: 4ab4ae5
+    manage_oauth_html: 'Mergi la %{oauth_link} pentru a-ți administra aplicațiile OAuth.'
+    #original_hash: d965ad1
+    token_request_intro: >-
+      Uite un exemplu de a obține un token de acces folosind ID-ul Aplicației,
+      Client Secret, email-ul și parola ta WCA, în italic:
+    #original_hash: 59d8cf3
+    user_email_placeholder: YOUR_EMAIL
+    #original_hash: 981eb7e
+    user_password_placeholder: YOUR_PASSWORD
+    #original_hash: 80c5cf5
+    user_info_request_intro: >-
+      Un token de acces OAuth poate fi folosit până la expirare pentru a face
+      cereri API autorizate. De exemplu, pentru a accesa informații despre
+      contul tău:
+    #original_hash: 040b3da
+    legal_tnoodle_api_header: Versiunea TNoodle legală
+  merch:
+    #original_hash: 96a95a1
+    title: Merchandise WCA
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        WCA are produse de merchandise exclusive ce pot fi achiziționate!
+        Tricouri, Hanorace, Stickere, Stackmats, Rucsacuri și multe altele!
+        Designurile noastre sunt actualizate permanent, de exemplu logo-ul WCA,
+        merchandise oficial pentru Campionatul Mondial sau designuri privind
+        Recorduri Mondiale.
+      #original_hash: 2865e1d
+      '2': >-
+        Cel mai bun mod de a susține WCA - o organizație non-profit operată de
+        voluntari - este să cumperi Merchandise WCA din magazinele noastre:
+        Folosim toate profiturile din vânzări pentru a finanța mai departe
+        campionate, echipamente și alte activități necesare derulării
+        activității WCA.
+      #original_hash: 8e57552
+      '3': >-
+        Poți cumpăra merchandise-ul nostru de oriunde - există magazine în
+        Europa, America, India, iar în curând și în multe alte locuri!
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Export Rezultate WCA
+      #original_hash: f9fe9df
+      description: >-
+        Pe această pagină punem la dispoziție rezultatele WCA, ce pot fi
+        descărcate în mai multe formate pentru ca tu să le poți folosi/analiza.
+        De regulă facem actualizări după fiecare weekend cu competiții, când
+        rezultatele sunt finalizate. Fișierele sunt numerotate și datate, deci
+        poți urmări dacă ai cea mai nouă versiune.
+      #original_hash: 4f59283
+      permalink: permalink
+      file_formats:
+        #original_hash: b086d79
+        sql: 'SQL statements, for import into SQL databases.'
+        #original_hash: 5f6fb6e
+        tsv: 'Tab-separated values, for spreadsheets in OpenOffice.org, Excel, etc.'
+      #original_hash: 178506e
+      hint_readme_html: >-
+        Fișierul %{readme_filename} inclus conține termenii de utilizare și o
+        descriere generală (în limba engleză):
+    developer_export:
+      #original_hash: 97d6025
+      heading: Export Dezvoltator WST
+      #original_hash: eba769a
+      description_html: >-
+        Pe această pagină oferim dezvoltatorilor WST posibilitatea exportării
+        prin descărcarea sub formă de SQL dump. Mai multe detalii aici:
+        %{github_link}.
+      #original_hash: a479c9c
+      download: Descărcare

@@ -16,8 +16,8 @@ sv:
     FM: Mikronesiska federationen
     #original_hash: db871b0
     GW: Guinea-Bissau
-    #original_hash: 2f488ff
-    HK: Hongkong
+    #original_hash: e758117
+    HK: 'Hongkong, Kina'
     #original_hash: 3ad2dd8
     KN: Saint Kitts och Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ sv:
     MK: Nordmakedonien
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macau
+    #original_hash: 77e4070
+    MO: 'Macau, Kina'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ sv:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trinidad och Tobago
+    #original_hash: fefc818
+    TW: Kinesiska Taipei
     #original_hash: 3fa9b2d
     VC: Saint Vincent och Grenadinerna
     #original_hash: 9af4622
@@ -307,8 +309,8 @@ sv:
     world: Värld
     #original_hash: 2513cf0
     continent: Kontinent
-    #original_hash: d523ebb
-    country: Land
+    #original_hash: 0f21717
+    country: Region
     #original_hash: 0154c0d
     here: här
     #original_hash: 77003d0
@@ -327,8 +329,8 @@ sv:
     user:
       #original_hash: 603a218
       wca_id: WCA-ID
-      #original_hash: e0f64f7
-      citizen_of: Medborgare i
+      #original_hash: fa4c045
+      representing: Representerar
     #original_hash: 3fc0ba1
     all_regions: Alla regioner
     errors:
@@ -401,8 +403,8 @@ sv:
         unconfirmed_wca_id: Obekräftat WCA-ID
         #original_hash: 8ed8874
         login: E-post eller WCA-ID
-        #original_hash: 1528d10
-        country_iso2: Medborgarskap
+        #original_hash: fa4c045
+        country_iso2: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 7636bbc
@@ -448,10 +450,10 @@ sv:
         name: Namn
         #original_hash: f91b080
         name_reason: Anledningen till namnet
-        #original_hash: b649210
-        cellName: Smeknamn för tävlingen
-        #original_hash: d523ebb
-        countryId: Land
+        #original_hash: fdba578
+        cellName: Förkortat namn för tävlingen
+        #original_hash: 0f21717
+        countryId: Region
         #original_hash: 25b7b06
         cityName: Stadens namn
         #original_hash: 67cd406
@@ -583,6 +585,8 @@ sv:
         paid_entry_fees: Betald
         #original_hash: bae7d5b
         status: Status
+        #original_hash: a6e8a0b
+        administrative_notes: Administrativa kommentarer
         #original_hash: 709a232
         name: Namn
         #original_hash: a6b9d69
@@ -622,8 +626,8 @@ sv:
       person:
         #original_hash: 8c41ae8
         wca_id: Person
-        #original_hash: d523ebb
-        countryId: Land
+        #original_hash: fa4c045
+        countryId: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 8a754c6
@@ -693,8 +697,8 @@ sv:
       regional_organization:
         #original_hash: 709a232
         name: Namn
-        #original_hash: d523ebb
-        country: Land
+        #original_hash: 0f21717
+        country: Region
         #original_hash: 2e8a57c
         website: Hemsida
         #original_hash: 83fce83
@@ -866,10 +870,11 @@ sv:
           Open 2016). Var noga med att använda stora bokstäver. Namnet får
           endast innehålla alfanumeriska tecken, bindestreck(-), och-tecken(&),
           punkt(.), Kolon(:), apostrofer('), och mellanslag().
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Ett kort namn för visning. Om namnet på tävlingen redan är kort kan du
-          återanvända namnet (t.ex. Europe 2006).
+          Ett kort namn för visning. Om namnet på tävlingen är under
+          %{short_name_limit} tecken bör detta inte ändras, utan bör vara samma
+          som det vanliga namnet.
         #original_hash: bce4589
         cityName: >-
           Namn på stad och stat (om tillämpligt) där tävlingen äger rum.
@@ -953,7 +958,7 @@ sv:
         competitor_limit_reason: >-
           Vad är anledningen till begränsningen av antalet tävlande? Vänligen
           fyll i detta på engelska!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           Antalet gäster per anmälan som är tillåtet vid denna tävling.
           Anmälningar med för många gäster kommer att blockeras. Lämna tomt om
@@ -1189,6 +1194,10 @@ sv:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Ytterligare kommentarer för hanteringen av den här anmälan. Dessa är
+          inte synliga för den tävlande.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1618,8 +1627,10 @@ sv:
       statistics: Statistik
       #original_hash: 82dabd0
       multimedia: Multimedia
-      #original_hash: 4fd2a7f
-      db_export: Databasexport
+      #original_hash: cfde9db
+      db_results_export: Resultatexport
+      #original_hash: 7533c29
+      db_dev_export: Utvecklarexport
       #original_hash: 1fa73f3
       regulations: Regler
       #original_hash: 6bce1b5
@@ -1650,8 +1661,8 @@ sv:
       results_team: Results Team
       #original_hash: 4e7afeb
       results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Databas
       #original_hash: aee74b8
       new_post: Nytt inlägg
       #original_hash: 0d67445
@@ -1974,11 +1985,12 @@ sv:
         delegater, arrangörer, teammedlemmar) och kan inte tas bort. Vänligen
         maila WCA Results Team för att ändra WCA-ID till ett annat konto.
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 8bb2def
         msg: >-
-          Du kan inte ändra namn, födelsedatum, kön eller land. Orsak:
-          %{reason}. Kontakta din <a href='%{delegate_url}'>Delegat</a> om du
-          behöver ändra något av dessa.
+          Du kan inte ändra namn, födelsedatum, kön eller region. Orsak:
+          %{reason}. Kontakta <a href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Results Team</a> eller din <a
+          href='%{delegate_url}'>Delegat</a> om du behöver ändra något av dessa.
         reason:
           #original_hash: 370ff12
           assigned: du har ett WCA-ID
@@ -2082,13 +2094,13 @@ sv:
       dob_past: får inte vara i framtiden
       #original_hash: b320913
       dob_recent: måste vara minst två år gammal
-      #original_hash: b64df45
+      #original_hash: afbf275
       already_represented_country: >-
-        Det går inte att ändra landet till ett land som personen har
+        Det går inte att ändra regionen till en region som personen har
         representerat tidigare.
-      #original_hash: b589014
+      #original_hash: 5fe15d4
       must_have_a_change: >-
-        Namnet eller landet måste vara annorlunda för att personen ska kunna
+        Namnet eller regionen måste vara annorlunda för att personen ska kunna
         uppdateras.
       #original_hash: 012f032
       must_be_senior: måste vara Senior-Delegat
@@ -2169,8 +2181,8 @@ sv:
       need_gender: Behöver ett kön
       #original_hash: ebf1ecb
       need_dob: Behöver ett födelsedatum
-      #original_hash: d84a54f
-      need_country: Behöver ett land
+      #original_hash: aab7355
+      need_country: Behöver en region
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: En anmälan kan inte raderas och godkännas samtidigt.
       #original_hash: a38d024
@@ -2191,7 +2203,7 @@ sv:
       series_more_than_one_accepted: Du kan bara vara anmäld till en tävling i tävlingsserien.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Du kan inte anmäla dig till grenar du inte kvalificerat dig för.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Du måste lämna en kommentar. Se anmälningskraven för information om vad
         som måste anges (t.ex. kan det vara vilken plats du ska att tävla på i
@@ -2318,11 +2330,11 @@ sv:
       title: 'Anmälningar för %{comp}'
       #original_hash: 5301648
       edit: Redigera
-      #original_hash: 0ab725c
+      #original_hash: beffc45
       country_plural:
         zero: '%{count} länder'
-        one: 1 land
-        other: '%{count} länder'
+        one: 1 region
+        other: '%{count} regioner'
       #original_hash: 1feee0e
       export_csv: Exportera som CSV
       #original_hash: 84add5b
@@ -2462,28 +2474,43 @@ sv:
       title: Anmälningsavgift
       #original_hash: d1569e6
       payment_successful: Din betalning lyckades och din anmälan bör stå som betald nedan.
+      #original_hash: 92dde77
+      payment_processing: 'Din betalning har bekräftats, men transaktionen är fortfarande pågående.'
+      #original_hash: 62d7351
+      button_text: Betala nu!
       hints:
         #original_hash: bf3a39e
         donation: >-
           Frivillig donation utöver anmälningsavgiften, som går till
           arrangörerna (för svenska tävlingar går dessa donationer till SveKub)
-        #original_hash: 16cf92d
-        card_information: >-
-          Din kortinformation når aldrig WCA:s hemsida. Den skickas säkert till
-          Stripe som hanterar betalningsprocessen och återkommer till oss.
+        #original_hash: f7fa263
+        payment_button: >-
+          Din betalningsinformation når aldrig WCA:s webbplats. Den skickas på
+          ett säkert sätt till Stripe som hanterar betalningsprocessen och
+          rapporterar tillbaka till oss.
       labels:
         #original_hash: 4de825f
         entry_fees: Anmälningsavgift
+        #original_hash: dc9d458
+        fees_paid: Betalat
+        #original_hash: cc632b5
+        fees_remaining: Återstående
         #original_hash: 2c09302
         donation: Donation
-        #original_hash: 184150d
-        card_information: Kortinformation
-        #original_hash: bc8091a
-        cardholder_name: Kortinnehavarens namn
         #original_hash: 919710d
         show_donation: >-
           Jag vill göra en extra frivillig donation till arrangörsteamet (för
           svenska tävlingar tillfaller donationerna SveKub)
+        #original_hash: 4930c06
+        payment_information: Betalningsinformation
+        #original_hash: de0fc95
+        payment_button: Betala avgifter med Stripe
+        #original_hash: f94d00f
+        ajax_error: WCA server-error
+        #original_hash: e62c56c
+        stripe_error: Stripe-error
+        #original_hash: 97f7359
+        subtotal: Summa
       alerts:
         #original_hash: a34940e
         not_a_number: Ange ett giltigt belopp.
@@ -2491,19 +2518,29 @@ sv:
         amount_too_low: >-
           Det totala beloppet måste vara minst de anmälningsavgifter som ska
           betalas.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Du håller på att betala minst dubbelt så mycket som krävs för din
+          anmälan. Bekräfta betalningen genom att trycka på OK.
       errors:
         #original_hash: 166d48c
         already_paid: Avgiften drogs inte eftersom anmälningsavgiften redan har betalats.
-        #original_hash: b2bc8ed
-        not_allowed: Du kan inte betala för den anmälan
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          "Payment intent" kunde inte hittas för att bekräfta på vår server.
-          Betalningsprocessen avbryts och ditt kort debiterades inte.
-        #original_hash: 63e0ec1
-        cardholder_name: Kontrollera kortinnehavarens namn.
-    #original_hash: 8607a87
-    payment_button_text: Betala avgiften med kort
+        #original_hash: f10c80c
+        not_allowed: Du kan inte betala för den anmälan.
+        #original_hash: a073600
+        stripe_failed: Var vänlig kontrollera Stripe-transaktionen
+        #original_hash: a32e40f
+        stripe_not_found: >-
+          Stripe rapporterade tillbaka ett transaktions-ID som inte kunde
+          hittas.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe rapporterade tillbaka en transaction secret som inte matchar
+          våra uppgifter.
+        #original_hash: 8d1a199
+        payment_reset: Betalningen avvisades av Stripe.
+        #original_hash: bcf6a93
+        payment_pending: Betalningen har inte genomförts ännu.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       För att göra anmälan snabbare i framtiden kan du välja dina favoritgrenar
@@ -2521,9 +2558,9 @@ sv:
         identifieras och databasen uppdateras därefter.
       #original_hash: 779b272
       registrations_file_label: Anmälningsfilen
-      #original_hash: 4017f0e
+      #original_hash: 224f3a6
       registrations_file_hint: >-
-        CSV-fil med kolumnerna: Status, Name, Country, WCA ID, Birth Date,
+        CSV-fil med kolumnerna: Status, Name, Region, WCA ID, Birth Date,
         Gender, Email, och en kolumn för varje gren.
       #original_hash: d6fbc9d
       import: Importera
@@ -2592,10 +2629,10 @@ sv:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Se till att alla icke-finalomgångar har ett specificerat villkor för
         vilka som går vidare.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Omgång %{round_number} i %{event} har en cutoff som är högre än
-        tidsgränsen, vänligen se till att cutoffen är lägre än tidsgränsen.
+        tidsgränsen, vänligen se till att cutoffen inte är högre än tidsgränsen.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Omgång %{round_number} i %{event} har en cutoff under 5 sekunder.
@@ -2624,7 +2661,7 @@ sv:
       not_announced: Tävlingen är synlig för allmänheten men har inte publicerats ännu.
       #original_hash: ab61991
       announced: Tävlingen publicerades!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: Tävlingen har ställts in. Se tävlingens information för mer detaljer.
       #original_hash: b4aa5ee
       cancel_success: Tävlingen har ställts in!
@@ -2666,14 +2703,18 @@ sv:
       tooltip_registered: Du är anmäld.
       #original_hash: f2d092f
       tooltip_waiting_list: Du är för närvarande på väntelistan.
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Din anmälan har tyvärr blivit raderad. Kolla din epost för mer detaljer,
+        eller kontakta arrangören.
+      #original_hash: 1b6dc61
       confirmed_visible: Tävlingen är bekräftad och synlig
-      #original_hash: fa186a9
-      confirmed_not_visible: Tävlingen är bekräftad men inte synlig
-      #original_hash: a66bbe3
-      not_confirmed_visible: Tävlingen är inte bekräftad men den är synlig
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: Tävlingen är inte bekräftad och inte synlig
+      #original_hash: abc2f96
+      confirmed_not_visible: Tävlingen är bekräftad men inte synlig.
+      #original_hash: 6d6290b
+      not_confirmed_visible: Tävlingen är inte bekräftad men den är synlig.
+      #original_hash: b299b27
+      not_confirmed_not_visible: Tävlingen är inte bekräftad och inte synlig.
       #original_hash: a821396
       stripe_connected: >-
         Du har nu lyckats ansluta ditt Stripe-konto och kan nu ta emot
@@ -2684,12 +2725,18 @@ sv:
       stripe_disconnected_failure: Det uppstod ett fel när Stripe-kontot skulle kopplas bort.
       #original_hash: 0a4bb53
       stripe_not_connected: Det uppstod ett problem och vi kunde inte ansluta ditt Stripe-konto.
-      #original_hash: 724cf0d
-      championship_exists: 'Det finns redan ett %{championship_type} för %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Det finns redan ett %{championship_type} för %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Kunde inte stänga anmälan.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Denna tävling har ingen deadline för att acceptera anmälningar från
+        väntelistan. Om du använder en väntelista, vänligen ange en deadline. Om
+        du inte använder en väntelista, kom ihåg att ange detta i
+        anmälningsvillkoren.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mina tävlingar
@@ -2916,9 +2963,9 @@ sv:
     index:
       #original_hash: db98a68
       title: Tävlingar
-      #original_hash: f483b9c
+      #original_hash: b24c9c0
       disclaimer: >-
-        Observera att på grund av COVID-19-pandemin kan vissa länder för
+        Observera att på grund av COVID-19-pandemin kan vissa regioner för
         närvarande inte hålla tävlingar.
       #original_hash: 6a72085
       all_events: Alla
@@ -2939,7 +2986,7 @@ sv:
       #original_hash: 769bb19
       state: När
       #original_hash: 4e9f7a3
-      present: Nuvarande
+      present: Kommande
       #original_hash: 76eec76
       recent: Nyligen
       #original_hash: 405c12f
@@ -3285,8 +3332,6 @@ sv:
     cancelled_by_html: 'Ställdes in av %{name} %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Är du säker på att du vill ställa in tävlingen?
-    #original_hash: 9a42672
-    upload_results: Ladda upp resultaten
     #original_hash: 01de5ee
     post_results: Publicera resultaten
     #original_hash: b6513f1
@@ -3351,11 +3396,11 @@ sv:
         qualification_html: >-
           Kvalificeringstider måste uppnås på andra WCA-tävlingar för att få
           tävla.
-        #original_hash: 3b524fd
-        qualification_all_events_html: 'Deadline för att uppnå kvalificeringstider är <b>%{date}</b>.'
-        #original_hash: 0d791e9
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Kvalificeringstider måste vara uppnådda före <b>%{date}</b>.'
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
-          Deadline för att uppnå kvalificeringstider i %{events} är
+          Kvalificeringstider för %{events} måste vara uppnådda före
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
@@ -3595,8 +3640,8 @@ sv:
       name: Namn
       #original_hash: 5faa59d
       result: Resultat
-      #original_hash: e0f64f7
-      citizen_of: Medborgare i
+      #original_hash: fa4c045
+      representing: Representerar
       #original_hash: 1917f4f
       competition: Tävling
       #original_hash: e7f6fc5
@@ -3627,8 +3672,8 @@ sv:
       name_or_wca_id: Delar av namn eller WCA-ID
       #original_hash: 709a232
       name: Namn
-      #original_hash: d523ebb
-      country: Land
+      #original_hash: fa4c045
+      country: Representerar
       #original_hash: 02ae2bd
       podiums: Pallplatser
       #original_hash: 56656a0
@@ -3640,11 +3685,11 @@ sv:
       completed_solves: Gjorda lösningar
       #original_hash: fc78642
       personal_records: Nuvarande Personliga Rekord
-      #original_hash: e631f13
+      #original_hash: 2ad8fd5
       odd_rank_reason: >-
-        En saknad ranking eller sämre landsranking än kontinentranking beror på
-        att personen bytt land. Resultat från den gamla regionen tas inte med i
-        den nuvarande regionrankningen.
+        En saknad ranking eller sämre regionsranking än kontinentranking beror
+        på att personen bytt region. Resultat från den gamla regionen tas inte
+        med i den nuvarande regionrankningen.
       #original_hash: a91508f
       championship_podiums: Pallplatser på Mästerskap
       championship_podium_levels:
@@ -3987,10 +4032,10 @@ sv:
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hur ser framtiden för WCA ut?
-    #original_hash: a08c67f
+    #original_hash: 2fea363
     whats_next_content_html: >-
       <p>World Cube Association har haft över 100 000 unika tävlande i 140 olika
-      länder och vi planerar inte att sakta in! Kubintresset har ökat stadigt
+      regioner och vi planerar inte att sakta in! Kubintresset har ökat stadigt
       sedan grundandet 2004 och vi vill möjliggöra detta att fortsätta in i
       framtiden genom att öka tillgängligheten av tävlingar till nya områden. I
       framtiden hoppas vi kunna stötta vårt community ännu mer genom samarbeten
@@ -4300,11 +4345,11 @@ sv:
     how_to:
       #original_hash: b243b1f
       title: Bli erkänd av WCA som Regional Organisation
-      #original_hash: f042a88
+      #original_hash: 9f31403
       description: >-
         WCA erkänner flera Regionala Organisationer över hela världen. Syftet
         med en Regional Organisation är att organisera WCA-tävlingar och stödja
-        WCA:s aktiviteter i regionen. Länder som vill bilda en Regional
+        WCA:s aktiviteter i regionen. Regioner som vill bilda en Regional
         Organisation uppmuntras att bidra till WCA i sitt område innan de lämnar
         in sin ansökan. Kontakta din närmaste WCA-Delegat för hjälp med att
         organisera en WCA-tävling i ditt område.
@@ -4982,8 +5027,8 @@ sv:
       olist1:
         #original_hash: de00462
         '1': The two competitions don't have events in common.
-        #original_hash: f7bacc5
-        '2': The two competitions take place in different countries.
+        #original_hash: b8ff462
+        '2': De två tävlingarna hålls i olika regioner.
       #original_hash: 5c5cf04
       content2: >-
         "3x3x3 Fewest Moves simultaneous competitions" are WCA competitions
@@ -5275,3 +5320,54 @@ sv:
       information om ditt konto:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Giltig TNoodle-version
+  merch:
+    #original_hash: 96a95a1
+    title: WCA-merch
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        WCA har exklusiv merch tillgänglig att köpa! Från t-shirts, hoodies,
+        klistermärken, stackmats, ryggsäckar, och mycket mer! Våra designer
+        uppdateras konstant, inklusive den klassiska WCA-loggan, officiella
+        produkter från världsmästerskap, och motiv med världsrekord.
+      #original_hash: 2865e1d
+      '2': >-
+        Att köpa merch genom våra butiker är det bästa sättet för dig att stötta
+        WCA - en icke-vinstdrivande, ideellt driven organisation. Vi använder
+        all vinst från produkterna till att finansiera mästerskap, utrustning,
+        och andra WCA-relaterade projekt.
+      #original_hash: 8e57552
+      '3': >-
+        Du kan köpa våra produkter över hela världen - vi har butiker baserade i
+        Europa, Amerika, och Indien, och fler är på väg!
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Export av WCA-Resultat
+      #original_hash: f9fe9df
+      description: >-
+        På den här sidan erbjuder vi WCA-resultaten för nedladdning i flera
+        olika format så att du kan använda/analysera dem. Vi kommer vanligtvis
+        att uppdatera efter varje tävlingshelg när resultaten är färdigställda.
+        Filerna är numrerade och daterade så att du kan se om du redan har den
+        senaste versionen.
+      #original_hash: 4f59283
+      permalink: permalänk
+      file_formats:
+        #original_hash: b086d79
+        sql: SQL för import till SQL-databaser.
+        #original_hash: 5f6fb6e
+        tsv: 'Tab-separerade värden, för kalkylark i OpenOffice.org, Excel, etc.'
+      #original_hash: 178506e
+      hint_readme_html: >-
+        Den medföljande filen %{readme_filename} innehåller användarvillkoren
+        och en allmän beskrivning (på engelska, inte översatt):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Utvecklarexport
+      #original_hash: eba769a
+      description_html: >-
+        På den här sidan erbjuder vi WST-utvecklarexporten för nedladdning som
+        SQL-dump. Detaljer finns på %{github_link}.
+      #original_hash: a479c9c
+      download: Ladda ned

@@ -39,24 +39,11 @@ namespace :db do
   namespace :dump do
     desc 'Generates a dump of our database with sensitive information stripped, safe for public viewing.'
     task development: :environment do
-      Dir.mktmpdir do |dir|
-        FileUtils.cd dir do
-          dump_filename = "wca-developer-database-dump.sql"
-          zip_filename = "wca-developer-database-dump.zip"
-          DatabaseDumper.development_dump(dump_filename)
+      DbDumpHelper.dump_developer_db
+    end
 
-          LogTask.log_task "Zipping '#{dump_filename}' to '#{zip_filename}'" do
-            system("zip #{zip_filename} #{dump_filename}") || raise("Error running `zip`")
-          end
-
-          public_zip_path = Rails.root.join('public', 'wst', zip_filename)
-
-          LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
-            FileUtils.mkpath(File.dirname(public_zip_path))
-            FileUtils.mv(zip_filename, public_zip_path)
-          end
-        end
-      end
+    task public_results: :environment do
+      DbDumpHelper.dump_results_db
     end
   end
 
@@ -69,27 +56,26 @@ namespace :db do
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dev_db_dump_url = "https://www.worldcubeassociation.org/wst/wca-developer-database-dump.zip"
-          dump_filename = "wca-developer-database-dump.sql"
-          zip_filename = "wca-developer-database-dump.zip"
+          dev_db_dump_url = "https://www.worldcubeassociation.org/export/developer/#{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}"
 
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
-            system("curl -o #{zip_filename} #{dev_db_dump_url}") || raise("Error while running `curl`")
+            system("curl -o #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK} #{dev_db_dump_url}") || raise("Error while running `curl`")
           end
-          LogTask.log_task("Unzipping #{zip_filename}") do
-            system("unzip #{zip_filename}") || raise("Error while running `unzip`")
+          LogTask.log_task("Unzipping #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}") do
+            system("unzip #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}") || raise("Error while running `unzip`")
           end
 
           config = ActiveRecord::Base.connection_db_config
-          LogTask.log_task "Clobbering contents of '#{config.database}' with #{dump_filename}" do
+          LogTask.log_task "Clobbering contents of '#{config.database}' with #{DbDumpHelper::DEVELOPER_EXPORT_SQL}" do
             DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config.database}")
             DatabaseDumper.mysql("CREATE DATABASE #{config.database}")
-            DatabaseDumper.mysql("SOURCE #{dump_filename}", config.database)
+            DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
           end
 
-          default_password = 'wca'
-          default_encrypted_password = User.new(password: default_password).encrypted_password
-          LogTask.log_task "Setting all user passwords to '#{default_password}'" do
+          dummy_password = DbDumpHelper.use_staging_password? ? EnvVars.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
+
+          default_encrypted_password = User.new(password: dummy_password).encrypted_password
+          LogTask.log_task "Setting all user passwords to '#{dummy_password}'" do
             User.update_all encrypted_password: default_encrypted_password
           end
 
