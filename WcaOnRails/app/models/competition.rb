@@ -1965,4 +1965,10 @@ class Competition < ApplicationRecord
         (format_id.nil? || format_id == r.format_id)
     end
   end
+
+  def dues_per_competitor_in_usd
+    ApplicationController.helpers.dues_per_competitor_in_usd(self)
+  rescue StandardError
+    0
+  end
 end

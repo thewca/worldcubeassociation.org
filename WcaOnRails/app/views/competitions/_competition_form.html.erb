@@ -251,19 +251,14 @@
 
         <script>
           function UpdateDues(){
+            var competitionId = $("#competition_id").val();
             var compLimitEnabled = "true" === $("#competition_competitor_limit_enabled").val();
             var compLimit = compLimitEnabled ? $("#competition_competitor_limit").val() : null;
             var currencyCode = $("#competition_currency_code").val();
-            var countryId = $("#competition_countryId").val();
-            var entryFee = $("#competition_base_entry_fee_lowest_denomination").val();
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
               url: '<%= calculate_dues_path %>',
               data: {
-                competitor_limit_enabled: compLimitEnabled,
-                competitor_limit: compLimit,
-                currency_code: currencyCode,
-                country_id: countryId,
-                entry_fee_cents: entryFee,
+                competition_id: competitionId,
               },
               success: function(data) {
                 if (compLimitEnabled) {
