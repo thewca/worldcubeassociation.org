@@ -1069,7 +1069,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_22_155348) do
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
     t.integer "senior_delegate_id"
-    t.string "region", limit: 255
+    t.string "location", limit: 255
     t.string "wca_id"
     t.string "avatar", limit: 255
     t.string "pending_avatar", limit: 255

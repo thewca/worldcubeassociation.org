@@ -10,23 +10,23 @@ RSpec.describe SyncMailingListsJob, type: :job do
     delegate = FactoryBot.create :delegate
     senior_delegate = FactoryBot.create :senior_delegate
     africa_delegate = FactoryBot.create :delegate
-    africa_delegate.senior_delegate.update(region: "Africa (France)")
+    africa_delegate.senior_delegate.update(location: "Africa (France)")
     asia_east_delegate = FactoryBot.create :delegate
-    asia_east_delegate.senior_delegate.update(region: "Asia East (Fujian, China)")
+    asia_east_delegate.senior_delegate.update(location: "Asia East (Fujian, China)")
     asia_southeast_delegate = FactoryBot.create :delegate
-    asia_southeast_delegate.senior_delegate.update(region: "Asia Southeast (Philippines)")
+    asia_southeast_delegate.senior_delegate.update(location: "Asia Southeast (Philippines)")
     asia_west_south_delegate = FactoryBot.create :delegate
-    asia_west_south_delegate.senior_delegate.update(region: "Asia West & South (India)")
+    asia_west_south_delegate.senior_delegate.update(location: "Asia West & South (India)")
     europe_central_eurasia_delegate = FactoryBot.create :delegate
-    europe_central_eurasia_delegate.senior_delegate.update(region: "Central Eurasia (Ukraine)")
+    europe_central_eurasia_delegate.senior_delegate.update(location: "Central Eurasia (Ukraine)")
     europe_delegate = FactoryBot.create :delegate
-    europe_delegate.senior_delegate.update(region: "Europe (Germany)")
+    europe_delegate.senior_delegate.update(location: "Europe (Germany)")
     latin_america_delegate = FactoryBot.create :delegate
-    latin_america_delegate.senior_delegate.update(region: "Latin America (Peru)")
+    latin_america_delegate.senior_delegate.update(location: "Latin America (Peru)")
     oceania_delegate = FactoryBot.create :delegate
-    oceania_delegate.senior_delegate.update(region: "Oceania (Australia, Victoria)")
+    oceania_delegate.senior_delegate.update(location: "Oceania (Australia, Victoria)")
     usa_canada_delegate = FactoryBot.create :delegate
-    usa_canada_delegate.senior_delegate.update(region: "USA & Canada (USA, Oregon)")
+    usa_canada_delegate.senior_delegate.update(location: "USA & Canada (USA, Oregon)")
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates@worldcubeassociation.org",

@@ -660,7 +660,7 @@ module DatabaseDumper
           gender
           last_sign_in_at
           name
-          region
+          location
           registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
