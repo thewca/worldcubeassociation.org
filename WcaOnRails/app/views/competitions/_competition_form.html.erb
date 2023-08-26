@@ -260,10 +260,11 @@
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
               url: '<%= calculate_dues_path %>',
               data: {
-                competition_id: competitionId,
+                competitor_limit_enabled: compLimitEnabled,
+                competitor_limit: compLimit,
+                currency_code: currencyCode,
                 country_id: countryId,
                 base_entry_fee_lowest_denomination: entryFee,
-                currency_code: currencyCode,
               },
               success: function(data) {
                 if (compLimitEnabled) {
