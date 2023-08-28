@@ -17,7 +17,7 @@ es:
     #original_hash: db871b0
     GW: Guinea-Bisáu
     #original_hash: e758117
-    HK: Hong Kong, China
+    HK: 'Hong Kong, China'
     #original_hash: 3ad2dd8
     KN: San Cristóbal y Nieves
     #original_hash: 5c34abb
@@ -31,7 +31,7 @@ es:
     #original_hash: 928b7c4
     MM: Myanmar
     #original_hash: 77e4070
-    MO: Macao, China
+    MO: 'Macao, China'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -309,8 +309,8 @@ es:
     world: Mundo
     #original_hash: 2513cf0
     continent: Continente
-    #original_hash: d523ebb
-    country: País
+    #original_hash: 0f21717
+    country: Región
     #original_hash: 0154c0d
     here: aquí
     #original_hash: 77003d0
@@ -329,8 +329,8 @@ es:
     user:
       #original_hash: 603a218
       wca_id: WCA ID
-      #original_hash: e0f64f7
-      citizen_of: Nacionalidad
+      #original_hash: fa4c045
+      representing: Representando
     #original_hash: 3fc0ba1
     all_regions: Todas las regiones
     errors:
@@ -403,8 +403,8 @@ es:
         unconfirmed_wca_id: WCA ID sin confirmar
         #original_hash: 8ed8874
         login: Correo electrónico o WCA ID
-        #original_hash: 1528d10
-        country_iso2: Nacionalidad
+        #original_hash: fa4c045
+        country_iso2: Representando
         #original_hash: ab58155
         dob: Fecha de Nacimiento
         #original_hash: 7636bbc
@@ -454,10 +454,10 @@ es:
         name: Nombre
         #original_hash: f91b080
         name_reason: Razón para el nombre
-        #original_hash: b649210
+        #original_hash: fdba578
         cellName: Nombre breve
-        #original_hash: d523ebb
-        countryId: País
+        #original_hash: 0f21717
+        countryId: Región
         #original_hash: 25b7b06
         cityName: Ciudad
         #original_hash: 67cd406
@@ -591,6 +591,8 @@ es:
         paid_entry_fees: Pagado
         #original_hash: bae7d5b
         status: Estado
+        #original_hash: a6e8a0b
+        administrative_notes: Notas administrativas
         #original_hash: 709a232
         name: Nombre
         #original_hash: a6b9d69
@@ -634,8 +636,8 @@ es:
       person:
         #original_hash: 8c41ae8
         wca_id: Persona
-        #original_hash: d523ebb
-        countryId: País
+        #original_hash: fa4c045
+        countryId: Representando
         #original_hash: ab58155
         dob: Fecha de Nacimiento
         #original_hash: 8a754c6
@@ -705,8 +707,8 @@ es:
       regional_organization:
         #original_hash: 709a232
         name: Nombre
-        #original_hash: d523ebb
-        country: País
+        #original_hash: 0f21717
+        country: Región
         #original_hash: 2e8a57c
         website: Sitio Web
         #original_hash: 83fce83
@@ -883,10 +885,11 @@ es:
           "Danish Open 2017"). Utiliza mayúsculas donde corresponda. El nombre
           sólo puede contener caracteres alfanuméricos, guiones (-), ampersands
           (&), puntos (.), dos puntos (:), apóstrofos ('), y espacios ( ).
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Un nombre corto para visualizar. Si el nombre de la competición ya es
-          corto, puedes volverlo a usar (p. ej. Europe 2016).
+          Un nombre corto para visualizar. Si el nombre de la competición es
+          menor de %{short_name_limit} caracteres, este campo no se debería
+          editar y debería ser igual que el nombre normal.
         #original_hash: bce4589
         cityName: >-
           Nombre de la ciudad y provincia donde tendrá lugar la competición. No
@@ -972,7 +975,7 @@ es:
         competitor_limit_reason: >-
           ¿Cuál es el motivo para el límite de competidores? Por favor, ¡rellena
           esto en inglés!
-        #original_hash: 7d19570
+        #original_hash: 4b51faa
         guests_per_registration_limit: >-
           El número de invitados por inscripción permitidos en esta
           competicióin. Inscripciones con demasiados invitados se bloquearán.
@@ -1213,6 +1216,10 @@ es:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Notas adicionales para la gestión de las inscripciones. Estas notas no
+          pueden verse por los competidores.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1552,6 +1559,19 @@ es:
           zero: El formulario no contiene errores
           one: 'El formulario contiene un error:'
           other: 'El formulario contiene %{count} errores:'
+      error_pages:
+        #original_hash: 1042478
+        500_error: 'Lo sentimos, pero algo ha ido mal.'
+        #original_hash: d815249
+        500_contact: >-
+          Si comunicas este error al equipo de Software, por favor menciona el
+          identificador de petición (Request ID)
+        #original_hash: b61e305
+        400_error: La página que buscabas no existe.
+        #original_hash: 8b309f5
+        400_contact: >-
+          Si crees que esto es un error, por favor contacta con el Equipo de
+          Software e incluye el id de petición (Request ID)
     doorkeeper:
       applications:
         help:
@@ -1644,8 +1664,10 @@ es:
       statistics: Estadísticas
       #original_hash: 82dabd0
       multimedia: Multimedia
-      #original_hash: 4fd2a7f
-      db_export: Exportación de la Base de Datos
+      #original_hash: cfde9db
+      db_results_export: Exportación de Resultados
+      #original_hash: 7533c29
+      db_dev_export: Exportación de Desarrollador
       #original_hash: 1fa73f3
       regulations: Reglamento
       #original_hash: 6bce1b5
@@ -1676,8 +1698,8 @@ es:
       results_team: Equipo de Resultados
       #original_hash: 4e7afeb
       results_admin: Administración
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Base de datos
       #original_hash: aee74b8
       new_post: Nueva noticia
       #original_hash: 0d67445
@@ -2023,12 +2045,13 @@ es:
         eliminados. Por favor cotacta el Equipo de Resultaados de la WCA para
         que te ayude a cambiar el ID WCA a alguna cuenta distinta.
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 8bb2def
         msg: >-
-          No puedes modificar tu nombre, fecha de nacimiento, sexo ni país.
-          Motivo: %{reason}. Ponte en contacto con tu <a
-          href='%{delegate_url}'>Delegado</a> si necesitas cambiar alguno de
-          estos campos.
+          No puedes modificar tu nombre, fecha de nacimiento, sexo ni región.
+          Motivo: %{reason}. Ponte en contacto con el <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA
+          Results Team</a> o tu <a href='%{delegate_url}'>Delegado</a> si
+          necesitas cambiar alguno de estos campos.
         reason:
           #original_hash: 370ff12
           assigned: ya tienes un WCA ID asignado
@@ -2050,6 +2073,10 @@ es:
       remove_avatar: Eliminar avatar
       #original_hash: 4bd25cf
       remove_avatar_confirm: ¿Estás seguro de que quieres eliminar tu avatar?
+      #original_hash: 6d7dbfb
+      remove_avatar_confirm_button: Confirma la eliminación de avatar
+      #original_hash: 010b0e5
+      remove_avatar_reason: 'Por favor, proporciona una razón para la eliminación'
       #original_hash: 141d1d7
       guidelines: Requisitos
       avatar_guidelines:
@@ -2123,12 +2150,12 @@ es:
       dob_past: debe ser una fecha pasada
       #original_hash: b320913
       dob_recent: Debe tener al menos dos años
-      #original_hash: b64df45
+      #original_hash: afbf275
       already_represented_country: >-
-        No se puede cambiar el país a un país que la persona haya representado
-        en el pasado.
-      #original_hash: b589014
-      must_have_a_change: El nombre del país debe ser distinto para actualizar.
+        No se puede cambiar la región a una región que la persona haya
+        representado en el pasado.
+      #original_hash: 5fe15d4
+      must_have_a_change: El nombre de la región debe ser distinta para actualizar.
       #original_hash: 012f032
       must_be_senior: debe ser un Delegado Senior
       #original_hash: 2e582eb
@@ -2211,8 +2238,8 @@ es:
       need_gender: Necesita un sexo
       #original_hash: ebf1ecb
       need_dob: Necesita una fecha de nacimiento
-      #original_hash: d84a54f
-      need_country: Necesita un país
+      #original_hash: aab7355
+      need_country: Necesita una región
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Un registro no puede ser aceptado y borrado a la vez.
       #original_hash: a38d024
@@ -2233,7 +2260,7 @@ es:
       series_more_than_one_accepted: Solo puedes ser aceptado por una Serie de competiciones a la vez
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: No puedes registrarte en categorías en las que no estás calificado.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Debes introducir un comentario. Asegúrate de leer en los requisitos de
         inscripción qué se debe incluir (por ejemplo, en una competición de MM
@@ -2363,11 +2390,11 @@ es:
       title: 'Registros para %{comp}'
       #original_hash: 5301648
       edit: Editar
-      #original_hash: 0ab725c
+      #original_hash: beffc45
       country_plural:
-        zero: Ningún país
-        one: 1 país
-        other: '%{count} países'
+        zero: Ninguna región
+        one: 1 región
+        other: '%{count} regiones'
       #original_hash: 1feee0e
       export_csv: Exportar a CSV
       #original_hash: 84add5b
@@ -2384,6 +2411,8 @@ es:
       approved_registrations: Registros aprobados
       #original_hash: bff04e8
       deleted_registrations: Registros eliminados
+      #original_hash: e86b1e1
+      non_competing: Inscripciones de no competidores
       #original_hash: ac5d958
       not_paid: Impagado
       registered:
@@ -2461,6 +2490,12 @@ es:
       El Límite de competidores para esta competición es  %{competitor_limit} y
       ya ha sido alcanzado. Si te registras tu registro será colocado en una
       lista de espera. Puede no ser aprobado hasta que un hueco quede libre.
+    #original_hash: cf29e85
+    registration_full_include_waiting_list: >-
+      El límite de competidores para esta competición es %{competitor_limit} y
+      puede estar completo. Si te inscribes, tu inscripción será colocada en la
+      lista de espera. No será aprobada hasta que no haya quedado un hueco
+      libre.
     #original_hash: 855ca9c
     can_register: 'Puedes registrarte en %{comp} abajo.'
     #original_hash: 4167ed7
@@ -2507,42 +2542,68 @@ es:
       payment_successful: >-
         Tu pago fue realizado con éxito y tu registro debería aparecer como
         pagado abajo.
+      #original_hash: 92dde77
+      payment_processing: 'Tu pago ha sido confirmado, pero la transacción sigue pendiente.'
+      #original_hash: 62d7351
+      button_text: ¡Pagar ahora!
       hints:
         #original_hash: bf3a39e
         donation: Donativo opcional para el equipo organizador
-        #original_hash: 16cf92d
-        card_information: >-
-          La información de tu tarjeta nunca llega a la web de la WCA. Se envúa
-          de modo seguro a Stripe, que gestiona el proceso de pago y nos retorna
-          a nosotros.
+        #original_hash: f7fa263
+        payment_button: >-
+          Tu información de pago nunca llega a la web de la WCA. Se envía a
+          Stripe de forma segura que realiza el proceso de pago y nos informa.
       labels:
         #original_hash: 4de825f
         entry_fees: Precio del registro
+        #original_hash: dc9d458
+        fees_paid: Pagado
+        #original_hash: cc632b5
+        fees_remaining: Queda
         #original_hash: 2c09302
         donation: Donativo
-        #original_hash: 184150d
-        card_information: Información de la tarjeta
-        #original_hash: bc8091a
-        cardholder_name: Propietario de la tarjeta
+        #original_hash: 919710d
+        show_donation: >-
+          Me gustaría hacer una donación opcional adicional que irá solo al
+          equipo organizador
+        #original_hash: 4930c06
+        payment_information: Información de pago
+        #original_hash: de0fc95
+        payment_button: Paga tus impuestos con Stripe
+        #original_hash: f94d00f
+        ajax_error: Error del servidore de la WCA
+        #original_hash: e62c56c
+        stripe_error: Error de Stripe
+        #original_hash: 97f7359
+        subtotal: Subtotal
       alerts:
         #original_hash: a34940e
         not_a_number: 'Por favor, introduce una cantidad válida'
         #original_hash: 707b9ca
         amount_too_low: El total pagado es menos que el importe del registro
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Vas a pagar al menos el doble de la cantidad requerida para que tu
+          inscripción continue. Por favor confirma el pago pulsando OK.
       errors:
         #original_hash: 166d48c
         already_paid: No se hizo ningún cargo porque la cuota de registro ya ha sido pagada.
-        #original_hash: b2bc8ed
-        not_allowed: No puedes pagar por ese registro
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          No pudimos localizar el intento de pago a confirmar en nuestro
-          servidor. El proceso ha sido interrumpido y no se realizó ningún cargo
-          a tu tarjeta.
-        #original_hash: 63e0ec1
-        cardholder_name: por favor comprueba el nombre del propietario de la tarjeta.
-    #original_hash: 8607a87
-    payment_button_text: Paga tu registro con tarjeta
+        #original_hash: f10c80c
+        not_allowed: No puedes pagar por esta inscripción
+        #original_hash: a073600
+        stripe_failed: Por favor comprueba la transacción de Stripe.
+        #original_hash: a32e40f
+        stripe_not_found: >-
+          Stripe nos devolvió un ID de transacción que no hemos podido
+          encontrar.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe nos ha devuelto un secreto de transacción que no coincide con
+          nuestros registros.
+        #original_hash: 8d1a199
+        payment_reset: El pago fue rechazado por Stripe.
+        #original_hash: bcf6a93
+        payment_pending: El pago no ha sido completado todavía.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Para facilitar tus registros en el futuro, puedes seleccionar tus pruebas
@@ -2562,9 +2623,9 @@ es:
         actualizará la base de datos de acuerdo a los mismos.
       #original_hash: 779b272
       registrations_file_label: Fichero de registros
-      #original_hash: 4017f0e
+      #original_hash: 224f3a6
       registrations_file_hint: >-
-        Fichero CSV con columnas: Estado, Nombre, País, WCA ID, Fecha de
+        Fichero CSV con columnas: Estado, Nombre, Región, WCA ID, Fecha de
         nacimiento, Género, Correo electrónico y una columna por cada categoría.
       #original_hash: d6fbc9d
       import: Importar
@@ -2636,11 +2697,11 @@ es:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Por favor, asegúrate de que se han especificado condiciones de avance
         para todas las rondas no finales.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         La ronda %{round_number} en %{event} tiene un tiempo de corte mayor que
-        el tiempo límite. Por favor asegúrate de que el tiempo de corte es menor
-        que el tiempo límite.
+        el tiempo límite. Por favor asegúrate de que el tiempo de corte no es
+        mayor que el tiempo límite.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         La ronda %{round_number} en %{event} tiene un tiempo de corte inferior a
@@ -2673,7 +2734,7 @@ es:
         todavía.
       #original_hash: ab61991
       announced: ¡Competición anunciada con éxito!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         La competición ha sido cancelada. Por favor revisa la sección de
         información para obtener más detalles.
@@ -2721,26 +2782,41 @@ es:
       tooltip_registered: Estás registrado.
       #original_hash: f2d092f
       tooltip_waiting_list: Actualmente estás en la lista de espera.
-      #original_hash: 9ecd976
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Desafortunadamente tu inscripción ha sido eliminada. Por favor comprueba
+        tu correo electrónico para más detalles, o contacta con los
+        organizadores.
+      #original_hash: 1b6dc61
       confirmed_visible: Esta competición está confirmada y es visible
-      #original_hash: fa186a9
+      #original_hash: abc2f96
       confirmed_not_visible: Esta competición está confirmada pero no es visible
-      #original_hash: a66bbe3
+      #original_hash: 6d6290b
       not_confirmed_visible: Esta competición no está confirmada pero es visible
-      #original_hash: 0f44e45
+      #original_hash: b299b27
       not_confirmed_not_visible: Esta competición ni está confirmada ni es visible
       #original_hash: a821396
       stripe_connected: >-
         Has conectado satisfactoriamente tu cuenta Stripe y ya puedes recibir
         pagos de registro para esta competición.
+      #original_hash: b8fc60f
+      stripe_disconnected_success: Desconectada la cuenta Stripe con éxito.
+      #original_hash: e1a250c
+      stripe_disconnected_failure: Hubo un error al intentar desconectar la cuenta de Stripe.
       #original_hash: 0a4bb53
       stripe_not_connected: Ha habido problemas y no hemos podido conectar con tu cuenta Stripe.
-      #original_hash: 724cf0d
-      championship_exists: 'Ya hay un %{championship_type} en %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Ya hay un %{championship_type} en %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Inscripción cerrada con éxito.
       #original_hash: 7f197a0
       orga_closed_reg_failure: No ha podido cerrarse la inscripción.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Esta competición no tienen una fecha límite para aceptar competidores en
+        la lista de espera. Si estás usando lista de espera, por favor
+        especifica una fecha límite. Si no estás usando una lista de espera,
+        recuerda especificar esto en los requisitos de las inscripciones.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Mis competiciones
@@ -2979,10 +3055,10 @@ es:
     index:
       #original_hash: db98a68
       title: Competiciones
-      #original_hash: f483b9c
+      #original_hash: b24c9c0
       disclaimer: >-
-        Por favor, ten en cuenta que debido a la pandemia del COVID-19, algunos
-        paises no pueden celebrar competiciones actualmente.
+        Por favor, ten en cuenta que debido a la pandemia del COVID-19, algunas
+        regiones no pueden celebrar competiciones actualmente.
       #original_hash: 6a72085
       all_events: Todas
       #original_hash: 6d76b81
@@ -3358,8 +3434,6 @@ es:
     cancelled_by_html: 'Cancelado por by %{name} en %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: ¿Estás seguro de que quieres cancelar la competición?
-    #original_hash: 9a42672
-    upload_results: Cargar los resultados
     #original_hash: 01de5ee
     post_results: Publicar los resultados
     #original_hash: b6513f1
@@ -3368,7 +3442,7 @@ es:
     cancel_mistake: ¿Cometiste un error?
     #original_hash: 0fb43d5
     note_before_cancel: 'Nota: Sólo se pueden cancelar competiciones confirmadas.'
-    #original_hash: 19a0ac2
+    #original_hash: b38ee61
     orga_close_reg: Cerrar Inscripciones.
     #original_hash: b2bfea9
     orga_close_reg_confirm: >-
@@ -3378,6 +3452,12 @@ es:
     note_reg_not_full_orga_close_reg: >-
       Nota: sólo puedes cerrar las inscripciones una vez se haya alcanzado el
       límite de competidores.
+    #original_hash: 1ae594d
+    stripe_disconnect: Desconectar la cuenta de Stripe
+    #original_hash: 9ca8e2c
+    stripe_disconnect_confirm: >-
+      ¿Estás seguro de que quieres desconectar la cuenta de Stripe? Esta acción
+      no puede deshacerse.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: Las inscripciones ya han sido cerradas.
     show:
@@ -3421,13 +3501,13 @@ es:
           una descripción de cada formato.
         #original_hash: fa50f5c
         qualification_html: Es necesario tener tiempos en otras competiciones WCA para competir.
-        #original_hash: 3b524fd
+        #original_hash: 51dfad5
         qualification_all_events_html: >-
-          La fecha límite para obtener los tiempos de calificación es
+          Los tiempos de calificación deben haber conseguido antes de:
           <b>%{date}</b>.
-        #original_hash: 0d791e9
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
-          La fecha límite para obtener tiempos de calificación en %{events} es
+          Los tiempos de calificación en %{events} deben realizarse antes de:
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Formato
@@ -3593,11 +3673,11 @@ es:
       title: Récords
     #original_hash: e02fccb
     last_updated_html: 'Última actualización: %{timestamp}'
-    #original_hash: 50c021e
-    heading_disabled_functions: >-
-      Por favor toma nota que algunos filtros (como los de años anteriores)
-      están temporalmente deshabilitados. Si tienes experiencia en
-      optimizaciones en SQL por favor contacta con el WST.
+    #original_hash: 9ca9d89
+    filters_fixes_underway: >-
+      Por favor ten en cuenta que algunos filtros (como años anteriores) se han
+      deshabilitado temporalmente. El Equipo de Software está trabajando en
+      rehabilitar estos filtros. Sentimos cualquier inconveniente.
     #original_hash: e3710ed
     tooltip_no_years: Nuestra base de datos es demasiado grande para computar datos históricos
     #original_hash: 357094b
@@ -3667,8 +3747,8 @@ es:
       name: Nombre
       #original_hash: 5faa59d
       result: Resultado
-      #original_hash: e0f64f7
-      citizen_of: Ciudadano de
+      #original_hash: fa4c045
+      representing: Representando
       #original_hash: 1917f4f
       competition: Competición
       #original_hash: e7f6fc5
@@ -3699,8 +3779,8 @@ es:
       name_or_wca_id: Partes del nombre o WCA ID
       #original_hash: 709a232
       name: Nombre
-      #original_hash: d523ebb
-      country: País
+      #original_hash: fa4c045
+      country: Representando
       #original_hash: 02ae2bd
       podiums: Podios
       #original_hash: 56656a0
@@ -3712,10 +3792,10 @@ es:
       completed_solves: Soluciones Completadas
       #original_hash: fc78642
       personal_records: Récords Personales Actuales
-      #original_hash: e631f13
+      #original_hash: 2ad8fd5
       odd_rank_reason: >-
-        Que falte una clasificación o que haya una clasificación nacional peor
-        que una continental se deben a un cambio de país. Los resultados de la
+        Que falte una clasificación o que haya una clasificación regional peor
+        que una continental se deben a un cambio de región. Los resultados de la
         anterior región no se tienen en cuenta en la clasificación regional
         actual.
       #original_hash: a91508f
@@ -4085,10 +4165,10 @@ es:
       .</p>
     #original_hash: f64ccc7
     whats_next_title: ¿Qué es lo próximo para la WCA?
-    #original_hash: a08c67f
+    #original_hash: 2fea363
     whats_next_content_html: >-
       <p>La Organización Mundial del Cubo ha tenido más de 100.000 competidores
-      únicos de 140 países distintos ¡Y no pretendemos desacelerar de momento!
+      únicos de 140 regiones distintas ¡Y no pretendemos desacelerar de momento!
       La comunidad cubera  ha crecido de manera constante desde nuestra
       fundación en 2005 y queremos animar a que esto continúe en el futuro
       aumentando la accesibilidad a competiciones a nuevas áreas. En el futuro,
@@ -4408,15 +4488,15 @@ es:
     how_to:
       #original_hash: b243b1f
       title: Cómo convertirse en una Organización Regional reconocida por la WCA
-      #original_hash: f042a88
+      #original_hash: 9f31403
       description: >-
         La WCA reconoce múltiples Organizaciones Regionales en todo el mundo. El
         propósito de una Organización Regional es organizar competiciones de la
-        WCA y promover las actividades de la WCA en la región. Se anima a los
-        países que deseen formar una Organización Regional a contribuir a la WCA
-        en su área antes de enviar su solicitud. Para ayuda en la organización
-        de una competición de la WCA en tu área, ponte en contacto con tu
-        Delegado WCA más cercano.
+        WCA y promover las actividades de la WCA en la región. Se anima a las
+        regiones que deseen formar una Organización Regional a contribuir a la
+        WCA en su área antes de enviar su solicitud. Para ayuda en la
+        organización de una competición de la WCA en tu área, ponte en contacto
+        con tu Delegado WCA más cercano.
     requirements:
       #original_hash: 1e04fd7
       title: Requisitos para las Organizaciones Regionales de la WCA
@@ -5129,8 +5209,8 @@ es:
       olist1:
         #original_hash: de00462
         '1': Las dos competiciones no tienen pruebas en común.
-        #original_hash: f7bacc5
-        '2': Las dos competiciones tienen lugar en países distintos.
+        #original_hash: b8ff462
+        '2': Las dos competiciones tienen lugar en regiones distintas.
       #original_hash: 5c5cf04
       content2: >-
         Las competiciones de 3x3x3 Menos Movimientos simultáneas son
@@ -5435,3 +5515,58 @@ es:
       tu cuenta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: versión de TNoodle legal
+  merch:
+    #original_hash: 96a95a1
+    title: Mercadería WCA
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        ¡La WCA tiene Mecadería exclusiva disponible para comprar! Desde
+        camisetas, sudaderas, pegatinas, alfombrillas, mochilas, y más. Nuestros
+        diseños se actualizan contínuamente incluyendo el clásico logo de la
+        WCA, mercadería de los campeonatos mundiales y diseños de los records
+        mundiales.
+      #original_hash: 2865e1d
+      '2': >-
+        Comprar mercadería WCA en nuestras tiendas es una de las mejores maneras
+        de apoyar a la WCA - una organización sin ánimo de lucro, basada en
+        voluntarios. Usamos todos los beneficios de la mercadería para apoyar
+        campeonatos, comprar material y otras actividades relacionadas con la
+        WCA.
+      #original_hash: 8e57552
+      '3': >-
+        Puedes comprar nuestra mercadería por todoel mundo - con tiendas
+        directas en Europa, América e India ¡y más que abrirán próximamente!
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: Export de Resultados WCA
+      #original_hash: f9fe9df
+      description: >-
+        En esta página ofrecemos los resultados WCA para descarga en varios
+        formatos para que puedan ser usados/analizados. Normalmente actualizamos
+        cada semana cuando han acabado las competiciones del fin de semana. Los
+        ficheros están numerados y fechados de forma que puedas comprobar si
+        tienes ya la versión más reciente.
+      #original_hash: 4f59283
+      permalink: Enlace permanente
+      file_formats:
+        #original_hash: b086d79
+        sql: 'Sentencias SQL, para importar en Bases de datos SQL.'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Valores separados por tabulador, para hojas de cálculo en
+          OpenOffice.org, Excel, etc.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        El archivo %{readme_filename} incluido contiene los términos de uso y
+        una descripción general (en Inglés, no está traducido):
+    developer_export:
+      #original_hash: 97d6025
+      heading: Export de Desarrollador WST
+      #original_hash: eba769a
+      description_html: >-
+        En esta página ofrecemos el export de desarrollador WST para descarga
+        como SQL dump. Más detalles en %{github_link}.
+      #original_hash: a479c9c
+      download: Descargar
