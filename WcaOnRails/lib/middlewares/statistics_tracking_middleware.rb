@@ -4,6 +4,7 @@ module Middlewares
   class StatisticsTrackingMiddleware
     include Sidekiq::ServerMiddleware
 
+    # The Sidekiq middleware has to follow this method signature, even though some parameters may be unused.
     def call(job_instance, job_payload, queue)
       job_class = job_payload["wrapped"] || job_payload["class"]
 

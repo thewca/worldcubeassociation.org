@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.describe JobFailureMailer, type: :mailer do
   describe "notify_admin_of_job_failure" do
-    let(:job) { Delayed::Job.new(id: 42, handler: "I tried to take care of this") }
+    let(:job) { { jid: 42, args: "I tried to take care of this" } }
     let(:exception) do
       RuntimeError.new("error!").tap { |e| e.set_backtrace(["stack level 1", "stack level 2"]) }
     end

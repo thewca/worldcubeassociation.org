@@ -3,8 +3,10 @@
 # Preview all emails at http://localhost:3000/rails/mailers/job_failure_mailer
 class JobFailureMailerPreview < ActionMailer::Preview
   def notify_admin_of_job_failure
-    job = Delayed::Job.new(id: 4242)
-    exception = nil
+    job = {
+      jid: '4242',
+      args: %w[some random arguments],
+    }
     begin
       raise "This is an error!"
     rescue StandardError => e

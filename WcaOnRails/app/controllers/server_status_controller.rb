@@ -50,8 +50,11 @@ class JobsCheck < StatusCheck
   end
 
   protected def _status_description
-    jobs_that_should_have_run_by_now = Delayed::Job.where(attempts: 0).where(locked_at: nil).where('created_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
-    oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:created_at).first
+    jobs_that_should_have_run_by_now = JobStatistic.where(recently_rejected: 0)
+                                                   .where('enqueued_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
+                                                   .where.not(run_end: nil)
+
+    oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
 
     if oldest_job_that_should_have_run_by_now.nil?
       [:success, nil]
@@ -60,8 +63,8 @@ class JobsCheck < StatusCheck
         :danger,
         %{
           Uh oh!
-          Job #{oldest_job_that_should_have_run_by_now.id} was created
-          #{time_ago_in_words oldest_job_that_should_have_run_by_now.created_at}
+          Job #{oldest_job_that_should_have_run_by_now.id} was enqueued
+          #{time_ago_in_words oldest_job_that_should_have_run_by_now.enqueued_at}
           ago and still has not run.
           #{jobs_that_should_have_run_by_now.count}
           #{"job".pluralize(jobs_that_should_have_run_by_now.count)}

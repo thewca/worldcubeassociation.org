@@ -4,6 +4,7 @@ module Middlewares
   class SingletonJobMiddleware
     include Sidekiq::ClientMiddleware
 
+    # The Sidekiq middleware has to follow this method signature, even though some parameters may be unused.
     def call(job_class_or_string, job, queue, redis_pool)
       if queue.to_sym == ApplicationJob::WCA_QUEUE
         # Rails ActiveJob wraps the jobs in a very complicated fashion

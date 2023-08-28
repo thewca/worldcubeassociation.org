@@ -4,19 +4,20 @@ module Middlewares
   class JobLifecycleMiddleware
     include Sidekiq::ServerMiddleware
 
+    # The Sidekiq middleware has to follow this method signature, even though some parameters may be unused.
     def call(job_instance, job_payload, queue)
-      run_succesful = true
+      run_successful = true
 
       begin
         yield
       rescue => e # rubocop:disable Style/RescueStandardError
         JobFailureMailer.notify_admin_of_job_failure(job_payload, e).deliver_now
-        run_succesful = false
+        run_successful = false
 
         # Propagate the error so that sidekiq can do retry-handling
         raise e
       ensure
-        if run_succesful
+        if run_successful
           CompletedJob.create!(
             priority: 0,
             attempts: job_payload["retry_count"] || 0,
