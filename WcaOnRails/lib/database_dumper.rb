@@ -742,6 +742,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "job_statistics" => :skip_all_rows,
     "championships" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
