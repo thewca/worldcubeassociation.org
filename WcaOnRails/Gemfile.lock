@@ -637,7 +637,7 @@ GEM
     seedbank (0.5.0)
       rake (>= 10.0)
     semantic_range (3.0.0)
-    shakapacker (7.0.1)
+    shakapacker (7.0.3)
       activesupport (>= 5.2)
       rack-proxy (>= 0.6.1)
       railties (>= 5.2)
@@ -820,7 +820,7 @@ DEPENDENCIES
   sdoc
   seedbank
   selectize-rails!
-  shakapacker (= 7.0.1)
+  shakapacker (= 7.0.3)
   simple_form
   simplecov
   simplecov-lcov
