@@ -508,7 +508,7 @@ class RegistrationsController < ApplicationController
 
       stored_intent = stored_transaction.stripe_payment_intent
 
-      stored_intent.update_status_and_charges(stripe_intent, audit_event) do |charge_transaction|
+      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
         if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
           ruby_money = charge_transaction.money_amount
 
@@ -530,7 +530,7 @@ class RegistrationsController < ApplicationController
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_transaction.stripe_payment_intent
-      stored_intent.update_status_and_charges(stripe_intent, audit_event)
+      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
