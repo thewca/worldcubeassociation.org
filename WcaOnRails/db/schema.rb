@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_22_155348) do
+ActiveRecord::Schema[7.0].define(version: 2023_08_22_160657) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -202,7 +202,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_22_155348) do
     t.index ["name"], name: "Persons_name"
     t.index ["name"], name: "index_Persons_on_name", type: :fulltext
     t.index ["wca_id", "subId"], name: "index_Persons_on_wca_id_and_subId", unique: true
-    t.index ["wca_id"], name: "Persons_id"
+    t.index ["wca_id"], name: "index_Persons_on_wca_id"
   end
 
   create_table "RanksAverage", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
