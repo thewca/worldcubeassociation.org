@@ -512,12 +512,18 @@ class RegistrationsController < ApplicationController
         if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
           ruby_money = charge_transaction.money_amount
 
-          stored_intent.holder.record_payment(
+          stored_payment = stored_intent.holder.record_payment(
             ruby_money.cents,
             ruby_money.currency.iso_code,
             charge_transaction,
             stored_intent.user.id,
           )
+
+          # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by Stripe.
+          # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
+          #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
+          #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
+          stored_payment.update!(created_at: audit_event.created_at_remote)
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
@@ -565,6 +571,10 @@ class RegistrationsController < ApplicationController
         charge_transaction,
         current_user.id,
       )
+
+      # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
+      #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
+      #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
