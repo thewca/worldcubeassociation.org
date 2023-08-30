@@ -108,7 +108,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def show_wcif_public
     id = params[:competition_id] || params[:id]
     cache_key = "wcif/#{id}"
-    competition = competition_from_params(associations: { registrations: [:assignments]})
+    competition = competition_from_params(associations: { registrations: [:assignments] })
     expires_in 5.minutes, public: true
     if stale?(competition, public: true)
       render json: Rails.cache.fetch(cache_key, expires_in: 5.minutes) {
