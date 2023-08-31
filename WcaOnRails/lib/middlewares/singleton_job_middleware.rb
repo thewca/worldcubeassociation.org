@@ -11,13 +11,15 @@ module Middlewares
         stat_key = job["wrapped"] || job_class_or_string
         statistics = JobStatistic.find_or_create_by(name: stat_key)
 
-        if statistics.enqueued_at.present?
+        # If a job has a start timestamp but no end timestamp, it is currently running
+        if statistics.run_start.present? && !statistics.run_end.present?
           statistics.increment! :recently_rejected
+
+          # Make Sidekiq abort and do NOT enqueue the job
           return false
         else
           statistics.touch :enqueued_at
           statistics.recently_rejected = 0
-          statistics.run_end = nil
 
           statistics.save!
         end
