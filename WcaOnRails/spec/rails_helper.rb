@@ -85,6 +85,8 @@ RSpec.configure do |config|
   config.include ApiSignInHelper, type: :request
 
   config.include ApplicationHelper
+
+  config.include ActiveJob::TestHelper
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
