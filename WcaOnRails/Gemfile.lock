@@ -361,7 +361,8 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
     io-console (0.6.0)
-    irb (1.7.4)
+    irb (1.8.0)
+      rdoc (~> 6.5)
       reline (>= 0.3.6)
     iso (0.2.2)
       i18n
@@ -553,7 +554,7 @@ GEM
     redis-client (0.16.0)
       connection_pool
     regexp_parser (2.8.1)
-    reline (0.3.7)
+    reline (0.3.8)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
