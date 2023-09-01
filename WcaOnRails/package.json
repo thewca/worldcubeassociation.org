@@ -41,7 +41,7 @@
     "expose-loader": "^4.1.0",
     "file-loader": "^6.2.0",
     "flag-icons": "^6.10.0",
-    "glob": "^10.3.3",
+    "glob": "^10.3.4",
     "i18n-js": "^4.3.0",
     "jquery": "3.4.1",
     "js-yaml": "^4.1.0",
