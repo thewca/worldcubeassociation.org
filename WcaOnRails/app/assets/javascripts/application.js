@@ -55,70 +55,6 @@ window.wca.cancelPendingAjaxAndAjax = function(id, options) {
   return window.wca._pendingAjaxById[id];
 };
 
-window.wca._googleMapsLoaded = false;
-window.wca._onGoogleMapsLoaded = function() {
-  window.wca._googleMapsLoaded = true;
-  window.wca._googleMapsLoadedListeners.forEach(function(listener) {
-    listener();
-  });
-  window.wca._googleMapsLoadedListeners = null;
-};
-window.wca._googleMapsLoadedListeners = [];
-window.wca.addGoogleMapsLoadedListener = function(listener) {
-  if(window.wca._googleMapsLoaded) {
-    listener();
-  } else {
-    window.wca._googleMapsLoadedListeners.push(listener);
-  }
-};
-
-window.wca.addCompetitionsToMap = function(map, competitions) {
-  competitions.forEach(function(c) {
-    if (c.is_probably_over) {
-      iconImage = 'https://maps.google.com/mapfiles/ms/icons/blue.png';
-    } else {
-      iconImage = 'https://maps.google.com/mapfiles/ms/icons/red.png';
-    }
-
-    c.marker = new google.maps.Marker({
-      map: map,
-      position: {
-        lat: c.latitude_degrees,
-        lng: c.longitude_degrees,
-      },
-      title: c.name,
-      icon: iconImage
-    });
-
-    c.marker.desc = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
-
-    map.overlappingMarkerSpiderfier.addMarker(c.marker);
-  });
-};
-
-window.wca.createCompetitionsMap = function(element) {
-  var map = new google.maps.Map(element, {
-    zoom: 2,
-    center: { lat: 0, lng: 0 },
-  });
-
-  map.overlappingMarkerSpiderfier = new OverlappingMarkerSpiderfier(map);
-  var infowindow = new google.maps.InfoWindow();
-  map.overlappingMarkerSpiderfier.addListener('click', function(marker) {
-    infowindow.setContent(marker.desc);
-    infowindow.open(map, marker);
-  });
-
-  return map;
-};
-
-window.wca.removeMarkers = function(map) {
-  map.overlappingMarkerSpiderfier.getMarkers().forEach(function(marker) {
-    marker.setMap(null);
-  });
-  map.overlappingMarkerSpiderfier.clearMarkers();
-};
-
 window.wca.renderMarkdownRequest = function(markdownContent) {
   return window.wca.cancelPendingAjaxAndAjax('render_markdown', {
     url: '/render_markdown',
@@ -264,12 +200,6 @@ $(function() {
     }
   });
 });
-
-// Polyfill for Math.trunc from
-//  https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/trunc#Polyfill
-Math.trunc = Math.trunc || function(x) {
-  return x < 0 ? Math.ceil(x) : Math.floor(x);
-};
 
 // Bootstrap-table default options
 $.extend($.fn.bootstrapTable.defaults, {
