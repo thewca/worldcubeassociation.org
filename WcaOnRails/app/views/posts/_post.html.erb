@@ -9,11 +9,11 @@
       <% if current_user&.can_create_posts? %>
         <span class="pull-right">
           <%= link_to edit_post_path(post.slug) do %>
-            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="pencil alternate icon"></span>
           <% end %>
           <% if post.persisted? %>
             <%= link_to post_path(post.slug), method: "delete", data: { confirm: I18n.t('posts.confirm_delete_post') } do %>
-              <span class="glyphicon glyphicon-trash"></span>
+              <span class="trash icon"></span>
             <% end %>
           <% end %>
         </span>

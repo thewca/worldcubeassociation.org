@@ -22,8 +22,8 @@
     display: none;
   }
   &::before {
-    font-family: 'Glyphicons Halflings';
-    content: "\e003"; /* glyphicon-search */
+    font-family: 'Icons';
+    content: "\f002"; /* semantic-search */
     opacity: 0.4;
     color: #333;
 

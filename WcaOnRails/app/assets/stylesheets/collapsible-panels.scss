@@ -1,9 +1,9 @@
 .collapse-indicator {
-  @extend .glyphicon;
-  @extend .glyphicon-chevron-down;
+  @extend .icon;
+  content: "\f078"; // Semantic chevron down
 
   .collapsed & {
-    @extend .glyphicon-chevron-right;
+    content: "\f077"; // Semantic chevron up
   }
 }
 .panel-heading .collapse-indicator {

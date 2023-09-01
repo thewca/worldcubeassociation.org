@@ -16,7 +16,7 @@ RSpec.describe MarkdownHelper do
 <a href="#foo-bar">Foo Bar</a>
 </li>
 </ul>
-<h1><span id=\'foo-bar\' class=\'anchorable\'><a href=\'#foo-bar\'><span class=\'glyphicon glyphicon-link\'></span></a> Foo Bar</span></h1>
+<h1><span id=\'foo-bar\' class=\'anchorable\'><a href=\'#foo-bar\'><span class=\'linkify icon\'></span></a> Foo Bar</span></h1>
 '
     end
   end
