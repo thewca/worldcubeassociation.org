@@ -1592,7 +1592,7 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "shortName" => cellName,
-      "series" => part_of_competition_series? ? competition_series_wcif : nil,
+      "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
@@ -1601,8 +1601,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  def competition_series_wcif
-    competition_series&.to_wcif
+  def competition_series_wcif(authorized: false)
+    competition_series&.to_wcif(authorized: authorized)
   end
 
   def persons_wcif(authorized: false)

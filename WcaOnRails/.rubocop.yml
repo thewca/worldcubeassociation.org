@@ -10,6 +10,10 @@ AllCops:
     - 'vendor/**/*'
     # This file is provided as-is by Discourse
     - 'lib/single_sign_on.rb'
+    # The schema files are dumped by Rails' ActiveRecord database engine and need to follow their formatting
+    - 'db/schema.rb'
+    - 'db/developer_dump_schema.rb'
+    - 'db/results_dump_schema.rb'
 
 Bundler/OrderedGems:
   Enabled: false
