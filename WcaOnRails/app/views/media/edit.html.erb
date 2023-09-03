@@ -8,13 +8,13 @@
   <%= render "approval_guidelines" %>
 
   <%= horizontal_simple_form_for @medium, url: medium_path(@medium), html: { class: 'are-you-sure' } do |f| %>
-    <%= f.input :competitionId, as: :competition_id, only_one: true %>
-    <%= f.input :type, include_blank: false %>
+    <%= f.input :competition_id, as: :competition_id, only_one: true %>
+    <%= f.input :media_type, include_blank: false %>
     <%= f.input :text %>
     <%= f.input :uri %>
-    <%= f.input :submitterName %>
-    <%= f.input :submitterEmail %>
-    <%= f.input :submitterComment %>
+    <%= f.input :submitter_name %>
+    <%= f.input :submitter_email %>
+    <%= f.input :submitter_comment %>
     <%= f.input :status, include_blank: false %>
 
     <%= f.button :submit %>

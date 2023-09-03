@@ -12,7 +12,7 @@
 
     <p>
       Choose 'Update' if the person's name or country has been changed.
-      It will add a new entry in the Persons table and make it the current information for that person (subId=1)
+      It will add a new entry in the Persons table and make it the current information for that person (sub_id=1)
       but it will not modify the Results table so previous results keep the old name.
     </p>
 
@@ -20,7 +20,7 @@
       <%= f.input :wca_id, as: :user_ids, persons_table: true, only_one: true %>
       <div id="person-fields">
         <%= f.input :name %>
-        <%= f.input :countryId, collection: Country.real, value_method: lambda { |c| c.id }, label_method: lambda { |c| c.name } %>
+        <%= f.input :country_id, collection: Country.real, value_method: lambda { |c| c.id }, label_method: lambda { |c| c.name } %>
 
         <%= f.input :gender %>
         <%= f.input :dob, as: :date_picker %>

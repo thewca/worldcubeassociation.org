@@ -1,34 +1,35 @@
 # frozen_string_literal: true
 
 class Person < ApplicationRecord
-  self.table_name = "Persons"
+  # for some reason, the ActiveRecord plural for "Person" is "people"…
+  self.table_name = 'persons'
 
   has_one :user, primary_key: "wca_id", foreign_key: "wca_id"
-  has_many :results, primary_key: "wca_id", foreign_key: "personId"
+  has_many :results, primary_key: "wca_id"
   has_many :competitions, -> { distinct }, through: :results
-  has_many :ranksAverage, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksAverage"
-  has_many :ranksSingle, primary_key: "wca_id", foreign_key: "personId", class_name: "RanksSingle"
+  has_many :ranks_average, primary_key: "wca_id", foreign_key: "person_id", class_name: "RanksAverage"
+  has_many :ranks_single, primary_key: "wca_id", foreign_key: "person_id", class_name: "RanksSingle"
 
   enum gender: (User::ALLOWABLE_GENDERS.to_h { |g| [g, g.to_s] })
 
   alias_attribute :ref_id, :wca_id
 
-  scope :current, -> { where(subId: 1) }
+  scope :current, -> { where(sub_id: 1) }
 
   scope :in_region, lambda { |region_id|
     unless region_id.blank? || region_id == 'all'
-      where(countryId: (Continent.country_ids(region_id) || region_id))
+      where(country_id: (Continent.country_ids(region_id) || region_id))
     end
   }
 
   validates :name, presence: true
-  validates_inclusion_of :countryId, in: Country.real.map(&:id).freeze
+  validates_inclusion_of :country_id, in: Country.real.map(&:id).freeze
 
-  # If creating a brand new person (ie: with subId equal to 1), then the
+  # If creating a brand new person (ie: with sub_id equal to 1), then the
   # WCA ID must be unique.
   # Note: in general WCA ID are not unique in the table, as one person with
-  # the same WCA ID may have multiple subIds (eg: if they changed nationality).
-  validates_uniqueness_of :wca_id, if: -> { new_record? && subId == 1 }, case_sensitive: true
+  # the same WCA ID may have multiple sub_ids (eg: if they changed nationality).
+  validates_uniqueness_of :wca_id, if: -> { new_record? && sub_id == 1 }, case_sensitive: true
   validates_format_of :wca_id, with: User::WCA_ID_RE
 
   # After checking with the WRT there are still missing dob in the db.
@@ -51,16 +52,16 @@ class Person < ApplicationRecord
   end
 
   # If someone represented country A, and now represents country B, it's
-  # easy to tell which solves are which (results have a countryId).
+  # easy to tell which solves are which (results have a country_id).
   # Fixing their country (B) to a new country C is easy to undo, just change
   # all Cs to Bs. However, if someone accidentally fixes their country from B
   # to A, then we cannot go back, as all their results are now for country A.
   validate :cannot_change_country_to_country_represented_before
   private def cannot_change_country_to_country_represented_before
-    if countryId_changed? && !new_record? && !@updating_using_sub_id
-      has_represented_this_country_already = Person.exists?(wca_id: wca_id, countryId: countryId)
+    if country_id_changed? && !new_record? && !@updating_using_sub_id
+      has_represented_this_country_already = Person.exists?(wca_id: wca_id, country_id: country_id)
       if has_represented_this_country_already
-        errors.add(:countryId, I18n.t('users.errors.already_represented_country'))
+        errors.add(:country_id, I18n.t('users.errors.already_represented_country'))
       end
     end
   end
@@ -75,8 +76,8 @@ class Person < ApplicationRecord
   after_update :update_results_table_and_associated_user
   private def update_results_table_and_associated_user
     unless @updating_using_sub_id
-      results_for_most_recent_sub_id = results.where(personName: name_before_last_save, countryId: countryId_before_last_save)
-      results_for_most_recent_sub_id.update_all(personName: name, countryId: countryId) if saved_change_to_name? || saved_change_to_countryId?
+      results_for_most_recent_sub_id = results.where(person_name: name_before_last_save, country_id: country_id_before_last_save)
+      results_for_most_recent_sub_id.update_all(person_name: name, country_id: country_id) if saved_change_to_name? || saved_change_to_country_id?
     end
     user.save! if user # User copies data from the person before validation, so this will update him.
   end
@@ -85,18 +86,18 @@ class Person < ApplicationRecord
     raise unless update_using_sub_id(attributes)
   end
 
-  # Update the person attributes and save the old state as a new Person with greater subId.
+  # Update the person attributes and save the old state as a new Person with greater sub_id.
   def update_using_sub_id(attributes)
     attributes = attributes.to_h
     @updating_using_sub_id = true
-    if attributes.slice(:name, :countryId).all? { |k, v| v.nil? || v == self.send(k) }
+    if attributes.slice(:name, :country_id).all? { |k, v| v.nil? || v == self.send(k) }
       errors.add(:base, message: I18n.t('users.errors.must_have_a_change'))
       return false
     end
     old_attributes = self.attributes
     if update(attributes)
-      Person.where(wca_id: wca_id).where.not(subId: 1).order(subId: :desc).update_all("subId = subId + 1")
-      Person.create(old_attributes.merge!(subId: 2))
+      Person.where(wca_id: wca_id).where.not(sub_id: 1).order(sub_id: :desc).update_all("sub_id = sub_id + 1")
+      Person.create(old_attributes.merge!(sub_id: 2))
       true
     end
   ensure
@@ -132,11 +133,11 @@ class Person < ApplicationRecord
   end
 
   def sub_ids
-    Person.where(wca_id: wca_id).map(&:subId)
+    Person.where(wca_id: wca_id).pluck(:sub_id)
   end
 
   def country
-    Country.c_find(countryId)
+    Country.c_find(country_id)
   end
 
   def country_iso2
@@ -146,9 +147,9 @@ class Person < ApplicationRecord
   private def rank_for_event_type(event, type)
     case type
     when :single
-      ranksSingle.find_by_eventId(event.id)
+      ranks_single.find_by_event_id(event.id)
     when :average
-      ranksAverage.find_by_eventId(event.id)
+      ranks_average.find_by_event_id(event.id)
     else
       raise "Unrecognized type #{type}"
     end
@@ -156,7 +157,7 @@ class Person < ApplicationRecord
 
   def world_rank(event, type)
     rank = rank_for_event_type(event, type)
-    rank ? rank.worldRank : nil
+    rank ? rank.world_rank : nil
   end
 
   def best_solve(event, type)
@@ -168,7 +169,7 @@ class Person < ApplicationRecord
     results.podium
            .joins(:event, competition: [:championships])
            .where("championships.championship_type = 'world'")
-           .order("YEAR(start_date) DESC, Events.rank")
+           .order("YEAR(start_date) DESC, events.rank")
            .includes(:competition, :format)
   end
 
@@ -189,9 +190,9 @@ class Person < ApplicationRecord
             .final
             .succeeded
             .joins(:event)
-            .order("Events.rank, pos")
+            .order("events.rank, pos")
             .includes(:format, :competition)
-            .group_by(&:eventId)
+            .group_by(&:event_id)
             .each_value do |final_results|
               previous_old_pos = nil
               previous_new_pos = nil
@@ -201,7 +202,7 @@ class Person < ApplicationRecord
                 previous_old_pos = old_pos
                 previous_new_pos = result.pos
                 break if result.pos > 3
-                championship_podium_results.push result if result.personId == self.wca_id
+                championship_podium_results.push result if result.person_id == self.wca_id
               end
             end
         end
@@ -212,18 +213,18 @@ class Person < ApplicationRecord
     {}.tap do |podiums|
       podiums[:world] = world_championship_podiums
       podiums[:continental] = championship_podiums_with_condition do |results|
-        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.continentId")
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = countries.continent_id")
       end
       EligibleCountryIso2ForChampionship.championship_types.each do |championship_type|
         podiums[championship_type.to_sym] = championship_podiums_with_condition do |results|
           results
             .joins(:country, competition: { championships: :eligible_country_iso2s_for_championship })
             .where("eligible_country_iso2s_for_championship.championship_type = ?", championship_type)
-            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = Countries.iso2")
+            .where("eligible_country_iso2s_for_championship.eligible_country_iso2 = countries.iso2")
         end
       end
       podiums[:national] = championship_podiums_with_condition do |results|
-        results.joins(:country, competition: [:championships]).where("championships.championship_type = Countries.iso2")
+        results.joins(:country, competition: [:championships]).where("championships.championship_type = countries.iso2")
       end
     end
   end
@@ -239,7 +240,7 @@ class Person < ApplicationRecord
   end
 
   def records
-    records = results.pluck(:regionalSingleRecord, :regionalAverageRecord).flatten.select(&:present?)
+    records = results.pluck(:regional_single_record, :regional_average_record).flatten.select(&:present?)
     {
       national: records.count("NR"),
       continental: records.reject { |record| %w(NR WR).include?(record) }.count,

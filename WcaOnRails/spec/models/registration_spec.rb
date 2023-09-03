@@ -251,9 +251,9 @@ RSpec.describe Registration do
     let!(:result) {
       FactoryBot.create(
         :result,
-        personId: user.wca_id,
-        competitionId: previous_competition.id,
-        eventId: '333',
+        person_id: user.wca_id,
+        competition_id: previous_competition.id,
+        event_id: '333',
         best: 1200,
         average: 1500,
       )

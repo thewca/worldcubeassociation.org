@@ -162,7 +162,7 @@ RSpec.feature "Competition management" do
   context "when signed in as delegate" do
     let!(:delegate) { FactoryBot.create(:delegate) }
     let(:cloned_delegate) { FactoryBot.create(:delegate) }
-    let(:competition_to_clone) { FactoryBot.create :competition, cityName: 'Melbourne, Victoria', countryId: "Australia", delegates: [cloned_delegate], showAtAll: true }
+    let(:competition_to_clone) { FactoryBot.create :competition, city_name: 'Melbourne, Victoria', country_id: "Australia", delegates: [cloned_delegate], show_at_all: true }
 
     let(:threes) { Event.find("333") }
     let(:fours) { Event.find("444") }
@@ -186,7 +186,7 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario "id and cellName changes for short comp name" do
+    scenario "id and cell_name changes for short comp name" do
       competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionnameshort2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       fill_in "Name", with: "New Id 2016"
@@ -195,7 +195,7 @@ RSpec.feature "Competition management" do
 
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
-      expect(c.cellName).to eq "New Id 2016"
+      expect(c.cell_name).to eq "New Id 2016"
     end
 
     scenario 'clone competition', js: true, retry: 3 do
@@ -212,9 +212,9 @@ RSpec.feature "Competition management" do
       expect(new_competition.name).to eq "New Comp 2015"
       expect(new_competition.delegates).to eq [delegate, cloned_delegate]
       expect(new_competition.venue).to eq competition_to_clone.venue
-      expect(new_competition.showAtAll).to eq false
+      expect(new_competition.show_at_all).to eq false
       expect(new_competition.confirmed?).to eq false
-      expect(new_competition.cityName).to eq 'Melbourne, Victoria'
+      expect(new_competition.city_name).to eq 'Melbourne, Victoria'
     end
 
     feature "edit" do

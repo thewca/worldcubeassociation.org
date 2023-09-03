@@ -152,57 +152,57 @@ zh-TW:
       #original_hash: 4d618bb
       name: 資格賽
       #original_hash: 4d618bb
-      cellName: 資格賽
+      cell_name: 資格賽
     '1':
       #original_hash: 1e725b6
       name: 首輪
       #original_hash: 1e725b6
-      cellName: 首輪
+      cell_name: 首輪
     '2':
       #original_hash: 985c8d0
       name: 第二輪
       #original_hash: 985c8d0
-      cellName: 第二輪
+      cell_name: 第二輪
     '3':
       #original_hash: e2f74d2
       name: 準決賽
       #original_hash: e2f74d2
-      cellName: 準決賽
+      cell_name: 準決賽
     b:
       #original_hash: 327c999
       name: B組決賽
       #original_hash: 327c999
-      cellName: B組決賽
+      cell_name: B組決賽
     c:
       #original_hash: 672b22c
       name: 決賽
       #original_hash: 672b22c
-      cellName: 決賽
+      cell_name: 決賽
     d:
       #original_hash: 1e725b6
       name: 首輪
       #original_hash: 1e725b6
-      cellName: 首輪
+      cell_name: 首輪
     e:
       #original_hash: 985c8d0
       name: 第二輪
       #original_hash: 985c8d0
-      cellName: 第二輪
+      cell_name: 第二輪
     f:
       #original_hash: 672b22c
       name: 決賽
       #original_hash: 672b22c
-      cellName: 決賽
+      cell_name: 決賽
     g:
       #original_hash: e2f74d2
       name: 準決賽
       #original_hash: e2f74d2
-      cellName: 準決賽
+      cell_name: 準決賽
     h:
       #original_hash: 4d618bb
       name: 資格賽
       #original_hash: 4d618bb
-      cellName: 資格賽
+      cell_name: 資格賽
   attempts:
     #original_hash: 17dae1e
     attempt_name: '第%{number}次還原'
@@ -438,23 +438,23 @@ zh-TW:
         #original_hash: 7f3d889
         confirmed: 禁止主辦團隊編輯本場比賽
         #original_hash: d493e6a
-        showAtAll: 公開比賽
+        show_at_all: 公開比賽
         #original_hash: 709a232
         name: 比賽名稱
         #original_hash: f91b080
         name_reason: 比賽名稱的原因
         #original_hash: fdba578
-        cellName: 比賽簡稱
+        cell_name: 比賽簡稱
         #original_hash: 0f21717
-        countryId: 區域
+        country_id: 區域
         #original_hash: 25b7b06
-        cityName: 城市名稱
+        city_name: 城市名稱
         #original_hash: 67cd406
         venue: 場地名稱
         #original_hash: 486f8fb
-        venueAddress: 場地地址
+        venue_address: 場地地址
         #original_hash: 08767af
-        venueDetails: 場地細節
+        venue_details: 場地細節
         #original_hash: ff99f5b
         start_date: 開始日期
         #original_hash: 89d10cd
@@ -612,7 +612,7 @@ zh-TW:
         #original_hash: 8c41ae8
         wca_id: 人
         #original_hash: fa4c045
-        countryId: 代表
+        country_id: 代表
         #original_hash: ab58155
         dob: 生日
         #original_hash: 8a754c6
@@ -664,19 +664,19 @@ zh-TW:
         competition_id: 發生於
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 比賽
+        competition_id: 比賽
         #original_hash: 3deb745
-        type: 種類
+        media_type: 種類
         #original_hash: c3328c3
         text: 內容
         #original_hash: d051707
         uri: 連結
         #original_hash: 1be755a
-        submitterName: 提交者姓名
+        submitter_name: 提交者姓名
         #original_hash: 78cdfee
-        submitterEmail: 提交者電子郵件
+        submitter_email: 提交者電子郵件
         #original_hash: 0d31f23
-        submitterComment: 提交者意見
+        submitter_comment: 提交者意見
         #original_hash: bae7d5b
         status: 狀態
       regional_organization:
@@ -742,7 +742,7 @@ zh-TW:
         accepted: 成功
         #original_hash: 96f608c
         pending: 待審核
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 報導
         #original_hash: 4360c2d
@@ -838,9 +838,9 @@ zh-TW:
           比賽的全名且必須以年份為結尾（例如：All is Well
           2017）。字首要大寫且必須只能包含字母與數字、破折號(-)、和號(&)、句號(.)、冒號(:)、撇號('')和空白( )。
         #original_hash: fbcda66
-        cellName: '供顯示方便的簡稱。如果比賽名稱已少於%{short_name_limit}個字元，不應該編輯這個區域，而且應該要和全名一樣。'
+        cell_name: '供顯示方便的簡稱。如果比賽名稱已少於%{short_name_limit}個字元，不應該編輯這個區域，而且應該要和全名一樣。'
         #original_hash: bce4589
-        cityName: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如使用：Taipei、Taichung或Kaohsiung）。
+        city_name: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如使用：Taipei、Taichung或Kaohsiung）。
         #original_hash: bb470cc
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         #original_hash: b4d020f
@@ -858,7 +858,7 @@ zh-TW:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -883,7 +883,7 @@ zh-TW:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -1030,7 +1030,7 @@ zh-TW:
         #original_hash: 498f4c5
         dob: 生日請按照YYYY-MM-DD的格式。
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e
@@ -1066,19 +1066,19 @@ zh-TW:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

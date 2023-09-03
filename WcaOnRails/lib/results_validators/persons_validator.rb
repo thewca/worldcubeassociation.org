@@ -47,7 +47,7 @@ module ResultsValidators
         persons_by_id = competition_data.persons.index_by(&:ref_id)
 
         detected_person_ids = persons_by_id.keys
-        persons_with_results = results_for_comp.map(&:personId)
+        persons_with_results = results_for_comp.map(&:person_id)
         (detected_person_ids - persons_with_results).each do |person_id|
           @errors << ValidationError.new(:persons, competition.id,
                                          PERSON_WITHOUT_RESULTS_ERROR,
@@ -192,7 +192,7 @@ module ResultsValidators
                                                  NON_MATCHING_COUNTRY_WARNING,
                                                  name: p.name, wca_id: p.wca_id,
                                                  expected_country: existing_person.country_iso2,
-                                                 country: p.countryId)
+                                                 country: p.country_iso2)
             end
           else
             @errors << ValidationError.new(:persons, competition.id,

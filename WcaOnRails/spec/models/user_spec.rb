@@ -26,14 +26,14 @@ RSpec.describe User, type: :model do
     expect(users.first).to eq user
   end
 
-  it "search returns only people with subId 1" do
-    FactoryBot.create :person, wca_id: "2005FLEI01", subId: 1
-    FactoryBot.create :person, wca_id: "2005FLEI01", subId: 2
+  it "search returns only people with sub_id 1" do
+    FactoryBot.create :person, wca_id: "2005FLEI01", sub_id: 1
+    FactoryBot.create :person, wca_id: "2005FLEI01", sub_id: 2
     FactoryBot.create :user, wca_id: "2005FLEI01"
 
     users = User.search("2005FLEI01", params: { persons_table: true })
     expect(users.count).to eq 1
-    expect(users[0].subId).to eq 1
+    expect(users[0].sub_id).to eq 1
   end
 
   it "allows empty country" do
@@ -255,7 +255,7 @@ RSpec.describe User, type: :model do
 
     it "does not allows assigning WCA ID if user and person details don't match" do
       user = FactoryBot.create(:user, name: "Whatever", country_iso2: "US", dob: Date.new(1950, 12, 12), gender: "m")
-      person = FactoryBot.create(:person, name: "Else", countryId: "United Kingdom", dob: '1900-01-01', gender: "f")
+      person = FactoryBot.create(:person, name: "Else", country_id: "United Kingdom", dob: '1900-01-01', gender: "f")
       user.wca_id = person.wca_id
       expect(user).to be_invalid_with_errors(
         name: [I18n.t('users.errors.must_match_person')],

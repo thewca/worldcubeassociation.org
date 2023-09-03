@@ -2,13 +2,13 @@
 
 class TestDbManager
   CONSTANT_TABLES = %w(
-    Continents
-    Countries
+    continents
+    countries
     eligible_country_iso2s_for_championship
-    Events
-    Formats
+    events
+    formats
     preferred_formats
-    RoundTypes
+    round_types
     teams
     timestamps
   ).freeze

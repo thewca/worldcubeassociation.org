@@ -7,7 +7,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
     else
       persons = Person.current.includes(:user)
     end
-    persons = persons.includes(:ranksSingle, :ranksAverage)
+    persons = persons.includes(:ranks_single, :ranks_average)
     if params[:wca_ids].present?
       persons = persons.where(wca_id: params[:wca_ids].split(','))
     end
@@ -15,7 +15,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
   end
 
   def show
-    person = Person.current.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(params[:wca_id])
+    person = Person.current.includes(:user, :ranks_single, :ranks_average).find_by_wca_id!(params[:wca_id])
     render json: person_to_json(person)
   end
 
@@ -33,9 +33,9 @@ class Api::V0::PersonsController < Api::V0::ApiController
     {
       person: person.serializable_hash(only: [:wca_id, :name, :url, :gender, :country_iso2, :delegate_status, :teams, :avatar]),
       competition_count: person.competitions.count,
-      personal_records: person.ranksSingle.each_with_object({}) do |rank_single, ranks|
+      personal_records: person.ranks_single.each_with_object({}) do |rank_single, ranks|
         event_id = rank_single.event.id
-        rank_average = person.ranksAverage.find { |rank| rank.event_id == event_id }
+        rank_average = person.ranks_average.find { |rank| rank.event_id == event_id }
         ranks[event_id] = { single: rank_to_json(rank_single) }
         ranks[event_id][:average] = rank_to_json(rank_average) if rank_average
       end,

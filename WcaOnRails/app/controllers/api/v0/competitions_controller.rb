@@ -36,7 +36,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params(associations: [:rounds])
     event = Event.c_find!(params[:event_id])
     results_by_round = competition.results
-                                  .where(eventId: event.id)
+                                  .where(event_id: event.id)
                                   .group_by(&:round_type)
                                   .sort_by { |round_type, _| -round_type.rank }
     rounds = results_by_round.map do |round_type, results|
@@ -49,7 +49,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
         roundTypeId: round_type.id,
         # Also include the (localized) name here, we don't have i18n in js yet.
         name: round&.name || "#{event.name} #{round_type.name}",
-        results: results.sort_by { |r| [r.pos, r.personName] },
+        results: results.sort_by { |r| [r.pos, r.person_name] },
       }
     end
     render json: {
@@ -69,7 +69,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     event = Event.c_find!(params[:event_id])
     scrambles_by_round = competition.scrambles
-                                    .where(eventId: event.id)
+                                    .where(event_id: event.id)
                                     .group_by(&:round_type)
                                     .sort_by { |round_type, _| -round_type.rank }
     rounds = scrambles_by_round.map do |round_type, scrambles|
@@ -144,7 +144,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
     # If this competition exists, but is not publicly visible, then only show it
     # to the user if they are able to manage the competition.
-    if competition && !competition.showAtAll && !can_manage?(competition)
+    if competition && !competition.show_at_all && !can_manage?(competition)
       competition = nil
     end
 

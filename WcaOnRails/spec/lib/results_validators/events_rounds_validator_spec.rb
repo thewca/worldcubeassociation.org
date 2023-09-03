@@ -31,9 +31,9 @@ RSpec.describe ERV do
       # UNEXPECTED_COMBINED_ROUND_ERROR
       [Result, InboxResult].each do |model|
         result_kind = model.model_name.singular.to_sym
-        FactoryBot.create(result_kind, competition: competition1, eventId: "333oh")
-        FactoryBot.create(result_kind, competition: competition2, eventId: "222")
-        FactoryBot.create(result_kind, :skip_validation, competition: competition2, eventId: "444", skip_round_creation: true)
+        FactoryBot.create(result_kind, competition: competition1, event_id: "333oh")
+        FactoryBot.create(result_kind, competition: competition2, event_id: "222")
+        FactoryBot.create(result_kind, :skip_validation, competition: competition2, event_id: "444", skip_round_creation: true)
       end
 
       expected_warnings = [
@@ -89,15 +89,15 @@ RSpec.describe ERV do
         result_kind = model.model_name.singular.to_sym
         # Create a result over a cutoff which does not exist in rounds data.
         FactoryBot.create(result_kind, :over_cutoff, :skip_validation,
-                          competition: competition1, eventId: "333oh",
+                          competition: competition1, event_id: "333oh",
                           cutoff: cutoff, skip_round_creation: true)
-        FactoryBot.create(result_kind, competition: competition1, eventId: "333")
+        FactoryBot.create(result_kind, competition: competition1, event_id: "333")
         # This creates results below the cutoff for 5x5, which effectively turns
         # it into a "regular" round instead of a cutoff round.
         FactoryBot.create(result_kind, :skip_validation,
-                          competition: competition2, eventId: "555", skip_round_creation: true)
+                          competition: competition2, event_id: "555", skip_round_creation: true)
         FactoryBot.create(result_kind, :skip_validation,
-                          competition: competition2, eventId: "222", roundTypeId: "c",
+                          competition: competition2, event_id: "222", round_type_id: "c",
                           skip_round_creation: true)
       end
       expected_errors = [

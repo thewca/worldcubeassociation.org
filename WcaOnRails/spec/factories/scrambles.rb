@@ -2,11 +2,11 @@
 
 FactoryBot.define do
   factory :scramble do
-    eventId { "333" }
-    roundTypeId { "f" }
-    groupId { "A" }
-    isExtra { false }
-    scrambleNum { 1 }
+    event_id { "333" }
+    round_type_id { "f" }
+    group_id { "A" }
+    is_extra { false }
+    scramble_num { 1 }
     scramble { "R2 D2" }
   end
 end

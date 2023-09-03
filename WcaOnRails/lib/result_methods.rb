@@ -2,15 +2,15 @@
 
 module ResultMethods
   def wca_id
-    @personId
+    @person_id
   end
 
   def best_solve
-    SolveTime.new(eventId, :single, best)
+    SolveTime.new(event_id, :single, best)
   end
 
   def average_solve
-    SolveTime.new(eventId, :average, average)
+    SolveTime.new(event_id, :average, average)
   end
 
   def best_index
@@ -30,11 +30,11 @@ module ResultMethods
   end
 
   def solve_times
-    @solve_times ||= [SolveTime.new(eventId, :single, value1),
-                      SolveTime.new(eventId, :single, value2),
-                      SolveTime.new(eventId, :single, value3),
-                      SolveTime.new(eventId, :single, value4),
-                      SolveTime.new(eventId, :single, value5)].freeze
+    @solve_times ||= [SolveTime.new(event_id, :single, value1),
+                      SolveTime.new(event_id, :single, value2),
+                      SolveTime.new(event_id, :single, value3),
+                      SolveTime.new(event_id, :single, value4),
+                      SolveTime.new(event_id, :single, value5)].freeze
   end
 
   def worst_index

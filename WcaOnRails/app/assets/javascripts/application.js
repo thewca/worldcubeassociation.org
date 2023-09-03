@@ -90,7 +90,7 @@ window.wca.addCompetitionsToMap = function(map, competitions) {
       icon: iconImage
     });
 
-    c.marker.desc = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.cityName;
+    c.marker.desc = "<a href=" + c.url + ">" + c.name + "</a><br />" + c.marker_date + " - " + c.city_name;
 
     map.overlappingMarkerSpiderfier.addMarker(c.marker);
   });

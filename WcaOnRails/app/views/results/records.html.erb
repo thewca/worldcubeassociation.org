@@ -15,7 +15,7 @@
 
   <% cache [*@cache_params, record_timestamp, I18n.locale] do %>
     <%
-      comp_ids = @rows.map { |r| r["competitionId"] }.uniq
+      comp_ids = @rows.map { |r| r["competition_id"] }.uniq
       unless @is_slim
         @competitions_by_id = Hash[Competition.where(id: comp_ids).map { |c| [c.id, c] }]
       end
@@ -24,7 +24,7 @@
     <div id="search-results" class="results">
       <div id="results-list">
         <% if @is_mixed %>
-          <% @rows.group_by { |row| row["eventId"] }.each do |event_id, rows| %>
+          <% @rows.group_by { |row| row["event_id"] }.each do |event_id, rows| %>
             <% event = Event.c_find(event_id) %>
             <h2>
               <%= link_to rankings_path(event.id, "single"), class: "plain" do %>
@@ -46,7 +46,7 @@
             <%= render 'records_separate_table', rows: average_rows, type: "average" %>
           <% end %>
         <% elsif @is_history %>
-          <% @rows.group_by { |row| row["eventId"] }.each do |event_id, rows| %>
+          <% @rows.group_by { |row| row["event_id"] }.each do |event_id, rows| %>
             <% event = Event.c_find(event_id) %>
             <h2>
               <%= link_to rankings_path(event.id, "single"), class: "plain" do %>

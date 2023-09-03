@@ -232,7 +232,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "can register for their own competition that is not yet visible" do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
       expect(RegistrationsMailer).to receive(:notify_organizers_of_new_registration).and_call_original
       expect(RegistrationsMailer).to receive(:notify_registrant_of_new_registration).and_call_original
       expect do
@@ -261,8 +261,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     let!(:delegate) { FactoryBot.create(:delegate) }
     let!(:other_delegate) { FactoryBot.create(:delegate) }
 
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
-    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], show_at_all: true) }
+    let!(:other_competition) { FactoryBot.create(:competition, :registration_open, delegates: [other_delegate], show_at_all: true) }
 
     before :each do
       sign_in delegate
@@ -364,7 +364,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
   context "signed in as competitor" do
     let!(:user) { FactoryBot.create(:user, :wca_id) }
     let!(:delegate) { FactoryBot.create(:delegate) }
-    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], showAtAll: true) }
+    let!(:competition) { FactoryBot.create(:competition, :registration_open, delegates: [delegate], show_at_all: true) }
     let(:threes_comp_event) { competition.competition_events.find_by(event_id: "333") }
 
     before :each do
@@ -445,7 +445,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     end
 
     it "cannot create registration when competition is not visible" do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
 
       expect {
         post :create, params: { competition_id: competition.id, registration: { registration_competition_events_attributes: [{ competition_event_id: threes_comp_event.id }], guests: 1, comments: "", status: :accepted } }
@@ -585,7 +585,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
   context "competition not visible" do
     let!(:organizer) { FactoryBot.create :user }
-    let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), showAtAll: false, organizers: [organizer]) }
+    let(:competition) { FactoryBot.create(:competition, :registration_open, events: Event.where(id: %w(333 444 333bf)), show_at_all: false, organizers: [organizer]) }
 
     it "404s when competition is not visible to public" do
       expect {
@@ -629,8 +629,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
     it "does not show pending registrations" do
       pending_registration = FactoryBot.create(:registration, competition: competition)
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "333", personId: pending_registration.personId
-      FactoryBot.create :ranks_average, rank: 10, best: 2000, eventId: "333", personId: pending_registration.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, event_id: "333", person_id: pending_registration.wca_id
+      FactoryBot.create :ranks_average, rank: 10, best: 2000, event_id: "333", person_id: pending_registration.wca_id
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       psych_sheet = assigns(:psych_sheet)
@@ -650,24 +650,24 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
       user_b = FactoryBot.create(:user, :wca_id, name: 'B')
 
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 1, best: 2000, eventId: "444", personId: registration1.personId
-      FactoryBot.create :ranks_single, rank: 1, best: 1500, eventId: "444", personId: registration1.personId
+      FactoryBot.create :ranks_average, rank: 1, best: 2000, event_id: "444", person_id: registration1.wca_id
+      FactoryBot.create :ranks_single, rank: 1, best: 1500, event_id: "444", person_id: registration1.wca_id
 
       registration2 = FactoryBot.create(:registration, :accepted, user: user_a, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
-      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration2.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, event_id: "444", person_id: registration2.wca_id
+      FactoryBot.create :ranks_single, rank: 10, best: 1900, event_id: "444", person_id: registration2.wca_id
 
       registration3 = FactoryBot.create(:registration, :accepted, user: user_b, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration3.personId
-      FactoryBot.create :ranks_single, rank: 10, best: 1900, eventId: "444", personId: registration3.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, event_id: "444", person_id: registration3.wca_id
+      FactoryBot.create :ranks_single, rank: 10, best: 1900, event_id: "444", person_id: registration3.wca_id
 
       registration4 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration4.personId
-      FactoryBot.create :ranks_single, rank: 30, best: 2500, eventId: "444", personId: registration4.personId
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, event_id: "444", person_id: registration4.wca_id
+      FactoryBot.create :ranks_single, rank: 30, best: 2500, event_id: "444", person_id: registration4.wca_id
 
       registration5 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 20, best: 4545, eventId: "444", personId: registration5.personId
-      FactoryBot.create :ranks_single, rank: 31, best: 2600, eventId: "444", personId: registration5.personId
+      FactoryBot.create :ranks_average, rank: 20, best: 4545, event_id: "444", person_id: registration5.wca_id
+      FactoryBot.create :ranks_single, rank: 31, best: 2600, event_id: "444", person_id: registration5.wca_id
 
       registration6 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
 
@@ -687,11 +687,11 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "handles missing average" do
       # Missing an average
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_single, rank: 2, best: 200, eventId: "444", personId: registration1.personId
+      FactoryBot.create :ranks_single, rank: 2, best: 200, event_id: "444", person_id: registration1.wca_id
 
       registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
-      FactoryBot.create :ranks_average, rank: 10, best: 4242, eventId: "444", personId: registration2.personId
-      FactoryBot.create :ranks_single, rank: 10, best: 2000, eventId: "444", personId: registration2.personId
+      FactoryBot.create :ranks_average, rank: 10, best: 4242, event_id: "444", person_id: registration2.wca_id
+      FactoryBot.create :ranks_single, rank: 10, best: 2000, event_id: "444", person_id: registration2.wca_id
 
       # Never competed
       registration3 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
@@ -705,12 +705,12 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "handles 1 registration" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
-        personId: registration.personId,
-        eventId: "444",
+        person_id: registration.wca_id,
+        event_id: "444",
         best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
+        world_rank: 10,
+        continent_rank: 10,
+        country_rank: 10,
       )
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
@@ -722,38 +722,38 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "sorts 333bf by single" do
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
-        personId: registration1.personId,
-        eventId: "333bf",
+        person_id: registration1.wca_id,
+        event_id: "333bf",
         best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
+        world_rank: 10,
+        continent_rank: 10,
+        country_rank: 10,
       )
       RanksSingle.create!(
-        personId: registration1.personId,
-        eventId: "333bf",
+        person_id: registration1.wca_id,
+        event_id: "333bf",
         best: "2000",
-        worldRank: 1,
-        continentRank: 1,
-        countryRank: 1,
+        world_rank: 1,
+        continent_rank: 1,
+        country_rank: 1,
       )
 
       registration2 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
-        personId: registration2.personId,
-        eventId: "333bf",
+        person_id: registration2.wca_id,
+        event_id: "333bf",
         best: "4242",
-        worldRank: 1,
-        continentRank: 1,
-        countryRank: 1,
+        world_rank: 1,
+        continent_rank: 1,
+        country_rank: 1,
       )
       RanksSingle.create!(
-        personId: registration2.personId,
-        eventId: "333bf",
+        person_id: registration2.wca_id,
+        event_id: "333bf",
         best: "2000",
-        worldRank: 2,
-        continentRank: 2,
-        countryRank: 2,
+        world_rank: 2,
+        continent_rank: 2,
+        country_rank: 2,
       )
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
@@ -770,20 +770,20 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "shows first timers on bottom" do
       registration1 = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("333bf")])
       RanksAverage.create!(
-        personId: registration1.personId,
-        eventId: "333bf",
+        person_id: registration1.wca_id,
+        event_id: "333bf",
         best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
+        world_rank: 10,
+        continent_rank: 10,
+        country_rank: 10,
       )
       RanksSingle.create!(
-        personId: registration1.personId,
-        eventId: "333bf",
+        person_id: registration1.wca_id,
+        event_id: "333bf",
         best: "2000",
-        worldRank: 1,
-        continentRank: 1,
-        countryRank: 1,
+        world_rank: 1,
+        continent_rank: 1,
+        country_rank: 1,
       )
 
       # Someone who has never competed in a WCA competition
@@ -803,12 +803,12 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
     it "handles 1 registration" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
-        personId: registration.personId,
-        eventId: "444",
+        person_id: registration.wca_id,
+        event_id: "444",
         best: "4242",
-        worldRank: 10,
-        continentRank: 10,
-        countryRank: 10,
+        world_rank: 10,
+        continent_rank: 10,
+        country_rank: 10,
       )
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }

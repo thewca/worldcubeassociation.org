@@ -6,7 +6,7 @@
       <th class="result"> <%= t("results.table_elements.result") %> </th>
       <th class="country"> <%= t("results.table_elements.representing") %> </th>
       <th class="competition"> <%= t("results.table_elements.competition") %> </th>
-      <% unless rows.first["eventId"] == "333mbf" %>
+      <% unless rows.first["event_id"] == "333mbf" %>
         <th class="solves" colspan="5"> <%= t("results.table_elements.solves") %> </th>
       <% end %>
 
@@ -20,7 +20,7 @@
     <% previous_value = 0 %>
     <% rows.each do |row| %>
       <% result = LightResult.new(row) %>
-      <% competition = @competitions_by_id[row["competitionId"]] %>
+      <% competition = @competitions_by_id[row["competition_id"]] %>
       <% type = row["type"] %>
       <% value = row["value"] %>
       <% tied_previous = (type == previous_type && value == previous_value) %>
@@ -28,7 +28,7 @@
 
       <tr>
         <td class="type <%= tied_previous ? "tied-previous" : "" %>"> <%= t("results.table_elements.type_options.#{type}") %> </td>
-        <td class="name"> <%= link_to result.personName, person_path(result.personId) %> </td>
+        <td class="name"> <%= link_to result.person_name, person_path(result.person_id) %> </td>
         <td class="result"> <%= SolveTime.new(result.event.id, type.to_sym, value).clock_format %> </td>
         <td class="country"> <%= flag_icon result.country.iso2 %> <%= result.country.name %> </td>
         <td class="competition"> <%= flag_icon competition.country.iso2 if competition.country.real? %> <%= link_to competition.name, competition_path(competition.id) %> </td>

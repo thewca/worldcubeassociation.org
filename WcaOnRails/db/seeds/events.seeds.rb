@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-sql = "INSERT INTO `Events` (`id`, `name`, `rank`, `format`, `cellName`) VALUES
+sql = "INSERT INTO `events` (`id`, `name`, `rank`, `format`, `cell_name`) VALUES
 ('333', '3x3x3 Cube', 10, 'time', '3x3x3 Cube'),
 ('222', '2x2x2 Cube', 20, 'time', '2x2x2 Cube'),
 ('444', '4x4x4 Cube', 30, 'time', '4x4x4 Cube'),

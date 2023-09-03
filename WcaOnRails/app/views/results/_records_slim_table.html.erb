@@ -30,7 +30,7 @@
 
       <tr>
         <% if single %>
-          <td class="name"> <%= link_to single_result.personName, person_path(single_result.personId) %> </td>
+          <td class="name"> <%= link_to single_result.person_name, person_path(single_result.person_id) %> </td>
           <td class="single"> <%= SolveTime.new(single_result.event.id, :single, single_value).clock_format %> </td>
         <% else %>
           <td class="blank-cell" colspan="2"><br></td>
@@ -51,7 +51,7 @@
 
         <% if average %>
           <td class="average"> <%= SolveTime.new(average_result.event.id, :average, average_value).clock_format %> </td>
-          <td class="name"> <%= link_to average_result.personName, person_path(average_result.personId) %> </td>
+          <td class="name"> <%= link_to average_result.person_name, person_path(average_result.person_id) %> </td>
           <% if event.id != "333mbf" %>
             <%= solve_tds_for_result(average_result) %>
           <% else %>

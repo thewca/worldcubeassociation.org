@@ -54,8 +54,8 @@ RSpec.describe "API Persons" do
     end
 
     it "includes personal records in the response" do
-      FactoryBot.create :ranks_single, personId: person.wca_id, eventId: "333", best: 450
-      FactoryBot.create :ranks_average, personId: person.wca_id, eventId: "333", best: 590
+      FactoryBot.create :ranks_single, person_id: person.wca_id, event_id: "333", best: 450
+      FactoryBot.create :ranks_average, person_id: person.wca_id, event_id: "333", best: 590
       get api_v0_person_path(person.wca_id)
       expect(response).to be_successful
       json = JSON.parse(response.body)

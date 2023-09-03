@@ -35,8 +35,8 @@ RSpec.describe AnonymizePerson do
 
     response = anonymize_person.do_anonymize_person
     expect(!!response).to eq true
-    expect(result.reload.personId).to eq "2020ANON01"
-    expect(result.reload.personName).to eq "Anonymous"
+    expect(result.reload.person_id).to eq "2020ANON01"
+    expect(result.reload.person_name).to eq "Anonymous"
     expect(person.reload.wca_id).to eq "2020ANON01"
     expect(person.reload.name).to eq "Anonymous"
     expect(person.reload.gender).to eq "o"

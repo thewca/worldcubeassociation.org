@@ -120,7 +120,7 @@ window.wca.addCompetitionsToMapLeaflet = function addCompToMap(map, competitions
       iconImage = redMarker;
     }
 
-    const competitionDesc = `<a href=${c.url}>${c.name}</a><br />${c.marker_date} - ${c.cityName}`;
+    const competitionDesc = `<a href=${c.url}>${c.name}</a><br />${c.marker_date} - ${c.city_name}`;
     new Marker({
       lat: c.latitude_degrees,
       lng: c.longitude_degrees,

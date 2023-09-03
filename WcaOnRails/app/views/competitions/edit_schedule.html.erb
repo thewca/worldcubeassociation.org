@@ -14,7 +14,7 @@
     <div class="alert alert-danger">
       There is no country assigned to this competition yet.
       Before you can manage your schedule, you have to add one
-      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_countryId")%>.
+      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_country_id")%>.
     </div>
   <% else %>
     <div id="edit-schedule-area"></div>
@@ -23,7 +23,7 @@
         competition_info = {
           id: <%= @competition.id.to_json.html_safe %>,
           venue: <%= @competition.venue.to_json.html_safe %>,
-          venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
+          venueDetails: <%= @competition.venue_details.to_json.html_safe %>,
           countryIso2: <%= @competition.country.iso2.to_json.html_safe %>,
           lat: <%= @competition.latitude.to_json.html_safe %>,
           lng: <%= @competition.longitude.to_json.html_safe %>,

@@ -152,57 +152,57 @@ ja:
       #original_hash: 4d618bb
       name: 予選ラウンド
       #original_hash: 4d618bb
-      cellName: 予選ラウンド
+      cell_name: 予選ラウンド
     '1':
       #original_hash: 1e725b6
       name: 1 回戦
       #original_hash: 1e725b6
-      cellName: 1 回戦
+      cell_name: 1 回戦
     '2':
       #original_hash: 985c8d0
       name: 2 回戦
       #original_hash: 985c8d0
-      cellName: 2 回戦
+      cell_name: 2 回戦
     '3':
       #original_hash: e2f74d2
       name: 準決勝
       #original_hash: e2f74d2
-      cellName: 準決勝
+      cell_name: 準決勝
     b:
       #original_hash: 327c999
       name: B 決勝
       #original_hash: 327c999
-      cellName: B 決勝
+      cell_name: B 決勝
     c:
       #original_hash: 672b22c
       name: 決勝
       #original_hash: 672b22c
-      cellName: 決勝
+      cell_name: 決勝
     d:
       #original_hash: 1e725b6
       name: 1 回戦
       #original_hash: 1e725b6
-      cellName: 1 回戦
+      cell_name: 1 回戦
     e:
       #original_hash: 985c8d0
       name: 2 回戦
       #original_hash: 985c8d0
-      cellName: 2 回戦
+      cell_name: 2 回戦
     f:
       #original_hash: 672b22c
       name: 決勝
       #original_hash: 672b22c
-      cellName: 決勝
+      cell_name: 決勝
     g:
       #original_hash: ccf6f8e
       name: 第３回戦
       #original_hash: ccf6f8e
-      cellName: 第３回戦
+      cell_name: 第３回戦
     h:
       #original_hash: 4d618bb
       name: 予選ラウンド
       #original_hash: 4d618bb
-      cellName: 予選ラウンド
+      cell_name: 予選ラウンド
   attempts:
     #original_hash: 17dae1e
     attempt_name: '第%{number}試技'
@@ -393,23 +393,23 @@ ja:
         #original_hash: 7f3d889
         confirmed: 運営メンバー (代理人除く) による大会編集を許可しない。
         #original_hash: d493e6a
-        showAtAll: 大会を一般公開する
+        show_at_all: 大会を一般公開する
         #original_hash: 709a232
         name: 大会名
         #original_hash: f91b080
         name_reason: 大会名の由来 (命名理由)
         #original_hash: b649210
-        cellName: 大会名略称
+        cell_name: 大会名略称
         #original_hash: d523ebb
-        countryId: 開催国
+        country_id: 開催国
         #original_hash: 25b7b06
-        cityName: 都市名
+        city_name: 都市名
         #original_hash: 67cd406
         venue: 会場
         #original_hash: 486f8fb
-        venueAddress: 会場所在地
+        venue_address: 会場所在地
         #original_hash: 08767af
-        venueDetails: 会場詳細
+        venue_details: 会場詳細
         #original_hash: ff99f5b
         start_date: 開始日
         #original_hash: 89d10cd
@@ -544,7 +544,7 @@ ja:
         #original_hash: 8c41ae8
         wca_id: 個人
         #original_hash: d523ebb
-        countryId: 国
+        country_id: 国
         #original_hash: ab58155
         dob: 生年月日
         #original_hash: 8a754c6
@@ -596,19 +596,19 @@ ja:
         competition_id: 発生した大会
       competition_medium:
         #original_hash: 1917f4f
-        competitionId: 大会
+        competition_id: 大会
         #original_hash: 3deb745
-        type: 記録種別
+        media_type: 記録種別
         #original_hash: c3328c3
         text: 本文
         #original_hash: d051707
         uri: リンク
         #original_hash: 1be755a
-        submitterName: 送信者氏名
+        submitter_name: 送信者氏名
         #original_hash: 78cdfee
-        submitterEmail: 送信者メールアドレス
+        submitter_email: 送信者メールアドレス
         #original_hash: 0d31f23
-        submitterComment: 送信者コメント
+        submitter_comment: 送信者コメント
         #original_hash: bae7d5b
         status: 状態
       regional_organization:
@@ -674,7 +674,7 @@ ja:
         accepted: 受理済
         #original_hash: 96f608c
         pending: 保留中
-      type:
+      media_type:
         #original_hash: ee45c30
         report: 報告
         #original_hash: 4360c2d
@@ -767,9 +767,9 @@ ja:
           大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
           (2) 語頭を大文字にする</p><p> (3) 英数字と - & . : ' および半角スペースのみ使用可。</p>
         #original_hash: 525fcc8
-        cellName: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
+        cell_name: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
         #original_hash: bce4589
-        cityName: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
+        city_name: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
         #original_hash: bb470cc
         information: >-
           大会の概要 (例 : UT Open 2010 is the first students-organized competition in
@@ -789,7 +789,7 @@ ja:
         #original_hash: da39a3e
         clone_tabs: ''
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         end_date: ''
         #original_hash: da39a3e
@@ -813,7 +813,7 @@ ja:
         #original_hash: da39a3e
         registration_close: ''
         #original_hash: da39a3e
-        showAtAll: ''
+        show_at_all: ''
         #original_hash: da39a3e
         start_date: ''
         #original_hash: da39a3e
@@ -825,7 +825,7 @@ ja:
         #original_hash: 4bd7102
         competitor_limit_reason: 大会定員設定の理由 (英語で記入してください)
         #original_hash: da39a3e
-        venueAddress: ''
+        venue_address: ''
         #original_hash: da39a3e
         championship_type: ''
         #original_hash: 3de153b
@@ -938,7 +938,7 @@ ja:
         #original_hash: 498f4c5
         dob: '生年月日は半角英数で (西暦)-(月)-(日) の形式で記入してください (2000年1月23日生の場合: 2000-01-23)。'
         #original_hash: da39a3e
-        countryId: ''
+        country_id: ''
         #original_hash: da39a3e
         gender: ''
         #original_hash: da39a3e
@@ -972,19 +972,19 @@ ja:
         comment: ''
       competition_medium:
         #original_hash: da39a3e
-        competitionId: ''
+        competition_id: ''
         #original_hash: da39a3e
-        type: ''
+        media_type: ''
         #original_hash: da39a3e
         text: ''
         #original_hash: da39a3e
         uri: ''
         #original_hash: da39a3e
-        submitterName: ''
+        submitter_name: ''
         #original_hash: da39a3e
-        submitterEmail: ''
+        submitter_email: ''
         #original_hash: da39a3e
-        submitterComment: ''
+        submitter_comment: ''
         #original_hash: da39a3e
         status: ''
       results_submission:

@@ -17,7 +17,7 @@ RSpec.describe "relations" do
     ]
   end
 
-  context "given a person with multiple subIDs" do
+  context "given a person with multiple sub_ids" do
     it "renders properly" do
       get relation_path, params: {
         wca_id1: person1.wca_id,

@@ -21,7 +21,7 @@ RSpec.describe Api::V0::CompetitionsController do
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        showAtAll: true,
+        show_at_all: true,
       )
     }
 
@@ -33,7 +33,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it '404s on hidden competition' do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
       get :show, params: { id: competition.id }
       expect(response.status).to eq 404
       parsed_body = JSON.parse(response.body)
@@ -61,7 +61,7 @@ RSpec.describe Api::V0::CompetitionsController do
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        showAtAll: true,
+        show_at_all: true,
       )
     }
 
@@ -73,7 +73,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it '404s on hidden competition' do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
       get :show, params: { id: competition.id }
       expect(response.status).to eq 404
       parsed_body = JSON.parse(response.body)
@@ -102,8 +102,8 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'can query by country_iso2' do
-      vietnam_comp = FactoryBot.create(:competition, :confirmed, :visible, countryId: "Vietnam")
-      usa_comp = FactoryBot.create(:competition, :confirmed, :visible, countryId: "USA")
+      vietnam_comp = FactoryBot.create(:competition, :confirmed, :visible, country_id: "Vietnam")
+      usa_comp = FactoryBot.create(:competition, :confirmed, :visible, country_id: "USA")
 
       get :index, params: { country_iso2: "US" }
       json = JSON.parse(response.body)
@@ -165,8 +165,8 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it 'can do a plaintext query' do
-      terrible_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "A terrible competition 2016", countryId: "USA")
-      awesome_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", countryId: "France")
+      terrible_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "A terrible competition 2016", country_id: "USA")
+      awesome_comp = FactoryBot.create(:competition, :confirmed, :visible, name: "An awesome competition 2016", country_id: "France")
 
       get :index, params: { q: "AWES" }
       json = JSON.parse(response.body)
@@ -269,7 +269,7 @@ RSpec.describe Api::V0::CompetitionsController do
         start_date: "2014-02-03",
         end_date: "2014-02-05",
         external_website: "http://example.com",
-        showAtAll: true,
+        show_at_all: true,
         event_ids: %w(333 444),
         latitude: 43_641_740,
         longitude: -79_376_902,
@@ -299,7 +299,7 @@ RSpec.describe Api::V0::CompetitionsController do
     end
 
     it '404s on hidden competition' do
-      competition.update_column(:showAtAll, false)
+      competition.update_column(:show_at_all, false)
       get :show_wcif, params: { competition_id: "TestComp2014" }
       expect(response.status).to eq 404
       parsed_body = JSON.parse(response.body)

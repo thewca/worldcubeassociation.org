@@ -1,19 +1,19 @@
 # frozen_string_literal: true
 
 module DatabaseDumper
-  WHERE_VISIBLE_COMP = "WHERE Competitions.showAtAll = 1"
-  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
+  WHERE_VISIBLE_COMP = "WHERE competitions.show_at_all = 1"
+  JOIN_WHERE_VISIBLE_COMP = "JOIN competitions ON competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
   DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
   RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
   VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A " \
                          "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = 'VenueRoom') " \
                          "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}".freeze
-  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON Competitions.id = competition_events.competition_id " \
-                            "LEFT JOIN competition_delegates ON Competitions.id = competition_delegates.competition_id " \
+  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON competitions.id = competition_events.competition_id " \
+                            "LEFT JOIN competition_delegates ON competitions.id = competition_delegates.competition_id " \
                             "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
-                            "LEFT JOIN competition_organizers ON Competitions.id = competition_organizers.competition_id " \
+                            "LEFT JOIN competition_organizers ON competitions.id = competition_organizers.competition_id " \
                             "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
-                            "GROUP BY Competitions.id".freeze
+                            "GROUP BY competitions.id".freeze
 
   PUBLIC_RESULTS_VERSION = '1.0.0'
 
@@ -37,24 +37,24 @@ module DatabaseDumper
   end
 
   DEV_SANITIZERS = {
-    "Competitions" => {
+    "competitions" => {
       where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           name
           name_reason
-          cityName
-          countryId
+          city_name
+          country_id
           information
           start_date
           end_date
           venue
-          venueAddress
-          venueDetails
+          venue_address
+          venue_details
           external_website
-          cellName
-          showAtAll
+          cell_name
+          show_at_all
           latitude
           longitude
           confirmed_at
@@ -115,61 +115,61 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "CompetitionsMedia" => {
+    "competition_media" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          competitionId
-          type
+          competition_id
+          media_type
           text
           uri
-          timestampSubmitted
-          timestampDecided
+          submitted_at
+          decided_at
           status
         ),
         fake_values: {
-          "submitterName" => "'mr. media submitter'",
-          "submitterComment" => "'a comment about this media'",
-          "submitterEmail" => "'mediasubmitter@example.com'",
+          "submitter_name" => "'mr. media submitter'",
+          "submitter_comment" => "'a comment about this media'",
+          "submitter_email" => "'mediasubmitter@example.com'",
         },
       ),
     }.freeze,
-    "ConciseAverageResults" => {
+    "concise_average_results" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
-    "ConciseSingleResults" => {
+    "concise_single_results" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
-          continentId
-          countryId
+          continent_id
+          country_id
           day
-          eventId
+          event_id
           id
           month
-          personId
-          valueAndId
+          person_id
+          value_and_id
           year
         ),
       ),
     }.freeze,
-    "Continents" => {
+    "continents" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -177,35 +177,35 @@ module DatabaseDumper
           latitude
           longitude
           name
-          recordName
+          record_name
           zoom
         ),
       ),
     }.freeze,
-    "Countries" => {
+    "countries" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          continentId
+          continent_id
           iso2
           name
         ),
       ),
     }.freeze,
-    "Events" => {
+    "events" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
+          cell_name
           format
           name
           rank
         ),
       ),
     }.freeze,
-    "Formats" => {
+    "formats" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -219,19 +219,19 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "InboxPersons" => :skip_all_rows,
-    "InboxResults" => :skip_all_rows,
-    "Persons" => {
+    "inbox_persons" => :skip_all_rows,
+    "inbox_results" => :skip_all_rows,
+    "persons" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           wca_id
           comments
-          countryId
+          country_id
           gender
           name
-          subId
+          sub_id
         ),
         db_default: %w(
           comments
@@ -242,51 +242,51 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
+    "ranks_average" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "RanksSingle" => {
+    "ranks_single" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
+          continent_rank
+          country_rank
+          event_id
+          person_id
+          world_rank
         ),
       ),
     }.freeze,
-    "Results" => {
+    "results" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
           average
           best
-          competitionId
-          countryId
-          eventId
-          formatId
-          personId
-          personName
+          competition_id
+          country_id
+          event_id
+          format_id
+          person_id
+          person_name
           pos
-          regionalAverageRecord
-          regionalSingleRecord
-          roundTypeId
+          regional_average_record
+          regional_single_record
+          round_type_id
           updated_at
           value1
           value2
@@ -316,30 +316,30 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "RoundTypes" => {
+    "round_types" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          cellName
+          cell_name
           final
           name
           rank
         ),
       ),
     }.freeze,
-    "Scrambles" => {
+    "scrambles" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          competitionId
-          eventId
-          groupId
-          isExtra
-          roundTypeId
+          id
+          competition_id
+          event_id
+          group_id
+          is_extra
+          round_type_id
           scramble
-          scrambleId
-          scrambleNum
+          scramble_num
         ),
       ),
     }.freeze,
@@ -387,7 +387,7 @@ module DatabaseDumper
     }.freeze,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
-      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
+      where_clause: "LEFT JOIN competitions ON competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -916,7 +916,7 @@ module DatabaseDumper
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
-          subid
+          subId
           name
           countryId
           gender
@@ -944,7 +944,7 @@ module DatabaseDumper
           longitude
         ),
         fake_values: {
-          "cancelled" => "(Competitions.cancelled_at IS NOT NULL AND Competitions.cancelled_by IS NOT NULL)",
+          "cancelled" => "(competitions.cancelled_at IS NOT NULL AND competitions.cancelled_by IS NOT NULL)",
           "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
           "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
           "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
