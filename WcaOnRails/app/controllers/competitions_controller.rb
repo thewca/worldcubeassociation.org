@@ -180,7 +180,14 @@ class CompetitionsController < ApplicationController
   end
 
   def create
-    @competition = Competition.new(comp_params_form)
+    comp_data = comp_params_form
+    @competition = Competition.new(comp_data.except(:championships))
+
+    if comp_data[:championships].is_a?(Array)
+      comp_data[:championships].each do |type|
+        @competition.championships.build(championship_type: type)
+      end
+    end
 
     if @competition.save
       flash[:success] = t('competitions.messages.create_success')
@@ -628,9 +635,19 @@ class CompetitionsController < ApplicationController
     @competition_organizer_view = !@competition_admin_view
 
     comp_params_minus_id = comp_params_form
+
     new_id = comp_params_minus_id.delete(:id)
 
     old_organizers = @competition.organizers.to_a
+
+    # Update championships
+    champs = comp_params_minus_id[:championships] || []
+    champs.each do |type|
+      @competition.championships.find_or_create_by(championship_type: type)
+    end
+
+    @competition.championships.where.not(championship_type: champs).destroy_all
+    comp_params_minus_id[:championships] = @competition.championships
 
     if params[:commit] == "Delete"
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
@@ -780,7 +797,7 @@ class CompetitionsController < ApplicationController
         trainee_delegate_ids: params.dig('staff', 'trainee_delegate_ids'),
         organizer_ids: params.dig('staff', 'organizer_ids'),
         contact: params.dig('staff', 'contact'),
-        # championships: params['championships'],
+        championships: params['championships'],
         generate_website: params.dig('website', 'generate_website'),
         external_website: params.dig('website', 'external_website'),
         use_wca_registration: params.dig('website', 'use_wca_registration'),
