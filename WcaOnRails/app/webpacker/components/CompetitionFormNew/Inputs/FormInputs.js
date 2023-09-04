@@ -192,8 +192,9 @@ export const InputCompetitions = wrapInput((props) => (
     id={props.id}
     value={props.value}
     onChange={props.onChange}
+    freeze={props.freeze}
   />
-), ['id']);
+), ['id', 'freeze']);
 
 export const InputCurrencyAmount = wrapInput((props) => (
   <AutonumericField currency={props.currency} value={props.value} onChange={props.onChange} />

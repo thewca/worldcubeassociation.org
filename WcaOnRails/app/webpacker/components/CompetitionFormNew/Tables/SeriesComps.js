@@ -100,7 +100,7 @@ export default function SeriesComps() {
       <CompsTable
         comps={nearby}
         action={{
-          label: 'Add to series',
+          label: I18n.t('competitions.competition_series_fields.add_series'),
           onClick: (comp) => {
             setFormData((previousData) => ({
               ...previousData,

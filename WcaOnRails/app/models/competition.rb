@@ -1987,6 +1987,7 @@ class Competition < ApplicationRecord
       "end_date" => end_date,
       "registration_open" => registration_open,
       "registration_close" => registration_close,
+      "series" => competition_series&.to_comp_form,
       "information" => information,
       "competitorLimit" => {
         "competitor_limit_enabled" => competitor_limit_enabled,

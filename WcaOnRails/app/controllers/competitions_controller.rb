@@ -181,11 +181,23 @@ class CompetitionsController < ApplicationController
 
   def create
     comp_data = comp_params_form
-    @competition = Competition.new(comp_data.except(:championships))
+    @competition = Competition.new(comp_data.except(:championships, :series))
 
     if comp_data[:championships].is_a?(Array)
       comp_data[:championships].each do |type|
         @competition.championships.build(championship_type: type)
+      end
+    end
+
+    unless comp_data[:series].nil?
+      series = comp_data[:series]
+      if series[:id].nil?
+        @competition.competition_series = CompetitionSeries.new.tap do |s|
+          s.name = series[:name]
+          s.competition_ids = series[:competition_ids]
+        end
+      else
+        @competition.competition_series = CompetitionSeries.find(wcif_id: series[:id])
       end
     end
 
@@ -804,6 +816,7 @@ class CompetitionsController < ApplicationController
         registration_open: params['registration_open'],
         registration_close: params['registration_close'],
         information: params['information'],
+        series: params['series'],
         competitor_limit_enabled: params.dig('competitorLimit', 'competitor_limit_enabled'),
         competitor_limit: params.dig('competitorLimit', 'competitor_limit'),
         competitor_limit_reason: params.dig('competitorLimit', 'competitor_limit_reason'),

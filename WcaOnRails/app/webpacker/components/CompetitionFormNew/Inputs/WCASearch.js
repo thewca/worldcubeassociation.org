@@ -49,8 +49,10 @@ export function CompetitionSearch({
   id,
   value,
   onChange,
+  freeze,
 }) {
-  const classNames = 'form-control competition_id optional wca-autocomplete wca-autocomplete-competitions_search';
+  let classNames = 'form-control competition_id optional wca-autocomplete wca-autocomplete-competitions_search';
+  if (freeze) classNames += ' wca-autocomplete-input_lock';
 
   const [initialData, setInitialData] = useState(value ? null : '[]');
 
@@ -71,7 +73,6 @@ export function CompetitionSearch({
     $(ref).on('change', (e) => onChange(e, { value: e.target.value })).wcaAutocomplete();
   }, []);
 
-  console.log(initialData);
   if (!initialData) return <Loading />;
 
   return (

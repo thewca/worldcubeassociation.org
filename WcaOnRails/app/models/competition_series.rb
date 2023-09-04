@@ -76,6 +76,16 @@ class CompetitionSeries < ApplicationRecord
     json
   end
 
+  def to_comp_form
+    {
+      "persisted" => true,
+      "id" => wcif_id,
+      "shortName" => short_name,
+      "name" => name,
+      "competitionIds" => self.competitions.map(&:id).join(','),
+    }
+  end
+
   def to_wcif(authorized: false)
     {
       "id" => wcif_id,
