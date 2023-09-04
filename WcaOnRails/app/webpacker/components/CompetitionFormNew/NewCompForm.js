@@ -123,9 +123,7 @@ export default function NewCompForm({
   persisted = false,
   adminView = false,
   organizerView = false,
-  debugObj = null,
 }) {
-  console.log(debugObj);
   const [showDebug, setShowDebug] = useState(false);
 
   const [formData, setFormData] = React.useState(competition);
