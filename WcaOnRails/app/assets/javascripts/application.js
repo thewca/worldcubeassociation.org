@@ -14,7 +14,6 @@
 //= require bootstrap-sprockets
 //= require bootstrap-hover-dropdown
 //= require jquery.are-you-sure
-//= require locationpicker.jquery
 //= require selectize
 //= require selectize.do_not_clear_on_blur
 //= require selectize.tags_options
