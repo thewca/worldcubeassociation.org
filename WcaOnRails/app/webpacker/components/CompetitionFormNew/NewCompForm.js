@@ -23,6 +23,7 @@ import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
 import RegistrationCollisions from './Tables/RegistrationCollisions';
 import Errors from './Errors';
+import Series from './FormSections/Series';
 
 // TODO: Need to add cloning params
 
@@ -183,6 +184,7 @@ export default function NewCompForm({
           <InputDate id="end_date" />
         </Form.Group>
         <NearbyComps />
+        <Series />
         <Divider />
 
         <Form.Group widths="equal">

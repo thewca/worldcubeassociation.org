@@ -447,6 +447,20 @@ class CompetitionsController < ApplicationController
     render json: @nearby_competitions.map { |c| competition_form_nearby_json(c) }
   end
 
+  def series_eligible_competitions_json
+    # Copied from nearby_competitions, but returns JSON instead of the HTML table.
+    @competition = Competition.new
+    @competition.id = params[:id]
+    @competition.start_date = params[:start_date]
+    @competition.end_date = params[:end_date]
+    @competition.latitude_degrees = params[:coordinates_lat]
+    @competition.longitude_degrees = params[:coordinates_long]
+
+    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    @series_eligible_competitions = get_series_eligible_competitions(@competition)
+    render json: @series_eligible_competitions.map { |c| competition_form_nearby_json(c) }
+  end
+
   # @param [Competition] c
   def competition_form_registration_collision_json(c)
     if current_user.can_admin_results?

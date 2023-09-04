@@ -8,7 +8,7 @@ import TextareaAutosize from 'react-autosize-textarea';
 import I18n from '../../../lib/i18n';
 import FormContext from '../State/FormContext';
 import MarkdownEditor from './MarkdownEditor';
-import { UserSearch } from './WCASearch';
+import { CompetitionSearch, UserSearch } from './WCASearch';
 import AutonumericField from './AutonumericField';
 
 function getFieldLabel(id) {
@@ -186,6 +186,14 @@ export const InputUsers = wrapInput((props) => (
     traineeOnly={props.traineeOnly}
   />
 ), ['delegateOnly', 'traineeOnly']);
+
+export const InputCompetitions = wrapInput((props) => (
+  <CompetitionSearch
+    id={props.id}
+    value={props.value}
+    onChange={props.onChange}
+  />
+), ['id']);
 
 export const InputCurrencyAmount = wrapInput((props) => (
   <AutonumericField currency={props.currency} value={props.value} onChange={props.onChange} />

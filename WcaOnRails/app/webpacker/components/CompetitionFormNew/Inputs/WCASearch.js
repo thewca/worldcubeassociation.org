@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { userApiUrl } from '../../../lib/requests/routes.js.erb';
-import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { userApiUrl, competitionApiUrl } from '../../../lib/requests/routes.js.erb';
+import { fetchJsonOrError, fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
 import Loading from '../../Requests/Loading';
 
 export function UserSearch({
@@ -45,5 +45,43 @@ export function UserSearch({
   );
 }
 
-export function CompetitionSearch() {
+export function CompetitionSearch({
+  id,
+  value,
+  onChange,
+}) {
+  const classNames = 'form-control competition_id optional wca-autocomplete wca-autocomplete-competitions_search';
+
+  const [initialData, setInitialData] = useState(value ? null : '[]');
+
+  useEffect(() => {
+    if (!value) return;
+    const ids = value.split(',');
+    const promises = ids.map((compId) => fetchWithAuthenticityToken(competitionApiUrl(compId)));
+
+    Promise.all(promises).then((reqs) => {
+      Promise.all(reqs.map((req) => req.json())).then((data) => {
+        setInitialData(JSON.stringify(data));
+      });
+    });
+  }, []);
+
+  // This is a workaround for selectize and jquery not calling onChange
+  const refWrapper = useCallback((ref) => {
+    $(ref).on('change', (e) => onChange(e, { value: e.target.value })).wcaAutocomplete();
+  }, []);
+
+  console.log(initialData);
+  if (!initialData) return <Loading />;
+
+  return (
+    <input
+      ref={refWrapper}
+      id={id}
+      defaultValue={value}
+      className={classNames}
+      type="text"
+      data-data={initialData}
+    />
+  );
 }
