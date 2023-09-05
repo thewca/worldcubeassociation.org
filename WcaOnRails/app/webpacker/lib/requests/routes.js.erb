@@ -52,6 +52,7 @@ export const competitionEventsDataUrl = (id) => `<%= CGI.unescape(Rails.applicat
 
 export const adminCADUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_compute_auxiliary_data_path) %>`;
 
+
 export const adminFixResultsUrl = (personId, competition_id = undefined, event_id = undefined, round_type_id = undefined) => {
   const searchParams = new URLSearchParams(`person_id=${personId}`);
 
