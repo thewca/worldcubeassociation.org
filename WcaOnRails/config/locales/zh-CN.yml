@@ -515,8 +515,10 @@ zh-CN:
         #original_hash: 6e6a6f2
         o: 其他
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: 实习代表
         #original_hash: 9b97968
-        candidate_delegate: 实习代表
+        candidate_delegate: 初级代表
         #original_hash: 12ab214
         delegate: 代表
         #original_hash: d463c23
