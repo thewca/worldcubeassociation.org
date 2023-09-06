@@ -1,0 +1,26 @@
+name: Assign PR to Author
+
+on:
+  pull_request:
+    types:
+      - opened
+
+jobs:
+  assign:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Assign PR to Author
+        uses: actions/github-script@v4
+        with:
+          script: |
+            const author = context.payload.pull_request.user.login;
+            const issue_number = context.payload.pull_request.number;
+            github.issues.addAssignees({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issue_number,
+              assignees: [author]
+            });
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
