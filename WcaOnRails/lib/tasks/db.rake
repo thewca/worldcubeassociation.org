@@ -74,7 +74,7 @@ namespace :db do
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
           end
 
-          dummy_password = DbDumpHelper.use_staging_password? ? EnvVars.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
+          dummy_password = DbDumpHelper.use_staging_password? ? read_secret("STAGING_PASSWORD") : DbDumpHelper::DEFAULT_DEV_PASSWORD
 
           default_encrypted_password = User.new(password: dummy_password).encrypted_password
           LogTask.log_task "Setting all user passwords to '#{dummy_password}'" do

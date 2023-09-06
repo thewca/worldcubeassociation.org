@@ -470,12 +470,12 @@ class RegistrationsController < ApplicationController
       return head :bad_request
     end
     # Check if webhook signing is configured.
-    if EnvVars.STRIPE_WEBHOOK_SECRET.present?
+    if read_secret("STRIPE_WEBHOOK_SECRET").present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
       begin
         event = Stripe::Webhook.construct_event(
-          payload, signature, EnvVars.STRIPE_WEBHOOK_SECRET
+          payload, signature, read_secret("STRIPE_WEBHOOK_SECRET")
         )
       rescue Stripe::SignatureVerificationError => e
         logger.warn "Stripe webhook signature verification failed. #{e.message}"
