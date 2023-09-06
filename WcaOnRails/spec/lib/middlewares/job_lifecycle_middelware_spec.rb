@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'middlewares/job_lifecycle_middleware'
+require 'middlewares/job_reporting_middleware'
 require 'rails_helper'
 
 class SuccessfulJob < ApplicationJob
@@ -17,7 +17,7 @@ class FailingJob < ApplicationJob
   end
 end
 
-RSpec.describe Middlewares::JobLifecycleMiddleware do
+RSpec.describe Middlewares::JobReportingMiddleware do
   it "stores completed jobs in completed_jobs table" do
     expect(Sidekiq::Worker.jobs.size).to eq 0
 
