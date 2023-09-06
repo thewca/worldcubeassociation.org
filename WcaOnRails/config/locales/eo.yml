@@ -4778,22 +4778,6 @@ eo:
         Retpoŝtu la JSON-dosieron kiun estis eksportita per la WCA Workbook
         Assistant al <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Rilatoj
-      #original_hash: 69ba020
-      find_relations: Trovi konektojn inter kubantoj
-      #original_hash: 5d6056d
-      show_relation: Montru al mi la rilaton!
-      connectives:
-        #original_hash: f85194e
-        was_at: Ĉeestis
-        #original_hash: 8c00243
-        together_with: Kun
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Bonvolu doni du malsamajn validajn WCA-ID-jn.
   search_results:
     index:
       #original_hash: db98a68

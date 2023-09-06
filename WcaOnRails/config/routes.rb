@@ -243,9 +243,6 @@ Rails.application.routes.draw do
 
   patch '/update_locale/:locale' => 'application#update_locale', as: :update_locale
 
-  get '/relations' => 'relations#index'
-  get '/relation' => 'relations#relation'
-
   get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
 
   # WFC section

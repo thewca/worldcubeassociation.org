@@ -2799,22 +2799,6 @@ zh-CN:
       content_html: >-
         通过邮件将WCA成绩表助手生成的JSON文件发送到<a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: 关系
-      #original_hash: 69ba020
-      find_relations: 发现魔友间的联系
-      #original_hash: 5d6056d
-      show_relation: 显示关系
-      connectives:
-        #original_hash: f85194e
-        was_at: 曾参加
-        #original_hash: 8c00243
-        together_with: 并撞见了
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 请提供两个不同的有效 WCA ID
   search_results:
     index:
       #original_hash: db98a68

@@ -4855,22 +4855,6 @@ pt:
         Envie o ficheiro JSON exportado pelo Assistente de Resultados por email
         para <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relações
-      #original_hash: 69ba020
-      find_relations: Encontrar relações entre competidores
-      #original_hash: 5d6056d
-      show_relation: Mostrar-me a relação!
-      connectives:
-        #original_hash: f85194e
-        was_at: Esteve em
-        #original_hash: 8c00243
-        together_with: Juntos com
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Por favor submeta dois IDs da WCA válidos e distintos.
   search_results:
     index:
       #original_hash: db98a68

@@ -4490,22 +4490,6 @@ fi:
         Lähetä WCA Workbook Assistantista tallentamasi JSON-tiedosto
         sähköpostitse osoitteeseen <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Yhteydet
-      #original_hash: 69ba020
-      find_relations: Löydä kilpailijoiden väliset yhteydet
-      #original_hash: 5d6056d
-      show_relation: Näytä yhteys!
-      connectives:
-        #original_hash: f85194e
-        was_at: Oli kilpailussa
-        #original_hash: 8c00243
-        together_with: Seuraavan kilpailijan kanssa
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Syötäthän kaksi voimassaolevaa WCA ID:tä.'
   search_results:
     index:
       #original_hash: db98a68
