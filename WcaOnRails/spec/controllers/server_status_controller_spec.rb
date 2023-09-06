@@ -35,8 +35,8 @@ end
 RSpec.describe "JobsCheck" do
   let(:check) { JobsCheck.new }
 
-  let!(:dummy_job) { WcaCronjob::ALL_JOBS.sample }
-  let!(:another_job) { (WcaCronjob::ALL_JOBS.without dummy_job).sample }
+  let!(:dummy_job) { JobUtils::WCA_CRONJOBS.sample }
+  let!(:another_job) { (JobUtils::WCA_CRONJOBS.without dummy_job).sample }
 
   it "passes if there are young jobs" do
     _young_job = dummy_job.cronjob_statistics.update!(enqueued_at: 1.minutes.ago)
