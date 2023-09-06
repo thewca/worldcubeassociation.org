@@ -71,5 +71,7 @@ AppSecrets = SuperConfig.new do
     optional :RECAPTCHA_PRIVATE_KEY, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :STAGING_PASSWORD, :string, ''
+    optional :SMTP_USERNAME, :string, ''
+    optional :SMTP_PASSWORD, :string, ''
   end
 end

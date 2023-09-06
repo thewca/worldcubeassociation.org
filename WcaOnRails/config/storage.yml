@@ -4,5 +4,5 @@ local:
 
 amazon:
   service: S3
-  bucket: <%= ENV["AWS_BUCKET"] %>
+  bucket: <%= EnvConfig.STORAGE_AWS_BUCKET %>
   region: "us-west-2"
