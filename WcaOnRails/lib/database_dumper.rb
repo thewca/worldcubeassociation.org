@@ -726,9 +726,6 @@ module DatabaseDumper
     }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
-    # We have seen MySQL full table errors when trying to copy the entire linkings table.
-    # Fortunately, it is a not really important table, so we can simply skip all its rows.
-    "linkings" => :skip_all_rows,
     "timestamps" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(

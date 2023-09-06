@@ -726,12 +726,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.datetime "digest_sent_at", precision: nil
   end
 
-  create_table "linkings", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "wca_id", limit: 10, null: false
-    t.text "wca_ids", size: :medium, null: false
-    t.index ["wca_id"], name: "index_linkings_on_wca_id", unique: true
-  end
-
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "latitude_microdegrees"
