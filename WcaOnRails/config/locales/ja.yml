@@ -3421,20 +3421,6 @@ ja:
         WCA Workbook Assistant によって出力された大会結果 JSON ファイルを <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
         に送信してください
-  relations:
-    relation:
-      #original_hash: 69ba020
-      find_relations: キューバー同士のつながりを探してみよう
-      #original_hash: 5d6056d
-      show_relation: つながりを表示する!
-      connectives:
-        #original_hash: f85194e
-        was_at: が
-        #original_hash: 8c00243
-        together_with: で一緒にいた人は
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 異なる 2 人の WCA ID を指定してください。
   search_results:
     index:
       #original_hash: db98a68

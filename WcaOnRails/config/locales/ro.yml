@@ -2495,7 +2495,7 @@ ro:
       fie aprobată decât dacă se eliberează un loc.
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
-      Limita numărului de concurenți pentru această competiție este 
+      Limita numărului de concurenți pentru această competiție este
       %{competitor_limit} și este posibil să se fi atins deja. Dacă te
       înregistrzi, vei fi pus într-o listă de așteptare. În acest caz, este
       posibil ca participarea ta să fie aprobată doar în urma eliberării unui
@@ -4927,22 +4927,6 @@ ro:
         Trimite un e-mail cu fișierul JSON exportat de WCA Workbook Assistant
         către <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>.
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relații
-      #original_hash: 69ba020
-      find_relations: Găsește conexiuni între cuberi
-      #original_hash: 5d6056d
-      show_relation: Arată-mi relația!
-      connectives:
-        #original_hash: f85194e
-        was_at: A fost la
-        #original_hash: 8c00243
-        together_with: Împreună cu
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Te rugăm să introduci două id-uri WCA valide diferite.
   search_results:
     index:
       #original_hash: db98a68

@@ -1354,7 +1354,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1912,7 +1912,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -4593,22 +4593,6 @@ th:
       content_html: >-
         email ไฟล์ JSON ที่ได้จาก WCA Workbook Assistant ไปที่ <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: ความสัมพันธ์
-      #original_hash: 69ba020
-      find_relations: ค้นหาความสัมพันธ์ระหว่างผู้เข้าแข่งขัน
-      #original_hash: 5d6056d
-      show_relation: แสดงความสัมพันธ์
-      connectives:
-        #original_hash: f85194e
-        was_at: เคยแข่งขันที่
-        #original_hash: 8c00243
-        together_with: ด้วยกันกับ
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: กรุณาแจ้ง WCA ID ที่ถูกต้อง 2 อัน
   search_results:
     index:
       #original_hash: db98a68
