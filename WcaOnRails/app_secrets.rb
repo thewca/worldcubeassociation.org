@@ -3,7 +3,6 @@
 require "superconfig"
 
 require_relative "env_config"
-require_relative "vault_config"
 
 SuperConfig::Base.class_eval do
   # The skeleton is stolen from the source code of the `superconfig` gem, file lib/superconfig.rb:104
@@ -25,6 +24,8 @@ end
 
 AppSecrets = SuperConfig.new do
   if Rails.env.production?
+    require_relative "vault_config"
+
     vault :DATABASE_PASSWORD
     vault :GOOGLE_MAPS_API_KEY
     vault :GITHUB_CREATE_PR_ACCESS_TOKEN
