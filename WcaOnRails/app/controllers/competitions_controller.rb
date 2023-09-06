@@ -326,7 +326,7 @@ class CompetitionsController < ApplicationController
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: EnvVars.ROOT_URL + competitions_stripe_connect_path,
+      redirect_uri: EnvConfig.ROOT_URL + competitions_stripe_connect_path,
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
@@ -357,7 +357,7 @@ class CompetitionsController < ApplicationController
       auth_scheme: :request_body,
     }
 
-    OAuth2::Client.new(read_secret("STRIPE_CLIENT_ID"), read_secret("STRIPE_API_KEY"), options)
+    OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 
   def disconnect_stripe
