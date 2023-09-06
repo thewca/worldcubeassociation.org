@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class SyncMailingListsJob < ApplicationJob
+class SyncMailingListsJob < WcaCronjob
   SENIOR_DELEGATES_REGIONS_INFO = [
     {
       mailing_list: "delegates.africa@worldcubeassociation.org",

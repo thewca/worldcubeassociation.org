@@ -35,11 +35,11 @@ end
 RSpec.describe "JobsCheck" do
   let(:check) { JobsCheck.new }
 
-  let!(:dummy_job) { ApplicationJob::WCA_JOBS.sample }
-  let!(:another_job) { (ApplicationJob::WCA_JOBS.without dummy_job).sample }
+  let!(:dummy_job) { WcaCronjob::ALL_JOBS.sample }
+  let!(:another_job) { (WcaCronjob::ALL_JOBS.without dummy_job).sample }
 
   it "passes if there are young jobs" do
-    _young_job = dummy_job.job_statistics.update!(enqueued_at: 1.minutes.ago)
+    _young_job = dummy_job.cronjob_statistics.update!(enqueued_at: 1.minutes.ago)
 
     status, description = check.status_description
 
@@ -48,8 +48,8 @@ RSpec.describe "JobsCheck" do
   end
 
   it "finds the oldest job that has been waiting to run" do
-    _old_job = dummy_job.job_statistics.update!(enqueued_at: 10.minutes.ago)
-    oldest_job = another_job.job_statistics.update!(enqueued_at: 15.minutes.ago)
+    _old_job = dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
+    oldest_job = another_job.cronjob_statistics.update!(enqueued_at: 15.minutes.ago)
 
     status, description = check.status_description
 
@@ -58,8 +58,8 @@ RSpec.describe "JobsCheck" do
   end
 
   it "ignores jobs in progress" do
-    old_job = dummy_job.job_statistics.update!(enqueued_at: 10.minutes.ago)
-    _old_but_running_job = another_job.job_statistics.update!(enqueued_at: 15.minutes.ago, end_date: nil)
+    old_job = dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
+    _old_but_running_job = another_job.cronjob_statistics.update!(enqueued_at: 15.minutes.ago, end_date: nil)
 
     status, description = check.status_description
 

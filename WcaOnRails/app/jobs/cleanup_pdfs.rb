@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CleanupPdfs < ApplicationJob
+class CleanupPdfs < WcaCronjob
   CACHE_DIRECTORY = Rails.root.join("tmp/cache/pdfs").freeze
   RM_DELAY = 1.week
 

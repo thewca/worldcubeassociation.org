@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ClearConnectedStripeAccount < ApplicationJob
+class ClearConnectedStripeAccount < WcaCronjob
   DELAY_IN_DAYS = 21
 
   def perform

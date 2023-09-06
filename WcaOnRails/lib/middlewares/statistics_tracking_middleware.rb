@@ -12,7 +12,7 @@ module Middlewares
       # (to access before _and_ after yield) but there are jobs that we don't want to compute statistics for
       statistics = CronjobStatistic.find_by name: job_class
 
-      if queue.to_sym == ApplicationJob::WCA_QUEUE && statistics.present?
+      if queue.to_sym == WcaCronjob::QUEUE_NAME && statistics.present?
         statistics.touch :run_start
       end
 
@@ -28,7 +28,7 @@ module Middlewares
         # Propagate the error so that sidekiq can do retry-handling
         raise e
       ensure
-        if queue.to_sym == ApplicationJob::WCA_QUEUE && statistics.present?
+        if queue.to_sym == WcaCronjob::QUEUE_NAME && statistics.present?
           statistics.touch :run_end
 
           statistics.enqueued_at = nil

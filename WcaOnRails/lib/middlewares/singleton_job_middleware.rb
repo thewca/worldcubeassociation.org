@@ -6,7 +6,7 @@ module Middlewares
 
     # The Sidekiq middleware has to follow this method signature, even though some parameters may be unused.
     def call(job_class_or_string, job, queue, redis_pool)
-      if queue.to_sym == ApplicationJob::WCA_QUEUE
+      if queue.to_sym == WcaCronjob::QUEUE_NAME
         # Rails ActiveJob wraps the jobs in a very complicated fashion
         stat_key = job["wrapped"] || job_class_or_string
         statistics = CronjobStatistic.find_or_create_by(name: stat_key)

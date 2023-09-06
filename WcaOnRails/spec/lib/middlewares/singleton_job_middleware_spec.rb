@@ -27,7 +27,7 @@ RSpec.describe Middlewares::SingletonJobMiddleware do
 
     SampleJob.perform_later
 
-    job_statistics = SampleJob.job_statistics
+    job_statistics = SampleJob.cronjob_statistics
     expect(job_statistics.recently_rejected).to be(0)
 
     SampleJob.perform_later
@@ -42,7 +42,7 @@ RSpec.describe Middlewares::SingletonJobMiddleware do
 
     SampleJob.perform_later
 
-    job_statistics = SampleJob.job_statistics
+    job_statistics = SampleJob.cronjob_statistics
     expect(job_statistics.recently_rejected).to be(0)
 
     SampleJob.perform_later

@@ -68,7 +68,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
       expect(Sidekiq::Worker.jobs.size).to be(0)
       expect(CronjobStatistic.count).to be(0)
 
-      job_statistics = SuccessfulJob.job_statistics
+      job_statistics = SuccessfulJob.cronjob_statistics
 
       # We intentionally want to return an *empty* statistics object, never nil!
       expect(job_statistics).to_not be_nil
@@ -98,7 +98,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
       SuccessfulJob.perform_now
 
-      job_statistics = SuccessfulJob.job_statistics
+      job_statistics = SuccessfulJob.cronjob_statistics
 
       expect(job_statistics.last_run_successful).to be(true)
       expect(job_statistics.times_completed).to be(1)
@@ -119,7 +119,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
       FailingJob.perform_now
 
-      job_statistics = FailingJob.job_statistics
+      job_statistics = FailingJob.cronjob_statistics
 
       expect(job_statistics.last_run_successful).to be(false)
       expect(job_statistics.recently_errored).to be(1)
@@ -132,7 +132,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
       FailingJob.perform_now
 
-      job_statistics = FailingJob.job_statistics
+      job_statistics = FailingJob.cronjob_statistics
 
       expect(job_statistics.recently_errored).to be(1)
       expect(job_statistics.average_runtime).to be_nil
@@ -144,7 +144,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
       FailingJob.perform_now
 
-      job_statistics = FailingJob.job_statistics
+      job_statistics = FailingJob.cronjob_statistics
       expect(job_statistics.recently_errored).to be(1)
 
       # trigger re-run
@@ -160,7 +160,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
       FailingJob.perform_now
 
-      job_statistics = FailingJob.job_statistics
+      job_statistics = FailingJob.cronjob_statistics
       expect(job_statistics.recently_errored).to be(1)
 
       # trigger succeeding run
