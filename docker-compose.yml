@@ -21,7 +21,7 @@ services:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
-      REDIS_URL: redis://wca_redis:6379/0
+      CACHE_URL: redis://wca_redis:6379/0
     tty: true
     # First, install Ruby and Node dependencies
     # Next, load the database if it does not exist yet

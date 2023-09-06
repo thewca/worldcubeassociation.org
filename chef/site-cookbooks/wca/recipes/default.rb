@@ -280,7 +280,7 @@ elsif node.chef_environment == "staging"
   redis[:host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
 end
 
-redis_url = "redis://#{redis[:host]}:#{redis[:port]}"
+cache_url = "redis://#{redis[:host]}:#{redis[:port]}"
 
 #### Rails secrets
 # Don't be confused by the name of this file! This is used by both our staging
@@ -293,7 +293,7 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
-              redis_url: redis_url,
+              cache_url: cache_url,
               db_host: db["host"],
               read_replica_host: read_replica
             })
