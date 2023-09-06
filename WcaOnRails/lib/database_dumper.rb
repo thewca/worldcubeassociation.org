@@ -460,8 +460,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "completed_jobs" => :skip_all_rows,
-    "delayed_jobs" => :skip_all_rows,
     "delegate_reports" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
