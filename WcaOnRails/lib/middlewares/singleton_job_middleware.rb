@@ -9,7 +9,7 @@ module Middlewares
       if queue.to_sym == ApplicationJob::WCA_QUEUE
         # Rails ActiveJob wraps the jobs in a very complicated fashion
         stat_key = job["wrapped"] || job_class_or_string
-        statistics = JobStatistic.find_or_create_by(name: stat_key)
+        statistics = CronjobStatistic.find_or_create_by(name: stat_key)
 
         # If a job has a start timestamp but no end timestamp, it is currently running
         if statistics.run_start.present? && !statistics.run_end.present?

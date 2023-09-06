@@ -35,38 +35,38 @@ end
 RSpec.describe Middlewares::StatisticsTrackingMiddleware do
   it "doesn't track statistics for jobs on default queue" do
     expect(Sidekiq::Worker.jobs.size).to be(0)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
 
     DefaultJob.perform_later
 
     expect(Sidekiq::Worker.jobs.size).to be(1)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
 
     Sidekiq::Worker.drain_all
 
     expect(Sidekiq::Worker.jobs.size).to be(1)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
   end
 
   it "doesn't track statistics for jobs on mailer queue" do
     expect(Sidekiq::Worker.jobs.size).to be(0)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
 
     DummyMailer.send_dummy_email.deliver_later
 
     expect(Sidekiq::Worker.jobs.size).to be(1)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
 
     Sidekiq::Worker.drain_all
 
     expect(Sidekiq::Worker.jobs.size).to be(0)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
   end
 
   context "successful job" do
     it "creates new statistics on demand" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       job_statistics = SuccessfulJob.job_statistics
 
@@ -79,12 +79,12 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
       SuccessfulJob.perform_now
 
-      expect(JobStatistic.count).to be(1)
+      expect(CronjobStatistic.count).to be(1)
     end
 
     it "records job as finished" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       SuccessfulJob.perform_now
 
@@ -94,7 +94,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
     it "counts successful job runs" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       SuccessfulJob.perform_now
 
@@ -115,7 +115,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
   context "unsuccessful job" do
     it "records the error" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       FailingJob.perform_now
 
@@ -128,7 +128,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
     it "does not count errors towards the runtime" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       FailingJob.perform_now
 
@@ -140,7 +140,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
     it "counts the retries" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       FailingJob.perform_now
 
@@ -156,7 +156,7 @@ RSpec.describe Middlewares::StatisticsTrackingMiddleware do
 
     it "resets error count on successful run" do
       expect(Sidekiq::Worker.jobs.size).to be(0)
-      expect(JobStatistic.count).to be(0)
+      expect(CronjobStatistic.count).to be(0)
 
       FailingJob.perform_now
 

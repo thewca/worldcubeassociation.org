@@ -27,7 +27,7 @@ class ApplicationJob < ActiveJob::Base
 
   class << self
     def job_statistics
-      JobStatistic.find_or_create_by!(name: self.name)
+      CronjobStatistic.find_or_create_by!(name: self.name)
     end
 
     def start_date

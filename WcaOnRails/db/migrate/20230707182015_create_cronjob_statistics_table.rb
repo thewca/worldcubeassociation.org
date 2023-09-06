@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class CreateJobStatisticsTable < ActiveRecord::Migration[7.0]
+class CreateCronjobStatisticsTable < ActiveRecord::Migration[7.0]
   def change
-    create_table :job_statistics, id: false do |t|
+    create_table :cronjob_statistics, id: false do |t|
       t.string :name, primary_key: true
       t.datetime :run_start
       t.datetime :run_end

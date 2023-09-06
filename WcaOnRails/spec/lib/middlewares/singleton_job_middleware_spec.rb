@@ -23,7 +23,7 @@ RSpec.describe Middlewares::SingletonJobMiddleware do
 
   it "counts how many times a job has been rejected" do
     expect(Sidekiq::Worker.jobs.size).to be(0)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
 
     SampleJob.perform_later
 
@@ -38,7 +38,7 @@ RSpec.describe Middlewares::SingletonJobMiddleware do
 
   it "resets the rejected job counter upon successful rerun" do
     expect(Sidekiq::Worker.jobs.size).to be(0)
-    expect(JobStatistic.count).to be(0)
+    expect(CronjobStatistic.count).to be(0)
 
     SampleJob.perform_later
 

@@ -10,7 +10,7 @@ module Middlewares
 
       # Note that we DON'T use find_or_create_by here, because we need the variable on top-level
       # (to access before _and_ after yield) but there are jobs that we don't want to compute statistics for
-      statistics = JobStatistic.find_by name: job_class
+      statistics = CronjobStatistic.find_by name: job_class
 
       if queue.to_sym == ApplicationJob::WCA_QUEUE && statistics.present?
         statistics.touch :run_start
