@@ -10,6 +10,6 @@ class CronjobStatistic < ApplicationRecord
   end
 
   def scheduled?
-    self.scheduled_at.present?
+    self.enqueued_at.present?
   end
 end

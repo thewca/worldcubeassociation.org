@@ -10,7 +10,7 @@ class WcaCronjob < ApplicationJob
     statistics = job.class.cronjob_statistics
 
     # If a job has a start timestamp but no end timestamp, it is currently running
-    if statistics.in_progress?
+    if statistics.scheduled? || statistics.in_progress?
       statistics.increment! :recently_rejected
 
       # Make Sidekiq abort and do NOT enqueue the job
@@ -75,7 +75,7 @@ class WcaCronjob < ApplicationJob
   end
 
   class << self
-    delegate :in_progress?, :scheduled?, :finished?, to: :cronjob_statistics
+    delegate :in_progress?, :scheduled?, :finished?, :last_run_successful?, to: :cronjob_statistics
 
     def cronjob_statistics
       CronjobStatistic.find_or_create_by!(name: self.name)
