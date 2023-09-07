@@ -21,7 +21,8 @@ services:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
-      CACHE_URL: redis://wca_redis:6379/0
+      CACHE_REDIS_URL: redis://wca_redis:6379/0
+      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
       MAILCATCHER_SMTP_HOST: wca_mailcatcher
     tty: true
     # First, install Ruby and Node dependencies
@@ -84,7 +85,7 @@ services:
     environment:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
-      REDIS_URL: redis://wca_redis:6379/0
+      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
       DISABLE_CRONJOBS: true
     command: >
       bash -c 'bundle install && yarn install &&
