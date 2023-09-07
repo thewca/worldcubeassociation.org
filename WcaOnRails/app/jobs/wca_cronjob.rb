@@ -23,7 +23,7 @@ class WcaCronjob < ApplicationJob
     statistics = job.class.cronjob_statistics
 
     statistics.touch :enqueued_at
-    statistics.recently_rejected = 0
+    statistics.recently_rejected = nil
 
     statistics.save!
   end
