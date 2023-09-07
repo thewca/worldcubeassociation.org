@@ -44,6 +44,9 @@ class WcaCronjob < ApplicationJob
       run_successful = false
       error_message = e.message
 
+      # Inform WST about the error so we can investigate and take action if required
+      JobFailureMailer.notify_admin_of_job_failure(job, e).deliver_now
+
       # Propagate the error so that our job adapter can do retry-handling
       raise e
     ensure

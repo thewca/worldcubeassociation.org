@@ -3,10 +3,7 @@
 # Preview all emails at http://localhost:3000/rails/mailers/job_failure_mailer
 class JobFailureMailerPreview < ActionMailer::Preview
   def notify_admin_of_job_failure
-    job = {
-      jid: '4242',
-      args: %w[some random arguments],
-    }
+    job = JobUtils::WCA_CRONJOBS.sample.new
     begin
       raise "This is an error!"
     rescue StandardError => e
