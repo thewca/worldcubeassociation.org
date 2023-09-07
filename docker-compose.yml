@@ -86,7 +86,9 @@ services:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
       SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
-      DISABLE_CRONJOBS: true
+      # Cronjobs are disabled in development by default. If you wish to run cronjobs,
+      # set this env variable to any integer value greater than zero
+      # CRONJOB_POLLING_MINUTES: 30
     command: >
       bash -c 'bundle install && yarn install &&
       bundle exec sidekiq'

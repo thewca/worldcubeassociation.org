@@ -16,6 +16,7 @@ EnvVars = SuperConfig.new do
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
+    optional :CRONJOB_POLLING_SECONDS, :int, 0
   end
 
   # Set WCA_LIVE_SITE to enable Google Analytics
@@ -48,7 +49,6 @@ EnvVars = SuperConfig.new do
   optional :SIDEKIQ_REDIS_URL, :string, ''
   optional :STAGING_PASSWORD, :string, ''
   optional :MAILCATCHER_SMTP_HOST, :string, ''
-  optional :DISABLE_CRONJOBS, :bool, false
 
   mandatory :GOOGLE_MAPS_API_KEY, :string
   mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
