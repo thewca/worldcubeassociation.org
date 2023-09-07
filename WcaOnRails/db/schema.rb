@@ -645,12 +645,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_155619) do
   create_table "cronjob_statistics", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.datetime "run_start", precision: nil
     t.datetime "run_end", precision: nil
-    t.boolean "last_run_successful", default: false
+    t.boolean "last_run_successful", default: false, null: false
     t.text "last_error_message"
     t.datetime "enqueued_at", precision: nil
-    t.integer "recently_rejected"
-    t.integer "recently_errored"
-    t.integer "times_completed"
+    t.integer "recently_rejected", default: 0, null: false
+    t.integer "recently_errored", default: 0, null: false
+    t.integer "times_completed", default: 0, null: false
     t.bigint "average_runtime"
   end
 

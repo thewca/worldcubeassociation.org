@@ -32,6 +32,14 @@ RSpec.describe WcaCronjob, type: :job do
     expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(0)
   end
 
+  it "doesn't enqueue a failed job again" do
+    expect { FailingJob.perform_later }.to change { enqueued_jobs.size }.by(1)
+
+    expect { perform_enqueued_jobs }.to raise_error(RuntimeError)
+
+    expect { FailingJob.perform_later }.to change { enqueued_jobs.size }.by(0)
+  end
+
   it "allows enqueuing multiple jobs of different types at the same time" do
     expect { ExampleJob.perform_later }.to change { enqueued_jobs.size }.by(1)
     expect { ExampleJob2.perform_later }.to change { enqueued_jobs.size }.by(1)

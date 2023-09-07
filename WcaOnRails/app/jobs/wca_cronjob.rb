@@ -9,11 +9,10 @@ class WcaCronjob < ApplicationJob
   before_enqueue do |job|
     statistics = job.class.cronjob_statistics
 
-    # If a job has a start timestamp but no end timestamp, it is currently running
-    if statistics.scheduled? || statistics.in_progress?
+    if statistics.scheduled? || statistics.in_progress? || statistics.recently_errored > 0
       statistics.increment! :recently_rejected
 
-      # Make Sidekiq abort and do NOT enqueue the job
+      # Make ActiveJob abort and do NOT enqueue the job
       throw :abort
     end
   end
@@ -23,7 +22,7 @@ class WcaCronjob < ApplicationJob
     statistics = job.class.cronjob_statistics
 
     statistics.touch :enqueued_at
-    statistics.recently_rejected = nil
+    statistics.recently_rejected = 0
 
     statistics.save!
   end
@@ -34,6 +33,9 @@ class WcaCronjob < ApplicationJob
     statistics = job.class.cronjob_statistics
 
     statistics.touch :run_start
+    statistics.enqueued_at = nil
+
+    statistics.save!
 
     run_successful = true
     error_message = nil
@@ -52,8 +54,6 @@ class WcaCronjob < ApplicationJob
     ensure
       statistics.touch :run_end
 
-      statistics.enqueued_at = nil
-
       statistics.last_run_successful = run_successful
       statistics.last_error_message = error_message
 
@@ -66,6 +66,7 @@ class WcaCronjob < ApplicationJob
         new_average = (current_average + runtime.round) / statistics.times_completed
 
         statistics.average_runtime = new_average
+        statistics.recently_errored = 0
       else
         statistics.increment :recently_errored
       end

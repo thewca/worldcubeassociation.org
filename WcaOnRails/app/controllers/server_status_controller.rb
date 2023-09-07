@@ -50,7 +50,7 @@ class JobsCheck < StatusCheck
   end
 
   protected def _status_description
-    jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: nil, run_start: nil)
+    jobs_that_should_have_run_by_now = CronjobStatistic.where(recently_rejected: 0, run_start: nil)
                                                        .where('enqueued_at < ?', MINUTES_IN_WHICH_A_JOB_SHOULD_HAVE_STARTED_RUNNING.minutes.ago)
 
     oldest_job_that_should_have_run_by_now = jobs_that_should_have_run_by_now.order(:enqueued_at).first
