@@ -274,7 +274,7 @@ redis = {
 
 if node.chef_environment == "production"
   # In production mode, we use Amazon ElasticCache.
-  redis[:host] = "wca-main-cache-001.iebvzt.0001.usw2.cache.amazonaws.com:6379"
+  redis[:host] = "wca-main-cache-001.iebvzt.0001.usw2.cache.amazonaws.com"
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon ElasticCache.
   redis[:host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
