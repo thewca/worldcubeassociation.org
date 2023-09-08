@@ -62,7 +62,7 @@ WorkingDirectory=<%= @repo_root %>/WcaOnRails
 # ExecStart=/home/deploy/.rvm/gems/ruby-2.6.5@gemset-name/wrappers/bundle exec sidekiq -e production
 # If you use rvm in production with gemset and ruby version/gemset is specified in .ruby-version,
 # .ruby-gemsetor or .rvmrc file in the working directory
-ExecStart=ExecStart=/bin/bash -lc 'exec /home/<%= @username %>/.rbenv/shims/bundle exec sidekiq -e production'
+ExecStart=/bin/bash -lc 'exec /home/<%= @username %>/.rbenv/shims/bundle exec sidekiq -e production'
 
 # Use `systemctl kill -s TSTP sidekiq` to quiet the Sidekiq process
 
