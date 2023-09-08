@@ -22,6 +22,7 @@ services:
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
       CACHE_URL: redis://wca_redis:6379/0
+      MAILCATCHER_SMTP_HOST: wca_mailcatcher
     tty: true
     # First, install Ruby and Node dependencies
     # Next, load the database if it does not exist yet
@@ -65,6 +66,17 @@ services:
         # We need to make sure that the database is populated because our frontend code
         # pulls stuff like WCA Events and Round formats from the DB when compiling assets
         condition: 'service_healthy'
+
+  wca_mailcatcher:
+    <<: *app
+    container_name: "mailcatcher"
+    expose:
+      - "1025"
+    ports:
+      - "1080:1080"
+    command: >
+      bash -c 'gem install mailcatcher &&
+      mailcatcher --foreground --ip=0.0.0.0'
 
   wca_db:
     image: mysql:8.0

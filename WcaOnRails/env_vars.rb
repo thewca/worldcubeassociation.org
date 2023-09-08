@@ -45,6 +45,7 @@ EnvVars = SuperConfig.new do
   optional :STRIPE_WEBHOOK_SECRET, :string, ''
   optional :CACHE_URL, :string, ''
   optional :STAGING_PASSWORD, :string, ''
+  optional :MAILCATCHER_SMTP_HOST, :string, ''
 
   mandatory :GOOGLE_MAPS_API_KEY, :string
   mandatory :GITHUB_CREATE_PR_ACCESS_TOKEN, :string
