@@ -67,8 +67,10 @@ namespace :db do
 
           config = ActiveRecord::Base.connection_db_config
           LogTask.log_task "Clobbering contents of '#{config.database}' with #{DbDumpHelper::DEVELOPER_EXPORT_SQL}" do
-            DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config.database}")
-            DatabaseDumper.mysql("CREATE DATABASE #{config.database}")
+            ActiveRecord::Tasks::DatabaseTasks.drop config
+            ActiveRecord::Tasks::DatabaseTasks.create config
+            ActiveRecord::Tasks::DatabaseTasks.load_schema config
+
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
           end
 
