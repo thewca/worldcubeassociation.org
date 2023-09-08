@@ -7,7 +7,6 @@ namespace :work do
     CleanupPdfs.perform_later
     SubmitResultsNagJob.perform_later
     SubmitReportNagJob.perform_later
-    ComputeLinkings.perform_later
     DumpDeveloperDatabase.perform_later
     DumpPublicResultsDatabase.perform_later
     UnstickPosts.perform_later
