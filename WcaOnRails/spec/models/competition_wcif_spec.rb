@@ -313,6 +313,17 @@ RSpec.describe "Competition WCIF" do
       # Adding a competitor limit should error
       expect { competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate) }.to raise_error(WcaExceptions::BadApiParameter)
     end
+
+    it "does not error when the limit is unchanged" do
+      competitor_limit_wcif = 50
+
+      # Manually confirm the competition
+      competition.confirmed_at = "2013-06-01"
+      competition.save!
+
+      competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate)
+      expect(competition.to_wcif["competitorLimit"]).to eq(competitor_limit_wcif)
+    end
   end
 
   describe "#set_wcif_events!" do
