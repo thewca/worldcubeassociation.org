@@ -12,7 +12,8 @@ Rails.application.routes.draw do
   mount Starburst::Engine => '/starburst'
 
   # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
-  authenticate :user, ->(user) { user.admin? } do
+  # Specifically referring to results because WRT needs access to this on top of regular admins.
+  authenticate :user, ->(user) { user.can_admin_results? } do
     mount Sidekiq::Web => '/sidekiq'
   end
 
