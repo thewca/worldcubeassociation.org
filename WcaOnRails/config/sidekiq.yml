@@ -1,0 +1,11 @@
+:queues:
+  - critical
+  - default
+  - wca_jobs
+  - mailers
+development:
+  :concurrency: 5
+  :verbose: true
+  # We cannot use EnvVars here because the Sidekiq server is booted outside of the Rails pipeline.
+  # Setting the value to zero (as a default) *disables* cronjobs entirely as per sidekiq-cron documentation.
+  :cron_poll_interval: <%= ENV.fetch('CRONJOB_POLLING_SECONDS', 0) %>

@@ -1,0 +1,65 @@
+clear_stripe:
+  class: "ClearConnectedStripeAccount"
+  cron: "0 0 * * *"
+  queue: wca_jobs
+
+cleanup_pdfs:
+  class: "CleanupPdfs"
+  cron: "0 */6 * * *"
+  queue: wca_jobs
+
+submit_results_nag:
+  class: "SubmitResultsNagJob"
+  cron: "0 * * * *"
+  queue: wca_jobs
+
+submit_report_nag:
+  class: "SubmitReportNagJob"
+  cron: "0 * * * *"
+  queue: wca_jobs
+
+compute_linkings:
+  class: "ComputeLinkings"
+  cron: "0 0 */3 * *"
+  queue: wca_jobs
+
+dump_developer_database:
+  class: "DumpDeveloperDatabase"
+  cron: "0 0 */3 * *"
+  queue: wca_jobs
+
+dump_public_results_database:
+  class: "DumpPublicResultsDatabase"
+  cron: "0 0 * * *"
+  queue: wca_jobs
+
+unstick_posts:
+  class: "UnstickPosts"
+  cron: "0 * * * *"
+  queue: wca_jobs
+
+registration_reminder:
+  class: "RegistrationReminderJob"
+  cron: "0 * * * *"
+  queue: wca_jobs
+
+sync_mailing_lists:
+  class: "SyncMailingListsJob"
+  cron: "0 * * * *"
+  queue: wca_jobs
+
+wst_chores:
+  class: "GenerateChore"
+  cron: "0 8 23 * *"
+  queue: wca_jobs
+
+weat_digest:
+  class: "WeatMonthlyDigestJob"
+  cron: "0 0 1 * *"
+  queue: mailers
+
+clear_tmp_cache:
+  class: "ClearTmpCache"
+  cron: "0 5 1,3,6 * *"
+  # Queueing on default because this is only a temporary task that we don't need statistics for
+  queue: default

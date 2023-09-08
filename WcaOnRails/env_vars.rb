@@ -5,7 +5,8 @@ EnvVars = SuperConfig.new do
     mandatory :SECRET_KEY_BASE, :string
     mandatory :DATABASE_HOST, :string
     mandatory :DATABASE_PASSWORD, :string
-    mandatory :CACHE_URL, :string
+    mandatory :CACHE_REDIS_URL, :string
+    mandatory :SIDEKIQ_REDIS_URL, :string
     mandatory :SMTP_USERNAME, :string
     mandatory :SMTP_PASSWORD, :string
   end
@@ -15,6 +16,7 @@ EnvVars = SuperConfig.new do
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
+    optional :CRONJOB_POLLING_SECONDS, :int, 0
   end
 
   # Set WCA_LIVE_SITE to enable Google Analytics
@@ -43,7 +45,8 @@ EnvVars = SuperConfig.new do
   optional :NEW_RELIC_LICENSE_KEY, :string, ''
   optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
   optional :STRIPE_WEBHOOK_SECRET, :string, ''
-  optional :CACHE_URL, :string, ''
+  optional :CACHE_REDIS_URL, :string, ''
+  optional :SIDEKIQ_REDIS_URL, :string, ''
   optional :STAGING_PASSWORD, :string, ''
   optional :MAILCATCHER_SMTP_HOST, :string, ''
 

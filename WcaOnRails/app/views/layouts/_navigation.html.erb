@@ -246,6 +246,7 @@
               <li><%= link_to t('.results_admin'), admin_path %></li>
               <li><%= link_to t('.competitions'), competitions_path %></li>
               <li><%= link_to t('.results_database'), '/results/database/' %></li>
+              <li><%= link_to t('.results_sidekiq'), '/sidekiq/' %></li>
             <% end %>
 
             <% if current_user.can_create_posts? %>

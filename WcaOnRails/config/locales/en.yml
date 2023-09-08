@@ -884,6 +884,8 @@ en:
       results_team: "Results team"
       results_admin: "Admin"
       results_database: "Database"
+      #context: "Sidekiq" is the name of a software product
+      results_sidekiq: "Sidekiq dashboard"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
