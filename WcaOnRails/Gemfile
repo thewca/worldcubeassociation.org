@@ -45,7 +45,7 @@ gem 'octokit'
 gem 'stripe'
 gem 'oauth2'
 gem 'openssl'
-gem "vault-rails"
+gem "vault"
 gem 'wca_i18n'
 gem 'cookies_eu'
 gem 'superconfig'

@@ -1,26 +1,11 @@
 # This file starts with _ because it has to be the first one run
 # frozen_string_literal: true
 
-require "vault/rails"
+require "vault"
 
 require_relative "env_config"
 
 Vault.configure do |vault|
-  # Use Vault in transit mode for encrypting and decrypting data. If
-  # disabled, vault-rails will encrypt data in-memory using a similar
-  # algorithm to Vault. The in-memory store uses a predictable encryption
-  # which is great for development and test, but should _never_ be used in
-  # production. Default: ENV["VAULT_RAILS_ENABLED"].
-  vault.enabled = Rails.env.production?
-
-  # The name of the application. All encrypted keys in Vault will be
-  # prefixed with this application name. If you change the name of the
-  # application, you will need to migrate the encrypted data to the new
-  # key namespace. Default: ENV["VAULT_RAILS_APPLICATION"].
-  # We save all our secrets in /secret/data/#{vault.application}/#{secret_name} using
-  # Vault's kv2 secret engine
-  vault.application = EnvConfig.VAULT_APPLICATION
-
   # The address of the Vault server, is read as ENV["VAULT_ADDR"]
 
   # Assume the correct role from the underlying instance
