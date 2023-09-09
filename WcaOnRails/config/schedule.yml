@@ -18,11 +18,6 @@ submit_report_nag:
   cron: "0 * * * *"
   queue: wca_jobs
 
-compute_linkings:
-  class: "ComputeLinkings"
-  cron: "0 0 */3 * *"
-  queue: wca_jobs
-
 dump_developer_database:
   class: "DumpDeveloperDatabase"
   cron: "0 0 */3 * *"

@@ -5,7 +5,8 @@ class WcaCronjob < ApplicationJob
 
   queue_as QUEUE_NAME
 
-  # Middleware: Don't enqueue cronjobs that are already running
+  # Middleware: Check queue status of cronjob. Record timestamp if it's being enqueued,
+  #   or reject it if it has already been enqueued previously
   before_enqueue do |job|
     statistics = job.class.cronjob_statistics
 
@@ -14,15 +15,15 @@ class WcaCronjob < ApplicationJob
 
       # Make ActiveJob abort and do NOT enqueue the job
       throw :abort
+    else
+      # Note to avid readers: Everything in this else-block would make more sense in an after_enqueue hook.
+      #   But doing so creates a race condition where jobs can be enqueued and then IMMEDIATELY be picked up
+      #   by the job handler backend before after_enqueue even had time to fire. This can be problematic,
+      #   for example if after_enqueue sets the "locked_at" timestamp after the job has already been picked up
+      #   and finished (happens for very quick jobs like a nag_job that realizes there's nothing to nag).
+      statistics.touch :enqueued_at
+      statistics.recently_rejected = 0
     end
-  end
-
-  # Middleware: Record when a cronjob was enqueued
-  after_enqueue do |job|
-    statistics = job.class.cronjob_statistics
-
-    statistics.touch :enqueued_at
-    statistics.recently_rejected = 0
 
     statistics.save!
   end
@@ -76,7 +77,7 @@ class WcaCronjob < ApplicationJob
   end
 
   class << self
-    delegate :in_progress?, :scheduled?, :finished?, :last_run_successful?, to: :cronjob_statistics
+    delegate :in_progress?, :scheduled?, :scheduled_at, :finished?, :last_run_successful?, :last_error_message, to: :cronjob_statistics
 
     def cronjob_statistics
       CronjobStatistic.find_or_create_by!(name: self.name)

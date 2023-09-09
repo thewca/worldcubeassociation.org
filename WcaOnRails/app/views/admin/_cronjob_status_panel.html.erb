@@ -1,0 +1,41 @@
+<% cronjob ||= nil %>
+<% trigger_link ||= nil %>
+
+<h2><%= "Controls for #{cronjob.name}" %></h2>
+
+<%= yield %>
+
+<% if cronjob.respond_to?(:reason_not_to_run) && cronjob.reason_not_to_run %>
+  <%= alert :warning, cronjob.reason_not_to_run %>
+<% else %>
+  <% if cronjob.scheduled? %>
+    <%= alert :info, "The job has been scheduled #{time_ago_in_words cronjob.scheduled_at}, but it hasn't been picked up by the job handler yet. Please come back later." %>
+  <% elsif cronjob.in_progress? %>
+    <%= alert :info, "The job is running. Thanks for checking =)" %>
+  <% elsif cronjob.finished? %>
+    <% if cronjob.last_run_successful? %>
+      <%= alert :success do %>
+        Job was last completed <%= time_ago_in_words cronjob.end_date %> ago
+        and took <%= distance_of_time_in_words cronjob.start_date, cronjob.end_date %>
+      <% end %>
+    <% else %>
+      <%= alert :danger do %>
+        Job was last completed <%= time_ago_in_words cronjob.end_date %> ago
+        but it raised an error: "<%= cronjob.last_error_message %>"
+      <% end %>
+
+      <div>
+        Note that our job handler has an automatic retry mechanism. The more times a job fails, the longer it waits to try again.
+        If this problem persists for several hours, feel free to contact the Software Team.
+      </div>
+    <% end %>
+  <% else %>
+    <%= alert :danger, "Oh dear! The job has never been run!" %>
+  <% end %>
+
+  <% unless cronjob.scheduled? || cronjob.in_progress? %>
+    <div>
+      <%= link_to "Do it!", trigger_link, class: "btn btn-primary" %>
+    </div>
+  <% end %>
+<% end %>
