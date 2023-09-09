@@ -9,7 +9,7 @@
   <%= alert :warning, cronjob.reason_not_to_run %>
 <% else %>
   <% if cronjob.scheduled? %>
-    <%= alert :info, "The job has been scheduled #{time_ago_in_words cronjob.scheduled_at}, but it hasn't been picked up by the job handler yet. Please come back later." %>
+    <%= alert :info, "The job has been scheduled #{time_ago_in_words cronjob.enqueued_at} ago, but it hasn't been picked up by the job handler yet. Please come back later." %>
   <% elsif cronjob.in_progress? %>
     <%= alert :info, "The job is running. Thanks for checking =)" %>
   <% elsif cronjob.finished? %>

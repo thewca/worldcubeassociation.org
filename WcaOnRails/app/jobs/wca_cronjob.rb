@@ -77,7 +77,7 @@ class WcaCronjob < ApplicationJob
   end
 
   class << self
-    delegate :in_progress?, :scheduled?, :scheduled_at, :finished?, :last_run_successful?, :last_error_message, to: :cronjob_statistics
+    delegate :in_progress?, :scheduled?, :enqueued_at, :finished?, :last_run_successful?, :last_error_message, to: :cronjob_statistics
 
     def cronjob_statistics
       CronjobStatistic.find_or_create_by!(name: self.name)
