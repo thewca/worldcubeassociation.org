@@ -1241,7 +1241,7 @@ RSpec.describe Competition do
     organizer = FactoryBot.create :user, country_iso2: nil
     competition = FactoryBot.build :competition, organizers: [organizer]
     expect(competition).not_to be_valid
-    expect(competition.errors.messages[:organizer_ids].first).to match "Need a country"
+    expect(competition.errors.messages[:organizer_ids].first).to match "Need a region"
   end
 
   describe "is exempt from dues" do

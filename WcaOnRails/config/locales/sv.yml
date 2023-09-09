@@ -309,8 +309,8 @@ sv:
     world: Värld
     #original_hash: 2513cf0
     continent: Kontinent
-    #original_hash: d523ebb
-    country: Land
+    #original_hash: 0f21717
+    country: Region
     #original_hash: 0154c0d
     here: här
     #original_hash: 77003d0
@@ -329,8 +329,8 @@ sv:
     user:
       #original_hash: 603a218
       wca_id: WCA-ID
-      #original_hash: e0f64f7
-      citizen_of: Medborgare i
+      #original_hash: fa4c045
+      representing: Representerar
     #original_hash: 3fc0ba1
     all_regions: Alla regioner
     errors:
@@ -403,8 +403,8 @@ sv:
         unconfirmed_wca_id: Obekräftat WCA-ID
         #original_hash: 8ed8874
         login: E-post eller WCA-ID
-        #original_hash: 1528d10
-        country_iso2: Medborgarskap
+        #original_hash: fa4c045
+        country_iso2: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 7636bbc
@@ -452,8 +452,8 @@ sv:
         name_reason: Anledningen till namnet
         #original_hash: fdba578
         cellName: Förkortat namn för tävlingen
-        #original_hash: d523ebb
-        countryId: Land
+        #original_hash: 0f21717
+        countryId: Region
         #original_hash: 25b7b06
         cityName: Stadens namn
         #original_hash: 67cd406
@@ -626,8 +626,8 @@ sv:
       person:
         #original_hash: 8c41ae8
         wca_id: Person
-        #original_hash: d523ebb
-        countryId: Land
+        #original_hash: fa4c045
+        countryId: Representerar
         #original_hash: ab58155
         dob: Födelsedatum
         #original_hash: 8a754c6
@@ -697,8 +697,8 @@ sv:
       regional_organization:
         #original_hash: 709a232
         name: Namn
-        #original_hash: d523ebb
-        country: Land
+        #original_hash: 0f21717
+        country: Region
         #original_hash: 2e8a57c
         website: Hemsida
         #original_hash: 83fce83
@@ -1985,11 +1985,12 @@ sv:
         delegater, arrangörer, teammedlemmar) och kan inte tas bort. Vänligen
         maila WCA Results Team för att ändra WCA-ID till ett annat konto.
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 8bb2def
         msg: >-
-          Du kan inte ändra namn, födelsedatum, kön eller land. Orsak:
-          %{reason}. Kontakta din <a href='%{delegate_url}'>Delegat</a> om du
-          behöver ändra något av dessa.
+          Du kan inte ändra namn, födelsedatum, kön eller region. Orsak:
+          %{reason}. Kontakta <a href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Results Team</a> eller din <a
+          href='%{delegate_url}'>Delegat</a> om du behöver ändra något av dessa.
         reason:
           #original_hash: 370ff12
           assigned: du har ett WCA-ID
@@ -2093,13 +2094,13 @@ sv:
       dob_past: får inte vara i framtiden
       #original_hash: b320913
       dob_recent: måste vara minst två år gammal
-      #original_hash: b64df45
+      #original_hash: afbf275
       already_represented_country: >-
-        Det går inte att ändra landet till ett land som personen har
+        Det går inte att ändra regionen till en region som personen har
         representerat tidigare.
-      #original_hash: b589014
+      #original_hash: 5fe15d4
       must_have_a_change: >-
-        Namnet eller landet måste vara annorlunda för att personen ska kunna
+        Namnet eller regionen måste vara annorlunda för att personen ska kunna
         uppdateras.
       #original_hash: 012f032
       must_be_senior: måste vara Senior-Delegat
@@ -2180,8 +2181,8 @@ sv:
       need_gender: Behöver ett kön
       #original_hash: ebf1ecb
       need_dob: Behöver ett födelsedatum
-      #original_hash: d84a54f
-      need_country: Behöver ett land
+      #original_hash: aab7355
+      need_country: Behöver en region
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: En anmälan kan inte raderas och godkännas samtidigt.
       #original_hash: a38d024
@@ -2329,11 +2330,11 @@ sv:
       title: 'Anmälningar för %{comp}'
       #original_hash: 5301648
       edit: Redigera
-      #original_hash: 0ab725c
+      #original_hash: beffc45
       country_plural:
         zero: '%{count} länder'
-        one: 1 land
-        other: '%{count} länder'
+        one: 1 region
+        other: '%{count} regioner'
       #original_hash: 1feee0e
       export_csv: Exportera som CSV
       #original_hash: 84add5b
@@ -2557,9 +2558,9 @@ sv:
         identifieras och databasen uppdateras därefter.
       #original_hash: 779b272
       registrations_file_label: Anmälningsfilen
-      #original_hash: 4017f0e
+      #original_hash: 224f3a6
       registrations_file_hint: >-
-        CSV-fil med kolumnerna: Status, Name, Country, WCA ID, Birth Date,
+        CSV-fil med kolumnerna: Status, Name, Region, WCA ID, Birth Date,
         Gender, Email, och en kolumn för varje gren.
       #original_hash: d6fbc9d
       import: Importera
@@ -2962,9 +2963,9 @@ sv:
     index:
       #original_hash: db98a68
       title: Tävlingar
-      #original_hash: f483b9c
+      #original_hash: b24c9c0
       disclaimer: >-
-        Observera att på grund av COVID-19-pandemin kan vissa länder för
+        Observera att på grund av COVID-19-pandemin kan vissa regioner för
         närvarande inte hålla tävlingar.
       #original_hash: 6a72085
       all_events: Alla
@@ -3639,8 +3640,8 @@ sv:
       name: Namn
       #original_hash: 5faa59d
       result: Resultat
-      #original_hash: e0f64f7
-      citizen_of: Medborgare i
+      #original_hash: fa4c045
+      representing: Representerar
       #original_hash: 1917f4f
       competition: Tävling
       #original_hash: e7f6fc5
@@ -3671,8 +3672,8 @@ sv:
       name_or_wca_id: Delar av namn eller WCA-ID
       #original_hash: 709a232
       name: Namn
-      #original_hash: d523ebb
-      country: Land
+      #original_hash: fa4c045
+      country: Representerar
       #original_hash: 02ae2bd
       podiums: Pallplatser
       #original_hash: 56656a0
@@ -3684,11 +3685,11 @@ sv:
       completed_solves: Gjorda lösningar
       #original_hash: fc78642
       personal_records: Nuvarande Personliga Rekord
-      #original_hash: e631f13
+      #original_hash: 2ad8fd5
       odd_rank_reason: >-
-        En saknad ranking eller sämre landsranking än kontinentranking beror på
-        att personen bytt land. Resultat från den gamla regionen tas inte med i
-        den nuvarande regionrankningen.
+        En saknad ranking eller sämre regionsranking än kontinentranking beror
+        på att personen bytt region. Resultat från den gamla regionen tas inte
+        med i den nuvarande regionrankningen.
       #original_hash: a91508f
       championship_podiums: Pallplatser på Mästerskap
       championship_podium_levels:
@@ -4031,10 +4032,10 @@ sv:
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hur ser framtiden för WCA ut?
-    #original_hash: a08c67f
+    #original_hash: 2fea363
     whats_next_content_html: >-
       <p>World Cube Association har haft över 100 000 unika tävlande i 140 olika
-      länder och vi planerar inte att sakta in! Kubintresset har ökat stadigt
+      regioner och vi planerar inte att sakta in! Kubintresset har ökat stadigt
       sedan grundandet 2004 och vi vill möjliggöra detta att fortsätta in i
       framtiden genom att öka tillgängligheten av tävlingar till nya områden. I
       framtiden hoppas vi kunna stötta vårt community ännu mer genom samarbeten
@@ -4344,11 +4345,11 @@ sv:
     how_to:
       #original_hash: b243b1f
       title: Bli erkänd av WCA som Regional Organisation
-      #original_hash: f042a88
+      #original_hash: 9f31403
       description: >-
         WCA erkänner flera Regionala Organisationer över hela världen. Syftet
         med en Regional Organisation är att organisera WCA-tävlingar och stödja
-        WCA:s aktiviteter i regionen. Länder som vill bilda en Regional
+        WCA:s aktiviteter i regionen. Regioner som vill bilda en Regional
         Organisation uppmuntras att bidra till WCA i sitt område innan de lämnar
         in sin ansökan. Kontakta din närmaste WCA-Delegat för hjälp med att
         organisera en WCA-tävling i ditt område.
@@ -4777,22 +4778,6 @@ sv:
       content_html: >-
         E-mail the JSON file exported by the WCA Workbook Assistant to <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relationer
-      #original_hash: 69ba020
-      find_relations: Hitta relationer mellan kuber
-      #original_hash: 5d6056d
-      show_relation: Visa mig relationen!
-      connectives:
-        #original_hash: f85194e
-        was_at: Var på
-        #original_hash: 8c00243
-        together_with: Tillsammans med
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Ange två olika giltiga WCA-ID:n.'
   search_results:
     index:
       #original_hash: db98a68
@@ -5026,8 +5011,8 @@ sv:
       olist1:
         #original_hash: de00462
         '1': The two competitions don't have events in common.
-        #original_hash: f7bacc5
-        '2': The two competitions take place in different countries.
+        #original_hash: b8ff462
+        '2': De två tävlingarna hålls i olika regioner.
       #original_hash: 5c5cf04
       content2: >-
         "3x3x3 Fewest Moves simultaneous competitions" are WCA competitions
@@ -5319,6 +5304,26 @@ sv:
       information om ditt konto:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Giltig TNoodle-version
+  merch:
+    #original_hash: 96a95a1
+    title: WCA-merch
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        WCA har exklusiv merch tillgänglig att köpa! Från t-shirts, hoodies,
+        klistermärken, stackmats, ryggsäckar, och mycket mer! Våra designer
+        uppdateras konstant, inklusive den klassiska WCA-loggan, officiella
+        produkter från världsmästerskap, och motiv med världsrekord.
+      #original_hash: 2865e1d
+      '2': >-
+        Att köpa merch genom våra butiker är det bästa sättet för dig att stötta
+        WCA - en icke-vinstdrivande, ideellt driven organisation. Vi använder
+        all vinst från produkterna till att finansiera mästerskap, utrustning,
+        och andra WCA-relaterade projekt.
+      #original_hash: 8e57552
+      '3': >-
+        Du kan köpa våra produkter över hela världen - vi har butiker baserade i
+        Europa, Amerika, och Indien, och fler är på väg!
   database:
     results_export:
       #original_hash: 15d00e1

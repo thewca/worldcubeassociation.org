@@ -30,9 +30,7 @@ module WcaOnRails
 
     config.load_defaults 7.0
 
-    config.active_record.schema_format = :sql
-
-    config.active_job.queue_adapter = :delayed_job
+    config.active_job.queue_adapter = :sidekiq
 
     config.generators do |g|
       g.test_framework(
@@ -88,6 +86,9 @@ module WcaOnRails
 
     config.action_view.preload_links_header = false
     config.active_storage.variant_processor = :mini_magick
+
+    # Move the mailers into a separate queue for us to control
+    config.action_mailer.deliver_later_queue_name = :mailers
 
     # Activate ActiveRecord attribute encryption for use with the Devise 2FA gem
     config.active_record.encryption.primary_key = EnvVars.ACTIVERECORD_PRIMARY_KEY

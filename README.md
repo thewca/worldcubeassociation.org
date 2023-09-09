@@ -9,6 +9,23 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   git clone https://github.com/thewca/worldcubeassociation.org
   cd worldcubeassociation.org
   ```
+
+We can run the application in two ways:
+- [Run using Docker](#run-using-docker)
+- [Run directly with Ruby](#run-directly-with-ruby-lightweight-also-only-runs-the-rails-portions-of-the-site)
+
+### Run using Docker (strongly recommended)
+
+- Install [Docker](https://docs.docker.com/get-docker/) (remember to complete the [Linux post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) if you're on Linux)
+- Install docker-compose. The best way to get an up-to-date version is to get it from their [releases page](https://github.com/docker/compose/releases)
+- Navigate into the repository's main directory (`worldcubeassociation.org`)
+- To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal)
+- If you want to run the php part of the website as well, run `docker compose -f docker-compose.yml -f docker-compose.php.yml up`
+- To run tests, run `docker-compose exec wca_on_rails bash -c "RAILS_ENV=test bin/rake db:reset && RAILS_ENV=test bin/rake assets:precompile && bin/rspec"`
+- If you're using Visual Studio Code to develop, you can [attach it to the Docker container](https://code.visualstudio.com/docs/remote/containers) so that your extensions can take advantage of the Ruby environment and so the terminal runs from inside the container
+
+### Run directly with Ruby (lightweight, but it involves manual installation which happens at your own risk and we won't be able to assist with detailed troubleshooting)
+
 - Ensure you have the correct [Ruby version](./.ruby-version) installed. We recommend using a Ruby version manager like [rvm](https://rvm.io/rvm/install) or [rbenv](https://github.com/rbenv/rbenv). They should both read the `.ruby-version` file to use the correct version (`rvm current` or `rbenv version` to confirm).
 - Ensure [Bundler 2](https://bundler.io/v2.0/guides/bundler_2_upgrade.html) is installed
   - To update from bundler 1:
@@ -26,19 +43,6 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
   (cd WcaOnRails; bundle install && bin/yarn && bundle exec overcommit --install)
   ```
   If some changes are made to this hook, you will have to update it running this command from the repository's root directory: `BUNDLE_GEMFILE=WcaOnRails/Gemfile bundle exec overcommit --sign`.
-
-## Run using Docker
-
-- Install [Docker](https://docs.docker.com/get-docker/) (remember to complete the [Linux post-install steps](https://docs.docker.com/engine/install/linux-postinstall/) if you're on Linux)
-- Install docker-compose. The best way to get an up-to-date version is to get it from their [releases page](https://github.com/docker/compose/releases)
-- Navigate into the repository's main directory (`worldcubeassociation.org`)
-- To start the server at `http://localhost:3000`, run `docker-compose up` and to bring it down, `docker-compose down` (or just press ctrl + c in the same terminal)
-- If you want to run the php part of the website as well, run `docker compose -f docker-compose.yml -f docker-compose.php.yml up`
-- To run tests, run `docker-compose exec wca_on_rails bash -c "RAILS_ENV=test bin/rake db:reset && RAILS_ENV=test bin/rake assets:precompile && bin/rspec"`
-- If you're using Visual Studio Code to develop, you can [attach it to the Docker container](https://code.visualstudio.com/docs/remote/containers) so that your extensions can take advantage of the Ruby environment and so the terminal runs from inside the container
-
-## Run directly with Ruby (lightweight, also only runs the Rails portions of the site)
-
 - Install [MySQL 8.0](https://dev.mysql.com/doc/refman/8.0/en/linux-installation.html), and set it up with a user with username "root" with an empty password.
   If it poses problems, try the following:
   ```shell

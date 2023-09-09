@@ -1470,15 +1470,12 @@ class Competition < ApplicationRecord
       prev_sorted_registration = nil
       sorted_registrations = []
       registrations.each_with_index do |registration, i|
-        if sort_by == 'single'
-          rank = registration.single_rank
-          prev_rank = prev_sorted_registration&.registration&.single_rank
-        else
-          rank = registration.average_rank
-          prev_rank = prev_sorted_registration&.registration&.average_rank
-        end
+        rank = sort_by == 'single' ? registration.single_rank : registration.average_rank
         if rank
-          tied_previous = rank == prev_rank
+          # Change position to previous if both single and average are tied with previous registration.
+          average_tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank
+          single_tied_previous = registration.single_rank == prev_sorted_registration&.registration&.single_rank
+          tied_previous = single_tied_previous && average_tied_previous
           pos = tied_previous ? prev_sorted_registration.pos : i + 1
         else
           # Hasn't competed in this event yet.
@@ -1591,7 +1588,7 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "shortName" => cellName,
-      "series" => part_of_competition_series? ? competition_series_wcif : nil,
+      "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
@@ -1600,8 +1597,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  def competition_series_wcif
-    competition_series&.to_wcif
+  def competition_series_wcif(authorized: false)
+    competition_series&.to_wcif(authorized: authorized)
   end
 
   def persons_wcif(authorized: false)
@@ -1667,6 +1664,7 @@ class Competition < ApplicationRecord
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+      set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
       # Trigger validations on the competition itself, and throw an error to rollback if necessary.
       # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
@@ -1682,6 +1680,24 @@ class Competition < ApplicationRecord
       #   artificially pretend like the Competition object was updated anyways.
       touch
     end
+  end
+
+  def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
+    return if wcif_competitor_limit == self.competitor_limit
+
+    if confirmed? && !current_user.can_admin_competitions?
+      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
+    end
+
+    unless competitor_limit_enabled?
+      raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
+    end
+
+    unless wcif_competitor_limit.present?
+      raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
+    end
+
+    self.competitor_limit = wcif_competitor_limit
   end
 
   def set_wcif_series!(wcif_series, current_user)

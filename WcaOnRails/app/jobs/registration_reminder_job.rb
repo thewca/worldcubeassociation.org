@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-class RegistrationReminderJob < ApplicationJob
-  include SingletonApplicationJob
-
-  queue_as :default
-
+class RegistrationReminderJob < WcaCronjob
   def should_send_reminder(competition)
     # We send a reminder if we haven't sent a reminder before, or if we sent one more than 2 days ago (i.e. if there is a second registration period).
     competition.registration_reminder_sent_at.nil? || competition.registration_reminder_sent_at < 2.days.ago

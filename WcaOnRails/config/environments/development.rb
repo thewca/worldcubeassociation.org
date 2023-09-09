@@ -23,8 +23,12 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
     # If the Developer is not running through Docker, Redis caching is disabled
-    redis_url = EnvVars.REDIS_URL
-    config.cache_store = redis_url.empty? ? :memory_store : :redis_cache_store, { url: redis_url }
+    cache_redis_url = EnvVars.CACHE_REDIS_URL
+    if cache_redis_url.empty?
+      config.cache_store = :memory_store
+    else
+      config.cache_store = :redis_cache_store, { url: cache_redis_url }
+    end
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}",
     }
@@ -41,7 +45,7 @@ Rails.application.configure do
 
   # Setup for mailcatcher (http://mailcatcher.me/)
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+  config.action_mailer.smtp_settings = { address: EnvVars.MAILCATCHER_SMTP_HOST, port: 1025 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log

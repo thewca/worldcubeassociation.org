@@ -130,7 +130,7 @@ class UsersController < ApplicationController
     params[:section] ||= "general"
 
     @user = user_to_edit
-    return if redirect_if_cannot_edit_user(@user)
+    nil if redirect_if_cannot_edit_user(@user)
   end
 
   def claim_wca_id
