@@ -12,7 +12,7 @@
         <p>See <%= link_to "developer export", db_dev_export_path %> for details</p>
       </div>
     <% end %>
-    <%= render 'cronjob_status_panel', job: DumpPublicResultsDatabase, trigger_link: admin_do_generate_public_export_path do %>
+    <%= render 'cronjob_status_panel', cronjob: DumpPublicResultsDatabase, trigger_link: admin_do_generate_public_export_path do %>
       <div>
         <h4>This script:</h4>
         <ul class="list-group">
