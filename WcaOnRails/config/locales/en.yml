@@ -1456,7 +1456,7 @@ en:
       no_refunds: "Registration fees won't be refunded under any circumstance."
       waiting_list_deadline_html: "Registrants on the waiting list may be accepted onto the competitor list until %{waiting_list_deadline}."
       event_change_deadline_html: "If you are a registered competitor you may change your registered events until %{event_change_deadline} by contacting the organization team."
-      event_change_deadline_edits_allowed_html: "If you are a registered competitor you may change your registered events until %{event_change_deadline} on the %{register} tab."
+      event_change_deadline_edits_allowed_html: "If you are a registered competitor you may register for more events until %{event_change_deadline} on the %{register} tab."
       event_change_deadline_default_html: "We encourage everyone to register for the events they want to compete in via your online registration, however you may add events to your registration up until the event has started."
       on_the_spot_registration_fee_html: "On the spot registrations will be accepted with a base registration fee of %{on_the_spot_base_entry_fee}."
       on_the_spot_registration_free: "On the spot registrations will be accepted for free."
