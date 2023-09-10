@@ -485,7 +485,7 @@ class Competition < ApplicationRecord
       end
     end
 
-    if reg_warnings.any?
+    if reg_warnings.any? && user.can_manage_competition?(self)
       warnings = reg_warnings.merge(warnings)
     end
 
@@ -503,7 +503,11 @@ class Competition < ApplicationRecord
   def reg_warnings
     warnings = {}
     if registration_range_specified? && !registration_past?
-      unless self.announced?
+      if self.announced?
+        if (self.registration_open - self.announced_at) < REGISTRATION_OPENING_EARLIEST
+          warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
+        end
+      else
         if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
