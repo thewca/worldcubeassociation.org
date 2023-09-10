@@ -45,9 +45,7 @@ ca:
     #original_hash: 9af4622
     XF: Països Múltiples (Àfrica)
     #original_hash: 374ac0d
-    XM: Països Múltiples (Amèrica)
-    #original_hash: 3f8c9de
-    XA: Països Múltiples (Àsia)
+    XM: Països Múltiples (Amèrica) #original_hash: 3f8c9de XA: Països Múltiples (Àsia)
     #original_hash: 090f3ce
     XE: Països Múltiples (Europa)
     #original_hash: b50b7a5
@@ -876,7 +874,7 @@ ca:
         #original_hash: cabe7fb
         external_website: Pàgina web de la competició. Ha de tenir un enllaç http(s) vàlid.
         #original_hash: 9965635
-        registration_open: 'Important: L'obertura i clausura del registre està en horari UTC'
+        registration_open: 'Important: L''obertura i clausura del registre està en horari UTC'
         #original_hash: 9ea6021
         remarks: >-
           Alguna informació addicional que vulguis mencionar a WCAT. Per
@@ -1363,7 +1361,7 @@ ca:
             #original_hash: eaee403
             email: enviat per correu electrònic al moment d'iniciar sessió.
           #original_hash: 7ae99ae
-          status_html: 'El doble factor d'autentificació està %{status} per tu.'
+          status_html: 'El doble factor d''autentificació està %{status} per tu.'
           #original_hash: 3ea3f98
           enabled: activat
           #original_hash: 07596f1
@@ -1785,10 +1783,10 @@ ca:
         #original_hash: a31e8fb
         header: 'Has sigut esborrat de %{competition} com a organitzador'
         #original_hash: 66cb109
-        information: '%{remover} t'ha esborrat de %{competition} com a organitzador.'
+        information: '%{remover} t''ha esborrat de %{competition} com a organitzador.'
       registration_reminder_email:
         #original_hash: 7d355cb
-        header: 'El registre per %{competition} s'obrirà aviat'
+        header: 'El registre per %{competition} s''obrirà aviat'
         #original_hash: c9d0561
         intro: 'Hola %{name},'
         #original_hash: a8f7e72
@@ -1797,16 +1795,16 @@ ca:
           href=%{competition_url}>%{competition}</a>  obrirà d'aquí menys de 24
           hores.
         #original_hash: 2b93022
-        not_accepted_html: 'T'has registrat, però el teu registre no ha estat acceptat.'
+        not_accepted_html: 'T''has registrat, però el teu registre no ha estat acceptat.'
         #original_hash: d4087ee
         more_info_html: >-
           Si us plau, visita <a href=%{competition_url}>competition WCA page</a>
           per a més informació i saber els requisits de registre.
       results_presence_email:
         #original_hash: 7ce2558
-        header: 'Els resultats de %{competition} ja s'han publicat'
+        header: 'Els resultats de %{competition} ja s''han publicat'
         #original_hash: 150446e
-        intro_html: 'Els teus resultats de %{competition_link} s'acaben de publicar.'
+        intro_html: 'Els teus resultats de %{competition_link} s''acaben de publicar.'
         #original_hash: 78edca3
         information_html: 'Comprova tots els teus resultats a %{result_link}.'
         #original_hash: a585fca
@@ -2156,7 +2154,7 @@ ca:
         one: Registre eliminat
         other: Registres eliminats
       #original_hash: c3aa289
-      single_deletion_and_mail: 'Registre eliminat i s'ha enviat un correu %{mail}'
+      single_deletion_and_mail: 'Registre eliminat i s''ha enviat un correu %{mail}'
       #original_hash: d8f067f
       cannot_delete: No pots eliminar el teu registre.
       #original_hash: 82b3899
@@ -2164,7 +2162,7 @@ ca:
       #original_hash: 856484a
       failed: No s'ha pogut actualitzar el registre
       #original_hash: 016b4ae
-      deleted: 'S'ha eliminat correctament el teu registre per %{comp}'
+      deleted: 'S''ha eliminat correctament el teu registre per %{comp}'
       #original_hash: 648424f
       registered: Registrat correctament!
       #original_hash: 82fed60
@@ -2204,10 +2202,10 @@ ca:
           El teu registre per %{comp_name} s'ha acceptat. Com sempre, pots
           consultar l'estat del teu registre %{here}.
         #original_hash: 1852cbf
-        see_you_soon: 'Estem desitjant a veure't a %{comp_name}!'
+        see_you_soon: 'Estem desitjant a veure''t a %{comp_name}!'
       pending:
         #original_hash: e48d8bd
-        mail_subject: 'Has sigut afegit a la llista d'espera per %{comp_name}'
+        mail_subject: 'Has sigut afegit a la llista d''espera per %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           El teu registre per %{comp_name} ha sigut afegit a la llista d'espera.
@@ -2579,7 +2577,7 @@ ca:
         Aquesta competició ja s'ha acabat, estem treballant per penjar els
         resultats com més aviat millor!
       #original_hash: 68dd436
-      computing_auxiliary_data: 'Si us plau, espera que les dades auxiliars s'hagin computat. =)'
+      computing_auxiliary_data: 'Si us plau, espera que les dades auxiliars s''hagin computat. =)'
       #original_hash: 8ebe272
       no_results: No hi ha resultats.
       #original_hash: 79e8b95

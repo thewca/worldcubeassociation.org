@@ -1,1 +1,1 @@
-//= require fc_locales/cs.js
+//= require fc_locales/ca.js
