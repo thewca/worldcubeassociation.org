@@ -485,7 +485,7 @@ class Competition < ApplicationRecord
       end
     end
 
-    if reg_warnings.any? && user.can_manage_competition?(self)
+    if reg_warnings.any? && user&.can_manage_competition?(self)
       warnings = reg_warnings.merge(warnings)
     end
 
