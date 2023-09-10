@@ -129,7 +129,7 @@ class RegistrationsController < ApplicationController
     end
     registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
                            .map(&:to_hash)
-                           .select { |registration_row| registration_row[:status] == "a" }
+                           .select { |registration_row| registration_row[:status] == "a" || registration_row[:status] == "accepted" }
     if competition.competitor_limit_enabled? && registration_rows.length > competition.competitor_limit
       raise I18n.t("registrations.import.errors.over_competitor_limit",
                    accepted_count: registration_rows.length,
