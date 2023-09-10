@@ -1,8 +1,0 @@
-#!/usr/bin/env bash
-<% rails_root = "#{@repo_root}/WcaOnRails" %>
-
-# assumes this is run as the user where rbenv is also installed.
-export PATH="/home/<%= @username %>/.rbenv/shims:/home/<%= @username %>/.rbenv/bin:$PATH"
-eval "$(rbenv init -)"
-
-<%= rails_root %>/bin/rake jobs:work

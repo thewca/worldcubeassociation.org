@@ -21,7 +21,6 @@
 //= require jquery.jcrop
 //= require jquery.wca-autocomplete
 //= require jquery.floatThead.js
-//= require slick.min
 //= require cocoon
 //= require moment
 //= require moment-timezone-with-data

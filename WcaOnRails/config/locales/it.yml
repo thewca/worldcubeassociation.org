@@ -4930,22 +4930,6 @@ it:
         Invia una email con il file JSON esportato dal WCA Workbook Assistant a
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relazioni
-      #original_hash: 69ba020
-      find_relations: Trova le connessioni fra i cuber
-      #original_hash: 5d6056d
-      show_relation: Mostra le relazioni!
-      connectives:
-        #original_hash: f85194e
-        was_at: Era al
-        #original_hash: 8c00243
-        together_with: Insieme con
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Perfavore, inserisci due WCA ID validi e differenti.'
   search_results:
     index:
       #original_hash: db98a68

@@ -78,7 +78,6 @@ gem 'datetimepicker-rails', github: 'zpaulovics/datetimepicker-rails', submodule
 gem 'blocks'
 gem 'rack-cors', require: 'rack/cors'
 gem 'api-pagination'
-gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
@@ -99,6 +98,8 @@ gem 'starburst', github: 'thewca/starburst'
 gem 'react-rails'
 gem 'sprockets-rails'
 gem 'fuzzy-string-match'
+gem 'sidekiq'
+gem 'sidekiq-cron'
 
 group :development, :test do
   gem 'spring'

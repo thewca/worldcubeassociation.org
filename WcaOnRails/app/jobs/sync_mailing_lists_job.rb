@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-class SyncMailingListsJob < ApplicationJob
-  include SingletonApplicationJob
-
-  queue_as :default
-
+class SyncMailingListsJob < WcaCronjob
   SENIOR_DELEGATES_REGIONS_INFO = [
     {
       mailing_list: "delegates.africa@worldcubeassociation.org",
@@ -45,6 +41,11 @@ class SyncMailingListsJob < ApplicationJob
       query: "%USA & Canada%",
     },
   ].freeze
+
+  before_enqueue do
+    # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
+    throw :abort unless EnvVars.WCA_LIVE_SITE?
+  end
 
   def perform
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", User.staff_delegates.map(&:email))

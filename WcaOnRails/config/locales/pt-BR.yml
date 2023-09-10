@@ -4810,22 +4810,6 @@ pt-BR:
         Envie o arquivo JSON exportado pelo Assistente de Planilha por email
         para <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relações
-      #original_hash: 69ba020
-      find_relations: Encontre conexões entre cubistas
-      #original_hash: 5d6056d
-      show_relation: Mostrar a relação!
-      connectives:
-        #original_hash: f85194e
-        was_at: Estava em
-        #original_hash: 8c00243
-        together_with: Junto com
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Por favor informe duas IDs da WCA válidas.
   search_results:
     index:
       #original_hash: db98a68

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_06_155619) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -635,17 +635,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
   end
 
-  create_table "completed_jobs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler"
-    t.datetime "run_at", precision: nil
-    t.string "queue", limit: 255
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.datetime "completed_at", precision: nil
-  end
-
   create_table "country_bands", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "number", null: false
     t.string "iso2", limit: 2, null: false
@@ -653,19 +642,16 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.index ["number"], name: "index_country_bands_on_number"
   end
 
-  create_table "delayed_jobs", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "priority", default: 0, null: false
-    t.integer "attempts", default: 0, null: false
-    t.text "handler"
-    t.text "last_error"
-    t.datetime "run_at", precision: nil
-    t.datetime "locked_at", precision: nil
-    t.datetime "failed_at", precision: nil
-    t.string "locked_by", limit: 255
-    t.string "queue", limit: 255
-    t.datetime "created_at", precision: nil
-    t.datetime "updated_at", precision: nil
-    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  create_table "cronjob_statistics", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.datetime "run_start", precision: nil
+    t.datetime "run_end", precision: nil
+    t.boolean "last_run_successful", default: false, null: false
+    t.text "last_error_message"
+    t.datetime "enqueued_at", precision: nil
+    t.integer "recently_rejected", default: 0, null: false
+    t.integer "recently_errored", default: 0, null: false
+    t.integer "times_completed", default: 0, null: false
+    t.bigint "average_runtime"
   end
 
   create_table "delegate_reports", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -724,12 +710,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_08_28_211643) do
     t.datetime "resolved_at", precision: nil
     t.boolean "digest_worthy", default: false
     t.datetime "digest_sent_at", precision: nil
-  end
-
-  create_table "linkings", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "wca_id", limit: 10, null: false
-    t.text "wca_ids", size: :medium, null: false
-    t.index ["wca_id"], name: "index_linkings_on_wca_id", unique: true
   end
 
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

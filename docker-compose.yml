@@ -21,7 +21,9 @@ services:
       RAILS_ENV: development
       DATABASE_HOST: wca_db
       SHAKAPACKER_DEV_SERVER_HOST: wca_webpacker
-      REDIS_URL: redis://wca_redis:6379/0
+      CACHE_REDIS_URL: redis://wca_redis:6379/0
+      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+      MAILCATCHER_SMTP_HOST: wca_mailcatcher
     tty: true
     # First, install Ruby and Node dependencies
     # Next, load the database if it does not exist yet
@@ -64,6 +66,38 @@ services:
       wca_on_rails:
         # We need to make sure that the database is populated because our frontend code
         # pulls stuff like WCA Events and Round formats from the DB when compiling assets
+        condition: 'service_healthy'
+
+  wca_mailcatcher:
+    <<: *app
+    container_name: "mailcatcher"
+    expose:
+      - "1025"
+    ports:
+      - "1080:1080"
+    command: >
+      bash -c 'gem install mailcatcher &&
+      mailcatcher --foreground --ip=0.0.0.0'
+
+  wca_sidekiq:
+    <<: *app
+    container_name: 'sidekiq'
+    environment:
+      RAILS_ENV: development
+      DATABASE_HOST: wca_db
+      SIDEKIQ_REDIS_URL: redis://wca_redis:6379/1
+      # Cronjobs are disabled in development by default. If you wish to run cronjobs,
+      # set this env variable to any integer value greater than zero
+      # CRONJOB_POLLING_MINUTES: 30
+    command: >
+      bash -c 'bundle install && yarn install &&
+      bundle exec sidekiq'
+    depends_on:
+      wca_on_rails:
+        condition: 'service_healthy'
+      wca_redis:
+        condition: 'service_started'
+      wca_db:
         condition: 'service_healthy'
 
   wca_db:

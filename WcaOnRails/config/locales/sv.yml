@@ -4778,22 +4778,6 @@ sv:
       content_html: >-
         E-mail the JSON file exported by the WCA Workbook Assistant to <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relationer
-      #original_hash: 69ba020
-      find_relations: Hitta relationer mellan kuber
-      #original_hash: 5d6056d
-      show_relation: Visa mig relationen!
-      connectives:
-        #original_hash: f85194e
-        was_at: Var på
-        #original_hash: 8c00243
-        together_with: Tillsammans med
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Ange två olika giltiga WCA-ID:n.'
   search_results:
     index:
       #original_hash: db98a68

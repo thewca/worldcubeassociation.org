@@ -38,7 +38,6 @@
     "recipe[openssh]",
     "recipe[timezone_lwrp]",
     "recipe[wca::base]",
-    "recipe[wca::supervisor]",
     "recipe[wca::regulations_documents]",
     "recipe[wca]",
     "recipe[wca::email]",

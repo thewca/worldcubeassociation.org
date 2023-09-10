@@ -3936,22 +3936,6 @@ zh-TW:
       content_html: >-
         透過電子郵件將WCA成績小幫手產生的JSON檔傳送至<a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: 關聯
-      #original_hash: 69ba020
-      find_relations: 尋找方塊玩家之間的關聯
-      #original_hash: 5d6056d
-      show_relation: 讓我看看關聯！
-      connectives:
-        #original_hash: f85194e
-        was_at: 參加了...
-        #original_hash: 8c00243
-        together_with: 也有參加的是...
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 請提供兩個有效且不同的WCA ID。
   search_results:
     index:
       #original_hash: db98a68

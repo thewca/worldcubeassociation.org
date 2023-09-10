@@ -214,7 +214,7 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.staff? %>
+            <% if current_user.staff_or_any_delegate? %>
               <li class="divider"></li>
               <li><%= link_to t('.panel'), panel_path %></li>
             <% end %>
@@ -246,6 +246,7 @@
               <li><%= link_to t('.results_admin'), admin_path %></li>
               <li><%= link_to t('.competitions'), competitions_path %></li>
               <li><%= link_to t('.results_database'), '/results/database/' %></li>
+              <li><%= link_to t('.results_sidekiq'), '/sidekiq/' %></li>
             <% end %>
 
             <% if current_user.can_create_posts? %>
