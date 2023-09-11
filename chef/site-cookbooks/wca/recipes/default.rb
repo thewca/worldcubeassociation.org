@@ -90,24 +90,49 @@ end
 #### Mysql
 package 'mysql-client-8.0'
 db = {
-  'user' => 'root'
+  'user' => 'root',
 }
 if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  db['password'] = secrets['mysql_password']
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon RDS.
   db['host'] = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+  db['password'] = secrets['mysql_password']
+else
+  # If not in the cloud, then we run a local mysql instance.
+  socket = "/var/run/mysqld/mysqld.sock"
+  db['host'] = 'localhost'
+  db['socket'] = socket
+  db['password'] = secrets['mysql_password']
+  mysql_service 'default' do
+    version '8.0'
+    charset 'utf8mb4'
+    bind_address '127.0.0.1'
+    initial_root_password secrets['mysql_password']
+    # Force default socket to make rails happy
+    socket socket
+    action [:create, :start]
+  end
+  mysql_config 'default' do
+    source 'mysql-wca.cnf.erb'
+    instance 'default'
+    notifies :restart, 'mysql_service[default]'
+    action :create
+  end
 end
+read_replica = db["read_replica"]
 template "/etc/my.cnf" do
   source "my.cnf.erb"
   mode 0644
   owner 'root'
   group 'root'
   variables({
-              db: db
+              secrets: secrets,
+              db: db,
             })
 end
 
