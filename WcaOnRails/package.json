@@ -63,6 +63,7 @@
     "react-datepicker": "^4.24.0",
     "react-dom": "^16.14.0",
     "react-leaflet": "^2.8.0",
+    "react-semantic-ui-datepickers": "^2.17.2",
     "react_ujs": "^2.7.1",
     "regenerator-runtime": "^0.14.0",
     "resolve-url-loader": "^5.0.0",

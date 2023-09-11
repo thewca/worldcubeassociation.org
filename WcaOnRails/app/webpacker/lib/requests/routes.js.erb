@@ -34,11 +34,16 @@ export const competitionReportUrl = (id) => `<%= CGI.unescape(Rails.application.
 
 export const competitionApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
 
+// Workaround to make sure that the digit constraint is met
+export const usersApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_path(12345))%>`.replace("12345", id);
+
 export const competitionEventResultsApiUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_results_path("${id}", "${eventId}")) %>`;
 
 export const competitionAllResultsUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_results_all_path("${id}", event: "${eventId}")) %>`;
 
 export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
+
+export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
 
 export const competitionSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_competitions_path %>?q=${query}`;
 

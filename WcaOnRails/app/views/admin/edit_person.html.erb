@@ -4,39 +4,9 @@
   <%= render layout: "nav" do %>
     <h1><%= yield(:title) %></h1>
 
-    <p>
-      Choose 'Fix' if you want to replace a person's information in the database.
-      It will modify the Persons table accordingly and the Results table if the person's name is different.
-      This should be used to fix mistakes in the database.
-    </p>
-
-    <p>
-      Choose 'Update' if the person's name or country has been changed.
-      It will add a new entry in the Persons table and make it the current information for that person (subId=1)
-      but it will not modify the Results table so previous results keep the old name.
-    </p>
-
-    <%= simple_form_for @person, url: admin_update_person_path, method: :patch do |f| %>
-      <%= f.input :wca_id, as: :user_ids, persons_table: true, only_one: true %>
-      <div id="person-fields">
-        <%= f.input :name %>
-        <%= f.input :countryId, collection: Country.real, value_method: lambda { |c| c.id }, label_method: lambda { |c| c.name } %>
-
-        <%= f.input :gender %>
-        <%= f.input :dob, as: :date_picker %>
-        <%= f.input :incorrect_wca_id_claim_count %>
-
-        <button type="submit" name="method" value="fix" class="btn btn-primary">
-          <%= ui_icon("wrench") %> Fix
-        </button>
-        <button type="submit" name="method" value="update" class="btn btn-warning" data-confirm="Are you sure that you want to 'Change', the competitor's data?">
-          <%= ui_icon("clone") %> Update
-        </button>
-
-        <button type="submit" name="method" value="destroy" class="btn btn-danger pull-right" data-confirm="Are you sure that you want to remove that competitor?">
-          <%= ui_icon("trash") %> Destroy
-        </button>
-      </div>
-    <% end %>
+    <%= react_component("Admin/EditPerson", {
+      countryList: Country.all,
+      genderList: [:m, :f, :o],
+    }) %>
   <% end %>
 </div>
