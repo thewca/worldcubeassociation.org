@@ -8,7 +8,7 @@ class Api::V0::GeocodingController < Api::V0::ApiController
   def get_location_from_query
     query_params = {
       address: params.require(:q),
-      key: EnvVars.GOOGLE_MAPS_API_KEY,
+      key: AppSecrets.GOOGLE_MAPS_API_KEY,
     }
     render json: JSON.parse(RestClient.get(GMAPS_GEOCODING_URL, params: query_params).body)
   end

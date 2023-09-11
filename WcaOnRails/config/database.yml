@@ -4,10 +4,10 @@ default: &default
   timeout: 5000
   encoding: utf8mb4
   collation: utf8mb4_unicode_ci
-  host: <%= ENV['DATABASE_HOST'] || "127.0.0.1" %>
+  host: <%= EnvConfig.DATABASE_HOST %>
   port: 3306
   username: root
-  password: <%= ENV['DATABASE_PASSWORD'] || "" %>
+  password: <%= AppSecrets.DATABASE_PASSWORD %>
 
 production:
   primary:
@@ -16,8 +16,17 @@ production:
   primary_replica:
     <<: *default
     database: cubing
-    host: <%= ENV['READ_REPLICA_HOST'] || "127.0.0.1" %>
+    host: <%= EnvConfig.READ_REPLICA_HOST %>
     replica: true
+  developer_dump:
+    <<: *default
+    database: developer_dump
+    database_tasks: false
+  results_dump:
+    <<: *default
+    database: results_dump
+    database_tasks: false
+    migrations_paths: db/results_migrate
 
 development:
   primary:
@@ -27,6 +36,13 @@ development:
     <<: *default
     database: wca_development
     replica: true
+  developer_dump:
+    <<: *default
+    database: wca_dump_developer
+  results_dump:
+    <<: *default
+    database: wca_dump_results
+    migrations_paths: db/results_migrate
 
 # Warning: The database defined as "test" will be erased and
 # re-generated from your development database when you run "rake".
@@ -39,3 +55,14 @@ test:
     <<: *default
     database: wca_test
     replica: true
+  # These two can have identical names to the config for normal development mode,
+  # because they are only temporary dump tables anyways that get dropped after every run.
+  developer_dump:
+    <<: *default
+    database: wca_dump_developer
+    database_tasks: false
+  results_dump:
+    <<: *default
+    database: wca_dump_results
+    database_tasks: false
+    migrations_paths: db/results_migrate

@@ -274,18 +274,21 @@ redis = {
 
 if node.chef_environment == "production"
   # In production mode, we use Amazon ElasticCache.
-  redis[:host] = "redis-main-prod-001.iebvzt.0001.usw2.cache.amazonaws.com"
+  redis[:cache_host] = "wca-main-cache-001.iebvzt.0001.usw2.cache.amazonaws.com"
+  redis[:sidekiq_host] = "wca-main-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com"
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon ElasticCache.
-  redis[:host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
+  redis[:cache_host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
+
+  # Yes, in staging mode we dump the cache and Sidekiq jobs to the same Redis instance.
+  redis[:sidekiq_host] = redis[:cache_host]
 end
 
-redis_url = "redis://#{redis[:host]}:#{redis[:port]}"
+cache_redis_url = "redis://#{redis[:cache_host]}:#{redis[:port]}"
+sidekiq_redis_url = "redis://#{redis[:sidekiq_host]}:#{redis[:port]}"
 
-#### Rails secrets
-# Don't be confused by the name of this file! This is used by both our staging
-# and our prod environments (because staging runs in the rails "production"
-# mode).
+#### Rails environment
+# Secrets are handled using Hashicorp Vault
 template "#{rails_root}/.env.production" do
   source "env.production.erb"
   mode 0644
@@ -293,9 +296,10 @@ template "#{rails_root}/.env.production" do
   group username
   variables({
               secrets: secrets,
-              redis_url: redis_url,
+              cache_redis_url: cache_redis_url,
+              sidekiq_redis_url: sidekiq_redis_url,
               db_host: db["host"],
-              read_replica_host: read_replica
+              read_replica_host: db["read_replica"]
             })
 end
 
@@ -329,6 +333,19 @@ execute "bundle install #{'--deployment --without development test' if rails_env
   environment({
                 "RACK_ENV" => rails_env,
               })
+end
+
+### Sidekiq
+template "/etc/systemd/user/sidekiq.service" do
+  source "sidekiq.service.erb"
+  variables({
+              username: username,
+              repo_root: repo_root,
+            })
+end
+execute "start-sidekiq" do
+  command "systemctl --user sidekiq start"
+  not_if "ps -efw | grep sidekiq"
 end
 
 if node.chef_environment == "development"
@@ -382,7 +399,6 @@ template "/home/#{username}/wca.screenrc" do
               rails_root: rails_root,
               rails_env: rails_env,
               db_host: db["host"],
-              secrets: secrets,
             })
 end
 template "/home/#{username}/startall" do

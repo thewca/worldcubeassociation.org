@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
-require 'relations'
 
 RSpec.describe CityValidator do
   context "US" do

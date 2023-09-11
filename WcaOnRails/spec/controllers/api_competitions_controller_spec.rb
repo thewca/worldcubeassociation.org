@@ -258,6 +258,8 @@ RSpec.describe Api::V0::CompetitionsController do
   end
 
   describe 'wcif' do
+    let!(:series) { FactoryBot.create :competition_series }
+
     let!(:competition) {
       FactoryBot.create(
         :competition,
@@ -269,15 +271,23 @@ RSpec.describe Api::V0::CompetitionsController do
         external_website: "http://example.com",
         showAtAll: true,
         event_ids: %w(333 444),
+        latitude: 43_641_740,
+        longitude: -79_376_902,
+        competition_series: series,
       )
     }
 
-    let(:hidden_competition) {
+    let!(:hidden_competition) {
       FactoryBot.create(
         :competition,
         :not_visible,
         id: "HiddenComp2014",
+        start_date: "2014-02-02",
+        end_date: "2014-02-02",
         delegates: competition.delegates,
+        latitude: 43_641_740,
+        longitude: -79_376_902,
+        competition_series: series,
       )
     }
 
@@ -356,6 +366,22 @@ RSpec.describe Api::V0::CompetitionsController do
         last_registration = FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         user_competitor_ids << [user.id, comp_id]
         get_wcif_and_compare_persons_to(competition.id, user_competitor_ids + [[competition.delegates.first.id, nil]])
+      end
+
+      it 'gets announced and unannounced series competitions ids' do
+        get :show_wcif, params: { competition_id: 'TestComp2014' }
+        expect(response.status).to eq 200
+        parsed_body = JSON.parse(response.body)
+        expect(parsed_body['series']['competitionIds']).to eq ['HiddenComp2014', 'TestComp2014']
+      end
+    end
+
+    context 'accessing public endpoint' do
+      it 'gets only announced series competitions ids' do
+        get :show_wcif_public, params: { competition_id: 'TestComp2014' }
+        expect(response.status).to eq 200
+        parsed_body = JSON.parse(response.body)
+        expect(parsed_body['series']['competitionIds']).to eq ['TestComp2014']
       end
     end
   end

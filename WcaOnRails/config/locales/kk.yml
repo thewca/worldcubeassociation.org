@@ -4130,22 +4130,6 @@ kk:
       content_html: >-
         Алынған JSON файлын электрондық пошта арқылы жіберіңіз: <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Байланыс
-      #original_hash: 69ba020
-      find_relations: Куберлер арасындағы байланыстарды табыңыз
-      #original_hash: 5d6056d
-      show_relation: Байланыстарды көрсету!
-      connectives:
-        #original_hash: f85194e
-        was_at: болды
-        #original_hash: 8c00243
-        together_with: бірге
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Екі түрлі жарамды WCA ID енгізіңіз.
   search_results:
     index:
       #original_hash: db98a68
