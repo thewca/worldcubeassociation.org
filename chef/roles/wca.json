@@ -39,9 +39,7 @@
     "recipe[timezone_lwrp]",
     "recipe[wca::base]",
     "recipe[wca::regulations_documents]",
-    "recipe[wca]",
-    "recipe[wca::email]",
-    "recipe[wca::cronjobs]"
+    "recipe[wca]"
   ],
   "env_run_lists": {
   }
