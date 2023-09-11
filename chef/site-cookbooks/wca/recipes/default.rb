@@ -125,16 +125,6 @@ else
   end
 end
 read_replica = db["read_replica"]
-template "/etc/my.cnf" do
-  source "my.cnf.erb"
-  mode 0644
-  owner 'root'
-  group 'root'
-  variables({
-              secrets: secrets,
-              db: db,
-            })
-end
 
 ### Fonts for generating PDFs
 package 'fonts-thai-tlwg'
