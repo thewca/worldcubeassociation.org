@@ -47,10 +47,8 @@ AppSecrets = SuperConfig.new do
     vault :CDN_AVATARS_DISTRIBUTION_ID
     vault :STAGING_PASSWORD
     vault :NEW_RELIC_LICENSE_KEY
-
-    # These should move to Vault ASAP
-    mandatory :SMTP_USERNAME, :string
-    mandatory :SMTP_PASSWORD, :string
+    vault :SMTP_USERNAME
+    vault :SMTP_PASSWORD
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
