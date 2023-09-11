@@ -69,7 +69,9 @@ namespace :db do
           LogTask.log_task "Clobbering contents of '#{config.database}' with #{DbDumpHelper::DEVELOPER_EXPORT_SQL}" do
             ActiveRecord::Tasks::DatabaseTasks.drop config
             ActiveRecord::Tasks::DatabaseTasks.create config
-            ActiveRecord::Tasks::DatabaseTasks.load_schema config
+
+            # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
+            # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
 
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
           end
