@@ -46,6 +46,7 @@ AppSecrets = SuperConfig.new do
     vault :RECAPTCHA_PUBLIC_KEY
     vault :CDN_AVATARS_DISTRIBUTION_ID
     vault :STAGING_PASSWORD
+    vault :NEW_RELIC_LICENSE_KEY
 
     # These should move to Vault ASAP
     mandatory :SMTP_USERNAME, :string
