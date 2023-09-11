@@ -685,6 +685,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
   end
 
+  create_table "groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "group_type", null: false
+    t.bigint "parent_group_id"
+    t.boolean "is_active", null: false
+    t.boolean "is_hidden", null: false
+    t.bigint "metadata_id"
+    t.string "metadata_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_group_id"], name: "index_groups_on_parent_group_id"
+  end
+
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.string "competition_id", null: false
@@ -870,6 +883,18 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
+  end
+
+  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.bigint "group_id", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.bigint "metadata_id"
+    t.string "metadata_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_roles_on_group_id"
   end
 
   create_table "rounds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1122,6 +1147,8 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "groups", "groups", column: "parent_group_id"
+  add_foreign_key "roles", "groups"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"

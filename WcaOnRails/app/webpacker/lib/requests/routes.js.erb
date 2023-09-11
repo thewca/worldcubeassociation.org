@@ -83,3 +83,7 @@ export const adminStartPostingUrl = `<%= CGI.unescape(Rails.application.routes.u
 export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_import_results_path("${competitionId}")) %>`;
 
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
+
+export const startProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_probation_path) %>`;
+
+export const endProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_probation_path) %>`;
