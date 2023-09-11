@@ -4,5 +4,7 @@ local:
 
 amazon:
   service: S3
+  access_key_id: <%= AppSecrets.AWS_ACCESS_KEY_ID %>
+  secret_access_key: <%= AppSecrets.AWS_SECRET_ACCESS_KEY %>
   bucket: <%= EnvConfig.STORAGE_AWS_BUCKET %>
-  region: "us-west-2"
+  region: <%= EnvConfig.STORAGE_AWS_REGION %>

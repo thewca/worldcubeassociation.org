@@ -9,6 +9,7 @@ EnvConfig = SuperConfig.new do
     mandatory :SIDEKIQ_REDIS_URL, :string
     mandatory :DISCOURSE_URL, :string
     mandatory :STORAGE_AWS_BUCKET, :string
+    mandatory :STORAGE_AWS_REGION, :string
     mandatory :S3_AVATARS_BUCKET, :string
     mandatory :S3_AVATARS_ASSET_HOST, :string
     mandatory :S3_AVATARS_REGION, :string
@@ -25,6 +26,7 @@ EnvConfig = SuperConfig.new do
     optional :SIDEKIQ_REDIS_URL, :string, ''
     optional :DISCOURSE_URL, :string, ''
     optional :STORAGE_AWS_BUCKET, :string, ''
+    optional :STORAGE_AWS_REGION, :string, ''
     optional :S3_AVATARS_BUCKET, :string, ''
     optional :S3_AVATARS_ASSET_HOST, :string, ''
     optional :S3_AVATARS_REGION, :string, ''
