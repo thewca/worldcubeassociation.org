@@ -265,7 +265,7 @@ class Person < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.person_url(wca_id, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

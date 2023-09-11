@@ -23,7 +23,7 @@ Rails.application.configure do
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
     # If the Developer is not running through Docker, Redis caching is disabled
-    cache_redis_url = EnvVars.CACHE_REDIS_URL
+    cache_redis_url = EnvConfig.CACHE_REDIS_URL
     if cache_redis_url.empty?
       config.cache_store = :memory_store
     else
@@ -45,7 +45,7 @@ Rails.application.configure do
 
   # Setup for mailcatcher (http://mailcatcher.me/)
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: EnvVars.MAILCATCHER_SMTP_HOST, port: 1025 }
+  config.action_mailer.smtp_settings = { address: EnvConfig.MAILCATCHER_SMTP_HOST, port: 1025 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -77,7 +77,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   config.after_initialize do
-    Bullet.enable = EnvVars.ENABLE_BULLET?
+    Bullet.enable = EnvConfig.ENABLE_BULLET?
     Bullet.alert = true
     Bullet.bullet_logger = true
     Bullet.console = true

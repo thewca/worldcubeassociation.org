@@ -721,6 +721,8 @@ GEM
       activemodel
       mail (>= 2.6.1)
       simpleidn
+    vault (0.17.0)
+      aws-sigv4
     version_gem (1.1.1)
     warden (1.2.9)
       rack (>= 2.0.9)
@@ -850,6 +852,7 @@ DEPENDENCIES
   uglifier
   unicorn
   valid_email
+  vault
   wca_i18n
   web-console
   wicked_pdf

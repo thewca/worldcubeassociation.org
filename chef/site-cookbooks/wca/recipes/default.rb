@@ -287,10 +287,8 @@ end
 cache_redis_url = "redis://#{redis[:cache_host]}:#{redis[:port]}"
 sidekiq_redis_url = "redis://#{redis[:sidekiq_host]}:#{redis[:port]}"
 
-#### Rails secrets
-# Don't be confused by the name of this file! This is used by both our staging
-# and our prod environments (because staging runs in the rails "production"
-# mode).
+#### Rails environment
+# Secrets are handled using Hashicorp Vault
 template "#{rails_root}/.env.production" do
   source "env.production.erb"
   mode 0644
@@ -301,7 +299,7 @@ template "#{rails_root}/.env.production" do
               cache_redis_url: cache_redis_url,
               sidekiq_redis_url: sidekiq_redis_url,
               db_host: db["host"],
-              read_replica_host: read_replica
+              read_replica_host: db["read_replica"]
             })
 end
 
@@ -401,7 +399,6 @@ template "/home/#{username}/wca.screenrc" do
               rails_root: rails_root,
               rails_env: rails_env,
               db_host: db["host"],
-              secrets: secrets,
             })
 end
 template "/home/#{username}/startall" do

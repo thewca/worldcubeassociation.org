@@ -51,7 +51,7 @@
     // Init Stripe PaymentElement
     // ----------
 
-    const stripe = Stripe('<%= EnvVars.STRIPE_PUBLISHABLE_KEY %>', {
+    const stripe = Stripe('<%= AppSecrets.STRIPE_PUBLISHABLE_KEY %>', {
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
       stripeAccount: '<%= @competition.connected_stripe_account_id %>',
     });
@@ -178,7 +178,7 @@
         elements,
         clientSecret,
         confirmParams: {
-          return_url: '<%= registration_payment_completion_url(@registration, host: EnvVars.ROOT_URL) %>',
+          return_url: '<%= registration_payment_completion_url(@registration, host: EnvConfig.ROOT_URL) %>',
         }
       });
 

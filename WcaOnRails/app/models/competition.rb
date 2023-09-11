@@ -814,7 +814,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_website
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   def managers
@@ -1893,7 +1893,7 @@ class Competition < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

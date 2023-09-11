@@ -90,6 +90,6 @@ module DbDumpHelper
   end
 
   def self.use_staging_password?
-    Rails.env.production? && !EnvVars.WCA_LIVE_SITE?
+    Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
   end
 end
