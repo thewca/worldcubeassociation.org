@@ -69,24 +69,6 @@ if username == "cubing"
 end
 rails_root = "#{repo_root}/WcaOnRails"
 
-#### SSH Keys
-# acces.sh depends on jq https://github.com/FatBoyXPC/acces.sh
-package 'jq'
-
-gen_auth_keys_path = "/home/#{username}/gen-authorized-keys.sh"
-template gen_auth_keys_path do
-  source "gen-authorized-keys.sh.erb"
-  mode 0755
-  owner username
-  group username
-  variables({
-              secrets: secrets,
-            })
-end
-execute gen_auth_keys_path do
-  user username
-end
-
 #### Mysql
 package 'mysql-client-8.0'
 db = {
