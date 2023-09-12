@@ -20,12 +20,12 @@ submit_report_nag:
 
 dump_developer_database:
   class: "DumpDeveloperDatabase"
-  cron: "0 0 */3 * *"
+  cron: "0 0 * * *"
   queue: wca_jobs
 
 dump_public_results_database:
   class: "DumpPublicResultsDatabase"
-  cron: "0 0 * * *"
+  cron: "0 0 */3 * *"
   queue: wca_jobs
 
 unstick_posts:
