@@ -15,58 +15,6 @@ end
 
 secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
-if username == "cubing"
-  user_lockfile = '/tmp/cubing-user-initialized'
-  cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
-  hashed_pw = `#{cmd}`.strip
-  user username do
-    manage_home true
-    home "/home/#{username}"
-    shell '/bin/bash'
-    password hashed_pw
-    not_if { ::File.exist?(user_lockfile) }
-  end
-
-  # Trick to run code immediately and last copied from:
-  #  https://gist.github.com/nvwls/7672039
-  ruby_block 'last' do
-    block do
-      puts "#"*80
-      puts "# Created user #{username} with password #{secrets['cubing_password']}"
-      puts "#"*80
-    end
-    not_if { ::File.exist?(user_lockfile) }
-  end
-  ruby_block 'notify' do
-    block do
-      true
-    end
-    notifies :run, 'ruby_block[last]', :delayed
-    not_if { ::File.exist?(user_lockfile) }
-  end
-
-  file user_lockfile do
-    action :create_if_missing
-  end
-
-  ssh_known_hosts_entry 'github.com'
-  unless Dir.exist? repo_root
-    branch = "master"
-    git repo_root do
-      repository "https://github.com/thewca/worldcubeassociation.org.git"
-      revision branch
-      # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
-      # for the reason for checkout_branch and "enable_checkout false"
-      checkout_branch branch
-      enable_checkout false
-      action :sync
-      enable_submodules true
-
-      user username
-      group username
-    end
-  end
-end
 rails_root = "#{repo_root}/WcaOnRails"
 
 #### Mysql
