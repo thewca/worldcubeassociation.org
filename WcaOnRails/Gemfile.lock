@@ -152,6 +152,9 @@ GEM
     aws-sdk-kms (1.71.0)
       aws-sdk-core (~> 3, >= 3.177.0)
       aws-sigv4 (~> 1.1)
+    aws-sdk-rds (1.193.0)
+      aws-sdk-core (~> 3, >= 3.177.0)
+      aws-sigv4 (~> 1.1)
     aws-sdk-s3 (1.134.0)
       aws-sdk-core (~> 3, >= 3.181.0)
       aws-sdk-kms (~> 1)
@@ -752,6 +755,7 @@ DEPENDENCIES
   api-pagination
   apparition!
   aws-sdk-cloudfront
+  aws-sdk-rds
   aws-sdk-s3
   better_errors
   binding_of_caller

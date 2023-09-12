@@ -1,0 +1,13 @@
+<% provide(:title, 'Get Database Login Token') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h1><%= yield(:title) %></h1>
+
+    <p>
+      You can use this token to log into the database PHPMyAdmin Panel with the username <b>phpymadmin</b> <br/>
+      This token is valid for 15 minutes
+    </p>
+    <code><%= @token %></code>
+  <% end %>
+</div>

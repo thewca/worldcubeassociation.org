@@ -14,6 +14,8 @@ EnvConfig = SuperConfig.new do
     mandatory :S3_AVATARS_ASSET_HOST, :string
     mandatory :S3_AVATARS_REGION, :string
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
+    mandatory :DATABASE_AWS_REGION, :string
+    mandatory :DATABASE_WRT_USER, :string
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
@@ -31,6 +33,8 @@ EnvConfig = SuperConfig.new do
     optional :S3_AVATARS_ASSET_HOST, :string, ''
     optional :S3_AVATARS_REGION, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
+    optional :DATABASE_AWS_REGION, :string, ''
+    optional :DATABASE_WRT_USER, :string, ''
 
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false

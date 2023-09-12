@@ -13,7 +13,6 @@ npm_package 'yarn' do
   options ['--global']
 end
 
-secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 rails_root = "#{repo_root}/WcaOnRails"
 
@@ -26,33 +25,10 @@ if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
-  db['password'] = secrets['mysql_password']
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon RDS.
   db['host'] = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
-  db['password'] = secrets['mysql_password']
-else
-  # If not in the cloud, then we run a local mysql instance.
-  socket = "/var/run/mysqld/mysqld.sock"
-  db['host'] = 'localhost'
-  db['socket'] = socket
-  db['password'] = secrets['mysql_password']
-  mysql_service 'default' do
-    version '8.0'
-    charset 'utf8mb4'
-    bind_address '127.0.0.1'
-    initial_root_password secrets['mysql_password']
-    # Force default socket to make rails happy
-    socket socket
-    action [:create, :start]
-  end
-  mysql_config 'default' do
-    source 'mysql-wca.cnf.erb'
-    instance 'default'
-    notifies :restart, 'mysql_service[default]'
-    action :create
-  end
 end
 read_replica = db["read_replica"]
 
@@ -215,7 +191,6 @@ template "#{rails_root}/.env.production" do
   owner username
   group username
   variables({
-              secrets: secrets,
               cache_redis_url: cache_redis_url,
               sidekiq_redis_url: sidekiq_redis_url,
               db_host: db["host"],
@@ -234,10 +209,11 @@ package "php-fpm"
 template "etc/phpmyadmin/conf.d/wca.php" do
   source "phpMyAdmin_config.inc.php.erb"
   variables({
-              secrets: secrets,
               db: db,
             })
 end
+# Download certificate bundle for the RDS database
+execute "wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -o /etc/phpmyadmin/conf.d/rds-combined-ca-bundle.pem"
 
 #### Initialize rails gems/database
 execute "bundle config set --local path '/home/#{username}/.bundle'" do
