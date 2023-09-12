@@ -20,11 +20,11 @@ $cfg['Servers'][$i]['connect_type'] = 'socket';
 $cfg['Servers'][$i]['host'] = '<%= @db['host'] %>';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 <% end %>
-$cfg['Servers'][$i]['auth_type'] = 'config';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
 // The RDS IAM Authentification requires SSL
 $cfg['Servers'][$i]['ssl'] = true;
 // You need to have the region CA file and the authority CA file in the PEM bundle for it to work
-$cfg['Servers'][$i]['ssl_ca'] = './rds-combined-ca-bundle.pem';
+$cfg['Servers'][$i]['ssl_ca'] = <%= @rds_certificate_pem %>;
 // Enable SSL verification
 $cfg['Servers'][$i]['ssl_verify'] = true;
 /* Servers configuration */

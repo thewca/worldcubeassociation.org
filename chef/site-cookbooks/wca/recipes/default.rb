@@ -206,14 +206,19 @@ end
 
 package "php-fpm"
 
+# Download certificate bundle for the RDS database
+rds_certificate_pem = '/etc/phpmyadmin/rds-combined-ca-bundle.pem'
+execute "wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -O ${rds_certificate_pem}" do
+  not_if { ::File.exist?(rds_certificate_pem) }
+end
+
 template "etc/phpmyadmin/conf.d/wca.php" do
   source "phpMyAdmin_config.inc.php.erb"
   variables({
+              rds_certificate_pem: rds_certificate_pem,
               db: db,
             })
 end
-# Download certificate bundle for the RDS database
-execute "wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -o /etc/phpmyadmin/conf.d/rds-combined-ca-bundle.pem"
 
 #### Initialize rails gems/database
 execute "bundle config set --local path '/home/#{username}/.bundle'" do
