@@ -1,19 +1,8 @@
 #!/usr/bin/env bash
 
-SCREEN_SESSION_NAME=wca
-print_usage_and_exit() {
-  echo "Usage: $0"
-  echo "Start a screen session named \"$SCREEN_SESSION_NAME\" iff one is not already running."
-  exit
-}
-if [ $# -gt 0 ]; then
-  print_usage_and_exit
-fi
-
-if screen -S $SCREEN_SESSION_NAME -Q select > /dev/null; then
-  echo "Found an existing screen session named \"$SCREEN_SESSION_NAME\"."
-  echo "Run \"screen -S $SCREEN_SESSION_NAME -X quit\" to stop it."
-  exit # don't error out here, as this is called by chef
-fi
-screen -d -m -S $SCREEN_SESSION_NAME -c ~/wca.screenrc
-echo "Started a screen named \"$SCREEN_SESSION_NAME\" as user `whoami`"
+<% if @rails_env == "development" %>
+cd <%= @rails_root %>
+RACK_ENV=development DATABASE_HOST=<%= @db_host %> bundle exec rails server
+<% else %>
+<%= repo_root %>/scripts/deploy.sh rebuild_rails update_docs"
+<% end %>

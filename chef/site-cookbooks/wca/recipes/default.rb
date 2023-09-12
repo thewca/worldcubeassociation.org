@@ -298,34 +298,17 @@ elsif node.chef_environment == "staging"
 end
 
 #### Screen
-template "/home/#{username}/.bash_profile" do
-  source "bash_profile.erb"
-  mode 0644
-  owner username
-  group username
-end
-template "/home/#{username}/.bashrc" do
-  source "bashrc.erb"
-  mode 0644
-  owner username
-  group username
-end
-template "/home/#{username}/wca.screenrc" do
-  source "wca.screenrc.erb"
-  mode 0644
-  owner username
-  group username
-  variables({
-              rails_root: rails_root,
-              rails_env: rails_env,
-              db_host: db["host"],
-            })
-end
 template "/home/#{username}/startall" do
   source "startall.erb"
   mode 0755
   owner username
   group username
+  variables({
+             rails_root: rails_root,
+             repo_root: repo_root,
+             rails_env: rails_env,
+             db_host: db["host"],
+           })
 end
 # We "sudo su ..." because simply specifying "user ..." doesn't invoke a login shell,
 # which makes for a very screwy screen (we're logged in as username, but HOME
@@ -334,7 +317,7 @@ execute "sudo su #{username} -c '~/startall'" do
   user username
   not_if "screen -S wca -Q select", user: username
 end
-# Start screen at boot by creating our own /etc/init.d/rc.local
+# Start server at boot by creating our own /etc/init.d/rc.local
 # Hopefully no one else needs to touch this file... there has *got* to be a
 # more portable way of doing this.
 template "/etc/rc.local" do
