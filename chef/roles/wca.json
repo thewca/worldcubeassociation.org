@@ -12,7 +12,7 @@
     },
     "openssh": {
       "server": {
-        "password_authentication": "yes"
+        "password_authentication": "no"
       }
     },
     "set_fqdn": "*.worldcubeassociation.org",
