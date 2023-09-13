@@ -59,6 +59,7 @@ gem 'high_voltage'
 gem 'carrierwave'
 gem 'carrierwave-aws'
 gem 'aws-sdk-s3'
+gem 'aws-sdk-rds'
 gem 'aws-sdk-cloudfront'
 
 # Pointing to thewca/carrierwave-crop which has a workaround for

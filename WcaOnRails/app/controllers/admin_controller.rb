@@ -362,6 +362,17 @@ class AdminController < ApplicationController
     redirect_to admin_generate_exports_path
   end
 
+  def generate_db_token
+    role_credentials = Aws::InstanceProfileCredentials.new
+    token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
+
+    @token = token_generator.auth_token({
+                                          region: EnvConfig.DATABASE_AWS_REGION,
+                                          endpoint: "#{EnvConfig.DATABASE_HOST}:3306",
+                                          user_name: EnvConfig.DATABASE_WRT_USER,
+                                        })
+  end
+
   def check_regional_records
     @check_records_request = CheckRegionalRecordsForm.new(
       competition_id: params[:competition_id] || nil,
