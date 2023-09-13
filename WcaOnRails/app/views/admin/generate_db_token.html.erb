@@ -16,5 +16,7 @@
     <label class="btn btn-primary" onclick="navigator.clipboard.writeText('<%= @token %>');">
       Copy to clipboard
     </label>
+
+    <%= link_to t('layouts.navigation.results_database'), '/results/database/', class: 'btn btn-primary', target: '_blank' %>
   <% end %>
 </div>
