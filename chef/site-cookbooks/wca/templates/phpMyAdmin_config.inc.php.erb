@@ -24,7 +24,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 // The RDS IAM Authentication requires SSL
 $cfg['Servers'][$i]['ssl'] = true;
 // You need to have the region CA file and the authority CA file in the PEM bundle for it to work
-$cfg['Servers'][$i]['ssl_ca'] = <%= @rds_certificate_pem %>;
+$cfg['Servers'][$i]['ssl_ca'] = '<%= @rds_certificate_pem %>';
 // Enable SSL verification
 $cfg['Servers'][$i]['ssl_verify'] = true;
 
@@ -44,7 +44,7 @@ $cfg['Servers'][$i]['auth_type'] = 'cookie';
 // The RDS IAM Authentication requires SSL
 $cfg['Servers'][$i]['ssl'] = true;
 // You need to have the region CA file and the authority CA file in the PEM bundle for it to work
-$cfg['Servers'][$i]['ssl_ca'] = <%= @rds_certificate_pem %>;
+$cfg['Servers'][$i]['ssl_ca'] = '<%= @rds_certificate_pem %>';
 // Enable SSL verification
 $cfg['Servers'][$i]['ssl_verify'] = true;
 
