@@ -12,5 +12,9 @@
     <pre>
       <code><%= @token %></code>
     </pre>
+
+    <label class="btn btn-primary" onclick="navigator.clipboard.writeText('<%= @token %>');">
+      Copy to clipboard
+    </label>
   <% end %>
 </div>
