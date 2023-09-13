@@ -368,7 +368,7 @@ class AdminController < ApplicationController
 
     @token = token_generator.auth_token({
                                           region: EnvConfig.DATABASE_AWS_REGION,
-                                          endpoint: EnvConfig.DATABASE_HOST,
+                                          endpoint: "#{EnvConfig.DATABASE_HOST}:3306",
                                           user_name: EnvConfig.DATABASE_WRT_USER,
                                         })
   end
