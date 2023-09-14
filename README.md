@@ -11,10 +11,9 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - [API to read data from the website](https://wca-rest-api.robiningelbrecht.be/)
 - [Other WCA Repos](https://docs.worldcubeassociation.org/#wca-software-resources)
 - [Using OAuth, or writing data to the website](https://docs.worldcubeassociation.org/knowledge_base/v0_api.html)
-- [Joining WST]()
 
 ## Can I join WST?
-Currently (2023-09-10) WST is not accepting new members. We aim to onboard more volunteers by early 2024.
+Currently (2023-09-10) WST is not accepting new members. We aim to onboard more volunteers by Q2 2024.
 
 ----
 
