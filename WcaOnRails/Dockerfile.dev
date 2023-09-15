@@ -5,12 +5,6 @@ ENV DEBIAN_FRONTEND noninteractive
 WORKDIR /app
 ARG NODE_MAJOR=16
 
-# Set production environment
-ENV RAILS_LOG_TO_STDOUT="1" \
-    RAILS_SERVE_STATIC_FILES="true" \
-    RAILS_ENV="production" \
-    BUNDLE_WITHOUT="development:test"
-
 # Add PPA needed to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
 RUN apt-get update && apt-get install -y ca-certificates curl gnupg
@@ -31,28 +25,6 @@ RUN apt-get update && apt-get install -y \
   mariadb-client \
   libssl-dev \
   libyaml-dev \
-  python3-pip \
-  fonts-unfonts-core \
-  fonts-wqy-microhei \
-  fonts-ipafont \
-  lmodern \
-  libxrender1 \
-  pipx \
   tzdata
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -O wkhtml.tar.xz && tar -xf wkhtml.tar.xz --strip-components=1 -C /usr/local
-# Using pipx because PEP668 doesn't allow installing systemwide packages anymore
-RUN pipx install wrc
 
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN bundle install
-# Install node dependencies
-COPY package.json ./
-RUN yarn install
-
-COPY . .
-
-# Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
-# but can also take a rails command, like "console" or "runner" to start instead.
-ENTRYPOINT ["/app/bin/docker-entrypoint"]
-EXPOSE 3000
+RUN gem update --system && gem install bundler

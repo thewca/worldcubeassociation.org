@@ -1,0 +1,16 @@
+#!/bin/sh
+
+if [ $# -eq 0 ]; then
+
+  # We need all the environment variables to be there to precompile assets
+  ./bin/bundle exec i18n export
+  ./bin/bundle exec rails assets:precompile
+  # Create new or migrate existing database
+  ./bin/rails db:prepare
+
+  # Start the server by default
+  exec bin/rails server
+else
+  # Allow other commands, like console or runner, to be called
+  exec bin/rails "$@"
+fi

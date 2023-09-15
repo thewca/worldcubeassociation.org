@@ -48,3 +48,6 @@ yarn-debug.log*
 
 # Healthcheck flag for our Rails docker container
 .db-inited
+
+# GCE secrets file
+**/application_default_credentials.json
