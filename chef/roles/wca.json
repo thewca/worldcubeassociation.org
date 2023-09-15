@@ -12,7 +12,7 @@
     },
     "openssh": {
       "server": {
-        "password_authentication": "yes"
+        "password_authentication": "no"
       }
     },
     "set_fqdn": "*.worldcubeassociation.org",
@@ -38,11 +38,8 @@
     "recipe[openssh]",
     "recipe[timezone_lwrp]",
     "recipe[wca::base]",
-    "recipe[wca::supervisor]",
     "recipe[wca::regulations_documents]",
-    "recipe[wca]",
-    "recipe[wca::email]",
-    "recipe[wca::cronjobs]"
+    "recipe[wca]"
   ],
   "env_run_lists": {
   }

@@ -4479,22 +4479,6 @@ nl:
       content_html: >-
         Stuur het json-bestand uit WCA Workbook Assistant met e-mail op naar <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relaties
-      #original_hash: 69ba020
-      find_relations: Vind verbindingen tussen speedcubers
-      #original_hash: 5d6056d
-      show_relation: Laat me de relatie zien!
-      connectives:
-        #original_hash: f85194e
-        was_at: Deed mee aan
-        #original_hash: 8c00243
-        together_with: Samen met
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Geef ajb twee andere correcte WCA-id's op.
   search_results:
     index:
       #original_hash: db98a68

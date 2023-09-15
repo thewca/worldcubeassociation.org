@@ -16,9 +16,27 @@ module DbDumpHelper
   DEVELOPER_EXPORT_SQL = "#{DEVELOPER_EXPORT_FILENAME}.sql".freeze
   DEVELOPER_EXPORT_SQL_PERMALINK = "#{DEVELOPER_EXPORT_FILENAME}.zip".freeze
 
+  DEFAULT_DEV_PASSWORD = 'wca'
+
   def self.dump_developer_db
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
+        # WARNING: Headache ahead! By using Rails-DSL database schema files, the migrations in the dev export can break.
+        #   Rails uses the timestamp at the top of the schema file to determine which migration is the latest one.
+        #   It then proceeds to glob the migration folder for older migrations and inserts them when loading the schema.
+        #   However, this glob is _relative_ to the Rails root. Due to our chdir into a temporary directory (where we can
+        #   write files to our heart's desire) the glob returns an empty list. So we symlink the migrations into our tmp
+        #   working directory to make sure that Rails can find them when loading/dumping the schema.
+        primary_connection = ActiveRecord::Base.connection
+        migration_paths = primary_connection.migration_context.migrations_paths
+
+        migration_paths.each do |migration_path|
+          FileUtils.mkpath(File.dirname(migration_path))
+
+          abs_migrations = File.join(Rails.application.root, migration_path)
+          FileUtils.ln_s abs_migrations, migration_path, verbose: true
+        end
+
         DatabaseDumper.development_dump(DEVELOPER_EXPORT_SQL)
 
         self.zip_and_permalink(DEVELOPER_EXPORT_FOLDER, DEVELOPER_EXPORT_SQL_PERMALINK, nil, DEVELOPER_EXPORT_SQL)
@@ -85,5 +103,9 @@ module DbDumpHelper
         FileUtils.ln_s(zip_filename, permalink_zip_path, force: true)
       end
     end
+  end
+
+  def self.use_staging_password?
+    Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
   end
 end

@@ -33,7 +33,7 @@ zh-CN:
     #original_hash: 77e4070
     MO: 澳门，中国
     #original_hash: 05a15c1
-    PS: 巴基斯坦
+    PS: 巴勒斯坦
     #original_hash: 655191a
     ST: 圣多美和普林西比
     #original_hash: 16cc7f8
@@ -515,8 +515,10 @@ zh-CN:
         #original_hash: 6e6a6f2
         o: 其他
       delegate_status:
+        #original_hash: 621101a
+        trainee_delegate: 实习代表
         #original_hash: 9b97968
-        candidate_delegate: 实习代表
+        candidate_delegate: 初级代表
         #original_hash: 12ab214
         delegate: 代表
         #original_hash: d463c23
@@ -2545,7 +2547,7 @@ zh-CN:
           该委员会负责支持和促进WCA内持续的质量改进，以及在全球范围内应用质量标准，以确保一致的高质量流程，WCA工作人员，区域组织，比赛组织者和工作人员。
       #original_hash: 7e849d2
       delegates_html: >-
-        <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
+        <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>、<strong>WCA初级代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
       #original_hash: 27d18ac
       see_link_html: '（查看%{link}）'
       #original_hash: 5b01fcc
@@ -2797,22 +2799,6 @@ zh-CN:
       content_html: >-
         通过邮件将WCA成绩表助手生成的JSON文件发送到<a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: 关系
-      #original_hash: 69ba020
-      find_relations: 发现魔友间的联系
-      #original_hash: 5d6056d
-      show_relation: 显示关系
-      connectives:
-        #original_hash: f85194e
-        was_at: 曾参加
-        #original_hash: 8c00243
-        together_with: 并撞见了
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 请提供两个不同的有效 WCA ID
   search_results:
     index:
       #original_hash: db98a68

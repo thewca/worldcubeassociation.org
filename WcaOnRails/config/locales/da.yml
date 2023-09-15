@@ -4406,22 +4406,6 @@ da:
       content_html: >-
         E-mai JSON filen eksporteret af WCA Workbook Assistant til <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relationer
-      #original_hash: 69ba020
-      find_relations: Find forbindelser mellem cubere
-      #original_hash: 5d6056d
-      show_relation: Vis mig relationen!
-      connectives:
-        #original_hash: f85194e
-        was_at: Var til
-        #original_hash: 8c00243
-        together_with: Sammen med
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Giv to forskellige gyldige WCA IDer.
   search_results:
     index:
       #original_hash: db98a68

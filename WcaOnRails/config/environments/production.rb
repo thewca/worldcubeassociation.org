@@ -71,7 +71,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-  config.cache_store = :redis_cache_store, { url: EnvVars.REDIS_URL }
+  config.cache_store = :redis_cache_store, { url: EnvConfig.CACHE_REDIS_URL }
 
   # Use a real queuing backend for Active Job (and separate queues per environment).
   # config.active_job.queue_adapter     = :resque
@@ -81,15 +81,15 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.raise_delivery_errors = true
 
-  if EnvVars.WCA_LIVE_SITE?
-    root_url = URI.parse(EnvVars.ROOT_URL)
+  if EnvConfig.WCA_LIVE_SITE?
+    root_url = URI.parse(EnvConfig.ROOT_URL)
 
     config.action_mailer.smtp_settings = {
       address: "email-smtp.us-west-2.amazonaws.com",
       port: 587,
       enable_starttls_auto: true,
-      user_name: EnvVars.SMTP_USERNAME,
-      password: EnvVars.SMTP_PASSWORD,
+      user_name: AppSecrets.SMTP_USERNAME,
+      password: AppSecrets.SMTP_PASSWORD,
       authentication: 'login',
       domain: root_url.host,
     }

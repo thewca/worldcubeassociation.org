@@ -345,7 +345,7 @@ class AdminController < ApplicationController
   end
 
   def do_compute_auxiliary_data
-    ComputeAuxiliaryData.perform_later unless ComputeAuxiliaryData.in_progress?
+    ComputeAuxiliaryData.perform_later
     redirect_to admin_compute_auxiliary_data_path
   end
 
@@ -353,12 +353,12 @@ class AdminController < ApplicationController
   end
 
   def do_generate_dev_export
-    DumpDeveloperDatabase.perform_later(force_export: true) unless DumpDeveloperDatabase.in_progress?
+    DumpDeveloperDatabase.perform_later
     redirect_to admin_generate_exports_path
   end
 
   def do_generate_public_export
-    DumpPublicResultsDatabase.perform_later(force_export: true) unless DumpPublicResultsDatabase.in_progress?
+    DumpPublicResultsDatabase.perform_later
     redirect_to admin_generate_exports_path
   end
 

@@ -3861,22 +3861,6 @@ uk:
       content_html: >-
         E-mail the JSON file exported by the WCA Workbook Assistant to <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Знайомства
-      #original_hash: 69ba020
-      find_relations: Знайти зв’язок між двома куберами
-      #original_hash: 5d6056d
-      show_relation: Покажіть мені зв’язок!
-      connectives:
-        #original_hash: f85194e
-        was_at: був присутній на
-        #original_hash: 8c00243
-        together_with: разом з
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Будь ласка, задайте два різні діючі WCA ID'
   search_results:
     index:
       #original_hash: db98a68

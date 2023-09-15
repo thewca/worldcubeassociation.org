@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+require 'sidekiq/cron/web'
+
 Rails.application.routes.draw do
   use_doorkeeper do
     controllers applications: 'oauth/applications'
@@ -7,6 +10,12 @@ Rails.application.routes.draw do
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
   mount Starburst::Engine => '/starburst'
+
+  # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
+  # Specifically referring to results because WRT needs access to this on top of regular admins.
+  authenticate :user, ->(user) { user.can_admin_results? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
@@ -169,22 +178,23 @@ Rails.application.routes.draw do
   patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
-  get 'teams-committees' => 'static_pages#teams_committees'
+  get 'contact' => 'static_pages#contact'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
-  get 'contact' => 'static_pages#contact'
-  get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'privacy' => 'static_pages#privacy'
   get 'faq' => 'static_pages#faq'
-  get 'score-tools' => 'static_pages#score_tools'
   get 'logo' => 'static_pages#logo'
   get 'media-instagram' => 'static_pages#media_instagram'
+  get 'merch' => 'static_pages#merch'
+  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
+  get 'privacy' => 'static_pages#privacy'
+  get 'score-tools' => 'static_pages#score_tools'
+  get 'speedcubing-history' => 'static_pages#speedcubing_history'
+  get 'teams-committees' => 'static_pages#teams_committees'
+  get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
-  get 'organizer-guidelines' => 'static_pages#organizer_guidelines'
-  get 'tutorial' => redirect('/education', status: 302)
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
@@ -242,9 +252,6 @@ Rails.application.routes.draw do
 
   patch '/update_locale/:locale' => 'application#update_locale', as: :update_locale
 
-  get '/relations' => 'relations#index'
-  get '/relation' => 'relations#relation'
-
   get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
 
   # WFC section
@@ -290,6 +297,7 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
+      get '/competition_series/:id' => 'api#competition_series'
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'

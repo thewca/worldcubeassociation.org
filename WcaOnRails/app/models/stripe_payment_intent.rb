@@ -34,7 +34,7 @@ class StripePaymentIntent < ApplicationRecord
     )
   end
 
-  def update_status_and_charges(api_intent, action_source)
+  def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
     ActiveRecord::Base.transaction do
       self.stripe_transaction.update_status(api_intent)
       self.update!(error_details: api_intent.last_payment_error)
@@ -45,7 +45,7 @@ class StripePaymentIntent < ApplicationRecord
         # The payment didn't need any additional actions and is completed!
 
         # Record the success timestamp if not already done
-        self.update!(confirmed_at: DateTime.current, confirmed_by: action_source) if self.pending?
+        self.update!(confirmed_at: source_datetime, confirmed_by: action_source) if self.pending?
 
         intent_charges = Stripe::Charge.list(
           { payment_intent: self.stripe_id },
@@ -71,7 +71,7 @@ class StripePaymentIntent < ApplicationRecord
       when 'canceled'
         # Canceled by Stripe
 
-        self.update!(canceled_at: DateTime.current, canceled_by: action_source)
+        self.update!(canceled_at: source_datetime, canceled_by: action_source)
       when 'requires_payment_method'
         # Reset by Stripe
 
