@@ -17,11 +17,11 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   def invalidate_cdn_cache(reference)
-    if EnvVars.CDN_AVATARS_DISTRIBUTION_ID.present?
+    if AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
       # the hash keys and structure are per Amazon AWS' documentation
       # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
       cloudfront_sdk.create_invalidation({
-                                           distribution_id: EnvVars.CDN_AVATARS_DISTRIBUTION_ID,
+                                           distribution_id: AppSecrets.CDN_AVATARS_DISTRIBUTION_ID,
                                            invalidation_batch: {
                                              paths: {
                                                quantity: 1,
@@ -43,7 +43,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   def self.missing_avatar_thumb_url
-    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: EnvVars.ROOT_URL).freeze
+    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: EnvConfig.ROOT_URL).freeze
   end
 
   # Choose what kind of storage to use for this uploader:

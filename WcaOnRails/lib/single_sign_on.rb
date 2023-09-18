@@ -55,11 +55,11 @@ class SingleSignOn
   attr_writer :sso_secret, :sso_url
 
   def self.sso_secret
-    EnvVars.DISCOURSE_SECRET
+    AppSecrets.DISCOURSE_SECRET
   end
 
   def self.sso_url
-    "#{EnvVars.DISCOURSE_URL}/session/sso_login?"
+    "#{EnvConfig.DISCOURSE_URL}/session/sso_login?"
   end
 
   def self.parse(payload, sso_secret = nil)

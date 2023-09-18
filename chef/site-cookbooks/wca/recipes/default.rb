@@ -15,77 +15,7 @@ end
 
 secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
-if username == "cubing"
-  user_lockfile = '/tmp/cubing-user-initialized'
-  cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
-  hashed_pw = `#{cmd}`.strip
-  user username do
-    manage_home true
-    home "/home/#{username}"
-    shell '/bin/bash'
-    password hashed_pw
-    not_if { ::File.exist?(user_lockfile) }
-  end
-
-  # Trick to run code immediately and last copied from:
-  #  https://gist.github.com/nvwls/7672039
-  ruby_block 'last' do
-    block do
-      puts "#"*80
-      puts "# Created user #{username} with password #{secrets['cubing_password']}"
-      puts "#"*80
-    end
-    not_if { ::File.exist?(user_lockfile) }
-  end
-  ruby_block 'notify' do
-    block do
-      true
-    end
-    notifies :run, 'ruby_block[last]', :delayed
-    not_if { ::File.exist?(user_lockfile) }
-  end
-
-  file user_lockfile do
-    action :create_if_missing
-  end
-
-  ssh_known_hosts_entry 'github.com'
-  unless Dir.exist? repo_root
-    branch = "master"
-    git repo_root do
-      repository "https://github.com/thewca/worldcubeassociation.org.git"
-      revision branch
-      # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
-      # for the reason for checkout_branch and "enable_checkout false"
-      checkout_branch branch
-      enable_checkout false
-      action :sync
-      enable_submodules true
-
-      user username
-      group username
-    end
-  end
-end
 rails_root = "#{repo_root}/WcaOnRails"
-
-#### SSH Keys
-# acces.sh depends on jq https://github.com/FatBoyXPC/acces.sh
-package 'jq'
-
-gen_auth_keys_path = "/home/#{username}/gen-authorized-keys.sh"
-template gen_auth_keys_path do
-  source "gen-authorized-keys.sh.erb"
-  mode 0755
-  owner username
-  group username
-  variables({
-              secrets: secrets,
-            })
-end
-execute gen_auth_keys_path do
-  user username
-end
 
 #### Mysql
 package 'mysql-client-8.0'
@@ -125,16 +55,6 @@ else
   end
 end
 read_replica = db["read_replica"]
-template "/etc/my.cnf" do
-  source "my.cnf.erb"
-  mode 0644
-  owner 'root'
-  group 'root'
-  variables({
-              secrets: secrets,
-              db: db,
-            })
-end
 
 ### Fonts for generating PDFs
 package 'fonts-thai-tlwg'
@@ -287,10 +207,8 @@ end
 cache_redis_url = "redis://#{redis[:cache_host]}:#{redis[:port]}"
 sidekiq_redis_url = "redis://#{redis[:sidekiq_host]}:#{redis[:port]}"
 
-#### Rails secrets
-# Don't be confused by the name of this file! This is used by both our staging
-# and our prod environments (because staging runs in the rails "production"
-# mode).
+#### Rails environment
+# Secrets are handled using Hashicorp Vault
 template "#{rails_root}/.env.production" do
   source "env.production.erb"
   mode 0644
@@ -301,7 +219,7 @@ template "#{rails_root}/.env.production" do
               cache_redis_url: cache_redis_url,
               sidekiq_redis_url: sidekiq_redis_url,
               db_host: db["host"],
-              read_replica_host: read_replica
+              read_replica_host: db["read_replica"]
             })
 end
 
@@ -401,7 +319,6 @@ template "/home/#{username}/wca.screenrc" do
               rails_root: rails_root,
               rails_env: rails_env,
               db_host: db["host"],
-              secrets: secrets,
             })
 end
 template "/home/#{username}/startall" do

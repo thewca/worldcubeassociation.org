@@ -10,7 +10,8 @@ require 'rails/all'
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
-require_relative '../env_vars'
+require_relative '../env_config'
+require_relative '../app_secrets'
 
 module WcaOnRails
   BOOTED_AT = Time.now
@@ -77,7 +78,7 @@ module WcaOnRails
     config.eager_load_paths << Rails.root.join('lib')
 
     # Set global default_url_options, see https://github.com/rails/rails/issues/29992#issuecomment-761892658
-    root_url = URI.parse(EnvVars.ROOT_URL)
+    root_url = URI.parse(EnvConfig.ROOT_URL)
     routes.default_url_options = {
       protocol: root_url.scheme,
       host: root_url.host,
@@ -91,8 +92,8 @@ module WcaOnRails
     config.action_mailer.deliver_later_queue_name = :mailers
 
     # Activate ActiveRecord attribute encryption for use with the Devise 2FA gem
-    config.active_record.encryption.primary_key = EnvVars.ACTIVERECORD_PRIMARY_KEY
-    config.active_record.encryption.deterministic_key = EnvVars.ACTIVERECORD_DETERMINISTIC_KEY
-    config.active_record.encryption.key_derivation_salt = EnvVars.ACTIVERECORD_KEY_DERIVATION_SALT
+    config.active_record.encryption.primary_key = AppSecrets.ACTIVERECORD_PRIMARY_KEY
+    config.active_record.encryption.deterministic_key = AppSecrets.ACTIVERECORD_DETERMINISTIC_KEY
+    config.active_record.encryption.key_derivation_salt = AppSecrets.ACTIVERECORD_KEY_DERIVATION_SALT
   end
 end

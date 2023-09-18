@@ -72,7 +72,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   devise :two_factor_authenticatable,
-         otp_secret_encryption_key: EnvVars.OTP_ENCRYPTION_KEY
+         otp_secret_encryption_key: AppSecrets.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
@@ -597,7 +597,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? && EnvVars.WCA_LIVE_SITE? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?
@@ -1074,7 +1074,7 @@ class User < ApplicationRecord
 
   def url
     if wca_id
-      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvVars.ROOT_URL)
+      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
     else
       ""
     end

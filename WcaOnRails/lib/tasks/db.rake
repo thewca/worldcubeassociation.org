@@ -50,7 +50,7 @@ namespace :db do
   namespace :load do
     desc 'Download and import the publicly accessible database dump from the production server'
     task development: :environment do
-      if EnvVars.WCA_LIVE_SITE?
+      if EnvConfig.WCA_LIVE_SITE?
         abort "This actions is disabled for the production server!"
       end
 
@@ -69,12 +69,14 @@ namespace :db do
           LogTask.log_task "Clobbering contents of '#{config.database}' with #{DbDumpHelper::DEVELOPER_EXPORT_SQL}" do
             ActiveRecord::Tasks::DatabaseTasks.drop config
             ActiveRecord::Tasks::DatabaseTasks.create config
-            ActiveRecord::Tasks::DatabaseTasks.load_schema config
+
+            # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
+            # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
 
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
           end
 
-          dummy_password = DbDumpHelper.use_staging_password? ? EnvVars.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
+          dummy_password = DbDumpHelper.use_staging_password? ? AppSecrets.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
 
           default_encrypted_password = User.new(password: dummy_password).encrypted_password
           LogTask.log_task "Setting all user passwords to '#{dummy_password}'" do
