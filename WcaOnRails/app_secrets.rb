@@ -23,7 +23,7 @@ SuperConfig::Base.class_eval do
         File.write file_path, value_raw.to_json
       end
 
-      file_path.to_s
+      File.expand_path file_path
     end
   end
 
