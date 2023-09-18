@@ -9,15 +9,32 @@ SuperConfig::Base.class_eval do
   #   (method SuperConfig::Base#credential). The inner Vault fetching logic is custom-written :)
   def vault(secret_name, &block)
     define_singleton_method(secret_name) do
-      @__cache__["_vault_#{secret_name}".to_sym] ||= Vault.with_retries(Vault::HTTPConnectionError, Vault::HTTPError) do |attempt, e|
-        puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
-
-        secret = Vault.logical.read("secret/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
-        raise "Tried to read #{secret_name}, but doesn't exist" unless secret.present?
-
-        value = secret.data[:data][:value]
+      @__cache__["_vault_#{secret_name}".to_sym] ||= begin
+        value = self.vault_read(secret_name)[:value]
         block ? block.call(value) : value
       end
+    end
+  end
+
+  def vault_file(secret_name, file_path)
+    define_singleton_method(secret_name) do
+      unless File.exist? file_path
+        value_raw = self.vault_read secret_name
+        File.write file_path, value_raw.to_json
+      end
+
+      file_path.to_s
+    end
+  end
+
+  private def vault_read(secret_name)
+    Vault.with_retries(Vault::HTTPConnectionError, Vault::HTTPError) do |attempt, e|
+      puts "Received exception #{e} from Vault - attempt #{attempt}" if e.present?
+
+      secret = Vault.logical.read("secret/data/#{EnvConfig.VAULT_APPLICATION}/#{secret_name}")
+      raise "Tried to read #{secret_name}, but doesn't exist" unless secret.present?
+
+      secret.data[:data]
     end
   end
 end
@@ -49,6 +66,7 @@ AppSecrets = SuperConfig.new do
     vault :NEW_RELIC_LICENSE_KEY
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
+    vault_file :GOOGLE_APPLICATION_CREDENTIALS, "../secrets/application_default_credentials.json"
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
@@ -73,5 +91,6 @@ AppSecrets = SuperConfig.new do
     optional :STAGING_PASSWORD, :string, ''
     optional :SMTP_USERNAME, :string, ''
     optional :SMTP_PASSWORD, :string, ''
+    optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
   end
 end
