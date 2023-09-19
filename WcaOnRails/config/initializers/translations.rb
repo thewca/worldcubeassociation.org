@@ -5,7 +5,7 @@
 # See https://github.com/thewca/worldcubeassociation.org/issues/2085.
 if Rails.env.production? && ENV.fetch('RAILS_RACKING', nil)
   Rails.configuration.after_initialize do
-    modification_hash = ServerSetting.find_or_create_by!(name: ServerSetting.BASE_LOCALE_HASH)
+    modification_hash = ServerSetting.find_or_create_by!(name: ServerSetting::BASE_LOCALE_HASH)
 
     translation_base_file = "#{Rails.root}/config/locales/en.yml"
     latest_modification_hash = Digest::SHA256.file(translation_base_file).hexdigest
