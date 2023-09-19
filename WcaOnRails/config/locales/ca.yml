@@ -45,7 +45,9 @@ ca:
     #original_hash: 9af4622
     XF: Països Múltiples (Àfrica)
     #original_hash: 374ac0d
-    XM: Països Múltiples (Amèrica) #original_hash: 3f8c9de XA: Països Múltiples (Àsia)
+    XM: Països Múltiples (Amèrica)
+    #original_hash: 3f8c9de 
+    XA: Països Múltiples (Àsia)
     #original_hash: 090f3ce
     XE: Països Múltiples (Europa)
     #original_hash: b50b7a5
