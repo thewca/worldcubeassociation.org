@@ -10,7 +10,7 @@ Sidekiq.configure_server do |config|
   # Instead of redesigning our whole zoo of cronjobs, pipe them through a linear execution worker.
   config.capsule("cronjobs") do |cap|
     cap.concurrency = 1
-    cap.queues = [WcaCronjob::QUEUE_NAME]
+    cap.queues = %w[wca_jobs]
   end
 end
 
