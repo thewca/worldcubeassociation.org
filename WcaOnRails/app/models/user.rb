@@ -763,6 +763,10 @@ class User < ApplicationRecord
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.results_posted?)
   end
 
+  def can_update_qualifications?(competition)
+    can_update_events?(competition) && competition.qualification_results? && competition.qualification_results_reason.present?
+  end
+
   def can_update_competition_series?(competition)
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
   end
