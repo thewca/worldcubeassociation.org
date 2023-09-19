@@ -27,3 +27,13 @@ variable "VAULT_APPLICATION" {
   description = "The namespace for Vault Secrets"
   default     = "wca-main-production"
 }
+
+variable "name_prefix" {
+  type        = string
+  description = "Prefix for naming resources"
+}
+
+variable "region" {
+  type = string
+  description = "The AWS Region"
+}
