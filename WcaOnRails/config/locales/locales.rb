@@ -8,7 +8,7 @@ module Locales
       name: "English",
     },
     ca: {
-      flag_id: "ca",
+      flag_id: "es-ct",
       name: "Català",
     },
     cs: {
