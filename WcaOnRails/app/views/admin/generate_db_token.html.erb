@@ -1,0 +1,22 @@
+<% provide(:title, 'Get Database Login Token') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <h1><%= yield(:title) %></h1>
+
+    <p>
+      You can use this token to log into the database PHPMyAdmin Panel with the username <b><%= EnvConfig.DATABASE_WRT_USER %></b> <br/>
+      This token is valid for 15 minutes
+    </p>
+
+    <pre>
+      <code><%= @token %></code>
+    </pre>
+
+    <label class="btn btn-primary" onclick="navigator.clipboard.writeText('<%= @token %>');">
+      Copy to clipboard
+    </label>
+
+    <%= link_to t('layouts.navigation.results_database'), '/results/database/', class: 'btn btn-primary', target: '_blank' %>
+  <% end %>
+</div>

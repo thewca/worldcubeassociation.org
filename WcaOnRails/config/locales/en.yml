@@ -884,6 +884,8 @@ en:
       results_team: "Results team"
       results_admin: "Admin"
       results_database: "Database"
+      #context: "Sidekiq" is the name of a software product
+      results_sidekiq: "Sidekiq dashboard"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
@@ -1507,7 +1509,6 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      disclaimer: "Please note that due to the COVID-19 pandemic, some regions are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
@@ -2354,21 +2355,6 @@ en:
     step7:
       title: "Step 7: Send the results JSON to the WCA"
       content_html: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
-  relations:
-    #context: The page used to find a relation between two given cubers.
-    relation:
-      title: "Relations"
-      find_relations: "Find connections between cubers"
-      show_relation: "Show me the relation!"
-      #context: A kind of connectives that link person/competition boxes on the relation line.
-      connectives:
-        #context: Appears between a person and a competition.
-        #context: Note that "was" may refer either to male or female. Do whatever is appropriate for your language, e.g. <male form>/<female form>.
-        was_at: "Was at"
-        #context: Appears between a competition and a person.
-        together_with: "Together with"
-    messages:
-      invalid_wca_ids: "Please provide two different valid WCA IDs."
   search_results:
     index:
       competitions: "Competitions"

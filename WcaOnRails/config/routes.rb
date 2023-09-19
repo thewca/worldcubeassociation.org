@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+require 'sidekiq/web'
+require 'sidekiq/cron/web'
+
 Rails.application.routes.draw do
   use_doorkeeper do
     controllers applications: 'oauth/applications'
@@ -7,6 +10,12 @@ Rails.application.routes.draw do
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
   mount Starburst::Engine => '/starburst'
+
+  # Sidekiq web UI, see https://github.com/sidekiq/sidekiq/wiki/Devise
+  # Specifically referring to results because WRT needs access to this on top of regular admins.
+  authenticate :user, ->(user) { user.can_admin_results? } do
+    mount Sidekiq::Web => '/sidekiq'
+  end
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
@@ -220,6 +229,7 @@ Rails.application.routes.draw do
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
   get '/admin/generate_exports' => 'admin#generate_exports'
+  get '/admin/generate_db_token' => 'admin#generate_db_token'
   get '/admin/do_generate_dev_export' => 'admin#do_generate_dev_export'
   get '/admin/do_generate_public_export' => 'admin#do_generate_public_export'
   get '/admin/check_regional_records' => 'admin#check_regional_records'
@@ -242,9 +252,6 @@ Rails.application.routes.draw do
   post '/render_markdown' => 'markdown_renderer#render_markdown'
 
   patch '/update_locale/:locale' => 'application#update_locale', as: :update_locale
-
-  get '/relations' => 'relations#index'
-  get '/relation' => 'relations#relation'
 
   get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
 

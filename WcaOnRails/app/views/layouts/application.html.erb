@@ -62,7 +62,7 @@
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
   <%= auto_discovery_link_tag(:rss, rss_url(format: :xml)) %>
-  <% if EnvVars.WCA_LIVE_SITE? %>
+  <% if EnvConfig.WCA_LIVE_SITE? %>
     <script data-ad-client="ca-pub-8682718775826560" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <!-- Legacy GA property still active for transitioning numbers -->
     <script>
