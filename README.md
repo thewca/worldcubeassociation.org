@@ -8,12 +8,16 @@ This repository contains all of the code that runs on [worldcubeassociation.org]
 - [Overview of the WCA's software ecosystem](https://docs.worldcubeassociation.org/)
 - [Running the website locally](https://docs.worldcubeassociation.org/contributing/quickstart)
 - [Contributing Guide](https://docs.worldcubeassociation.org/contributing/detailed_contributing_guide.html)
-- [API to read data from the website](https://wca-rest-api.robiningelbrecht.be/)
+- [Unofficial API\* to read data from the website](https://wca-rest-api.robiningelbrecht.be/)
 - [Other WCA Repos](https://docs.worldcubeassociation.org/#wca-software-resources)
 - [Using OAuth, or writing data to the website](https://docs.worldcubeassociation.org/knowledge_base/v0_api.html)
 
 ## Can I join WST?
-Currently (2023-09-10) WST is not accepting new members. We aim to onboard more volunteers by Q2 2024.
+Currently (2023-09-10) WST is not accepting new members. We aim to onboard more volunteers by late 2023/early 2024.
+
+## \*Unofficial API
+
+If you want to query WCA data, the [Unofficial API](https://wca-rest-api.robiningelbrecht.be/) is the best way to do this. It is not developed or supported by WST, but it makes use of the results export and updates daily, so you can rely on the information it provides.
 
 ----
 
