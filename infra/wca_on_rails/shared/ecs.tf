@@ -136,11 +136,6 @@ resource "aws_autoscaling_group" "this" {
     propagate_at_launch = true
   }
 
-  tag {
-    key                 = "Env"
-    value               = var.env
-    propagate_at_launch = true
-  }
 
   lifecycle {
     create_before_destroy = true
