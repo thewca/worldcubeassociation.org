@@ -658,7 +658,7 @@ module DatabaseDumper
           gender
           last_sign_in_at
           name
-          region
+          location
           registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
@@ -724,12 +724,14 @@ module DatabaseDumper
     }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
-    "timestamps" => {
+    "server_settings" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           name
-          date
+          value
+          created_at
+          updated_at
         ),
       ),
     }.freeze,
@@ -1042,7 +1044,7 @@ module DatabaseDumper
       end
 
       if dump_ts_name.present?
-        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.timestamps (name, date) VALUES ('#{dump_ts_name}', UTC_TIMESTAMP())")
+        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())")
       end
     end
 

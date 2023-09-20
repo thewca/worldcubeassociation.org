@@ -7,6 +7,10 @@ module Locales
       flag_id: "gb",
       name: "English",
     },
+    ca: {
+      flag_id: "es-ct",
+      name: "Català",
+    },
     cs: {
       flag_id: "cz",
       name: "Čeština",

@@ -17,7 +17,7 @@
             <%= f.label :password %>
             <%= link_to t("devise.passwords.new.forgot_your_password"), new_user_password_path %><br />
             <%= f.password_field :password, autocomplete: "off", class: "form-control", tabindex: "2" %>
-            <% if Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME) %>
+            <% if ServerSetting.exists?(DatabaseDumper::DEV_TIMESTAMP_NAME) %>
               <p class="help-block">
                 Hint! It looks like you are using the
                 <a href="https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export" target="_blank">developer export</a>

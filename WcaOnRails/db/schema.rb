@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_06_155619) do
+ActiveRecord::Schema[7.0].define(version: 2023_09_18_144154) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -923,6 +923,13 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_155619) do
     t.index ["holder_type", "holder_id"], name: "index_schedule_activities_on_holder_type_and_holder_id"
   end
 
+  create_table "server_settings", primary_key: "name", id: :string, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "value"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["name"], name: "index_server_settings_on_name", unique: true
+  end
+
   create_table "starburst_announcement_views", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.integer "announcement_id"
@@ -1012,12 +1019,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_155619) do
     t.index ["friendly_id"], name: "index_teams_on_friendly_id"
   end
 
-  create_table "timestamps", id: false, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", null: false
-    t.datetime "date", precision: nil
-    t.index ["name"], name: "index_timestamps_on_name", unique: true
-  end
-
   create_table "uploaded_jsons", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.text "json_str", size: :long
@@ -1050,7 +1051,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_06_155619) do
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
     t.integer "senior_delegate_id"
-    t.string "region", limit: 255
+    t.string "location", limit: 255
     t.string "wca_id"
     t.string "avatar", limit: 255
     t.string "pending_avatar", limit: 255
