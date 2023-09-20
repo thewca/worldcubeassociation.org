@@ -1,13 +1,15 @@
-module "production" {
-  source = "./production"
-  name_prefix = "${var.name_prefix}-prod"
-  region = var.region
-}
+#module "production" {
+#  source = "./production"
+#  name_prefix = "${var.name_prefix}-prod"
+#  region = var.region
+#}
 
 module "staging" {
   source = "./staging"
   name_prefix = "${var.name_prefix}-staging"
   region = var.region
+  VAULT_ADDR = var.VAULT_ADDR
+  DATABASE_WRT_USER = var.DATABASE_WRT_USER
 }
 
 module "shared" {

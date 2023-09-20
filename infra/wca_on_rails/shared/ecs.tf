@@ -21,7 +21,8 @@ resource "aws_security_group_rule" "cluster_lb_ingress" {
   from_port                = 0
   to_port                  = 0
   protocol                 = "-1"
-  source_security_group_id = aws_security_group.lb.id
+                            # TODO: Replace with imported resource
+  source_security_group_id = "sg-0b9b2ed600f650018"
   description              = "Load balancer ingress"
 }
 
@@ -92,9 +93,9 @@ resource "aws_launch_configuration" "this" {
   name_prefix          = "${var.name_prefix}-"
   image_id             = data.aws_ami.ecs.id
   iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.name
-  instance_type        = "t3.small"
+  instance_type        = "t3.large"
   security_groups      = [aws_security_group.cluster.id]
-  user_data            = templatefile("./templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
+  user_data            = templatefile("../../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
 
 
   lifecycle {
@@ -107,7 +108,7 @@ resource "aws_autoscaling_group" "this" {
   min_size                  = 1
   max_size                  = 6
   desired_capacity          = 1
-  vpc_zone_identifier       = aws_subnet.private[*].id
+  vpc_zone_identifier       = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
   launch_configuration      = aws_launch_configuration.this.name
   health_check_grace_period = 0
   health_check_type         = "EC2"
@@ -169,6 +170,37 @@ resource "aws_ecs_cluster_capacity_providers" "this" {
     capacity_provider = aws_ecs_capacity_provider.this.name
     weight            = 1
   }
+}
+
+resource "aws_ecr_repository" "this" {
+  name         = var.name_prefix
+  force_delete = true
+}
+
+resource "aws_ecr_lifecycle_policy" "this" {
+  repository = aws_ecr_repository.this.name
+
+  policy = jsonencode({
+    rules = [
+      {
+        rulePriority = 1
+        description  = "Expire images older than 14 days"
+        selection = {
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 14
+        }
+        action = {
+          type = "expire"
+        }
+      }
+    ]
+  })
+}
+
+output "ecr_repository_url" {
+  value = aws_ecr_repository.this.repository_url
 }
 
 output "ecs_cluster" {

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "storage-bucket" {
-  bucket = 'www.worldcubeassociation.org'
+  bucket = 'staging.worldcubeassociation.org'
   tags = {
     "Name" = 'www.worldcubeassociation.org'
   }

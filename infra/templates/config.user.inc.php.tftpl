@@ -8,7 +8,7 @@ $i = 0;
 $i++;
 $cfg['Servers'][$i]['verbose'] = '';
 $cfg['Servers'][$i]['port'] = '';
-$cfg['Servers'][$i]['host'] = 'staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com;
+$cfg['Servers'][$i]['host'] = '${rds_host}';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 // The RDS IAM Authentication requires SSL
@@ -22,7 +22,7 @@ $cfg['Servers'][$i]['ssl_verify'] = true;
 $i++;
 $cfg['Servers'][$i]['verbose'] = '';
 $cfg['Servers'][$i]['port'] = '';
-$cfg['Servers'][$i]['host'] = 'readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com';
+$cfg['Servers'][$i]['host'] = '${rds_replica_host}';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 $cfg['Servers'][$i]['auth_type'] = 'cookie';
 // The RDS IAM Authentication requires SSL
