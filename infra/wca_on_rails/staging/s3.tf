@@ -1,7 +1,7 @@
 resource "aws_s3_bucket" "storage-bucket" {
-  bucket = 'staging.worldcubeassociation.org'
+  bucket = "staging.worldcubeassociation.org"
   tags = {
-    "Name" = 'www.worldcubeassociation.org'
+    "Name" = "www.worldcubeassociation.org"
   }
 }
 resource "aws_s3_bucket" "avatars" {

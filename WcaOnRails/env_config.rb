@@ -21,7 +21,7 @@ EnvConfig = SuperConfig.new do
     mandatory :VAULT_ADDR, :string
     mandatory :VAULT_APPLICATION, :string
     mandatory :VAULT_AWS_REGION, :string
-    mandatory :INSTANCE_ROLE, :string
+    mandatory :TASK_ROLE, :string
   else
     optional :READ_REPLICA_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''

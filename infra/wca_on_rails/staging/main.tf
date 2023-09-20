@@ -77,16 +77,16 @@ locals {
       value = var.VAULT_APPLICATION
     },
     {
-      name = "INSTANCE_ROLE",
-      value = aws_iam_role.task_role
+      name = "TASK_ROLE",
+      value = aws_iam_role.task_role.name
     }
   ]
   pma_environment = [
     {
       name = "PMA_USER_CONFIG_BASE64"
-      value = base64encode(templatefile("../../templates/config.user.inc.php.tftpl",
+      value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
         { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
+          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
     }
   ]
 }
@@ -270,6 +270,8 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+
+
 resource "aws_ecs_service" "this" {
   name                               = var.name_prefix
   cluster                            = var.shared.ecs_cluster.id
@@ -302,13 +304,13 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = aws_lb_target_group.this.arn
-    container_name   = "handler"
+    container_name   = "rails-staging"
     container_port   = 3000
   }
 
   network_configuration {
     security_groups = [var.shared.cluster_security.id]
-    subnets         = var.shared.private_subnets
+    subnets         = var.shared.private_subnets[*].id
   }
 
   deployment_controller {
