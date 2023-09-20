@@ -1,0 +1,29 @@
+FROM ruby:3.2.2
+
+ENV DEBIAN_FRONTEND noninteractive
+WORKDIR /app
+
+# Set production environment
+ENV RAILS_LOG_TO_STDOUT="1" \
+    RAILS_SERVE_STATIC_FILES="true" \
+    RAILS_ENV="production" \
+    BUNDLE_WITHOUT="development:test"
+
+RUN apt-get update && apt-get install -y \
+  git \
+  yarn \
+  build-essential \
+  mariadb-client \
+  libssl-dev \
+  libyaml-dev \
+  tzdata
+
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN bundle install
+
+COPY . .
+
+# Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
+# but can also take a rails command, like "console" or "runner" to start instead.
+CMD ["/app/bin/bundle", "exec", "sidekiq"]

@@ -5,7 +5,7 @@ resource "aws_ecs_cluster" "this" {
 resource "aws_security_group" "cluster" {
   name        = "${var.name_prefix}-cluster"
   description = "Main ECS cluster"
-  vpc_id      = aws_default_vpc.default
+  vpc_id      = aws_default_vpc.default.id
 
   tags = {
     Name = "${var.name_prefix}-cluster"
@@ -95,7 +95,7 @@ resource "aws_launch_configuration" "this" {
   iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.name
   instance_type        = "t3.large"
   security_groups      = [aws_security_group.cluster.id]
-  user_data            = templatefile("../../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
+  user_data            = templatefile("../templates/user_data.sh.tftpl", { ecs_cluster_name = aws_ecs_cluster.this.name })
 
 
   lifecycle {

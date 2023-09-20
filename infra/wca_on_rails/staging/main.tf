@@ -83,7 +83,7 @@ locals {
   ]
   pma_environment = [
     {
-      name = "PMA_CONFIG_BASE64"
+      name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../../templates/config.user.inc.php.tftpl",
         { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
           replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
