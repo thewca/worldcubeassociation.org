@@ -98,7 +98,7 @@ window.wca.addCompetitionsToMap = function(map, competitions) {
 window.wca.createCompetitionsMap = function(element) {
   var map = new google.maps.Map(element, {
     zoom: 2,
-    center: { lat: 0, lng: 0 },
+    center: { lat: 15, lng: 0 },
   });
 
   map.overlappingMarkerSpiderfier = new OverlappingMarkerSpiderfier(map);
