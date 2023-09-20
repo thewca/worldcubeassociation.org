@@ -43,10 +43,6 @@ module Locales
       flag_id: "hr",
       name: "Hrvatski",
     },
-    hu: {
-      flag_id: "hu",
-      name: "Magyar",
-    },
     id: {
       flag_id: "id",
       name: "Bahasa Indonesia",

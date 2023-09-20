@@ -60,7 +60,6 @@ class TranslationsController < ApplicationController
     "fi" => [39072],
     "fr" => [277],
     "hr" => [46],
-    "hu" => [378],
     "id" => [1285],
     "it" => [19667],
     "ja" => [32229, 1118],
