@@ -34,7 +34,7 @@ module "staging" {
   source = "./staging"
   name_prefix = "${var.name_prefix}-staging"
   region = var.region
-  VAULT_ADDR = var.VAULT_ADDR
+  VAULT_ADDR = "http://172.31.56.54:8200"
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
   shared = module.shared
 }
