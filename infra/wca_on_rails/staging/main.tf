@@ -57,7 +57,7 @@ locals {
       value = aws_s3_bucket.avatars.id
     },
     {
-      name = "DISCOURSE_URL"
+      name = "S3_AVATARS_ASSET_HOST"
       value = "https://avatars.worldcubeassociation.org"
     },
     {
