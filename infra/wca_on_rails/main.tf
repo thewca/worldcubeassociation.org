@@ -10,6 +10,7 @@ module "staging" {
   region = var.region
   VAULT_ADDR = var.VAULT_ADDR
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
+  shared = module.shared
 }
 
 module "shared" {
