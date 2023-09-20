@@ -17,13 +17,14 @@
             <%= f.label :password %>
             <%= link_to t("devise.passwords.new.forgot_your_password"), new_user_password_path %><br />
             <%= f.password_field :password, autocomplete: "off", class: "form-control", tabindex: "2" %>
-            <% if Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME) %>
+            <% if ServerSetting.exists?(DatabaseDumper::DEV_TIMESTAMP_NAME) %>
               <p class="help-block">
                 Hint! It looks like you are using the
-                <a href="https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export" target="_blank">developer export</a>,
-                every user's
-                password is "wca". You can find email addresses to log in
-                with over on
+                <a href="https://github.com/thewca/worldcubeassociation.org/wiki/Developer-database-export" target="_blank">developer export</a>
+                <% unless DbDumpHelper.use_staging_password? %>
+                  , every user's password is "wca"
+                <% end %>
+                . You can find email addresses to log in with over on
                 <%= link_to "the delegates page", delegates_path %>.
               </p>
             <% end %>

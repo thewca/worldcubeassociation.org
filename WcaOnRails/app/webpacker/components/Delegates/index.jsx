@@ -15,7 +15,7 @@ export default function Delegates({
 }) {
   const seniorDelegates = React.useMemo(() => delegates
     .filter((user) => user.delegate_status === 'senior_delegate')
-    .sort((user1, user2) => user1.region.localeCompare(user2.region)), [delegates]);
+    .sort((user1, user2) => user1.location.localeCompare(user2.location)), [delegates]);
 
   // NOTE: The UI currently assumes that the delegates always have a
   // senior delegate unless they themselves are a senior delegate.
@@ -23,8 +23,8 @@ export default function Delegates({
   return seniorDelegates.map((seniorDelegate) => {
     const delegatesUnderSenior = [seniorDelegate, ...delegates
       .filter((user) => user.senior_delegate_id === seniorDelegate.id && user.delegate_status !== 'trainee_delegate')
-      .sort((user1, user2) => ((user1.region !== user2.region)
-        ? user1.region.localeCompare(user2.region)
+      .sort((user1, user2) => ((user1.location !== user2.location)
+        ? user1.location.localeCompare(user2.location)
         : user1.name.localeCompare(user2.name)))];
     return (
       <div
@@ -75,7 +75,7 @@ export default function Delegates({
                   {I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}
                 </Table.Cell>
                 <Table.Cell>
-                  {delegate.region}
+                  {delegate.location}
                 </Table.Cell>
               </Table.Row>
             ))}

@@ -76,12 +76,12 @@ class CompetitionSeries < ApplicationRecord
     json
   end
 
-  def to_wcif
+  def to_wcif(authorized: false)
     {
       "id" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => competitions.map(&:id),
+      "competitionIds" => (authorized ? competitions : public_competitions).map(&:id),
     }
   end
 
@@ -128,5 +128,9 @@ class CompetitionSeries < ApplicationRecord
   private def clear_competition_ids
     # reset them so that upon the next read they will be fetched based on what's just been written.
     @competition_ids = nil
+  end
+
+  def public_competitions
+    self.competitions.where(showAtAll: true)
   end
 end

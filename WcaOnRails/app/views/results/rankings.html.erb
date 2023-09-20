@@ -1,9 +1,7 @@
 <% provide(:title, t(".title")) %>
 
-<% cached_rows = execute_cached_query(@cache_params, @query) %>
-
-<% ranking_timestamp = cached_rows.updated_at %>
-<% @rows = cached_rows.parsed_payload %>
+<% ranking_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
+<% @rows = execute_cached_query([*@cache_params, ranking_timestamp], @query) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>

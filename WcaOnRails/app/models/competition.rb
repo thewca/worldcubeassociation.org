@@ -123,12 +123,6 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    year
-    month
-    day
-    endYear
-    endMonth
-    endDay
     cellName
     showAtAll
     external_registration_page
@@ -491,7 +485,7 @@ class Competition < ApplicationRecord
       end
     end
 
-    if reg_warnings.any?
+    if reg_warnings.any? && user&.can_manage_competition?(self)
       warnings = reg_warnings.merge(warnings)
     end
 
@@ -619,7 +613,6 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report!
 
-  before_validation :unpack_dates
   validate :dates_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
@@ -821,7 +814,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_website
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   def managers
@@ -1058,24 +1051,6 @@ class Competition < ApplicationRecord
   # can competitors delete their own registration after it has been accepetd
   def registration_delete_after_acceptance_allowed?
     self.allow_registration_self_delete_after_acceptance
-  end
-
-  private def unpack_dates
-    if start_date
-      self.year = start_date.year
-      self.month = start_date.month
-      self.day = start_date.day
-    else
-      self.year = self.month = self.day = 0
-    end
-
-    if end_date
-      self.endYear = end_date.year
-      self.endMonth = end_date.month
-      self.endDay = end_date.day
-    else
-      self.endYear = self.endMonth = self.endDay = 0
-    end
   end
 
   private def dates_must_be_valid
@@ -1499,15 +1474,12 @@ class Competition < ApplicationRecord
       prev_sorted_registration = nil
       sorted_registrations = []
       registrations.each_with_index do |registration, i|
-        if sort_by == 'single'
-          rank = registration.single_rank
-          prev_rank = prev_sorted_registration&.registration&.single_rank
-        else
-          rank = registration.average_rank
-          prev_rank = prev_sorted_registration&.registration&.average_rank
-        end
+        rank = sort_by == 'single' ? registration.single_rank : registration.average_rank
         if rank
-          tied_previous = rank == prev_rank
+          # Change position to previous if both single and average are tied with previous registration.
+          average_tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank
+          single_tied_previous = registration.single_rank == prev_sorted_registration&.registration&.single_rank
+          tied_previous = single_tied_previous && average_tied_previous
           pos = tied_previous ? prev_sorted_registration.pos : i + 1
         else
           # Hasn't competed in this event yet.
@@ -1538,7 +1510,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:year).uniq.sort!.reverse!
+    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1620,7 +1592,7 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "shortName" => cellName,
-      "series" => part_of_competition_series? ? competition_series_wcif : nil,
+      "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
@@ -1629,8 +1601,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  def competition_series_wcif
-    competition_series&.to_wcif
+  def competition_series_wcif(authorized: false)
+    competition_series&.to_wcif(authorized: authorized)
   end
 
   def persons_wcif(authorized: false)
@@ -1696,6 +1668,7 @@ class Competition < ApplicationRecord
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+      set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
       # Trigger validations on the competition itself, and throw an error to rollback if necessary.
       # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
@@ -1703,7 +1676,32 @@ class Competition < ApplicationRecord
       #   that have qualification requirements via a perfectly valid Events WCIF, but the competition itself
       #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
       save!
+
+      # After validations succeeded, and we know that we have a consistent competition state, mark the competition as updated.
+      # Context: As above, it is possible to make a PATCH call that _only_ updates associated models but not the competition
+      #   itself in the stricter sense (i.e. only changes stuff in the `assignments` table but not the `competitions` table itself).
+      #   But our API relies on the updated_at timestamp of the top-level Competition object to enable Conditional GET, so we
+      #   artificially pretend like the Competition object was updated anyways.
+      touch
     end
+  end
+
+  def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
+    return if wcif_competitor_limit == self.competitor_limit
+
+    if confirmed? && !current_user.can_admin_competitions?
+      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
+    end
+
+    unless competitor_limit_enabled?
+      raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
+    end
+
+    unless wcif_competitor_limit.present?
+      raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
+    end
+
+    self.competitor_limit = wcif_competitor_limit
   end
 
   def set_wcif_series!(wcif_series, current_user)
@@ -1895,7 +1893,7 @@ class Competition < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

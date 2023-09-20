@@ -3,7 +3,7 @@ import {
   Form, Grid,
 } from 'semantic-ui-react';
 
-import AttemptResultField from '../WCALive/AttemptResultField/AttemptResultField';
+import AttemptResultFieldWrapper from './AttemptResultFieldWrapper';
 import MarkerField from '../WCALive/AttemptResultField/MarkerField';
 import { average, best, formatAttemptResult } from '../../../lib/wca-live/attempts';
 import useNestedInputUpdater from '../../../lib/hooks/useNestedInputUpdater';
@@ -23,19 +23,15 @@ function AttemptsForm({
     <Form>
       <Grid stackable padded columns={2}>
         <Grid.Column className="attempts-column">
-          {attempts.map((attempt, index) => {
-            const setAttempt = useNestedInputUpdater(setState, `attempts[${index}]`);
-            return (
-              <AttemptResultField
-                key={index}
-                eventId={eventId}
-                label={`Attempt ${index + 1}`}
-                initialValue={attempt}
-                value={attempt}
-                onChange={setAttempt}
-              />
-            );
-          })}
+          {attempts.map((attempt, index) => (
+            <AttemptResultFieldWrapper
+              key={index}
+              index={index}
+              attempt={attempt}
+              setState={setState}
+              eventId={eventId}
+            />
+          ))}
         </Grid.Column>
         <Grid.Column>
           <Form.Input

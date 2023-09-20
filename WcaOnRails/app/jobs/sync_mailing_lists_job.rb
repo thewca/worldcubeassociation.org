@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-class SyncMailingListsJob < ApplicationJob
-  include SingletonApplicationJob
-
-  queue_as :default
-
+class SyncMailingListsJob < WcaCronjob
   SENIOR_DELEGATES_REGIONS_INFO = [
     {
       mailing_list: "delegates.africa@worldcubeassociation.org",
@@ -46,6 +42,11 @@ class SyncMailingListsJob < ApplicationJob
     },
   ].freeze
 
+  before_enqueue do
+    # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
+    throw :abort unless EnvConfig.WCA_LIVE_SITE?
+  end
+
   def perform
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", User.staff_delegates.map(&:email))
     GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", User.trainee_delegates.map(&:email))
@@ -75,7 +76,7 @@ class SyncMailingListsJob < ApplicationJob
     GsuiteMailingLists.sync_group("archive@worldcubeassociation.org", Team.wat.current_members.includes(:user).map(&:user).map(&:email))
 
     SENIOR_DELEGATES_REGIONS_INFO.each do |region|
-      senior_delegates = User.senior_delegates.where("region like ?", region[:query])
+      senior_delegates = User.senior_delegates.where("location like ?", region[:query])
       if senior_delegates.length > 1
         raise "Multiple Senior Delegates match #{region[:query]}"
       elsif senior_delegates.empty?

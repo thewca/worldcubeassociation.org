@@ -4,7 +4,7 @@ require "rails_helper"
 
 RSpec.feature "Claim WCA ID" do
   let!(:user) { FactoryBot.create(:user) }
-  let!(:person) { FactoryBot.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
+  let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
   let!(:person_without_dob) { FactoryBot.create :person, :skip_validation, :missing_dob }
 
   context 'when signed in as user without wca id', js: true do

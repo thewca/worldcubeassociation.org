@@ -1,5 +1,4 @@
 <% provide(:title, @competition.name) %>
-<% add_to_packs("edit_events") %>
 
 <%= render layout: 'nav' do %>
   <% if !current_user.can_update_events?(@competition) %>
@@ -7,15 +6,13 @@
       Events management has been locked after results being posted. Please contact WRT if you want to edit them.
     <% end %>
   <% end %>
-  <div id="events-edit-area"></div>
-  <script>
-    $(function() {
-      window.wca.initializeEventsForm(
-        <%= @competition.id.to_json.html_safe %>,
-        <%= current_user.can_add_and_remove_events?(@competition).to_json.html_safe %>,
-        <%= current_user.can_update_events?(@competition).to_json.html_safe %>,
-        <%= @competition.events_wcif.to_json.html_safe %>
-      );
-    });
-  </script>
+  <%= react_component("EditEvents/index", {
+    competitionId: @competition.id,
+    canAddAndRemoveEvents: current_user.can_add_and_remove_events?(@competition),
+    canUpdateEvents: current_user.can_update_events?(@competition),
+    canUpdateQualifications: current_user.can_update_qualifications?(@competition),
+    wcifEvents: @competition.events_wcif
+  }, {
+    id: "events-edit-area",
+  }) %>
 <% end %>

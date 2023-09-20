@@ -20,12 +20,13 @@ $cfg['Servers'][$i]['connect_type'] = 'socket';
 $cfg['Servers'][$i]['host'] = '<%= @db['host'] %>';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 <% end %>
-$cfg['Servers'][$i]['auth_type'] = 'config';
-$cfg['Servers'][$i]['user'] = 'root';
-$cfg['Servers'][$i]['password'] = '<%= @secrets['mysql_password'] %>';
-
-/* Servers configuration */
-$i = 1;
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+// The RDS IAM Authentication requires SSL
+$cfg['Servers'][$i]['ssl'] = true;
+// You need to have the region CA file and the authority CA file in the PEM bundle for it to work
+$cfg['Servers'][$i]['ssl_ca'] = '<%= @rds_certificate_pem %>';
+// Enable SSL verification
+$cfg['Servers'][$i]['ssl_verify'] = true;
 
 /* Server: Read Replica [1] */
 $i++;
@@ -39,9 +40,13 @@ $cfg['Servers'][$i]['connect_type'] = 'socket';
 $cfg['Servers'][$i]['host'] = '<%= @db['read_replica'] %>';
 $cfg['Servers'][$i]['connect_type'] = 'tcp';
 <% end %>
-$cfg['Servers'][$i]['auth_type'] = 'config';
-$cfg['Servers'][$i]['user'] = 'root';
-$cfg['Servers'][$i]['password'] = '<%= @secrets['mysql_password'] %>';
+$cfg['Servers'][$i]['auth_type'] = 'cookie';
+// The RDS IAM Authentication requires SSL
+$cfg['Servers'][$i]['ssl'] = true;
+// You need to have the region CA file and the authority CA file in the PEM bundle for it to work
+$cfg['Servers'][$i]['ssl_ca'] = '<%= @rds_certificate_pem %>';
+// Enable SSL verification
+$cfg['Servers'][$i]['ssl_verify'] = true;
 
 /* End of servers configuration */
 

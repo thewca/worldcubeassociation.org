@@ -137,7 +137,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = @competitions.where("end_date < ?", Date.today).reverse_order
       unless params[:year] == "all years"
-        @competitions = @competitions.where(year: params[:year])
+        @competitions = @competitions.where("YEAR(start_date) = :comp_year", comp_year: params[:year])
       end
     end
 
@@ -326,7 +326,7 @@ class CompetitionsController < ApplicationController
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: EnvVars.ROOT_URL + competitions_stripe_connect_path,
+      redirect_uri: EnvConfig.ROOT_URL + competitions_stripe_connect_path,
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
@@ -357,7 +357,7 @@ class CompetitionsController < ApplicationController
       auth_scheme: :request_body,
     }
 
-    OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
+    OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 
   def disconnect_stripe
@@ -625,6 +625,7 @@ class CompetitionsController < ApplicationController
       @bookmarked_competitions = Competition.not_over
                                             .where(id: bookmarked_ids.uniq)
                                             .sort_by(&:start_date)
+      @show_registration_status = params[:show_registration_status] == "on"
     end
   end
 

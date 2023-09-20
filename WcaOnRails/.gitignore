@@ -45,3 +45,6 @@ pids/*.pid
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
+
+# Healthcheck flag for our Rails docker container
+.db-inited
