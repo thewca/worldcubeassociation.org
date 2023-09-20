@@ -53,7 +53,7 @@ locals {
       value = var.DISCOURSE_URL
     },
     {
-      name = "STORAGE_AWS_BUCKET"
+      name = "S3_AVATARS_BUCKET"
       value = aws_s3_bucket.avatars.id
     },
     {
