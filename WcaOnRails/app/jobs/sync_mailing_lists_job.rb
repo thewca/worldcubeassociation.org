@@ -76,7 +76,7 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("archive@worldcubeassociation.org", Team.wat.current_members.includes(:user).map(&:user).map(&:email))
 
     SENIOR_DELEGATES_REGIONS_INFO.each do |region|
-      senior_delegates = User.senior_delegates.where("region like ?", region[:query])
+      senior_delegates = User.senior_delegates.where("location like ?", region[:query])
       if senior_delegates.length > 1
         raise "Multiple Senior Delegates match #{region[:query]}"
       elsif senior_delegates.empty?
