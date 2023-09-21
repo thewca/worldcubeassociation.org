@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Popup } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { AvatarEdit } from "./AvatarEdit";
 
@@ -108,20 +108,16 @@ const UploadAvatar = ({
           {user.avatar && (
             <>
               <h4>{I18n.t('users.edit.your_thumbnail')}</h4>
-              <OverlayTrigger
-                overlay={
-                  <Tooltip id="edit-thumbnail-hint">
-                    {I18n.t('users.edit.edit_thumbnail')}
-                  </Tooltip>
+              <Popup
+                content={I18n.t('users.edit.edit_thumbnail')}
+                trigger={
+                  <img
+                    src={user.avatar.thumb_url}
+                    style={{ width: "20%", height: "auto" }}
+                    onClick={startCropImage}
+                  />
                 }
-                id="edit-thumbnail"
-              >
-                <img
-                  src={user.avatar.thumb_url}
-                  style={{ width: "20%", height: "auto" }}
-                  onClick={startCropImage}
-                />
-              </OverlayTrigger>
+              />
             </>
           )}
         </div>
