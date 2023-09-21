@@ -1,6 +1,6 @@
 <h1 align="center">WorldCubeAssociation Website</h1>
 <div align="center">
-  <img height="120" src="client/public/favicon.png" />
+  <img height="120" src="WcaOnRails/public/" />
 </div>
 <br />
 <div align="center">
@@ -10,10 +10,9 @@
 </div>
 <br />
 <div align="center">
-
-
-[![Build Status](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml/badge.svg?event=push)](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml) [![Coverage Status](https://coveralls.io/repos/github/thewca/worldcubeassociation.org/badge.svg?branch=master)](https://coveralls.io/github/thewca/worldcubeassociation.org?branch=master)
-
+[![Build Status](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml/badge.svg?event=push)](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml)
+[![Coverage Status](https://coveralls.io/repos/github/thewca/worldcubeassociation.org/badge.svg?branch=master)](https://coveralls.io/github/thewca/worldcubeassociation.org?branch=master)
+</div>
 
 ----
 
