@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import {
   Container,
   Divider,
@@ -9,7 +9,7 @@ import {
   Message,
   Popup, Grid,
 } from 'semantic-ui-react';
-import ReactCrop, { centerCrop, makeAspectCrop, convertToPercentCrop } from 'react-image-crop';
+import ReactCrop, { centerCrop, convertToPercentCrop, makeAspectCrop } from 'react-image-crop';
 
 import I18n from '../../lib/i18n';
 
@@ -28,11 +28,7 @@ function EditAvatar({
   uploadDisabled,
   canRemoveAvatar,
 }) {
-  const [storedCrop, setStoredCrop] = useState(crop);
-
-  const [pendingCropRel, setPendingCropRel] = useState();
-
-  const [uiCropAbs, setUiCropAbs] = useState();
+  const [cropRel, setCropRel] = useState();
   const [uiCropRel, setUiCropRel] = useState();
 
   const [isEditingThumbnail, setEditingThumbnail] = useState(false);
@@ -40,12 +36,10 @@ function EditAvatar({
   const [uploadedImage, setUploadedImage] = useState();
   const [imageURL, setImageURL] = useState(user.avatar.url);
 
-  const clearThumbnailSelector = () => {
-    setUiCropAbs(undefined);
-    setStoredCrop(crop);
-
+  const clearThumbnailSelector = useCallback(() => {
+    setUiCropRel(undefined);
     setEditingThumbnail(false);
-  };
+  }, []);
 
   useEffect(() => {
     if (!uploadedImage) return;
@@ -54,44 +48,45 @@ function EditAvatar({
 
     const newImageURL = URL.createObjectURL(uploadedImage);
     setImageURL(newImageURL);
-  }, [uploadedImage]);
+  }, [uploadedImage, clearThumbnailSelector]);
 
   const onImageLoad = (e) => {
-    const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
+    const { naturalWidth, naturalHeight } = e.currentTarget;
 
     // Only reset the cropping if a new image is being uploaded
-    if (!!uploadedImage) {
-      const centeredCrop = centerCrop(
-        makeAspectCrop(
-          {
-            unit: '%',
-            width: SUGGESTED_IMG_RATIO,
-            height: SUGGESTED_IMG_RATIO,
-          },
-          1,
-          width,
-          height,
-        ),
-        width,
-        height,
+    if (uploadedImage) {
+      const aspectCrop = makeAspectCrop(
+        {
+          unit: '%',
+          width: SUGGESTED_IMG_RATIO,
+          height: SUGGESTED_IMG_RATIO,
+        },
+        1,
+        naturalWidth,
+        naturalHeight,
       );
 
-      setStoredCrop(centeredCrop);
-    }
+      const centeredCrop = centerCrop(
+        aspectCrop,
+        naturalWidth,
+        naturalHeight,
+      );
 
-    const relCrop = convertToPercentCrop(storedCrop, width, height);
-    setPendingCropRel(relCrop);
+      setCropRel(centeredCrop);
+    } else {
+      const relCrop = convertToPercentCrop(crop, naturalWidth, naturalHeight);
+      setCropRel(relCrop);
+    }
   };
 
   const handleSaveThumbnail = (evt) => {
     evt.preventDefault();
 
-    setStoredCrop(uiCropAbs);
-    setPendingCropRel(uiCropRel);
+    setCropRel(uiCropRel);
   };
 
   const onEditThumbnail = () => {
-    setUiCropAbs(storedCrop);
+    setUiCropRel(cropRel);
     setEditingThumbnail(true);
   };
 
@@ -131,11 +126,8 @@ function EditAvatar({
                 aspect={1}
                 ruleOfThirds
                 keepSelection
-                crop={uiCropAbs}
-                onChange={(abs, rel) => {
-                  setUiCropAbs(abs);
-                  setUiCropRel(rel);
-                }}
+                crop={uiCropRel}
+                onChange={(abs, rel) => setUiCropRel(rel)}
                 disabled={!isEditingThumbnail}
                 style={{ width: '100%' }}
               >
@@ -153,7 +145,7 @@ function EditAvatar({
                       icon
                       primary
                       floated="right"
-                      disabled={!uiCropAbs}
+                      disabled={!uiCropRel}
                     >
                       <Icon name="save" />
                     </Form.Button>
@@ -162,7 +154,7 @@ function EditAvatar({
                       negative
                       floated="right"
                       onClick={clearThumbnailSelector}
-                      disabled={!uiCropAbs}
+                      disabled={!uiCropRel}
                     >
                       <Icon name="cancel" />
                     </Form.Button>
@@ -180,12 +172,13 @@ function EditAvatar({
                 <Popup
                   content={I18n.t('users.edit.edit_thumbnail')}
                   trigger={(
-                    <CroppedImage
-                      imgSrc={imageURL}
-                      crop={uiCropRel || pendingCropRel}
-                      style={{ width: '20%', height: 'auto' }}
-                      onClick={onEditThumbnail}
-                    />
+                    <div className="user-avatar-image-large">
+                      <CroppedImage
+                        crop={cropRel}
+                        src={imageURL}
+                        onClick={onEditThumbnail}
+                      />
+                    </div>
                   )}
                 />
               </>

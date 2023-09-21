@@ -1,13 +1,15 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image } from 'semantic-ui-react';
+import { convertToPercentCrop } from 'react-image-crop';
 
 function CroppedImage({
-  imgSrc,
   crop,
   ...imgProps
 }) {
   const [naturalWidth, setNaturalWidth] = useState();
   const [naturalHeight, setNaturalHeight] = useState();
+
+  const [relCrop, setRelCrop] = useState();
 
   const onImageLoad = (evt) => {
     const { naturalWidth: width, naturalHeight: height } = evt.currentTarget;
@@ -16,25 +18,50 @@ function CroppedImage({
     setNaturalHeight(height);
   };
 
-  const makeClippingPolygon = () => {
-    if (!crop) return null;
+  useEffect(() => {
+    if (!crop) return;
 
-    const coords = [
-      [crop.x, crop.y],
-      [crop.x + crop.width, crop.y],
-      [crop.x + crop.width, crop.y + crop.height],
-      [crop.x, crop.y + crop.height],
-    ];
+    if (!naturalWidth || !naturalHeight) return;
 
-    const cssCoords = coords.map((point) => point.map((coord) => `${Math.round(coord)}${crop.unit}`).join(' ')).join(', ');
-    return `polygon(${cssCoords})`;
+    const calculatedRelCrop = convertToPercentCrop(crop, naturalWidth, naturalHeight);
+    setRelCrop(calculatedRelCrop);
+  }, [crop, naturalWidth, naturalHeight]);
+
+  const getRelWidth = () => {
+    if (!relCrop) return 'inherit';
+
+    return `${(100 / relCrop.width) * 100}%`;
+  };
+
+  const getRelHeight = () => {
+    if (!relCrop) return 'inherit';
+
+    return `${(100 / relCrop.height) * 100}%`;
+  };
+
+  const getMarginTop = () => {
+    if (!relCrop) return '0px';
+
+    return `-${(100 / relCrop.height) * relCrop.y}%`;
+  };
+
+  const getMarginLeft = () => {
+    if (!relCrop) return '0px';
+
+    return `-${(100 / relCrop.width) * relCrop.x}%`;
   };
 
   return (
     <Image
       {...imgProps}
-      src={imgSrc}
-      style={{ width: '20%', height: 'auto', clipPath: makeClippingPolygon() }}
+      style={{
+        width: getRelWidth(),
+        height: getRelHeight(),
+        maxWidth: 'initial',
+        objectFit: 'cover',
+        marginTop: getMarginTop(),
+        marginLeft: getMarginLeft(),
+      }}
       onLoad={onImageLoad}
     />
   );
