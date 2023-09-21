@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import { Button, Divider, Form } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 
-function UploadForm({
+function ImageUpload({
   uploadDisabled,
-  canRemoveAvatar,
-  onImageUpload,
+  removalEnabled,
+  onImageSelected,
+  onImageSubmitted,
+  onImageDeleted,
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -13,17 +15,19 @@ function UploadForm({
     evt.preventDefault();
 
     console.log('evt', evt);
+    onImageSubmitted();
   };
 
   const handleRemoveAvatar = (evt) => {
     evt.preventDefault();
 
     console.log('evt', evt);
+    onImageDeleted();
   };
 
   const handleSelectedImage = (evt) => {
     const selectedImage = evt.target.files[0];
-    onImageUpload(selectedImage);
+    onImageSelected(selectedImage);
   };
 
   return (
@@ -34,7 +38,7 @@ function UploadForm({
         <Form.Checkbox required label={I18n.t('users.edit.guidelines_confirmation')} disabled={uploadDisabled} />
         <Form.Button primary disabled={uploadDisabled}>{I18n.t('users.edit.save')}</Form.Button>
       </Form>
-      {!!canRemoveAvatar && (
+      {removalEnabled && (
         <>
           <Divider />
           <Button
@@ -57,4 +61,4 @@ function UploadForm({
   );
 }
 
-export default UploadForm;
+export default ImageUpload;

@@ -1,25 +1,17 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Container,
   Divider,
-  Form,
-  Header,
-  Image,
-  Icon,
+  Grid,
   Message,
-  Popup, Grid,
 } from 'semantic-ui-react';
-import ReactCrop, { centerCrop, convertToPercentCrop, makeAspectCrop } from 'react-image-crop';
 
 import I18n from '../../lib/i18n';
 
-import UploadForm from './UploadForm';
-import CroppedImage from './CroppedImage';
+import ImageUpload from './ImageUpload';
 
 import 'react-image-crop/dist/ReactCrop.css';
-
-// Crop starts as 33% of the original image size
-const SUGGESTED_IMG_RATIO = 33;
+import ThumbnailEditor from './ThumbnailEditor';
 
 function EditAvatar({
   user,
@@ -28,67 +20,17 @@ function EditAvatar({
   uploadDisabled,
   canRemoveAvatar,
 }) {
-  const [cropRel, setCropRel] = useState();
-  const [uiCropRel, setUiCropRel] = useState();
-
-  const [isEditingThumbnail, setEditingThumbnail] = useState(false);
-
   const [uploadedImage, setUploadedImage] = useState();
-  const [imageURL, setImageURL] = useState(user.avatar.url);
+  const [imageURL, setImageURL] = useState(user.avatar?.url);
 
-  const clearThumbnailSelector = useCallback(() => {
-    setUiCropRel(undefined);
-    setEditingThumbnail(false);
-  }, []);
+  const [cropAbs, setCropAbs] = useState(crop);
 
   useEffect(() => {
     if (!uploadedImage) return;
 
-    clearThumbnailSelector();
-
     const newImageURL = URL.createObjectURL(uploadedImage);
     setImageURL(newImageURL);
-  }, [uploadedImage, clearThumbnailSelector]);
-
-  const onImageLoad = (e) => {
-    const { naturalWidth, naturalHeight } = e.currentTarget;
-
-    // Only reset the cropping if a new image is being uploaded
-    if (uploadedImage) {
-      const aspectCrop = makeAspectCrop(
-        {
-          unit: '%',
-          width: SUGGESTED_IMG_RATIO,
-          height: SUGGESTED_IMG_RATIO,
-        },
-        1,
-        naturalWidth,
-        naturalHeight,
-      );
-
-      const centeredCrop = centerCrop(
-        aspectCrop,
-        naturalWidth,
-        naturalHeight,
-      );
-
-      setCropRel(centeredCrop);
-    } else {
-      const relCrop = convertToPercentCrop(crop, naturalWidth, naturalHeight);
-      setCropRel(relCrop);
-    }
-  };
-
-  const handleSaveThumbnail = (evt) => {
-    evt.preventDefault();
-
-    setCropRel(uiCropRel);
-  };
-
-  const onEditThumbnail = () => {
-    setUiCropRel(cropRel);
-    setEditingThumbnail(true);
-  };
+  }, [uploadedImage]);
 
   return (
     <Container>
@@ -114,75 +56,19 @@ function EditAvatar({
                 </>
               )}
             </Message>
-            <UploadForm
+            <ImageUpload
               uploadDisabled={uploadDisabled}
-              canRemoveAvatar={canRemoveAvatar}
-              onImageUpload={setUploadedImage}
+              removalEnabled={canRemoveAvatar}
+              onImageSelected={setUploadedImage}
             />
           </Grid.Column>
           <Grid.Column>
-            <Form onSubmit={handleSaveThumbnail}>
-              <ReactCrop
-                aspect={1}
-                ruleOfThirds
-                keepSelection
-                crop={uiCropRel}
-                onChange={(abs, rel) => setUiCropRel(rel)}
-                disabled={!isEditingThumbnail}
-                style={{ width: '100%' }}
-              >
-                <Image
-                  onLoad={onImageLoad}
-                  src={imageURL}
-                  style={{ width: '100%', height: 'auto' }}
-                />
-              </ReactCrop>
-
-              {isEditingThumbnail && (
-                <>
-                  <div>
-                    <Form.Button
-                      icon
-                      primary
-                      floated="right"
-                      disabled={!uiCropRel}
-                    >
-                      <Icon name="save" />
-                    </Form.Button>
-                    <Form.Button
-                      icon
-                      negative
-                      floated="right"
-                      onClick={clearThumbnailSelector}
-                      disabled={!uiCropRel}
-                    >
-                      <Icon name="cancel" />
-                    </Form.Button>
-                  </div>
-                  <Message warning visible>
-                    <Message.Header>{I18n.t('users.edit_avatar_thumbnail.cdn_warning')}</Message.Header>
-                    <p>{I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}</p>
-                  </Message>
-                </>
-              )}
-            </Form>
-            {user.avatar && (
-              <>
-                <Header>{I18n.t('users.edit.your_thumbnail')}</Header>
-                <Popup
-                  content={I18n.t('users.edit.edit_thumbnail')}
-                  trigger={(
-                    <div className="user-avatar-image-large">
-                      <CroppedImage
-                        crop={cropRel}
-                        src={imageURL}
-                        onClick={onEditThumbnail}
-                      />
-                    </div>
-                  )}
-                />
-              </>
-            )}
+            <ThumbnailEditor
+              imageURL={imageURL}
+              preCalculatedCrop={uploadedImage ? null : crop}
+              editsDisabled={!user.avatar}
+              onThumbnailChanged={setCropAbs}
+            />
           </Grid.Column>
         </Grid.Row>
       </Grid>
