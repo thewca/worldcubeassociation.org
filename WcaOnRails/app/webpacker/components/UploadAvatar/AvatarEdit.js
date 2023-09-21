@@ -5,6 +5,7 @@ import I18n from '../../lib/i18n';
 function AvatarEdit({
   uploadDisabled,
   canRemoveAvatar,
+  setImage,
 }) {
   const [isRemoving, setIsRemoving] = useState(false);
 
@@ -15,9 +16,10 @@ function AvatarEdit({
   };
 
   const handleSelectedImage = (evt) => {
-    evt.preventDefault();
+    //evt.preventDefault();
 
-    console.log('evt', evt);
+    const selectedImage = evt.target.files[0];
+    setImage(selectedImage);
   };
 
   return (

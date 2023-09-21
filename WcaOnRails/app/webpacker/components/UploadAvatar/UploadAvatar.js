@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Divider, Form, Header, Image, Icon, Message, Popup } from 'semantic-ui-react';
 import ReactCrop from 'react-image-crop';
 
@@ -18,7 +18,18 @@ function UploadAvatar({
 }) {
   const [crop, setCrop] = useState();
   const [editingThumbnail, setEditingThumbnail] = useState(false);
+
   const imgRef = useRef(null);
+
+  const [image, setImage] = useState();
+  const [imageURL, setImageURL] = useState(user.avatar.url);
+
+  useEffect(() => {
+    if (!image) return;
+
+    const newImageURL = URL.createObjectURL(image);
+    setImageURL(newImageURL);
+  }, [image]);
 
   const startCropImage = () => {
     const imgWidth = imgRef.current?.clientWidth;
@@ -75,6 +86,7 @@ function UploadAvatar({
           <AvatarEdit
             uploadDisabled={uploadDisabled}
             canRemoveAvatar={canRemoveAvatar}
+            setImage={setImage}
           />
         </div>
         <div className="col-sm-6 text-center">
@@ -88,7 +100,7 @@ function UploadAvatar({
             >
               <img
                 ref={imgRef}
-                src={user.avatar.url}
+                src={imageURL}
                 style={{ width: '100%', height: 'auto' }}
               />
             </ReactCrop>
