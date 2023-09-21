@@ -1,21 +1,21 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react';
 import { Icon, Popup } from 'semantic-ui-react';
+import ReactCrop from 'react-image-crop';
+
 import I18n from '../../lib/i18n';
-import { AvatarEdit } from "./AvatarEdit";
+import AvatarEdit from './AvatarEdit';
 
-import "react-image-crop/dist/ReactCrop.css";
-
-import ReactCrop from "react-image-crop";
+import 'react-image-crop/dist/ReactCrop.css';
 
 // Crop starts as 25% of the original image size
 const SUGGESTED_IMG_RATIO = 4;
 
-const UploadAvatar = ({
+function UploadAvatar({
   user,
   staff,
   uploadDisabled,
   canRemoveAvatar,
-}) => {
+}) {
   const [crop, setCrop] = useState();
   const [editingThumbnail, setEditingThumbnail] = useState(false);
   const imgRef = useRef(null);
@@ -32,7 +32,7 @@ const UploadAvatar = ({
       y: imgHeight / SUGGESTED_IMG_RATIO,
       width: initialDimension,
       height: initialDimension,
-      unit: "px",
+      unit: 'px',
     });
   };
 
@@ -82,12 +82,12 @@ const UploadAvatar = ({
               crop={crop}
               onChange={setCrop}
               disabled={!editingThumbnail} // TODO include :pending_avatar
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
             >
               <img
                 ref={imgRef}
                 src={user.avatar.url}
-                style={{ width: "100%", height: "auto" }}
+                style={{ width: '100%', height: 'auto' }}
               />
             </ReactCrop>
 
@@ -125,7 +125,7 @@ const UploadAvatar = ({
                 trigger={
                   <img
                     src={user.avatar.thumb_url}
-                    style={{ width: "20%", height: "auto" }}
+                    style={{ width: '20%', height: 'auto' }}
                     onClick={startCropImage}
                   />
                 }
@@ -136,6 +136,6 @@ const UploadAvatar = ({
       </div>
     </section>
   );
-};
+}
 
 export default UploadAvatar;

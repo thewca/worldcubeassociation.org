@@ -1,13 +1,13 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import I18n from '../../lib/i18n';
 
-export const AvatarEdit = ({
+function AvatarEdit({
   uploadDisabled,
   canRemoveAvatar,
-}) => {
+}) {
   const [confirmation, setConfirmation] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
-  const [reasonForRemoval, setReasonForRemoval] = useState("");
+  const [reasonForRemoval, setReasonForRemoval] = useState('');
 
   return (
     <>
@@ -58,4 +58,6 @@ export const AvatarEdit = ({
       </div>
     </>
   );
-};
+}
+
+export default AvatarEdit;
