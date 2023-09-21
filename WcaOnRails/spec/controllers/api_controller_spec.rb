@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V0::ApiController do
+RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   describe 'GET #competitions_search' do
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "Jfly's Competition 2015") }
 
@@ -221,7 +221,7 @@ RSpec.describe Api::V0::ApiController do
   describe 'GET #delegates' do
     it 'includes emails and regions' do
       senior_delegate = FactoryBot.create :senior_delegate
-      delegate = FactoryBot.create :delegate, region: "SF bay area, USA", senior_delegate: senior_delegate
+      delegate = FactoryBot.create :delegate, location: "SF bay area, USA", senior_delegate: senior_delegate
 
       get :delegates
       expect(response.status).to eq 200
@@ -230,7 +230,7 @@ RSpec.describe Api::V0::ApiController do
 
       delegate_json = json.find { |user| user["id"] == delegate.id }
       expect(delegate_json["email"]).to eq delegate.email
-      expect(delegate_json["region"]).to eq "SF bay area, USA"
+      expect(delegate_json["location"]).to eq "SF bay area, USA"
       expect(delegate_json["senior_delegate_id"]).to eq senior_delegate.id
     end
 
@@ -375,9 +375,7 @@ RSpec.describe Api::V0::ApiController do
           :person,
           countryId: "USA",
           gender: "m",
-          year: 1987,
-          month: 12,
-          day: 4,
+          dob: '1987-12-04',
         )
       end
       let(:user) do
@@ -503,26 +501,66 @@ RSpec.describe Api::V0::ApiController do
 
   describe 'GET #export_public' do
     it 'returns information about latest public export' do
-      Dir.mktmpdir do |dir|
-        rails_root = Pathname.new(dir).join("WcaOnRails")
-        FileUtils.mkdir_p rails_root
-        expect(Rails).to receive(:root).twice.and_return(rails_root)
+      export_timestamp = DateTime.current.utc
+      DumpPublicResultsDatabase.cronjob_statistics.update!(run_end: export_timestamp)
 
-        FileUtils.mkdir_p "#{dir}/webroot/results/misc"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export001_20171114T062335Z.sql.zip"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export002_20181114T062335Z.sql.zip"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export001_20171114T062335Z.tsv.zip"
-        FileUtils.touch "#{dir}/webroot/results/misc/WCA_export002_20181114T062335Z.tsv.zip"
+      get :export_public
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json).to eq(
+        'export_date' => export_timestamp.iso8601,
+        'sql_url' => "#{root_url}export/results/WCA_export.sql.zip",
+        'tsv_url' => "#{root_url}export/results/WCA_export.tsv.zip",
+      )
+    end
+  end
 
-        get :export_public
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-        expect(json).to eq(
-          'export_date' => '2018-11-14T06:23:35Z',
-          'sql_url' => "#{root_url}results/misc/WCA_export002_20181114T062335Z.sql.zip",
-          'tsv_url' => "#{root_url}results/misc/WCA_export002_20181114T062335Z.tsv.zip",
-        )
-      end
+  describe 'GET #competition_series/:id' do
+    let!(:series) { FactoryBot.create :competition_series }
+    let!(:competition1) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-01', end_date: '2023-01-01' }
+    let!(:competition2) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-02', end_date: '2023-01-02' }
+    let!(:competition3) { FactoryBot.create :competition, :confirmed, :visible, competition_series: series, latitude: 43_641_740, longitude: -79_376_902, start_date: '2023-01-03', end_date: '2023-01-03' }
+
+    it 'returns series portion of wcif json' do
+      get :competition_series, params: { id: series.wcif_id }
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json).to eq(
+        'id' => series.wcif_id,
+        'name' => series.name,
+        'shortName' => series.short_name,
+        'competitionIds' => [competition1.id, competition2.id, competition3.id],
+      )
+    end
+
+    it 'returns series portion of wcif json with only competitions that are publicly visible' do
+      competition2.update_column(:showAtAll, false)
+      get :competition_series, params: { id: series.wcif_id }
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json).to eq(
+        'id' => series.wcif_id,
+        'name' => series.name,
+        'shortName' => series.short_name,
+        'competitionIds' => [competition1.id, competition3.id],
+      )
+    end
+
+    it 'returns 404 when all competitions in series are not visible' do
+      competition1.update_column(:showAtAll, false)
+      competition2.update_column(:showAtAll, false)
+      competition3.update_column(:showAtAll, false)
+      get :competition_series, params: { id: series.wcif_id }
+      expect(response.status).to eq 404
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq "Competition series with ID #{series.wcif_id} not found"
+    end
+
+    it 'returns 404 for unknown competition series id' do
+      get :competition_series, params: { id: 'UnknownSeries1989' }
+      expect(response.status).to eq 404
+      json = JSON.parse(response.body)
+      expect(json['error']).to eq 'Competition series with ID UnknownSeries1989 not found'
     end
   end
 end

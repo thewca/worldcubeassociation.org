@@ -49,7 +49,22 @@
   </h3>
 
   <%= t '.bookmarked_explanation' %>
-
+  <%= form_tag(my_comps_path, method: :get, class: "competition-select form-inline #{@display}", id: "bookmarked-competitions-query-form") do %>
+    <div id="registration-status" class="form-group registration-status-selector">
+      <%= check_box_tag(:show_registration_status, params[:show_registration_status], params[:show_registration_status] == "on") %>
+      <%= label_tag(name = :show_registration_status, content_or_options = t('competitions.index.show_registration_status')) %>
+    </div>
+  <% end %>
   <%= render "my_competitions_table", competitions: @bookmarked_competitions, registrations_by_competition_id: @registered_for_by_competition_id, past: false, bookmarked: true %>
 
 </div>
+
+<script>
+$(document).ready(function() {
+    var $form = $('#bookmarked-competitions-query-form');
+    function submitForm() {
+      $form.trigger('submit.rails');
+    }
+    $('#show_registration_status').on('change', submitForm);
+});
+</script>

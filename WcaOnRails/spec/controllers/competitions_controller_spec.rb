@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 RSpec.describe CompetitionsController do
-  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit) }
+  let(:competition) { FactoryBot.create(:competition, :with_delegate, :registration_open, :with_valid_schedule, :with_guest_limit, :with_event_limit, name: "my long competition name above 32 chars 2023") }
   let(:future_competition) { FactoryBot.create(:competition, :with_delegate, :ongoing) }
 
   describe 'GET #index' do
@@ -68,7 +68,7 @@ RSpec.describe CompetitionsController do
         end
 
         it "when a single year is selected, shows past competitions from this year" do
-          get :index, params: { state: :past, year: past_comp1.year }
+          get :index, params: { state: :past, year: past_comp1.start_date.year }
           expect(assigns(:competitions)).to eq [past_comp1]
         end
 
@@ -317,9 +317,8 @@ RSpec.describe CompetitionsController do
         expect(new_comp.confirmed?).to eq false
         expect(new_comp.results_posted_at).to eq nil
         # We don't want to clone its dates.
-        %w(year month day endYear endMonth endDay).each do |attribute|
-          expect(new_comp.send(attribute)).to eq 0
-        end
+        expect(new_comp.start_date).to be_nil
+        expect(new_comp.end_date).to be_nil
 
         # Cloning a competition should clone its events.
         expect(new_comp.events.sort_by(&:id)).to eq competition.events.sort_by(&:id)
@@ -999,7 +998,7 @@ RSpec.describe CompetitionsController do
         person = user.person
         FactoryBot.create(:registration, :accepted, competition: competition, user: user)
         FactoryBot.create(:result, competition: competition, person: person, eventId: "333")
-        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, year: person.year, month: person.month, day: person.day)
+        another_person = FactoryBot.create(:person, name: person.name, countryId: person.countryId, gender: person.gender, dob: person.dob)
         FactoryBot.create(:result, competition: competition, person: another_person, eventId: "333")
 
         user.update(wca_id: nil)
@@ -1027,7 +1026,7 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #my_competitions' do
+  describe 'GET #my_competitions', clean_db_with_truncation: true do
     let(:delegate) { FactoryBot.create(:delegate) }
     let(:organizer) { FactoryBot.create(:user) }
     let!(:future_competition1) { FactoryBot.create(:competition, :registration_open, starts: 5.week.from_now, organizers: [organizer], delegates: [delegate], events: Event.where(id: %w(222 333))) }
@@ -1038,7 +1037,7 @@ RSpec.describe CompetitionsController do
     let!(:past_competition2) { FactoryBot.create(:competition, starts: 2.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition3) { FactoryBot.create(:competition, starts: 3.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let!(:past_competition4) { FactoryBot.create(:competition, :results_posted, starts: 4.month.ago, delegates: [delegate], events: Event.where(id: %w(222 333))) }
-    let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333)), year: "0") }
+    let!(:unscheduled_competition1) { FactoryBot.create(:competition, starts: nil, ends: nil, delegates: [delegate], events: Event.where(id: %w(222 333))) }
     let(:registered_user) { FactoryBot.create :user, name: "Jan-Ove Waldner" }
     let!(:registration1) { FactoryBot.create(:registration, :accepted, competition: future_competition1, user: registered_user) }
     let!(:registration2) { FactoryBot.create(:registration, :accepted, competition: future_competition3, user: registered_user) }

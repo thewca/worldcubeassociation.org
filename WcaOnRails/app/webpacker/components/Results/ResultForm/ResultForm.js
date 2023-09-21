@@ -13,7 +13,7 @@ import AfterActionMessage from './AfterActionMessage';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { average, best } from '../../../lib/wca-live/attempts';
 import { shouldComputeAverage, getExpectedSolveCount } from '../../../lib/helpers/results';
-import { resultUrl, competitionAllResultsUrl } from '../../../lib/requests/routes.js.erb';
+import { resultUrl, competitionAllResultsUrl, adminFixResultsUrl } from '../../../lib/requests/routes.js.erb';
 import { countries } from '../../../lib/wca-data.js.erb';
 import './ResultForm.scss';
 
@@ -29,8 +29,8 @@ const attemptsDataFromResult = (result) => ({
     getExpectedSolveCount(result.format_id),
     (index) => (result.attempts && result.attempts[index]) || 0,
   ),
-  markerBest: result.regional_single_record || '',
-  markerAvg: result.regional_average_record || '',
+  markerBest: result.regional_single_record,
+  markerAvg: result.regional_average_record,
 });
 
 const personDataFromResult = (result) => ({
@@ -132,7 +132,7 @@ function ResultForm({
       { method: 'DELETE' },
       onError,
     );
-  }, [result, onDelete, onError]);
+  }, [save, result, onDelete, onError]);
 
   const onPersonCreate = useCallback((data) => {
     setPersonData(personDataFromResult(data));
@@ -180,7 +180,21 @@ function ResultForm({
           disabled={saving}
           href={competitionAllResultsUrl(roundData.competitionId, roundData.eventId)}
         >
-          Go back to results
+          Go to competition results
+        </Button>
+        <Button
+          secondary
+          as="a"
+          loading={saving}
+          disabled={saving}
+          href={adminFixResultsUrl(
+            personData.wcaId,
+            roundData.competitionId,
+            roundData.eventId,
+            roundData.roundTypeId,
+          )}
+        >
+          Go to Fix results
         </Button>
       </div>
       {id && (
@@ -199,6 +213,13 @@ function ResultFormWrapper({ result, sync }) {
   const [created, setCreated] = useState(undefined);
   const [deleted, setDeleted] = useState(undefined);
 
+  const [edited, setEdited] = useState(undefined);
+
+  const setUpdated = useCallback((data) => {
+    setEdited(data);
+    sync();
+  }, [sync, setEdited]);
+
   if (created) {
     return (
       <AfterActionMessage
@@ -207,6 +228,26 @@ function ResultFormWrapper({ result, sync }) {
         competitionId={result.competition_id}
         response={created.response}
       />
+    );
+  }
+  if (edited) {
+    return (
+      <div>
+        <AfterActionMessage
+          wcaId={edited.result.personId}
+          eventId={result.event_id}
+          competitionId={result.competition_id}
+          response={edited.response}
+        />
+        <Button
+          secondary
+          loading={saving}
+          disabled={saving}
+          onClick={() => setEdited(undefined)}
+        >
+          Go back for more edits
+        </Button>
+      </div>
     );
   }
   if (deleted) {
@@ -225,7 +266,7 @@ function ResultFormWrapper({ result, sync }) {
       save={save}
       saving={saving}
       onCreate={setCreated}
-      onUpdate={sync}
+      onUpdate={setUpdated}
       onDelete={setDeleted}
     />
   );

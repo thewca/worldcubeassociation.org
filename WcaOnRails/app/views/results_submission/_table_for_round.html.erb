@@ -1,16 +1,20 @@
 <%# expect variables: results, results_validator, round_id %>
 <% persons_by_id = results_validator.persons_by_id %>
 <% round_name = Round.name_from_attributes_id(*round_id.split("-")) %>
+
+<% expand_all ||= false %>
+<% unindent_solves ||= false %>
+
 <h3><%= link_to round_name, "##{round_id}", "data-toggle": "collapse" %></h3>
-<%= wca_table table_class: "wca-results collapse", floatThead: false, table_id: round_id do %>
+<%= wca_table table_class: "wca-results collapse #{"in" if expand_all}", floatThead: false, table_id: round_id do %>
   <thead>
     <tr>
       <th class="pos">#</th>
       <th class="name"><%= t 'competitions.results_table.name' %></th>
       <th class="single"><%= t 'common.best' %></th>
       <th class="average"><%= t 'common.average' %></th>
-      <th class="country"><%= t 'common.user.citizen_of' %> </th>
-      <th class="solves" colspan="5"><%= t 'common.solves' %></th>
+      <th class="country"><%= t 'common.user.representing' %> </th>
+      <th class="solves" colspan="<%= 5 unless unindent_solves %>"><%= t 'common.solves' %></th>
       <% # Extra column for .table-greedy-last-column %>
       <th></th>
     </tr>
@@ -33,7 +37,13 @@
         <td class="single"><%= result.best_solve.clock_format %></td>
         <td class="average"><%= result.average_solve.clock_format %></td>
         <td class="country"><%= person.country.name %></td>
-        <%= solve_tds_for_result(result) %>
+        <% if unindent_solves %>
+          <%# WRT _deliberately_ **wants** the result rows to be out of alignment (i.e. all clock_formats should just be glued together) %>
+          <%# because they have a tactic of checking competition results for plausibility by seeing whether results "visually grow wider" towards the end. %>
+          <td><%= result.solve_times.map(&:clock_format).join("\u00A0\u00A0\u00A0") %></td>
+        <% else %>
+          <%= solve_tds_for_result(result) %>
+        <% end %>
         <% # Extra column for .table-greedy-last-column %>
         <td></td>
       </tr>

@@ -64,7 +64,7 @@
             <th></th>
             <th class="wca-id" data-sortable="true"><%= t 'common.user.wca_id' %></th>
             <th class="name" data-sortable="true"><%= t 'activerecord.attributes.registration.name' %></th>
-            <th class="countryId" data-sortable="true"><%= t 'common.user.citizen_of' %></th>
+            <th class="countryId" data-sortable="true"><%= t 'common.user.representing' %></th>
             <% if @show_birthdays %>
               <th class="birthday" data-sortable="true"><%= t 'activerecord.attributes.registration.birthday' %></th>
             <% end %>
@@ -84,6 +84,9 @@
             <th class="events" data-sortable="true"><%= t 'registrations.list.n_events' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
             <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
+            <% if @competition.has_administrative_notes? %>
+              <th class="administrative-notes"><%= t 'activerecord.attributes.registration.administrative_notes' %></th>
+            <% end %>
             <% if @competition.using_stripe_payments? %>
               <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
             <% end %>
@@ -145,6 +148,13 @@
                   <%= registration.comments %>
                 </span>
               </td>
+              <% if @competition.has_administrative_notes? %>
+                <td class="administrative-notes">
+                  <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.administrative_notes %>">
+                    <%= registration.administrative_notes %>
+                  </span>
+                </td>
+              <% end %>
               <% if @competition.using_stripe_payments? %>
                 <td class="entry_fee">
                   <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.last_payment_date %>">

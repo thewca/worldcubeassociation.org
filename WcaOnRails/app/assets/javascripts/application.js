@@ -21,7 +21,6 @@
 //= require jquery.jcrop
 //= require jquery.wca-autocomplete
 //= require jquery.floatThead.js
-//= require slick.min
 //= require cocoon
 //= require moment
 //= require moment-timezone-with-data
@@ -29,7 +28,6 @@
 //= require bootstrap-table
 //= require bootstrap-table-locale-all
 //= require extensions/bootstrap-table-mobile
-//= require jquery_plugins
 //= require starburst/starburst
 //= require_self
 // We don't require_tree here, because we don't want fullcalendar and locales

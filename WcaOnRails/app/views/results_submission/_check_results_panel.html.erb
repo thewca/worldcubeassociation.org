@@ -1,5 +1,6 @@
 <%
   force_collapse ||= false
+  display_competition ||= false
   # NOTE: expect valid 'results_validator' variable
   panel_style = class_for_panel(error: results_validator.has_errors?,
                                 warning: results_validator.has_warnings?,
@@ -19,7 +20,7 @@
   </div>
   <div id="collapse-check-results" class="panel-body collapse <%= "in" unless collapse_panel %>">
     <% if results_validator.validators.any? %>
-      <%= render "results_submission/validations_results", results_validator: results_validator %>
+      <%= render "results_submission/validations_results", results_validator: results_validator, display_competition: display_competition %>
     <% else %>
       Please run some validators to check the results.
     <% end %>

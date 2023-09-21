@@ -1,0 +1,26 @@
+<% provide(:title, 'Generate exports') %>
+
+<div class="container">
+  <%= render layout: "nav" do %>
+    <%= render 'cronjob_status_panel', cronjob: DumpDeveloperDatabase, trigger_link: admin_do_generate_dev_export_path do %>
+      <div>
+        <h4>This script:</h4>
+        <ul class="list-group">
+          <li class="list-group-item">Copies a redacted version of our entire database into an SQL file</li>
+          <li class="list-group-item">Zips the file and makes the ZIP file available for public download</li>
+        </ul>
+        <p>See <%= link_to "developer export", db_dev_export_path %> for details</p>
+      </div>
+    <% end %>
+    <%= render 'cronjob_status_panel', cronjob: DumpPublicResultsDatabase, trigger_link: admin_do_generate_public_export_path do %>
+      <div>
+        <h4>This script:</h4>
+        <ul class="list-group">
+          <li class="list-group-item">Generates the public Results Export in SQL and TSV formats</li>
+          <li class="list-group-item">Zips the file and makes the ZIP file available for public download</li>
+        </ul>
+        <p>See <%= link_to "results export", db_results_export_path %> for details</p>
+      </div>
+    <% end %>
+  <% end %>
+</div>

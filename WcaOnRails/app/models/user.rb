@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
@@ -31,6 +32,8 @@ class User < ApplicationRecord
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
   has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
+  has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
+  has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -69,7 +72,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   devise :two_factor_authenticatable,
-         otp_secret_encryption_key: EnvVars.OTP_ENCRYPTION_KEY
+         otp_secret_encryption_key: AppSecrets.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
@@ -83,76 +86,6 @@ class User < ApplicationRecord
     otp_required_for_login
   end
 
-  # devise-two-factor migration, copy-pasted (and very slightly adjusted to make RuboCop shut up)
-  # from https://github.com/tinfoil/devise-two-factor/blob/main/UPGRADING.md
-  ##
-  # Decrypt and return the `encrypted_otp_secret` attribute which was used in
-  # prior versions of devise-two-factor
-  # @return [String] The decrypted OTP secret
-  private def legacy_otp_secret
-    return nil unless self[:encrypted_otp_secret]
-    return nil unless self.class.otp_secret_encryption_key
-
-    hmac_iterations = 2000 # a default set by the Encryptor gem
-    key = self.class.otp_secret_encryption_key
-    salt = Base64.decode64(encrypted_otp_secret_salt)
-    iv = Base64.decode64(encrypted_otp_secret_iv)
-
-    raw_cipher_text = Base64.decode64(encrypted_otp_secret)
-    # The last 16 bytes of the ciphertext are the authentication tag - we use
-    # Galois Counter Mode which is an authenticated encryption mode
-    cipher_text = raw_cipher_text[0..-17]
-    auth_tag =  raw_cipher_text[-16..]
-
-    # this alrorithm lifted from
-    # https://github.com/attr-encrypted/encryptor/blob/master/lib/encryptor.rb#L54
-
-    # create an OpenSSL object which will decrypt the AES cipher with 256 bit
-    # keys in Galois Counter Mode (GCM). See
-    # https://ruby.github.io/openssl/OpenSSL/Cipher.html
-    cipher = OpenSSL::Cipher.new('aes-256-gcm')
-
-    # tell the cipher we want to decrypt. Symmetric algorithms use a very
-    # similar process for encryption and decryption, hence the same object can
-    # do both.
-    cipher.decrypt
-
-    # Use a Password-Based Key Derivation Function to generate the key actually
-    # used for encryptoin from the key we got as input.
-    cipher.key = OpenSSL::PKCS5.pbkdf2_hmac_sha1(key, salt, hmac_iterations, cipher.key_len)
-
-    # set the Initialization Vector (IV)
-    cipher.iv = iv
-
-    # The tag must be set after calling Cipher#decrypt, Cipher#key= and
-    # Cipher#iv=, but before calling Cipher#final. After all decryption is
-    # performed, the tag is verified automatically in the call to Cipher#final.
-    #
-    # If the auth_tag does not verify, then #final will raise OpenSSL::Cipher::CipherError
-    cipher.auth_tag = auth_tag
-
-    # auth_data must be set after auth_tag has been set when decrypting See
-    # http://ruby-doc.org/stdlib-2.0.0/libdoc/openssl/rdoc/OpenSSL/Cipher.html#method-i-auth_data-3D
-    # we are not adding any authenticated data but OpenSSL docs say this should
-    # still be called.
-    cipher.auth_data = ''
-
-    # #update is (somewhat confusingly named) the method which actually
-    # performs the decryption on the given chunk of data. Our OTP secret is
-    # short so we only need to call it once.
-    #
-    # It is very important that we call #final because:
-    #
-    # 1. The authentication tag is checked during the call to #final
-    # 2. Block based cipher modes (e.g. CBC) work on fixed size chunks. We need
-    #    to call #final to get it to process the last chunk properly. The output
-    #    of #final should be appended to the decrypted value. This isn't
-    #    required for streaming cipher modes but including it is a best practice
-    #    so that your code will continue to function correctly even if you later
-    #    change to a block cipher mode.
-    cipher.update(cipher_text) + cipher.final
-  end
-
   # When creating an account, we actually don't mind if the user leaves their
   # name empty, so long as they're a returning competitor and are claiming their
   # wca id.
@@ -164,8 +97,7 @@ class User < ApplicationRecord
 
   # Very simple (and permissive) regexp, the goal is just to avoid silly typo
   # like "aaa@bbb,com", or forgetting the '@'.
-  EMAIL_RE = /[\w.%+-]+@[\w.-]+\.\w+/
-  validates :email, format: { with: EMAIL_RE }
+  validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
 
   # Virtual attribute for authenticating by WCA ID or email.
   attr_accessor :login
@@ -665,7 +597,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? && EnvVars.WCA_LIVE_SITE? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?
@@ -831,6 +763,10 @@ class User < ApplicationRecord
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.results_posted?)
   end
 
+  def can_update_qualifications?(competition)
+    can_update_events?(competition) && competition.qualification_results? && competition.qualification_results_reason.present?
+  end
+
   def can_update_competition_series?(competition)
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
   end
@@ -928,13 +864,13 @@ class User < ApplicationRecord
   # Note this is very similar to the cannot_be_assigned_to_user_reasons method in person.rb.
   # The competition parameter is there when you want to check if a (potentially banned)
   # competitor wants to register for a specific competition, not competitions in general
-  def cannot_register_for_competition_reasons(competition = nil)
+  def cannot_register_for_competition_reasons(competition = nil, is_competing: true)
     [].tap do |reasons|
       reasons << I18n.t('registrations.errors.need_name') if name.blank?
       reasons << I18n.t('registrations.errors.need_gender') if gender.blank?
       reasons << I18n.t('registrations.errors.need_dob') if dob.blank?
       reasons << I18n.t('registrations.errors.need_country') if country_iso2.blank?
-      reasons << I18n.t('registrations.errors.banned_html').html_safe if competition.present? && banned_at_date?(competition.start_date)
+      reasons << I18n.t('registrations.errors.banned_html').html_safe if is_competing && competition.present? && banned_at_date?(competition.start_date)
     end
   end
 
@@ -983,7 +919,7 @@ class User < ApplicationRecord
     fields += editable_avatar_fields(user)
     # Delegate Status Fields
     if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status senior_delegate_id region)
+      fields += %i(delegate_status senior_delegate_id location)
     end
     fields
   end
@@ -1071,7 +1007,7 @@ class User < ApplicationRecord
     if !wca_id && !unconfirmed_wca_id
       matches = []
       unless country.nil? || dob.nil?
-        matches = competition.competitors.where(name: name, year: dob.year, month: dob.month, day: dob.day, gender: gender, countryId: country.id).to_a
+        matches = competition.competitors.where(name: name, dob: dob, gender: gender, countryId: country.id).to_a
       end
       if matches.size == 1 && matches.first.user.nil?
         update(wca_id: matches.first.wca_id)
@@ -1142,7 +1078,7 @@ class User < ApplicationRecord
 
   def url
     if wca_id
-      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvVars.ROOT_URL)
+      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
     else
       ""
     end
@@ -1161,7 +1097,7 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if any_kind_of_delegate?
-      default_options[:methods].push("email", "region", "senior_delegate_id")
+      default_options[:methods].push("email", "location", "senior_delegate_id")
     end
 
     options = default_options.merge(options || {})
@@ -1307,5 +1243,10 @@ class User < ApplicationRecord
     self.accepted_registrations
         .includes(competition: [:delegates, :organizers, :events])
         .map(&:competition)
+  end
+
+  def senior_or_self
+    return nil unless self.delegate_status.present?
+    self.delegate_status == "senior_delegate" ? self : self.senior_delegate
   end
 end

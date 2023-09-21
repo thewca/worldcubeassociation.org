@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class SubmitResultsNagJob < SingletonApplicationJob
-  queue_as :default
-
+class SubmitResultsNagJob < WcaCronjob
   def nag_needed(competition)
     (competition.results_nag_sent_at || competition.end_date) <= 8.days.ago
   end

@@ -18,6 +18,7 @@ class Registration < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :assignments, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :stripe_payment_intents, as: :holder, dependent: :delete_all
 
   serialize :roles, Array
 
@@ -150,26 +151,31 @@ class Registration < ApplicationRecord
     (competition.registration_opened? || !(new_or_deleted?)) || (competition.user_can_pre_register?(user))
   end
 
-  def record_payment(amount, currency_code, stripe_charge_id, user_id)
+  def record_payment(
+    amount_lowest_denomination,
+    currency_code,
+    receipt,
+    user_id
+  )
     registration_payments.create!(
-      amount_lowest_denomination: amount,
+      amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,
-      stripe_charge_id: stripe_charge_id,
+      receipt: receipt,
       user_id: user_id,
     )
   end
 
   def record_refund(
-    amount,
+    amount_lowest_denomination,
     currency_code,
-    stripe_refund_id,
+    receipt,
     refunded_registration_payment_id,
     user_id
   )
     registration_payments.create!(
-      amount_lowest_denomination: amount * -1,
+      amount_lowest_denomination: amount_lowest_denomination.abs * -1,
       currency_code: currency_code,
-      stripe_charge_id: stripe_refund_id,
+      receipt: receipt,
       refunded_registration_payment_id: refunded_registration_payment_id,
       user_id: user_id,
     )
@@ -189,21 +195,28 @@ class Registration < ApplicationRecord
     Hash.new(index: index, length: pending_registrations.length)
   end
 
+  def wcif_status
+    # Non-competing staff are treated as accepted.
+    if accepted? || !is_competing?
+      'accepted'
+    elsif deleted?
+      'deleted'
+    else
+      'pending'
+    end
+  end
+
   def to_wcif(authorized: false)
     authorized_fields = {
       "guests" => guests,
       "comments" => comments || '',
+      "administrativeNotes" => administrative_notes || '',
     }
     {
       "wcaRegistrationId" => id,
       "eventIds" => events.map(&:id).sort,
-      "status" => if accepted?
-                    'accepted'
-                  elsif deleted?
-                    'deleted'
-                  else
-                    'pending'
-                  end,
+      "status" => wcif_status,
+      "isCompeting" => is_competing?,
     }.merge(authorized ? authorized_fields : {})
   end
 
@@ -216,6 +229,8 @@ class Registration < ApplicationRecord
         "status" => { "type" => "string", "enum" => %w(accepted deleted pending) },
         "guests" => { "type" => "integer" },
         "comments" => { "type" => "string" },
+        "administrativeNotes" => { "type" => "string" },
+        "isCompeting" => { "type" => "boolean" },
       },
     }
   end
@@ -230,7 +245,7 @@ class Registration < ApplicationRecord
   # change doesn't lead to an invalid state.
   validate :user_can_register_for_competition, on: :create
   private def user_can_register_for_competition
-    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition)
+    cannot_register_reasons = user&.cannot_register_for_competition_reasons(competition, is_competing: self.is_competing?)
     if cannot_register_reasons.present?
       errors.add(:user_id, cannot_register_reasons.to_sentence)
     end
@@ -243,9 +258,9 @@ class Registration < ApplicationRecord
     end
   end
 
-  validate :must_register_for_gte_one_event
+  validate :must_register_for_gte_one_event, if: :is_competing?
   private def must_register_for_gte_one_event
-    if is_competing && registration_competition_events.reject(&:marked_for_destruction?).empty?
+    if registration_competition_events.reject(&:marked_for_destruction?).empty?
       errors.add(:registration_competition_events, I18n.t('registrations.errors.must_register'))
     end
   end
@@ -265,14 +280,14 @@ class Registration < ApplicationRecord
     if competition && competition.allow_registration_without_qualification
       return
     end
-    if registration_competition_events.reject(&:marked_for_destruction?).select { |event| !event.competition_event&.can_register?(user) }.any?
+    if registration_competition_events.reject(&:marked_for_destruction?).any? { |event| !event.competition_event&.can_register?(user) }
       errors.add(:registration_competition_events, I18n.t('registrations.errors.can_only_register_for_qualified_events'))
     end
   end
 
-  validate :forcing_competitors_to_add_comment
+  validate :forcing_competitors_to_add_comment, if: :is_competing?
   private def forcing_competitors_to_add_comment
-    if competition&.force_comment_in_registration.present? && comments.strip.empty?
+    if competition&.force_comment_in_registration.present? && !comments&.strip&.present?
       errors.add(:user_id, I18n.t('registrations.errors.cannot_register_without_comment'))
     end
   end

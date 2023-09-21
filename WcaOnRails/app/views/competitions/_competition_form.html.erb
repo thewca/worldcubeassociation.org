@@ -28,14 +28,17 @@
       <% disable_form = !can_edit_competition %>
 
       <fieldset <%= disable_form && "disabled" %>>
+        <% disable_id_edit = @competition_organizer_view && (@competition.name.length <= Competition::MAX_CELL_NAME_LENGTH) %>
 
         <% if @competition.persisted? %>
-          <%= f.input :id %>
+          <%= f.input :id, disabled: disable_id_edit %>
         <% end %>
         <%= f.input :name, wrapper_html: { class: @competition.warnings_for(current_user)[:name] ? "has-warning" : "" } %>
+
         <% if @competition.persisted? %>
-          <%= f.input :cellName %>
+          <%= f.input :cellName, disabled: disable_id_edit, hint: t('simple_form.hints.competition.cellName', short_name_limit: Competition::MAX_CELL_NAME_LENGTH) %>
         <% end %>
+
         <%= f.input :name_reason, hint: t('.name_reason_html') %>
 
         <%= f.input :countryId, collection: Country.all_sorted_by(I18n.locale), label_method: lambda { |c| c.name }, value_method: lambda { |c| c.id }  %>
@@ -81,20 +84,18 @@
                 return;
               }
 
-              var obj = $("#competition-form").serializeJSON();
-
               var request = {
                 url: url,
                 data: {
                   <% if @competition_admin_view %>
                     'competition_admin_view': true,
                   <% end %>
-                  'competition[id]': obj['competition[id]'],
-                  'competition[latitude_degrees]': obj['competition[latitude_degrees]'],
-                  'competition[longitude_degrees]': obj['competition[longitude_degrees]'],
-                  'competition[start_date]': obj['competition[start_date]'],
-                  'competition[end_date]': obj['competition[end_date]'],
-                  'competition[registration_open]': obj['competition[registration_open]'],
+                  'competition[id]': $("#competition_id").val(),
+                  'competition[latitude_degrees]': $("#competition_latitude").val(),
+                  'competition[longitude_degrees]': $("#competition_longitude").val(),
+                  'competition[start_date]': $("#competition_start_date").val(),
+                  'competition[end_date]': $("#competition_end_date").val(),
+                  'competition[registration_open]': $("#competition_registration_open").val(),
                 },
                 success: successFn
               };
@@ -250,20 +251,19 @@
 
         <script>
           function UpdateDues(){
-
-            var obj = $("#competition-form").serializeJSON();
-            var compLimitEnabled = obj['competition[competitor_limit_enabled]']
-            var compLimit = compLimitEnabled === "true" ? obj['competition[competitor_limit]'] : null
-            var currencyCode = obj['competition[currency_code]']
-
+            var compLimitEnabled = "true" === $("#competition_competitor_limit_enabled").val();
+            var compLimit = compLimitEnabled ? $("#competition_competitor_limit").val() : null;
+            var currencyCode = $("#competition_currency_code").val();
+            var countryId = $("#competition_countryId").val();
+            var entryFee = $("#competition_base_entry_fee_lowest_denomination").val();
             window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
               url: '<%= calculate_dues_path %>',
               data: {
                 competitor_limit_enabled: compLimitEnabled,
                 competitor_limit: compLimit,
                 currency_code: currencyCode,
-                country_id: obj['competition[countryId]'],
-                entry_fee_cents: obj['competition[base_entry_fee_lowest_denomination]'],
+                country_id: countryId,
+                entry_fee_cents: entryFee,
               },
               success: function(data) {
                 if (compLimitEnabled) {

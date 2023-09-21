@@ -29,6 +29,8 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
+  has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -72,7 +74,7 @@ class Competition < ApplicationRecord
       ).group(:id)
   }
   scope :order_by_date, -> { order(:start_date, :end_date) }
-  scope :order_by_announcement_date, -> { order(announced_at: :desc) }
+  scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
 
@@ -121,12 +123,6 @@ class Competition < ApplicationRecord
     end_date
     name
     name_reason
-    year
-    month
-    day
-    endYear
-    endMonth
-    endDay
     cellName
     showAtAll
     external_registration_page
@@ -236,6 +232,10 @@ class Competition < ApplicationRecord
 
   def number_of_events
     persisted_events_id.length
+  end
+
+  def has_administrative_notes?
+    registrations.any? { |registration| !registration.administrative_notes.blank? }
   end
 
   NEARBY_DISTANCE_KM_WARNING = 250
@@ -441,6 +441,10 @@ class Competition < ApplicationRecord
         warnings[:events] = I18n.t('competitions.messages.must_have_events')
       end
 
+      if !self.waiting_list_deadline_date
+        warnings[:waiting_list_deadline_missing] = I18n.t('competitions.messages.no_waiting_list_specified')
+      end
+
       # NOTE: this will show up on the edit schedule page, and stay even if the
       # schedule matches when saved. Should we add some logic to not show this
       # message on the edit schedule page?
@@ -481,7 +485,7 @@ class Competition < ApplicationRecord
       end
     end
 
-    if reg_warnings.any?
+    if reg_warnings.any? && user&.can_manage_competition?(self)
       warnings = reg_warnings.merge(warnings)
     end
 
@@ -574,7 +578,9 @@ class Competition < ApplicationRecord
              'bookmarked_competitions',
              'bookmarked_users',
              'competition_series',
-             'series_competitions'
+             'series_competitions',
+             'inbox_results',
+             'inbox_persons'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -607,7 +613,6 @@ class Competition < ApplicationRecord
 
   after_create :create_delegate_report!
 
-  before_validation :unpack_dates
   validate :dates_must_be_valid
 
   alias_attribute :latitude_microdegrees, :latitude
@@ -615,19 +620,19 @@ class Competition < ApplicationRecord
   before_validation :compute_coordinates
 
   before_validation :create_id_and_cell_name
-  def create_id_and_cell_name
+  def create_id_and_cell_name(force_override: false)
     m = VALID_NAME_RE.match(name)
     if m
       name_without_year = m[1]
       year = m[2]
-      if id.blank?
+      if id.blank? || force_override
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
         safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
-      if cellName.blank?
+      if cellName.blank? || force_override
         year = " " + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
@@ -809,7 +814,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_website
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   def managers
@@ -1046,24 +1051,6 @@ class Competition < ApplicationRecord
   # can competitors delete their own registration after it has been accepetd
   def registration_delete_after_acceptance_allowed?
     self.allow_registration_self_delete_after_acceptance
-  end
-
-  private def unpack_dates
-    if start_date
-      self.year = start_date.year
-      self.month = start_date.month
-      self.day = start_date.day
-    else
-      self.year = self.month = self.day = 0
-    end
-
-    if end_date
-      self.endYear = end_date.year
-      self.endMonth = end_date.month
-      self.endDay = end_date.day
-    else
-      self.endYear = self.endMonth = self.endDay = 0
-    end
   end
 
   private def dates_must_be_valid
@@ -1444,76 +1431,75 @@ class Competition < ApplicationRecord
   SortedRegistration = Struct.new(:registration, :tied_previous, :pos, keyword_init: true)
   PsychSheet = Struct.new(:sorted_registrations, :sort_by, :sort_by_second, keyword_init: true)
   def psych_sheet_event(event, sort_by)
-    competition_event = competition_events.find_by!(event_id: event.id)
-    joinsql = <<-SQL
-      JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
-      JOIN users ON users.id = registrations.user_id
-      JOIN Countries ON Countries.iso2 = users.country_iso2
-      LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
-      LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
-    SQL
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_event = competition_events.find_by!(event_id: event.id)
+      joinsql = <<-SQL
+        JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
+        JOIN users ON users.id = registrations.user_id
+        JOIN Countries ON Countries.iso2 = users.country_iso2
+        LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
+        LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
+      SQL
 
-    selectsql = <<-SQL
-      registrations.id,
-      users.name select_name,
-      users.wca_id select_wca_id,
-      registrations.accepted_at,
-      registrations.deleted_at,
-      Countries.id select_country_id,
-      registration_competition_events.competition_event_id,
-      RanksAverage.worldRank average_rank,
-      ifnull(RanksAverage.best, 0) average_best,
-      RanksSingle.worldRank single_rank,
-      ifnull(RanksSingle.best, 0) single_best
-    SQL
+      selectsql = <<-SQL
+        registrations.id,
+        users.name select_name,
+        users.wca_id select_wca_id,
+        registrations.accepted_at,
+        registrations.deleted_at,
+        Countries.id select_country_id,
+        registration_competition_events.competition_event_id,
+        RanksAverage.worldRank average_rank,
+        ifnull(RanksAverage.best, 0) average_best,
+        RanksSingle.worldRank single_rank,
+        ifnull(RanksSingle.best, 0) single_best
+      SQL
 
-    if sort_by == event.recommended_format.sort_by_second
-      sort_by_second = event.recommended_format.sort_by
-    else
-      sort_by = event.recommended_format.sort_by
-      sort_by_second = event.recommended_format.sort_by_second
-    end
-    sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
-
-    registrations = self.registrations
-                        .accepted
-                        .joins(joinsql)
-                        .where("registration_competition_events.competition_event_id=?", competition_event.id)
-                        .order(sort_clause)
-                        .select(selectsql)
-                        .to_a
-
-    prev_sorted_registration = nil
-    sorted_registrations = []
-    registrations.each_with_index do |registration, i|
-      if sort_by == 'single'
-        rank = registration.single_rank
-        prev_rank = prev_sorted_registration&.registration&.single_rank
+      if sort_by == event.recommended_format.sort_by_second
+        sort_by_second = event.recommended_format.sort_by
       else
-        rank = registration.average_rank
-        prev_rank = prev_sorted_registration&.registration&.average_rank
+        sort_by = event.recommended_format.sort_by
+        sort_by_second = event.recommended_format.sort_by_second
       end
-      if rank
-        tied_previous = rank == prev_rank
-        pos = tied_previous ? prev_sorted_registration.pos : i + 1
-      else
-        # Hasn't competed in this event yet.
-        tied_previous = nil
-        pos = nil
+      sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
+
+      registrations = self.registrations
+                          .accepted
+                          .joins(joinsql)
+                          .where("registration_competition_events.competition_event_id=?", competition_event.id)
+                          .order(sort_clause)
+                          .select(selectsql)
+                          .to_a
+
+      prev_sorted_registration = nil
+      sorted_registrations = []
+      registrations.each_with_index do |registration, i|
+        rank = sort_by == 'single' ? registration.single_rank : registration.average_rank
+        if rank
+          # Change position to previous if both single and average are tied with previous registration.
+          average_tied_previous = registration.average_rank == prev_sorted_registration&.registration&.average_rank
+          single_tied_previous = registration.single_rank == prev_sorted_registration&.registration&.single_rank
+          tied_previous = single_tied_previous && average_tied_previous
+          pos = tied_previous ? prev_sorted_registration.pos : i + 1
+        else
+          # Hasn't competed in this event yet.
+          tied_previous = nil
+          pos = nil
+        end
+        sorted_registration = SortedRegistration.new(
+          registration: registration,
+          tied_previous: tied_previous,
+          pos: pos,
+        )
+        sorted_registrations << sorted_registration
+        prev_sorted_registration = sorted_registration
       end
-      sorted_registration = SortedRegistration.new(
-        registration: registration,
-        tied_previous: tied_previous,
-        pos: pos,
+      PsychSheet.new(
+        sorted_registrations: sorted_registrations,
+        sort_by: sort_by,
+        sort_by_second: sort_by_second,
       )
-      sorted_registrations << sorted_registration
-      prev_sorted_registration = sorted_registration
     end
-    PsychSheet.new(
-      sorted_registrations: sorted_registrations,
-      sort_by: sort_by,
-      sort_by_second: sort_by_second,
-    )
   end
 
   # For associated_events_picker
@@ -1524,7 +1510,7 @@ class Competition < ApplicationRecord
   end
 
   def self.years
-    Competition.where(showAtAll: true).pluck(:year).uniq.sort!.reverse!
+    Competition.where(showAtAll: true).pluck(:start_date).map(&:year).uniq.sort!.reverse!
   end
 
   def self.non_future_years
@@ -1606,7 +1592,7 @@ class Competition < ApplicationRecord
       "id" => id,
       "name" => name,
       "shortName" => cellName,
-      "series" => part_of_competition_series? ? competition_series_wcif : nil,
+      "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
       "persons" => persons_wcif(authorized: authorized),
       "events" => events_wcif,
       "schedule" => schedule_wcif,
@@ -1615,8 +1601,8 @@ class Competition < ApplicationRecord
     }
   end
 
-  def competition_series_wcif
-    competition_series&.to_wcif
+  def competition_series_wcif(authorized: false)
+    competition_series&.to_wcif(authorized: authorized)
   end
 
   def persons_wcif(authorized: false)
@@ -1627,12 +1613,16 @@ class Competition < ApplicationRecord
       { user: {
         person: [:ranksSingle, :ranksAverage],
       } },
+      :wcif_extensions,
     ]
+    # NOTE: we're including non-competing registrations so that they can have job
+    # assignments as well. These registrations don't have accepted?, but they
+    # should appear in the WCIF.
     persons_wcif = registrations.order(:id)
                                 .includes(includes_associations)
                                 .to_enum
                                 .with_index(1)
-                                .select { |r, registrant_id| authorized || r.accepted? }
+                                .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
                                 .map do |r, registrant_id|
                                   managers.delete(r.user)
                                   r.user.to_wcif(self, r, registrant_id, authorized: authorized)
@@ -1678,6 +1668,7 @@ class Competition < ApplicationRecord
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+      set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
       # Trigger validations on the competition itself, and throw an error to rollback if necessary.
       # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
@@ -1685,7 +1676,32 @@ class Competition < ApplicationRecord
       #   that have qualification requirements via a perfectly valid Events WCIF, but the competition itself
       #   was never configured to support qualifications (i.e. the use of qualifications was never approved by WCAT).
       save!
+
+      # After validations succeeded, and we know that we have a consistent competition state, mark the competition as updated.
+      # Context: As above, it is possible to make a PATCH call that _only_ updates associated models but not the competition
+      #   itself in the stricter sense (i.e. only changes stuff in the `assignments` table but not the `competitions` table itself).
+      #   But our API relies on the updated_at timestamp of the top-level Competition object to enable Conditional GET, so we
+      #   artificially pretend like the Competition object was updated anyways.
+      touch
     end
+  end
+
+  def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
+    return if wcif_competitor_limit == self.competitor_limit
+
+    if confirmed? && !current_user.can_admin_competitions?
+      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
+    end
+
+    unless competitor_limit_enabled?
+      raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
+    end
+
+    unless wcif_competitor_limit.present?
+      raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
+    end
+
+    self.competitor_limit = wcif_competitor_limit
   end
 
   def set_wcif_series!(wcif_series, current_user)
@@ -1724,7 +1740,7 @@ class Competition < ApplicationRecord
 
     # Create missing events.
     wcif_events.each do |wcif_event|
-      event_found = competition_events.find_by_event_id(wcif_event["id"])
+      event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
       event_to_be_added = wcif_event["rounds"]
       if !event_found && event_to_be_added
         unless current_user.can_add_and_remove_events?(self)
@@ -1741,7 +1757,7 @@ class Competition < ApplicationRecord
         unless current_user.can_update_events?(self)
           raise WcaExceptions::BadApiParameter.new("Cannot update events")
         end
-        competition_events.find_by_event_id!(wcif_event["id"]).load_wcif!(wcif_event)
+        competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
       end
     end
 
@@ -1761,19 +1777,25 @@ class Competition < ApplicationRecord
     wcif_persons.each do |wcif_person|
       local_assignments = []
       registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
-      # If no registration is found, assume that this is a non-competing staff member being added.
-      registration ||= registrations.create(
-        competition: self,
-        user_id: wcif_person["wcaUserId"],
-        created_at: DateTime,
-        updated_at: DateTime,
-        is_competing: false,
-      )
+      # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
+      adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
+      if adding_non_competing
+        registration ||= registrations.create(
+          competition: self,
+          user_id: wcif_person["wcaUserId"],
+          created_at: DateTime.now,
+          updated_at: DateTime.now,
+          is_competing: false,
+        )
+      end
+      next unless registration.present?
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
       if wcif_person["roles"]
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
-        registration.update!(roles: roles)
+        # The additional roles are only for WCIF purposes and we don't validate them,
+        # so we can safely skip validations by using update_attribute
+        registration.update_attribute(:roles, roles)
       end
       if wcif_person["assignments"]
         wcif_person["assignments"].each do |assignment_wcif|
@@ -1871,7 +1893,7 @@ class Competition < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

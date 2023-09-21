@@ -46,9 +46,29 @@ export const competitionEventScramblesApiUrl = (id, eventId) => `<%= CGI.unescap
 
 export const adminCheckExistingResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_check_existing_results_path("${competitionId}")) %>`;
 
+export const adminCheckRegionalRecordsUrl = (competitionId, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path(competition_id: "${competitionId}", event_id: "${eventId}")) %>`
+
 export const competitionEventsDataUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_events_data_path("${id}"))%>`;
 
 export const adminCADUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_compute_auxiliary_data_path) %>`;
+
+export const adminFixResultsUrl = (personId, competition_id = undefined, event_id = undefined, round_type_id = undefined) => {
+  const searchParams = new URLSearchParams(`person_id=${personId}`);
+
+  if (competition_id) {
+    searchParams.append(`competition_id`, competition_id);
+
+    if (event_id) {
+      searchParams.append(`event_id`, event_id);
+
+      if (round_type_id) {
+        searchParams.append(`round_type_id`, round_type_id);
+      }
+    }
+  }
+
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>?${searchParams.toString()}`
+};
 
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 

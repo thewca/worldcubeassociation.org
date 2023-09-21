@@ -40,11 +40,11 @@ namespace :competition_tabs do
         puts "Processing #{row.id}"
       end
 
-      new_content = content.gsub(/!\[(.*)\]\((.+?)\)/) do
+      new_content = content.gsub(/!\[(.*?)\]\((.+?)\)/) do
         img_description = Regexp.last_match(1)
         url = Regexp.last_match(2)
 
-        rehashed_url = url.gsub(%r{https?://(?:www\.)?worldcubeassociation\.org/rails/active_storage/blobs(?:/redirect)?/(.+--.+)/(.+)}) do |old_url|
+        rehashed_url = url.gsub(%r{https?://(?:www\.)?worldcubeassociation\.org/rails/active_storage/blobs(?:/redirect)?/(\w+--\w+)/(.+)}) do |old_url|
           old_signed_id = Regexp.last_match(1)
 
           active_storage_id = legacy_verifier.verify(old_signed_id, purpose: 'blob_id')

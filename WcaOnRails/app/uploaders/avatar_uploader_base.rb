@@ -17,11 +17,11 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   def invalidate_cdn_cache(reference)
-    if EnvVars.CDN_AVATARS_DISTRIBUTION_ID.present?
+    if AppSecrets.CDN_AVATARS_DISTRIBUTION_ID.present?
       # the hash keys and structure are per Amazon AWS' documentation
       # https://docs.aws.amazon.com/sdk-for-ruby/v3/api/Aws/CloudFront/Client.html#create_invalidation-instance_method
       cloudfront_sdk.create_invalidation({
-                                           distribution_id: EnvVars.CDN_AVATARS_DISTRIBUTION_ID,
+                                           distribution_id: AppSecrets.CDN_AVATARS_DISTRIBUTION_ID,
                                            invalidation_batch: {
                                              paths: {
                                                quantity: 1,
@@ -35,6 +35,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
 
   # Copied from https://makandracards.com/makandra/12323-carrierwave-auto-rotate-tagged-jpegs.
   process :auto_orient
+
   def auto_orient
     manipulate! do |image|
       image.tap(&:auto_orient)
@@ -42,7 +43,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   end
 
   def self.missing_avatar_thumb_url
-    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: EnvVars.ROOT_URL).freeze
+    @@missing_avatar_thumb_url ||= ActionController::Base.helpers.asset_url("missing_avatar_thumb.png", host: EnvConfig.ROOT_URL).freeze
   end
 
   # Choose what kind of storage to use for this uploader:
@@ -64,6 +65,7 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
 
   # Yup...
   attr_writer :override_column_value
+
   def identifier
     @override_column_value || super
   end
@@ -78,8 +80,14 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
 
   # Add an allow list of extensions which are allowed to be uploaded.
   # For images you might use something like this:
-  def extension_white_list
+  def extension_allowlist
     %w(jpg jpeg gif png)
+  end
+
+  # Additionally filter uploads by content type,
+  # mainly to mitigate CVE-2016-3714
+  def content_type_allowlist
+    %r{image/}
   end
 
   # Override the filename of the uploaded files:
@@ -88,14 +96,13 @@ class AvatarUploaderBase < CarrierWave::Uploader::Base
   # Also important: https://github.com/carrierwaveuploader/carrierwave/wiki/How-to%3A-Create-random-and-unique-filenames-for-all-versioned-files#note
   def filename
     if original_filename
-      # This is pretty gross. We only want to reuse the existing filename if
-      # a new avatar isn't being uploaded, we look at the saved_change_to_* attribute to
-      # determine if that happened.
-      if model && model.read_attribute(mounted_as).present? && !model.send(:"saved_change_to_#{mounted_as}?")
+      # This is pretty gross. We only want to reuse the existing filename if a new avatar isn't being uploaded.
+      # In order to determine the change, we look at the model attributes that are changing through ActiveRecord::Dirty.
+      if model && model.read_attribute(mounted_as).present? && !model.attribute_changed?(mounted_as)
         model.read_attribute(mounted_as)
       else
         # new filename
-        @name ||= "#{timestamp}.#{model.send(mounted_as).file.extension}" if original_filename
+        @name ||= "#{timestamp}.#{model.send(mounted_as).file.extension}" if original_filename.present?
       end
     end
   end

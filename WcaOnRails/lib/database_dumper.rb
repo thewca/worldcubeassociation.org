@@ -1,10 +1,21 @@
 # frozen_string_literal: true
 
 module DatabaseDumper
-  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id=competition_id WHERE showAtAll=1"
-  DUMP_TIMESTAMP_NAME = "developer_dump_exported_at"
-  VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type='VenueRoom') JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}"
-                         .freeze
+  WHERE_VISIBLE_COMP = "WHERE Competitions.showAtAll = 1"
+  JOIN_WHERE_VISIBLE_COMP = "JOIN Competitions ON Competitions.id = competition_id #{WHERE_VISIBLE_COMP}".freeze
+  DEV_TIMESTAMP_NAME = "developer_dump_exported_at"
+  RESULTS_TIMESTAMP_NAME = "public_results_exported_at"
+  VISIBLE_ACTIVITY_IDS = "SELECT A.id FROM schedule_activities AS A " \
+                         "JOIN venue_rooms ON (venue_rooms.id = holder_id AND holder_type = 'VenueRoom') " \
+                         "JOIN competition_venues ON competition_venues.id = competition_venue_id #{JOIN_WHERE_VISIBLE_COMP}".freeze
+  PUBLIC_COMPETITION_JOIN = "LEFT JOIN competition_events ON Competitions.id = competition_events.competition_id " \
+                            "LEFT JOIN competition_delegates ON Competitions.id = competition_delegates.competition_id " \
+                            "LEFT JOIN users AS users_delegates ON users_delegates.id = competition_delegates.delegate_id " \
+                            "LEFT JOIN competition_organizers ON Competitions.id = competition_organizers.competition_id " \
+                            "LEFT JOIN users AS users_organizers ON users_organizers.id = competition_organizers.organizer_id #{WHERE_VISIBLE_COMP} " \
+                            "GROUP BY Competitions.id".freeze
+
+  PUBLIC_RESULTS_VERSION = '1.0.0'
 
   def self.actions_to_column_sanitizers(columns_by_action)
     {}.tap do |column_sanitizers|
@@ -25,9 +36,9 @@ module DatabaseDumper
     end
   end
 
-  TABLE_SANITIZERS = {
+  DEV_SANITIZERS = {
     "Competitions" => {
-      where_clause: "WHERE showAtAll = TRUE",
+      where_clause: WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -36,12 +47,6 @@ module DatabaseDumper
           cityName
           countryId
           information
-          year
-          month
-          day
-          endYear
-          endMonth
-          endDay
           start_date
           end_date
           venue
@@ -221,11 +226,11 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
+          wca_id
           comments
           countryId
           gender
           name
-          rails_id
           subId
         ),
         db_default: %w(
@@ -233,9 +238,7 @@ module DatabaseDumper
           incorrect_wca_id_claim_count
         ),
         fake_values: {
-          "year" => "1954",
-          "month" => "12",
-          "day" => "4",
+          "dob" => "'1954-12-04'",
         },
       ),
     }.freeze,
@@ -384,7 +387,7 @@ module DatabaseDumper
     }.freeze,
     "competition_series" => {
       # One Series can be associated with many competitions, so any JOIN will inherently produce duplicates. Get rid of them by using GROUP BY.
-      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id WHERE showAtAll=1 GROUP BY competition_series.id",
+      where_clause: "LEFT JOIN Competitions ON Competitions.competition_series_id=competition_series.id #{WHERE_VISIBLE_COMP} GROUP BY competition_series.id",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -457,8 +460,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "completed_jobs" => :skip_all_rows,
-    "delayed_jobs" => :skip_all_rows,
     "delegate_reports" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
@@ -536,7 +537,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "rails_persons" => :skip_all_rows,
     "regional_organizations" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -592,6 +592,7 @@ module DatabaseDumper
         db_default: %w(ip),
         fake_values: {
           "comments" => "''", # Can't use :db_default here because comments does not have a default value.
+          "administrative_notes" => "''", # Can't use :db_default here because administrative_notes does not have a default value.
         },
       ),
     }.freeze,
@@ -657,7 +658,7 @@ module DatabaseDumper
           gender
           last_sign_in_at
           name
-          region
+          location
           registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
@@ -680,9 +681,6 @@ module DatabaseDumper
           consumed_timestep
           cookies_acknowledged
           current_sign_in_ip
-          encrypted_otp_secret
-          encrypted_otp_secret_iv
-          encrypted_otp_secret_salt
           encrypted_password
           last_sign_in_ip
           otp_backup_codes
@@ -726,20 +724,20 @@ module DatabaseDumper
     }.freeze,
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
-    # We have seen MySQL full table errors when trying to copy the entire linkings table.
-    # Fortunately, it is a not really important table, so we can simply skip all its rows.
-    "linkings" => :skip_all_rows,
-    "timestamps" => {
+    "server_settings" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           name
-          date
+          value
+          created_at
+          updated_at
         ),
       ),
     }.freeze,
+    "cronjob_statistics" => :skip_all_rows,
     "championships" => {
-      where_clause: "",
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -771,7 +769,9 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "stripe_charges" => :skip_all_rows,
+    "stripe_transactions" => :skip_all_rows,
+    "stripe_payment_intents" => :skip_all_rows,
+    "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
       where_clause: JOIN_WHERE_VISIBLE_COMP,
@@ -795,42 +795,303 @@ module DatabaseDumper
     }.freeze,
   }.freeze
 
-  def self.development_dump(dump_filename)
-    dump_db_name = "wca_development_db_dump"
+  RESULTS_SANITIZERS = {
+    "Results" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          competitionId
+          eventId
+          roundTypeId
+          pos
+          best
+          average
+          personName
+          personId
+          formatId
+          value1
+          value2
+          value3
+          value4
+          value5
+          regionalSingleRecord
+          regionalAverageRecord
+        ),
+        fake_values: {
+          "personCountryId" => "countryId",
+        }.freeze,
+      ),
+    }.freeze,
+    "RanksSingle" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          personId
+          eventId
+          best
+          worldRank
+          continentRank
+          countryRank
+        ),
+      ),
+    }.freeze,
+    "RanksAverage" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          personId
+          eventId
+          best
+          worldRank
+          continentRank
+          countryRank
+        ),
+      ),
+    }.freeze,
+    "RoundTypes" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          cellName
+          final
+          name
+          rank
+        ),
+      ),
+    }.freeze,
+    "Events" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          cellName
+          format
+          name
+          rank
+        ),
+      ),
+    }.freeze,
+    "Formats" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          expected_solve_count
+          name
+          sort_by
+          sort_by_second
+          trim_fastest_n
+          trim_slowest_n
+        ),
+      ),
+    }.freeze,
+    "Countries" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          continentId
+          iso2
+          name
+        ),
+      ),
+    }.freeze,
+    "Continents" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          latitude
+          longitude
+          name
+          recordName
+          zoom
+        ),
+      ),
+    }.freeze,
+    "Persons" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          subid
+          name
+          countryId
+          gender
+        ),
+        fake_values: {
+          "id" => "wca_id",
+        },
+      ),
+    }.freeze,
+    "Competitions" => {
+      where_clause: PUBLIC_COMPETITION_JOIN,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          name
+          cityName
+          countryId
+          information
+          venue
+          venueAddress
+          venueDetails
+          external_website
+          cellName
+          latitude
+          longitude
+        ),
+        fake_values: {
+          "cancelled" => "(Competitions.cancelled_at IS NOT NULL AND Competitions.cancelled_by IS NOT NULL)",
+          "eventSpecs" => "REPLACE(GROUP_CONCAT(DISTINCT competition_events.event_id), \",\", \" \")",
+          "wcaDelegate" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_delegates.name, \"}{mailto:\", users_delegates.email, \"}]\")) SEPARATOR \" \")",
+          "organiser" => "GROUP_CONCAT(DISTINCT(CONCAT(\"[{\", users_organizers.name, \"}{mailto:\", users_organizers.email, \"}]\")) SEPARATOR \" \")",
+          "year" => "YEAR(start_date)",
+          "month" => "MONTH(start_date)",
+          "day" => "DAY(start_date)",
+          "endMonth" => "MONTH(end_date)",
+          "endDay" => "DAY(end_date)",
+        }.freeze,
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "information" => "REGEXP_REPLACE(information, '[[:space:]]+', ' ')",
+        },
+      ),
+    }.freeze,
+    "Scrambles" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          competitionId
+          eventId
+          groupId
+          isExtra
+          roundTypeId
+          scramble
+          scrambleId
+          scrambleNum
+        ),
+      ),
+      tsv_sanitizers: actions_to_column_sanitizers(
+        fake_values: {
+          "scramble" => "IF(eventId='333mbf', REPLACE(scramble, '\\n', '|'), scramble)",
+        },
+      ),
+    }.freeze,
+    "championships" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          championship_type
+        ),
+      ),
+    }.freeze,
+    "eligible_country_iso2s_for_championship" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          championship_type
+          eligible_country_iso2
+        ),
+      ),
+    }.freeze,
+  }.freeze
+
+  # NOTE: The parameter dump_config_name has to correspond exactly to the desired key in config/database.yml
+  def self.with_dumped_db(dump_config_name, dump_sanitizers, dump_ts_name = nil)
+    primary_db_config = ActiveRecord::Base.connection_db_config
+
+    config = ActiveRecord::Base.configurations.configs_for(name: dump_config_name.to_s, include_hidden: true)
+    dump_db_name = config.configuration_hash[:database]
 
     LogTask.log_task "Creating temporary database '#{dump_db_name}'" do
-      ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
-      ActiveRecord::Base.connection.execute("CREATE DATABASE #{dump_db_name} DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci")
-      self.mysql("SOURCE #{Rails.root.join('db', 'structure.sql')}", dump_db_name)
+      ActiveRecord::Tasks::DatabaseTasks.drop config
+      ActiveRecord::Tasks::DatabaseTasks.create config
+      ActiveRecord::Tasks::DatabaseTasks.load_schema config
+    ensure
+      # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
+      ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
+
+      # We use GROUP_CONCAT for some fields to maintain backwards compatibility with the Results Export schema.
+      # Unfortunately, MySQL has an embarrassingly low default value for the max_length, so we steal the MariaDB default instead :)
+      ActiveRecord::Base.connection.execute("SET SESSION group_concat_max_len = 1048576")
     end
 
     LogTask.log_task "Populating sanitized tables in '#{dump_db_name}'" do
-      TABLE_SANITIZERS.each do |table_name, table_sanitizer|
+      dump_sanitizers.each do |table_name, table_sanitizer|
         next if table_sanitizer == :skip_all_rows
 
-        column_sanitizers = table_sanitizer[:column_sanitizers].select do |column_name, column_sanitizer|
-          column_sanitizer != :db_default
+        # Give an option to override source table name if schemas diverge
+        source_table = table_sanitizer[:source_table] || table_name
+
+        column_sanitizers = table_sanitizer[:column_sanitizers].reject do |_, column_sanitizer|
+          column_sanitizer == :db_default
         end
 
         column_expressions = column_sanitizers.map do |column_name, column_sanitizer|
-          column_sanitizer == :copy ? "#{table_name}.#{column_name}" : "#{column_sanitizer} as #{ActiveRecord::Base.connection.quote_column_name column_name}"
+          column_sanitizer == :copy ? "#{source_table}.#{column_name}" : "#{column_sanitizer} AS #{ActiveRecord::Base.connection.quote_column_name column_name}"
         end.join(", ")
 
         # Some column names like "rank" are reserved keywords starting mysql 8.0 and require quoting.
         quoted_column_list = column_sanitizers.keys.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }.join(", ")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{table_name} #{table_sanitizer[:where_clause]}"
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{table_sanitizer[:where_clause]}"
         ActiveRecord::Base.connection.execute(populate_table_sql)
       end
 
-      ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.timestamps (name, date) VALUES ('#{DUMP_TIMESTAMP_NAME}', UTC_TIMESTAMP())")
+      if dump_ts_name.present?
+        ActiveRecord::Base.connection.execute("INSERT INTO #{dump_db_name}.server_settings (name, value, created_at, updated_at) VALUES ('#{dump_ts_name}', UNIX_TIMESTAMP(), NOW(), NOW())")
+      end
     end
 
-    LogTask.log_task "Dumping '#{dump_db_name}' to '#{dump_filename}'" do
-      self.mysqldump(dump_db_name, dump_filename)
-    end
+    yield dump_db_name
   ensure
-    ActiveRecord::Base.connection.execute("DROP DATABASE IF EXISTS #{dump_db_name}")
+    ActiveRecord::Tasks::DatabaseTasks.drop config
+
+    # Need to connect to primary database again because the operations above redirect the entire ActiveRecord connection
+    ActiveRecord::Base.establish_connection(primary_db_config) if primary_db_config
+  end
+
+  def self.development_dump(dump_filename)
+    self.with_dumped_db(:developer_dump, DEV_SANITIZERS, DEV_TIMESTAMP_NAME) do |dump_db|
+      LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
+        self.mysqldump(dump_db, dump_filename)
+      end
+    end
+  end
+
+  def self.public_results_dump(dump_filename, tsv_folder)
+    self.with_dumped_db(:results_dump, RESULTS_SANITIZERS) do |dump_db|
+      LogTask.log_task "Running SQL dump to '#{dump_filename}'" do
+        self.mysqldump(dump_db, dump_filename)
+      end
+
+      RESULTS_SANITIZERS.each do |table_name, table_sanitizer|
+        next if table_sanitizer == :skip_all_rows
+
+        column_expressions = table_sanitizer[:column_sanitizers].map do |column_name, _|
+          tsv_sanitizer = table_sanitizer.dig(:tsv_sanitizers, column_name)
+
+          # TSV exports are generated by passing a certain command to MySQL via Bash.
+          # Bash interprets the MySQL column quoting backtick (`) as command execution (comparable to $()) in a string.
+          # So we have to mask them out to prevent Bash from "evaluating" column names.
+          bash_quoted_column_name = ActiveRecord::Base.connection.quote_column_name(column_name).gsub('`', '\\\\`')
+
+          tsv_sanitizer.present? ? "#{tsv_sanitizer} AS #{bash_quoted_column_name}" : "#{table_name}.#{column_name}"
+        end.join(", ")
+
+        populate_table_sql = "SELECT #{column_expressions} FROM #{table_name}"
+
+        LogTask.log_task "Writing TSV for #{table_name}" do
+          export_file = "#{tsv_folder}/WCA_export_#{table_name}.tsv"
+          self.mysqldump_tsv(dump_db, populate_table_sql, export_file)
+        end
+      end
+    end
   end
 
   def self.mysql_cli_creds
@@ -842,16 +1103,20 @@ module DatabaseDumper
     bash!("mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}")
   end
 
+  def self.mysqldump_tsv(database, command, dest_filename)
+    bash!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+  end
+
   def self.mysqldump(db_name, dest_filename)
     # Use --set-gtid-purged=OFF to avoid having `SET @@GLOBAL.gtid_purged` and `SET @@SESSION.SQL_LOG_BIN`
     # in the resulting dump file, as setting these require additional parmissions
     # making it troublesome to import the dump into a managed databases like the staging one.
-    bash!("mysqldump --set-gtid-purged=OFF #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
+    bash!("mysqldump #{"--set-gtid-purged=OFF " if Rails.env.production?}#{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
     bash!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
   end
 
-  def self.filter_out_mysql_warning
-    '2>&1 | grep -v "[Warning] Using a password on the command line interface can be insecure." || true'
+  def self.filter_out_mysql_warning(dest_filename = nil)
+    "2>&1 | grep -v \"\\[Warning\\] Using a password on the command line interface can be insecure.\"#{dest_filename.present? ? " > #{dest_filename}" : ''} || true"
   end
 end
 

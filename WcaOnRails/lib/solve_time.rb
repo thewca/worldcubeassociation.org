@@ -252,7 +252,7 @@ class SolveTime
     time_limit_minutes = [60, @attempted * 10].min
     time_limit_seconds = time_limit_minutes * 60
     # We let up to 30s margin for +2 during the attempt
-    # The error message 'hide' the fact that we let a 30s margin above the timelimit, but we're fine with it
+    # The error message 'hide' the fact that we let a 30s margin above the time limit, but we're fine with it
     if time_seconds > (time_limit_seconds + 30)
       errors.add(:base, "should be less than or equal to #{time_limit_minutes} minutes")
     end

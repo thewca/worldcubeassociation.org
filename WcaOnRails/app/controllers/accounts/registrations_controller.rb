@@ -8,18 +8,18 @@ class Accounts::RegistrationsController < Devise::RegistrationsController
 
   private
 
-  def check_captcha
-    return if verify_recaptcha
+    def check_captcha
+      return if verify_recaptcha
 
-    build_resource(sign_up_params)
-    resource.validate
+      build_resource(sign_up_params)
+      resource.validate
 
-    clean_up_passwords resource
-    set_minimum_password_length
+      clean_up_passwords resource
+      set_minimum_password_length
 
-    respond_with_navigational(resource) do
-      flash.now[:recaptcha_error] = flash[:recaptcha_error]
-      render :new
+      respond_with_navigational(resource) do
+        flash.now[:recaptcha_error] = flash[:recaptcha_error]
+        render :new
+      end
     end
-  end
 end

@@ -8,12 +8,14 @@ hu:
     XS: Több ország (Dél-Amerika)
     #original_hash: 374ac0d
     XM: Több ország (Amerika)
-    #original_hash: 918c53a
-    MO: Makaó
-    #original_hash: 2f488ff
-    HK: Hongkong
+    #original_hash: 77e4070
+    MO: Makaó, Kína
+    #original_hash: e758117
+    HK: Hongkong, Kína
     #original_hash: 4e8bd04
     KR: Korea
+    #original_hash: fefc818
+    TW: Kínai Tajpej
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Több kontinens
@@ -3221,22 +3223,6 @@ hu:
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
         címre.
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Kapcsolat
-      #original_hash: 69ba020
-      find_relations: Kockások közötti kapcsolat megkeresése
-      #original_hash: 5d6056d
-      show_relation: Mutasd a kapcsolatot!
-      connectives:
-        #original_hash: f85194e
-        was_at: Részt vett az alábbi versenyen
-        #original_hash: 8c00243
-        together_with: Együtt az alábbi versenyzővel
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Kérlek adj meg két különböző és érvényes WCA ID-t!
   search_results:
     index:
       #original_hash: db98a68

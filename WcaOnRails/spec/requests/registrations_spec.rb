@@ -540,38 +540,41 @@ RSpec.describe "registrations" do
       end
 
       context "with a valid credit card without SCA" do
-        let!(:card) { FactoryBot.create(:credit_card) }
-        let!(:pm) {
-          # This emulates the client side action from the user: when submitting a payment
-          # Stripe creates a payment method and POST its id to us.
-          Stripe::PaymentMethod.create(
-            { type: "card", card: card },
-            stripe_account: competition.connected_stripe_account_id,
-          )
-        }
-
-        it "rejects insufficient payment with valid credit card" do
-          payment_amount = registration.outstanding_entry_fees / 2
-          expect {
-            post registration_payment_intent_path(registration.id), params: {
-              payment_method_id: pm.id,
-              amount: payment_amount,
-            }
-          }.to_not change { registration.reload.outstanding_entry_fees }
+        it "rejects insufficient payment" do
+          outstanding_fees_money = registration.outstanding_entry_fees
+          post registration_payment_intent_path(registration.id), params: {
+            amount: outstanding_fees_money / 2,
+          }
           expect_error_to_be(response, I18n.t("registrations.payment_form.alerts.amount_too_low"))
+          # Should not have created a payment intent in the first place, so assume `payment_intent` to be nil.
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to be_nil
+          expect(registration.reload.outstanding_entry_fees).to eq(outstanding_fees_money)
         end
 
-        it "processes payment with a valid credit card without SCA" do
+        it "processes sufficient payment" do
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          # NOTE: the #process_payment_intent endpoint doesn't redirect, it's
-          # the 'register' page which does.
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          # mimic the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
-          charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
           expect(charge.metadata.competition).to eq competition.name
@@ -580,71 +583,128 @@ RSpec.describe "registrations" do
           expect(registration.registration_payments.first.user).to eq user
         end
 
-        it "processes payment with donation and valid credit card without SCA" do
+        it "processes sufficient payment with donation" do
           donation_lowest_denomination = 100
           payment_amount = registration.outstanding_entry_fees.cents + donation_lowest_denomination
+
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: payment_amount,
           }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          # mimic the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
           expect(registration.reload.outstanding_entry_fees.cents).to eq(-donation_lowest_denomination)
           expect(registration.paid_entry_fees.cents).to eq payment_amount
-          charge = Stripe::Charge.retrieve(registration.registration_payments.first.stripe_charge_id, stripe_account: competition.connected_stripe_account_id)
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq payment_amount
         end
 
         it "insert a success in the stripe journal" do
-          expect(StripeCharge.all.length).to eq 0
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge_id = registration.reload.registration_payments.first.stripe_charge_id
-          stripe_charge = StripeCharge.find_by(stripe_charge_id: stripe_charge_id)
-          expect(stripe_charge&.status).to eq "success"
-          metadata = JSON.parse(stripe_charge.metadata)["metadata"]
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          # mimic the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          stripe_transaction = payment_intent.reload.stripe_transaction
+          # Now we should have a confirmation after calling the return_url hook :)
+          expect(payment_intent.confirmed_at).to_not be_nil
+          expect(stripe_transaction).to_not be_nil
+          expect(stripe_transaction.status).to eq "succeeded"
+          metadata = stripe_transaction.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
       end
 
       context "with a valid 3D-secure credit card" do
-        let!(:card) { FactoryBot.create(:credit_card, :sca_card) }
-        let!(:pm) {
-          # This emulates the client side action from the user: when submitting a payment
-          # Stripe creates a payment method and POST its id to us.
-          Stripe::PaymentMethod.create(
-            { type: "card", card: card },
-            stripe_account: competition.connected_stripe_account_id,
-          )
-        }
-
         it "asks for further action before recording payment" do
           # The #process_payment_intent endpoint doesn't redirect, it's
           # the 'register' page which does.
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          # NOTE: The PI confirmation sends a redirect code where the user would _normally_ proceed with authentication,
+          # but we cannot do that programmatically. So we just take the status quo as "stuck in SCA". (See also comment below)
           expect {
-            post registration_payment_intent_path(registration.id), params: {
-              payment_method_id: pm.id,
-              amount: registration.outstanding_entry_fees.cents,
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_authenticationRequired' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+            # mimic the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_completion_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
+
           expect(registration.paid_entry_fees).to eq 0
-          response_json = JSON.parse(response.body)
-          expect(response_json["requires_action"]).to be true
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_action')
           # That's as far as we can go, testing the authentication success/failure
           # must be done by clicking on a modal.
         end
 
-        it "inserts an 'intent registered' event in the stripe journal" do
-          expect(StripeCharge.all.length).to eq 0
+        it "inserts a 'confirmation pending' event in the stripe journal" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge = StripeCharge.first
-          expect(stripe_charge&.status).to eq "payment_intent_registered"
-          metadata = JSON.parse(stripe_charge.metadata)
-          expect(metadata["payment_method"]).to eq pm.id
-          expect(metadata["metadata"]["competition"]).to eq competition.name
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_authenticationRequired' },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+          # mimic the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          stripe_transaction = payment_intent.reload.stripe_transaction
+          # Now we should still wait for the confirmation because SCA hasn't been completed yet
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(stripe_transaction).to_not be_nil
+          expect(stripe_transaction.status).to eq 'requires_action'
+          metadata = stripe_transaction.parameters["metadata"]
+          expect(metadata["competition"]).to eq competition.name
         end
       end
 
@@ -652,62 +712,322 @@ RSpec.describe "registrations" do
       # not to actually test Stripe's correctness...
       context "rejected credit cards" do
         it "rejects payment with declined credit card" do
-          card = FactoryBot.create(:credit_card, :invalid)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
-            stripe_account: competition.connected_stripe_account_id,
-          )
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
           expect {
-            post registration_payment_intent_path(registration.id), params: {
-              payment_method_id: pm.id,
-              amount: registration.outstanding_entry_fees.cents,
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclined' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          expect {
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_completion_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
-          expect_error_to_be(response, "Your card was declined.")
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_transaction.error).to eq('card_declined')
         end
 
         it "rejects payment with expired credit card" do
-          card = FactoryBot.create(:credit_card, :expired)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
-            stripe_account: competition.connected_stripe_account_id,
-          )
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          expect_error_to_be(response, "Your card has expired.")
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclinedExpiredCard' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card has expired.")
+
+          expect {
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_completion_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
+            }
+          }.to_not change { registration.reload.outstanding_entry_fees }
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_transaction.error).to eq('expired_card')
         end
 
         it "rejects payment with incorrect cvc" do
-          card = FactoryBot.create(:credit_card, :incorrect_cvc)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
-            stripe_account: competition.connected_stripe_account_id,
-          )
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          expect_error_to_be(response, "Your card's security code is incorrect.")
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclinedIncorrectCvc' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card's security code is incorrect.")
+
+          expect {
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_completion_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
+            }
+          }.to_not change { registration.reload.outstanding_entry_fees }
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_transaction.error).to eq('incorrect_cvc')
+        end
+
+        it "rejects payment due to fraud protection" do
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_radarBlock' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          expect {
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_completion_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
+            }
+          }.to_not change { registration.reload.outstanding_entry_fees }
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_transaction.error).to eq('card_declined')
+        end
+
+        it "rejects payment despite successful 3DSecure" do
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_authenticationRequiredChargeDeclinedInsufficientFunds' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+            # mimick the response that Stripe sends to our return_url after completing the checkout UI
+            get registration_payment_completion_path(registration.id), params: {
+              payment_intent: payment_intent.stripe_id,
+              payment_intent_client_secret: payment_intent.client_secret,
+            }
+          }.to_not change { registration.reload.outstanding_entry_fees }
+
+          expect(registration.paid_entry_fees).to eq 0
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_action')
+          expect(payment_intent.stripe_transaction.error).to be_nil
         end
 
         it "records a failure in the stripe journal" do
-          expect(StripeCharge.all.length).to eq 0
-          card = FactoryBot.create(:credit_card, :invalid)
-          pm = Stripe::PaymentMethod.create(
-            { type: "card", card: card },
-            stripe_account: competition.connected_stripe_account_id,
-          )
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
           post registration_payment_intent_path(registration.id), params: {
-            payment_method_id: pm.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          stripe_charge = StripeCharge.first
-          expect(stripe_charge&.status).to eq "failure"
-          metadata = JSON.parse(stripe_charge.metadata)
-          expect(metadata["payment_method"]).to eq pm.id
-          expect(metadata["metadata"]["competition"]).to eq competition.name
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclined' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          stripe_transaction = payment_intent.reload.stripe_transaction
+          # Now we should still wait for the confirmation because the card has been declined
+          expect(payment_intent.confirmed_at).to be_nil
+          expect(stripe_transaction).to_not be_nil
+          expect(stripe_transaction.status).to eq "requires_payment_method"
+          expect(stripe_transaction.error).to_not be_nil
+          metadata = stripe_transaction.parameters["metadata"]
+          expect(metadata["competition"]).to eq competition.name
+        end
+
+        it "recycles a PI when the previous payment was unsuccessful" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          first_pi_stripe_id = payment_intent.stripe_id
+          first_pi_parameters = payment_intent.parameters
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclined' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          # Try to pay again. The old PI should be fetched as "not pending", so we expect that no new PI is being created
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          new_payment_intents = registration.reload.stripe_payment_intents
+          expect(new_payment_intents.size).to eq(1)
+
+          # This _should_ be the same intent as the one we previously sent. Check that it really is.
+          recycled_intent = new_payment_intents.first
+
+          expect(recycled_intent.stripe_id).to eq(first_pi_stripe_id)
+          expect(recycled_intent.parameters).to eq(first_pi_parameters)
+        end
+
+        it "recycles a PI even when the amount was updated" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          first_pi_stripe_id = payment_intent.stripe_id
+          first_pi_parameters = payment_intent.parameters
+
+          expect {
+            # mimic the user clicking through the interface
+            Stripe::PaymentIntent.confirm(
+              payment_intent.stripe_id,
+              { payment_method: 'pm_card_visa_chargeDeclined' },
+              stripe_account: competition.connected_stripe_account_id,
+            )
+          }.to raise_error(Stripe::StripeError, "Your card was declined.")
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          # Try to pay again. The old PI should be fetched as "not pending", so we expect that no new PI is being created
+          post registration_payment_intent_path(registration.id), params: {
+            # Pay some non-zero additional amount / donations.
+            amount: registration.outstanding_entry_fees.cents * 2,
+          }
+          new_payment_intents = registration.reload.stripe_payment_intents
+          expect(new_payment_intents.size).to eq(1)
+
+          # This _should_ be the same intent as the one we previously sent. Check that it really is.
+          recycled_intent = new_payment_intents.first
+
+          expect(recycled_intent.stripe_id).to eq(first_pi_stripe_id)
+          # The amount is supposed to have changed!
+          expect(recycled_intent.parameters).not_to eq(first_pi_parameters)
+        end
+
+        it "does NOT recycle a PI when the payment is successful" do
+          expect(StripeTransaction.count).to eq 0
+          expect(StripePaymentIntent.count).to eq 0
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.stripe_payment_intents.first
+          expect(payment_intent).to_not be_nil
+          # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
+          expect(payment_intent.confirmed_at).to be_nil
+
+          first_pi_stripe_id = payment_intent.stripe_id
+          first_pi_parameters = payment_intent.parameters
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: competition.connected_stripe_account_id,
+          )
+
+          # mimick the response that Stripe sends to our return_url after completing the checkout UI
+          get registration_payment_completion_path(registration.id), params: {
+            payment_intent: payment_intent.stripe_id,
+            payment_intent_client_secret: payment_intent.client_secret,
+          }
+
+          expect(registration.registration_payments.size).to eq(1)
+
+          # The entry fee changed. Simulate a valid reason for the user having to pay again.
+          competition.update!(base_entry_fee_lowest_denomination: 2000)
+
+          # Try to pay again. The old PI should be fetched as "completed", so we expect that a new PI is being created
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          new_payment_intents = registration.reload.stripe_payment_intents
+          expect(new_payment_intents.size).to eq(2)
+
+          # This should _not_ be the same intent as the one we previously sent.
+          recycled_intent = new_payment_intents.last
+
+          expect(recycled_intent.stripe_id).not_to eq(first_pi_stripe_id)
+          # The parameters should be the same, because
+          #   (a) we're working on the same registration, so metadata is equal
+          #   (b) the amount has doubled, so we're paying the same amount again that we already paid before
+          expect(recycled_intent.parameters).to eq(first_pi_parameters)
         end
       end
     end

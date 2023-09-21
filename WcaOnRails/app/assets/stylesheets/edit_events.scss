@@ -1,59 +1,67 @@
 #events-edit-area {
-  .panel-heading {
-    padding-top: 10px;
-    padding-bottom: 10px;
+  .event-panel-container {
+    .event-panel {
+      width: '100%';
 
-    .panel-title {
-      white-space: nowrap;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-
-      $cubing-icon-size: 55px;
-
-      .img-thumbnail.cubing-icon {
-        font-size: 40px;
-        position: absolute;
-        top: -5px;
-        height: $cubing-icon-size;
-        z-index: 1;
-
-        &::before {
-          vertical-align: 0;
-        }
+      .event-panel__heading {
+        background-color: #f5f5f5;
+        color: #333;
       }
 
-      .title {
-        padding-left: $cubing-icon-size;
-        padding-right: 5px;
-      }
+      .event-panel__rounds-table {
+        width: 100%;
+        padding: 0.5em;
+        font-size: 0.85em;
+        position: relative;
 
-      .add-event {
-        margin-left: auto;
-      }
-
-      .input-group {
-        margin-left: auto;
-
-        select {
-          width: 100px;
+        thead {
+          th {
+            text-align: center;
+          }
         }
 
-        .input-group-btn {
-          display: inline-block;
+        tbody {
+          .round-row__index {
+            font-size: medium;
+            padding: 0.5em;
+          }
+
+          .round-row__format {
+            .ui.dropdown  {
+              font-size: 1em;
+              line-height: 1em;
+            }
+          }
+
+          .round-row__scramble-set-count {
+            .input {
+              width: 5em;
+
+              input {
+                font-size: 1em;
+                line-height: 1em;
+                padding: 0.25em 0.5em;
+              }
+            }
+          }
+
         }
+
+      }
+
+      button.editable-text-button {
+        font-size: 1em;
+        padding: 0.5em 0.5em;
       }
     }
-  }
 
-  .panel-body {
-    select[name="format"] {
-      width: 100%;
+    .ui.dropdown .menu {
+      opacity: 1;
+      z-index: 1;
     }
 
-    input[name="scrambleSetCount"] {
-      display: inline-block;
-      width: 50px;
+    .go-behind {
+      position: relative !important;
     }
   }
 }

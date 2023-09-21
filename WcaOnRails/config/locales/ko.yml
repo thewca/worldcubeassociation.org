@@ -8,12 +8,14 @@ ko:
     XS: 여러 나라 (남미)
     #original_hash: 374ac0d
     XM: 여러 나라 (북미)
-    #original_hash: 918c53a
-    MO: 마카오
-    #original_hash: 2f488ff
-    HK: 홍콩
+    #original_hash: 77e4070
+    MO: 마카오, 중국
+    #original_hash: e758117
+    HK: 홍콩, 중국
     #original_hash: 4e8bd04
     KR: 대한민국
+    #original_hash: fefc818
+    TW: 차이니스 타이베이
   continents:
     #original_hash: 0f138c8
     Multiple Continents: 여러 대륙
@@ -2279,22 +2281,6 @@ ko:
       content_html: >-
         WCA 워크북 도우미로 생성된 대회 결과 JSON 파일을 다음 이메일로 보냅니다.  <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: 거리
-      #original_hash: 69ba020
-      find_relations: 큐버 사이의 거리를 계산합니다
-      #original_hash: 5d6056d
-      show_relation: 거리 계산!
-      connectives:
-        #original_hash: f85194e
-        was_at: 선수는 다음 대회
-        #original_hash: 8c00243
-        together_with: 에 다음 선수와 함께 참가 했습니다
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 올바른 두개의 다른 WCA ID를 제공하세요
   search_results:
     index:
       #original_hash: db98a68

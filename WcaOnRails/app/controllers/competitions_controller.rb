@@ -43,6 +43,8 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
 
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe]
+
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
@@ -135,7 +137,7 @@ class CompetitionsController < ApplicationController
     else
       @competitions = @competitions.where("end_date < ?", Date.today).reverse_order
       unless params[:year] == "all years"
-        @competitions = @competitions.where(year: params[:year])
+        @competitions = @competitions.where("YEAR(start_date) = :comp_year", comp_year: params[:year])
       end
     end
 
@@ -234,22 +236,22 @@ class CompetitionsController < ApplicationController
     comp = competition_from_params
     if ComputeAuxiliaryData.in_progress?
       flash[:danger] = t('competitions.messages.computing_auxiliary_data')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     unless comp.results.any?
       flash[:danger] = t('competitions.messages.no_results')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     if comp.main_event && comp.results.where(eventId: comp.main_event_id).empty?
       flash[:danger] = t('competitions.messages.no_main_event_results', event_name: comp.main_event.name)
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     if comp.results_posted?
       flash[:danger] = t('competitions.messages.results_already_posted')
-      return redirect_to admin_edit_competition_path(comp)
+      return redirect_to competition_admin_import_results_path(comp)
     end
 
     ActiveRecord::Base.transaction do
@@ -259,7 +261,7 @@ class CompetitionsController < ApplicationController
     end
 
     flash[:success] = t('competitions.messages.results_posted')
-    redirect_to admin_edit_competition_path(comp)
+    redirect_to competition_admin_import_results_path(comp)
   end
 
   def orga_close_reg_when_full_limit
@@ -287,19 +289,19 @@ class CompetitionsController < ApplicationController
   end
 
   def get_nearby_competitions(competition)
-    nearby_competitions = competition.nearby_competitions_warning[0, 10]
+    nearby_competitions = competition.nearby_competitions_warning.to_a[0, 10]
     nearby_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     nearby_competitions
   end
 
   def get_series_eligible_competitions(competition)
-    series_eligible_competitions = competition.series_eligible_competitions
+    series_eligible_competitions = competition.series_eligible_competitions.to_a
     series_eligible_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     series_eligible_competitions
   end
 
   def get_colliding_registration_start_competitions(competition)
-    colliding_registration_start_competitions = competition.colliding_registration_start_competitions
+    colliding_registration_start_competitions = competition.colliding_registration_start_competitions.to_a
     colliding_registration_start_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     colliding_registration_start_competitions
   end
@@ -324,7 +326,7 @@ class CompetitionsController < ApplicationController
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: EnvVars.ROOT_URL + competitions_stripe_connect_path,
+      redirect_uri: EnvConfig.ROOT_URL + competitions_stripe_connect_path,
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
@@ -355,7 +357,18 @@ class CompetitionsController < ApplicationController
       auth_scheme: :request_body,
     }
 
-    OAuth2::Client.new(EnvVars.STRIPE_CLIENT_ID, EnvVars.STRIPE_API_KEY, options)
+    OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
+  end
+
+  def disconnect_stripe
+    comp = competition_from_params
+    if comp.connected_stripe_account_id
+      comp.update!(connected_stripe_account_id: nil)
+      flash[:success] = t('competitions.messages.stripe_disconnected_success')
+    else
+      flash[:danger] = t('competitions.messages.stripe_disconnected_failure')
+    end
+    redirect_to competitions_payment_setup_path(comp)
   end
 
   def clone_competition
@@ -410,7 +423,7 @@ class CompetitionsController < ApplicationController
     # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
     price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
 
-    if params[:competitor_limit_enabled]
+    if ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled])
       estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
       estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
 
@@ -536,6 +549,19 @@ class CompetitionsController < ApplicationController
         redirect_to root_url
       end
     elsif @competition.update(comp_params_minus_id)
+      # Automatically compute the cellName and ID for competitions with a short name.
+      if !@competition.confirmed? && @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        old_competition_id = @competition.id
+        @competition.create_id_and_cell_name(force_override: true)
+
+        # Save the newly computed cellName without breaking the ID associations
+        # (which in turn is handled by a hack in the next if-block below)
+        @competition.with_old_id { @competition.save! }
+
+        # Try to update the ID only if it _actually_ changed
+        new_id = @competition.id unless @competition.id == old_competition_id
+      end
+
       if new_id && !@competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
@@ -576,28 +602,31 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
-    competition_ids = current_user.organized_competitions.pluck(:competition_id)
-    competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
-    registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
-    registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-    @registered_for_by_competition_id = registrations.uniq.to_h do |r|
-      [r.competition.id, r]
+    ActiveRecord::Base.connected_to(role: :read_replica) do
+      competition_ids = current_user.organized_competitions.pluck(:competition_id)
+      competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
+      registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
+      registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+      @registered_for_by_competition_id = registrations.uniq.to_h do |r|
+        [r.competition.id, r]
+      end
+      competition_ids.concat(@registered_for_by_competition_id.keys)
+      if current_user.person
+        competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
+      end
+      # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
+      # For example, mailing all competitors about the cancellation.
+      # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
+      competitions = Competition.includes(:delegate_report, :delegates)
+                                .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
+                                .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
+      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
+      bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
+      @bookmarked_competitions = Competition.not_over
+                                            .where(id: bookmarked_ids.uniq)
+                                            .sort_by(&:start_date)
+      @show_registration_status = params[:show_registration_status] == "on"
     end
-    competition_ids.concat(@registered_for_by_competition_id.keys)
-    if current_user.person
-      competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
-    end
-    # An organiser might still have duties to perform for a cancelled competition until the date of the competition has passed.
-    # For example, mailing all competitors about the cancellation.
-    # In general ensuring ease of access until it is certain that they won't need to frequently visit the page anymore.
-    competitions = Competition.includes(:delegate_report, :delegates)
-                              .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
-                              .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
-    @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
-    bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
-    @bookmarked_competitions = Competition.not_over
-                                          .where(id: bookmarked_ids.uniq)
-                                          .sort_by(&:start_date)
   end
 
   def for_senior

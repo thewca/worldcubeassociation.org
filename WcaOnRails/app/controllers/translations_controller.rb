@@ -51,7 +51,8 @@ class TranslationsController < ApplicationController
 
   # rubocop:disable Style/NumericLiterals
   VERIFIED_TRANSLATORS_BY_LOCALE = {
-    "cs" => [8583, 169302],
+    "ca" => [94007, 15295],
+    "cs" => [8583],
     "da" => [6777],
     "de" => [870, 7121, 7139],
     "eo" => [1517],

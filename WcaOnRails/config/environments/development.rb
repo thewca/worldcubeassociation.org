@@ -22,8 +22,13 @@ Rails.application.configure do
   if Rails.root.join('tmp', 'caching-dev.txt').exist?
     config.action_controller.perform_caching = true
     config.action_controller.enable_fragment_cache_logging = true
-
-    config.cache_store = :memory_store
+    # If the Developer is not running through Docker, Redis caching is disabled
+    cache_redis_url = EnvConfig.CACHE_REDIS_URL
+    if cache_redis_url.empty?
+      config.cache_store = :memory_store
+    else
+      config.cache_store = :redis_cache_store, { url: cache_redis_url }
+    end
     config.public_file_server.headers = {
       'Cache-Control' => "public, max-age=#{2.days.to_i}",
     }
@@ -40,7 +45,7 @@ Rails.application.configure do
 
   # Setup for mailcatcher (http://mailcatcher.me/)
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: 'localhost', port: 1025 }
+  config.action_mailer.smtp_settings = { address: EnvConfig.MAILCATCHER_SMTP_HOST, port: 1025 }
 
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
@@ -72,7 +77,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   config.after_initialize do
-    Bullet.enable = !EnvVars.DISABLE_BULLET?
+    Bullet.enable = EnvConfig.ENABLE_BULLET?
     Bullet.alert = true
     Bullet.bullet_logger = true
     Bullet.console = true
@@ -86,6 +91,12 @@ Rails.application.configure do
     # not using the rounds association.
     Bullet.add_safelist type: :unused_eager_loading, class_name: "CompetitionEvent", association: :rounds
   end
+
+  # uncomment this if you want to test error pages in development
+  # config.consider_all_requests_local = false
+  # config.exceptions_app = ->(env) {
+  #   ErrorsController.action(:show).call(env)
+  # }
 
   # Annotate rendered view with file names.
   # config.action_view.annotate_rendered_view_with_filenames = true

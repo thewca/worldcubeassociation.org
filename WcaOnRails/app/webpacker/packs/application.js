@@ -42,4 +42,6 @@ window.wca.setUrlParams = setUrlParams;
 const componentRequireContext = require.context('components', true);
 const ReactRailsUJS = require('react_ujs');
 
+// see: https://github.com/reactjs/react-rails#component-name
+// eslint-disable-next-line react-hooks/rules-of-hooks
 ReactRailsUJS.useContext(componentRequireContext);

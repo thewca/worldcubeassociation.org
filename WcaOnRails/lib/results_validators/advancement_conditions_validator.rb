@@ -23,56 +23,55 @@ module ResultsValidators
     # They are not taken into account in advancement conditions.
     IGNORE_ROUND_TYPES = ["0", "h", "b"].freeze
 
-    @@desc = "This validator checks that advancement between rounds is correct according to the regulations."
+    @desc = "This validator checks that advancement between rounds is correct according to the regulations."
 
     def self.has_automated_fix?
       false
     end
 
-    def validate(competition_ids: [], model: Result, results: nil)
-      reset_state
-      # Get all results if not provided
-      results ||= model.sorted_for_competitions(competition_ids)
+    def competition_associations
+      {
+        rounds: [],
+      }
+    end
 
-      results_by_competition_id = results.group_by(&:competitionId)
+    def run_validation(validator_data)
+      ordered_round_type_ids = RoundType.order(:rank).all.map(&:id)
 
-      competitions_start_dates = Competition.where(id: results_by_competition_id.keys).select(:id, :start_date).to_h do |c|
-        [c.id, c.start_date]
-      end
+      validator_data.each do |competition_data|
+        competition = competition_data.competition
+        comp_start_date = competition.start_date
 
-      results_by_competition_id.each do |competition_id, results_for_comp|
-        competition = Competition.includes(:rounds).find(competition_id)
-        comp_start_date = competitions_start_dates[competition_id]
-        results_by_event_id = results_for_comp.group_by(&:eventId)
+        results_by_event_id = competition_data.results.group_by(&:eventId)
         results_by_event_id.each do |event_id, results_for_event|
-          results_by_event_id[event_id] = results_for_event.group_by(&:roundTypeId)
-        end
-        ordered_round_type_ids = RoundType.order(:rank).all.map(&:id)
-        results_by_event_id.each do |event_id, results_by_round_type_id|
+          results_by_round_type_id = results_for_event.group_by(&:roundTypeId)
+
           round_types_in_results = results_by_round_type_id.keys.reject do |round_type_id|
             IGNORE_ROUND_TYPES.include?(round_type_id)
           end
+
           remaining_number_of_rounds = round_types_in_results.size
           previous_round_type_id = nil
+
           (ordered_round_type_ids & round_types_in_results).each do |round_type_id|
             remaining_number_of_rounds -= 1
             number_of_people_in_round = results_by_round_type_id[round_type_id].size
             round_id = "#{event_id}-#{round_type_id}"
             if number_of_people_in_round <= 7 && remaining_number_of_rounds > 0
               # https://www.worldcubeassociation.org/regulations/#9m3: Rounds with 7 or fewer competitors must not have subsequent rounds.
-              @errors << ValidationError.new(:rounds, competition_id,
+              @errors << ValidationError.new(:rounds, competition.id,
                                              REGULATION_9M3_ERROR,
                                              round_id: round_id)
             end
             if number_of_people_in_round <= 15 && remaining_number_of_rounds > 1
               # https://www.worldcubeassociation.org/regulations/#9m2: Rounds with 15 or fewer competitors must have at most one subsequent round.
-              @errors << ValidationError.new(:rounds, competition_id,
+              @errors << ValidationError.new(:rounds, competition.id,
                                              REGULATION_9M2_ERROR,
                                              round_id: round_id)
             end
             if number_of_people_in_round <= 99 && remaining_number_of_rounds > 2
               # https://www.worldcubeassociation.org/regulations/#9m1: Rounds with 99 or fewer competitors must have at most one subsequent round.
-              @errors << ValidationError.new(:rounds, competition_id,
+              @errors << ValidationError.new(:rounds, competition.id,
                                              REGULATION_9M1_ERROR,
                                              round_id: round_id)
             end
@@ -92,10 +91,11 @@ module ResultsValidators
               if condition.instance_of? AdvancementConditions::AttemptResultCondition
                 current_persons = results_by_round_type_id[round_type_id].map(&:wca_id)
                 people_over_condition = previous_results.filter do |r|
-                  current_persons.include?(r.wca_id) && r.send(r.format.sort_by) > condition.attempt_result
+                  sort_by_column = r.format.sort_by == "single" ? :best : :average
+                  current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
                 end.map(&:wca_id)
                 if people_over_condition.any?
-                  @errors << ValidationError.new(:rounds, competition_id,
+                  @errors << ValidationError.new(:rounds, competition.id,
                                                  COMPETED_NOT_QUALIFIED_ERROR,
                                                  round_id: round_id,
                                                  ids: people_over_condition.join(","),
@@ -107,7 +107,7 @@ module ResultsValidators
               if Date.new(2006, 7, 20) <= comp_start_date &&
                  comp_start_date <= Date.new(2010, 4, 13)
                 if number_of_people_in_round >= number_of_people_in_previous_round
-                  @errors << ValidationError.new(:rounds, competition_id,
+                  @errors << ValidationError.new(:rounds, competition.id,
                                                  OLD_REGULATION_9P_ERROR,
                                                  round_id: round_id)
                 end
@@ -116,43 +116,43 @@ module ResultsValidators
                 # Article 9p1, since April 14, 2010
                 # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.
                 if number_of_people_in_round > max_advancing
-                  @errors << ValidationError.new(:rounds, competition_id,
+                  @errors << ValidationError.new(:rounds, competition.id,
                                                  REGULATION_9P1_ERROR,
                                                  round_id: round_id)
                 end
                 if condition
-                  theoritical_number_of_people = condition.max_advancing(previous_results)
-                  if number_of_people_in_round > theoritical_number_of_people
-                    @warnings << ValidationWarning.new(:rounds, competition_id,
+                  theoretical_number_of_people = condition.max_advancing(previous_results)
+                  if number_of_people_in_round > theoretical_number_of_people
+                    @warnings << ValidationWarning.new(:rounds, competition.id,
                                                        TOO_MANY_QUALIFIED_WARNING,
                                                        round_id: round_id,
                                                        actual: number_of_people_in_round,
-                                                       expected: theoritical_number_of_people,
+                                                       expected: theoretical_number_of_people,
                                                        condition: condition.to_s(previous_round))
                   end
-                  if theoritical_number_of_people > max_advancing
-                    @errors << ValidationError.new(:rounds, competition_id,
+                  if theoretical_number_of_people > max_advancing
+                    @errors << ValidationError.new(:rounds, competition.id,
                                                    ROUND_9P1_ERROR,
                                                    round_id: round_id,
                                                    condition: condition.to_s(previous_round))
                   end
                   # This comes from https://github.com/thewca/worldcubeassociation.org/issues/5587
-                  if theoritical_number_of_people - number_of_people_in_round >= 3 &&
-                     (number_of_people_in_round / theoritical_number_of_people) <= 0.8
-                    @warnings << ValidationWarning.new(:rounds, competition_id,
+                  if theoretical_number_of_people - number_of_people_in_round >= 3 &&
+                     (number_of_people_in_round / theoretical_number_of_people) <= 0.8
+                    @warnings << ValidationWarning.new(:rounds, competition.id,
                                                        NOT_ENOUGH_QUALIFIED_WARNING,
                                                        round_id: round_id,
-                                                       expected: theoritical_number_of_people,
+                                                       expected: theoretical_number_of_people,
                                                        actual: number_of_people_in_round)
                   end
                 end
               end
             end
+
             previous_round_type_id = round_type_id
           end
         end
       end
-      self
     end
   end
 end

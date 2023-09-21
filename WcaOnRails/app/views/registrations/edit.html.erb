@@ -28,6 +28,8 @@
 
     <%= f.input :comments %>
 
+    <%= f.input :administrative_notes %>
+
     <%= f.input :status, as: :radio_buttons, collection: [:accepted, :pending, :deleted], checked: @registration.checked_status, include_blank: false %>
 
     <div class="form-group">

@@ -3,8 +3,6 @@
 <div class="container">
   <h2><%= yield(:title) %></h2>
 
-  <%= alert :warning, t('.disclaimer') %>
-
   <%= form_tag competitions_path, method: :get, remote: true, class: "competition-select form-inline #{@display}", id: "competition-query-form" do %>
     <%= render 'index_form' %>
   <% end %>

@@ -1,14 +1,12 @@
 # frozen_string_literal: true
 
-class DumpDeveloperDatabase < SingletonApplicationJob
-  queue_as :default
+class DumpDeveloperDatabase < WcaCronjob
+  before_enqueue do
+    running_on_dev_dump = ServerSetting.exists?(name: DatabaseDumper::DEV_TIMESTAMP_NAME)
+    throw :abort if running_on_dev_dump
+  end
 
   def perform
-    # Create developer database dump every 3 days.
-    last_developer_db_dump = Timestamp.find_or_create_by(name: 'developer_db_dump')
-    if last_developer_db_dump.not_after?(3.days.ago)
-      Rake::Task["db:dump:development"].invoke
-      last_developer_db_dump.touch :date
-    end
+    DbDumpHelper.dump_developer_db
   end
 end

@@ -82,7 +82,6 @@ fi
 if [ "$environment" != "development" ]; then
   echo "Downloading secret chef key from S3"
   aws s3 cp s3://wca-backups/latest/my_secret_key $repo_root/secrets/my_secret_key
-  aws s3 cp s3://wca-backups/latest/application_default_credentials.json $repo_root/secrets/application_default_credentials.json
 fi
 
 # Install chef client

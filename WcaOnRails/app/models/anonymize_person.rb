@@ -92,33 +92,25 @@ class AnonymizePerson
           else
             current_sub_id += 1
             current_country_id = p.countryId
-            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", year: 0, month: 0, day: 0, subId: current_sub_id)
+            p.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil, subId: current_sub_id)
           end
         end
 
       end
 
       # Anonymize person's data in Persons for subid 1
-      person.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", year: 0, month: 0, day: 0)
+      person.update(wca_id: new_wca_id, name: ANONYMIZED_NAME, gender: "o", dob: nil)
     end
 
     { new_wca_id: new_wca_id }
   end
 
   def generate_new_wca_id
-    # generate new wcaid
-    semiId = person_wca_id[0..3] + "ANON"
-    similarWcaIds = Person.where("wca_id LIKE ?", semiId + '%')
+    competition_year = person_wca_id[0..3]
 
-    (1..99).each do |i|
-      new_wca_id = semiId + i.to_s.rjust(2, "0")
+    semi_id, = FinishUnfinishedPersons.compute_semi_id(competition_year, ANONYMIZED_NAME)
+    wca_id, = FinishUnfinishedPersons.complete_wca_id(semi_id)
 
-      unless similarWcaIds.where(wca_id: new_wca_id).any?
-        return new_wca_id
-      end
-    end
-
-    # Semi Id doesn't work
-    nil
+    wca_id
   end
 end

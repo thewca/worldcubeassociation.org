@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.feature "Sign up" do
-  let!(:person) { FactoryBot.create(:person_who_has_competed_once, year: 1988, month: 2, day: 3) }
+  let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
   let!(:custom_delegate) { FactoryBot.create(:delegate) }
 
   before :each do
@@ -172,7 +172,7 @@ RSpec.feature "Sign up" do
       fill_in "Full name", with: "Jack Johnson"
       fill_in "Birthdate", with: "1975-05-18"
       select "Male", from: "Gender"
-      select "United States", from: "Citizenship"
+      select "United States", from: "Representing"
 
       click_button "Sign up"
 

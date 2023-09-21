@@ -16,8 +16,8 @@ pl:
     FM: Sfederowane Stany Mikronezji
     #original_hash: db871b0
     GW: Gwinea Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: Hong Kong, Chiny
     #original_hash: 3ad2dd8
     KN: Saint Kitts and Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ pl:
     MK: Macedonia Północna
     #original_hash: 928b7c4
     MM: Mjanma
-    #original_hash: d887137
-    MO: Makau
+    #original_hash: 77e4070
+    MO: Makau, Chiny
     #original_hash: 05a15c1
     PS: Palestyna
     #original_hash: 655191a
@@ -40,6 +40,8 @@ pl:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trynidad i Tobago
+    #original_hash: fefc818
+    TW: Chińskie Tajpej
     #original_hash: 3fa9b2d
     VC: Saint Vincent i Grenadyny
     #original_hash: 9af4622
@@ -4530,22 +4532,6 @@ pl:
         Wyślij maila, dołączając plik JSON wyeksportowany przez WCA Workbook
         Assistant, na adres <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relacje
-      #original_hash: 69ba020
-      find_relations: Znajdź powiązanie pomiędzy speedcuberami
-      #original_hash: 5d6056d
-      show_relation: Pokaż mi powiązanie!
-      connectives:
-        #original_hash: f85194e
-        was_at: Był(a) na
-        #original_hash: 8c00243
-        together_with: Razem z
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Prosimy o podanie dwóch różnych, poprawnych WCA ID.'
   search_results:
     index:
       #original_hash: db98a68

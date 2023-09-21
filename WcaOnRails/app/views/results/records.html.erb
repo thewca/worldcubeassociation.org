@@ -1,14 +1,13 @@
 <% provide(:title, t(".title")) %>
 
-<% cached_rows = execute_cached_query(@cache_params, @query) %>
+<% record_timestamp = ComputeAuxiliaryData.end_date || Date.current %>
 
-<% record_timestamp = cached_rows.updated_at %>
-<% @rows = cached_rows.parsed_payload %>
+<% @rows = execute_cached_query([*@cache_params, record_timestamp], @query) %>
 
 <div class="container">
   <h1><%= yield(:title) %></h1>
   <p><%= t("results.last_updated_html", timestamp: wca_local_time(record_timestamp)) %></p>
-  <p><i><%= t('results.heading_disabled_functions') %></i></p>
+  <p><i><%= t('results.filters_fixes_underway') %></i></p>
 
   <div id="results-selector" class="results-select form-inline">
     <%= render 'results_selector', show_records_options: true %>

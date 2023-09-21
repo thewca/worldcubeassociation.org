@@ -2,33 +2,15 @@
 
 <div class="container">
   <%= render layout: "nav" do %>
-    <h2><%= yield(:title) %></h2>
-    <div>
-      <h4>This script:</h4>
-      <ul class="list-group">
-        <li class="list-group-item">Computes some auxiliary tables in the database (ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage).</li>
-        <li class="list-group-item">Clears some cache files (living on the PHP side)</li>
-        <li class="list-group-item">Deletes cached results (so they can be cached again)</li>
-      </ul>
-    </div>
-    <% if @reason_not_to_run %>
-      <%= alert :warning, @reason_not_to_run %>
-    <% else %>
-      <% if ComputeAuxiliaryData.in_progress? %>
-        <%= alert :info, "The data is being computed. Thanks for checking =)" %>
-      <% elsif ComputeAuxiliaryData.finished? %>
-        <%= alert :success do %>
-          Data was last computed <%= time_ago_in_words ComputeAuxiliaryData.end_date %> ago
-          and took <%= distance_of_time_in_words ComputeAuxiliaryData.start_date, ComputeAuxiliaryData.end_date %>
-        <% end %>
-      <% else %>
-        <%= alert :danger, "Oh dear! The data has never been computed!" %>
-      <% end %>
-      <% unless ComputeAuxiliaryData.in_progress? %>
-        <div>
-          <%= link_to "Do it!", admin_do_compute_auxiliary_data_path, class: "btn btn-primary" %>
-        </div>
-      <% end %>
+    <%= render 'cronjob_status_panel', cronjob: ComputeAuxiliaryData, trigger_link: admin_do_compute_auxiliary_data_path do %>
+      <div>
+        <h4>This script:</h4>
+        <ul class="list-group">
+          <li class="list-group-item">Computes some auxiliary tables in the database (ConciseSingleResults, ConciseAverageResults, RanksSingle and RanksAverage).</li>
+          <li class="list-group-item">Clears some cache files (living on the PHP side)</li>
+          <li class="list-group-item">Deletes cached results (so they can be cached again)</li>
+        </ul>
+      </div>
     <% end %>
   <% end %>
 </div>

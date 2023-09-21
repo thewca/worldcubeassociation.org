@@ -16,8 +16,8 @@ fi:
     FM: Mikronesia
     #original_hash: db871b0
     GW: Guinea-Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: Hong Kong, Kiina
     #original_hash: 3ad2dd8
     KN: Saint Kitts ja Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ fi:
     MK: Pohjois-Makedonia
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macao
+    #original_hash: 77e4070
+    MO: Macao, Kiina
     #original_hash: 05a15c1
     PS: Palestiina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ fi:
     SZ: Swazimaa
     #original_hash: 4d206a8
     TT: Trinidad ja Tobago
+    #original_hash: fefc818
+    TW: Kiinan Taipei
     #original_hash: 3fa9b2d
     VC: Saint Vincent ja Grenadiinit
     #original_hash: 9af4622
@@ -4488,22 +4490,6 @@ fi:
         Lähetä WCA Workbook Assistantista tallentamasi JSON-tiedosto
         sähköpostitse osoitteeseen <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Yhteydet
-      #original_hash: 69ba020
-      find_relations: Löydä kilpailijoiden väliset yhteydet
-      #original_hash: 5d6056d
-      show_relation: Näytä yhteys!
-      connectives:
-        #original_hash: f85194e
-        was_at: Oli kilpailussa
-        #original_hash: 8c00243
-        together_with: Seuraavan kilpailijan kanssa
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Syötäthän kaksi voimassaolevaa WCA ID:tä.'
   search_results:
     index:
       #original_hash: db98a68

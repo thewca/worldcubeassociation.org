@@ -130,7 +130,7 @@ class UsersController < ApplicationController
     params[:section] ||= "general"
 
     @user = user_to_edit
-    return if redirect_if_cannot_edit_user(@user)
+    nil if redirect_if_cannot_edit_user(@user)
   end
 
   def claim_wca_id
@@ -170,8 +170,18 @@ class UsersController < ApplicationController
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
       if @user.saved_change_to_delegate_status
-        # TODO: See https://github.com/thewca/worldcubeassociation.org/issues/2969.
-        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(@user, current_user).deliver_now
+        if @user.delegate_status
+          @user_senior_delegate = @user.senior_or_self
+        else
+          @user_senior_delegate = User.find(@user.senior_delegate_id_before_last_save)
+        end
+        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(
+          @user,
+          current_user,
+          @user_senior_delegate,
+          @user.delegate_status_before_last_save,
+          @user.delegate_status,
+        ).deliver_later
       end
       if current_user == @user
         # Sign in the user, bypassing validation in case their password changed
@@ -252,7 +262,7 @@ class UsersController < ApplicationController
     # WAC does not know the contents of SURVEY_SECRET, so they cannot (reasonably) brute-force any hashes.
     # But once the survey is over, they can give us a list of tokens and we can easily verify whether they are legit.
     token_payload = current_user.id.to_s
-    wca_token = OpenSSL::HMAC.hexdigest("sha256", EnvVars.SURVEY_SECRET, token_payload)
+    wca_token = OpenSSL::HMAC.hexdigest("sha256", AppSecrets.SURVEY_SECRET, token_payload)
 
     survey_url = "#{survey_base_url}?wca_token=#{wca_token}"
 

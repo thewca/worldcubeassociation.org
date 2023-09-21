@@ -3,14 +3,19 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <h2>Staff</h2>
+  <% if current_user&.staff? %>
+    <h2>Staff</h2>
 
-  <ul>
-    <%= documents_list("policies/internal") %>
-    <li>
-      <%= link_to("Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf") %>
-    </li>
-  </ul>
+    <ul>
+      <%= documents_list("policies/internal") %>
+      <li>
+        <%= link_to "Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf" %>
+      </li>
+      <li>
+        <%= link_to "Merch Order Form (with staff discount)", "https://forms.gle/RAor4LyzNCxs6Mvb8" %>
+      </li>
+    </ul>
+  <% end %>
 
   <% if current_user&.can_view_delegate_matters? %>
     <h2>Delegates</h2>
@@ -32,7 +37,10 @@
         <%= link_to "Travel Reimbursement Form", "https://docs.google.com/forms/d/12tz2I_EeBORm14kQO6ZB5TOp321YbXkIXvrxUNIHxN0/viewform" %>
       </li>
       <li>
-        <%= link_to "Equipment Funding Form", "https://docs.google.com/forms/d/e/1FAIpQLSeglibvXYG6Z2CzIPbxu2LTpAuXkJPK-vi4GuOnBFx1756ufA/viewform" %>
+        <%= link_to "Equipment Funding Form", "https://docs.google.com/forms/d/e/1FAIpQLSebkWMyG2kRzR3cDm3jXFVMFCwd5u4XI6Yt35givu0SOidpHg/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Bands for WCA Dues", country_bands_path %>
       </li>
     </ul>
   <% end %>
@@ -72,6 +80,9 @@
       </li>
       <li>
         <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
+      </li>
+      <li>
+        <%= link_to "Bands for WCA Dues", country_bands_path %>
       </li>
     </ul>
   <% end %>

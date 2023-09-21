@@ -8,12 +8,14 @@ sl:
     XS: Več držav (Južna Amerika)
     #original_hash: 374ac0d
     XM: Več držav (Amerika)
-    #original_hash: 918c53a
-    MO: Macau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: 77e4070
+    MO: Macau, Kitajska
+    #original_hash: e758117
+    HK: Hong Kong, Kitajska
     #original_hash: 4e8bd04
     KR: Koreja
+    #original_hash: fefc818
+    TW: Kitajski Tajpej
   continents:
     #original_hash: 0f138c8
     Multiple Continents: Več kontinentov
@@ -2909,22 +2911,6 @@ sl:
         Pošljite E-pošto z JSON datoteko, izvoženo iz WCA asistenta za delovni
         zvezek na <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>.
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Vezi
-      #original_hash: 69ba020
-      find_relations: Najdi povezave med kocarji
-      #original_hash: 5d6056d
-      show_relation: Pokaži mi povezavo!
-      connectives:
-        #original_hash: f85194e
-        was_at: Je bil na
-        #original_hash: 8c00243
-        together_with: Skupaj z
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Prosimo, da vpišete dva različna in veljavna WCA ID-ja.'
   search_results:
     index:
       #original_hash: db98a68

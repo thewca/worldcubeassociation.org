@@ -30,7 +30,7 @@ class SemiId
   end
 
   def self.generate(name, competition)
-    semi_id_year = competition.year.to_s
+    semi_id_year = competition.start_date.year.to_s
     # Extract the "roman" part of the name (everything up to "("), and transliterate
     # remaining characters.
     roman_name = I18n.transliterate(name.slice(/\A[^(]+/) || "")

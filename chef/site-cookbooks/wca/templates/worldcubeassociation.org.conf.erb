@@ -33,7 +33,6 @@ server {
     deny all;
   }
 
-
   # Redirect 401 to log in page
   # Unfortunately, I don't think there's any way to redirect back after the
   # user logs in.
@@ -49,7 +48,7 @@ server {
     proxy_set_header X-Original-URI $request_uri;
   }
 
-  #### Legacy PHP code
+  #### Legacy PHP redirects
   # /results/admin/ is now handled by Rails over at /admin/
   location ~ ^/results/admin/?$ {
     return 302 /admin/;
@@ -106,6 +105,7 @@ server {
   location /results/c.php {
     return 302 /results/competition.php$is_args$args;
   }
+
   location /results/competition.php {
     # The competition id could be in the url parameter "competitionId" or "i".
     if ($arg_competitionId = "") {
@@ -144,6 +144,7 @@ server {
   location /results/media_insertion.php {
     return 302 /media/new;
   }
+
   location /results/media.php {
     return 302 /media/;
   }
@@ -153,6 +154,7 @@ server {
     if ($arg_eventId = "") {
       set $args "${args}&eventId=${arg_i}";
     }
+
     return 302 /results/events.php$is_args$args;
   }
   # Redirect /results/events.php to /results/rankings
@@ -229,38 +231,35 @@ server {
     try_files $uri @app;
   }
 
-  location /results {
-    alias <%= @repo_root %>/webroot/results;
+  location /results/database {
+    alias /usr/share/phpmyadmin;
     index index.php index.html;
 
-    include fcgi.conf;
+    # Delegate to Rails to determine if the client is authorized to administer
+    # results. This is kind of painful, as it results in an extra request for every
+    # single request, but this way we can avoid editing the existing PHP code.
+    auth_request /api/v0/auth/results;
 
-    location ^~ /results/admin {
-      # Delegate to Rails to determine if the client is authorized to administer
-      # results. This is kind of painful, as it results in an extra request for every
-      # single request, but this way we can avoid editing the existing PHP code.
-      auth_request /api/v0/auth/results;
+    location ~ \.php$ {
+      # NOTE: Despite what many guides recommend, we are leaving
+      # cgi.fix_pathinfo = 1; in php.ini. See http://serverfault.com/a/625953
+      fastcgi_split_path_info ^(.+\.php)(/.+)$;
+      fastcgi_pass unix:/run/php/php-fpm.sock;
+      fastcgi_buffers 16 16k;
+      fastcgi_buffer_size 32k;
+      fastcgi_index index.php;
 
-      include fcgi.conf;
-      # Some of our administration scripts take entirely too long to run. Bump
-      # the timeout to 10 minutes.
-      fastcgi_read_timeout 10m;
+      # See https://blog.martinfjordvald.com/2013/04/nginx-config-history-fastcgi_params-versus-fastcgi-conf/
+      fastcgi_param SCRIPT_FILENAME $request_filename;
+      include fastcgi_params;
     }
 
     # As recommended by http://docs.phpmyadmin.net/en/latest/setup.html#using-setup-script,
     # prevent access to /libraries and /setup/lib.
-    location ^~ /results/admin/phpMyAdmin/libraries {
+    location ^~ /results/database/libraries {
       deny all;
     }
-    location ^~ /results/admin/phpMyAdmin/setup/lib {
-      deny all;
-    }
-
-    location ^~ /results/includes {
-      deny all;
-    }
-
-    location ^~ /results/generated {
+    location ^~ /results/database/setup/lib {
       deny all;
     }
   }
@@ -295,6 +294,7 @@ server {
     if ($arg_personId = "") {
       set $arg_personId $arg_i;
     }
+
     return 302 /persons/$arg_personId;
   }
 
@@ -329,7 +329,6 @@ server {
 
   # Redirect /organisations to /organizations
   location /organisations {
-
     return 302 /organizations;
   }
 
@@ -353,6 +352,7 @@ server {
     add_header Access-Control-Allow-Origin *;
   }
 <% end %>
+
   # Prefer to serve static files directly from nginx to avoid unnecessary
   # data copies from the application server.
   try_files $uri/index.html $uri.html $uri @app;
@@ -383,6 +383,7 @@ server {
     # proxy_buffering off;
     proxy_pass http://app;
   }
+
   # Rails error pages
   error_page 500 502 503 504 /500.html;
   client_max_body_size 64M;

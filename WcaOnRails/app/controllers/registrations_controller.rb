@@ -3,7 +3,9 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register]
+  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination]
+  # Stripe has its own authenticity mechanism with Webhook Secrets.
+  protect_from_forgery except: [:stripe_webhook]
 
   private def competition_from_params
     competition = if params[:competition_id]
@@ -18,9 +20,9 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_success, :process_payment_intent, :destroy, :update]
+                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy, :update]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event]
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
@@ -196,6 +198,8 @@ class RegistrationsController < ApplicationController
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
       raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+      registration_comment = params.dig(:registration_data, :comments)
+      registration.assign_attributes(comments: registration_comment) if registration_comment.present?
       registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
       params[:registration_data][:event_ids]&.each do |event_id|
         competition_event = @competition.competition_events.find { |ce| ce.event_id == event_id }
@@ -439,171 +443,320 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def payment_success
-    @competition = competition_from_params
-    flash[:success] = t("registrations.payment_form.payment_successful")
+  def stripe_denomination
+    ruby_denomination = params.require(:amount)
+    currency_iso = params.require(:currency_iso)
+
+    stripe_amount = StripeTransaction.amount_to_stripe(ruby_denomination, currency_iso.downcase)
+
+    ruby_money = Money.new(ruby_denomination, currency_iso)
+    human_amount = helpers.format_money(ruby_money)
+
+    render json: { stripe_amount: stripe_amount, human_amount: human_amount }
+  end
+
+  # Respond to asynchronous payment updates from Stripe.
+  # Code skeleton according to https://stripe.com/docs/webhooks/quickstart
+  def stripe_webhook
+    payload = request.body.read
+
+    begin
+      event = Stripe::Event.construct_from(
+        JSON.parse(payload, symbolize_names: true),
+      )
+    rescue JSON::ParserError => e
+      # Invalid payload
+      logger.warn "Stripe webhook error while parsing basic request. #{e.message}"
+      return head :bad_request
+    end
+    # Check if webhook signing is configured.
+    if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
+      # Retrieve the event by verifying the signature using the raw body and secret.
+      signature = request.env['HTTP_STRIPE_SIGNATURE']
+      begin
+        event = Stripe::Webhook.construct_event(
+          payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
+        )
+      rescue Stripe::SignatureVerificationError => e
+        logger.warn "Stripe webhook signature verification failed. #{e.message}"
+        return head :bad_request
+      end
+    elsif Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+      logger.error "No Stripe webhook secret defined in Production."
+      return head :bad_request
+    end
+
+    # Create a default audit that marks the event as "unhandled".
+    audit_event = StripeWebhookEvent.create_from_api(event)
+
+    stripe_intent = event.data.object # contains a polymorphic type that depends on the event
+    stored_transaction = StripeTransaction.find_by(stripe_id: stripe_intent.id)
+
+    if StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
+      if stored_transaction.nil?
+        logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
+        return head :not_found
+      else
+        audit_event.update!(stripe_transaction: stored_transaction, handled: true)
+      end
+    end
+
+    # Handle the event
+    case event.type
+    when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
+      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+
+      stored_intent = stored_transaction.stripe_payment_intent
+
+      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
+        if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
+          ruby_money = charge_transaction.money_amount
+
+          stored_payment = stored_intent.holder.record_payment(
+            ruby_money.cents,
+            ruby_money.currency.iso_code,
+            charge_transaction,
+            stored_intent.user.id,
+          )
+
+          # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by Stripe.
+          # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
+          #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
+          #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
+          stored_payment.update!(created_at: audit_event.created_at_remote)
+        end
+      end
+    when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
+      # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
+
+      stored_intent = stored_transaction.stripe_payment_intent
+      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
+    else
+      logger.info "Unhandled Stripe event type: #{event.type}"
+    end
+
+    head :ok
+  end
+
+  def payment_completion
+    registration = Registration.includes(:competition).find(params[:id])
+    @competition = registration.competition
+
+    # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
+    intent_id = params[:payment_intent]
+    intent_secret = params[:payment_intent_client_secret]
+
+    stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
+    stored_intent = stored_transaction.stripe_payment_intent
+
+    unless stored_intent.client_secret == intent_secret
+      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
+      return redirect_to competition_register_path(@competition)
+    end
+
+    # No need to create a new intent here. We can just query the stored intent from Stripe directly.
+    stripe_intent = stored_intent.retrieve_intent
+
+    unless stripe_intent.present?
+      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
+      return redirect_to competition_register_path(@competition)
+    end
+
+    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
+      ruby_money = charge_transaction.money_amount
+
+      registration.record_payment(
+        ruby_money.cents,
+        ruby_money.currency.iso_code,
+        charge_transaction,
+        current_user.id,
+      )
+
+      # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
+      #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
+      #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
+    end
+
+    # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
+    case stored_transaction.status
+    when 'succeeded'
+      flash[:success] = t("registrations.payment_form.payment_successful")
+    when 'requires_action'
+      # Customer did not complete the payment
+      # For example, 3DSecure could still be pending.
+      flash[:warning] = t("registrations.payment_form.errors.payment_pending")
+    when 'requires_payment_method'
+      # Payment failed. If a payment fails, it is "reset" by Stripe,
+      # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
+      flash[:error] = t("registrations.payment_form.errors.payment_reset")
+    when 'processing'
+      # The payment can be pending, for example bank transfers can take multiple days to be fulfilled.
+      flash[:warning] = t("registrations.payment_form.payment_processing")
+    else
+      # Invalid status
+      flash[:error] = "Invalid PaymentIntent status"
+    end
+
     redirect_to competition_register_path(@competition)
   end
 
-  # This method implements the synchronous workflow described here: https://stripe.com/docs/payments/payment-intents/web-manual
-  # It does:
-  #   - if payment method id is sent by Stripe, generate a payment intent
-  #     - if PI is successful, register the payment and say it's ok
-  #     - if card error, register the payment as failure
-  #     - if not, ask for extra action (ie: 3D secure) to the user
-  #   - if payment intent id is sent by Stripe, try confirm it
-  #     - if success, register the payment and say it's ok
-  #     - if not, register the payment as failure
-  def process_payment_intent
+  # This method implements the PaymentElements workflow described at:
+  # - https://stripe.com/docs/payments/quickstart
+  # - https://stripe.com/docs/payments/accept-a-payment
+  # - https://stripe.com/docs/payments/accept-a-payment?ui=elements
+  # It essentially creates a PaymentIntent for the current user-specified amount.
+  # Everything after the creation of the intent is handled by Stripe through their JS integration.
+  # At the very end, when the process is finished, it redirects the user to a return URL that we specified.
+  # This return URL handles record keeping and stuff at `payment_completion` above.
+  def load_payment_intent
     registration = Registration.includes(:user, :competition).find(params[:id])
-    user = registration&.user
+    user = registration.user
+
     unless user == current_user
-      render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
-      return
+      return render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
     end
+
     amount = params[:amount].to_i
+
     if registration.outstanding_entry_fees.cents <= 0
-      render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
-      return
+      return render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
     end
-    intent = nil
-    stripe_charge = nil
+
+    if amount < registration.outstanding_entry_fees.cents
+      return render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
+    end
+
     competition = registration.competition
+    account_id = competition.connected_stripe_account_id
+
     registration_metadata = {
       competition: competition.name,
       registration_url: edit_registration_url(registration),
     }
-    begin
-      if params[:payment_method_id]
-        if amount < registration.outstanding_entry_fees.cents
-          render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
-          return
-        end
 
-        currency_iso = registration.outstanding_entry_fees.currency.iso_code
-        stripe_amount = StripeCharge.amount_to_stripe(amount, currency_iso)
+    currency_iso = registration.outstanding_entry_fees.currency.iso_code
+    stripe_amount = StripeTransaction.amount_to_stripe(amount, currency_iso)
 
-        payment_intent_args = {
-          payment_method: params[:payment_method_id],
-          amount: stripe_amount,
-          currency: currency_iso,
-          confirmation_method: "manual",
-          confirm: true,
-          receipt_email: user.email,
-          description: "Registration payment for #{competition.name}",
-          metadata: registration_metadata,
-        }
-        # Log the payment attempt
-        stripe_charge = StripeCharge.create!(
-          metadata: payment_intent_args.to_json,
-          stripe_charge_id: nil,
-          status: "unknown",
-        )
-        # Create the PaymentIntent, overriding the stripe_account for the request
-        # by the connected stripe account for the competition.
-        intent = Stripe::PaymentIntent.create(
+    payment_intent_args = {
+      amount: stripe_amount,
+      currency: currency_iso,
+      receipt_email: user.email,
+      description: "Registration payment for #{competition.name}",
+      metadata: registration_metadata,
+    }
+
+    registration.stripe_payment_intents
+                .pending
+                .each do |intent|
+      intent_account_id = intent.stripe_transaction.account_id
+
+      if intent_account_id == account_id && !intent.started?
+        # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
+        # so we need to make sure that the correct amount is being used)
+        Stripe::PaymentIntent.update(
+          intent.stripe_id,
           payment_intent_args,
-          stripe_account: registration.competition.connected_stripe_account_id,
+          stripe_account: account_id,
         )
-      elsif params[:payment_intent_id]
-        stripe_charge = StripeCharge.find_by(stripe_charge_id: params[:payment_intent_id])
-        # We should definitely find a StripeCharge for this PI, so show an error if we don't.
-        unless stripe_charge
-          render json: { error: { message: t("registrations.payment_form.errors.intent_not_found") } }
-          return
-        end
-        intent = Stripe::PaymentIntent.confirm(
-          params[:payment_intent_id],
-          {},
-          stripe_account: registration.competition.connected_stripe_account_id,
-        )
-      end
-    rescue Stripe::StripeError => e
-      # Log and display error to client
-      stripe_charge.update!(status: "failure", error: e.message)
-      render json: { error: { message: e.message } }
-      return
-    end
-    status, response = generate_payment_response!(registration, intent, stripe_charge)
-    render json: response, status: status
-  end
 
-  private def generate_payment_response!(registration, intent, stripe_charge)
-    if intent && intent.status == "requires_action" &&
-       intent.next_action.type == "use_stripe_sdk"
-      # For now, since we don't have a charge, we'll keep the intent id as the charge id
-      # to be able to match the log entry to an actual Stripe action.
-      stripe_charge.update!(
-        status: "payment_intent_registered",
-        stripe_charge_id: intent.id,
-      )
-      # Tell the client to handle the action
-      [200, { requires_action: true, payment_intent_client_secret: intent.client_secret }]
-    elsif intent&.status == "succeeded"
-      # FIXME: what if intent.charges.total_count is not 1?!
-      intent.charges.data.each do |charge|
-        registration.record_payment(
-          charge.amount,
-          charge.currency,
-          charge.id,
-          current_user.id,
-        )
-        stripe_charge.update!(
-          status: "success",
-          stripe_charge_id: charge.id,
-        )
-      end
-      # The payment didn’t need any additional actions and is completed!
-      # Handle post-payment fulfillment
-      [200, { success: true }]
-    else
-      # Invalid status
-      [500, { error: "Invalid PaymentIntent status" }]
-    end
-  end
+        updated_parameters = intent.parameters.deep_merge(payment_intent_args)
 
-  private def error_to_s(error)
-    error.inspect + "\n" + error.backtrace.join("\n")
+        # Update our own journals so that we know we changed something
+        intent.stripe_transaction.update!(
+          parameters: updated_parameters,
+          amount_stripe_denomination: stripe_amount,
+          currency_code: currency_iso,
+        )
+
+        return render json: { client_secret: intent.client_secret }
+      end
+    end
+
+    # The Stripe API forces the user to provide a return_url when using automated payment methods.
+    # In our test suite however, we want to be able to confirm specific payment methods without a return URL
+    # because our CI containers are not exposed to the public. So we need this little hack :/
+    enable_automatic_pm = !Rails.env.test?
+
+    # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
+    # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
+    payment_intent_args[:automatic_payment_methods] = { enabled: enable_automatic_pm }
+
+    # Create the PaymentIntent, overriding the stripe_account for the request
+    # by the connected stripe account for the competition.
+    intent = Stripe::PaymentIntent.create(
+      payment_intent_args,
+      stripe_account: account_id,
+    )
+
+    # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
+    stripe_transaction = StripeTransaction.create_from_api(intent, payment_intent_args, account_id)
+
+    # memoize the payment intent in our DB because payments are handled asynchronously
+    # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
+    StripePaymentIntent.create!(
+      holder: registration,
+      stripe_transaction: stripe_transaction,
+      client_secret: intent.client_secret,
+      user: current_user,
+    )
+
+    render json: { client_secret: intent.client_secret }
   end
 
   def refund_payment
     registration = Registration.find(params[:id])
+
     unless registration.competition.using_stripe_payments?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
-      redirect_to edit_registration_path(registration)
-      return
+      return redirect_to edit_registration_path(registration)
     end
 
     payment = RegistrationPayment.find(params[:payment_id])
+
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
     if refund_amount > payment.amount_available_for_refund
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      redirect_to edit_registration_path(registration)
-      return
+      return redirect_to edit_registration_path(registration)
     end
+
     if refund_amount < 0
       flash[:danger] = "The refund amount must be greater than zero."
-      redirect_to edit_registration_path(registration)
-      return
+      return redirect_to edit_registration_path(registration)
     end
 
     currency_iso = registration.competition.currency_code
-    stripe_amount = StripeCharge.amount_to_stripe(refund_amount, currency_iso)
+    stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
+
+    # Backwards compatibility: We may at some point try to record a refund for a payment that was
+    #   - created before the introduction of receipts
+    #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
+    charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
+
+    refund_args = {
+      charge: charge_id,
+      amount: stripe_amount,
+    }
+
+    account_id = registration.competition.connected_stripe_account_id
 
     refund = Stripe::Refund.create(
-      {
-        charge: payment.stripe_charge_id,
-        amount: stripe_amount,
-      },
-      stripe_account: registration.competition.connected_stripe_account_id,
+      refund_args,
+      stripe_account: account_id,
     )
 
+    refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
+    refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
+
+    # Should be the same as `refund_amount`, but by double-converting from the Stripe object
+    # we can also double-check that they're on the same page as we are (to be _really_ sure!)
+    ruby_money = refund_receipt.money_amount
+
     registration.record_refund(
-      refund.amount,
-      refund.currency,
-      refund.id,
+      ruby_money.cents,
+      ruby_money.currency.iso_code,
+      refund_receipt,
       payment.id,
       current_user.id,
     )
@@ -643,6 +796,7 @@ class RegistrationsController < ApplicationController
         :deleted_at,
         :accepted_by,
         :deleted_by,
+        :administrative_notes,
       ]
       params[:registration].merge! case params[:registration][:status]
                                    when "accepted"

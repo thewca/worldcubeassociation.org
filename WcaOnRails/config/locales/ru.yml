@@ -16,8 +16,8 @@ ru:
     FM: Федеративные Штаты Микронезии
     #original_hash: db871b0
     GW: Гвинея-Бисау
-    #original_hash: 2f488ff
-    HK: Гонконг
+    #original_hash: e758117
+    HK: Гонконг, Китай
     #original_hash: 3ad2dd8
     KN: Сент-Китс и Невис
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ ru:
     MK: Северная Македония
     #original_hash: 928b7c4
     MM: Мьянма
-    #original_hash: d887137
-    MO: Макао
+    #original_hash: 77e4070
+    MO: Макао, Китай
     #original_hash: 05a15c1
     PS: Палестина
     #original_hash: 655191a
@@ -40,6 +40,8 @@ ru:
     SZ: Эсватини
     #original_hash: 4d206a8
     TT: Тринидад и Тобаго
+    #original_hash: fefc818
+    TW: Кита́йский Тайбэ́й
     #original_hash: 3fa9b2d
     VC: Сент-Винсент и Гренадины
     #original_hash: 9af4622
@@ -4785,22 +4787,6 @@ ru:
       content_html: >-
         Отправьте полученный файл JSON по email: <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Связи
-      #original_hash: 69ba020
-      find_relations: Найдите связи между куберами
-      #original_hash: 5d6056d
-      show_relation: Показать связи!
-      connectives:
-        #original_hash: f85194e
-        was_at: был(а) на
-        #original_hash: 8c00243
-        together_with: вместе с
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Пожалуйста, введите два разных действительных WCA ID.'
   search_results:
     index:
       #original_hash: db98a68

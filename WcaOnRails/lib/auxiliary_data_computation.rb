@@ -4,10 +4,6 @@ module AuxiliaryDataComputation
   def self.compute_everything
     self.compute_concise_results
     self.compute_rank_tables
-
-    self.delete_php_cache # NOTE: this should go away together with the PHP code.
-
-    self.delete_cached_results
   end
 
   ## Build 'concise results' tables.
@@ -28,13 +24,15 @@ module AuxiliaryDataComputation
             eventId,
             country.id countryId,
             continentId,
-            year, month, day
+            YEAR(start_date),
+            MONTH(start_date),
+            DAY(start_date)
           FROM (
               SELECT MIN(#{field} * 1000000000 + result.id) valueAndId
               FROM Results result
               JOIN Competitions competition ON competition.id = competitionId
               WHERE #{field} > 0
-              GROUP BY personId, result.countryId, eventId, year
+              GROUP BY personId, result.countryId, eventId, YEAR(start_date)
             ) MinValuesWithId
             JOIN Results result ON result.id = valueAndId % 1000000000
             JOIN Competitions competition ON competition.id = competitionId
@@ -107,15 +105,5 @@ module AuxiliaryDataComputation
         end
       end
     end
-  end
-
-  def self.delete_php_cache
-    cache_files = Dir.glob(Rails.root.join("../webroot/results/generated/cache/*.cache"))
-    FileUtils.rm cache_files
-  end
-
-  def self.delete_cached_results
-    # By deleting existing results, they can be cached again on the first execution
-    CachedResult.delete_all
   end
 end

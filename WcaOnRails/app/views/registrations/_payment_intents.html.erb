@@ -1,0 +1,17 @@
+<div>
+  There are pending payments for this registration. Please wait until they are confirmed before paying again.
+
+  <% @registration.stripe_payment_intents.pending.each do |payment_intent| %>
+    <% alert_status = payment_intent.pending? ? :warning : :success %>
+
+    <%= alert alert_status do %>
+      <b><%= wca_local_time(payment_intent.created_at) %></b>
+      <%# Abusing the payment success callback that is used after a user walks through the Stripe payment flow, because it already handles fetching. %>
+      <%= link_to ui_icon('refresh'), registration_payment_completion_path(@registration, payment_intent: payment_intent.stripe_id, payment_intent_client_secret: payment_intent.client_secret) %>
+      <br/>
+      Amount: <%= format_money payment_intent.money_amount %>
+      <br/>
+      Made by: <%= name_for_payment(payment_intent) %>
+    <% end %>
+  <% end %>
+</div>

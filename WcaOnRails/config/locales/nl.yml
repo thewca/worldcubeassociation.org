@@ -16,8 +16,8 @@ nl:
     FM: Micronesië
     #original_hash: db871b0
     GW: Guinee Bissau
-    #original_hash: 2f488ff
-    HK: Hong Kong
+    #original_hash: e758117
+    HK: Hong Kong, China
     #original_hash: 3ad2dd8
     KN: Saint Kitts en Nevis
     #original_hash: 5c34abb
@@ -30,8 +30,8 @@ nl:
     MK: Noord Macedonië
     #original_hash: 928b7c4
     MM: Myanmar
-    #original_hash: d887137
-    MO: Macau
+    #original_hash: 77e4070
+    MO: Macau, China
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -40,6 +40,8 @@ nl:
     SZ: Eswatini
     #original_hash: 4d206a8
     TT: Trinidad en Tobago
+    #original_hash: fefc818
+    TW: Chinees Taipei
     #original_hash: 3fa9b2d
     VC: Saint Vincent en de Grenadinen
     #original_hash: 9af4622
@@ -4477,22 +4479,6 @@ nl:
       content_html: >-
         Stuur het json-bestand uit WCA Workbook Assistant met e-mail op naar <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relaties
-      #original_hash: 69ba020
-      find_relations: Vind verbindingen tussen speedcubers
-      #original_hash: 5d6056d
-      show_relation: Laat me de relatie zien!
-      connectives:
-        #original_hash: f85194e
-        was_at: Deed mee aan
-        #original_hash: 8c00243
-        together_with: Samen met
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Geef ajb twee andere correcte WCA-id's op.
   search_results:
     index:
       #original_hash: db98a68
