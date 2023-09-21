@@ -188,33 +188,19 @@
 
     <% if current_user.can_change_users_avatar?(@user) %>
       <div class="tab-pane active" id="avatar">
-          <%= react_component("UploadAvatar/UploadAvatar", {
-            user: @user,
-            staff: @user.staff?,
-            uploadDisabled: !editable_fields.include?(:pending_avatar),
-            canRemoveAvatar: @user.avatar? && editable_fields.include?(:remove_avatar),
-          }) %>
-        <div class="row">
-          <div class="col-sm-6">
-            <%= simple_form_for @user, html: { multipart: true, class: 'are-you-sure', id: "upload-avatar-form" } do |f| %>
-              <%= hidden_field_tag "section", "avatar" %>
-              <%= f.hidden_field :pending_avatar_cache %>
-            <% end %>
-            <% if @user.avatar? && editable_fields.include?(:remove_avatar)  %>
-              <div class="remove-avatar-confirm">
-                <%= form_with model: @user, method: :patch do |f| %>
-                  <%= f.text_area :removal_reason, class: 'form-control',
-                    placeholder: t('.remove_avatar_reason') %>
-
-                  <%= f.hidden_field :remove_avatar, value: true %>
-
-                  <%= f.submit t('.remove_avatar_confirm_button'), class: 'btn btn-danger',
-                    data: { confirm: t('.remove_avatar_confirm') } %>
-                <% end %>
-              </div>
-            <% end %>
-          </div>
-        </div>
+        <%= react_component("EditAvatar", {
+          user: @user,
+          staff: @user.staff?,
+          crop: {
+            x: @user.saved_avatar_crop_x,
+            y: @user.saved_avatar_crop_y,
+            width: @user.saved_avatar_crop_w,
+            height: @user.saved_avatar_crop_h,
+            unit: 'px',
+          },
+          uploadDisabled: !editable_fields.include?(:pending_avatar),
+          canRemoveAvatar: @user.avatar? && editable_fields.include?(:remove_avatar),
+        }) %>
       </div>
     <% end %>
     <div class="tab-pane" id="roles">
