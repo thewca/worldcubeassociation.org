@@ -1,14 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Button, Divider, Form, Header, Image, Icon, Message, Popup } from 'semantic-ui-react';
-import ReactCrop from 'react-image-crop';
+import React, { useEffect, useState } from 'react';
+import {
+  Button,
+  Divider,
+  Form,
+  Header,
+  Image,
+  Icon,
+  Message,
+  Popup,
+} from 'semantic-ui-react';
+import ReactCrop, { centerCrop, makeAspectCrop, convertToPercentCrop } from 'react-image-crop';
 
 import I18n from '../../lib/i18n';
 import AvatarEdit from './AvatarEdit';
 
 import 'react-image-crop/dist/ReactCrop.css';
 
-// Crop starts as 25% of the original image size
-const SUGGESTED_IMG_RATIO = 4;
+// Crop starts as 33% of the original image size
+const SUGGESTED_IMG_RATIO = 33;
 
 function UploadAvatar({
   user,
@@ -16,48 +25,91 @@ function UploadAvatar({
   uploadDisabled,
   canRemoveAvatar,
 }) {
-  const [crop, setCrop] = useState();
-  const [editingThumbnail, setEditingThumbnail] = useState(false);
+  const [storedCrop, setStoredCrop] = useState({
+    x: 0,
+    y: 0,
+    width: 10,
+    height: 10,
+    unit: '%',
+  });
 
-  const imgRef = useRef(null);
+  const [pendingCropRel, setPendingCropRel] = useState();
 
-  const [image, setImage] = useState();
+  const [uiCropAbs, setUiCropAbs] = useState();
+  const [uiCropRel, setUiCropRel] = useState();
+
+  const [isEditingThumbnail, setEditingThumbnail] = useState(false);
+
+  const [uploadedImage, setUploadedImage] = useState();
   const [imageURL, setImageURL] = useState(user.avatar.url);
 
+  const clearThumbnailSelector = () => {
+    setUiCropAbs(undefined);
+    setEditingThumbnail(false);
+  };
+
   useEffect(() => {
-    if (!image) return;
+    if (!uploadedImage) return;
 
-    const newImageURL = URL.createObjectURL(image);
+    clearThumbnailSelector();
+
+    const newImageURL = URL.createObjectURL(uploadedImage);
     setImageURL(newImageURL);
-  }, [image]);
+  }, [uploadedImage]);
 
-  const startCropImage = () => {
-    const imgWidth = imgRef.current?.clientWidth;
-    const imgHeight = imgRef.current?.clientHeight;
+  const onImageLoad = (e) => {
+    const { naturalWidth: width, naturalHeight: height } = e.currentTarget;
 
-    const initialDimension = Math.min(imgWidth, imgHeight) / 2;
+    // Only reset the cropping if a new image is being uploaded
+    if (!!uploadedImage) {
+      const centeredCrop = centerCrop(
+        makeAspectCrop(
+          {
+            unit: '%',
+            width: SUGGESTED_IMG_RATIO,
+            height: SUGGESTED_IMG_RATIO,
+          },
+          1,
+          width,
+          height,
+        ),
+        width,
+        height,
+      );
 
-    setCrop({
-      x: imgWidth / SUGGESTED_IMG_RATIO,
-      y: imgHeight / SUGGESTED_IMG_RATIO,
-      width: initialDimension,
-      height: initialDimension,
-      unit: 'px',
-    });
+      setStoredCrop(centeredCrop);
+    }
 
-    setEditingThumbnail(true);
+    const relCrop = convertToPercentCrop(storedCrop, width, height);
+    setPendingCropRel(relCrop);
   };
 
   const handleSaveThumbnail = (evt) => {
     evt.preventDefault();
-    evt.stopPropagation();
 
-    console.log(crop);
+    setStoredCrop(uiCropAbs);
+    setPendingCropRel(uiCropRel);
   };
 
-  const onCancelThumbnail = () => {
-    setCrop(undefined);
-    setEditingThumbnail(false);
+  const onEditThumbnail = () => {
+    setUiCropAbs(storedCrop);
+    setEditingThumbnail(true);
+  };
+
+  const makeClippingPolygon = () => {
+    const relCrop = uiCropRel || pendingCropRel;
+
+    if (!relCrop) return null;
+
+    const coords = [
+      [relCrop.x, relCrop.y],
+      [relCrop.x + relCrop.width, relCrop.y],
+      [relCrop.x + relCrop.width, relCrop.y + relCrop.height],
+      [relCrop.x, relCrop.y + relCrop.height],
+    ];
+
+    const cssCoords = coords.map((point) => point.map((coord) => `${Math.round(coord)}${relCrop.unit}`).join(' ')).join(', ');
+    return `polygon(${cssCoords})`;
   };
 
   return (
@@ -86,33 +138,37 @@ function UploadAvatar({
           <AvatarEdit
             uploadDisabled={uploadDisabled}
             canRemoveAvatar={canRemoveAvatar}
-            setImage={setImage}
+            onImageUpload={setUploadedImage}
           />
         </div>
         <div className="col-sm-6 text-center">
           <Form onSubmit={handleSaveThumbnail}>
             <ReactCrop
               aspect={1}
-              crop={crop}
-              onChange={setCrop}
-              disabled={!editingThumbnail} // TODO include :pending_avatar
+              ruleOfThirds
+              crop={uiCropAbs}
+              onChange={(abs, rel) => {
+                setUiCropAbs(abs);
+                setUiCropRel(rel);
+              }}
+              disabled={!isEditingThumbnail}
               style={{ width: '100%' }}
             >
-              <img
-                ref={imgRef}
+              <Image
+                onLoad={onImageLoad}
                 src={imageURL}
                 style={{ width: '100%', height: 'auto' }}
               />
             </ReactCrop>
 
-            {editingThumbnail && (
+            {isEditingThumbnail && (
               <>
                 <div className="row">
                   <Form.Button
                     icon
                     primary
                     floated="right"
-                    disabled={!crop}
+                    disabled={!uiCropAbs}
                   >
                     <Icon name="save" />
                   </Form.Button>
@@ -120,8 +176,8 @@ function UploadAvatar({
                     icon
                     negative
                     floated="right"
-                    onClick={onCancelThumbnail}
-                    disabled={!crop}
+                    onClick={clearThumbnailSelector}
+                    disabled={!uiCropAbs}
                   >
                     <Icon name="cancel" />
                   </Button>
@@ -140,9 +196,9 @@ function UploadAvatar({
                 content={I18n.t('users.edit.edit_thumbnail')}
                 trigger={(
                   <Image
-                    src={user.avatar.thumb_url}
-                    style={{ width: '20%', height: 'auto' }}
-                    onClick={startCropImage}
+                    src={imageURL}
+                    style={{ width: '20%', height: 'auto', clipPath: makeClippingPolygon() }}
+                    onClick={onEditThumbnail}
                   />
                 )}
               />
