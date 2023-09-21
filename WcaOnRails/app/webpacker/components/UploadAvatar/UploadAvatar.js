@@ -1,5 +1,6 @@
 import React, { useRef, useState } from "react";
 import { OverlayTrigger, Tooltip } from "react-bootstrap";
+import I18n from '../../lib/i18n';
 import { AvatarEdit } from "./AvatarEdit";
 
 import "react-image-crop/dist/ReactCrop.css";
@@ -13,7 +14,6 @@ const SUGGESTED_IMG_RATIO = 4;
 const UploadAvatar = ({
   user,
   staff,
-  translations,
   uploadDisabled,
   canRemoveAvatar,
 }) => {
@@ -54,17 +54,17 @@ const UploadAvatar = ({
       <div className="row">
         <div className="col-sm-6 ">
           <div className="well">
-            <h3>{translations.guidelines}</h3>
+            <h3>{I18n.t('users.edit.guidelines')}</h3>
             <ul>
-              {translations.avatarGuidelines.map((guideline, idx) => (
+              {I18n.tArray('users.edit.avatar_guidelines').map((guideline, idx) => (
                 <li key={idx}>{guideline}</li>
               ))}
             </ul>
             {staff && (
               <>
-                <h3>{translations.staffAvatarGuidelinesTitle}</h3>
+                <h3>{I18n.t('users.edit.staff_avatar_guidelines.title')}</h3>
                 <ul>
-                  {translations.staffAvatarGuidelines.map((guideline, idx) => (
+                  {I18n.tArray('users.edit.staff_avatar_guidelines.paragraphs').map((guideline, idx) => (
                     <li key={idx}>{guideline}</li>
                   ))}
                 </ul>
@@ -72,7 +72,6 @@ const UploadAvatar = ({
             )}
           </div>
           <AvatarEdit
-            translations={translations}
             uploadDisabled={uploadDisabled}
             canRemoveAvatar={canRemoveAvatar}
           />
@@ -100,19 +99,19 @@ const UploadAvatar = ({
                   onCancel={onCancelThumbnail}
                 />
                 <div className="alert alert-warning">
-                  <p>{translations.cdnWarning}</p>
-                  <p>{translations.cdnExplanation}</p>
+                  <p>{I18n.t('users.edit_avatar_thumbnail.cdn_warning')}</p>
+                  <p>{I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}</p>
                 </div>
               </div>
             )}
           </form>
           {user.avatar && (
             <>
-              <h4>{translations.yourThumbnail}</h4>
+              <h4>{I18n.t('users.edit.your_thumbnail')}</h4>
               <OverlayTrigger
                 overlay={
                   <Tooltip id="edit-thumbnail-hint">
-                    {translations.clickToEditThumbnail}
+                    {I18n.t('users.edit.edit_thumbnail')}
                   </Tooltip>
                 }
                 id="edit-thumbnail"
