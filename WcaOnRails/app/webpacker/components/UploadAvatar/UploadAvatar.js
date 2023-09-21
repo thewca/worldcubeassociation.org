@@ -1,12 +1,11 @@
 import React, { useRef, useState } from "react";
-import { Popup } from 'semantic-ui-react';
+import { Icon, Popup } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { AvatarEdit } from "./AvatarEdit";
 
 import "react-image-crop/dist/ReactCrop.css";
 
 import ReactCrop from "react-image-crop";
-import { CancelAndSave } from "../../elements/CancelAndSave";
 
 // Crop starts as 25% of the original image size
 const SUGGESTED_IMG_RATIO = 4;
@@ -94,10 +93,23 @@ const UploadAvatar = ({
 
             {editingThumbnail && (
               <div>
-                <CancelAndSave
-                  saveDisabed={!crop}
-                  onCancel={onCancelThumbnail}
-                />
+                <div className="row">
+                  <button
+                    className="btn btn-primary pull-right"
+                    type="submit"
+                    disabled={!crop}
+                  >
+                    <Icon name="save" />
+                  </button>
+                  <button
+                    className="btn btn-warning pull-right"
+                    type="button"
+                    onClick={onCancelThumbnail}
+                    disabled={!crop}
+                  >
+                    <Icon name="cancel" />
+                  </button>
+                </div>
                 <div className="alert alert-warning">
                   <p>{I18n.t('users.edit_avatar_thumbnail.cdn_warning')}</p>
                   <p>{I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}</p>

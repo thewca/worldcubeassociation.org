@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import "react-image-crop/dist/ReactCrop.css";
 
 import ReactCrop from "react-image-crop";
-
-import { CancelAndSave } from "../elements/CancelAndSave";
+import { Icon } from 'semantic-ui-react';
 
 const EditThumbnail = ({ cdnExplanation, cdnWarning, user, pending }) => {
   const [crop, setCrop] = useState();
@@ -38,11 +37,23 @@ const EditThumbnail = ({ cdnExplanation, cdnWarning, user, pending }) => {
         </ReactCrop>
       </section>
 
-      <CancelAndSave
-        onCancel={() => setCrop(undefined)}
-        saveDisabed={!crop}
-        cancelDisabled={!crop}
-      />
+      <div className="row">
+        <button
+          className="btn btn-primary pull-right"
+          type="submit"
+          disabled={!crop}
+        >
+          <Icon name="save" />
+        </button>
+        <button
+          className="btn btn-warning pull-right"
+          type="button"
+          onClick={() => setCrop(undefined)}
+          disabled={!crop}
+        >
+          <Icon name="cancel" />
+        </button>
+      </div>
     </form>
   );
 };

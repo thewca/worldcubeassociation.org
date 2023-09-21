@@ -8,6 +8,7 @@ export const AvatarEdit = ({
   const [confirmation, setConfirmation] = useState(false);
   const [isRemoving, setIsRemoving] = useState(false);
   const [reasonForRemoval, setReasonForRemoval] = useState("");
+
   return (
     <>
       <div>
