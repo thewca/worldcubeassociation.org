@@ -205,7 +205,11 @@ RSpec.feature "Competition events management" do
           click_button "Yes"
         end
 
-        save_events_react(wait_for_completion: false)
+        # The alert that is expected here implies the 400 error message
+        #   (which is displayed in an alert in our current frontend)
+        accept_alert do
+          save_events_react(wait_for_completion: false)
+        end
 
         expect(competition.reload.events.map(&:id)).to match_array %w(222 444)
       end
