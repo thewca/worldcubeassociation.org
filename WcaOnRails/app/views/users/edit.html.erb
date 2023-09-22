@@ -16,15 +16,14 @@
   <% if @user.unconfirmed_email %>
     <%= alert :warning, t('.pending_mail_confirmation', email: @user.unconfirmed_email) %>
   <% end %>
-  <% if @user.pending_avatar? %>
+  <% if @user.avatar.pending? %>
     <%= alert :warning do %>
       <%= t '.pending_avatar_confirmation' %>
       <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
         <%= react_component("UserAvatar", {
-          avatar: @user.pending_avatar,
+          avatar: @user.avatar,
           size: "small",
           title: t('.edit_thumbnail'),
-          breakCache: true
         }, class: 'avatar-thumbnail') %>
       <% end %>
       <% if current_user.can_admin_results? %>
@@ -192,10 +191,10 @@
           user: @user,
           staff: @user.staff?,
           crop: {
-            x: @user.saved_avatar_crop_x,
-            y: @user.saved_avatar_crop_y,
-            width: @user.saved_avatar_crop_w,
-            height: @user.saved_avatar_crop_h,
+            x: @user.avatar.thumbnail_crop_x,
+            y: @user.avatar.thumbnail_crop_y,
+            width: @user.avatar.thumbnail_crop_w,
+            height: @user.avatar.thumbnail_crop_h,
             unit: 'px',
           },
           uploadDisabled: !editable_fields.include?(:pending_avatar),

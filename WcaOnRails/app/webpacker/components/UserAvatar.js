@@ -2,29 +2,39 @@ import React from 'react';
 import { Popup } from 'semantic-ui-react';
 
 import '../stylesheets/user_avatar.scss';
+import CroppedImage from './EditAvatar/CroppedImage';
 
 function UserAvatar({
-  avatar = { url: '', pending_url: '', thumb_url: '' },
+  avatar = {},
   avatarClass = '',
   title = '',
   size = 'medium',
   disableHover = false,
-  breakCache = false,
 }) {
-  const { url, thumb_url: thumbUrl, thumb } = avatar;
-  // The avatar thumbnail url is at thumb_url for officers but at thumb.url for team members.
-  const thumbnailUrl = `${thumbUrl || thumb.url || url}${breakCache ? `?${Date.now() / 1000}` : ''}`;
+  const { url } = avatar;
 
   if (!['tiny', 'small', 'medium', 'large'].includes(size)) {
     throw new Error(`Invalid size: ${size} must be one of 'small', 'medium', or 'large'`);
   }
 
+  const cropAbs = {
+    x: avatar.thumbnail_crop_x,
+    y: avatar.thumbnail_crop_y,
+    width: avatar.thumbnail_crop_w,
+    height: avatar.thumbnail_crop_h,
+    unit: 'px',
+  };
+
   const image = (
     <div
       className={`user-avatar-image-${size} ${avatarClass}`}
-      style={{ backgroundImage: `url(${thumbnailUrl})` }}
       title={title}
-    />
+    >
+      <CroppedImage
+        crop={cropAbs}
+        src={url}
+      />
+    </div>
   );
 
   if (disableHover || !url) {

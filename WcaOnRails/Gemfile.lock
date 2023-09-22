@@ -27,14 +27,6 @@ GIT
     selectize-rails (0.12.1)
 
 GIT
-  remote: https://github.com/thewca/carrierwave-crop.git
-  revision: 0ada1914e8f3d3c875004a7063b7b822323e2295
-  specs:
-    carrierwave-crop (0.1.2)
-      carrierwave (>= 0.8.0)
-      rails (>= 3.2)
-
-GIT
   remote: https://github.com/thewca/i18n-country-translations.git
   revision: e6706abe0eaa65729c1acb698be08b91dd2b6fde
   specs:
@@ -226,16 +218,6 @@ GEM
     capybara-screenshot (1.0.26)
       capybara (>= 1.0, < 4)
       launchy
-    carrierwave (3.0.5)
-      activemodel (>= 6.0.0)
-      activesupport (>= 6.0.0)
-      addressable (~> 2.6)
-      image_processing (~> 1.1)
-      marcel (~> 1.0.0)
-      ssrf_filter (~> 1.0)
-    carrierwave-aws (1.6.0)
-      aws-sdk-s3 (~> 1.0)
-      carrierwave (>= 2.0, < 4)
     childprocess (5.0.0)
     chunky_png (1.4.0)
     cldr-plurals-runtime-rb (1.1.0)
@@ -737,7 +719,6 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    ssrf_filter (1.1.2)
     stringio (3.1.0)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
@@ -823,9 +804,6 @@ DEPENDENCIES
   byebug
   capybara
   capybara-screenshot
-  carrierwave
-  carrierwave-aws
-  carrierwave-crop!
   cocoon
   cookies_eu
   daemons

@@ -52,7 +52,7 @@
               </div>
 
               <div class="col-sm-6">
-                <% carousel_avatars = user.old_avatar_files.reverse.map { |file| file.public_url } %>
+                <% carousel_avatars = user.old_avatar_files.reverse %>
                 <% if user.avatar? %>
                   <% carousel_avatars.unshift(user.avatar.url) %>
                 <% end %>

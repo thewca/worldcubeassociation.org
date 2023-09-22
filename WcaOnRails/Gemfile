@@ -58,16 +58,9 @@ gem 'jwt'
 #  https://github.com/selectize/selectize.js/issues/953
 gem 'selectize-rails', github: 'jfly/selectize-rails'
 
-gem 'carrierwave'
-gem 'carrierwave-aws'
 gem 'aws-sdk-s3'
 gem 'aws-sdk-rds'
 gem 'aws-sdk-cloudfront'
-
-# Pointing to thewca/carrierwave-crop which has a workaround for
-#  https://github.com/kirtithorat/carrierwave-crop/issues/17
-#  and also remove jquery from dependencies (because we add it through webpack)
-gem 'carrierwave-crop', github: 'thewca/carrierwave-crop'
 
 gem 'redis'
 # Faster Redis library

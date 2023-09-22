@@ -323,97 +323,28 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
-        _mounter(:avatar).uploaders.each do |uploader|
-          uploader.override_column_value = dummy_user.read_attribute :avatar
+        dummy_user.user_avatars.each do |avatar|
+          avatar.user = self # TODO does this need an explicit save?
         end
         dummy_user.destroy!
       end
     end
   end
 
-  AVATAR_PARAMETERS = {
-    file_size: {
-      maximum: 2.megabytes.to_i,
-    }.freeze,
-  }.freeze
-
-  mount_uploader :pending_avatar, PendingAvatarUploader
-  crop_uploaded :pending_avatar
-  validates :pending_avatar, AVATAR_PARAMETERS
-
-  mount_uploader :avatar, AvatarUploader
-  # Don't delete avatar when this model is destroyed. User models should almost never be
-  # destroyed, except when we're deleting dummy accounts.
-  skip_callback :commit, :after, :remove_avatar!
-  crop_uploaded :avatar
-  validates :avatar, AVATAR_PARAMETERS
+  def avatar
+    self.user_avatars.approved.first || UserAvatar.default_avatar(self)
+  end
 
   def old_avatar_files
-    # CarrierWave doesn't have a general "list uploaded files" feature
-    # so we have to hijack the class-private storage engine to make direct S3 API calls
-    avatar_storage = avatar.send(:storage)
-    s3_client = avatar_storage.connection
-
-    # query underlying AWS S3 API directly
-    s3_bucket = s3_client.bucket(avatar.aws_bucket)
-
-    files = s3_bucket.objects({ prefix: avatar.store_dir })
-                     .select { |obj| !obj.key.include?('thumb') } # filter out thumbnails
-                     .map { |obj| obj.key.rpartition('/').last } # only take the filename itself, not the folder path
-                     .map { |key| avatar_storage.retrieve!(key) } # read the filename through CarrierWave for convenience
-
-    files.select do |f|
-      (!pending_avatar.url || pending_avatar.url != f.url) && (!avatar.url || avatar.url != f.url)
-    end
-  end
-
-  before_save :stash_rejected_avatar
-  def stash_rejected_avatar
-    if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar) && pending_avatar_was
-      # hijacking internal S3 storage engine, see method `old_avatar_files` above
-      avatar_storage = avatar.send(:storage)
-
-      file = avatar_storage.retrieve!(pending_avatar_was)
-      rejected_filename = "#{avatar.store_dir}/rejected/#{pending_avatar_was}"
-
-      file.move_to rejected_filename
-    end
-  end
-
-  before_validation :maybe_save_crop_coordinates
-  def maybe_save_crop_coordinates
-    self.saved_avatar_crop_x = avatar_crop_x if avatar_crop_x
-    self.saved_avatar_crop_y = avatar_crop_y if avatar_crop_y
-    self.saved_avatar_crop_w = avatar_crop_w if avatar_crop_w
-    self.saved_avatar_crop_h = avatar_crop_h if avatar_crop_h
-
-    self.saved_pending_avatar_crop_x = pending_avatar_crop_x if pending_avatar_crop_x
-    self.saved_pending_avatar_crop_y = pending_avatar_crop_y if pending_avatar_crop_y
-    self.saved_pending_avatar_crop_w = pending_avatar_crop_w if pending_avatar_crop_w
-    self.saved_pending_avatar_crop_h = pending_avatar_crop_h if pending_avatar_crop_h
-  end
-
-  before_validation :maybe_clear_crop_coordinates
-  def maybe_clear_crop_coordinates
-    if ActiveRecord::Type::Boolean.new.cast(remove_avatar)
-      self.saved_avatar_crop_x = nil
-      self.saved_avatar_crop_y = nil
-      self.saved_avatar_crop_w = nil
-      self.saved_avatar_crop_h = nil
-    end
-    if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar)
-      self.saved_pending_avatar_crop_x = nil
-      self.saved_pending_avatar_crop_y = nil
-      self.saved_pending_avatar_crop_w = nil
-      self.saved_pending_avatar_crop_h = nil
-    end
+    old_avatars = user_avatars - self.avatar
+    old_avatars.map(&:url)
   end
 
   validates :region_id, presence: true, if: -> { delegate_status.present? }
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
-    if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
+    if avatar.present? && wca_id.blank?
       errors.add(:avatar, I18n.t('users.errors.avatar_requires_wca_id'))
     end
   end
@@ -1063,17 +994,6 @@ class User < ApplicationRecord
     end
   end
 
-  def approve_pending_avatar!
-    # Bypass the .avatar and .pending_avatar helpers that carrierwave creates
-    # and write directly to the database.
-    self.update_columns(
-      avatar: self.read_attribute(:pending_avatar),
-      saved_avatar_crop_x: self.saved_pending_avatar_crop_x, saved_avatar_crop_y: self.saved_pending_avatar_crop_y, saved_avatar_crop_w: self.saved_pending_avatar_crop_w, saved_avatar_crop_h: self.saved_pending_avatar_crop_h,
-      pending_avatar: nil,
-      saved_pending_avatar_crop_x: nil, saved_pending_avatar_crop_y: nil, saved_pending_avatar_crop_w: nil, saved_pending_avatar_crop_h: nil
-    )
-  end
-
   def self.search(query, params: {})
     users = Person.includes(:user).current
     # We can't search by email on the 'Person' table
@@ -1113,8 +1033,8 @@ class User < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "wca_id", "name", "gender",
            "country_iso2", "delegate_status", "created_at", "updated_at"],
-    methods: ["url", "country"],
-    include: ["avatar", "teams"],
+    methods: ["url", "country", "avatar"],
+    include: ["teams"],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -1140,12 +1060,7 @@ class User < ApplicationRecord
       json[:teams] = current_team_members.includes(:team).reject(&:hidden?)
     end
     if include_avatar
-      json[:avatar] = {
-        url: self.avatar.url,
-        pending_url: self.pending_avatar.url,
-        thumb_url: self.avatar.url(:thumb),
-        is_default: !self.avatar?,
-      }
+      json[:avatar] = self.avatar
     end
 
     # Private attributes to include.
@@ -1179,10 +1094,7 @@ class User < ApplicationRecord
       "countryIso2" => country_iso2,
       "gender" => gender,
       "registration" => registration&.to_wcif(authorized: authorized),
-      "avatar" => {
-        "url" => avatar.url,
-        "thumbUrl" => avatar.url(:thumb),
-      },
+      "avatar" => avatar&.to_wcif,
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
       "personalBests" => person_pb.map(&:to_wcif),
@@ -1202,13 +1114,7 @@ class User < ApplicationRecord
         "gender" => { "type" => "string", "enum" => %w(m f o) },
         "birthdate" => { "type" => "string" },
         "email" => { "type" => "string" },
-        "avatar" => {
-          "type" => ["object", "null"],
-          "properties" => {
-            "url" => { "type" => "string" },
-            "thumbUrl" => { "type" => "string" },
-          },
-        },
+        "avatar" => UserAvatar.wcif_json_schema,
         "roles" => { "type" => "array", "items" => { "type" => "string" } },
         "registration" => Registration.wcif_json_schema,
         "assignments" => { "type" => "array", "items" => Assignment.wcif_json_schema },
