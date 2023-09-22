@@ -431,8 +431,8 @@ pt:
           quando novos registos forem submetidos.
         #original_hash: de60ab8
         delegate_status: Estatuto de delegado
-        #original_hash: 0f21717
-        region: Região
+        #original_hash: d219c68
+        location: Localização
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -846,7 +846,7 @@ pt:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1675,6 +1675,8 @@ pt:
       results_admin: Administrador
       #original_hash: 61074f1
       results_database: Base de dados
+      #original_hash: 54e0548
+      results_sidekiq: Dashboard Sidekiq
       #original_hash: aee74b8
       new_post: Novo artigo
       #original_hash: 0d67445
@@ -1770,12 +1772,12 @@ pt:
     support:
       #original_hash: 610edba
       title: Ajude a WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
-        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
-        donativos para nos ajudar a promover a nossa visão de ter competições
-        mais agradáveis em todo o mundo.
+        Sendo uma organização sem fins lucrativos, 100% liderada por
+        voluntários, agradecemos donativos para nos ajudar a promover a nossa
+        visão de ter competições mais agradáveis em todo o mundo.
       #original_hash: 65c84ec
       button: Saiba mais sobre como pode ajudar a WCA
   users:
@@ -3000,10 +3002,6 @@ pt:
     index:
       #original_hash: db98a68
       title: Competições
-      #original_hash: b24c9c0
-      disclaimer: >-
-        Note que, devido à pandemia COVID-19, em algumas regiões pode não haver
-        competições.
       #original_hash: 6a72085
       all_events: Todos
       #original_hash: 6d76b81
@@ -4053,7 +4051,7 @@ pt:
     mission_footer: Declaração da Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
-    #original_hash: 9248dc4
+    #original_hash: 19b86da
     who_we_are_content_html: >-
       <p> A World Cube Association rege as competições de puzzles mecânicos que
       são operados por rotação de grupos de peças, geralmente conhecidos como
@@ -4062,7 +4060,7 @@ pt:
       quebra-cabeças é escolhida como eventos oficiais da WCA.</p> <p>Como a WCA
       evoluiu na última década, mais de 100.000 pessoas competiram nas nossas
       competições. Apesar desse crescimento, continuamos a ser uma organização
-      que é inteiramente gerida por voluntários, de organizadores locais a
+      que é quase inteiramente gerida por voluntários, de organizadores locais a
       delegados da WCA e até mesmo ao Conselho da WCA. Somos muito gratos a
       todos que tiram tempo de suas vidas para permitir que a WCA funcione. Com
       mais apoio financeiro, esperamos trazer um nível ainda maior de
@@ -4126,12 +4124,12 @@ pt:
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org
       </a>.</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
-        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
-        donativos para nos ajudar a promover a nossa visão de ter competições
-        mais agradáveis em todo o mundo.
+        Sendo uma organização sem fins lucrativos, 100% liderada por
+        voluntários, agradecemos donativos para nos ajudar a promover a nossa
+        visão de ter competições mais agradáveis em todo o mundo.
       #original_hash: 24c87db
       donate_credit: Doar via cartão de crédito
       #original_hash: 0e5a9c3
