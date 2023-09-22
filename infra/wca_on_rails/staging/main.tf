@@ -148,14 +148,14 @@ resource "aws_ecs_task_definition" "this" {
 
   # This is what our current staging instance is using
   cpu = "2048"
-  memory = "4096"
+  memory = "7861"
 
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
       image             = "${var.shared.repository_url}:staging"
       cpu    = 1536
-      memory = 3072
+      memory = 6000
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -177,7 +177,7 @@ resource "aws_ecs_task_definition" "this" {
         command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
         interval           = 30
         retries            = 3
-        startPeriod        = 60
+        startPeriod        = 300
         timeout            = 5
       }
     },
@@ -212,7 +212,7 @@ resource "aws_ecs_task_definition" "this" {
       portMappings = [{
         # The hostPort is automatically set for awsvpc network mode,
         # see https://docs.aws.amazon.com/AmazonECS/latest/APIReference/API_PortMapping.html#ECS-Type-PortMapping-hostPort
-        containerPort = 8080
+        containerPort = 80
         protocol      = "tcp"
       }]
       logConfiguration = {
@@ -225,7 +225,7 @@ resource "aws_ecs_task_definition" "this" {
       }
       environment = local.pma_environment
       healthCheck       = {
-        command            = ["CMD-SHELL", "pgrep php || exit 1"]
+        command            = ["CMD-SHELL", "curl -f http://localhost/LICENSE || exit 1"]
         interval           = 30
         retries            = 3
         startPeriod        = 60
@@ -253,15 +253,14 @@ resource "aws_lb_target_group" "this" {
   target_type = "ip"
 
   deregistration_delay = 10
-
   health_check {
-    interval            = 10
+    interval            = 60
     path                = "/"
     port                = "traffic-port"
     protocol            = "HTTP"
     timeout             = 5
     healthy_threshold   = 2
-    unhealthy_threshold = 2
+    unhealthy_threshold = 5
     matcher             = 200
   }
   tags = {

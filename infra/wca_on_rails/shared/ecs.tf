@@ -108,9 +108,9 @@ resource "aws_autoscaling_group" "this" {
   min_size                  = 1
   max_size                  = 6
   desired_capacity          = 1
-  vpc_zone_identifier       = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id]
+  vpc_zone_identifier       = [aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
   launch_configuration      = aws_launch_configuration.this.name
-  health_check_grace_period = 0
+  health_check_grace_period = 300
   health_check_type         = "EC2"
   default_cooldown          = 300
 
