@@ -1,11 +1,11 @@
 <h1 align="center">WorldCubeAssociation Website</h1>
 <div align="center">
-  <img height="120" src="WcaOnRails/public/" />
+  <img height="120" src="WcaOnRails/public/assets/files/../../files/wca_icon_only.png" />
 </div>
 <br />
 <div align="center">
   <strong>
-    This repository contains all of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).
+    All of the code that runs on [worldcubeassociation.org](https://www.worldcubeassociation.org/).
   </strong>
 </div>
 <br />
