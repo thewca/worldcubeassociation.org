@@ -1,6 +1,6 @@
 <h1 align="center">WorldCubeAssociation Website</h1>
 <div align="center">
-  <img height="120" src="WcaOnRails/public/assets/files/../../files/wca_icon_only.png" />
+  <img height="120" src="WcaOnRails/public/files/wca_icon_only.png" />
 </div>
 <br />
 <div align="center">
