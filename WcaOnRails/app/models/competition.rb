@@ -29,6 +29,7 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
 
@@ -77,6 +78,7 @@ class Competition < ApplicationRecord
   scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
+  scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
 
   enum guest_entry_status: {
     unclear: 0,
@@ -150,6 +152,7 @@ class Competition < ApplicationRecord
     announced_by
     cancelled_by
     results_posted_by
+    posting_by
     main_event_id
     waiting_list_deadline_date
     event_change_deadline_date
@@ -579,6 +582,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'posting_user',
              'inbox_results',
              'inbox_persons'
           # Do nothing as they shouldn't be cloned.

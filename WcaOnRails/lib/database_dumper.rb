@@ -95,6 +95,7 @@ module DatabaseDumper
           event_restrictions_reason
           announced_by
           results_posted_by
+          posting_by
           main_event_id
           cancelled_at
           cancelled_by

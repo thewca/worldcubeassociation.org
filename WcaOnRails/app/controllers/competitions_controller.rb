@@ -255,7 +255,9 @@ class CompetitionsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
+      # It's important to clearout the 'posting_by' here to make sure
+      # another WRT member can start posting other results.
+      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
       comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
       comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
     end

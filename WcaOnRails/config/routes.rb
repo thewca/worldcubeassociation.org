@@ -275,6 +275,11 @@ Rails.application.routes.draw do
   get '/sso-discourse' => 'users#sso_discourse'
   get '/redirect/wac-survey' => 'users#wac_survey'
 
+  scope 'admin' do
+    get '/posting-index' => 'admin/results#posting_index'
+    post '/start-posting' => 'admin/results#start_posting'
+  end
+
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
     namespace :v0 do
