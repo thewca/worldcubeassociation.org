@@ -128,6 +128,16 @@ data "aws_iam_policy_document" "task_policy" {
 
     resources = ["*"]
   }
+  statement {
+      actions = [
+        "s3:*",
+      ]
+
+      resources = [aws_s3_bucket.avatars.arn,
+                "${aws_s3_bucket.avatars.arn}/*",
+                   aws_s3_bucket.storage-bucket.arn,
+                "${aws_s3_bucket.storage-bucket.arn}/*"]
+    }
 }
 
 resource "aws_iam_role_policy" "task_policy" {

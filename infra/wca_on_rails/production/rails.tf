@@ -3,7 +3,7 @@ resource "aws_cloudwatch_log_group" "this" {
 }
 
 locals {
-  app_environment = [
+  rails_environment = [
     {
       name  = "WCA_LIVE_SITE"
       value = var.WCA_LIVE_SITE
@@ -11,6 +11,82 @@ locals {
     {
       name  = "ROOT_URL"
       value = var.ROOT_URL
+    },
+    {
+      name = "DATABASE_HOST"
+      value = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+    },
+    {
+      name = "READ_REPLICA_HOST"
+      value = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
+    },
+    {
+      name = "CACHE_REDIS_URL"
+      value = "redis://wca-main-cache.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "SIDEKIQ_REDIS_URL"
+      value = "redis://wca-main-sidekiq.iebvzt.ng.0001.usw2.cache.amazonaws.com:6379"
+    },
+    {
+      name = "STORAGE_AWS_BUCKET"
+      value = aws_s3_bucket.storage-bucket.id
+    },
+    {
+      name = "STORAGE_AWS_REGION"
+      value = var.region
+    },
+    {
+      name = "VAULT_AWS_REGION"
+      value = var.region
+    },
+    {
+      name = "S3_AVATARS_REGION"
+      value = var.region
+    },
+    {
+      name = "DATABASE_AWS_REGION"
+      value = var.region
+    },
+    {
+      name = "DISCOURSE_URL"
+      value = var.DISCOURSE_URL
+    },
+    {
+      name = "S3_AVATARS_BUCKET"
+      value = aws_s3_bucket.avatars.id
+    },
+    {
+      name = "S3_AVATARS_ASSET_HOST"
+      value = "https://avatars.worldcubeassociation.org"
+    },
+    {
+      name = "CDN_AVATARS_DISTRIBUTION_ID"
+      value = "ELNTWW0SE1ZJ"
+    },
+    {
+      name = "DATABASE_WRT_USER"
+      value = var.DATABASE_WRT_USER
+    },
+    {
+      name = "VAULT_ADDR"
+      value = var.VAULT_ADDR
+    },
+    {
+      name = "VAULT_APPLICATION"
+      value = var.VAULT_APPLICATION
+    },
+    {
+      name = "TASK_ROLE",
+      value = aws_iam_role.task_role.name
+    }
+  ]
+  pma_environment = [
+    {
+      name = "PMA_USER_CONFIG_BASE64"
+      value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
+        { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
     }
   ]
 }
@@ -52,6 +128,16 @@ data "aws_iam_policy_document" "task_policy" {
 
     resources = ["*"]
   }
+  statement {
+      actions = [
+        "s3:*",
+      ]
+
+      resources = [aws_s3_bucket.avatars.arn,
+                "${aws_s3_bucket.avatars.arn}/*",
+                   aws_s3_bucket.storage-bucket.arn,
+                "${aws_s3_bucket.storage-bucket.arn}/*"]
+    }
 }
 
 resource "aws_iam_role_policy" "task_policy" {
@@ -70,15 +156,15 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "512"
-  memory = "512"
+  cpu = "2048"
+  memory = "7861"
 
   container_definitions = jsonencode([
     {
-      name              = "handler"
-      image             = "${aws_ecr_repository.this.repository_url}:latest"
-      cpu    = 512
-      memory = 512
+      name              = "rails-main"
+      image             = "${var.shared.repository_url}:latest"
+      cpu    = 1536
+      memory = 7861
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -90,21 +176,21 @@ resource "aws_ecs_task_definition" "this" {
       logConfiguration = {
         logDriver = "awslogs"
         options = {
-          awslogs-group         = {aws_cloudwatch_log_group.this.name}
+          awslogs-group         = aws_cloudwatch_log_group.this.name
           awslogs-region        = var.region
           awslogs-stream-prefix = var.name_prefix
         }
       }
-      environment = local.app_environment
+      environment = local.rails_environment
       healthCheck       = {
         command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
         interval           = 30
         retries            = 3
-        startPeriod        = 60
+        startPeriod        = 300
         timeout            = 5
       }
     }
-  ])
+    ])
 
   tags = {
     Name = var.name_prefix
@@ -117,21 +203,47 @@ data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
 }
 
+resource "aws_lb_target_group" "this" {
+  name        = "wca-main-staging"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = var.shared.vpc_id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 60
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = var.name_prefix
+    Env = "staging"
+  }
+}
+
+
+
 resource "aws_ecs_service" "this" {
-  name    = var.name_prefix
-  cluster = var.shared_resources.ecs_cluster.id
+  name                               = var.name_prefix
+  cluster                            = var.shared.ecs_cluster.id
   # During deployment a new task revision is created with modified
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 2
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
   health_check_grace_period_seconds  = 0
 
   capacity_provider_strategy {
-    capacity_provider = var.shared_resources.capacity_provider.name
+    capacity_provider = var.shared.capacity_provider.name
     weight            = 1
   }
 
@@ -148,60 +260,22 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = var.shared_resources.main_target_group.arn
-    container_name   = "handler"
+    target_group_arn = aws_lb_target_group.this.arn
+    container_name   = "rails-staging"
     container_port   = 3000
   }
 
   network_configuration {
-    security_groups = [var.shared_resources.cluster_security.id]
-    subnets         = var.shared_resources.private_subnets
+    security_groups = [var.shared.cluster_security.id]
+    subnets         = var.shared.private_subnets[*].id
   }
 
   deployment_controller {
-    type = "CODE_DEPLOY"
+    type = "ECS"
   }
 
   tags = {
     Name = var.name_prefix
   }
 
-  lifecycle {
-    ignore_changes = [
-      # The desired count is modified by Application Auto Scaling
-      desired_count,
-      # The target group changes during Blue/Green deployment
-      load_balancer,
-      # The Task definition will be set by Code Deploy
-      task_definition
-    ]
-  }
-}
-
-resource "aws_appautoscaling_target" "this" {
-  service_namespace  = "ecs"
-  resource_id        = "service/${var.shared_resources.ecs_cluster.name}/${aws_ecs_service.this.name}"
-  scalable_dimension = "ecs:service:DesiredCount"
-  min_capacity       = 1
-  max_capacity       = 1
-}
-
-resource "aws_appautoscaling_policy" "this" {
-  name               = var.name_prefix
-  policy_type        = "TargetTrackingScaling"
-  resource_id        = aws_appautoscaling_target.this.resource_id
-  scalable_dimension = aws_appautoscaling_target.this.scalable_dimension
-  service_namespace  = aws_appautoscaling_target.this.service_namespace
-
-  target_tracking_scaling_policy_configuration {
-    predefined_metric_specification {
-      predefined_metric_type = "ALBRequestCountPerTarget"
-      resource_label = "${var.shared_resources.lb.arn_suffix}/${var.shared_resources.main_target_group.arn_suffix}"
-
-    }
-
-    target_value = 1000
-  }
-
-  depends_on = [aws_appautoscaling_target.this]
 }
