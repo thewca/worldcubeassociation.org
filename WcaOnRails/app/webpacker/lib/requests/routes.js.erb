@@ -75,3 +75,11 @@ export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_h
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;
 
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
+
+export const adminPostingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.posting_index_path(format: "json")) %>`;
+
+export const adminStartPostingUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_posting_path) %>`;
+
+export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_import_results_path("${competitionId}")) %>`;
+
+export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
