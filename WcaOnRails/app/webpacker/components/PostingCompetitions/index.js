@@ -92,10 +92,14 @@ function PostingCompetitionsIndex({
                 {' '}
                 <CountryFlag iso2={c.country_iso2} />
               </Header.Subheader>
+              <Header.Subheader>
+                {`Submission Timestamp: ${c.results_submitted_at}`}
+                {/* TODO: Convert the above timestamp to a readable way */}
+              </Header.Subheader>
             </Header>
             <Button.Group floated="right">
               <Button
-                target="blank"
+                target="_blank"
                 primary
                 href={competitionUrl(c.id)}
               >
@@ -105,18 +109,18 @@ function PostingCompetitionsIndex({
               {!someoneElsePosting && initialState[c.id] && (
                 <>
                   <Button
-                    target="blank"
+                    target="_blank"
                     color="olive"
                     href={adminCheckUploadedResults(c.id)}
                   >
-                    Check uploaded results
+                    Check results page
                   </Button>
                   <Button
-                    target="blank"
+                    target="_blank"
                     color="green"
                     href={adminImportResultsUrl(c.id)}
                   >
-                    Import the results
+                    Import results page
                   </Button>
                 </>
               )}
