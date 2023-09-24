@@ -3,7 +3,7 @@
 .user-badge {
   margin: 4px !important;
 
-  & > .label {
+  &>.label {
     // Same colour as the rest of the button, so that it blends without a border.
     // It should normally be hidden anyway, but for the users with multiple lines
     // of subtext, it shows a little.
@@ -63,21 +63,5 @@
 
   .user-avatar-rounded-left {
     border-radius: 0.3em 0 0 0.3em;
-  }
-
-  /* Make it fill width of screen on mobile */
-  @media (max-width: 525px) {
-    width: 100vw;
-    margin: 0 !important;
-    border: none !important;
-    border-radius: 0 !important;
-
-    .user-name {
-      background: none !important;
-    }
-
-    > .label {
-      border-radius: 0 !important;
-    }
   }
 }
