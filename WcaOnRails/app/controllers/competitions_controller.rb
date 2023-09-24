@@ -416,10 +416,11 @@ class CompetitionsController < ApplicationController
 
     # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
     price_per_competitor_us_cents = dues_per_competitor_in_usd * 100
-    multiplier = params[:competitor_limit_enabled] ? params[:competitor_limit].to_i : 1
+    multiplier = ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled]) ? params[:competitor_limit].to_i : 1
     total_dues = price_per_competitor_us_cents * multiplier
+    dues_in_currency = Money.new(total_dues, "USD").exchange_to(params[:currency_code]).format
     render json: {
-      dues_value: Money.new(total_dues, "USD").exchange_to(params[:currency_code]).format,
+      dues_value: dues_in_currency,
     }
   end
 
