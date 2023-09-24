@@ -168,8 +168,8 @@ Rails.application.routes.draw do
 
   get 'admin/delegates' => 'delegates#stats', as: :delegates_stats
   get 'admin/delegate_probations' => 'delegates#probations', as: :delegate_probations
-  post 'admin/start_probation' => 'delegates#start_probation', as: :start_probation
-  post 'admin/end_probation' => 'delegates#end_probation', as: :end_probation
+  post 'admin/start_delegate_probation' => 'delegates#start_delegate_probation', as: :start_delegate_probation
+  post 'admin/end_delegate_probation' => 'delegates#end_delegate_probation', as: :end_delegate_probation
 
   get 'robots' => 'static_pages#robots'
 

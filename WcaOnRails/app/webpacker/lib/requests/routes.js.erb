@@ -84,6 +84,6 @@ export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.
 
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
 
-export const startProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_probation_path) %>`;
+export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_delegate_probation_path) %>`;
 
-export const endProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_probation_path) %>`;
+export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;

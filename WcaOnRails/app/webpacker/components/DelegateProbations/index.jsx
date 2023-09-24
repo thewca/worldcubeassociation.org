@@ -1,14 +1,14 @@
 import React from 'react';
 import { Button, Input, Table } from 'semantic-ui-react';
 import UserBadge from '../UserBadge';
-import { startProbationUrl, endProbationUrl } from '../../lib/requests/routes.js.erb';
+import { startDelegateProbationUrl, endDelegateProbationUrl } from '../../lib/requests/routes.js.erb';
 import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
 
 export default function DelegateProbations({ probationRoles, probationUsers }) {
   const [wcaId, setWcaId] = React.useState('');
 
   function startProbation() {
-    fetchWithAuthenticityToken(startProbationUrl, {
+    fetchWithAuthenticityToken(startDelegateProbationUrl, {
       method: 'POST',
       body: JSON.stringify({ wcaId }),
       headers: { 'Content-Type': 'application/json' },
@@ -18,7 +18,7 @@ export default function DelegateProbations({ probationRoles, probationUsers }) {
   }
 
   function endProbation(probationRoleId) {
-    fetchWithAuthenticityToken(endProbationUrl, {
+    fetchWithAuthenticityToken(endDelegateProbationUrl, {
       method: 'POST',
       body: JSON.stringify({ probationRoleId }),
       headers: { 'Content-Type': 'application/json' },

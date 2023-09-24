@@ -10,26 +10,24 @@ class DelegatesController < ApplicationController
 
   def probations
     @probation_roles = Role.where(group_id: Group.where(group_type: "delegate_probation"))
-    @probation_users = {}
-    @probation_roles.each { |probation_role|
-      @probation_users[probation_role.user_id] = User.find_by_id(probation_role.user_id)
+    @probation_users = @probation_roles.index_with { |probation_role|
+      User.find_by_id(probation_role.user_id)
     }
   end
 
   def start_probation
     wca_id = params[:wcaId]
     user = User.find_by_wca_id!(wca_id)
-    role = Role.new(
+    Role.create!(
       user_id: user.id,
       group_id: Group.find_by!(name: "Delegate Probation").id,
       start_date: Date.today,
     )
-    role.save!
   end
 
   def end_probation
     probation_role_id = params[:probationRoleId]
     role = Role.find_by_id(probation_role_id)
-    role.update(end_date: Date.today)
+    role.update!(end_date: Date.today)
   end
 end
