@@ -1,6 +1,7 @@
 import 'flag-icons/css/flag-icons.css';
 import '@cubing/icons';
 
+import 'semantic-css/accordion';
 import 'semantic-css/button';
 import 'semantic-css/card';
 import 'semantic-css/checkbox';
@@ -25,16 +26,19 @@ import 'semantic-css/placeholder';
 import 'semantic-css/popup';
 import 'semantic-css/reset';
 import 'semantic-css/segment';
+import 'semantic-css/sidebar';
 import 'semantic-css/site';
 import 'semantic-css/step';
 import 'semantic-css/table';
 import 'semantic-css/transition';
 // NOTE: This is the js, wouldn't go fine through our module-resolver!
+import '../stylesheets/semantic/components/accordion.min';
 import '../stylesheets/semantic/components/checkbox.min';
 import '../stylesheets/semantic/components/dropdown.min';
 import '../stylesheets/semantic/components/dimmer.min';
 import '../stylesheets/semantic/components/modal.min';
 import '../stylesheets/semantic/components/popup.min';
+import '../stylesheets/semantic/components/sidebar.min';
 import '../stylesheets/semantic/components/site.min';
 import '../stylesheets/semantic/components/form.min';
 import '../stylesheets/semantic/components/transition.min';
