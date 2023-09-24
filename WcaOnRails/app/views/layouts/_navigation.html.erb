@@ -1,6 +1,6 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="brand">
-    <a href="<%= root_path %>" ><%= image_tag "WCA Logo 2020.svg" %></a>
+    <a href="<%= root_path %>" ><%= image_tag "WCA Logo.svg" %></a>
   </div>
   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
     <span class="icon-bar"></span>
@@ -10,7 +10,7 @@
   <div class="navbar-collapse collapse disabled">
     <ul class="nav navbar-nav">
       <li class="top-nav logo">
-        <a href="<%= root_path %>"><%= image_tag "WCA Logo 2020.svg" %></a>
+        <a href="<%= root_path %>"><%= image_tag "WCA Logo.svg" %></a>
       </li>
       <li class="dropdown <%= (params[:controller] == 'static_pages' && params[:action] != 'homepage') ? 'active' : '' %>">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -32,7 +32,7 @@
           <li><a href="<%= disclaimer_path %>"><%= ui_icon('exclamation circle') %> <%= t '.disclaimer' %></a></li>
           <li class="divider"></li>
           <li><a href="<%= score_tools_path %>"><%= ui_icon('wrench') %> <%= t '.tools' %></a></li>
-          <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
+          <li><a href="<%= logo_path %>"><i><%= image_tag('WCA Logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
         </ul>
       </li>
       <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
