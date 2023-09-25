@@ -37,3 +37,21 @@ variable "region" {
   type = string
   description = "The AWS Region"
 }
+
+variable "shared" {
+  type = object({
+    vpc_id: string,
+    repository_url: string,
+    ecs_cluster: object({
+      id: string
+    }),
+    capacity_provider: object({
+      name: string
+    }),
+    cluster_security: object({
+      id: string
+    }),
+    private_subnets: any
+  })
+  description = "The shared resources between Environments"
+}

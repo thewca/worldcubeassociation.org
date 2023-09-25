@@ -112,11 +112,11 @@ resource "aws_codebuild_project" "build" {
 
   source {
     type = "CODEPIPELINE"
-    buildspec = templatefile("./templates/buildspec_build.yml.tftpl", {
+    buildspec = templatefile("../templates/buildspec_build.yml.tftpl", {
       container_name         = "handler"
       container_port         = 3000
       task_definition        = aws_ecs_task_definition.this.arn
-      capacity_provider_name = var.shared_resources.capacity_provider.name
+      capacity_provider_name = var.shared.capacity_provider.name
     })
   }
 }
@@ -175,22 +175,22 @@ resource "aws_codedeploy_deployment_group" "this" {
   }
 
   ecs_service {
-    cluster_name = var.shared_resources.ecs_cluster.name
+    cluster_name = var.shared.ecs_cluster.name
     service_name = aws_ecs_service.this.name
   }
 
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {
-        listener_arns = [var.shared_resources.https_listener.arn]
+        listener_arns = [var.shared.https_listener.arn]
       }
 
       target_group {
-        name = var.shared_resources.main_target_group.name
+        name = var.shared.main_target_group.name
       }
 
       target_group {
-        name = var.shared_resources.secondary_target_group.name
+        name = var.shared.secondary_target_group.name
       }
     }
   }

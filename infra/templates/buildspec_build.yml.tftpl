@@ -1,0 +1,18 @@
+version: 0.2
+
+phases:
+  build:
+    commands:
+      # Note that we explicitly specify CapacityProviderStrategy in the appspec,
+      # otherwise the deployment switches the service to launch type EC2.
+      # See https://github.com/aws/containers-roadmap/issues/1752
+      - "printf 'version: 0.0\nResources:\n  - TargetService:\n      Type: AWS::ECS::Service\n      Properties:\n        TaskDefinition: <TASK_DEFINITION>\n        LoadBalancerInfo:\n          ContainerName: \"${container_name}\"\n          ContainerPort: ${container_port}\n        CapacityProviderStrategy:\n          - CapacityProvider: \"${capacity_provider_name}\"\n            Weight: 1' > appspec.yaml"
+      - aws ecs describe-task-definition --output json --task-definition ${task_definition} --query taskDefinition > task_definition.json
+      - jq '.containerDefinitions | map((select(.name == "${container_name}") | .image) |= "<IMAGE_NAME>") | {"containerDefinitions":.}' task_definition.json > task_definition_patch.json
+      - jq -s '.[0] * .[1]' task_definition.json task_definition_patch.json > taskdef.json
+
+artifacts:
+  files:
+    - imageDetail.json
+    - appspec.yaml
+    - taskdef.json
