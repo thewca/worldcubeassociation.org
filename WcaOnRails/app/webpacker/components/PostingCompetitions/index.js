@@ -93,8 +93,7 @@ function PostingCompetitionsIndex({
                 <CountryFlag iso2={c.country_iso2} />
               </Header.Subheader>
               <Header.Subheader>
-                {`Submission Timestamp: ${c.results_submitted_at}`}
-                {/* TODO: Convert the above timestamp to a readable way */}
+                {`Submission Timestamp: ${moment(c.results_submitted_at).fromNow()}`}
               </Header.Subheader>
             </Header>
             <Button.Group floated="right">
