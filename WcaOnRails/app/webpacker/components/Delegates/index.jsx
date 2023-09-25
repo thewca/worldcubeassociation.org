@@ -103,8 +103,6 @@ export default function Delegates({
           marginBottom: '1em',
         }}
         >
-          Region:
-          {' '}
           <Dropdown
             inline
             style={{
