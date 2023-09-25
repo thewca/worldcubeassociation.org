@@ -255,7 +255,7 @@ data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
 }
 
-resource "aws_lb_target_group" "this" {
+resource "aws_lb_target_group" "rails" {
   name        = "wca-main-staging"
   port        = 3000
   protocol    = "HTTP"
@@ -279,7 +279,29 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+resource "aws_lb_target_group" "pma" {
+  name        = "wca-main-pma"
+  port        = 80
+  protocol    = "HTTP"
+  vpc_id      = var.shared.vpc_id
+  target_type = "ip"
 
+  deregistration_delay = 10
+  health_check {
+    interval            = 60
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = var.name_prefix
+    Env = "staging"
+  }
+}
 
 resource "aws_ecs_service" "this" {
   name                               = var.name_prefix
@@ -312,9 +334,15 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.rails.arn
     container_name   = "rails-staging"
     container_port   = 3000
+  }
+
+  load_balancer {
+    target_group_arn = aws_lb_target_group.pma.arn
+    container_name   = "pma-staging"
+    container_port   = 80
   }
 
   network_configuration {

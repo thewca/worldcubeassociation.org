@@ -85,8 +85,8 @@ locals {
     {
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
-        { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
-          rds_replica_host: "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
+        { rds_host: "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
+          rds_replica_host: "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com" }))
     }
   ]
 }
@@ -204,7 +204,7 @@ data "aws_ecs_task_definition" "this" {
 }
 
 resource "aws_lb_target_group" "this" {
-  name        = "wca-main-staging"
+  name        = "wca-main-production"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = var.shared.vpc_id

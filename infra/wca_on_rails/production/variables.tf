@@ -28,6 +28,16 @@ variable "VAULT_APPLICATION" {
   default     = "wca-main-production"
 }
 
+variable "DATABASE_WRT_USER" {
+  type        = string
+  description = "The name of the database user that WRT signs in with"
+}
+
+variable "VAULT_ADDR" {
+  type        = string
+  description = "The address of the vault cluster that is running in our private subnet"
+}
+
 variable "name_prefix" {
   type        = string
   description = "Prefix for naming resources"
