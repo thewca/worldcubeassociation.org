@@ -1,0 +1,69 @@
+name: Deployment to Staging
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Trigger deployment on comment
+        id: trigger-deployment
+        uses: shanegenschaw/pull-request-comment-trigger@v2.1.0
+        with:
+          trigger: '@thewca-bot deploy staging'
+          reaction: rocket
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Get ref from pr
+        id: comment-branch
+        uses: xt0rted/pull-request-comment-branch@v2
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ steps.comment-branch.outputs.head_ref }}
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+      - name: Build Sidekiq if triggered
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+        uses: docker/build-push-action@v4
+        with:
+          context: ./WcaOnRails
+          push: true
+          file: Dockerfile.sidekiq
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Build Rails if triggered
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+        uses: docker/build-push-action@v4
+        with:
+          context: ./WcaOnRails
+          push: true
+          file: Dockerfile
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+      - name: Deploy staging if triggered
+        if: steps.trigger-deployment.outputs.triggered == 'true'
+        run: |
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment

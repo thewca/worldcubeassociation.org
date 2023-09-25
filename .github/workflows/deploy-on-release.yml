@@ -1,0 +1,52 @@
+name: Deploy Image on GitHub Release
+on:
+  release:
+    types: [created]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v3
+        with:
+          aws-access-key-id: ${{ secrets.CI_CD_AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.CI_CD_AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_DEFAULT_REGION }}
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+      - name: Build and Push Sidekiq image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./WcaOnRails
+          push: true
+          file: Dockerfile.sidekiq
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-production
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:sidekiq-staging
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+        # this will trigger the deployment pipeline for prod
+      - name: Build and push Prod Image
+        uses: docker/build-push-action@v4
+        with:
+          context: ./WcaOnRails
+          push: true
+          file: Dockerfile
+          tags: |
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:latest
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
+            ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:${{ github.event.release.tag_name }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+        # Replace the old sidekiq image with the new one
+      - name: Deploy Sidekiq
+        run: |
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-auxiliary-services --force-new-deployment
+        # There is no pipeline for staging so we manually force to update the image
+      - name: Deploy staging
+        run: |
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-staging --force-new-deployment
