@@ -199,8 +199,8 @@ resource "aws_ecr_lifecycle_policy" "this" {
   })
 }
 
-output "repository_url" {
-  value = aws_ecr_repository.this.repository_url
+output "ecr_repository" {
+  value = aws_ecr_repository.this
 }
 
 output "ecs_cluster" {

@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name              = "sidekiq-main"
-      image             = "${var.shared.repository_url}:sidekiq-staging"
+      image             = "${var.shared.repository_url}:sidekiq-production"
       cpu    = 512
       memory = 1024
       portMappings = []

@@ -31,7 +31,7 @@ data "aws_iam_policy_document" "codepipeline_policy" {
 
   statement {
     actions   = ["ecr:DescribeImages"]
-    resources = [aws_ecr_repository.this.arn]
+    resources = [var.shared.ecr_repository.arn]
   }
 
   statement {
@@ -217,33 +217,6 @@ resource "aws_s3_bucket_lifecycle_configuration" "this" {
   }
 }
 
-resource "aws_ecr_repository" "this" {
-  name         = var.name_prefix
-  force_delete = true
-}
-
-resource "aws_ecr_lifecycle_policy" "this" {
-  repository = aws_ecr_repository.this.name
-
-  policy = jsonencode({
-    rules = [
-      {
-        rulePriority = 1
-        description  = "Expire images older than 14 days"
-        selection = {
-          tagStatus   = "untagged"
-          countType   = "sinceImagePushed"
-          countUnit   = "days"
-          countNumber = 14
-        }
-        action = {
-          type = "expire"
-        }
-      }
-    ]
-  })
-}
-
 resource "aws_codepipeline" "this" {
   name     = var.name_prefix
   role_arn = aws_iam_role.codepipeline_role.arn
@@ -265,7 +238,7 @@ resource "aws_codepipeline" "this" {
       output_artifacts = ["image"]
 
       configuration = {
-        RepositoryName = aws_ecr_repository.this.name
+        RepositoryName = var.shared.ecr_repository.name
         ImageTag       = "latest"
       }
     }
@@ -325,7 +298,7 @@ resource "aws_cloudwatch_event_rule" "ecr_image_push" {
     detail-type = ["ECR Image Action"]
 
     detail = {
-      repository-name = [aws_ecr_repository.this.name]
+      repository-name = [var.shared.ecr_repository.name]
       image-tag       = ["latest"]
       action-type     = ["PUSH"]
       result          = ["SUCCESS"]
@@ -337,8 +310,4 @@ resource "aws_cloudwatch_event_target" "ecr_image_push" {
   rule     = aws_cloudwatch_event_rule.ecr_image_push.name
   arn      = aws_codepipeline.this.arn
   role_arn = aws_iam_role.codepipeline_role.arn
-}
-
-output "ecr_repository_url" {
-  value = aws_ecr_repository.this.repository_url
 }

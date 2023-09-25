@@ -163,7 +163,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name              = "rails-staging"
-      image             = "${var.shared.repository_url}:staging"
+      image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1536
       memory = 6000
       portMappings = [
@@ -193,7 +193,7 @@ resource "aws_ecs_task_definition" "this" {
     },
     {
       name              = "sidekiq-staging"
-      image             = "${var.shared.repository_url}:sidekiq-staging"
+      image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
       cpu    = 256
       memory = 512
       portMappings = []

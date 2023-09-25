@@ -46,7 +46,10 @@ variable "VAULT_APPLICATION" {
 variable "shared" {
   type = object({
     vpc_id: string,
-    repository_url: string,
+    ecr_repository: object({
+      repository_url: string
+      name: string
+    }),
     ecs_cluster: object({
       id: string
     }),

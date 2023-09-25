@@ -41,7 +41,11 @@ variable "region" {
 variable "shared" {
   type = object({
     vpc_id: string,
-    repository_url: string,
+    ecr_repository: object({
+      repository_url: string
+      name: string
+      arn: string
+    }),
     ecs_cluster: object({
       id: string
     }),
