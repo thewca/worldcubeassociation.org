@@ -72,6 +72,9 @@ variable "shared" {
     https_listener: object({
       arn: string
     })
+    pma_production: object({
+      arn: string
+    })
     # These are booth arrays
     private_subnets: any
     rails-blue-green: any

@@ -59,6 +59,12 @@ variable "shared" {
     cluster_security: object({
       id: string
     }),
+    rails_staging: object({
+      arn: string
+    })
+    pma_staging: object({
+      arn: string
+    })
     private_subnets: any
   })
   description = "The shared resources between Environments"

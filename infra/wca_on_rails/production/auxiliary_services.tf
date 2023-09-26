@@ -2,30 +2,6 @@ resource "aws_cloudwatch_log_group" "auxiliary" {
   name = var.name_prefix
 }
 
-resource "aws_lb_target_group" "auxiliary" {
-  name        = "wca-main-staging"
-  port        = 80
-  protocol    = "HTTP"
-  vpc_id      = var.shared.vpc_id
-  target_type = "ip"
-
-  deregistration_delay = 10
-  health_check {
-    interval            = 60
-    path                = "/"
-    port                = "traffic-port"
-    protocol            = "HTTP"
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
-    matcher             = 200
-  }
-  tags = {
-    Name = var.name_prefix
-    Env = "staging"
-  }
-}
-
 resource "aws_ecs_task_definition" "auxiliary" {
   family = "${var.name_prefix}-auxiliary-services"
 
@@ -134,7 +110,7 @@ resource "aws_ecs_service" "auxiliary" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.auxiliary.arn
+    target_group_arn = var.shared.pma_production.arn
     container_name   = "pma-production"
     container_port   = 80
   }
