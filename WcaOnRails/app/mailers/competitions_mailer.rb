@@ -161,16 +161,6 @@ class CompetitionsMailer < ApplicationMailer
     @competition.uploaded_jsons.delete_all
   end
 
-  def posting_results(competition, poster)
-    @competition = competition
-    @poster = poster
-    mail(
-      from: "results@worldcubeassociation.org",
-      to: "results@worldcubeassociation.org",
-      subject: "Results for #{competition.name}",
-    )
-  end
-
   def registration_reminder(competition, user, registered_but_not_accepted)
     @competition = competition
     @user = user

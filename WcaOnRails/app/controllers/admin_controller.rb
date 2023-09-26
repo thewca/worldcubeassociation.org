@@ -145,6 +145,7 @@ class AdminController < ApplicationController
   end
 
   def import_results
+    @competition = competition_from_params
     load_result_posting_steps
   end
 
