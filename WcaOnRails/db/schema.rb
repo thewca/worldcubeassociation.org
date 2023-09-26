@@ -895,6 +895,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["group_id"], name: "index_roles_on_group_id"
+    t.index ["user_id"], name: "index_roles_on_user_id"
   end
 
   create_table "rounds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1149,6 +1150,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "groups", "groups", column: "parent_group_id"
   add_foreign_key "roles", "groups"
+  add_foreign_key "roles", "users"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"
