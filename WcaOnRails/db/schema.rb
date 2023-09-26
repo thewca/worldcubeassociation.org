@@ -685,19 +685,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
   end
 
-  create_table "groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "name", null: false
-    t.string "group_type", null: false
-    t.bigint "parent_group_id"
-    t.boolean "is_active", null: false
-    t.boolean "is_hidden", null: false
-    t.bigint "metadata_id"
-    t.string "metadata_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["parent_group_id"], name: "index_groups_on_parent_group_id"
-  end
-
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.string "competition_id", null: false
@@ -1052,6 +1039,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
+  create_table "user_groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "group_type", null: false
+    t.bigint "parent_group_id"
+    t.boolean "is_active", null: false
+    t.boolean "is_hidden", null: false
+    t.bigint "metadata_id"
+    t.string "metadata_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_group_id"], name: "index_user_groups_on_parent_group_id"
+  end
+
   create_table "user_preferred_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "event_id"
@@ -1148,8 +1148,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "groups", "groups", column: "parent_group_id"
-  add_foreign_key "roles", "groups"
+  add_foreign_key "roles", "user_groups", column: "group_id"
   add_foreign_key "roles", "users"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
@@ -1157,4 +1156,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
   add_foreign_key "stripe_payment_intents", "users"
   add_foreign_key "stripe_transactions", "stripe_transactions", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
+  add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
 end
