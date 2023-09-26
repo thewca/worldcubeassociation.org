@@ -1,4 +1,4 @@
-resource "aws_cloudwatch_log_group" "this" {
+resource "aws_cloudwatch_log_group" "auxiliary" {
   name = var.name_prefix
 }
 
@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "auxiliary" {
   container_definitions = jsonencode([
     {
       name              = "sidekiq-main"
-      image             = "${var.shared.repository_url}:sidekiq-production"
+      image             = "${var.shared.ecr_repository.repository_url}:sidekiq-production"
       cpu    = 512
       memory = 1024
       portMappings = []
@@ -98,6 +98,11 @@ resource "aws_ecs_task_definition" "auxiliary" {
     Name = var.name_prefix
   }
 }
+
+data "aws_ecs_task_definition" "auxiliary" {
+  task_definition = aws_ecs_task_definition.this.family
+}
+
 resource "aws_ecs_service" "auxiliary" {
   name                               = "${var.name_prefix}-auxiliary-services"
   cluster                            = var.shared.ecs_cluster.id

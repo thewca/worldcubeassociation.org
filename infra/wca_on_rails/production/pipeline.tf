@@ -182,15 +182,15 @@ resource "aws_codedeploy_deployment_group" "this" {
   load_balancer_info {
     target_group_pair_info {
       prod_traffic_route {
-        listener_arns = [var.shared.https_listener.arn]
+        listener_arns = [var.https_listener]
       }
 
       target_group {
-        name = var.shared.main_target_group.name
+        name = aws_lb_target_group.rails-blue.name
       }
 
       target_group {
-        name = var.shared.secondary_target_group.name
+        name = aws_lb_target_group.rails-green.name
       }
     }
   }

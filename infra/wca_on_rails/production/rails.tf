@@ -162,7 +162,7 @@ resource "aws_ecs_task_definition" "this" {
   container_definitions = jsonencode([
     {
       name              = "rails-main"
-      image             = "${var.shared.repository_url}:latest"
+      image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 1536
       memory = 7861
       portMappings = [
@@ -203,7 +203,7 @@ data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
 }
 
-resource "aws_lb_target_group" "this" {
+resource "aws_lb_target_group" "rails-blue" {
   name        = "wca-main-production"
   port        = 3000
   protocol    = "HTTP"
@@ -227,7 +227,29 @@ resource "aws_lb_target_group" "this" {
   }
 }
 
+resource "aws_lb_target_group" "rails-green" {
+  name        = "wca-main-production"
+  port        = 3000
+  protocol    = "HTTP"
+  vpc_id      = var.shared.vpc_id
+  target_type = "ip"
 
+  deregistration_delay = 10
+  health_check {
+    interval            = 60
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = var.name_prefix
+    Env = "staging"
+  }
+}
 
 resource "aws_ecs_service" "this" {
   name                               = var.name_prefix
@@ -260,7 +282,7 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.this.arn
+    target_group_arn = aws_lb_target_group.rails-blue.arn
     container_name   = "rails-staging"
     container_port   = 3000
   }
@@ -278,4 +300,14 @@ resource "aws_ecs_service" "this" {
     Name = var.name_prefix
   }
 
+  lifecycle {
+    ignore_changes = [
+      # The desired count is modified by Application Auto Scaling
+      desired_count,
+      # The target group changes during Blue/Green deployment
+      load_balancer,
+      # The Task definition will be set by Code Deploy
+      task_definition
+    ]
+  }
 }

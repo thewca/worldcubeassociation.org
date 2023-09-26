@@ -48,6 +48,12 @@ variable "region" {
   description = "The AWS Region"
 }
 
+variable "https_listener" {
+  type = string
+  description = "The HTTPS Listener of the Main Load Balancer"
+  default = "arn:aws:elasticloadbalancing:us-west-2:285938427530:listener/app/WCA-Main/04d6bbfa0cb1e752/9e17b4a74e426ee4"
+}
+
 variable "shared" {
   type = object({
     vpc_id: string,
@@ -58,6 +64,7 @@ variable "shared" {
     }),
     ecs_cluster: object({
       id: string
+      name: string
     }),
     capacity_provider: object({
       name: string
