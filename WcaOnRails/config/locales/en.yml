@@ -942,7 +942,7 @@ en:
     #context: "Support the WCA" bottom box
     support:
       title: "Support the WCA"
-      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
+      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-led nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
       button: "Learn more about how you can support the WCA"
   #context: Key used in the context of editing a user profile
   users:
@@ -2037,7 +2037,7 @@ en:
     mission_footer: WCA Mission Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
-      <p>As the WCA has evolved over the past decade, over 200,000 people have competed in our competitions. Despite this growth, we remain an organization that is entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
+      <p>As the WCA has evolved over the past decade, over 200,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
@@ -2052,7 +2052,7 @@ en:
     other_help_title: Other ways to help
     other_help_content_html: '<p>If you believe you would be able to contribute to the World Cube Association in a non-financial way, we would love to hear from you! Please get in touch with us at <a href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>'
     donation_banner:
-      content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
+      content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-led nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
       donate_credit: Donate via credit card
       donate_paypal: Donate via Paypal
       donate_other: Other ways to donate
