@@ -48,12 +48,6 @@ variable "region" {
   description = "The AWS Region"
 }
 
-variable "https_listener" {
-  type = string
-  description = "The HTTPS Listener of the Main Load Balancer"
-  default = "arn:aws:elasticloadbalancing:us-west-2:285938427530:listener/app/WCA-Main/04d6bbfa0cb1e752/9e17b4a74e426ee4"
-}
-
 variable "shared" {
   type = object({
     vpc_id: string,
@@ -72,7 +66,15 @@ variable "shared" {
     cluster_security: object({
       id: string
     }),
+    lb: object({
+      id: string
+    })
+    https_listener: object({
+      arn: string
+    })
+    # These are booth arrays
     private_subnets: any
+    rails-blue-green: any
   })
   description = "The shared resources between Environments"
 }

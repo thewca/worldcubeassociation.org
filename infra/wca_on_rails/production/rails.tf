@@ -203,54 +203,6 @@ data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
 }
 
-resource "aws_lb_target_group" "rails-blue" {
-  name        = "wca-main-production"
-  port        = 3000
-  protocol    = "HTTP"
-  vpc_id      = var.shared.vpc_id
-  target_type = "ip"
-
-  deregistration_delay = 10
-  health_check {
-    interval            = 60
-    path                = "/"
-    port                = "traffic-port"
-    protocol            = "HTTP"
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
-    matcher             = 200
-  }
-  tags = {
-    Name = var.name_prefix
-    Env = "staging"
-  }
-}
-
-resource "aws_lb_target_group" "rails-green" {
-  name        = "wca-main-production"
-  port        = 3000
-  protocol    = "HTTP"
-  vpc_id      = var.shared.vpc_id
-  target_type = "ip"
-
-  deregistration_delay = 10
-  health_check {
-    interval            = 60
-    path                = "/"
-    port                = "traffic-port"
-    protocol            = "HTTP"
-    timeout             = 5
-    healthy_threshold   = 2
-    unhealthy_threshold = 5
-    matcher             = 200
-  }
-  tags = {
-    Name = var.name_prefix
-    Env = "staging"
-  }
-}
-
 resource "aws_ecs_service" "this" {
   name                               = var.name_prefix
   cluster                            = var.shared.ecs_cluster.id
@@ -282,7 +234,7 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = aws_lb_target_group.rails-blue.arn
+    target_group_arn = var.shared.rails-blue-green[0].arn
     container_name   = "rails-staging"
     container_port   = 3000
   }
