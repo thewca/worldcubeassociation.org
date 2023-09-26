@@ -93,8 +93,8 @@ after "development:users" do
             eventId: event.id,
             roundTypeId: roundTypeId,
             formatId: round_format.id,
-            regionalSingleRecord: k == 0 ? "WR" : "",
-            regionalAverageRecord: k == 0 ? "WR" : "",
+            regionalSingleRecord: k == 0 ? "WR" : nil,
+            regionalAverageRecord: k == 0 ? "WR" : nil,
           )
           round_format.expected_solve_count.times do |v|
             result.send("value#{v+1}=", random_wca_value)

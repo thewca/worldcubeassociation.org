@@ -1,5 +1,5 @@
 # See http://www.robotstxt.org/robotstxt.html for documentation on how to use the robots.txt file
-<% unless EnvVars.WCA_LIVE_SITE? %>
+<% unless EnvConfig.WCA_LIVE_SITE? %>
 User-agent: *
 Disallow: /
 <% end %>

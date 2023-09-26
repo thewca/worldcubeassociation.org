@@ -4787,22 +4787,6 @@ ru:
       content_html: >-
         Отправьте полученный файл JSON по email: <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Связи
-      #original_hash: 69ba020
-      find_relations: Найдите связи между куберами
-      #original_hash: 5d6056d
-      show_relation: Показать связи!
-      connectives:
-        #original_hash: f85194e
-        was_at: был(а) на
-        #original_hash: 8c00243
-        together_with: вместе с
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Пожалуйста, введите два разных действительных WCA ID.'
   search_results:
     index:
       #original_hash: db98a68

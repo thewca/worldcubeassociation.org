@@ -30,7 +30,7 @@
         <%= f.previewbox avatar_sym %>
 
         <br>
-        <% if EnvVars.WCA_LIVE_SITE? %>
+        <% if EnvConfig.WCA_LIVE_SITE? %>
           <%= f.submit t('.save'), class: "btn btn-primary" %>
         <% end %>
       </div>

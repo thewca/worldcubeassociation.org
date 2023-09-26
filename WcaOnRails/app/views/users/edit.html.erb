@@ -126,7 +126,7 @@
         <% if current_user.can_view_all_users? %>
           <%= f.input :delegate_status, disabled: !editable_fields.include?(:senior_delegate_id) %>
           <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
-          <%= f.input :region, disabled: !editable_fields.include?(:region) %>
+          <%= f.input :location, disabled: !editable_fields.include?(:location) %>
         <% end %>
 
         <% unless @user.current_teams.reject(&:hidden?).empty? %>

@@ -50,7 +50,7 @@ namespace :db do
   namespace :load do
     desc 'Download and import the publicly accessible database dump from the production server'
     task development: :environment do
-      if EnvVars.WCA_LIVE_SITE?
+      if EnvConfig.WCA_LIVE_SITE?
         abort "This actions is disabled for the production server!"
       end
 
@@ -67,14 +67,19 @@ namespace :db do
 
           config = ActiveRecord::Base.connection_db_config
           LogTask.log_task "Clobbering contents of '#{config.database}' with #{DbDumpHelper::DEVELOPER_EXPORT_SQL}" do
-            DatabaseDumper.mysql("DROP DATABASE IF EXISTS #{config.database}")
-            DatabaseDumper.mysql("CREATE DATABASE #{config.database}")
+            ActiveRecord::Tasks::DatabaseTasks.drop config
+            ActiveRecord::Tasks::DatabaseTasks.create config
+
+            # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
+            # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
+
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
           end
 
-          default_password = 'wca'
-          default_encrypted_password = User.new(password: default_password).encrypted_password
-          LogTask.log_task "Setting all user passwords to '#{default_password}'" do
+          dummy_password = DbDumpHelper.use_staging_password? ? AppSecrets.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
+
+          default_encrypted_password = User.new(password: dummy_password).encrypted_password
+          LogTask.log_task "Setting all user passwords to '#{dummy_password}'" do
             User.update_all encrypted_password: default_encrypted_password
           end
 

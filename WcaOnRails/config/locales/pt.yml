@@ -309,8 +309,8 @@ pt:
     world: Mundo
     #original_hash: 2513cf0
     continent: Continente
-    #original_hash: d523ebb
-    country: País
+    #original_hash: 0f21717
+    country: Região
     #original_hash: 0154c0d
     here: aqui
     #original_hash: 77003d0
@@ -329,8 +329,8 @@ pt:
     user:
       #original_hash: 603a218
       wca_id: ID da WCA
-      #original_hash: e0f64f7
-      citizen_of: Cidadão de
+      #original_hash: fa4c045
+      representing: Representando
     #original_hash: 3fc0ba1
     all_regions: Todas as regiões
     errors:
@@ -403,8 +403,8 @@ pt:
         unconfirmed_wca_id: ID da WCA não confirmado
         #original_hash: 8ed8874
         login: Email ou ID da WCA
-        #original_hash: 1528d10
-        country_iso2: Nacionalidade
+        #original_hash: fa4c045
+        country_iso2: Representando
         #original_hash: ab58155
         dob: Data de nascimento
         #original_hash: 7636bbc
@@ -431,8 +431,8 @@ pt:
           quando novos registos forem submetidos.
         #original_hash: de60ab8
         delegate_status: Estatuto de delegado
-        #original_hash: 0f21717
-        region: Região
+        #original_hash: d219c68
+        location: Localização
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -452,8 +452,8 @@ pt:
         name_reason: A razão para o nome
         #original_hash: fdba578
         cellName: Nome curto da competição
-        #original_hash: d523ebb
-        countryId: País
+        #original_hash: 0f21717
+        countryId: Região
         #original_hash: 25b7b06
         cityName: Cidade
         #original_hash: 67cd406
@@ -630,8 +630,8 @@ pt:
       person:
         #original_hash: 8c41ae8
         wca_id: Pessoa
-        #original_hash: d523ebb
-        countryId: País
+        #original_hash: fa4c045
+        countryId: Representando
         #original_hash: ab58155
         dob: Data de nascimento
         #original_hash: 8a754c6
@@ -701,8 +701,8 @@ pt:
       regional_organization:
         #original_hash: 709a232
         name: Nome
-        #original_hash: d523ebb
-        country: País
+        #original_hash: 0f21717
+        country: Região
         #original_hash: 2e8a57c
         website: Website
         #original_hash: 83fce83
@@ -846,7 +846,7 @@ pt:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1675,6 +1675,8 @@ pt:
       results_admin: Administrador
       #original_hash: 61074f1
       results_database: Base de dados
+      #original_hash: 54e0548
+      results_sidekiq: Dashboard Sidekiq
       #original_hash: aee74b8
       new_post: Novo artigo
       #original_hash: 0d67445
@@ -1770,12 +1772,12 @@ pt:
     support:
       #original_hash: 610edba
       title: Ajude a WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
-        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
-        donativos para nos ajudar a promover a nossa visão de ter competições
-        mais agradáveis em todo o mundo.
+        Sendo uma organização sem fins lucrativos, 100% liderada por
+        voluntários, agradecemos donativos para nos ajudar a promover a nossa
+        visão de ter competições mais agradáveis em todo o mundo.
       #original_hash: 65c84ec
       button: Saiba mais sobre como pode ajudar a WCA
   users:
@@ -2011,10 +2013,12 @@ pt:
         removidos. Envie um email para a Equipa de Resultados da WCA para ajudar
         a mudar o ID da WCA para uma conta diferente.
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 8bb2def
         msg: >-
-          Não pode alterar o seu nome, data de nascimento, género ou país.
-          Motivo: %{reason}. Entre em contacto com o seu <a
+          Não pode alterar o seu nome, data de nascimento, género ou região.
+          Motivo: %{reason}. Entre em contacto com a <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>Equipa
+          de Resultados da WCA</a> ou com o seu <a
           href='%{delegate_url}'>Delegado</a> para fazer algumas dessas
           mudanças.
         reason:
@@ -2115,12 +2119,12 @@ pt:
       dob_past: deve ser no passado
       #original_hash: b320913
       dob_recent: tem de ter pelo menos dois anos de idade
-      #original_hash: b64df45
+      #original_hash: afbf275
       already_represented_country: >-
-        Não é possível modificar o país para um que a pessoa já representou no
-        passado.
-      #original_hash: b589014
-      must_have_a_change: O nome do país tem que ser diferente para atualizar o competidor.
+        Não é possível modificar a região para uma que a pessoa já representou
+        no passado.
+      #original_hash: 5fe15d4
+      must_have_a_change: O nome da região tem que ser diferente para atualizar o competidor.
       #original_hash: 012f032
       must_be_senior: deve ser um Delegado Sénior
       #original_hash: 2e582eb
@@ -2198,8 +2202,8 @@ pt:
       need_gender: Necessita ter um género
       #original_hash: ebf1ecb
       need_dob: Necessita ter uma data de nascimento
-      #original_hash: d84a54f
-      need_country: Necessita ter um país
+      #original_hash: aab7355
+      need_country: Necessita ter uma região
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Uma inscrição não pode estar aceite e excluída ao mesmo tempo.
       #original_hash: a38d024
@@ -2350,11 +2354,11 @@ pt:
       title: 'Inscrições para %{comp}'
       #original_hash: 5301648
       edit: Editar
-      #original_hash: 0ab725c
+      #original_hash: beffc45
       country_plural:
-        zero: 0 países
-        one: 1 país
-        other: '%{count} países'
+        zero: 0 regiões
+        one: 1 região
+        other: '%{count} regiões'
       #original_hash: 1feee0e
       export_csv: Exportar para CSV
       #original_hash: 84add5b
@@ -2455,8 +2459,8 @@ pt:
     #original_hash: cf29e85
     registration_full_include_waiting_list: >-
       O limite de competidores para esta competição é %{competitor_limit} e
-      poderá estar atingidoo. Se se inscrever, a sua inscrição será colocada
-      numa lista de espera. Poderá não ser aprovada a menos que uma vaga seja
+      poderá estar atingido. Se se inscrever, a sua inscrição será colocada numa
+      lista de espera. Poderá não ser aprovada a menos que uma vaga seja
       libertada.
     #original_hash: 855ca9c
     can_register: 'Pode inscrever-se em %{comp} abaixo.'
@@ -2583,9 +2587,9 @@ pt:
         a base de dados atualizada de acordo.
       #original_hash: 779b272
       registrations_file_label: Ficheiro de registos
-      #original_hash: 4017f0e
+      #original_hash: 224f3a6
       registrations_file_hint: >-
-        Ficheiro CSV com as colunas: Estado, Nome, País, ID da WCA, Data de
+        Ficheiro CSV com as colunas: Estado, Nome, Região, ID da WCA, Data de
         Nascimento, Sexo, Email e uma coluna para cada evento.
       #original_hash: d6fbc9d
       import: Importar
@@ -2998,10 +3002,6 @@ pt:
     index:
       #original_hash: db98a68
       title: Competições
-      #original_hash: f483b9c
-      disclaimer: >-
-        Note que, devido à pandemia COVID-19, alguns países não podem ter
-        competições.
       #original_hash: 6a72085
       all_events: Todos
       #original_hash: 6d76b81
@@ -3685,8 +3685,8 @@ pt:
       name: Nome
       #original_hash: 5faa59d
       result: Resultado
-      #original_hash: e0f64f7
-      citizen_of: Cidadão de
+      #original_hash: fa4c045
+      representing: Representando
       #original_hash: 1917f4f
       competition: Competição
       #original_hash: e7f6fc5
@@ -3717,8 +3717,8 @@ pt:
       name_or_wca_id: Parte do nome ou ID da WCA
       #original_hash: 709a232
       name: Nome
-      #original_hash: d523ebb
-      country: País
+      #original_hash: fa4c045
+      country: Representando
       #original_hash: 02ae2bd
       podiums: Pódios
       #original_hash: 56656a0
@@ -3730,10 +3730,10 @@ pt:
       completed_solves: Resoluções Completas
       #original_hash: fc78642
       personal_records: Recordes Pessoais Atuais
-      #original_hash: e631f13
+      #original_hash: 2ad8fd5
       odd_rank_reason: >-
-        Um ranking em falta ou um ranking de país pior que o do continente
-        deve-se a uma mudança de país. Resultados da região anterior não são
+        Um ranking em falta ou um ranking regional pior que o do continente
+        deve-se a uma mudança de região. Resultados da região anterior não são
         levados em conta para o ranking da região atual.
       #original_hash: a91508f
       championship_podiums: Pódios em Competições
@@ -4051,7 +4051,7 @@ pt:
     mission_footer: Declaração da Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
-    #original_hash: 9248dc4
+    #original_hash: 19b86da
     who_we_are_content_html: >-
       <p> A World Cube Association rege as competições de puzzles mecânicos que
       são operados por rotação de grupos de peças, geralmente conhecidos como
@@ -4060,7 +4060,7 @@ pt:
       quebra-cabeças é escolhida como eventos oficiais da WCA.</p> <p>Como a WCA
       evoluiu na última década, mais de 100.000 pessoas competiram nas nossas
       competições. Apesar desse crescimento, continuamos a ser uma organização
-      que é inteiramente gerida por voluntários, de organizadores locais a
+      que é quase inteiramente gerida por voluntários, de organizadores locais a
       delegados da WCA e até mesmo ao Conselho da WCA. Somos muito gratos a
       todos que tiram tempo de suas vidas para permitir que a WCA funcione. Com
       mais apoio financeiro, esperamos trazer um nível ainda maior de
@@ -4088,10 +4088,10 @@ pt:
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
-    #original_hash: a08c67f
+    #original_hash: 2fea363
     whats_next_content_html: >-
       <p> A World Cube Association teve mais de 100.000 competidores únicos de
-      140 países diferentes e não estamos a planear abrandar tão cedo! A
+      140 regiões diferentes e não estamos a planear abrandar tão cedo! A
       comunidade de cubing tem crescido constantemente desde a nossa fundação em
       2004 e queremos encorajá-la a continuar no futuro aumentando a
       acessibilidade das competições a novas áreas. No futuro, esperamos apoiar
@@ -4124,12 +4124,12 @@ pt:
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org
       </a>.</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
-        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
-        donativos para nos ajudar a promover a nossa visão de ter competições
-        mais agradáveis em todo o mundo.
+        Sendo uma organização sem fins lucrativos, 100% liderada por
+        voluntários, agradecemos donativos para nos ajudar a promover a nossa
+        visão de ter competições mais agradáveis em todo o mundo.
       #original_hash: 24c87db
       donate_credit: Doar via cartão de crédito
       #original_hash: 0e5a9c3
@@ -4416,11 +4416,11 @@ pt:
     how_to:
       #original_hash: b243b1f
       title: Como se tornar uma Organização Regional reconhecida pela WCA
-      #original_hash: f042a88
+      #original_hash: 9f31403
       description: >-
         A WCA reconhece várias Organizações Regionais pelo mundo inteiro. O
         objetivo de uma Organização Regional WCA é organizar competições da WCA
-        e suportar as suas atividades nessa região. Países que desejem formar
+        e suportar as suas atividades nessa região. Regiões que desejem formar
         uma Organização Regional são encorajadas a contribuir para a WCA na sua
         área antes de submeterem uma aplicação. Para ajudar a organizar uma
         competição da WCA na sua área, por favor contacte o seu Delegado mais
@@ -4853,22 +4853,6 @@ pt:
         Envie o ficheiro JSON exportado pelo Assistente de Resultados por email
         para <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relações
-      #original_hash: 69ba020
-      find_relations: Encontrar relações entre competidores
-      #original_hash: 5d6056d
-      show_relation: Mostrar-me a relação!
-      connectives:
-        #original_hash: f85194e
-        was_at: Esteve em
-        #original_hash: 8c00243
-        together_with: Juntos com
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Por favor submeta dois IDs da WCA válidos e distintos.
   search_results:
     index:
       #original_hash: db98a68
@@ -5107,8 +5091,8 @@ pt:
       olist1:
         #original_hash: de00462
         '1': As duas competições não têm eventos comuns.
-        #original_hash: f7bacc5
-        '2': As duas competições ocorrem em países diferentes.
+        #original_hash: b8ff462
+        '2': As duas competições ocorrem em regiões diferentes.
       #original_hash: 5c5cf04
       content2: >-
         "Competições simultâneas de Resolução 3x3 em Menos Movimentos" são
@@ -5414,6 +5398,27 @@ pt:
       sobre a sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão TNoodle legal
+  merch:
+    #original_hash: 96a95a1
+    title: Merchandise WCA
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        A WCA tem merchandise exclusivo disponível para compra! De t-shirts a
+        blusões, autocolantes, tapetes stackmat, mochilas e muito mais! Os
+        nossos designs são constantemente atualizados, incluindo o logótipo
+        clássico da WCA, merchandise oficial do Campeonato do Mundo e designs de
+        Recordes Mundiais.
+      #original_hash: 2865e1d
+      '2': >-
+        Comprar produtos da WCA nas nossas lojas é uma das melhores maneiras de
+        poder apoiar a WCA - uma organização sem fins lucrativos gerida por
+        voluntários. Usamos todos os lucros de merchandise para financiar
+        campeonatos, equipamentos e outras atividades relacionadas com a WCA.
+      #original_hash: 8e57552
+      '3': >-
+        Pode comprar os nossos produtos em todo o mundo - com lojas diretas na
+        Europa, América e Índia e mais para vir em breve!
   database:
     results_export:
       #original_hash: 15d00e1

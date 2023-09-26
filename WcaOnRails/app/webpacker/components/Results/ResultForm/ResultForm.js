@@ -132,7 +132,7 @@ function ResultForm({
       { method: 'DELETE' },
       onError,
     );
-  }, [result, onDelete, onError]);
+  }, [save, result, onDelete, onError]);
 
   const onPersonCreate = useCallback((data) => {
     setPersonData(personDataFromResult(data));

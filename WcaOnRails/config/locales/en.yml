@@ -208,7 +208,7 @@ en:
   common:
     world: "World"
     continent: "Continent"
-    country: "Country"
+    country: "Region"
     #context: "here" is used in html links such as "You can create an account here".
     here: "here"
     best: "Best"
@@ -222,7 +222,7 @@ en:
       no_date: "No date"
     user:
       wca_id: "WCA ID"
-      citizen_of: "Citizen of"
+      representing: "Representing"
     all_regions: "All regions"
     errors:
       invalid: "invalid"
@@ -273,7 +273,7 @@ en:
         wca_id: "WCA ID"
         unconfirmed_wca_id: "Unconfirmed WCA ID"
         login: "Email or WCA ID"
-        country_iso2: "Citizenship"
+        country_iso2: "Representing"
         dob: "Birthdate"
         dob_verification: "Your Birthdate"
         gender: "Gender"
@@ -286,7 +286,7 @@ en:
         results_notifications_enabled: "Email me when my results are posted."
         registration_notifications_enabled: "When I organize or delegate a competition, email me when new registrations are submitted."
         delegate_status: "Delegate status"
-        region: "Region"
+        location: "Location"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
@@ -298,7 +298,7 @@ en:
         name: "Name"
         name_reason: "The reason for the name"
         cellName: "Competition short name"
-        countryId: "Country"
+        countryId: "Region"
         cityName: "City name"
         venue: "Venue"
         venueAddress: "Venue address"
@@ -389,7 +389,7 @@ en:
       #context: a person
       person:
         wca_id: "Person"
-        countryId: "Country"
+        countryId: "Representing"
         dob: "Birthdate"
         gender: "Gender"
         name: "Name"
@@ -433,7 +433,7 @@ en:
         status: "Status"
       regional_organization:
         name: "Name"
-        country: "Country"
+        country: "Region"
         website: "Website"
         logo: "Logo"
         email: "Email"
@@ -512,7 +512,7 @@ en:
         login: ""
         password: ""
         password_confirmation: ""
-        region: ""
+        location: ""
         remember_me: ""
         results_notifications_enabled: ""
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
@@ -884,6 +884,8 @@ en:
       results_team: "Results team"
       results_admin: "Admin"
       results_database: "Database"
+      #context: "Sidekiq" is the name of a software product
+      results_sidekiq: "Sidekiq dashboard"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
@@ -940,7 +942,7 @@ en:
     #context: "Support the WCA" bottom box
     support:
       title: "Support the WCA"
-      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
+      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-led nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
       button: "Learn more about how you can support the WCA"
   #context: Key used in the context of editing a user profile
   users:
@@ -1053,7 +1055,7 @@ en:
       account_is_special: "The WCA ID and account are connected to special roles in the WCA (e.g. delegates, organizers, team members) and cannot be removed. Please email the WCA Results Team to help change the WCA ID to a different account."
       #context: used in the error message when a user can't edit some part of their profile
       cannot_edit:
-        msg: "You cannot change your name, birthdate, gender, or country. Reason: %{reason}. Contact your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
+        msg: "You cannot change your name, birthdate, gender, or region. Reason: %{reason}. Contact the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> or your <a href='%{delegate_url}'>Delegate</a> if you need to change any of these."
         reason:
           assigned: "you have a WCA ID assigned"
           registered: "you have registered for a competition"
@@ -1096,8 +1098,8 @@ en:
       unique_html: "is already used by %{used_name} with %{used_email}. To free up the WCA ID, you can <a href=\"%{used_edit_path}\" target=\"_blank\">edit that account</a> and unassign the WCA ID."
       dob_past: "must be in the past"
       dob_recent: "must be at least two years old"
-      already_represented_country: "Cannot change the country to a country the person has already represented in the past."
-      must_have_a_change: "The name or the country must be different to update the person."
+      already_represented_country: "Cannot change the region to a region the person has already represented in the past."
+      must_have_a_change: "The name or the region must be different to update the person."
       must_be_senior: "must be a Senior Delegate"
       must_not_be_present: "must not be present"
       senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
@@ -1126,7 +1128,7 @@ en:
       need_name: "Need a name"
       need_gender: "Need a gender"
       need_dob: "Need a birthdate"
-      need_country: "Need a country"
+      need_country: "Need a region"
       cannot_be_deleted_and_accepted: "A registration cannot be deleted and accepted at the same time."
       must_register: "must register for at least one event"
       exceeds_event_limit:
@@ -1228,8 +1230,8 @@ en:
       edit: "Edit"
       #context: pluralization of "x country", used on its own, below registrations list
       country_plural:
-        one: "1 country"
-        other: "%{count} countries"
+        one: "1 region"
+        other: "%{count} regions"
       export_csv: "Export to CSV"
       email: "Email"
       approve: "Approve"
@@ -1328,7 +1330,7 @@ en:
       title: "Import registrations for %{comp}"
       info: "You can import registrations multiple times, changes will be determined and the database will be updated accordingly."
       registrations_file_label: "Registrations file"
-      registrations_file_hint: "CSV file with columns: Status, Name, Country, WCA ID, Birth Date, Gender, Email, and one column for each event."
+      registrations_file_hint: "CSV file with columns: Status, Name, Region, WCA ID, Birth Date, Gender, Email, and one column for each event."
       import: "Import"
       errors:
         error: "Error importing %{registration}: %{error}."
@@ -1507,7 +1509,6 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      disclaimer: "Please note that due to the COVID-19 pandemic, some countries are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
@@ -1859,7 +1860,7 @@ en:
     table_elements:
       name: "Name"
       result: "Result"
-      citizen_of: "Citizen of"
+      representing: "Representing"
       competition: "Competition"
       solves: "Solves"
       region: "Region"
@@ -1879,7 +1880,7 @@ en:
     index:
       name_or_wca_id: "Name parts or WCA ID"
       name: "Name"
-      country: "Country"
+      country: "Representing"
       podiums: "Podiums"
       no_persons_found: "No person matches the given criteria."
     #context: Person profile page
@@ -1888,8 +1889,8 @@ en:
       completed_solves: "Completed Solves"
       personal_records: "Current Personal Records"
       odd_rank_reason: >-
-        A missing rank or worse country rank than the continent one
-        is due to a change of country. Results from the previous region
+        A missing rank or worse regional rank than the continent one
+        is due to a change of region. Results from the previous region
         are not taken into account in the current region ranking.
       championship_podiums: "Championship Podiums"
       championship_podium_levels:
@@ -2036,13 +2037,13 @@ en:
     mission_footer: WCA Mission Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
-      <p>As the WCA has evolved over the past decade, over 100,000 people have competed in our competitions. Despite this growth, we remain an organization that is entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
+      <p>As the WCA has evolved over the past decade, over 100,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
-    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different countries and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
+    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
     world_championship_content_html: <p>Every two years, we sanction the competition that ultimately determines the world champion. These events require extremely careful planning by a number of volunteers, as well as a large financial commitment to reserve the venue and make necessary preparations.</p>
     contributing_title: Making a contribution
@@ -2051,7 +2052,7 @@ en:
     other_help_title: Other ways to help
     other_help_content_html: '<p>If you believe you would be able to contribute to the World Cube Association in a non-financial way, we would love to hear from you! Please get in touch with us at <a href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>'
     donation_banner:
-      content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
+      content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-led nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
       donate_credit: Donate via credit card
       donate_paypal: Donate via Paypal
       donate_other: Other ways to donate
@@ -2195,7 +2196,7 @@ en:
     empty: "No Regional Organizations are currently acknowledged by the WCA."
     how_to:
       title: How to become an acknowledged WCA Regional Organization
-      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Countries wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
+      description: The WCA recognizes various Regional Organizations worldwide. The purpose of a WCA Regional Organization is to organize WCA Competitions and support the WCA’s activities in the region. Regions wishing to form a Regional Organization are encouraged to contribute to the WCA in their area before submitting their application. For help organizing a WCA competition in your area, please contact your nearest WCA Delegate.
     requirements:
       title: Requirements for WCA Regional Organizations
       list:
@@ -2354,21 +2355,6 @@ en:
     step7:
       title: "Step 7: Send the results JSON to the WCA"
       content_html: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
-  relations:
-    #context: The page used to find a relation between two given cubers.
-    relation:
-      title: "Relations"
-      find_relations: "Find connections between cubers"
-      show_relation: "Show me the relation!"
-      #context: A kind of connectives that link person/competition boxes on the relation line.
-      connectives:
-        #context: Appears between a person and a competition.
-        #context: Note that "was" may refer either to male or female. Do whatever is appropriate for your language, e.g. <male form>/<female form>.
-        was_at: "Was at"
-        #context: Appears between a competition and a person.
-        together_with: "Together with"
-    messages:
-      invalid_wca_ids: "Please provide two different valid WCA IDs."
   search_results:
     index:
       competitions: "Competitions"
@@ -2467,7 +2453,7 @@ en:
       content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
       olist1:
         '1': "The two competitions don't have events in common."
-        '2': "The two competitions take place in different countries."
+        '2': "The two competitions take place in different regions."
       content2: '"3x3x3 Fewest Moves simultaneous competitions" are WCA competitions having only the 3x3x3 Fewest Moves event and taking place simultaneously in different locations.'
       olist2:
         '1':
@@ -2581,6 +2567,12 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
+  merch:
+      title: 'WCA Merchandise'
+      paragraphs:
+        '1': 'The WCA has exclusive merchandise available to purchase! From T-Shirts, Hoodies, Stickers, Stackmats, Backpacks, and more! Our designs are constantly updated including the classic WCA logo, official World Championship merchandise, and World Record designs.'
+        '2': 'Buying WCA Merch through our stores is one of the best ways for you to support the WCA - a non-profit, volunteer run organization. We use all profits from the merchandise to further fund championships, equipment and other WCA related activities.'
+        '3': 'You can buy our merchandise all over the world -- with direct stores in Europe, America and India and more to come soon!'
   database:
     results_export:
       heading: "WCA Results Export"

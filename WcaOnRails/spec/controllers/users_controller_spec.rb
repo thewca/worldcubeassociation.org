@@ -82,8 +82,7 @@ RSpec.describe UsersController do
 
     it "can set id to something not claimed if the details match" do
       person2 = FactoryBot.create :person, name: user.name, countryId: user.country.id,
-                                           year: user.dob.year, month: user.dob.month,
-                                           day: user.dob.day, gender: user.gender
+                                           dob: user.dob, gender: user.gender
       patch :update, params: { id: user, user: { wca_id: person2.wca_id } }
       user.reload
       expect(user.wca_id).to eq person2.wca_id
@@ -189,14 +188,16 @@ RSpec.describe UsersController do
 
       it "notifies the board and the wqac via email" do
         sign_in user_who_makes_the_change
-        expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(user_whose_delegate_status_changes, user_who_makes_the_change).and_call_original
+        expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(
+          user_whose_delegate_status_changes,
+          user_who_makes_the_change,
+          user_senior_delegate,
+          "candidate_delegate",
+          "delegate",
+        ).and_call_original
         expect do
           patch :update, params: { id: user_whose_delegate_status_changes.id, user: { delegate_status: "delegate" } }
-
-          # For now, we're not sending the delegate status email in a
-          # background job. See
-          # https://github.com/thewca/worldcubeassociation.org/issues/2969.
-        end.to change { enqueued_jobs.size }.by(0)
+        end.to change { enqueued_jobs.size }.by(1)
 
         expect(user_whose_delegate_status_changes.reload.delegate_status).to eq "delegate"
       end

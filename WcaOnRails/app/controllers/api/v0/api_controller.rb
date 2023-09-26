@@ -96,7 +96,11 @@ class Api::V0::ApiController < ApplicationController
         render status: :bad_request, json: { error: "No query specified" }
         return
       end
-      result = models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
+      concise_results_date = ComputeAuxiliaryData.end_date || Date.current
+      cache_key = ["search", *models, concise_results_date.iso8601, query]
+      result = Rails.cache.fetch(cache_key) do
+        models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
+      end
       render status: :ok, json: { result: result }
     end
   end
@@ -158,8 +162,8 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def records
-    concise_results_date = Timestamp.find_by(name: "compute_auxiliary_data_end").date
-    cache_key = "records/#{concise_results_date.iso8601}"
+    concise_results_date = ComputeAuxiliaryData.end_date || Date.current
+    cache_key = ["records", concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
       records = ActiveRecord::Base.connection.exec_query <<-SQL
         SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
@@ -211,5 +215,13 @@ class Api::V0::ApiController < ApplicationController
 
   def countries
     render json: Country.all
+  end
+
+  def competition_series
+    competition_series = CompetitionSeries.find_by_wcif_id(params[:id])
+    if !competition_series.present? || competition_series.public_competitions.empty?
+      raise WcaExceptions::NotFound.new("Competition series with ID #{params[:id]} not found")
+    end
+    render json: competition_series.to_wcif
   end
 end

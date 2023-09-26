@@ -23,10 +23,13 @@ class StripeWebhookEvent < ApplicationRecord
   end
 
   def self.create_from_api(api_event, handled: false)
+    created_at_remote = Time.at(api_event.created).to_datetime
+
     StripeWebhookEvent.create!(
       stripe_id: api_event.id,
       event_type: api_event.type,
       account_id: api_event.account,
+      created_at_remote: created_at_remote,
       handled: handled,
     )
   end
