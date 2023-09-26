@@ -1168,7 +1168,7 @@ en:
       updated: "Updated registration"
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
-      registered: "Registration submitted - make check for any payment instructions to avoid disappointment!"
+      registered: "Registration submitted - please check for any payment instructions to avoid disappointment!"
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
