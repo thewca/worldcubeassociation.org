@@ -1,11 +1,24 @@
 import React from 'react';
 import { Button, Input, Table } from 'semantic-ui-react';
 import UserBadge from '../UserBadge';
-import { startDelegateProbationUrl, endDelegateProbationUrl } from '../../lib/requests/routes.js.erb';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import {
+  delegateProbationDataUrl,
+  startDelegateProbationUrl,
+  endDelegateProbationUrl,
+} from '../../lib/requests/routes.js.erb';
 import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
 
-export default function DelegateProbations({ probationRoles, probationUsers }) {
+export default function DelegateProbations() {
   const [wcaId, setWcaId] = React.useState('');
+  const {
+    data, loading, error, sync,
+  } = useLoadedData(delegateProbationDataUrl);
+  if (loading) return 'Loading...';
+  if (error) {
+    throw error;
+  }
+  const { probationRoles, probationUsers } = data;
 
   function startProbation() {
     fetchWithAuthenticityToken(startDelegateProbationUrl, {
@@ -13,7 +26,7 @@ export default function DelegateProbations({ probationRoles, probationUsers }) {
       body: JSON.stringify({ wcaId }),
       headers: { 'Content-Type': 'application/json' },
     }).then(async () => {
-      window.location.reload();
+      sync();
     });
   }
 
@@ -23,7 +36,7 @@ export default function DelegateProbations({ probationRoles, probationUsers }) {
       body: JSON.stringify({ probationRoleId }),
       headers: { 'Content-Type': 'application/json' },
     }).then(async () => {
-      window.location.reload();
+      sync();
     });
   }
 

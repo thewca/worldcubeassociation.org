@@ -16,6 +16,22 @@ class DelegatesController < ApplicationController
     }
   end
 
+  def delegate_probation_data
+    respond_to do |format|
+      format.json do
+        @probation_roles = Role.where(group_id: UserGroup.where(group_type: "delegate_probation"))
+        @probation_users = {}
+        @probation_roles.each { |probation_role|
+          @probation_users[probation_role.user_id] = User.find_by_id(probation_role.user_id)
+        }
+        render json: {
+          probationUsers: @probation_users.as_json,
+          probationRoles: @probation_roles.as_json,
+        }
+      end
+    end
+  end
+
   def start_delegate_probation
     wca_id = params[:wcaId]
     user = User.find_by_wca_id!(wca_id)
