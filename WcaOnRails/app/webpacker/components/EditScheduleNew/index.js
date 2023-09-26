@@ -27,6 +27,7 @@ import EditActivities from './EditActivities';
 function EditScheduleNew({
   wcifEvents,
   countryZones,
+  calendarLocale,
 }) {
   const {
     competitionId,
@@ -152,6 +153,7 @@ function EditScheduleNew({
           >
             <EditActivities
               wcifEvents={wcifEvents}
+              calendarLocale={calendarLocale}
             />
           </Accordion.Content>
         </Accordion>
@@ -183,6 +185,7 @@ export default function Wrapper({
   wcifEvents,
   wcifSchedule,
   countryZones,
+  calendarLocale,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
 
@@ -200,6 +203,7 @@ export default function Wrapper({
         <EditScheduleNew
           countryZones={countryZones}
           wcifEvents={normalizedEvents}
+          calendarLocale={calendarLocale}
         />
       </ConfirmProvider>
     </Store>
