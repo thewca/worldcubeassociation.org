@@ -1168,7 +1168,7 @@ en:
       updated: "Updated registration"
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
-      registered: "Successfully registered!"
+      registered: "Registration submitted - make sure to follow payment instructions to avoid disappointment!"
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
@@ -1181,10 +1181,11 @@ en:
       #context: for a new registration
       new:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Registration Pending: %{comp}"
+        mail_subject: "Registration Pending: %{comp_name}"
         #context: "comp_name" contains the competition's name
-        registered_html: "Your registration for %{comp_name} is now pending."
-        awaits_approval: "Your registration has been received. Please pay any registration fee, and await approval from the organization team."
+        registered_html: "Your registration for %{comp_name} is now pending, and awaiting approval from the organization team."
+        awaits_approval: "Please ensure that you have followed the competition's registration requirements. For example, a registration fee may need to be paid before the registration is complete."
+
         #context: "here" is replaced by a link to view the registration
         approval_info_html: >-
           You will be emailed when your registration is approved.
