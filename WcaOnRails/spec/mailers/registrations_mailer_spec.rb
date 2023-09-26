@@ -115,7 +115,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:mail) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your registration for #{registration.competition.name} is submitted and pending approval")
+      expect(mail.subject).to eq("Registration Pending: #{registration.competition.name}")
       expect(mail.to).to eq([registration.email])
       expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
