@@ -113,7 +113,9 @@ function EditActivities({
 
   return (
     <>
-      <Dropdown placeholder="Venue" clearable selection options={venueOptions} onChange={setSelectedRoomId} />
+      <Container textAlign="center">
+        <Dropdown placeholder="Venue" clearable selection options={venueOptions} onChange={setSelectedRoomId} />
+      </Container>
       {!!selectedRoomId && (
         <Container>
           <Grid>
