@@ -161,7 +161,7 @@ resource "aws_ecs_task_definition" "this" {
 
   container_definitions = jsonencode([
     {
-      name              = "rails-main"
+      name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
       cpu    = 1536
       memory = 7861
@@ -210,7 +210,7 @@ resource "aws_ecs_service" "this" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 1
+  desired_count                      = 0
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -235,7 +235,7 @@ resource "aws_ecs_service" "this" {
 
   load_balancer {
     target_group_arn = var.shared.rails-blue-green[0].arn
-    container_name   = "rails-staging"
+    container_name   = "rails-production"
     container_port   = 3000
   }
 
@@ -245,7 +245,7 @@ resource "aws_ecs_service" "this" {
   }
 
   deployment_controller {
-    type = "ECS"
+    type = "CODE_DEPLOY"
   }
 
   tags = {

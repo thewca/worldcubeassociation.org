@@ -103,7 +103,7 @@ resource "aws_launch_configuration" "t3_launch_config" {
 }
 
 resource "aws_launch_configuration" "m6i_launch_config" {
-  name_prefix          = "${var.name_prefix}-"
+  name_prefix          = "${var.name_prefix}-m6i-"
   image_id             = data.aws_ami.ecs.id
   iam_instance_profile = aws_iam_instance_profile.ecs_instance_profile.name
   instance_type        = "m6i.2xlarge"
@@ -117,10 +117,10 @@ resource "aws_launch_configuration" "m6i_launch_config" {
 }
 
 resource "aws_autoscaling_group" "t3_group" {
-  name_prefix               = "${var.name_prefix}-"
-  min_size                  = 1
+  name_prefix               = "${var.name_prefix}-t3-"
+  min_size                  = 0
   max_size                  = 6
-  desired_capacity          = 1
+  desired_capacity          = 0
   vpc_zone_identifier       = [aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
   launch_configuration      = aws_launch_configuration.t3_launch_config.name
   health_check_grace_period = 300
@@ -160,10 +160,10 @@ resource "aws_autoscaling_group" "t3_group" {
 }
 
 resource "aws_autoscaling_group" "m6i_group" {
-  name_prefix               = "${var.name_prefix}-"
-  min_size                  = 1
+  name_prefix               = "${var.name_prefix}-m6i-"
+  min_size                  = 0
   max_size                  = 2
-  desired_capacity          = 1
+  desired_capacity          = 0
   vpc_zone_identifier       = [aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
   launch_configuration      = aws_launch_configuration.m6i_launch_config.name
   health_check_grace_period = 300
@@ -203,7 +203,7 @@ resource "aws_autoscaling_group" "m6i_group" {
 }
 
 resource "aws_ecs_capacity_provider" "t3_provider" {
-  name = var.name_prefix
+  name = "${var.name_prefix}-t3"
 
   auto_scaling_group_provider {
     auto_scaling_group_arn         = aws_autoscaling_group.t3_group.arn
@@ -219,7 +219,7 @@ resource "aws_ecs_capacity_provider" "t3_provider" {
 }
 
 resource "aws_ecs_capacity_provider" "m6i_provider" {
-  name = var.name_prefix
+  name = "${var.name_prefix}-m6i"
 
   auto_scaling_group_provider {
     auto_scaling_group_arn         = aws_autoscaling_group.m6i_group.arn

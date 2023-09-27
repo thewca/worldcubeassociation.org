@@ -1,5 +1,5 @@
 resource "aws_cloudwatch_log_group" "auxiliary" {
-  name = var.name_prefix
+  name = "${var.name_prefix}-auxiliary"
 }
 
 resource "aws_ecs_task_definition" "auxiliary" {
@@ -76,7 +76,7 @@ resource "aws_ecs_task_definition" "auxiliary" {
 }
 
 data "aws_ecs_task_definition" "auxiliary" {
-  task_definition = aws_ecs_task_definition.this.family
+  task_definition = aws_ecs_task_definition.auxiliary.family
 }
 
 resource "aws_ecs_service" "auxiliary" {
@@ -86,7 +86,7 @@ resource "aws_ecs_service" "auxiliary" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.auxiliary.arn
-  desired_count                      = 1
+  desired_count                      = 0
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

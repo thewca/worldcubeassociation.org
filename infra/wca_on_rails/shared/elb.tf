@@ -90,7 +90,7 @@ resource "aws_lb_target_group" "rails-blue-green" {
 }
 
 resource "aws_lb_target_group" "auxiliary" {
-  name        = "wca-main-staging"
+  name        = "wca-auxiliary"
   port        = 80
   protocol    = "HTTP"
   vpc_id      = aws_default_vpc.default.id
@@ -114,7 +114,7 @@ resource "aws_lb_target_group" "auxiliary" {
 }
 
 resource "aws_lb_target_group" "rails-staging" {
-  name        = "wca-main-staging"
+  name        = "wca-rails-staging"
   port        = 3000
   protocol    = "HTTP"
   vpc_id      = aws_default_vpc.default.id
@@ -223,7 +223,7 @@ resource "aws_lb_listener_rule" "www_forward_prod" {
 
 resource "aws_lb_listener_rule" "pma_forward_prod" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 2
+  priority     = 3
 
   action {
     type             = "forward"
@@ -232,14 +232,20 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
 
   condition {
     host_header {
-      values = ["www.worldcubeassociation.org/results/database"]
+      values = ["wwww.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/results/database"]
     }
   }
 }
 
 resource "aws_lb_listener_rule" "rails_forward_staging" {
   listener_arn = aws_lb_listener.https.arn
-  priority     = 1
+  priority     = 2
 
   action {
     type             = "forward"
@@ -264,7 +270,13 @@ resource "aws_lb_listener_rule" "pma_forward_staging" {
 
   condition {
     host_header {
-      values = ["staging.worldcubeassociation.org/results/database"]
+      values = ["staging.worldcubeassociation.org"]
+    }
+  }
+
+  condition {
+    path_pattern {
+      values = ["/results/database"]
     }
   }
 }
