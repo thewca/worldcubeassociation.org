@@ -216,7 +216,7 @@ resource "aws_ecs_task_definition" "this" {
     },
     {
       name              = "pma-staging"
-      image             = "botsudo/phpmyadmin-snapshots:5.2-snapshot"
+      image             = "${var.shared.ecr_repository.repository_url}:pma"
       cpu    = 256
       memory = 512
       portMappings = [{

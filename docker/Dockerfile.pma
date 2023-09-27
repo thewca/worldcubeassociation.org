@@ -1,0 +1,10 @@
+FROM botsudo/phpmyadmin-snapshots:5.2-snapshot
+
+# Add custom entrypoint script to the image
+COPY load-ca-and-start.sh /custom-entrypoint.sh
+
+# Make the custom entrypoint script executable
+RUN chmod +x /custom-entrypoint.sh
+
+# Set custom entrypoint script as the entrypoint
+ENTRYPOINT ["/custom-entrypoint.sh"]

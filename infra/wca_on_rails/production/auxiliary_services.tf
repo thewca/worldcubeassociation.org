@@ -42,7 +42,7 @@ resource "aws_ecs_task_definition" "auxiliary" {
     },
     {
       name              = "pma-production"
-      image             = "botsudo/phpmyadmin-snapshots:5.2-snapshot"
+      image             = "${var.shared.ecr_repository.repository_url}:pma"
       cpu    = 256
       memory = 512
       portMappings = [{
