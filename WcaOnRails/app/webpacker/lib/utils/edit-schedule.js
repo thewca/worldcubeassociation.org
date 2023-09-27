@@ -48,6 +48,14 @@ export function newActivityId() {
   return currentElementsIds.activity;
 }
 
+export function nextActivityId(wcifSchedule) {
+  // Explore the WCIF to get the highest ids.
+  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
+  const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
+  const activities = rooms.flatMap((room) => withNestedActivities(room.activities));
+  return maxId(activities) + 1;
+}
+
 export function convertVenueActivitiesToVenueTimezone(oldTZ, venueWcif) {
   // Called when a venue's timezone has been updated, to update all the activities times.
   // The WCA website expose times in UTC, so we need to do two steps:

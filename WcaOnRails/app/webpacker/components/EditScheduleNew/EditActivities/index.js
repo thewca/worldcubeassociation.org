@@ -1,36 +1,39 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useMemo, useRef } from 'react';
 import {
   Button,
-  Checkbox,
   Container,
   Divider,
   Dropdown,
-  Form, Grid,
+  Form,
+  Grid,
   Icon,
   List,
   Message,
-  Popup, Rail, Segment,
-  Sidebar, Sticky,
+  Popup,
+  Sticky,
 } from 'semantic-ui-react';
 
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import luxonPlugin from '@fullcalendar/luxon3';
+import luxonPlugin, { toLuxonDateTime } from '@fullcalendar/luxon3';
 
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import useInputState from '../../../lib/hooks/useInputState';
-import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import ActivityPicker from './ActivityPicker';
 import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
+import { addActivity, removeActivity } from '../store/actions';
+import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
+import { defaultDurationFromActivityCode, nextActivityId } from '../../../lib/utils/edit-schedule';
 
 function EditActivities({
   wcifEvents,
   calendarLocale,
 }) {
   const { wcifSchedule } = useStore();
+  const dispatch = useDispatch();
 
   const [selectedRoomId, setSelectedRoomId] = useInputState();
 
@@ -75,10 +78,14 @@ function EditActivities({
   const fcActivities = useMemo(() => {
     return wcifRoom?.activities.map((activity) => {
       return {
-        id: activity.id,
         title: activity.name,
         start: activity.startTime,
         end: activity.endTime,
+        extendedProps: {
+          activityId: activity.id,
+          activityCode: activity.activityCode,
+          childActivities: activity.childActivities,
+        },
       };
     });
   }, [wcifRoom?.activities]);
@@ -90,12 +97,27 @@ function EditActivities({
 
     new Draggable(node, {
       itemSelector: '.fc-draggable',
+      eventData: (eventEl) => {
+        const activityCode = eventEl.getAttribute('wcif-ac');
+        const defaultDuration = defaultDurationFromActivityCode(activityCode);
+
+        const activityId = nextActivityId(wcifSchedule);
+
+        return {
+          title: eventEl.getAttribute('wcif-title'),
+          duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
+          extendedProps: {
+            activityId,
+            activityCode,
+          },
+        };
+      },
     });
-  }, []);
+  }, [wcifSchedule]);
 
   const dropToDeleteRef = useRef(null);
 
-  const removeIfOverDropzone = ({ fcEvent, jsEvent, view: { calendar } }) => {
+  const removeIfOverDropzone = ({ event: fcEvent, jsEvent }) => {
     if (!dropToDeleteRef.current) return;
 
     const elem = dropToDeleteRef.current;
@@ -107,8 +129,31 @@ function EditActivities({
     const right = rect.right + window.scrollX;
 
     if (jsEvent.pageX >= left && jsEvent.pageX <= right && jsEvent.pageY >= top && jsEvent.pageY <= bottom) {
-      console.log('Imma remove!');
+      dispatch(removeActivity(fcEvent.extendedProps.activityId));
     }
+  };
+
+  const fcRef = useRef(null);
+
+  const addNewActivity = ({ event: fcEvent }) => {
+    const calendarInstance = fcRef.current.calendar;
+
+    const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendarInstance);
+    const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendarInstance);
+
+    const utcStartIso = eventStartLuxon.toUTC().toISO({ suppressMilliseconds: true });
+    const utcEndIso = eventEndLuxon.toUTC().toISO({ suppressMilliseconds: true });
+
+    const activity = {
+      id: fcEvent.extendedProps.activityId,
+      name: fcEvent.title,
+      activityCode: fcEvent.extendedProps.activityCode,
+      startTime: utcStartIso,
+      endTime: utcEndIso,
+      childActivities: fcEvent.extendedProps.childActivities || [],
+    };
+
+    dispatch(addActivity(activity, wcifRoom.id));
   };
 
   return (
@@ -127,6 +172,7 @@ function EditActivities({
                   >
                     <ActivityPicker
                       wcifEvents={wcifEvents}
+                      wcifRoom={wcifRoom}
                     />
                   </div>
                 </Sticky>
@@ -243,9 +289,10 @@ function EditActivities({
                 <Container text textAlign="center">
                   The timezone for this room is
                   {' '}
-                  <b>{wcifVenue.timezone}</b>
+                  <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
                 </Container>
                 <FullCalendar
+                  ref={fcRef}
                   plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
                   initialView="agendaForComp"
                   views={{
@@ -278,6 +325,7 @@ function EditActivities({
                   droppable
                   selectable
                   eventDragStop={removeIfOverDropzone}
+                  eventReceive={addNewActivity}
                 />
               </Grid.Column>
             </Grid.Row>

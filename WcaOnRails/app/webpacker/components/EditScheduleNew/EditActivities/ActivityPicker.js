@@ -1,17 +1,16 @@
 import React, { useMemo } from 'react';
 import { Label, List, Popup } from 'semantic-ui-react';
 import cn from 'classnames';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import _ from 'lodash';
 import {
-  activityCodeListFromWcif,
   parseActivityCode,
-  roundIdToString
+  roundIdToString,
 } from '../../../lib/utils/wcif';
 import { formats } from '../../../lib/wca-data.js.erb';
-import _ from 'lodash';
 
 function ActivityPicker({
   wcifEvents,
+  wcifRoom,
 }) {
   return (
     <>
@@ -27,6 +26,7 @@ function ActivityPicker({
               {event.rounds.map((round, roundIdx) => (
                 <PickerRow
                   key={roundIdx}
+                  wcifRoom={wcifRoom}
                   wcifEvent={event}
                   wcifRound={round}
                 />
@@ -44,6 +44,7 @@ function ActivityPicker({
 }
 
 function PickerRow({
+  wcifRoom,
   wcifEvent,
   wcifRound,
 }) {
@@ -53,6 +54,7 @@ function PickerRow({
     return _.times(numberOfAttempts, (n) => (
       <ActivityLabel
         key={n}
+        wcifRoom={wcifRoom}
         activityCode={`${wcifRound.id}-a${n + 1}`}
         attemptNumber={n + 1}
       />
@@ -61,6 +63,7 @@ function PickerRow({
 
   return (
     <ActivityLabel
+      wcifRoom={wcifRoom}
       activityCode={wcifRound.id}
       attemptNumber={null}
     />
@@ -68,14 +71,13 @@ function PickerRow({
 }
 
 function ActivityLabel({
+  wcifRoom,
   activityCode,
   attemptNumber,
 }) {
-  const { wcifSchedule } = useStore();
-
   const usedActivityCodes = useMemo(() => {
-    return activityCodeListFromWcif(wcifSchedule);
-  }, [wcifSchedule]);
+    return wcifRoom.activities.map((activity) => activity.activityCode);
+  }, [wcifRoom.activities]);
 
   const { roundNumber } = parseActivityCode(activityCode);
 
@@ -96,6 +98,8 @@ function ActivityLabel({
         <Label
           className={isEnabled ? 'fc-draggable' : ''}
           color={isEnabled ? 'blue' : 'grey'}
+          wcif-title={tooltipText}
+          wcif-ac={activityCode}
         >
           {text}
         </Label>
