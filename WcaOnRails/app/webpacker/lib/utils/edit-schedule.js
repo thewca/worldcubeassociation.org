@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { parseActivityCode } from './wcif';
+import { DateTime, Duration } from 'luxon';
 
 export function toMicrodegrees(coord) {
   return Math.trunc(parseFloat(coord) * 1e6);
@@ -85,4 +86,13 @@ export function defaultDurationFromActivityCode(activityCode) {
     return 60;
   }
   return 30;
+}
+
+export function moveByIsoDuration(isoDateTime, isoDuration) {
+  const luxonDuration = Duration.fromISO(isoDuration);
+  const luxonDateTime = DateTime.fromISO(isoDateTime);
+
+  const movedDateTime = luxonDateTime.plus(luxonDuration);
+
+  return movedDateTime.toISO({ suppressMilliseconds: true });
 }

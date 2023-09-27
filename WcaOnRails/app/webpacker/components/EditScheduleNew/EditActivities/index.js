@@ -16,7 +16,7 @@ import {
 import FullCalendar from '@fullcalendar/react';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import timeGridPlugin from '@fullcalendar/timegrid';
-import luxonPlugin, { toLuxonDateTime } from '@fullcalendar/luxon3';
+import luxonPlugin, { toLuxonDateTime, toLuxonDuration } from '@fullcalendar/luxon3';
 
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import useInputState from '../../../lib/hooks/useInputState';
@@ -24,7 +24,7 @@ import ActivityPicker from './ActivityPicker';
 import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
-import { addActivity, removeActivity } from '../store/actions';
+import { addActivity, moveActivity, removeActivity } from '../store/actions';
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import { defaultDurationFromActivityCode, nextActivityId } from '../../../lib/utils/edit-schedule';
 
@@ -129,7 +129,8 @@ function EditActivities({
     const right = rect.right + window.scrollX;
 
     if (jsEvent.pageX >= left && jsEvent.pageX <= right && jsEvent.pageY >= top && jsEvent.pageY <= bottom) {
-      dispatch(removeActivity(fcEvent.extendedProps.activityId));
+      const { activityId } = fcEvent.extendedProps;
+      dispatch(removeActivity(activityId));
     }
   };
 
@@ -144,16 +145,29 @@ function EditActivities({
     const utcStartIso = eventStartLuxon.toUTC().toISO({ suppressMilliseconds: true });
     const utcEndIso = eventEndLuxon.toUTC().toISO({ suppressMilliseconds: true });
 
+    const { activityId, activityCode, childActivities } = fcEvent.extendedProps;
+
     const activity = {
-      id: fcEvent.extendedProps.activityId,
+      id: activityId,
       name: fcEvent.title,
-      activityCode: fcEvent.extendedProps.activityCode,
+      activityCode,
       startTime: utcStartIso,
       endTime: utcEndIso,
-      childActivities: fcEvent.extendedProps.childActivities || [],
+      childActivities: childActivities || [],
     };
 
     dispatch(addActivity(activity, wcifRoom.id));
+  };
+
+  const changeActivityTimeslot = ({ event: fcEvent, delta }) => {
+    const { activityId } = fcEvent.extendedProps;
+
+    const calendarInstance = fcRef.current.calendar;
+
+    const duration = toLuxonDuration(delta, calendarInstance);
+    const deltaIso = duration.toISO();
+
+    dispatch(moveActivity(activityId, deltaIso));
   };
 
   return (
@@ -326,6 +340,7 @@ function EditActivities({
                   selectable
                   eventDragStop={removeIfOverDropzone}
                   eventReceive={addNewActivity}
+                  eventDrop={changeActivityTimeslot}
                 />
               </Grid.Column>
             </Grid.Row>
