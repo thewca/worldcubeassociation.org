@@ -217,7 +217,7 @@ resource "aws_ecs_service" "this" {
   health_check_grace_period_seconds  = 0
 
   capacity_provider_strategy {
-    capacity_provider = var.shared.capacity_provider.name
+    capacity_provider = var.shared.m6i_capacity_provider.name
     weight            = 1
   }
 

@@ -53,7 +53,7 @@ variable "shared" {
     ecs_cluster: object({
       id: string
     }),
-    capacity_provider: object({
+    t3_capacity_provider: object({
       name: string
     }),
     cluster_security: object({

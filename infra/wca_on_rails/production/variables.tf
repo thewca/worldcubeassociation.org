@@ -60,7 +60,10 @@ variable "shared" {
       id: string
       name: string
     }),
-    capacity_provider: object({
+    t3_capacity_provider: object({
+      name: string
+    }),
+    m6i_capacity_provider: object({
       name: string
     }),
     cluster_security: object({
