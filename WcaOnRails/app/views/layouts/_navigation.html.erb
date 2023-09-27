@@ -55,8 +55,6 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="https://live.worldcubeassociation.org"><%= ui_icon('sort numeric down') %>WCA Live</a></li>
-          <li class="divider"></li>
           <li><a href="<%= rankings_path("333", "single") %>"><%= ui_icon('signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
           <li><a href="<%= records_path %>"><%= ui_icon('trophy') %> <%= t '.records' %></a></li>
           <li><a href="<%= persons_path %>"><%= ui_icon('users') %> <%= t '.persons' %></a></li>
@@ -147,6 +145,11 @@
         <a href="https://forum.worldcubeassociation.org/" target="_blank" class="top-nav hide-new-window-icon">
           <%= ui_icon('comments') %>
           <span class="visible-lg-inline visible-xs-inline"><%= t '.forum' %></span>
+        </a>
+      </li>
+      <li>
+        <a href="https://live.worldcubeassociation.org/" target="_blank" class="top-nav hide-new-window-icon">
+          <%= ui_icon('sort numeric down') %> WCA Live
         </a>
       </li>
     </ul>
