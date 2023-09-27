@@ -24,7 +24,7 @@ import ActivityPicker from './ActivityPicker';
 import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
-import { addActivity, moveActivity, removeActivity } from '../store/actions';
+import { addActivity, moveActivity, removeActivity, scaleActivity } from '../store/actions';
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import { defaultDurationFromActivityCode, nextActivityId } from '../../../lib/utils/edit-schedule';
 
@@ -168,6 +168,20 @@ function EditActivities({
     const deltaIso = duration.toISO();
 
     dispatch(moveActivity(activityId, deltaIso));
+  };
+
+  const resizeActivity = ({ event: fcEvent, startDelta, endDelta }) => {
+    const { activityId } = fcEvent.extendedProps;
+
+    const calendarInstance = fcRef.current.calendar;
+
+    const startScaleDuration = toLuxonDuration(startDelta, calendarInstance);
+    const startScaleIso = startScaleDuration.toISO();
+
+    const endScaleDuration = toLuxonDuration(endDelta, calendarInstance);
+    const endScaleIso = endScaleDuration.toISO();
+
+    dispatch(scaleActivity(activityId, startScaleIso, endScaleIso));
   };
 
   return (
@@ -341,6 +355,7 @@ function EditActivities({
                   eventDragStop={removeIfOverDropzone}
                   eventReceive={addNewActivity}
                   eventDrop={changeActivityTimeslot}
+                  eventResize={resizeActivity}
                 />
               </Grid.Column>
             </Grid.Row>

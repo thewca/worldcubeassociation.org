@@ -2,6 +2,7 @@ export const ChangesSaved = 'saving_started';
 export const AddActivity = 'ADD_ACTIVITY';
 export const RemoveActivity = 'REMOVE_ACTIVITY';
 export const MoveActivity = 'MOVE_ACTIVITY';
+export const ScaleActivity = 'SCALE_ACTIVITY';
 
 /**
  * Action creator for marking changes as saved
@@ -41,5 +42,14 @@ export const moveActivity = (activityId, isoDuration) => ({
   payload: {
     activityId,
     isoDuration,
+  },
+});
+
+export const scaleActivity = (activityId, scaleStartIso, scaleEndIso) => ({
+  type: ScaleActivity,
+  payload: {
+    activityId,
+    scaleStartIso,
+    scaleEndIso,
   },
 });

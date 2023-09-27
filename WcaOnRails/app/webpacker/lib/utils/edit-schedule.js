@@ -96,3 +96,12 @@ export function moveByIsoDuration(isoDateTime, isoDuration) {
 
   return movedDateTime.toISO({ suppressMilliseconds: true });
 }
+
+export function rescaleDuration(isoDuration, scalingFactor) {
+  const luxonDuration = Duration.fromISO(isoDuration);
+
+  const durationMillis = luxonDuration.toMillis();
+  const scaledMillis = durationMillis * scalingFactor;
+
+  return Duration.fromMillis(scaledMillis).rescale().toISO();
+}
