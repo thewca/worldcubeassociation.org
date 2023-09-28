@@ -7,10 +7,10 @@ import {
   startDelegateProbationUrl,
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
-import post from '../../lib/requests/post';
+import useSaveAction from '../../lib/hooks/useSaveAction';
 
 function ProbationListTable({
-  roleList, userMap, isActive, sync,
+  roleList, userMap, isActive, save, sync,
 }) {
   return (
     <Table>
@@ -39,9 +39,9 @@ function ProbationListTable({
               {
                 isActive ? (
                   <Button
-                    onClick={() => post(endDelegateProbationUrl, {
+                    onClick={() => save(endDelegateProbationUrl, {
                       probationRoleId: probationRole.id,
-                    }).then(sync)}
+                    }, sync, { method: 'POST' })}
                   >
                     End Probation
                   </Button>
@@ -60,8 +60,9 @@ export default function DelegateProbations() {
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
+  const { save, saving } = useSaveAction();
 
-  if (loading) return 'Loading...'; // No i18n because this page is used only by WCA Staff.
+  if (loading || saving) return 'Loading...'; // No i18n because this page is used only by WCA Staff.
   if (error) throw error;
 
   const { probationRoles, probationUsers } = data;
@@ -71,7 +72,7 @@ export default function DelegateProbations() {
       <h1>Delegate Probations</h1>
       <Input value={wcaId} onChange={(e) => setWcaId(e.target.value)} placeholder="Enter WCA ID" />
       <Button
-        onClick={() => post(startDelegateProbationUrl, { wcaId }).then(sync)}
+        onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
       >
         Start Probation
       </Button>
@@ -80,6 +81,7 @@ export default function DelegateProbations() {
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null)}
         userMap={probationUsers}
         isActive
+        save={save}
         sync={sync}
       />
       <h2>Past Probations</h2>

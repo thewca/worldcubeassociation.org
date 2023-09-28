@@ -31,18 +31,32 @@ class DelegatesController < ApplicationController
   end
 
   def start_delegate_probation
-    wca_id = params[:wcaId]
-    user = User.find_by_wca_id!(wca_id)
-    Role.create!(
-      user_id: user.id,
-      group_id: UserGroup.find_by!(name: "Delegate Probation").id,
-      start_date: Date.today,
-    )
+    respond_to do |format|
+      format.json do
+        wca_id = params[:wcaId]
+        user = User.find_by_wca_id!(wca_id)
+        Role.create!(
+          user_id: user.id,
+          group_id: UserGroup.find_by!(name: "Delegate Probation").id,
+          start_date: Date.today,
+        )
+        render json: {
+          success: true,
+        }
+      end
+    end
   end
 
   def end_delegate_probation
-    probation_role_id = params[:probationRoleId]
-    role = Role.find_by_id(probation_role_id)
-    role.update!(end_date: Date.today)
+    respond_to do |format|
+      format.json do
+        probation_role_id = params[:probationRoleId]
+        role = Role.find_by_id(probation_role_id)
+        role.update!(end_date: Date.today)
+        render json: {
+          success: true,
+        }
+      end
+    end
   end
 end
