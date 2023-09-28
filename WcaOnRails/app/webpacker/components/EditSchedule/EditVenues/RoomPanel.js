@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Card, Form, Icon } from 'semantic-ui-react';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { editRoom } from '../store/actions';
+import { editRoom, removeRoom } from '../store/actions';
 
 function RoomPanel({
   room,
@@ -10,6 +10,12 @@ function RoomPanel({
 
   const handleChange = (evt, { name, value }) => {
     dispatch(editRoom(room.id, name, value));
+  };
+
+  const handleDeleteRoom = () => {
+    if (confirm(`Are you sure you want to delete the room ${room.name}? This will also delete all associated schedules. THIS ACTION CANNOT BE UNDONE!`)) {
+      dispatch(removeRoom(room.id));
+    }
   };
 
   return (
@@ -33,7 +39,7 @@ function RoomPanel({
         </Form>
       </Card.Content>
       <Card.Content>
-        <Button negative icon>
+        <Button negative icon onClick={handleDeleteRoom}>
           <Icon name="trash" />
         </Button>
       </Card.Content>

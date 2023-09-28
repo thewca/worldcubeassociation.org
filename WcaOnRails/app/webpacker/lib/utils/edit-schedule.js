@@ -26,6 +26,19 @@ export function nextActivityId(wcifSchedule) {
   return maxId(activities) + 1;
 }
 
+export function nextVenueId(wcifSchedule) {
+  // Explore the WCIF to get the highest ids.
+  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
+  return maxId(wcifSchedule.venues) + 1;
+}
+
+export function nextRoomId(wcifSchedule) {
+  // Explore the WCIF to get the highest ids.
+  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
+  const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
+  return maxId(rooms) + 1;
+}
+
 export function defaultDurationFromActivityCode(activityCode) {
   const { eventId } = parseActivityCode(activityCode);
   if (eventId === '333fm' || eventId === '333mbf'

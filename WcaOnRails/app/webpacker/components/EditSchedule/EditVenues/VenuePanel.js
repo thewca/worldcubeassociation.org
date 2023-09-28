@@ -12,7 +12,7 @@ import VenueLocationMap from './VenueLocationMap';
 import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { editVenue } from '../store/actions';
+import { addRoom, editVenue, removeVenue } from '../store/actions';
 
 const countryOptions = countries.real.map((country) => {
   return {
@@ -30,6 +30,16 @@ function VenuePanel({
 
   const handleVenueChange = (evt, { name, value }) => {
     dispatch(editVenue(venue.id, name, value));
+  };
+
+  const handleDeleteVenue = () => {
+    if (confirm(`Are you sure you want to delete the venue ${venue.name}? This will also delete all associated rooms and all associated schedules. THIS ACTION CANNOT BE UNDONE!`)) {
+      dispatch(removeVenue(venue.id));
+    }
+  };
+
+  const handleAddRoom = () => {
+    dispatch(addRoom(venue.id));
   };
 
   // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
@@ -105,11 +115,11 @@ function VenuePanel({
           ))}
         </Card.Group>
         <div className="ui two buttons">
-          <Button positive>Add room</Button>
+          <Button positive onClick={handleAddRoom}>Add room</Button>
         </div>
       </Card.Content>
       <Card.Content>
-        <Button negative icon>
+        <Button negative icon onClick={handleDeleteVenue}>
           <Icon name="trash" />
         </Button>
       </Card.Content>

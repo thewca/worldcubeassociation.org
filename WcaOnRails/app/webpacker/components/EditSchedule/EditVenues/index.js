@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { Button, Container, Grid } from 'semantic-ui-react';
 import _ from 'lodash';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
+import { addVenue } from '../store/actions';
 
 function EditVenues({
   countryZones,
@@ -10,6 +11,12 @@ function EditVenues({
   const { wcifSchedule } = useStore();
 
   const displayVenues = useMemo(() => _.chunk(wcifSchedule.venues, 2), [wcifSchedule.venues]);
+
+  const dispatch = useDispatch();
+
+  const handleAddVenue = () => {
+    dispatch(addVenue());
+  };
 
   return (
     <>
@@ -33,7 +40,7 @@ function EditVenues({
           ))}
           <Grid.Row stretched>
             <Grid.Column>
-              <Button positive>Add a venue</Button>
+              <Button positive onClick={handleAddVenue}>Add a venue</Button>
             </Grid.Column>
           </Grid.Row>
         </Grid>

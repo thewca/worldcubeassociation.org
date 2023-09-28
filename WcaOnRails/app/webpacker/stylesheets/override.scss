@@ -33,6 +33,13 @@ body, html {
     outline: none;
   }
 
+  .ui.form input[type=color] {
+    // SCSS: "complex selectors may not be extended"
+    // @extend .ui.form input[type=text];
+
+    min-height: 38px;
+  }
+
   .navbar-brand {
     .icon {
       margin: 0;

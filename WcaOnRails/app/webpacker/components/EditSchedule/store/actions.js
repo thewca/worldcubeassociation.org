@@ -5,6 +5,10 @@ export const MoveActivity = 'MOVE_ACTIVITY';
 export const ScaleActivity = 'SCALE_ACTIVITY';
 export const EditVenue = 'EDIT_VENUE';
 export const EditRoom = 'EDIT_ROOM';
+export const RemoveVenue = 'REMOVE_VENUE';
+export const RemoveRoom = 'REMOVE_ROOM';
+export const AddVenue = 'ADD_VENUE';
+export const AddRoom = 'ADD_ROOM';
 
 /**
  * Action creator for marking changes as saved
@@ -71,5 +75,31 @@ export const editRoom = (roomId, propertyKey, newProperty) => ({
     roomId,
     propertyKey,
     newProperty,
+  },
+});
+
+export const removeVenue = (venueId) => ({
+  type: RemoveVenue,
+  payload: {
+    venueId,
+  },
+});
+
+export const removeRoom = (roomId) => ({
+  type: RemoveRoom,
+  payload: {
+    roomId,
+  },
+});
+
+export const addVenue = () => ({
+  type: AddVenue,
+  payload: {},
+});
+
+export const addRoom = (venueId) => ({
+  type: AddRoom,
+  payload: {
+    venueId,
   },
 });

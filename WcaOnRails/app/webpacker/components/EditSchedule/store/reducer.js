@@ -1,14 +1,14 @@
 import {
-  AddActivity,
+  AddActivity, AddRoom, AddVenue,
   ChangesSaved, EditRoom, EditVenue,
   MoveActivity,
-  RemoveActivity,
+  RemoveActivity, RemoveRoom, RemoveVenue,
   ScaleActivity,
 } from './actions';
 import {
   changeTimezoneKeepingLocalTime,
   moveByIsoDuration,
-  nextActivityId,
+  nextActivityId, nextRoomId, nextVenueId,
   rescaleDuration
 } from '../../../lib/utils/edit-schedule';
 
@@ -161,6 +161,60 @@ const reducers = {
           [payload.propertyKey]: payload.newProperty,
         } : room)),
       })),
+    },
+  }),
+
+  [RemoveVenue]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.filter((venue) => venue.id !== payload.venueId),
+    },
+  }),
+
+  [RemoveRoom]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.map((venue) => ({
+        ...venue,
+        rooms: venue.rooms.filter((room) => room.id !== payload.roomId),
+      })),
+    },
+  }),
+
+  [AddVenue]: (state) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: [
+        ...state.wcifSchedule.venues,
+        {
+          id: nextVenueId(state.wcifSchedule),
+          latitudeMicrodegrees: 0,
+          longitudeMicrodegrees: 0,
+          rooms: [],
+          extensions: [],
+        },
+      ],
+    },
+  }),
+
+  [AddRoom]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.map((venue) => (venue.id === payload.venueId ? {
+        ...venue,
+        rooms: [
+          ...venue.rooms,
+          {
+            id: nextRoomId(state.wcifSchedule),
+            activities: [],
+            extensions: [],
+          },
+        ],
+      } : venue)),
     },
   }),
 };
