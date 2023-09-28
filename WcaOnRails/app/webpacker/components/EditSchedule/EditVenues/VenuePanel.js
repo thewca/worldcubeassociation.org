@@ -59,6 +59,20 @@ function VenuePanel({
       </Container>
       <Card.Content>
         <Form>
+          <Form.Group widths="equal">
+            <Form.Input
+              label="Latitude"
+              name="latitudeMicrodegrees"
+              value={venue.latitudeMicrodegrees}
+              onChange={handleVenueChange}
+            />
+            <Form.Input
+              label="Longitude"
+              name="longitudeMicrodegrees"
+              value={venue.longitudeMicrodegrees}
+              onChange={handleVenueChange}
+            />
+          </Form.Group>
           <Form.Input
             label="Name"
             name="name"
