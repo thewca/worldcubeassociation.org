@@ -43,7 +43,6 @@
               { text: t('.menu.orga_view'), path: edit_competition_path(@competition), icon: "lock" },
               { text: t('.menu.event_view'), path: edit_events_path(@competition), icon: "cubes" },
               { text: t('.menu.schedule_view'), path: edit_schedule_path(@competition), icon: "calendar" },
-              { text: 'Edit schedule NEW', path: edit_schedule_new_path(@competition), icon: "calendar" },
               { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), icon: "cc stripe" },
             ] +
               (current_user.can_admin_competitions? ? [
