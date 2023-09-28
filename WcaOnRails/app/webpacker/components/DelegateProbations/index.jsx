@@ -7,44 +7,28 @@ import {
   startDelegateProbationUrl,
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
-import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
+import { post } from '../../lib/requests/fetchWithAuthenticityToken';
 
 export default function DelegateProbations() {
   const [wcaId, setWcaId] = React.useState('');
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
-  if (loading) return 'Loading...';
-  if (error) {
-    throw error;
-  }
+
+  if (loading) return 'Loading...'; // No i18n because this page is used only by WCA Staff.
+  if (error) throw error;
+
   const { probationRoles, probationUsers } = data;
-
-  function startProbation() {
-    fetchWithAuthenticityToken(startDelegateProbationUrl, {
-      method: 'POST',
-      body: JSON.stringify({ wcaId }),
-      headers: { 'Content-Type': 'application/json' },
-    }).then(async () => {
-      sync();
-    });
-  }
-
-  function endProbation(probationRoleId) {
-    fetchWithAuthenticityToken(endDelegateProbationUrl, {
-      method: 'POST',
-      body: JSON.stringify({ probationRoleId }),
-      headers: { 'Content-Type': 'application/json' },
-    }).then(async () => {
-      sync();
-    });
-  }
 
   return (
     <>
       <h1>Delegate Probations</h1>
       <Input value={wcaId} onChange={(e) => setWcaId(e.target.value)} placeholder="Enter WCA ID" />
-      <Button onClick={() => startProbation()}>Start Probation</Button>
+      <Button
+        onClick={() => post(startDelegateProbationUrl, { wcaId }).then(sync)}
+      >
+        Start Probation
+      </Button>
       <h2>Active Probations</h2>
       <Table>
         <Table.Header>
@@ -71,7 +55,13 @@ export default function DelegateProbations() {
                   {probationRole.start_date}
                 </Table.Cell>
                 <Table.Cell>
-                  <Button onClick={() => endProbation(probationRole.id)}>End Probation</Button>
+                  <Button
+                    onClick={() => post(endDelegateProbationUrl, {
+                      probationRoleId: probationRole.id,
+                    }).then(sync)}
+                  >
+                    End Probation
+                  </Button>
                 </Table.Cell>
               </Table.Row>
             ))}
