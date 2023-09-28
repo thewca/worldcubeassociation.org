@@ -1,4 +1,10 @@
-import React, { useCallback, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
+
 import {
   Button,
   Container,
@@ -27,6 +33,7 @@ import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
 import { addActivity, moveActivity, removeActivity, scaleActivity } from '../store/actions';
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import { defaultDurationFromActivityCode, nextActivityId } from '../../../lib/utils/edit-schedule';
+import EditActivityModal from './EditActivityModal';
 
 function EditActivities({
   wcifEvents,
@@ -42,6 +49,20 @@ function EditActivities({
   const [calendarEnd, setCalendarEnd] = useInputState(20);
 
   const [isKeyboardEnabled, setKeyboardEnabled] = useToggleButtonState(false);
+
+  // This part is ugly because Semantic-UI and Fullcalendar disagree about how modals should be handled.
+  // According to Semantic-UI, modals are "always there" in the DOM, just that their "isOpen" state
+  //   is false most of the time. So they simply don't show but they are already part of the DOM tree.
+  // The (click-)event-based model of Fullcalendar however dictates that we can only "instantiate" a modal
+  //   once the user actually clicks somewhere on the calendar. So we pre-fill the modal with empty state
+  //   and set it accordingly on every event click. If somebody has a better idea how to handle this, please shout.
+  const [showActivityModal, setShowActivityModal] = useState(false);
+
+  const [modalActivity, setModalActivity] = useState();
+
+  const [modalLuxonStart, setModalLuxonStart] = useState();
+  const [modalLuxonEnd, setModalLuxonEnd] = useState();
+  // ------ MODAL HACK END ------
 
   const fcSlotDuration = useMemo(() => {
     return `00:${minutesPerRow.toString().padStart(2, '0')}:00`;
@@ -101,19 +122,16 @@ function EditActivities({
         const activityCode = eventEl.getAttribute('wcif-ac');
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
-        const activityId = nextActivityId(wcifSchedule);
-
         return {
           title: eventEl.getAttribute('wcif-title'),
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
-            activityId,
             activityCode,
           },
         };
       },
     });
-  }, [wcifSchedule]);
+  }, []);
 
   const dropToDeleteRef = useRef(null);
 
@@ -145,10 +163,9 @@ function EditActivities({
     const utcStartIso = eventStartLuxon.toUTC().toISO({ suppressMilliseconds: true });
     const utcEndIso = eventEndLuxon.toUTC().toISO({ suppressMilliseconds: true });
 
-    const { activityId, activityCode, childActivities } = fcEvent.extendedProps;
+    const { activityCode, childActivities } = fcEvent.extendedProps;
 
     const activity = {
-      id: activityId,
       name: fcEvent.title,
       activityCode,
       startTime: utcStartIso,
@@ -184,6 +201,51 @@ function EditActivities({
     dispatch(scaleActivity(activityId, startScaleIso, endScaleIso));
   };
 
+  const addActivityFromCalendar = (start, end = undefined) => {
+    const calendarInstance = fcRef.current.calendar;
+
+    const eventStartLuxon = toLuxonDateTime(start, calendarInstance);
+
+    const usableEnd = end || eventStartLuxon.plus({ minutes: 30 }).toJSDate();
+    const eventEndLuxon = toLuxonDateTime(usableEnd, calendarInstance);
+
+    setModalLuxonStart(eventStartLuxon);
+    setModalLuxonEnd(eventEndLuxon);
+
+    setShowActivityModal(true);
+  };
+
+  const onActivityModalClose = (ok, modalData) => {
+    setShowActivityModal(false);
+
+    const { activityCode, activityName } = modalData;
+
+    if (ok) {
+      if (modalActivity) {
+        // TODO update existing activity
+
+        setModalActivity(null);
+      } else {
+        const utcStartIso = modalLuxonStart.toUTC().toISO({ suppressMilliseconds: true });
+        const utcEndIso = modalLuxonEnd.toUTC().toISO({ suppressMilliseconds: true });
+
+        const activity = {
+          name: activityName,
+          activityCode,
+          startTime: utcStartIso,
+          endTime: utcEndIso,
+          childActivities: [],
+        };
+
+        dispatch(addActivity(activity, wcifRoom.id));
+      }
+    }
+
+    // cleanup.
+    setModalLuxonStart(null);
+    setModalLuxonEnd(null);
+  };
+
   return (
     <>
       <Container textAlign="center">
@@ -191,6 +253,14 @@ function EditActivities({
       </Container>
       {!!selectedRoomId && (
         <Container>
+          <EditActivityModal
+            showModal={showActivityModal}
+            activity={modalActivity}
+            startLuxon={modalLuxonStart}
+            endLuxon={modalLuxonEnd}
+            dateLocale={calendarLocale}
+            onModalClose={onActivityModalClose}
+          />
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>
@@ -356,6 +426,8 @@ function EditActivities({
                   eventReceive={addNewActivity}
                   eventDrop={changeActivityTimeslot}
                   eventResize={resizeActivity}
+                  dateClick={({ date }) => addActivityFromCalendar(date)}
+                  select={({ start, end }) => addActivityFromCalendar(start, end)}
                 />
               </Grid.Column>
             </Grid.Row>

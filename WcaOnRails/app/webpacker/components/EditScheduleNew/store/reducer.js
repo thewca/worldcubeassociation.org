@@ -5,7 +5,11 @@ import {
   RemoveActivity,
   ScaleActivity,
 } from './actions';
-import { moveByIsoDuration, rescaleDuration } from '../../../lib/utils/edit-schedule';
+import {
+  moveByIsoDuration,
+  nextActivityId,
+  rescaleDuration
+} from '../../../lib/utils/edit-schedule';
 
 const moveActivityByDuration = (activity, isoDuration) => ({
   ...activity,
@@ -19,15 +23,39 @@ const scaleAcitvitiesByDuration = (activity, scaleStartIso, scaleEndIso) => ({
   startTime: moveByIsoDuration(activity.startTime, scaleStartIso),
   endTime: moveByIsoDuration(activity.endTime, scaleEndIso),
   childActivities: activity.childActivities.map((childActivity, childIdx) => {
+    // Unfortunately, scaling child activities (properly) is rocket science.
     const nChildren = activity.childActivities.length;
 
-    const startScalingFactor = (nChildren - childIdx) / nChildren;
-    const endScalingFactor = (nChildren - childIdx + 1) / nChildren;
+    // Say you have a parent activity with n=3 children, and you scale the start by -1 hour (i.e. 1 hour earlier).
+    //   In that case, the first child activity's start also has to be scaled by 1 hour.
+    //   However, the second child activity's start only has to be scaled by 2/3 of 1 hour,
+    //   and the last has to be scaled by only 1/3 of 1 hour. In general, the i-th child of n total children
+    //   scales by (n-i)/n for the start of the activity.
+    const startScaleUp = (nChildren - childIdx) / nChildren;
 
-    const childScaleStartIso = rescaleDuration(scaleStartIso, startScalingFactor);
-    const childScaleEndIso = rescaleDuration(scaleEndIso, endScalingFactor);
+    // However, it doesn't end there. When a parent activity's _start_ scales, only the startTime
+    //   has to be manipulated. But for the children, the _endTime_ ALSO has to be manipulated because
+    //   even though only the start of the parent changes, the children _move_ within that scaled parent as a whole.
+    //   The scaling factor for the end of a child is the same as the scaling factor for the start of the _next_ child.
+    const endScaleUp = (nChildren - childIdx + 1) / nChildren;
 
-    return scaleAcitvitiesByDuration(childActivity, childScaleStartIso, childScaleEndIso);
+    const childScaledUpStart = rescaleDuration(scaleStartIso, startScaleUp);
+    const childScaledUpEnd = rescaleDuration(scaleStartIso, endScaleUp);
+
+    // Of course, this all has to happen recursively because children can have children!
+    const startScaledChild = scaleAcitvitiesByDuration(childActivity, childScaledUpStart, childScaledUpEnd);
+
+    // And it gets even more crazy: The same (n-i)/n logic from above has to be applied to the endDate
+    //   scaling of the parent as well, but of course IN REVERSE! So the _last_ child moves the full amount,
+    //   the second-to-last child moves a little less, and the first child only moves a tiny bit.
+    const startScaleDown = childIdx / nChildren;
+    const endScaleDown = (childIdx + 1) / nChildren;
+
+    const childScaledDownStart = rescaleDuration(scaleEndIso, startScaleDown);
+    const childScaledDownEnd = rescaleDuration(scaleEndIso, endScaleDown);
+
+    // Phew, we're done.
+    return scaleAcitvitiesByDuration(startScaledChild, childScaledDownStart, childScaledDownEnd);
   }),
 });
 
@@ -47,7 +75,10 @@ const reducers = {
           ...room,
           activities: [
             ...room.activities,
-            payload.wcifActivity,
+            {
+              ...payload.wcifActivity,
+              id: nextActivityId(state.wcifSchedule),
+            },
           ],
         }) : room)),
       })),
