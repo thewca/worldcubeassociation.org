@@ -1168,7 +1168,8 @@ en:
       updated: "Updated registration"
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
-      registered: "Successfully registered!"
+      registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
+
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
@@ -1181,10 +1182,11 @@ en:
       #context: for a new registration
       new:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} is submitted and pending approval"
+        mail_subject: "Registration Pending: %{comp_name}"
         #context: "comp_name" contains the competition's name
-        registered_html: "You just registered for %{comp_name}."
-        awaits_approval: "Your registration has been received and is pending approval from the organization team."
+        registered_html: "Your registration for %{comp_name} is now pending, and awaiting approval from the organization team."
+        awaits_approval: "Please ensure that you have followed the competition's registration requirements. For example, a registration fee may need to be paid before the registration is complete."
+
         #context: "here" is replaced by a link to view the registration
         approval_info_html: >-
           You will be emailed when your registration is approved.
@@ -1196,7 +1198,7 @@ en:
       #context: when registration is accepted
       accepted:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} has been accepted"
+        mail_subject: "Registration Accepted: %{comp_name}"
         #context: "comp_name" contains the competition's name, and "here" is replaced by a link to edit the registration
         message_html: "Your registration for %{comp_name} has been accepted. As always, you can check the status of your registration %{here}."
         #context: "comp_name" contains the competition's name
@@ -1204,7 +1206,7 @@ en:
       #context: when registration is moved to waiting list
       pending:
         #context: "comp_name" contains the competition's name
-        mail_subject: "You have been moved to the waiting list for %{comp_name}"
+        mail_subject: "Registration Moved to Waitlist: %{comp_name}"
         #context: "comp_name" contains the competition's name
         moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
@@ -1215,7 +1217,7 @@ en:
       #context: when registration is deleted
       deleted:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} has been deleted"
+        mail_subject: "Registration Deleted: %{comp_name}"
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:

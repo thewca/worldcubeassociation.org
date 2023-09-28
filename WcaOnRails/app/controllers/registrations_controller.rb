@@ -774,7 +774,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = I18n.t('registrations.flash.registered')
+      flash[:warning] = I18n.t('registrations.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_later
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path
