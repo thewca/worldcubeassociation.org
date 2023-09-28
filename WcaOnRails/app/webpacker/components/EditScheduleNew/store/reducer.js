@@ -1,11 +1,12 @@
 import {
   AddActivity,
-  ChangesSaved,
+  ChangesSaved, EditRoom, EditVenue,
   MoveActivity,
   RemoveActivity,
   ScaleActivity,
 } from './actions';
 import {
+  changeTimezoneKeepingLocalTime,
   moveByIsoDuration,
   nextActivityId,
   rescaleDuration
@@ -57,6 +58,13 @@ const scaleAcitvitiesByDuration = (activity, scaleStartIso, scaleEndIso) => ({
     // Phew, we're done.
     return scaleAcitvitiesByDuration(startScaledChild, childScaledDownStart, childScaledDownEnd);
   }),
+});
+
+const changeActivityTimezone = (activity, oldTimezone, newTimezone) => ({
+  ...activity,
+  startTime: changeTimezoneKeepingLocalTime(activity.startTime, oldTimezone, newTimezone),
+  endTime: changeTimezoneKeepingLocalTime(activity.endTime, oldTimezone, newTimezone),
+  childActivities: activity.childActivities.map((childActivity) => changeActivityTimezone(childActivity, oldTimezone, newTimezone)),
 });
 
 const reducers = {
@@ -123,6 +131,35 @@ const reducers = {
           ...room,
           activities: room.activities.map((activity) => (activity.id === payload.activityId ? scaleAcitvitiesByDuration(activity, payload.scaleStartIso, payload.scaleEndIso) : activity)),
         })),
+      })),
+    },
+  }),
+
+  [EditVenue]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.map((venue) => (venue.id === payload.venueId ? {
+        ...venue,
+        [payload.propertyKey]: payload.newProperty,
+        rooms: venue.rooms.map((room) => ({
+          ...room,
+          activities: (payload.propertyKey === 'timezone' ? room.activities.map((activity) => changeActivityTimezone(activity, venue.timezone, payload.newProperty)) : room.activities),
+        })),
+      } : venue)),
+    },
+  }),
+
+  [EditRoom]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.map((venue) => ({
+        ...venue,
+        rooms: venue.rooms.map((room) => (room.id === payload.roomId ? {
+          ...room,
+          [payload.propertyKey]: payload.newProperty,
+        } : room)),
       })),
     },
   }),

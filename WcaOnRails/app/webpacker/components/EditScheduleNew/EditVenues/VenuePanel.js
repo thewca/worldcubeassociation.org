@@ -1,15 +1,18 @@
 import React from 'react';
 import {
   Button,
-  Card, Container,
-  Form, Icon,
-  Image,
+  Card,
+  Container,
+  Form,
+  Icon,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
 import VenueLocationMap from './VenueLocationMap';
 import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { editVenue } from '../store/actions';
 
 const countryOptions = countries.real.map((country) => {
   return {
@@ -23,9 +26,10 @@ function VenuePanel({
   venue,
   countryZones,
 }) {
-  const handleChange = (evt, { name, value }) => {
-    // TODO fire dispatch events!
-    console.log(evt, name, value);
+  const dispatch = useDispatch();
+
+  const handleVenueChange = (evt, { name, value }) => {
+    dispatch(editVenue(venue.id, name, value));
   };
 
   // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
@@ -59,18 +63,21 @@ function VenuePanel({
             label="Name"
             name="name"
             value={venue.name}
+            onChange={handleVenueChange}
           />
           <Form.Select
             label="Country"
-            name="country"
+            name="countryIso2"
             options={countryOptions}
             value={venue.countryIso2}
+            onChange={handleVenueChange}
           />
           <Form.Select
             label="Timezone"
-            name="tz"
+            name="timezone"
             options={timezoneOptions}
             value={venue.timezone}
+            onChange={handleVenueChange}
           />
         </Form>
       </Card.Content>

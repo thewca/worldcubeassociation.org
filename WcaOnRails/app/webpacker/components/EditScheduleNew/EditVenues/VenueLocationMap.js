@@ -3,12 +3,16 @@ import { Map, Marker, TileLayer } from 'react-leaflet';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import InvisibleIFrame from './InvisibleIFrame';
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { editVenue } from '../store/actions';
 
 function VenueLocationMap({
   venue,
 }) {
   const mapElem = useRef();
   const markerElem = useRef();
+
+  const dispatch = useDispatch();
 
   const mapPosition = useMemo(() => ({
     lat: toDegrees(venue.latitudeMicrodegrees),
@@ -50,7 +54,8 @@ function VenueLocationMap({
     const newLat = toMicrodegrees(pos.lat);
     const newLng = toMicrodegrees(pos.lng);
 
-    console.log(evt, newLat, newLng);
+    dispatch(editVenue(venue.id, 'latitudeMicrodegrees', newLat));
+    dispatch(editVenue(venue.id, 'longitudeMicrodegrees', newLng));
   };
 
   return (

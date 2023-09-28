@@ -1,12 +1,15 @@
 import React from 'react';
 import { Button, Card, Form, Icon } from 'semantic-ui-react';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { editRoom } from '../store/actions';
 
 function RoomPanel({
   room,
 }) {
+  const dispatch = useDispatch();
+
   const handleChange = (evt, { name, value }) => {
-    // TODO fire dispatch events!
-    console.log(evt, name, value);
+    dispatch(editRoom(room.id, name, value));
   };
 
   return (

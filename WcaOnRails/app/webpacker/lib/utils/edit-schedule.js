@@ -105,3 +105,12 @@ export function rescaleDuration(isoDuration, scalingFactor) {
 
   return Duration.fromMillis(scaledMillis).rescale().toISO();
 }
+
+export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTimezone) {
+  const luxonDateTime = DateTime.fromISO(isoDateTime);
+
+  const oldLocalDateTime = luxonDateTime.setZone(oldTimezone);
+  const newZoneSameLocalTime = oldLocalDateTime.setZone(newTimezone, { keepLocalTime: true });
+
+  return newZoneSameLocalTime.toISO({ suppressMilliseconds: true });
+}
