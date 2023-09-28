@@ -7,7 +7,7 @@ import {
   startDelegateProbationUrl,
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
-import { post } from '../../lib/requests/fetchWithAuthenticityToken';
+import post from '../../lib/requests/post';
 
 function ProbationListTable({
   roleList, userMap, isActive, sync,
