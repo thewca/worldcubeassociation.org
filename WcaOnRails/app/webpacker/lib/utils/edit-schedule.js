@@ -35,13 +35,17 @@ export function defaultDurationFromActivityCode(activityCode) {
   return 30;
 }
 
+export function luxonToWcifIso(luxonDateTime) {
+  return luxonDateTime.toUTC().toISO({ suppressMilliseconds: true });
+}
+
 export function moveByIsoDuration(isoDateTime, isoDuration) {
   const luxonDuration = Duration.fromISO(isoDuration);
   const luxonDateTime = DateTime.fromISO(isoDateTime);
 
   const movedDateTime = luxonDateTime.plus(luxonDuration);
 
-  return movedDateTime.toISO({ suppressMilliseconds: true });
+  return luxonToWcifIso(movedDateTime);
 }
 
 export function rescaleDuration(isoDuration, scalingFactor) {
@@ -59,5 +63,5 @@ export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTime
   const oldLocalDateTime = luxonDateTime.setZone(oldTimezone);
   const newZoneSameLocalTime = oldLocalDateTime.setZone(newTimezone, { keepLocalTime: true });
 
-  return newZoneSameLocalTime.toISO({ suppressMilliseconds: true });
+  return luxonToWcifIso(newZoneSameLocalTime);
 }

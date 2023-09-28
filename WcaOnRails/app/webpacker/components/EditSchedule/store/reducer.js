@@ -38,7 +38,7 @@ const scaleAcitvitiesByDuration = (activity, scaleStartIso, scaleEndIso) => ({
     //   has to be manipulated. But for the children, the _endTime_ ALSO has to be manipulated because
     //   even though only the start of the parent changes, the children _move_ within that scaled parent as a whole.
     //   The scaling factor for the end of a child is the same as the scaling factor for the start of the _next_ child.
-    const endScaleUp = (nChildren - childIdx + 1) / nChildren;
+    const endScaleUp = (nChildren - (childIdx + 1)) / nChildren;
 
     const childScaledUpStart = rescaleDuration(scaleStartIso, startScaleUp);
     const childScaledUpEnd = rescaleDuration(scaleStartIso, endScaleUp);

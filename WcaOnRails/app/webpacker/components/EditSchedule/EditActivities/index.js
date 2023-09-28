@@ -32,7 +32,7 @@ import { getTextColor } from '../../../lib/utils/calendar';
 import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
 import { addActivity, moveActivity, removeActivity, scaleActivity } from '../store/actions';
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
-import { defaultDurationFromActivityCode } from '../../../lib/utils/edit-schedule';
+import { defaultDurationFromActivityCode, luxonToWcifIso } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
 
 function EditActivities({
@@ -156,8 +156,8 @@ function EditActivities({
     const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
     const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
 
-    const utcStartIso = eventStartLuxon.toUTC().toISO({ suppressMilliseconds: true });
-    const utcEndIso = eventEndLuxon.toUTC().toISO({ suppressMilliseconds: true });
+    const utcStartIso = luxonToWcifIso(eventStartLuxon);
+    const utcEndIso = luxonToWcifIso(eventEndLuxon);
 
     const { activityCode, childActivities } = fcEvent.extendedProps;
 
@@ -225,8 +225,8 @@ function EditActivities({
 
         setModalActivity(null);
       } else {
-        const utcStartIso = modalLuxonStart.toUTC().toISO({ suppressMilliseconds: true });
-        const utcEndIso = modalLuxonEnd.toUTC().toISO({ suppressMilliseconds: true });
+        const utcStartIso = luxonToWcifIso(modalLuxonStart);
+        const utcEndIso = luxonToWcifIso(modalLuxonEnd);
 
         const activity = {
           name: activityName,
