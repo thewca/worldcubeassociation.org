@@ -152,7 +152,7 @@ function EditActivities({
     }
   };
 
-  const addNewActivity = ({ event: fcEvent, view: { calendar } }) => {
+  const addActivityFromPicker = ({ event: fcEvent, view: { calendar } }) => {
     const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
     const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
 
@@ -247,7 +247,7 @@ function EditActivities({
 
   return (
     <>
-      <Container textAlign="center">
+      <Container textAlign="center" fluid>
         <Dropdown placeholder="Venue" clearable selection options={venueOptions} onChange={setSelectedRoomId} />
       </Container>
       {!!selectedRoomId && (
@@ -379,8 +379,8 @@ function EditActivities({
                   <span
                     ref={dropToDeleteRef}
                   >
-                Drop an event here to remove it from the schedule.
-              </span>
+                    Drop an event here to remove it from the schedule.
+                  </span>
                   <Icon name="trash" />
                 </Message>
                 <Container text textAlign="center">
@@ -389,7 +389,12 @@ function EditActivities({
                   <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
                 </Container>
                 <FullCalendar
+                  // plugins for the basic FullCalendar implementation.
+                  //   - timeGridPlugin: Display days as vertical grid
+                  //   - luxonPlugin: Support timezones
+                  //   - interactionPlugin: Support dragging events from the sidebar
                   plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
+                  // define our "own" view (which is basically just saying how many days we want)
                   initialView="agendaForComp"
                   views={{
                     agendaForComp: {
@@ -398,32 +403,45 @@ function EditActivities({
                     },
                   }}
                   initialDate={wcifSchedule.startDate}
-                  allDaySlot={false}
-                  headerToolbar={false}
+                  allDaySlot={false} // by default, FC offers support for separate "whole-day" events
+                  headerToolbar={false} // by default, FC would show a "skip to next day" toolbar
+                  // the next three values can be configured via a popup menu
                   slotMinTime={fcSlotMin}
                   slotMaxTime={fcSlotMax}
                   slotDuration={fcSlotDuration}
+                  // force FC to automagically compute an event's "end" flag, if the event doesn't specify one itself
                   forceEventDuration
+                  defaultTimedEventDuration="00:30:00"
+                  // no debuf when an event drag was cancelled
                   dragRevertDuration={0}
+                  // make it so that the user's mouse must travel some non-zero distance until any "drag" event is triggered
                   selectMinDistance={5}
                   height="auto"
+                  // intervals in which the events "snap" to the calendar grid
                   snapDuration="00:05:00"
-                  defaultTimedEventDuration="00:30:00"
-                  events={fcActivities}
+                  // display color for background + text
                   eventColor={wcifRoom.color}
                   eventTextColor={getTextColor(wcifRoom.color)}
+                  // localization settings
                   locale={calendarLocale}
                   timeZone={wcifVenue.timezone}
+                  // FIRE IN DA HOLE!
+                  events={fcActivities}
+                  // make the calendar editable
                   editable
+                  eventDragStop={removeIfOverDropzone}
+                  // allow moving events as a whole around
                   eventStartEditable
+                  eventDrop={changeActivityTimeslot}
+                  // allow resizing events, and explicitly allow resizing on both ends
                   eventDurationEditable
                   eventResizableFromStart
-                  droppable
-                  selectable
-                  eventDragStop={removeIfOverDropzone}
-                  eventReceive={addNewActivity}
-                  eventDrop={changeActivityTimeslot}
                   eventResize={resizeActivity}
+                  // allow dropping external events onto the schedule
+                  droppable
+                  eventReceive={addActivityFromPicker}
+                  // allow highlighting an (empty) timeslot with your mouse to create a new event
+                  selectable
                   dateClick={addActivityFromCalendarClick}
                   select={addActivityFromCalendarDrag}
                 />
