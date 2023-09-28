@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Card,
@@ -13,6 +13,8 @@ import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { addRoom, editVenue, removeVenue } from '../store/actions';
+import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
+import useInputState from '../../../lib/hooks/useInputState';
 
 const countryOptions = countries.real.map((country) => {
   return {
@@ -27,6 +29,19 @@ function VenuePanel({
   countryZones,
 }) {
   const dispatch = useDispatch();
+
+  const [latitudeDegrees, setLatitudeDegrees] = useInputState(toDegrees(venue.latitudeMicrodegrees));
+  const [longitudeDegrees, setLongitudeDegrees] = useInputState(toDegrees(venue.longitudeMicrodegrees));
+
+  useEffect(() => {
+    const latitudeMicrodegrees = toMicrodegrees(latitudeDegrees);
+    dispatch(editVenue(venue.id, 'latitudeMicrodegrees', latitudeMicrodegrees));
+  }, [dispatch, venue.id, latitudeDegrees]);
+
+  useEffect(() => {
+    const longitudeMicrodegrees = toMicrodegrees(longitudeDegrees);
+    dispatch(editVenue(venue.id, 'longitudeMicrodegrees', longitudeMicrodegrees));
+  }, [dispatch, venue.id, longitudeDegrees]);
 
   const handleVenueChange = (evt, { name, value }) => {
     dispatch(editVenue(venue.id, name, value));
@@ -73,14 +88,14 @@ function VenuePanel({
             <Form.Input
               label="Latitude"
               name="latitudeMicrodegrees"
-              value={venue.latitudeMicrodegrees}
-              onChange={handleVenueChange}
+              value={toDegrees(venue.latitudeMicrodegrees)}
+              onChange={setLatitudeDegrees}
             />
             <Form.Input
               label="Longitude"
               name="longitudeMicrodegrees"
-              value={venue.longitudeMicrodegrees}
-              onChange={handleVenueChange}
+              value={toDegrees(venue.longitudeMicrodegrees)}
+              onChange={setLongitudeDegrees}
             />
           </Form.Group>
           <Form.Input
