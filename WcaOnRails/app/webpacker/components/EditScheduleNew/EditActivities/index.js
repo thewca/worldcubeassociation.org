@@ -32,7 +32,7 @@ import { getTextColor } from '../../../lib/utils/calendar';
 import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
 import { addActivity, moveActivity, removeActivity, scaleActivity } from '../store/actions';
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
-import { defaultDurationFromActivityCode, nextActivityId } from '../../../lib/utils/edit-schedule';
+import { defaultDurationFromActivityCode } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
 
 function EditActivities({
@@ -152,13 +152,9 @@ function EditActivities({
     }
   };
 
-  const fcRef = useRef(null);
-
-  const addNewActivity = ({ event: fcEvent }) => {
-    const calendarInstance = fcRef.current.calendar;
-
-    const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendarInstance);
-    const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendarInstance);
+  const addNewActivity = ({ event: fcEvent, view: { calendar } }) => {
+    const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
+    const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
 
     const utcStartIso = eventStartLuxon.toUTC().toISO({ suppressMilliseconds: true });
     const utcEndIso = eventEndLuxon.toUTC().toISO({ suppressMilliseconds: true });
@@ -176,43 +172,46 @@ function EditActivities({
     dispatch(addActivity(activity, wcifRoom.id));
   };
 
-  const changeActivityTimeslot = ({ event: fcEvent, delta }) => {
+  const changeActivityTimeslot = ({ event: fcEvent, delta, view: { calendar } }) => {
     const { activityId } = fcEvent.extendedProps;
 
-    const calendarInstance = fcRef.current.calendar;
-
-    const duration = toLuxonDuration(delta, calendarInstance);
+    const duration = toLuxonDuration(delta, calendar);
     const deltaIso = duration.toISO();
 
     dispatch(moveActivity(activityId, deltaIso));
   };
 
-  const resizeActivity = ({ event: fcEvent, startDelta, endDelta }) => {
+  const resizeActivity = ({ event: fcEvent, startDelta, endDelta, view: { calendar } }) => {
     const { activityId } = fcEvent.extendedProps;
 
-    const calendarInstance = fcRef.current.calendar;
-
-    const startScaleDuration = toLuxonDuration(startDelta, calendarInstance);
+    const startScaleDuration = toLuxonDuration(startDelta, calendar);
     const startScaleIso = startScaleDuration.toISO();
 
-    const endScaleDuration = toLuxonDuration(endDelta, calendarInstance);
+    const endScaleDuration = toLuxonDuration(endDelta, calendar);
     const endScaleIso = endScaleDuration.toISO();
 
     dispatch(scaleActivity(activityId, startScaleIso, endScaleIso));
   };
 
-  const addActivityFromCalendar = (start, end = undefined) => {
-    const calendarInstance = fcRef.current.calendar;
-
-    const eventStartLuxon = toLuxonDateTime(start, calendarInstance);
-
-    const usableEnd = end || eventStartLuxon.plus({ minutes: 30 }).toJSDate();
-    const eventEndLuxon = toLuxonDateTime(usableEnd, calendarInstance);
-
-    setModalLuxonStart(eventStartLuxon);
-    setModalLuxonEnd(eventEndLuxon);
+  const addActivityFromCalendar = (startLuxon, endLuxon) => {
+    setModalLuxonStart(startLuxon);
+    setModalLuxonEnd(endLuxon);
 
     setShowActivityModal(true);
+  };
+
+  const addActivityFromCalendarClick = ({ date, view: { calendar } }) => {
+    const eventStartLuxon = toLuxonDateTime(date, calendar);
+    const eventEndLuxon = eventStartLuxon.plus({ minutes: defaultDurationFromActivityCode('other') });
+
+    addActivityFromCalendar(eventStartLuxon, eventEndLuxon);
+  };
+
+  const addActivityFromCalendarDrag = ({ start, end, view: { calendar } }) => {
+    const eventStartLuxon = toLuxonDateTime(start, calendar);
+    const eventEndLuxon = toLuxonDateTime(end, calendar);
+
+    addActivityFromCalendar(eventStartLuxon, eventEndLuxon);
   };
 
   const onActivityModalClose = (ok, modalData) => {
@@ -390,7 +389,6 @@ function EditActivities({
                   <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
                 </Container>
                 <FullCalendar
-                  ref={fcRef}
                   plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
                   initialView="agendaForComp"
                   views={{
@@ -426,8 +424,8 @@ function EditActivities({
                   eventReceive={addNewActivity}
                   eventDrop={changeActivityTimeslot}
                   eventResize={resizeActivity}
-                  dateClick={({ date }) => addActivityFromCalendar(date)}
-                  select={({ start, end }) => addActivityFromCalendar(start, end)}
+                  dateClick={addActivityFromCalendarClick}
+                  select={addActivityFromCalendarDrag}
                 />
               </Grid.Column>
             </Grid.Row>
