@@ -9,6 +9,52 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import { post } from '../../lib/requests/fetchWithAuthenticityToken';
 
+function ProbationListTable({
+  roleList, userMap, isActive, sync,
+}) {
+  return (
+    <Table>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell width={5}>User</Table.HeaderCell>
+          <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
+          <Table.HeaderCell width={2}>{isActive ? 'Action' : 'End date'}</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {roleList.map((probationRole) => (
+          <Table.Row key={probationRole.id}>
+            <Table.Cell>
+              <UserBadge
+                user={userMap[probationRole.user_id]}
+                hideBorder
+                leftAlign
+              />
+            </Table.Cell>
+            <Table.Cell>
+              {probationRole.start_date}
+            </Table.Cell>
+            <Table.Cell>
+              {
+                isActive ? (
+                  <Button
+                    onClick={() => post(endDelegateProbationUrl, {
+                      probationRoleId: probationRole.id,
+                    }).then(sync)}
+                  >
+                    End Probation
+                  </Button>
+                ) : probationRole.end_date
+              }
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}
+
 export default function DelegateProbations() {
   const [wcaId, setWcaId] = React.useState('');
   const {
@@ -30,75 +76,18 @@ export default function DelegateProbations() {
         Start Probation
       </Button>
       <h2>Active Probations</h2>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell width={5}>User</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Action</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {probationRoles
-            .filter((probationRole) => probationRole.end_date === null)
-            .map((probationRole) => (
-              <Table.Row key={probationRole.id}>
-                <Table.Cell>
-                  <UserBadge
-                    user={probationUsers[probationRole.user_id]}
-                    hideBorder
-                    leftAlign
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  {probationRole.start_date}
-                </Table.Cell>
-                <Table.Cell>
-                  <Button
-                    onClick={() => post(endDelegateProbationUrl, {
-                      probationRoleId: probationRole.id,
-                    }).then(sync)}
-                  >
-                    End Probation
-                  </Button>
-                </Table.Cell>
-              </Table.Row>
-            ))}
-        </Table.Body>
-      </Table>
+      <ProbationListTable
+        roleList={probationRoles.filter((probationRole) => probationRole.end_date === null)}
+        userMap={probationUsers}
+        isActive
+        sync={sync}
+      />
       <h2>Past Probations</h2>
-      <Table>
-        <Table.Header>
-          <Table.Row>
-            <Table.HeaderCell width={5}>User</Table.HeaderCell>
-            <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
-            <Table.HeaderCell width={2}>End date</Table.HeaderCell>
-          </Table.Row>
-        </Table.Header>
-
-        <Table.Body>
-          {probationRoles
-            .filter((probationRole) => probationRole.end_date !== null)
-            .map((probationRole) => (
-              <Table.Row key={probationRole.id}>
-                <Table.Cell>
-                  <UserBadge
-                    user={probationUsers[probationRole.user_id]}
-                    hideBorder
-                    leftAlign
-                  />
-                </Table.Cell>
-                <Table.Cell>
-                  {probationRole.start_date}
-                </Table.Cell>
-                <Table.Cell>
-                  {probationRole.end_date}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-        </Table.Body>
-      </Table>
+      <ProbationListTable
+        roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null)}
+        userMap={probationUsers}
+        isActive={false}
+      />
     </>
   );
 }
