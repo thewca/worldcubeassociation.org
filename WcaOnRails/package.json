@@ -65,7 +65,6 @@
     "prop-types": "^15.8.1",
     "rails-erb-loader": "^5.5.2",
     "react": "^16.14.0",
-    "react-bootstrap": "^0.33.1",
     "react-datepicker": "^4.24.0",
     "react-dom": "^16.14.0",
     "react-leaflet": "^2.8.0",
