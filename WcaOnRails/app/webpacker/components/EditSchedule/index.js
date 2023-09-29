@@ -175,7 +175,6 @@ export default function Wrapper({
         competitionId,
         wcifSchedule,
         initialWcifSchedule: wcifSchedule,
-        unsavedChanges: false,
       }}
     >
       <ConfirmProvider>

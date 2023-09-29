@@ -15,7 +15,7 @@ import {
   Icon,
   List,
   Message,
-  Popup,
+  Popup, Segment,
   Sticky,
 } from 'semantic-ui-react';
 
@@ -247,208 +247,213 @@ function EditActivities({
 
   return (
     <>
-      <Container textAlign="center" fluid>
-        <Dropdown placeholder="Venue" clearable selection options={venueOptions} onChange={setSelectedRoomId} />
+      <Container textAlign="center">
+        <Dropdown fluid placeholder="Venue" clearable selection options={venueOptions} onChange={setSelectedRoomId} />
       </Container>
       {!!selectedRoomId && (
-        <Container>
-          <EditActivityModal
-            showModal={showActivityModal}
-            activity={modalActivity}
-            startLuxon={modalLuxonStart}
-            endLuxon={modalLuxonEnd}
-            dateLocale={calendarLocale}
-            onModalClose={onActivityModalClose}
-          />
-          <Grid>
-            <Grid.Row>
-              <Grid.Column width={4}>
-                <Sticky>
-                  <div
-                    ref={activityPickerRef}
-                  >
-                    <ActivityPicker
-                      wcifEvents={wcifEvents}
-                      wcifRoom={wcifRoom}
-                    />
-                  </div>
-                </Sticky>
-              </Grid.Column>
-              <Grid.Column width={12}>
-                <Button.Group basic>
-                  <Popup
-                    trigger={<Button icon="question circle" />}
-                    position="bottom center"
-                  >
-                    <Popup.Header>Keyboard shortcuts help</Popup.Header>
-                    <Popup.Content>
-                      <List>
-                        <List.Item>
-                          <List.Header>Icon or [C]+i</List.Header>
-                          <List.Description>Toggle keyboard shortcuts</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>Arrow keys</List.Header>
-                          <List.Description>Change selected event in calendar</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>[S] + Arrow keys</List.Header>
-                          <List.Description>Change selected activity in picker</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>Enter</List.Header>
-                          <List.Description>Add selected activity after selected event</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>[Del]</List.Header>
-                          <List.Description>Remove selected event</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>[C] + Arrow keys</List.Header>
-                          <List.Description>Move selected event around in calendar</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>[C] + [S] + up/down</List.Header>
-                          <List.Description>Shrink/Expand selected event in calendar</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>[C] + [S] + click</List.Header>
-                          <List.Description>Show contextual menu for event</List.Description>
-                        </List.Item>
-                        <Divider />
-                        <List.Item>
-                          <List.Header>[C]</List.Header>
-                          <List.Description>...means Control/CTRL key</List.Description>
-                        </List.Item>
-                        <List.Item>
-                          <List.Header>[S]</List.Header>
-                          <List.Description>...means Shift key</List.Description>
-                        </List.Item>
-                      </List>
-                    </Popup.Content>
-                  </Popup>
-                  <Popup
-                    trigger={<Button icon="cog" />}
-                    on="click"
-                    position="bottom center"
-                    pinned
-                  >
-                    <Popup.Header>Calendar settings</Popup.Header>
-                    <Popup.Content>
-                      <Form>
-                        <Form.Input
-                          label="Minutes per row"
-                          name="row-mins"
-                          type="number"
-                          min={5}
-                          max={30}
-                          step={5}
-                          value={minutesPerRow}
-                          onChange={setMinutesPerRow}
-                        />
-                        <Form.Input
-                          label="Calendar starts at"
-                          name="cal-start"
-                          type="number"
-                          min={0}
-                          max={24}
-                          value={calendarStart}
-                          onChange={setCalendarStart}
-                        />
-                        <Form.Input
-                          label="Calendar ends at"
-                          name="cal-end"
-                          type="number"
-                          min={0}
-                          max={24}
-                          value={calendarEnd}
-                          onChange={setCalendarEnd}
-                        />
-                      </Form>
-                    </Popup.Content>
-                  </Popup>
-                  <Button
-                    icon="keyboard"
-                    toggle
-                    active={isKeyboardEnabled}
-                    onClick={setKeyboardEnabled}
+        <>
+          <Divider />
+          <Container fluid>
+            <EditActivityModal
+              showModal={showActivityModal}
+              activity={modalActivity}
+              startLuxon={modalLuxonStart}
+              endLuxon={modalLuxonEnd}
+              dateLocale={calendarLocale}
+              onModalClose={onActivityModalClose}
+            />
+            <Grid>
+              <Grid.Row>
+                <Grid.Column width={4}>
+                  <Sticky>
+                    <Segment
+                      ref={activityPickerRef}
+                    >
+                      <ActivityPicker
+                        wcifEvents={wcifEvents}
+                        wcifRoom={wcifRoom}
+                      />
+                    </Segment>
+                  </Sticky>
+                </Grid.Column>
+                <Grid.Column width={12}>
+                  <Container text textAlign="center">
+                    <Button.Group basic>
+                      <Popup
+                        trigger={<Button icon="question circle" />}
+                        position="bottom center"
+                      >
+                        <Popup.Header>Keyboard shortcuts help</Popup.Header>
+                        <Popup.Content>
+                          <List>
+                            <List.Item>
+                              <List.Header>Icon or [C]+i</List.Header>
+                              <List.Description>Toggle keyboard shortcuts</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>Arrow keys</List.Header>
+                              <List.Description>Change selected event in calendar</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>[S] + Arrow keys</List.Header>
+                              <List.Description>Change selected activity in picker</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>Enter</List.Header>
+                              <List.Description>Add selected activity after selected event</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>[Del]</List.Header>
+                              <List.Description>Remove selected event</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>[C] + Arrow keys</List.Header>
+                              <List.Description>Move selected event around in calendar</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>[C] + [S] + up/down</List.Header>
+                              <List.Description>Shrink/Expand selected event in calendar</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>[C] + [S] + click</List.Header>
+                              <List.Description>Show contextual menu for event</List.Description>
+                            </List.Item>
+                            <Divider />
+                            <List.Item>
+                              <List.Header>[C]</List.Header>
+                              <List.Description>...means Control/CTRL key</List.Description>
+                            </List.Item>
+                            <List.Item>
+                              <List.Header>[S]</List.Header>
+                              <List.Description>...means Shift key</List.Description>
+                            </List.Item>
+                          </List>
+                        </Popup.Content>
+                      </Popup>
+                      <Popup
+                        trigger={<Button icon="cog" />}
+                        on="click"
+                        position="bottom center"
+                        pinned
+                      >
+                        <Popup.Header>Calendar settings</Popup.Header>
+                        <Popup.Content>
+                          <Form>
+                            <Form.Input
+                              label="Minutes per row"
+                              name="row-mins"
+                              type="number"
+                              min={5}
+                              max={30}
+                              step={5}
+                              value={minutesPerRow}
+                              onChange={setMinutesPerRow}
+                            />
+                            <Form.Input
+                              label="Calendar starts at"
+                              name="cal-start"
+                              type="number"
+                              min={0}
+                              max={24}
+                              value={calendarStart}
+                              onChange={setCalendarStart}
+                            />
+                            <Form.Input
+                              label="Calendar ends at"
+                              name="cal-end"
+                              type="number"
+                              min={0}
+                              max={24}
+                              value={calendarEnd}
+                              onChange={setCalendarEnd}
+                            />
+                          </Form>
+                        </Popup.Content>
+                      </Popup>
+                      <Button
+                        icon="keyboard"
+                        toggle
+                        active={isKeyboardEnabled}
+                        onClick={setKeyboardEnabled}
+                      />
+                    </Button.Group>
+                    <span>
+                      The timezone for this room is
+                      {' '}
+                      <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
+                    </span>
+                  </Container>
+                  <Container fluid textAlign="center">
+                    <span ref={dropToDeleteRef}>
+                      <Message negative floating>
+                        <Icon name="trash" />
+                        Drop an event here to remove it from the schedule.
+                        <Icon name="trash" />
+                      </Message>
+                    </span>
+                  </Container>
+                  <FullCalendar
+                    // plugins for the basic FullCalendar implementation.
+                    //   - timeGridPlugin: Display days as vertical grid
+                    //   - luxonPlugin: Support timezones
+                    //   - interactionPlugin: Support dragging events from the sidebar
+                    plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
+                    // define our "own" view (which is basically just saying how many days we want)
+                    initialView="agendaForComp"
+                    views={{
+                      agendaForComp: {
+                        type: 'timeGrid',
+                        duration: { days: wcifSchedule.numberOfDays },
+                      },
+                    }}
+                    initialDate={wcifSchedule.startDate}
+                    allDaySlot={false} // by default, FC offers support for separate "whole-day" events
+                    headerToolbar={false} // by default, FC would show a "skip to next day" toolbar
+                    // the next three values can be configured via a popup menu
+                    slotMinTime={fcSlotMin}
+                    slotMaxTime={fcSlotMax}
+                    slotDuration={fcSlotDuration}
+                    // force FC to automagically compute an event's "end" flag, if the event doesn't specify one itself
+                    forceEventDuration
+                    defaultTimedEventDuration="00:30:00"
+                    // no debuf when an event drag was cancelled
+                    dragRevertDuration={0}
+                    // make it so that the user's mouse must travel some non-zero distance until any "drag" event is triggered
+                    selectMinDistance={5}
+                    height="auto"
+                    // intervals in which the events "snap" to the calendar grid
+                    snapDuration="00:05:00"
+                    // display color for background + text
+                    eventColor={wcifRoom.color}
+                    eventTextColor={getTextColor(wcifRoom.color)}
+                    // localization settings
+                    locale={calendarLocale}
+                    timeZone={wcifVenue.timezone}
+                    // FIRE IN DA HOLE!
+                    events={fcActivities}
+                    // make the calendar editable
+                    editable
+                    eventDragStop={removeIfOverDropzone}
+                    // allow moving events as a whole around
+                    eventStartEditable
+                    eventDrop={changeActivityTimeslot}
+                    // allow resizing events, and explicitly allow resizing on both ends
+                    eventDurationEditable
+                    eventResizableFromStart
+                    eventResize={resizeActivity}
+                    // allow dropping external events onto the schedule
+                    droppable
+                    eventReceive={addActivityFromPicker}
+                    // allow highlighting an (empty) timeslot with your mouse to create a new event
+                    selectable
+                    dateClick={addActivityFromCalendarClick}
+                    select={addActivityFromCalendarDrag}
                   />
-                </Button.Group>
-                <Message negative compact>
-                  <Icon name="trash" />
-                  <span
-                    ref={dropToDeleteRef}
-                  >
-                    Drop an event here to remove it from the schedule.
-                  </span>
-                  <Icon name="trash" />
-                </Message>
-                <Container text textAlign="center">
-                  The timezone for this room is
-                  {' '}
-                  <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
-                </Container>
-                <FullCalendar
-                  // plugins for the basic FullCalendar implementation.
-                  //   - timeGridPlugin: Display days as vertical grid
-                  //   - luxonPlugin: Support timezones
-                  //   - interactionPlugin: Support dragging events from the sidebar
-                  plugins={[timeGridPlugin, luxonPlugin, interactionPlugin]}
-                  // define our "own" view (which is basically just saying how many days we want)
-                  initialView="agendaForComp"
-                  views={{
-                    agendaForComp: {
-                      type: 'timeGrid',
-                      duration: { days: wcifSchedule.numberOfDays },
-                    },
-                  }}
-                  initialDate={wcifSchedule.startDate}
-                  allDaySlot={false} // by default, FC offers support for separate "whole-day" events
-                  headerToolbar={false} // by default, FC would show a "skip to next day" toolbar
-                  // the next three values can be configured via a popup menu
-                  slotMinTime={fcSlotMin}
-                  slotMaxTime={fcSlotMax}
-                  slotDuration={fcSlotDuration}
-                  // force FC to automagically compute an event's "end" flag, if the event doesn't specify one itself
-                  forceEventDuration
-                  defaultTimedEventDuration="00:30:00"
-                  // no debuf when an event drag was cancelled
-                  dragRevertDuration={0}
-                  // make it so that the user's mouse must travel some non-zero distance until any "drag" event is triggered
-                  selectMinDistance={5}
-                  height="auto"
-                  // intervals in which the events "snap" to the calendar grid
-                  snapDuration="00:05:00"
-                  // display color for background + text
-                  eventColor={wcifRoom.color}
-                  eventTextColor={getTextColor(wcifRoom.color)}
-                  // localization settings
-                  locale={calendarLocale}
-                  timeZone={wcifVenue.timezone}
-                  // FIRE IN DA HOLE!
-                  events={fcActivities}
-                  // make the calendar editable
-                  editable
-                  eventDragStop={removeIfOverDropzone}
-                  // allow moving events as a whole around
-                  eventStartEditable
-                  eventDrop={changeActivityTimeslot}
-                  // allow resizing events, and explicitly allow resizing on both ends
-                  eventDurationEditable
-                  eventResizableFromStart
-                  eventResize={resizeActivity}
-                  // allow dropping external events onto the schedule
-                  droppable
-                  eventReceive={addActivityFromPicker}
-                  // allow highlighting an (empty) timeslot with your mouse to create a new event
-                  selectable
-                  dateClick={addActivityFromCalendarClick}
-                  select={addActivityFromCalendarDrag}
-                />
-              </Grid.Column>
-            </Grid.Row>
-          </Grid>
-        </Container>
+                </Grid.Column>
+              </Grid.Row>
+            </Grid>
+          </Container>
+        </>
       )}
     </>
   );

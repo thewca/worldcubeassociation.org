@@ -77,6 +77,7 @@ function VenuePanel({
 
   return (
     <Card fluid raised>
+      { /* Needs the className 'image' so that SemUI fills the top of the card */ }
       <Container className="image venue-map" style={{ height: '300px' }}>
         <VenueLocationMap
           venue={venue}
@@ -121,17 +122,18 @@ function VenuePanel({
         </Form>
       </Card.Content>
       <Card.Content>
-        <Card.Group>
-          {venue.rooms.map((room) => (
-            <RoomPanel
-              key={room.id}
-              room={room}
-            />
-          ))}
-        </Card.Group>
-        <div className="ui two buttons">
+        <Card.Header>Rooms</Card.Header>
+        <Card.Description>
+          <Card.Group itemsPerRow={2}>
+            {venue.rooms.map((room) => (
+              <RoomPanel
+                key={room.id}
+                room={room}
+              />
+            ))}
+          </Card.Group>
           <Button positive onClick={handleAddRoom}>Add room</Button>
-        </div>
+        </Card.Description>
       </Card.Content>
       <Card.Content>
         <Button negative icon onClick={handleDeleteVenue}>

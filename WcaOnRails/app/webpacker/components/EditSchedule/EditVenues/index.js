@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { Button, Container, Grid } from 'semantic-ui-react';
+import { Button, Card, Container, Grid } from 'semantic-ui-react';
 import _ from 'lodash';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
@@ -9,8 +9,6 @@ function EditVenues({
   countryZones,
 }) {
   const { wcifSchedule } = useStore();
-
-  const displayVenues = useMemo(() => _.chunk(wcifSchedule.venues, 2), [wcifSchedule.venues]);
 
   const dispatch = useDispatch();
 
@@ -25,25 +23,16 @@ function EditVenues({
       </Container>
 
       <Container>
-        <Grid>
-          {displayVenues.map((venueRow, rowIdx) => (
-            <Grid.Row key={rowIdx}>
-              {venueRow.map((venue) => (
-                <Grid.Column key={venue.id}>
-                  <VenuePanel
-                    venue={venue}
-                    countryZones={countryZones}
-                  />
-                </Grid.Column>
-              ))}
-            </Grid.Row>
+        <Card.Group itemsPerRow={2}>
+          {wcifSchedule.venues.map((venue) => (
+            <VenuePanel
+              key={venue.id}
+              venue={venue}
+              countryZones={countryZones}
+            />
           ))}
-          <Grid.Row stretched>
-            <Grid.Column>
-              <Button positive onClick={handleAddVenue}>Add a venue</Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
+        </Card.Group>
+        <Button positive onClick={handleAddVenue}>Add a venue</Button>
       </Container>
     </>
   );
