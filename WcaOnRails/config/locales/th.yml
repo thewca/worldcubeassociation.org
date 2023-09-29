@@ -2157,8 +2157,11 @@ th:
       failed: ไม่สามารถแก้ไขการสมัครได้
       #original_hash: 016b4ae
       deleted: 'ลบการสมัครการแข่งขัน %{comp} สำเร็จแล้ว'
-      #original_hash: 648424f
-      registered: สมัครการแข่งขันสำเร็จแล้ว
+      #original_hash: 7707307
+      registered: >-
+        การสมัครได้ถูกส่งไปยังผู้จัดการแข่งขันแล้ว
+        กรุณาตรวจสอบว่าคุณได้ปฏิบัติตามเงื่อนไขการสมัครทั้งหมดแล้ว
+        เพื่อให้การสมัครของคุณสมบูรณ์
       #original_hash: 82fed60
       imported: นำเข้าการสมัครสำเร็จ
       #original_hash: 3614fd1
@@ -2170,14 +2173,16 @@ th:
       #original_hash: 72e2180
       regards_html: 'ด้วยความนับถือ, %{people}.'
       new:
-        #original_hash: a32db59
-        mail_subject: >-
-          การสมัครการแข่งขัน %{comp_name} ของคุณได้ถูกส่งแล้ว
-          และกำลังรอการยืนยัน
-        #original_hash: 8374583
-        registered_html: 'คุณได้สมัครการแข่งขัน %{comp_name}'
-        #original_hash: 13fabed
-        awaits_approval: ได้รับการสมัครของคุณแล้ว กำลังรอการยืนยันจากผู้จัดการแข่งขัน
+        #original_hash: 63591e5
+        mail_subject: 'การสมัครที่กำลังรอการยืนยัน %{comp_name}'
+        #original_hash: 6aa057a
+        registered_html: >-
+          การสมัครการแข่งขัน %{comp_name}
+          ของคุณกำลังรอการยืนยันจากทางผู้จัดการแข่งขัน
+        #original_hash: f98b245
+        awaits_approval: >-
+          กรุณาตรวจสอบว่าคุณได้ทำตามข้อกำหนดการสมัครการแข่งขันครบแล้ว เช่น
+          ชำระค่าสมัคร
         #original_hash: 826045f
         approval_info_html: >-
           คุณจะได้รับ email เมื่อการสมัครของคุณได้รับการยืนยัน
@@ -2188,8 +2193,8 @@ th:
           หรือติดต่อผู้จัดการแข่งขัน คุณสามารถตรวจสอบสถานะการสมัครของคุณได้ที่
           %{here}
       accepted:
-        #original_hash: 34515b5
-        mail_subject: 'การสมัครการแข่งขัน %{comp_name} ของคุณ ได้รับการยืนยันแล้ว'
+        #original_hash: 6f1fa1f
+        mail_subject: 'การสมัครที่ได้รับการยืนยัน: %{comp_name}'
         #original_hash: 24d2883
         message_html: >-
           การสมัครการแข่งขัน %{comp_name} ของคุณได้รับการยืนยันแล้ว
@@ -2197,8 +2202,8 @@ th:
         #original_hash: 1852cbf
         see_you_soon: 'เรารอที่จะได้พบคุณที่ %{comp_name}!'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: 'คุณได้ถุกย้ายไปอยู่รายชื่อรอสำหรับการแข่งขัน %{comp_name}'
+        #original_hash: 8d26297
+        mail_subject: 'การสมัครที่ถูกย้ายไปอยู่ใน Waitlist: %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           การสมัครการแข่งขัน %{comp_name} ของคุณ ได้ถูกย้ายไปอยู่รายชื่อรอ
@@ -2211,8 +2216,8 @@ th:
         #original_hash: 8f7358f
         email_if_error: ถ้าคุณคิดว่านี่เป็นข้อผิดพลาด กรุณาตอบกลับ email นี้
       deleted:
-        #original_hash: 268e248
-        mail_subject: 'การสมัครการแข่งขัน %{comp_name} ของคุณถูกลบทิ้ง'
+        #original_hash: 8cbc6c0
+        mail_subject: 'การสมัครที่โดนลบ: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'การสมัครการแข่งขัน %{comp_name} ของคุณถูกลบทิ้ง สาเหตุที่เป็นไปได้คือ:'
         causes:
