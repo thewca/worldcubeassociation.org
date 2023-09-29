@@ -1,4 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import _ from 'lodash';
 
 import { Button, Message } from 'semantic-ui-react';
@@ -33,7 +38,7 @@ function EditEvents() {
     return null;
   }, [unsavedChanges]);
 
-  useState(() => {
+  useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
 
     return () => {

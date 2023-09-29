@@ -10,7 +10,7 @@ module Admin
           render :posting_index
         end
         format.json do
-          @pending_competitions = Competition.pending_posting
+          @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
           user_attributes = {
             only: ["id", "name"],
             methods: [],
@@ -19,7 +19,7 @@ module Admin
           render json: {
             current_user: current_user.as_json(user_attributes),
             competitions: @pending_competitions.as_json(
-              only: ["id", "name"],
+              only: ["id", "name", "results_submitted_at"],
               methods: ["city", "country_iso2"],
               include: { posting_user: user_attributes },
             ),
@@ -50,9 +50,6 @@ module Admin
 
       json = { error: "Something went wrong." }
       if @updated_competitions.update(posting_user: current_user)
-        @updated_competitions.each do |c|
-          CompetitionsMailer.posting_results(c, current_user).deliver_now
-        end
         json = { message: "Competitions successfully locked, go on posting!" }
       end
 

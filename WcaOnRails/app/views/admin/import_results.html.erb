@@ -1,6 +1,10 @@
 <% provide(:title, "Import uploaded competition results") %>
 <%= render layout: 'competitions/nav' do %>
   <h1><%= yield(:title) %></h1>
-
+  <% if @competition.posting_by? %>
+    <%= alert :info do %>
+      <%= User.find(@competition.posting_by).name %> is posting the results...
+    <% end %>
+  <% end %>
   <%= render 'import_results_steps' %>
 <% end %>

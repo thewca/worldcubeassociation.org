@@ -276,7 +276,7 @@ Rails.application.routes.draw do
   get '/redirect/wac-survey' => 'users#wac_survey'
 
   scope 'admin' do
-    get '/posting-index' => 'admin/results#posting_index'
+    get '/posting-index' => 'admin/results#posting_index', as: :results_posting_dashboard
     post '/start-posting' => 'admin/results#start_posting'
   end
 
