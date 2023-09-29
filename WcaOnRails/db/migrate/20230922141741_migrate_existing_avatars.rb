@@ -2,8 +2,10 @@
 
 class MigrateExistingAvatars < ActiveRecord::Migration[7.0]
   def change
+    add_column :users, :current_avatar_id, :bigint, after: :avatar
+
     User.where.not(avatar: nil).find_each do |user|
-      UserAvatar.create!(
+      avatar = UserAvatar.create!(
         user_id: user.id,
         filename: user.avatar.identifier,
         status: UserAvatar.statuses[:approved],
@@ -13,10 +15,13 @@ class MigrateExistingAvatars < ActiveRecord::Migration[7.0]
         thumbnail_crop_h: user.saved_avatar_crop_h,
         backend: UserAvatar.backends[:s3_cdn],
       )
+
+      user.avatar = avatar
+      user.save!
     end
 
     User.where.not(pending_avatar: nil).find_each do |user|
-      UserAvatar.create!(
+      pending_avatar = UserAvatar.create!(
         user_id: user.id,
         filename: user.avatar.identifier,
         status: UserAvatar.statuses[:pending],
@@ -25,7 +30,10 @@ class MigrateExistingAvatars < ActiveRecord::Migration[7.0]
         thumbnail_crop_w: user.saved_pending_avatar_crop_w,
         thumbnail_crop_h: user.saved_pending_avatar_crop_h,
         backend: UserAvatar.backends[:s3_cdn],
-        )
+      )
+
+      user.avatar = pending_avatar
+      user.save!
     end
   end
 end
