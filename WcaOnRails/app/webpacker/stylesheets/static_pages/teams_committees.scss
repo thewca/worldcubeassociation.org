@@ -45,8 +45,27 @@
 
     /* On mobile, colour every other user badge a light shade of grey to separate them */
     @media (max-width: 525px) {
-      & > :nth-child(2n) {
+      &> :nth-child(2n) {
         background: #f2f2f2 !important;
+      }
+    }
+
+    .user-badge {
+
+      /* Make it fill width of screen on mobile */
+      @media (max-width: 525px) {
+        width: 100vw;
+        margin: 0 !important;
+        border: none !important;
+        border-radius: 0 !important;
+
+        .user-name {
+          background: none !important;
+        }
+
+        >.label {
+          border-radius: 0 !important;
+        }
       }
     }
   }

@@ -18,6 +18,8 @@ RSpec.describe "Competition WCIF" do
       event_ids: %w(333 444 333fm 333mbf),
       with_schedule: true,
       competitor_limit: 50,
+      registration_open: "2013-12-01",
+      registration_close: "2013-12-31",
     )
   }
   let(:partner_competition) { FactoryBot.create(:competition, :with_delegate, id: "PartnerComp2014", series_base: competition, series_distance_days: 3, showAtAll: true) }
@@ -267,6 +269,60 @@ RSpec.describe "Competition WCIF" do
       expect {
         JSON::Validator.validate!(Competition.wcif_json_schema, competition.to_wcif)
       }.to_not raise_error
+    end
+  end
+
+  describe "#set_wcif_competitor_limit!" do
+    let(:competitor_limit_wcif) { competition.to_wcif["competitorLimit"] }
+
+    it "Can set a new competitor limit" do
+      competitor_limit_wcif = 120
+
+      competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate)
+
+      expect(competition.competitor_limit_enabled?).to eq(true)
+      expect(competition.to_wcif["competitorLimit"]).to eq(competitor_limit_wcif)
+    end
+
+    it "Cannot set a new competitor limit after a competition is confirmed" do
+      competitor_limit_wcif = 120
+
+      # Manually confirm the competition
+      competition.confirmed_at = "2013-06-01"
+      competition.save!
+
+      expect { competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate) }.to raise_error(WcaExceptions::BadApiParameter)
+    end
+
+    it "Cannot add a competitor limit when competitor limits are not enabled" do
+      competitor_limit_wcif = 120
+
+      # Disable competitor limits for this competition manually.
+      competition.competitor_limit_enabled = false
+      competition.competitor_limit = nil
+      competition.competitor_limit_reason = nil
+      competition.save!
+
+      # Adding a competitor limit should error
+      expect { competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate) }.to raise_error(WcaExceptions::BadApiParameter)
+    end
+
+    it "Cannot remove a competitor limit" do
+      competitor_limit_wcif = nil
+
+      # Adding a competitor limit should error
+      expect { competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate) }.to raise_error(WcaExceptions::BadApiParameter)
+    end
+
+    it "does not error when the limit is unchanged" do
+      competitor_limit_wcif = 50
+
+      # Manually confirm the competition
+      competition.confirmed_at = "2013-06-01"
+      competition.save!
+
+      competition.set_wcif_competitor_limit!(competitor_limit_wcif, delegate)
+      expect(competition.to_wcif["competitorLimit"]).to eq(competitor_limit_wcif)
     end
   end
 

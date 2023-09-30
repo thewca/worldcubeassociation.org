@@ -431,8 +431,8 @@ pt:
           quando novos registos forem submetidos.
         #original_hash: de60ab8
         delegate_status: Estatuto de delegado
-        #original_hash: 0f21717
-        region: Região
+        #original_hash: d219c68
+        location: Localização
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -846,7 +846,7 @@ pt:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1675,6 +1675,8 @@ pt:
       results_admin: Administrador
       #original_hash: 61074f1
       results_database: Base de dados
+      #original_hash: 54e0548
+      results_sidekiq: Dashboard Sidekiq
       #original_hash: aee74b8
       new_post: Novo artigo
       #original_hash: 0d67445
@@ -1770,12 +1772,12 @@ pt:
     support:
       #original_hash: 610edba
       title: Ajude a WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
-        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
-        donativos para nos ajudar a promover a nossa visão de ter competições
-        mais agradáveis em todo o mundo.
+        Sendo uma organização sem fins lucrativos, 100% liderada por
+        voluntários, agradecemos donativos para nos ajudar a promover a nossa
+        visão de ter competições mais agradáveis em todo o mundo.
       #original_hash: 65c84ec
       button: Saiba mais sobre como pode ajudar a WCA
   users:
@@ -2273,8 +2275,11 @@ pt:
       failed: Não foi possível atualizar a inscrição
       #original_hash: 016b4ae
       deleted: 'Sua inscrição em %{comp} foi excluída com sucesso'
-      #original_hash: 648424f
-      registered: Inscrição realizada!
+      #original_hash: 7707307
+      registered: >-
+        Formulário de inscrição submetido - certifique-se de que segue todas as
+        instruções dos requisitos de registo abaixo, para garantir que o seu
+        registo está completo.
       #original_hash: 82fed60
       imported: Registos importados com sucesso!
       #original_hash: 3614fd1
@@ -2286,16 +2291,17 @@ pt:
       #original_hash: 72e2180
       regards_html: 'Cumprimentos, %{people}.'
       new:
-        #original_hash: a32db59
-        mail_subject: >-
-          O seu registo para a competição %{comp_name} foi submetido, aguardando
-          aprovação
-        #original_hash: 8374583
-        registered_html: 'Acabou de se registar para %{comp_name}.'
-        #original_hash: 13fabed
+        #original_hash: 63591e5
+        mail_subject: 'Registo Pendente: %{comp_name}'
+        #original_hash: 6aa057a
+        registered_html: >-
+          O seu registo para %{comp_name} está agora pendente e a aguardar
+          aprovação da equipa de organização.
+        #original_hash: f98b245
         awaits_approval: >-
-          O seu registo foi recebido e está pendente de aprovação pela equipa de
-          organização.
+          Por favor certifique-se de que seguiu todos os requisitos de inscrição
+          na competição. Por exemplo, pode ser necessário pagar uma taxa de
+          inscrição antes do registo estar finalizado.
         #original_hash: 826045f
         approval_info_html: >-
           Ser-lhe-á enviado um email quando o seu registo for aprovado. Note que
@@ -2305,8 +2311,8 @@ pt:
           visite o site da competição ou contacte a organização. Pode também
           verificar o estado do seu registo %{here}.
       accepted:
-        #original_hash: 34515b5
-        mail_subject: 'O seu registo para %{comp_name} foi aceite'
+        #original_hash: 6f1fa1f
+        mail_subject: 'Registo Aceite: %{comp_name}'
         #original_hash: 24d2883
         message_html: >-
           O seu registo para %{comp_name} foi aceite. Poderá sempre verificar o
@@ -2314,8 +2320,8 @@ pt:
         #original_hash: 1852cbf
         see_you_soon: 'Ficamos então à sua espera na competição %{comp_name}!'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: 'Foi movido para a lista de espera para %{comp_name}'
+        #original_hash: 8d26297
+        mail_subject: 'Registo movido para lista de espera: %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           O seu registo para %{comp_name} foi movido para a lista de espera.
@@ -2328,8 +2334,8 @@ pt:
         #original_hash: 8f7358f
         email_if_error: 'Se considera que isto foi um erro, por favor responda a este email.'
       deleted:
-        #original_hash: 268e248
-        mail_subject: 'O seu registo em %{comp_name} foi apagado'
+        #original_hash: 8cbc6c0
+        mail_subject: 'Registo Apagado: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'O seu registo em %{comp_name} foi apagado. Causas possíveis são:'
         causes:
@@ -3000,10 +3006,6 @@ pt:
     index:
       #original_hash: db98a68
       title: Competições
-      #original_hash: b24c9c0
-      disclaimer: >-
-        Note que, devido à pandemia COVID-19, em algumas regiões pode não haver
-        competições.
       #original_hash: 6a72085
       all_events: Todos
       #original_hash: 6d76b81
@@ -4053,16 +4055,16 @@ pt:
     mission_footer: Declaração da Missão da WCA
     #original_hash: cdab446
     who_we_are_title: Quem somos
-    #original_hash: 9248dc4
+    #original_hash: c0d9a3e
     who_we_are_content_html: >-
       <p> A World Cube Association rege as competições de puzzles mecânicos que
       são operados por rotação de grupos de peças, geralmente conhecidos como
       'twisty puzzles'. O mais famoso desses quebra-cabeças é o Cubo de Rubik,
       inventado pelo professor Rubik, da Hungria. Uma seleção desses
       quebra-cabeças é escolhida como eventos oficiais da WCA.</p> <p>Como a WCA
-      evoluiu na última década, mais de 100.000 pessoas competiram nas nossas
+      evoluiu na última década, mais de 200.000 pessoas competiram nas nossas
       competições. Apesar desse crescimento, continuamos a ser uma organização
-      que é inteiramente gerida por voluntários, de organizadores locais a
+      que é quase inteiramente gerida por voluntários, de organizadores locais a
       delegados da WCA e até mesmo ao Conselho da WCA. Somos muito gratos a
       todos que tiram tempo de suas vidas para permitir que a WCA funcione. Com
       mais apoio financeiro, esperamos trazer um nível ainda maior de
@@ -4090,10 +4092,10 @@ pt:
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
-    #original_hash: 2fea363
+    #original_hash: 487c6a1
     whats_next_content_html: >-
-      <p> A World Cube Association teve mais de 100.000 competidores únicos de
-      140 regiões diferentes e não estamos a planear abrandar tão cedo! A
+      <p> A World Cube Association teve mais de 200.000 competidores únicos de
+      158 regiões diferentes e não estamos a planear abrandar tão cedo! A
       comunidade de cubing tem crescido constantemente desde a nossa fundação em
       2004 e queremos encorajá-la a continuar no futuro aumentando a
       acessibilidade das competições a novas áreas. No futuro, esperamos apoiar
@@ -4126,12 +4128,12 @@ pt:
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org
       </a>.</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         A World Cube Association é uma organização 501(c)(3) isenta de impostos.
-        Sendo uma organização sem fins lucrativos, 100% voluntária, agradecemos
-        donativos para nos ajudar a promover a nossa visão de ter competições
-        mais agradáveis em todo o mundo.
+        Sendo uma organização sem fins lucrativos, 100% liderada por
+        voluntários, agradecemos donativos para nos ajudar a promover a nossa
+        visão de ter competições mais agradáveis em todo o mundo.
       #original_hash: 24c87db
       donate_credit: Doar via cartão de crédito
       #original_hash: 0e5a9c3
@@ -4855,22 +4857,6 @@ pt:
         Envie o ficheiro JSON exportado pelo Assistente de Resultados por email
         para <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Relações
-      #original_hash: 69ba020
-      find_relations: Encontrar relações entre competidores
-      #original_hash: 5d6056d
-      show_relation: Mostrar-me a relação!
-      connectives:
-        #original_hash: f85194e
-        was_at: Esteve em
-        #original_hash: 8c00243
-        together_with: Juntos com
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Por favor submeta dois IDs da WCA válidos e distintos.
   search_results:
     index:
       #original_hash: db98a68

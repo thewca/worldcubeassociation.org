@@ -470,18 +470,18 @@ class RegistrationsController < ApplicationController
       return head :bad_request
     end
     # Check if webhook signing is configured.
-    if EnvVars.STRIPE_WEBHOOK_SECRET.present?
+    if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
       begin
         event = Stripe::Webhook.construct_event(
-          payload, signature, EnvVars.STRIPE_WEBHOOK_SECRET
+          payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
         )
       rescue Stripe::SignatureVerificationError => e
         logger.warn "Stripe webhook signature verification failed. #{e.message}"
         return head :bad_request
       end
-    elsif Rails.env.production? && EnvVars.WCA_LIVE_SITE?
+    elsif Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
       logger.error "No Stripe webhook secret defined in Production."
       return head :bad_request
     end
@@ -508,23 +508,29 @@ class RegistrationsController < ApplicationController
 
       stored_intent = stored_transaction.stripe_payment_intent
 
-      stored_intent.update_status_and_charges(stripe_intent, audit_event) do |charge_transaction|
+      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
         if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
           ruby_money = charge_transaction.money_amount
 
-          stored_intent.holder.record_payment(
+          stored_payment = stored_intent.holder.record_payment(
             ruby_money.cents,
             ruby_money.currency.iso_code,
             charge_transaction,
             stored_intent.user.id,
           )
+
+          # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by Stripe.
+          # Context: When our servers die due to traffic spikes, the Stripe webhook cannot be processed
+          #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
+          #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
+          stored_payment.update!(created_at: audit_event.created_at_remote)
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_transaction.stripe_payment_intent
-      stored_intent.update_status_and_charges(stripe_intent, audit_event)
+      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
@@ -565,6 +571,10 @@ class RegistrationsController < ApplicationController
         charge_transaction,
         current_user.id,
       )
+
+      # Running in sync mode, so if the code reaches this point we're reasonably confident that the time the Stripe payment
+      #   succeeded matches the time that the information reached our database. There are cases for async webhooks where
+      #   this behavior differs and we overwrite created_at manually, see #stripe_webhook above.
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
@@ -764,7 +774,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = I18n.t('registrations.flash.registered')
+      flash[:warning] = I18n.t('registrations.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_later
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path

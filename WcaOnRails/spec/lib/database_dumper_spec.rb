@@ -55,7 +55,7 @@ RSpec.describe "DatabaseDumper" do
     dump_file.close
 
     with_database :developer_dump do
-      expect(Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME)).to be_nil
+      expect(ServerSetting.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME)).to be_nil
 
       DbHelper.execute_sql sql
 
@@ -63,7 +63,7 @@ RSpec.describe "DatabaseDumper" do
       expect(visible_competition.reload.remarks).to eq "remarks to the board here"
       expect(CompetitionDelegate.find_by_competition_id(not_visible_competition.id)).to eq nil
       expect(user.reload.dob).to eq Date.new(1954, 12, 4)
-      expect(Timestamp.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME).date).to be >= before_dump
+      expect(ServerSetting.find_by_name(DatabaseDumper::DEV_TIMESTAMP_NAME).as_datetime).to be >= before_dump
 
       # It's ok for the public to know about the existence of a hidden team,
       # but we don't want them to know about the *members* of that hidden team.

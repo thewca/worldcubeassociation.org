@@ -55,8 +55,6 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="https://live.worldcubeassociation.org"><%= ui_icon('sort numeric down') %>WCA Live</a></li>
-          <li class="divider"></li>
           <li><a href="<%= rankings_path("333", "single") %>"><%= ui_icon('signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
           <li><a href="<%= records_path %>"><%= ui_icon('trophy') %> <%= t '.records' %></a></li>
           <li><a href="<%= persons_path %>"><%= ui_icon('users') %> <%= t '.persons' %></a></li>
@@ -149,6 +147,11 @@
           <span class="visible-lg-inline visible-xs-inline"><%= t '.forum' %></span>
         </a>
       </li>
+      <li>
+        <a href="https://live.worldcubeassociation.org/" target="_blank" class="top-nav hide-new-window-icon">
+          <%= ui_icon('sort numeric down') %> WCA Live
+        </a>
+      </li>
     </ul>
 
 
@@ -214,7 +217,7 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.staff? %>
+            <% if current_user.staff_or_any_delegate? %>
               <li class="divider"></li>
               <li><%= link_to t('.panel'), panel_path %></li>
             <% end %>
@@ -246,6 +249,7 @@
               <li><%= link_to t('.results_admin'), admin_path %></li>
               <li><%= link_to t('.competitions'), competitions_path %></li>
               <li><%= link_to t('.results_database'), '/results/database/' %></li>
+              <li><%= link_to t('.results_sidekiq'), '/sidekiq/' %></li>
             <% end %>
 
             <% if current_user.can_create_posts? %>

@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-class SubmitReportNagJob < ApplicationJob
-  include SingletonApplicationJob
-
-  queue_as :default
-
+class SubmitReportNagJob < WcaCronjob
   def nag_needed?(competition)
     (competition.delegate_report.nag_sent_at || competition.end_date) <= 8.days.ago
   end

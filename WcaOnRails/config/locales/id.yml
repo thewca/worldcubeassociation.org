@@ -4730,22 +4730,6 @@ id:
         E-mail berkasi JSON yang telah diekspor dari Bantuan Buku Kerja WCA ke
         <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Hubungan
-      #original_hash: 69ba020
-      find_relations: Temukan koneksi antar Cuber
-      #original_hash: 5d6056d
-      show_relation: Perlihatkan hubungan kepada saya!
-      connectives:
-        #original_hash: f85194e
-        was_at: Datang ke
-        #original_hash: 8c00243
-        together_with: Bersama dengan
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: Tulis dua ID WCA yang valid.
   search_results:
     index:
       #original_hash: db98a68

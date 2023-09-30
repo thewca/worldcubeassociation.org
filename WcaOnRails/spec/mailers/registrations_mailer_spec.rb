@@ -115,7 +115,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:mail) { RegistrationsMailer.notify_registrant_of_new_registration(registration) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your registration for #{registration.competition.name} is submitted and pending approval")
+      expect(mail.subject).to eq("Registration Pending: #{registration.competition.name}")
       expect(mail.to).to eq([registration.email])
       expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
@@ -145,7 +145,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been accepted")
+      expect(mail.subject).to eq("Registration Accepted: #{competition_without_organizers.name}")
       expect(mail.to).to eq([registration.email])
       expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
@@ -174,7 +174,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("You have been moved to the waiting list for #{registration.competition.name}")
+      expect(mail.subject).to eq("Registration Moved to Waitlist: #{competition_without_organizers.name}")
       expect(mail.to).to eq([registration.email])
       expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])
@@ -205,7 +205,7 @@ RSpec.describe RegistrationsMailer, type: :mailer do
     let(:registration) { FactoryBot.create(:registration, competition: competition_without_organizers) }
 
     it "renders the headers" do
-      expect(mail.subject).to eq("Your registration for #{registration.competition.name} has been deleted")
+      expect(mail.subject).to eq("Registration Deleted: #{competition_without_organizers.name}")
       expect(mail.to).to eq([registration.email])
       expect(mail.reply_to).to eq(competition_without_organizers.delegates.map(&:email))
       expect(mail.from).to eq(["notifications@worldcubeassociation.org"])

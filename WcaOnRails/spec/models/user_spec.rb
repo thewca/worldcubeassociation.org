@@ -674,7 +674,7 @@ RSpec.describe User, type: :model do
       user = FactoryBot.create :user
       senior_delegate = FactoryBot.create :senior_delegate
       expect(senior_delegate.can_edit_user?(user)).to eq true
-      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :region)
+      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :location)
     end
 
     it "disallows delegates to edit WCA IDs of special accounts" do

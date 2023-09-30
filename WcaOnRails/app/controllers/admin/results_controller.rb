@@ -4,6 +4,58 @@ module Admin
   class ResultsController < AdminController
     # NOTE: authentication is performed by admin controller
 
+    def posting_index
+      respond_to do |format|
+        format.html do
+          render :posting_index
+        end
+        format.json do
+          @pending_competitions = Competition.pending_posting.order(results_submitted_at: :asc)
+          user_attributes = {
+            only: ["id", "name"],
+            methods: [],
+            include: [],
+          }
+          render json: {
+            current_user: current_user.as_json(user_attributes),
+            competitions: @pending_competitions.as_json(
+              only: ["id", "name", "results_submitted_at"],
+              methods: ["city", "country_iso2"],
+              include: { posting_user: user_attributes },
+            ),
+          }
+        end
+      end
+    end
+
+    def start_posting
+      # The purpose of this action is to allow an admin to "lock" and start
+      # posting competitions. This is an informative lock that relies on
+      # WRT members common sense though, nothing should actually prevent
+      # posting from happening.
+      # If posting is possible, the idea is to:
+      #   - get all pending competitions
+      #   - filter out those who are already being posted (by the same member)
+      #   - intersect with the competitions in the parameters
+      #   - either lock them and reply ok, or there is none to lock and reply
+      #   it was a no-op.
+      @other_posting = Competition.where.not(posting_user: [nil, current_user]).any?
+      if @other_posting
+        return render json: { error: "Someone is already posting!" }
+      end
+      @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
+      if @updated_competitions.empty?
+        return render json: { error: "No competitions to lock." }
+      end
+
+      json = { error: "Something went wrong." }
+      if @updated_competitions.update(posting_user: current_user)
+        json = { message: "Competitions successfully locked, go on posting!" }
+      end
+
+      render json: json
+    end
+
     def new
       competition = Competition.find(params[:competition_id])
       round = Round.find(params[:round_id])
