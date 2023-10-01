@@ -40,7 +40,7 @@
     "easymde": "^2.18.0",
     "expose-loader": "^4.1.0",
     "file-loader": "^6.2.0",
-    "flag-icons": "^6.11.0",
+    "flag-icons": "^6.11.1",
     "glob": "^10.3.4",
     "i18n-js": "^4.3.0",
     "jquery": "3.4.1",
