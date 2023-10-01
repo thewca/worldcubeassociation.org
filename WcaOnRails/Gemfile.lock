@@ -648,7 +648,7 @@ GEM
       railties (>= 5.2)
       semantic_range (>= 2.3.0)
     shellany (0.0.1)
-    sidekiq (7.1.3)
+    sidekiq (7.1.4)
       concurrent-ruby (< 2)
       connection_pool (>= 2.3.0)
       rack (>= 2.2.4)
