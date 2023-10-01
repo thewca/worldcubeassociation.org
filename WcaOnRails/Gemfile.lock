@@ -364,9 +364,9 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
     io-console (0.6.0)
-    irb (1.8.0)
-      rdoc (~> 6.5)
-      reline (>= 0.3.6)
+    irb (1.8.1)
+      rdoc
+      reline (>= 0.3.8)
     iso (0.2.2)
       i18n
     jbuilder (2.11.5)
@@ -689,7 +689,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     ssrf_filter (1.1.1)
-    stringio (3.0.5)
+    stringio (3.0.8)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
     stripe (9.1.0)
