@@ -38,7 +38,7 @@ function ImageUpload({
   const handleRemoveAvatar = (evt) => {
     evt.preventDefault();
 
-    onImageDeleted();
+    onImageDeleted(reasonForDeletion);
   };
 
   const clearFormErrors = () => setCheckboxError(false);

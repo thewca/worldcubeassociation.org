@@ -15,6 +15,7 @@ import ThumbnailEditor from './ThumbnailEditor';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { userAvatarDataUrl } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
+import useSaveAction from '../../lib/hooks/useSaveAction';
 
 function EditAvatar({
   userId,
@@ -27,6 +28,7 @@ function EditAvatar({
     data: avatarData,
     loading,
     error,
+    sync,
   } = useLoadedData(avatarDataUrl);
 
   const [uploadedImage, setUploadedImage] = useState();
@@ -55,17 +57,46 @@ function EditAvatar({
     setImageURL(newImageURL);
   }, [uploadedImage]);
 
-  const onThumbnailConfirmed = (confirmedCropAbs) => {
-    setCropAbs(confirmedCropAbs);
-    console.log('Sending down PATCH request with crop!');
+  const { save, saving } = useSaveAction();
+
+  const onThumbnailConfirmed = () => {
+    if (!uploadedImage) {
+      const thumbnailRaw = {
+        x: cropAbs.x,
+        y: cropAbs.y,
+        w: cropAbs.width,
+        h: cropAbs.height,
+      };
+
+      save(avatarDataUrl, { thumbnail: thumbnailRaw }, sync);
+    }
   };
 
   const confirmAvatarUpload = () => {
-    console.log('Sending down POST request with new avatar!');
+    const formData = new FormData();
+    formData.append('file', uploadedImage);
+
+    const thumbnailRaw = {
+      x: cropAbs.x,
+      y: cropAbs.y,
+      w: cropAbs.width,
+      h: cropAbs.height,
+    };
+
+    formData.append('thumbnail', JSON.stringify(thumbnailRaw));
+
+    save(avatarDataUrl, formData, () => {
+      setUploadedImage(undefined);
+      sync();
+    }, {
+      method: 'POST',
+      headers: {},
+      body: formData,
+    });
   };
 
-  const confirmAvatarDeletion = () => {
-    console.log('Sending down DELETE request with current avatar!');
+  const confirmAvatarDeletion = (reasonForDeletion) => {
+    save(avatarDataUrl, { reason: reasonForDeletion }, sync);
   };
 
   return (
@@ -73,7 +104,11 @@ function EditAvatar({
       {error && <Errored />}
       <Dimmer.Dimmable as={Grid}>
         <Dimmer active={loading} inverted>
-          <Loader>Loading</Loader>
+          <Loader content="Loading" />
+        </Dimmer>
+
+        <Dimmer active={saving} inverted>
+          <Loader content="Saving" />
         </Dimmer>
 
         <Grid.Row columns={2}>
@@ -110,7 +145,8 @@ function EditAvatar({
               imageSrc={imageURL}
               initialCrop={uploadedImage ? null : cropAbs}
               editsDisabled={!uploadedImage && avatarData?.isDefaultAvatar}
-              onThumbnailChanged={onThumbnailConfirmed}
+              onThumbnailChanged={setCropAbs}
+              onThumbnailSaved={onThumbnailConfirmed}
             />
           </Grid.Column>
         </Grid.Row>

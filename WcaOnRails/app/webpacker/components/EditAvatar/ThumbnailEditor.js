@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Button, Container,
   Form,
@@ -24,11 +24,16 @@ function ThumbnailEditor({
   initialCrop,
   editsDisabled,
   onThumbnailChanged,
+  onThumbnailSaved,
 }) {
   const [cropRel, setCropRel] = useState();
   const [uiCropRel, setUiCropRel] = useState();
 
   const [pendingCropAbs, setPendingCropAbs] = useState();
+
+  useEffect(() => {
+    onThumbnailChanged(pendingCropAbs);
+  }, [onThumbnailChanged, pendingCropAbs]);
 
   const isEditingThumbnail = useMemo(() => uiCropRel !== undefined, [uiCropRel]);
 
@@ -47,31 +52,31 @@ function ThumbnailEditor({
     disableThumbnailCrop();
 
     if (pendingCropAbs) {
-      onThumbnailChanged(pendingCropAbs);
+      onThumbnailSaved();
     }
   };
 
   const calculateNewCrop = (width, height) => {
-    if (!initialCrop) {
-      const aspectCrop = makeAspectCrop(
-        {
-          unit: '%',
-          width: SUGGESTED_IMG_RATIO,
-          height: SUGGESTED_IMG_RATIO,
-        },
-        1,
-        width,
-        height,
-      );
-
-      return centerCrop(
-        aspectCrop,
-        width,
-        height,
-      );
-    } else {
+    if (initialCrop) {
       return convertToPercentCrop(initialCrop, width, height);
     }
+
+    const aspectCrop = makeAspectCrop(
+      {
+        unit: '%',
+        width: SUGGESTED_IMG_RATIO,
+        height: SUGGESTED_IMG_RATIO,
+      },
+      1,
+      width,
+      height,
+    );
+
+    return centerCrop(
+      aspectCrop,
+      width,
+      height,
+    );
   };
 
   const onImageLoad = (evt) => {

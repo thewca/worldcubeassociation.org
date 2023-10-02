@@ -59,7 +59,8 @@ Rails.application.routes.draw do
 
   get 'users/:id/avatar' => 'users#avatar_data', as: :users_avatar_data
   post 'users/:id/avatar' => 'users#upload_avatar'
-  patch 'users/:id/avatar' => 'users#patch_avatar'
+  patch 'users/:id/avatar' => 'users#update_avatar'
+  delete 'users/:id/avatar' => 'users#delete_avatar'
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 

@@ -171,6 +171,34 @@ class UsersController < ApplicationController
     end
   end
 
+  def upload_avatar
+    upload_file = params.require(:file)
+
+    thumbnail_json = params.require(:thumbnail)
+    thumbnail = JSON.parse thumbnail_json
+
+    puts upload_file
+    puts thumbnail
+
+    render json: { ok: true }
+  end
+
+  def update_avatar
+    thumbnail = params.require(:thumbnail)
+
+    puts thumbnail
+
+    render json: { ok: true }
+  end
+
+  def delete_avatar
+    reason = params.require(:reason)
+
+    puts reason
+
+    render json: { ok: true }
+  end
+
   def update
     @user = user_to_edit
     @user.current_user = current_user
