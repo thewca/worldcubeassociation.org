@@ -19,6 +19,8 @@ function ImageUpload({
   const [isRemoving, setIsRemoving] = useState(false);
   const [isConsenting, setIsConsenting] = useCheckboxState(false);
 
+  const [selectedFile, setSelectedFile] = useState();
+
   // For some reason, Checkboxes are the _only_ form components in semantic where
   // browser-based (aka "magical") validation screws up and we have to manage error state ourselves.
   const [checkboxError, setCheckboxError] = useState(false);
@@ -31,6 +33,10 @@ function ImageUpload({
     if (!isConsenting) {
       setCheckboxError(true);
     } else {
+      setIsConsenting(false);
+      // browser file choosers specifically need the empty string to clear the input
+      setSelectedFile('');
+
       onImageSubmitted();
     }
   };
@@ -43,11 +49,12 @@ function ImageUpload({
 
   const clearFormErrors = () => setCheckboxError(false);
 
-  const handleSelectedImage = (evt) => {
+  const handleSelectedImage = (evt, { value }) => {
+    setIsConsenting(false);
+    setSelectedFile(value);
+
     const selectedImage = evt.target.files[0];
     onImageSelected(selectedImage);
-
-    setIsConsenting(false);
   };
 
   useEffect(() => {
@@ -60,7 +67,7 @@ function ImageUpload({
     <>
       <Container>
         <Form onSubmit={handleSaveAvatar}>
-          <Form.Input required label={I18n.t('activerecord.attributes.user.pending_avatar')} type="file" accept="image/*" onChange={handleSelectedImage} />
+          <Form.Input required label={I18n.t('activerecord.attributes.user.pending_avatar')} type="file" accept="image/*" value={selectedFile} onChange={handleSelectedImage} />
           <p>{I18n.t('simple_form.hints.user.pending_avatar')}</p>
           <Form.Checkbox required label={I18n.t('users.edit.guidelines_confirmation')} disabled={uploadDisabled} checked={isConsenting} onChange={setIsConsenting} error={checkboxError} />
           <Form.Button floated="left" primary disabled={uploadDisabled}>{I18n.t('users.edit.save')}</Form.Button>
