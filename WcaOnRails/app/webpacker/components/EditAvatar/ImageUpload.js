@@ -67,7 +67,7 @@ function ImageUpload({
     <>
       <Container>
         <Form onSubmit={handleSaveAvatar}>
-          <Form.Input required label={I18n.t('activerecord.attributes.user.pending_avatar')} type="file" accept="image/*" value={selectedFile} onChange={handleSelectedImage} />
+          <Form.Input required label={I18n.t('activerecord.attributes.user.pending_avatar')} disabled={uploadDisabled} type="file" accept="image/*" value={selectedFile} onChange={handleSelectedImage} />
           <p>{I18n.t('simple_form.hints.user.pending_avatar')}</p>
           <Form.Checkbox required label={I18n.t('users.edit.guidelines_confirmation')} disabled={uploadDisabled} checked={isConsenting} onChange={setIsConsenting} error={checkboxError} />
           <Form.Button floated="left" primary disabled={uploadDisabled}>{I18n.t('users.edit.save')}</Form.Button>

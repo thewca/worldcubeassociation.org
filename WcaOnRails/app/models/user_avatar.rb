@@ -10,7 +10,7 @@ class UserAvatar < ApplicationRecord
   belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
 
   has_one_attached :public_image
-  has_one_attached :private_image, service: :local_private
+  has_one_attached :private_image, service: :local_private #TODO
 
   default_scope { with_attached_public_image }
 

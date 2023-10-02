@@ -155,17 +155,18 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json do
-        frontend_data = {
-          id: @user.current_avatar&.id,
+        user_data = {
           isStaff: @user.staff?,
           isDefaultAvatar: !@user.current_avatar.present?,
         }
 
-        avatar_data = @user.avatar.to_wcif.merge(frontend_data)
+        avatar_data = {
+          avatar: @user.avatar.serializable_hash,
+          userData: user_data,
+        }
 
         if @user.pending_avatar.present?
-          avatar_data[:pending_avatar] = @user.pending_avatar.to_wcif
-          avatar_data[:pending_avatar][:id] = @user.pending_avatar.id
+          avatar_data[:pendingAvatar] = @user.pending_avatar.serializable_hash
         end
 
         render json: avatar_data

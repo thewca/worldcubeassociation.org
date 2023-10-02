@@ -16,21 +16,6 @@
   <% if @user.unconfirmed_email %>
     <%= alert :warning, t('.pending_mail_confirmation', email: @user.unconfirmed_email) %>
   <% end %>
-  <% if @user.avatar.pending? %>
-    <%= alert :warning do %>
-      <%= t '.pending_avatar_confirmation' %>
-      <%= link_to users_pending_avatar_thumbnail_edit_path(@user) do %>
-        <%= react_component("UserAvatar", {
-          avatar: @user.avatar,
-          size: "small",
-          title: t('.edit_thumbnail'),
-        }, class: 'avatar-thumbnail') %>
-      <% end %>
-      <% if current_user.can_admin_results? %>
-        <%= link_to t('.manage_pending'), admin_avatars_path %>
-      <% end %>
-    <% end %>
-  <% end %>
   <% if @user.dummy_account? %>
     <%= alert :warning do %>
       This account is a dummy account. It serves as a placeholder because the competitor

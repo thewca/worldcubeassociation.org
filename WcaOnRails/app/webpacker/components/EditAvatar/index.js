@@ -1,8 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Container, Dimmer,
+  Checkbox,
+  Container,
+  Dimmer,
   Divider,
-  Grid, Loader,
+  Grid,
+  Loader,
   Message,
 } from 'semantic-ui-react';
 
@@ -16,6 +19,8 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import { userAvatarDataUrl } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import UserAvatar from '../UserAvatar';
+import useCheckboxState from '../../lib/hooks/useCheckboxState';
 
 function EditAvatar({
   userId,
@@ -25,30 +30,40 @@ function EditAvatar({
   const avatarDataUrl = useMemo(() => userAvatarDataUrl(userId), [userId]);
 
   const {
-    data: avatarData,
+    data,
     loading,
     error,
     sync,
   } = useLoadedData(avatarDataUrl);
 
+  const [isEditingPending, setIsEditingPending] = useCheckboxState(false);
+
+  const workingAvatar = useMemo(() => (isEditingPending ? data?.pendingAvatar : data?.avatar), [data, isEditingPending]);
+
   const [uploadedImage, setUploadedImage] = useState();
   const [imageURL, setImageURL] = useState();
 
   useEffect(() => {
-    setImageURL(avatarData?.url);
-  }, [avatarData]);
+    setImageURL(workingAvatar?.url);
+  }, [workingAvatar]);
 
   const [cropAbs, setCropAbs] = useState();
 
   useEffect(() => {
     setCropAbs({
-      x: avatarData?.thumbnail?.x,
-      y: avatarData?.thumbnail?.y,
-      width: avatarData?.thumbnail?.w,
-      height: avatarData?.thumbnail?.h,
+      x: workingAvatar?.thumbnail_crop_x,
+      y: workingAvatar?.thumbnail_crop_y,
+      width: workingAvatar?.thumbnail_crop_w,
+      height: workingAvatar?.thumbnail_crop_h,
       unit: 'px',
     });
-  }, [avatarData]);
+  }, [workingAvatar]);
+
+  const [pendingAvatar, setPendingAvatar] = useState();
+
+  useEffect(() => {
+    setPendingAvatar(data?.pendingAvatar);
+  }, [data]);
 
   useEffect(() => {
     if (!uploadedImage) return;
@@ -68,7 +83,7 @@ function EditAvatar({
         h: cropAbs.height,
       };
 
-      save(avatarDataUrl, { avatarId: avatarData?.id, thumbnail: thumbnailRaw }, sync);
+      save(avatarDataUrl, { avatarId: workingAvatar?.id, thumbnail: thumbnailRaw }, sync);
     }
   };
 
@@ -99,12 +114,25 @@ function EditAvatar({
   };
 
   const confirmAvatarDeletion = (reasonForDeletion) => {
-    save(avatarDataUrl, { avatarId: avatarData?.id, reason: reasonForDeletion }, sync);
+    save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, sync);
   };
 
   return (
     <Container>
       {error && <Errored />}
+      {pendingAvatar && (
+        <Message warning>
+          There is a pending avatar for your user:
+          <UserAvatar
+            avatar={pendingAvatar}
+            size="medium"
+          />
+          Click here if you want to edit its thumbnail instead:
+          <Checkbox toggle checked={isEditingPending} onChange={setIsEditingPending} />
+          {isEditingPending && <b>Editing pending avatar!</b>}
+          {/*TODO: Path to admin if permission*/}
+        </Message>
+      )}
       <Dimmer.Dimmable as={Grid}>
         <Dimmer active={loading} inverted>
           <Loader content="Loading" />
@@ -123,7 +151,7 @@ function EditAvatar({
                   <Message.Item key={idx}>{guideline}</Message.Item>
                 ))}
               </Message.List>
-              {avatarData?.isStaff && (
+              {data?.userData?.isStaff && (
                 <>
                   <Divider />
                   <Message.Header>{I18n.t('users.edit.staff_avatar_guidelines.title')}</Message.Header>
@@ -136,8 +164,8 @@ function EditAvatar({
               )}
             </Message>
             <ImageUpload
-              uploadDisabled={uploadDisabled}
-              removalEnabled={canRemoveAvatar}
+              uploadDisabled={uploadDisabled || isEditingPending}
+              removalEnabled={canRemoveAvatar && !isEditingPending}
               onImageSelected={setUploadedImage}
               onImageSubmitted={confirmAvatarUpload}
               onImageDeleted={confirmAvatarDeletion}
@@ -147,7 +175,7 @@ function EditAvatar({
             <ThumbnailEditor
               imageSrc={imageURL}
               initialCrop={uploadedImage ? null : cropAbs}
-              editsDisabled={!uploadedImage && avatarData?.isDefaultAvatar}
+              editsDisabled={!uploadedImage && data?.userData?.isDefaultAvatar}
               onThumbnailChanged={setCropAbs}
               onThumbnailSaved={onThumbnailConfirmed}
             />
