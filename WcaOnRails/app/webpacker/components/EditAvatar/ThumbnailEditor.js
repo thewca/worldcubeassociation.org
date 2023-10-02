@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Button, Container,
   Form,
@@ -29,11 +29,8 @@ function ThumbnailEditor({
   const [cropRel, setCropRel] = useState();
   const [uiCropRel, setUiCropRel] = useState();
 
-  const [pendingCropAbs, setPendingCropAbs] = useState();
-
-  useEffect(() => {
-    onThumbnailChanged(pendingCropAbs);
-  }, [onThumbnailChanged, pendingCropAbs]);
+  const [naturalWidth, setNaturalWidth] = useState();
+  const [naturalHeight, setNaturalHeight] = useState();
 
   const isEditingThumbnail = useMemo(() => uiCropRel !== undefined, [uiCropRel]);
 
@@ -51,9 +48,7 @@ function ThumbnailEditor({
     setCropRel(uiCropRel);
     disableThumbnailCrop();
 
-    if (pendingCropAbs) {
-      onThumbnailSaved();
-    }
+    onThumbnailSaved();
   };
 
   const calculateNewCrop = (width, height) => {
@@ -82,18 +77,25 @@ function ThumbnailEditor({
   const onImageLoad = (evt) => {
     const { naturalWidth: width, naturalHeight: height } = evt.currentTarget;
 
+    setNaturalWidth(width);
+    setNaturalHeight(height);
+
     const newCropRel = calculateNewCrop(width, height);
     setCropRel(newCropRel);
 
     const convertedCropAbs = convertToPixelCrop(newCropRel, width, height);
-    setPendingCropAbs(convertedCropAbs);
+    onThumbnailChanged(convertedCropAbs);
 
     disableThumbnailCrop();
   };
 
   const onThumbnailChange = (abs, rel) => {
-    setPendingCropAbs(abs);
     setUiCropRel(rel);
+
+    if (naturalWidth && naturalHeight) {
+      const cropAbs = convertToPixelCrop(rel, naturalWidth, naturalHeight);
+      onThumbnailChanged(cropAbs);
+    }
   };
 
   return (
