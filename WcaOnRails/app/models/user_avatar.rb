@@ -77,14 +77,13 @@ class UserAvatar < ApplicationRecord
   after_save :move_user_associations
   def move_user_associations
     if !self.destroyed? && self.status_previously_changed?
-      if self.status == UserAvatar.statuses[:approved]
-        user.update_attribute(:pending_avatar, nil)
-        user.update_attribute(:current_avatar, self)
+      if self.status == UserAvatar.statuses[:pending]
+        user.update_attribute(:pending_avatar, self)
       else
-        user.update_attribute(:current_avatar, nil)
+        user.update_attribute(:pending_avatar, nil)
 
-        if self.status == UserAvatar.statuses[:pending]
-          user.update_attribute(:pending_avatar, self)
+        if self.status == UserAvatar.statuses[:approved]
+          user.update_attribute(:current_avatar, self)
         end
       end
     end
