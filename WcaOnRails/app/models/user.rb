@@ -337,9 +337,8 @@ class User < ApplicationRecord
     self.current_avatar || UserAvatar.default_avatar(self)
   end
 
-  def old_avatar_files
-    old_avatars = user_avatars - self.avatar
-    old_avatars.map(&:url)
+  def avatar_history
+    user_avatars.not_pending.order(created_at: :desc)
   end
 
   validates :region_id, presence: true, if: -> { delegate_status.present? }

@@ -52,10 +52,7 @@
               </div>
 
               <div class="col-sm-6">
-                <% carousel_avatars = user.old_avatar_files.reverse %>
-                <% if user.avatar? %>
-                  <% carousel_avatars.unshift(user.avatar.url) %>
-                <% end %>
+                <% carousel_avatars = user.avatar_history %>
                 <% if carousel_avatars.empty? %>
                   <h3>This user has no previous pictures.</h3>
                 <% else %>
@@ -69,11 +66,11 @@
 
                     <!-- Wrapper for slides -->
                     <div class="carousel-inner" role="listbox">
-                      <% carousel_avatars.each_with_index do |url, i| %>
+                      <% carousel_avatars.each_with_index do |avatar, i| %>
                         <div class="item <%= i == 0 ? "active" : "" %>">
-                          <%= image_tag(url) %>
+                          <%= image_tag(avatar.url) %>
                           <div class="carousel-caption">
-                            <% if user.avatar? && i == 0 %>
+                            <% if avatar.id == user.current_avatar_id %>
                               Current profile picture for
                             <% else %>
                               Old profile picture for

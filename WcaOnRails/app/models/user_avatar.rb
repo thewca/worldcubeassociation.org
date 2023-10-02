@@ -89,6 +89,17 @@ class UserAvatar < ApplicationRecord
     end
   end
 
+  after_save :register_status_timestamps
+  def register_status_timestamps
+    if !self.destroyed? && self.status_previously_changed?
+      if self.status == UserAvatar.statuses[:approved]
+        self.touch :approved_at
+      elsif self.status == UserAvatar.statuses[:rejected] || self.status == UserAvatar.statuses[:deleted]
+        self.touch :revoked_at
+      end
+    end
+  end
+
   def to_wcif
     {
       "url" => self.url,
