@@ -20,8 +20,8 @@ import CroppedImage from './CroppedImage';
 const SUGGESTED_IMG_RATIO = 33;
 
 function ThumbnailEditor({
-  imageURL,
-  preCalculatedCrop,
+  imageSrc,
+  crop,
   editsDisabled,
   onThumbnailChanged,
 }) {
@@ -62,7 +62,7 @@ function ThumbnailEditor({
     setNaturalWidth(width);
     setNaturalHeight(height);
 
-    if (!preCalculatedCrop) {
+    if (!crop) {
       const aspectCrop = makeAspectCrop(
         {
           unit: '%',
@@ -82,7 +82,7 @@ function ThumbnailEditor({
 
       setCropRel(centeredCrop);
     } else {
-      const convertedCropRel = convertToPercentCrop(preCalculatedCrop, width, height);
+      const convertedCropRel = convertToPercentCrop(crop, width, height);
       setCropRel(convertedCropRel);
     }
 
@@ -103,7 +103,7 @@ function ThumbnailEditor({
         >
           <Image
             onLoad={onImageLoad}
-            src={imageURL}
+            src={imageSrc}
             style={{ width: '100%', height: 'auto' }}
           />
         </ReactCrop>
@@ -145,7 +145,7 @@ function ThumbnailEditor({
               <div className="user-avatar-image-large">
                 <CroppedImage
                   crop={cropRel}
-                  src={imageURL}
+                  src={imageSrc}
                   onClick={enableThumbnailCrop}
                 />
               </div>

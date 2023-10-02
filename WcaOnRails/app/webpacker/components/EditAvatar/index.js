@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Container,
   Divider,
@@ -12,18 +12,41 @@ import ImageUpload from './ImageUpload';
 
 import 'react-image-crop/dist/ReactCrop.css';
 import ThumbnailEditor from './ThumbnailEditor';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import { userAvatarDataUrl } from '../../lib/requests/routes.js.erb';
+import Errored from '../Requests/Errored';
 
 function EditAvatar({
-  user,
-  staff,
-  crop,
+  userId,
   uploadDisabled,
   canRemoveAvatar,
 }) {
-  const [uploadedImage, setUploadedImage] = useState();
-  const [imageURL, setImageURL] = useState(user.avatar?.url);
+  const avatarDataUrl = useMemo(() => userAvatarDataUrl(userId), [userId]);
 
-  const [cropAbs, setCropAbs] = useState(crop);
+  const {
+    data: avatarData,
+    loading,
+    error,
+  } = useLoadedData(avatarDataUrl);
+
+  const [uploadedImage, setUploadedImage] = useState();
+  const [imageURL, setImageURL] = useState();
+
+  useEffect(() => {
+    setImageURL(avatarData?.url);
+  }, [avatarData]);
+
+  const [cropAbs, setCropAbs] = useState();
+
+  useEffect(() => {
+    setCropAbs({
+      x: avatarData?.thumbnail?.x,
+      y: avatarData?.thumbnail?.y,
+      width: avatarData?.thumbnail?.w,
+      height: avatarData?.thumbnail?.h,
+      unit: 'px',
+    });
+  }, [avatarData]);
 
   useEffect(() => {
     if (!uploadedImage) return;
@@ -34,6 +57,7 @@ function EditAvatar({
 
   return (
     <Container>
+      {error && <Errored />}
       <Grid>
         <Grid.Row columns={2}>
           <Grid.Column>
@@ -44,7 +68,7 @@ function EditAvatar({
                   <Message.Item key={idx}>{guideline}</Message.Item>
                 ))}
               </Message.List>
-              {staff && (
+              {avatarData?.isStaff && (
                 <>
                   <Divider />
                   <Message.Header>{I18n.t('users.edit.staff_avatar_guidelines.title')}</Message.Header>
@@ -64,9 +88,9 @@ function EditAvatar({
           </Grid.Column>
           <Grid.Column>
             <ThumbnailEditor
-              imageURL={imageURL}
-              preCalculatedCrop={uploadedImage ? null : crop}
-              editsDisabled={!user.avatar}
+              imageSrc={imageURL}
+              crop={uploadedImage ? null : cropAbs}
+              editsDisabled={!uploadedImage && avatarData?.isDefaultAvatar}
               onThumbnailChanged={setCropAbs}
             />
           </Grid.Column>

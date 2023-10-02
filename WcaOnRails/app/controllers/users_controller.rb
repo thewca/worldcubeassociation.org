@@ -150,9 +150,20 @@ class UsersController < ApplicationController
     render partial: 'select_nearby_delegate'
   end
 
-  def edit_avatar_thumbnail
+  def avatar_data
     @user = user_to_edit
-    redirect_to_root_unless_user(:can_change_users_avatar?, @user)
+
+    respond_to do |format|
+      format.json do
+        user_data = {
+          isStaff: @user.staff?,
+          isDefaultAvatar: !@user.current_avatar.present?,
+        }
+
+        avatar_data = @user.avatar.to_wcif.merge(user_data)
+        render json: avatar_data
+      end
+    end
   end
 
   def update
