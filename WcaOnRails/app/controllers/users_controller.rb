@@ -161,6 +161,11 @@ class UsersController < ApplicationController
         }
 
         avatar_data = @user.avatar.to_wcif.merge(user_data)
+
+        if @user.pending_avatar.present?
+          avatar_data[:pending_avatar] = @user.pending_avatar.to_wcif
+        end
+
         render json: avatar_data
       end
     end

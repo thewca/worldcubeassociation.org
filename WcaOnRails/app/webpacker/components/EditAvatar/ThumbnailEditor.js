@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import {
+  Button, Container,
   Form,
   Header,
   Icon,
   Image,
-  Message,
   Popup,
 } from 'semantic-ui-react';
 import ReactCrop, {
@@ -91,53 +91,42 @@ function ThumbnailEditor({
 
   return (
     <>
+      <ReactCrop
+        aspect={1}
+        ruleOfThirds
+        keepSelection
+        crop={uiCropRel}
+        onChange={(abs, rel) => setUiCropRel(rel)}
+        disabled={!isEditingThumbnail}
+        style={{ width: '100%' }}
+      >
+        <Image
+          onLoad={onImageLoad}
+          src={imageSrc}
+          style={{ width: '100%', height: 'auto' }}
+        />
+      </ReactCrop>
       <Form onSubmit={handleSaveThumbnail}>
-        <ReactCrop
-          aspect={1}
-          ruleOfThirds
-          keepSelection
-          crop={uiCropRel}
-          onChange={(abs, rel) => setUiCropRel(rel)}
-          disabled={!isEditingThumbnail}
-          style={{ width: '100%' }}
-        >
-          <Image
-            onLoad={onImageLoad}
-            src={imageSrc}
-            style={{ width: '100%', height: 'auto' }}
-          />
-        </ReactCrop>
-
         {isEditingThumbnail && (
-          <>
-            <div>
-              <Form.Button
-                icon
-                primary
-                floated="right"
-                disabled={!uiCropRel}
-              >
-                <Icon name="save" />
-              </Form.Button>
-              <Form.Button
-                icon
-                negative
-                floated="right"
-                onClick={disableThumbnailCrop}
-                disabled={!uiCropRel}
-              >
-                <Icon name="cancel" />
-              </Form.Button>
-            </div>
-            <Message warning visible>
-              <Message.Header>{I18n.t('users.edit_avatar_thumbnail.cdn_warning')}</Message.Header>
-              <p>{I18n.t('users.edit_avatar_thumbnail.cdn_explanation')}</p>
-            </Message>
-          </>
+          <Button.Group icon floated="right">
+            <Form.Button
+              primary
+              disabled={!uiCropRel}
+            >
+              <Icon name="save" />
+            </Form.Button>
+            <Form.Button
+              negative
+              onClick={disableThumbnailCrop}
+              disabled={!uiCropRel}
+            >
+              <Icon name="cancel" />
+            </Form.Button>
+          </Button.Group>
         )}
       </Form>
       {!editsDisabled && (
-        <>
+        <Container textAlign="center">
           <Header>{I18n.t('users.edit.your_thumbnail')}</Header>
           <Popup
             content={I18n.t('users.edit.edit_thumbnail')}
@@ -151,7 +140,7 @@ function ThumbnailEditor({
               </div>
             )}
           />
-        </>
+        </Container>
       )}
     </>
   );

@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import {
-  Container,
+  Container, Dimmer,
   Divider,
-  Grid,
+  Grid, Loader,
   Message,
 } from 'semantic-ui-react';
 
@@ -58,7 +58,11 @@ function EditAvatar({
   return (
     <Container>
       {error && <Errored />}
-      <Grid>
+      <Dimmer.Dimmable as={Grid}>
+        <Dimmer active={loading} inverted>
+          <Loader>Loading</Loader>
+        </Dimmer>
+
         <Grid.Row columns={2}>
           <Grid.Column>
             <Message visible>
@@ -95,7 +99,7 @@ function EditAvatar({
             />
           </Grid.Column>
         </Grid.Row>
-      </Grid>
+      </Dimmer.Dimmable>
     </Container>
   );
 }
