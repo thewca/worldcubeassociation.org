@@ -272,7 +272,7 @@ resource "aws_ecs_service" "this" {
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
-  health_check_grace_period_seconds  = var.rails_start_up_time
+  health_check_grace_period_seconds  = var.rails_startup_time
 
   capacity_provider_strategy {
     capacity_provider = var.shared.t3_capacity_provider.name

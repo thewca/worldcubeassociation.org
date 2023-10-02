@@ -43,7 +43,7 @@ variable "VAULT_APPLICATION" {
   default     = "wca-main-staging"
 }
 
-variable "rails_start_up_time" {
+variable "rails_startup_time" {
   type = number
   description = "The Startup time of the Ruby on Rails Application"
 }
@@ -76,6 +76,7 @@ variable "shared" {
     pma_staging: object({
       arn: string
     })
+    account_id: string
     private_subnets: any
   })
   description = "The shared resources between Environments"

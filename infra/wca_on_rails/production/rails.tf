@@ -201,7 +201,7 @@ resource "aws_ecs_task_definition" "this" {
         command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
         interval           = 30
         retries            = 3
-        startPeriod        = var.rails_start_up_time
+        startPeriod        = var.rails_startup_time
         timeout            = 5
       }
     }
@@ -229,7 +229,7 @@ resource "aws_ecs_service" "this" {
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
-  health_check_grace_period_seconds  = var.rails_start_up_time
+  health_check_grace_period_seconds  = var.rails_startup_time
 
   capacity_provider_strategy {
     capacity_provider = var.shared.m6i_capacity_provider.name
@@ -249,7 +249,7 @@ resource "aws_ecs_service" "this" {
   }
 
   load_balancer {
-    target_group_arn = var.shared.rails-blue-green[0].arn
+    target_group_arn = var.shared.rails-production[0].arn
     container_name   = "rails-production"
     container_port   = 3000
   }

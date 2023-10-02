@@ -13,7 +13,7 @@ variable "availability_zones" {
   description = "Availability zones"
 }
 
-variable "rails_start_up_time" {
+variable "rails_startup_time" {
   type = number
   description = "The Startup time of the Ruby on Rails Application"
 }
