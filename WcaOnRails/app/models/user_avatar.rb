@@ -3,6 +3,9 @@
 class UserAvatar < ApplicationRecord
   belongs_to :user
 
+  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by
+  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by
+
   has_one_attached :public_image
   has_one_attached :private_image, service: :local_private
 

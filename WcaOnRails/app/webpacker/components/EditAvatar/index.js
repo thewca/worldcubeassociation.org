@@ -68,7 +68,7 @@ function EditAvatar({
         h: cropAbs.height,
       };
 
-      save(avatarDataUrl, { thumbnail: thumbnailRaw }, sync);
+      save(avatarDataUrl, { avatarId: avatarData?.id, thumbnail: thumbnailRaw }, sync);
     }
   };
 
@@ -90,13 +90,16 @@ function EditAvatar({
       sync();
     }, {
       method: 'POST',
+      // FIXME: We need to override this because otherwise the useSaveData hook
+      //   tries to JSON-ify everything. But because we are uploading files, we neither want the
+      //   application/json header, nor do we want to submit stringified JSON.
       headers: {},
       body: formData,
     });
   };
 
   const confirmAvatarDeletion = (reasonForDeletion) => {
-    save(avatarDataUrl, { reason: reasonForDeletion }, sync);
+    save(avatarDataUrl, { avatarId: avatarData?.id, reason: reasonForDeletion }, sync);
   };
 
   return (

@@ -155,15 +155,17 @@ class UsersController < ApplicationController
 
     respond_to do |format|
       format.json do
-        user_data = {
+        frontend_data = {
+          id: @user.current_avatar&.id,
           isStaff: @user.staff?,
           isDefaultAvatar: !@user.current_avatar.present?,
         }
 
-        avatar_data = @user.avatar.to_wcif.merge(user_data)
+        avatar_data = @user.avatar.to_wcif.merge(frontend_data)
 
         if @user.pending_avatar.present?
           avatar_data[:pending_avatar] = @user.pending_avatar.to_wcif
+          avatar_data[:pending_avatar][:id] = @user.pending_avatar.id
         end
 
         render json: avatar_data
@@ -192,17 +194,36 @@ class UsersController < ApplicationController
   end
 
   def update_avatar
+    avatar_id = params.require(:avatarId)
+
+    user_avatar = user_to_edit.user_avatars.find(avatar_id)
+    return head :not_found unless user_avatar.present?
+
     thumbnail = params.require(:thumbnail)
 
-    puts thumbnail
+    user_avatar.update!(
+      thumbnail_crop_x: thumbnail[:x],
+      thumbnail_crop_y: thumbnail[:y],
+      thumbnail_crop_w: thumbnail[:w],
+      thumbnail_crop_h: thumbnail[:h],
+    )
 
     render json: { ok: true }
   end
 
   def delete_avatar
+    avatar_id = params.require(:avatarId)
+
+    user_avatar = user_to_edit.user_avatars.find(avatar_id)
+    return head :not_found unless user_avatar.present?
+
     reason = params.require(:reason)
 
-    puts reason
+    user_avatar.update!(
+      status: UserAvatar.statuses[:deleted],
+      revoked_by_user: current_user,
+      revocation_reason: reason,
+    )
 
     render json: { ok: true }
   end
