@@ -3,8 +3,11 @@
 class UserAvatar < ApplicationRecord
   belongs_to :user
 
-  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by
-  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by
+  has_one :current_user, class_name: "User", foreign_key: :current_avatar_id, dependent: :nullify
+  has_one :pending_user, class_name: "User", foreign_key: :pending_avatar_id, dependent: :nullify
+
+  belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true
+  belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
 
   has_one_attached :public_image
   has_one_attached :private_image, service: :local_private
@@ -67,6 +70,22 @@ class UserAvatar < ApplicationRecord
         # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
         self.private_image.attach(self.public_image.blob)
         self.public_image.purge_later
+      end
+    end
+  end
+
+  after_save :move_user_associations
+  def move_user_associations
+    if !self.destroyed? && self.status_previously_changed?
+      if self.status == UserAvatar.statuses[:approved]
+        user.update_attribute(:pending_avatar, nil)
+        user.update_attribute(:current_avatar, self)
+      else
+        user.update_attribute(:current_avatar, nil)
+
+        if self.status == UserAvatar.statuses[:pending]
+          user.update_attribute(:pending_avatar, self)
+        end
       end
     end
   end

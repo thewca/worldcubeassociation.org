@@ -188,7 +188,6 @@ class UsersController < ApplicationController
     )
 
     user_avatar.attach_image(upload_file)
-    user_to_edit.update!(pending_avatar: user_avatar)
 
     render json: { ok: user_avatar.valid? }
   end
