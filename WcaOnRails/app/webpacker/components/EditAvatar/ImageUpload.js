@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Container, Form, Icon } from 'semantic-ui-react';
+import {
+  Button,
+  Container,
+  Form,
+  Icon,
+} from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import useInputState from '../../lib/hooks/useInputState';

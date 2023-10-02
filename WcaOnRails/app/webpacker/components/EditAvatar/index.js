@@ -55,6 +55,19 @@ function EditAvatar({
     setImageURL(newImageURL);
   }, [uploadedImage]);
 
+  const onThumbnailConfirmed = (confirmedCropAbs) => {
+    setCropAbs(confirmedCropAbs);
+    console.log('Sending down PATCH request with crop!');
+  };
+
+  const confirmAvatarUpload = () => {
+    console.log('Sending down POST request with new avatar!');
+  };
+
+  const confirmAvatarDeletion = () => {
+    console.log('Sending down DELETE request with current avatar!');
+  };
+
   return (
     <Container>
       {error && <Errored />}
@@ -88,14 +101,16 @@ function EditAvatar({
               uploadDisabled={uploadDisabled}
               removalEnabled={canRemoveAvatar}
               onImageSelected={setUploadedImage}
+              onImageSubmitted={confirmAvatarUpload}
+              onImageDeleted={confirmAvatarDeletion}
             />
           </Grid.Column>
           <Grid.Column>
             <ThumbnailEditor
               imageSrc={imageURL}
-              crop={uploadedImage ? null : cropAbs}
+              initialCrop={uploadedImage ? null : cropAbs}
               editsDisabled={!uploadedImage && avatarData?.isDefaultAvatar}
-              onThumbnailChanged={setCropAbs}
+              onThumbnailChanged={onThumbnailConfirmed}
             />
           </Grid.Column>
         </Grid.Row>

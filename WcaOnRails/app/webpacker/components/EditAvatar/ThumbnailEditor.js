@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Button, Container,
   Form,
@@ -21,48 +21,38 @@ const SUGGESTED_IMG_RATIO = 33;
 
 function ThumbnailEditor({
   imageSrc,
-  crop,
+  initialCrop,
   editsDisabled,
   onThumbnailChanged,
 }) {
   const [cropRel, setCropRel] = useState();
   const [uiCropRel, setUiCropRel] = useState();
 
-  const [naturalWidth, setNaturalWidth] = useState();
-  const [naturalHeight, setNaturalHeight] = useState();
+  const [pendingCropAbs, setPendingCropAbs] = useState();
 
-  const [isEditingThumbnail, setEditingThumbnail] = useState(false);
+  const isEditingThumbnail = useMemo(() => uiCropRel !== undefined, [uiCropRel]);
 
-  useEffect(() => {
-    if (!naturalWidth || !naturalHeight) return;
+  const enableThumbnailCrop = () => {
+    setUiCropRel(cropRel);
+  };
 
-    const cropAbs = convertToPixelCrop(cropRel, naturalWidth, naturalHeight);
-    onThumbnailChanged(cropAbs);
-  }, [cropRel, naturalWidth, naturalHeight, onThumbnailChanged]);
+  const disableThumbnailCrop = () => {
+    setUiCropRel(undefined);
+  };
 
   const handleSaveThumbnail = (evt) => {
     evt.preventDefault();
 
     setCropRel(uiCropRel);
+    disableThumbnailCrop();
+
+    if (pendingCropAbs) {
+      onThumbnailChanged(pendingCropAbs);
+    }
   };
 
-  const enableThumbnailCrop = () => {
-    setUiCropRel(cropRel);
-    setEditingThumbnail(true);
-  };
-
-  const disableThumbnailCrop = () => {
-    setUiCropRel(undefined);
-    setEditingThumbnail(false);
-  };
-
-  const onImageLoad = (evt) => {
-    const { naturalWidth: width, naturalHeight: height } = evt.currentTarget;
-
-    setNaturalWidth(width);
-    setNaturalHeight(height);
-
-    if (!crop) {
+  const calculateNewCrop = (width, height) => {
+    if (!initialCrop) {
       const aspectCrop = makeAspectCrop(
         {
           unit: '%',
@@ -74,19 +64,31 @@ function ThumbnailEditor({
         height,
       );
 
-      const centeredCrop = centerCrop(
+      return centerCrop(
         aspectCrop,
         width,
         height,
       );
-
-      setCropRel(centeredCrop);
     } else {
-      const convertedCropRel = convertToPercentCrop(crop, width, height);
-      setCropRel(convertedCropRel);
+      return convertToPercentCrop(initialCrop, width, height);
     }
+  };
+
+  const onImageLoad = (evt) => {
+    const { naturalWidth: width, naturalHeight: height } = evt.currentTarget;
+
+    const newCropRel = calculateNewCrop(width, height);
+    setCropRel(newCropRel);
+
+    const convertedCropAbs = convertToPixelCrop(newCropRel, width, height);
+    setPendingCropAbs(convertedCropAbs);
 
     disableThumbnailCrop();
+  };
+
+  const onThumbnailChange = (abs, rel) => {
+    setPendingCropAbs(abs);
+    setUiCropRel(rel);
   };
 
   return (
@@ -96,7 +98,7 @@ function ThumbnailEditor({
         ruleOfThirds
         keepSelection
         crop={uiCropRel}
-        onChange={(abs, rel) => setUiCropRel(rel)}
+        onChange={onThumbnailChange}
         disabled={!isEditingThumbnail}
         style={{ width: '100%' }}
       >
