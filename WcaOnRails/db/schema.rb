@@ -1163,6 +1163,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_03_180115) do
     t.string "location", limit: 255
     t.string "wca_id"
     t.bigint "current_avatar_id"
+    t.bigint "pending_avatar_id"
     t.string "unconfirmed_wca_id", limit: 255
     t.integer "delegate_id_to_handle_wca_id_claim"
     t.date "dob"

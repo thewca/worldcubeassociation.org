@@ -1,7 +1,9 @@
 class RemoveAvatarColumnsFromUsers < ActiveRecord::Migration[7.0]
   def change
-    remove_column :users, :avatar
-    remove_column :users, :pending_avatar
+    # These two columns had been renamed in the previous migration to avoid naming collisions.
+    remove_column :users, :legacy_avatar
+    remove_column :users, :legacy_pending_avatar
+
     remove_column :users, :saved_avatar_crop_x
     remove_column :users, :saved_avatar_crop_y
     remove_column :users, :saved_avatar_crop_w

@@ -36,7 +36,8 @@ class User < ApplicationRecord
   has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
   has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
   has_one :wfc_dues_redirect, as: :redirect_source
-  belongs_to :current_avatar, class_name: "UserAvatar"
+  belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :user, optional: true
+  belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :user, optional: true
   has_many :user_avatars, dependent: :destroy
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
