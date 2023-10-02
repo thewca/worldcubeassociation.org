@@ -3,6 +3,11 @@
 class UserAvatar < ApplicationRecord
   belongs_to :user
 
+  has_one_attached :public_image
+  has_one_attached :private_image, service: :local_private
+
+  default_scope { with_attached_public_image }
+
   enum :status, {
     pending: 'pending',
     approved: 'approved',
@@ -12,9 +17,9 @@ class UserAvatar < ApplicationRecord
 
   enum :backend, {
     s3_cdn: 's3-cdn',
-    s3_private: 's3-private',
+    active_storage: 'active-storage',
     local: 'local-fs',
-  }, scopes: false
+  }, default: :active_storage, scopes: false
 
   def url
     case self.backend
@@ -23,10 +28,43 @@ class UserAvatar < ApplicationRecord
       path = "/uploads/user/avatar/#{user.wca_id}/#{self.filename}"
 
       URI::HTTPS.build(host: host, path: path).to_s
-    when 's3_private'
-      'https://yay.lol/'
+    when 'active_storage'
+      Rails.application.routes.url_helpers.rails_representation_url(self.image) if self.image.present?
     when 'local'
       ActionController::Base.helpers.asset_url(self.filename, host: EnvConfig.ROOT_URL)
+    end
+  end
+
+  def filename
+    self.backend == 'active_storage' ? self.image.blob.filename.to_s : super
+  end
+
+  def image
+    self.approved? ? self.public_image : self.private_image
+  end
+
+  def attach_image(file)
+    self.image.attach(file)
+  end
+
+  after_save :move_image_if_approved
+  def move_image_if_approved
+    # ActiveStorage takes care of purging attachments from destroyed records
+    return if self.destroyed?
+
+    old_status, new_status = self.status_previous_change
+
+    # NOTE: Yes, this could be realised through status_changed?, but then we'd need to query the changes later anyways…
+    if old_status != new_status
+      if new_status == UserAvatar.statuses[:approved]
+        # We approved a new avatar! Take the previously private file and upload it to public storage.
+        self.public_image.attach(self.private_image.blob)
+        self.private_image.purge_later
+      elsif old_status == UserAvatar.statuses[:approved]
+        # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
+        self.private_image.attach(self.public_image.blob)
+        self.public_image.purge_later
+      end
     end
   end
 

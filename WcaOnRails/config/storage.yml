@@ -2,6 +2,10 @@ local:
   service: Disk
   root: <%= Rails.root.join("tmp/storage") %>
 
+local_private:
+  service: Disk
+  root: <%= Rails.root.join("tmp/storage-private") %>
+
 amazon:
   service: S3
   access_key_id: <%= AppSecrets.AWS_ACCESS_KEY_ID %>

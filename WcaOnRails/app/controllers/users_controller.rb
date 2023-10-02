@@ -175,12 +175,20 @@ class UsersController < ApplicationController
     upload_file = params.require(:file)
 
     thumbnail_json = params.require(:thumbnail)
-    thumbnail = JSON.parse thumbnail_json
+    thumbnail = JSON.parse(thumbnail_json).symbolize_keys
 
-    puts upload_file
-    puts thumbnail
+    user_avatar = UserAvatar.create!(
+      user: user_to_edit,
+      thumbnail_crop_x: thumbnail[:x],
+      thumbnail_crop_y: thumbnail[:y],
+      thumbnail_crop_w: thumbnail[:w],
+      thumbnail_crop_h: thumbnail[:h],
+    )
 
-    render json: { ok: true }
+    user_avatar.attach_image(upload_file)
+    user_to_edit.update!(pending_avatar: user_avatar)
+
+    render json: { ok: user_avatar.valid? }
   end
 
   def update_avatar
