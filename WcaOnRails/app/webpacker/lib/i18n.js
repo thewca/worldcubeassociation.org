@@ -20,10 +20,10 @@ function tArray(scope, options) {
     const maybeNumericKeys = resKeys.map(Number);
     maybeNumericKeys.sort();
 
-    // Our i18n export library changed behavior in a minor version bump (sigh…) to maintain numeric keys as JS objects
-    // even when the keys clearly indicate index ordering, implying an array.
-    // We need to circumvent this behavior because we rely on external tools for our translators which require the YML
-    // to contain string keys (instead of changing the YML itself to a "proper" array)
+    // Our i18n export library changed behavior in a minor version bump (sigh…) to maintain numeric
+    // keys as JS objects even when the keys clearly indicate index ordering, implying an array.
+    // We need to circumvent this behavior because we rely on external tools for our translators,
+    // which require the YML to contain string keys (instead "proper" YML arrays)
     const isPseudoArray = maybeNumericKeys.every((key, idx) => key === (idx + 1));
 
     if (isPseudoArray) {
