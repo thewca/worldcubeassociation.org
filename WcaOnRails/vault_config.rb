@@ -8,8 +8,8 @@ require_relative "env_config"
 Vault.configure do |vault|
   # The address of the Vault server, is read as ENV["VAULT_ADDR"]
 
-  # Assume the correct role from the underlying instance
-  role_credentials = Aws::ECSCredentials.new(retries: 3)
+  # Assume the correct role from the underlying task
+  role_credentials = Aws::ECSCredentials.new
 
   Vault.auth.aws_iam(EnvConfig.TASK_ROLE, role_credentials, nil, "https://sts.#{EnvConfig.VAULT_AWS_REGION}.amazonaws.com")
 

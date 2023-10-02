@@ -186,11 +186,11 @@ resource "aws_codedeploy_deployment_group" "this" {
       }
 
       target_group {
-        name = var.shared.rails-blue-green[0].name
+        name = var.shared.rails-production[0].name
       }
 
       target_group {
-        name = var.shared.rails-blue-green[1].name
+        name = var.shared.rails-production[1].name
       }
     }
   }
@@ -310,4 +310,47 @@ resource "aws_cloudwatch_event_target" "ecr_image_push" {
   rule     = aws_cloudwatch_event_rule.ecr_image_push.name
   arn      = aws_codepipeline.this.arn
   role_arn = aws_iam_role.codepipeline_role.arn
+}
+
+# Notification on deploy events
+
+resource "aws_sns_topic" "deploy_notifications" {
+  name = "deploy-notifications"
+}
+
+resource "aws_sns_topic_subscription" "deploy_notifications_email_target" {
+  topic_arn = aws_sns_topic.deploy_notifications.arn
+  protocol  = "email"
+  endpoint  = "admin@worldcubeassociation.org"
+}
+
+
+data "aws_iam_policy_document" "notification_access" {
+  statement {
+    actions = ["sns:Publish"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["codestar-notifications.amazonaws.com"]
+    }
+
+    resources = [aws_sns_topic.deploy_notifications.arn]
+  }
+}
+
+resource "aws_sns_topic_policy" "default" {
+  arn    = aws_sns_topic.deploy_notifications.arn
+  policy = data.aws_iam_policy_document.notification_access.json
+}
+
+resource "aws_codestarnotifications_notification_rule" "commits" {
+  detail_type    = "FULL"
+  event_type_ids = ["codedeploy-application-deployment-failed","codedeploy-application-deployment-succeeded","codedeploy-application-deployment-started"]
+
+  name     = "wca-on-rails-deploy-notifications"
+  resource = aws_codedeploy_app.this.arn
+
+  target {
+    address = aws_sns_topic.deploy_notifications.arn
+  }
 }

@@ -82,7 +82,7 @@ locals {
     }
   ]
   pma_environment = [
-    {
+    { # The PHPMyAdmin Docker file allows us to pass the user config as a base 64 encoded environment variable
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
         { rds_host: "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
@@ -138,6 +138,12 @@ data "aws_iam_policy_document" "task_policy" {
                    aws_s3_bucket.storage-bucket.arn,
                 "${aws_s3_bucket.storage-bucket.arn}/*"]
     }
+  statement {
+    actions = [
+      "rds-db:connect",
+    ]
+    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
 }
 
 resource "aws_iam_role_policy" "task_policy" {
@@ -266,7 +272,7 @@ resource "aws_ecs_service" "this" {
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
-  health_check_grace_period_seconds  = 0
+  health_check_grace_period_seconds  = var.rails_start_up_time
 
   capacity_provider_strategy {
     capacity_provider = var.shared.t3_capacity_provider.name

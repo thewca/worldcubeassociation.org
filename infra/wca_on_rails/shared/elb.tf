@@ -64,7 +64,7 @@ data "aws_acm_certificate" "this" {
   statuses = ["ISSUED"]
 }
 
-resource "aws_lb_target_group" "rails-blue-green" {
+resource "aws_lb_target_group" "rails-production" {
   name        = "wca-main-production-${count.index}"
   port        = 3000
   protocol    = "HTTP"
@@ -85,7 +85,7 @@ resource "aws_lb_target_group" "rails-blue-green" {
   }
   tags = {
     Name = var.name_prefix
-    Env = "staging"
+    Env = "production"
   }
 }
 
@@ -109,7 +109,7 @@ resource "aws_lb_target_group" "auxiliary" {
   }
   tags = {
     Name = var.name_prefix
-    Env = "staging"
+    Env = "production"
   }
 }
 
@@ -166,11 +166,11 @@ resource "aws_lb_listener" "https" {
 
   port            = 443
   protocol        = "HTTPS"
-  ssl_policy      = "ELBSecurityPolicy-2016-08"
+  ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
   certificate_arn = data.aws_acm_certificate.this.arn
 
   default_action {
-    target_group_arn = aws_lb_target_group.rails-blue-green[0].arn
+    target_group_arn = aws_lb_target_group.rails-production[0].arn
     type             = "forward"
   }
 
@@ -232,7 +232,7 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
 
   condition {
     host_header {
-      values = ["wwww.worldcubeassociation.org"]
+      values = ["www.worldcubeassociation.org","worldcubeassociation.org"]
     }
   }
 
@@ -296,8 +296,8 @@ output "http_listener" {
 output "lb" {
   value = aws_lb.this
 }
-output "rails-blue-green" {
-  value = aws_lb_target_group.rails-blue-green
+output "rails-production" {
+  value = aws_lb_target_group.rails-production
 }
 
 output "rails_staging"{

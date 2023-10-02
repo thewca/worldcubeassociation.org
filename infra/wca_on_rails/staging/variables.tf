@@ -43,6 +43,17 @@ variable "VAULT_APPLICATION" {
   default     = "wca-main-staging"
 }
 
+variable "rails_start_up_time" {
+  type = number
+  description = "The Startup time of the Ruby on Rails Application"
+}
+
+variable "rds_iam_identifier" {
+  type = string
+  description = "The identifier of the RDS Instance used for IAM Auth"
+  default = "db-GEOER6N45337C3ZMAYEL2WBAOY"
+}
+
 variable "shared" {
   type = object({
     vpc_id: string,

@@ -1,3 +1,7 @@
+locals {
+  rails_startup_time = 300
+}
+
 terraform {
   required_providers {
     aws = {
@@ -31,6 +35,7 @@ module "production" {
   shared = module.shared
   VAULT_ADDR = "http://172.31.56.54:8200"
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
+  rails_start_up_time = local.rails_startup_time
 }
 
 module "staging" {
@@ -40,6 +45,7 @@ module "staging" {
   VAULT_ADDR = "http://172.31.43.54:8200"
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
   shared = module.shared
+  rails_start_up_time = local.rails_startup_time
 }
 
 module "shared" {
@@ -47,4 +53,5 @@ module "shared" {
   name_prefix = var.name_prefix
   region = var.region
   availability_zones = var.availability_zones
+  rails_start_up_time = local.rails_startup_time
 }

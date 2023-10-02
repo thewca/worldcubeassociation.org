@@ -48,6 +48,17 @@ variable "region" {
   description = "The AWS Region"
 }
 
+variable "rails_start_up_time" {
+  type = number
+  description = "The Startup time of the Ruby on Rails Application"
+}
+
+variable "rds_iam_identifier" {
+  type = string
+  description = "The identifier of the RDS Instance used for IAM Auth"
+  default = "db-VFBCC2563NK74KYKEYEC32YXHA"
+}
+
 variable "shared" {
   type = object({
     vpc_id: string,
@@ -78,9 +89,10 @@ variable "shared" {
     pma_production: object({
       arn: string
     })
+    account_id: string
     # These are booth arrays
     private_subnets: any
-    rails-blue-green: any
+    rails-production: any
   })
   description = "The shared resources between Environments"
 }

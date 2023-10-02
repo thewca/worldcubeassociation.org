@@ -82,7 +82,7 @@ locals {
     }
   ]
   pma_environment = [
-    {
+    { # The PHPMyAdmin Docker file allows us to pass the user config as a base 64 encoded environment variable
       name = "PMA_USER_CONFIG_BASE64"
       value = base64encode(templatefile("../templates/config.user.inc.php.tftpl",
         { rds_host: "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com",
@@ -136,8 +136,23 @@ data "aws_iam_policy_document" "task_policy" {
       resources = [aws_s3_bucket.avatars.arn,
                 "${aws_s3_bucket.avatars.arn}/*",
                    aws_s3_bucket.storage-bucket.arn,
-                "${aws_s3_bucket.storage-bucket.arn}/*"]
+                "${aws_s3_bucket.storage-bucket.arn}/*",
+                  aws_s3_bucket.backup-bucket.arn,
+                  "${aws_s3_bucket.backup-bucket.arn}/*"]
     }
+  statement {
+    actions = [
+      "cloudfront:CreateInvalidation",
+    ]
+    # Resource based policies are not supported with Cloudfront (https://docs.aws.amazon.com/AmazonCloudFront/latest/DeveloperGuide/security_iam_service-with-iam.html)
+    resources = ["*"]
+  }
+  statement {
+    actions = [
+      "rds-db:connect",
+    ]
+    resources = ["arn:aws:rds-db:${var.region}:${var.shared.account_id}:dbuser:${var.rds_iam_identifier}/${var.DATABASE_WRT_USER}"]
+  }
 }
 
 resource "aws_iam_role_policy" "task_policy" {
@@ -156,15 +171,15 @@ resource "aws_ecs_task_definition" "this" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "2048"
-  memory = "7861"
+  cpu = "8192"
+  memory = "30000"
 
   container_definitions = jsonencode([
     {
       name              = "rails-production"
       image             = "${var.shared.ecr_repository.repository_url}:latest"
-      cpu    = 1536
-      memory = 7861
+      cpu    = 8192
+      memory = 30000
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -186,7 +201,7 @@ resource "aws_ecs_task_definition" "this" {
         command            = ["CMD-SHELL", "curl -f http://localhost:3000/ || exit 1"]
         interval           = 30
         retries            = 3
-        startPeriod        = 300
+        startPeriod        = var.rails_start_up_time
         timeout            = 5
       }
     }
@@ -214,7 +229,7 @@ resource "aws_ecs_service" "this" {
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
-  health_check_grace_period_seconds  = 0
+  health_check_grace_period_seconds  = var.rails_start_up_time
 
   capacity_provider_strategy {
     capacity_provider = var.shared.m6i_capacity_provider.name

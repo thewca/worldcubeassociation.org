@@ -43,6 +43,5 @@ RUN yarn install
 
 COPY . .
 
-# Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
-# but can also take a rails command, like "console" or "runner" to start instead.
+# Start sidekiq
 CMD ["/app/bin/bundle", "exec", "sidekiq"]

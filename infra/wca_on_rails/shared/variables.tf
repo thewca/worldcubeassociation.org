@@ -12,3 +12,8 @@ variable "availability_zones" {
   type        = list(string)
   description = "Availability zones"
 }
+
+variable "rails_start_up_time" {
+  type = number
+  description = "The Startup time of the Ruby on Rails Application"
+}
