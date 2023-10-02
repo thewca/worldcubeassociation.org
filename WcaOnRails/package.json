@@ -22,7 +22,7 @@
     "@cubing/icons": "^1.0.8",
     "@rails/ujs": "^6.1.7",
     "autonumeric": "^4.10.0",
-    "autoprefixer": "^10.4.15",
+    "autoprefixer": "^10.4.16",
     "autosize": "^6.0.1",
     "babel-loader": "^9.1.3",
     "babel-plugin-dynamic-import-node": "^2.3.3",
