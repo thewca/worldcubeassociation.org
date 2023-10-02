@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Input, Table } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
@@ -8,6 +9,10 @@ import {
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import useInputState from '../../lib/hooks/useInputState';
+import Errored from '../Requests/Errored';
+
+const dateFormat = 'YYYY-MM-DD';
 
 function ProbationListTable({
   roleList, userMap, isActive, save, sync,
@@ -38,13 +43,13 @@ function ProbationListTable({
             <Table.Cell>
               {
                 isActive ? (
-                  <Button
-                    onClick={() => save(endDelegateProbationUrl, {
+                  <DatePicker
+                    onChange={(date) => save(endDelegateProbationUrl, {
                       probationRoleId: probationRole.id,
+                      endDate: moment(date).format(dateFormat),
                     }, sync, { method: 'POST' })}
-                  >
-                    End Probation
-                  </Button>
+                    selected={probationRole.end_date ? new Date(probationRole.end_date) : null}
+                  />
                 ) : probationRole.end_date
               }
             </Table.Cell>
@@ -56,21 +61,21 @@ function ProbationListTable({
 }
 
 export default function DelegateProbations() {
-  const [wcaId, setWcaId] = React.useState('');
+  const [wcaId, setWcaId] = useInputState('');
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
   const { save, saving } = useSaveAction();
 
   if (loading || saving) return 'Loading...'; // No i18n because this page is used only by WCA Staff.
-  if (error) throw error;
+  if (error) return <Errored />;
 
   const { probationRoles, probationUsers } = data;
 
   return (
     <>
       <h1>Delegate Probations</h1>
-      <Input value={wcaId} onChange={(e) => setWcaId(e.target.value)} placeholder="Enter WCA ID" />
+      <Input value={wcaId} onChange={setWcaId} placeholder="Enter WCA ID" />
       <Button
         onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
       >
@@ -78,7 +83,8 @@ export default function DelegateProbations() {
       </Button>
       <h2>Active Probations</h2>
       <ProbationListTable
-        roleList={probationRoles.filter((probationRole) => probationRole.end_date === null)}
+        roleList={probationRoles.filter((probationRole) => probationRole.end_date === null
+           || probationRole.end_date > moment().format(dateFormat))}
         userMap={probationUsers}
         isActive
         save={save}
@@ -86,7 +92,8 @@ export default function DelegateProbations() {
       />
       <h2>Past Probations</h2>
       <ProbationListTable
-        roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null)}
+        roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null
+          && probationRole.end_date <= moment().format(dateFormat))}
         userMap={probationUsers}
         isActive={false}
       />
