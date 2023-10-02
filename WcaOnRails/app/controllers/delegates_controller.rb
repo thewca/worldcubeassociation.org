@@ -12,10 +12,8 @@ class DelegatesController < ApplicationController
     respond_to do |format|
       format.json do
         @probation_roles = Role.where(group_id: UserGroup.where(group_type: "delegate_probation"))
-        @probation_users = {}
-        @probation_roles.each { |probation_role|
-          @probation_users[probation_role.user_id] = User.find_by_id(probation_role.user_id)
-        }
+        user_ids = @probation_roles.pluck(:user_id)
+        @probation_users = User.find(user_ids).index_by(&:id)
         render json: {
           probationUsers: @probation_users,
           probationRoles: @probation_roles,
