@@ -2256,10 +2256,10 @@ asynciterator.prototype@^1.0.0:
   dependencies:
     has-symbols "^1.0.3"
 
-autonumeric@^4.9.0:
-  version "4.9.0"
-  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.9.0.tgz#5e54b5b2b79ba61f596902e6f2bb4256fab19fa8"
-  integrity sha512-wCNM6AzgZh2QibED+HOnD2PD8qp3YyXqM6akADdMViqhDx+M+Nwq70WNh26eEjRWfclTh9f+kw2GLx2+ZUmOGw==
+autonumeric@^4.10.0:
+  version "4.10.0"
+  resolved "https://registry.yarnpkg.com/autonumeric/-/autonumeric-4.10.0.tgz#e6eef677ceb2211b72695767c057b3c03e009435"
+  integrity sha512-OtRqsHe+Y/U1Tqga484+FCkFtNixS9XrJBcJkBZzhOyVDGQkZ4aNwTtuAwRTlpFIwEdfgTDE/d0HLwDtWL+9/A==
 
 autoprefixer@^10.4.15:
   version "10.4.15"
