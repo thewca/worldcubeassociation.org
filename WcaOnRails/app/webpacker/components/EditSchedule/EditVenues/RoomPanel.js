@@ -6,6 +6,7 @@ import {
   Icon,
 } from 'semantic-ui-react';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { editRoom, removeRoom } from '../store/actions';
 
 function RoomPanel({
@@ -13,14 +14,16 @@ function RoomPanel({
 }) {
   const dispatch = useDispatch();
 
+  const confirm = useConfirm();
+
   const handleChange = (evt, { name, value }) => {
     dispatch(editRoom(room.id, name, value));
   };
 
   const handleDeleteRoom = () => {
-    if (confirm(`Are you sure you want to delete the room ${room.name}? This will also delete all associated schedules. THIS ACTION CANNOT BE UNDONE!`)) {
-      dispatch(removeRoom(room.id));
-    }
+    confirm({
+      content: `Are you sure you want to delete the room ${room.name}? This will also delete all associated schedules. THIS ACTION CANNOT BE UNDONE!`,
+    }).then(() => dispatch(removeRoom(room.id)));
   };
 
   return (

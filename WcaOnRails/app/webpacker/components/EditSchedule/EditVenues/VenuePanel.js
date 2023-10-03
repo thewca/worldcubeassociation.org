@@ -12,6 +12,7 @@ import VenueLocationMap from './VenueLocationMap';
 import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { addRoom, editVenue, removeVenue } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import useInputState from '../../../lib/hooks/useInputState';
@@ -27,6 +28,8 @@ function VenuePanel({
   countryZones,
 }) {
   const dispatch = useDispatch();
+
+  const confirm = useConfirm();
 
   const [latitudeDegrees, setLatitudeDegrees] = useInputState(
     toDegrees(venue.latitudeMicrodegrees),
@@ -51,9 +54,9 @@ function VenuePanel({
   };
 
   const handleDeleteVenue = () => {
-    if (confirm(`Are you sure you want to delete the venue ${venue.name}? This will also delete all associated rooms and all associated schedules. THIS ACTION CANNOT BE UNDONE!`)) {
-      dispatch(removeVenue(venue.id));
-    }
+    confirm({
+      content: `Are you sure you want to delete the venue ${venue.name}? This will also delete all associated rooms and all associated schedules. THIS ACTION CANNOT BE UNDONE!`,
+    }).then(() => dispatch(removeVenue(venue.id)));
   };
 
   const handleAddRoom = () => {
