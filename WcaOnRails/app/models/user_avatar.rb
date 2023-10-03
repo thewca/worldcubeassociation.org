@@ -9,8 +9,8 @@ class UserAvatar < ApplicationRecord
   belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true
   belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
 
-  has_one_attached :public_image
-  has_one_attached :private_image, service: :local_private #TODO
+  has_one_attached :public_image, service: :s3_avatars_public
+  has_one_attached :private_image, service: :s3_avatars_private
 
   default_scope { with_attached_public_image }
 
@@ -22,27 +22,31 @@ class UserAvatar < ApplicationRecord
   }, default: :pending
 
   enum :backend, {
-    s3_cdn: 's3-cdn',
+    s3_legacy_cdn: 's3-legacy-cdn',
     active_storage: 'active-storage',
     local: 'local-fs',
   }, default: :active_storage, scopes: false
 
   def url
     case self.backend
-    when 's3_cdn'
+    when 's3_legacy_cdn'
       host = EnvConfig.S3_AVATARS_ASSET_HOST.delete_prefix('https://')
       path = "/uploads/user/avatar/#{user.wca_id}/#{self.filename}"
 
       URI::HTTPS.build(host: host, path: path).to_s
     when 'active_storage'
-      Rails.application.routes.url_helpers.rails_representation_url(self.image) if self.image.present?
+      if self.approved?
+        Rails.application.routes.url_helpers.rails_storage_proxy_path(self.image)
+      else
+        Rails.application.routes.url_helpers.rails_representation_url(self.image)
+      end
     when 'local'
       ActionController::Base.helpers.asset_url(self.filename, host: EnvConfig.ROOT_URL)
     end
   end
 
   def filename
-    self.backend == 'active_storage' ? self.image.blob.filename.to_s : super
+    self.active_storage? ? self.image.blob.filename.to_s : super
   end
 
   def image
@@ -53,7 +57,7 @@ class UserAvatar < ApplicationRecord
     self.image.attach(file)
   end
 
-  after_save :move_image_if_approved
+  after_save :move_image_if_approved, if: :active_storage?
   def move_image_if_approved
     # ActiveStorage takes care of purging attachments from destroyed records
     return if self.destroyed?
@@ -74,9 +78,9 @@ class UserAvatar < ApplicationRecord
     end
   end
 
-  after_save :move_user_associations
+  after_save :move_user_associations, unless: :destroyed?
   def move_user_associations
-    if !self.destroyed? && self.status_previously_changed?
+    if self.status_previously_changed?
       if self.status == UserAvatar.statuses[:pending]
         user.update_attribute(:pending_avatar, self)
       else

@@ -14,7 +14,7 @@ class MigrateExistingAvatars < ActiveRecord::Migration[7.0]
         thumbnail_crop_y: user.saved_avatar_crop_y,
         thumbnail_crop_w: user.saved_avatar_crop_w,
         thumbnail_crop_h: user.saved_avatar_crop_h,
-        backend: UserAvatar.backends[:s3_cdn],
+        backend: UserAvatar.backends[:s3_legacy_cdn],
       )
     end
 
@@ -27,7 +27,7 @@ class MigrateExistingAvatars < ActiveRecord::Migration[7.0]
         thumbnail_crop_y: user.saved_pending_avatar_crop_y,
         thumbnail_crop_w: user.saved_pending_avatar_crop_w,
         thumbnail_crop_h: user.saved_pending_avatar_crop_h,
-        backend: UserAvatar.backends[:s3_cdn],
+        backend: UserAvatar.backends[:s3_legacy_cdn],
       )
     end
   end
