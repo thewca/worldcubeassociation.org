@@ -30,7 +30,14 @@ import ActivityPicker from './ActivityPicker';
 import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
-import { addActivity, moveActivity, removeActivity, scaleActivity } from '../store/actions';
+
+import {
+  addActivity,
+  moveActivity,
+  removeActivity,
+  scaleActivity,
+} from '../store/actions';
+
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import { defaultDurationFromActivityCode, luxonToWcifIso } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
@@ -50,12 +57,15 @@ function EditActivities({
 
   const [isKeyboardEnabled, setKeyboardEnabled] = useToggleButtonState(false);
 
-  // This part is ugly because Semantic-UI and Fullcalendar disagree about how modals should be handled.
-  // According to Semantic-UI, modals are "always there" in the DOM, just that their "isOpen" state
-  //   is false most of the time. So they simply don't show but they are already part of the DOM tree.
-  // The (click-)event-based model of Fullcalendar however dictates that we can only "instantiate" a modal
-  //   once the user actually clicks somewhere on the calendar. So we pre-fill the modal with empty state
-  //   and set it accordingly on every event click. If somebody has a better idea how to handle this, please shout.
+  // This part is ugly because Semantic-UI and Fullcalendar disagree
+  //   about how modals should be handled.
+  // According to Semantic-UI, modals are "always there" in the DOM,
+  //   just that their "isOpen" state is false most of the time.
+  //   So they simply don't show but they are already part of the DOM tree.
+  // The (click-)event-based model of Fullcalendar however dictates that
+  //   we can only "instantiate" a modal once the user actually clicks somewhere on the calendar.
+  //   So we pre-fill the modal with empty state and set it accordingly on every event click.
+  // If somebody has a better idea how to handle this, please shout.
   const [showActivityModal, setShowActivityModal] = useState(false);
 
   const [modalActivity, setModalActivity] = useState();
@@ -64,58 +74,50 @@ function EditActivities({
   const [modalLuxonEnd, setModalLuxonEnd] = useState();
   // ------ MODAL HACK END ------
 
-  const fcSlotDuration = useMemo(() => {
-    return `00:${minutesPerRow.toString().padStart(2, '0')}:00`;
-  }, [minutesPerRow]);
+  const fcSlotDuration = useMemo(() => `00:${minutesPerRow.toString().padStart(2, '0')}:00`, [minutesPerRow]);
 
-  const fcSlotMin = useMemo(() => {
-    return `${calendarStart.toString().padStart(2, '0')}:00:00`;
-  }, [calendarStart]);
+  const fcSlotMin = useMemo(() => `${calendarStart.toString().padStart(2, '0')}:00:00`, [calendarStart]);
+  const fcSlotMax = useMemo(() => `${calendarEnd.toString().padStart(2, '0')}:00:00`, [calendarEnd]);
 
-  const fcSlotMax = useMemo(() => {
-    return `${calendarEnd.toString().padStart(2, '0')}:00:00`;
-  }, [calendarEnd]);
+  const wcifVenue = useMemo(
+    () => venueWcifFromRoomId(wcifSchedule, selectedRoomId),
+    [selectedRoomId, wcifSchedule],
+  );
 
-  const wcifVenue = useMemo(() => {
-    return venueWcifFromRoomId(wcifSchedule, selectedRoomId);
-  }, [selectedRoomId, wcifSchedule]);
+  const wcifRoom = useMemo(
+    () => roomWcifFromId(wcifSchedule, selectedRoomId),
+    [selectedRoomId, wcifSchedule],
+  );
 
-  const wcifRoom = useMemo(() => {
-    return roomWcifFromId(wcifSchedule, selectedRoomId);
-  }, [selectedRoomId, wcifSchedule]);
+  const venueOptions = useMemo(() => (
+    wcifSchedule.venues.flatMap((venue) => (
+      venue.rooms.map((room) => ({
+        key: room.id,
+        text: `"${room.name}" in "${venue.name}"`,
+        value: room.id,
+      }))
+    ))
+  ), [wcifSchedule.venues]);
 
-  const venueOptions = useMemo(() => {
-    return wcifSchedule.venues.flatMap((venue) => {
-      return venue.rooms.map((room) => {
-        return {
-          key: room.id,
-          text: `"${room.name}" in "${venue.name}"`,
-          value: room.id,
-        };
-      });
-    });
-  }, [wcifSchedule.venues]);
-
-  const fcActivities = useMemo(() => {
-    return wcifRoom?.activities.map((activity) => {
-      return {
-        title: activity.name,
-        start: activity.startTime,
-        end: activity.endTime,
-        extendedProps: {
-          activityId: activity.id,
-          activityCode: activity.activityCode,
-          childActivities: activity.childActivities,
-        },
-      };
-    });
-  }, [wcifRoom?.activities]);
+  const fcActivities = useMemo(() => (
+    wcifRoom?.activities.map((activity) => ({
+      title: activity.name,
+      start: activity.startTime,
+      end: activity.endTime,
+      extendedProps: {
+        activityId: activity.id,
+        activityCode: activity.activityCode,
+        childActivities: activity.childActivities,
+      },
+    }))
+  ), [wcifRoom?.activities]);
 
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
   // See https://medium.com/@teh_builder/ref-objects-inside-useeffect-hooks-eb7c15198780
   const activityPickerRef = useCallback((node) => {
     if (!node) return;
 
+    // eslint-disable-next-line no-new
     new Draggable(node, {
       itemSelector: '.fc-draggable',
       eventData: (eventEl) => {
@@ -146,7 +148,12 @@ function EditActivities({
     const left = rect.left + window.scrollX;
     const right = rect.right + window.scrollX;
 
-    if (jsEvent.pageX >= left && jsEvent.pageX <= right && jsEvent.pageY >= top && jsEvent.pageY <= bottom) {
+    if (
+      jsEvent.pageX >= left
+        && jsEvent.pageX <= right
+        && jsEvent.pageY >= top
+        && jsEvent.pageY <= bottom
+    ) {
       const { activityId } = fcEvent.extendedProps;
       dispatch(removeActivity(activityId));
     }
@@ -172,7 +179,11 @@ function EditActivities({
     dispatch(addActivity(activity, wcifRoom.id));
   };
 
-  const changeActivityTimeslot = ({ event: fcEvent, delta, view: { calendar } }) => {
+  const changeActivityTimeslot = ({
+    event: fcEvent,
+    delta,
+    view: { calendar },
+  }) => {
     const { activityId } = fcEvent.extendedProps;
 
     const duration = toLuxonDuration(delta, calendar);
@@ -181,7 +192,12 @@ function EditActivities({
     dispatch(moveActivity(activityId, deltaIso));
   };
 
-  const resizeActivity = ({ event: fcEvent, startDelta, endDelta, view: { calendar } }) => {
+  const resizeActivity = ({
+    event: fcEvent,
+    startDelta,
+    endDelta,
+    view: { calendar },
+  }) => {
     const { activityId } = fcEvent.extendedProps;
 
     const startScaleDuration = toLuxonDuration(startDelta, calendar);
@@ -248,7 +264,7 @@ function EditActivities({
   return (
     <>
       <Container textAlign="center">
-        <Dropdown fluid placeholder="Venue" clearable selection options={venueOptions} onChange={setSelectedRoomId} />
+        <Dropdown fluid placeholder="Venue" clearable selection options={venueOptions} value={selectedRoomId} onChange={setSelectedRoomId} />
       </Container>
       {!!selectedRoomId && (
         <>
@@ -407,18 +423,22 @@ function EditActivities({
                       },
                     }}
                     initialDate={wcifSchedule.startDate}
-                    allDaySlot={false} // by default, FC offers support for separate "whole-day" events
-                    headerToolbar={false} // by default, FC would show a "skip to next day" toolbar
+                    // by default, FC offers support for separate "whole-day" events
+                    allDaySlot={false}
+                    // by default, FC would show a "skip to next day" toolbar
+                    headerToolbar={false}
                     // the next three values can be configured via a popup menu
                     slotMinTime={fcSlotMin}
                     slotMaxTime={fcSlotMax}
                     slotDuration={fcSlotDuration}
-                    // force FC to automagically compute an event's "end" flag, if the event doesn't specify one itself
+                    // force FC to automagically compute an event's "end" flag,
+                    //   if the event doesn't specify one itself
                     forceEventDuration
                     defaultTimedEventDuration="00:30:00"
                     // no debuf when an event drag was cancelled
                     dragRevertDuration={0}
-                    // make it so that the user's mouse must travel some non-zero distance until any "drag" event is triggered
+                    // make it so that the user's mouse must travel some non-zero distance
+                    //   until any "drag" event is triggered
                     selectMinDistance={5}
                     height="auto"
                     // intervals in which the events "snap" to the calendar grid

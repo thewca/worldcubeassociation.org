@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import { events } from '../wca-data.js.erb';
 import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 import I18n from '../i18n';
@@ -16,10 +15,6 @@ function promiseSaveWcif(competitionId, data) {
   };
 
   return fetchWithAuthenticityToken(url, fetchOptions);
-}
-
-export function getAuthenticityToken() {
-  return document.querySelector('meta[name=csrf-token]').content;
 }
 
 export function saveWcif(competitionId, data, onSuccess, onFailure) {
@@ -83,16 +78,12 @@ export function buildActivityCode(activity) {
 
 export function roomWcifFromId(scheduleWcif, id) {
   const intId = parseInt(id, 10);
-  return _.find(_.flatMap(scheduleWcif.venues, 'rooms'), { id: intId });
+  return scheduleWcif.venues.flatMap((venue) => venue.rooms).find((room) => room.id === intId);
 }
 
 export function venueWcifFromRoomId(scheduleWcif, id) {
   const intId = parseInt(id, 10);
-  return _.find(scheduleWcif.venues, (venue) => _.some(venue.rooms, { id: intId }));
-}
-
-export function activityCodeListFromWcif(scheduleWcif) {
-  return _.map(_.flatMap(_.flatMap(scheduleWcif.venues, 'rooms'), 'activities'), 'activityCode');
+  return scheduleWcif.venues.find((venue) => venue.rooms.some((room) => room.id === intId));
 }
 
 export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {

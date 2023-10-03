@@ -20,13 +20,11 @@ const commonActivityCodes = {
   'other-misc': 'Other',
 };
 
-const otherActivityCodeOptions = Object.keys(commonActivityCodes).map((activityCode) => {
-  return {
-    key: activityCode,
-    text: commonActivityCodes[activityCode],
-    value: activityCode,
-  };
-});
+const otherActivityCodeOptions = Object.keys(commonActivityCodes).map((activityCode) => ({
+  key: activityCode,
+  text: commonActivityCodes[activityCode],
+  value: activityCode,
+}));
 
 function EditActivityModal({
   showModal,

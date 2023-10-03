@@ -1,4 +1,9 @@
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+} from 'react';
 import { Map, Marker, TileLayer } from 'react-leaflet';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import InvisibleIFrame from './InvisibleIFrame';
@@ -25,17 +30,17 @@ function VenueLocationMap({
     mapElem.current.leafletElement.invalidateSize(false);
   };
 
-  const onGeoSearchResult = useMemo(() => {
-    return (result) => {
-      const marker = markerElem.current.leafletElement;
+  const onGeoSearchResult = useCallback((result) => {
+    const marker = markerElem.current.leafletElement;
 
-      marker.setLatLng({
-        lat: result.location.y,
-        lng: result.location.x,
-      });
+    marker.setLatLng({
+      lat: result.location.y,
+      lng: result.location.x,
+    });
 
-      marker.bindPopup(result.location.label).openPopup();
-    };
+    marker
+      .bindPopup(result.location.label)
+      .openPopup();
   }, [markerElem]);
 
   useEffect(() => {

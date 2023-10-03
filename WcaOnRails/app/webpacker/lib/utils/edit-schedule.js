@@ -12,31 +12,31 @@ export function toDegrees(coord) {
 
 function withNestedActivities(activities) {
   if (activities.length === 0) return [];
+
   return [
     ...activities,
-    ...withNestedActivities(_.flatMap(activities, 'childActivities')),
+    ...withNestedActivities(activities.flatMap((activity) => activity.childActivities)),
   ];
 }
 
-export function nextActivityId(wcifSchedule) {
-  // Explore the WCIF to get the highest ids.
-  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
-  const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
-  const activities = rooms.flatMap((room) => withNestedActivities(room.activities));
-  return maxId(activities) + 1;
-}
+const maxId = (objects) => _.max(objects.map((wcifObj) => wcifObj.id)) || 0;
 
 export function nextVenueId(wcifSchedule) {
   // Explore the WCIF to get the highest ids.
-  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
   return maxId(wcifSchedule.venues) + 1;
 }
 
 export function nextRoomId(wcifSchedule) {
   // Explore the WCIF to get the highest ids.
-  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
   const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
   return maxId(rooms) + 1;
+}
+
+export function nextActivityId(wcifSchedule) {
+  // Explore the WCIF to get the highest ids.
+  const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
+  const activities = rooms.flatMap((room) => withNestedActivities(room.activities));
+  return maxId(activities) + 1;
 }
 
 export function defaultDurationFromActivityCode(activityCode) {

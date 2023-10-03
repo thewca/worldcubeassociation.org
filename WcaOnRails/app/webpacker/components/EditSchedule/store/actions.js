@@ -20,7 +20,8 @@ export const changesSaved = () => ({
 
 /**
  * Action creator for adding activity
- * @param {ActivityId} activityId
+ * @param {Activity} wcifActivity
+ * @param {int} roomId
  * @returns {Action}
  */
 export const addActivity = (wcifActivity, roomId) => ({
@@ -32,8 +33,8 @@ export const addActivity = (wcifActivity, roomId) => ({
 });
 
 /**
- * Action creator for removing event
- * @param {ActivityId} activityId
+ * Action creator for removing activity
+ * @param {int} activityId
  * @returns {Action}
  */
 export const removeActivity = (activityId) => ({
@@ -43,6 +44,12 @@ export const removeActivity = (activityId) => ({
   },
 });
 
+/**
+ * Action creator for moving an activity's time
+ * @param {int} activityId
+ * @param {string} isoDuration
+ * @returns {Action}
+ */
 export const moveActivity = (activityId, isoDuration) => ({
   type: MoveActivity,
   payload: {
@@ -51,15 +58,30 @@ export const moveActivity = (activityId, isoDuration) => ({
   },
 });
 
-export const scaleActivity = (activityId, scaleStartIso, scaleEndIso) => ({
+/**
+ * Action creator for scaling an activity's time,
+ * i.e. changing the start and/or end date by some delta
+ * @param {int} activityId
+ * @param {string} isoDeltaStart
+ * @param {string} isoDeltaEnd
+ * @returns {Action}
+ */
+export const scaleActivity = (activityId, isoDeltaStart, isoDeltaEnd) => ({
   type: ScaleActivity,
   payload: {
     activityId,
-    scaleStartIso,
-    scaleEndIso,
+    isoDeltaStart,
+    isoDeltaEnd,
   },
 });
 
+/**
+ * Action creator for changing a venue's properties
+ * @param {int} venueId
+ * @param {string} propertyKey
+ * @param {string} newProperty
+ * @returns {Action}
+ */
 export const editVenue = (venueId, propertyKey, newProperty) => ({
   type: EditVenue,
   payload: {
@@ -69,6 +91,13 @@ export const editVenue = (venueId, propertyKey, newProperty) => ({
   },
 });
 
+/**
+ * Action creator for changing a room's properties
+ * @param {int} roomId
+ * @param {string} propertyKey
+ * @param {string} newProperty
+ * @returns {Action}
+ */
 export const editRoom = (roomId, propertyKey, newProperty) => ({
   type: EditRoom,
   payload: {
@@ -78,6 +107,11 @@ export const editRoom = (roomId, propertyKey, newProperty) => ({
   },
 });
 
+/**
+ * Action creator for removing a venue.
+ * @param {int} venueId
+ * @returns {Action}
+ */
 export const removeVenue = (venueId) => ({
   type: RemoveVenue,
   payload: {
@@ -85,6 +119,11 @@ export const removeVenue = (venueId) => ({
   },
 });
 
+/**
+ * Action creator for removing a room.
+ * @param {int} roomId
+ * @returns {Action}
+ */
 export const removeRoom = (roomId) => ({
   type: RemoveRoom,
   payload: {
@@ -92,11 +131,20 @@ export const removeRoom = (roomId) => ({
   },
 });
 
+/**
+ * Action creator for adding a blank venue.
+ * @returns {Action}
+ */
 export const addVenue = () => ({
   type: AddVenue,
   payload: {},
 });
 
+/**
+ * Action creator for adding a blank room.
+ * @param {int} venueId
+ * @returns {Action}
+ */
 export const addRoom = (venueId) => ({
   type: AddRoom,
   payload: {

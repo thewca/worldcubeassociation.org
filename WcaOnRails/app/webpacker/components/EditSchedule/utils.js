@@ -1,73 +1,77 @@
-import { events, formats } from '../../lib/wca-data.js.erb';
-import { buildActivityCode, parseActivityCode } from '../../lib/utils/wcif';
-import { matchResult, pluralize } from '../../lib/utils/edit-events';
+import {
+  changeTimezoneKeepingLocalTime,
+  moveByIsoDuration,
+  rescaleDuration,
+} from '../../lib/utils/edit-schedule';
 
-const DEFAULT_TIME_LIMIT = {
-  centiseconds: 10 * 60 * 100,
-  cumulativeRoundIds: [],
-};
+export const moveActivityByDuration = (activity, isoDuration) => ({
+  ...activity,
+  startTime: moveByIsoDuration(activity.startTime, isoDuration),
+  endTime: moveByIsoDuration(activity.endTime, isoDuration),
+  childActivities: activity.childActivities.map((childActivity) => (
+    moveActivityByDuration(childActivity, isoDuration)
+  )),
+});
 
-export const generateWcifRound = (eventId, roundNumber) => {
-  const event = events.byId[eventId];
+export const scaleActivitiesByDuration = (activity, isoDeltaStart, isoDeltaEnd) => ({
+  ...activity,
+  startTime: moveByIsoDuration(activity.startTime, isoDeltaStart),
+  endTime: moveByIsoDuration(activity.endTime, isoDeltaEnd),
+  childActivities: activity.childActivities.map((childActivity, childIdx) => {
+    // Unfortunately, scaling child activities (properly) is rocket science.
+    const nChildren = activity.childActivities.length;
 
-  return {
-    id: buildActivityCode({
-      eventId,
-      roundNumber,
-    }),
-    format: event.recommendedFormat().id,
-    timeLimit: event.canChangeTimeLimit ? DEFAULT_TIME_LIMIT : null,
-    cutoff: null,
-    advancementCondition: null,
-    results: [],
-    groups: [],
-    scrambleSetCount: 1,
-  };
-};
+    // Say you have a parent activity with n=3 children,
+    // and you scale the start by -1 hour (i.e. 1 hour earlier).
+    //   In that case, the first child activity's start also has to be scaled by 1 hour.
+    // However, the second child activity's start only has to be scaled by 2/3 of 1 hour,
+    //   and the last has to be scaled by only 1/3 of 1 hour.
+    // In general, the i-th child of n children scales by (n-i)/n for the start of the activity.
+    const startScaleUp = (nChildren - childIdx) / nChildren;
 
-/**
- * Removes the roundIds from the cumulativeRoundIds of the specified event.
- *
- * @param {collection} wcifEvents Will be modified in place.
- * @param {Array}      roundIdsToRemove Rounds to be removed from all cumulativeRoundIds.
- */
-export const removeSharedTimeLimits = (event, roundIdsToRemove) => {
-  if (event.rounds) {
-    return {
-      ...event,
-      rounds: event.rounds.map((round) => removeSharedTimeLimitsFromRound(round, roundIdsToRemove)),
-    };
-  };
-  return event;
-};
+    // However, it doesn't end there. When a parent activity's _start_ scales,
+    //   only the startTime has to be manipulated.
+    // But for the children, the _endTime_ ALSO has to be manipulated
+    //   because even though only the start of the parent changes,
+    //   the children _move_ within that scaled parent as a whole.
+    // The scaling factor for the end of a child is the same as the scaling factor
+    //   for the start of the _next_ child.
+    const endScaleUp = (nChildren - (childIdx + 1)) / nChildren;
 
-const removeSharedTimeLimitsFromRound = (round, roundIdsToRemove) => {
-  if (round.timeLimit) {
-    return {
-      ...round,
-      timeLimit: {
-        ...round.timeLimit,
-        cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter((wcifRoundId) => (
-          !roundIdsToRemove.includes(wcifRoundId)
-        )),
-      },
-    };
-  };
-  return round;
-};
+    const childDeltaStartUp = rescaleDuration(isoDeltaStart, startScaleUp);
+    const childDeltaEndUp = rescaleDuration(isoDeltaStart, endScaleUp);
 
-export const roundCutoffToString = (wcifRound, { short } = {}) => {
-  const { cutoff } = wcifRound;
-  if (!cutoff) {
-    return '-';
-  }
+    // Of course, this all has to happen recursively because children can have children!
+    const startScaledChild = scaleActivitiesByDuration(
+      childActivity,
+      childDeltaStartUp,
+      childDeltaEndUp,
+    );
 
-  const { eventId } = parseActivityCode(wcifRound.id);
-  const matchStr = matchResult(cutoff.attemptResult, eventId, { short });
-  if (short) {
-    return `Best of ${cutoff.numberOfAttempts} ${matchStr}`;
-  }
-  let explanationText = `Competitors get ${pluralize(cutoff.numberOfAttempts, 'attempt')} to get ${matchStr}.`;
-  explanationText += ` If they succeed, they get to do all ${formats.byId[wcifRound.format].expectedSolveCount} solves.`;
-  return explanationText;
-};
+    // And it gets even more crazy:
+    //   The same (n-i)/n logic from above has to be applied to the endDate as well,
+    //   but of course IN REVERSE! So the _last_ child moves the full amount,
+    //   the second-to-last child moves a little less, and the first child only moves a tiny bit.
+    const startScaleDown = childIdx / nChildren;
+    const endScaleDown = (childIdx + 1) / nChildren;
+
+    const childDeltaStartDown = rescaleDuration(isoDeltaEnd, startScaleDown);
+    const childDeltaEndDown = rescaleDuration(isoDeltaEnd, endScaleDown);
+
+    // Phew, we're done.
+    return scaleActivitiesByDuration(startScaledChild, childDeltaStartDown, childDeltaEndDown);
+  }),
+});
+
+export const changeActivityTimezone = (activity, oldTimezone, newTimezone) => ({
+  ...activity,
+  startTime: changeTimezoneKeepingLocalTime(activity.startTime, oldTimezone, newTimezone),
+  endTime: changeTimezoneKeepingLocalTime(activity.endTime, oldTimezone, newTimezone),
+  childActivities: activity.childActivities.map((childActivity) => (
+    changeActivityTimezone(
+      childActivity,
+      oldTimezone,
+      newTimezone,
+    )
+  )),
+});

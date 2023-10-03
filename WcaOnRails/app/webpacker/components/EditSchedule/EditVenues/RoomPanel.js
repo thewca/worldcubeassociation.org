@@ -1,5 +1,10 @@
 import React from 'react';
-import { Button, Card, Form, Icon } from 'semantic-ui-react';
+import {
+  Button,
+  Card,
+  Form,
+  Icon,
+} from 'semantic-ui-react';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { editRoom, removeRoom } from '../store/actions';
 

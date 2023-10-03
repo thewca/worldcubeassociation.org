@@ -15,17 +15,17 @@ function ActivityPicker({
   return (
     <>
       <List relaxed>
-        {wcifEvents.map((event, eventIdx) => (
-          <List.Item key={eventIdx}>
+        {wcifEvents.map((event) => (
+          <List.Item key={event.id}>
             <List.Icon
               className={cn('cubing-icon', `event-${event.id}`)}
               verticalAlign="middle"
               size="large"
             />
             <List.Content>
-              {event.rounds.map((round, roundIdx) => (
+              {event.rounds.map((round) => (
                 <PickerRow
-                  key={roundIdx}
+                  key={round.id}
                   wcifRoom={wcifRoom}
                   wcifEvent={event}
                   wcifRound={round}
@@ -75,9 +75,10 @@ function ActivityLabel({
   activityCode,
   attemptNumber,
 }) {
-  const usedActivityCodes = useMemo(() => {
-    return wcifRoom.activities.map((activity) => activity.activityCode);
-  }, [wcifRoom.activities]);
+  const usedActivityCodes = useMemo(
+    () => wcifRoom.activities.map((activity) => activity.activityCode),
+    [wcifRoom.activities],
+  );
 
   const { roundNumber } = parseActivityCode(activityCode);
 

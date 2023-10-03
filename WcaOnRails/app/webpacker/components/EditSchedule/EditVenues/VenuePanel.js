@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
   Button,
   Card,
@@ -16,13 +16,11 @@ import { addRoom, editVenue, removeVenue } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import useInputState from '../../../lib/hooks/useInputState';
 
-const countryOptions = countries.real.map((country) => {
-  return {
-    key: country.iso2,
-    text: country.name,
-    value: country.iso2,
-  };
-});
+const countryOptions = countries.real.map((country) => ({
+  key: country.iso2,
+  text: country.name,
+  value: country.iso2,
+}));
 
 function VenuePanel({
   venue,
@@ -30,8 +28,13 @@ function VenuePanel({
 }) {
   const dispatch = useDispatch();
 
-  const [latitudeDegrees, setLatitudeDegrees] = useInputState(toDegrees(venue.latitudeMicrodegrees));
-  const [longitudeDegrees, setLongitudeDegrees] = useInputState(toDegrees(venue.longitudeMicrodegrees));
+  const [latitudeDegrees, setLatitudeDegrees] = useInputState(
+    toDegrees(venue.latitudeMicrodegrees),
+  );
+
+  const [longitudeDegrees, setLongitudeDegrees] = useInputState(
+    toDegrees(venue.longitudeMicrodegrees),
+  );
 
   useEffect(() => {
     const latitudeMicrodegrees = toMicrodegrees(latitudeDegrees);
@@ -67,13 +70,11 @@ function VenuePanel({
   let selectKeys = _.difference(Object.keys(timezoneData), competitionZonesKeys);
   selectKeys = _.union(competitionZonesKeys.sort(), selectKeys.sort());
 
-  const timezoneOptions = selectKeys.map((key) => {
-    return {
-      key,
-      text: key,
-      value: timezoneData[key] || key,
-    };
-  });
+  const timezoneOptions = selectKeys.map((key) => ({
+    key,
+    text: key,
+    value: timezoneData[key] || key,
+  }));
 
   return (
     <Card fluid raised>

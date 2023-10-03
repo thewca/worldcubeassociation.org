@@ -1,6 +1,5 @@
-import React, { useMemo } from 'react';
-import { Button, Card, Container, Grid } from 'semantic-ui-react';
-import _ from 'lodash';
+import React from 'react';
+import { Button, Card, Container } from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
 import { addVenue } from '../store/actions';
