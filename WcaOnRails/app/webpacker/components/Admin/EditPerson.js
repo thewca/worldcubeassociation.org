@@ -27,7 +27,12 @@ function EditPerson({ countryList, genderList }) {
       <UserSearch onSelect={(el) => {
         const userId = el[0].id;
         fetchJsonOrError(usersApiUrl(userId)).then((data) => {
-         console.log(data)
+          console.log(data);
+          setPersonFound(true);
+          setName(data.name);
+          setRepresenting(data.country);
+          setGender(data.gender);
+          setBirthdate(data.birthdate);
         })
       }}></UserSearch>
       <Form>
@@ -42,11 +47,11 @@ function EditPerson({ countryList, genderList }) {
           <Icon name="wrench" />
           Fix
         </Button>
-        <Button type="submit">
+        <Button type="submit" active={personFound}>
           <Icon name="clone" />
           Update
         </Button>
-        <Button type="submit">
+        <Button type="submit" active={personFound}>
           <Icon name="trash" />
           Destroy
         </Button>
