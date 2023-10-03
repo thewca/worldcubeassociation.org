@@ -14,7 +14,7 @@ import {
 
 import _ from 'lodash';
 
-import { saveWcif } from '../../lib/utils/wcif';
+import { useSaveWcifAction } from '../../lib/utils/wcif';
 import { changesSaved } from './store/actions';
 import wcifScheduleReducer from './store/reducer';
 import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
@@ -35,7 +35,6 @@ function EditScheduleNew({
 
   const dispatch = useDispatch();
 
-  const [saving, setSaving] = useState(false);
   const [openAccordion, setOpenAccordion] = useState(-1);
 
   const unsavedChanges = useMemo(() => (
@@ -61,20 +60,15 @@ function EditScheduleNew({
     };
   }, [onUnload]);
 
+  const { saveWcif, saving } = useSaveWcifAction();
+
   const save = useCallback(() => {
-    setSaving(true);
-
-    const onSuccess = () => {
-      setSaving(false);
-      dispatch(changesSaved());
-    };
-
-    const onFailure = () => {
-      setSaving(false);
-    };
-
-    saveWcif(competitionId, { schedule: wcifSchedule }, onSuccess, onFailure);
-  }, [competitionId, dispatch, wcifSchedule]);
+    saveWcif(
+      competitionId,
+      { schedule: wcifSchedule },
+      () => dispatch(changesSaved()),
+    );
+  }, [competitionId, dispatch, saveWcif, wcifSchedule]);
 
   const renderUnsavedChangesAlert = () => (
     <Message color="blue">

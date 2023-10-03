@@ -1,36 +1,36 @@
+import { useCallback } from 'react';
 import { events } from '../wca-data.js.erb';
-import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
+import useSaveAction from '../hooks/useSaveAction';
 
-function promiseSaveWcif(competitionId, data) {
-  const url = `/api/v0/competitions/${competitionId}/wcif`;
-  const fetchOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    method: 'PATCH',
-    body: JSON.stringify(data),
+export function useSaveWcifAction() {
+  const { save, saving } = useSaveAction();
+
+  const alertWcifError = (err) => {
+    /* eslint-disable-next-line */
+    alert(`Something went wrong while saving.\n${err.message}`);
   };
 
-  return fetchWithAuthenticityToken(url, fetchOptions);
-}
+  const saveWcif = useCallback(
+    (
+      competitionId,
+      wcifData,
+      onSuccess,
+      options = {},
+      onError = alertWcifError,
+    ) => {
+      const url = `/api/v0/competitions/${competitionId}/wcif`;
 
-export function saveWcif(competitionId, data, onSuccess, onFailure) {
-  promiseSaveWcif(competitionId, data)
-    .then((response) => Promise.all([response, response.json()]))
-    .then(([response, json]) => {
-      if (!response.ok) {
-        throw new Error(`${response.status}: ${response.statusText}\n${json.error}`);
-      }
-      onSuccess();
-    })
-    .catch((e) => {
-      onFailure();
-      /* eslint-disable-next-line */
-      alert(`Something went wrong while saving.\n${e.message}`);
-    });
+      save(url, wcifData, onSuccess, options, onError);
+    },
+    [save],
+  );
+
+  return {
+    saveWcif,
+    saving,
+  };
 }
 
 // Copied from https://github.com/jfly/tnoodle/blob/c2b529e6292469c23f33b1d73839e22f041443e0/tnoodle-ui/src/WcaCompetitionJson.js#L52
