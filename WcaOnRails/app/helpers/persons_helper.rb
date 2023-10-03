@@ -1,10 +1,18 @@
 # frozen_string_literal: true
 
 module PersonsHelper
-  def rank_td(rank_object, type)
-    rank = rank_object&.public_send("#{type}_rank")
+  def rank_td(rank_object, type, wca_id, region_id = nil)
+    region_type = "world"
+    if region_id&.starts_with?("_")
+      region_type = "continent"
+    elsif region_id
+      region_type = "country"
+    end
+    rank = rank_object&.public_send("#{region_type}_rank")
     rank = "-" if rank == 0
-    content_tag :td, rank, class: "#{type}-rank #{'record' if rank == 1}"
+    content_tag(:td, class: "#{region_type}-rank #{'record' if rank == 1}") do
+      rank ? link_to(rank, rankings_path(rank_object.event_id, type, region: region_id, focus: wca_id), class: :plain) : nil
+    end
   end
 
   def odd_rank_reason
