@@ -45,7 +45,7 @@ module ApplicationHelper
 
   def anchorable(pretty_text, id = nil)
     id ||= pretty_text.parameterize
-    "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='linkify icon'></span></a> #{pretty_text}</span>".html_safe
+    "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='icon linkify'></span></a> #{pretty_text}</span>".html_safe
   end
 
   WCA_EXCERPT_RADIUS = 50
