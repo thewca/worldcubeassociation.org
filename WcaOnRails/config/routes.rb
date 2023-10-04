@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 
   get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
   get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
+  get 'users/:user_id/role/:role_id' => 'users#role'
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
@@ -171,6 +172,10 @@ Rails.application.routes.draw do
   get 'admin/delegate_probation_data' => 'delegates#delegate_probation_data', as: :delegate_probation_data
   post 'admin/start_delegate_probation' => 'delegates#start_delegate_probation', as: :start_delegate_probation
   post 'admin/end_delegate_probation' => 'delegates#end_delegate_probation', as: :end_delegate_probation
+
+  get 'admin/role_list' => 'roles#role_list', as: :role_list
+  get 'admin/role_data' => 'roles#role_data', as: :role_data
+  post 'admin/role_update' => 'roles#role_update', as: :role_update
 
   get 'robots' => 'static_pages#robots'
 
