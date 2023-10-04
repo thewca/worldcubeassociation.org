@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require_relative '../helpers/microservices_helper'
+
 class PaymentController < ApplicationController
   def payment_config
     competition = Competition.find(params[:competition_id])
@@ -59,7 +61,7 @@ class PaymentController < ApplicationController
       flash[:error] = "Invalid PaymentIntent status"
     end
 
-    redirect_to competition_register_path(competition)
+    redirect_to competition_register_path(competition_id)
   end
 
   def payment_refund
@@ -68,7 +70,7 @@ class PaymentController < ApplicationController
 
     unless competition.using_stripe_payments?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
-      return redirect_to "https://www.worldcubeassociation.org/competitions/#{competition_id}/#{user_id}/edit"
+      return redirect_to edit_registration_path(competition_id, user_id)
     end
 
     payment = RegistrationPayment.find(params[:payment_id])
@@ -78,12 +80,12 @@ class PaymentController < ApplicationController
 
     if refund_amount > payment.amount_available_for_refund
       flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      return redirect_to "https://www.worldcubeassociation.org/competitions/#{competition_id}/#{user_id}/edit"
+      return redirect_to edit_registration_path(competition_id, user_id)
     end
 
     if refund_amount < 0
       flash[:danger] = "The refund amount must be greater than zero."
-      return redirect_to "https://www.worldcubeassociation.org/competitions/#{competition_id}/#{user_id}/edit"
+      return redirect_to edit_registration_path(competition_id, user_id)
     end
 
     currency_iso = competition.currency_code
@@ -122,6 +124,6 @@ class PaymentController < ApplicationController
       )
 
     flash[:success] = 'Payment was refunded'
-    redirect_to "https://www.worldcubeassociation.org/competitions/#{competition_id}/#{user_id}/edit"
+    redirect_to edit_registration_path(competition_id, user_id)
   end
 end
