@@ -1,3 +1,4 @@
+
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
@@ -379,6 +380,10 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
 
+  def number_of_bookmarks
+    bookmarked_users.length
+  end
+
   def country
     Country.c_find(self.countryId)
   end
@@ -389,6 +394,16 @@ class Competition < ApplicationRecord
 
   def main_event_id=(event_id)
     super(event_id.blank? ? nil : event_id)
+  end
+
+  def events_with_rounds
+    includes_associations = [
+      { rounds: [:competition_event] },
+    ]
+    competition_events
+      .includes(includes_associations)
+      .sort_by { |ce| ce.event.rank }
+      .map(&:to_wcif)
   end
 
   # Enforce that the users marked as delegates for this competition are
