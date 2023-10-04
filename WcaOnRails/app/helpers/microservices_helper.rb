@@ -20,8 +20,8 @@ module MicroServicesHelper
       data = Vault.logical.read("identity/oidc/token/#{EnvConfig.VAULT_APPLICATION}")
       if data.present?
         data.data[:data][:token]
-      else # TODO: should we hard error out here?
-        puts "Tried to get identity token, but got error"
+      else
+        raise Error "Can't get a Vault token"
       end
     end
   end
