@@ -794,6 +794,39 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "user_groups" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          name
+          group_type
+          parent_group_id
+          is_active
+          is_hidden
+          metadata_id
+          metadata_type
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "roles" => {
+      where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          user_id
+          group_id
+          start_date
+          end_date
+          metadata_id
+          metadata_type
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
   }.freeze
 
   RESULTS_SANITIZERS = {
