@@ -1,16 +1,16 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Table, Message, Button, Popup,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
-import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import { events } from '../../../lib/wca-data.js.erb';
 import { useStore } from '../../../lib/providers/StoreProvider';
+import useLoadedData from '../../../lib/hooks/useLoadedData';
 
 function NotConfirmedIcon() {
   return (
@@ -167,29 +167,28 @@ function RegistrationCollisionsContent() {
     },
   } = useStore();
 
-  const [loading, setLoading] = useState(false);
-  const [collisions, setCollisions] = useState();
-  const [savedParams, setSavedParams] = useState(null);
-
-  useEffect(() => {
-    if (!registration_open) return;
-    setLoading(true);
+  const savedParams = useMemo(() => {
     const params = new URLSearchParams();
+
+    if (!registration_open) return params;
+
     params.append('id', id);
     params.append('registration_open', registration_open);
 
-    setSavedParams(params);
+    return params;
   }, [id, registration_open]);
 
-  useEffect(() => {
-    if (!savedParams) return;
+  const registrationCollisionsUrl = useMemo(
+    () => `${registrationCollisionsJsonUrl}?${savedParams.toString()}`,
+    [savedParams],
+  );
 
-    fetchJsonOrError(`${registrationCollisionsJsonUrl}?${savedParams.toString()}`)
-      .then(({ data }) => {
-        setCollisions(data);
-      })
-      .finally(() => setLoading(false));
-  }, [savedParams]);
+  const {
+    data: collisions,
+    loading,
+    error,
+    sync,
+  } = useLoadedData(registrationCollisionsUrl);
 
   if (loading) {
     return <Loading />;

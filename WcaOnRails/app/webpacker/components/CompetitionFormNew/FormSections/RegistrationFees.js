@@ -1,13 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import SubSection from './SubSection';
 import {
   InputBoolean, InputCurrencyAmount, InputNumber, InputRadio, InputSelect,
 } from '../Inputs/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
-import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 import { useStore } from '../../../lib/providers/StoreProvider';
+import useLoadedData from '../../../lib/hooks/useLoadedData';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -44,7 +44,7 @@ export default function RegistrationFees() {
   const {
     competition: {
       venue: {
-        country,
+        countryId: country,
       },
       entryFees,
       competitorLimit,
@@ -56,37 +56,45 @@ export default function RegistrationFees() {
   const guestsGoFree = entryFees && !(entryFees.guests_entry_fee_lowest_denomination > 0);
   const guestsRestricted = entryFees && guestsGoFree && entryFees.guest_entry_status === 'restricted';
 
-  const [duesText, setDuesText] = useState('');
-  useEffect(() => {
+  const savedParams = useMemo(() => {
     const params = new URLSearchParams();
+
     params.append('competitor_limit_enabled', competitorLimit.competitor_limit_enabled);
     params.append('competitor_limit', competitorLimit.competitor_limit);
-    params.append('currency_code', currency);
-    params.append('country_id', country);
+    params.append('currency_code', entryFees.currency_code);
     params.append('entry_fee_cents', entryFees.base_entry_fee_lowest_denomination);
+    params.append('country_id', country);
 
-    fetchWithAuthenticityToken(`${calculateDuesUrl}?${params.toString()}`)
-      .then((response) => response.json()
-        .then((json) => {
-          if (!response.ok) {
-            setDuesText(I18n.t('competitions.competition_form.dues_estimate.ajax_error'));
-            return;
-          }
+    return params;
+  }, [competitorLimit, country, entryFees]);
 
-          let text;
-          if (competitorLimit.competitor_limit_enabled) {
-            text = `${I18n.t('competitions.competition_form.dues_estimate.calculated', {
-              limit: competitorLimit.competitor_limit,
-              estimate: json.dues_value,
-            })} (${currency})`;
-          } else {
-            text = `${I18n.t('competitions.competition_form.dues_estimate.per_competitor', {
-              estimate: json.dues_value,
-            })} (${currency})`;
-          }
-          setDuesText(text);
-        }));
-  }, [country, currency, competitorLimit, entryFees]);
+  const entryFeeDuesUrl = useMemo(
+    () => `${calculateDuesUrl}?${savedParams.toString()}`,
+    [savedParams],
+  );
+
+  const {
+    data: duesJson,
+    error,
+    loading,
+  } = useLoadedData(entryFeeDuesUrl);
+
+  const duesText = useMemo(() => {
+    if (error) {
+      return I18n.t('competitions.competition_form.dues_estimate.ajax_error');
+    }
+
+    if (competitorLimit.competitor_limit_enabled) {
+      return `${I18n.t('competitions.competition_form.dues_estimate.calculated', {
+        limit: competitorLimit.competitor_limit,
+        estimate: duesJson?.dues_value,
+      })} (${currency})`;
+    }
+
+    return `${I18n.t('competitions.competition_form.dues_estimate.per_competitor', {
+      estimate: duesJson?.dues_value,
+    })} (${currency})`;
+  }, [competitorLimit, currency, duesJson, error]);
 
   return (
     <SubSection section="entryFees">

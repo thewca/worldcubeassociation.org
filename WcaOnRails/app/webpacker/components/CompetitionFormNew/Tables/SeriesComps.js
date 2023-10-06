@@ -1,8 +1,7 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Message } from 'semantic-ui-react';
-import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { seriesEligibleCompetitionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
@@ -10,6 +9,7 @@ import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { updateFormValue } from '../store/actions';
+import useLoadedData from '../../../lib/hooks/useLoadedData';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -31,15 +31,9 @@ export default function SeriesComps() {
       end_date,
       series,
     },
-    setMarkers,
   } = useStore();
 
   const dispatch = useDispatch();
-
-  const [nearby, setNearby] = useState();
-  const [loading, setLoading] = useState(false);
-
-  const [savedParams, setSavedParams] = useState(null);
 
   const lat = parseFloat(coordinates.lat);
   const long = parseFloat(coordinates.long);
@@ -49,33 +43,37 @@ export default function SeriesComps() {
     || Number.isNaN(lat)
     || Number.isNaN(long);
 
-  useEffect(() => {
-    if (missingDate || missingLocation) return;
-    setLoading(true);
+  const savedParams = useMemo(() => {
     const params = new URLSearchParams();
+
+    if (missingDate || missingLocation) return params;
+
     params.append('id', id);
     params.append('coordinates_lat', lat.toString());
     params.append('coordinates_long', long.toString());
     params.append('start_date', start_date);
     params.append('end_date', end_date);
 
-    setSavedParams(params);
-  }, [id, coordinates, start_date, end_date]);
+    return params;
+  }, [id, lat, long, start_date, end_date, missingDate, missingLocation]);
 
-  useEffect(() => {
-    if (!savedParams) return;
+  const seriesEligibleDataUrl = useMemo(
+    () => `${seriesEligibleCompetitionsJsonUrl}?${savedParams.toString()}`,
+    [savedParams],
+  );
 
-    fetchJsonOrError(`${seriesEligibleCompetitionsJsonUrl}?${savedParams.toString()}`)
-      .then(({ data }) => {
-        setNearby(data);
-        setMarkers(data.map((comp) => ({
-          id: comp.id,
-          lat: comp.coordinates.lat,
-          long: comp.coordinates.long,
-        })));
-      })
-      .finally(() => setLoading(false));
-  }, [savedParams]);
+  const {
+    data: nearby,
+    loading,
+    error,
+    sync,
+  } = useLoadedData(seriesEligibleDataUrl);
+
+  const markers = useMemo(() => nearby?.map((comp) => ({
+    id: comp.id,
+    lat: comp.coordinates.lat,
+    long: comp.coordinates.long,
+  })), [nearby]);
 
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 33, kms: 200 });
 

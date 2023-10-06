@@ -19,7 +19,6 @@ import PerUserSettings from './FormSections/UserSettings';
 import RegistrationFee from './FormSections/RegistrationFees';
 import RegistrationDetails from './FormSections/RegistrationDetails';
 import EventRestrictions from './FormSections/EventRestrictions';
-import { fetchWithAuthenticityToken } from '../../lib/requests/fetchWithAuthenticityToken';
 import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
@@ -32,6 +31,7 @@ import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreP
 import competitionFormReducer from './store/reducer';
 import { setErrors } from './store/actions';
 import SectionProvider from './store/sections';
+import useSaveAction from '../../lib/hooks/useSaveAction';
 
 // TODO: Need to add cloning params
 
@@ -44,50 +44,21 @@ function FormActions() {
 
   const dispatch = useDispatch();
 
-  const createComp = async () => {
-    const url = '/competitions';
-    const fetchOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      method: 'POST',
-      body: JSON.stringify(competition),
-    };
+  const { save, saving } = useSaveAction();
 
-    const response = await fetchWithAuthenticityToken(url, fetchOptions);
-    if (response.redirected) {
-      window.location.replace(response.url);
-      return;
-    }
-
-    const json = await response.json();
-
-    dispatch(setErrors(json));
+  const createComp = () => {
+    save('/competitions', competition, (data) => { dispatch(setErrors(data)); }, { method: 'POST' });
   };
 
-  const updateComp = async () => {
-    const url = `/competitions/${initialCompetition.id}`;
-    const fetchOptions = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      credentials: 'include',
-      method: 'PATCH',
-      body: JSON.stringify(competition),
-    };
-
-    const response = await fetchWithAuthenticityToken(url, fetchOptions);
-
-    if (response.redirected) {
-      window.location.replace(response.url);
-      return;
-    }
-
-    const json = await response.json();
-
-    dispatch(setErrors(json));
+  const updateComp = () => {
+    save(`/competitions/${initialCompetition.id}`, competition, (data) => { dispatch(setErrors(data)); });
   };
+
+  // TODO should we handle stuff like this in the save hook?
+  /* if (response.redirected) {
+    window.location.replace(response.url);
+    return;
+  } */
 
   if (persisted) {
     return (
