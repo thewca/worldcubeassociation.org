@@ -73,7 +73,7 @@ function TimeField({
     onChange(attempt);
     // Once we emit the change, reflect the initial state.
     setDraftInput(attemptResultToInput(value));
-  }, [draftInput, onChange, setDraftInput]);
+  }, [draftInput, onChange, setDraftInput, value]);
 
   return (
     <Form.Input

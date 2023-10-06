@@ -35,8 +35,11 @@ end
 RSpec.describe "JobsCheck" do
   let(:check) { JobsCheck.new }
 
+  let!(:dummy_job) { JobUtils::WCA_CRONJOBS.sample }
+  let!(:another_job) { (JobUtils::WCA_CRONJOBS.without dummy_job).sample }
+
   it "passes if there are young jobs" do
-    _young_job = Delayed::Job.create(created_at: 1.minutes.ago, handler: "")
+    _young_job = dummy_job.cronjob_statistics.update!(enqueued_at: 1.minutes.ago)
 
     status, description = check.status_description
 
@@ -45,23 +48,23 @@ RSpec.describe "JobsCheck" do
   end
 
   it "finds the oldest job that has been waiting to run" do
-    _old_job = Delayed::Job.create(created_at: 10.minutes.ago, handler: "")
-    oldest_job = Delayed::Job.create(created_at: 15.minutes.ago, handler: "")
+    dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
+    another_job.cronjob_statistics.update!(enqueued_at: 15.minutes.ago)
 
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to match(/Job #{oldest_job.id} was/)
+    expect(description).to match(/Job #{another_job.cronjob_statistics.id} was/)
   end
 
   it "ignores jobs in progress" do
-    old_job = Delayed::Job.create(created_at: 10.minutes.ago, handler: "")
-    _old_but_running_job = Delayed::Job.create(created_at: 15.minutes.ago, handler: "", locked_at: Time.now)
+    dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
+    another_job.cronjob_statistics.update!(enqueued_at: 15.minutes.ago, run_start: DateTime.current, run_end: nil)
 
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to match(/Job #{old_job.id} was/)
+    expect(description).to match(/Job #{dummy_job.cronjob_statistics.id} was/)
   end
 end
 

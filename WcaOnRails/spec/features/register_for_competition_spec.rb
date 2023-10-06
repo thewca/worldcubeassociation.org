@@ -16,7 +16,7 @@ RSpec.feature "Registering for a competition" do
       visit competition_register_path(competition)
       check "registration_competition_events_333"
       click_button "Register!"
-      expect(page).to have_text("Successfully registered!")
+      expect(page).to have_text("Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete.")
       registration = competition.registrations.find_by_user_id(user.id)
       expect(registration).not_to eq nil
     end

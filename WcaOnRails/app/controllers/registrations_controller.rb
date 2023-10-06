@@ -470,18 +470,18 @@ class RegistrationsController < ApplicationController
       return head :bad_request
     end
     # Check if webhook signing is configured.
-    if EnvVars.STRIPE_WEBHOOK_SECRET.present?
+    if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
       begin
         event = Stripe::Webhook.construct_event(
-          payload, signature, EnvVars.STRIPE_WEBHOOK_SECRET
+          payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
         )
       rescue Stripe::SignatureVerificationError => e
         logger.warn "Stripe webhook signature verification failed. #{e.message}"
         return head :bad_request
       end
-    elsif Rails.env.production? && EnvVars.WCA_LIVE_SITE?
+    elsif Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
       logger.error "No Stripe webhook secret defined in Production."
       return head :bad_request
     end
@@ -774,7 +774,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = I18n.t('registrations.flash.registered')
+      flash[:warning] = I18n.t('registrations.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_later
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path

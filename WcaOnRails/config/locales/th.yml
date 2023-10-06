@@ -308,8 +308,8 @@ th:
     world: โลก
     #original_hash: 2513cf0
     continent: ทวีป
-    #original_hash: d523ebb
-    country: ประเทศ
+    #original_hash: 0f21717
+    country: ภูมิภาค
     #original_hash: 0154c0d
     here: ที่นี่
     #original_hash: 77003d0
@@ -328,8 +328,8 @@ th:
     user:
       #original_hash: 603a218
       wca_id: WCA ID
-      #original_hash: e0f64f7
-      citizen_of: พลเมืองของ
+      #original_hash: fa4c045
+      representing: Representing
     #original_hash: 3fc0ba1
     all_regions: ทุกภูมิภาค
     errors:
@@ -400,8 +400,8 @@ th:
         unconfirmed_wca_id: WCA ID ที่ยังไม่ได้รับการยืนยัน
         #original_hash: 8ed8874
         login: Email หรือ WCA ID
-        #original_hash: 1528d10
-        country_iso2: สัญชาติ
+        #original_hash: fa4c045
+        country_iso2: Representing
         #original_hash: ab58155
         dob: วันเกิด
         #original_hash: 7636bbc
@@ -428,8 +428,8 @@ th:
           หาฉันเมื่อมีการสมัครการแข่งขัน
         #original_hash: de60ab8
         delegate_status: สถานะ Delegate
-        #original_hash: 0f21717
-        region: ภูมิภาค
+        #original_hash: d219c68
+        location: สถานที่
         #original_hash: 730db33
         receive_delegate_reports: ฉันต้องการรับ email รายงานการแข่งขันของ WCA
         #original_hash: 57eaf24
@@ -449,8 +449,8 @@ th:
         name_reason: เหตุผลของชื่อ
         #original_hash: fdba578
         cellName: ชื่อของการแข่งขันแบบสั้น
-        #original_hash: d523ebb
-        countryId: ประเทศ
+        #original_hash: 0f21717
+        countryId: ภูมิภาค
         #original_hash: 25b7b06
         cityName: เมือง
         #original_hash: 67cd406
@@ -615,8 +615,8 @@ th:
       person:
         #original_hash: 8c41ae8
         wca_id: บุคคล
-        #original_hash: d523ebb
-        countryId: ประเทศ
+        #original_hash: fa4c045
+        countryId: Representing
         #original_hash: ab58155
         dob: วันเกิด
         #original_hash: 8a754c6
@@ -686,8 +686,8 @@ th:
       regional_organization:
         #original_hash: 709a232
         name: ชื่อ
-        #original_hash: d523ebb
-        country: ประเทศ
+        #original_hash: 0f21717
+        country: ภูมิภาค
         #original_hash: 2e8a57c
         website: Website
         #original_hash: 83fce83
@@ -828,7 +828,7 @@ th:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1603,6 +1603,8 @@ th:
       results_admin: Admin
       #original_hash: 61074f1
       results_database: Database
+      #original_hash: 54e0548
+      results_sidekiq: Sidekiq dashboard
       #original_hash: aee74b8
       new_post: New post
       #original_hash: 0d67445
@@ -1696,7 +1698,7 @@ th:
     support:
       #original_hash: 610edba
       title: สนับสนุน WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         สมาคมลูกบาศก์โลกเป็นองค์กรที่ได้รับการยกเว้นภาษีประเภท 501(c)(3)
         ในฐานะองค์กรไม่แสวงหาผลกำไรที่ดำเนินการโดยอาสาสมัคร 100%
@@ -1916,10 +1918,12 @@ th:
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 8bb2def
         msg: >-
-          คุณไม่สามารถแก้ไขชื่อ วันเกิด เพศ หรือประเทศได้ เนื่องจาก %{reason}
-          กรุณาติดต่อ <a href='%{delegate_url}'>Delegate</a> ถ้าคุณต้องการแก้ไข
+          คุณไม่สามารถแก้ไขชื่อ วันเกิด เพศ หรือภูมิภาคได้ เนื่องจาก %{reason}
+          กรุณาติดต่อ <a href='mailto:results@worldcubeassociation.org'
+          target='_blank'>WCA Results Team</a> หรือ <a
+          href='%{delegate_url}'>Delegate</a> ถ้าคุณต้องการแก้ไข
         reason:
           #original_hash: 370ff12
           assigned: คุณได้รับ WCA ID แล้ว
@@ -2013,10 +2017,10 @@ th:
       dob_past: ต้องเป็นอดีต
       #original_hash: b320913
       dob_recent: ต้องเป็นอดีตอย่างน้อย 2 ปี
-      #original_hash: b64df45
-      already_represented_country: ไม่สามารถเปลี่ยนประเทศเป็นประเทศที่บุคคลได้ใช้ในอดีต
-      #original_hash: b589014
-      must_have_a_change: ชื่อและประเทศต้องต่างกันในการแก้ไขบุคคล
+      #original_hash: afbf275
+      already_represented_country: ไม่สามารถเปลี่ยนภูมิภาคเป็นภูมิภาคที่มีการใช้ในอดีตได้
+      #original_hash: 5fe15d4
+      must_have_a_change: ชื่อหรือภูมิภาคต้องต่างกันในการแก้ไขบุคคล
       #original_hash: 012f032
       must_be_senior: ต้องเป็น Senior Delegate
       #original_hash: 2e582eb
@@ -2087,8 +2091,8 @@ th:
       need_gender: ต้องการเพศ
       #original_hash: ebf1ecb
       need_dob: ต้องการวันเกิด
-      #original_hash: d84a54f
-      need_country: ต้องการประเทศ
+      #original_hash: aab7355
+      need_country: ต้องการภูมิภาค
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: การสมัครไม่สามารถถูกลบและยืนยันได้ในเวลาเดียวกัน
       #original_hash: a38d024
@@ -2153,8 +2157,11 @@ th:
       failed: ไม่สามารถแก้ไขการสมัครได้
       #original_hash: 016b4ae
       deleted: 'ลบการสมัครการแข่งขัน %{comp} สำเร็จแล้ว'
-      #original_hash: 648424f
-      registered: สมัครการแข่งขันสำเร็จแล้ว
+      #original_hash: 7707307
+      registered: >-
+        การสมัครได้ถูกส่งไปยังผู้จัดการแข่งขันแล้ว
+        กรุณาตรวจสอบว่าคุณได้ปฏิบัติตามเงื่อนไขการสมัครทั้งหมดแล้ว
+        เพื่อให้การสมัครของคุณสมบูรณ์
       #original_hash: 82fed60
       imported: นำเข้าการสมัครสำเร็จ
       #original_hash: 3614fd1
@@ -2166,14 +2173,16 @@ th:
       #original_hash: 72e2180
       regards_html: 'ด้วยความนับถือ, %{people}.'
       new:
-        #original_hash: a32db59
-        mail_subject: >-
-          การสมัครการแข่งขัน %{comp_name} ของคุณได้ถูกส่งแล้ว
-          และกำลังรอการยืนยัน
-        #original_hash: 8374583
-        registered_html: 'คุณได้สมัครการแข่งขัน %{comp_name}'
-        #original_hash: 13fabed
-        awaits_approval: ได้รับการสมัครของคุณแล้ว กำลังรอการยืนยันจากผู้จัดการแข่งขัน
+        #original_hash: 63591e5
+        mail_subject: 'การสมัครที่กำลังรอการยืนยัน %{comp_name}'
+        #original_hash: 6aa057a
+        registered_html: >-
+          การสมัครการแข่งขัน %{comp_name}
+          ของคุณกำลังรอการยืนยันจากทางผู้จัดการแข่งขัน
+        #original_hash: f98b245
+        awaits_approval: >-
+          กรุณาตรวจสอบว่าคุณได้ทำตามข้อกำหนดการสมัครการแข่งขันครบแล้ว เช่น
+          ชำระค่าสมัคร
         #original_hash: 826045f
         approval_info_html: >-
           คุณจะได้รับ email เมื่อการสมัครของคุณได้รับการยืนยัน
@@ -2184,8 +2193,8 @@ th:
           หรือติดต่อผู้จัดการแข่งขัน คุณสามารถตรวจสอบสถานะการสมัครของคุณได้ที่
           %{here}
       accepted:
-        #original_hash: 34515b5
-        mail_subject: 'การสมัครการแข่งขัน %{comp_name} ของคุณ ได้รับการยืนยันแล้ว'
+        #original_hash: 6f1fa1f
+        mail_subject: 'การสมัครที่ได้รับการยืนยัน: %{comp_name}'
         #original_hash: 24d2883
         message_html: >-
           การสมัครการแข่งขัน %{comp_name} ของคุณได้รับการยืนยันแล้ว
@@ -2193,8 +2202,8 @@ th:
         #original_hash: 1852cbf
         see_you_soon: 'เรารอที่จะได้พบคุณที่ %{comp_name}!'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: 'คุณได้ถุกย้ายไปอยู่รายชื่อรอสำหรับการแข่งขัน %{comp_name}'
+        #original_hash: 8d26297
+        mail_subject: 'การสมัครที่ถูกย้ายไปอยู่ใน Waitlist: %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           การสมัครการแข่งขัน %{comp_name} ของคุณ ได้ถูกย้ายไปอยู่รายชื่อรอ
@@ -2207,8 +2216,8 @@ th:
         #original_hash: 8f7358f
         email_if_error: ถ้าคุณคิดว่านี่เป็นข้อผิดพลาด กรุณาตอบกลับ email นี้
       deleted:
-        #original_hash: 268e248
-        mail_subject: 'การสมัครการแข่งขัน %{comp_name} ของคุณถูกลบทิ้ง'
+        #original_hash: 8cbc6c0
+        mail_subject: 'การสมัครที่โดนลบ: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'การสมัครการแข่งขัน %{comp_name} ของคุณถูกลบทิ้ง สาเหตุที่เป็นไปได้คือ:'
         causes:
@@ -2229,10 +2238,10 @@ th:
       title: 'การสมัครการแข่งขัน %{comp}'
       #original_hash: 5301648
       edit: แก้ไข
-      #original_hash: 0ab725c
+      #original_hash: beffc45
       country_plural:
-        zero: '%{count} ประเทศ'
-        other: '%{count} ประเทศ'
+        zero: '%{count} ภูมิภาค'
+        other: '%{count} ภูมิภาค'
       #original_hash: 1feee0e
       export_csv: Export to CSV
       #original_hash: 84add5b
@@ -2440,9 +2449,9 @@ th:
         การเปลี่ยนแปลงจะถูกตรวจสอบและฐานข้อมูลจะได้รับการปรับปรุงตาม
       #original_hash: 779b272
       registrations_file_label: ไฟล์การสมัคร
-      #original_hash: 4017f0e
+      #original_hash: 224f3a6
       registrations_file_hint: >-
-        ไฟล์ CSV ที่มีคอลัมน์ สถานะ, ชื่อ, ประเทศ, WCA ID, วันเกิด, เพศ, email,
+        ไฟล์ CSV มีคอลัมน์ สถานะ, ชื่อ, ภูมิภาค, WCA ID, วันเกิด, เพศ, email,
         และแต่ละคอลัมน์ของประเภทการแข่งขัน
       #original_hash: d6fbc9d
       import: นำเข้า
@@ -2834,10 +2843,6 @@ th:
     index:
       #original_hash: db98a68
       title: การแข่งขัน
-      #original_hash: f483b9c
-      disclaimer: >-
-        โปรดทราบว่า อันเนื่องมาจากการระบาดของ COVID-19
-        ทำให้ในบางประเทศไม่สามารถจัดการแข่งขันได้
       #original_hash: 6a72085
       all_events: ทั้งหมด
       #original_hash: 6d76b81
@@ -3491,8 +3496,8 @@ th:
       name: ชื่อ
       #original_hash: 5faa59d
       result: เวลา
-      #original_hash: e0f64f7
-      citizen_of: ผลเมืองของ
+      #original_hash: fa4c045
+      representing: Representing
       #original_hash: 1917f4f
       competition: การแข่งขัน
       #original_hash: e7f6fc5
@@ -3523,8 +3528,8 @@ th:
       name_or_wca_id: ส่วนของชื่อหรือ WCA ID
       #original_hash: 709a232
       name: ชื่อ
-      #original_hash: d523ebb
-      country: ประเทศ
+      #original_hash: fa4c045
+      country: Representing
       #original_hash: 02ae2bd
       podiums: ผู้ชนะ
       #original_hash: 56656a0
@@ -3536,11 +3541,10 @@ th:
       completed_solves: แก้โจทย์สำเร็จ
       #original_hash: fc78642
       personal_records: สถิติส่วนตัวปัจจุบัน
-      #original_hash: e631f13
+      #original_hash: 2ad8fd5
       odd_rank_reason: >-
-        A missing rank or worse country rank than the continent one is due to a
-        change of country. Results from the previous region are not taken into
-        account in the current region ranking.
+        อันดับที่หายไปหรืออันดับภูมิภาคที่แย่กว่าทวีปนั้นเกิดจากการเปลี่ยนแปลงของภูมิภาค
+        ผลลัพธ์จากภูมิภาคก่อนหน้าจะไม่นำมาพิจารณาในการจัดอันดับภูมิภาคปัจจุบัน
       #original_hash: a91508f
       championship_podiums: ผู้ชนะการแข่งขันชิงแชมป์
       championship_podium_levels:
@@ -3839,7 +3843,7 @@ th:
     mission_footer: พันธกิจของ WCA
     #original_hash: cdab446
     who_we_are_title: เราคือใคร
-    #original_hash: 9248dc4
+    #original_hash: c0d9a3e
     who_we_are_content_html: >-
       <p>สมาคมลูกบากศ์โลกควบคุมการแข่งขันสำหรับ puzzle
       เชิงกลที่บิดชิ้นส่วนหรือที่รู้จักกันทั่วไปว่า 'twisty puzzles' Puzzle
@@ -3847,7 +3851,7 @@ th:
       ที่ถูกคิดค้นขึ้นโดยศาสตราจารย์รูบิคจากประเทศฮังการี Puzzle
       ที่ถูกเลือกจะเป็นการแข่งขันอย่างเป็นทางการของ WCA</p> <p>WCA
       พัฒนาขึ้นมากในช่วงทศวรรษที่ผ่านมา มีผู้เข้าร่วมการแข่งขันของเรามากกว่า
-      100,000 คน แม้จะมีการเติบโตอย่างรวดเร็ว
+      200,000 คน แม้จะมีการเติบโตอย่างรวดเร็ว
       แต่เรายังคงเป็นองค์กรที่ดำเนินการโดยอาสาสมัครทั้งหมดตั้งแต่ผู้จัดงานในท้องถิ่นไปจนถึง
       WCA Delegates หรือแม้แต่ WCA Board เราขอขอบคุณทุกคนที่สละเวลาเพื่อทำงานให้
       WCA
@@ -3873,10 +3877,10 @@ th:
       ที่นี่ </a></p>
     #original_hash: f64ccc7
     whats_next_title: ก้าวต่อไปของ WCA
-    #original_hash: a08c67f
+    #original_hash: 487c6a1
     whats_next_content_html: >-
-      <p>สมาคมลูกบากศ์โลกมีผู้เข้าแข่งขันกว่า 100,000 รายใน 140
-      ประเทศและยังเพิ่มขึ้นอย่างต่อเนื่อง! ชุมชน cubing
+      <p>สมาคมลูกบากศ์โลกมีผู้เข้าแข่งขันกว่า 200,000 รายใน 158
+      ภูมิภาคและยังเพิ่มขึ้นอย่างต่อเนื่อง! ชุมชน cubing
       มีการเติบโตอย่างต่อเนื่องตั้งแต่ก่อตั้งขึ้นในปี 2004
       และเราต้องการที่จะสนับสนุนให้สิ่งนี้ดำเนินต่อไปในอนาคต
       โดยเพิ่มการเข้าถึงการแข่งขันไปยังพื้นที่ใหม่
@@ -3905,7 +3909,7 @@ th:
       เรายินดีที่จะร่วมงานกับคุณ! กรุณาติดต่อเราที่ <a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         สมาคมลูกบากศ์โลกเป็นองค์กรที่ได้รับการยกเว้นภาษี 501(c)(3)
         ในฐานะอาสาสมัครที่ไม่แสวงหากำไร 100%
@@ -4179,12 +4183,12 @@ th:
     how_to:
       #original_hash: b243b1f
       title: วิธีการเป็นองค์กรระดับภูมิภาคที่ได้รับการยอมรับจาก WCA
-      #original_hash: f042a88
+      #original_hash: 9f31403
       description: >-
         WCA ยอมรับองค์กรระดับภูมิภาคหลายแห่งทั่วโลก
         วัตถุประสงค์ขององค์กรระดับภูมิภาคของ WCA คือการจัดแข่งขัน WCA
         และสนับสนุนกิจกรรมของ WCA ในภูมิภาคนั้น
-        ประเทศที่ต้องการจัดตั้งองค์กรระดับภูมิภาคได้รับการสนับสนุนให้มีส่วนร่วมใน
+        ภูมิภาคที่ต้องการจัดตั้งองค์กรระดับภูมิภาคได้รับการสนับสนุนให้มีส่วนร่วมใน
         WCA ในพื้นที่ของตนก่อนที่จะส่งใบสมัคร
         สำหรับความช่วยเหลือในการจัดการแข่งขัน WCA ในพื้นที่ของคุณโปรดติดต่อ WCA
         Delegate ที่ใกล้ที่สุด
@@ -4593,22 +4597,6 @@ th:
       content_html: >-
         email ไฟล์ JSON ที่ได้จาก WCA Workbook Assistant ไปที่ <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: ความสัมพันธ์
-      #original_hash: 69ba020
-      find_relations: ค้นหาความสัมพันธ์ระหว่างผู้เข้าแข่งขัน
-      #original_hash: 5d6056d
-      show_relation: แสดงความสัมพันธ์
-      connectives:
-        #original_hash: f85194e
-        was_at: เคยแข่งขันที่
-        #original_hash: 8c00243
-        together_with: ด้วยกันกับ
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: กรุณาแจ้ง WCA ID ที่ถูกต้อง 2 อัน
   search_results:
     index:
       #original_hash: db98a68
@@ -4828,8 +4816,8 @@ th:
       olist1:
         #original_hash: de00462
         '1': การแข่งขัน 2 ครั้งนั้นไม่มีประเภทการแข่งขันที่ซ้ำกัน
-        #original_hash: f7bacc5
-        '2': การแข่งขัน 2 ครั้งนั้นจัดในประเทศที่ต่างกัน
+        #original_hash: b8ff462
+        '2': การแข่งขัน 2 ครั้งนั้นจัดในภูมิภาคที่ต่างกัน
       #original_hash: 5c5cf04
       content2: >-
         การแข่งขัน “3x3x3 Fewest Moves simultaneous competitions”

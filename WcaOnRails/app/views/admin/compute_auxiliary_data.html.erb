@@ -2,7 +2,7 @@
 
 <div class="container">
   <%= render layout: "nav" do %>
-    <%= render 'delayed_job_runner', job: ComputeAuxiliaryData, trigger_link: admin_do_compute_auxiliary_data_path do %>
+    <%= render 'cronjob_status_panel', cronjob: ComputeAuxiliaryData, trigger_link: admin_do_compute_auxiliary_data_path do %>
       <div>
         <h4>This script:</h4>
         <ul class="list-group">

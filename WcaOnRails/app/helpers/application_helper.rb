@@ -45,7 +45,7 @@ module ApplicationHelper
 
   def anchorable(pretty_text, id = nil)
     id ||= pretty_text.parameterize
-    "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='glyphicon glyphicon-link'></span></a> #{pretty_text}</span>".html_safe
+    "<span id='#{id}' class='anchorable'><a href='##{id}'><span class='icon linkify'></span></a> #{pretty_text}</span>".html_safe
   end
 
   WCA_EXCERPT_RADIUS = 50
@@ -231,7 +231,7 @@ module ApplicationHelper
   end
 
   def embedded_map_url(query)
-    "#{EnvVars.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
+    "#{EnvConfig.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
   end
 
   def add_to_packs(*names)

@@ -145,6 +145,7 @@ class AdminController < ApplicationController
   end
 
   def import_results
+    @competition = competition_from_params
     load_result_posting_steps
   end
 
@@ -345,7 +346,7 @@ class AdminController < ApplicationController
   end
 
   def do_compute_auxiliary_data
-    ComputeAuxiliaryData.perform_later unless ComputeAuxiliaryData.in_progress?
+    ComputeAuxiliaryData.perform_later
     redirect_to admin_compute_auxiliary_data_path
   end
 
@@ -353,13 +354,24 @@ class AdminController < ApplicationController
   end
 
   def do_generate_dev_export
-    DumpDeveloperDatabase.perform_later(force_export: true) unless DumpDeveloperDatabase.in_progress?
+    DumpDeveloperDatabase.perform_later
     redirect_to admin_generate_exports_path
   end
 
   def do_generate_public_export
-    DumpPublicResultsDatabase.perform_later(force_export: true) unless DumpPublicResultsDatabase.in_progress?
+    DumpPublicResultsDatabase.perform_later
     redirect_to admin_generate_exports_path
+  end
+
+  def generate_db_token
+    role_credentials = Aws::InstanceProfileCredentials.new
+    token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
+
+    @token = token_generator.auth_token({
+                                          region: EnvConfig.DATABASE_AWS_REGION,
+                                          endpoint: "#{EnvConfig.DATABASE_HOST}:3306",
+                                          user_name: EnvConfig.DATABASE_WRT_USER,
+                                        })
   end
 
   def check_regional_records

@@ -286,7 +286,7 @@ en:
         results_notifications_enabled: "Email me when my results are posted."
         registration_notifications_enabled: "When I organize or delegate a competition, email me when new registrations are submitted."
         delegate_status: "Delegate status"
-        region: "Region"
+        location: "Location"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
@@ -512,7 +512,7 @@ en:
         login: ""
         password: ""
         password_confirmation: ""
-        region: ""
+        location: ""
         remember_me: ""
         results_notifications_enabled: ""
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
@@ -851,6 +851,7 @@ en:
       forum: "Forum"
       teams: "Teams, Committees, and Councils"
       education: "Educational resources"
+      wca_live: "WCA Live"
       contact: "Contact Information"
       speedcubing_history: "Speedcubing History"
       tools: "Tools"
@@ -884,6 +885,8 @@ en:
       results_team: "Results team"
       results_admin: "Admin"
       results_database: "Database"
+      #context: "Sidekiq" is the name of a software product
+      results_sidekiq: "Sidekiq dashboard"
       new_post: "New post"
       team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
@@ -940,7 +943,7 @@ en:
     #context: "Support the WCA" bottom box
     support:
       title: "Support the WCA"
-      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
+      text: "The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-led nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world."
       button: "Learn more about how you can support the WCA"
   #context: Key used in the context of editing a user profile
   users:
@@ -1166,7 +1169,8 @@ en:
       updated: "Updated registration"
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
-      registered: "Successfully registered!"
+      registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
+
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
@@ -1179,10 +1183,11 @@ en:
       #context: for a new registration
       new:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} is submitted and pending approval"
+        mail_subject: "Registration Pending: %{comp_name}"
         #context: "comp_name" contains the competition's name
-        registered_html: "You just registered for %{comp_name}."
-        awaits_approval: "Your registration has been received and is pending approval from the organization team."
+        registered_html: "Your registration for %{comp_name} is now pending, and awaiting approval from the organization team."
+        awaits_approval: "Please ensure that you have followed the competition's registration requirements. For example, a registration fee may need to be paid before the registration is complete."
+
         #context: "here" is replaced by a link to view the registration
         approval_info_html: >-
           You will be emailed when your registration is approved.
@@ -1194,7 +1199,7 @@ en:
       #context: when registration is accepted
       accepted:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} has been accepted"
+        mail_subject: "Registration Accepted: %{comp_name}"
         #context: "comp_name" contains the competition's name, and "here" is replaced by a link to edit the registration
         message_html: "Your registration for %{comp_name} has been accepted. As always, you can check the status of your registration %{here}."
         #context: "comp_name" contains the competition's name
@@ -1202,7 +1207,7 @@ en:
       #context: when registration is moved to waiting list
       pending:
         #context: "comp_name" contains the competition's name
-        mail_subject: "You have been moved to the waiting list for %{comp_name}"
+        mail_subject: "Registration Moved to Waitlist: %{comp_name}"
         #context: "comp_name" contains the competition's name
         moved_html: "Your registration for %{comp_name} has been moved to the waiting list. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be moved to the waiting list
@@ -1213,7 +1218,7 @@ en:
       #context: when registration is deleted
       deleted:
         #context: "comp_name" contains the competition's name
-        mail_subject: "Your registration for %{comp_name} has been deleted"
+        mail_subject: "Registration Deleted: %{comp_name}"
         message_html: "Your registration for %{comp_name} has been deleted. Possible causes are:"
         #context: this key is one of the reasons explaining why a registration could be deleted
         causes:
@@ -1507,7 +1512,6 @@ en:
     #context: on the competition's index page
     index:
       title: "Competitions"
-      disclaimer: "Please note that due to the COVID-19 pandemic, some regions are currently unable to host competitions."
       all_events: "All"
       all_years: "All Years"
       clear: "Clear"
@@ -2036,13 +2040,13 @@ en:
     mission_footer: WCA Mission Statement
     who_we_are_title: Who we are
     who_we_are_content_html: <p>The World Cube Association governs competitions for mechanical puzzles that are operated by twisting groups of pieces, commonly known as 'twisty puzzles'. The most famous of these puzzles is the Rubik's Cube, invented by professor Rubik from Hungary. A selection of these puzzles are chosen as official events of the WCA.</p>
-      <p>As the WCA has evolved over the past decade, over 100,000 people have competed in our competitions. Despite this growth, we remain an organization that is entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
+      <p>As the WCA has evolved over the past decade, over 200,000 people have competed in our competitions. Despite this growth, we remain an organization that is almost entirely run by volunteers, from local organizers to WCA Delegates to even the WCA Board. We are very grateful to everyone who takes time out of their lives to allow the WCA to function. With more financial support, we hope to bring an even greater level of professionalism to our competitions as we continue to sanction more events across the globe.</p>
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
     our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
-    whats_next_content_html: <p>The World Cube Association has had over 100,000 unique competitors across 140 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
+    whats_next_content_html: <p>The World Cube Association has had over 200,000 unique competitors across 158 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
     world_championship_content_html: <p>Every two years, we sanction the competition that ultimately determines the world champion. These events require extremely careful planning by a number of volunteers, as well as a large financial commitment to reserve the venue and make necessary preparations.</p>
     contributing_title: Making a contribution
@@ -2051,7 +2055,7 @@ en:
     other_help_title: Other ways to help
     other_help_content_html: '<p>If you believe you would be able to contribute to the World Cube Association in a non-financial way, we would love to hear from you! Please get in touch with us at <a href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>'
     donation_banner:
-      content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-run nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
+      content: The World Cube Association is a 501(c)(3) tax-exempt organization. As a 100% volunteer-led nonprofit, we welcome your donations to help us further our vision of having more enjoyable competitions all over the world.
       donate_credit: Donate via credit card
       donate_paypal: Donate via Paypal
       donate_other: Other ways to donate
@@ -2354,21 +2358,6 @@ en:
     step7:
       title: "Step 7: Send the results JSON to the WCA"
       content_html: 'E-mail the JSON file exported by the WCA Workbook Assistant to <a href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>'
-  relations:
-    #context: The page used to find a relation between two given cubers.
-    relation:
-      title: "Relations"
-      find_relations: "Find connections between cubers"
-      show_relation: "Show me the relation!"
-      #context: A kind of connectives that link person/competition boxes on the relation line.
-      connectives:
-        #context: Appears between a person and a competition.
-        #context: Note that "was" may refer either to male or female. Do whatever is appropriate for your language, e.g. <male form>/<female form>.
-        was_at: "Was at"
-        #context: Appears between a competition and a person.
-        together_with: "Together with"
-    messages:
-      invalid_wca_ids: "Please provide two different valid WCA IDs."
   search_results:
     index:
       competitions: "Competitions"

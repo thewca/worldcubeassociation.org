@@ -327,7 +327,7 @@ zh-TW:
       #original_hash: 603a218
       wca_id: WCA ID
       #original_hash: fa4c045
-      representing: 代表
+      representing: 區域
     #original_hash: 3fc0ba1
     all_regions: 所有地區
     errors:
@@ -399,7 +399,7 @@ zh-TW:
         #original_hash: 8ed8874
         login: 電子郵件 或 WCA ID
         #original_hash: fa4c045
-        country_iso2: 代表
+        country_iso2: 區域
         #original_hash: ab58155
         dob: 生日
         #original_hash: 7636bbc
@@ -424,8 +424,8 @@ zh-TW:
         registration_notifications_enabled: 當我是該場比賽的代表或是主辦團隊的時候，有人提出報名時，用電子郵件通知我。
         #original_hash: de60ab8
         delegate_status: WCA代表狀態
-        #original_hash: 0f21717
-        region: 地區
+        #original_hash: d219c68
+        location: 地點
         #original_hash: 730db33
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         #original_hash: 57eaf24
@@ -612,7 +612,7 @@ zh-TW:
         #original_hash: 8c41ae8
         wca_id: 人
         #original_hash: fa4c045
-        countryId: 代表
+        countryId: 區域
         #original_hash: ab58155
         dob: 生日
         #original_hash: 8a754c6
@@ -817,7 +817,7 @@ zh-TW:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1018,7 +1018,7 @@ zh-TW:
         #original_hash: 38a95e5
         wdc_incidents: 列出希望WDC回饋的意外事件編號。
         #original_hash: f30abdc
-        remarks: 分享任何關於比賽的其他細節(例如：進步/社群/這地區的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
+        remarks: 分享任何關於比賽的其他細節(例如：進步/社群/這區域的未來展望)。如果您是為了讓前面章節比較簡潔而沒有提到一些事情，盡情在這邊留下評論。
         #original_hash: da39a3e
         discussion_url: ''
       competition_tab:
@@ -1455,6 +1455,8 @@ zh-TW:
       results_admin: 成績管理員
       #original_hash: 61074f1
       results_database: 資料庫
+      #original_hash: 54e0548
+      results_sidekiq: Sidekiq儀表板
       #original_hash: aee74b8
       new_post: 新文章
       #original_hash: 0d67445
@@ -1537,10 +1539,10 @@ zh-TW:
     support:
       #original_hash: 610edba
       title: 幫助WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         世界方塊協會是美利堅合眾國
-        501(c)(3)免稅組織。由於我們是一個100%志願者經營的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
+        501(c)(3)免稅組織。由於我們是一個100%志願者主導的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
       #original_hash: 65c84ec
       button: 我還想知道有哪些方法能幫助WCA
   users:
@@ -2494,8 +2496,6 @@ zh-TW:
     index:
       #original_hash: db98a68
       title: 比賽
-      #original_hash: b24c9c0
-      disclaimer: 請注意：由於COVID-19全球流行疫情的影響，有些區域目前無法舉辦比賽。
       #original_hash: 6a72085
       all_events: 所有項目
       #original_hash: 6d76b81
@@ -2509,7 +2509,7 @@ zh-TW:
       #original_hash: ab478f3
       map: 地圖
       #original_hash: 0f21717
-      region: 地區
+      region: 區域
       #original_hash: bce0641
       search: 搜尋
       #original_hash: 769bb19
@@ -3040,7 +3040,7 @@ zh-TW:
         #original_hash: 3e83afa
         all_events: 所有項目
       #original_hash: 0f21717
-      region: 地區
+      region: 區域
       type_selector:
         #original_hash: 3deb745
         type: 型式
@@ -3073,7 +3073,7 @@ zh-TW:
         #original_hash: f3baa4a
         results_html: '前%{quantity}個成績'
         #original_hash: d46d2ee
-        by_region: 地區分別
+        by_region: 區域分別
         #original_hash: c0dcb86
         mixed: 混合顯示
         #original_hash: 5ee371a
@@ -3099,13 +3099,13 @@ zh-TW:
       #original_hash: 5faa59d
       result: 成績
       #original_hash: fa4c045
-      representing: 代表
+      representing: 區域
       #original_hash: 1917f4f
       competition: 比賽
       #original_hash: e7f6fc5
       solves: 還原內容
       #original_hash: 0f21717
-      region: 地區
+      region: 區域
       #original_hash: 70c07ec
       world: 全世界
       type_options:
@@ -3131,7 +3131,7 @@ zh-TW:
       #original_hash: 709a232
       name: 姓名
       #original_hash: fa4c045
-      country: 代表
+      country: 區域
       #original_hash: 02ae2bd
       podiums: 獎牌數
       #original_hash: 56656a0
@@ -3392,11 +3392,11 @@ zh-TW:
     mission_footer: WCA的使命
     #original_hash: cdab446
     who_we_are_title: 我們是誰
-    #original_hash: 9248dc4
+    #original_hash: 19b86da
     who_we_are_content_html: >-
       <p>世界方塊協會掌管方塊比賽，這些方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」（twisty
       puzzles）。其中最著名的就是由匈牙利的魯比克教授（professor Rubik）發明的3x3x3魔術方塊（Rubik's
-      Cube）。這些方塊中選出了一系列被當成是WCA的正式比賽項目。</p><p>WCA已經在過去的十年來已成長很多，超過100,000名參賽者已經參加過我們的比賽。儘管有如此的成長，我們的組織仍然是由一群完全的志願者來經營，從最基本的當地團體，往上的WCA代表甚至是最上層的WCA董事會也不利外。我們非常感謝每一位貢獻自己的時間來讓WCA得以運作的人。有著更多的經濟上的支持後，我們希望在認可全球各地的比賽的同時，能夠把我們的比賽提升到更專業的層級。</p>
+      Cube）。這些方塊中選出了一系列被當成是WCA的正式比賽項目。</p><p>WCA已經在過去的十年來已成長很多，超過100,000名參賽者已經參加過我們的比賽。儘管有如此的成長，我們的組織仍然幾乎都是志願者來經營，從最基本的當地團體，往上的WCA代表甚至是最上層的WCA董事會也不利外。我們非常感謝每一位貢獻自己的時間來讓WCA得以運作的人。有著更多的經濟上的支持後，我們希望在認可全球各地的比賽的同時，能夠把我們的比賽提升到更專業的層級。</p>
     #original_hash: bccd8c5
     spirit: 我們的精神是，全世界的人們可以在一個友善的環境下一起玩得開心，互相幫助並保持著運動家風度。
     #original_hash: 69131cc
@@ -3429,10 +3429,10 @@ zh-TW:
       <p>如果您相信您能夠用非金援方式協助世界方塊協會，我們感到很高興！請寄信到<a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>與我們聯絡。</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         世界方塊協會是美利堅合眾國
-        501(c)(3)免稅組織。由於我們是一個100%志願者經營的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
+        501(c)(3)免稅組織。由於我們是一個100%志願者主導的非營利團體，我們歡迎您的捐款，這讓我們能夠拓展我們的願景，並幫助全世界舉辦更讓人樂於其中的比賽。
       #original_hash: 24c87db
       donate_credit: 用信用卡捐款
       #original_hash: 0e5a9c3
@@ -3633,7 +3633,7 @@ zh-TW:
       #original_hash: c3f104d
       role: 職位
       #original_hash: 0f21717
-      region: 地區
+      region: 區域
   regional_organizations:
     #original_hash: 37b8fdc
     title: 區域組織
@@ -3936,22 +3936,6 @@ zh-TW:
       content_html: >-
         透過電子郵件將WCA成績小幫手產生的JSON檔傳送至<a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>。
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: 關聯
-      #original_hash: 69ba020
-      find_relations: 尋找方塊玩家之間的關聯
-      #original_hash: 5d6056d
-      show_relation: 讓我看看關聯！
-      connectives:
-        #original_hash: f85194e
-        was_at: 參加了...
-        #original_hash: 8c00243
-        together_with: 也有參加的是...
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 請提供兩個有效且不同的WCA ID。
   search_results:
     index:
       #original_hash: db98a68

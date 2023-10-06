@@ -13,79 +13,8 @@ npm_package 'yarn' do
   options ['--global']
 end
 
-secrets = WcaHelper.get_secrets(self)
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
-if username == "cubing"
-  user_lockfile = '/tmp/cubing-user-initialized'
-  cmd = ["openssl", "passwd", "-1", secrets['cubing_password']].shelljoin
-  hashed_pw = `#{cmd}`.strip
-  user username do
-    manage_home true
-    home "/home/#{username}"
-    shell '/bin/bash'
-    password hashed_pw
-    not_if { ::File.exist?(user_lockfile) }
-  end
-
-  # Trick to run code immediately and last copied from:
-  #  https://gist.github.com/nvwls/7672039
-  ruby_block 'last' do
-    block do
-      puts "#"*80
-      puts "# Created user #{username} with password #{secrets['cubing_password']}"
-      puts "#"*80
-    end
-    not_if { ::File.exist?(user_lockfile) }
-  end
-  ruby_block 'notify' do
-    block do
-      true
-    end
-    notifies :run, 'ruby_block[last]', :delayed
-    not_if { ::File.exist?(user_lockfile) }
-  end
-
-  file user_lockfile do
-    action :create_if_missing
-  end
-
-  ssh_known_hosts_entry 'github.com'
-  unless Dir.exist? repo_root
-    branch = "master"
-    git repo_root do
-      repository "https://github.com/thewca/worldcubeassociation.org.git"
-      revision branch
-      # See http://lists.opscode.com/sympa/arc/chef/2015-03/msg00308.html
-      # for the reason for checkout_branch and "enable_checkout false"
-      checkout_branch branch
-      enable_checkout false
-      action :sync
-      enable_submodules true
-
-      user username
-      group username
-    end
-  end
-end
 rails_root = "#{repo_root}/WcaOnRails"
-
-#### SSH Keys
-# acces.sh depends on jq https://github.com/FatBoyXPC/acces.sh
-package 'jq'
-
-gen_auth_keys_path = "/home/#{username}/gen-authorized-keys.sh"
-template gen_auth_keys_path do
-  source "gen-authorized-keys.sh.erb"
-  mode 0755
-  owner username
-  group username
-  variables({
-              secrets: secrets,
-            })
-end
-execute gen_auth_keys_path do
-  user username
-end
 
 #### Mysql
 package 'mysql-client-8.0'
@@ -96,45 +25,12 @@ if node.chef_environment == "production"
   # In production mode, we use Amazon RDS.
   db['host'] = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
-  db['password'] = secrets['mysql_password']
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon RDS.
   db['host'] = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
   db['read_replica'] = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
-  db['password'] = secrets['mysql_password']
-else
-  # If not in the cloud, then we run a local mysql instance.
-  socket = "/var/run/mysqld/mysqld.sock"
-  db['host'] = 'localhost'
-  db['socket'] = socket
-  db['password'] = secrets['mysql_password']
-  mysql_service 'default' do
-    version '8.0'
-    charset 'utf8mb4'
-    bind_address '127.0.0.1'
-    initial_root_password secrets['mysql_password']
-    # Force default socket to make rails happy
-    socket socket
-    action [:create, :start]
-  end
-  mysql_config 'default' do
-    source 'mysql-wca.cnf.erb'
-    instance 'default'
-    notifies :restart, 'mysql_service[default]'
-    action :create
-  end
 end
 read_replica = db["read_replica"]
-template "/etc/my.cnf" do
-  source "my.cnf.erb"
-  mode 0644
-  owner 'root'
-  group 'root'
-  variables({
-              secrets: secrets,
-              db: db,
-            })
-end
 
 ### Fonts for generating PDFs
 package 'fonts-thai-tlwg'
@@ -274,28 +170,31 @@ redis = {
 
 if node.chef_environment == "production"
   # In production mode, we use Amazon ElasticCache.
-  redis[:host] = "redis-main-prod-001.iebvzt.0001.usw2.cache.amazonaws.com"
+  redis[:cache_host] = "wca-main-cache-001.iebvzt.0001.usw2.cache.amazonaws.com"
+  redis[:sidekiq_host] = "wca-main-sidekiq-001.iebvzt.0001.usw2.cache.amazonaws.com"
 elsif node.chef_environment == "staging"
   # In staging mode, we use Amazon ElasticCache.
-  redis[:host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
+  redis[:cache_host] = "redis-main-staging-001.iebvzt.0001.usw2.cache.amazonaws.com"
+
+  # Yes, in staging mode we dump the cache and Sidekiq jobs to the same Redis instance.
+  redis[:sidekiq_host] = redis[:cache_host]
 end
 
-redis_url = "redis://#{redis[:host]}:#{redis[:port]}"
+cache_redis_url = "redis://#{redis[:cache_host]}:#{redis[:port]}"
+sidekiq_redis_url = "redis://#{redis[:sidekiq_host]}:#{redis[:port]}"
 
-#### Rails secrets
-# Don't be confused by the name of this file! This is used by both our staging
-# and our prod environments (because staging runs in the rails "production"
-# mode).
+#### Rails environment
+# Secrets are handled using Hashicorp Vault
 template "#{rails_root}/.env.production" do
   source "env.production.erb"
   mode 0644
   owner username
   group username
   variables({
-              secrets: secrets,
-              redis_url: redis_url,
+              cache_redis_url: cache_redis_url,
+              sidekiq_redis_url: sidekiq_redis_url,
               db_host: db["host"],
-              read_replica_host: read_replica
+              read_replica_host: db["read_replica"]
             })
 end
 
@@ -307,10 +206,16 @@ end
 
 package "php-fpm"
 
+# Download certificate bundle for the RDS database
+rds_certificate_pem = '/etc/phpmyadmin/rds-combined-ca-bundle.pem'
+execute "wget https://s3.amazonaws.com/rds-downloads/rds-combined-ca-bundle.pem -O ${rds_certificate_pem}" do
+  not_if { ::File.exist?(rds_certificate_pem) }
+end
+
 template "etc/phpmyadmin/conf.d/wca.php" do
   source "phpMyAdmin_config.inc.php.erb"
   variables({
-              secrets: secrets,
+              rds_certificate_pem: rds_certificate_pem,
               db: db,
             })
 end
@@ -329,6 +234,19 @@ execute "bundle install #{'--deployment --without development test' if rails_env
   environment({
                 "RACK_ENV" => rails_env,
               })
+end
+
+### Sidekiq
+template "/etc/systemd/user/sidekiq.service" do
+  source "sidekiq.service.erb"
+  variables({
+              username: username,
+              repo_root: repo_root,
+            })
+end
+execute "start-sidekiq" do
+  command "systemctl --user sidekiq start"
+  not_if "ps -efw | grep sidekiq"
 end
 
 if node.chef_environment == "development"
@@ -382,7 +300,6 @@ template "/home/#{username}/wca.screenrc" do
               rails_root: rails_root,
               rails_env: rails_env,
               db_host: db["host"],
-              secrets: secrets,
             })
 end
 template "/home/#{username}/startall" do

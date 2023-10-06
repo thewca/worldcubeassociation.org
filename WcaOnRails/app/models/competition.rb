@@ -29,6 +29,7 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
 
@@ -77,6 +78,7 @@ class Competition < ApplicationRecord
   scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
+  scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
 
   enum guest_entry_status: {
     unclear: 0,
@@ -150,6 +152,7 @@ class Competition < ApplicationRecord
     announced_by
     cancelled_by
     results_posted_by
+    posting_by
     main_event_id
     waiting_list_deadline_date
     event_change_deadline_date
@@ -485,7 +488,7 @@ class Competition < ApplicationRecord
       end
     end
 
-    if reg_warnings.any?
+    if reg_warnings.any? && user&.can_manage_competition?(self)
       warnings = reg_warnings.merge(warnings)
     end
 
@@ -579,6 +582,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'posting_user',
              'inbox_results',
              'inbox_persons'
           # Do nothing as they shouldn't be cloned.
@@ -814,7 +818,7 @@ class Competition < ApplicationRecord
   end
 
   def internal_website
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   def managers
@@ -1668,6 +1672,7 @@ class Competition < ApplicationRecord
       set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
       update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
       WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
+      set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
 
       # Trigger validations on the competition itself, and throw an error to rollback if necessary.
       # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
@@ -1683,6 +1688,24 @@ class Competition < ApplicationRecord
       #   artificially pretend like the Competition object was updated anyways.
       touch
     end
+  end
+
+  def set_wcif_competitor_limit!(wcif_competitor_limit, current_user)
+    return if wcif_competitor_limit == self.competitor_limit
+
+    if confirmed? && !current_user.can_admin_competitions?
+      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
+    end
+
+    unless competitor_limit_enabled?
+      raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
+    end
+
+    unless wcif_competitor_limit.present?
+      raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
+    end
+
+    self.competitor_limit = wcif_competitor_limit
   end
 
   def set_wcif_series!(wcif_series, current_user)
@@ -1874,7 +1897,7 @@ class Competition < ApplicationRecord
   end
 
   def url
-    Rails.application.routes.url_helpers.competition_url(self, host: EnvVars.ROOT_URL)
+    Rails.application.routes.url_helpers.competition_url(self, host: EnvConfig.ROOT_URL)
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

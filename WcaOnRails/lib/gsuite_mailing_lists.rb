@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-ENV['GOOGLE_APPLICATION_CREDENTIALS'] = Rails.root.join("../secrets/application_default_credentials.json").to_s
+ENV['GOOGLE_APPLICATION_CREDENTIALS'] = AppSecrets.GOOGLE_APPLICATION_CREDENTIALS
 
 require 'googleauth'
 require 'googleauth/stores/file_token_store'

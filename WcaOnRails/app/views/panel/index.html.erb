@@ -3,17 +3,19 @@
 <div class="container">
   <h1><%= yield(:title) %></h1>
 
-  <h2>Staff</h2>
+  <% if current_user&.staff? %>
+    <h2>Staff</h2>
 
-  <ul>
-    <%= documents_list("policies/internal") %>
-    <li>
-      <%= link_to "Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf" %>
-    </li>
-    <li>
-      <%= link_to "Merch Order Form (with staff discount)", "https://forms.gle/RAor4LyzNCxs6Mvb8" %>
-    </li>
-  </ul>
+    <ul>
+      <%= documents_list("policies/internal") %>
+      <li>
+        <%= link_to "Staff crash course", "/edudoc/staff-crash-course/staff_crash_course.pdf" %>
+      </li>
+      <li>
+        <%= link_to "Merch Order Form (with staff discount)", "https://forms.gle/RAor4LyzNCxs6Mvb8" %>
+      </li>
+    </ul>
+  <% end %>
 
   <% if current_user&.can_view_delegate_matters? %>
     <h2>Delegates</h2>
@@ -21,6 +23,9 @@
     <ul>
       <li>
         <%= link_to "Delegate Crash course", panel_delegate_crash_course_path %>
+      </li>
+      <li>
+        <%= link_to "Guidelines for Disciplinary Incidents", "/edudoc/guidelines-for-disciplinary-incidents/guidelines-for-disciplinary-incidents.pdf" %>
       </li>
       <li>
         <%= link_to "Delegates", delegates_stats_path %>

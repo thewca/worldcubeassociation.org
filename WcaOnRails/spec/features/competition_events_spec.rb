@@ -10,15 +10,17 @@ RSpec.feature "Competition events management" do
   end
 
   context "unconfirmed competition" do
-    let(:competition) { FactoryBot.create(:competition, event_ids: [], qualification_results_reason: "Because I need them for testing!") }
+    let(:competition) { FactoryBot.create(:competition, event_ids: [], qualification_results: true, qualification_results_reason: "Because I need them for testing!") }
 
     background do
       sign_in FactoryBot.create(:admin)
       visit "/competitions/#{competition.id}/events/edit"
+
       within_event_panel("333") do
         click_button "Add event"
-        select("1 round", from: "selectRoundCount")
       end
+      select_from_ui(find_event_panel("333"), "selectRoundCount", "1 round")
+
       save_events_react
       competition.reload
     end
@@ -29,10 +31,13 @@ RSpec.feature "Competition events management" do
 
     scenario "remove event", js: true do
       within_event_panel("333") do
-        accept_confirm("Are you sure you want to remove all 1 round of 3x3x3 Cube?") do
-          click_button "Remove event"
-        end
+        click_button "Remove event"
       end
+
+      within_modal do
+        click_button "Yes"
+      end
+
       save_events_react
 
       expect(competition.reload.events.map(&:id)).to eq []
@@ -47,17 +52,20 @@ RSpec.feature "Competition events management" do
       let(:round_333_1) { comp_event_333.rounds.first }
 
       scenario "close with unsaved changes prompts user before discarding changes", js: true, retry: 3 do
-        within_round("333", 1) { find("[name=timeLimit]").click }
+        find_round("333", 1).find(".round-row__time-limit").find("button").click
 
-        page.accept_confirm "Are you sure you want to discard your changes?", wait: 10 do
-          within_modal do
-            fill_in "minutes", with: "4"
-            click_button "Close"
-          end
+        modal = find_modal
+        modal.find(:css, "input[type='text']").fill_in with: "4:00.00"
+        modal.click_button "Close"
+
+        # Modal asking to discard changes.
+        within_modal do
+          click_button "Yes"
         end
 
         # Now that we discarded that change, try opening the modal again and check what value is shown.
-        within_round("333", 1) { find("[name=timeLimit]").click }
+        find_round("333", 1).find(".round-row__time-limit").find("button").click
+
         within_modal do
           expect(page).to have_text "Competitors have 10 minutes for each of their solves."
         end
@@ -70,25 +78,25 @@ RSpec.feature "Competition events management" do
       end
 
       scenario "change time limit to 5 minutes", js: true, retry: 3 do
-        within_round("333", 1) { find("[name=timeLimit]").click }
+        find_round("333", 1).find(".round-row__time-limit").find("button").click
 
-        within_modal do
-          fill_in "minutes", with: "5"
-          click_button "Ok"
-        end
+        modal = find_modal
+        modal.find(:css, "input[type='text']").fill_in with: "5:00.00"
+        modal.click_button "Ok"
+
         save_events_react
 
         expect(round_333_1.reload.time_limit_to_s).to eq "5:00.00"
       end
 
       scenario "change cutoff to best of 2 in 2 minutes", js: true, retry: 3 do
-        within_round("333", 1) { find("[name=cutoff]").click }
+        find_round("333", 1).find(".round-row__cutoff").find("button").click
 
-        within_modal do
-          select "Best of 2", from: "Cutoff format"
-          fill_in "minutes", with: "2"
-          click_button "Ok"
-        end
+        modal = find_modal
+        select_from_ui(modal, "cutoffFormat", "Best of 2")
+        modal.find("div.field", text: "Result").find("input").fill_in with: "2:00.00"
+        modal.click_button "Ok"
+
         save_events_react
 
         expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get < 2:00.00"
@@ -96,31 +104,35 @@ RSpec.feature "Competition events management" do
 
       scenario "change advancement condition to top 12 people", js: true, retry: 3 do
         # Add a second round of 333 so we can set an advancement condition on round 1.
-        within_event_panel("333") { select("2 rounds", from: "selectRoundCount") }
+        event_panel = find_event_panel("333")
+        select_from_ui(event_panel, "selectRoundCount", "2 rounds")
 
-        within_round("333", 1) { find("[name=advancementCondition]").click }
+        find_round("333", 1).find(".round-row__advancement-condition").find("button").click
 
-        within_modal do
-          select "Ranking", from: "Type"
-          fill_in "Ranking", with: "12"
-          click_button "Ok"
-        end
+        modal = find_modal
+        select_from_ui(modal, "advancementType", "Ranking")
+        modal.find(:css, "input[type='number'][label='Ranking']").fill_in with: "12"
+        modal.click_button "Ok"
+
         save_events_react
 
         expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
       end
 
       scenario "change qualification time to any result", js: true, retry: 3 do
-        within_event_panel("333") { find("[name=qualification]").click }
+        find_event_panel("333").find("[name='qualification']").click
 
         qualification_date = 7.days.from_now.to_date
 
-        within_modal do
-          select "Single", from: "Result Type"
-          select "Any result", from: "Qualification Type"
-          fill_in "Qualification Deadline", with: qualification_date.strftime('%m/%d/%Y')
-          click_button "Ok"
-        end
+        modal = find_modal
+        select_from_ui(modal, "qualificationResultType", "Single")
+        select_from_ui(modal, "qualificationType", "Any result")
+
+        modal.find("div.field", text: "Qualification Deadline")
+             .find("input")
+             .fill_in with: qualification_date.strftime('%m/%d/%Y')
+
+        modal.click_button "Ok"
 
         save_events_react
         comp_event_333.reload
@@ -138,7 +150,7 @@ RSpec.feature "Competition events management" do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/events/edit"
       within_event_panel("333") do
-        expect(find_button("Add event", disabled: true)).not_to be_nil
+        expect(find_button("Add event", disabled: true)).to be
       end
     end
 
@@ -146,7 +158,7 @@ RSpec.feature "Competition events management" do
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/events/edit"
       within_event_panel("222") do
-        expect(find_button("Remove event", disabled: true)).not_to be_nil
+        expect(find_button("Remove event", disabled: true)).to be
       end
     end
 
@@ -168,6 +180,11 @@ RSpec.feature "Competition events management" do
       within_event_panel("444") do
         click_button "Remove event"
       end
+
+      within_modal do
+        click_button "Yes"
+      end
+
       save_events_react
 
       expect(competition.reload.events.map(&:id)).to match_array %w(222)
@@ -184,6 +201,12 @@ RSpec.feature "Competition events management" do
           click_button "Remove event"
         end
 
+        within_modal do
+          click_button "Yes"
+        end
+
+        # The alert that is expected here implies the 400 error message
+        #   (which is displayed in an alert in our current frontend)
         accept_alert do
           save_events_react(wait_for_completion: false)
         end
@@ -195,20 +218,7 @@ RSpec.feature "Competition events management" do
         sign_in FactoryBot.create(:admin)
         visit "/competitions/#{competition.id}/events/edit"
 
-        within_event_panel("222") { find("[name=qualification]").click }
-
-        within_modal do
-          select "Single", from: "Result Type"
-          select "Any result", from: "Qualification Type"
-          fill_in "Qualification Deadline", with: 7.days.from_now.strftime('%m/%d/%Y')
-          click_button "Ok"
-        end
-
-        accept_alert do
-          save_events_react(wait_for_completion: false)
-        end
-
-        expect(comp_event_222.reload.qualification).to be_nil
+        expect(find_event_panel("222").find(:css, '[name="qualification"].disabled')).to be
       end
     end
   end
@@ -221,23 +231,24 @@ RSpec.feature "Competition events management" do
       FactoryBot.create :round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/events/edit"
-      within_event_panel("333") do
-        expect(find("[name=selectRoundCount]").disabled?).to eq true
-      end
-      within_round("333", 1) do
-        expect(find("[name=format]").disabled?).to eq true
-        expect(find("[name=cutoff]").disabled?).to eq true
-        expect(find("[name=timeLimit]").disabled?).to eq true
-        expect(find("[name=advancementCondition]").disabled?).to eq true
-      end
+
+      expect(find_event_panel("333").find('[name="selectRoundCount"].disabled')).to be
+
+      round = find_round("333", 1)
+
+      expect(round.find(".round-row__format").find("div[name='format'].disabled")).to be
+      expect(round.find(".round-row__scramble-set-count").find("input").disabled?).to be
+      expect(round.find(".round-row__time-limit").find("button").disabled?).to be
+      expect(round.find(".round-row__cutoff").find("button").disabled?).to be
+      expect(round.find(".round-row__advancement-condition").find("button").disabled?).to be
     end
 
     scenario "board member can update events", js: true do
       sign_in FactoryBot.create(:user, :board_member)
       visit "/competitions/#{competition.id}/events/edit"
-      within_event_panel("333") do
-        select("2 rounds", from: "selectRoundCount")
-      end
+
+      event_panel = find_event_panel("333")
+      select_from_ui(event_panel, "selectRoundCount", "2 rounds")
       save_events_react
 
       expect(competition_event.reload.rounds.length).to eq 2
@@ -245,18 +256,30 @@ RSpec.feature "Competition events management" do
   end
 end
 
+def find_event_panel(event_id, &)
+  find(:css, ".event-panel.event-#{event_id}", &)
+end
+
+def find_round(event_id, round_number, &)
+  find_event_panel(event_id).find(:css, "[name='round-#{round_number}']", &)
+end
+
 def within_event_panel(event_id, &)
-  within(:css, ".panel.event-#{event_id}", &)
+  within(:css, ".event-panel.event-#{event_id}", &)
 end
 
 def within_round(event_id, round_number, &)
   within_event_panel(event_id) do
-    within(:css, ".round-1", &)
+    within(:css, "[name='round-#{round_number}']", &)
   end
 end
 
+def find_modal(&)
+  all(:css, '.modal.visible', &).last
+end
+
 def within_modal(&)
-  within(:css, '.modal-content', &)
+  within(find_modal(&))
 end
 
 def save_events_react(wait_for_completion: true)
@@ -265,4 +288,10 @@ def save_events_react(wait_for_completion: true)
   first(:button, "save your changes!", visible: true).click
   # Wait for ajax to complete.
   expect(page).to have_no_content("You have unsaved changes") if wait_for_completion
+end
+
+def select_from_ui(parent, name, option)
+  field = parent.find(:css, "div[name='#{name}']")
+  field.click
+  field.find(:css, "div[role='option']", text: option).click
 end

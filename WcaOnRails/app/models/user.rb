@@ -72,7 +72,7 @@ class User < ApplicationRecord
          :recoverable, :rememberable, :trackable, :validatable,
          :confirmable
   devise :two_factor_authenticatable,
-         otp_secret_encryption_key: EnvVars.OTP_ENCRYPTION_KEY
+         otp_secret_encryption_key: AppSecrets.OTP_ENCRYPTION_KEY
   BACKUP_CODES_LENGTH = 8
   NUMBER_OF_BACKUP_CODES = 10
   devise :two_factor_backupable,
@@ -597,7 +597,7 @@ class User < ApplicationRecord
   end
 
   def admin?
-    Rails.env.production? && EnvVars.WCA_LIVE_SITE? ? software_team_admin? : software_team?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
   def any_kind_of_delegate?
@@ -763,6 +763,10 @@ class User < ApplicationRecord
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.results_posted?)
   end
 
+  def can_update_qualifications?(competition)
+    can_update_events?(competition) && competition.qualification_results? && competition.qualification_results_reason.present?
+  end
+
   def can_update_competition_series?(competition)
     can_admin_competitions? || (can_manage_competition?(competition) && !competition.confirmed?)
   end
@@ -915,7 +919,7 @@ class User < ApplicationRecord
     fields += editable_avatar_fields(user)
     # Delegate Status Fields
     if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status senior_delegate_id region)
+      fields += %i(delegate_status senior_delegate_id location)
     end
     fields
   end
@@ -1074,7 +1078,7 @@ class User < ApplicationRecord
 
   def url
     if wca_id
-      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvVars.ROOT_URL)
+      Rails.application.routes.url_helpers.person_url(wca_id, host: EnvConfig.ROOT_URL)
     else
       ""
     end
@@ -1093,7 +1097,7 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if any_kind_of_delegate?
-      default_options[:methods].push("email", "region", "senior_delegate_id")
+      default_options[:methods].push("email", "location", "senior_delegate_id")
     end
 
     options = default_options.merge(options || {})

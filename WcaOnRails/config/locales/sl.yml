@@ -2911,22 +2911,6 @@ sl:
         Pošljite E-pošto z JSON datoteko, izvoženo iz WCA asistenta za delovni
         zvezek na <a
         href="mailto:results@worldcubeassociation.org">results@worldcubeassociation.org</a>.
-  relations:
-    relation:
-      #original_hash: 6519fe1
-      title: Vezi
-      #original_hash: 69ba020
-      find_relations: Najdi povezave med kocarji
-      #original_hash: 5d6056d
-      show_relation: Pokaži mi povezavo!
-      connectives:
-        #original_hash: f85194e
-        was_at: Je bil na
-        #original_hash: 8c00243
-        together_with: Skupaj z
-    messages:
-      #original_hash: 4406a0b
-      invalid_wca_ids: 'Prosimo, da vpišete dva različna in veljavna WCA ID-ja.'
   search_results:
     index:
       #original_hash: db98a68
