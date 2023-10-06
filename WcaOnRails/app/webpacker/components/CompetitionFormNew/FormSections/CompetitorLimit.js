@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import SubSection from './SubSection';
 import { InputBooleanSelect, InputNumber, InputTextArea } from '../Inputs/FormInputs';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function CompetitorLimit() {
-  const limitData = useContext(FormContext).formData.competitorLimit;
+  const { competition: { competitorLimit: limitData } } = useStore();
 
   const hasLimit = limitData && limitData.competitor_limit_enabled;
   return (

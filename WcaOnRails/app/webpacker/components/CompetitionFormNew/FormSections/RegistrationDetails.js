@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import SubSection from './SubSection';
 import {
   InputBoolean,
@@ -8,10 +8,10 @@ import {
   InputMarkdown,
   InputNumber,
 } from '../Inputs/FormInputs';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function RegistrationDetails({ currency }) {
-  const regDetailsData = useContext(FormContext).formData.regDetails;
+  const { competition: { regDetails: regDetailsData } } = useStore();
 
   const canRegOnSite = regDetailsData && regDetailsData.on_the_spot_registration === 'true';
   return (

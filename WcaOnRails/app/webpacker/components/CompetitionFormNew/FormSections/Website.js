@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import SubSection from './SubSection';
 import { InputBoolean, InputString } from '../Inputs/FormInputs';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function Website() {
-  const websiteData = useContext(FormContext).formData.website;
+  const { competition: { website: websiteData } } = useStore();
 
   const usingExternalWebsite = websiteData && !websiteData.generate_website;
   const usingExternalRegistration = websiteData && !websiteData.use_wca_registration;

@@ -6,9 +6,9 @@ import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityTok
 import { seriesEligibleCompetitionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
-import FormContext from '../State/FormContext';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -21,7 +21,7 @@ function MissingInfo({ missingDate, missingLocation }) {
 
 export default function SeriesComps() {
   const {
-    formData: {
+    competition: {
       id,
       venue: {
         coordinates,
@@ -32,7 +32,7 @@ export default function SeriesComps() {
     },
     setFormData,
     setMarkers,
-  } = useContext(FormContext);
+  } = useStore();
 
   const [nearby, setNearby] = useState();
   const [loading, setLoading] = useState(false);

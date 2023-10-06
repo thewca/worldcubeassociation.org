@@ -5,12 +5,12 @@ import {
   Table, Message, Button, Popup,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import FormContext from '../State/FormContext';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import { events } from '../../../lib/wca-data.js.erb';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 function NotConfirmedIcon() {
   return (
@@ -161,11 +161,11 @@ function MissingInfo() {
 
 function RegistrationCollisionsContent() {
   const {
-    formData: {
+    competition: {
       id,
       registration_open,
     },
-  } = useContext(FormContext);
+  } = useStore();
 
   const [loading, setLoading] = useState(false);
   const [collisions, setCollisions] = useState();

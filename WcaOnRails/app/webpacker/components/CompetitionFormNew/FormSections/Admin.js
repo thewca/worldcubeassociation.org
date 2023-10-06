@@ -1,10 +1,10 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import SubSection from './SubSection';
 import { InputBoolean } from '../Inputs/FormInputs';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function Admin() {
-  const { persisted, adminView } = useContext(FormContext);
+  const { persisted, adminView } = useStore();
 
   if (!persisted || !adminView) return null;
 

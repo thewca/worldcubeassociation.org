@@ -1,6 +1,5 @@
 import React, {
   useCallback,
-  useContext,
   useEffect,
   useState,
 } from 'react';
@@ -8,7 +7,7 @@ import { Button, Form, Icon } from 'semantic-ui-react';
 import { championshipRegionsUrl } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 function Championship({
   value,
@@ -71,9 +70,9 @@ async function fetchRegions() {
 }
 
 export default function InputChampionship({ id }) {
-  const { formData, setFormData } = useContext(FormContext);
+  const { competition } = useStore();
 
-  const rawValue = formData[id];
+  const rawValue = competition[id];
 
   const value = Array.isArray(rawValue) ? rawValue : [];
   const [internalValue, setInternalValue] = useState(value.map((c, i) => ({

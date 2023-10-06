@@ -14,7 +14,7 @@ import { GeoSearchControl as SearchControl, OpenStreetMapProvider } from 'leafle
 import { nearbyCompetitionDistanceWarning, nearbyCompetitionDistanceDanger } from '../../../lib/wca-data.js.erb';
 import { blueMarker } from '../../../lib/leaflet-wca/markers';
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {
@@ -130,10 +130,10 @@ export default function InputMap({
   idLong,
   markers,
 }) {
-  const { formData, setFormData } = useContext(FormContext);
+  const { competition } = useStore();
 
-  const lat = Number.isNaN(parseFloat(formData[idLat])) ? 0 : Number(formData[idLat]);
-  const long = Number.isNaN(parseFloat(formData[idLong])) ? 0 : Number(formData[idLong]);
+  const lat = Number.isNaN(parseFloat(competition[idLat])) ? 0 : Number(competition[idLat]);
+  const long = Number.isNaN(parseFloat(competition[idLong])) ? 0 : Number(competition[idLong]);
 
   const setLat = (newLat) => setFormData((d) => ({ ...d, [idLat]: newLat }));
   const setLong = (newLong) => setFormData((d) => ({ ...d, [idLong]: newLong }));

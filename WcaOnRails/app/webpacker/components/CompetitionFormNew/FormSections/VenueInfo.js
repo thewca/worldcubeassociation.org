@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Form } from 'semantic-ui-react';
 import { countries } from '../../../lib/wca-data.js.erb';
 import { InputSelect, InputString } from '../Inputs/FormInputs';
 import MapInput from '../Inputs/InputMap';
 import I18n from '../../../lib/i18n';
 import SubSection from './SubSection';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 const countriesOptions = Object.values(countries.byIso2).map((country) => ({
   key: country.id,
@@ -14,7 +14,7 @@ const countriesOptions = Object.values(countries.byIso2).map((country) => ({
 })).sort((a, b) => a.text.localeCompare(b.text));
 
 export default function VenueInfo() {
-  const { markers } = useContext(FormContext);
+  const { markers } = useStore();
 
   return (
     <SubSection section="venue">

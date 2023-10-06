@@ -1,7 +1,7 @@
 import React from 'react';
 import { List, Message } from 'semantic-ui-react';
-import FormContext from './State/FormContext';
 import I18n from '../../lib/i18n';
+import { useStore } from '../../lib/providers/StoreProvider';
 
 // https://stackoverflow.com/questions/28336104/humanize-a-string-in-javascript
 function humanize(str) {
@@ -12,7 +12,7 @@ function humanize(str) {
 }
 
 export default function Errors() {
-  const { errors } = React.useContext(FormContext);
+  const { errors } = useStore();
 
   if (!errors) return null;
 

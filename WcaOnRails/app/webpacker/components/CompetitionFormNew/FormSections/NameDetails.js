@@ -1,9 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { InputString } from '../Inputs/FormInputs';
-import FormContext from '../State/FormContext';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function NameDetails() {
-  const { persisted } = useContext(FormContext);
+  const { persisted } = useStore();
 
   return (
     <>

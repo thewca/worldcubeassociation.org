@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Divider } from 'semantic-ui-react';
 import SubSection from './SubSection';
 import {
@@ -8,8 +8,8 @@ import {
   InputSelect,
   InputTextArea,
 } from '../Inputs/FormInputs';
-import FormContext from '../State/FormContext';
 import { events } from '../../../lib/wca-data.js.erb';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 const mainEventOptions = events.official.map((event) => ({
   key: event.id,
@@ -24,7 +24,7 @@ mainEventOptions.unshift({
 });
 
 export default function EventRestrictions() {
-  const restrictionsData = useContext(FormContext).formData.eventRestrictions;
+  const { competition: { eventRestrictions: restrictionsData } } = useStore();
 
   const earlySubmission = restrictionsData && restrictionsData.early_puzzle_submission;
   const needQualification = restrictionsData && restrictionsData.qualification_results;

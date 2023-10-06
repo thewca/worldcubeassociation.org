@@ -1,11 +1,10 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React from 'react';
 import {
   Button,
   Divider,
   Form,
   Message,
 } from 'semantic-ui-react';
-import FormContext from './State/FormContext';
 import VenueInfo from './FormSections/VenueInfo';
 import {
   InputDate,
@@ -29,16 +28,20 @@ import Errors from './Errors';
 import Series from './FormSections/Series';
 import useToggleState from '../../lib/hooks/useToggleState';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import competitionFormReducer from './store/reducer';
+import { setErrors } from './store/actions';
 
 // TODO: Need to add cloning params
 
 function FormActions() {
   const {
     persisted,
-    setErrors,
-    competition: ogData,
-    formData: data,
-  } = useContext(FormContext);
+    competition,
+    initialCompetition,
+  } = useStore();
+
+  const dispatch = useDispatch();
 
   const createComp = async () => {
     const url = '/competitions';
@@ -48,7 +51,7 @@ function FormActions() {
       },
       credentials: 'include',
       method: 'POST',
-      body: JSON.stringify(data),
+      body: JSON.stringify(competition),
     };
 
     const response = await fetchWithAuthenticityToken(url, fetchOptions);
@@ -59,18 +62,18 @@ function FormActions() {
 
     const json = await response.json();
 
-    setErrors(json);
+    dispatch(setErrors(json));
   };
 
   const updateComp = async () => {
-    const url = `/competitions/${ogData.id}`;
+    const url = `/competitions/${initialCompetition.id}`;
     const fetchOptions = {
       headers: {
         'Content-Type': 'application/json',
       },
       credentials: 'include',
       method: 'PATCH',
-      body: JSON.stringify(data),
+      body: JSON.stringify(competition),
     };
 
     const response = await fetchWithAuthenticityToken(url, fetchOptions);
@@ -81,7 +84,8 @@ function FormActions() {
     }
 
     const json = await response.json();
-    setErrors(json);
+
+    dispatch(setErrors(json));
   };
 
   if (persisted) {
@@ -95,7 +99,9 @@ function FormActions() {
   );
 }
 
-function AnnouncementDetails({ competition, persisted }) {
+function AnnouncementMessage() {
+  const { competition, persisted } = useStore();
+
   if (!persisted) return null;
 
   let messageStyle = null;
@@ -131,47 +137,15 @@ function AnnouncementDetails({ competition, persisted }) {
 }
 
 // TODO: There are various parts which have overrides for enabled and disabled which need to done
-export default function NewCompForm({
-  competition = null,
-  persisted = false,
-  adminView = false,
-  organizerView = false,
-}) {
+function NewCompForm() {
+  const { competition } = useStore();
+
   const [showDebug, setShowDebug] = useToggleState(false);
-
-  const [formData, setFormData] = useState(competition);
-  const [markers, setMarkers] = useState([]);
-
-  const [errors, setErrors] = useState();
-
-  const formContext = useMemo(() => ({
-    competition,
-    persisted,
-    adminView,
-    organizerView,
-    formData,
-    setFormData,
-    markers,
-    setMarkers,
-    errors,
-    setErrors,
-  }), [
-    competition,
-    persisted,
-    adminView,
-    organizerView,
-    formData,
-    setFormData,
-    markers,
-    setMarkers,
-    errors,
-    setErrors,
-  ]);
 
   const currency = formData.entryFees.currency_code || 'USD';
 
   return (
-    <FormContext.Provider value={formContext}>
+    <>
       <Button toggle active={showDebug} onClick={setShowDebug}>
         {showDebug ? 'Hide' : 'Show'}
         {' '}
@@ -180,12 +154,12 @@ export default function NewCompForm({
       {showDebug && (
         <pre>
           <code>
-            {JSON.stringify(formData, null, 2)}
+            {JSON.stringify(competition, null, 2)}
           </code>
         </pre>
       )}
       <Divider />
-      <AnnouncementDetails competition={competition} />
+      <AnnouncementMessage />
       <Errors />
       <Form>
         <Admin />
@@ -229,6 +203,35 @@ export default function NewCompForm({
 
         <FormActions />
       </Form>
-    </FormContext.Provider>
+    </>
+  );
+}
+
+export default function Wrapper({
+  competition = null,
+  persisted = false,
+  adminView = false,
+  organizerView = false,
+}) {
+  return (
+    <Store
+      reducer={competitionFormReducer}
+      initialState={{
+        unsavedChanges: false,
+        competition,
+        initialCompetition: competition,
+        persisted,
+        errors: null,
+        adminView,
+        organizerView,
+      }}
+    >
+      <NewCompForm
+        competition={competition}
+        persisted={persisted}
+        adminView={adminView}
+        organizerView={organizerView}
+      />
+    </Store>
   );
 }

@@ -1,14 +1,14 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Message } from 'semantic-ui-react';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { competitionNearbyJsonUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
-import FormContext from '../State/FormContext';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -21,7 +21,7 @@ function MissingInfo({ missingDate, missingLocation }) {
 
 export default function NearbyComps() {
   const {
-    formData: {
+    competition: {
       id,
       venue: {
         coordinates,
@@ -30,7 +30,7 @@ export default function NearbyComps() {
       end_date,
     },
     setMarkers,
-  } = useContext(FormContext);
+  } = useStore();
 
   const [nearby, setNearby] = useState();
   const [loading, setLoading] = useState(false);

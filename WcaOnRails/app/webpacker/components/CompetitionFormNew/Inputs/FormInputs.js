@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import {
   Checkbox,
   Form, Input,
@@ -6,10 +6,10 @@ import {
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
 import I18n from '../../../lib/i18n';
-import FormContext from '../State/FormContext';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './WCASearch';
 import AutonumericField from './AutonumericField';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 function getFieldLabel(id) {
   return I18n.t(`activerecord.attributes.competition.${id}`);
@@ -60,7 +60,7 @@ const wrapInput = (
   additionalPropNames,
   emptyStringForNull = false,
 ) => function wrappedInput(props) {
-  const { formData, setFormData, errors } = useContext(FormContext);
+  const { competition, setFormData, errors } = useStore();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => {
     acc[propName] = props[propName];
@@ -70,7 +70,8 @@ const wrapInput = (
   const onChange = useCallback((e, { value: newValue }) => {
     setFormData((previousData) => ({ ...previousData, [props.id]: newValue }));
   }, [props.id, setFormData]);
-  let value = formData[props.id];
+
+  let value = competition[props.id];
 
   if (emptyStringForNull && value === null) value = '';
 
@@ -201,9 +202,10 @@ export const InputCurrencyAmount = wrapInput((props) => (
 ), ['currency']);
 
 export function InputBoolean({ id }) {
-  const { formData, setFormData } = useContext(FormContext);
+  const { competition } = useStore();
 
-  const value = formData[id] || false;
+  const value = competition[id] || false;
+
   const onChange = useCallback((e, { checked: newValue }) => {
     setFormData((previousData) => ({ ...previousData, [id]: String(newValue) }));
   }, [id, setFormData]);

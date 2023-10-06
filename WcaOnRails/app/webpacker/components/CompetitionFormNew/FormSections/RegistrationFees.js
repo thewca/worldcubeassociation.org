@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SubSection from './SubSection';
 import {
   InputBoolean, InputCurrencyAmount, InputNumber, InputRadio, InputSelect,
 } from '../Inputs/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
-import FormContext from '../State/FormContext';
 import I18n from '../../../lib/i18n';
 import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
+import { useStore } from '../../../lib/providers/StoreProvider';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -42,14 +42,14 @@ const guestMessageOptions = [{
 
 export default function RegistrationFees({ currency }) {
   const {
-    formData: {
+    competition: {
       venue: {
         country,
       },
       entryFees,
       competitorLimit,
     },
-  } = useContext(FormContext);
+  } = useStore();
 
   const guestsGoFree = entryFees && !(entryFees.guests_entry_fee_lowest_denomination > 0);
   const guestsRestricted = entryFees && guestsGoFree && entryFees.guest_entry_status === 'restricted';
