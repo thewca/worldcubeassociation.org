@@ -10,12 +10,17 @@ import {
   Segment,
   Table,
 } from 'semantic-ui-react';
+import cn from 'classnames';
+import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import UserBadge from '../UserBadge';
 
 import '../../stylesheets/delegates/style.scss';
 
-const dasherize = (string) => string.replace(/_/g, '-');
+const dasherize = (string) => _.kebabCase(string);
+// In the current status quo, we have no standardized list of Senior regions.
+// We use the Senior's location, which has the format "Region (actual Location)" to guess the region
+const seniorLocationToRegion = (string) => string.split('(')[0].trim();
 
 function sortedDelegates(delegates) {
   return delegates.sort((user1, user2) => ((user1.location !== user2.location)
@@ -35,15 +40,15 @@ function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
       </Table.Header>
 
       <Table.Body>
-        {[
-          ...sortedDelegates([
-            activeSeniorDelegate,
-            ...delegates.filter(
-              (user) => user.senior_delegate_id === activeSeniorDelegate.id && user.delegate_status !== 'trainee_delegate',
-            )]),
-        ].map((delegate) => (
+        {sortedDelegates([
+          activeSeniorDelegate,
+          ...delegates.filter((user) => (
+            user.senior_delegate_id === activeSeniorDelegate.id
+              && user.delegate_status !== 'trainee_delegate'
+          )),
+        ]).map((delegate) => (
           <Table.Row
-            className={`${dasherize(delegate.delegate_status)}`}
+            className={cn(`${dasherize(delegate.delegate_status)}`)}
             key={delegate.id}
           >
             <Table.Cell>
@@ -90,9 +95,8 @@ export default function Delegates({
   const seniorDelegates = React.useMemo(() => delegates
     .filter((user) => user.delegate_status === 'senior_delegate')
     .sort((user1, user2) => (user1.location || '').localeCompare(user2.location || '')), [delegates]);
-  const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState(
-    seniorDelegates.length ? seniorDelegates[0] : null,
-  );
+
+  const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState(seniorDelegates?.[0]);
 
   // NOTE: The UI currently assumes that the delegates always have a
   // senior delegate unless they themselves are a senior delegate.
@@ -105,12 +109,15 @@ export default function Delegates({
           {seniorDelegates.map((seniorDelegate) => (
             <Menu.Item
               key={`region-${seniorDelegate.id}`}
-              name={(seniorDelegate.location || '').split('(')[0].trim()}
+              name={seniorLocationToRegion(seniorDelegate.location || '')}
               active={activeSeniorDelegate === seniorDelegate}
               onClick={() => {
                 setActiveSeniorDelegate(seniorDelegate);
               }}
-            />
+            >
+              {/* The 'name' shorthand above can populate the label, but it sanitizes & signs :( */}
+              {seniorLocationToRegion(seniorDelegate.location || '')}
+            </Menu.Item>
           ))}
         </Menu>
       </Grid.Column>
@@ -119,7 +126,7 @@ export default function Delegates({
         <Segment>
           <Grid container centered>
             <Grid.Row only="computer">
-              <Header>{(activeSeniorDelegate.location || '').split('(')[0].trim()}</Header>
+              <Header>{seniorLocationToRegion(activeSeniorDelegate.location || '')}</Header>
             </Grid.Row>
             <Grid.Row only="computer">
               <Segment raised>
@@ -138,7 +145,7 @@ export default function Delegates({
                 inline
                 options={seniorDelegates.map((seniorDelegate) => ({
                   key: `senior-delegate-${seniorDelegate.id}`,
-                  text: (seniorDelegate.location || '').split('(')[0].trim(),
+                  text: seniorLocationToRegion(seniorDelegate.location || ''),
                   value: seniorDelegate.id,
                 }))}
                 value={activeSeniorDelegate.id}
