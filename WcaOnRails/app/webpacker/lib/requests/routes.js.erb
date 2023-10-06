@@ -95,3 +95,9 @@ export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers
 export const roleDataUrl = (userId, roleId) => `<%= Rails.application.routes.url_helpers.role_data_path(format: "json") %>?userId=${userId}&roleId=${roleId}`;
 
 export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.role_update_path(format: "json") %>`
+
+export const roleEndUrl = `<%= Rails.application.routes.url_helpers.role_end_path(format: "json") %>`
+
+export const updateRolePageUrl = (userId, roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.update_role_path("${userId}", "${roleId}"))%>`;
+
+export const newRolePageUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.new_role_path("${userId}"))%>`;

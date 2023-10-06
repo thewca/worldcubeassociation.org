@@ -263,7 +263,9 @@
       </div>
     <% end %>
     <div class="tab-pane" id="roles">
-      <%= react_component("RolesTab") %>
+      <%= react_component("RolesTab", {
+        userId: params[:id],
+      }) %>
     </div>
   </div>
   <script>

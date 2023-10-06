@@ -50,7 +50,8 @@ Rails.application.routes.draw do
 
   get 'users/:id/edit/avatar_thumbnail' => 'users#edit_avatar_thumbnail', as: :users_avatar_thumbnail_edit
   get 'users/:id/edit/pending_avatar_thumbnail' => 'users#edit_pending_avatar_thumbnail', as: :users_pending_avatar_thumbnail_edit
-  get 'users/:user_id/role/:role_id' => 'users#role'
+  get 'users/:user_id/role/:role_id' => 'users#role', as: :update_role
+  get 'users/:user_id/role/new' => 'users#role', as: :new_role
   get 'admin/avatars' => 'admin/avatars#index'
   post 'admin/avatars' => 'admin/avatars#update_all'
 
@@ -176,6 +177,7 @@ Rails.application.routes.draw do
   get 'admin/role_list' => 'roles#role_list', as: :role_list
   get 'admin/role_data' => 'roles#role_data', as: :role_data
   post 'admin/role_update' => 'roles#role_update', as: :role_update
+  post 'admin/role_end' => 'roles#role_end', as: :role_end
 
   get 'robots' => 'static_pages#robots'
 

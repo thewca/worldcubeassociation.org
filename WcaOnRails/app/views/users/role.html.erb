@@ -1,1 +1,4 @@
-<%= react_component("RolesTab/RoleForm") %>
+<%= react_component("RolesTab/RoleForm", {
+  userId: params[:user_id],
+  roleId: params[:role_id],
+}) %>
