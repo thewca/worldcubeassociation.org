@@ -38,7 +38,7 @@ class PaymentController < ApplicationController
         currency_code: ruby_money.currency.iso_code,
         receipt: charge_transaction,
         user_id: current_user.id,
-        )
+      )
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
@@ -106,7 +106,7 @@ class PaymentController < ApplicationController
     refund = Stripe::Refund.create(
       refund_args,
       stripe_account: account_id,
-      )
+    )
 
     refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
     refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
@@ -121,7 +121,7 @@ class PaymentController < ApplicationController
       receipt: refund_receipt,
       refunded_registration_payment_id: payment.id,
       user_id: current_user.id,
-      )
+    )
 
     flash[:success] = 'Payment was refunded'
     redirect_to edit_registration_path(competition_id, user_id)

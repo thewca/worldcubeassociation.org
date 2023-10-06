@@ -534,7 +534,7 @@ class RegistrationsController < ApplicationController
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
-
+    UpdateWCARegistration.perform(stripe_intent.status)
     head :ok
   end
 

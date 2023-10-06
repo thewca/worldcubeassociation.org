@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
   def init
     competition_id, user_id = params["attendee_id"].split("-")
@@ -38,7 +40,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     intent = Stripe::PaymentIntent.create(
       payment_intent_args,
       stripe_account: account_id,
-      )
+    )
 
     # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
     stripe_transaction = StripeTransaction.create_from_api(intent, payment_intent_args, account_id)
@@ -50,7 +52,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       stripe_transaction: stripe_transaction,
       client_secret: intent.client_secret,
       user: user,
-      )
+    )
 
     render json: { client_secret: intent.client_secret, connected_account_id: account_id }
   end

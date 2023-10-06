@@ -83,6 +83,5 @@ class StripePaymentIntent < ApplicationRecord
         )
       end
     end
-    UpdateWCARegistration.perform(api_intent.status)
   end
 end
