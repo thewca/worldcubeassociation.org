@@ -1,10 +1,15 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
 import {
-  Button, Dropdown, Segment, Table, Grid, Menu,
+  Button,
+  Dropdown,
+  Grid,
+  Header,
+  Label,
+  Menu,
+  Segment,
+  Table,
 } from 'semantic-ui-react';
-import { useMediaQuery } from 'react-responsive';
 import I18n from '../../lib/i18n';
 import UserBadge from '../UserBadge';
 
@@ -82,7 +87,6 @@ export default function Delegates({
   delegates,
   isEditVisible,
 }) {
-  const isMobile = useMediaQuery({ query: '(max-width: 760px)' });
   const seniorDelegates = React.useMemo(() => delegates
     .filter((user) => user.delegate_status === 'senior_delegate')
     .sort((user1, user2) => (user1.location || '').localeCompare(user2.location || '')), [delegates]);
@@ -93,88 +97,68 @@ export default function Delegates({
   // NOTE: The UI currently assumes that the delegates always have a
   // senior delegate unless they themselves are a senior delegate.
 
-  return (isMobile
-    ? (
-      <Segment>
-        <span style={{
-          fontSize: '1.5em',
-          display: 'inline-block',
-          padding: '0.5em',
-          marginBottom: '1em',
-        }}
-        >
-          <Dropdown
-            inline
-            style={{
-              fontSize: '1.2em',
-            }}
-            options={seniorDelegates.map((seniorDelegate) => ({
-              key: `senior-delegate-${seniorDelegate.id}`,
-              text: (seniorDelegate.location || '').split('(')[0].trim(),
-              value: seniorDelegate.id,
-            }))}
-            value={activeSeniorDelegate.id}
-            onChange={(event, data) => {
-              setActiveSeniorDelegate(
-                seniorDelegates.find((seniorDelegate) => seniorDelegate.id === data.value),
-              );
-            }}
-          />
-        </span>
-        <div style={{
-          overflow: 'scroll',
-        }}
-        >
-          <DelegatesOfRegion
-            activeSeniorDelegate={activeSeniorDelegate}
-            delegates={delegates}
-            isAdminMode={isEditVisible}
-          />
-        </div>
-      </Segment>
-    )
-    : (
-      <Grid>
-        <Grid.Column width={4}>
-          <h3>Regions</h3>
-          <Menu vertical>
-            {seniorDelegates.map((seniorDelegate) => (
-              <Menu.Item
-                key={`region-${seniorDelegate.id}`}
-                name={(seniorDelegate.location || '').split('(')[0].trim()}
-                active={activeSeniorDelegate === seniorDelegate}
-                onClick={() => {
-                  setActiveSeniorDelegate(seniorDelegate);
+  return (
+    <Grid container>
+      <Grid.Column only="computer" computer={4}>
+        <Header>Regions</Header>
+        <Menu vertical>
+          {seniorDelegates.map((seniorDelegate) => (
+            <Menu.Item
+              key={`region-${seniorDelegate.id}`}
+              name={(seniorDelegate.location || '').split('(')[0].trim()}
+              active={activeSeniorDelegate === seniorDelegate}
+              onClick={() => {
+                setActiveSeniorDelegate(seniorDelegate);
+              }}
+            />
+          ))}
+        </Menu>
+      </Grid.Column>
+
+      <Grid.Column stretched computer={12} mobile={16} tablet={16}>
+        <Segment>
+          <Grid container centered>
+            <Grid.Row only="computer">
+              <Header>{(activeSeniorDelegate.location || '').split('(')[0].trim()}</Header>
+            </Grid.Row>
+            <Grid.Row only="computer">
+              <Segment raised>
+                <Label ribbon>Senior Delegate</Label>
+
+                <UserBadge
+                  user={activeSeniorDelegate}
+                  hideBorder
+                  leftAlign
+                  subtexts={activeSeniorDelegate.wca_id ? [activeSeniorDelegate.wca_id] : []}
+                />
+              </Segment>
+            </Grid.Row>
+            <Grid.Row only="tablet mobile">
+              <Dropdown
+                inline
+                options={seniorDelegates.map((seniorDelegate) => ({
+                  key: `senior-delegate-${seniorDelegate.id}`,
+                  text: (seniorDelegate.location || '').split('(')[0].trim(),
+                  value: seniorDelegate.id,
+                }))}
+                value={activeSeniorDelegate.id}
+                onChange={(event, { value }) => {
+                  setActiveSeniorDelegate(
+                    seniorDelegates.find((seniorDelegate) => seniorDelegate.id === value),
+                  );
                 }}
               />
-            ))}
-          </Menu>
-        </Grid.Column>
-
-        <Grid.Column stretched width={12}>
-          <Segment>
-            <h3>{(activeSeniorDelegate.location || '').split('(')[0].trim()}</h3>
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-            }}
-            >
-              <h3>Senior Delegate:</h3>
-              <UserBadge
-                user={activeSeniorDelegate}
-                hideBorder
-                leftAlign
-                subtexts={activeSeniorDelegate.wca_id ? [activeSeniorDelegate.wca_id] : []}
+            </Grid.Row>
+            <Grid.Row style={{ overflowX: 'scroll' }}>
+              <DelegatesOfRegion
+                activeSeniorDelegate={activeSeniorDelegate}
+                delegates={delegates}
+                isAdminMode={isEditVisible}
               />
-            </div>
-            <DelegatesOfRegion
-              activeSeniorDelegate={activeSeniorDelegate}
-              delegates={delegates}
-              isAdminMode={isEditVisible}
-            />
-          </Segment>
-        </Grid.Column>
-      </Grid>
-    )
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      </Grid.Column>
+    </Grid>
   );
 }
