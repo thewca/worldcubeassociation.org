@@ -397,11 +397,8 @@ class Competition < ApplicationRecord
   end
 
   def events_with_rounds
-    includes_associations = [
-      { rounds: [:competition_event] },
-    ]
     competition_events
-      .includes(includes_associations)
+      .includes({ rounds: [:competition_event] })
       .sort_by { |ce| ce.event.rank }
       .map(&:to_wcif)
   end
