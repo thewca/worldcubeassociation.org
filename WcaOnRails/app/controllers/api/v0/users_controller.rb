@@ -1,8 +1,16 @@
+# frozen_string_literal: true
+
 class Api::V0::PersonsController < Api::V0::ApiController
   def me
     if current_user
       if stale?(current_user)
-        render json: { user: current_user }
+        # Also include the users current prs so we can handle qualifications on the Frontend
+        if current_user.wca_id.present?
+          person = Person.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
+          render json: { user: current_user, rankings: { single: person.ranksSingle, average: person.ranksAverage } }
+        else
+          render json: { user: current_user }
+        end
       end
     else
       render status: :unauthorized, json: { error: "Please log in" }
@@ -12,18 +20,7 @@ class Api::V0::PersonsController < Api::V0::ApiController
   def permissions
     if current_user
       if stale?(current_user)
-        render json: {
-          can_attend_competitions: {
-            scope: current_user.cannot_register_for_competition_reasons.empty? ? "*" : [],
-            until: user.banned? ? user.current_team_members.select(:team == Team.banned).first.end_date : nil
-          },
-          can_organize_competitions: {
-            scope: current_user.can_create_competitions? ? "*" : [],
-          },
-          can_administer_competitions: {
-            scope: current_user.can_admin_competitions? ? "*" : (current_user.delegated_competitions + current_user.organized_competitions).pluck("id"),
-          },
-        }
+        render json: current_user.permissions
       end
     else
       render status: :unauthorized, json: { error: "Please log in" }
