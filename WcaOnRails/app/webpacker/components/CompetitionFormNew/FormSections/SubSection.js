@@ -1,27 +1,19 @@
-import React, { useCallback, useMemo } from 'react';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import React, { useMemo } from 'react';
+import SectionProvider, { useSections } from '../store/sections';
 
 export default function SubSection({ section, children }) {
-  const { competition } = useStore();
+  const sections = useSections();
 
-  const nestedFormData = competition[section] || {};
-
-  const nestedSetFormData = useCallback((getData) => {
-    setFormData((prevData) => {
-      const newData = { ...prevData };
-      newData[section] = getData(newData[section] || {});
-      return newData;
-    });
-  }, [section]);
-
-  const value = useMemo(() => ({
-    formData: nestedFormData,
-    setFormData: nestedSetFormData,
-  }), [nestedFormData, nestedSetFormData]);
+  const currentSubSection = useMemo(
+    () => sections.concat(section),
+    [sections, section],
+  );
 
   return (
-    <StoreContext.Provider value={value}>
+    <SectionProvider
+      section={currentSubSection}
+    >
       {children}
-    </StoreContext.Provider>
+    </SectionProvider>
   );
 }

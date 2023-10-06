@@ -28,9 +28,10 @@ import Errors from './Errors';
 import Series from './FormSections/Series';
 import useToggleState from '../../lib/hooks/useToggleState';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import Store, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import competitionFormReducer from './store/reducer';
 import { setErrors } from './store/actions';
+import SectionProvider from './store/sections';
 
 // TODO: Need to add cloning params
 
@@ -142,8 +143,6 @@ function NewCompForm() {
 
   const [showDebug, setShowDebug] = useToggleState(false);
 
-  const currency = formData.entryFees.currency_code || 'USD';
-
   return (
     <>
       <Button toggle active={showDebug} onClick={setShowDebug}>
@@ -192,8 +191,8 @@ function NewCompForm() {
         <PerUserSettings />
         <Divider />
 
-        <RegistrationFee currency={currency} />
-        <RegistrationDetails currency={currency} />
+        <RegistrationFee />
+        <RegistrationDetails />
         <Divider />
 
         <EventRestrictions />
@@ -214,7 +213,7 @@ export default function Wrapper({
   organizerView = false,
 }) {
   return (
-    <Store
+    <StoreProvider
       reducer={competitionFormReducer}
       initialState={{
         unsavedChanges: false,
@@ -226,12 +225,14 @@ export default function Wrapper({
         organizerView,
       }}
     >
-      <NewCompForm
-        competition={competition}
-        persisted={persisted}
-        adminView={adminView}
-        organizerView={organizerView}
-      />
-    </Store>
+      <SectionProvider>
+        <NewCompForm
+          competition={competition}
+          persisted={persisted}
+          adminView={adminView}
+          organizerView={organizerView}
+        />
+      </SectionProvider>
+    </StoreProvider>
   );
 }

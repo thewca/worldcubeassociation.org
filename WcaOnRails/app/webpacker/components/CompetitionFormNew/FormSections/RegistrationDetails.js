@@ -10,10 +10,13 @@ import {
 } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
-export default function RegistrationDetails({ currency }) {
-  const { competition: { regDetails: regDetailsData } } = useStore();
+export default function RegistrationDetails() {
+  const { competition: { regDetails: regDetailsData, entryFees } } = useStore();
+
+  const currency = entryFees.currency_code;
 
   const canRegOnSite = regDetailsData && regDetailsData.on_the_spot_registration === 'true';
+
   return (
     <SubSection section="regDetails">
       <InputNumber id="refund_policy_percent" />

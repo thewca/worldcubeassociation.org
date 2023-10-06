@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Message } from 'semantic-ui-react';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { seriesEligibleCompetitionsJsonUrl } from '../../../lib/requests/routes.js.erb';
@@ -8,7 +8,8 @@ import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { updateFormValue } from '../store/actions';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -30,9 +31,10 @@ export default function SeriesComps() {
       end_date,
       series,
     },
-    setFormData,
     setMarkers,
   } = useStore();
+
+  const dispatch = useDispatch();
 
   const [nearby, setNearby] = useState();
   const [loading, setLoading] = useState(false);
@@ -101,14 +103,7 @@ export default function SeriesComps() {
         comps={nearby}
         action={{
           label: I18n.t('competitions.competition_series_fields.add_series'),
-          onClick: (comp) => {
-            setFormData((previousData) => ({
-              ...previousData,
-              series: {
-                competitionIds: comp.id,
-              },
-            }));
-          },
+          onClick: (comp) => dispatch(updateFormValue('series', { competitionIds: comp.id })),
         }}
       />
     </TableWrapper>

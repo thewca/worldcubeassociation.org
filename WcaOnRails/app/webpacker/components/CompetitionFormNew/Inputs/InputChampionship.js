@@ -7,7 +7,8 @@ import { Button, Form, Icon } from 'semantic-ui-react';
 import { championshipRegionsUrl } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
 
 function Championship({
   value,
@@ -70,9 +71,12 @@ async function fetchRegions() {
 }
 
 export default function InputChampionship({ id }) {
-  const { competition } = useStore();
+  const formValues = useCompetitionForm();
+  const updateFormValue = useUpdateFormAction();
 
-  const rawValue = competition[id];
+  const dispatch = useDispatch();
+
+  const rawValue = formValues[id];
 
   const value = Array.isArray(rawValue) ? rawValue : [];
   const [internalValue, setInternalValue] = useState(value.map((c, i) => ({
@@ -83,8 +87,8 @@ export default function InputChampionship({ id }) {
   const onChange = useCallback((newInternalValue) => {
     setInternalValue(newInternalValue);
     const newValue = newInternalValue.map(({ championship }) => championship);
-    setFormData((previousData) => ({ ...previousData, [id]: newValue }));
-  }, [id, setFormData]);
+    dispatch(updateFormValue(id, newValue));
+  }, [dispatch, id]);
 
   const [regions, setRegions] = useState(null);
   const [loading, setLoading] = useState(value.length > 0);

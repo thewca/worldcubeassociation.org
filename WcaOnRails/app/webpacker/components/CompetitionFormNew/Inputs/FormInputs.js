@@ -1,15 +1,18 @@
 import React, { useCallback, useMemo } from 'react';
 import {
   Checkbox,
-  Form, Input,
-  Radio, Select,
+  Form,
+  Input,
+  Radio,
+  Select,
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './WCASearch';
 import AutonumericField from './AutonumericField';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
 
 function getFieldLabel(id) {
   return I18n.t(`activerecord.attributes.competition.${id}`);
@@ -30,14 +33,17 @@ function FieldWrapper({
   id,
   label,
   noLabel,
+  blankLabel,
   hint,
   noHint,
   mdHint,
   error,
   children,
 }) {
-  const htmlLabel = noLabel ? '&#8203;' : label || getFieldLabel(id);
-  const htmlHint = noHint ? '&#8203;' : hint || getFieldHint(id, mdHint);
+  const fallbackLabel = blankLabel ? '' : '&nbsp;';
+  const htmlLabel = noLabel ? fallbackLabel : label || getFieldLabel(id);
+
+  const htmlHint = noHint ? '&nbsp;' : hint || getFieldHint(id, mdHint);
 
   return (
     <Form.Field
@@ -59,30 +65,43 @@ const wrapInput = (
   WrappedInput,
   additionalPropNames,
   emptyStringForNull = false,
+  inputValueKey = 'value',
 ) => function wrappedInput(props) {
-  const { competition, setFormData, errors } = useStore();
+  const { errors } = useStore();
+  const dispatch = useDispatch();
+
+  const formValues = useCompetitionForm();
+  const updateFormValue = useUpdateFormAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => {
     acc[propName] = props[propName];
     return acc;
   }, {});
 
-  const onChange = useCallback((e, { value: newValue }) => {
-    setFormData((previousData) => ({ ...previousData, [props.id]: newValue }));
-  }, [props.id, setFormData]);
+  const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
+    dispatch(updateFormValue(props.id, newValue));
+  }, [dispatch, updateFormValue, props.id]);
 
-  let value = competition[props.id];
+  let value = formValues[props.id];
 
   if (emptyStringForNull && value === null) value = '';
 
+  inputProps[inputValueKey] = value;
+
   const error = errors && errors[props.id] && errors[props.id].length > 0 && errors[props.id].join(', ');
+
+  const passDownLabel = additionalPropNames.includes('label');
+  const noLabel = props.noLabel || passDownLabel;
+
+  if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id));
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <FieldWrapper
       id={props.id}
       label={props.label}
-      noLabel={props.noLabel}
+      noLabel={noLabel}
+      blankLabel={passDownLabel}
       hint={props.hint}
       noHint={props.noHint}
       mdHint={props.mdHint}
@@ -90,7 +109,6 @@ const wrapInput = (
     >
       <WrappedInput
         {...inputProps}
-        value={value}
         onChange={onChange}
       />
     </FieldWrapper>
@@ -201,22 +219,9 @@ export const InputCurrencyAmount = wrapInput((props) => (
   <AutonumericField currency={props.currency} value={props.value} onChange={props.onChange} />
 ), ['currency']);
 
-export function InputBoolean({ id }) {
-  const { competition } = useStore();
-
-  const value = competition[id] || false;
-
-  const onChange = useCallback((e, { checked: newValue }) => {
-    setFormData((previousData) => ({ ...previousData, [id]: String(newValue) }));
-  }, [id, setFormData]);
-  const label = getFieldLabel(id);
-
-  return (
-    <Form.Field>
-      <Checkbox checked={value} onChange={onChange} label={label} />
-    </Form.Field>
-  );
-}
+export const InputBoolean = wrapInput((props) => (
+  <Checkbox checked={props.checked} onChange={props.onChange} label={props.label} />
+), ['label'], false, 'checked');
 
 export function InputBooleanSelect({ id }) {
   const options = useMemo(() => [

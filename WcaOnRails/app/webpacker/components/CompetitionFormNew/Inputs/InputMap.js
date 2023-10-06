@@ -1,6 +1,6 @@
 import React, {
   useState,
-  useEffect, useContext,
+  useEffect,
 } from 'react';
 import {
   Circle,
@@ -14,7 +14,8 @@ import { GeoSearchControl as SearchControl, OpenStreetMapProvider } from 'leafle
 import { nearbyCompetitionDistanceWarning, nearbyCompetitionDistanceDanger } from '../../../lib/wca-data.js.erb';
 import { blueMarker } from '../../../lib/leaflet-wca/markers';
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {
@@ -128,15 +129,18 @@ function CompetitionsMap({
 export default function InputMap({
   idLat,
   idLong,
-  markers,
+  markers = [],
 }) {
-  const { competition } = useStore();
+  const formValues = useCompetitionForm();
+  const updateFormValue = useUpdateFormAction();
 
-  const lat = Number.isNaN(parseFloat(competition[idLat])) ? 0 : Number(competition[idLat]);
-  const long = Number.isNaN(parseFloat(competition[idLong])) ? 0 : Number(competition[idLong]);
+  const dispatch = useDispatch();
 
-  const setLat = (newLat) => setFormData((d) => ({ ...d, [idLat]: newLat }));
-  const setLong = (newLong) => setFormData((d) => ({ ...d, [idLong]: newLong }));
+  const lat = Number.isNaN(parseFloat(formValues[idLat])) ? 0 : Number(formValues[idLat]);
+  const long = Number.isNaN(parseFloat(formValues[idLong])) ? 0 : Number(formValues[idLong]);
+
+  const setLat = (newLat) => dispatch(updateFormValue(idLat, newLat));
+  const setLong = (newLong) => dispatch(updateFormValue(idLong, newLong));
 
   const center = [lat, long];
 

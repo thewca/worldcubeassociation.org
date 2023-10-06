@@ -4,21 +4,21 @@ import SubSection from './SubSection';
 import { InputCompetitions, InputString } from '../Inputs/FormInputs';
 import SeriesComps from '../Tables/SeriesComps';
 import I18n from '../../../lib/i18n';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { updateFormValue } from '../store/actions';
 
 export default function Series() {
   const {
     competition: {
       series,
     },
-    setFormData,
   } = useStore();
+
+  const dispatch = useDispatch();
 
   if (!series) return <SeriesComps />;
 
-  const removeFromSeries = () => {
-    setFormData((previousData) => ({ ...previousData, series: null }));
-  };
+  const removeFromSeries = () => dispatch(updateFormValue('series', null));
 
   return (
     <SubSection section="series">

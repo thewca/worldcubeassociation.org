@@ -40,7 +40,7 @@ const guestMessageOptions = [{
   text: I18n.t('enums.competition.guest_entry_status.restricted'),
 }];
 
-export default function RegistrationFees({ currency }) {
+export default function RegistrationFees() {
   const {
     competition: {
       venue: {
@@ -50,6 +50,8 @@ export default function RegistrationFees({ currency }) {
       competitorLimit,
     },
   } = useStore();
+
+  const currency = entryFees.currency_code;
 
   const guestsGoFree = entryFees && !(entryFees.guests_entry_fee_lowest_denomination > 0);
   const guestsRestricted = entryFees && guestsGoFree && entryFees.guest_entry_status === 'restricted';
