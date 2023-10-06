@@ -1,7 +1,10 @@
 import React, { useContext, useMemo, useState } from 'react';
-import { Button, Divider, Form } from 'semantic-ui-react';
-import { Alert } from 'react-bootstrap';
-import I18n from '../../lib/i18n';
+import {
+  Button,
+  Divider,
+  Form,
+  Message,
+} from 'semantic-ui-react';
 import FormContext from './State/FormContext';
 import VenueInfo from './FormSections/VenueInfo';
 import {
@@ -24,6 +27,8 @@ import NearbyComps from './Tables/NearbyComps';
 import RegistrationCollisions from './Tables/RegistrationCollisions';
 import Errors from './Errors';
 import Series from './FormSections/Series';
+import useToggleState from '../../lib/hooks/useToggleState';
+import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 // TODO: Need to add cloning params
 
@@ -93,28 +98,35 @@ function FormActions() {
 function AnnouncementDetails({ competition, persisted }) {
   if (!persisted) return null;
 
-  let alertStyle = null;
-  let alertHTML = null;
+  let messageStyle = null;
+
+  let i18nKey = null;
+  let i18nReplacements = {};
+
   // TODO: Replace the emails
   if (competition.confirmed && competition.showAtAll) {
-    alertStyle = 'success';
-    alertHTML = I18n.t('competitions.competition_form.public_and_locked_html');
+    messageStyle = 'success';
+    i18nKey = 'competitions.competition_form.public_and_locked_html';
   } else if (competition.confirmed && !competition.showAtAll) {
-    alertStyle = 'warning';
-    alertHTML = I18n.t('competitions.competition_form.confirmed_but_not_visible_html', { contact: 'replace-me' });
+    messageStyle = 'warning';
+    i18nKey = 'competitions.competition_form.confirmed_but_not_visible_html';
+    i18nReplacements = { contact: 'replace-me' };
   } else if (!competition.confirmed && competition.showAtAll) {
-    alertStyle = 'danger';
-    alertHTML = I18n.t('competitions.competition_form.is_visible');
+    messageStyle = 'error';
+    i18nKey = 'competitions.competition_form.is_visible';
   } else if (!competition.confirmed && !competition.showAtAll) {
-    alertStyle = 'warning';
-    alertHTML = I18n.t('competitions.competition_form.pending_confirmation_html', { contact: 'replace-me' });
+    messageStyle = 'warning';
+    i18nKey = 'competitions.competition_form.pending_confirmation_html';
+    i18nReplacements = { contact: 'replace-me' };
   }
 
   return (
-    <Alert bsStyle={alertStyle}>
-      {/* eslint-disable-next-line react/no-danger */}
-      <span dangerouslySetInnerHTML={{ __html: alertHTML }} />
-    </Alert>
+    <Message error={messageStyle === 'error'} warning={messageStyle === 'warning'} success={messageStyle === 'success'}>
+      <I18nHTMLTranslate
+        i18nKey={i18nKey}
+        options={i18nReplacements}
+      />
+    </Message>
   );
 }
 
@@ -125,13 +137,12 @@ export default function NewCompForm({
   adminView = false,
   organizerView = false,
 }) {
-  console.log(competition);
-  const [showDebug, setShowDebug] = useState(false);
+  const [showDebug, setShowDebug] = useToggleState(false);
 
-  const [formData, setFormData] = React.useState(competition);
-  const [markers, setMarkers] = React.useState([]);
+  const [formData, setFormData] = useState(competition);
+  const [markers, setMarkers] = useState([]);
 
-  const [errors, setErrors] = React.useState();
+  const [errors, setErrors] = useState();
 
   const formContext = useMemo(() => ({
     competition,
@@ -161,7 +172,7 @@ export default function NewCompForm({
 
   return (
     <FormContext.Provider value={formContext}>
-      <Button onClick={() => setShowDebug(!showDebug)}>
+      <Button toggle active={showDebug} onClick={setShowDebug}>
         {showDebug ? 'Hide' : 'Show'}
         {' '}
         Debug

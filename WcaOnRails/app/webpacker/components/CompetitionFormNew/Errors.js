@@ -1,5 +1,5 @@
 import React from 'react';
-import { Alert } from 'react-bootstrap';
+import { List, Message } from 'semantic-ui-react';
 import FormContext from './State/FormContext';
 import I18n from '../../lib/i18n';
 
@@ -17,22 +17,24 @@ export default function Errors() {
   if (!errors) return null;
 
   return (
-    <Alert bsStyle="danger">
-      <p>
+    <Message negative>
+      <Message.Header>
         {I18n.t('wca.errors.messages.form_error', { count: Object.keys(errors).length })}
-      </p>
-      <ul>
+      </Message.Header>
+      <List bulleted>
         {Object.keys(errors).map((attribute) => {
           const attributeErrors = errors[attribute];
+
           return attributeErrors.map((error) => (
-            <li key={attribute + error}>
-              <strong>{humanize(attribute)}</strong>
-              {' '}
-              {error}
-            </li>
+            <List.Item key={attribute + error}>
+              <List.Content>
+                <List.Header>{humanize(attribute)}</List.Header>
+                <List.Description>{error}</List.Description>
+              </List.Content>
+            </List.Item>
           ));
         })}
-      </ul>
-    </Alert>
+      </List>
+    </Message>
   );
 }
