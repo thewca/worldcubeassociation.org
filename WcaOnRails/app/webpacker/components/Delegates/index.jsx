@@ -33,6 +33,7 @@ function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
     <Table className="delegates-table" unstackable>
       <Table.Header>
         <Table.Row>
+          <Table.HeaderCell collapsing />
           <Table.HeaderCell>{I18n.t('delegates_page.table.name')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('delegates_page.table.role')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('delegates_page.table.region')}</Table.HeaderCell>
@@ -51,29 +52,27 @@ function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
             className={cn(`${dasherize(delegate.delegate_status)}`)}
             key={delegate.id}
           >
-            <Table.Cell>
-              <div style={{
-                display: 'flex',
-                alignItems: 'center',
-              }}
-              >
+            <Table.Cell verticalAlign="middle">
+              <Button.Group vertical>
                 <Button
                   href={`mailto:${delegate.email}`}
                   icon="envelope"
                 />
                 {isAdminMode && (
-                <Button
-                  href={`users/${delegate.id}/edit`}
-                  icon="edit"
-                />
+                  <Button
+                    href={`users/${delegate.id}/edit`}
+                    icon="edit"
+                  />
                 )}
-                <UserBadge
-                  user={delegate}
-                  hideBorder
-                  leftAlign
-                  subtexts={delegate.wca_id ? [delegate.wca_id] : []}
-                />
-              </div>
+              </Button.Group>
+            </Table.Cell>
+            <Table.Cell>
+              <UserBadge
+                user={delegate}
+                hideBorder
+                leftAlign
+                subtexts={delegate.wca_id ? [delegate.wca_id] : []}
+              />
             </Table.Cell>
             <Table.Cell>
               {I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}
