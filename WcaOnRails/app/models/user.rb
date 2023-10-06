@@ -633,7 +633,7 @@ class User < ApplicationRecord
   end
 
   def ban_end
-    current_team_members.select(:team == Team.banned).first.end_date
+    current_team_members.where(team: Team.banned).first.end_date
   end
 
   def banned_at_date?(date)
@@ -654,7 +654,7 @@ class User < ApplicationRecord
         scope: can_create_competitions? ? "*" : [],
       },
       can_administer_competitions: {
-        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck("id"),
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
     }
   end
