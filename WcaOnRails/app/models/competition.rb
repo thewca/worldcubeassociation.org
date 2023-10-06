@@ -395,13 +395,6 @@ class Competition < ApplicationRecord
     super(event_id.blank? ? nil : event_id)
   end
 
-  def events_with_rounds
-    competition_events
-      .includes({ rounds: [:competition_event] })
-      .sort_by { |ce| ce.event.rank }
-      .map(&:to_wcif)
-  end
-
   # Enforce that the users marked as delegates for this competition are
   # actually delegates. Note: just because someone (legally) delegated a
   # competition in the past does not mean that they are still a delegate,
