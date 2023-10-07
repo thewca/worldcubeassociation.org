@@ -76,6 +76,8 @@ export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.route
 
 export const userApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_path("${id}"))%>`;
 
+export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
+
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
 
 export const championshipRegionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.championship_regions_json_path)%>`;

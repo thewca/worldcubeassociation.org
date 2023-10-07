@@ -645,15 +645,15 @@ class Competition < ApplicationRecord
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.map(&:id).join(",")
+    @staff_delegate_ids || staff_delegates.pluck(:id).join(",")
   end
 
   def organizer_ids
-    @organizer_ids || organizers.map(&:id).join(",")
+    @organizer_ids || organizers.pluck(:id).join(",")
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.pluck(:id).join(",")
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -2018,9 +2018,9 @@ class Competition < ApplicationRecord
         "competitor_limit_reason" => competitor_limit_reason,
       },
       "staff" => {
-        "staff_delegate_ids" => staff_delegate_ids,
-        "trainee_delegate_ids" => trainee_delegate_ids,
-        "organizer_ids" => organizer_ids,
+        "staff_delegate_ids" => staff_delegates.pluck(:id),
+        "trainee_delegate_ids" => trainee_delegates.pluck(:id),
+        "organizer_ids" => organizers.pluck(:id),
         "contact" => contact,
       },
       "championships" => championships.map(&:championship_type),

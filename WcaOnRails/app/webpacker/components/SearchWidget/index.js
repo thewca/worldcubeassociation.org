@@ -1,11 +1,11 @@
 import React from 'react';
 
-import OmnisearchInput from './OmnisearchInput';
+import MultiSearchInput from './MultiSearchInput';
 import { omnisearchApiUrl } from '../../lib/requests/routes.js.erb';
 
 function SearchWidget() {
   return (
-    <OmnisearchInput
+    <MultiSearchInput
       removeNoResultsMessage
       goToItemOnSelect
       url={omnisearchApiUrl}

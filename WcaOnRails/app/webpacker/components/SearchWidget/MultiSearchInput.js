@@ -58,18 +58,22 @@ const createSearchItem = (search) => itemToOption({
 
 const DEBOUNCE_MS = 300;
 
-function OmnisearchInput({
+function MultiSearchInput({
   url,
   goToItemOnSelect,
   placeholder,
   removeNoResultsMessage,
+  preSelected = [],
+  disabled = false,
+  onSearchChange,
 }) {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+
   const debouncedSearch = useDebounce(search, DEBOUNCE_MS);
 
-  const [selected, setSelected] = useState([]);
+  const [selected, setSelected] = useState(preSelected.map(itemToOption));
 
   const handleChange = useCallback((e, { value, options }) => {
     setSearch('');
@@ -83,7 +87,7 @@ function OmnisearchInput({
     setSelected((oldSelected) => {
       const newSelected = [
         ...new Set(oldSelected.concat(options)),
-      ].filter(({ id }) => value.includes(id));
+      ].filter((item) => value.includes(item.id));
       // Redirect user to actual page if needed, and do not change the state.
       if (goToItemOnSelect && newSelected.length > 0) {
         window.location.href = newSelected[0].item.url;
@@ -91,7 +95,11 @@ function OmnisearchInput({
       }
       return newSelected;
     });
-  }, [setSelected, setSearch, goToItemOnSelect]);
+
+    if (onSearchChange) {
+      onSearchChange(e, { value, options });
+    }
+  }, [setSelected, setSearch, onSearchChange, goToItemOnSelect]);
 
   useEffect(() => {
     // Do nothing if search string is empty: we're just loading the page
@@ -131,7 +139,8 @@ function OmnisearchInput({
       search
       icon="search"
       className="omnisearch-dropdown"
-      value={selected.map(({ id }) => id)}
+      disabled={disabled}
+      value={selected.map((item) => item.id)}
       searchQuery={search}
       options={options}
       onChange={handleChange}
@@ -144,4 +153,4 @@ function OmnisearchInput({
   );
 }
 
-export default OmnisearchInput;
+export default MultiSearchInput;

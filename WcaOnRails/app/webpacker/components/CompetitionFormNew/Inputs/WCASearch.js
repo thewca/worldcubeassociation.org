@@ -1,7 +1,13 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { userApiUrl, competitionApiUrl } from '../../../lib/requests/routes.js.erb';
-import { fetchJsonOrError, fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
+import React, { useCallback, useMemo } from 'react';
+import {
+  userSearchApiUrl,
+  userApiUrl,
+  competitionSearchApiUrl,
+  competitionApiUrl,
+} from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
+import MultiSearchInput from '../../SearchWidget/MultiSearchInput';
+import { useManyLoadedData } from '../../../lib/hooks/useLoadedData';
 
 export function UserSearch({
   value,
@@ -9,80 +15,65 @@ export function UserSearch({
   delegateOnly = false,
   traineeOnly = false,
 }) {
-  let classNames = 'form-control user_ids optional wca-autocomplete wca-autocomplete-users_search';
-  if (delegateOnly) classNames += ' wca-autocomplete-only_staff_delegates';
-  if (traineeOnly) classNames += ' wca-autocomplete-only_trainee_delegates';
+  const userIds = useMemo(() => (value || []), [value]);
 
-  const [initialData, setInitialData] = useState(value ? null : '[]');
+  const queryParams = useMemo(() => {
+    const params = new URLSearchParams();
 
-  useEffect(() => {
-    if (!value) return;
+    if (delegateOnly) params.append('only_staff_delegates', true);
+    if (traineeOnly) params.append('only_trainee_delegates', true);
 
-    const ids = value.split(',');
-    const promises = ids.map((id) => fetchJsonOrError(userApiUrl(id)));
+    return params;
+  }, [delegateOnly, traineeOnly]);
 
-    Promise.all(promises).then((reqs) => {
-      const users = reqs.map((req) => req.data.user);
-      setInitialData(JSON.stringify(users));
-    });
-  }, []);
+  const userSearchApiUrlFn = useCallback((query) => `${userSearchApiUrl(query)}&${queryParams.toString()}`, [queryParams]);
 
-  // This is a workaround for selectize and jquery not calling onChange
-  const refWrapper = useCallback((ref) => {
-    $(ref).on('change', (e) => onChange(e, { value: e.target.value })).wcaAutocomplete();
-  }, []);
+  const {
+    data,
+    anyLoading,
+  } = useManyLoadedData(userIds, userApiUrl);
 
-  if (!initialData) return <Loading />;
+  const preSelected = useMemo(
+    // the users API actually returns users in the format { "user": stuff_you_are_interested_in }
+    () => Object.values(data).map((item) => item.user),
+    [data],
+  );
+
+  if (anyLoading) return <Loading />;
 
   return (
-    <input
-      ref={refWrapper}
-      defaultValue={value}
-      className={classNames}
-      type="text"
-      data-data={initialData}
+    <MultiSearchInput
+      url={userSearchApiUrlFn}
+      goToItemOnSelect={false}
+      preSelected={preSelected}
+      onSearchChange={onChange}
     />
   );
 }
 
 export function CompetitionSearch({
-  id,
   value,
   onChange,
   freeze,
 }) {
-  let classNames = 'form-control competition_id optional wca-autocomplete wca-autocomplete-competitions_search';
-  if (freeze) classNames += ' wca-autocomplete-input_lock';
+  const competitionIds = useMemo(() => (value?.split(',').filter(Boolean) || []), [value]);
 
-  const [initialData, setInitialData] = useState(value ? null : '[]');
+  const {
+    data: initialData,
+    anyLoading,
+  } = useManyLoadedData(competitionIds, competitionApiUrl);
 
-  useEffect(() => {
-    if (!value) return;
-    const ids = value.split(',');
-    const promises = ids.map((compId) => fetchWithAuthenticityToken(competitionApiUrl(compId)));
+  const preSelected = useMemo(() => Object.values(initialData), [initialData]);
 
-    Promise.all(promises).then((reqs) => {
-      Promise.all(reqs.map((req) => req.json())).then((data) => {
-        setInitialData(JSON.stringify(data));
-      });
-    });
-  }, []);
-
-  // This is a workaround for selectize and jquery not calling onChange
-  const refWrapper = useCallback((ref) => {
-    $(ref).on('change', (e) => onChange(e, { value: e.target.value })).wcaAutocomplete();
-  }, []);
-
-  if (!initialData) return <Loading />;
+  if (anyLoading) return <Loading />;
 
   return (
-    <input
-      ref={refWrapper}
-      id={id}
-      defaultValue={value}
-      className={classNames}
-      type="text"
-      data-data={initialData}
+    <MultiSearchInput
+      url={competitionSearchApiUrl}
+      goToItemOnSelect={false}
+      preSelected={preSelected}
+      disabled={freeze}
+      onSearchChange={onChange}
     />
   );
 }
