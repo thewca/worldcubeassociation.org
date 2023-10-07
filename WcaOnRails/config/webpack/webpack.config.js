@@ -1,7 +1,5 @@
-const { generateWebpackConfig, merge } = require('shakapacker');
+const { generateWebpackConfig } = require('shakapacker');
 const webpack = require('webpack');
-
-const webpackConfig = generateWebpackConfig();
 
 const customConfig = {
   resolve: {
@@ -51,4 +49,4 @@ const customConfig = {
   ignoreWarnings: [/Module not found: Error: Can't resolve 'react-dom\/client'/],
 };
 
-module.exports = merge(webpackConfig, customConfig);
+module.exports = generateWebpackConfig(customConfig);

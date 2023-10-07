@@ -427,14 +427,14 @@ sv:
         results_notifications_enabled: Mejla mig när mina resultat publiceras.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
-          När jag är arrangör eller Delegat för en tävling, mejla mig när nya
+          När jag är arrangör eller delegat för en tävling, mejla mig när nya
           anmälningar tas emot.
         #original_hash: de60ab8
         delegate_status: Delegatstatus
-        #original_hash: 0f21717
-        region: Region
+        #original_hash: d219c68
+        location: Plats
         #original_hash: 730db33
-        receive_delegate_reports: Jag vill få Delegatrapporter för WCA-tävlingar via e-post
+        receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
         #original_hash: 57eaf24
         user_preferred_events: Favoritgrenar
         #original_hash: e632fbf
@@ -477,9 +477,9 @@ sv:
         #original_hash: 28a6fbb
         currency_code: Valutakod
         #original_hash: 2e3ed8b
-        staff_delegate_ids: WCA-Delegat(er)
+        staff_delegate_ids: WCA-delegat(er)
         #original_hash: c0ddcd6
-        trainee_delegate_ids: WCA-Trainee-Delegat(er)
+        trainee_delegate_ids: WCA-trainee-delegat(er)
         #original_hash: 958562e
         organizer_ids: Arrangör(er)
         #original_hash: b37456c
@@ -736,13 +736,13 @@ sv:
         o: Övrigt
       delegate_status:
         #original_hash: 621101a
-        trainee_delegate: Trainee-Delegat
+        trainee_delegate: Trainee-delegat
         #original_hash: 9b97968
-        candidate_delegate: Junior-Delegat
+        candidate_delegate: Junior-delegat
         #original_hash: 12ab214
         delegate: Delegat
         #original_hash: d463c23
-        senior_delegate: Senior-Delegat
+        senior_delegate: Senior-delegat
     person:
       gender:
         #original_hash: 3f3a489
@@ -795,7 +795,7 @@ sv:
           engelska!
         #original_hash: 67f2a1a
         private_description: >-
-          En beskrivning av händelsen som endast kan ses av Delegater. Fyll i
+          En beskrivning av händelsen som endast kan ses av delegater. Fyll i
           detta på engelska.
         #original_hash: b766029
         private_wrc_decision: >-
@@ -841,14 +841,14 @@ sv:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
         results_notifications_enabled: ''
         #original_hash: f62eb10
         registration_notifications_enabled: >-
-          Detta gäller endast tävlingar som du är arrangör eller Delegat för,
+          Detta gäller endast tävlingar som du är arrangör eller delegat för,
           och kan ändras för varje enskild tävling.
         #original_hash: da39a3e
         unconfirmed_wca_id: ''
@@ -856,8 +856,8 @@ sv:
         wca_id: ''
         #original_hash: 81a76a3
         receive_delegate_reports: >-
-          Om du är Trainee-Delegat, Junior-Delegat, Senior-Delegat eller medlem
-          i WRC eller WQAC, får du Delegatrapporter som standard. Obs: ändringen
+          Om du är trainee-delegat, junior-delegat, senior-delegat eller medlem
+          i WRC eller WQAC, får du delegatrapporter som standard. Obs: ändringen
           kan ta upp till en timme att träda i kraft.
         #original_hash: 0627e5c
         otp_attempt: >-
@@ -885,9 +885,9 @@ sv:
           tävlingens huvudsida. <br/>Fyll i det här <b>på engelska</b>< och
           eventuella andra språk dina tävlande talar.>
         #original_hash: b4d020f
-        staff_delegate_ids: WCA-Delegater för tävlingen.
+        staff_delegate_ids: WCA-delegater för tävlingen.
         #original_hash: cb9882c
-        trainee_delegate_ids: WCA-Trainee-Delegater för tävlingen.
+        trainee_delegate_ids: WCA-trainee-delegater för tävlingen.
         #original_hash: 517d376
         organizer_ids: Tävlingsarrangörer (de behöver ett konto för att listas här).
         #original_hash: cabe7fb
@@ -946,7 +946,7 @@ sv:
         use_wca_live_for_scoretaking: ''
         #original_hash: dc47c39
         competitor_limit_enabled: >-
-          Även om det inte Reglerna kräver att en gräns för antalet tävlande
+          Även om det inte reglerna kräver att en gräns för antalet tävlande
           sätts, är det starkt rekommenderat att göra det.
         #original_hash: b7b599b
         competitor_limit: >-
@@ -1586,7 +1586,7 @@ sv:
       #original_hash: ed97787
       documents: WCA-Dokument
       #original_hash: d8fd3e4
-      delegates: WCA-Delegater
+      delegates: WCA-delegater
       #original_hash: 37b8fdc
       organizations: Regionala Organisationer
       #original_hash: d790b40
@@ -1634,7 +1634,7 @@ sv:
       #original_hash: 1fa73f3
       regulations: Regler
       #original_hash: 6bce1b5
-      about_regulations: Om Reglerna
+      about_regulations: Om reglerna
       #original_hash: 141d1d7
       guidelines: Riktlinjer
       #original_hash: c4622c3
@@ -1663,6 +1663,8 @@ sv:
       results_admin: Admin
       #original_hash: 61074f1
       results_database: Databas
+      #original_hash: 54e0548
+      results_sidekiq: Sidekiq dashboard
       #original_hash: aee74b8
       new_post: Nytt inlägg
       #original_hash: 0d67445
@@ -1757,11 +1759,11 @@ sv:
     support:
       #original_hash: 610edba
       title: Stötta WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         World Cube Association är en skattebefriad organisation (501(c)(3)). Som
-        en 100% ideellt driven, icke-vinstdrivande organisation välkomnar vi
-        dina donationer för att hjälpa oss att främja vår vision om att ha fler
+        en 100% ideellt ledd, icke-vinstdrivande organisation välkomnar vi dina
+        donationer för att hjälpa oss att främja vår vision om att ha fler
         roliga tävlingar över hela världen.
       #original_hash: 65c84ec
       button: Läs mer om hur du kan stötta WCA
@@ -1990,7 +1992,7 @@ sv:
           Du kan inte ändra namn, födelsedatum, kön eller region. Orsak:
           %{reason}. Kontakta <a href='mailto:results@worldcubeassociation.org'
           target='_blank'>WCA Results Team</a> eller din <a
-          href='%{delegate_url}'>Delegat</a> om du behöver ändra något av dessa.
+          href='%{delegate_url}'>delegat</a> om du behöver ändra något av dessa.
         reason:
           #original_hash: 370ff12
           assigned: du har ett WCA-ID
@@ -2103,11 +2105,11 @@ sv:
         Namnet eller regionen måste vara annorlunda för att personen ska kunna
         uppdateras.
       #original_hash: 012f032
-      must_be_senior: måste vara Senior-Delegat
+      must_be_senior: måste vara senior-delegat
       #original_hash: 2e582eb
       must_not_be_present: får inte vara närvarande
       #original_hash: 5b4eac9
-      senior_has_delegate: kan inte degradera Senior-Delegat med underordnade Delegater
+      senior_has_delegate: kan inte degradera senior-delegat med underordnade delegater
       #original_hash: 48653a9
       already_have_id: >-
         kan inte göra anspråk på ett WCA-ID eftersom du redan har WCA-ID
@@ -2252,8 +2254,11 @@ sv:
       failed: Det gick inte att uppdatera anmälan
       #original_hash: 016b4ae
       deleted: 'Din anmälan för %{comp} har raderats'
-      #original_hash: 648424f
-      registered: Anmälan lyckades!
+      #original_hash: 7707307
+      registered: >-
+        Anmälningsformuläret har skickats in - se till att följa alla
+        anvisningar i anmälningskraven nedan för att säkerställa att din anmälan
+        är fullbordad.
       #original_hash: 82fed60
       imported: Anmälningar har importerats!
       #original_hash: 3614fd1
@@ -2265,14 +2270,16 @@ sv:
       #original_hash: 72e2180
       regards_html: 'Hälsningar, %{people}.'
       new:
-        #original_hash: a32db59
-        mail_subject: 'Din anmälan till %{comp_name} är inskickad och väntar på godkännande'
-        #original_hash: 8374583
-        registered_html: 'Du har just anmält dig till %{comp_name}.'
-        #original_hash: 13fabed
-        awaits_approval: >-
-          Din anmälan har mottagits och väntar på godkännande från
+        #original_hash: 63591e5
+        mail_subject: 'Anmälan väntar: %{comp_name}'
+        #original_hash: 6aa057a
+        registered_html: >-
+          Din anmälan till %{comp_name} inväntar godkännande från
           arrangörsteamet.
+        #original_hash: f98b245
+        awaits_approval: >-
+          Se till att du har följt tävlingens anmälningskrav. Till exempel kan
+          en anmälningsavgift behöva betalas innan anmälan är fullbordad.
         #original_hash: 826045f
         approval_info_html: >-
           Du kommer att få ett mejl när din anmälan godkänns. Observera att
@@ -2282,8 +2289,8 @@ sv:
           webbplats eller kontakta arrangörerna. Du kan också kontrollera
           statusen för din anmälan %{here}.
       accepted:
-        #original_hash: 34515b5
-        mail_subject: 'Din anmälan till %{comp_name} har godkänts'
+        #original_hash: 6f1fa1f
+        mail_subject: 'Anmälan godkänd: %{comp_name}'
         #original_hash: 24d2883
         message_html: >-
           Din anmälan till %{comp_name} har godkänts. Som alltid kan du
@@ -2291,8 +2298,8 @@ sv:
         #original_hash: 1852cbf
         see_you_soon: 'Vi ser fram emot att träffa dig på %{comp_name}!'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: 'Du har flyttats till väntelistan för %{comp_name}'
+        #original_hash: 8d26297
+        mail_subject: 'Anmälan flyttad till väntelistan: %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           Din anmälan till %{comp_name} har flyttats till väntelistan. Möjliga
@@ -2305,8 +2312,8 @@ sv:
         #original_hash: 8f7358f
         email_if_error: 'Om du tror att detta är ett fel, svara på det här e-postmeddelandet.'
       deleted:
-        #original_hash: 268e248
-        mail_subject: 'Din anmälan till %{comp_name} har raderats'
+        #original_hash: 8cbc6c0
+        mail_subject: 'Anmälan raderad: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'Din anmälan till %{comp_name} har raderats. Möjliga orsaker är:'
         causes:
@@ -2790,9 +2797,9 @@ sv:
       organization_team: Arrangörsteam
       #original_hash: 6afa61e
       delegate:
-        zero: WCA-Delegater
-        one: WCA-Delegat
-        other: WCA-Delegater
+        zero: WCA-delegater
+        one: WCA-delegat
+        other: WCA-delegater
       #original_hash: b37456c
       contact: Kontakt
       #original_hash: 0eb5ed5
@@ -2963,10 +2970,6 @@ sv:
     index:
       #original_hash: db98a68
       title: Tävlingar
-      #original_hash: b24c9c0
-      disclaimer: >-
-        Observera att på grund av COVID-19-pandemin kan vissa regioner för
-        närvarande inte hålla tävlingar.
       #original_hash: 6a72085
       all_events: Alla
       #original_hash: 6d76b81
@@ -3067,7 +3070,7 @@ sv:
       #original_hash: 4f98e6d
       results_up: Resultaten är uppe!
       #original_hash: 87ab5db
-      report: Visa Delegatrapporten
+      report: Visa delegatrapporten
       #original_hash: b4ca252
       edit_report: Redigera rapporten
       #original_hash: e590657
@@ -3129,7 +3132,7 @@ sv:
         för allmänheten!
       #original_hash: 1039850
       pending_confirmation_html: >-
-        Fyll i alla fält och få din Delegat att klicka på 'Bekräfta' när du är
+        Fyll i alla fält och få din delegat att klicka på 'Bekräfta' när du är
         redo för %{contact} att godkänna tävlingen.
       #original_hash: 8966fd0
       submit_create_value: Skapa tävling
@@ -3188,9 +3191,9 @@ sv:
       #original_hash: 54fe619
       schedule_must_match_rounds: 'måste ha minst en omgång, och alla omgångar måste ingå i schemat.'
       #original_hash: 6e228b7
-      must_contain_delegate: måste ha minst en WCA-Delegat
+      must_contain_delegate: måste ha minst en WCA-delegat
       #original_hash: 8131fc2
-      not_all_delegates: är inte alla Delegater
+      not_all_delegates: är inte alla delegater
       #original_hash: 43a23c2
       registration_close_after_open: anmälan måste stänga efter att anmälan öppnar
       #original_hash: 8a3a4f6
@@ -3838,10 +3841,10 @@ sv:
             I allmänhet finns det inte många krav på en person för att delta i
             en WCA-tävling, men alla tävlande förväntas ha en god förståelse för
             <a
-            href='https://www.worldcubeassociation.org/regulations/'>WCA-Reglerna</a>.
+            href='https://www.worldcubeassociation.org/regulations/'>WCA-reglerna</a>.
             Om engelska inte är ditt första språk och du har problem med att
             förstå dokumentet, finns <a
-            href='https://www.worldcubeassociation.org/regulations/translations/'>Översättningar</a>
+            href='https://www.worldcubeassociation.org/regulations/translations/'>översättningar</a>
             tillgängliga.
       '5':
         #original_hash: 3b657aa
@@ -3855,7 +3858,7 @@ sv:
           #original_hash: be305b8
           '2': >-
             WCA-tävlingar måste följa <a target='_blank'
-            href='https://www.worldcubeassociation.org/regulations/'>WCA-Reglerna</a>.
+            href='https://www.worldcubeassociation.org/regulations/'>WCA-reglerna</a>.
             Arrangörsteamet behöver inte kunna alla regler utantill, men en djup
             kunskap om grunderna i reglerna underlättar definitivt i att
             arrangera tävlingen korrekt.
@@ -3926,7 +3929,7 @@ sv:
         content:
           #original_hash: 890d879
           '1': >-
-            Efter att en tävling har avslutats måste WCA-Delegaten dubbelkolla
+            Efter att en tävling har avslutats måste WCA-delegaten dubbelkolla
             alla resultatkort och personuppgifter för att korrigera eventuella
             fel. När detta är gjort skickas resultaten till WCA Results Team
             (WRT), som ansvarar för att ladda upp tävlingsresultat och
@@ -3934,7 +3937,7 @@ sv:
             WCA-databasen så snart som möjligt.
           #original_hash: daf1cb1
           '2': >-
-            Beroende på tävlingens storlek och Delegatens personliga schema kan
+            Beroende på tävlingens storlek och delegatens personliga schema kan
             allt detta ta bara en dag eller upp till en vecka. Ha tålamod.
           #original_hash: bf8adbe
           '3': >-
@@ -3949,8 +3952,8 @@ sv:
           '1': >-
             Du hittar reglerna om pussel i <a
             href='https://www.worldcubeassociation.org/regulations/#3'>Artikel
-            3</a>. Alla pussel bör godkännas av en WCA-Delegat. Om du är osäker,
-            vänligen fråga Delegaten för din tävling. För att vara på den säkra
+            3</a>. Alla pussel bör godkännas av en WCA-delegat. Om du är osäker,
+            vänligen fråga delegaten för din tävling. För att vara på den säkra
             sidan kan du ta med ett extra pussel om du inte får använda det.
       regulations2:
         #original_hash: 48f1234
@@ -3998,17 +4001,17 @@ sv:
     mission_footer: 'WCA:s Verksamhet'
     #original_hash: cdab446
     who_we_are_title: Vilka vi är
-    #original_hash: 9248dc4
+    #original_hash: c0d9a3e
     who_we_are_content_html: >-
       <p>World Cube Association reglerar tävlingar för mekaniska pussel som
       manipuleras genom att vrida grupper av bitar, allmänt kända som "twisty
       puzzles". Det mest kända av dessa pussel är Rubiks Kub, uppfunnen av
       professor Rubik från Ungern. Ett urval av dessa pussel har valts som
       officiella grenar i WCA.</p> <p>I takt med att WCA har utvecklats under
-      det senaste decenniet har över 100 000 personer tävlat i våra tävlingar.
+      det senaste decenniet har över 200 000 personer tävlat i våra tävlingar.
       Trots denna tillväxt förblir vi en organisation som helt drivs av
       volontärer, från lokala arrangörer till WCA-delegater och till och med
-      WCA:s Styrelse. Vi är väldigt tacksamma för alla som tar tid ur sina liv
+      WCA:s styrelse. Vi är väldigt tacksamma för alla som tar tid ur sina liv
       för att få WCA att fungera. Med mer ekonomiskt stöd hoppas vi kunna få en
       ännu högre nivå av professionalitet i våra tävlingar när vi fortsätter att
       innefatta fler evenemang över hela världen.</p>
@@ -4028,13 +4031,13 @@ sv:
       och inom vårt community skapar möjligheter till tillväxt för de
       involverade ungdomarna och att inkluderandet av nya grupper av människor
       gör det möjligt för vårt community att stärkas. Ett dokument som
-      innehåller Styrelsens vision och strategi för WCA finns <a
+      innehåller styrelsens vision och strategi för WCA finns <a
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hur ser framtiden för WCA ut?
-    #original_hash: 2fea363
+    #original_hash: 487c6a1
     whats_next_content_html: >-
-      <p>World Cube Association har haft över 100 000 unika tävlande i 140 olika
+      <p>World Cube Association har haft över 200 000 unika tävlande i 158 olika
       regioner och vi planerar inte att sakta in! Kubintresset har ökat stadigt
       sedan grundandet 2004 och vi vill möjliggöra detta att fortsätta in i
       framtiden genom att öka tillgängligheten av tävlingar till nya områden. I
@@ -4066,10 +4069,10 @@ sv:
       på <a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         World Cube Association är en skattebefriad organisation (501(c)(3)). Som
-        en 100% ideell organisation driven av volontärer välkomnar vi dina
+        en 100% ideellt ledd organisation driven av volontärer välkomnar vi dina
         donationer för att hjälpa oss att främja vår vision om att ha roligare
         tävlingar över hela världen.
       #original_hash: 24c87db
@@ -4085,21 +4088,21 @@ sv:
       title: Struktur
       board:
         #original_hash: abd2828
-        name: 'WCA:s Styrelse'
+        name: 'WCA:s styrelse'
         #original_hash: e0d37a2
         description: >-
-          WCA-Styrelsen är ansvarig för att leda organisationen som helhet, och
-          fullgöra alla uppgifter som inte uppfylls av andra Team, Kommittéer
-          och Råd
+          WCA-styrelsen är ansvarig för att leda organisationen som helhet, och
+          fullgöra alla uppgifter som inte uppfylls av andra team, kommittéer
+          och råd
       #original_hash: d54d953
       committees: >-
         WCA:s team och kommittéer är en väsentlig del av organisationen och
         utför de dagliga uppgifter som krävs för att den ska fungera. Dessa
-        kommittéer består av WCA-medlemmar, inklusive WCA-Delegater och
+        kommittéer består av WCA-medlemmar, inklusive WCA-delegater och
         tävlande. Varje team har en ledare vars roll är att säkerställa att
         teamet fungerar väl och att vägleda andra teammedlemmar. Råd är en
-        speciell typ av team som har en rådgivande roll för WCA-Styrelsen och
-        består av medlemmar, inte WCA-Personal. När det finns lediga platser i
+        speciell typ av team som har en rådgivande roll för WCA-styrelsen och
+        består av medlemmar, inte WCA-personal. När det finns lediga platser i
         kommittéer, team, eller råd publiceras information om hur man ansöker på
         förstasidan.
       #original_hash: c366473
@@ -4112,9 +4115,9 @@ sv:
         #original_hash: 312e799
         description: >-
           WCA:s ledning hanterar uppgifter som rör WCA:s ideella status. Dessa
-          personer väljs av WCA:s Styrelse. Verkställande Direktören är WCA:s
-          VD, Ordföranden leder alla styrelsemöten, Sekreteraren underhåller
-          organisationens handlingar, och Kassören hanterar WCA:s ekonomi.
+          personer väljs av WCA:s styrelse. Verkställande direktören är WCA:s
+          VD, ordföranden leder alla styrelsemöten, sekreteraren underhåller
+          organisationens handlingar, och kassören hanterar WCA:s ekonomi.
       chair:
         #original_hash: de34439
         name: 'WCA:s Ordförande'
@@ -4139,7 +4142,7 @@ sv:
         #original_hash: 286fdf8
         description: >-
           Denna kommitté ger WCA-styrelsen råd i speciella fall, som anklagelser
-          om brott mot WCA-Reglerna, och kan kontaktas av WCA-medlemmar vid
+          om brott mot WCA-reglerna, och kan kontaktas av WCA-medlemmar vid
           viktiga personliga frågor angående WCA-tävlingar.
       wdpc:
         #original_hash: 70539cd
@@ -4150,7 +4153,7 @@ sv:
         #original_hash: 3da1e85
         name: WCA Regulations Committee
         #original_hash: 13ada5b
-        description: Denna kommitté är ansvarig för att hantera WCA-Reglerna.
+        description: Denna kommitté är ansvarig för att hantera WCA-reglerna.
       wrt:
         #original_hash: 67be768
         name: WCA Results Team
@@ -4254,28 +4257,28 @@ sv:
       teams_committees: Team och Kommittéer
       probation:
         #original_hash: 1dd6e3b
-        name: Tillfälligt Avstängda Delegater
+        name: Tillfälligt avstängda delegater
       wst_admin:
         #original_hash: d4112d2
         name: Mjukvaruadministratörer
       #original_hash: 7e849d2
       delegates_html: >-
-        <p><strong>WCA-Delegat</strong> är en roll som definieras i WCA:s
-        Motioner och beskrivs i WCA-Reglerna. En Delegats primära roll är att
-        överse tävlingar på uppdrag av WCA. En WCA-Delegat är ansvarig för att
-        se till att alla WCA-tävlingar hålls enligt WCA:s Verksamhetsmål, Anda
-        och Regler. WCA skiljer mellan <strong>Senior-Delegater</strong>,
-        <strong>Regionala Delegater</strong>,<strong>Fulltändiga
-        Delegater</strong>, <strong>Junior-Delegater</strong>, och
-        <strong>Trainee-Delegater</strong>%{see_link}.</p> <p> Utöver en
-        WCA-Delegats uppgifter är en Senior-Delegat eller Regional Delegat
-        ansvarig för att hantera WCA-Delegaterna i deras område och kan också
-        kontaktas av communityt för regionala frågor.</p> <p> Nya Delegater
-        listas först som Junior-Delegater; därefter behöver de att visa
+        <p><strong>WCA-delegat</strong> är en roll som definieras i WCA:s
+        motioner och beskrivs i WCA-reglerna. En delegats primära roll är att
+        överse tävlingar på uppdrag av WCA. En WCA-delegat är ansvarig för att
+        se till att alla WCA-tävlingar hålls enligt WCA:s verksamhetsmål, anda,
+        och regler. WCA skiljer mellan <strong>senior-delegater</strong>,
+        <strong>regionala delegater</strong>,<strong>fulltändiga
+        delegater</strong>, <strong>junior-delegater</strong>, och
+        <strong>trainee-delegater</strong>%{see_link}.</p> <p> Utöver en
+        WCA-delegats uppgifter är en renior-delegat eller regional delegat
+        ansvarig för att hantera WCA-delegaterna i deras område och kan också
+        kontaktas av communityt för regionala frågor.</p> <p> Nya delegater
+        listas först som junior-delegater; därefter behöver de att visa
         kompetens i att hantera WCA-tävlingar innan de befordras till
-        WCA-Delegater. </p> <p> Trainee-Delegater är under utbildning för
-        positionen som WCA-Delegat och kan bara överse tävlingar där en
-        WCA-Delegat är närvarande. </p>
+        WCA-delegater. </p> <p> Trainee-delegater är under utbildning för
+        positionen som WCA-delegat och kan bara överse tävlingar där en
+        WCA-delegat är närvarande. </p>
       #original_hash: 27d18ac
       see_link_html: '(se %{link})'
       #original_hash: 5b01fcc
@@ -4325,9 +4328,9 @@ sv:
     orga_guidelines: Riktlinjer för arrangörer
   delegates_page:
     #original_hash: d8fd3e4
-    title: WCA-Delegater
+    title: WCA-delegater
     #original_hash: 77b819c
-    acknowledges: 'WCA erkänner följande WCA-Delegater:'
+    acknowledges: 'WCA erkänner följande WCA-delegater:'
     table:
       #original_hash: 709a232
       name: Namn
@@ -4347,12 +4350,12 @@ sv:
       title: Bli erkänd av WCA som Regional Organisation
       #original_hash: 9f31403
       description: >-
-        WCA erkänner flera Regionala Organisationer över hela världen. Syftet
-        med en Regional Organisation är att organisera WCA-tävlingar och stödja
-        WCA:s aktiviteter i regionen. Regioner som vill bilda en Regional
-        Organisation uppmuntras att bidra till WCA i sitt område innan de lämnar
-        in sin ansökan. Kontakta din närmaste WCA-Delegat för hjälp med att
-        organisera en WCA-tävling i ditt område.
+        WCA erkänner flera regionala organisationer över hela världen. Syftet
+        med en regional organisation är att organisera WCA-tävlingar och stödja
+        WCA:s aktiviteter i regionen. Regioner som vill bilda en regional
+        organisation uppmuntras att bidra till WCA i sitt område innan de lämnar
+        in sin ansökan. Kontakta din närmaste WCA-delegat för hjälp med att
+        arrangera en WCA-tävling i ditt område.
     requirements:
       #original_hash: 1e04fd7
       title: Krav för Regionala Organisationer
@@ -4368,7 +4371,7 @@ sv:
         #original_hash: 3c07dd6
         '3': 'Att respektera och utföra Målen i WCA:s Stadgar och Motioner'
         #original_hash: 0c3576b
-        '4': Att följa alla tillämpliga WCA-Regler
+        '4': Att följa alla tillämpliga WCA-regler
         #original_hash: 1a9e6c5
         '5': 'Att acceptera och följa beslut från WCA:s Personal'
         #original_hash: d4ae7c1
@@ -4390,7 +4393,7 @@ sv:
       #original_hash: a1c6de9
       private_information: Privat information
       #original_hash: 87a1c7e
-      private_information_disclaimer: 'All information nedan kommer endast att vara synlig för WCA:s Styrelse'
+      private_information_disclaimer: 'All information nedan kommer endast att vara synlig för WCA:s styrelse'
     errors:
       #original_hash: 08122c4
       end_date_after_start_date: kan inte vara efter Erkänd till
@@ -4423,7 +4426,7 @@ sv:
     board:
       #original_hash: f3cbb35
       info_html: >-
-        World Cube Association leds av WCA:s Styrelse. De ansvarar för allmänna
+        World Cube Association leds av WCA:s styrelse. De ansvarar för allmänna
         förfrågningar och WCA-organisationen som helhet.
     wct:
       #original_hash: 846684d
@@ -4436,7 +4439,7 @@ sv:
       info_html: >-
         WDC utreder olika situationer och föreslår lösningar, inklusive straff
         vid behov. Bland annat kan dessa situationer vara allvarliga
-        överträdelser av WCA-Reglerna eller community-problem. Om du har upplevt
+        överträdelser av WCA-reglerna eller community-problem. Om du har upplevt
         något av dessa är du välkommen att kontakta denna kommitté.
     wdpc:
       #original_hash: c21a96e
@@ -4448,11 +4451,11 @@ sv:
       #original_hash: fcd3526
       info_html: >-
         WRC hanterar alla frågor som är relaterade till tillämpningen,
-        förbättringen och utvecklingen av WCA-Reglerna. De stöder WCA-delegater
+        förbättringen och utvecklingen av WCA-reglerna. De stöder WCA-delegater
         i alla typer av procedurfrågor som uppkommer vid tävlingar och beslutar
         om incidenter som inte är lösta och inte täcks av Reglerna. WRC
         publicerar regelbundet interna rapporter för att hjälpa alla
-        WCA-Delegater och förbättra deras kunskap om Reglerna. Om du vill delta
+        WCA-delegater och förbättra deras kunskap om reglerna. Om du vill delta
         i utvecklingen av regler eller föreslå ändringar kan du nå WRC genom att
         kontakta dem via e-post, eller via diskussioner på <a
         href='https://github.com/thewca/wca-regulations'>GitHub</a>.
@@ -4461,7 +4464,7 @@ sv:
       info_html: >-
         WRT ansvarar för att hantera all data i WCA:s databaser, framför allt
         tävlingsresultat och personuppgifter. De publicerar resultat från
-        WCA-tävlingar till WCA:s hemsida när WCA-Delegaten för tävlingen har
+        WCA-tävlingar till WCA:s hemsida när WCA-delegaten för tävlingen har
         skickat in dem. Förutom att lägga upp tävlingsresultat är WCA Results
         Team också ansvariga för att korrigera tävlingsresultaten vid behov och
         de har ansvaret att administrera alla WCA-profilsidor. Detta inkluderar
@@ -4492,7 +4495,7 @@ sv:
     weat:
       #original_hash: 889dd90
       info_html: >-
-        Detta team ansvarar för att utföra WCA-Styrelsens administrativa
+        Detta team ansvarar för att utföra WCA-styrelsens administrativa
         uppgifter.
     wqac:
       #original_hash: 0171b3b
@@ -4607,7 +4610,7 @@ sv:
         #original_hash: 0a38b22
         description: >-
           TNoodle är det officiella blandningsprogrammet som används för
-          WCA-tävlingar. Det används vanligtvis av WCA-Delegater före
+          WCA-tävlingar. Det används vanligtvis av WCA-delegater före
           WCA-tävlingar, men det är även möjligt för vem som helst att generera
           alla sorters blandningar för alla WCA-grenar.
       live:
@@ -4756,8 +4759,8 @@ sv:
       content2_html: A dialog will show up with a list of competitions to choose from.
       #original_hash: ceeb6fe
       content3_html: >-
-        You can filter the list by typing a part of the name of the competition
-        or the WCA Delegate.
+        Du kan filtrera listan genom att skriva en del av namnet på tävlingen
+        eller WCA-delegaten.
       #original_hash: 5ca74eb
       content4_html: >-
         To start off with, only competitions that took place less than one week
@@ -4791,7 +4794,7 @@ sv:
       #original_hash: a0ca0c3
       posts: Inlägg
       #original_hash: 9d7ea9c
-      regulations_and_guidelines: Regler och Riktlinjer
+      regulations_and_guidelines: Regler och riktlinjer
       #original_hash: db683b3
       search_for: 'Sök efter <b>%{search_string}</b>'
       not_found:
@@ -4806,7 +4809,7 @@ sv:
         #original_hash: 3499e7e
         incidents: Inga incidenter hittade för
         #original_hash: 76a6bf1
-        regulations_and_guidelines: Inga Regler eller Riktlinjer hittades för
+        regulations_and_guidelines: Inga regler eller riktlinjer hittades för
   incidents_log:
     #original_hash: 61ab89f
     i18n_disclaimer: >-
@@ -4816,19 +4819,19 @@ sv:
     incident: 'Incident:'
   about_regulations:
     #original_hash: 6bce1b5
-    title: Om Reglerna
+    title: Om reglerna
     panel1:
       #original_hash: 1fa73f3
       title: Regler
       #original_hash: 557095b
       content1_html: >-
-        Alla tävlingar måste följa <a href="/regulations/">WCA-Reglerna</a>. Det
+        Alla tävlingar måste följa <a href="/regulations/">WCA-reglerna</a>. Det
         är viktigt att tävlande läser dessa regler innan de deltar i sin första
         tävling.
       #original_hash: 4296902
       content2_html: >-
-        WCA-Reglerna kompletteras av <a
-        href="/regulations/guidelines.html">WCA-Riktlinjerna</a>, som innehåller
+        WCA-reglerna kompletteras av <a
+        href="/regulations/guidelines.html">WCA-riktlinjerna</a>, som innehåller
         ytterligare förtydliganden och förklaringar.
       #original_hash: c8e1783
       content3_html: >-
@@ -4839,21 +4842,21 @@ sv:
       title: Översättningar
       #original_hash: 7477d9b
       content1_html: >-
-        WCA-Reglerna är inte bara tillgängliga på engelska, WCA-medlemmar har
+        WCA-reglerna är inte bara tillgängliga på engelska, WCA-medlemmar har
         översatt dem till flera språk: <a
         href="/regulations/translations/">Översättningar</a>.
       #original_hash: 6add7a3
       content2_html: >-
         <strong>Viktigt</strong>: Även om översättningarna är mycket hjälpsamma
-        är de inte officiella. Det är den engelska versionen av WCA-Reglerna som
+        är de inte officiella. Det är den engelska versionen av WCA-reglerna som
         är bindande.
     panel3:
       #original_hash: 234fd4d
-      title: Vanliga frågor om Reglerna
+      title: Vanliga frågor om reglerna
       #original_hash: 8afba93
       content1_html: >-
         Sektionen <a href="/faq">Vanliga Frågor</a> svarar på flera vanliga
-        frågor om WCA-Reglerna.
+        frågor om WCA-reglerna.
     panel4:
       #original_hash: ad5f6e7
       title: Riktlinjer för arrangörer
@@ -4868,7 +4871,7 @@ sv:
         tävlingsarrangörer.
   regulations_translations:
     #original_hash: 9493b8d
-    title: 'WCA-Regler och Riktlinjer: Översättningar'
+    title: 'WCA-regler och riktlinjer: Översättningar'
     #original_hash: 386ecc1
     paragraph1: >-
       Om du talar ett annat språk än engelska kan dessa översättningar vara
@@ -4891,7 +4894,7 @@ sv:
       #original_hash: 89b86ab
       language: Språk
     #original_hash: a916f93
-    translating: Översätta Reglerna
+    translating: Översätta reglerna
     #original_hash: 1b026e1
     paragraph3_html: >-
       Om du är intresserad av att lägga till/uppdatera en översättning, vänligen
@@ -4920,7 +4923,7 @@ sv:
       #original_hash: 1cf87ad
       finding-venue: Finding a venue
       #original_hash: 3ce0d9c
-      orga-team-delegate: Creating your organization team and approaching a Delegate
+      orga-team-delegate: Bilda arrangörsteam och kontakta en delegat
       #original_hash: d3c693b
       budget: Budgeting a competition
       #original_hash: b1429a7
@@ -4964,38 +4967,37 @@ sv:
       title: How to organize a competition
       #original_hash: 3dbbbee
       content: >-
-        All WCA competitions must be attended and overseen by a WCA Delegate. If
-        you are interested in organizing your own competition, please contact
-        your nearest WCA Delegate. They will be able to give you more
-        information on the local practices and can help you with finding a
-        suitable date as they know if there are any other competitions planned
-        in the same time frame. If there is no WCA Delegate near your area,
-        please get in touch with the Senior Delegate for your region.
+        Alla WCA-tävlingar måste övervakas av en WCA-delegat. Om du är
+        intresserad av att arrangera din egen tävling, vänligen kontakta din
+        närmaste WCA-delegat. De kommer att kunna ge dig mer information om de
+        lokala metoderna och kan hjälpa dig att hitta ett lämpligt datum, då de
+        vet när det finns andra tävlingar planerade. Om det inte finns någon
+        WCA-delegat i närheten av dig kan du kontakta den seniora delegaten för
+        din region.
     paragraph2:
       #original_hash: f20dd3b
       title: Expected expenses for organizing a competition
       #original_hash: f16a06f
       content: >-
-        The expected expenses differ greatly from country to country and are
-        determined by several factors like the size of the venue and other
-        general conditions. Recouping all expenses with registration fees is
-        possible. However, to keep these as low as possible, it is highly
-        recommended to search for sponsors. Although WCA Delegates are
-        volunteers and do not receive a salary for their work, organizers should
-        consider paying compensation for their travel expenses.
+        De förväntade kostnaderna varierar kraftigt från land till land och
+        bestäms av flera faktorer, t.ex. lokalens storlek och andra allmänna
+        förhållanden. Det är möjligt att täcka alla kostnader med
+        anmälningsavgifter. För att hålla dessa så låga som möjligt
+        rekommenderas dock starkt att söka efter sponsorer. WCA-delegaterna är
+        volontärer och får inte någon lön för sitt arbete, men arrangörerna bär
+        överväga att betala ersättning för deras resekostnader.
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadlines for the announcement of the competition
       #original_hash: 66bf437
       content_html: >-
-        The competition must be announced at least 28 days before the start of
-        the competition (see <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
-        Requirements</a>). However, this is rarely enough time. You should
-        consider everything that will go into organizing your competition, and
-        give yourself enough time to prepare. Also, the WCAT will need time to
-        review your competition before it is announced. Consult with your
-        delegate if you are unsure about how much time will be needed.
+        Tävlingen måste publiceras minst 28 dagar innan den börjar (se <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
+        Detta är dock sällan tillräckligt med tid. Du bör överväga allt som
+        kommer att ingå i att arrangera din tävling och ge dig själv
+        tillräckligt med tid att förbereda dig. WCAT kommer också att behöva tid
+        för att granska din tävling innan den publiceras. Rådgör med din delegat
+        om du är osäker på hur mycket tid som kommer att behövas.
     paragraph4:
       #original_hash: b6dca56
       title: Proximity policy
@@ -5042,24 +5044,22 @@ sv:
       title: Announcing events
       #original_hash: 7ad62c7
       content: >-
-        All events that are going to be held at the competition must be
-        specified by the Delegate when requesting the competition approval.
-        Further additions must be approved by the WCAT.
+        Alla grenar som kommer att hållas vid tävlingen måste specificeras av
+        delegaten när tävlingen skickas in. Ytterligare tillägg måste godkännas
+        av WCAT.
     paragraph5:
       #original_hash: 17d01de
       title: Competitor limits
       #original_hash: bd8e6ee
       content_html: >-
-        The number of competitors may be limited per event or per competition
-        (see <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition
-        Requirements</a>). The Delegate of the competition must get an approval
-        of the competitor limit by the WCAT. Competitor limits should be chosen
-        wisely and in accordance with the expected competitor interest. The
-        limit should not set to a lower number for minor reasons. The intended
-        limit should already be taken into consideration when searching for a
-        suitable venue. The competitors limit must be clearly stated on the
-        competition page on the WCA website.
+        Antalet tävlande kan begränsas per gren eller per tävling (se <a
+        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
+        Delegaten för tävlingen måste få gränsen godkänd av WCAT. Gränser för
+        antal tävlande bör noga övervägas, i enlighet med det förväntade
+        tävlingsintresset. Om gränsen sätts till ett lägre antal bör det finnas
+        bra skäl till det. Den avsedda gränsen bör tas i beaktning redan när man
+        söker efter en lämplig lokal. Gränsen för antal tävlande måste tydligt
+        anges på tävlingssidan på WCA:s webbplats.
     paragraph6:
       #original_hash: ce4c3d0
       title: Handling registrations
@@ -5114,9 +5114,9 @@ sv:
       title: Tasks during the competition
       #original_hash: ee2e9c6
       content: >-
-        The tasks an organizer has to do during a competition should be
-        discussed with the WCA Delegate. The typical tasks are (they can be
-        delegated to other reliable people):
+        De uppgifter som en arrangör måste utföra under en tävling bör
+        diskuteras med WCA-delegaten. De typiska uppgifterna är (de kan
+        delegeras till andra pålitliga personer):
       list:
         #original_hash: 03aea46
         '1': Managing the registration desk
