@@ -13,7 +13,6 @@ import {
   Form,
   Grid,
   Icon,
-  List,
   Message,
   Popup, Segment,
   Sticky,
@@ -29,7 +28,6 @@ import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
 import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
-import useToggleButtonState from '../../../lib/hooks/useToggleButtonState';
 
 import {
   addActivity,
@@ -54,8 +52,6 @@ function EditActivities({
   const [minutesPerRow, setMinutesPerRow] = useInputState(15);
   const [calendarStart, setCalendarStart] = useInputState(8);
   const [calendarEnd, setCalendarEnd] = useInputState(20);
-
-  const [isKeyboardEnabled, setKeyboardEnabled] = useToggleButtonState(false);
 
   // This part is ugly because Semantic-UI and Fullcalendar disagree
   //   about how modals should be handled.
@@ -294,63 +290,20 @@ function EditActivities({
                 </Grid.Column>
                 <Grid.Column width={12}>
                   <Container text textAlign="center">
-                    <Button.Group basic>
+                    <span>
+                      The timezone for this room is
+                      {' '}
+                      <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
+                    </span>
+                  </Container>
+                  <Grid container textAlign="center" verticalAlign="middle">
+                    <Grid.Column width={1}>
                       <Popup
-                        trigger={<Button icon="question circle" />}
-                        position="bottom center"
-                      >
-                        <Popup.Header>Keyboard shortcuts help</Popup.Header>
-                        <Popup.Content>
-                          <List>
-                            <List.Item>
-                              <List.Header>Icon or [C]+i</List.Header>
-                              <List.Description>Toggle keyboard shortcuts</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>Arrow keys</List.Header>
-                              <List.Description>Change selected event in calendar</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>[S] + Arrow keys</List.Header>
-                              <List.Description>Change selected activity in picker</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>Enter</List.Header>
-                              <List.Description>Add selected activity after selected event</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>[Del]</List.Header>
-                              <List.Description>Remove selected event</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>[C] + Arrow keys</List.Header>
-                              <List.Description>Move selected event around in calendar</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>[C] + [S] + up/down</List.Header>
-                              <List.Description>Shrink/Expand selected event in calendar</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>[C] + [S] + click</List.Header>
-                              <List.Description>Show contextual menu for event</List.Description>
-                            </List.Item>
-                            <Divider />
-                            <List.Item>
-                              <List.Header>[C]</List.Header>
-                              <List.Description>...means Control/CTRL key</List.Description>
-                            </List.Item>
-                            <List.Item>
-                              <List.Header>[S]</List.Header>
-                              <List.Description>...means Shift key</List.Description>
-                            </List.Item>
-                          </List>
-                        </Popup.Content>
-                      </Popup>
-                      <Popup
-                        trigger={<Button icon="cog" />}
+                        trigger={<Button secondary icon="cog" />}
                         on="click"
-                        position="bottom center"
+                        position="right center"
                         pinned
+                        flowing
                       >
                         <Popup.Header>Calendar settings</Popup.Header>
                         <Popup.Content>
@@ -386,28 +339,17 @@ function EditActivities({
                           </Form>
                         </Popup.Content>
                       </Popup>
-                      <Button
-                        icon="keyboard"
-                        toggle
-                        active={isKeyboardEnabled}
-                        onClick={setKeyboardEnabled}
-                      />
-                    </Button.Group>
-                    <span>
-                      The timezone for this room is
-                      {' '}
-                      <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
-                    </span>
-                  </Container>
-                  <Container fluid textAlign="center">
-                    <span ref={dropToDeleteRef}>
-                      <Message negative floating>
-                        <Icon name="trash" />
-                        Drop an event here to remove it from the schedule.
-                        <Icon name="trash" />
-                      </Message>
-                    </span>
-                  </Container>
+                    </Grid.Column>
+                    <Grid.Column width={15}>
+                      <span ref={dropToDeleteRef}>
+                        <Message negative floating>
+                          <Icon name="trash" />
+                          Drop an event here to remove it from the schedule.
+                          <Icon name="trash" />
+                        </Message>
+                      </span>
+                    </Grid.Column>
+                  </Grid>
                   <FullCalendar
                     // plugins for the basic FullCalendar implementation.
                     //   - timeGridPlugin: Display days as vertical grid
