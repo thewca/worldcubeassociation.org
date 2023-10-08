@@ -22,7 +22,7 @@ import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 import EditVenues from './EditVenues';
 import EditActivities from './EditActivities';
 
-function EditScheduleNew({
+function EditSchedule({
   wcifEvents,
   countryZones,
   calendarLocale,
@@ -172,7 +172,7 @@ export default function Wrapper({
       }}
     >
       <ConfirmProvider>
-        <EditScheduleNew
+        <EditSchedule
           countryZones={countryZones}
           wcifEvents={wcifEvents}
           calendarLocale={calendarLocale}
