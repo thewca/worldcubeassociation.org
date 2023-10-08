@@ -34,14 +34,26 @@ function EditActivityModal({
   onModalClose,
   dateLocale,
 }) {
-  const [activityCode, setActivityCode] = useInputState(activity?.activityCode);
-  const [activityName, setActivityName] = useInputState(activity?.name);
+  const [activityCode, setActivityCode] = useInputState();
+  const [activityName, setActivityName] = useInputState();
 
-  useEffect(() => {
-    if (!activityName && activityCode) {
-      setActivityName(commonActivityCodes[activityCode]);
+  const setActivityCodeInternal = (evt, data) => {
+    const { value: newActivityCode } = data;
+
+    // only if there is no name yet: assign a default name based on the activity code
+    if (!activityName && newActivityCode) {
+      setActivityName(commonActivityCodes[newActivityCode]);
     }
-  }, [activityName, activityCode, setActivityName]);
+
+    setActivityCode(evt, data);
+  };
+
+  // We have to assign state in this awkward way because of an opinionated conflict
+  //   between FullCalendar and SemanticUI. See comment at the beginning of index.js for details.
+  useEffect(() => {
+    setActivityCode(activity?.activityCode);
+    setActivityName(activity?.name);
+  }, [activity, setActivityCode, setActivityName]);
 
   return (
     <Modal
@@ -49,15 +61,13 @@ function EditActivityModal({
       dimmer="blurring"
     >
       <Modal.Header>Add a custom activity</Modal.Header>
-      <Modal.Content
-        as={Form}
-      >
+      <Modal.Content as={Form}>
         <Form.Select
           label="Type of activity"
           name="activity-type"
           options={otherActivityCodeOptions}
           value={activityCode}
-          onChange={setActivityCode}
+          onChange={setActivityCodeInternal}
         />
         <Form.Input
           label="Name"

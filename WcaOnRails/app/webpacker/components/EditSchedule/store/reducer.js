@@ -3,6 +3,7 @@ import {
   AddRoom,
   AddVenue,
   ChangesSaved,
+  EditActivity,
   EditRoom,
   EditVenue,
   MoveActivity,
@@ -40,6 +41,24 @@ const reducers = {
             },
           ],
         }) : room)),
+      })),
+    },
+  }),
+
+  [EditActivity]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.map((venue) => ({
+        ...venue,
+        rooms: venue.rooms.map((room) => ({
+          ...room,
+          activities: room.activities.map((activity) => (
+            activity.id === payload.activityId
+              ? { ...activity, [payload.key]: payload.value }
+              : activity
+          )),
+        })),
       })),
     },
   }),

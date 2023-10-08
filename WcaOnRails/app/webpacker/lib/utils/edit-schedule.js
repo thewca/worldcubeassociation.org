@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import { DateTime, Duration } from 'luxon';
+import { toLuxonDateTime } from '@fullcalendar/luxon3';
 import { parseActivityCode } from './wcif';
 
 export function toMicrodegrees(coord) {
@@ -77,4 +78,28 @@ export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTime
   const newZoneSameLocalTime = oldLocalDateTime.setZone(newTimezone, { keepLocalTime: true });
 
   return luxonToWcifIso(newZoneSameLocalTime);
+}
+
+export function fcEventToActivityAndDates(fcEvent, calendar) {
+  const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
+  const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
+
+  const utcStartIso = luxonToWcifIso(eventStartLuxon);
+  const utcEndIso = luxonToWcifIso(eventEndLuxon);
+
+  const { activityCode, childActivities } = fcEvent.extendedProps;
+
+  const activity = {
+    name: fcEvent.title,
+    activityCode,
+    startTime: utcStartIso,
+    endTime: utcEndIso,
+    childActivities: childActivities || [],
+  };
+
+  return {
+    activity,
+    startLuxon: eventStartLuxon,
+    endLuxon: eventEndLuxon,
+  };
 }

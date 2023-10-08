@@ -31,13 +31,18 @@ import { getTextColor } from '../../../lib/utils/calendar';
 
 import {
   addActivity,
+  editActivity,
   moveActivity,
   removeActivity,
   scaleActivity,
 } from '../store/actions';
 
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
-import { defaultDurationFromActivityCode, luxonToWcifIso } from '../../../lib/utils/edit-schedule';
+import {
+  defaultDurationFromActivityCode,
+  fcEventToActivityAndDates,
+  luxonToWcifIso,
+} from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
 
 function EditActivities({
@@ -156,21 +161,7 @@ function EditActivities({
   };
 
   const addActivityFromPicker = ({ event: fcEvent, view: { calendar } }) => {
-    const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
-    const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
-
-    const utcStartIso = luxonToWcifIso(eventStartLuxon);
-    const utcEndIso = luxonToWcifIso(eventEndLuxon);
-
-    const { activityCode, childActivities } = fcEvent.extendedProps;
-
-    const activity = {
-      name: fcEvent.title,
-      activityCode,
-      startTime: utcStartIso,
-      endTime: utcEndIso,
-      childActivities: childActivities || [],
-    };
+    const { activity } = fcEventToActivityAndDates(fcEvent, calendar);
 
     dispatch(addActivity(activity, wcifRoom.id));
   };
@@ -226,6 +217,25 @@ function EditActivities({
     addActivityFromCalendar(eventStartLuxon, eventEndLuxon);
   };
 
+  const editCustomEvent = ({ event: fcEvent, view: { calendar } }) => {
+    const {
+      activity,
+      startLuxon,
+      endLuxon,
+    } = fcEventToActivityAndDates(fcEvent, calendar);
+
+    const canEdit = activity.activityCode.startsWith('other-');
+
+    if (canEdit) {
+      setModalActivity(activity);
+
+      setModalLuxonStart(startLuxon);
+      setModalLuxonEnd(endLuxon);
+
+      setShowActivityModal(true);
+    }
+  };
+
   const onActivityModalClose = (ok, modalData) => {
     setShowActivityModal(false);
 
@@ -233,9 +243,8 @@ function EditActivities({
 
     if (ok) {
       if (modalActivity) {
-        // TODO update existing activity
-
-        setModalActivity(null);
+        dispatch(editActivity(modalActivity.id, 'activityCode', activityCode));
+        dispatch(editActivity(modalActivity.id, 'name', activityName));
       } else {
         const utcStartIso = luxonToWcifIso(modalLuxonStart);
         const utcEndIso = luxonToWcifIso(modalLuxonEnd);
@@ -253,6 +262,8 @@ function EditActivities({
     }
 
     // cleanup.
+    setModalActivity(null);
+
     setModalLuxonStart(null);
     setModalLuxonEnd(null);
   };
@@ -410,6 +421,8 @@ function EditActivities({
                     selectable
                     dateClick={addActivityFromCalendarClick}
                     select={addActivityFromCalendarDrag}
+                    // allow clicking on existing events to edit them
+                    eventClick={editCustomEvent}
                   />
                 </Grid.Column>
               </Grid.Row>

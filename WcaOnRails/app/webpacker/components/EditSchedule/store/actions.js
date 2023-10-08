@@ -1,5 +1,6 @@
 export const ChangesSaved = 'saving_started';
 export const AddActivity = 'ADD_ACTIVITY';
+export const EditActivity = 'EDIT_ACTIVITY';
 export const RemoveActivity = 'REMOVE_ACTIVITY';
 export const MoveActivity = 'MOVE_ACTIVITY';
 export const ScaleActivity = 'SCALE_ACTIVITY';
@@ -29,6 +30,20 @@ export const addActivity = (wcifActivity, roomId) => ({
   payload: {
     wcifActivity,
     roomId,
+  },
+});
+
+/**
+ * Action creator for modifying details of an activity
+ * @param {int} activityId
+ * @returns {Action}
+ */
+export const editActivity = (activityId, key, value) => ({
+  type: EditActivity,
+  payload: {
+    activityId,
+    key,
+    value,
   },
 });
 
