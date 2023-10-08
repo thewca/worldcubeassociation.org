@@ -6,7 +6,7 @@ import {
   competitionApiUrl,
 } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
-import MultiSearchInput from '../../SearchWidget/MultiSearchInput';
+import MultiSearchInput, { itemToOption } from '../../SearchWidget/MultiSearchInput';
 import { useManyLoadedData } from '../../../lib/hooks/useLoadedData';
 
 export function UserSearch({
@@ -35,7 +35,7 @@ export function UserSearch({
 
   const preSelected = useMemo(
     // the users API actually returns users in the format { "user": stuff_you_are_interested_in }
-    () => Object.values(data).map((item) => item.user),
+    () => Object.values(data).map((item) => itemToOption(item.user)),
     [data],
   );
 
@@ -45,8 +45,8 @@ export function UserSearch({
     <MultiSearchInput
       url={userSearchApiUrlFn}
       goToItemOnSelect={false}
-      preSelected={preSelected}
-      onSearchChange={onChange}
+      selectedItems={preSelected}
+      onChange={onChange}
     />
   );
 }
@@ -63,7 +63,10 @@ export function CompetitionSearch({
     anyLoading,
   } = useManyLoadedData(competitionIds, competitionApiUrl);
 
-  const preSelected = useMemo(() => Object.values(initialData), [initialData]);
+  const preSelected = useMemo(
+    () => Object.values(initialData).map(itemToOption),
+    [initialData],
+  );
 
   if (anyLoading) return <Loading />;
 
@@ -71,9 +74,9 @@ export function CompetitionSearch({
     <MultiSearchInput
       url={competitionSearchApiUrl}
       goToItemOnSelect={false}
-      preSelected={preSelected}
+      selectedItems={preSelected}
       disabled={freeze}
-      onSearchChange={onChange}
+      onChange={onChange}
     />
   );
 }

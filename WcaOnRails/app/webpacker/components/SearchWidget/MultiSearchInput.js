@@ -1,6 +1,4 @@
-import React, {
-  useState, useEffect, useCallback,
-} from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
 import CompetitionItem from './CompetitionItem';
@@ -11,7 +9,6 @@ import TextItem from './TextItem';
 import useDebounce from '../../lib/hooks/useDebounce';
 import I18n from '../../lib/i18n';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
-import '../../stylesheets/search_widget/OmnisearchInput.scss';
 
 const classToComponent = {
   user: UserItem,
@@ -38,7 +35,7 @@ const renderLabel = ({ item }) => ({
   as: 'div',
 });
 
-const itemToOption = (item) => ({
+export const itemToOption = (item) => ({
   item,
   id: item.id,
   key: item.id,
@@ -63,9 +60,9 @@ function MultiSearchInput({
   goToItemOnSelect,
   placeholder,
   removeNoResultsMessage,
-  preSelected = [],
+  selectedItems,
   disabled = false,
-  onSearchChange,
+  onChange,
 }) {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
@@ -73,33 +70,12 @@ function MultiSearchInput({
 
   const debouncedSearch = useDebounce(search, DEBOUNCE_MS);
 
-  const [selected, setSelected] = useState(preSelected.map(itemToOption));
-
-  const handleChange = useCallback((e, { value, options }) => {
+  // wrap the 'onChange' handler because we want to reset the search string
+  const onChangeInternal = useCallback((e, data) => {
     setSearch('');
-    // Here we have "value" which contains the ids of the elements selected,
-    // "oldSelected" which contains the previously selected elements,
-    // "options" which contains the currently displayed options.
-    // "options" changes over time, and may not contain previously selected
-    // elements anymore: we need to make sure the new "selected" value includes
-    // all elements details for the elements in "value", they may come either
-    // from "oldSelected" or "options".
-    setSelected((oldSelected) => {
-      const newSelected = [
-        ...new Set(oldSelected.concat(options)),
-      ].filter((item) => value.includes(item.id));
-      // Redirect user to actual page if needed, and do not change the state.
-      if (goToItemOnSelect && newSelected.length > 0) {
-        window.location.href = newSelected[0].item.url;
-        return oldSelected;
-      }
-      return newSelected;
-    });
 
-    if (onSearchChange) {
-      onSearchChange(e, { value, options });
-    }
-  }, [setSelected, setSearch, onSearchChange, goToItemOnSelect]);
+    onChange(e, data);
+  }, [onChange, setSearch]);
 
   useEffect(() => {
     // Do nothing if search string is empty: we're just loading the page
@@ -119,7 +95,7 @@ function MultiSearchInput({
     }
   }, [debouncedSearch, url]);
 
-  const options = [...selected, ...results];
+  const options = [...selectedItems, ...results];
 
   // If we go to item on select, we want to give the user the option to go to
   // the search page.
@@ -140,10 +116,10 @@ function MultiSearchInput({
       icon="search"
       className="omnisearch-dropdown"
       disabled={disabled}
-      value={selected.map((item) => item.id)}
+      value={selectedItems.map((item) => item.id)}
       searchQuery={search}
       options={options}
-      onChange={handleChange}
+      onChange={onChangeInternal}
       onSearchChange={(e, { searchQuery }) => setSearch(searchQuery)}
       loading={loading}
       noResultsMessage={removeNoResultsMessage ? null : I18n.t('search_results.index.not_found.generic')}
