@@ -289,13 +289,13 @@ function EditActivities({
               <Grid.Row>
                 <Grid.Column width={4}>
                   <Sticky>
-                    <Segment
-                      ref={activityPickerRef}
-                    >
-                      <ActivityPicker
-                        wcifEvents={wcifEvents}
-                        wcifRoom={wcifRoom}
-                      />
+                    <Segment>
+                      <div ref={activityPickerRef}>
+                        <ActivityPicker
+                          wcifEvents={wcifEvents}
+                          wcifRoom={wcifRoom}
+                        />
+                      </div>
                     </Segment>
                   </Sticky>
                 </Grid.Column>
@@ -307,60 +307,62 @@ function EditActivities({
                       <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
                     </span>
                   </Container>
-                  <Grid container textAlign="center" verticalAlign="middle">
-                    <Grid.Column width={1}>
-                      <Popup
-                        trigger={<Button secondary icon="cog" />}
-                        on="click"
-                        position="right center"
-                        pinned
-                        flowing
-                      >
-                        <Popup.Header>Calendar settings</Popup.Header>
-                        <Popup.Content>
-                          <Form>
-                            <Form.Input
-                              label="Minutes per row"
-                              name="row-mins"
-                              type="number"
-                              min={5}
-                              max={30}
-                              step={5}
-                              value={minutesPerRow}
-                              onChange={setMinutesPerRow}
-                            />
-                            <Form.Input
-                              label="Calendar starts at"
-                              name="cal-start"
-                              type="number"
-                              min={0}
-                              max={24}
-                              value={calendarStart}
-                              onChange={setCalendarStart}
-                            />
-                            <Form.Input
-                              label="Calendar ends at"
-                              name="cal-end"
-                              type="number"
-                              min={0}
-                              max={24}
-                              value={calendarEnd}
-                              onChange={setCalendarEnd}
-                            />
-                          </Form>
-                        </Popup.Content>
-                      </Popup>
-                    </Grid.Column>
-                    <Grid.Column width={15}>
-                      <span ref={dropToDeleteRef}>
-                        <Message negative floating>
-                          <Icon name="trash" />
-                          Drop an event here to remove it from the schedule.
-                          <Icon name="trash" />
-                        </Message>
-                      </span>
-                    </Grid.Column>
-                  </Grid>
+                  <Container fluid>
+                    <Grid textAlign="center" verticalAlign="middle">
+                      <Grid.Column width={1}>
+                        <Popup
+                          trigger={<Button secondary icon="cog" />}
+                          on="click"
+                          position="right center"
+                          pinned
+                          flowing
+                        >
+                          <Popup.Header>Calendar settings</Popup.Header>
+                          <Popup.Content>
+                            <Form>
+                              <Form.Input
+                                label="Minutes per row"
+                                name="row-mins"
+                                type="number"
+                                min={5}
+                                max={30}
+                                step={5}
+                                value={minutesPerRow}
+                                onChange={setMinutesPerRow}
+                              />
+                              <Form.Input
+                                label="Calendar starts at"
+                                name="cal-start"
+                                type="number"
+                                min={0}
+                                max={24}
+                                value={calendarStart}
+                                onChange={setCalendarStart}
+                              />
+                              <Form.Input
+                                label="Calendar ends at"
+                                name="cal-end"
+                                type="number"
+                                min={0}
+                                max={24}
+                                value={calendarEnd}
+                                onChange={setCalendarEnd}
+                              />
+                            </Form>
+                          </Popup.Content>
+                        </Popup>
+                      </Grid.Column>
+                      <Grid.Column width={15}>
+                        <span ref={dropToDeleteRef}>
+                          <Message negative floating>
+                            <Icon name="trash" />
+                            Drop an event here to remove it from the schedule.
+                            <Icon name="trash" />
+                          </Message>
+                        </span>
+                      </Grid.Column>
+                    </Grid>
+                  </Container>
                   <FullCalendar
                     // plugins for the basic FullCalendar implementation.
                     //   - timeGridPlugin: Display days as vertical grid

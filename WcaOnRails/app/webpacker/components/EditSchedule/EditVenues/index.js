@@ -22,7 +22,7 @@ function EditVenues({
       </Container>
 
       <Container>
-        <Card.Group itemsPerRow={2}>
+        <Card.Group centered itemsPerRow={2}>
           {wcifSchedule.venues.map((venue) => (
             <VenuePanel
               key={venue.id}
