@@ -1,5 +1,10 @@
 import React, { useMemo } from 'react';
-import { Label, List, Popup } from 'semantic-ui-react';
+import {
+  Label,
+  List,
+  Popup,
+  Ref,
+} from 'semantic-ui-react';
 import cn from 'classnames';
 import _ from 'lodash';
 import {
@@ -11,30 +16,33 @@ import { formats } from '../../../lib/wca-data.js.erb';
 function ActivityPicker({
   wcifEvents,
   wcifRoom,
+  listRef,
 }) {
   return (
     <>
-      <List relaxed>
-        {wcifEvents.map((event) => (
-          <List.Item key={event.id}>
-            <List.Icon
-              className={cn('cubing-icon', `event-${event.id}`)}
-              verticalAlign="middle"
-              size="large"
-            />
-            <List.Content>
-              {event.rounds.map((round) => (
-                <PickerRow
-                  key={round.id}
-                  wcifRoom={wcifRoom}
-                  wcifEvent={event}
-                  wcifRound={round}
-                />
-              ))}
-            </List.Content>
-          </List.Item>
-        ))}
-      </List>
+      <Ref innerRef={listRef}>
+        <List relaxed>
+          {wcifEvents.map((event) => (
+            <List.Item key={event.id}>
+              <List.Icon
+                className={cn('cubing-icon', `event-${event.id}`)}
+                verticalAlign="middle"
+                size="large"
+              />
+              <List.Content>
+                {event.rounds.map((round) => (
+                  <PickerRow
+                    key={round.id}
+                    wcifRoom={wcifRoom}
+                    wcifEvent={event}
+                    wcifRound={round}
+                  />
+                ))}
+              </List.Content>
+            </List.Item>
+          ))}
+        </List>
+      </Ref>
       <p>
         Want to add a custom activity such as lunch or registration?
         Click and select a timeframe on the calendar!

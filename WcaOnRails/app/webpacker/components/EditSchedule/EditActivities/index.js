@@ -14,7 +14,7 @@ import {
   Grid,
   Icon,
   Message,
-  Popup, Segment,
+  Popup, Ref, Segment,
   Sticky,
 } from 'semantic-ui-react';
 
@@ -290,22 +290,19 @@ function EditActivities({
                 <Grid.Column width={4}>
                   <Sticky>
                     <Segment>
-                      <div ref={activityPickerRef}>
-                        <ActivityPicker
-                          wcifEvents={wcifEvents}
-                          wcifRoom={wcifRoom}
-                        />
-                      </div>
+                      <ActivityPicker
+                        wcifEvents={wcifEvents}
+                        wcifRoom={wcifRoom}
+                        listRef={activityPickerRef}
+                      />
                     </Segment>
                   </Sticky>
                 </Grid.Column>
                 <Grid.Column width={12}>
                   <Container text textAlign="center">
-                    <span>
-                      The timezone for this room is
-                      {' '}
-                      <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
-                    </span>
+                    The timezone for this room is
+                    {' '}
+                    <b>{friendlyTimezoneName(wcifVenue.timezone)}</b>
                   </Container>
                   <Container fluid>
                     <Grid textAlign="center" verticalAlign="middle">
@@ -353,13 +350,13 @@ function EditActivities({
                         </Popup>
                       </Grid.Column>
                       <Grid.Column width={15}>
-                        <span ref={dropToDeleteRef}>
+                        <Ref innerRef={dropToDeleteRef}>
                           <Message negative floating>
                             <Icon name="trash" />
                             Drop an event here to remove it from the schedule.
                             <Icon name="trash" />
                           </Message>
-                        </span>
+                        </Ref>
                       </Grid.Column>
                     </Grid>
                   </Container>
