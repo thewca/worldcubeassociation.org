@@ -33,6 +33,7 @@ import competitionFormReducer from './store/reducer';
 import { changesSaved, setErrors } from './store/actions';
 import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import CompDates from './FormSections/CompDates';
 
 // TODO: Need to add cloning params
 
@@ -164,10 +165,7 @@ function NewCompForm() {
         <Admin />
         <NameDetails />
         <VenueInfo />
-        <Form.Group widths="equal">
-          <InputDate id="start_date" />
-          <InputDate id="end_date" />
-        </Form.Group>
+        <CompDates />
         <NearbyComps />
         <Series />
         <Divider />
