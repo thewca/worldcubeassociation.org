@@ -24,6 +24,7 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import luxonPlugin, { toLuxonDateTime, toLuxonDuration } from '@fullcalendar/luxon3';
 
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
 import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
@@ -51,6 +52,8 @@ function EditActivities({
 }) {
   const { wcifSchedule } = useStore();
   const dispatch = useDispatch();
+
+  const confirm = useConfirm();
 
   const [selectedRoomId, setSelectedRoomId] = useInputState();
 
@@ -155,8 +158,12 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
-      const { activityId } = fcEvent.extendedProps;
-      dispatch(removeActivity(activityId));
+      confirm({
+        content: `Are you sure you want to delete the event ${fcEvent.title}? THIS ACTION CANNOT BE UNDONE!`,
+      }).then(() => {
+        const { activityId } = fcEvent.extendedProps;
+        dispatch(removeActivity(activityId));
+      });
     }
   };
 
