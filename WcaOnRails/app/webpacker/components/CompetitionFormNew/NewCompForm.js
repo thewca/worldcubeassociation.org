@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import {
   Button,
   Divider,
   Form,
   Message,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
   InputDate,
@@ -29,47 +30,11 @@ import useToggleState from '../../lib/hooks/useToggleState';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import competitionFormReducer from './store/reducer';
-import { setErrors } from './store/actions';
+import { changesSaved, setErrors } from './store/actions';
 import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 
 // TODO: Need to add cloning params
-
-function FormActions() {
-  const {
-    persisted,
-    competition,
-    initialCompetition,
-  } = useStore();
-
-  const dispatch = useDispatch();
-
-  const { save, saving } = useSaveAction();
-
-  const createComp = () => {
-    save('/competitions', competition, (data) => { dispatch(setErrors(data)); }, { method: 'POST' });
-  };
-
-  const updateComp = () => {
-    save(`/competitions/${initialCompetition.id}`, competition, (data) => { dispatch(setErrors(data)); });
-  };
-
-  // TODO should we handle stuff like this in the save hook?
-  /* if (response.redirected) {
-    window.location.replace(response.url);
-    return;
-  } */
-
-  if (persisted) {
-    return (
-      <Button onClick={updateComp} primary>Update Competition</Button>
-    );
-  }
-
-  return (
-    <Button onClick={createComp} primary>Create Competition</Button>
-  );
-}
 
 function AnnouncementMessage() {
   const { competition, persisted } = useStore();
@@ -110,12 +75,76 @@ function AnnouncementMessage() {
 
 // TODO: There are various parts which have overrides for enabled and disabled which need to done
 function NewCompForm() {
-  const { competition } = useStore();
+  const { competition, initialCompetition, persisted } = useStore();
+  const dispatch = useDispatch();
+
+  const { save, saving } = useSaveAction();
+
+  const createComp = useCallback(() => {
+    save('/competitions', competition, (data) => {
+      dispatch(setErrors(data));
+      // TODO we should probably check whether there are _actual_ errors here
+      //   -- in the backend, return errors only if there are errors as an error state!
+      dispatch(changesSaved());
+    }, { method: 'POST' });
+  }, [dispatch, competition, save]);
+
+  const updateComp = useCallback(() => {
+    save(`/competitions/${initialCompetition.id}`, competition, (data) => {
+      dispatch(setErrors(data));
+      // TODO see above
+      dispatch(changesSaved());
+    });
+  }, [dispatch, competition, initialCompetition.id, save]);
+
+  const saveComp = useMemo(
+    () => (persisted ? updateComp : createComp),
+    [persisted, createComp, updateComp],
+  );
+
+  const unsavedChanges = useMemo(() => (
+    !_.isEqual(competition, initialCompetition)
+  ), [competition, initialCompetition]);
+
+  const onUnload = useCallback((e) => {
+    // Prompt the user before letting them navigate away from this page with unsaved changes.
+    if (unsavedChanges) {
+      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
+
+    return null;
+  }, [unsavedChanges]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [onUnload]);
+
+  const renderUnsavedChangesAlert = () => (
+    <Message color="blue">
+      You have unsaved changes. Don&apos;t forget to
+      {' '}
+      <Button
+        onClick={saveComp}
+        disabled={saving}
+        loading={saving}
+        color="blue"
+      >
+        save your changes!
+      </Button>
+    </Message>
+  );
 
   const [showDebug, setShowDebug] = useToggleState(false);
 
   return (
     <>
+      {unsavedChanges && renderUnsavedChangesAlert()}
       <Button toggle active={showDebug} onClick={setShowDebug}>
         {showDebug ? 'Hide' : 'Show'}
         {' '}
@@ -171,7 +200,7 @@ function NewCompForm() {
         <InputTextArea id="remarks" />
         <Divider />
 
-        <FormActions />
+        <Button onClick={saveComp} primary>{persisted ? 'Update Competition' : 'Create Competition'}</Button>
       </Form>
     </>
   );
