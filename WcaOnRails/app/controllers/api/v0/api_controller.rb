@@ -132,31 +132,6 @@ class Api::V0::ApiController < ApplicationController
     search(Competition, User, Regulation, Incident)
   end
 
-  def show_user(user)
-    if user
-      json = { user: user }
-      if params[:upcoming_competitions]
-        json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
-      end
-      if params[:ongoing_competitions]
-        json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
-      end
-      render status: :ok, json: json
-    else
-      render status: :not_found, json: { user: nil }
-    end
-  end
-
-  def show_user_by_id
-    user = User.find_by_id(params[:id])
-    show_user(user)
-  end
-
-  def show_user_by_wca_id
-    user = User.find_by_wca_id(params[:wca_id])
-    show_user(user)
-  end
-
   def delegates
     paginate json: User.staff_delegates
   end

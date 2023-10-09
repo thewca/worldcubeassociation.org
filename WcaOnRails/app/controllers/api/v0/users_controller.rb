@@ -1,20 +1,25 @@
 # frozen_string_literal: true
 
-class Api::V0::PersonsController < Api::V0::ApiController
+class Api::V0::UsersController < Api::V0::ApiController
   def me
     if current_user
       if stale?(current_user)
         # Also include the users current prs so we can handle qualifications on the Frontend
-        if current_user.wca_id.present?
-          person = Person.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
-          render json: { user: current_user, rankings: { single: person.ranksSingle, average: person.ranksAverage } }
-        else
-          render json: { user: current_user }
-        end
+        show_user(current_user, show_rankings: true)
       end
     else
       render status: :unauthorized, json: { error: "Please log in" }
     end
+  end
+
+  def show_user_by_id
+    user = User.find_by_id(params[:id])
+    show_user(user)
+  end
+
+  def show_user_by_wca_id
+    user = User.find_by_wca_id(params[:wca_id])
+    show_user(user)
   end
 
   def permissions
@@ -26,4 +31,25 @@ class Api::V0::PersonsController < Api::V0::ApiController
       render status: :unauthorized, json: { error: "Please log in" }
     end
   end
+
+  private
+
+    def show_user(user, show_rankings: false)
+      if user
+        json = { user: user }
+        if params[:upcoming_competitions]
+          json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
+        end
+        if params[:ongoing_competitions]
+          json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
+        end
+        if show_rankings && user.wca_id.present?
+          person = Person.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
+          json[:rankings] = { single: person.ranksSingle, average: person.ranksAverage }
+        end
+        render status: :ok, json: json
+      else
+        render status: :not_found, json: { user: nil }
+      end
+    end
 end
