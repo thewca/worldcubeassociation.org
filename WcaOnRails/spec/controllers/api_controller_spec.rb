@@ -46,6 +46,146 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     end
   end
 
+  describe 'GET #me' do
+    it 'correctly returns user' do
+      let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
+      let!(:current_user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
+      get :me
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["user"]).to eq current_user.to_json
+    end
+    it 'correctly returns user without wca_id' do
+      let!(:current_user) { FactoryBot.create(:user, email: "example@email.com") }
+      get :me
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["user"]).to eq current_user.to_json
+    end
+    it 'correctly returns user with their prs' do
+      let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
+      let!(:current_user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
+      get :me
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["user"]).to eq current_user.to_json
+      expect(json["rankings"]).to eq "a"
+    end
+  end
+
+  describe 'GET #permissions' do
+    it 'correctly returns user a normal users permission' do
+      let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
+      let!(:current_user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json).to eq current_user.permissions.to_json
+    end
+
+    it 'correctly returns that a banned user cant compete' do
+      let(:person) { FactoryBot.create(:person, name: "Ban Hammer", wca_id: "2005BANH01") }
+      let!(:current_user) { FactoryBot.create(:banned, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_attend_competitions"]).to eq []
+    end
+
+    it 'correctly returns a banned users end_date' do
+      let(:person) { FactoryBot.create(:person, name: "Ban Hammer", wca_id: "2005BANH01") }
+      let!(:current_user) { FactoryBot.create(:banned, person: person, email: "example@email.com") }
+      current_user.update_column("???", "2012-04-21")
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_attend_competitions"]["until"]).to eq "2012-04-21"
+    end
+
+    it 'correctly returns wrt to be able to create competitions' do
+      let(:person) { FactoryBot.create(:person, name: "WRT Member", wca_id: "2005WRTM01") }
+      let!(:current_user) { FactoryBot.create(:wrt_member, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_create_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns delegate to be able to create competitions' do
+      let(:person) { FactoryBot.create(:person, name: "Delegate", wca_id: "2005DELE01") }
+      let!(:current_user) { FactoryBot.create(:delegate, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_create_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns wst to be able to create competitions' do
+      let(:person) { FactoryBot.create(:person, name: "WST Member", wca_id: "2005WSTM01") }
+      let!(:current_user) { FactoryBot.create(:wst_member, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_create_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns board to be able to create competitions' do
+      let(:person) { FactoryBot.create(:person, name: "Board Member", wca_id: "2005BOAR01") }
+      let!(:current_user) { FactoryBot.create(:board_member, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_create_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns board to be able to admin competitions' do
+      let(:person) { FactoryBot.create(:person, name: "Board Member", wca_id: "2005BOAR01") }
+      let!(:current_user) { FactoryBot.create(:board_member, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_administer_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns wrt to be able to admin competitions' do
+      let(:person) { FactoryBot.create(:person, name: "WRT Member", wca_id: "2005WRTM01") }
+      let!(:current_user) { FactoryBot.create(:wrt_member, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_administer_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns wst to be able to admin competitions' do
+      let(:person) { FactoryBot.create(:person, name: "WST Member", wca_id: "2005WSTM01") }
+      let!(:current_user) { FactoryBot.create(:wst_member, person: person, email: "example@email.com") }
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_administer_competitions"]).to eq "*"
+    end
+
+    it 'correctly returns delegates to be able to admin competitions they delegated' do
+      let(:person) { FactoryBot.create(:person, name: "Delegate", wca_id: "2005DELE01") }
+      let!(:current_user) { FactoryBot.create(:delegate, person: person, email: "example@email.com") }
+      current_user.update_column("delegated_competitions", ["TestCompetition2023"])
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_administer_competitions"]).to eq ["TestCompetition2023"]
+    end
+
+    it 'correctly returns organzizer to be able to admin competitions they organizer' do
+      let(:person) { FactoryBot.create(:person, name: "Organizer", wca_id: "2005DELE01") }
+      let!(:current_user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
+      current_user.update_column("organized_competitions", ["TestCompetition2023"])
+      get :permissions
+      expect(response.status).to eq 200
+      json = JSON.parse(response.body)
+      expect(json["can_administer_competitions"]).to eq ["TestCompetition2023"]
+    end
+  end
+
   describe 'GET #users_search' do
     let(:person) { FactoryBot.create(:person, name: "Jeremy", wca_id: "2005FLEI01") }
     let!(:user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
