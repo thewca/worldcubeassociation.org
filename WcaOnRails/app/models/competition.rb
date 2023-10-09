@@ -1915,7 +1915,7 @@ class Competition < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    json = super(DEFAULT_SERIALIZE_OPTIONS.deep_merge(options || {}))
     # Fallback to the default 'serializable_hash' method, but always include our
     # custom 'class' attribute.
     # We can't put that in our DEFAULT_SERIALIZE_OPTIONS because the 'class'
