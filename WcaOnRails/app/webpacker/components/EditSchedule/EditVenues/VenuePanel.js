@@ -21,6 +21,7 @@ const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
   text: country.name,
   value: country.iso2,
+  flag: country.iso2.toLowerCase(),
 }));
 
 function VenuePanel({
@@ -110,6 +111,7 @@ function VenuePanel({
             onChange={handleVenueChange}
           />
           <Form.Select
+            search
             label="Country"
             name="countryIso2"
             options={countryOptions}

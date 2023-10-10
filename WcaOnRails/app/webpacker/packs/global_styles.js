@@ -9,6 +9,7 @@ import 'semantic-css/container';
 import 'semantic-css/dimmer';
 import 'semantic-css/divider';
 import 'semantic-css/dropdown';
+import 'semantic-css/flag';
 import 'semantic-css/form';
 import 'semantic-css/grid';
 import 'semantic-css/header';
