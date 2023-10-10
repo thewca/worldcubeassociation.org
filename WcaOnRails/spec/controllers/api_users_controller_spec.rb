@@ -163,8 +163,8 @@ RSpec.describe Api::V0::UsersController do
     end
     let(:delegate_person) { FactoryBot.create(:person, name: "Delegate", wca_id: "2005DELE01") }
     let!(:delegate_user) { FactoryBot.create(:delegate, person: person, email: "example@email.com") }
-    delegate_user.update_column("delegated_competitions", ["TestCompetition2023"])
     it 'correctly returns delegates to be able to admin competitions they delegated' do
+      delegate_user.update_column("delegated_competitions", ["TestCompetition2023"])
       sign_in { delegate_user }
       get :permissions
       expect(response.status).to eq 200
@@ -173,8 +173,8 @@ RSpec.describe Api::V0::UsersController do
     end
     let(:organizer_person) { FactoryBot.create(:person, name: "Organizer", wca_id: "2005DELE01") }
     let!(:organizer_user) { FactoryBot.create(:user, person: person, email: "example@email.com") }
-    organizer_user.update_column("organized_competitions", ["TestCompetition2023"])
     it 'correctly returns organizer to be able to admin competitions they organize' do
+      organizer_user.update_column("organized_competitions", ["TestCompetition2023"])
       sign_in { organizer_user }
       get :permissions
       expect(response.status).to eq 200
