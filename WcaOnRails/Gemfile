@@ -102,6 +102,7 @@ gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
+gem 'deep_merge', require: 'deep_merge/rails_compat'
 
 group :development, :test do
   gem 'spring'

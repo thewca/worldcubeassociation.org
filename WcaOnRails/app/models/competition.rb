@@ -379,6 +379,10 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
 
+  def number_of_bookmarks
+    bookmarked_users.count
+  end
+
   def country
     Country.c_find(self.countryId)
   end
@@ -1911,7 +1915,10 @@ class Competition < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    # This looks weird, but we need the 'deeper_merge' method to handle arrays inside hashes.
+    #   In turn, the 'deeper_merge' library has a quirk that even though it doesn't use the ! naming convention,
+    #   it tries to modify the source array in-place. This is not cool so we need to circumvent by duplicating.
+    json = super(DEFAULT_SERIALIZE_OPTIONS.deep_dup.deeper_merge(options || {}))
     # Fallback to the default 'serializable_hash' method, but always include our
     # custom 'class' attribute.
     # We can't put that in our DEFAULT_SERIALIZE_OPTIONS because the 'class'
