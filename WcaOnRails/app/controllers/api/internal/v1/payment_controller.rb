@@ -2,8 +2,10 @@
 
 class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
   def init
-    competition_id, user_id = params["attendee_id"].split("-")
+    return json: { error: "Missing fields" } unless params["attendee_id"].present? && params["amount"].present?
 
+    holder = AttendeePaymentRequest.new(attendee_id: params["attendee_id"])
+    competition_id, user_id = holder.competition_and_user_id
     amount = params["amount"].to_i
 
     competition = Competition.find(competition_id)
@@ -48,12 +50,15 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
     StripePaymentIntent.create!(
-      holder: { type: "attendee", value: params["attendee_id"]},
+      holder: holder,
       stripe_transaction: stripe_transaction,
       client_secret: intent.client_secret,
       user: user,
     )
 
-    render json: { id: intent.client_secret }
+    holder.payment_id = intent.id
+    holder.save
+
+    render json: { id: intent.id }
   end
 end

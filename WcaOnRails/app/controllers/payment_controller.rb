@@ -3,8 +3,17 @@
 
 class PaymentController < ApplicationController
   def payment_config
-    competition = Competition.find(params[:competition_id])
-    render json: { stripe_publishable_key: EnvVars.STRIPE_PUBLISHABLE_KEY, connected_account_id: competition.connected_stripe_account_id }
+    return json: { error: "Please Log in" }, status: :unauthorized unless current_user.present?
+    return json: { error: "Missing fields" } unless params["attendee_id"].present?
+
+    payment_request = AttendeePaymentRequest.find_by(attendee_id: params[:attendee_id])
+    competition_id, user_id = payment_request.competition_and_user_id
+    return json: { error: "Not Authorized to get payment information" }, status: :unauthorized unless user_id == current_user.id?
+
+    competition = Competition.find(competition_id)
+    stripe_transaction = StripeTransaction.find_by(stripe_id: payment_request.payment_id)
+
+    render json: { stripe_publishable_key: EnvVars.STRIPE_PUBLISHABLE_KEY, connected_account_id: competition.connected_stripe_account_id, client_secret: stripe_transaction.client_secret }
   end
 
   def payment_finish
@@ -32,7 +41,7 @@ class PaymentController < ApplicationController
       begin
         update_registration_payment(stripe_intent.id, stripe_intent.status)
       rescue Error
-        return redirect_to competition_register_path(competition_id, "Couldn't reach Registration Service")
+        return redirect_to competition_register_path(competition_id, "registration_down")
       end
     end
 
@@ -40,16 +49,18 @@ class PaymentController < ApplicationController
   end
 
   def payment_refund
-    competition_id, user_id = params["attendee_id"].split("-")
+    return json: { error: "Missing fields" } unless params["attendee_id"].present?
+    payment_request = AttendeePaymentRequest.find_by(attendee_id: params[:attendee_id])
+    competition_id, user_id = payment_request.competition_and_user_id
     competition = Competition.find(competition_id)
 
     unless competition.using_stripe_payments?
       return redirect_to edit_registration_path(competition_id, user_id, "no_stripe")
     end
 
-    payment = RegistrationPayment.find(params[:payment_id])
+    charge = StripeTransaction.find_by(stripe_id: payment_request.payment_id)
 
-    refund_amount_param = params.require(:payment).require(:refund_amount)
+    refund_amount_param = params.require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
     if refund_amount < 0
@@ -59,13 +70,8 @@ class PaymentController < ApplicationController
     currency_iso = competition.currency_code
     stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
 
-    # Backwards compatibility: We may at some point try to record a refund for a payment that was
-    #   - created before the introduction of receipts
-    #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
-    charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
-
     refund_args = {
-      charge: charge_id,
+      charge: charge.id,
       amount: stripe_amount,
     }
 
@@ -77,21 +83,14 @@ class PaymentController < ApplicationController
     )
 
     refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
-    refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
+    refund_receipt.update!(parent_transaction: payment_request.receipt) if payment_request.receipt.present?
 
-    # Should be the same as `refund_amount`, but by double-converting from the Stripe object
-    # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    ruby_money = refund_receipt.money_amount
+    begin
+      update_registration_payment(refund_receipt.intent.id, "refund")
+    rescue Error
+      return redirect_to competition_register_path(competition_id, "registration_down")
+    end
 
-    registration_payments.create!(
-      amount_lowest_denomination: ruby_money.cents * -1,
-      currency_code: ruby_money.currency.iso_code,
-      receipt: refund_receipt,
-      refunded_registration_payment_id: payment.id,
-      user_id: current_user.id,
-    )
-
-    flash[:success] = 'Payment was refunded'
     redirect_to edit_registration_path(competition_id, user_id)
   end
 end
