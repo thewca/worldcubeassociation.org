@@ -9,21 +9,17 @@ export default function RoundsTable({ wcifEvent, disabled }) {
   const event = events.byId[wcifEvent.id];
 
   return (
-    <Segment
-      basic
-      compact
-      className="event-panel__rounds-table"
-    >
+    <Segment basic>
       <Table
-        compact
         unstackable
         basic="very"
+        textAlign="center"
       >
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>#</Table.HeaderCell>
             <Table.HeaderCell>Format</Table.HeaderCell>
-            <Table.HeaderCell style={{ width: '5em' }}>Scramble Sets</Table.HeaderCell>
+            <Table.HeaderCell>Scramble Sets</Table.HeaderCell>
             {event.canChangeTimeLimit && (
               <Table.HeaderCell>Time Limit</Table.HeaderCell>
             )}

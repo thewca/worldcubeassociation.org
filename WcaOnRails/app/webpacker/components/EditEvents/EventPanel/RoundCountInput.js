@@ -31,9 +31,6 @@ export default function RoundCountInput({ roundCount, onChange, disabled }) {
       onChange={handleChange}
       disabled={disabled}
       options={RoundCountOptions}
-      style={{
-        fontSize: '.75em',
-      }}
     />
   );
 }

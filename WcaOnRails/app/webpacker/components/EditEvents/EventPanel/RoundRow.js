@@ -55,11 +55,10 @@ export default function RoundRow({
       verticalAlign="middle"
       name={`round-${roundNumber}`}
     >
-      <Table.Cell className="round-row__index">
+      <Table.Cell verticalAlign="middle">
         {wcifRound.id.split('-')[1].replace('r', '')}
-
       </Table.Cell>
-      <Table.Cell className="round-row__format">
+      <Table.Cell>
         <Dropdown
           selection
           name="format"
@@ -75,11 +74,15 @@ export default function RoundRow({
         />
       </Table.Cell>
 
-      <Table.Cell className="round-row__scramble-set-count">
+      <Table.Cell>
         <Input
           name="scrambleSetCount"
           type="number"
           min={1}
+          // This is arbitrary, but HTML uses this property to compute the width of the input box.
+          // No max property means HTML thinks "this number could be 13247324871321,
+          // so better make the box very very wide!"
+          max={1000}
           value={wcifRound.scrambleSetCount}
           onChange={scrambleSetCountChanged}
           disabled={disabled}
@@ -87,7 +90,7 @@ export default function RoundRow({
       </Table.Cell>
 
       {event.canChangeTimeLimit && (
-        <Table.Cell className="round-row__time-limit">
+        <Table.Cell>
           <EditTimeLimitModal
             wcifEvent={wcifEvent}
             wcifRound={wcifRound}
@@ -98,7 +101,7 @@ export default function RoundRow({
       )}
 
       {event.canHaveCutoff && (
-        <Table.Cell className="round-row__cutoff">
+        <Table.Cell>
           <EditCutoffModal
             wcifEvent={wcifEvent}
             wcifRound={wcifRound}
@@ -108,7 +111,7 @@ export default function RoundRow({
         </Table.Cell>
       )}
 
-      <Table.Cell className="round-row__advancement-condition">
+      <Table.Cell>
         {!isLastRound && (
           <EditAdvancementConditionModal
             wcifEvent={wcifEvent}

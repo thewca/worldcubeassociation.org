@@ -5,7 +5,7 @@ import React, {
 } from 'react';
 import _ from 'lodash';
 
-import { Button, Message } from 'semantic-ui-react';
+import { Button, Card, Message } from 'semantic-ui-react';
 import { events } from '../../lib/wca-data.js.erb';
 
 import { useSaveWcifAction } from '../../lib/utils/wcif';
@@ -70,24 +70,19 @@ function EditEvents() {
   );
 
   return (
-    <div>
+    <>
       {unsavedChanges && renderUnsavedChangesAlert()}
-      <div
-        style={{
-          // https://css-tricks.com/an-auto-filling-css-grid-with-max-columns/
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fill, minmax(max(400px, calc((100% - calc(calc(3 - 1) * 1em)) / 3)), 1fr))',
-          gridGap: '1em',
-          alignItems: 'baseline',
-        }}
-        className="event-panel-container"
+      <Card.Group
+        itemsPerRow={3}
+        // this is necessary so that the cards "wrap" instead of growing to match the longest card
+        style={{ alignItems: 'baseline' }}
       >
         {wcifEvents.map((wcifEvent) => (
           <EventPanel key={wcifEvent.id} wcifEvent={wcifEvent} />
         ))}
-      </div>
+      </Card.Group>
       {unsavedChanges && renderUnsavedChangesAlert()}
-    </div>
+    </>
   );
 }
 

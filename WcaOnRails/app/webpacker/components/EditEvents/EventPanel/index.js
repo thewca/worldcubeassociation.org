@@ -1,8 +1,11 @@
 import React from 'react';
-import cn from 'classnames';
 
 import {
-  Button, Header, Segment,
+  Button,
+  Card,
+  Header,
+  Icon,
+  Label, Segment,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -82,11 +85,8 @@ export default function EventPanel({
                 : ''
             }
             onClick={handleRemoveEvent}
-            color="red"
-            size="tiny"
-            style={{
-              fontSize: '.75em',
-            }}
+            negative
+            size="small"
           >
             Remove event
           </Button>
@@ -104,11 +104,8 @@ export default function EventPanel({
             : ''
         }
         onClick={() => dispatch(addEvent(wcifEvent.id))}
-        color="green"
-        size="tiny"
-        style={{
-          fontSize: '.75em',
-        }}
+        positive
+        size="small"
       >
         Add event
       </Button>
@@ -116,74 +113,58 @@ export default function EventPanel({
   };
 
   return (
-    <Segment.Group
+    <Card
       size="tiny"
       compact
       className={`event-panel event-${wcifEvent.id}`}
     >
-
-      <Header
-        className="event-panel__heading"
-        style={{
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-        }}
-        attached
+      <Card.Content
+        // replicate the way SemUI Cards handle images (borderless) without an actual image
+        style={{ padding: 0 }}
       >
-        <div
-          style={{
-            margin: '-1.5em -1em',
-          }}
-        >
-          <span className={cn('img-thumbnail', 'cubing-icon', `event-${event.id}`)} />
-        </div>
-        <span
-          className="title"
-          style={{
-            flexGrow: 1,
-            marginLeft: '2em',
-          }}
-        >
-          {event.name}
-
-        </span>
-        <div>
-          {renderRoundCountInputs()}
-        </div>
-      </Header>
-
+        <Segment basic tertiary>
+          <Header as="span">
+            <Icon className="cubing-icon" name={`event-${event.id}`} />
+            <Header.Content>
+              {event.name}
+            </Header.Content>
+          </Header>
+          <Button.Group floated="right">
+            {renderRoundCountInputs()}
+          </Button.Group>
+        </Segment>
+      </Card.Content>
       {wcifEvent.rounds !== null && (
         <>
-          <RoundsTable
-            wcifEvents={wcifEvents}
-            wcifEvent={wcifEvent}
-            disabled={disabled}
-          />
-          <Segment>
-            <h5 style={{ display: 'inline' }}>
-              <span style={{ marginRight: '0.25em' }}>
-                {i18n.t('competitions.events.qualification')}
-                :
-              </span>
-              {/* Qualifications cannot be edited after the competition has been announced. */}
-              {/* Qualifications cannot be added if the box from the competition form is unchecked. */}
-              <EditQualificationModal
-                wcifEvent={wcifEvent}
-                disabled={
-                  disabled || !canAddAndRemoveEvents || !canUpdateQualifications
-                }
-                disabledReason={
-                  // todo: translations?
-                  canUpdateQualifications
-                    ? undefined
-                    : 'Turn on Qualifications under Edit > Organizer View and add a reason.'
-                }
-              />
-            </h5>
-          </Segment>
+          <Card.Content>
+            <RoundsTable
+              wcifEvents={wcifEvents}
+              wcifEvent={wcifEvent}
+              disabled={disabled}
+            />
+          </Card.Content>
+          <Card.Content>
+            <Label basic>
+              {i18n.t('competitions.events.qualification')}
+              :
+            </Label>
+            {/* Qualifications cannot be edited after the competition has been announced. */}
+            {/* Qualifications cannot be added if the box from the competition form is unchecked. */}
+            <EditQualificationModal
+              wcifEvent={wcifEvent}
+              disabled={
+                disabled || !canAddAndRemoveEvents || !canUpdateQualifications
+              }
+              disabledReason={
+                // todo: translations?
+                canUpdateQualifications
+                  ? undefined
+                  : 'Turn on Qualifications under Edit > Organizer View and add a reason.'
+              }
+            />
+          </Card.Content>
         </>
       )}
-    </Segment.Group>
+    </Card>
   );
 }
