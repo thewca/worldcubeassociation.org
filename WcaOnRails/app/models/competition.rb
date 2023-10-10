@@ -380,7 +380,7 @@ class Competition < ApplicationRecord
   end
 
   def number_of_bookmarks
-    bookmarked_users.length
+    bookmarked_users.count
   end
 
   def country
