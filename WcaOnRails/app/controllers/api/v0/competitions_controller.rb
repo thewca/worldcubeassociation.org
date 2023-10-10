@@ -27,9 +27,9 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def show
     competition = competition_from_params
+
     if stale?(competition)
-      json = competition.serializable_hash(COMPETITION_INFO_SERIALIZE_OPTIONS)
-      render json: json
+      render json: competition.as_json(COMPETITION_INFO_SERIALIZE_OPTIONS)
     end
   end
 
