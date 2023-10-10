@@ -645,10 +645,9 @@ class User < ApplicationRecord
   end
 
   def permissions
-    {
+    permissions = {
       can_attend_competitions: {
         scope: cannot_register_for_competition_reasons.empty? ? "*" : [],
-        until: banned? ? ban_end : nil,
       },
       can_organize_competitions: {
         scope: can_create_competitions? ? "*" : [],
@@ -657,6 +656,10 @@ class User < ApplicationRecord
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
     }
+    if banned?
+      permissions[:can_attend_competitions][:until] = ban_end || nil
+    end
+    permissions
   end
 
   def can_view_all_users?

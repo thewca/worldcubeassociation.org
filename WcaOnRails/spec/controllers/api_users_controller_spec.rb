@@ -96,7 +96,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_attend_competitions"]).to eq []
+      expect(json["can_attend_competitions"]["scope"]).to eq []
     end
     it 'correctly returns a banned users end_date' do
       banned_user.teams.select(team: Team.banned).first.update_column("end_date", "2012-04-21")
@@ -111,7 +111,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]).to eq "*"
+      expect(json["can_create_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns delegate to be able to create competitions' do
@@ -119,7 +119,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]).to eq "*"
+      expect(json["can_create_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns wst to be able to create competitions' do
@@ -127,7 +127,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]).to eq "*"
+      expect(json["can_create_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns board to be able to create competitions' do
@@ -135,7 +135,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]).to eq "*"
+      expect(json["can_create_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns board to be able to admin competitions' do
@@ -143,7 +143,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_administer_competitions"]).to eq "*"
+      expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns wrt to be able to admin competitions' do
@@ -151,7 +151,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_administer_competitions"]).to eq "*"
+      expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns wst to be able to admin competitions' do
