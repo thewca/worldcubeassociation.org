@@ -12,7 +12,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
 
     registration_metadata = {
       competition: competition.name,
-      registration_url: "https://www.worldcubeassociation.org/competitions/#{competition_id}/#{user_id}/edit",
+      registration_url: edit_registration_path(competition_id, user_id),
     }
 
     currency_iso = params["currency_code"]
@@ -48,12 +48,12 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
     StripePaymentIntent.create!(
-      holder: params["attendee_id"],
+      holder: { type: "attendee", value: params["attendee_id"]},
       stripe_transaction: stripe_transaction,
       client_secret: intent.client_secret,
       user: user,
     )
 
-    render json: { client_secret: intent.client_secret, connected_account_id: account_id }
+    render json: { id: intent.client_secret }
   end
 end

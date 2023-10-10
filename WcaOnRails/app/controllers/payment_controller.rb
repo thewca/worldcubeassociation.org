@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative '../helpers/microservices_helper'
 
 class PaymentController < ApplicationController
   def payment_config
@@ -19,49 +18,25 @@ class PaymentController < ApplicationController
     stored_intent = stored_transaction.stripe_payment_intent
 
     unless stored_intent.client_secret == intent_secret
-      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
-      return redirect_to competition_register_path(competition)
+      return redirect_to competition_register_path(competition, "secret_invalid")
     end
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
     stripe_intent = stored_intent.retrieve_intent
 
     unless stripe_intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
-      return redirect_to competition_register_path(competition)
+      return redirect_to competition_register_path(competition, "not_found")
     end
 
-    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
-      ruby_money = charge_transaction.money_amount
-      registration_payments.create!(
-        amount_lowest_denomination: ruby_money.cents,
-        currency_code: ruby_money.currency.iso_code,
-        receipt: charge_transaction,
-        user_id: current_user.id,
-      )
+    stored_intent.update_status_and_charges(stripe_intent, current_user) do |_|
+      begin
+        update_registration_payment(stripe_intent.id, stripe_intent.status)
+      rescue Error
+        return redirect_to competition_register_path(competition_id, "Couldn't reach Registration Service")
+      end
     end
 
-    # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_transaction.status
-    when 'succeeded'
-      flash[:success] = t("registrations.payment_form.payment_successful")
-    when 'requires_action'
-      # Customer did not complete the payment
-      # For example, 3DSecure could still be pending.
-      flash[:warning] = t("registrations.payment_form.errors.payment_pending")
-    when 'requires_payment_method'
-      # Payment failed. If a payment fails, it is "reset" by Stripe,
-      # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
-      flash[:error] = t("registrations.payment_form.errors.payment_reset")
-    when 'processing'
-      # The payment can be pending, for example bank transfers can take multiple days to be fulfilled.
-      flash[:warning] = t("registrations.payment_form.payment_processing")
-    else
-      # Invalid status
-      flash[:error] = "Invalid PaymentIntent status"
-    end
-
-    redirect_to competition_register_path(competition_id)
+    redirect_to competition_register_path(competition_id, stored_transaction.status)
   end
 
   def payment_refund
@@ -69,7 +44,6 @@ class PaymentController < ApplicationController
     competition = Competition.find(competition_id)
 
     unless competition.using_stripe_payments?
-      flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(competition_id, user_id)
     end
 

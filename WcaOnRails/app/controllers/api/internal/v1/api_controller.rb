@@ -4,7 +4,7 @@ class Api::Internal::V1::ApiController < ApplicationController
   prepend_before_action :validate_token
 
   def validate_token
-    service_token = request.headers["X-WCA-Service-Token"]
+    service_token = request.headers[MICROSERVICE_AUTH_HEADER]
     unless service_token.present?
       return render json: { error: "Missing Authentication" }, status: :forbidden
     end
