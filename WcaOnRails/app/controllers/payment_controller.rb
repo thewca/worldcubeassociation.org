@@ -44,7 +44,7 @@ class PaymentController < ApplicationController
     competition = Competition.find(competition_id)
 
     unless competition.using_stripe_payments?
-      return redirect_to edit_registration_path(competition_id, user_id)
+      return redirect_to edit_registration_path(competition_id, user_id, "no_stripe")
     end
 
     payment = RegistrationPayment.find(params[:payment_id])
@@ -52,14 +52,8 @@ class PaymentController < ApplicationController
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
-    if refund_amount > payment.amount_available_for_refund
-      flash[:danger] = "You are not allowed to refund more than the competitor has paid."
-      return redirect_to edit_registration_path(competition_id, user_id)
-    end
-
     if refund_amount < 0
-      flash[:danger] = "The refund amount must be greater than zero."
-      return redirect_to edit_registration_path(competition_id, user_id)
+      return redirect_to edit_registration_path(competition_id, user_id, "refund_zero")
     end
 
     currency_iso = competition.currency_code
