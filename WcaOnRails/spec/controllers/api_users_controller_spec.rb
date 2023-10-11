@@ -52,7 +52,7 @@ RSpec.describe Api::V0::UsersController do
   describe 'GET #me' do
     let!(:normal_user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
     it 'correctly returns user' do
-      sign_in { normal_user }
+      sign_in normal_user
       get :me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -61,7 +61,7 @@ RSpec.describe Api::V0::UsersController do
     let!(:id_less_user) { FactoryBot.create(:user, email: "example@email.com") }
     it 'correctly returns user without wca_id' do
       get :me
-      sign_in { id_less_user }
+      sign_in id_less_user
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["user"]).to eq current_user.to_json
@@ -69,7 +69,7 @@ RSpec.describe Api::V0::UsersController do
     let(:competed_person) { FactoryBot.create(:person_who_has_competed_once, name: "Jeremy", wca_id: "2005FLEI01") }
     let!(:competed_user) { FactoryBot.create(:user, person: competed_person, email: "example1@email.com") }
     it 'correctly returns user with their prs' do
-      sign_in { competed_user }
+      sign_in competed_user
       get :me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -81,7 +81,7 @@ RSpec.describe Api::V0::UsersController do
   describe 'GET #permissions' do
     let!(:normal_user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
     it 'correctly returns user a normal users permission' do
-      sign_in { normal_user }
+      sign_in normal_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -89,7 +89,7 @@ RSpec.describe Api::V0::UsersController do
     end
     let!(:banned_user) { FactoryBot.create(:user, :banned) }
     it 'correctly returns that a banned user cant compete' do
-      sign_in { banned_user }
+      sign_in banned_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -97,7 +97,7 @@ RSpec.describe Api::V0::UsersController do
     end
     it 'correctly returns a banned users end_date' do
       banned_user.teams.select(team: Team.banned).first.update_column("end_date", "2012-04-21")
-      sign_in { banned_user }
+      sign_in banned_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -158,20 +158,20 @@ RSpec.describe Api::V0::UsersController do
       json = JSON.parse(response.body)
       expect(json["can_administer_competitions"]).to eq "*"
     end
-    let(:delegate_user) { FactoryBot.create(:delegate) }
-    let(:organizer_user) { FactoryBot.create(:user) }
+    let(:delegate_user) { FactoryBot.create :delegate }
+    let(:organizer_user) { FactoryBot.create :user }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
     }
     it 'correctly returns delegates to be able to admin competitions they delegated' do
-      sign_in { delegate_user }
+      sign_in delegate_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
       expect(json["can_administer_competitions"]).to eq [competition.id]
     end
     it 'correctly returns organizer to be able to admin competitions they organize' do
-      sign_in { organizer_user }
+      sign_in organizer_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
