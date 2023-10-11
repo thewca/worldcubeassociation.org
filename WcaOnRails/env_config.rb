@@ -36,7 +36,7 @@ EnvConfig = SuperConfig.new do
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :DATABASE_AWS_REGION, :string, ''
     optional :DATABASE_WRT_USER, :string, ''
-
+    optional :WCA_REGISTRATION_URL, :string, ''
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
