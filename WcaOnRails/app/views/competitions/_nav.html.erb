@@ -121,6 +121,13 @@
           icon: "align left",
         }
       end
+      if current_user&.can_manage_competition?(@competition)
+        nav_items << {
+          text: t('.menu.enable_v2'),
+          path: competitions_v2_enable_path(@competition),
+          icon: "lightbulb",
+        }
+      end
       unless @competition.results_posted?
         if @competition.use_wca_registration?
           nav_items << {

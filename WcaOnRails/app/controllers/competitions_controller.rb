@@ -464,7 +464,9 @@ class CompetitionsController < ApplicationController
     }
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
-      format.html
+      format.html do
+        return redirect_to competition_v2_path(@competition) if @competition.uses_new_registration_service? && !@competition.results_posted?
+      end
       format.pdf do
         unless @competition.has_schedule?
           flash[:danger] = t('.no_schedule')
@@ -528,6 +530,17 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params
     BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
     head :ok
+  end
+
+  # Enables the New Registration Service for a Competition
+  def enable_v2
+    @competition = competition_from_params
+    if @competition.registration_opened?
+      flash.now[:danger] = t('.cannot_activate_v2')
+      return redirect_to competition_path(@competition)
+    end
+    @competition.enable_v2_registrations
+    redirect_to competition_v2_path(@competition)
   end
 
   def update
