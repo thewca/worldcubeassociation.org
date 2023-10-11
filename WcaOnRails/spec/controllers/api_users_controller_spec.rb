@@ -107,7 +107,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]["scope"]).to eq "*"
+      expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns delegate to be able to create competitions' do
@@ -115,7 +115,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]["scope"]).to eq "*"
+      expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns wst to be able to create competitions' do
@@ -123,7 +123,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]["scope"]).to eq "*"
+      expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns board to be able to create competitions' do
@@ -131,7 +131,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_create_competitions"]["scope"]).to eq "*"
+      expect(json["can_organize_competitions"]["scope"]).to eq "*"
     end
 
     it 'correctly returns board to be able to admin competitions' do
@@ -157,7 +157,8 @@ RSpec.describe Api::V0::UsersController do
       json = JSON.parse(response.body)
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
-    let(:delegate_user) { FactoryBot.create :delegate }
+    let(:senior_delegate) { FactoryBot.create :senior_delegate }
+    let(:delegate_user) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
     let(:organizer_user) { FactoryBot.create :user }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])
