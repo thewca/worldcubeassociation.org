@@ -84,8 +84,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in normal_user
       get :permissions
       expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json).to eq normal_user.permissions
+      expect(response.body).to eq normal_user.permissions.to_json
     end
     let!(:banned_user) { FactoryBot.create(:user, :banned) }
     it 'correctly returns that a banned user cant compete' do
@@ -104,7 +103,7 @@ RSpec.describe Api::V0::UsersController do
       expect(json["can_attend_competitions"]["scope"]["until"]).to eq "2012-04-21"
     end
     it 'correctly returns wrt to be able to create competitions' do
-      sign_in { FactoryBot.create :user, :wrt_member }
+      sign_in FactoryBot.create :user, :wrt_member
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -112,7 +111,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns delegate to be able to create competitions' do
-      sign_in { FactoryBot.create :user, :delegate }
+      sign_in FactoryBot.create :user, :delegate
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -120,7 +119,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wst to be able to create competitions' do
-      sign_in { FactoryBot.create :user, :wst_member }
+      sign_in FactoryBot.create :user, :wst_member
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -128,7 +127,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns board to be able to create competitions' do
-      sign_in { FactoryBot.create :user, :board_member }
+      sign_in FactoryBot.create :user, :board_member
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -136,7 +135,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns board to be able to admin competitions' do
-      sign_in { FactoryBot.create :user, :board_member }
+      sign_in FactoryBot.create :user, :board_member
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -144,7 +143,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wrt to be able to admin competitions' do
-      sign_in { FactoryBot.create :user, :wrt_member }
+      sign_in FactoryBot.create :user, :wrt_member
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -152,7 +151,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wst to be able to admin competitions' do
-      sign_in { FactoryBot.create :user, :wst_member }
+      sign_in FactoryBot.create :user, :wst_member
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
