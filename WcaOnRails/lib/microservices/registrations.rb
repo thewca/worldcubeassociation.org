@@ -15,10 +15,24 @@ module MicroServicesRegistrations
   end
 
   def update_registration_payment(id, status)
-    token = get_wca_token
-    response = Faraday.post(update_payment_status_path, headers: { MICROSERVICE_AUTH_HEADER => token, "Content-Type" => "application/json" }, body: { payment_id: id, payment_status: status }.to_json)
-    unless response.ok?
-      raise Error "Updating wca-registration failed with error #{response.status} #{response.body}"
+    conn = Faraday.new(
+      url: update_payment_status_path,
+      headers: { MICROSERVICE_AUTH_HEADER => get_wca_token }
+    ) do | builder |
+      # Sets headers and parses jsons automatically
+      builder.request :json
+      builder.response :json
+      # Raises an error on 4xx and 5xx responses.
+      builder.response :raise_error
+      # Logs requests and responses.
+      # By default, it only logs the request method and URL, and the request/response headers.
+      builder.response :logger
     end
+
+    conn.post('/') do |req|
+      req.body = { payment_id: id, payment_status: status }
+    end
+    # If we ever need the response body
+    conn.body
   end
 end

@@ -534,10 +534,10 @@ class RegistrationsController < ApplicationController
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
-    if stored_intent.holder.type == "attendee"
+    if stored_intent.holder.is_a? AttendeePaymentRequest
       begin
         update_registration_payment(stored_intent.id, stored_intent.status)
-      rescue Error
+      rescue Faraday::Error
         logger.error "Couldn't update Microservice"
         return head: :internal_server_error
       end

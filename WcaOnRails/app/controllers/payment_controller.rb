@@ -4,9 +4,9 @@
 class PaymentController < ApplicationController
   def payment_config
     return json: { error: "Please Log in" }, status: :unauthorized unless current_user.present?
-    return json: { error: "Missing fields" } unless params["attendee_id"].present?
+    attendee_id = params.require(:attendee_id)
 
-    payment_request = AttendeePaymentRequest.find_by(attendee_id: params[:attendee_id])
+    payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
     competition_id, user_id = payment_request.competition_and_user_id
     return json: { error: "Not Authorized to get payment information" }, status: :unauthorized unless user_id == current_user.id?
 
@@ -17,7 +17,10 @@ class PaymentController < ApplicationController
   end
 
   def payment_finish
-    competition = Competition.find(params[:competition_id])
+    attendee_id = params.require(:attendee_id)
+    payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
+    competition_id = payment_request.competition_and_user_id
+    competition = Competition.find(competition_id)
 
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
@@ -26,21 +29,18 @@ class PaymentController < ApplicationController
     stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
     stored_intent = stored_transaction.stripe_payment_intent
 
-    unless stored_intent.client_secret == intent_secret
-      return redirect_to competition_register_path(competition, "secret_invalid")
-    end
+    return redirect_to competition_register_path(competition, "intent_invalid") unless intent_id == payment_request.payment_id
+    return redirect_to competition_register_path(competition, "secret_invalid") unless stored_intent.client_secret == intent_secret
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
     stripe_intent = stored_intent.retrieve_intent
 
-    unless stripe_intent.present?
-      return redirect_to competition_register_path(competition, "not_found")
-    end
+    return redirect_to competition_register_path(competition, "not_found") unless stripe_intent.present?
 
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |_|
       begin
         update_registration_payment(stripe_intent.id, stripe_intent.status)
-      rescue Error
+      rescue Faraday::Error
         return redirect_to competition_register_path(competition_id, "registration_down")
       end
     end
@@ -49,8 +49,8 @@ class PaymentController < ApplicationController
   end
 
   def payment_refund
-    return json: { error: "Missing fields" } unless params["attendee_id"].present?
-    payment_request = AttendeePaymentRequest.find_by(attendee_id: params[:attendee_id])
+    attendee_id = params.require(:attendee_id)
+    payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
     competition_id, user_id = payment_request.competition_and_user_id
     competition = Competition.find(competition_id)
 
@@ -86,9 +86,9 @@ class PaymentController < ApplicationController
     refund_receipt.update!(parent_transaction: payment_request.receipt) if payment_request.receipt.present?
 
     begin
-      update_registration_payment(refund_receipt.intent.id, "refund")
-    rescue Error
-      return redirect_to competition_register_path(competition_id, "registration_down")
+      update_registration_payment(payment_request.payment_id, "refund")
+    rescue Faraday::Error
+      return redirect_to edit_registration_path(competition_id, user_id, "registration_down")
     end
 
     redirect_to edit_registration_path(competition_id, user_id)

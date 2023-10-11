@@ -2,14 +2,15 @@
 
 class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
   def init
-    return json: { error: "Missing fields" } unless params["attendee_id"].present? && params["amount"].present?
+    attendee_id = params.require(:attendee_id)
+    iso_amount = params.require(:amount)
 
-    holder = AttendeePaymentRequest.new(attendee_id: params["attendee_id"])
+    holder = AttendeePaymentRequest.new(attendee_id: attendee_id)
     competition_id, user_id = holder.competition_and_user_id
-    amount = params["amount"].to_i
 
     competition = Competition.find(competition_id)
     user = User.find(user_id)
+    render json: { error: "Registration not found" }, status: :not_found unless competition.present? && user.present?
     account_id = competition.connected_stripe_account_id
 
     registration_metadata = {
@@ -18,7 +19,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     }
 
     currency_iso = params["currency_code"]
-    stripe_amount = StripeTransaction.amount_to_stripe(amount, currency_iso)
+    stripe_amount = StripeTransaction.amount_to_stripe(iso_amount, currency_iso)
 
     payment_intent_args = {
       amount: stripe_amount,
