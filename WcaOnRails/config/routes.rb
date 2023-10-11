@@ -294,7 +294,7 @@ Rails.application.routes.draw do
       get '/search/users' => 'api#users_search'
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
-      get '/users/me' => 'users#me'
+      get '/users/me' => 'users#show_me'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id'

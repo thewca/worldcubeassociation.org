@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::UsersController < Api::V0::ApiController
-  def me
+  def show_me
     if current_user
       if stale?(current_user)
         # Also include the users current prs so we can handle qualifications on the Frontend
