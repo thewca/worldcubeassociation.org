@@ -56,7 +56,7 @@ RSpec.describe Api::V0::UsersController do
       get :me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq normal_user.to_json
+      expect(json["user"]).to eq normal_user
     end
     let!(:id_less_user) { FactoryBot.create(:user, email: "example@email.com") }
     it 'correctly returns user without wca_id' do
@@ -64,7 +64,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in id_less_user
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq current_user.to_json
+      expect(json["user"]).to eq current_user
     end
     let(:competed_person) { FactoryBot.create(:person_who_has_competed_once, name: "Jeremy", wca_id: "2005FLEI01") }
     let!(:competed_user) { FactoryBot.create(:user, person: competed_person, email: "example1@email.com") }
@@ -73,7 +73,7 @@ RSpec.describe Api::V0::UsersController do
       get :me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq current_user.to_json
+      expect(json["user"]).to eq current_user
       expect(json["rankings"]).to eq "a"
     end
   end
@@ -85,7 +85,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json).to eq normal_user.permissions.to_json
+      expect(json).to eq normal_user.permissions
     end
     let!(:banned_user) { FactoryBot.create(:user, :banned) }
     it 'correctly returns that a banned user cant compete' do
@@ -101,10 +101,10 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_attend_competitions"]["until"]).to eq "2012-04-21"
+      expect(json["can_attend_competitions"]["scope"]["until"]).to eq "2012-04-21"
     end
     it 'correctly returns wrt to be able to create competitions' do
-      sign_in { FactoryBot.create(:wrt_member, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :wrt_member }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -112,7 +112,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns delegate to be able to create competitions' do
-      sign_in { FactoryBot.create(:delegate, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :delegate }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -120,7 +120,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wst to be able to create competitions' do
-      sign_in { FactoryBot.create(:wst_member, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :wst_member }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -128,7 +128,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns board to be able to create competitions' do
-      sign_in { FactoryBot.create(:board_member, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :board_member }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -136,7 +136,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns board to be able to admin competitions' do
-      sign_in { FactoryBot.create(:board_member, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :board_member }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -144,7 +144,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wrt to be able to admin competitions' do
-      sign_in { FactoryBot.create(:wrt_member, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :wrt_member }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -152,11 +152,11 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns wst to be able to admin competitions' do
-      sign_in { FactoryBot.create(:wst_member, person: person, email: "example@email.com") }
+      sign_in { FactoryBot.create :user, :wst_member }
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_administer_competitions"]).to eq "*"
+      expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
     let(:delegate_user) { FactoryBot.create :delegate }
     let(:organizer_user) { FactoryBot.create :user }
@@ -168,14 +168,14 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_administer_competitions"]).to eq [competition.id]
+      expect(json["can_administer_competitions"]["scope"]).to eq [competition.id]
     end
     it 'correctly returns organizer to be able to admin competitions they organize' do
       sign_in organizer_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_administer_competitions"]).to eq [competition.id]
+      expect(json["can_administer_competitions"]["scope"]).to eq [competition.id]
     end
   end
 end
