@@ -13,15 +13,17 @@
       <code id="token-content"><%= @default_token %></code>
     </pre>
 
-    <label for="dbs">Choose a database:</label>
+    <div class="form-group">
+      <label class="control-label" for="dbs">Choose a database:</label>
 
-    <select id="dbs">
-      <% @db_endpoints.each do |key, url| %>
-        <% db_token = @db_tokens[key] %>
+      <select class="form-control" id="dbs" name="wrt-token">
+        <% @db_endpoints.each do |key, url| %>
+          <% db_token = @db_tokens[key] %>
 
-        <option value="<%= key %>" data-wrt-token="<%= db_token %>"><%= url %></option>
-      <% end %>
-    </select>
+          <option value="<%= key %>" data-wrt-token="<%= db_token %>"><%= url %></option>
+        <% end %>
+      </select>
+    </div>
 
     <br />
 
