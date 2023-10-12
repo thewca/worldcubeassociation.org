@@ -662,20 +662,36 @@ class CompetitionsController < ApplicationController
     @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @competition_organizer_view = !@competition_admin_view
 
-    comp_params_minus_id = comp_params_form
+    comp_data = comp_params_form
+    comp_params_minus_id = comp_data.except(:championships, :series)
 
     new_id = comp_params_minus_id.delete(:id)
 
     old_organizers = @competition.organizers.to_a
 
     # Update championships
-    champs = comp_params_minus_id[:championships] || []
+    champs = comp_data[:championships] || []
     champs.each do |type|
       @competition.championships.find_or_create_by(championship_type: type)
     end
 
     @competition.championships.where.not(championship_type: champs).destroy_all
     comp_params_minus_id[:championships] = @competition.championships
+
+    @competition.competition_series = nil
+    unless comp_data[:series].nil?
+      series = comp_data[:series]
+      puts series
+      if series[:id].nil?
+        @competition.competition_series = CompetitionSeries.new.tap do |s|
+          s.name = series[:name] || ''
+          s.competition_ids = series[:competition_ids]
+        end
+      else
+        @competition.competition_series = CompetitionSeries.find(wcif_id: series[:id])
+      end
+    end
+    comp_params_minus_id[:competition_series] = @competition.competition_series
 
     if params[:commit] == "Delete"
       cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
@@ -736,7 +752,8 @@ class CompetitionsController < ApplicationController
         redirect_to edit_competition_path(@competition)
       end
     else
-      render :edit
+      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
+      render json: @competition.errors
     end
   end
 
