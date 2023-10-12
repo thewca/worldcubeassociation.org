@@ -57,6 +57,6 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       user: user,
     )
 
-    render json: { id: stripe_transaction.stripe_id }
+    render json: { id: stripe_transaction.id }
   end
 end

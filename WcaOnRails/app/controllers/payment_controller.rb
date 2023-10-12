@@ -8,7 +8,7 @@ class PaymentController < ApplicationController
     competition_id = params.require(:competition_id)
 
     competition = Competition.find(competition_id)
-    stripe_transaction = StripeTransaction.find_by(stripe_id: payment_id)
+    stripe_transaction = StripeTransaction.find(payment_id)
 
     render json: { stripe_publishable_key: EnvVars.STRIPE_PUBLISHABLE_KEY, connected_account_id: competition.connected_stripe_account_id, client_secret: stripe_transaction.client_secret }
   end
