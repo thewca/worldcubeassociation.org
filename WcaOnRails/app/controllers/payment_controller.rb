@@ -26,7 +26,6 @@ class PaymentController < ApplicationController
     stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
     stored_intent = stored_transaction.stripe_payment_intent
 
-    return redirect_to competition_register_path(competition, "intent_invalid") unless intent_id == payment_request.receipt.stripe_id
     return redirect_to competition_register_path(competition, "secret_invalid") unless stored_intent.client_secret == intent_secret
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
@@ -37,7 +36,7 @@ class PaymentController < ApplicationController
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
       begin
         ruby_money = charge_transaction.money_amount
-        update_registration_payment(attendee_id, charge.stripe_id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+        update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
       rescue Faraday::Error
         return redirect_to competition_register_path(competition_id, "registration_down")
       end
@@ -93,7 +92,7 @@ class PaymentController < ApplicationController
     refund_receipt.update!(parent_transaction: charge)
 
     begin
-      update_registration_payment(attendee_id, refund_receipt, refund_amount, currency_iso, "refund")
+      update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
     rescue Faraday::Error
       return redirect_to edit_registration_path(competition_id, user_id, "registration_down")
     end
