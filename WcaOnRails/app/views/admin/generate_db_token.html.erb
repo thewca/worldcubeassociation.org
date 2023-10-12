@@ -9,19 +9,17 @@
       This token is valid for 15 minutes
     </p>
 
-    <% @db_tokens.each do |key, token| %>
-      <% pre_selected = key == @default_token %>
-
-      <pre class="token" data-value="<%= key %>" data-wrt-selected="<%= pre_selected %>" style="display: <%= pre_selected ? 'block' : 'none' %>">
-        <code><%= token %></code>
-      </pre>
-    <% end %>
+    <pre>
+      <code id="token-content"><%= @default_token %></code>
+    </pre>
 
     <label for="dbs">Choose a database:</label>
 
     <select id="dbs">
       <% @db_endpoints.each do |key, url| %>
-        <option value="<%= key %>"><%= url %></option>
+        <% db_token = @db_tokens[key] %>
+
+        <option value="<%= key %>" data-wrt-token="<%= db_token %>"><%= url %></option>
       <% end %>
     </select>
 
@@ -35,20 +33,18 @@
       document.getElementById("dbs").addEventListener("change", handleDataBaseOptions);
 
       function handleDataBaseOptions(event) {
-        document.querySelectorAll('.token').forEach((el) => {
-          const isSelectedBox = el.getAttribute('data-value') === event.target.value;
+        const selectedOption = event.target.options[event.target.selectedIndex];
+        const selectedToken = selectedOption.dataset.wrtToken;
 
-          el.style.display = isSelectedBox ? 'block' : 'none';
-        });
+        const tokenBox = document.getElementById('token-content');
+        tokenBox.innerText = selectedToken;
       }
 
       document.getElementById("clipboard").addEventListener("click", copySelectedToClipboard);
 
       function copySelectedToClipboard() {
-        const tokenPre = document.querySelector('.token[data-wrt-selected="true"]');
-        const tokenContent = tokenPre.querySelector('code');
-
-        navigator.clipboard.writeText(tokenContent.textContent);
+        const tokenBox = document.getElementById('token-content');
+        navigator.clipboard.writeText(tokenBox.textContent);
       }
     </script>
 
