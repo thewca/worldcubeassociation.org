@@ -56,7 +56,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq normal_user
+      expect(json["user"]).to eq normal_user.as_json
     end
     let!(:id_less_user) { FactoryBot.create(:user, email: "example@email.com") }
     it 'correctly returns user without wca_id' do
@@ -64,7 +64,7 @@ RSpec.describe Api::V0::UsersController do
       sign_in id_less_user
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq current_user
+      expect(json["user"]).to eq current_user.as_json
     end
     let(:competed_person) { FactoryBot.create(:person_who_has_competed_once, name: "Jeremy", wca_id: "2005FLEI01") }
     let!(:competed_user) { FactoryBot.create(:user, person: competed_person, email: "example1@email.com") }
@@ -73,7 +73,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq current_user
+      expect(json["user"]).to eq current_user.as_json
       expect(json["rankings"]).to eq "a"
     end
   end
