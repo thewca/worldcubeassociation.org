@@ -650,13 +650,14 @@ class User < ApplicationRecord
         scope: cannot_register_for_competition_reasons.empty? ? "*" : [],
       },
       can_organize_competitions: {
-        scope: can_create_competitions? ? "*" : [],
+        scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? "*" : [],
       },
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
     }
     if banned?
+      permissions[:can_attend_competitions][:scope] = []
       permissions[:can_attend_competitions][:until] = ban_end || nil
     end
     permissions
