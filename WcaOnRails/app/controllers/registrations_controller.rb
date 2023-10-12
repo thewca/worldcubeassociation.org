@@ -509,7 +509,7 @@ class RegistrationsController < ApplicationController
       stored_intent = stored_transaction.stripe_payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
-        if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
+        if stored_intent.holder.is_a? Registration
           ruby_money = charge_transaction.money_amount
 
           stored_payment = stored_intent.holder.record_payment(
@@ -525,6 +525,15 @@ class RegistrationsController < ApplicationController
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
         end
+        if stored_intent.holder.is_a? AttendeePaymentRequest
+          ruby_money = charge_transaction.money_amount
+          begin
+            update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
+          rescue Faraday::Error
+            logger.error "Couldn't update Microservice"
+            return head: :internal_server_error
+          end
+        end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
@@ -533,14 +542,6 @@ class RegistrationsController < ApplicationController
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
-    end
-    if stored_intent.holder.is_a? AttendeePaymentRequest
-      begin
-        update_registration_payment(stored_intent.id, stored_intent.status)
-      rescue Faraday::Error
-        logger.error "Couldn't update Microservice"
-        return head: :internal_server_error
-      end
     end
     head :ok
   end

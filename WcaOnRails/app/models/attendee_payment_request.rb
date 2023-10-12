@@ -1,5 +1,5 @@
 class AttendeePaymentRequest < ApplicationRecord
-  belongs_to :receipt, polymorphic: true, optional: true
+  has_one :stripe_payment_intents, as: :holder
   def competition_and_user_id
     self.attendee_id.split("-")
   end

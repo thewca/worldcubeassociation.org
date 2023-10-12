@@ -5,7 +5,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     attendee_id = params.require(:attendee_id)
     iso_amount = params.require(:amount)
 
-    holder = AttendeePaymentRequest.new(attendee_id: attendee_id)
+    holder = AttendeePaymentRequest.create(attendee_id: attendee_id)
     competition_id, user_id = holder.competition_and_user_id
 
     competition = Competition.find(competition_id)
@@ -57,9 +57,6 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       user: user,
     )
 
-    holder.payment_id = intent.id
-    holder.save
-
-    render json: { id: intent.id }
+    render json: { id: stripe_transaction.stripe_id }
   end
 end

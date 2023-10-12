@@ -4,14 +4,11 @@
 class PaymentController < ApplicationController
   def payment_config
     return json: { error: "Please Log in" }, status: :unauthorized unless current_user.present?
-    attendee_id = params.require(:attendee_id)
-
-    payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    competition_id, user_id = payment_request.competition_and_user_id
-    return json: { error: "Not Authorized to get payment information" }, status: :unauthorized unless user_id == current_user.id?
+    payment_id = params.require(:payment_id)
+    competition_id = params.require(:competition_id)
 
     competition = Competition.find(competition_id)
-    stripe_transaction = StripeTransaction.find_by(stripe_id: payment_request.payment_id)
+    stripe_transaction = StripeTransaction.find_by(stripe_id: payment_id)
 
     render json: { stripe_publishable_key: EnvVars.STRIPE_PUBLISHABLE_KEY, connected_account_id: competition.connected_stripe_account_id, client_secret: stripe_transaction.client_secret }
   end
@@ -29,7 +26,7 @@ class PaymentController < ApplicationController
     stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
     stored_intent = stored_transaction.stripe_payment_intent
 
-    return redirect_to competition_register_path(competition, "intent_invalid") unless intent_id == payment_request.payment_id
+    return redirect_to competition_register_path(competition, "intent_invalid") unless intent_id == payment_request.receipt.stripe_id
     return redirect_to competition_register_path(competition, "secret_invalid") unless stored_intent.client_secret == intent_secret
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
@@ -37,9 +34,10 @@ class PaymentController < ApplicationController
 
     return redirect_to competition_register_path(competition, "not_found") unless stripe_intent.present?
 
-    stored_intent.update_status_and_charges(stripe_intent, current_user) do |_|
+    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
       begin
-        update_registration_payment(stripe_intent.id, stripe_intent.status)
+        ruby_money = charge_transaction.money_amount
+        update_registration_payment(attendee_id, charge.stripe_id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
       rescue Faraday::Error
         return redirect_to competition_register_path(competition_id, "registration_down")
       end
@@ -48,8 +46,17 @@ class PaymentController < ApplicationController
     redirect_to competition_register_path(competition_id, stored_transaction.status)
   end
 
-  def payment_refund
+  def available_refunds
     attendee_id = params.require(:attendee_id)
+    payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
+    transactions = StripeTransaction.where(stripe_id: payment_request.stripe_payment_intent.id)
+    render json: { charges: transactions.pluck(:id) }, status: :ok
+  end
+
+  def payment_refund
+    payment_id = params.require(:payment_id)
+    attendee_id = params.require(:attendee_id)
+
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
     competition_id, user_id = payment_request.competition_and_user_id
     competition = Competition.find(competition_id)
@@ -58,7 +65,7 @@ class PaymentController < ApplicationController
       return redirect_to edit_registration_path(competition_id, user_id, "no_stripe")
     end
 
-    charge = StripeTransaction.find_by(stripe_id: payment_request.payment_id)
+    charge = StripeTransaction.find(payment_id)
 
     refund_amount_param = params.require(:refund_amount)
     refund_amount = refund_amount_param.to_i
@@ -83,10 +90,10 @@ class PaymentController < ApplicationController
     )
 
     refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
-    refund_receipt.update!(parent_transaction: payment_request.receipt) if payment_request.receipt.present?
+    refund_receipt.update!(parent_transaction: charge)
 
     begin
-      update_registration_payment(payment_request.payment_id, "refund")
+      update_registration_payment(attendee_id, refund_receipt, refund_amount, currency_iso, "refund")
     rescue Faraday::Error
       return redirect_to edit_registration_path(competition_id, user_id, "registration_down")
     end

@@ -14,7 +14,7 @@ module MicroServicesRegistrations
     "https://#{EnvConfig.WCA_REGISTRATION_URL}/api/internal/v1/update_payment"
   end
 
-  def update_registration_payment(id, status)
+  def update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
     conn = Faraday.new(
       url: update_payment_status_path,
       headers: { MICROSERVICE_AUTH_HEADER => get_wca_token }
@@ -30,7 +30,7 @@ module MicroServicesRegistrations
     end
 
     conn.post('/') do |req|
-      req.body = { payment_id: id, payment_status: status }
+      req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }
     end
     # If we ever need the response body
     conn.body
