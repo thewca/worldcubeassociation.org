@@ -109,7 +109,7 @@ RSpec.describe Api::V0::UsersController do
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_attend_competitions"]["scope"]["until"]).to eq "2012-04-21"
+      expect(json["can_attend_competitions"]["until"]).to eq "2012-04-21"
     end
 
     it 'correctly returns wrt to be able to create competitions' do
