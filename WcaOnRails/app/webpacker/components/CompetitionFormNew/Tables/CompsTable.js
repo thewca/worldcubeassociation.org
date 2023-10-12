@@ -159,7 +159,7 @@ function CompsTableContent({ comps, action }) {
         <CompsTableHeaderRow showEvents={showEvents} />
       </Table.Header>
       <Table.Body>
-        {comps.slice().reverse().map((comp) => (
+        {comps.map((comp) => (
           <CompsTableCompRow
             key={comp.name}
             comp={comp}
@@ -197,5 +197,5 @@ export default function CompsTable({
     );
   }
 
-  return <CompsTableContent comps={comps.reverse()} action={action} />;
+  return <CompsTableContent comps={comps} action={action} />;
 }
