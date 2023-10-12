@@ -104,7 +104,7 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns a banned users end_date' do
-      banned_user.teams.select(team: Team.banned).first.update_column("end_date", "2012-04-21")
+      banned_user.current_ban.update_column("end_date", "2012-04-21")
       sign_in banned_user
       get :permissions
       expect(response.status).to eq 200

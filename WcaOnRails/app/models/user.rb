@@ -632,8 +632,12 @@ class User < ApplicationRecord
     current_teams.include?(Team.banned)
   end
 
+  def current_ban
+    current_team_members.where(team: Team.banned).first
+  end
+
   def ban_end
-    current_team_members.where(team: Team.banned).first.end_date
+    current_ban&.end_date
   end
 
   def banned_at_date?(date)

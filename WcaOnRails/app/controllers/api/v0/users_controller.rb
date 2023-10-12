@@ -17,6 +17,12 @@ class Api::V0::UsersController < Api::V0::ApiController
     show_user(user)
   end
 
+  def show_users_by_id
+    user_ids = params.require(:ids)
+    users = User.where(id: user_ids)
+    render status: ok, json: { users: users }
+  end
+
   def show_user_by_wca_id
     user = User.find_by_wca_id(params[:wca_id])
     show_user(user)
