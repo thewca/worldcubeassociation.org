@@ -83,7 +83,6 @@ RSpec.describe Api::V0::UsersController do
   end
 
   describe 'GET #permissions' do
-
     let!(:normal_user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
     let!(:senior_delegate) { FactoryBot.create :senior_delegate }
 
@@ -104,12 +103,13 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns a banned users end_date' do
-      banned_user.current_ban.update_column("end_date", "2012-04-21")
+      end_date = (Date.today + 1).to_s
+      banned_user.current_ban.update_column("end_date", end_date)
       sign_in banned_user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["can_attend_competitions"]["until"]).to eq "2012-04-21"
+      expect(json["can_attend_competitions"]["until"]).to eq end_date
     end
 
     it 'correctly returns wrt to be able to create competitions' do
