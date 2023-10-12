@@ -364,19 +364,23 @@ class AdminController < ApplicationController
   end
 
   def generate_db_token
+    @db_endpoints = {
+      main: EnvConfig.DATABASE_HOST,
+      replica: EnvConfig.READ_REPLICA_HOST,
+    }
+
     role_credentials = Aws::InstanceProfileCredentials.new
     token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
 
-    @main_token = token_generator.auth_token({
-                                          region: EnvConfig.DATABASE_AWS_REGION,
-                                          endpoint: "#{EnvConfig.DATABASE_HOST}:3306",
-                                          user_name: EnvConfig.DATABASE_WRT_USER,
-                                        })
-    @replica_token = token_generator.auth_token({
-                                          region: EnvConfig.DATABASE_AWS_REGION,
-                                          endpoint: "#{EnvConfig.READ_REPLICA_HOST}:3306",
-                                          user_name: EnvConfig.DATABASE_WRT_USER,
-                                        })
+    @db_tokens = @db_endpoints.transform_values do |url|
+      token_generator.auth_token({
+                                   region: EnvConfig.DATABASE_AWS_REGION,
+                                   endpoint: "#{url}:3306",
+                                   user_name: EnvConfig.DATABASE_WRT_USER,
+                                 })
+    end
+
+    @default_token = :main
   end
 
   def check_regional_records

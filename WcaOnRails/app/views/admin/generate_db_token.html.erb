@@ -9,36 +9,46 @@
       This token is valid for 15 minutes
     </p>
 
-    <pre class="token" data-value="main">
-      <code><%= @main_token %></code>
-    </pre>
-    <pre class="token" data-value="replica" style="display: none">
-      <code><%= @replica_token %></code>
-    </pre>
+    <% @db_tokens.each do |key, token| %>
+      <% pre_selected = key == @default_token %>
+
+      <pre class="token" data-value="<%= key %>" data-wrt-selected="<%= pre_selected %>" style="display: <%= pre_selected ? 'block' : 'none' %>">
+        <code><%= token %></code>
+      </pre>
+    <% end %>
 
     <label for="dbs">Choose a database:</label>
 
     <select id="dbs">
-      <option value="main"><%= EnvConfig.DATABASE_HOST %></option>
-      <option value="replica"><%= EnvConfig.READ_REPLICA_HOST %></option>
+      <% @db_endpoints.each do |key, url| %>
+        <option value="<%= key %>"><%= url %></option>
+      <% end %>
     </select>
-    <br />
+
     <br />
 
-    <label class="btn btn-primary" onclick="navigator.clipboard.writeText('<%= @token %>');">
+    <label id="clipboard" class="btn btn-primary">
       Copy to clipboard
     </label>
 
     <script>
-      document.getElementById("dbs").addEventListener("change", handleDataBaseOptions)
-      function handleDataBaseOptions(event){
+      document.getElementById("dbs").addEventListener("change", handleDataBaseOptions);
+
+      function handleDataBaseOptions(event) {
         document.querySelectorAll('.token').forEach((el) => {
-          if(el.getAttribute('data-value') === event.target.value){
-            el.style.display = 'block'
-          }else{
-            el.style.display = 'none'
-          }
-        })
+          const isSelectedBox = el.getAttribute('data-value') === event.target.value;
+
+          el.style.display = isSelectedBox ? 'block' : 'none';
+        });
+      }
+
+      document.getElementById("clipboard").addEventListener("click", copySelectedToClipboard);
+
+      function copySelectedToClipboard() {
+        const tokenPre = document.querySelector('.token[data-wrt-selected="true"]');
+        const tokenContent = tokenPre.querySelector('code');
+
+        navigator.clipboard.writeText(tokenContent.textContent);
       }
     </script>
 
