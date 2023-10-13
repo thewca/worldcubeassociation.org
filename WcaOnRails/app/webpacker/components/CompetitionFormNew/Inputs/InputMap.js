@@ -95,6 +95,7 @@ function CompetitionsMap({
   setLat,
   setLong,
   children,
+  id = undefined,
 }) {
   const provider = userTileProvider;
   const center = [lat || 0, long || 0];
@@ -103,15 +104,10 @@ function CompetitionsMap({
 
   return (
     <Map
+      id={id}
       center={center}
       zoom={zoom}
       zoomControl={false}
-      style={{
-        /* Will move to competitions.scss later */
-        height: '400px',
-        width: '100%',
-        margin: '1rem 0 1rem 0',
-      }}
       onzoomend={(e) => setZoom(e.target.zoom)}
     >
       <TileLayer
@@ -130,6 +126,7 @@ export default function InputMap({
   idLat,
   idLong,
   markers = [],
+  id = undefined,
 }) {
   const formValues = useCompetitionForm();
   const updateFormValue = useUpdateFormAction();
@@ -148,7 +145,7 @@ export default function InputMap({
   const warningDist = nearbyCompetitionDistanceWarning;
 
   return (
-    <CompetitionsMap lat={lat} long={long} setLat={setLat} setLong={setLong}>
+    <CompetitionsMap id={id} lat={lat} long={long} setLat={setLat} setLong={setLong}>
       <Circle
         center={center}
         fill={false}

@@ -21,7 +21,9 @@ export default function VenueInfo() {
       <InputString id="venueDetails" mdHint />
       <InputString id="venueAddress" />
       <SubSection section="coordinates">
-        <MapInput idLat="lat" idLong="long" />
+        <div id="venue-map-wrapper">
+          <MapInput id="map" idLat="lat" idLong="long" />
+        </div>
         <Form.Group widths="equal">
           <InputString id="lat" attachedLabel="Latitude" label={I18n.t('competitions.competition_form.coordinates')} noHint />
           <InputString id="long" attachedLabel="Longitude" noLabel noHint />
