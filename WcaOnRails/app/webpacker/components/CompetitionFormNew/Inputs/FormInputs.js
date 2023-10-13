@@ -67,12 +67,13 @@ function FieldWrapper({
   );
 }
 
+/* eslint-disable react/destructuring-assignment */
 const wrapInput = (
   WrappedInput,
   additionalPropNames,
   emptyStringForNull = false,
   inputValueKey = 'value',
-) => function wrappedInput(props) {
+) => function WcaFormInput(props) {
   const { adminView, confirmed, errors } = useStore();
   const dispatch = useDispatch();
 
@@ -129,6 +130,7 @@ const wrapInput = (
   );
   /* eslint-enable react/jsx-props-no-spreading */
 };
+/* eslint-disable react/destructuring-assignment */
 
 export const InputString = wrapInput((props) => (
   <Input

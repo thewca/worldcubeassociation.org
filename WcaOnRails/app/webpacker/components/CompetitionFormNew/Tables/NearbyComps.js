@@ -61,15 +61,7 @@ export default function NearbyComps() {
   const {
     data: nearby,
     loading,
-    error,
-    sync,
   } = useLoadedData(nearbyDataUrl);
-
-  const markers = useMemo(() => nearby?.map((comp) => ({
-    id: comp.id,
-    lat: comp.coordinates.lat,
-    long: comp.coordinates.long,
-  })), [nearby]);
 
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 5, kms: 10 });
 

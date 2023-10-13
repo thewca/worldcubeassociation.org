@@ -188,8 +188,6 @@ function RegistrationCollisionsContent() {
   const {
     data: collisions,
     loading,
-    error,
-    sync,
   } = useLoadedData(registrationCollisionsUrl);
 
   if (loading) {

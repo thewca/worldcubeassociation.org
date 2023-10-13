@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useRef, useState,
+  useEffect, useMemo, useRef, useState,
 } from 'react';
 import AutoNumeric from 'autonumeric';
 import { Input } from 'semantic-ui-react';
@@ -10,7 +10,10 @@ export default function AutonumericField({ value, onChange, currency }) {
 
   const inputComponentRef = useRef();
 
-  const currencyInfo = currenciesData.byIso[currency] || currenciesData.byIso.USD;
+  const currencyInfo = useMemo(
+    () => (currenciesData.byIso[currency] || currenciesData.byIso.USD),
+    [currency],
+  );
 
   useEffect(() => {
     const newAutoNumeric = new AutoNumeric(inputComponentRef.current.inputRef.current, {
@@ -20,21 +23,24 @@ export default function AutonumericField({ value, onChange, currency }) {
       showWarnings: false,
       modifyValueOnWheel: false,
     });
+
     newAutoNumeric.set(value / currencyInfo.subunitToUnit);
+
     setAutoNumeric(newAutoNumeric);
-  }, []);
+  }, [value, currencyInfo]);
 
   useEffect(() => {
     if (!autoNumeric) return;
+
     autoNumeric.update({
       currencySymbol: currencyInfo.symbol,
       currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
       decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
     });
-  }, [currency]);
+  }, [autoNumeric, currencyInfo]);
 
-  const onChangeAutonumeric = () => {
-    onChange(null, { value: autoNumeric.rawValue * currencyInfo.subunitToUnit });
+  const onChangeAutonumeric = (event) => {
+    onChange(event, { value: autoNumeric.rawValue * currencyInfo.subunitToUnit });
   };
 
   return <Input ref={inputComponentRef} type="text" onChange={onChangeAutonumeric} />;

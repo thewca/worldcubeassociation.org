@@ -77,7 +77,6 @@ export default function RegistrationFees() {
   const {
     data: duesJson,
     error,
-    loading,
   } = useLoadedData(entryFeeDuesUrl);
 
   const duesText = useMemo(() => {

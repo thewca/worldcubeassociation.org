@@ -88,7 +88,7 @@ export default function InputChampionship({ id }) {
     setInternalValue(newInternalValue);
     const newValue = newInternalValue.map(({ championship }) => championship);
     dispatch(updateFormValue(id, newValue));
-  }, [dispatch, id]);
+  }, [dispatch, updateFormValue, id]);
 
   const [regions, setRegions] = useState(null);
   const [loading, setLoading] = useState(value.length > 0);
@@ -100,11 +100,13 @@ export default function InputChampionship({ id }) {
         setLoading(false);
       });
     }
-  }, []);
+  }, [loading, regions]);
 
   const onClickAdd = useCallback(async () => {
     if (loading && !regions) return;
+
     let validRegions = regions;
+
     if (!validRegions) {
       setLoading(true);
 
