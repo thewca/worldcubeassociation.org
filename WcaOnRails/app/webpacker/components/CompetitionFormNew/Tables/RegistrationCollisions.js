@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import {
   Table, Message, Button, Popup,
 } from 'semantic-ui-react';
@@ -11,6 +11,7 @@ import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.e
 import { events } from '../../../lib/wca-data.js.erb';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
+import useToggleState from '../../../lib/hooks/useToggleState';
 
 function NotConfirmedIcon() {
   return (
@@ -117,7 +118,7 @@ function CollisionsTableCompRow({ comp, showEvents }) {
 }
 
 function CollisionsTable({ comps }) {
-  const [showEvents, setShowEvents] = useState(false);
+  const [showEvents, setShowEvents] = useToggleState(false);
 
   return (
     <Table structured>
@@ -137,10 +138,11 @@ function CollisionsTable({ comps }) {
         <Table.Row>
           <Table.HeaderCell colSpan="16">
             <Button
+              toggle
               floated="right"
               size="mini"
-              primary
-              onClick={() => setShowEvents(!showEvents)}
+              active={showEvents}
+              onClick={setShowEvents}
             >
               {showEvents ? 'Hide Events' : 'Show Events'}
             </Button>

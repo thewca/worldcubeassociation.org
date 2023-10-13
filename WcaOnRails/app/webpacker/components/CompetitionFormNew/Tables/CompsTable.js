@@ -1,10 +1,11 @@
 /* eslint-disable react/no-danger */
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Button, Table, Message, Popup, TableCell,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
+import useToggleState from '../../../lib/hooks/useToggleState';
 
 function NotConfirmedIcon() {
   return (
@@ -151,7 +152,7 @@ function CompsTableCompRow({ comp, action, showEvents }) {
 }
 
 function CompsTableContent({ comps, action }) {
-  const [showEvents, setShowEvents] = useState(false);
+  const [showEvents, setShowEvents] = useToggleState(false);
 
   return (
     <Table structured>
@@ -172,10 +173,11 @@ function CompsTableContent({ comps, action }) {
         <Table.Row>
           <Table.HeaderCell colSpan="16">
             <Button
+              toggle
               floated="right"
               size="mini"
-              primary
-              onClick={() => setShowEvents(!showEvents)}
+              active={showEvents}
+              onClick={setShowEvents}
             >
               {showEvents ? 'Hide Events' : 'Show Events'}
             </Button>
