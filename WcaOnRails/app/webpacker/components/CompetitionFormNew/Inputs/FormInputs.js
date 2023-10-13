@@ -7,12 +7,14 @@ import {
   Select,
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
+import { Circle } from 'react-leaflet';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './WCASearch';
 import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
+import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 
 function getFieldLabel(id) {
   return I18n.t(`activerecord.attributes.competition.${id}`);
@@ -36,6 +38,7 @@ function FieldWrapper({
   blankLabel,
   hint,
   noHint,
+  blankHint,
   mdHint,
   error,
   disabled,
@@ -44,7 +47,8 @@ function FieldWrapper({
   const fallbackLabel = blankLabel ? '' : '&nbsp;';
   const htmlLabel = noLabel ? fallbackLabel : label || getFieldLabel(id);
 
-  const htmlHint = noHint ? '&nbsp;' : hint || getFieldHint(id, mdHint);
+  const fallbackHint = blankHint ? '' : '&nbsp;';
+  const htmlHint = noHint ? fallbackHint : hint || getFieldHint(id, mdHint);
 
   return (
     <Form.Field
@@ -93,11 +97,15 @@ const wrapInput = (
   const error = errors && errors[props.id] && errors[props.id].length > 0 && errors[props.id].join(', ');
 
   const passDownLabel = additionalPropNames.includes('label');
-  const noLabel = props.noLabel || passDownLabel;
-
   if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id));
 
+  const noLabel = props.noLabel || passDownLabel;
+  const blankLabel = props.blankLabel || passDownLabel;
+
   const disabled = confirmed && !adminView;
+
+  const passDownDisabled = additionalPropNames.includes('disabled');
+  if (passDownDisabled) inputProps.disabled = disabled;
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
@@ -105,8 +113,9 @@ const wrapInput = (
       id={props.id}
       label={props.label}
       noLabel={noLabel}
-      blankLabel={passDownLabel}
+      blankLabel={blankLabel}
       hint={props.hint}
+      blankHint={props.blankHint}
       noHint={props.noHint}
       mdHint={props.mdHint}
       error={error}
@@ -161,7 +170,7 @@ export const InputDate = wrapInput((props) => {
     newDate.getTimezoneOffset();
     newDate.setMinutes(newDate.getMinutes() - newDate.getTimezoneOffset());
     props.onChange(e, { value: newDate.toISOString() });
-  }, [props.onChange, props.dateTime]);
+  }, [props]);
 
   return (
     <Input
@@ -245,3 +254,34 @@ export function InputBooleanSelect({ id }) {
 
   return <InputSelect id={id} options={options} />;
 }
+
+export const InputMap = wrapInput((props) => {
+  const coords = [props.value.lat, props.value.long];
+
+  const setCoords = useCallback((evt, newCoords) => props.onChange(evt, {
+    value: {
+      lat: newCoords[0],
+      long: newCoords[1],
+    },
+  }), [props]);
+
+  return (
+    <div id="venue-map-wrapper">
+      <CompetitionsMap id={props.htmlId} coords={coords} setCoords={setCoords}>
+        {props.circles && props.circles.map((circle) => (
+          <Circle
+            key={circle.id}
+            center={coords}
+            fill={false}
+            radius={circle.radius * 1000}
+            color={circle.color}
+          />
+        ))}
+        <DraggableMarker coords={coords} setCoords={setCoords} disabled={props.disabled} />
+        {props.markers && props.markers.map((marker) => (
+          <StaticMarker key={marker.id} coords={marker.coords} />
+        ))}
+      </CompetitionsMap>
+    </div>
+  );
+}, ['htmlId', 'circles', 'markers', 'disabled']);

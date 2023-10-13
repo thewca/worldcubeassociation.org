@@ -303,6 +303,7 @@ en:
         venue: "Venue"
         venueAddress: "Venue address"
         venueDetails: "Venue details"
+        coordinates: "Coordinates"
         start_date: "Start date"
         end_date: "End date"
         external_website: "Website"

@@ -3,7 +3,6 @@ import React, {
   useEffect,
 } from 'react';
 import {
-  Circle,
   Map,
   Marker,
   TileLayer,
@@ -11,11 +10,8 @@ import {
   useLeaflet,
 } from 'react-leaflet';
 import { GeoSearchControl as SearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
-import { nearbyCompetitionDistanceWarning, nearbyCompetitionDistanceDanger } from '../../../lib/wca-data.js.erb';
 import { blueMarker } from '../../../lib/leaflet-wca/markers';
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {
@@ -25,23 +21,27 @@ function roundToMicrodegrees(toRound) {
   return Math.trunc(parseFloat(val) * 1e6) / 1e6;
 }
 
-function DraggableMarker({
-  lat,
-  long,
-  setLat,
-  setLong,
+export function DraggableMarker({
+  coords,
+  setCoords,
+  disabled = false,
 }) {
-  const position = { lat, lng: long };
+  const position = { lat: coords[0], lng: coords[1] };
 
   const updatePosition = (e) => {
     const newPos = e.target.getLatLng();
-    setLat(roundToMicrodegrees(newPos.lat));
-    setLong(roundToMicrodegrees(newPos.lng));
+
+    const newCoords = [
+      roundToMicrodegrees(newPos.lat),
+      roundToMicrodegrees(newPos.lng),
+    ];
+
+    setCoords(e, newCoords);
   };
 
   return (
     <Marker
-      draggable
+      draggable={!disabled}
       position={position}
       icon={blueMarker}
       onDragend={updatePosition}
@@ -50,14 +50,14 @@ function DraggableMarker({
   );
 }
 
-function StaticMarker({ lat, lng }) {
-  const position = { lat, lng };
+export function StaticMarker({ coords }) {
+  const position = { lat: coords[0], lng: coords[1] };
+
   return <Marker position={position} icon={blueMarker} />;
 }
 
 function GeoSearchControl({
-  setLat,
-  setLong,
+  setCoords,
   setZoom,
 }) {
   const { map } = useLeaflet();
@@ -76,36 +76,35 @@ function GeoSearchControl({
     map.addControl(searchControl);
     map.on('geosearch/showlocation', (e) => {
       if (!e.location) return;
-      setLat(roundToMicrodegrees(e.location.y));
-      setLong(roundToMicrodegrees(e.location.x));
+
+      const coords = [e.location.y, e.location.x];
+      setCoords(e, coords);
+
       setZoom(11);
     });
 
     return () => {
       map.removeControl(searchControl);
     };
-  }, [map]);
+  }, [map, setCoords, setZoom]);
 
   return null;
 }
 
-function CompetitionsMap({
-  lat,
-  long,
-  setLat,
-  setLong,
+export function CompetitionsMap({
+  coords,
+  setCoords,
   children,
   id = undefined,
 }) {
   const provider = userTileProvider;
-  const center = [lat || 0, long || 0];
 
   const [zoom, setZoom] = useState(8);
 
   return (
     <Map
       id={id}
-      center={center}
+      center={coords}
       zoom={zoom}
       zoomControl={false}
       onzoomend={(e) => setZoom(e.target.zoom)}
@@ -115,53 +114,9 @@ function CompetitionsMap({
         attribution={provider.attribution}
         maxZoom={19}
       />
-      <GeoSearchControl setLat={setLat} setLong={setLong} setZoom={setZoom} />
+      <GeoSearchControl setCoords={setCoords} setZoom={setZoom} />
       <ZoomControl position="topright" />
       {children}
     </Map>
-  );
-}
-
-export default function InputMap({
-  idLat,
-  idLong,
-  markers = [],
-  id = undefined,
-}) {
-  const formValues = useCompetitionForm();
-  const updateFormValue = useUpdateFormAction();
-
-  const dispatch = useDispatch();
-
-  const lat = Number.isNaN(parseFloat(formValues[idLat])) ? 0 : Number(formValues[idLat]);
-  const long = Number.isNaN(parseFloat(formValues[idLong])) ? 0 : Number(formValues[idLong]);
-
-  const setLat = (newLat) => dispatch(updateFormValue(idLat, newLat));
-  const setLong = (newLong) => dispatch(updateFormValue(idLong, newLong));
-
-  const center = [lat, long];
-
-  const dangerDist = nearbyCompetitionDistanceDanger;
-  const warningDist = nearbyCompetitionDistanceWarning;
-
-  return (
-    <CompetitionsMap id={id} lat={lat} long={long} setLat={setLat} setLong={setLong}>
-      <Circle
-        center={center}
-        fill={false}
-        radius={dangerDist * 1000}
-        color="#d9534f"
-      />
-      <Circle
-        center={center}
-        fill={false}
-        radius={warningDist * 1000}
-        color="#f0ad4e"
-      />
-      <DraggableMarker lat={lat} long={long} setLat={setLat} setLong={setLong} />
-      {markers && markers.map((marker) => (
-        <StaticMarker key={marker.id} lat={marker.lat} lng={marker.long} />
-      ))}
-    </CompetitionsMap>
   );
 }
