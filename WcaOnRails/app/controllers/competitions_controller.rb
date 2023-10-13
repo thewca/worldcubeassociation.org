@@ -506,7 +506,6 @@ class CompetitionsController < ApplicationController
     @competition.valid?
     @collisions = get_colliding_registration_start_competitions(@competition)
 
-
     render json: @collisions.map { |c| competition_form_registration_collision_json(c) }
   end
 
