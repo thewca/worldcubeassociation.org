@@ -34,6 +34,7 @@ import { changesSaved, setErrors } from './store/actions';
 import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
+import SubSection from './FormSections/SubSection';
 
 // TODO: Need to add cloning params
 
@@ -170,12 +171,16 @@ function NewCompForm() {
         <Series />
         <Divider />
 
-        <Form.Group widths="equal">
-          <InputDate id="registration_open" dateTime />
-          <InputDate id="registration_close" dateTime />
-        </Form.Group>
-        <RegistrationCollisions />
+        <SubSection section="registration">
+          <Form.Group widths="equal">
+            <InputDate id="openingDateTime" dateTime />
+            <InputDate id="closingDateTime" dateTime />
+          </Form.Group>
+          <RegistrationCollisions />
+        </SubSection>
+
         <InputMarkdown id="information" />
+
         <CompetitorLimit />
         <Staff />
         <Divider />
@@ -189,8 +194,8 @@ function NewCompForm() {
         <PerUserSettings />
         <Divider />
 
-        <RegistrationFee />
         <RegistrationDetails />
+        <RegistrationFee />
         <Divider />
 
         <EventRestrictions />

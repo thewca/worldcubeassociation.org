@@ -189,13 +189,14 @@ class CompetitionsController < ApplicationController
       end
     end
 
-    unless comp_data[:series].nil?
-      series = comp_data[:series]
-      if series[:id].nil?
-        @competition.competition_series = CompetitionSeries.new.tap do |s|
-          s.name = series[:name]
-          s.competition_ids = series[:competition_ids]
-        end
+    if comp_data[:series].present?
+      series_data = comp_data[:series]
+
+      if series_data[:id].nil?
+        @competition.competition_series = CompetitionSeries.new(
+          name: series[:name],
+          competition_ids: series[:competition_ids],
+        )
       else
         @competition.competition_series = CompetitionSeries.find(wcif_id: series[:id])
       end
@@ -832,9 +833,9 @@ class CompetitionsController < ApplicationController
         competitor_limit_enabled: params.dig('competitorLimit', 'competitor_limit_enabled'),
         competitor_limit: params.dig('competitorLimit', 'competitor_limit'),
         competitor_limit_reason: params.dig('competitorLimit', 'competitor_limit_reason'),
-        staff_delegate_ids: params.dig('staff', 'staff_delegate_ids').join(','),
-        trainee_delegate_ids: params.dig('staff', 'trainee_delegate_ids').join(','),
-        organizer_ids: params.dig('staff', 'organizer_ids').join(','),
+        staff_delegate_ids: params.dig('staff', 'staff_delegate_ids')&.join(','),
+        trainee_delegate_ids: params.dig('staff', 'trainee_delegate_ids')&.join(','),
+        organizer_ids: params.dig('staff', 'organizer_ids')&.join(','),
         contact: params.dig('staff', 'contact'),
         championships: params['championships'],
         generate_website: params.dig('website', 'generate_website'),

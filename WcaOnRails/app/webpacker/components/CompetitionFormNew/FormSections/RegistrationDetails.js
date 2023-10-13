@@ -6,32 +6,63 @@ import {
   InputCurrencyAmount,
   InputDate,
   InputMarkdown,
-  InputNumber,
+  InputNumber, InputRadio, InputSelect,
 } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
+import I18n from '../../../lib/i18n';
+
+const guestsEnabledOptions = [
+  {
+    value: true,
+    text: I18n.t('simple_form.options.competition.guests_enabled.true'),
+  },
+  {
+    value: false,
+    text: I18n.t('simple_form.options.competition.guests_enabled.false'),
+  },
+];
+
+const guestMessageOptions = [
+  {
+    key: 'unclear',
+    value: 'unclear',
+    text: I18n.t('enums.competition.guest_entry_status.unclear'),
+  },
+  {
+    key: 'free',
+    value: 'free',
+    text: I18n.t('enums.competition.guest_entry_status.free'),
+  },
+  {
+    key: 'restricted',
+    value: 'restricted',
+    text: I18n.t('enums.competition.guest_entry_status.restricted'),
+  },
+];
 
 export default function RegistrationDetails() {
-  const { competition: { regDetails: regDetailsData, entryFees } } = useStore();
+  const { competition: { entryFees } } = useStore();
 
-  const currency = entryFees.currency_code;
-
-  const canRegOnSite = regDetailsData && regDetailsData.on_the_spot_registration === 'true';
+  const guestsGoFree = entryFees && entryFees.guestEntryFee === 0;
+  const guestsRestricted = entryFees && guestsGoFree && entryFees.guestEntryStatus === 'restricted';
 
   return (
-    <SubSection section="regDetails">
-      <InputNumber id="refund_policy_percent" />
-      <InputDate id="refund_policy_limit_date" dateTime />
-      <InputDate id="waiting_list_deadline_date" dateTime />
-      <InputDate id="event_change_deadline_date" dateTime />
-      <InputBooleanSelect id="on_the_spot_registration" />
-      <ConditionalSection showIf={canRegOnSite}>
-        <InputCurrencyAmount id="on_the_spot_entry_fee_lowest_denomination" currency={currency} />
+    <SubSection section="registration">
+      <InputDate id="waitingListDeadlineDate" dateTime />
+      <InputDate id="eventChangeDeadlineDate" dateTime />
+      <InputBooleanSelect id="allowOnTheSpot" />
+      <InputBooleanSelect id="allowSelfDeleteAfterAcceptance" />
+      <InputBooleanSelect id="allowSelfEdits" />
+      <InputRadio id="guestsEnabled" options={guestsEnabledOptions} />
+      <ConditionalSection showIf={guestsGoFree}>
+        <InputSelect id="guestEntryStatus" options={guestMessageOptions} />
       </ConditionalSection>
-      <InputBooleanSelect id="allow_registration_edits" />
-      <InputBooleanSelect id="allow_registration_self_delete_after_acceptance" />
-      <InputMarkdown id="extra_registration_requirements" />
-      <InputBoolean id="force_comment_in_registration" />
+      <ConditionalSection showIf={guestsRestricted}>
+        <InputNumber id="guestsPerRegistration" />
+      </ConditionalSection>
+      <InputMarkdown id="extraRequirements" />
+      <InputBoolean id="forceComment" />
     </SubSection>
   );
 }

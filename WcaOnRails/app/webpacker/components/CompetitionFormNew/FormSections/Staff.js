@@ -5,9 +5,9 @@ import { InputString, InputUsers } from '../Inputs/FormInputs';
 export default function Staff() {
   return (
     <SubSection section="staff">
-      <InputUsers id="staff_delegate_ids" delegateOnly />
-      <InputUsers id="trainee_delegate_ids" traineeOnly />
-      <InputUsers id="organizer_ids" />
+      <InputUsers id="staffDelegateIds" delegateOnly />
+      <InputUsers id="traineeDelegateIds" traineeOnly />
+      <InputUsers id="organizerIds" />
       <InputString id="contact" mdHint />
     </SubSection>
   );

@@ -1,6 +1,6 @@
 <%= react_component("CompetitionFormNew/NewCompForm", {
   persisted: @competition.persisted?,
   confirmed: @competition.confirmed?,
-  competition: @competition.to_comp_form,
+  competition: @competition.to_form_data,
   adminView: @competition_admin_view,
 }) %>

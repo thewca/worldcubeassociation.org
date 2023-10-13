@@ -9,8 +9,8 @@ export default function NameDetails() {
     <>
       {persisted && <InputString id="id" />}
       <InputString id="name" />
-      {persisted && <InputString id="cellName" />}
-      <InputString id="name_reason" mdHint />
+      {persisted && <InputString id="shortName" />}
+      <InputString id="nameReason" mdHint />
     </>
   );
 }

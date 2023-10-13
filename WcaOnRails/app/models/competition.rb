@@ -1666,6 +1666,7 @@ class Competition < ApplicationRecord
 
   def set_wcif!(wcif, current_user)
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
+
     ActiveRecord::Base.transaction do
       set_wcif_series!(wcif["series"], current_user) if wcif["series"]
       set_wcif_events!(wcif["events"], current_user) if wcif["events"]
@@ -1989,83 +1990,236 @@ class Competition < ApplicationRecord
     end
   end
 
-  def to_comp_form
+  def to_form_data
     {
       "id" => id,
       "name" => name,
-      "cellName" => cellName,
-      "name_reason" => name_reason,
+      "shortName" => cellName,
+      "nameReason" => name_reason,
       "venue" => {
         "countryId" => countryId,
         "cityName" => cityName,
-        "venue" => venue,
-        "venueDetails" => venueDetails,
-        "venueAddress" => venueAddress,
+        "name" => venue,
+        "details" => venueDetails,
+        "address" => venueAddress,
         "coordinates" => {
           "lat" => latitude_degrees,
           "long" => longitude_degrees,
         },
       },
-      "start_date" => start_date,
-      "end_date" => end_date,
-      "registration_open" => registration_open,
-      "registration_close" => registration_close,
-      "series" => competition_series&.to_comp_form,
+      "startDate" => start_date&.iso8601,
+      "endDate" => end_date&.iso8601,
+      "series" => competition_series&.to_form_data,
       "information" => information,
       "competitorLimit" => {
-        "competitor_limit_enabled" => competitor_limit_enabled,
-        "competitor_limit" => competitor_limit,
-        "competitor_limit_reason" => competitor_limit_reason,
+        "enabled" => competitor_limit_enabled,
+        "count" => competitor_limit,
+        "reason" => competitor_limit_reason,
       },
       "staff" => {
-        "staff_delegate_ids" => staff_delegates.pluck(:id),
-        "trainee_delegate_ids" => trainee_delegates.pluck(:id),
-        "organizer_ids" => organizers.pluck(:id),
+        "staffDelegateIds" => staff_delegates.pluck(:id),
+        "traineeDelegateIds" => trainee_delegates.pluck(:id),
+        "organizerIds" => organizers.pluck(:id),
         "contact" => contact,
       },
       "championships" => championships.map(&:championship_type),
       "website" => {
-        "generate_website" => generate_website,
-        "external_website" => external_website,
-        "use_wca_registration" => use_wca_registration,
-        "external_registration_page" => external_registration_page,
-        "use_wca_live_for_scoretaking" => use_wca_live_for_scoretaking,
+        "generateWebsite" => generate_website,
+        "externalWebsite" => external_website,
+        "externalRegistrationPage" => external_registration_page,
+        "usesWcaRegistration" => use_wca_registration,
+        "usesWcaLive" => use_wca_live_for_scoretaking,
       },
       "userSettings" => {
-        "receive_registration_emails" => receive_registration_emails,
+        "receiveRegistrationEmails" => receive_registration_emails || false,
       },
       "entryFees" => {
-        "currency_code" => currency_code,
-        "base_entry_fee_lowest_denomination" => base_entry_fee_lowest_denomination,
-        "enable_donations" => enable_donations,
-        "guests_enabled" => guests_enabled,
-        "guests_entry_fee_lowest_denomination" => guests_entry_fee_lowest_denomination,
-        "guest_entry_status" => guest_entry_status,
-        "guests_per_registration_limit" => guests_per_registration_limit,
+        "currencyCode" => currency_code,
+        "baseEntryFee" => base_entry_fee_lowest_denomination,
+        "onTheSpotEntryFee" => base_entry_fee_lowest_denomination,
+        "guestEntryFee" => guests_entry_fee_lowest_denomination,
+        "donationsEnabled" => enable_donations,
+        "refundPolicyPercent" => refund_policy_percent,
+        "refundPolicyLimitDate" => refund_policy_limit_date,
       },
-      "regDetails" => {
-        "allow_registration_self_delete_after_acceptance" => allow_registration_self_delete_after_acceptance,
-        "refund_policy_percent" => refund_policy_percent,
-        "on_the_spot_registration" => on_the_spot_registration,
-        "refund_policy_limit_date" => refund_policy_limit_date,
-        "waiting_list_deadline_date" => waiting_list_deadline_date,
-        "event_change_deadline_date" => event_change_deadline_date,
-        "allow_registration_edits" => allow_registration_edits,
-        "extra_registration_requirements" => extra_registration_requirements,
-        "force_comment_in_registration" => force_comment_in_registration,
+      "registration" => {
+        "openingDateTime" => registration_open&.iso8601,
+        "closingDateTime" => registration_close&.iso8601,
+        "waitingListDeadlineDate" => waiting_list_deadline_date,
+        "eventChangeDeadlineDate" => event_change_deadline_date,
+        "allowOnTheSpot" => on_the_spot_registration,
+        "allowSelfDeleteAfterAcceptance" => allow_registration_self_delete_after_acceptance,
+        "allowSelfEdits" => allow_registration_edits,
+        "guestsEnabled" => guests_enabled,
+        "guestEntryStatus" => guest_entry_status,
+        "guestsPerRegistration" => guests_per_registration_limit,
+        "extraRequirements" => extra_registration_requirements,
+        "forceComment" => force_comment_in_registration,
       },
       "eventRestrictions" => {
-        "early_puzzle_submission" => early_puzzle_submission,
-        "early_puzzle_submission_reason" => early_puzzle_submission_reason,
-        "qualification_results" => qualification_results,
-        "qualification_results_reason" => qualification_results_reason,
-        "allow_registration_without_qualification" => allow_registration_without_qualification,
-        "event_restrictions" => event_restrictions,
-        "event_restrictions_reason" => event_restrictions_reason,
-        "events_per_registration_limit" => events_per_registration_limit,
-        "main_event_id" => main_event_id,
+        "earlyPuzzleSubmission" => {
+          "enabled" => early_puzzle_submission,
+          "reason" => early_puzzle_submission_reason,
+        },
+        "qualificationResults" => {
+          "enabled" => qualification_results,
+          "reason" => qualification_results_reason,
+          "allowRegistrationWithout" => allow_registration_without_qualification,
+        },
+        "eventLimitation" => {
+          "enabled" => event_restrictions,
+          "reason" => event_restrictions_reason,
+          "perRegistrationLimit" => events_per_registration_limit,
+        },
+        "mainEventId" => main_event_id,
       },
       "remarks" => remarks,
+    }
+  end
+
+  def set_form_data!(form_data, current_user)
+    JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
+  end
+
+  def self.form_data_json_schema
+    {
+      "type" => "object",
+      "properties" => {
+        "id" => { "type" => "string" },
+        "name" => { "type" => "string" },
+        "shortName" => { "type" => "string" },
+        "nameReason" => { "type" => "string" },
+        "venue" => {
+          "type" => "object",
+          "properties" => {
+            "name" => { "type" => "string" },
+            "cityName" => { "type" => "string" },
+            "countryId" => { "type" => "string" },
+            "details" => { "type" => "string" },
+            "address" => { "type" => "string" },
+            "coordinates" => {
+              "type" => "object",
+              "properties" => {
+                "lat" => { "type" => "double" },
+                "long" => { "type" => "double" },
+              },
+            },
+          },
+        },
+        "startDate" => { "type" => "string" },
+        "endDate" => { "type" => "string" },
+        "series" => CompetitionSeries.form_data_json_schema,
+        "information" => { "type" => "string" },
+        "competitorLimit" => {
+          "type" => "object",
+          "properties" => {
+            "enabled" => { "type" => "boolean" },
+            "count" => { "type" => "integer" },
+            "reason" => { "type" => "string" },
+          },
+        },
+        "staff" => {
+          "type" => "object",
+          "properties" => {
+            "staffDelegateIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "traineeDelegateIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "organizerIds" => {
+              "type" => "array",
+              "items" => { "type" => "integer" },
+              "uniqueItems" => true,
+            },
+            "contact" => { "type" => "string" },
+          },
+        },
+        "championships" => {
+          "type" => "array",
+          "items" => { "type" => "string" },
+          "uniqueItems" => true,
+        },
+        "website" => {
+          "type" => "object",
+          "properties" => {
+            "generateWebsite" => { "type" => "boolean" },
+            "externalWebsite" => { "type" => "string" },
+            "externalRegistrationPage" => { "type" => "string" },
+            "usesWcaRegistration" => { "type" => "boolean" },
+            "usesWcaLive" => { "type" => "boolean" },
+          },
+        },
+        "userSettings" => {
+          "type" => "object",
+          "properties" => {
+            "receiveRegistrationEmails" => { "type" => "boolean" },
+          },
+        },
+        "entryFees" => {
+          "type" => "object",
+          "properties" => {
+            "currencyCode" => { "type" => "string" },
+            "baseEntryFee" => { "type" => "integer" },
+            "onTheSpotEntryFee" => { "type" => "integer" },
+            "guestEntryFee" => { "type" => "integer" },
+            "donationsEnabled" => { "type" => "boolean" },
+            "refundPolicyPercent" => { "type" => "integer" },
+            "refundPolicyLimitDate" => { "type" => "string" },
+          },
+        },
+        "registration" => {
+          "type" => "object",
+          "properties" => {
+            "openingDateTime" => { "type" => "string" },
+            "closingDateTime" => { "type" => "string" },
+            "waitingListDeadlineDate" => { "type" => "string" },
+            "eventChangeDeadlineDate" => { "type" => "string" },
+            "allowOnTheSpot" => { "type" => "boolean" },
+            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
+            "allowSelfEdits" => { "type" => "boolean" },
+            "guestsEnabled" => { "type" => "boolean" },
+            "guestEntryStatus" => { "type" => "string" },
+            "guestsPerRegistration" => { "type" => "integer" },
+            "extraRequirements" => { "type" => "string" },
+            "forceComment" => { "type" => "boolean" },
+          },
+        },
+        "eventRestrictions" => {
+          "type" => "object",
+          "properties" => {
+            "earlyPuzzleSubmission" => {
+              "type" => "object",
+              "properties" => {
+                "enabled" => { "type" => "boolean" },
+                "reason" => { "type" => "string" },
+              },
+            },
+            "qualificationResults" => {
+              "type" => "object",
+              "properties" => {
+                "enabled" => { "type" => "boolean" },
+                "reason" => { "type" => "string" },
+                "allowRegistrationWithout" => { "type" => "boolean" },
+              },
+            },
+            "eventLimitation" => {
+              "type" => "object",
+              "properties" => {
+                "enabled" => { "type" => "boolean" },
+                "reason" => { "type" => "string" },
+                "perRegistrationLimit" => { "type" => "integer" },
+              },
+            },
+            "mainEventId" => { "type" => "string" },
+          },
+        },
+        "remarks" => { "type" => "string" },
+      },
     }
   end
 end

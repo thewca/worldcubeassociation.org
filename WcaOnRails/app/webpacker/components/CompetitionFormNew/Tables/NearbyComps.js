@@ -26,15 +26,15 @@ export default function NearbyComps() {
       venue: {
         coordinates,
       },
-      start_date,
-      end_date,
+      startDate,
+      endDate,
     },
   } = useStore();
 
   const lat = parseFloat(coordinates.lat);
   const long = parseFloat(coordinates.long);
 
-  const missingDate = !start_date || !end_date;
+  const missingDate = !startDate || !endDate;
   const missingLocation = !coordinates
     || Number.isNaN(lat)
     || Number.isNaN(long);
@@ -47,11 +47,11 @@ export default function NearbyComps() {
     params.append('id', id);
     params.append('coordinates_lat', lat.toString());
     params.append('coordinates_long', long.toString());
-    params.append('start_date', start_date);
-    params.append('end_date', end_date);
+    params.append('start_date', startDate);
+    params.append('end_date', endDate);
 
     return params;
-  }, [id, lat, long, start_date, end_date, missingDate, missingLocation]);
+  }, [id, lat, long, startDate, endDate, missingDate, missingLocation]);
 
   const nearbyDataUrl = useMemo(
     () => `${competitionNearbyJsonUrl}?${savedParams.toString()}`,

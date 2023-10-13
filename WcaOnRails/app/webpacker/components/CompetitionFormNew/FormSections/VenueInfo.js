@@ -24,9 +24,9 @@ export default function VenueInfo() {
     <SubSection section="venue">
       <InputSelect id="countryId" options={countriesOptions} search />
       <InputString id="cityName" />
-      <InputString id="venue" mdHint />
-      <InputString id="venueDetails" mdHint />
-      <InputString id="venueAddress" />
+      <InputString id="name" mdHint />
+      <InputString id="details" mdHint />
+      <InputString id="address" />
       <InputMap id="coordinates" htmlId="map" circles={circles} noHint blankHint />
       <SubSection section="coordinates">
         <Form.Group widths="equal">

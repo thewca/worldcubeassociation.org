@@ -76,13 +76,30 @@ class CompetitionSeries < ApplicationRecord
     json
   end
 
-  def to_comp_form
+  def to_form_data
     {
-      "persisted" => true,
-      "id" => wcif_id,
-      "shortName" => short_name,
+      "id" => id,
+      "seriesId" => wcif_id,
       "name" => name,
-      "competitionIds" => self.competitions.map(&:id).join(','),
+      "shortName" => short_name,
+      "competitionIds" => self.competitions.pluck(&:id),
+    }
+  end
+
+  def self.form_data_json_schema
+    {
+      "type" => ["object", "null"],
+      "properties" => {
+        "id" => { "type" => "integer" },
+        "seriesId" => { "type" => "string" },
+        "name" => { "type" => "string" },
+        "shortName" => { "type" => "string" },
+        "competitionIds" => {
+          "type" => "array",
+          "items" => { "type" => "string" },
+          "uniqueItems" => true,
+        },
+      },
     }
   end
 

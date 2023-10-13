@@ -1,7 +1,9 @@
 import React, { useMemo } from 'react';
 import SubSection from './SubSection';
 import {
-  InputBoolean, InputCurrencyAmount, InputNumber, InputRadio, InputSelect,
+  InputBoolean,
+  InputCurrencyAmount, InputDate, InputNumber,
+  InputSelect,
 } from '../Inputs/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
@@ -16,31 +18,6 @@ const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   text: `${currenciesData.byIso[iso].name} (${iso})`,
 }));
 
-const guestsEnabledOptions = [{
-  value: true,
-  text: I18n.t('simple_form.options.competition.guests_enabled.true'),
-},
-{
-  value: false,
-  text: I18n.t('simple_form.options.competition.guests_enabled.false'),
-}];
-
-const guestMessageOptions = [{
-  key: 'unclear',
-  value: 'unclear',
-  text: I18n.t('enums.competition.guest_entry_status.unclear'),
-},
-{
-  key: 'free',
-  value: 'free',
-  text: I18n.t('enums.competition.guest_entry_status.free'),
-},
-{
-  key: 'restricted',
-  value: 'restricted',
-  text: I18n.t('enums.competition.guest_entry_status.restricted'),
-}];
-
 export default function RegistrationFees() {
   const {
     competition: {
@@ -49,21 +26,21 @@ export default function RegistrationFees() {
       },
       entryFees,
       competitorLimit,
+      registration,
     },
   } = useStore();
 
-  const currency = entryFees.currency_code;
+  const currency = entryFees.currencyCode;
 
-  const guestsGoFree = entryFees && !(entryFees.guests_entry_fee_lowest_denomination > 0);
-  const guestsRestricted = entryFees && guestsGoFree && entryFees.guest_entry_status === 'restricted';
+  const canRegOnSite = registration && registration.allowOnTheSpot;
 
   const savedParams = useMemo(() => {
     const params = new URLSearchParams();
 
-    params.append('competitor_limit_enabled', competitorLimit.competitor_limit_enabled);
-    params.append('competitor_limit', competitorLimit.competitor_limit);
-    params.append('currency_code', entryFees.currency_code);
-    params.append('entry_fee_cents', entryFees.base_entry_fee_lowest_denomination);
+    params.append('competitor_limit_enabled', competitorLimit.enabled);
+    params.append('competitor_limit', competitorLimit.count);
+    params.append('currency_code', entryFees.currencyCode);
+    params.append('entry_fee_cents', entryFees.baseEntryFee);
     params.append('country_id', country);
 
     return params;
@@ -98,22 +75,20 @@ export default function RegistrationFees() {
 
   return (
     <SubSection section="entryFees">
-      <InputSelect id="currency_code" options={currenciesOptions} />
-      <InputCurrencyAmount id="base_entry_fee_lowest_denomination" currency={currency} />
+      <InputSelect id="currencyCode" options={currenciesOptions} />
+      <InputCurrencyAmount id="baseEntryFee" currency={currency} />
       <p className="help-block">
         <b>
           {duesText}
         </b>
       </p>
-      <InputBoolean id="enable_donations" />
-      <InputRadio id="guests_enabled" options={guestsEnabledOptions} />
-      <InputCurrencyAmount id="guests_entry_fee_lowest_denomination" currency={currency} />
-      <ConditionalSection showIf={guestsGoFree}>
-        <InputSelect id="guest_entry_status" options={guestMessageOptions} />
+      <ConditionalSection showIf={canRegOnSite}>
+        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} />
       </ConditionalSection>
-      <ConditionalSection showIf={guestsRestricted}>
-        <InputNumber id="guests_per_registration_limit" />
-      </ConditionalSection>
+      <InputCurrencyAmount id="guestEntryFee" currency={currency} />
+      <InputBoolean id="donationsEnabled" />
+      <InputNumber id="refundPolicyPercent" />
+      <InputDate id="refundPolicyLimitDate" dateTime />
     </SubSection>
   );
 }

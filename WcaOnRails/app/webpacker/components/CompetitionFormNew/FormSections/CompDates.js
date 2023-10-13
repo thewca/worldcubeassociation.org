@@ -16,16 +16,17 @@ function daysUntil(date) {
   if (days >= 0) {
     return I18n.t('competitions.time_until_competition.competition_in', { n_days: daysText });
   }
+
   return I18n.t('competitions.time_until_competition.competition_was', { n_days: daysText });
 }
 
 export default function CompDates() {
-  const { competition: { start_date: startDate } } = useStore();
+  const { competition: { startDate } } = useStore();
 
   return (
     <Form.Group widths="equal">
-      <InputDate id="start_date" hint={daysUntil(startDate)} />
-      <InputDate id="end_date" />
+      <InputDate id="startDate" hint={daysUntil(startDate)} />
+      <InputDate id="endDate" />
     </Form.Group>
   );
 }

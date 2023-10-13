@@ -7,19 +7,20 @@ import ConditionalSection from './ConditionalSection';
 export default function Website() {
   const { competition: { website: websiteData } } = useStore();
 
-  const usingExternalWebsite = websiteData && !websiteData.generate_website;
-  const usingExternalRegistration = websiteData && !websiteData.use_wca_registration;
+  const usingExternalWebsite = websiteData && !websiteData.generateWebsite;
+  const usingExternalRegistration = websiteData && !websiteData.usesWcaRegistration;
+
   return (
     <SubSection section="website">
-      <InputBoolean id="generate_website" />
+      <InputBoolean id="generateWebsite" />
       <ConditionalSection showIf={usingExternalWebsite}>
-        <InputString id="external_website" />
+        <InputString id="externalWebsite" />
       </ConditionalSection>
-      <InputBoolean id="use_wca_registration" />
+      <InputBoolean id="usesWcaRegistration" />
       <ConditionalSection showIf={usingExternalRegistration}>
-        <InputString id="external_registration_page" />
+        <InputString id="externalRegistrationPage" />
       </ConditionalSection>
-      <InputBoolean id="use_wca_live_for_scoretaking" />
+      <InputBoolean id="usesWcaLive" />
     </SubSection>
   );
 }

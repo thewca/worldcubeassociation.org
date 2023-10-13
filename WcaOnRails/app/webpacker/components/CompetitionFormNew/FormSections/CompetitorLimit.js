@@ -5,16 +5,18 @@ import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 
 export default function CompetitorLimit() {
-  const { competition: { competitorLimit: limitData } } = useStore();
+  const {
+    competition: { competitorLimit },
+  } = useStore();
 
-  const hasLimit = limitData && limitData.competitor_limit_enabled;
+  const hasLimit = competitorLimit.enabled;
 
   return (
     <SubSection section="competitorLimit">
-      <InputBooleanSelect id="competitor_limit_enabled" />
+      <InputBooleanSelect id="enabled" />
       <ConditionalSection showIf={hasLimit}>
-        <InputNumber id="competitor_limit" min={0} />
-        <InputTextArea id="competitor_limit_reason" min={0} />
+        <InputNumber id="count" min={0} />
+        <InputTextArea id="reason" />
       </ConditionalSection>
     </SubSection>
   );

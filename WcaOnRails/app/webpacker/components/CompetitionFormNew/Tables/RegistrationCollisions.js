@@ -165,20 +165,20 @@ function RegistrationCollisionsContent() {
   const {
     competition: {
       id,
-      registration_open,
+      registration: { openingDateTime },
     },
   } = useStore();
 
   const savedParams = useMemo(() => {
     const params = new URLSearchParams();
 
-    if (!registration_open) return params;
+    if (!openingDateTime) return params;
 
     params.append('id', id);
-    params.append('registration_open', registration_open);
+    params.append('registration_open', openingDateTime);
 
     return params;
-  }, [id, registration_open]);
+  }, [id, openingDateTime]);
 
   const registrationCollisionsUrl = useMemo(
     () => `${registrationCollisionsJsonUrl}?${savedParams.toString()}`,
@@ -194,7 +194,7 @@ function RegistrationCollisionsContent() {
     return <Loading />;
   }
 
-  if (!registration_open) return <MissingInfo />;
+  if (!openingDateTime) return <MissingInfo />;
 
   if (!collisions || collisions.length === 0) {
     return (
