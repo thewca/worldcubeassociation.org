@@ -8,28 +8,39 @@ import {
 } from 'semantic-ui-react';
 import TextareaAutosize from 'react-autosize-textarea';
 import { Circle } from 'react-leaflet';
+import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './WCASearch';
 import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
+import { useCompetitionForm, useSections, useUpdateFormAction } from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 
-function getFieldLabel(id) {
-  return I18n.t(`activerecord.attributes.competition.${id}`);
+function snakifyId(id, section = []) {
+  const idParts = [...section, id];
+  const yamlParts = idParts.map(_.snakeCase);
+
+  return yamlParts.join('.');
 }
 
-function getFieldHint(id, md) {
+function getFieldLabel(id, section = []) {
+  const yamlId = snakifyId(id, section);
+  return I18n.t(`competitions.competition_form.labels.${yamlId}`);
+}
+
+function getFieldHint(idWithSection, section = [], isMarkdown = false) {
+  const yamlId = snakifyId(idWithSection, section);
+
   // TODO: Maybe this should be forced within the translation file?
-  if (md) {
-    const snakeCaseId = id.replace(/[A-Z]/g, (letter) => `_${letter.toLowerCase()}`);
-    return I18n.t(`competitions.competition_form.${snakeCaseId}_html`, {
+  if (isMarkdown) {
+    return I18n.t(`competitions.competition_form.hints.${yamlId}_html`, {
       md: I18n.t('competitions.competition_form.supports_md_html'),
     });
   }
-  return I18n.t(`simple_form.hints.competition.${id}`);
+
+  return I18n.t(`competition.competition_form.hints.${yamlId}`);
 }
 
 function FieldWrapper({
@@ -45,11 +56,13 @@ function FieldWrapper({
   disabled,
   children,
 }) {
+  const section = useSections();
+
   const fallbackLabel = blankLabel ? '' : '&nbsp;';
-  const htmlLabel = noLabel ? fallbackLabel : label || getFieldLabel(id);
+  const htmlLabel = noLabel ? fallbackLabel : label || getFieldLabel(id, section);
 
   const fallbackHint = blankHint ? '' : '&nbsp;';
-  const htmlHint = noHint ? fallbackHint : hint || getFieldHint(id, mdHint);
+  const htmlHint = noHint ? fallbackHint : hint || getFieldHint(id, section, mdHint);
 
   return (
     <Form.Field
@@ -78,6 +91,8 @@ const wrapInput = (
   const { adminView, confirmed, errors } = useStore();
   const dispatch = useDispatch();
 
+  const section = useSections();
+
   const formValues = useCompetitionForm();
   const updateFormValue = useUpdateFormAction();
 
@@ -99,7 +114,7 @@ const wrapInput = (
   const error = errors && errors[props.id] && errors[props.id].length > 0 && errors[props.id].join(', ');
 
   const passDownLabel = additionalPropNames.includes('label');
-  if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id));
+  if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id, section));
 
   const noLabel = props.noLabel || passDownLabel;
   const blankLabel = props.blankLabel || passDownLabel;
@@ -306,7 +321,7 @@ export const InputChampionships = wrapInput((props) => {
         <ChampionshipSelect
           key={`${championship}-${index + 1}`}
           value={championship}
-          onChange={(_, { value: newValue }) => {
+          onChange={(evt, { value: newValue }) => {
             const newValueArray = [...championships];
             newValueArray[index] = newValue;
             onChange(newValueArray);
