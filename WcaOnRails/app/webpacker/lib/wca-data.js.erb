@@ -129,6 +129,10 @@ export const railsEnv = '<%= Rails.env %>';
 
 // ----- COMP RULES -----
 
-export const nearbyCompetitionDistanceWarning = <%=Competition::NEARBY_DISTANCE_KM_WARNING.to_json.html_safe %>
+export const nearbyCompetitionDistanceWarning = <%= Competition::NEARBY_DISTANCE_KM_WARNING.to_json.html_safe %>
 
-export const nearbyCompetitionDistanceDanger = <%=Competition::NEARBY_DISTANCE_KM_DANGER.to_json.html_safe %>
+export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_KM_DANGER.to_json.html_safe %>
+
+// ----- CHAMPIONSHIPS -----
+
+export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>

@@ -114,7 +114,6 @@ Rails.application.routes.draw do
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
   get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
 
-  get 'competitions/edit/championship-regions-json' => 'competitions#championship_regions_json', as: :championship_regions_json
   get 'competitions/edit/nearby-competitions-json' => 'competitions#nearby_competitions_json', as: :nearby_competitions_json
   get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
   get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json

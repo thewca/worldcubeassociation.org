@@ -313,6 +313,7 @@ en:
         staff_delegate_ids: "WCA Delegate(s)"
         trainee_delegate_ids: "WCA Trainee Delegate(s)"
         organizer_ids: "Organizer(s)"
+        championships: "Championships"
         contact: "Contact"
         information: "Information"
         use_wca_registration: "I would like to use the WCA website for registration"

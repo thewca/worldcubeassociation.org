@@ -15,6 +15,7 @@ import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useCompetitionForm, useUpdateFormAction } from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
+import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 
 function getFieldLabel(id) {
   return I18n.t(`activerecord.attributes.competition.${id}`);
@@ -287,3 +288,37 @@ export const InputMap = wrapInput((props) => {
     </div>
   );
 }, ['htmlId', 'circles', 'markers', 'disabled']);
+
+export const InputChampionships = wrapInput((props) => {
+  const championships = props.value;
+
+  const onChange = useCallback((newChampionships) => {
+    props.onChange(null, { value: newChampionships });
+  }, [props]);
+
+  const onClickAdd = useCallback(() => {
+    onChange([...championships, null]);
+  }, [championships, onChange]);
+
+  return (
+    <>
+      {championships.map((championship, index) => (
+        <ChampionshipSelect
+          key={`${championship}-${index + 1}`}
+          value={championship}
+          onChange={(_, { value: newValue }) => {
+            const newValueArray = [...championships];
+            newValueArray[index] = newValue;
+            onChange(newValueArray);
+          }}
+          onRemove={() => {
+            const newValueArray = [...championships];
+            newValueArray.splice(index, 1);
+            onChange(newValueArray);
+          }}
+        />
+      ))}
+      <AddChampionshipButton onClick={onClickAdd} />
+    </>
+  );
+}, []);

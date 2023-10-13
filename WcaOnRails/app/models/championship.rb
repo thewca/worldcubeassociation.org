@@ -2,8 +2,9 @@
 
 class Championship < ApplicationRecord
   include Comparable
+  CHAMPIONSHIP_TYPE_WORLD = "world"
   MAJOR_CHAMPIONSHIP_TYPES = [
-    "world",
+    CHAMPIONSHIP_TYPE_WORLD,
     *Continent.real.map(&:id),
   ].freeze
   CHAMPIONSHIP_TYPES = [
@@ -56,5 +57,14 @@ class Championship < ApplicationRecord
 
   def <=>(other)
     self.to_a <=> other.to_a
+  end
+
+  def self.grouped_championship_types
+    {
+      "Planetary Championship" => [["World", CHAMPIONSHIP_TYPE_WORLD]],
+      "Continental Championship" => Continent.all_sorted_by(I18n.locale, real: true).map { |continent| [continent.name, continent.id] },
+      "Multi-country Championship" => EligibleCountryIso2ForChampionship.championship_types.map { |championship_type| [championship_type.titleize, championship_type] },
+      "National Championship" => Country.all_sorted_by(I18n.locale, real: true).map { |country| [country.name, country.iso2] },
+    }
   end
 end

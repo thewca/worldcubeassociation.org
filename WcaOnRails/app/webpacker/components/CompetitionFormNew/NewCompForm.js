@@ -8,6 +8,7 @@ import {
 import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
+  InputChampionships,
   InputDate,
   InputMarkdown,
   InputTextArea,
@@ -15,7 +16,6 @@ import {
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
 import Website from './FormSections/Website';
-import InputChampionship from './Inputs/InputChampionship';
 import PerUserSettings from './FormSections/UserSettings';
 import RegistrationFee from './FormSections/RegistrationFees';
 import RegistrationDetails from './FormSections/RegistrationDetails';
@@ -180,7 +180,7 @@ function NewCompForm() {
         <Staff />
         <Divider />
 
-        <InputChampionship id="championships" />
+        <InputChampionships id="championships" noHint blankHint />
         <Divider />
 
         <Website />

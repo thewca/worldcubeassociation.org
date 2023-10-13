@@ -533,10 +533,6 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  def championship_regions_json
-    render json: helpers.grouped_championship_types
-  end
-
   def calculate_dues
     country_iso2 = Country.find_by(id: params[:country_id])&.iso2
     country_band = CountryBand.find_by(iso2: country_iso2)&.number
