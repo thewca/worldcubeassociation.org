@@ -207,8 +207,8 @@ function NewCompForm() {
 export default function Wrapper({
   competition = null,
   persisted = false,
+  confirmed = false,
   adminView = false,
-  organizerView = false,
 }) {
   return (
     <StoreProvider
@@ -218,18 +218,13 @@ export default function Wrapper({
         competition,
         initialCompetition: competition,
         persisted,
+        confirmed,
         errors: null,
         adminView,
-        organizerView,
       }}
     >
       <SectionProvider>
-        <NewCompForm
-          competition={competition}
-          persisted={persisted}
-          adminView={adminView}
-          organizerView={organizerView}
-        />
+        <NewCompForm />
       </SectionProvider>
     </StoreProvider>
   );

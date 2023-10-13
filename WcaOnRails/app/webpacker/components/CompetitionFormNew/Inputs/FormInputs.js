@@ -38,6 +38,7 @@ function FieldWrapper({
   noHint,
   mdHint,
   error,
+  disabled,
   children,
 }) {
   const fallbackLabel = blankLabel ? '' : '&nbsp;';
@@ -49,6 +50,7 @@ function FieldWrapper({
     <Form.Field
       error={!!error}
       className={error && 'has-error'}
+      disabled={!!disabled}
     >
       {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
       <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />
@@ -67,7 +69,7 @@ const wrapInput = (
   emptyStringForNull = false,
   inputValueKey = 'value',
 ) => function wrappedInput(props) {
-  const { errors } = useStore();
+  const { adminView, confirmed, errors } = useStore();
   const dispatch = useDispatch();
 
   const formValues = useCompetitionForm();
@@ -95,6 +97,8 @@ const wrapInput = (
 
   if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id));
 
+  const disabled = confirmed && !adminView;
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <FieldWrapper
@@ -106,6 +110,7 @@ const wrapInput = (
       noHint={props.noHint}
       mdHint={props.mdHint}
       error={error}
+      disabled={disabled}
     >
       <WrappedInput
         {...inputProps}

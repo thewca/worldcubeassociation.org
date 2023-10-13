@@ -455,7 +455,6 @@ class CompetitionsController < ApplicationController
     @competition.longitude_degrees = params[:coordinates_long]
 
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     @nearby_competitions = get_nearby_competitions(@competition)
 
     render json: @nearby_competitions.map { |c| competition_form_nearby_json(c) }
@@ -528,7 +527,6 @@ class CompetitionsController < ApplicationController
   def time_until_competition
     @competition = Competition.new(competition_params)
     @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     render json: {
       has_date_errors: @competition.has_date_errors?,
       html: render_to_string(partial: 'time_until_competition'),
