@@ -380,7 +380,10 @@ class AdminController < ApplicationController
                                  })
     end
 
-    @default_token = @db_tokens[:main]
+    @db_server_indices = {
+      main: 1,
+      replica: 2,
+    }
   end
 
   def check_regional_records
