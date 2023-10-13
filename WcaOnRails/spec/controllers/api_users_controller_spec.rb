@@ -77,7 +77,7 @@ RSpec.describe Api::V0::UsersController do
       get :show_me
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["user"]).to eq current_user.as_json
+      expect(json["user"]).to eq competed_user.as_json
       expect(json.key?("rankings")).to eq true
     end
   end
