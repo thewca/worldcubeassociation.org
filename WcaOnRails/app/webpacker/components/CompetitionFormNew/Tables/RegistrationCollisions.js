@@ -125,7 +125,7 @@ function CollisionsTable({ comps }) {
         <CollisionsTableHeaderRow />
       </Table.Header>
       <Table.Body>
-        {comps.slice().reverse().map((comp) => (
+        {comps.toReversed().map((comp) => (
           <CollisionsTableCompRow
             key={comp.name}
             comp={comp}

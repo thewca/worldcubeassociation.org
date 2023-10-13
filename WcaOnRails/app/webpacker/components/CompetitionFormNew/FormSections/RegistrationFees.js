@@ -8,6 +8,7 @@ import I18n from '../../../lib/i18n';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
+import ConditionalSection from './ConditionalSection';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,
@@ -108,8 +109,12 @@ export default function RegistrationFees() {
       <InputBoolean id="enable_donations" />
       <InputRadio id="guests_enabled" options={guestsEnabledOptions} />
       <InputCurrencyAmount id="guests_entry_fee_lowest_denomination" currency={currency} />
-      {guestsGoFree && <InputSelect id="guest_entry_status" options={guestMessageOptions} />}
-      {guestsRestricted && <InputNumber id="guests_per_registration_limit" />}
+      <ConditionalSection showIf={guestsGoFree}>
+        <InputSelect id="guest_entry_status" options={guestMessageOptions} />
+      </ConditionalSection>
+      <ConditionalSection showIf={guestsRestricted}>
+        <InputNumber id="guests_per_registration_limit" />
+      </ConditionalSection>
     </SubSection>
   );
 }

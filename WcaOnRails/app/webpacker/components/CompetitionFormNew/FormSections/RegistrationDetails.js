@@ -9,6 +9,7 @@ import {
   InputNumber,
 } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
+import ConditionalSection from './ConditionalSection';
 
 export default function RegistrationDetails() {
   const { competition: { regDetails: regDetailsData, entryFees } } = useStore();
@@ -24,7 +25,9 @@ export default function RegistrationDetails() {
       <InputDate id="waiting_list_deadline_date" dateTime />
       <InputDate id="event_change_deadline_date" dateTime />
       <InputBooleanSelect id="on_the_spot_registration" />
-      {canRegOnSite && <InputCurrencyAmount id="on_the_spot_entry_fee_lowest_denomination" currency={currency} />}
+      <ConditionalSection showIf={canRegOnSite}>
+        <InputCurrencyAmount id="on_the_spot_entry_fee_lowest_denomination" currency={currency} />
+      </ConditionalSection>
       <InputBooleanSelect id="allow_registration_edits" />
       <InputBooleanSelect id="allow_registration_self_delete_after_acceptance" />
       <InputMarkdown id="extra_registration_requirements" />
