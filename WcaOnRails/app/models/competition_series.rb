@@ -82,8 +82,24 @@ class CompetitionSeries < ApplicationRecord
       "seriesId" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      # For god knows whatever buggy reason, Rails returns nil when using pluck :(
-      "competitionIds" => competitions.map(&:id),
+      "competitionIds" => competitions.pluck(:id),
+    }
+  end
+
+  def set_form_data(form_data_series)
+    if form_data_series["competitionIds"].count <= 1
+      raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
+    end
+
+    self.competition_ids = form_data_series["competitionIds"].join(",")
+    assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
+  end
+
+  def self.form_data_to_attributes(form_data)
+    {
+      wcif_id: form_data["seriesId"],
+      name: form_data["name"],
+      short_name: form_data["shortName"],
     }
   end
 
@@ -91,7 +107,7 @@ class CompetitionSeries < ApplicationRecord
     {
       "type" => ["object", "null"],
       "properties" => {
-        "id" => { "type" => "integer" },
+        "id" => { "type" => [ "integer", "null" ] },
         "seriesId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
@@ -125,7 +141,9 @@ class CompetitionSeries < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif_series)
+  def set_wcif!(wcif_series)
+    JSON::Validator.validate!(CompetitionSeries.wcif_json_schema, wcif_series)
+
     if wcif_series["competitionIds"].count <= 1
       raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
     end

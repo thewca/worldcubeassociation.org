@@ -180,37 +180,29 @@ class CompetitionsController < ApplicationController
   end
 
   def create
-    comp_data = comp_params_form
-    @competition = Competition.new(comp_data.except(:championships, :series))
+    competition = Competition.new
 
-    if comp_data[:championships].is_a?(Array)
-      comp_data[:championships].each do |type|
-        @competition.championships.build(championship_type: type)
-      end
+    begin
+      # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
+      form_data = params.permit!.to_h
+      competition.set_form_data(form_data, current_user)
+    rescue JSON::Schema::ValidationError => e
+      return render status: 400, json: {
+        status: "Schema error while creating the competition",
+        error: e.message,
+      }
     end
 
-    if comp_data[:series].present?
-      series_data = comp_data[:series]
-
-      if series_data[:id].nil?
-        @competition.competition_series = CompetitionSeries.new(
-          name: series[:name],
-          competition_ids: series[:competition_ids],
-        )
-      else
-        @competition.competition_series = CompetitionSeries.find(wcif_id: series[:id])
+    if competition.save
+      competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
       end
-    end
 
-    if @competition.save
-      flash[:success] = t('competitions.messages.create_success')
-      @competition.organizers.each do |organizer|
-        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
-      end
-      redirect_to edit_competition_path(@competition)
+      render json: { status: "ok" }
     else
-      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      render json: @competition.errors
+      competition.errors[:id].each { |error| competition.errors.add(:name, message: error) }
+
+      render json: competition.errors
     end
   end
 
@@ -652,103 +644,93 @@ class CompetitionsController < ApplicationController
   end
 
   def update
-    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
-    @competition_organizer_view = !@competition_admin_view
+    competition = competition_from_params
 
-    comp_data = comp_params_form
-    comp_params_minus_id = comp_data.except(:championships, :series)
+    competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
+    competition_organizer_view = !competition_admin_view
 
-    new_id = comp_params_minus_id.delete(:id)
+    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
+    form_data = params.permit!.to_h
 
-    old_organizers = @competition.organizers.to_a
+    # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
+    new_id = form_data.delete(:competitionId)
 
-    # Update championships
-    champs = comp_data[:championships] || []
-    champs.each do |type|
-      @competition.championships.find_or_create_by(championship_type: type)
+    old_organizers = competition.organizers.to_a
+
+    begin
+      competition.set_form_data(form_data, current_user)
+    rescue JSON::Schema::ValidationError => e
+      return render status: 400, json: {
+        status: "Schema error while saving the competition",
+        error: e.message,
+      }
     end
 
-    @competition.championships.where.not(championship_type: champs).destroy_all
-    comp_params_minus_id[:championships] = @competition.championships
-
-    @competition.competition_series = nil
-    unless comp_data[:series].nil?
-      series = comp_data[:series]
-      puts series
-      if series[:id].nil?
-        @competition.competition_series = CompetitionSeries.new.tap do |s|
-          s.name = series[:name] || ''
-          s.competition_ids = series[:competition_ids]
-        end
-      else
-        @competition.competition_series = CompetitionSeries.find(wcif_id: series[:id])
-      end
-    end
-    comp_params_minus_id[:competition_series] = @competition.competition_series
-
-    if params[:commit] == "Delete"
-      cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
-      if cannot_delete_competition_reason
-        flash.now[:danger] = cannot_delete_competition_reason
-        render :edit
-      else
-        @competition.destroy
-        flash[:success] = t('.delete_success', id: @competition.id)
-        redirect_to root_url
-      end
-    elsif @competition.update(comp_params_minus_id)
+    if competition.save
       # Automatically compute the cellName and ID for competitions with a short name.
-      if !@competition.confirmed? && @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
-        old_competition_id = @competition.id
-        @competition.create_id_and_cell_name(force_override: true)
+      if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        old_competition_id = competition.id
+        competition.create_id_and_cell_name(force_override: true)
 
         # Save the newly computed cellName without breaking the ID associations
         # (which in turn is handled by a hack in the next if-block below)
-        @competition.with_old_id { @competition.save! }
+        competition.with_old_id { competition.save! }
 
         # Try to update the ID only if it _actually_ changed
-        new_id = @competition.id unless @competition.id == old_competition_id
+        new_id = competition.id unless competition.id == old_competition_id
       end
 
-      if new_id && !@competition.update(id: new_id)
+      if new_id && !competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with
         # editing the ID text box manually. This will go away once we have proper
         # immutable ids for competitions.
-        @competition = Competition.find(params[:id])
+        competition.errors[:id].each { |error| competition.errors.add(:name, message: error) }
+
+        return render json: competition.errors
       end
 
-      new_organizers = @competition.organizers - old_organizers
-      removed_organizers = old_organizers - @competition.organizers
+      new_organizers = competition.organizers - old_organizers
+      removed_organizers = old_organizers - competition.organizers
 
       new_organizers.each do |new_organizer|
-        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, new_organizer).deliver_later
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, new_organizer).deliver_later
       end
 
       removed_organizers.each do |removed_organizer|
-        CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, @competition, removed_organizer).deliver_later
+        CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      if confirming?
-        CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
-        @competition.organizers.each do |organizer|
-          CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
-        end
-        flash[:success] = t('.confirm_success')
-      else
-        flash[:success] = t('.save_success')
-      end
-      if @competition_admin_view
-        redirect_to admin_edit_competition_path(@competition)
-      else
-        redirect_to edit_competition_path(@competition)
-      end
+      render json: { status: "ok" }
     else
-      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      render json: @competition.errors
+      competition.errors[:id].each { |error| competition.errors.add(:name, message: error) }
+
+      render json: competition.errors
     end
+  end
+
+  def delete
+    cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
+
+    if cannot_delete_competition_reason
+      render status: 400, json: { reason: cannot_delete_competition_reason }
+    else
+      @competition.destroy
+      redirect_to root_url
+    end
+  end
+
+  def confirm
+    # TODO: Actually set the "confirmed" flags on the competition
+
+    CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
+
+    @competition.organizers.each do |organizer|
+      CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
+    end
+
+    render json: { status: "ok" }
   end
 
   def my_competitions
@@ -792,94 +774,6 @@ class CompetitionsController < ApplicationController
     if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
       Money.default_bank.update_rates
     end
-  end
-
-  private def comp_params_form
-    comp_data = {
-      receive_registration_emails: params.dig('userSettings', 'receive_registration_emails'),
-      being_cloned_from_id: params.dig('cloning', 'being_cloned_from_id'),
-      clone_tabs: params.dig('cloning', 'clone_tabs'),
-    }
-
-    if @competition.nil? || @competition.can_edit_registration_fees?
-      additional_data = {
-        base_entry_fee_lowest_denomination: params.dig('entryFees', 'base_entry_fee_lowest_denomination'),
-        currency_code: params.dig('entryFees', 'currency_code'),
-      }
-      comp_data.merge! additional_data
-    end
-
-    if @competition&.confirmed? && !current_user.can_admin_competitions?
-      # If the competition is confirmed, non admins are not allowed to change anything.
-    else
-      additional_data = {
-        id: params['id'],
-        name: params['name'],
-        cellName: params['cellName'],
-        name_reason: params['name_reason'],
-        countryId: params.dig('venue', 'countryId'),
-        cityName: params.dig('venue', 'cityName'),
-        venue: params.dig('venue', 'venue'),
-        venueDetails: params.dig('venue', 'venueDetails'),
-        venueAddress: params.dig('venue', 'venueAddress'),
-        latitude_degrees: params.dig('venue', 'coordinates', 'lat'),
-        longitude_degrees: params.dig('venue', 'coordinates', 'long'),
-        start_date: params['start_date'],
-        end_date: params['end_date'],
-        registration_open: params['registration_open'],
-        registration_close: params['registration_close'],
-        information: params['information'],
-        series: params['series'],
-        competitor_limit_enabled: params.dig('competitorLimit', 'competitor_limit_enabled'),
-        competitor_limit: params.dig('competitorLimit', 'competitor_limit'),
-        competitor_limit_reason: params.dig('competitorLimit', 'competitor_limit_reason'),
-        staff_delegate_ids: params.dig('staff', 'staff_delegate_ids')&.join(','),
-        trainee_delegate_ids: params.dig('staff', 'trainee_delegate_ids')&.join(','),
-        organizer_ids: params.dig('staff', 'organizer_ids')&.join(','),
-        contact: params.dig('staff', 'contact'),
-        championships: params['championships'],
-        generate_website: params.dig('website', 'generate_website'),
-        external_website: params.dig('website', 'external_website'),
-        use_wca_registration: params.dig('website', 'use_wca_registration'),
-        external_registration_page: params.dig('website', 'external_registration_page'),
-        use_wca_live_for_scoretaking: params.dig('website', 'use_wca_live_for_scoretaking'),
-        currency_code: params.dig('entryFees', 'currency_code'),
-        base_entry_fee_lowest_denomination: params.dig('entryFees', 'base_entry_fee_lowest_denomination'),
-        enable_donations: params.dig('entryFees', 'enable_donations'),
-        guests_enabled: params.dig('entryFees', 'guests_enabled'),
-        guests_entry_fee_lowest_denomination: params.dig('entryFees', 'guests_entry_fee_lowest_denomination'),
-        guest_entry_status: params.dig('entryFees', 'guest_entry_status'),
-        guests_per_registration_limit: params.dig('entryFees', 'guests_per_registration_limit'),
-        allow_registration_self_delete_after_acceptance: params.dig('regDetails', 'allow_registration_self_delete_after_acceptance'),
-        refund_policy_percent: params.dig('regDetails', 'refund_policy_percent'),
-        on_the_spot_registration: params.dig('regDetails', 'on_the_spot_registration'),
-        refund_policy_limit_date: params.dig('regDetails', 'refund_policy_limit_date'),
-        waiting_list_deadline_date: params.dig('regDetails', 'waiting_list_deadline_date'),
-        event_change_deadline_date: params.dig('regDetails', 'event_change_deadline_date'),
-        allow_registration_edits: params.dig('regDetails', 'allow_registration_edits'),
-        extra_registration_requirements: params.dig('regDetails', 'extra_registration_requirements'),
-        force_comment_in_registration: params.dig('regDetails', 'force_comment_in_registration'),
-        early_puzzle_submission: params.dig('eventRestrictions', 'early_puzzle_submission'),
-        early_puzzle_submission_reason: params.dig('eventRestrictions', 'early_puzzle_submission_reason'),
-        qualification_results: params.dig('eventRestrictions', 'qualification_results'),
-        qualification_results_reason: params.dig('eventRestrictions', 'qualification_results_reason'),
-        allow_registration_without_qualification: params.dig('eventRestrictions', 'allow_registration_without_qualification'),
-        event_restrictions: params.dig('eventRestrictions', 'event_restrictions'),
-        event_restrictions_reason: params.dig('eventRestrictions', 'event_restrictions_reason'),
-        events_per_registration_limit: params.dig('eventRestrictions', 'events_per_registration_limit'),
-        main_event_id: params.dig('eventRestrictions', 'main_event_id'),
-        remarks: params['remarks'],
-      }
-      comp_data.merge! additional_data
-    end
-
-    if confirming? && current_user.can_confirm_competition?(@competition)
-      comp_data[:confirmed] = true
-    end
-
-    comp_data[:editing_user_id] = current_user.id
-
-    comp_data
   end
 
   private def competition_params

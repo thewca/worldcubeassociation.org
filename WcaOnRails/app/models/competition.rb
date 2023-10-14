@@ -1719,11 +1719,9 @@ class Competition < ApplicationRecord
     end
 
     competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
-    competition_series.load_wcif!(wcif_series)
+    competition_series.set_wcif!(wcif_series)
 
     self.competition_series = competition_series
-
-    reload
   end
 
   def set_wcif_events!(wcif_events, current_user)
@@ -1992,7 +1990,9 @@ class Competition < ApplicationRecord
 
   def to_form_data
     {
-      "id" => id,
+      # TODO: enable this once we have persistent IDs
+      # "id" => id,
+      "competitionId" => id,
       "name" => name,
       "shortName" => cellName,
       "nameReason" => name_reason,
@@ -2003,8 +2003,8 @@ class Competition < ApplicationRecord
         "details" => venueDetails,
         "address" => venueAddress,
         "coordinates" => {
-          "lat" => latitude_degrees,
-          "long" => longitude_degrees,
+          "lat" => latitude_microdegrees,
+          "long" => longitude_microdegrees,
         },
       },
       "startDate" => start_date&.iso8601,
@@ -2077,15 +2077,119 @@ class Competition < ApplicationRecord
     }
   end
 
-  def set_form_data!(form_data, current_user)
+  def set_form_data(form_data, current_user)
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
+
+    if self.confirmed? && !current_user.can_admin_competitions?
+      raise WcaExceptions::BadApiParameter.new("Cannot change announced competition")
+    end
+
+    ActiveRecord::Base.transaction do
+      if (form_series = form_data["series"]).present?
+        set_form_data_series(form_series, current_user)
+      else
+        self.competition_series = nil
+      end
+
+      if (form_championships = form_data["championships"]).present?
+        self.championships = form_championships.map do |type|
+          Championship.new(championship_type: type)
+        end
+      end
+
+      self.editing_user_id = current_user.id
+      self.receive_registration_emails = form_data.dig('userSettings', 'receiveRegistrationEmails')
+
+      #TODO
+      #being_cloned_from_id: form_data.dig('cloning', 'being_cloned_from_id'),
+      #clone_tabs: form_data.dig('cloning', 'clone_tabs'),
+      self.staff_delegate_ids = form_data.dig('staff', 'staffDelegateIds')&.join(',')
+      self.trainee_delegate_ids = form_data.dig('staff', 'traineeDelegateIds')&.join(',')
+      self.organizer_ids = form_data.dig('staff', 'organizerIds')&.join(',')
+
+      assign_attributes(Competition.form_data_to_attributes(form_data))
+    end
+  end
+
+  def self.form_data_to_attributes(form_data)
+    {
+      id: form_data['competitionId'],
+      name: form_data['name'],
+      cityName: form_data.dig('venue', 'cityName'),
+      countryId: form_data.dig('venue', 'countryId'),
+      information: form_data['information'],
+      venue: form_data.dig('venue', 'name'),
+      venueAddress: form_data.dig('venue', 'address'),
+      venueDetails: form_data.dig('venue', 'details'),
+      external_website: form_data.dig('website', 'externalWebsite'),
+      cellName: form_data['shortName'],
+      latitude: form_data.dig('venue', 'coordinates', 'lat'),
+      longitude: form_data.dig('venue', 'coordinates', 'long'),
+      contact: form_data.dig('staff', 'contact'),
+      remarks: form_data['remarks'],
+      registration_open: form_data.dig('registration', 'openingDateTime'),
+      registration_close: form_data.dig('registration', 'closingDateTime'),
+      use_wca_registration: form_data.dig('website', 'usesWcaRegistration'),
+      guests_enabled: form_data.dig('entryFees', 'guestsEnabled'),
+      generate_website: form_data.dig('website', 'generateWebsite'),
+      base_entry_fee_lowest_denomination: form_data.dig('entryFees', 'baseEntryFee'),
+      currency_code: form_data.dig('entryFees', 'currencyCode'),
+      start_date: form_data['startDate'],
+      end_date: form_data['endDate'],
+      enable_donations: form_data.dig('entryFees', 'donationsEnabled'),
+      competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
+      competitor_limit: form_data.dig('competitorLimit', 'count'),
+      competitor_limit_reason: form_data.dig('competitorLimit', 'reason'),
+      extra_registration_requirements: form_data.dig('registration', 'extraRequirements'),
+      on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
+      on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
+      refund_policy_percent: form_data.dig('entryFees', 'refundPolicyPercent'),
+      refund_policy_limit_date: form_data.dig('entryFees', 'refundPolicyLimitDate'),
+      guests_entry_fee_lowest_denomination: form_data.dig('entryFees', 'guestEntryFee'),
+      early_puzzle_submission: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'enabled'),
+      early_puzzle_submission_reason: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'reason'),
+      qualification_results: form_data.dig('eventRestrictions', 'qualificationResults', 'enabled'),
+      qualification_results_reason: form_data.dig('eventRestrictions', 'qualificationResults', 'reason'),
+      name_reason: form_data['nameReason'],
+      external_registration_page: form_data.dig('website', 'externalRegistrationPage'),
+      event_restrictions: form_data.dig('eventRestrictions', 'eventLimitation', 'enabled'),
+      event_restrictions_reason: form_data.dig('eventRestrictions', 'eventLimitation', 'reason'),
+      main_event_id: form_data.dig('eventRestrictions', 'mainEventId'),
+      waiting_list_deadline_date: form_data.dig('registration', 'waitingListDeadlineDate'),
+      event_change_deadline_date: form_data.dig('registration', 'eventChangeDeadlineDate'),
+      guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
+      allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
+      allow_registration_self_delete_after_acceptance: form_data.dig('registration', 'allowSelfDeleteAfterAcceptance'),
+      use_wca_live_for_scoretaking: form_data.dig('website', 'usesWcaLive'),
+      allow_registration_without_qualification: form_data.dig('eventRestrictions', 'qualificationResults', 'allowRegistrationWithout'),
+      guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
+      events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
+      force_comment_in_registration: form_data.dig('registration', 'forceComment'),
+    }
+  end
+
+  def set_form_data_series(form_data_series, current_user)
+    unless current_user.can_update_competition_series?(self)
+      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
+    end
+
+    unless form_data_series["competitionIds"].include?(self.id)
+      raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
+    end
+
+    competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : CompetitionSeries.new
+    competition_series.set_form_data(form_data_series)
+
+    self.competition_series = competition_series
   end
 
   def self.form_data_json_schema
     {
       "type" => "object",
       "properties" => {
-        "id" => { "type" => "string" },
+        # TODO: See above in to_form_data
+        # "id" => { "type" => "string" },
+        "competitionId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
         "nameReason" => { "type" => "string" },
@@ -2100,8 +2204,8 @@ class Competition < ApplicationRecord
             "coordinates" => {
               "type" => "object",
               "properties" => {
-                "lat" => { "type" => "double" },
-                "long" => { "type" => "double" },
+                "lat" => { "type" => "integer" },
+                "long" => { "type" => "integer" },
               },
             },
           },
