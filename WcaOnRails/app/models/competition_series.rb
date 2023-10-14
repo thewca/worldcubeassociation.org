@@ -82,7 +82,8 @@ class CompetitionSeries < ApplicationRecord
       "seriesId" => wcif_id,
       "name" => name,
       "shortName" => short_name,
-      "competitionIds" => self.competitions.pluck(&:id),
+      # For god knows whatever buggy reason, Rails returns nil when using pluck :(
+      "competitionIds" => competitions.map(&:id),
     }
   end
 

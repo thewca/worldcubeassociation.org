@@ -30,8 +30,8 @@ function getFieldLabel(id, section = []) {
   return I18n.t(`competitions.competition_form.labels.${yamlId}`);
 }
 
-function getFieldHint(idWithSection, section = [], isMarkdown = false) {
-  const yamlId = snakifyId(idWithSection, section);
+function getFieldHint(id, section = [], isMarkdown = false) {
+  const yamlId = snakifyId(id, section);
 
   // TODO: Maybe this should be forced within the translation file?
   if (isMarkdown) {
