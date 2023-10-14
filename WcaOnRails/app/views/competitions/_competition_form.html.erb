@@ -266,7 +266,11 @@
                 base_entry_fee_lowest_denomination: entryFee,
               },
               success: function(data) {
-                if (compLimitEnabled) {
+                if (data.dues_value == null) {
+                  <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
+                  $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
+                }
+                else if (compLimitEnabled) {
                   <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.calculated', {limit: compLimit, estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
                 }
@@ -275,11 +279,6 @@
                   $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.per_competitor', {estimate: data.dues_value}) + " (" + currencyCode + ")</b>");
                 }
               },
-              error: function(){
-                // This error will occur if there are no available exchange rates for the selected currency, and there are quite a few of such currencies.
-                <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
-                $('#dues_estimate').html("<b>" + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + "</b>");
-              }
             });
           }
 

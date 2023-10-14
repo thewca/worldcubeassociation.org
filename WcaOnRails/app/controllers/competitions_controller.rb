@@ -412,15 +412,10 @@ class CompetitionsController < ApplicationController
 
   def calculate_dues
     country_iso2 = Country.find_by(id: params[:country_id])&.iso2
-    dues_per_competitor_in_usd = DuesCalculator.dues_per_competitor_in_usd(country_iso2, params[:base_entry_fee_lowest_denomination], params[:currency_code])
-
-    # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
-    price_per_competitor_us_cents = dues_per_competitor_in_usd * 100
     multiplier = ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled]) ? params[:competitor_limit].to_i : 1
-    total_dues = price_per_competitor_us_cents * multiplier
-    dues_in_currency = Money.new(total_dues, "USD").exchange_to(params[:currency_code]).format
+    total_dues = DuesCalculator.dues_for_n_competitors(country_iso2, params[:base_entry_fee_lowest_denomination].to_i, params[:currency_code], multiplier)
     render json: {
-      dues_value: dues_in_currency,
+      dues_value: total_dues.present? ? total_dues.format : nil,
     }
   end
 

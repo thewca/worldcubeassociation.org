@@ -1967,8 +1967,7 @@ class Competition < ApplicationRecord
   end
 
   def dues_per_competitor_in_usd
-    DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination, self.currency_code)
-  rescue StandardError
-    0
+    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
+    dues.present? ? dues : 0
   end
 end
