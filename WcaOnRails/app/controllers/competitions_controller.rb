@@ -414,31 +414,11 @@ class CompetitionsController < ApplicationController
 
   def calculate_dues
     country_iso2 = Country.find_by(id: params[:country_id])&.iso2
-    country_band = CountryBand.find_by(iso2: country_iso2)&.number
-
-    update_exchange_rates_if_needed
-    input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
-
-    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand::PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT
-    country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
-
-    # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
-    price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
-
-    if ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled])
-      estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
-      estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
-
-      render json: {
-        dues_value: estimated_dues,
-      }
-    else
-      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
-
-      render json: {
-        dues_value: price_per_competitor,
-      }
-    end
+    multiplier = ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled]) ? params[:competitor_limit].to_i : 1
+    total_dues = DuesCalculator.dues_for_n_competitors(country_iso2, params[:base_entry_fee_lowest_denomination].to_i, params[:currency_code], multiplier)
+    render json: {
+      dues_value: total_dues.present? ? total_dues.format : nil,
+    }
   end
 
   def show
@@ -638,12 +618,6 @@ class CompetitionsController < ApplicationController
 
   private def confirming?
     params[:commit] == "Confirm"
-  end
-
-  private def update_exchange_rates_if_needed
-    if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
-      Money.default_bank.update_rates
-    end
   end
 
   private def competition_params
