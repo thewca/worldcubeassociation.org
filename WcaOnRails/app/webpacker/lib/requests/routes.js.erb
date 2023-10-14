@@ -90,14 +90,14 @@ export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.role_list_path(format: "json") %>?userId=${userId}`;
+export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.api_v0_roles_list_path %>?userId=${userId}`;
 
-export const roleDataUrl = (userId, roleId) => `<%= Rails.application.routes.url_helpers.role_data_path(format: "json") %>?userId=${userId}&roleId=${roleId}`;
+export const roleDataUrl = (userId, roleId) => {
+  if (roleId) {
+    return `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}&roleId=${roleId}`;
+  } else {
+    return `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}`;
+  }
+}
 
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.role_update_path(format: "json") %>`
-
-export const roleEndUrl = `<%= Rails.application.routes.url_helpers.role_end_path(format: "json") %>`
-
-export const updateRolePageUrl = (userId, roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.update_role_path("${userId}", "${roleId}"))%>`;
-
-export const newRolePageUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.new_role_path("${userId}"))%>`;
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>`

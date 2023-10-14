@@ -2,11 +2,11 @@ import React from 'react';
 
 import { Form } from 'semantic-ui-react';
 
+import _ from 'lodash';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   roleDataUrl,
   roleUpdateUrl,
-  roleEndUrl,
 } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import Errored from '../Requests/Errored';
@@ -28,13 +28,12 @@ export default function RoleForm({ userId, roleId }) {
   const [formValues, setFormValues] = React.useState({});
   const [apiError, setError] = React.useState(false);
   const [saving, setSaving] = React.useState(false);
+  const [finished, setFinished] = React.useState(false);
 
   React.useEffect(() => {
     setFormValues({
-      ...{
-        delegateStatus: delegateStatusOptions[0],
-        location: '',
-      },
+      delegateStatus: delegateStatusOptions[0],
+      location: '',
       ...(data?.roleData || {}),
     });
   }, [data]);
@@ -49,9 +48,9 @@ export default function RoleForm({ userId, roleId }) {
         ...formValues,
       },
       () => {
-        window.location.href = `/users/${userId}/edit?section=roles`;
+        setFinished(true);
       },
-      { method: 'POST' },
+      { method: 'PATCH' },
       () => setError(true),
     );
   };
@@ -59,21 +58,22 @@ export default function RoleForm({ userId, roleId }) {
   const endRole = () => {
     setSaving(true);
     save(
-      roleEndUrl,
+      roleUpdateUrl,
       {
         userId,
         roleId,
       },
       () => {
-        window.location.href = `/users/${userId}/edit?section=roles`;
+        setFinished(true);
       },
-      { method: 'POST' },
+      { method: 'DELETE' },
       () => setError(true),
     );
   };
 
   if (loading) return <Loading />;
   if (error || apiError) return <Errored />;
+  if (finished) return 'Success...';
 
   return (
     <Form
@@ -112,14 +112,15 @@ export default function RoleForm({ userId, roleId }) {
         <Form.Button
           primary
           type="submit"
-          disabled={(JSON.stringify(formValues) === JSON.stringify(data?.roleData || {}))}
+          disabled={(_.isEqual(formValues, data?.roleData))}
         >
-          {roleId === 'new' ? 'Create Role' : 'Update Role'}
+          {roleId ? 'Update Role' : 'Create Role'}
         </Form.Button>
         <Form.Button
           secondary
+          type="button"
           onClick={endRole}
-          disabled={roleId === 'new'}
+          disabled={!roleId}
         >
           End Role
         </Form.Button>

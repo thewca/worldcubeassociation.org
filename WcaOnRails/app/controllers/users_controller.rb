@@ -133,6 +133,11 @@ class UsersController < ApplicationController
     nil if redirect_if_cannot_edit_user(@user)
   end
 
+  def role
+    @user_id = params[:user_id]
+    @role_id = params[:role_id]
+  end
+
   def claim_wca_id
     @user = current_user
   end
