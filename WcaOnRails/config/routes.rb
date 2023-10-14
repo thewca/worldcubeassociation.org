@@ -235,7 +235,7 @@ Rails.application.routes.draw do
   get '/admin/edit_person' => 'admin#edit_person'
   get '/admin/fix_results' => 'admin#fix_results'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
-  patch '/admin/update_person' => 'admin#update_person'
+  patch '/admin/update_person' => 'admin#update_person', as: :admin_update_person
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'

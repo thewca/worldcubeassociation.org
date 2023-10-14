@@ -106,7 +106,7 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    render status: :ok, json: { result: result }
+    render status: :ok, json: { result: result }, option_name: current_user&.can_admin_results? ? :can_admin_results : nil
   end
 
   def posts_search

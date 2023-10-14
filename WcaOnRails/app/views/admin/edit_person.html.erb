@@ -4,7 +4,7 @@
   <%= render layout: "nav" do %>
     <h1><%= yield(:title) %></h1>
 
-    <%= react_component("Admin/EditPerson", {
+    <%= react_component("Panel/Wrt/EditPerson", {
       countryList: Country.all,
       genderList: [:m, :f, :o],
     }) %>

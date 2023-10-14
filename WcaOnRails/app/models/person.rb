@@ -280,6 +280,11 @@ class Person < ApplicationRecord
       id: self.wca_id,
     )
 
+    if options[:option_name] == :can_admin_results
+      json[:dob] = dob.to_s
+      json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
+    end
+
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
     (user || User.new).serializable_hash(options).merge(json)

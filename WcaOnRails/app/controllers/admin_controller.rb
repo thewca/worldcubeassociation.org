@@ -291,43 +291,54 @@ class AdminController < ApplicationController
   end
 
   def update_person
-    @person = Person.current.find_by(wca_id: params[:person][:wca_id])
-    if @person
-      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :incorrect_wca_id_claim_count)
+    wca_id = params.require(:person).permit(:wcaId)[:wcaId]
+    person = Person.current.find_by(wca_id: wca_id)
+    success_message = nil
+    warning_message = nil
+    error_message = nil
+    if person
+      person_params = params.require(:person).permit(:name, :gender, :dob)
+      person_params[:countryId] = Country.find_by_iso2(params[:person][:representing]).id
+      person_params[:incorrect_wca_id_claim_count] = 0
       case params[:method]
       when "fix"
-        if @person.update(person_params)
-          flash.now[:success] = "Successfully fixed #{@person.name}."
-          if @person.saved_change_to_countryId?
-            flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
+        if person.update(person_params)
+          success_message = "Successfully fixed #{person.name}."
+          if person.saved_change_to_countryId?
+            warning_message = "The change you made may have affected national and continental records, be sure to run
             <a href='#{admin_check_regional_records_path}'>check_regional_record_markers</a>.".html_safe
           end
         else
-          flash.now[:danger] = "Error while fixing #{@person.name}."
+          error_message = "Error while fixing #{person.name}."
         end
       when "update"
-        if @person.update_using_sub_id(person_params)
-          flash.now[:success] = "Successfully updated #{@person.name}."
+        if person.update_using_sub_id(person_params)
+          success_message = "Successfully updated #{person.name}."
         else
-          flash.now[:danger] = "Error while updating #{@person.name}."
+          error_message = "Error while updating #{person.name}."
         end
       when "destroy"
-        if @person.results.any?
-          flash.now[:danger] = "#{@person.name} has results, can't destroy them."
-        elsif @person.user.present?
-          flash.now[:danger] = "#{@person.wca_id} is linked to a user, can't destroy them."
+        if person.results.any?
+          error_message = "#{person.name} has results, can't destroy them."
+        elsif person.user.present?
+          error_message = "#{person.wca_id} is linked to a user, can't destroy them."
         else
-          name = @person.name
-          @person.destroy
-          flash.now[:success] = "Successfully destroyed #{name}."
-          @person = Person.new
+          name = person.name
+          person.destroy
+          success_message = "Successfully destroyed #{name}."
         end
+      when "reset-claim-count"
+        person.update(incorrect_wca_id_claim_count: 0)
+        success_message = "Successfully reset claim count for #{person.name}."
       end
     else
-      @person = Person.new
-      flash.now[:danger] = "No person has been chosen."
+      error_message = "No person has been chosen."
     end
-    render :edit_person
+    render json: {
+      success_message: success_message,
+      warning_message: warning_message,
+      error_message: error_message,
+    }
   end
 
   def person_data
