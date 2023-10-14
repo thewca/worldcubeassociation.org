@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class Api::V0::RolesController < Api::V0::ApiController
+  before_action :current_user_is_authorized_for_action!, only: [:patch, :delete]
+  private def current_user_is_authorized_for_action!
+    unless current_user.board_member? || current_user.senior_delegate?
+      render json: {}, status: 401
+    end
+  end
+
   def list
     user_id = params.require(:userId)
     user = User.find(user_id)
