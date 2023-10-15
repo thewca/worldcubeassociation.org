@@ -69,6 +69,10 @@ Rails.application.routes.draw do
     put 'confirm' => 'competitions#confirm', as: :confirm_competition
     delete 'delete' => 'competitions#delete', as: :delete_competition
 
+    put 'announce' => 'competitions#post_announcement', as: :competition_announce
+    put 'cancel' => 'competitions#cancel_or_uncancel', as: :competition_cancel
+    put 'close_full_registration' => 'competitions#close_full_registration', as: :competition_close_full_registration
+
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
     get 'results/by_person' => 'competitions#show_results_by_person'
@@ -158,10 +162,7 @@ Rails.application.routes.draw do
 
   resources :votes, only: [:create, :update]
 
-  post 'competitions/:id/post_announcement' => 'competitions#post_announcement', as: :competition_post_announcement
-  post 'competitions/:id/cancel' => 'competitions#cancel_competition', as: :competition_cancel
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
-  post 'competitions/:id/orga_close_reg_when_full_limit' => 'competitions#orga_close_reg_when_full_limit', as: :competition_orga_close_reg_when_full_limit
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
   get 'panel' => 'panel#index'

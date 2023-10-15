@@ -23,8 +23,6 @@ class CompetitionsController < ApplicationController
     :show_scrambles,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
-    :post_announcement,
-    :cancel_competition,
     :admin_edit,
     :disconnect_stripe,
   ]
@@ -42,7 +40,6 @@ class CompetitionsController < ApplicationController
     :edit_events,
     :edit_schedule,
     :payment_setup,
-    :orga_close_reg_when_full_limit,
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
@@ -53,7 +50,7 @@ class CompetitionsController < ApplicationController
     render status: :bad_request, json: { error: e.to_s }
   end
 
-  private def require_competition_permission(action, *args, is_boolean: true)
+  private def require_user_permission(action, *args, is_boolean: true)
     permission_result = current_user&.send(action, *args)
 
     if is_boolean && !permission_result
@@ -200,45 +197,6 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  def post_announcement
-    comp = competition_from_params
-
-    unless comp.announced?
-      ActiveRecord::Base.transaction do
-        comp.update!(announced_at: Time.now, announced_by: current_user.id)
-
-        comp.organizers.each do |organizer|
-          CompetitionsMailer.notify_organizer_of_announced_competition(comp, organizer).deliver_later
-        end
-      end
-    end
-
-    flash[:success] = t('competitions.messages.announced')
-    redirect_to admin_edit_competition_path(comp)
-  end
-
-  def cancel_competition
-    comp = competition_from_params
-    undo = params[:undo].present?
-
-    if undo
-      if comp.cancelled?
-        comp.update!(cancelled_at: nil, cancelled_by: nil)
-        flash[:success] = t('competitions.messages.uncancel_success')
-      else
-        flash[:danger] = t('competitions.messages.uncancel_failure')
-      end
-    else
-      if comp.can_be_cancelled?
-        comp.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-        flash[:success] = t('competitions.messages.cancel_success')
-      else
-        flash[:danger] = t('competitions.messages.cancel_failure')
-      end
-    end
-    redirect_to admin_edit_competition_path(comp)
-  end
-
   def post_results
     comp = competition_from_params
     if ComputeAuxiliaryData.in_progress?
@@ -271,17 +229,6 @@ class CompetitionsController < ApplicationController
 
     flash[:success] = t('competitions.messages.results_posted')
     redirect_to competition_admin_import_results_path(comp)
-  end
-
-  def orga_close_reg_when_full_limit
-    comp = competition_from_params
-    if comp.orga_can_close_reg_full_limit?
-      comp.update!(registration_close: Time.now)
-      flash[:success] = t('competitions.messages.orga_closed_reg_success')
-    else
-      flash[:danger] = t('competitions.messages.orga_closed_reg_failure')
-    end
-    redirect_to edit_competition_path(comp)
   end
 
   def edit_events
@@ -634,7 +581,7 @@ class CompetitionsController < ApplicationController
     render status: :bad_request, json: competition_errors
   end
 
-  before_action -> { require_competition_permission(:can_create_competitions?) }, only: [:create]
+  before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
 
   def create
     competition = Competition.new
@@ -654,7 +601,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { require_competition_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
 
   def update
     competition = competition_from_params
@@ -712,7 +659,7 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { require_competition_permission(:get_cannot_delete_competition_reason, competition_from_params, is_boolean: false) }, only: [:delete]
+  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_boolean: false) }, only: [:delete]
 
   def delete
     competition = competition_from_params
@@ -721,22 +668,74 @@ class CompetitionsController < ApplicationController
     render json: { status: "ok" }
   end
 
-  before_action -> { require_competition_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
+  before_action -> { require_user_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
 
   def confirm
     competition = competition_from_params
 
-    ActiveRecord::Base.transaction do
-      competition.update!(confirmed: true)
+    competition.update!(confirmed: true)
 
-      CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
+    CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, competition).deliver_later
 
-      @competition.organizers.each do |organizer|
-        CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
-      end
+    competition.organizers.each do |organizer|
+      CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
     end
 
     render json: { status: "ok" }
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:post_announcement]
+
+  def post_announcement
+    competition = competition_from_params
+
+    if competition.announced?
+      return render json: { error: "Already announced" }
+    end
+
+    competition.update!(announced_at: Time.now, announced_by: current_user.id)
+
+    competition.organizers.each do |organizer|
+      CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
+    end
+
+    render json: { status: "ok" }
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
+
+  def cancel_or_uncancel
+    competition = competition_from_params
+    undo = params[:undo].present?
+
+    if undo
+      if competition.cancelled?
+        competition.update!(cancelled_at: nil, cancelled_by: nil)
+        render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
+      else
+        render json: { error: t('competitions.messages.uncancel_failure') }
+      end
+    else
+      if competition.can_be_cancelled?
+        competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+        render json: { status: "ok", message: t('competitions.messages.cancel_success') }
+      else
+        render json: { error: t('competitions.messages.cancel_failure') }
+      end
+    end
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:close_full_registration]
+
+  def close_full_registration
+    competition = competition_from_params
+
+    if competition.orga_can_close_reg_full_limit?
+      competition.update!(registration_close: Time.now)
+      render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
+    else
+      render json: { error: t('competitions.messages.orga_closed_reg_failure') }
+    end
   end
 
   def my_competitions

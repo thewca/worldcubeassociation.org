@@ -911,7 +911,7 @@ RSpec.describe CompetitionsController do
         comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         comp_with_full_reg.organizers << orga
         FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
-        patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+        patch :close_full_registration, params: { id: comp_with_full_reg }
         expect(response).to redirect_to edit_competition_path(comp_with_full_reg)
         expect(comp_with_full_reg.reload.registration_close).to be < Time.now
       end
@@ -921,7 +921,7 @@ RSpec.describe CompetitionsController do
         comp_without_full_reg.organizers << orga
         FactoryBot.create(:registration, :pending, :newcomer, competition: comp_without_full_reg)
         FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_without_full_reg)
-        patch :orga_close_reg_when_full_limit, params: { id: comp_without_full_reg }
+        patch :close_full_registration, params: { id: comp_without_full_reg }
         expect(response).to redirect_to edit_competition_path(comp_without_full_reg)
         expect(comp_without_full_reg.reload.registration_close).to be > Time.now
       end
@@ -933,7 +933,7 @@ RSpec.describe CompetitionsController do
         comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
         expect {
-          patch :orga_close_reg_when_full_limit, params: { id: comp_with_full_reg }
+          patch :close_full_registration, params: { id: comp_with_full_reg }
         }.to raise_error(ActionController::RoutingError)
         expect(comp_with_full_reg.reload.registration_close).to be > Time.now
       end
