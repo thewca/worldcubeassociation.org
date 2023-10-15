@@ -50,18 +50,19 @@ class CompetitionsController < ApplicationController
     render status: :bad_request, json: { error: e.to_s }
   end
 
-  private def require_user_permission(action, *args, is_boolean: true)
+  private def require_user_permission(action, *args, is_message: true)
     permission_result = current_user&.send(action, *args)
 
-    if is_boolean && !permission_result
-      return render status: :forbidden, json: { error: "Missing permission #{action}" }
-    elsif permission_result
+    if is_message && permission_result
       return render status: :forbidden, json: { error: permission_result }
+    elsif !permission_result
+      return render status: :forbidden, json: { error: "Missing permission #{action}" }
     end
 
-    # return: when is_boolean is true, the permission_result should also be true.
-    #   when is_boolean is false, the permission_result should be empty, i.e. false-y.
-    !!permission_result == is_boolean
+    # return: when is_message is true, the permission_result message should be empty, i.e. false-y,
+    #   and the negation of an empty message is also true.
+    #   When is_message is false, the permission_result should be true, i.e. the negation should be false.
+    is_message == !permission_result
   end
 
   private def competition_from_params(includes: nil)
@@ -659,9 +660,9 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_boolean: false) }, only: [:delete]
+  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: false) }, only: [:delete]
 
-  def delete
+  def destroy
     competition = competition_from_params
     competition.destroy
 
@@ -684,9 +685,9 @@ class CompetitionsController < ApplicationController
     render json: { status: "ok" }
   end
 
-  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:post_announcement]
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:announce]
 
-  def post_announcement
+  def announce
     competition = competition_from_params
 
     if competition.announced?

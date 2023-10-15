@@ -60,16 +60,11 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
-  post 'competitions/create' => 'competitions#create', as: :create_competition
-
-  resources :competitions, only: [:index, :show, :edit, :new] do
+  resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
 
-    patch 'update' => 'competitions#update', as: :update_competition
     put 'confirm' => 'competitions#confirm', as: :confirm_competition
-    delete 'delete' => 'competitions#delete', as: :delete_competition
-
-    put 'announce' => 'competitions#post_announcement', as: :competition_announce
+    put 'announce' => 'competitions#announce', as: :competition_announce
     put 'cancel' => 'competitions#cancel_or_uncancel', as: :competition_cancel
     put 'close_full_registration' => 'competitions#close_full_registration', as: :competition_close_full_registration
 
