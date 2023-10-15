@@ -26,10 +26,46 @@ class CompetitionsController < ApplicationController
     :post_announcement,
     :cancel_competition,
     :admin_edit,
+    :disconnect_stripe,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
   ]
+  before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [
+    :new,
+  ]
+  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [
+    :for_senior,
+  ]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
+    :edit,
+    :edit_events,
+    :edit_schedule,
+    :payment_setup,
+    :orga_close_reg_when_full_limit,
+  ]
+
+  rescue_from WcaExceptions::ApiException do |e|
+    render status: e.status, json: { error: e.to_s }
+  end
+
+  rescue_from JSON::Schema::ValidationError do |e|
+    render status: :bad_request, json: { error: e.to_s }
+  end
+
+  private def require_competition_permission(action, *args, is_boolean: true)
+    permission_result = current_user&.send(action, *args)
+
+    if is_boolean && !permission_result
+      return render status: :forbidden, json: { error: "Missing permission #{action}" }
+    elsif permission_result
+      return render status: :forbidden, json: { error: permission_result }
+    end
+
+    # return: when is_boolean is true, the permission_result should also be true.
+    #   when is_boolean is false, the permission_result should be empty, i.e. false-y.
+    !!permission_result == is_boolean
+  end
 
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
@@ -38,16 +74,6 @@ class CompetitionsController < ApplicationController
       end
     end
   end
-
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup, :orga_close_reg_when_full_limit]
-
-  before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
-
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe]
-
-  before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
-
-  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
@@ -179,38 +205,13 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  def create
-    competition = Competition.new
-
-    begin
-      # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-      form_data = params.permit!.to_h
-      competition.set_form_data(form_data, current_user)
-    rescue JSON::Schema::ValidationError => e
-      return render status: 400, json: {
-        status: "Schema error while creating the competition",
-        error: e.message,
-      }
-    end
-
-    if competition.save
-      competition.organizers.each do |organizer|
-        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
-      end
-
-      render json: { status: "ok" }
-    else
-      competition.errors[:id].each { |error| competition.errors.add(:name, message: error) }
-
-      render json: competition.errors
-    end
-  end
-
   def post_announcement
     comp = competition_from_params
+
     unless comp.announced?
       ActiveRecord::Base.transaction do
         comp.update!(announced_at: Time.now, announced_by: current_user.id)
+
         comp.organizers.each do |organizer|
           CompetitionsMailer.notify_organizer_of_announced_competition(comp, organizer).deliver_later
         end
@@ -224,6 +225,7 @@ class CompetitionsController < ApplicationController
   def cancel_competition
     comp = competition_from_params
     undo = params[:undo].present?
+
     if undo
       if comp.cancelled?
         comp.update!(cancelled_at: nil, cancelled_by: nil)
@@ -322,6 +324,7 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
     @competition_organizer_view = false
+
     render :edit
   end
 
@@ -329,6 +332,7 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
     @competition_organizer_view = true
+
     render :edit
   end
 
@@ -643,11 +647,42 @@ class CompetitionsController < ApplicationController
     head :ok
   end
 
+  private def render_competition_errors(competition_errors)
+    # Transfer the errors related to the database ID to show up as errors related to the name
+    competition_errors[:id].each { |error| competition_errors.add(:name, message: error) }
+
+    render status: :bad_request, json: competition_errors
+  end
+
+  before_action -> { require_competition_permission(:can_create_competitions?) }, only: [:create]
+
+  def create
+    competition = Competition.new
+
+    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
+    form_data = params.permit!.to_h
+    competition.set_form_data(form_data, current_user)
+
+    if competition.save
+      competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
+      end
+
+      render json: { status: "ok" }
+    else
+      render_competition_errors competition.errors
+    end
+  end
+
+  before_action -> { require_competition_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
+
   def update
     competition = competition_from_params
 
     competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
     competition_organizer_view = !competition_admin_view
+
+    old_organizers = competition.organizers.to_a
 
     # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
     form_data = params.permit!.to_h
@@ -655,16 +690,7 @@ class CompetitionsController < ApplicationController
     # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
     new_id = form_data.delete(:competitionId)
 
-    old_organizers = competition.organizers.to_a
-
-    begin
-      competition.set_form_data(form_data, current_user)
-    rescue JSON::Schema::ValidationError => e
-      return render status: 400, json: {
-        status: "Schema error while saving the competition",
-        error: e.message,
-      }
-    end
+    competition.set_form_data(form_data, current_user)
 
     if competition.save
       # Automatically compute the cellName and ID for competitions with a short name.
@@ -686,9 +712,7 @@ class CompetitionsController < ApplicationController
         # code, just revert the attempted id change. The user will have to deal with
         # editing the ID text box manually. This will go away once we have proper
         # immutable ids for competitions.
-        competition.errors[:id].each { |error| competition.errors.add(:name, message: error) }
-
-        return render json: competition.errors
+        return render_competition_errors competition.errors
       end
 
       new_organizers = competition.organizers - old_organizers
@@ -704,25 +728,22 @@ class CompetitionsController < ApplicationController
 
       render json: { status: "ok" }
     else
-      competition.errors[:id].each { |error| competition.errors.add(:name, message: error) }
-
-      render json: competition.errors
+      render_competition_errors competition.errors
     end
   end
+
+  before_action -> { require_competition_permission(:get_cannot_delete_competition_reason, competition_from_params, is_boolean: false) }, only: [:delete]
 
   def delete
-    cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
-
-    if cannot_delete_competition_reason
-      render status: 400, json: { reason: cannot_delete_competition_reason }
-    else
-      @competition.destroy
-      redirect_to root_url
-    end
+    @competition.destroy
+    render json: { status: "ok" }
   end
 
+  before_action -> { require_competition_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
+
   def confirm
-    # TODO: Actually set the "confirmed" flags on the competition
+    # TODO: Actually check whether those are all "confirmed" flags on the competition (confirmed_by etc...)
+    competition_params[:confirmed] = true
 
     CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
 
@@ -764,10 +785,6 @@ class CompetitionsController < ApplicationController
   def for_senior
     @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
-  end
-
-  private def confirming?
-    params[:commit] == "Confirm"
   end
 
   private def update_exchange_rates_if_needed
@@ -860,9 +877,6 @@ class CompetitionsController < ApplicationController
     end
 
     params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
-      if confirming? && current_user.can_confirm_competition?(@competition)
-        competition_params[:confirmed] = true
-      end
       competition_params[:editing_user_id] = current_user.id
 
       # Quirk: When adding a new competition to an already existing (i.e. already persisted) Series,
