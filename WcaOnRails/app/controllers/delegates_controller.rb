@@ -3,6 +3,12 @@
 class DelegatesController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_view_delegate_matters?) }
+  before_action :current_user_is_authorized_for_action!, only: [:start_delegate_probation, :end_delegate_probation]
+  private def current_user_is_authorized_for_action!
+    unless current_user.senior_delegate? || current_user.team_leader?(Team.wfc) || current_user.team_senior_member?(Team.wfc)
+      render json: {}, status: 401
+    end
+  end
 
   def stats
     @delegates = User.delegates.includes(:actually_delegated_competitions)
