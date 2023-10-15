@@ -271,7 +271,6 @@ class CompetitionsController < ApplicationController
   def admin_edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
-    @competition_organizer_view = false
 
     render :edit
   end
@@ -279,7 +278,6 @@ class CompetitionsController < ApplicationController
   def edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
-    @competition_organizer_view = true
 
     render :edit
   end

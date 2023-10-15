@@ -4,14 +4,14 @@ import { InputBoolean } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function Admin() {
-  const { persisted, adminView } = useStore();
+  const { isAdminView, status: { isPersisted } } = useStore();
 
-  if (!persisted || !adminView) return null;
+  if (!isPersisted || !isAdminView) return null;
 
   return (
     <SubSection section="admin">
-      <InputBoolean id="confirmed" />
-      <InputBoolean id="showAtAll" />
+      <InputBoolean id="isConfirmed" />
+      <InputBoolean id="isVisible" />
     </SubSection>
   );
 }

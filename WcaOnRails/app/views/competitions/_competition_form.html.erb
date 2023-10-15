@@ -28,7 +28,7 @@
   <% disable_form = !can_edit_competition %>
 
   <fieldset <%= disable_form && "disabled" %>>
-    <% disable_id_edit = @competition_organizer_view && (@competition.name.length <= Competition::MAX_CELL_NAME_LENGTH) %>
+    <% disable_id_edit = !@competition_admin_view && (@competition.name.length <= Competition::MAX_CELL_NAME_LENGTH) %>
 
     <% if @competition.persisted? %>
       <%= f.input :id, disabled: disable_id_edit %>

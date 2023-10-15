@@ -2088,6 +2088,10 @@ class Competition < ApplicationRecord
         "mainEventId" => main_event_id,
       },
       "remarks" => remarks,
+      "admin" => {
+        "isConfirmed" => confirmed?,
+        "isVisible" => showAtAll?,
+      },
     }
   end
 
@@ -2179,6 +2183,8 @@ class Competition < ApplicationRecord
       guests_per_registration_limit: form_data.dig('registration', 'guestsPerRegistration'),
       events_per_registration_limit: form_data.dig('eventRestrictions', 'eventLimitation', 'perRegistrationLimit'),
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
+      confirmed: form_data.dig('admin', 'isConfirmed'),
+      showAtAll: form_data.dig('admin', 'isVisible'),
     }
   end
 
@@ -2337,6 +2343,13 @@ class Competition < ApplicationRecord
           },
         },
         "remarks" => { "type" => "string" },
+        "admin" => {
+          "type" => "object",
+          "properties" => {
+            "isConfirmed" => { "type" => "boolean" },
+            "isVisible" => { "type" => "boolean" },
+          },
+        },
       },
     }
   end

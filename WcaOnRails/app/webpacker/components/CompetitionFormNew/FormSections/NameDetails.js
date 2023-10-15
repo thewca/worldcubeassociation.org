@@ -3,13 +3,13 @@ import { InputString } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function NameDetails() {
-  const { persisted } = useStore();
+  const { status: { isPersisted } } = useStore();
 
   return (
     <>
-      {persisted && <InputString id="id" />}
+      {isPersisted && <InputString id="id" />}
       <InputString id="name" />
-      {persisted && <InputString id="shortName" />}
+      {isPersisted && <InputString id="shortName" />}
       <InputString id="nameReason" mdHint />
     </>
   );

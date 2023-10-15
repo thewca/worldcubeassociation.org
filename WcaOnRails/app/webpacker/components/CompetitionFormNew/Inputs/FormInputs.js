@@ -88,7 +88,7 @@ const wrapInput = (
   emptyStringForNull = false,
   inputValueKey = 'value',
 ) => function WcaFormInput(props) {
-  const { adminView, confirmed, errors } = useStore();
+  const { isAdminView, errors, status: { isConfirmed } } = useStore();
   const dispatch = useDispatch();
 
   const section = useSections();
@@ -119,7 +119,7 @@ const wrapInput = (
   const noLabel = props.noLabel || passDownLabel;
   const blankLabel = props.blankLabel || passDownLabel;
 
-  const disabled = confirmed && !adminView;
+  const disabled = isConfirmed && !isAdminView;
 
   const passDownDisabled = additionalPropNames.includes('disabled');
   if (passDownDisabled) inputProps.disabled = disabled;

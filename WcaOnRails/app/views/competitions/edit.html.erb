@@ -6,36 +6,29 @@
     <h2><%= t 'competitions.announcements' %></h2>
     <ul>
       <li>
-        <%= button_to competition_post_announcement_path, class: 'btn', disabled: @competition.announced?, method: :post do %>
-          <%= t 'competitions.post_announcement' %>
-        <% end %>
         <% if @competition.announced? %>
-          <ul>
-            <li>
-              <%= t 'competitions.announced_by_html', announcer_name: User.find(@competition.announced_by).name, date_time: wca_local_time(@competition.announced_at) %>
-            </li>
-          </ul>
+          <%= t 'competitions.announced_by_html', announcer_name: User.find(@competition.announced_by).name, date_time: wca_local_time(@competition.announced_at) %>
+        <% else %>
+          <%= button_to competition_post_announcement_path, class: 'btn', method: :post do %>
+            <%= t 'competitions.post_announcement' %>
+          <% end %>
         <% end %>
       </li>
       <li>
-        <%= button_to competition_cancel_path, class: 'btn btn-danger', disabled: !@competition.can_be_cancelled?, method: :post, data: { confirm: t('competitions.cancel_confirm') } do %>
-          <%= t 'competitions.cancel' %>
-        <% end %>
-        <% if !@competition.can_be_cancelled? && !@competition.cancelled? %>
-          <%= t 'competitions.note_before_cancel' %>
-        <% end %>
         <% if @competition.cancelled? %>
-          <ul>
-            <li>
-              <%= t 'competitions.cancelled_by_html', name: User.find(@competition.cancelled_by).name, date_time: wca_local_time(@competition.cancelled_at) %>
-            </li>
-            <li>
-              <%= t 'competitions.cancel_mistake' %>
-              <%= button_to competition_cancel_path(undo: true), class: 'btn', method: :post do %>
-                <%= t 'competitions.uncancel' %>
-              <% end %>
-            </li>
-          </ul>
+          <p>
+            <%= t 'competitions.cancelled_by_html', name: User.find(@competition.cancelled_by).name, date_time: wca_local_time(@competition.cancelled_at) %>
+            <%= t 'competitions.cancel_mistake' %>
+            <%= button_to competition_cancel_path(undo: true), class: 'btn', method: :post do %>
+              <%= t 'competitions.uncancel' %>
+            <% end %>
+          </p>
+        <% elsif @competition.can_be_cancelled? %>
+          <%= button_to competition_cancel_path, class: 'btn btn-danger', method: :post, data: { confirm: t('competitions.cancel_confirm') } do %>
+            <%= t 'competitions.cancel' %>
+          <% end %>
+        <% else %>
+          <%= t 'competitions.note_before_cancel' %>
         <% end %>
       </li>
     </ul>
@@ -43,13 +36,14 @@
   <% else %>
     <ul>
       <li>
-        <%= button_to competition_orga_close_reg_when_full_limit_path, class: 'btn btn-danger', disabled: !@competition.orga_can_close_reg_full_limit?, method: :post, data: { confirm: t('competitions.orga_close_reg_confirm') } do %>
-          <%= t 'competitions.orga_close_reg' %>
-        <% end %>
-        <% if !@competition.registration_full? && !@competition.registration_past?%>
-          <%= t 'competitions.note_reg_not_full_orga_close_reg' %>
-        <% elsif @competition.registration_past?%>
+        <% if @competition.registration_past? %>
           <%= t 'competitions.note_reg_closed_orga_close_reg' %>
+        <% elsif !@competition.registration_full? %>
+          <%= t 'competitions.note_reg_not_full_orga_close_reg' %>
+        <% elsif @competition.orga_can_close_reg_full_limit? %>
+          <%= button_to competition_orga_close_reg_when_full_limit_path, class: 'btn btn-danger', method: :post, data: { confirm: t('competitions.orga_close_reg_confirm') } do %>
+            <%= t 'competitions.orga_close_reg' %>
+          <% end %>
         <% end %>
       </li>
     </ul>

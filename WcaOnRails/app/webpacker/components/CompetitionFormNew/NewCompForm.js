@@ -35,13 +35,24 @@ import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
+import AnnouncementActions from './AnnouncementActions';
 
 // TODO: Need to add cloning params
 
 function AnnouncementMessage() {
-  const { competition, persisted } = useStore();
+  const {
+    competition: {
+      admin: {
+        isConfirmed,
+        isVisible,
+      },
+    },
+    status: {
+      isPersisted,
+    },
+  } = useStore();
 
-  if (!persisted) return null;
+  if (!isPersisted) return null;
 
   let messageStyle = null;
 
@@ -49,17 +60,17 @@ function AnnouncementMessage() {
   let i18nReplacements = {};
 
   // TODO: Replace the emails
-  if (competition.confirmed && competition.showAtAll) {
+  if (isConfirmed && isVisible) {
     messageStyle = 'success';
     i18nKey = 'competitions.competition_form.public_and_locked_html';
-  } else if (competition.confirmed && !competition.showAtAll) {
+  } else if (isConfirmed && !isVisible) {
     messageStyle = 'warning';
     i18nKey = 'competitions.competition_form.confirmed_but_not_visible_html';
     i18nReplacements = { contact: 'replace-me' };
-  } else if (!competition.confirmed && competition.showAtAll) {
+  } else if (!isConfirmed && isVisible) {
     messageStyle = 'error';
     i18nKey = 'competitions.competition_form.is_visible';
-  } else if (!competition.confirmed && !competition.showAtAll) {
+  } else if (!isConfirmed && !isVisible) {
     messageStyle = 'warning';
     i18nKey = 'competitions.competition_form.pending_confirmation_html';
     i18nReplacements = { contact: 'replace-me' };
@@ -77,7 +88,11 @@ function AnnouncementMessage() {
 
 // TODO: There are various parts which have overrides for enabled and disabled which need to done
 function NewCompForm() {
-  const { competition, initialCompetition, persisted } = useStore();
+  const {
+    competition,
+    initialCompetition,
+    status: { isPersisted },
+  } = useStore();
   const dispatch = useDispatch();
 
   const { save, saving } = useSaveAction();
@@ -100,8 +115,8 @@ function NewCompForm() {
   }, [dispatch, competition, initialCompetition.id, save]);
 
   const saveComp = useMemo(
-    () => (persisted ? updateComp : createComp),
-    [persisted, createComp, updateComp],
+    () => (isPersisted ? updateComp : createComp),
+    [isPersisted, createComp, updateComp],
   );
 
   const unsavedChanges = useMemo(() => (
@@ -160,8 +175,11 @@ function NewCompForm() {
         </pre>
       )}
       <Divider />
+
+      <AnnouncementActions />
       <AnnouncementMessage />
       <Errors />
+
       <Form>
         <Admin />
         <NameDetails />
@@ -203,7 +221,7 @@ function NewCompForm() {
         <InputTextArea id="remarks" />
         <Divider />
 
-        <Button onClick={saveComp} primary>{persisted ? 'Update Competition' : 'Create Competition'}</Button>
+        <Button onClick={saveComp} primary>{isPersisted ? 'Update Competition' : 'Create Competition'}</Button>
       </Form>
     </>
   );
@@ -211,21 +229,27 @@ function NewCompForm() {
 
 export default function Wrapper({
   competition = null,
-  persisted = false,
-  confirmed = false,
-  adminView = false,
+  isAdminView = false,
+  status = {
+    isPersisted: false,
+    isConfirmed: false,
+    isAnnounced: false,
+    isCancelled: false,
+    canBeCancelled: false,
+    isRegistrationPast: false,
+    isRegistrationFull: false,
+    canCloseFullRegistration: false,
+  },
 }) {
   return (
     <StoreProvider
       reducer={competitionFormReducer}
       initialState={{
-        unsavedChanges: false,
         competition,
         initialCompetition: competition,
-        persisted,
-        confirmed,
+        status,
         errors: null,
-        adminView,
+        isAdminView,
       }}
     >
       <SectionProvider>
