@@ -1,53 +1,5 @@
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'nav' do %>
-
-  <% if @competition_admin_view %>
-    <h2><%= t 'competitions.announcements' %></h2>
-    <ul>
-      <li>
-        <% if @competition.announced? %>
-          <%= t 'competitions.announced_by_html', announcer_name: User.find(@competition.announced_by).name, date_time: wca_local_time(@competition.announced_at) %>
-        <% else %>
-          <%= button_to competition_post_announcement_path, class: 'btn', method: :post do %>
-            <%= t 'competitions.post_announcement' %>
-          <% end %>
-        <% end %>
-      </li>
-      <li>
-        <% if @competition.cancelled? %>
-          <p>
-            <%= t 'competitions.cancelled_by_html', name: User.find(@competition.cancelled_by).name, date_time: wca_local_time(@competition.cancelled_at) %>
-            <%= t 'competitions.cancel_mistake' %>
-            <%= button_to competition_cancel_path(undo: true), class: 'btn', method: :post do %>
-              <%= t 'competitions.uncancel' %>
-            <% end %>
-          </p>
-        <% elsif @competition.can_be_cancelled? %>
-          <%= button_to competition_cancel_path, class: 'btn btn-danger', method: :post, data: { confirm: t('competitions.cancel_confirm') } do %>
-            <%= t 'competitions.cancel' %>
-          <% end %>
-        <% else %>
-          <%= t 'competitions.note_before_cancel' %>
-        <% end %>
-      </li>
-    </ul>
-    <hr>
-  <% else %>
-    <ul>
-      <li>
-        <% if @competition.registration_past? %>
-          <%= t 'competitions.note_reg_closed_orga_close_reg' %>
-        <% elsif !@competition.registration_full? %>
-          <%= t 'competitions.note_reg_not_full_orga_close_reg' %>
-        <% elsif @competition.orga_can_close_reg_full_limit? %>
-          <%= button_to competition_orga_close_reg_when_full_limit_path, class: 'btn btn-danger', method: :post, data: { confirm: t('competitions.orga_close_reg_confirm') } do %>
-            <%= t 'competitions.orga_close_reg' %>
-          <% end %>
-        <% end %>
-      </li>
-    </ul>
-  <% end %>
-
   <%= render 'competition_form_new' %>
 <% end %>
