@@ -79,11 +79,6 @@ class CompetitionsController < ApplicationController
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
-  def new
-    @competition = Competition.new
-    assign_delegate(@competition)
-  end
-
   # Normalizes the params that old links to index still work.
   private def support_old_links!
     params[:display].downcase! if params[:display] # 'List' -> 'list', 'Map' -> 'map'
@@ -318,6 +313,11 @@ class CompetitionsController < ApplicationController
     colliding_registration_start_competitions = competition.colliding_registration_start_competitions.to_a
     colliding_registration_start_competitions.select!(&:confirmed?) unless current_user.can_view_hidden_competitions?
     colliding_registration_start_competitions
+  end
+
+  def new
+    @competition = Competition.new
+    assign_delegate(@competition)
   end
 
   def admin_edit
@@ -735,20 +735,25 @@ class CompetitionsController < ApplicationController
   before_action -> { require_competition_permission(:get_cannot_delete_competition_reason, competition_from_params, is_boolean: false) }, only: [:delete]
 
   def delete
-    @competition.destroy
+    competition = competition_from_params
+    competition.destroy
+
     render json: { status: "ok" }
   end
 
   before_action -> { require_competition_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
 
   def confirm
-    # TODO: Actually check whether those are all "confirmed" flags on the competition (confirmed_by etc...)
-    competition_params[:confirmed] = true
+    competition = competition_from_params
 
-    CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
+    ActiveRecord::Base.transaction do
+      competition.update!(confirmed: true)
 
-    @competition.organizers.each do |organizer|
-      CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
+      CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
+
+      @competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
+      end
     end
 
     render json: { status: "ok" }

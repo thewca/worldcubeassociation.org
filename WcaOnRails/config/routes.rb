@@ -60,7 +60,15 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
-  resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
+  post 'competitions/create' => 'competitions#create', as: :create_competition
+
+  resources :competitions, only: [:index, :show, :edit, :new] do
+    get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
+
+    patch 'update' => 'competitions#update', as: :update_competition
+    put 'confirm' => 'competitions#confirm', as: :confirm_competition
+    delete 'delete' => 'competitions#delete', as: :delete_competition
+
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
     get 'results/by_person' => 'competitions#show_results_by_person'
@@ -102,7 +110,6 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
 
-  get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
   get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
