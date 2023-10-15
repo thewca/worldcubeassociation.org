@@ -30,13 +30,24 @@ RSpec.describe Api::V0::RolesController do
       end
 
       it 'update delegate status' do
-        patch :patch, params: { userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", seniorDelegateId: user_senior_delegate.id, location: "location" }
+        expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(
+          user_whose_delegate_status_changes,
+          user_who_makes_the_change,
+          user_senior_delegate,
+          "candidate_delegate",
+          "delegate",
+        ).and_call_original
+        expect do
+          patch :patch, params: { userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", seniorDelegateId: user_senior_delegate.id, location: "location" }
+        end.to change { enqueued_jobs.size }.by(1)
+
         parsed_body = JSON.parse(response.body)
+        user_whose_delegate_status_changes.reload
 
         expect(parsed_body["success"]).to eq true
-        expect(user_whose_delegate_status_changes.reload.delegate_status).to eq "delegate"
-        expect(user_whose_delegate_status_changes.reload.senior_delegate_id).to eq user_senior_delegate.id
-        expect(user_whose_delegate_status_changes.reload.location).to eq "location"
+        expect(user_whose_delegate_status_changes.delegate_status).to eq "delegate"
+        expect(user_whose_delegate_status_changes.senior_delegate_id).to eq user_senior_delegate.id
+        expect(user_whose_delegate_status_changes.location).to eq "location"
       end
 
       it 'ends delegate role' do
