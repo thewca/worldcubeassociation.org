@@ -46,7 +46,7 @@
             { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), icon: "cc stripe" },
           ] +
           (current_user.can_admin_competitions? ? [
-            { text: t('.menu.admin_view'), path: admin_edit_competition_path(@competition), icon: "lock" },
+            { text: t('.menu.admin_view'), path: competition_admin_edit_path(@competition), icon: "lock" },
           ] : [])
         }
         if @competition.use_wca_registration?

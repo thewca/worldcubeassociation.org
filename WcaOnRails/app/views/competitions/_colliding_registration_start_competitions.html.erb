@@ -32,7 +32,7 @@
             <tr class="<%= (@competition.registration_open_adjacent_to?(c, Competition::REGISTRATION_COLLISION_MINUTES_DANGER)) ? "danger" : "warning" %>">
               <td class="text-nowrap">
                 <%= if current_user.can_admin_results?
-                      link_to c.name, admin_edit_competition_path(c.id), target: "_blank"
+                      link_to c.name, competition_admin_edit_path(c.id), target: "_blank"
                     else
                       link_to c.name, competition_path(c.id)
                     end %>

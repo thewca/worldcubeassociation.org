@@ -114,7 +114,7 @@ RSpec.feature "Competition management" do
 
     scenario "can change id of short name from admin view" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
-      visit admin_edit_competition_path(competition)
+      visit competition_admin_edit_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
 

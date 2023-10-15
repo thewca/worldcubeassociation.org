@@ -22,7 +22,7 @@
     <tr class="<%= (@competition.adjacent_to?(c, nearby_km, nearby_days) ^ adjacent_desired) ? "danger" : "warning" %>">
       <td class="text-nowrap">
         <%= if current_user.can_admin_results?
-              link_to c.name, admin_edit_competition_path(c.id), target: "_blank"
+              link_to c.name, competition_admin_edit_path(c.id), target: "_blank"
             else
               link_to c.name, competition_path(c.id)
             end %>

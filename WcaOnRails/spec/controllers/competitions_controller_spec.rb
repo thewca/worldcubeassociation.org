@@ -369,7 +369,7 @@ RSpec.describe CompetitionsController do
 
       it 'redirects admin view to admin view' do
         patch :update, params: { id: competition, competition: { name: competition.name }, competition_admin_view: true }
-        expect(response).to redirect_to admin_edit_competition_path(competition)
+        expect(response).to redirect_to competition_admin_edit_path(competition)
       end
 
       it 'renders admin view when failing to save admin view' do
@@ -853,27 +853,27 @@ RSpec.describe CompetitionsController do
       it "cannot cancel unconfirmed competition" do
         comp = FactoryBot.create(:competition, :announced)
         patch :cancel_competition, params: { id: comp }
-        expect(response).to redirect_to admin_edit_competition_path(comp)
+        expect(response).to redirect_to competition_admin_edit_path(comp)
         expect(comp.reload.cancelled?).to eq false
       end
 
       it "cannot cancel unannounced competition" do
         comp = FactoryBot.create(:competition, :confirmed)
         patch :cancel_competition, params: { id: comp }
-        expect(response).to redirect_to admin_edit_competition_path(comp)
+        expect(response).to redirect_to competition_admin_edit_path(comp)
         expect(comp.reload.cancelled?).to eq false
       end
 
       it "can cancel competition" do
         patch :cancel_competition, params: { id: competition }
-        expect(response).to redirect_to admin_edit_competition_path(competition)
+        expect(response).to redirect_to competition_admin_edit_path(competition)
         expect(competition.reload.cancelled?).to eq true
       end
 
       it "can uncancel competition" do
         cancelled_competition = FactoryBot.create(:competition, :cancelled)
         patch :cancel_competition, params: { id: cancelled_competition, undo: true }
-        expect(response).to redirect_to admin_edit_competition_path(cancelled_competition)
+        expect(response).to redirect_to competition_admin_edit_path(cancelled_competition)
         expect(cancelled_competition.reload.cancelled?).to eq false
       end
     end

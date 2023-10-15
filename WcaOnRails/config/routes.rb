@@ -61,12 +61,12 @@ Rails.application.routes.draw do
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
   resources :competitions do
-    get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
+    get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
 
-    put 'confirm' => 'competitions#confirm', as: :confirm_competition
-    put 'announce' => 'competitions#announce', as: :competition_announce
-    put 'cancel' => 'competitions#cancel_or_uncancel', as: :competition_cancel
-    put 'close_full_registration' => 'competitions#close_full_registration', as: :competition_close_full_registration
+    put 'confirm' => 'competitions#confirm', as: :confirm
+    put 'announce' => 'competitions#announce', as: :announce
+    put 'cancel' => 'competitions#cancel_or_uncancel', as: :cancel
+    put 'close_full_registration' => 'competitions#close_full_registration', as: :close_full_registration
 
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
