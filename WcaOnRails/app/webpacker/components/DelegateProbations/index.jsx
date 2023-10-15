@@ -10,6 +10,7 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import useInputState from '../../lib/hooks/useInputState';
+import UserSearch from '../SearchWidget/UserSearch';
 import Errored from '../Requests/Errored';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -75,12 +76,24 @@ export default function DelegateProbations() {
   return (
     <>
       <h1>Delegate Probations</h1>
-      <Input value={wcaId} onChange={setWcaId} placeholder="Enter WCA ID" />
-      <Button
-        onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
+      <div style={{
+        display: 'flex',
+      }}
       >
-        Start Probation
-      </Button>
+        <UserSearch onSelect={(el) => {
+          if (el.length === 1) {
+            setWcaId(el[0].item.wca_id);
+          } else {
+            setWcaId('');
+          }
+        }}
+        />
+        <Button
+          onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
+        >
+          Start Probation
+        </Button>
+      </div>
       <h2>Active Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null

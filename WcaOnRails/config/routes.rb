@@ -298,7 +298,7 @@ Rails.application.routes.draw do
       get '/search/users' => 'api#users_search'
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
-      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
+      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }, as: :user
       get '/users/:wca_id' => 'api#show_user_by_wca_id'
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"

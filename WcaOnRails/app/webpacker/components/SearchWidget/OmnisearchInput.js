@@ -1,7 +1,7 @@
 import React, {
   useState, useEffect, useCallback,
 } from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import { Dropdown, Icon } from 'semantic-ui-react';
 
 import CompetitionItem from './CompetitionItem';
 import IncidentItem from './IncidentItem';
@@ -63,6 +63,8 @@ function OmnisearchInput({
   goToItemOnSelect,
   placeholder,
   removeNoResultsMessage,
+  onSelect,
+  multiple,
 }) {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
@@ -89,6 +91,9 @@ function OmnisearchInput({
         window.location.href = newSelected[0].item.url;
         return oldSelected;
       }
+      if (onSelect) {
+        onSelect(newSelected);
+      }
       return newSelected;
     });
   }, [setSelected, setSearch, goToItemOnSelect]);
@@ -111,7 +116,7 @@ function OmnisearchInput({
     }
   }, [debouncedSearch, url]);
 
-  const options = [...selected, ...results];
+  const options = [...results];
 
   // If we go to item on select, we want to give the user the option to go to
   // the search page.
@@ -123,6 +128,29 @@ function OmnisearchInput({
   // "galerie lafa" it won't match the "galeries lafayette" competitions
   // (whereas searching for "galeries lafa" does).
   // We should try to set our own search method that would match word by word.
+  if (!multiple && selected.length === 1) {
+    return (
+      <div style={{
+        display: 'flex',
+        alignItems: 'center',
+      }}
+      >
+        <div className="omnisearch-item">
+          <ItemFor
+            item={selected[0].item}
+          />
+        </div>
+        <Icon
+          name="close"
+          onClick={() => {
+            setSelected([]);
+            onSelect([]);
+          }}
+        />
+
+      </div>
+    );
+  }
   return (
     <Dropdown
       fluid
