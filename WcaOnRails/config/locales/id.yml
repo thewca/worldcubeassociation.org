@@ -3310,6 +3310,34 @@ id:
           Sebagai contoh, jika ada hal yang Anda belum yakin, atau jika ada permintaan
           khusus kepada WCAT. Harap isi dengan bahasa Inggris!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Tanya tentang pendamping
+          'false': JANGAN tanya tentang pendamping
+        competitor_limit:
+          enabled:
+            'true': Saya ingin menetapkan batas kompetitor
+            'false': Saya TIDAK INGIN menetapkan batas kompetitor
+        registration:
+          on_the_spot_registration:
+            'true': Pendaftaran di tempat dapat diterima
+            'false': Pendaftaran di tempat TIDAK AKAN diterima
+          allow_registration_edits:
+            'true': Kompetitor dapat menyunting pendaftaran mereka sampai batas waktu
+              untuk memperbarui cabang
+            'false': Kompetitor TIDAK diperbolehkan untuk menyunting pendaftaran setelah
+              pendaftaran disetujui
+          allow_self_delete_after_acceptance:
+            'true': Kompetitor diperbolehkan untuk menghapus pendaftaran mereka walaupun
+              pendaftaran sudah disetujui
+            'false': Kompetitor TIDAK diperbolehkan untuk menghapus pendaftaran mereka
+              setelah pendaftaran disetujui
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': Kompetitor akan diperbolehkan untuk mendaftar cabang yang tidak
+                lolos kualifikasi (Saya akan menghapusnya nanti)
+              'false': Kompetitor WAJIB lolos kualifikasi untuk mendaftar cabang
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

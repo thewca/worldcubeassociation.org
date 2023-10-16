@@ -2147,6 +2147,29 @@ zh-CN:
           main_event_id:
         remarks: 一些你想和董事会说的额外信息。比如为啥这个比赛没有提前一个月申请之类的。请使用英文填写！
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': 询问随行人员
+          'false': 不询问随行人员
+        competitor_limit:
+          enabled:
+            'true':
+            'false':
+        registration:
+          on_the_spot_registration:
+            'true':
+            'false':
+          allow_registration_edits:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必须以年份结尾，并且只能包含数字、字母、标点（-&.:''）和空格'

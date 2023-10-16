@@ -51,7 +51,7 @@ export default function EventRestrictions() {
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={needQualification}>
           <InputTextArea id="reason" />
-          <InputBooleanSelect id="allowReasonWithout" />
+          <InputBooleanSelect id="allowRegistrationWithout" />
         </ConditionalSection>
       </SubSection>
       <SubSection section="eventLimitation">

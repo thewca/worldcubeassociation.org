@@ -3380,6 +3380,33 @@ sv:
           om det finns något du är osäker på, eller om det finns några speciella önskemål
           till WCAT. Vänligen fyll i detta på engelska!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Fråga om gäster
+          'false': Fråga INTE om gäster
+        competitor_limit:
+          enabled:
+            'true': Jag vill ange en gräns för antalet tävlande
+            'false': Jag vill INTE ange en gräns för antalet tävlande
+        registration:
+          on_the_spot_registration:
+            'true': Anmälningar på plats kommer accepteras
+            'false': Anmälningar på plats kommer INTE accepteras
+          allow_registration_edits:
+            'true': Tävlande får ändra sin anmälan fram till deadline för att uppdatera
+              grenar
+            'false': Tävlande får INTE ändra sin anmälan fram till deadline för att
+              uppdatera grenar
+          allow_self_delete_after_acceptance:
+            'true': Tävlande får ta bort sina anmälningar även efter att de har godkänts
+            'false': Tävlande får INTE ta bort sina anmälningar efter att de godkänts
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': Tävlande tillåts att anmäla sig till grenar som de inte är kvalificerade
+                för (jag tar bort dem senare).
+              'false': Tävlande MÅSTE vara kvalificerade för att kunna anmäla sig
+                till en gren
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

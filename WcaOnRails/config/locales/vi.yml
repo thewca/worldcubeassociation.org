@@ -2436,6 +2436,29 @@ vi:
           main_event_id:
         remarks:
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Hỏi về khách mời
+          'false': Không hỏi về khách mời
+        competitor_limit:
+          enabled:
+            'true': Tôi muốn đặt giới hạn số lượng thí sinh
+            'false': Tôi không muốn đặt giới hạn số lượng thí sinh
+        registration:
+          on_the_spot_registration:
+            'true': Đăng ký tại giải đấu sẽ được chấp nhận
+            'false': Đăng ký tại giải đấu sẽ KHÔNG ĐƯỢC chấp nhận
+          allow_registration_edits:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

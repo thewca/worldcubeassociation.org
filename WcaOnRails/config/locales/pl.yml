@@ -3185,6 +3185,29 @@ pl:
           nie masz co do czegoś pewności lub jeśli masz specjalne prośby dla WCAT.
           Prosimy o wypełnienie w języku angielskim!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Pytaj o gości
+          'false': NIE pytaj o gości
+        competitor_limit:
+          enabled:
+            'true': Chciałbym określić limit zawodników
+            'false': NIE chcę określać limitu zawodników
+        registration:
+          on_the_spot_registration:
+            'true': Rejestracja na miejscu będzie możliwa
+            'false': Rejestracja na miejscu NIE będzie możliwa
+          allow_registration_edits:
+            'true': Zawodnicy mogą edytować swoje rejestracje do terminu zmian w konkurencjach.
+            'false': Zawodnicy nie mogą edytować swoich rejestracji po ich zaakceptowaniu
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

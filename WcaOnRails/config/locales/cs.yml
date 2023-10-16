@@ -1275,47 +1275,6 @@ cs:
           pending: Waiting list
           #original_hash: 441bda6
           deleted: Smazáno
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Zeptat se na hosty
-          #original_hash: f8c2332
-          'false': NEptat se na hosty
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Chci specifikovat limit pro soutěžící
-          #original_hash: 5b581b5
-          'false': NECHCI specifikovat limit pro soutěžící
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Registrace na místě budou akceptovány
-          #original_hash: 0f236df
-          'false': Registrace na místě NEBUDOU akceptovány
-        allow_registration_without_qualification:
-          #original_hash: 9697d98
-          'true': >-
-            Soutěžícím bude dovoleno zaregistrovat se na eventy, na které nejsou
-            kvalifikovaní (odeberu je později)
-          #original_hash: 6509041
-          'false': >-
-            Soutěžící musí být kvalifikováni, aby se mohli zaregistrovat na
-            event
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': >-
-            Soutěžící mohou upravit svou registraci až do uzávěrky pro změnu
-            eventů
-          #original_hash: 2cbb80e
-          'false': >-
-            Soutěžící NEmohou upravit svou registraci od chvíle, kdy byla
-            přijata
-        allow_registration_self_delete_after_acceptance:
-          #original_hash: 5c2e8c1
-          'true': >-
-            Soutěžící mohou smazat svou vlastní registraci i pokud už byla
-            přijata
-          #original_hash: 3b77604
-          'false': 'Soutěžící NEsmí smazat svou registraci poté, co byla přijata'
   mail_form:
     attributes:
       contact_form:
@@ -3364,6 +3323,39 @@ cs:
         remarks: Dodatečné informace pro WCAT. Například pokud si něčím nejste jisti,
           nebo nějaké speciální žádosti pro WCAT. Prosíme vyplňte v angličtině!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Zeptat se na hosty
+          'false': NEptat se na hosty
+        competitor_limit:
+          enabled:
+            'true': Chci specifikovat limit pro soutěžící
+            'false': NECHCI specifikovat limit pro soutěžící
+        registration:
+          allow_on_the_spot:
+            'true': Registrace na místě budou akceptovány
+            'false': Registrace na místě NEBUDOU akceptovány
+          allow_self_edits:
+            'true': >-
+              Soutěžící mohou upravit svou registraci až do uzávěrky pro změnu
+              eventů
+            'false': >-
+              Soutěžící NEmohou upravit svou registraci od chvíle, kdy byla
+              přijata
+          allow_self_delete_after_acceptance:
+            'true': >-
+              Soutěžící mohou smazat svou vlastní registraci i pokud už byla
+              přijata
+            'false': 'Soutěžící NEsmí smazat svou registraci poté, co byla přijata'
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': >-
+                Soutěžícím bude dovoleno zaregistrovat se na eventy, na které nejsou
+                kvalifikovaní (odeberu je později)
+              'false': >-
+                Soutěžící musí být kvalifikováni, aby se mohli zaregistrovat na
+                event
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

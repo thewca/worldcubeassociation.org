@@ -1155,31 +1155,6 @@ da:
           pending: Vente liste
           #original_hash: 441bda6
           deleted: Slettet
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Spørg om gæster
-          #original_hash: f8c2332
-          'false': Spørg IKKE om gæster
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Jeg vil gerne sætte en deltagergrænse
-          #original_hash: 5b581b5
-          'false': Jeg vil IKKE sætte en deltagergrænse
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Tilmelding i lokalet vil være muligt
-          #original_hash: 0f236df
-          'false': Tilmelding i lokalet VIL IKKE være muligt
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': >-
-            Competitors may edit their registration until the deadline for
-            updating events
-          #original_hash: 2cbb80e
-          'false': >-
-            Competitors may NOT edit their registration once it has been
-            accepted
   mail_form:
     attributes:
       contact_form:
@@ -3073,6 +3048,25 @@ da:
           er noget som du er usikker på, eller hvis der er en speciel forespørgsel
           til WCAT. Udfyld det her på engelsk!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Spørg om gæster
+          'false': Spørg IKKE om gæster
+        competitor_limit:
+          enabled:
+            'true': Jeg vil gerne sætte en deltagergrænse
+            'false': Jeg vil IKKE sætte en deltagergrænse
+        registration:
+          allow_on_the_spot:
+            'true': Tilmelding i lokalet vil være muligt
+            'false': Tilmelding i lokalet VIL IKKE være muligt
+          allow_self_edits:
+            'true': >-
+              Competitors may edit their registration until the deadline for
+              updating events
+            'false': >-
+              Competitors may NOT edit their registration once it has been
+              accepted
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

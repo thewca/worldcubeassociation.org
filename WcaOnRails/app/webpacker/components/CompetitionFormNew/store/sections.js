@@ -27,7 +27,7 @@ export const readValueRecursive = (formValues, sectionKeys = []) => {
   }
 
   const [nextSection, tail] = headAndTail(sectionKeys);
-  const nestedFormValues = formValues[nextSection] || {};
+  const nestedFormValues = formValues?.[nextSection] || {};
 
   return readValueRecursive(nestedFormValues, tail);
 };

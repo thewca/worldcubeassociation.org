@@ -687,26 +687,6 @@ en:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
-      competition:
-        #context: about guests
-        guests_enabled:
-          "true": "Ask about guests"
-          "false": "Do NOT ask about guests"
-        competitor_limit_enabled:
-          "true": "I want to specify a competitor limit"
-          "false": "I DON'T WANT to specify a competitor limit"
-        on_the_spot_registration:
-          "true": "On the spot registrations will be accepted"
-          "false": "On the spot registrations WILL NOT be accepted"
-        allow_registration_without_qualification:
-          "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
-          "false": "Competitors MUST be qualified to register for an event"
-        allow_registration_edits:
-          "true": "Competitors may edit their registration until the deadline for updating events"
-          "false": "Competitors may NOT edit their registration once it has been accepted"
-        allow_registration_self_delete_after_acceptance:
-          "true": "Competitors may delete their own registration even after it has been accepted"
-          "false": "Competitors may NOT delete their own registration once it has been accepted"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
@@ -1756,6 +1736,30 @@ en:
           main_event_id: "The winner of this event will be the winner of the competition."
         remarks: "Some additional information you want to pass on to the WCAT. For example, if there is something you are uncertain about, or if there are any special requests for the WCAT. Please fill this out in English!"
         clone_tabs: ""
+      choices:
+        #context: about guests
+        guests_enabled:
+          "true": "Ask about guests"
+          "false": "Do NOT ask about guests"
+        competitor_limit:
+          enabled:
+            "true": "I want to specify a competitor limit"
+            "false": "I DON'T WANT to specify a competitor limit"
+        registration:
+          allow_on_the_spot:
+            "true": "On the spot registrations will be accepted"
+            "false": "On the spot registrations WILL NOT be accepted"
+          allow_self_edits:
+            "true": "Competitors may edit their registration until the deadline for updating events"
+            "false": "Competitors may NOT edit their registration once it has been accepted"
+          allow_self_delete_after_acceptance:
+            "true": "Competitors may delete their own registration even after it has been accepted"
+            "false": "Competitors may NOT delete their own registration once it has been accepted"
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
+              "false": "Competitors MUST be qualified to register for an event"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"

@@ -2505,6 +2505,29 @@ ja:
           main_event_id: この種目の優勝者が本大会の優勝者となります。
         remarks: WCATに伝達する追加情報（例：何か不安がある場合や、要望がある場合に記入）。必ず英語で記入してください。
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': 見学者人数記入を求める
+          'false': 見学者人数記入を求めない
+        competitor_limit:
+          enabled:
+            'true': 大会定員を設定する。
+            'false': 大会定員を設定しない。
+        registration:
+          on_the_spot_registration:
+            'true': 会場申込を受け付ける
+            'false': 会場申込を受け付けない
+          allow_registration_edits:
+            'true': 承認済みの申し込み登録情報（参加種目や同伴者人数など）を変更したい場合は、申込期間内に実行委員あてに個別にご連絡ください。
+            'false': 承認済みの申し込み登録情報（参加種目や同伴者人数など）の変更はできません。
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

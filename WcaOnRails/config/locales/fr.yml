@@ -3199,6 +3199,31 @@ fr:
           si vous avez des requêtes spéciales à faire au WCAT. Merci de remplir ça
           en Anglais!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Demander de renseigner les accompagnateurs
+          'false': Ne PAS demander de renseigner les accompagnateurs
+        competitor_limit:
+          enabled:
+            'true': Je veux spécifier une limite au nombre de compétiteurs
+            'false': Je NE VEUX PAS spécifier de limite au nombre de compétiteurs
+        registration:
+          on_the_spot_registration:
+            'true': Les inscriptions sur place seront acceptées
+            'false': Les inscriptions sur place ne seront PAS acceptées
+          allow_registration_edits:
+            'true': Les compétiteurs peuvent modifier leur inscription jusqu'à la
+              date limite pour mettre à jour leurs épreuves.
+            'false': Les compétiteurs ne peuvent pas modifier leur inscription une
+              fois qu'elle a été acceptée.
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

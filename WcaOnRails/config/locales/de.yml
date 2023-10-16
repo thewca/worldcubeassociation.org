@@ -1299,49 +1299,6 @@ de:
           pending: Warteliste
           #original_hash: 441bda6
           deleted: Gelöscht
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Nach Gästen fragen
-          #original_hash: f8c2332
-          'false': NICHT nach Gästen fragen
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Ich möchte ein Teilnehmerlimit angeben
-          #original_hash: 5b581b5
-          'false': Ich will KEIN Teilnehmerimit angeben
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Vor-Ort Registrierung wird akzeptiert
-          #original_hash: 0f236df
-          'false': Vor-Ort Registrierung wird NICHT akzeptiert
-        allow_registration_without_qualification:
-          #original_hash: 9697d98
-          'true': >-
-            Teilnehmer dürfen sich zu Events anmelden, für die sie sich nicht
-            qualifiziert haben (ich entferne sie später)
-          #original_hash: 6509041
-          'false': >-
-            Teilnehmer MÜSSEN für ein Event qualifiziert sein, um sich anmelden
-            zu können
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': >-
-            Teilnehmer dürfen ihre Registrierung bis zur Deadline zum
-            Aktualisieren von Events verändern
-          #original_hash: 2cbb80e
-          'false': >-
-            Teilnehmer dürfen ihre Registrierung NICHT verändern, sobald diese
-            akzeptiert wurde
-        allow_registration_self_delete_after_acceptance:
-          #original_hash: 5c2e8c1
-          'true': >-
-            Teilnehmer dürfen ihre eigene Registrierung löschen, auch nachdem
-            sie bereits akzeptiert wurde
-          #original_hash: 3b77604
-          'false': >-
-            Teilnehmer dürfen ihre eigene Registrierung NICHT löschen, nachdem
-            sie akzeptiert wurde
   mail_form:
     attributes:
       contact_form:
@@ -3507,6 +3464,41 @@ de:
           Beispiel ob es Unklarheiten gibt oder ob es spezielle Anfragen an das WCAT
           gibt. Bitte fülle dies in Englisch aus!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Nach Gästen fragen
+          'false': NICHT nach Gästen fragen
+        competitor_limit:
+          enabled:
+            'true': Ich möchte ein Teilnehmerlimit angeben
+            'false': Ich will KEIN Teilnehmerimit angeben
+        registration:
+          on_the_spot_registration:
+            'true': Vor-Ort Registrierung wird akzeptiert
+            'false': Vor-Ort Registrierung wird NICHT akzeptiert
+          allow_registration_edits:
+            'true': >-
+              Teilnehmer dürfen ihre Registrierung bis zur Deadline zum
+              Aktualisieren von Events verändern
+            'false': >-
+              Teilnehmer dürfen ihre Registrierung NICHT verändern, sobald diese
+              akzeptiert wurde
+          allow_self_delete_after_acceptance:
+            'true': >-
+              Teilnehmer dürfen ihre eigene Registrierung löschen, auch nachdem
+              sie bereits akzeptiert wurde
+            'false': >-
+              Teilnehmer dürfen ihre eigene Registrierung NICHT löschen, nachdem
+              sie akzeptiert wurde
+        event_restrictions:
+          qualification_results:
+            allow_registrations_without:
+              'true': >-
+                Teilnehmer dürfen sich zu Events anmelden, für die sie sich nicht
+                qualifiziert haben (ich entferne sie später)
+              'false': >-
+                Teilnehmer MÜSSEN für ein Event qualifiziert sein, um sich anmelden
+                zu können
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

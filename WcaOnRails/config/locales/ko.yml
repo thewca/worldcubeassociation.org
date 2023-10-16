@@ -1538,6 +1538,29 @@ ko:
           main_event_id:
         remarks:
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true':
+          'false':
+        competitor_limit:
+          enabled:
+            'true':
+            'false':
+        registration:
+          on_the_spot_registration:
+            'true':
+            'false':
+          allow_registration_edits:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     messages:
       #original_hash: 07de612
       upload_results: 이미 끝난 대회 입니다. 대회 결과가 승인되기를 기다리는 중입니다.

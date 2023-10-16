@@ -3375,6 +3375,35 @@ pt-BR:
           exemplo, se há algo sobre o qual você não tem certeza, ou algum pedido especial.
           Por favor preencha em Inglês!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Perguntar sobre acompanhantes
+          'false': NÃO perguntar sobre acompanhantes
+        competitor_limit:
+          enabled:
+            'true': Quero especificar um limite de competidores
+            'false': NÃO QUERO especificar um limite de competidores
+        registration:
+          on_the_spot_registration:
+            'true': Inscrições no local serão aceitas
+            'false': Inscrições no local NÃO serão aceitas
+          allow_registration_edits:
+            'true': Competidores podem editar sua inscrição até a data limite para
+              atualizar eventos
+            'false': Competidores NÃO podem editar sua inscrição depois que tenha
+              sido aceita
+          allow_self_delete_after_acceptance:
+            'true': Os competidores podem excluir sua própria inscrição mesmo depois
+              que ela tenha sido aceita
+            'false': Os competidores NÃO podem excluir sua inscrição após ela ter
+              sido aceita
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': Os competidores poderão se inscrever em eventos para os quais
+                não estão qualificados (vou removê-los depois)
+              'false': Os competidores PRECISAM estar qualificados para se inscrevem
+                em um evento
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

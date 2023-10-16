@@ -3362,6 +3362,34 @@ eo:
           se vi ne certas pri io aŭ se vi havas specifajn petojn por la WCAT. Bonvolu
           plenigi tion en la angla!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Demandu pri gastoj
+          'false': NE demandu pri gastoj
+        competitor_limit:
+          enabled:
+            'true': Mi volas difini limon de konkursantoj
+            'false': Mi ne volas difini limon de konkursantoj
+        registration:
+          on_the_spot_registration:
+            'true': Surlokaj registriĝoj eblos
+            'false': Surlokaj registriĝoj NE eblos
+          allow_registration_edits:
+            'true': Konkursantoj povas redakti siajn registriĝojn ĝis la limdato por
+              redakti konkurserojn
+            'false': Konkursantoj NE povas redakti siajn registriĝojn kiam ĝi estas
+              akceptata
+          allow_self_delete_after_acceptance:
+            'true': La konkursantoj povas forigi sian propran registriĝon eĉ post
+              kiam ĝi estas akceptita
+            'false': La konkursantoj NE povas forigi sian propran registriĝon post
+              kiam ĝi estas akceptita
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': Konkursantoj rajtos registriĝi por konkurseroj por kiuj ili
+                ne estas kvalifikitaj (mi forigos ilin poste)
+              'false': Konkursantoj DEVAS esti kvalifikitaj por registriĝi por konkursero
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

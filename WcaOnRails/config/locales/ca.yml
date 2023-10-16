@@ -1223,40 +1223,6 @@ ca:
           pending: Llista d'espera
           #original_hash: 441bda6
           deleted: Eliminada
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Pregunta sobre els acompanyants
-          #original_hash: f8c2332
-          'false': NO preguntis sobre els acompanyants
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Vull especificar un límit de competidors
-          #original_hash: 5b581b5
-          'false': NO VULL especificar un límit de competidors
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Registres al lloc seran acceptats
-          #original_hash: 0f236df
-          'false': Registres al lloc NO seran acceptats
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': >-
-            Els competidors poden editar el seu registre fins a la data límit
-            per actualitzar les categories
-          #original_hash: 2cbb80e
-          'false': >-
-            Els competidors NO haurien d'editar el seu registre un cop ja s'hagi
-            acceptat
-        allow_registration_self_delete_after_acceptance:
-          #original_hash: 5c2e8c1
-          'true': >-
-            Els competidors poden eliminar el seu registre inclús després
-            d'haver sigut acceptats
-          #original_hash: 3b77604
-          'false': >-
-            Els competidors NO haurien d'eliminar el seu registre un cop s'hagi
-            acceptat
   mail_form:
     attributes:
       contact_form:
@@ -3229,6 +3195,32 @@ ca:
           si hi ha alguna cosa que no acabes de tenir clara o si tens una proposta
           especial per WCAT. Si us plau, omple-ho en anglès!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Pregunta sobre els acompanyants
+          'false': NO preguntis sobre els acompanyants
+        competitor_limit:
+          enabled:
+            'true': Vull especificar un límit de competidors
+            'false': NO VULL especificar un límit de competidors
+        registration:
+          allow_on_the_spot:
+            'true': Registres al lloc seran acceptats
+            'false': Registres al lloc NO seran acceptats
+          allow_self_edits:
+            'true': >-
+              Els competidors poden editar el seu registre fins a la data límit
+              per actualitzar les categories
+            'false': >-
+              Els competidors NO haurien d'editar el seu registre un cop ja s'hagi
+              acceptat
+          allow_self_delete_after_acceptance:
+            'true': >-
+              Els competidors poden eliminar el seu registre inclús després
+              d'haver sigut acceptats
+            'false': >-
+              Els competidors NO haurien d'eliminar el seu registre un cop s'hagi
+              acceptat
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

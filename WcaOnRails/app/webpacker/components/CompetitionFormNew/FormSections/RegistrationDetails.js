@@ -3,7 +3,6 @@ import SubSection from './SubSection';
 import {
   InputBoolean,
   InputBooleanSelect,
-  InputCurrencyAmount,
   InputDate,
   InputMarkdown,
   InputNumber, InputRadio, InputSelect,
@@ -15,11 +14,11 @@ import I18n from '../../../lib/i18n';
 const guestsEnabledOptions = [
   {
     value: true,
-    text: I18n.t('simple_form.options.competition.guests_enabled.true'),
+    text: I18n.t('competitions.competition_form.choices.guests_enabled.true'),
   },
   {
     value: false,
-    text: I18n.t('simple_form.options.competition.guests_enabled.false'),
+    text: I18n.t('competitions.competition_form.choices.guests_enabled.false'),
   },
 ];
 

@@ -119,7 +119,9 @@ const wrapInput = (
 
   inputProps[inputValueKey] = value;
 
-  const errorSegment = readValueRecursive(errors || [], section);
+  const snakeSections = section.map(_.snakeCase);
+  const errorSegment = readValueRecursive(errors, snakeSections);
+
   const error = errorSegment?.[props.id]?.join(', ');
 
   const passDownLabel = additionalPropNames.includes('label');
@@ -261,23 +263,34 @@ export const InputBoolean = wrapInput((props) => (
   <Checkbox checked={props.checked} onChange={props.onChange} label={props.label} />
 ), ['label'], false, 'checked');
 
-export function InputBooleanSelect({ id }) {
-  const options = useMemo(() => [
-    {
-      value: null,
-      text: '',
-    },
-    {
-      value: true,
-      text: I18n.t(`simple_form.options.competition.${id}.true`),
-    },
-    {
-      value: false,
-      text: I18n.t(`simple_form.options.competition.${id}.false`),
-    }], [id]);
+export const InputBooleanSelect = wrapInput((props) => {
+  const section = useSections();
 
-  return <InputSelect id={id} options={options} />;
-}
+  const accessKey = useMemo(() => snakifyId(props.id, section), [props.id, section]);
+
+  const options = useMemo(() => {
+    const baseOptions = [true, false].map((bool) => ({
+      value: bool,
+      text: I18n.t(`competitions.competition_form.choices.${accessKey}.${bool.toString()}`),
+    }));
+
+    if (!props.forceChoice) {
+      const noneOption = { value: null, text: '' };
+
+      return [noneOption, ...baseOptions];
+    }
+
+    return baseOptions;
+  }, [accessKey, props.forceChoice]);
+
+  return (
+    <Select
+      options={options}
+      value={props.value}
+      onChange={props.onChange}
+    />
+  );
+}, ['id', 'forcedChoice']);
 
 export const InputMap = wrapInput((props) => {
   const coords = [props.value.lat, props.value.long];

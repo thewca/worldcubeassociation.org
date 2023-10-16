@@ -2758,6 +2758,29 @@ uk:
           є щось, стосовно чого ви не впевнені, або якщо є окреме прохання до WCAT.
           Будь ласка, заповніть це англійською!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Питати про гостей
+          'false': Не питати про гостей
+        competitor_limit:
+          enabled:
+            'true': Я хочу вказати ліміт учасників
+            'false': Я не хочу вказувати ліміт учасників
+        registration:
+          on_the_spot_registration:
+            'true': Реєстрація на місці дозволена
+            'false': Реєстрація на місці заборонена
+          allow_registration_edits:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

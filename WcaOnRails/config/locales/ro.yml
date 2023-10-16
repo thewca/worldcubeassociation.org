@@ -3473,6 +3473,35 @@ ro:
           exemplu, dacă este ceva de care nu ești sigur, sau dacă ai orice cerere
           specială către WCAT. Completează în engleză!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Întreabă despre însoțitori
+          'false': NU întreba despre însoțitori
+        competitor_limit:
+          enabled:
+            'true': Vreau să specific o limită de concurenți
+            'false': NU VREAU să specific o limită de concurenți
+        registration:
+          on_the_spot_registration:
+            'true': Înregistrările pe loc vor fi acceptate
+            'false': Înregistrările pe loc NU vor fi acceptate
+          allow_registration_edits:
+            'true': Concurenții își pot edita detaliile din înscriere până la termenul
+              limită pentru actualizarea probelor
+            'false': Concurenții NU își pot edita detaliile înscrierii după ce aceasta
+              a fost acceptată
+          allow_self_delete_after_acceptance:
+            'true': Concurenții își pot anula înregistrarea după ce aceasta a fost
+              acceptată
+            'false': Concurenții NU își pot anula înregistrarea după ce aceasta a
+              fost acceptată
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': Concurenții se pot înscrie la probe pentru care nu sunt calificați
+                (îi voi șterge ulterior)
+              'false': Concurenții TREBUIE să fie calificați pentru a se înscrie la
+                o probă
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

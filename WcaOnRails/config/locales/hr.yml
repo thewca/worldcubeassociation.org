@@ -3385,6 +3385,34 @@ hr:
           ukoliko ne znaš nešto ili imaš određene zahtjeve za WCAT. Ispuni ovo na
           engleskom jeziku!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Pitaj u vezi gostiju
+          'false': Ne pitaj u vezi gostiju
+        competitor_limit:
+          enabled:
+            'true': Želim specificirati natjecateljski limit
+            'false': NE ŽELIM specificirati natjecateljski limit
+        registration:
+          on_the_spot_registration:
+            'true': Registracije na licu mjesta će se prihvatiti
+            'false': Registracije na licu mjesta NEĆE SE prihvaćati
+          allow_registration_edits:
+            'true': Natjecatelji mogu uređivati svoju registraciju do roka za ažuriranje
+              registriranih disciplina
+            'false': Natjecatelji NE MOGU uređivati svoju registraciju nakon što je
+              prihvaćena
+          allow_self_delete_after_acceptance:
+            'true': Natjecatelji mogu obrisati svoju registraciju čak i nakon što
+              su prihvaćeni
+            'false': Natjecatelji NE MOGU obrisati svoju registraciju nakon što su
+              prihvaćeni
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': Natjecateljima će biti dozvoljena registracija disciplina za
+                koje se nisu kvalificirali (maknut ću ih kasnije)
+              'false': Natjecatelji MORAJU biti kvalificirani kako bi prijavili discipline
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

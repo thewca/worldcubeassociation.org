@@ -3458,6 +3458,35 @@ it:
           puoi includere domande, se hai dei dubbi, o richieste speciali al WCAT.
           Si prega di compilare in inglese!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Chiedi degli accompagnatori
+          'false': NON chiedere degli accompagnatori
+        competitor_limit:
+          enabled:
+            'true': Voglio specificare un limite di partecipanti
+            'false': NON VOGLIO specificare un limite di partecipanti
+        registration:
+          on_the_spot_registration:
+            'true': Le registrazioni in loco sono accettate
+            'false': Le registrazioni in loco NON SONO accettate
+          allow_registration_edits:
+            'true': I partecipanti possono apportare modifiche alla propria registrazione
+              entro la data di scadenza per la modifica degli eventi
+            'false': I partecipanti NON possono apportare modifiche alla propria registrazione
+              una volta che questa è stata accettata
+          allow_self_delete_after_acceptance:
+            'true': I partecipanti possono cancellare la propria registrazione anche
+              dopo che questa è stata accettata
+            'false': I partecipanti NON possono cancellare la propria registrazione
+              una volta che questa è stata accettata
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': I partecipanti possono iscriversi ad eventi per i quali non
+                sono qualificati (li rimuoverò in seguito)
+              'false': I partecipanti DEVONO essere qualificati per potersi iscrivere
+                ad un evento
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -2089,6 +2089,29 @@ sl:
           main_event_id:
         remarks:
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Vprašaj o gostih
+          'false': Ne vprašaj o gostih
+        competitor_limit:
+          enabled:
+            'true':
+            'false':
+        registration:
+          on_the_spot_registration:
+            'true':
+            'false':
+          allow_registration_edits:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -2885,6 +2885,29 @@ kk:
           нәрсе туралы сенімді болмасаңыз немесе ерекше тілектеріңіз болса. Бұл өрісті
           ағылшын тілінде толтырыңыз!
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': Қонақтар туралы сұрау
+          'false': Қонақтар туралы сұрамаңыз
+        competitor_limit:
+          enabled:
+            'true': Мен қатысушылар санына шектеу қойғым келеді
+            'false': Мен қатысушылар санына шектеу қойғым келмейді
+        registration:
+          on_the_spot_registration:
+            'true': Орнында тіркелуге болады
+            'false': Орнында тіркелуге БОЛМАЙДЫ
+          allow_registration_edits:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

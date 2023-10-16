@@ -6,7 +6,7 @@ namespace :comp_form_locales do
     Locales::AVAILABLE.each do |l, _|
       trans = YAML.load_file("config/locales/#{l}.yml").deep_symbolize_keys
 
-      hints = labels = nil
+      hints = labels = choices = nil
 
       comp_attr = trans.dig(l.to_sym, :activerecord, :attributes, :competition)
 
@@ -189,12 +189,52 @@ namespace :comp_form_locales do
         }
       end
 
+      comp_form_options = trans.dig(l.to_sym, :simple_form, :options, :competition)
+
+      if comp_form_options.present?
+        choices = {
+          guests_enabled: {
+            true: comp_form_options.dig(:guests_enabled, :true),
+            false: comp_form_options.dig(:guests_enabled, :false),
+          },
+          competitor_limit: {
+            enabled: {
+              true: comp_form_options.dig(:competitor_limit_enabled, :true),
+              false: comp_form_options.dig(:competitor_limit_enabled, :false),
+            },
+          },
+          registration: {
+            on_the_spot_registration: {
+              true: comp_form_options.dig(:on_the_spot_registration, :true),
+              false: comp_form_options.dig(:on_the_spot_registration, :false),
+            },
+            allow_registration_edits: {
+              true: comp_form_options.dig(:allow_registration_edits, :true),
+              false: comp_form_options.dig(:allow_registration_edits, :false),
+            },
+            allow_self_delete_after_acceptance: {
+              true: comp_form_options.dig(:allow_registration_self_delete_after_acceptance, :true),
+              false: comp_form_options.dig(:allow_registration_self_delete_after_acceptance, :false),
+            },
+          },
+          event_restrictions: {
+            qualification_results: {
+              allow_registration_without: {
+                true: comp_form_options.dig(:allow_registration_without_qualification, :true),
+                false: comp_form_options.dig(:allow_registration_without_qualification, :false),
+              },
+            },
+          },
+        }
+      end
+
       write_data = {
         l.to_sym => {
           competitions: {
             competition_form: {
               labels: labels&.deep_stringify_keys,
               hints: hints&.deep_stringify_keys,
+              choices: choices&.deep_stringify_keys,
             },
           },
         },

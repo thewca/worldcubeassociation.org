@@ -2818,6 +2818,29 @@ zh-TW:
           main_event_id: 這個項目的優勝參賽者將會是這場比賽的優勝參賽者
         remarks: 任何您想跟WCAT說明的事。例如，有疑問的事項，或是您想向WCAT請求特別事項。請用英文填寫！
         clone_tabs: ''
+      choices:
+        guests_enabled:
+          'true': 詢問是否有陪同者
+          'false': 不要詢問是否有陪同者
+        competitor_limit:
+          enabled:
+            'true': 我想要設置參賽者上限
+            'false': 我不想要設置參賽者上限
+        registration:
+          on_the_spot_registration:
+            'true': 接受現場報名
+            'false': 不接受現場報名
+          allow_registration_edits:
+            'true': 參賽者可以修改他們的報名資訊直到修改比賽項目的截止日為止
+            'false': 參賽者無法在成功報名後修改報名內容
+          allow_self_delete_after_acceptance:
+            'true': 即使報名已完成，參賽者可以刪除自己的報名
+            'false': 報名完成後，參賽者不可以刪除自己的報名
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true': 參賽者將會被允許報名沒有取得資格的比賽項目（之後自行移除）
+              'false': 參賽者必須要達到資格限制才能報名
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )'
