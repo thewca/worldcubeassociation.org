@@ -724,7 +724,9 @@ class CompetitionsController < ApplicationController
 
   def cancel_or_uncancel
     competition = competition_from_params
-    undo = params[:undo].present?
+
+    undo = params[:undo]
+    undo = ActiveRecord::Type::Boolean.new.cast(undo) if undo.present?
 
     if undo
       if competition.cancelled?

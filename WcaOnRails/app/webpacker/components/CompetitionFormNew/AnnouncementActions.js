@@ -8,17 +8,41 @@ import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import { competitionAnnouncementDataUrl } from '../../lib/requests/routes.js.erb';
+import {
+  announceCompetitionUrl,
+  cancelCompetitionUrl,
+  closeRegistrationWhenFullUrl,
+  competitionAnnouncementDataUrl,
+} from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
+import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
+import useSaveAction from '../../lib/hooks/useSaveAction';
 
 function AnnounceAction({
   data,
+  sync,
 }) {
   const {
     isAnnounced,
     announcedBy,
     announcedAt,
   } = data;
+
+  const { competition: { competitionId } } = useStore();
+
+  const { save } = useSaveAction();
+  const confirm = useConfirm();
+
+  const postAnnouncement = () => {
+    confirm({
+      content: 'Do you really want to announce?',
+    }).then(() => {
+      save(announceCompetitionUrl(competitionId), null, sync, {
+        body: null,
+        method: 'PUT',
+      });
+    });
+  };
 
   if (isAnnounced) {
     return (
@@ -30,13 +54,14 @@ function AnnounceAction({
 
   return (
     <List.Item>
-      <Button positive>{I18n.t('competitions.post_announcement')}</Button>
+      <Button positive onClick={postAnnouncement}>{I18n.t('competitions.post_announcement')}</Button>
     </List.Item>
   );
 }
 
 function CancelAction({
   data,
+  sync,
 }) {
   const {
     isCancelled,
@@ -45,6 +70,22 @@ function CancelAction({
     canBeCancelled,
   } = data;
 
+  const { competition: { competitionId } } = useStore();
+
+  const { save } = useSaveAction();
+  const confirm = useConfirm();
+
+  const cancelCompetition = (undo) => {
+    confirm({
+      content: 'Do you really want to (un)cancel?',
+    }).then(() => {
+      save(cancelCompetitionUrl(competitionId, undo), null, sync, {
+        body: null,
+        method: 'PUT',
+      });
+    });
+  };
+
   if (isCancelled) {
     return (
       <List.Item>
@@ -52,9 +93,7 @@ function CancelAction({
         <List.List>
           <List.Item>
             {I18n.t('competitions.cancel_mistake')}
-            <Button>
-              {I18n.t('competitions.uncancel')}
-            </Button>
+            <Button secondary onClick={() => cancelCompetition(true)}>{I18n.t('competitions.uncancel')}</Button>
           </List.Item>
         </List.List>
       </List.Item>
@@ -64,8 +103,7 @@ function CancelAction({
   if (canBeCancelled) {
     return (
       <List.Item>
-        {/* TODO: confirmation dialog */}
-        <Button negative>{I18n.t('competitions.cancel')}</Button>
+        <Button negative onClick={() => cancelCompetition(false)}>{I18n.t('competitions.cancel')}</Button>
       </List.Item>
     );
   }
@@ -79,12 +117,29 @@ function CancelAction({
 
 function CloseRegistrationAction({
   data,
+  sync,
 }) {
   const {
     isRegistrationPast,
     isRegistrationFull,
     canCloseFullRegistration,
   } = data;
+
+  const { competition: { competitionId } } = useStore();
+
+  const { save } = useSaveAction();
+  const confirm = useConfirm();
+
+  const closeRegistrationWhenFull = () => {
+    confirm({
+      content: 'Do you really want to close the registration?',
+    }).then(() => {
+      save(closeRegistrationWhenFullUrl(competitionId), null, sync, {
+        body: null,
+        method: 'PUT',
+      });
+    });
+  };
 
   if (isRegistrationPast) {
     return (
@@ -106,8 +161,7 @@ function CloseRegistrationAction({
 
   return (
     <List.Item>
-      {/* TODO: confirmation dialog */}
-      <Button negative>{I18n.t('competitions.orga_close_reg')}</Button>
+      <Button negative onClick={closeRegistrationWhenFull}>{I18n.t('competitions.orga_close_reg')}</Button>
     </List.Item>
   );
 }
@@ -126,13 +180,15 @@ export default function AnnouncementActions() {
   if (loading) return <Loading />;
 
   return (
-    <Container fluid>
-      <Header>{I18n.t('competitions.announcements')}</Header>
-      <List bulleted>
-        {isAdminView && <AnnounceAction data={data} />}
-        {isAdminView && <CancelAction data={data} />}
-        <CloseRegistrationAction data={data} />
-      </List>
-    </Container>
+    <ConfirmProvider>
+      <Container fluid>
+        <Header>{I18n.t('competitions.announcements')}</Header>
+        <List bulleted>
+          {isAdminView && <AnnounceAction data={data} sync={sync} />}
+          {isAdminView && <CancelAction data={data} sync={sync} />}
+          <CloseRegistrationAction data={data} sync={sync} />
+        </List>
+      </Container>
+    </ConfirmProvider>
   );
 }
