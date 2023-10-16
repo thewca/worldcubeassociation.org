@@ -1,5 +1,8 @@
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
 } from 'react';
 import AutoNumeric from 'autonumeric';
 import { Input } from 'semantic-ui-react';
@@ -8,40 +11,49 @@ import { currenciesData } from '../../../lib/wca-data.js.erb';
 export default function AutonumericField({ value, onChange, currency }) {
   const [autoNumeric, setAutoNumeric] = useState(null);
 
-  const inputComponentRef = useRef();
-
   const currencyInfo = useMemo(
     () => (currenciesData.byIso[currency] || currenciesData.byIso.USD),
     [currency],
   );
 
-  useEffect(() => {
-    const newAutoNumeric = new AutoNumeric(inputComponentRef.current.inputRef.current, {
-      currencySymbol: currencyInfo.symbol,
-      currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
-      decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
-      showWarnings: false,
-      modifyValueOnWheel: false,
-    });
+  const autoNumericCurrency = useMemo(() => ({
+    currencySymbol: currencyInfo.symbol,
+    currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
+    decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
+    modifyValueOnWheel: false,
+  }), [currencyInfo]);
 
-    newAutoNumeric.set(value / currencyInfo.subunitToUnit);
+  const autoNumericRef = useCallback((node) => {
+    if (!node?.inputRef) return;
+
+    // Only initialize AutoNumeric once, otherwise some weird glitches can occur
+    if (autoNumeric !== null) return;
+
+    const newAutoNumeric = new AutoNumeric(
+      node.inputRef.current,
+      autoNumericCurrency,
+    );
 
     setAutoNumeric(newAutoNumeric);
-  }, [value, currencyInfo]);
+  }, [autoNumeric, autoNumericCurrency]);
 
+  // Hook to update AN's _value_
   useEffect(() => {
     if (!autoNumeric) return;
 
-    autoNumeric.update({
-      currencySymbol: currencyInfo.symbol,
-      currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
-      decimalPlaces: (currencyInfo.subunitToUnit === 1) ? 0 : 2,
-    });
-  }, [autoNumeric, currencyInfo]);
+    autoNumeric.set(value / currencyInfo.subunitToUnit);
+  }, [autoNumeric, value, currencyInfo]);
+
+  // Hook to update AN's _currency_
+  useEffect(() => {
+    if (!autoNumeric) return;
+
+    autoNumeric.update(autoNumericCurrency);
+  }, [autoNumeric, autoNumericCurrency]);
 
   const onChangeAutonumeric = (event) => {
-    onChange(event, { value: autoNumeric.rawValue * currencyInfo.subunitToUnit });
+    onChange(event, { value: autoNumeric.getNumber() * currencyInfo.subunitToUnit });
   };
 
-  return <Input ref={inputComponentRef} type="text" onChange={onChangeAutonumeric} />;
+  return <Input ref={autoNumericRef} type="text" onChange={onChangeAutonumeric} />;
 }
