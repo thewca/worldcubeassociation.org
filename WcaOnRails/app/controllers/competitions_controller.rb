@@ -560,13 +560,6 @@ class CompetitionsController < ApplicationController
     head :ok
   end
 
-  private def render_competition_errors(competition_errors)
-    # Transfer the errors related to the database ID to show up as errors related to the name
-    competition_errors[:id].each { |error| competition_errors.add(:name, message: error) }
-
-    render status: :bad_request, json: competition_errors
-  end
-
   before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
 
   def create
@@ -583,7 +576,7 @@ class CompetitionsController < ApplicationController
 
       render json: { status: "ok" }
     else
-      render_competition_errors competition.errors
+      render status: :bad_request, json: competition.form_errors
     end
   end
 
@@ -625,7 +618,7 @@ class CompetitionsController < ApplicationController
         # code, just revert the attempted id change. The user will have to deal with
         # editing the ID text box manually. This will go away once we have proper
         # immutable ids for competitions.
-        return render_competition_errors competition.errors
+        render status: :bad_request, json: competition.form_errors
       end
 
       new_organizers = competition.organizers - old_organizers
@@ -641,7 +634,7 @@ class CompetitionsController < ApplicationController
 
       render json: { status: "ok" }
     else
-      render_competition_errors competition.errors
+      render status: :bad_request, json: competition.form_errors
     end
   end
 

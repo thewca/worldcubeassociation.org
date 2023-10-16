@@ -2052,7 +2052,7 @@ class Competition < ApplicationRecord
       "entryFees" => {
         "currencyCode" => currency_code,
         "baseEntryFee" => base_entry_fee_lowest_denomination,
-        "onTheSpotEntryFee" => base_entry_fee_lowest_denomination,
+        "onTheSpotEntryFee" => on_the_spot_entry_fee_lowest_denomination,
         "guestEntryFee" => guests_entry_fee_lowest_denomination,
         "donationsEnabled" => enable_donations,
         "refundPolicyPercent" => refund_policy_percent,
@@ -2097,6 +2097,106 @@ class Competition < ApplicationRecord
       "cloning" => {
         "fromId" => being_cloned_from_id,
         "cloneTabs" => clone_tabs || false,
+      },
+    }
+  end
+
+  # It is quite uncool that we have to duplicate the internal form_data formatting like this
+  # but as long as we let our backend handle the complete error validation we literally have no other choice
+  def form_errors
+    return nil if self.valid?
+
+    {
+      # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
+      "competitionId" => errors[:id] + errors[:name],
+      "name" => [],
+      "shortName" => errors[:cellName],
+      "nameReason" => errors[:name_reason],
+      "venue" => {
+        "countryId" => errors[:countryId],
+        "cityName" => errors[:cityName],
+        "name" => errors[:venue],
+        "details" => errors[:venueDetails],
+        "address" => errors[:venueAddress],
+        "coordinates" => {
+          "lat" => errors[:latitude],
+          "long" => errors[:longitude],
+        },
+      },
+      "startDate" => errors[:start_date],
+      "endDate" => errors[:end_date],
+      "series" => competition_series.valid? ? [] : competition_series.form_errors,
+      "information" => errors[:information],
+      "competitorLimit" => {
+        "enabled" => errors[:competitor_limit_enabled],
+        "count" => errors[:competitor_limit],
+        "reason" => errors[:competitor_limit_reason],
+      },
+      "staff" => {
+        "staffDelegateIds" => errors[:staff_delegate_ids],
+        "traineeDelegateIds" => errors[:trainee_delegate_ids],
+        "organizerIds" => errors[:organizer_ids],
+        "contact" => errors[:contact],
+      },
+      "championships" => errors[:championships],
+      "website" => {
+        "generateWebsite" => errors[:generate_website],
+        "externalWebsite" => errors[:external_website],
+        "externalRegistrationPage" => errors[:external_registration_page],
+        "usesWcaRegistration" => errors[:use_wca_registration],
+        "usesWcaLive" => errors[:use_wca_live_for_scoretaking],
+      },
+      "userSettings" => {
+        "receiveRegistrationEmails" => errors[:receive_registration_emails],
+      },
+      "entryFees" => {
+        "currencyCode" => errors[:currency_code],
+        "baseEntryFee" => errors[:base_entry_fee_lowest_denomination],
+        "onTheSpotEntryFee" => errors[:on_the_spot_entry_fee_lowest_denomination],
+        "guestEntryFee" => errors[:guests_entry_fee_lowest_denomination],
+        "donationsEnabled" => errors[:enable_donations],
+        "refundPolicyPercent" => errors[:refund_policy_percent],
+        "refundPolicyLimitDate" => errors[:refund_policy_limit_date],
+      },
+      "registration" => {
+        "openingDateTime" => errors[:registration_open],
+        "closingDateTime" => errors[:registration_close],
+        "waitingListDeadlineDate" => errors[:waiting_list_deadline_date],
+        "eventChangeDeadlineDate" => errors[:event_change_deadline_date],
+        "allowOnTheSpot" => errors[:on_the_spot_registration],
+        "allowSelfDeleteAfterAcceptance" => errors[:allow_registration_self_delete_after_acceptance],
+        "allowSelfEdits" => errors[:allow_registration_edits],
+        "guestsEnabled" => errors[:guests_enabled],
+        "guestEntryStatus" => errors[:guest_entry_status],
+        "guestsPerRegistration" => errors[:guests_per_registration_limit],
+        "extraRequirements" => errors[:extra_registration_requirements],
+        "forceComment" => errors[:force_comment_in_registration],
+      },
+      "eventRestrictions" => {
+        "earlyPuzzleSubmission" => {
+          "enabled" => errors[:early_puzzle_submission],
+          "reason" => errors[:early_puzzle_submission_reason],
+        },
+        "qualificationResults" => {
+          "enabled" => errors[:qualification_results],
+          "reason" => errors[:qualification_results_reason],
+          "allowRegistrationWithout" => errors[:allow_registration_without_qualification],
+        },
+        "eventLimitation" => {
+          "enabled" => errors[:event_restrictions],
+          "reason" => errors[:event_restrictions_reason],
+          "perRegistrationLimit" => errors[:events_per_registration_limit],
+        },
+        "mainEventId" => errors[:main_event_id],
+      },
+      "remarks" => errors[:remarks],
+      "admin" => {
+        "isConfirmed" => errors[:confirmed_at],
+        "isVisible" => errors[:showAtAll],
+      },
+      "cloning" => {
+        "fromId" => errors[:being_cloned_from_id],
+        "cloneTabs" => errors[:clone_tabs],
       },
     }
   end

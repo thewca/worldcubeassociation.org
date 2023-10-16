@@ -86,6 +86,19 @@ class CompetitionSeries < ApplicationRecord
     }
   end
 
+  # See competition#form_errors about the (almost) duplication of to_form_data
+  def form_errors
+    return nil if self.valid?
+
+    {
+      "id" => errors[:id],
+      "seriesId" => errors[:wcif_id],
+      "name" => errors[:name],
+      "shortName" => errors[:short_name],
+      "competitionIds" => errors[:competitions],
+    }
+  end
+
   def set_form_data(form_data_series)
     if form_data_series["competitionIds"].count <= 1
       raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
