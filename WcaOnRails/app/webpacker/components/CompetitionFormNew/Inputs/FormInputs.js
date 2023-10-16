@@ -14,7 +14,12 @@ import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './WCASearch';
 import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import { useCompetitionForm, useSections, useUpdateFormAction } from '../store/sections';
+import {
+  readValueRecursive,
+  useCompetitionForm,
+  useSections,
+  useUpdateFormAction,
+} from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 
@@ -47,10 +52,8 @@ function FieldWrapper({
   id,
   label,
   noLabel,
-  blankLabel,
   hint,
   noHint,
-  blankHint,
   mdHint,
   error,
   disabled,
@@ -58,8 +61,13 @@ function FieldWrapper({
 }) {
   const section = useSections();
 
+  const blankLabel = noLabel === 'blank';
+  const ignoreLabel = noLabel === 'ignore';
+
   const fallbackLabel = blankLabel ? '' : '&nbsp;';
   const htmlLabel = noLabel ? fallbackLabel : label || getFieldLabel(id, section);
+
+  const blankHint = noHint === 'blank';
 
   const fallbackHint = blankHint ? '' : '&nbsp;';
   const htmlHint = noHint ? fallbackHint : hint || getFieldHint(id, section, mdHint);
@@ -71,7 +79,7 @@ function FieldWrapper({
       disabled={!!disabled}
     >
       {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
-      <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />
+      {!ignoreLabel && <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />}
       {children}
       {/* eslint-disable-next-line react/no-danger */}
       {error && (<p dangerouslySetInnerHTML={{ __html: error || '' }} className="help-block" />)}
@@ -111,13 +119,13 @@ const wrapInput = (
 
   inputProps[inputValueKey] = value;
 
-  const error = errors && errors[props.id] && errors[props.id].length > 0 && errors[props.id].join(', ');
+  const errorSegment = readValueRecursive(errors || [], section);
+  const error = errorSegment?.[props.id]?.join(', ');
 
   const passDownLabel = additionalPropNames.includes('label');
   if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id, section));
 
-  const noLabel = props.noLabel || passDownLabel;
-  const blankLabel = props.blankLabel || passDownLabel;
+  const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
   const disabled = isConfirmed && !isAdminView;
 
@@ -130,9 +138,7 @@ const wrapInput = (
       id={props.id}
       label={props.label}
       noLabel={noLabel}
-      blankLabel={blankLabel}
       hint={props.hint}
-      blankHint={props.blankHint}
       noHint={props.noHint}
       mdHint={props.mdHint}
       error={error}

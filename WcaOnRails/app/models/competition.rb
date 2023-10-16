@@ -2019,8 +2019,8 @@ class Competition < ApplicationRecord
         "details" => venueDetails,
         "address" => venueAddress,
         "coordinates" => {
-          "lat" => latitude_degrees,
-          "long" => longitude_degrees,
+          "lat" => latitude_degrees || 0,
+          "long" => longitude_degrees || 0,
         },
       },
       "startDate" => start_date&.iso8601,

@@ -174,7 +174,7 @@ function NewCompForm() {
       )}
       <Divider />
 
-      <AnnouncementActions />
+      {isPersisted && <AnnouncementActions />}
       <AnnouncementMessage />
       <Errors />
 
@@ -201,7 +201,7 @@ function NewCompForm() {
         <Staff />
         <Divider />
 
-        <InputChampionships id="championships" noHint blankHint />
+        <InputChampionships id="championships" noHint="blank" />
         <Divider />
 
         <Website />

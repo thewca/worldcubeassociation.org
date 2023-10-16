@@ -14,25 +14,29 @@ export default function SectionProvider({ children, section = [] }) {
 
 export const useSections = () => useContext(SectionContext);
 
-const readValueRecursive = (formValues, sectionKeys = []) => {
+const headAndTail = (arr) => {
+  const safetyClone = [...arr];
+  const shiftedHead = safetyClone.shift();
+
+  return [shiftedHead, safetyClone];
+};
+
+export const readValueRecursive = (formValues, sectionKeys = []) => {
   if (sectionKeys.length === 0) {
     return formValues;
   }
 
-  const nextSection = sectionKeys.shift();
+  const [nextSection, tail] = headAndTail(sectionKeys);
   const nestedFormValues = formValues[nextSection] || {};
 
-  return readValueRecursive(nestedFormValues, sectionKeys);
+  return readValueRecursive(nestedFormValues, tail);
 };
 
 export const useCompetitionForm = () => {
   const { competition } = useStore();
   const sections = useSections();
 
-  // doing shallow copy on purpose to make sure we're not accidentally mutating state on recursion
-  const sectionKeys = [...sections];
-
-  return readValueRecursive(competition, sectionKeys);
+  return readValueRecursive(competition, sections);
 };
 
 export const useUpdateFormAction = () => {

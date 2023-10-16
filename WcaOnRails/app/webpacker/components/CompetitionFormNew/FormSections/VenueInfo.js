@@ -27,11 +27,11 @@ export default function VenueInfo() {
       <InputString id="name" mdHint />
       <InputString id="details" mdHint />
       <InputString id="address" />
-      <InputMap id="coordinates" htmlId="map" circles={circles} noHint blankHint />
+      <InputMap id="coordinates" htmlId="map" circles={circles} noHint="blank" />
       <SubSection section="coordinates">
         <Form.Group widths="equal">
-          <InputString id="lat" attachedLabel="Latitude" noLabel blankLabel noHint />
-          <InputString id="long" attachedLabel="Longitude" noLabel blankLabel noHint />
+          <InputString id="lat" attachedLabel="Latitude" noLabel="blank" noHint />
+          <InputString id="long" attachedLabel="Longitude" noLabel="blank" noHint />
         </Form.Group>
       </SubSection>
     </SubSection>

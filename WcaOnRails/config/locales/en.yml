@@ -1611,8 +1611,8 @@ en:
         ajax_error: "There is an error with Dues estimation, possibly because there are no available exchange rates for the selected currency."
       labels:
         admin:
-          confirmed: "Do not let organizers edit this competition"
-          show_at_all: "Make competition visible to the public"
+          is_confirmed: "Do not let organizers edit this competition"
+          is_visible: "Make competition visible to the public"
         id: "ID"
         name: "Name"
         short_name: "Competition short name"
@@ -1685,8 +1685,8 @@ en:
       #context: for a competition
       hints:
         admin:
-          confirmed: ""
-          show_at_all: ""
+          is_confirmed: ""
+          is_visible: ""
         id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
