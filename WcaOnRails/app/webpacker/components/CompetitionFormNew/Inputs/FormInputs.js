@@ -88,7 +88,7 @@ const wrapInput = (
   emptyStringForNull = false,
   inputValueKey = 'value',
 ) => function WcaFormInput(props) {
-  const { isAdminView, errors, status: { isConfirmed } } = useStore();
+  const { isAdminView, errors, competition: { admin: { isConfirmed } } } = useStore();
   const dispatch = useDispatch();
 
   const section = useSections();

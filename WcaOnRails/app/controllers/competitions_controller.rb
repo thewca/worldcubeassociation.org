@@ -50,7 +50,7 @@ class CompetitionsController < ApplicationController
     render status: :bad_request, json: { error: e.to_s }
   end
 
-  private def require_user_permission(action, *args, is_message: true)
+  private def require_user_permission(action, *args, is_message: false)
     permission_result = current_user&.send(action, *args)
 
     if is_message && permission_result
@@ -658,7 +658,26 @@ class CompetitionsController < ApplicationController
     end
   end
 
-  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: false) }, only: [:delete]
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
+
+  def announcement_data
+    competition = competition_from_params
+
+    render json: {
+      isAnnounced: competition.announced?,
+      announcedBy: competition.announced_by_user&.name,
+      announcedAt: competition.announced_at&.iso8601,
+      isCancelled: competition.cancelled?,
+      canBeCancelled: competition.can_be_cancelled?,
+      cancelledBy: competition.cancelled_by_user&.name,
+      cancelledAt: competition.cancelled_at&.iso8601,
+      isRegistrationPast: competition.registration_past?,
+      isRegistrationFull: competition.registration_full?,
+      canCloseFullRegistration: competition.orga_can_close_reg_full_limit?,
+    }
+  end
+
+  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: false) }, only: [:destroy]
 
   def destroy
     competition = competition_from_params

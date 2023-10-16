@@ -4,18 +4,21 @@ import {
   Header,
   List,
 } from 'semantic-ui-react';
-import React from 'react';
+import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import { competitionAnnouncementDataUrl } from '../../lib/requests/routes.js.erb';
+import Loading from '../Requests/Loading';
 
-function AnnounceAction() {
+function AnnounceAction({
+  data,
+}) {
   const {
-    status: {
-      isAnnounced,
-      announcedBy,
-      announcedAt,
-    },
-  } = useStore();
+    isAnnounced,
+    announcedBy,
+    announcedAt,
+  } = data;
 
   if (isAnnounced) {
     return (
@@ -32,15 +35,15 @@ function AnnounceAction() {
   );
 }
 
-function CancelAction() {
+function CancelAction({
+  data,
+}) {
   const {
-    status: {
-      isCancelled,
-      cancelledBy,
-      cancelledAt,
-      canBeCancelled,
-    },
-  } = useStore();
+    isCancelled,
+    cancelledBy,
+    cancelledAt,
+    canBeCancelled,
+  } = data;
 
   if (isCancelled) {
     return (
@@ -74,14 +77,14 @@ function CancelAction() {
   );
 }
 
-function CloseRegistrationAction() {
+function CloseRegistrationAction({
+  data,
+}) {
   const {
-    status: {
-      isRegistrationPast,
-      isRegistrationFull,
-      canCloseFullRegistration,
-    },
-  } = useStore();
+    isRegistrationPast,
+    isRegistrationFull,
+    canCloseFullRegistration,
+  } = data;
 
   if (isRegistrationPast) {
     return (
@@ -110,15 +113,25 @@ function CloseRegistrationAction() {
 }
 
 export default function AnnouncementActions() {
-  const { isAdminView } = useStore();
+  const { isAdminView, competition: { competitionId } } = useStore();
+
+  const dataUrl = useMemo(() => competitionAnnouncementDataUrl(competitionId), [competitionId]);
+
+  const {
+    data,
+    loading,
+    sync,
+  } = useLoadedData(dataUrl);
+
+  if (loading) return <Loading />;
 
   return (
     <Container fluid>
       <Header>{I18n.t('competitions.announcements')}</Header>
       <List bulleted>
-        {isAdminView && <AnnounceAction />}
-        {isAdminView && <CancelAction />}
-        <CloseRegistrationAction />
+        {isAdminView && <AnnounceAction data={data} />}
+        {isAdminView && <CancelAction data={data} />}
+        <CloseRegistrationAction data={data} />
       </List>
     </Container>
   );

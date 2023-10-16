@@ -1,17 +1,5 @@
 <%= react_component("CompetitionFormNew/NewCompForm", {
   competition: @competition.to_form_data,
   isAdminView: @competition_admin_view,
-  status: {
-    isPersisted: @competition.persisted?,
-    isAnnounced: @competition.announced?,
-    announcedBy: @competition.announced_by_user&.name,
-    announcedAt: @competition.announced_at&.iso8601,
-    isCancelled: @competition.cancelled?,
-    canBeCancelled: @competition.can_be_cancelled?,
-    cancelledBy: @competition.cancelled_by_user&.name,
-    cancelledAt: @competition.cancelled_at&.iso8601,
-    isRegistrationPast: @competition.registration_past?,
-    isRegistrationFull: @competition.registration_full?,
-    canCloseFullRegistration: @competition.orga_can_close_reg_full_limit?,
-  }
+  isPersisted: @competition.persisted?,
 }) %>

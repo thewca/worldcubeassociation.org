@@ -4,7 +4,7 @@ import { InputBoolean } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function Admin() {
-  const { isAdminView, status: { isPersisted } } = useStore();
+  const { isAdminView, isPersisted } = useStore();
 
   if (!isPersisted || !isAdminView) return null;
 

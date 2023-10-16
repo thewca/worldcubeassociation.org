@@ -3,7 +3,7 @@ import { InputString } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 
 export default function NameDetails() {
-  const { status: { isPersisted } } = useStore();
+  const { isPersisted } = useStore();
 
   return (
     <>

@@ -47,9 +47,7 @@ function AnnouncementMessage() {
         isVisible,
       },
     },
-    status: {
-      isPersisted,
-    },
+    isPersisted,
   } = useStore();
 
   if (!isPersisted) return null;
@@ -91,7 +89,7 @@ function NewCompForm() {
   const {
     competition,
     initialCompetition,
-    status: { isPersisted },
+    isPersisted,
   } = useStore();
   const dispatch = useDispatch();
 
@@ -230,16 +228,7 @@ function NewCompForm() {
 export default function Wrapper({
   competition = null,
   isAdminView = false,
-  status = {
-    isPersisted: false,
-    isConfirmed: false,
-    isAnnounced: false,
-    isCancelled: false,
-    canBeCancelled: false,
-    isRegistrationPast: false,
-    isRegistrationFull: false,
-    canCloseFullRegistration: false,
-  },
+  isPersisted = false,
 }) {
   return (
     <StoreProvider
@@ -247,9 +236,9 @@ export default function Wrapper({
       initialState={{
         competition,
         initialCompetition: competition,
-        status,
         errors: null,
         isAdminView,
+        isPersisted,
       }}
     >
       <SectionProvider>
