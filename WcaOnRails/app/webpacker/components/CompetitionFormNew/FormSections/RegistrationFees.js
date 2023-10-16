@@ -40,7 +40,7 @@ export default function RegistrationFees() {
     params.append('competitor_limit_enabled', competitorLimit.enabled);
     params.append('competitor_limit', competitorLimit.count);
     params.append('currency_code', entryFees.currencyCode);
-    params.append('entry_fee_cents', entryFees.baseEntryFee);
+    params.append('base_entry_fee_lowest_denomination', entryFees.baseEntryFee);
     params.append('country_id', country);
 
     return params;
