@@ -2094,6 +2094,10 @@ class Competition < ApplicationRecord
         "isConfirmed" => confirmed?,
         "isVisible" => showAtAll?,
       },
+      "cloning" => {
+        "fromId" => being_cloned_from_id,
+        "cloneTabs" => clone_tabs || false,
+      },
     }
   end
 
@@ -2105,6 +2109,8 @@ class Competition < ApplicationRecord
     end
 
     ActiveRecord::Base.transaction do
+      self.editing_user_id = current_user.id
+
       if (form_series = form_data["series"]).present?
         set_form_data_series(form_series, current_user)
       else
@@ -2116,16 +2122,6 @@ class Competition < ApplicationRecord
           Championship.new(championship_type: type)
         end
       end
-
-      self.editing_user_id = current_user.id
-      self.receive_registration_emails = form_data.dig('userSettings', 'receiveRegistrationEmails')
-
-      #TODO
-      #being_cloned_from_id: form_data.dig('cloning', 'being_cloned_from_id'),
-      #clone_tabs: form_data.dig('cloning', 'clone_tabs'),
-      self.staff_delegate_ids = form_data.dig('staff', 'staffDelegateIds')&.join(',')
-      self.trainee_delegate_ids = form_data.dig('staff', 'traineeDelegateIds')&.join(',')
-      self.organizer_ids = form_data.dig('staff', 'organizerIds')&.join(',')
 
       assign_attributes(Competition.form_data_to_attributes(form_data))
     end
@@ -2145,6 +2141,9 @@ class Competition < ApplicationRecord
       cellName: form_data['shortName'],
       latitude_degrees: form_data.dig('venue', 'coordinates', 'lat'),
       longitude_degrees: form_data.dig('venue', 'coordinates', 'long'),
+      staff_delegate_ids: form_data.dig('staff', 'staffDelegateIds')&.join(','),
+      trainee_delegate_ids: form_data.dig('staff', 'traineeDelegateIds')&.join(','),
+      organizer_ids: form_data.dig('staff', 'organizerIds')&.join(','),
       contact: form_data.dig('staff', 'contact'),
       remarks: form_data['remarks'],
       registration_open: form_data.dig('registration', 'openingDateTime'),
@@ -2187,6 +2186,9 @@ class Competition < ApplicationRecord
       force_comment_in_registration: form_data.dig('registration', 'forceComment'),
       confirmed: form_data.dig('admin', 'isConfirmed'),
       showAtAll: form_data.dig('admin', 'isVisible'),
+      being_cloned_from_id: form_data.dig('cloning', 'fromId'),
+      clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+      receive_registration_emails: form_data.dig('userSettings', 'receiveRegistrationEmails'),
     }
   end
 
@@ -2350,6 +2352,13 @@ class Competition < ApplicationRecord
           "properties" => {
             "isConfirmed" => { "type" => "boolean" },
             "isVisible" => { "type" => "boolean" },
+          },
+        },
+        "cloning" => {
+          "type" => "object",
+          "properties" => {
+            "fromId" => { "type" => [ "integer", "null" ] },
+            "cloneTabs" => { "type" => "boolean" },
           },
         },
       },

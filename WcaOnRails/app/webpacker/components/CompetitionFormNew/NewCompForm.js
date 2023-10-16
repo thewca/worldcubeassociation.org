@@ -8,6 +8,7 @@ import {
 import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
+  InputBoolean,
   InputChampionships,
   InputDate,
   InputMarkdown,
@@ -90,6 +91,7 @@ function NewCompForm() {
     competition,
     initialCompetition,
     isPersisted,
+    isCloning,
   } = useStore();
   const dispatch = useDispatch();
 
@@ -217,6 +219,13 @@ function NewCompForm() {
         <EventRestrictions />
 
         <InputTextArea id="remarks" />
+
+        {isCloning && (
+          <SubSection section="cloning">
+            <InputBoolean id="cloneTabs" />
+          </SubSection>
+        )}
+
         <Divider />
 
         <Button onClick={saveComp} primary>{isPersisted ? 'Update Competition' : 'Create Competition'}</Button>
@@ -229,6 +238,7 @@ export default function Wrapper({
   competition = null,
   isAdminView = false,
   isPersisted = false,
+  isCloning = false,
 }) {
   return (
     <StoreProvider
@@ -239,6 +249,7 @@ export default function Wrapper({
         errors: null,
         isAdminView,
         isPersisted,
+        isCloning,
       }}
     >
       <SectionProvider>
