@@ -388,7 +388,7 @@ class CompetitionsController < ApplicationController
   end
 
   def nearby_competitions_json
-    permitted_params = params.permit(:id, :start_date, :end_date, :coordinates_lat, :coordinates_long)
+    permitted_params = params.permit(:id, :start_date, :end_date, :latitude_degrees, :longitude_degrees)
     competition = Competition.new(permitted_params)
 
     competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
@@ -398,7 +398,7 @@ class CompetitionsController < ApplicationController
   end
 
   def series_eligible_competitions_json
-    permitted_params = params.permit(:id, :start_date, :end_date, :coordinates_lat, :coordinates_long)
+    permitted_params = params.permit(:id, :start_date, :end_date, :latitude_degrees, :longitude_degrees)
     competition = Competition.new(permitted_params)
 
     competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here

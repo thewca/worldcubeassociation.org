@@ -27,8 +27,8 @@ export default function SeriesComps() {
       venue: {
         coordinates,
       },
-      start_date,
-      end_date,
+      startDate,
+      endDate,
       series,
     },
   } = useStore();
@@ -38,7 +38,7 @@ export default function SeriesComps() {
   const lat = parseFloat(coordinates.lat);
   const long = parseFloat(coordinates.long);
 
-  const missingDate = !start_date || !end_date;
+  const missingDate = !startDate || !endDate;
   const missingLocation = !coordinates
     || Number.isNaN(lat)
     || Number.isNaN(long);
@@ -49,13 +49,13 @@ export default function SeriesComps() {
     if (missingDate || missingLocation) return params;
 
     params.append('id', competitionId);
-    params.append('coordinates_lat', lat.toString());
-    params.append('coordinates_long', long.toString());
-    params.append('start_date', start_date);
-    params.append('end_date', end_date);
+    params.append('latitude_degrees', lat.toString());
+    params.append('longitude_degrees', long.toString());
+    params.append('start_date', startDate);
+    params.append('end_date', endDate);
 
     return params;
-  }, [competitionId, lat, long, start_date, end_date, missingDate, missingLocation]);
+  }, [competitionId, lat, long, startDate, endDate, missingDate, missingLocation]);
 
   const seriesEligibleDataUrl = useMemo(
     () => `${seriesEligibleCompetitionsJsonUrl}?${savedParams.toString()}`,

@@ -45,8 +45,8 @@ export default function NearbyComps() {
     if (missingDate || missingLocation) return params;
 
     params.append('id', competitionId);
-    params.append('coordinates_lat', lat.toString());
-    params.append('coordinates_long', long.toString());
+    params.append('latitude_degrees', lat.toString());
+    params.append('longitude_degrees', long.toString());
     params.append('start_date', startDate);
     params.append('end_date', endDate);
 
