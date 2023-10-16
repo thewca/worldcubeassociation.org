@@ -107,7 +107,7 @@ class CompetitionSeries < ApplicationRecord
     {
       "type" => ["object", "null"],
       "properties" => {
-        "id" => { "type" => [ "integer", "null" ] },
+        "id" => { "type" => ["integer", "null"] },
         "seriesId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },

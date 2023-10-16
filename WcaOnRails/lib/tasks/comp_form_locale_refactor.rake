@@ -192,6 +192,7 @@ namespace :comp_form_locales do
       comp_form_options = trans.dig(l.to_sym, :simple_form, :options, :competition)
 
       if comp_form_options.present?
+        # rubocop:disable Lint/BooleanSymbol
         choices = {
           guests_enabled: {
             true: comp_form_options.dig(:guests_enabled, :true),
@@ -226,6 +227,7 @@ namespace :comp_form_locales do
             },
           },
         }
+        # rubocop:enable Lint/BooleanSymbol
       end
 
       write_data = {

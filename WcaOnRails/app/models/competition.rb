@@ -2242,8 +2242,8 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "enabled" => { "type" => "boolean" },
-            "count" => { "type" => [ "integer", "null" ] },
-            "reason" => { "type" => [ "string", "null" ] },
+            "count" => { "type" => ["integer", "null"] },
+            "reason" => { "type" => ["string", "null"] },
           },
         },
         "staff" => {
@@ -2276,7 +2276,7 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "generateWebsite" => { "type" => "boolean" },
-            "externalWebsite" => { "type" => [ "string", "null" ] },
+            "externalWebsite" => { "type" => ["string", "null"] },
             "externalRegistrationPage" => { "type" => "string" },
             "usesWcaRegistration" => { "type" => "boolean" },
             "usesWcaLive" => { "type" => "boolean" },
@@ -2297,7 +2297,7 @@ class Competition < ApplicationRecord
             "guestEntryFee" => { "type" => "integer" },
             "donationsEnabled" => { "type" => "boolean" },
             "refundPolicyPercent" => { "type" => "integer" },
-            "refundPolicyLimitDate" => { "type" => [ "string", "null" ], "format" => "date-time" },
+            "refundPolicyLimitDate" => { "type" => ["string", "null"], "format" => "date-time" },
           },
         },
         "registration" => {
@@ -2305,14 +2305,14 @@ class Competition < ApplicationRecord
           "properties" => {
             "openingDateTime" => { "type" => "string", "format" => "date-time" },
             "closingDateTime" => { "type" => "string", "format" => "date-time" },
-            "waitingListDeadlineDate" => { "type" => [ "string", "null" ], "format" => "date-time" },
-            "eventChangeDeadlineDate" => { "type" => [ "string", "null" ], "format" => "date-time" },
+            "waitingListDeadlineDate" => { "type" => ["string", "null"], "format" => "date-time" },
+            "eventChangeDeadlineDate" => { "type" => ["string", "null"], "format" => "date-time" },
             "allowOnTheSpot" => { "type" => "boolean" },
             "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
             "allowSelfEdits" => { "type" => "boolean" },
             "guestsEnabled" => { "type" => "boolean" },
             "guestEntryStatus" => { "type" => "string" },
-            "guestsPerRegistration" => { "type" => [ "integer", "null" ] },
+            "guestsPerRegistration" => { "type" => ["integer", "null"] },
             "extraRequirements" => { "type" => "string" },
             "forceComment" => { "type" => "boolean" },
           },
@@ -2331,19 +2331,19 @@ class Competition < ApplicationRecord
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => [ "string", "null" ] },
-                "allowRegistrationWithout" => { "type" => [ "boolean", "null" ] },
+                "reason" => { "type" => ["string", "null"] },
+                "allowRegistrationWithout" => { "type" => ["boolean", "null"] },
               },
             },
             "eventLimitation" => {
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => [ "string", "null" ] },
-                "perRegistrationLimit" => { "type" => [ "integer", "null" ] },
+                "reason" => { "type" => ["string", "null"] },
+                "perRegistrationLimit" => { "type" => ["integer", "null"] },
               },
             },
-            "mainEventId" => { "type" => [ "string", "null" ] },
+            "mainEventId" => { "type" => ["string", "null"] },
           },
         },
         "remarks" => { "type" => "string" },
@@ -2357,7 +2357,7 @@ class Competition < ApplicationRecord
         "cloning" => {
           "type" => "object",
           "properties" => {
-            "fromId" => { "type" => [ "integer", "null" ] },
+            "fromId" => { "type" => ["integer", "null"] },
             "cloneTabs" => { "type" => "boolean" },
           },
         },
