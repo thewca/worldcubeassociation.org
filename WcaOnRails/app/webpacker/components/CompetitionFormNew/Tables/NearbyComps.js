@@ -22,7 +22,7 @@ function MissingInfo({ missingDate, missingLocation }) {
 export default function NearbyComps() {
   const {
     competition: {
-      id,
+      competitionId,
       venue: {
         coordinates,
       },
@@ -44,14 +44,14 @@ export default function NearbyComps() {
 
     if (missingDate || missingLocation) return params;
 
-    params.append('id', id);
+    params.append('id', competitionId);
     params.append('coordinates_lat', lat.toString());
     params.append('coordinates_long', long.toString());
     params.append('start_date', startDate);
     params.append('end_date', endDate);
 
     return params;
-  }, [id, lat, long, startDate, endDate, missingDate, missingLocation]);
+  }, [competitionId, lat, long, startDate, endDate, missingDate, missingLocation]);
 
   const nearbyDataUrl = useMemo(
     () => `${competitionNearbyJsonUrl}?${savedParams.toString()}`,

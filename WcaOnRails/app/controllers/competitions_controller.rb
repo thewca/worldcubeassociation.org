@@ -348,108 +348,95 @@ class CompetitionsController < ApplicationController
     render partial: 'nearby_competitions'
   end
 
-  # @param [Competition] c
-  def competition_form_nearby_json(c)
+  def competition_form_nearby_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(c.name, competition_admin_edit_path(c.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
     else
-      comp_link = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
 
-    days_until = @competition.days_until_competition?(c)
+    days_until = competition.days_until_competition?(other_comp)
 
     {
-      danger: @competition.dangerously_close_to?(c),
-      id: c.id,
-      name: c.name,
+      danger: competition.dangerously_close_to?(other_comp),
+      id: other_comp.id,
+      name: other_comp.name,
       nameLink: comp_link,
-      confirmed: c.confirmed?,
-      delegates: users_to_sentence(c.delegates),
+      confirmed: other_comp.confirmed?,
+      delegates: users_to_sentence(other_comp.delegates),
       daysUntil: days_until,
-      startDate: c.start_date,
-      endDate: c.end_date,
-      location: "#{c.cityName}, #{c.countryId}",
+      startDate: other_comp.start_date,
+      endDate: other_comp.end_date,
+      location: "#{other_comp.cityName}, #{other_comp.countryId}",
       distance: link_to_google_maps_dir(
-        "#{@competition.kilometers_to(c).round(2)} km",
-        c.latitude_degrees,
-        c.longitude_degrees,
-        @competition.latitude_degrees,
-        @competition.longitude_degrees,
+        "#{competition.kilometers_to(other_comp).round(2)} km",
+        other_comp.latitude_degrees,
+        other_comp.longitude_degrees,
+        competition.latitude_degrees,
+        competition.longitude_degrees,
       ),
-      limit: c.competitor_limit_enabled ? c.competitor_limit : "",
-      competitors: c.is_probably_over? ? c.results.select('DISTINCT personId').count : "",
-      events: c.events.map { |event|
+      limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
+      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      events: other_comp.events.map { |event|
         event.id
       },
       coordinates: {
-        lat: c.latitude_degrees,
-        long: c.longitude_degrees,
+        lat: other_comp.latitude_degrees,
+        long: other_comp.longitude_degrees,
       },
     }
   end
 
   def nearby_competitions_json
-    # Copied from nearby_competitions, but returns JSON instead of the HTML table.
-    @competition = Competition.new
-    @competition.id = params[:id]
-    @competition.start_date = params[:start_date]
-    @competition.end_date = params[:end_date]
-    @competition.latitude_degrees = params[:coordinates_lat]
-    @competition.longitude_degrees = params[:coordinates_long]
+    permitted_params = params.permit(:id, :start_date, :end_date, :coordinates_lat, :coordinates_long)
+    competition = Competition.new(permitted_params)
 
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @nearby_competitions = get_nearby_competitions(@competition)
+    competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    nearby_competitions = get_nearby_competitions(competition)
 
-    render json: @nearby_competitions.map { |c| competition_form_nearby_json(c) }
+    render json: nearby_competitions.map { |c| competition_form_nearby_json(competition, c) }
   end
 
   def series_eligible_competitions_json
-    # Copied from nearby_competitions, but returns JSON instead of the HTML table.
-    @competition = Competition.new
-    @competition.id = params[:id]
-    @competition.start_date = params[:start_date]
-    @competition.end_date = params[:end_date]
-    @competition.latitude_degrees = params[:coordinates_lat]
-    @competition.longitude_degrees = params[:coordinates_long]
+    permitted_params = params.permit(:id, :start_date, :end_date, :coordinates_lat, :coordinates_long)
+    competition = Competition.new(permitted_params)
 
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @series_eligible_competitions = get_series_eligible_competitions(@competition)
-    render json: @series_eligible_competitions.map { |c| competition_form_nearby_json(c) }
+    competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    series_eligible_competitions = get_series_eligible_competitions(competition)
+    render json: series_eligible_competitions.map { |c| competition_form_nearby_json(competition, c) }
   end
 
-  # @param [Competition] c
-  def competition_form_registration_collision_json(c)
+  def competition_form_registration_collision_json(competition, other_comp)
     if current_user.can_admin_results?
-      comp_link = ActionController::Base.helpers.link_to(c.name, competition_admin_edit_path(c.id), target: "_blank")
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
     else
-      comp_link = ActionController::Base.helpers.link_to(c.name, competition_path(c.id))
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
     end
 
     {
-      id: c.id,
-      name: c.name,
+      id: other_comp.id,
+      name: other_comp.name,
       nameLink: comp_link,
-      confirmed: c.confirmed?,
-      delegates: users_to_sentence(c.delegates),
-      registrationOpen: c.registration_open,
-      minutesUntil: @competition.minutes_until_other_registration_starts(c),
-      cityName: c.cityName,
-      countryId: c.countryId,
-      events: c.events.map { |event|
+      confirmed: other_comp.confirmed?,
+      delegates: users_to_sentence(other_comp.delegates),
+      registrationOpen: other_comp.registration_open,
+      minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
+      cityName: other_comp.cityName,
+      countryId: other_comp.countryId,
+      events: other_comp.events.map { |event|
         event.id
       },
     }
   end
 
   def registration_collisions_json
-    @competition = Competition.new
-    @competition.id = params[:id]
-    @competition.registration_open = params[:registration_open]
+    permitted_params = params.permit(:id, :registration_open)
+    competition = Competition.new(permitted_params)
 
-    @competition.valid?
-    @collisions = get_colliding_registration_start_competitions(@competition)
+    competition.valid? # unwrap data hidden behind validations
+    collisions = get_colliding_registration_start_competitions(competition)
 
-    render json: @collisions.map { |c| competition_form_registration_collision_json(c) }
+    render json: collisions.map { |c| competition_form_registration_collision_json(competition, c) }
   end
 
   def series_eligible_competitions

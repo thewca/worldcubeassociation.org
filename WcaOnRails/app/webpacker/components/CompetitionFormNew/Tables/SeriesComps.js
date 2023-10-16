@@ -23,7 +23,7 @@ function MissingInfo({ missingDate, missingLocation }) {
 export default function SeriesComps() {
   const {
     competition: {
-      id,
+      competitionId,
       venue: {
         coordinates,
       },
@@ -48,14 +48,14 @@ export default function SeriesComps() {
 
     if (missingDate || missingLocation) return params;
 
-    params.append('id', id);
+    params.append('id', competitionId);
     params.append('coordinates_lat', lat.toString());
     params.append('coordinates_long', long.toString());
     params.append('start_date', start_date);
     params.append('end_date', end_date);
 
     return params;
-  }, [id, lat, long, start_date, end_date, missingDate, missingLocation]);
+  }, [competitionId, lat, long, start_date, end_date, missingDate, missingLocation]);
 
   const seriesEligibleDataUrl = useMemo(
     () => `${seriesEligibleCompetitionsJsonUrl}?${savedParams.toString()}`,

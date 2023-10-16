@@ -164,7 +164,7 @@ function MissingInfo() {
 function RegistrationCollisionsContent() {
   const {
     competition: {
-      id,
+      competitionId,
       registration: { openingDateTime },
     },
   } = useStore();
@@ -174,11 +174,11 @@ function RegistrationCollisionsContent() {
 
     if (!openingDateTime) return params;
 
-    params.append('id', id);
+    params.append('id', competitionId);
     params.append('registration_open', openingDateTime);
 
     return params;
-  }, [id, openingDateTime]);
+  }, [competitionId, openingDateTime]);
 
   const registrationCollisionsUrl = useMemo(
     () => `${registrationCollisionsJsonUrl}?${savedParams.toString()}`,
