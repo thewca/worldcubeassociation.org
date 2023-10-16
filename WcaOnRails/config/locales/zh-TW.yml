@@ -2672,6 +2672,152 @@ zh-TW:
         per_competitor: '估算的每位參賽者平均WCA稅費是%{estimate}'
         #original_hash: 1b67d84
         ajax_error: 稅費估算有出現錯誤，有可能是因為沒有該幣值可用的換算匯率。
+      labels:
+        admin:
+          is_confirmed: 禁止主辦團隊編輯本場比賽
+          is_visible: 公開比賽
+        competition_id: 比賽ID
+        name: 比賽名稱
+        short_name: 比賽簡稱
+        name_reason: 比賽名稱的原因
+        venue:
+          country_id: 區域
+          city_name: 城市名稱
+          name: 場地名稱
+          details: 場地細節
+          address: 場地地址
+          coordinates:
+        start_date: 開始日期
+        end_date: 結束日期
+        information: 資訊
+        competitor_limit:
+          enabled: 限制參賽者人數
+          count: 參賽者人數上限
+          reason: 限制的理由
+        staff:
+          staff_delegate_ids: WCA代表
+          trainee_delegate_ids: WCA 實習代表
+          organizer_ids: 主辦人ID
+          contact: 聯絡
+        championships:
+        website:
+          generate_website: 我要使用WCA網站公布資訊，而非外部網站。
+          external_website: 外部網站
+          external_registration_page: 報名頁面
+          uses_wca_registration: 我要使用WCA網站的報名系統
+          uses_wca_live: 我將使用 WCA Live 作成績計入
+        user_settings:
+          receive_registration_emails: 當有人報名這場比賽時，我要收到關於報名的電子郵件通知。
+        entry_fees:
+          currency_code: 貨幣代碼
+          base_entry_fee: 基本報名費
+          on_the_spot_entry_fee: 現場報名費
+          guest_entry_fee: 陪同者入場費
+          donations_enabled: 除了報名費以外，我想要開放捐款
+          refund_policy_percent: 退費百分比
+          refund_policy_limit_date: 退費期限
+        registration:
+          opening_date_time: 報名開始
+          closing_date_time: 報名截止
+          waiting_list_deadline_date: 核准候補名單上參賽者的最後截止時間
+          event_change_deadline_date: 參賽者可以更新報名項目的截止時間
+          allow_on_the_spot: 現場報名
+          allow_self_delete_after_acceptance: 取消報名
+          allow_self_edits: 編輯報名
+          guests_enabled: 陪同者
+          guest_entry_status: 顯示免費陪同者的訊息
+          guests_per_registration: 每個報名可以添加的最多陪同者人數
+          extra_requirements: 額外報名條件
+          force_comment: 強迫要求參賽者要在報名時填寫註記
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: 我希望參賽者能在該比賽項目開始前的一個時間點先繳交方塊
+            reason: 提早繳交方塊的理由和細節
+          qualification_results:
+            enabled: 我希望用特定成績來限制參賽者能參加某項目
+            reason: 特定成績的理由及細節
+            allow_registration_without: 有資格限制的比賽項目
+          event_limitation:
+            enabled: 我希望限制參賽者不能報名特定項目組合
+            reason: 項目組合限制的理由和細節
+            per_registration_limit: 每次報名的比賽項目數量限制
+          main_event_id: 主要項目
+        remarks: 備註
+        clone_tabs: 我想要複製所有標籤以及其資訊
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: 比賽的全名且必須以年份為結尾（例如：All is Well 2017）。字首要大寫且必須只能包含字母與數字、破折號(-)、和號(&)、句號(.)、冒號(:)、撇號('')和空白(
+          )。
+        short_name: 供顯示方便的簡稱。如果比賽名稱已少於%{short_name_limit}個字元，不應該編輯這個區域，而且應該要和全名一樣。
+        name_reason_html: 簡短解釋比賽名稱。名稱必須要符合<a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA比賽要求政策</a>
+        venue:
+          country_id: ''
+          city_name: 比賽舉行的城市或州（如果適用）。不要包含國家名稱（例如使用：Taipei、Taichung或Kaohsiung）。
+          name_html: 舉行比賽的場地。%{md} 例如：[National Taiwan Normal University](https://www.ntnu.edu.tw/)
+          details_html: 場地的細節（例如：一樓的正後方，跟隨指標走）%{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
+        competitor_limit:
+          enabled: 儘管規則沒有要求比賽要設置人數上限，但我們強烈建議您要設。
+          count: 這場比賽允許的參賽人數。目前這數字僅做為發佈消息之用，並不會阻止更多參賽者報名比賽。我們正在開發更完整的報名流程，但這需要一些時間。
+          reason: 設定人數上限的理由是什麼？請用英文填寫！
+        staff:
+          staff_delegate_ids: 本場比賽的WCA代表。
+          trainee_delegate_ids: 比賽的WCA實習代表。
+          organizer_ids: 比賽的主辦團隊（他們需要建立WCA帳號才能列在這裡）。
+          contact_html: 可任意選擇聯絡資訊。若您未填寫，聯繫請求內容會由表格方式送出，主辦人的電子郵件將不會被顯示。%{md} 範例：[顯示內容](mailto:some@email.com)
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: 這場比賽的網站網站。必須為有效的http(s)網址。
+          external_registration_page: 參賽者報名比賽的頁面，必須為有效的http(s)網址。
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: 報名費的貨幣代碼。
+          base_entry_fee: 這場比賽的基本報名費。如果有使用WCA報名系統，其將會被顯示在比賽資訊頁面以及報名頁面。如果此處設為0，會有一個句子表示報名為免費的。<br><br><b>免責聲明：下面WCA稅費的估算是用目前的匯率計算的，沒有任何正式效力。</b>
+          on_the_spot_entry_fee: 如果此處設為0，會有一個句子表示現場報名為免費的。
+          guest_entry_fee: 目前這個數字僅供顯示資訊用，本網站不處理陪同者入場費。如果此處設為0，可以選擇顯示一個觀眾政策的文字。
+          donations_enabled: ''
+          refund_policy_percent: 目前這個數字僅供顯示資訊用，退費還是由人工處理。如果此處設為0，會有一個句子表示報名費在任何情況下皆不退費。
+          refund_policy_limit_date: 這個日期以後皆不再退費。
+        registration:
+          opening_date_time: 備註：報名開始和結束時間採用UTC時間
+          closing_date_time: ''
+          waiting_list_deadline_date: 不再接受候補名單的日期。如果您有退費的截止日期，不受理候補的日期不應該早於退費的截止日期。
+          event_change_deadline_date: 在這個時間以前，參賽者都有權利聯絡主辦團隊更新報名的比賽項目。這個期限禁止設在報名截止之前。如果這裡留白，代表參賽者在該比賽項目開始之前都可以追加該比賽項目。如果允許現場報名，這個期限必須是比賽當天。
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: 這個比賽每個參賽者所允許的陪同者人數。太多陪同者的報名會被擋下來。如果沒有人數限制，請留空白。
+          extra_requirements: 請在此處說明任何以上未提及到的額外報名條件，例如有關如何支付。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。它將顯示在比賽的資訊頁面上，如果您使用WCA網站報名，它也會顯示在報名頁面上。
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: 請在這裡說明為什麼您希望參賽者提早繳交方塊。請用英文填寫！
+          qualification_results:
+            enabled: ''
+            reason: 請在這裡說明為什麼您希望設定特定成績。請用英文填寫！
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: 請在這裡說明為什麼您希望設定禁止報名特定的項目組合。請用英文填寫！
+            per_registration_limit: 可以選擇性的方式，限制每一位參賽者可以報名的最多比賽項目數量（常用在較熱門的比賽）。您應該在比賽項目新增好後再編輯這個區域。報名太多的比賽項目時會被擋下。如果沒有限制，請留白。
+          main_event_id: 這個項目的優勝參賽者將會是這場比賽的優勝參賽者
+        remarks: 任何您想跟WCAT說明的事。例如，有疑問的事項，或是您想向WCAT請求特別事項。請用英文填寫！
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必須以年份為結尾且只能包含字母與數字，破折號(-)、&符號(&)、句號(.)、冒號(:)、撇號('')和空白( )'

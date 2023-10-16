@@ -2700,6 +2700,191 @@ kk:
         greater_china: Үлкен Қытай Чемпионаты
         #original_hash: 3b920b7
         generic: 'Чемпионат: %{type}'
+      labels:
+        admin:
+          is_confirmed: Ұйымдастырушыларға бұл жарысты редакциялауға жол бермеу
+          is_visible: Бәсекелестікті барлығына көрінетін ету
+        competition_id: ID
+        name: Аты
+        short_name: Қысқа аты
+        name_reason: Атаудың себебі
+        venue:
+          country_id: Ел
+          city_name: Қаласы
+          name: Бөлме
+          details: Толығырақ
+          address: Бөлменің мекен-жайы
+          coordinates:
+        start_date: Басталу күні
+        end_date: Аяқталу күні
+        information: Ақпарат
+        competitor_limit:
+          enabled: Қатысушылар санына лимит
+          count: Қатысушылардың ең көп саны
+          reason: Лимиттің себебі
+        staff:
+          staff_delegate_ids: WCA делегат(тар)
+          trainee_delegate_ids: WCA Делегат(тар)-стажер(лар)
+          organizer_ids: Ұйымдастырушы(лар)
+          contact: Байланыс ақпараты
+        championships:
+        website:
+          generate_website: Мен WCA веб-сайтын сыртқы ақпараттың орнына ақпаратты
+            орналастыру үшін қолданғым келеді сайт.
+          external_website: Сайт
+          external_registration_page: Тіркеу беті
+          uses_wca_registration: Тіркелу үшін WCA веб-сайтын пайдаланыңыз
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Біреу жарысқа тіркелген кезде маған электрондық
+            поштаға жіберіңіз.
+        entry_fees:
+          currency_code: Валюта кодтары
+          base_entry_fee: Қатысу жарнасы
+          on_the_spot_entry_fee: Жергілікті жерде тіркелгені үшін базалық жарна
+          guest_entry_fee: Көрермендерге арналған жарна
+          donations_enabled: Қатысу жарнасымен бірге қайырымдылық мүмкіндігін қосыңыз
+          refund_policy_percent: Қайтарылатын үлес
+          refund_policy_limit_date: Жарнаны қайтарудың соңғы мерзімі
+        registration:
+          opening_date_time: Тіркеуді ашу
+          closing_date_time: Тіркеуді жабу
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: Тіркеу орнында
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: Қонақтар
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Тіркеуге қойылатын қосымша талаптар
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Мен қатысушыларға пән басталғанға дейін арнайы уақытта басқатырғыштар
+              тапсырғанын қалаймын
+            reason: Басқатырғыштарды ерте тапсырудың себептері мен егжей-тегжейлері
+          qualification_results:
+            enabled: Мен кейбір пәндер бойынша қатысушыларды шектеу үшін квалификацияны
+              қолданғым келеді
+            reason: Квалификацияны қолданудың себептері мен егжей-тегжейлері
+            allow_registration_without:
+          event_limitation:
+            enabled: Мен қатысушыларға пәндердің белгілі бір комбинациясына тіркелуге
+              тыйым салғым келеді
+            reason: Пән бойынша шектеулердің себептері мен егжей-тегжейлері
+            per_registration_limit:
+          main_event_id: Басты пән
+        remarks: Жазбалар
+        clone_tabs: Барлық қойындыларды қосымша ақпаратпен көшіріңіз
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Жарыстың толық атауы, оның ішінде жылдың соңында (мысалы, Moscow North-West
+          Open 2011). Сөздер жақсы жазуға арналған үлкен әріптер. Атау тек ағылшын
+          әріптерін, сандарды, сызықшаларды (-), амперсандаларды (&), нүктелерді (.),
+          қос нүкте (:), апострофтар (') және бос орындар ( ).
+        short_name: Қысқа дисплей атауы (Мысалы, Moscow North-West Open 2011 орнына
+          MNW Open 2011). Егер әдеттегі атау өте қысқа болса, оны осы жерде де қолдануға
+          болады.
+        name_reason_html: Жарыс атауының қысқаша түсіндірмесі. Атау қанағаттандыруы
+          керек <a href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
+          жарыстарына  қойылатын талаптар</a>.
+        venue:
+          country_id: ''
+          city_name: Жарыс өтетін қаланың атауы және мемлекет (егер қолданылса). Мұнда
+            елді жазбаңыз. Мысалы <strong>Moscow</strong>, немесе <strong>San Francisco,
+            California</strong>. <br/>Бұл өріс, сондай-ақ осы формадағы барлық өрістер
+            ағылшын тілінде толтырылады.
+          name_html: 'Жарыс өтетін бөлме. %{md}. Мысалы: [Moscow Aviation Institute](http://intstudy.mai.ru/)'
+          details_html: Бөлменің егжей-тегжейлері (мысалы, негізгі кіреберіс, екінші
+            қабат, белгілерді орындаңыз). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Қатысушылар білуі керек маңызды ақпарат. Ол жарыстың басты бетінде
+          көрсетіледі. <br/> Осы <b>өрісін ағылшын тілінде</b> және сіздің қатысушыларыңыз
+          сөйлейтін басқа тілдерде толтырыңыз.
+        competitor_limit:
+          enabled: WCA ережелері қатысушылардың санын шектеуді қажет етпесе де, бұл
+            сұралынады.
+          count: Бұл жарысқа қатыса алатын қатысушылардың саны. Әзірге бұл өріс тек
+            ақпарат үшін және жаңа қатысушыларды тіркеуді ештеңе тоқтата алмайды.
+            Біз оны тіркеу процесінде ескеру үшін жұмыс жасаймыз.
+          reason: Лимиттің себебі неде? Ағылшын тілінде толтырыңыз!
+        staff:
+          staff_delegate_ids: WCA осы жарысқа Делегат(тар).
+          trainee_delegate_ids: WCA делегат(тар)-стажер(лар) осы жарысқа арналған.
+          organizer_ids: Осы жарыстың ұйымдастырушысы(лар) (оларды осында тізімдеу
+            үшін оларда аккаунт болуы керек).
+          contact_html: 'Байланыс электрондық поштасы. Егер сіз оны толтырмасаңыз,
+            ұйымдастырушылар электрондық поштаны жария етеді. %{md}. Мысалы: [Вася
+            Пупкин](mailto:vasya@pupkin.ru)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Жарыс сайты. Дұрыс http(s) URL болуы керек.
+          external_registration_page: Қатысушылар жарысқа тіркелуі керек бет. Дұрыс
+            http(s) URL болуы керек.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Қатысу жарнасы үшін валюта коды.
+          base_entry_fee: Жарыстарға қатысу үшін базалық жарна. Ол жарыстар парағында,
+            сондай-ақ егер ол қолданылса, тіркеу парағында көрсетіледі. Егер бұл өрісте
+            0 болса, онда тіркеу тегін деп жазылады.
+          on_the_spot_entry_fee: Егер осы өрісте 0 болса, қатысушыларға сайтта тіркелу
+            тегін екендігі көрсетіледі.
+          guest_entry_fee: Әзірге бұл сан тек ақпарат үшін, сіз осы сайтта қонақтарға
+            жарна ала алмайсыз. Егер бұл жерде 0 болса, қатысушыларға көрермендер
+            тегін келе алатындығы көрсетіледі.
+          donations_enabled: ''
+          refund_policy_percent: Әзірге бұл өріс тек ақпарат үшін, Сіз жарналарды
+            өзіңіз қайтаруыңыз керек. Егер бұл жерде 0 болса, қатысушыларға жарналар
+            қайтарылмайтындығы көрсетіледі.
+          refund_policy_limit_date: Жарналар осы күн өткеннен соң қайтарылмайды
+        registration:
+          opening_date_time: Тіркеуді ашу және жабу уақыты UTC уақыт белдеуінде көрсетілген.
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Жоғарыда көрсетілмеген қосымша тіркеу талаптарын көрсетіңіз,
+            мысалы, төлем нұсқаулары. <br/>Осы <b>өрісін ағылшын тілінде</b>, сондай-ақ
+            сіздің қатысушыларыңыз сөйлейтін басқа тілдерде толтырыңыз; егер сіз олар
+            үшін WCA сайтын қолдансаңыз, бұл талаптар жарыс бетінде, сондай-ақ тіркеу
+            парағында көрсетіледі.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Неліктен қатысушыларды басқатырғыштарды алдын-ала тапсыруға мәжбүр
+              еткіңіз келетінін түсіндіріңіз. Бұл өрісті ағылшын тілінде толтырыңыз!
+          qualification_results:
+            enabled: ''
+            reason: Неліктен біліктілікті пайдаланғыңыз келетінін түсіндіріңіз. Бұл
+              өрісті ағылшын тілінде толтырыңыз!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Неліктен қатысушыларға кейбір пәндер комбинациясына тіркелуге
+              тыйым салғыңыз келетінін түсіндіріңіз. Бұл өрісті ағылшын тілінде толтырыңыз!
+            per_registration_limit:
+          main_event_id: Бұл пәннің жеңімпазы жарыстың жеңімпазы болады.
+        remarks: WCAT-қа жеткізгіңіз келетін қосымша ақпарат. Мысалы, егер сіз бір
+          нәрсе туралы сенімді болмасаңыз немесе ерекше тілектеріңіз болса. Бұл өрісті
+          ағылшын тілінде толтырыңыз!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

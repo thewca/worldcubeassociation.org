@@ -3176,6 +3176,215 @@ hr:
         ajax_error: >-
           Dogodila se greška prilikom estimiranja Duesa, vjerojatno jer više ne
           postoje dostupni tečajevi za odabranu valutu.
+      labels:
+        admin:
+          is_confirmed: Zabrani organizatorima uređivanje ovog natjecanja
+          is_visible: Napravi natjecanje vidljivim
+        competition_id: Identifikacija
+        name: Ime
+        short_name: Nadimak natjecanja
+        name_reason: Razlog za ime
+        venue:
+          country_id: Država
+          city_name: Ime grada
+          name: Prostor
+          details: Detalji prostora
+          address: Adresa prostora
+          coordinates:
+        start_date: Datum početka
+        end_date: Datum završetka
+        information: Informacije
+        competitor_limit:
+          enabled: Natjecateljski limit
+          count: Maksimalan broj natjecatelja
+          reason: Razlog ograničenja broja natjecatelja
+        staff:
+          staff_delegate_ids: WCA Delegati
+          trainee_delegate_ids: WCA Delegat pripravnik
+          organizer_ids: Organizator(i)
+          contact: Kontakt
+        championships:
+        website:
+          generate_website: Htio bi koristiti WCA web-stranicu umjesto vanjske za
+            dodatne informacije.
+          external_website: Web-stranica
+          external_registration_page: Stranica za registracije
+          uses_wca_registration: Htio bi koristiti WCA web-stranicu za registracije
+          uses_wca_live: Koristit ću WCA Live za unošenje rezultata
+        user_settings:
+          receive_registration_emails: Obavijesti me e-mailom kada se netko registrira
+            za ovo natjecanje
+        entry_fees:
+          currency_code: Kôd valute
+          base_entry_fee: Osnovna kotizacija
+          on_the_spot_entry_fee: Osnovna kotizacija na licu mjesta
+          guest_entry_fee: Kotizacija za goste/gledatelje
+          donations_enabled: Želim omogućiti donacije dodatno uz prikupljanje kotizacija
+          refund_policy_percent: Postotak povrata novca
+          refund_policy_limit_date: Datumski rok za povrat novca
+        registration:
+          opening_date_time: Registracije se otvaraju
+          closing_date_time: Registracije se zatvaraju
+          waiting_list_deadline_date: Rok za prihvaćanje natjecatelja s liste čekanja
+          event_change_deadline_date: Rok do kada natjecatelji mogu uređivati svoje
+            registrirane discipline
+          allow_on_the_spot: Registracije na licu mjesta
+          allow_self_delete_after_acceptance: Otkazane registracije
+          allow_self_edits: Uređivanje registracija
+          guests_enabled: Gosti
+          guest_entry_status: Prikaži poruku za besplatan ulaz gledatelja
+          guests_per_registration: Maksimalni broj gostiju po registraciji
+          extra_requirements: Dodatni zahtjevi za registraciju
+          force_comment: Komentar prilikom registracije je obavezan
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Želim da natjecatelji predaju mozgalice u vremenu prije nego
+              je neka disciplina počela
+            reason: Razlozi i detalji za predaju mozgalica ranije
+          qualification_results:
+            enabled: Želim koristiti kvalifikacijske rezultate kako bi ograničio/la
+              tko se može natjecati u pojedinim disciplinama
+            reason: Razlozi i detalji za kvalifikacijske rezultate
+            allow_registration_without: Discipline s Kvalifikacijom
+          event_limitation:
+            enabled: Želim ograničiti natjecatelje u registriranju za specifične kombinacije
+              disciplina
+            reason: Razlozi i detalji za ograničenja disciplina
+            per_registration_limit: Limit disciplina po registraciji
+          main_event_id: Glavna disciplina
+        remarks: Napomene
+        clone_tabs: Htio bi klonirati sve kartice s dodatnim informacijama
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Puno ime natjecanja, uključujući godinu na kraju (npr. Croatian Open
+          2016). Ne zaboravi pisati velika slova. Ime mora sadržavati samo alfanumeričke
+          znakove, crtice(-), ampersand znakove(&), točke(.), dvotočje(:), apostrofe(')
+          i razmake( ).
+        short_name: Kratko ime za prikaz. Ako je ime natjecanja već kratko, može se
+          koristiti to ime (npr. Croatia 2016).
+        name_reason_html: Kratko objašnjenje imena natjecanja. Ime se mora biti sukladno
+          s <a href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
+          Politikom najavljivanja natjecanja</a>.
+        venue:
+          country_id: ''
+          city_name: Ime grada i pokrajine (ukoliko je potrebno) gdje se natjecanje
+            održava. Nemoj koristiti saveznu državu/pokrajinu (npr. San Francisco,
+            Kalifornija).
+          name_html: 'Prostor gdje se natjecanje održava. %{md}.Primjerice: [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Detalji o prostoru (npr. pratite znakove na vratima). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Važne informacije koje natjecatelji moraju znati. Bit će prikazano
+          na glavnoj stranici natjecanja. <br/>Molimo ispunite ovo <b>na engleskom</b>
+          ili na bilo kojem drugom jeziku kojeg natjecatelji razumiju.
+        competitor_limit:
+          enabled: Iako nije potrebno reći natjecateljski limit prema Pravilniku,
+            toplo se preporučuje.
+          count: Dozvoljeni broj natjecatelja na ovom natjecanju. Zasad je ovaj broj
+            informativnog karaktera i ne sprječava više ljudi da se registriraju.
+            Radimo na dodavanju eksplicitne podrške u registracijskom toku, ali to
+            prvo zahtjeva dodatni rad.
+          reason: Koji je razlog ograničavanja broja natjecatelja? Ispuni na engleskom
+            jeziku!
+        staff:
+          staff_delegate_ids: WCA Delegati za natjecanje.
+          trainee_delegate_ids: WCA Delegati pripravnici za natjecanje.
+          organizer_ids: Organizatori natjecanja (njihovi korisnički računi moraju
+            biti navedeni ovdje).
+          contact_html: 'Neobavezne kontakt informacije. Ukoliko ovo ne ispunite,
+            kontakt upiti će se poslati preko forme bez otkrivanja mail adresa organizatora.
+            %{md}. Primjer: [Text to display](mailto:some@email.com)'
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: Web-stranica natjecanja. Mora biti valjani http(s) URL.
+          external_registration_page: Stranica gdje se natjecatelji moraju registrirati
+            za natjecanje. Mora biti točan http(s) url.
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Kôd valute za kotizaciju.
+          base_entry_fee: 'Osnovna kotizacija za natjecanje. Kotizacija će biti prikazana
+            na stranici informacija o natjecanju i na stranici za registraciju, ukoliko
+            se koristi. Ukoliko je postavljeno na 0, prikazat će se rečenica koja
+            govori da će se registracije prihvatiti besplatno. <br><br><b>NAPOMENA:
+            Navedena  estimacija WCA Dues je aproksimacija iznosa ovisno o trenutnom
+            tečaju i nije pravno vezajući podatak za Dues plaćanje. </b>'
+          on_the_spot_entry_fee: Ukoliko je ovo postavljeno na 0, pokazat će se rečenica
+            koja govori da će se registracije na licu mjesta besplatno prihvatiti.
+          guest_entry_fee: Zasad je ovaj broj samo informacijskog karaktera, kotizacije
+            za goste/gledatelje se ne mogu uređivati preko web-stranice. Ukoliko je
+            ovaj broj stavljen na 0, prikazat će se rečenica po vašem odabiru politike
+            dolaska gledatelja na natjecanje.
+          donations_enabled: ''
+          refund_policy_percent: Zasad je ovaj broj samo informacijskog karaktera,
+            povrati novca će se morati izdavati ručno. Ukoliko je broj postavljen
+            na 0, prikazat će se rečenica koja govori da se kotizacije neće vraćati
+            ni pod kojim okolnostima.
+          refund_policy_limit_date: Datum nakon kojeg se povrat novca više neće moći
+            izvršiti.
+        registration:
+          opening_date_time: 'Bilješka: Registracije se otvaraja i zatvaraju u vremenu
+            univerzalne vremenske zone (UTC)'
+          closing_date_time: ''
+          waiting_list_deadline_date: Datum kada se više ne prihvaćaju natjecatelji
+            s liste čekanja. Ukoliko imate rok za povrat kotizacije, rok za prihvaćanje
+            registracije ne bi trebao biti prije roka za povrat kotizacije.
+          event_change_deadline_date: Registrirani natjecatelji imaju pravo urediti
+            i ažurirati svoje registrirane discipline do ovog vremena na način da
+            kontaktiraju organizacijski tim. Ovaj rok ne smije biti postavljen prije
+            nego je to rok za zatvaranje registracija. Ostavljanjem ovog polja praznim
+            znači da natjecatelji mogu dodavati/ažurirati svoje registrirane discipline
+            sve dok se natjecanje ne krene održavati. Ukoliko imate registracije na
+            licu mjesta, ovaj rok mora biti postavljen na isti dan kad se natjecanje
+            održava.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: Broj gostiju po registraciji je dozvoljen na ovom
+            natjecanju. Registracije s previše gostiju će biti blokirane. Ostavi prazno
+            ako nema limita.
+          extra_requirements: Prikaži ovdje bilo koje dodatne uvjete za registracije
+            koji nisu još objašnjeni, kao primjerice upute za plaćanje. <br/>Ispuni
+            ovo <b>na engleskom jeziku</b> ili na bilo kojem drugom jeziku kojeg natjecatelji
+            razumiju; ovo će se prikazivati na stranici informacija o natjecanju,
+            kao i na stranici za registracije, ukoliko se koristi WCA web-stranica
+            za registracije.
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Obrazloži ovdje zašto želiš da natjecatelji predaju mozgalice
+              ranije. Ispuni ovo na engleskom jeziku!
+          qualification_results:
+            enabled: ''
+            reason: Objasni ovdje zašto želiš koristiti kvalifikacijska vremena. Ispuni
+              ovo na engleskom jeziku!
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: Objasni ovdje zašto želiš ograničiti neke kombinacije disciplina.
+              Ispuni ovo na engleskom jeziku!
+            per_registration_limit: Ukupan broj disciplina za koje se natjecatelj
+              može prijaviti (obično se koristi za natjecanja pod "Favoriti") je obavezan.
+              Trebali biste dodati discipline prije korištenja ovog polja. Prijave
+              s previše disciplina bit će blokirane. Ostavi prazno ako nema ograničenja.
+          main_event_id: Pobjednik u ovoj disciplini je ujedno i pobjednik natjecanja.
+        remarks: Neke dodatne informacije koje želiš proslijediti WCATu. Primjerice,
+          ukoliko ne znaš nešto ili imaš određene zahtjeve za WCAT. Ispuni ovo na
+          engleskom jeziku!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

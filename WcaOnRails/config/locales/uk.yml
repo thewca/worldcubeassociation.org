@@ -2574,6 +2574,190 @@ uk:
         greater_china: Чемпіонат Китаю
         #original_hash: 3b920b7
         generic: 'Чемпіонат: %{type}'
+      labels:
+        admin:
+          is_confirmed: Не дозволяти організаторам редагувати ці змагання
+          is_visible: Опублікувати змагання
+        competition_id: ID
+        name: Назва
+        short_name: Стисла назва змагання
+        name_reason: Обгрунтування імені
+        venue:
+          country_id: Країна
+          city_name: Місто
+          name: Місце проведення
+          details: Опис місця проведення
+          address: Адреса місця проведення
+          coordinates:
+        start_date: Дата початку
+        end_date: Дата закінчення
+        information: Інформація
+        competitor_limit:
+          enabled: Ліміт учасників
+          count: Максимальна кількість учасників
+          reason: Обгрунтування ліміту учасників
+        staff:
+          staff_delegate_ids: Делегат(и) WCA
+          trainee_delegate_ids:
+          organizer_ids: Організатор(и)
+          contact: Контакти
+        championships:
+        website:
+          generate_website: Використовувати сайт WCA для розміщення додаткової інформації
+          external_website: Веб-сторінка
+          external_registration_page: Сторінка реєстрації
+          uses_wca_registration: Використовувати сайт WCA для реєстрації
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Надсилати електронний лист, коли хтось реєструється
+            на змагання
+        entry_fees:
+          currency_code: Валютний код
+          base_entry_fee: Базовий реєстраційний внесок
+          on_the_spot_entry_fee: Базовий реєстраційний внесок на місці
+          guest_entry_fee: Вхідний внесок для гостей
+          donations_enabled: Увімкнути донейти на додаток до збіру реєстраційних внесків
+          refund_policy_percent: Процент внеску, що повертається
+          refund_policy_limit_date: Останній день для повернення внесків
+        registration:
+          opening_date_time: Реєстрація відкривається
+          closing_date_time: Реєстрація закривається
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: Реєстрація на місці
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: Гості
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Додаткові реєстраційні вимоги
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Я б хотів, щоб учасники принесли головоломки в зазначений час
+              перед початком дисципліни
+            reason: Причина, за якої учасники мають принести головоломки раніше
+          qualification_results:
+            enabled: Я б хотів використовувати кваліфікаційні результати, щоб обмежити
+              кількість учасників в деяких дисциплінах
+            reason: Причина для застосування кваліфікаційних результатів
+            allow_registration_without:
+          event_limitation:
+            enabled: Я б хотів обмежити учасників від реєстрації в деяких комбінаціях
+              дисциплін
+            reason: Причина для обмежень в дисциплінах
+            per_registration_limit:
+          main_event_id: Основна дисципліна
+        remarks: Примітки
+        clone_tabs: Клонувати також всі вкладки з додатковою інформацією
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Повна назва змагання включно з роком (наприклад, Kyiv Open 2011). Переконайтесь,
+          що всі слова починаються з великої літери. Ім’я має містити лише букви,
+          цифри, дефіси(-), амперсанди(&), крапки(.), двокрапки(:), апострофи(') та
+          пробіли( ).
+        short_name: Скорочена назва для відображення. Якщо основна назва достатньо
+          коротка, можна її продублювати.
+        name_reason_html: Коротке пояснення назви змагання. Назва має відповідати
+          <a href='/documents/policies/external/Competition%20Requirements.pdf'>Вимогам
+          до Змагань WCA</a>.
+        venue:
+          country_id: ''
+          city_name: Назва міста та району/області (якщо треба) де буде відбуватись
+            змагання (наприклад, Sultan-Sarai, Bilogirs'kyi, Crimea). Країну вказувати
+            не потрібно.
+          name_html: 'Приміщення, в якому будуть відбуватись змаганнь. %{md}. Наприклад:
+            [Верховна Рада України](https://rada.gov.ua/)'
+          details_html: Детальний опис приміщення (розташування під’їзду, на якому
+            поверсі знаходиться зал тощо). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Важлива інформація, яку мають знати учасники. Вона буде відображена
+          на основній сторінці змагання. <br/>Будь ласка, заповніть її як <strong>українською</strong>,
+          так і <strong>англійською</strong>.
+        competitor_limit:
+          enabled: Хоча Правила WCA не вимагають встановлювати ліміт учасників, дуже
+            рекомендується це зробити.
+          count: Кількість учасників, що будуть допущені до участі. Це число має лише
+            інформаційний характер і не зупиняє процес реєстрації на змагання. Ми
+            працюємо над покращенням процедури реєстрації.
+          reason: Обгрунтування ліміту учасників. Будь ласка, заповніть це поле англійською!
+        staff:
+          staff_delegate_ids: Делегати WCA на змаганнях.
+          trainee_delegate_ids:
+          organizer_ids: Організатори змагань (вони повинні мати аккаунти на сайті
+            WCA).
+          contact_html: 'Додаткова контактна інформація. Якщо не заповнювати це поле,
+            користувачі будуть бачити електронні адреси організаторів. %{md}. Наприклад:
+            [Олег Ляшко](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Веб-сторінка змагання. Це має бути працююче http(s) посилання.
+          external_registration_page: Сторінка, на якій учасники будуть реєструватись.
+            Це має бути працююче http(s) посилання.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Валютний код для внесків.
+          base_entry_fee: Базовий реєстраційний внесок. Буде відображатись на основній
+            сторінці змагань та на сторінці реєстрації. Якщо вказати "0", то учасники
+            будуть бачити, що змагання безкоштовні.
+          on_the_spot_entry_fee: Якщо вказати "0", то учасник буде бачити повідомлення,
+            що реєстрація на місці буде безкоштовною.
+          guest_entry_fee: На даний момент це число носить інформаційний характер;
+            гостьові внески не сплачуються через сайт WCA. Якщо вказати 0, то учасники
+            будуть бачити повідомлення, що вхід для гостей безкоштовний.
+          donations_enabled: ''
+          refund_policy_percent: Це число носить лише інформаційний характер. Якщо
+            встановити "0", то учасник буде бачити повідомлення, що реєстраційні внески
+            не будуть повертатись ні за яких обставин.
+          refund_policy_limit_date: Термін, після якого повернути внесок буде неможливо.
+        registration:
+          opening_date_time: 'Примітка: Реєстрація відкриється і закриється за часом
+            UTC.'
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Напишіть тут ті додаткові реєстраційні вимоги, які не
+            описані вище. Наприклад, як учасник має сплатити реєстраційний внесок.<br/>Будь
+            ласка, заповніть це поле як <strong>українською</strong>, так і <strong>англійською</strong>.
+            Ця інформація буде відображена на основній сторінці змагання, а також
+            на сторінці реєстрації, якщо Ви обрали сайт WCA для реєстрації.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Будь ласка, опишіть тут, чому Ви просите учасників принести головоломки
+              заздалегідь. Будь ласка, заповніть це англійською!
+          qualification_results:
+            enabled: ''
+            reason: Будь ласка, опишіть тут, чому Ви бажаєте використовувати кваліфікаційний
+              час. Будь ласка, заповніть це англійською!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Будь ласка, опишіть тут, чому Ви б хотіли обмежити участь у комбінації
+              деяких дисциплін. Будь ласка, заповніть це англійською!
+            per_registration_limit:
+          main_event_id: Переможець цієї дисципліни буде оголошений переможцем змагання.
+        remarks: Додаткова інформація, яку потрібно повідомити WCAT. Наприклад, якщо
+          є щось, стосовно чого ви не впевнені, або якщо є окреме прохання до WCAT.
+          Будь ласка, заповніть це англійською!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -7,7 +7,7 @@ export default function NameDetails() {
 
   return (
     <>
-      {isPersisted && <InputString id="id" />}
+      {isPersisted && <InputString id="competitionId" />}
       <InputString id="name" />
       {isPersisted && <InputString id="shortName" />}
       <InputString id="nameReason" mdHint />

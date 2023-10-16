@@ -3174,6 +3174,212 @@ sv:
         ajax_error: >-
           Ett fel uppstod vid uppskattningen av WCA-avgiften, eventuellt för att
           det inte finns några tillgängliga växelkurser för den valda valutan.
+      labels:
+        admin:
+          is_confirmed: Låt inte arrangörer redigera den här tävlingen
+          is_visible: Gör tävlingen synlig för allmänheten
+        competition_id: ID
+        name: Namn
+        short_name: Förkortat namn för tävlingen
+        name_reason: Anledningen till namnet
+        venue:
+          country_id: Region
+          city_name: Stadens namn
+          name: Lokal
+          details: Lokaldetaljer
+          address: Lokalens adress
+          coordinates:
+        start_date: Startdatum
+        end_date: Slutdatum
+        information: Information
+        competitor_limit:
+          enabled: Gräns för antalet tävlande
+          count: Maximalt antal tävlande
+          reason: Anledningen till gränsen för antalet tävlande
+        staff:
+          staff_delegate_ids: WCA-delegat(er)
+          trainee_delegate_ids: WCA-trainee-delegat(er)
+          organizer_ids: Arrangör(er)
+          contact: Kontakt
+        championships:
+        website:
+          generate_website: Jag vill använda WCA:s hemsida istället för en extern
+            för ytterligare information.
+          external_website: Hemsida
+          external_registration_page: Anmälningssida
+          uses_wca_registration: Jag vill använda WCA:s hemsida för anmälan
+          uses_wca_live: Jag kommer använda WCA Live för resultat
+        user_settings:
+          receive_registration_emails: Meddela mig via e-post när någon anmäler sig
+            till den här tävlingen
+        entry_fees:
+          currency_code: Valutakod
+          base_entry_fee: Basanmälningsavgift
+          on_the_spot_entry_fee: Basanmälningsavgift för anmälan på plats
+          guest_entry_fee: Inträdesavgift för gäster
+          donations_enabled: Jag vill möjliggöra donationer utöver anmälningsavgifterna
+          refund_policy_percent: Procent som återbetalas
+          refund_policy_limit_date: Sista datum för återbetalningar
+        registration:
+          opening_date_time: Anmälan öppnar
+          closing_date_time: Anmälan stänger
+          waiting_list_deadline_date: Deadline för att acceptera tävlande från väntelistan
+          event_change_deadline_date: Deadline för tävlande att uppdatera vilka grenar
+            de är anmälda till
+          allow_on_the_spot: Anmälan på plats
+          allow_self_delete_after_acceptance: Avanmälningar
+          allow_self_edits: Ändringar i anmälan
+          guests_enabled: Gäster
+          guest_entry_status: Meddelande som ska visas angående gäster
+          guests_per_registration: Maximalt antal gäster per anmälan
+          extra_requirements: Extra anmälningskrav
+          force_comment: Kräv att tävlande lämnar en kommentar vid anmälan
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Jag vill kräva att tävlande lämnar in pussel vid en viss tidpunkt
+              innan grenen planeras att börja
+            reason: Anledning och detaljer kring att lämna in pussel tidigt
+          qualification_results:
+            enabled: Jag vill använda kvalgränser för att begränsa vilka som kan tävla
+              i vissa grenar
+            reason: Anledning och detaljer för kvalificeringsresultat
+            allow_registration_without: Grenar med kvalgränser
+          event_limitation:
+            enabled: Jag vill begränsa tävlande från att anmäla sig till specifika
+              kombinationer av grenar
+            reason: Orsak och detaljer för grenbegränsningar
+            per_registration_limit: Events per registration limit
+          main_event_id: Huvudgren
+        remarks: Kommentarer
+        clone_tabs: Jag vill också klona alla flikar med ytterligare information
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Tävlingens fullständiga namn inklusive året i slutet (t.ex. Danish Open
+          2016). Var noga med att använda stora bokstäver. Namnet får endast innehålla
+          alfanumeriska tecken, bindestreck(-), och-tecken(&), punkt(.), Kolon(:),
+          apostrofer('), och mellanslag().
+        short_name: Ett kort namn för visning. Om namnet på tävlingen är under %{short_name_limit}
+          tecken bör detta inte ändras, utan bör vara samma som det vanliga namnet.
+        name_reason_html: En kort förklaring av tävlingsnamnet. Namnet måste överensstämma
+          med <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          Competition Requirements Policy</a>.
+        venue:
+          country_id: ''
+          city_name: Namn på stad och stat (om tillämpligt) där tävlingen äger rum.
+            Inkludera inte land (t.ex. Paris ELLER San Francisco, California).
+          name_html: 'Lokalen där tävlingen äger rum. %{md}. Till exempel: [Cité des
+            Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Detaljer om lokalen (t.ex. första våningen längst in, följ
+            skyltarna). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Viktig information som tävlande bör veta. Det kommer att visas
+          på tävlingens huvudsida. <br/>Fyll i det här <b>på engelska</b>< och eventuella
+          andra språk dina tävlande talar.>
+        competitor_limit:
+          enabled: Även om det inte reglerna kräver att en gräns för antalet tävlande
+            sätts, är det starkt rekommenderat att göra det.
+          count: Antalet tävlande som tillåts i denna tävling. För närvarande är detta
+            nummer endast informativt och hindrar ännu inte fler från att anmäla sig.
+            Vi arbetar med att lägga till uttryckligt stöd för detta i anmälningsflödet,
+            men det kräver lite annat arbete först.
+          reason: Vad är anledningen till begränsningen av antalet tävlande? Vänligen
+            fyll i detta på engelska!
+        staff:
+          staff_delegate_ids: WCA-delegater för tävlingen.
+          trainee_delegate_ids: WCA-trainee-delegater för tävlingen.
+          organizer_ids: Tävlingsarrangörer (de behöver ett konto för att listas här).
+          contact_html: 'Frivillig kontaktinformation. Om du inte fyller i detta kommer
+            kontaktförfrågningar att skickas via ett formulär utan att arrangörernas
+            e-postadresser avslöjas. %{md}. Exempel: [Text som ska visas](mailto:någon@mejladress.com)'
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: Tävlingens webbplats. Måste vara en giltig http(s)-url.
+          external_registration_page: Sidan där de tävlande anmäler sig till tävlingen.
+            Måste vara en giltig http(s)-url.
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Valutakod för avgifter.
+          base_entry_fee: 'Basanmälningsavgiften för tävlingen. Den kommer att visas
+            på tävlingens informationssida och anmälningssidan om den används. Om
+            detta sätts till 0 visas en text som säger att anmälan är gratis. <br><br><b>DISCLAIMER:
+            Följande uppskattning av WCA-avgiften är endast en uppskattning baserad
+            på aktuella valutakurser och är inte på något sätt juridiskt bindande
+            för betalningen av avgiften.</b><br>Klicka på "Uppdatera tävling" efter
+            att ha ändrat valutakoden för att synkronisera den med uppskattningen.
+            Om det inte finns några tillgängliga växelkurser för den valda valutan
+            visas ingenting.'
+          on_the_spot_entry_fee: Om detta sätts till 0 visas en text som säger att
+            anmälningar på plats accepteras gratis.
+          guest_entry_fee: För närvarande är detta nummer endast informativt, gästavgifter
+            kan inte hanteras via denna hemsida. Om detta är satt till 0 visas en
+            text som du väljer om policyn för åskådare.
+          donations_enabled: ''
+          refund_policy_percent: För närvarande är detta nummer endast informativt,
+            återbetalningar måste utfärdas manuellt. Om detta sätts till 0 visas en
+            text som säger att anmälningsavgifter inte kommer att återbetalas under
+            några omständigheter.
+          refund_policy_limit_date: Datum efter vilket inga fler återbetalningar kommer
+            att utfärdas.
+        registration:
+          opening_date_time: Obs! Anmälans öppnings- och stängningstider är i UTC-tid
+          closing_date_time: ''
+          waiting_list_deadline_date: Datumet då personer på väntelistan inte längre
+            kommer accepteras. Om ni har en deadline för återbetalning bör deadlinen
+            för att accepteras inte vara före deadlinen för återbetalningen.
+          event_change_deadline_date: Anmälda tävlande har rätt att uppdatera vilka
+            grenar de är anmälda i fram till denna tid genom att kontakta arrangörsteamet.
+            Denna deadline får inte sättas till en tid innan anmälan stänger. Att
+            lämna fältet tomt innebär att tävlande kan lägga till grenar till sin
+            anmälan fram tills den grenen hålls. Om ni tillåter anmälningar på plats
+            måste detta sättas till samma dag som tävlingen.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: Antalet gäster per anmälan som är tillåtet vid
+            denna tävling. Anmälningar med för många gäster kommer att blockeras.
+            Lämna tomt om det inte finns någon gräns.
+          extra_requirements: Ange här eventuella extra anmälningskrav som inte nämns
+            ovan, som till exempel anvisningar om hur man betalar. <br/>Fyll i det
+            här <b>på engelska</b> och eventuella andra språk dina tävlande talar;
+            detta kommer att visas på tävlingens informationssida och på anmälningssidan
+            om du använder WCA:s hemsida för anmälan.
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Förklara här varför ni vill kräva att tävlande lämnar in pussel
+              tidigt. Vänligen fyll i detta på engelska!
+          qualification_results:
+            enabled: ''
+            reason: Förklara här varför ni vill använda kvalificeringstider. Vänligen
+              fyll i detta på engelska!
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: Förklara här varför ni vill begränsa vissa kombinationer av grenar.
+              Vänligen fyll i detta på engelska!
+            per_registration_limit: Om du vill kan du begränsa det totala antalet
+              grenar som en tävlande kan anmäla sig till (används ofta för "Favorites"-tävlingar).
+              Du bör lägga till grenar innan du använder det här fältet. Anmälningar
+              med för många grenar blockeras. Lämna tomt om det inte finns någon gräns.
+          main_event_id: Vinnaren av denna gren kommer att vara vinnaren av tävlingen.
+        remarks: Ytterligare information du vill skicka med till WCAT. Till exempel
+          om det finns något du är osäker på, eller om det finns några speciella önskemål
+          till WCAT. Vänligen fyll i detta på engelska!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

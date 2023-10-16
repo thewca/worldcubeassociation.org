@@ -46,7 +46,7 @@ ca:
     XF: Països Múltiples (Àfrica)
     #original_hash: 374ac0d
     XM: Països Múltiples (Amèrica)
-    #original_hash: 3f8c9de 
+    #original_hash: 3f8c9de
     XA: Països Múltiples (Àsia)
     #original_hash: 090f3ce
     XE: Països Múltiples (Europa)
@@ -1456,7 +1456,7 @@ ca:
       #original_hash: 3f9db99
       unconfirmed: >-
         Has de confirmar la teva adreça de correu electrònic abans de continuar.
-        No has rebut cap correu? Ves a 
+        No has rebut cap correu? Ves a
         https://www.worldcubeassociation.org/users/confirmation/new per
         demanar-ne un de nou.
     mailer:
@@ -3020,6 +3020,215 @@ ca:
         ajax_error: >-
           Hi ha un error en el càlcul de les quotes, si us plau, restableix a
           zero i torna a introduir la quota de registre bàsica
+      labels:
+        admin:
+          is_confirmed: No deixis als organitzadors editar aquesta competició
+          is_visible: Fer la competició visible per al públic
+        competition_id: ID
+        name: Nom
+        short_name: Sobrenom de la competició
+        name_reason: La raó del nom
+        venue:
+          country_id: País
+          city_name: Nom de la ciutat
+          name: Local
+          details: Detalls del lloc
+          address: Adreça del lloc
+          coordinates:
+        start_date: Data d'inici
+        end_date: Data de finalització
+        information: Informació
+        competitor_limit:
+          enabled: Límit de competidors
+          count: Nombre màxim de competidors
+          reason: La raó del límit de competidors
+        staff:
+          staff_delegate_ids:
+          trainee_delegate_ids: Delegat(s) en pràctiques de la WCA
+          organizer_ids: Organitzador(s)
+          contact: Contacte
+        championships:
+        website:
+          generate_website: M'agradaria utilitzar la pàgina web de la WCA en lloc
+            d'una externa per informació addicional.
+          external_website: Pàgina web
+          external_registration_page: Pàgina del registre
+          uses_wca_registration: M'agradaria utilitzar la pàgina web de la WCA pel
+            registre
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Notifica'm per correu electrònic quan algú
+            es registri a aquesta competició
+        entry_fees:
+          currency_code: Codi de divisa
+          base_entry_fee: Quota bàsica de registre
+          on_the_spot_entry_fee: Quota d'inscripció bàsica al lloc
+          guest_entry_fee: Quota d'entrada pels espectadors
+          donations_enabled: Vull activar les donacions addicionalment a les quotes
+            d'inscripció
+          refund_policy_percent: Percentatge de reemborsament
+          refund_policy_limit_date: Data límit pels retorns
+        registration:
+          opening_date_time: Registre obert
+          closing_date_time: Registre tancat
+          waiting_list_deadline_date: Data límit per acceptar competidors de la llista
+            d'espera
+          event_change_deadline_date: Data límit pels competidors per actualitzar
+            les categories
+          allow_on_the_spot: Registres al lloc
+          allow_self_delete_after_acceptance: Cancel·lacions de registres
+          allow_self_edits: Edicions dels registres
+          guests_enabled: Espectadors
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Requisits extra de registre
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: M'agradaria sol·licitar als competidors que facin entrega dels
+              seus cubs en una hora específica abans que comenci la categoria
+            reason: Raó i detalls per l'entrega abans d'hora dels cubs
+          qualification_results:
+            enabled: M'agradaria utilitzar els resultats de qualificació per limitar
+              qui pot competir en certes categories
+            reason: Raó i detalls pels resultats de qualificació
+            allow_registration_without:
+          event_limitation:
+            enabled: M'agradaria limitar als competidors de registrar-se a una combinació
+              específica de categories
+            reason: Raó i detalls per les limitacions de categories
+            per_registration_limit:
+          main_event_id: Categoria principal
+        remarks: Observacions
+        clone_tabs: M'agradaria clonar totes les pàgines inclosa la informació addicional
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: 'El nom complet de la competició incloent l''any al final (exemple:
+          Danish Open 2016). Revisa les majúscules. El nom ha de contenir només caràcters
+          alfanumèrics, guions(-), ampersands(&), punts(.), dos punts(:), apòstrofs('')
+          i espais().'
+        short_name: 'Un nom curt per mostrar. Si el nom de la competició ja és curt,
+          pots reutilitzar el nom (exemple: Europe 2006).'
+        name_reason_html: Una breu explicació pel nom de la competició. El nom ha
+          de complir amb <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          Competition Requirements Policy</a>.
+        venue:
+          country_id: ''
+          city_name: 'Nom de la ciutat i estat (si és possible) on hi haurà la competició.
+            No incloguis el país (exemple: París o San Francisco, Califòrnia).'
+          name_html: 'El local on tindrà lloc la competició. %{md}. Per exemple: [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Detalls sobre el local (per exemple, Al fons de la primera
+            planta, segueix els signes). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informació important que els competidors haurien de saber. Sortirà
+          a la pàgina principal de la competició. <br/>Si us plau, emplena-ho <b>en
+          anglès</b> i qualsevol altre idioma que els competidors puguin parlar.
+        competitor_limit:
+          enabled: Tot i que no és requerit per les Regulacions d'establir un límit
+            de competidors, és altament recomanat.
+          count: El nombre de competidors permesos per aquesta competició. Per ara
+            aquest nombre només és informatiu i no impedeix que més gent es registri.
+            Estem treballant per afegir suport explícit per aquest procés d'inscripció,
+            però requereix més feina primer.
+          reason: Quina és la raó del límit de competidors? Si us plau, omple-ho en
+            anglès!
+        staff:
+          staff_delegate_ids:
+          trainee_delegate_ids: Delegats en pràctiques de la WCA per la competició.
+          organizer_ids: Organitzadors de la competició (han de tenir un compte per
+            sortir aquí).
+          contact_html: 'Dades de contacte opcional. Si no ho omples, el contacte
+            es farà a través d''un formulari sense revelar les adreces de correu electrònic
+            dels organitzadors. %{md}. Exemple: [Text to display](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Pàgina web de la competició. Ha de tenir un enllaç http(s)
+            vàlid.
+          external_registration_page: La pàgina on els competidors s'han de registrar
+            per la competició. Ha de ser un enllaç http(s) vàlid.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: El codi de moneda per les quotes.
+          base_entry_fee: 'La quota de registre bàsica per la competició. Es mostrarà
+            a la pàgina principal de la competició i a la pàgina de registre si s''utilitza.
+            Si s''estableix a 0, es mostrarà una frase dient que es pot atendre a
+            la competició gratuïtament. <br><br> <b>IMPORTANT: Les següents WCA Dues
+            són només una aproximació basada en el tipus de conversió de divisa actual
+            i de cap manera és legalment vinculant pel pagament d''aquestes. </b><br>
+            Prem "Actualitza Competició" després de canviar el codi de moneda per
+            sincronitzar l''estimació. Si no hi ha cap tipus de conversió disponible
+            per la moneda seleccionada, no es mostrarà res.'
+          on_the_spot_entry_fee: Si s'introdueix un 0 aquí, es mostrarà una frase
+            dient que els registres al lloc seran acceptats gratuïtament.
+          guest_entry_fee: Per ara aquest nombre és només informatiu, les quotes d'espectador
+            no poden ser administrades per aquesta pàgina web. Si s'introdueix un
+            0, es mostrarà una frase que escullis referent a la política pels espectadors.
+          donations_enabled: ''
+          refund_policy_percent: Per ara aquest nombre es només informatiu, els retorns
+            s'han de fer manualment. Si s'introdueix 0, es mostrarà una frase dient
+            que les quotes de registre mai seran retornades sota cap circumstància.
+          refund_policy_limit_date: Data límit a partir de la qual no es retornarà
+            cap més quota.
+        registration:
+          opening_date_time: 'Important: L''obertura i clausura del registre està
+            en horari UTC'
+          closing_date_time: ''
+          waiting_list_deadline_date: La data a partir de la qual no s'acceptaran
+            més persones de la llista d'espera. Si tens una data límit pels retorns
+            de quota, la data per ser acceptat no hauria de ser abans de la data límit
+            pels retorns.
+          event_change_deadline_date: Els competidors registrats tenen el dret d'actualitzar
+            les seves categories fins aquesta data contactant l'equip organitzador.
+            Aquesta data límit no hauria de ser posada abans del moment que s'ha de
+            tancar els registres. Deixar aquest espai en blanc vol dir que els competidors
+            poden afegir una categoria més per competir fins al mateix moment de la
+            competició. Si acceptes registres al lloc, aquesta data ha de ser la mateixa
+            que l'inici de la competició.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Si us plau, indica aquí qualsevol requisit extra pel
+            registre que encara no s'hagi indicat, com per exemple instruccions de
+            com pagar. <br/>Si us plau, omple-ho <b>en anglès</b> i qualsevol altre
+            idioma que els competidors puguin parlar; es mostrarà a la pàgina d'informació
+            sobre la competició així com la pàgina de registre a la competició si
+            és que s'utilitza la pàgina web de la WCA per fer-les.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Si us plau, explica perquè voldries requerir als competidors que
+              entriguin els cubs més aviat. Omple-ho en anglès!
+          qualification_results:
+            enabled: ''
+            reason: Si us plau, explica aquí perquè voldries utilitzar temps de qualificació.
+              Omple-ho en anglès!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Si us plau, explica aquí perquè voldries limitar una combinació
+              especifica de categories. Omple-ho en anglès!
+            per_registration_limit:
+          main_event_id: El guanyador d'aquesta categoria serà el guanyador de la
+            competició.
+        remarks: Alguna informació addicional que vulguis mencionar a WCAT. Per exemple,
+          si hi ha alguna cosa que no acabes de tenir clara o si tens una proposta
+          especial per WCAT. Si us plau, omple-ho en anglès!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3846,7 +4055,7 @@ ca:
     our_goals_content_html: >-
       <p>La World Cube Association vol brindar oportunitats per formar part de
       la comunitat i liderar a persones joves d'arreu del món a través
-      d'incrementar l'accessibilitat de les nostres competicions de 
+      d'incrementar l'accessibilitat de les nostres competicions de
       'trencaclosques giratoris'. Creiem que les experiències a les competicions
       i dins de la nostra comunitat creen oportunitats de creixement per la gent
       jove involucrada i que introduir esdeveniments de cubs a grups nous de

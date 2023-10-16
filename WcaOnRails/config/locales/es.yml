@@ -3263,6 +3263,216 @@ es:
         ajax_error: >-
           Hay un error con la estimación de la cuota WCA, probablemente porque
           no hay cambio de moneda disponible para la moneda seleccionada.
+      labels:
+        admin:
+          is_confirmed: No permitir modificar esta competición a organizadores
+          is_visible: Hacer esta competición públicamente visible
+        competition_id: ID
+        name: Nombre
+        short_name: Nombre breve
+        name_reason: Razón para el nombre
+        venue:
+          country_id: Región
+          city_name: Ciudad
+          name: Local
+          details: Detalles del local
+          address: Dirección del local
+          coordinates:
+        start_date: Fecha de comienzo
+        end_date: Fecha de finalización
+        information: Información
+        competitor_limit:
+          enabled: Límite de competidores
+          count: Número máximo de competidores
+          reason: El motivo para el límite de competidores
+        staff:
+          staff_delegate_ids: Delegado(s) de la WCA
+          trainee_delegate_ids: Delegado(s) en prácticas
+          organizer_ids: Organizador(es)
+          contact: Contacto
+        championships:
+        website:
+          generate_website: Usaré la web de la WCA en vez de una web externa
+          external_website: Sitio web
+          external_registration_page: Página de registro
+          uses_wca_registration: Usaré la web de la WCA para el registro
+          uses_wca_live: Usaré WCA Live para introducir tiempos
+        user_settings:
+          receive_registration_emails: Enviadme un correo electrónico cuando alguien
+            se registre
+        entry_fees:
+          currency_code: Moneda
+          base_entry_fee: Tarifa básica
+          on_the_spot_entry_fee: Cuota básica de registro in situ
+          guest_entry_fee: Precio de entrada de acompañantes
+          donations_enabled: Quiero habilitar donaciones además de cobrar el importe
+            del registro
+          refund_policy_percent: Porcentaje a reembolsar
+          refund_policy_limit_date: Fecha límite para reembolsos
+        registration:
+          opening_date_time: Apertura del registro
+          closing_date_time: Cierre del registro
+          waiting_list_deadline_date: Fecha límite para aceptar competidores de la
+            lista de espera
+          event_change_deadline_date: Fecha límite para permitir a los competidores
+            actualizar las categorías en las que participan
+          allow_on_the_spot: Registros in situ
+          allow_self_delete_after_acceptance: Cancelaciones de registro
+          allow_self_edits: Modificaciones de registro
+          guests_enabled: Acompañantes
+          guest_entry_status: Mostrar mensaje para acceso gratuito de invitados
+          guests_per_registration: Máximo número de invitados por inscripción
+          extra_requirements: Requisitos de registro adicionales
+          force_comment: Forzar a los competidores a introducir un comentario cuando
+            se inscriban.
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Me gustaría requerir que los competidores entreguen sus puzzles
+              a una hora dada antes de que comience la categoría
+            reason: Razón y detallas para entregar los puzzles con anterioridad
+          qualification_results:
+            enabled: Me gustaría usar los resultados de calificación para limitar
+              quien puede competir en determinadas categorías
+            reason: Razón y detalles para usar resultados de calificación
+            allow_registration_without: Categorías con Calificación
+          event_limitation:
+            enabled: Me gustaría restringir registrarse a los competidores en determinadas
+              combinaciones de categorías
+            reason: Razón y detalles para restricciones de categorías
+            per_registration_limit: Límite de categorías por registro
+          main_event_id: Categoría principal
+        remarks: Comentarios para la Junta Directiva
+        clone_tabs: Clonar también todas las pestañas con información adicional
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Nombre completo de la competición incluyendo el año al final (ejemplo,
+          "Danish Open 2017"). Utiliza mayúsculas donde corresponda. El nombre sólo
+          puede contener caracteres alfanuméricos, guiones (-), ampersands (&), puntos
+          (.), dos puntos (:), apóstrofos ('), y espacios ( ).
+        short_name: Un nombre corto para visualizar. Si el nombre de la competición
+          es menor de %{short_name_limit} caracteres, este campo no se debería editar
+          y debería ser igual que el nombre normal.
+        name_reason_html: Una breve descripción del nombre de la competición. El nombre
+          debe respetar la <a href='/documents/policies/external/Competition%20Requirements.pdf'>Política
+          de Requisitos de Competiciones de la WCA</a>
+        venue:
+          country_id: ''
+          city_name: 'Nombre de la ciudad y provincia donde tendrá lugar la competición.
+            No incluyas el país. (Ejemplos: "Madrid" o "Archena, Murcia".)'
+          name_html: 'El local donde se celebra la competición. %{md}. Por ejemplo:
+            [Parque de las Ciencias](http://www.parqueciencias.com/)'
+          details_html: Detalles sobre el local (por ejemplo, "primera planta" o "sigue
+            los carteles"). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Información importante que el competidor debería conocer. Se
+          mostrará en la página principal de la competición. <br/> Por favor rellena
+          esto <b>en Inglés</b> y demás idiomas adicionales que hablen tus competidores.
+        competitor_limit:
+          enabled: Aunque el reglamento no requiere especificar un límite de competidores,
+            es altamente recomendable hacerlo.
+          count: El número de competidores permitido en esta competición. Por el momento
+            este número es meramente informativo y todavía no impide que se registre
+            más gente. Estamos trabajando en añadir soporte explícito para este flujo
+            de registro, pero es necesario finalizar otras tareas previamente.
+          reason: "¿Cuál es el motivo para el límite de competidores? Por favor, ¡rellena
+            esto en inglés!"
+        staff:
+          staff_delegate_ids: Delegados de la WCA para la competición.
+          trainee_delegate_ids: Delegado en prácticas de la WCA para la competición.
+          organizer_ids: Organizadores de la competición. (Tienen que tener cuenta
+            para poder aparecer aquí.)
+          contact_html: 'Información de contacto opcional. Si no se rellena, las peticiones
+            de contacto serán enviadas mediante un formulario sin revelar los correos
+            de los organizadores. %{md}. Ejemplo: [Textp a mostrar](mailto:algun@correo.com).'
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: Sitio web de la competición. Tiene que ser una URL http(s)
+            válida.
+          external_registration_page: La página donde los competidores deben hacer
+            el registro para la competición. Debe ser una URL http o https válida.
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Moneda en que se especifican los pagos.
+          base_entry_fee: 'Precio del registro básico. Se mostrará en la página de
+            información de la competición y en la de registro si se utiliza. Si esto
+            se pone a 0, se mostrará una frase indicando que se aceptan registros
+            gratuitos. <br><br><b>DESCARGO DE RESPONSABILIDAD: Las siguientes estimaciones
+            de cuotas WCA son simplemente una estimación basada en las actuales tarifas
+            de cambios de moneda y de ningún modo son jurídicamente vinculantes para
+            el pago de las cuotas.</b>'
+          on_the_spot_entry_fee: Si esto se pone a 0, se mostrará una frase indicando
+            que se aceptan los registros in situ de forma gratuita.
+          guest_entry_fee: Por el momento esta cifra es solamente informativa, los
+            precios de entrada de espectadores no se pueden gestionar desde este sitio
+            web. Si se pone a 0, se mostrará una frase de su elección indicando la
+            política de espectadores elegida.
+          donations_enabled: ''
+          refund_policy_percent: Por ahora esta cifra es informativa, los reembolsos
+            deberán realizarse manualmente. Si esto se pone a 0, se mostrará una frase
+            indicando que las cuotas de registro no se reembolsarán bajo ninguna circunstancia.
+          refund_policy_limit_date: Fecha tras la cual no se efectuarán más reembolsos.
+        registration:
+          opening_date_time: 'Nota: la apertura y cierre se registra según la hora
+            UTC.'
+          closing_date_time: ''
+          waiting_list_deadline_date: Fecha a partir de la cual los competidores en
+            lista de espera dejarán de ser aceptados. Si tienes fecha límite par reembolsos,
+            la fecha límite para ser aceptado no debería ser anterior a la de reembolsos.
+          event_change_deadline_date: Los competidores registrados tienen el derecho
+            de actualizar las categorías a las que se han apuntado hasta esta fecha
+            poniéndose en contacto con el equipo organizador. Esta fecha límite no
+            debe ser anterior a la fecha de cierre del registro. Dejar este campo
+            en blanco quiere decir que los competidores pueden añadir categorías hasta
+            que empiecen esas categorías. Si tiene registro in situ ha de ponerse
+            la fecha en la que ocurra la competición.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: El número de invitados por inscripción permitidos
+            en esta competicióin. Inscripciones con demasiados invitados se bloquearán.
+            Dejar en blanco si no hay límite.
+          extra_requirements: Por favor indica aquí cualquier requisito adicional
+            no cubierto arriba, como por ejemplo indicaciones sobre cómo efectuar
+            el pago. <br/>Por favor rellénalo <b>en inglés</b> y cualquier lenguaje
+            adicional que hablen tus competidores; será mostrado en la página de registro
+            de la competición si estás usando el registro de la web de la WCA.
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Por favor explica aquí por que te gustaría requerir que los competidores
+              entreguen sus puzzles con anelación. Por favor rellena esto en inglés
+          qualification_results:
+            enabled: ''
+            reason: Por favor explica aquí por que te gustaría requerir usar tiempos
+              de calificación. Por favor rellena esto en inglés
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: Por favor explica aquí por que te gustaría restringir ciertas
+              combinaciones de categorías. Por favor rellena esto en inglés
+            per_registration_limit: Forzar de manera opcional el total de categorías
+              en las que un competidor puede inscribirse (comunmente usadas para competiciones
+              favoritas). Deberías añadir categorías antes de usar este campo. Inscripciones
+              con demasiadas categorías se bloquearán. Dejar en blanco si no hay límite.
+          main_event_id: El ganador de esta categoría será el ganador de la competición.
+        remarks: Alguna información adicional que quieras pasar al WCAT. Por ejemplo,
+          si hay algo de lo que no estés seguro o si hay alguna petición para el WCAT.
+          Por favor rellénalo en inglés.
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -2249,6 +2249,193 @@ vi:
         greater_china: Giải Vô địch Trung Quốc Đại Lục
         #original_hash: 3b920b7
         generic: 'Giải Vô địch: %{type}'
+      labels:
+        admin:
+          is_confirmed: Không để ban tổ chức điều chỉnh giải đấu
+          is_visible: Hiển thị giải đấu cho công chúng
+        competition_id: ID
+        name: Tên
+        short_name: Biệt danh trong giải đấu
+        name_reason: Lý do đặt tên
+        venue:
+          country_id: Quốc gia
+          city_name: Tên thành phố
+          name: Địa điểm
+          details: Chi tiết địa điểm
+          address: Địa chỉ
+          coordinates:
+        start_date: Ngày bắt đầu
+        end_date: Ngày kết thúc
+        information: Thông tin
+        competitor_limit:
+          enabled: Giới hạn số lượng thí sinh
+          count: Số lượng thí sinh tối đa
+          reason: Lý do giới hạn số lượng thí sinh
+        staff:
+          staff_delegate_ids: WCA Delegate
+          trainee_delegate_ids:
+          organizer_ids: Người tổ chức
+          contact: Liên lạc
+        championships:
+        website:
+          generate_website: Tôi muốn sử dụng trang web của WCA để hiển thị thông tin
+            thay cho trang web bên ngoài.
+          external_website: Trang chủ
+          external_registration_page: Trang đăng ký
+          uses_wca_registration: Tôi muốn sử dụng trang web của WCA cho việc đăng
+            ký
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Gửi email cho tôi khi có người đăng ký tham
+            gia giải đấu
+        entry_fees:
+          currency_code: Mã tiền tệ
+          base_entry_fee: Lệ phí đăng ký (cơ sở)
+          on_the_spot_entry_fee: Lệ phi đăng ký cơ sở tại giải đấu
+          guest_entry_fee: Lệ phí vào cửa cho khách mời
+          donations_enabled: Tôi muốn tiếp nhận quyên góp ngoài việc thu lệ phí thi
+          refund_policy_percent: Phần trăm được hoàn trả
+          refund_policy_limit_date: Hạn chót để hoàn trả
+        registration:
+          opening_date_time: Mở đăng ký
+          closing_date_time: Đóng đơn đăng ký
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: Đăng ký tại giải đấu
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: Khách mời
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Yêu cầu thêm khi đăng ký
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Tôi muốn yêu cầu thí sinh phải nộp khối hình một khoảng thời
+              gian trước khi bắt đầu một nội dung thi đấu
+            reason: Chi tiết lý do yêu cầu nộp khối hình sớm
+          qualification_results:
+            enabled: Tôi muốn sử dụng kết quả có sẵn để giới hạn số lượng thí sinh
+              có thể tham gia một nội dung
+            reason: Chi tiết lý do sử dụng kết quả có sẵn
+            allow_registration_without:
+          event_limitation:
+            enabled: Tôi muốn giới hạn thí sinh không được đăng ký một tổ hợp nội
+              dung
+            reason: Chi tiết lý do giới hạn nội dung đăng ký
+            per_registration_limit:
+          main_event_id:
+        remarks: Chú ý
+        clone_tabs: Tôi muốn sao chép tất cả các mục cùng thông tin đi kèm
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Tên đầy đủ của giải đấu bao gồm năm (v.d Hanoi Open 2018). Để ý tên
+          viết hoa. Tên giải đấu chỉ chứa ký tự chữ cái và số, dấu gạch ngang (-),
+          dấu và (&), dấu chấm (.), chấm phẩy (;), nháy đơn ('), và dấu cách ( ).
+        short_name: Tên ngắn để hiển thị. Nếu tên gốc của giải đấu đã ngắn, bạn có
+          thể sử dụng tên gốc (v.d. CSP Open 2018).
+        name_reason_html: Giải thích ngắn về ý nghĩa tên giải đấu. Tên giải đấu phải
+          tuân theo <a href='/documents/policies/external/Competition%20Requirements.pdf'>Chính
+          sách về Quy định Giải đấu của WCA</a>.
+        venue:
+          country_id: ''
+          city_name: Tên của thành phố và bang (nếu có thể) nơi giải đấu diễn ra.
+            Không bao gồm quốc gia (v.d. Hà Nội hoặc San Francisco, California).
+          name_html: 'Địa điểm nơi giải đấu diễn ra. %{md}. Ví dụ: [Cité des Sciences
+            et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Thông tin chi tiết về địa điểm (v.d. ở hội trường tầng đầu
+            tiên, đi theo biển chỉ dẫn). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Thông tin quan trọng mà thí sinh cần biết. Thông tin này sẽ được
+          hiển thị trên trang chính của giải đấu. <br/>Vui lòng điền phần này <b>bằng
+          tiếng Anh</b> và bất kỳ ngôn ngữ nào thí sinh của bạn sử dụng.
+        competitor_limit:
+          enabled: Mặc dù Quy định không yêu cầu, việc đặt giới hạn số lượng thí sinh
+            rất được khuyến khích.
+          count: Số lượng thí sinh được tham gia giải đấu. Hiện tại con số này chỉ
+            mang tính thông báo, và không cản trở các thí sinh đăng ký thêm. Chúng
+            tôi đang nỗ lực phát triển công cụ hỗ trợ quản lý đăng ký giải đấu, và
+            sẽ cập nhật tính năng sau này.
+          reason: Lý do có giới hạn số lượng thí sinh là gì? Vui lòng điền bằng tiếng
+            Anh!
+        staff:
+          staff_delegate_ids: WCA Delegate cho giải đấu.
+          trainee_delegate_ids:
+          organizer_ids: Ban tổ chức giải đấu (cần có tài khoản để được liệt kê ở
+            đây).
+          contact_html: 'Thông tin liên hệ không bắt buộc. Nếu bạn không điền phần
+            này, email của ban tổ chức sẽ được hiển thị công khai. %{md}. Ví dụ: [Text
+            to display](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Trang chủ của giải đấu. Bắt buộc phải là đường dẫn http(s)
+            hợp lệ.
+          external_registration_page: Trang web dành cho thí sinh để đăng ký tham
+            gia giải đấu. Bắt buộc phải điền một đường dẫn có hiệu lực.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Mã tiền tệ cho lệ phí.
+          base_entry_fee: Lệ phí cơ sở cho giải đấu. Thông tin này sẽ được hiển thị
+            trên trang thông tin của giải đấu và trang đăng ký nếu được sử dụng. Nếu
+            được đặt là 0, thí sinh sẽ nhận được thông báo đơn đăng ký tham gia giải
+            đấu là hoàn toàn miễn phí.
+          on_the_spot_entry_fee: Nếu được đặt bằng 0, một thông báo sẽ được hiển thị
+            với nội dung các đơn đăng ký tại giải đấu sẽ được chấp nhận miễn phí.
+          guest_entry_fee: Hiện tại con số này chỉ mang tính thông báo, lệ phí cho
+            khách mời không thể được quản lý qua trang này. Nếu được đặt bằng 0, một
+            thông báo sẽ được hiển thị rằng khách mời có thể vào cửa miễn phí.
+          donations_enabled: ''
+          refund_policy_percent: Hiện tại con số này chỉ mang tính thông báo, phần
+            hoàn tiền sẽ được xử lý theo từng trường hợp. Nếu được đặt bằng 0, một
+            thông báo sẽ được hiển thị rằng lệ phí đăng ký sẽ không được hoàn trả
+            trong bất kỳ trường hợp nào.
+          refund_policy_limit_date: Hạn chót để hoàn trả bất kỳ lệ phí nào.
+        registration:
+          opening_date_time: 'Ghi chú: Thời gian mở và đóng đơn đăng ký theo múi giờ
+            UTC.'
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: Vui lòng ghi rõ bất kỳ tiêu chí đăng ký nào chưa được
+            liệt kê, ví dụ hướng dẫn nộp lệ phí đăng ký. <br/>Vui lòng điền mục này
+            <b>bằng tiếng Anh</b> và bất kỳ ngôn ngữ nào thí sinh sử dụng; thông tin
+            này sẽ được hiển thị trên trang thông tin của giải đấu, và trang đăng
+            ký của WCA nếu được sử dụng.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Vui lòng nói rõ vì sao bạn muốn yêu cầu thí sinh nộp khối hình
+              sớm. Vui lòng viết bằng tiếng Anh!
+          qualification_results:
+            enabled: ''
+            reason: Vui lòng giải thích vì sao bạn muốn đặt giới hạn thời gian. Vui
+              lòng viết bằng tiếng Anh!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Vui lòng giải thích vì sao bạn muốn giới hạn một số tổ hợp nội
+              dung. Vui lòng viết bằng tiếng Anh!
+            per_registration_limit:
+          main_event_id:
+        remarks:
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

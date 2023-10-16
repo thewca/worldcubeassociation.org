@@ -45,7 +45,7 @@ function getFieldHint(id, section = [], isMarkdown = false) {
     });
   }
 
-  return I18n.t(`competition.competition_form.hints.${yamlId}`);
+  return I18n.t(`competitions.competition_form.hints.${yamlId}`);
 }
 
 function FieldWrapper({

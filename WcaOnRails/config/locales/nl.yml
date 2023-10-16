@@ -2894,6 +2894,201 @@ nl:
         greater_china: Greater China Kampioenschap
         #original_hash: 3b920b7
         generic: 'Kampioenschap: %{type}'
+      labels:
+        admin:
+          is_confirmed: Laat de organisatoren niet deze wedstrijd bewerken
+          is_visible: Maak deze wedstrijd zichtbaar voor publiek
+        competition_id: id
+        name: Naam
+        short_name: Verkorte naam van wedstrijd
+        name_reason: De reden voor de naam
+        venue:
+          country_id: Land
+          city_name: Stad
+          name: Wedstrijdlocatie
+          details: Details van wedstrijdlocatie
+          address: Adres van wedstrijdlocatie
+          coordinates:
+        start_date: Startdatum
+        end_date: Einddatum
+        information: Informatie
+        competitor_limit:
+          enabled: Maximumaantal deelnemers
+          count: Maximumaantal deelnemers
+          reason: De reden voor het maximumaantal deelnemers
+        staff:
+          staff_delegate_ids: WCA-delegate(s)
+          trainee_delegate_ids: WCA Trainee Delegate(s)
+          organizer_ids: Organisator(en)
+          contact: Contact
+        championships:
+        website:
+          generate_website: Ik wil de WCA-website gebruiken in plaats van een externe
+            website.
+          external_website: Website
+          external_registration_page: Aanmeldingspagina
+          uses_wca_registration: Ik wil de WCA-website gebruiken voor aanmeldingen
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Stuur me een mail als iemand zich aanmeldt
+        entry_fees:
+          currency_code: Valutacode
+          base_entry_fee: Basisbedrag voor aanmelding
+          on_the_spot_entry_fee: Deelnamekosten bij nieuwe aanmelding op locatie
+          guest_entry_fee: Bezoekerskosten
+          donations_enabled: Ik wil naast de deelnamekosten ook de mogelijkheid bieden
+            om donaties te doen
+          refund_policy_percent: Teruggave percentage
+          refund_policy_limit_date: Uiterste datum voor teruggave
+        registration:
+          opening_date_time: Aanmelding geopend
+          closing_date_time: Aanmelding gesloten
+          waiting_list_deadline_date: Uiterste datum om deelnemers van de wachtlijst
+            te accepteren voor de wedstrijd
+          event_change_deadline_date: Uiterste datum voor deelnemers om hun wedstrijdonderdelen
+            aan te passen
+          allow_on_the_spot: Ik wil aanmeldingen bij binnenkomst op locatie accepteren.
+          allow_self_delete_after_acceptance:
+          allow_self_edits: Aanpassingen in aanmeldingen
+          guests_enabled: Gasten
+          guest_entry_status: Toon bericht over gratis toegang voor gasten
+          guests_per_registration:
+          extra_requirements: Extra aanmeldingseisen
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Ik wil van deelnemers eisen dat ze hun puzzels op een specifiek
+              tijdstip voor het wedstrijdonderdeel inleveren
+            reason: Reden en detals voor het vroegtijdig inleveren van puzzels
+          qualification_results:
+            enabled: Ik wil graag kwalificatieresultaten gebruiken om te beperken
+              wie kan deelnemen aan bepaalde wedstrijdonderdelen
+            reason: Reden en details voor kwalificatieresultaten
+            allow_registration_without:
+          event_limitation:
+            enabled: Ik wil deelnemers beperken in het registreren voor specifieke
+              combinaties van wedstrijdonderdelen
+            reason: Reden en details voor beperkingen in wedstrijdonderdelen
+            per_registration_limit:
+          main_event_id: Main Event
+        remarks: Opmerkingen
+        clone_tabs: Ik wil de tabbladen met aanvullende informatie klonen
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: De volledige wedstrijdnaam afgesloten met jaartal (bijv. Danish Open
+          2016). Gebruik hoofdletters. De naam mag alleen letters, cijfers en spaties
+          bevatten, en verder -&.:'.
+        short_name: Een verkorte naam. Als de wedstrijdnaam al kort is kun je die
+          gebruiken (bijv. Euro 2006).
+        name_reason_html: Een korte uitleg van de wedstrijdnaam. De naam moet voldoen
+          aan de <a href='/documents/policies/external/Competition%20Name20Requirements.pdf'>WCA
+          Competition Requirements Policy</a>.
+        venue:
+          country_id: ''
+          city_name: Naam van de stad, zonder provincie of land. (voor sommige landen
+            laten we de staat zien)
+          name_html: 'De locatie waar de wedstrijd plaatsvindt. %{md}. Bijvoorbeeld:
+            [Cité des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Details van de wedstrijdlocatie (bijv. Op de eerste etage
+            achterin, volg de borden). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informatie over maximumaantal deelnemers, de aanmeldkosten voor
+          deelnemers en toeschouwers, en andere details die relevant zijn voor mensen
+          die zijn geïnteresseerd om deel te nemen of te komen kijken.
+        competitor_limit:
+          enabled: Hoewel het niet vereist is in het wedstrijdreglement om een deelnemerslimiet
+            op te geven, wordt dit wel sterk aanbevolen.
+          count: Het aantal deelnemers dat wordt geaccepteerd voor deze wedstrijd.
+            Voorlopig is dit aantal alleen ter informatie, en voorkomt het niet dat
+            meer mensen zich aanmelden. We werken aan expliciete ondersteuning voor
+            het registratieproces, maar dit vraagt nog wat werk.
+          reason: Wat is de reden voor het maximumaantal deelnemers? Graag in het
+            Engels!
+        staff:
+          staff_delegate_ids: WCA-delegates van de wedstrijd.
+          trainee_delegate_ids: WCA Trainee Delegates voor deze wedstrijd
+          organizer_ids: Organisatoren (ze hebben een account nodig om op de lijst
+            zichtbaar te worden).
+          contact_html: 'Optionele contactinformatie. Als je deze niet invult, worden
+            contactverzoeken via een formulier ingestuurd, zonder dat de e-mailadressen
+            van de organisatoren worden getoond. %{md}. Voorbeeld: [Tekst](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Link naar de website van de wedstrijd, inclusief http(s).
+          external_registration_page: De pagina waar deelnemers zich moeten aanmelden
+            voor de wedstrijd. Moet een valide http-link zijn.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Valutacode van de deelnamekosten.
+          base_entry_fee: Het basisbedrag voor aanmelding voor de wedstrijd. Het bedrag
+            wordt getoond op de wedstrijdinformatiepagina en aanmeldingspagina. Als
+            het bedrag 0 is, wordt een tekst getoond dat aanmelding gratis is.
+          on_the_spot_entry_fee: Als dit bedrag 0 is, dan wordt een zin getoond dat
+            aanmelding bij binnenkomst gratis is.
+          guest_entry_fee: Dit getal is vooralsnog ter informatie, de toegangsprijs
+            voor gasten kun je niet via deze website regelen. Als het bedrag 0 is,
+            dan wordt een zin naar keuze getoond over het beleid rond gasten.
+          donations_enabled: ''
+          refund_policy_percent: Dit getal is slechts ter informatie, teruggaves moeten
+            handmatig worden uitgevoerd. Als het bedrag 0 is, dan wordt een zin dat
+            aanmeldkosten onder geen enkele omstandigheid worden teruggegeven.
+          refund_policy_limit_date: Datum waarna aanmeldkosten niet meer teruggegeven
+            worden.
+        registration:
+          opening_date_time: 'Let op: de tijden van de aanmelding zijn in UTC tijdzone'
+          closing_date_time: ''
+          waiting_list_deadline_date: De datum waarop aangemelde personen op de wachtlijst
+            niet meer worden geaccepteerd. Als je een deadline hebt voor refunds,
+            moet de datum voor wachtlijst niet voor de deadline voor refunds liggen.
+          event_change_deadline_date: Geregistreerde deelnemers hebben het recht om
+            hun geregistreerde wedstrijdonderdelen aan te passen tot dit moment, door
+            contact op te nemen met het organisatieteam. De deal moet niet zijn voor
+            de registratie is gesloten. Als het veld leeg is mogen deelnemers wedstrijdonderdelen
+            toevoegen tot de dag van de wedstrijd. Als registratie op de dag van de
+            wedstrijd mogelijk is, moet dit dezelfde dag zijn als de wedstrijd.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements: Geef hier alle extra aanmeldingseisen aan die niet boven
+            zijn genoemd, zoals aanwijzingen over hoe te betalen.</br>Geef de tekst
+            <b>in Engels</b> en andere talen die de deelnemers spreken; de tekst wordt
+            getoond op de informatiepagina van de wedstrijd, en op de aanmeldpagina
+            als je de aanmelding via de WCA-website doet.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Leg uit waarom je deelnemers hun puzzels vroegtijdig wilt laten
+              inleveren. In het Engels!
+          qualification_results:
+            enabled: ''
+            reason: Leg uit waarom je kwalificatietijden wil gebruiken. Invullen in
+              Engels!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Leg uit waarom je bepaalde combinaties van wedstrijdonderdelen
+              wilt uitsluiten. Invullen in Engels!
+            per_registration_limit:
+          main_event_id: De winnaar van dit wedstrijdonderdeel zal de winnaar zijn
+            de wedstrijd
+        remarks: Enkele aanvullende informatie die je wilt doorgeven aan de WCAT.
+          Als er bijvoorbeeld iets is waarover je niet zeker bent, of als er speciale
+          verzoeken zijn voor de WCAT. Vul dit alstublieft in het Engels in!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

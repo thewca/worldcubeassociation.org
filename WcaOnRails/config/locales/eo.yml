@@ -3160,6 +3160,208 @@ eo:
         ajax_error: >-
           Estas eraro kun la takso de Kotizoj, eble ĉar ne ekzistas disponeblaj
           kurzoj por la elektita valuto.
+      labels:
+        admin:
+          is_confirmed: Malpermesi redakton de tiu konkurso al organizantoj
+          is_visible: Videbliĝu tiu konkurso publike
+        competition_id: ID
+        name: Nomo
+        short_name: Kromnomo de la konkurso
+        name_reason: Kialo de la nomo
+        venue:
+          country_id: Lando
+          city_name: Urbonomo
+          name: Konkursejo
+          details: Detaloj pri la konkursejo
+          address: Konkurseja adreso
+          coordinates:
+        start_date: Komencdato
+        end_date: Findato
+        information: Informo
+        competitor_limit:
+          enabled: Limo de konkursantoj
+          count: Plej alta kvanto da konkursantoj
+          reason: Kialo por tiu limo de konkursantoj
+        staff:
+          staff_delegate_ids: WCA-Delegito(j)
+          trainee_delegate_ids: Trejnanta(j) WCA-Delegito(j)
+          organizer_ids: Organizanto(j)
+          contact: Kontakto
+        championships:
+        website:
+          generate_website: Mi ŝatus uzi la retejon de la WCA anstataŭ ekstera retejo
+            por ceteraj informadoj.
+          external_website: Retejo
+          external_registration_page: Paĝo por la registriĝoj
+          uses_wca_registration: Mi ŝatus uzi la retejon de la WCA por la registriĝoj
+          uses_wca_live: Mi uzos WCA Live por eniri rezultojn
+        user_settings:
+          receive_registration_emails: Sciigu min per retmesaĝo kiam iu registriĝas
+            por tiu konkurso
+        entry_fees:
+          currency_code: Valuta kodo
+          base_entry_fee: Baza registriĝkosto
+          on_the_spot_entry_fee: Baza surloka registriĝkosto
+          guest_entry_fee: Enira kosto por akompanantoj
+          donations_enabled: Mi volas ebligi donacojn, aldone al la baza registriĝkosto
+          refund_policy_percent: Repagota procento
+          refund_policy_limit_date: Limdato por repagoj
+        registration:
+          opening_date_time: Malfermo de registriĝperiodo
+          closing_date_time: Fermo de registriĝperiodo
+          waiting_list_deadline_date: Limdato por akcepti konkursantojn de la atendolisto.
+          event_change_deadline_date: Limdato por ĝisdatigo de la konkurseroj de konkursantoj
+          allow_on_the_spot: Surlokaj registriĝoj
+          allow_self_delete_after_acceptance: Nuligo de registriĝoj
+          allow_self_edits: Redaktoj de registriĝoj
+          guests_enabled: Akompanantoj
+          guest_entry_status: Videbla mesaĝo rilate al senpaga eniro de akompanantoj
+          guests_per_registration: Maksimuma nombro da gastoj per registriĝo
+          extra_requirements: Aldonaj registriĝaj postuloj
+          force_comment: Devigi al konkursantoj skribi komenton dum registrado
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Mi ŝatus devigi konkursantojn submetiĝi puzloj je specifa tempo
+              antaŭ la komenco de la konkursero
+            reason: Kialo kaj detaloj por la antaŭtempa submetiĝo de puzloj
+          qualification_results:
+            enabled: Mi ŝatus uzi kvalifikajn rezultojn por limigi kiu povas konkursi
+              en specifaj konkurseroj
+            reason: Kialo kaj detaloj por la kvalifikaj rezultoj
+            allow_registration_without: Konkurseroj kun Kvalifiko
+          event_limitation:
+            enabled: Mi ŝatus limigi registriĝon de specifa kombinado da konkurseroj
+            reason: Kialo kaj detaloj pri limigoj de konkursero
+            per_registration_limit: Limo de konkurseroj por registriĝo
+          main_event_id: Ĉefa konkursero
+        remarks: Rimarkoj
+        clone_tabs: Mi ankaŭ ŝatus kloni ĉiujn langetojn kun ceteraj informadoj
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: La tuta nomo de la konkurso kun la jaro en la fino (t.e., Danish Open
+          2016). Kapitaligu. La nomo devas enhavi nur alfanumerajn signojn, streketojn
+          (-), kaj-signojn (&), punktojn (.), dupunktojn (:), apostrofojn ('), kaj
+          spacetojn ( ).
+        short_name: Mallonga nomo por elmontri. Se la nomo jam estas mallonga, vi
+          povas reuzi la nomon (ekz, Eŭropo 2006).
+        name_reason_html: Mallonga klarigo de la nomo de la konkurso. La nomo devas
+          konformiĝi al la <a href='/documents/policies/external/Competition%20Requirements.pdf'>Politiko
+          pri Postuloj de Konkursoj de la WCA</a>.
+        venue:
+          country_id: ''
+          city_name: Urbonomo kaj ŝtatnomo (se aplikebla) kie la konkurso okazas.
+            Ne inkluzivigu la landon (ekz., Paris AŬ San Francisco, California).
+          name_html: 'La konkursejo kie okazas la konkurso. %{md}. Ekzemple: [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Detaloj pri la konkursejo (ekz., Je la unua etaĝo, funde,
+            sekvu la ŝildojn). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Gravaj informoj kiujn la konkursantoj devus scii. Ĝi aperos en
+          la ĉefpaĝo de la konkurso. <br/>Bonvolu plenigi tion <b>en la angla</b>
+          kaj en ĉiuj lingvoj parolataj de viaj konkursantoj.
+        competitor_limit:
+          enabled: Kvankam la Regularo ne devigas vin difini limon de konkursantoj,
+            estas ege rekomendata fari tion.
+          count: Kiomo da konkursantoj kiuj povas partopreni en tiu konkurso. Nun,
+            tiu nombro estas nur sciiga, kaj ĝi ne malpermesas registriĝon de pliaj
+            homoj. Ni laboras pri aldono de tio en la registriĝa procedo, sed ĝi postulas
+            antaŭan laboron.
+          reason: Kial estas limo de konkursantoj? Bonvolu plenigi tion en la angla!
+        staff:
+          staff_delegate_ids: WCA-Delegitoj de la konkurso.
+          trainee_delegate_ids: Trejnanta(j) WCA-Delegito(j) de la konkurso.
+          organizer_ids: Organizantoj de la konkurso (ili bezonas konton por esti
+            listigitaj tie ĉi).
+          contact_html: 'Nedeviga kontakta informo. Se vi ne plenigas ĝin, kontaktdemandoj
+            estos senditaj per formularo kiu ne konigos la retpoŝtadresojn de la organizantoj.
+            %{md}. Ekzemple: [Videbla teksto](mailto:iu@retpoŝto.com)'
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: La retejo de la konkurso. Ĝi devas esti valida reteja
+            adreso (http(s)).
+          external_registration_page: La paĝo kie la konkursantoj povas registriĝi
+            por la konkurso. Ĝi devas esti valida reteja adreso (http(s)).
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: La valuto uzata por la kostoj.
+          base_entry_fee: 'La baza registriĝkosto por la konkurso. Se uzata, ĝi videblos
+            en la paĝo pri konkursinformado kaj en la registriĝpaĝo. Se vi indikas
+            "0", aperos frazo por diri ke registriĝi estas senpaga. <br><br><b>Malgarantio:
+            La sekva takso de WCA-Kotizoj estas nur proksimigo bazita sur aktualaj
+            kurzoj kaj neniel estas leĝe deviga por la pago de Kotizoj.</b>'
+          on_the_spot_entry_fee: Se vi enigas 0, videblos frazo dirante ke surlokaj
+            registriĝoj estas senpagaj.
+          guest_entry_fee: Nuntempe, tiu nombro estas nur sciiga ĉar pagoj de akompanantoj
+            ne povas esti faritaj per tiu retejo. Se vi enigas 0, vi povos elekti
+            frazon pri kiel vi traktos spektantojn.
+          donations_enabled: ''
+          refund_policy_percent: Nun, tiu nombro estas nur sciiga, repagoj devos esti
+            farita permane. Se vi enigas 0, videblos frazo dirante ke registriĝkostoj
+            nenial estos repagotaj.
+          refund_policy_limit_date: Dato post kiam ne plu eblos repagoj.
+        registration:
+          opening_date_time: 'Noto: Malfermaj kaj fermaj horoj de registriĝperiodo
+            estas indikitaj laŭ UTC'
+          closing_date_time: ''
+          waiting_list_deadline_date: La dato post kiam oni ne plu akceptos registriĝoj
+            de la atendolisto. Se vi havas limdaton por repagoj, la limdato por esti
+            akceptata ne povas esti antaŭ la limdato por repagoj.
+          event_change_deadline_date: Registritaj konkursantoj povas ĝisdatigi iliajn
+            konkurserojn ĝis tiu tempo kontaktante la organizanta teamo. Tiu limdato
+            ne povas esti antaŭ la limdato por registriĝi. Se vi ne plenumas tiun
+            kampon, tio signifas ke konkursantoj povas aldoni konkurseron ĝis kiam
+            tiu konkursero okazas. Se vi havas surlokajn registriĝojn, vi devas enigi
+            la tagon de la konkurso.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: La nombro da gastoj permesitaj per registriĝo ĉe
+            ĉi tiu konkurso. Registriĝo kun tro da gastoj estos blokita. Lasu tion
+            malplena se ne estas limo.
+          extra_requirements: Bonvolu indiki tie iajn pliajn registriĝajn postulojn
+            kiuj ne estis menciitaj supre, ekzemple ekspliko pri kiel pagi. <br/>Bonvolu
+            plenigi tion <b>en la angla</b> kaj iaj aliaj lingvoj parolataj de viaj
+            konkursontoj; tio aperos ĉe la informa paĝo de la konkurso, kaj ankaŭ
+            en la paĝo por registriĝi se vi uzas la registran sistemon de retejo de
+            la WCA.
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Bonvolu detali tie kial vi ŝatus devigi konkursantojn antaŭtempe
+              submetiĝi puzloj. Bonvolu plenigi tion en la angla!
+          qualification_results:
+            enabled: ''
+            reason: Bonvolu detali tie kial vi ŝatus uzi kvalifikajn rezultojn. Bonvolu
+              plenigi tion en la angla!
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: Bonvolu detali tie kial vi ŝatus limigi specifajn kombinadojn
+              de konkurseroj. Bonvolu plenigi tion en la angla!
+            per_registration_limit: Laŭvole devigu la tutsumon de konkurseroj, pri
+              kiuj konkursanto povas registriĝi (ofte uzata por "Favoritaj" konkursoj).
+              Vi devus aldoni konkurserojn antaŭ ol uzi ĉi tiun kampon. Registriĝoj
+              kun tro da konkurseroj estos blokitaj. Lasu tion malplena se ne estas
+              limo.
+          main_event_id: La venkinto de tiu konkursero estos la venkinto de la konkurso.
+        remarks: Iujn aldonajn informojn kiujn vi ŝatus komuniki al la WCAT. Ekzemple,
+          se vi ne certas pri io aŭ se vi havas specifajn petojn por la WCAT. Bonvolu
+          plenigi tion en la angla!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

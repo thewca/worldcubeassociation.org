@@ -2947,6 +2947,203 @@ fi:
         ajax_error: >-
           There is an error with Dues estimation, please set to zero and
           re-enter the base registration fee
+      labels:
+        admin:
+          is_confirmed: Älä anna järjestäjien muokata tätä kilpailua
+          is_visible: Tee kilpailusta julkisesti näkyvä
+        competition_id: ID
+        name: Nimi
+        short_name: Kilpailun lempinimi
+        name_reason: Peruste nimelle
+        venue:
+          country_id: Maa
+          city_name: Kaupunki
+          name: Kilpailupaikka
+          details: Kilpailupaikan lisätiedot
+          address: Kilpailupaikan osoite
+          coordinates:
+        start_date: Alkamispäivä
+        end_date: Loppumispäivä
+        information: Tietoa
+        competitor_limit:
+          enabled: Kilpailijaraja
+          count: Kilpailijoiden enimmäismäärä
+          reason: Kilpailijarajan peruste
+        staff:
+          staff_delegate_ids: WCA-delegaatti/delegaatit
+          trainee_delegate_ids: Delegaattiharjoittelijat
+          organizer_ids: Järjestäjä(t)
+          contact: Ota yhteyttä
+        championships:
+        website:
+          generate_website: Haluan käyttää ulkoisen sivuston sijaan WCA-sivua lisätietoihin.
+          external_website: Verkkosivusto
+          external_registration_page: Rekisteröitymissivu
+          uses_wca_registration: Haluan käyttää WCA-sivua rekisteröitymiseen
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Ilmoita minulle sähköpostitse, kun joku rekisteröityy
+            tähän kilpailuun
+        entry_fees:
+          currency_code: Valuuttatunnus
+          base_entry_fee: Osallistumismaksu
+          on_the_spot_entry_fee: Osallistumismaksu paikan päällä rekisteröityville
+          guest_entry_fee: Vieraiden pääsymaksu
+          donations_enabled: Haluan sallia lahjoitukset osallistumismaksujen keräämisen
+            lisäksi
+          refund_policy_percent: Palautettava osuus prosentteina
+          refund_policy_limit_date: Takaraja palautuksille
+        registration:
+          opening_date_time: Rekisteröityminen avautuu
+          closing_date_time: Rekisteröityminen sulkeutuu
+          waiting_list_deadline_date: Takaraja jonotuslistalla olevien kilpailijoiden
+            hyväksymiseen
+          event_change_deadline_date: Takaraja rekisteröityneiden kilpailijoiden kilpailulajien
+            päivittämiseen
+          allow_on_the_spot: Paikan päällä rekisteröityminen
+          allow_self_delete_after_acceptance: Rekisteröitymisen peruuttaminen
+          allow_self_edits: Muutokset rekisteröitymisiin
+          guests_enabled: Vierailijat
+          guest_entry_status: Display message for free guest entry
+          guests_per_registration:
+          extra_requirements: Muut rekisteröitymisohjeet
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Haluan vaatia kilpailijoita toimittamaan pulmapelinsä ennalta
+              määrättynä ajankohtana ennen lajin alkamisaikaa
+            reason: Syy ja lisätiedot koskien aikaistettua pulmapelien toimittamista
+          qualification_results:
+            enabled: Haluan määrittää karsintatuloksia rajoittamaan kilpailijoiden
+              oikeutta kilpailla tietyissä lajeissa
+            reason: Syy ja lisätiedot koskien karsintatulosten määrittämistä
+            allow_registration_without:
+          event_limitation:
+            enabled: Haluan määrittää lajiyhdistelmiä, joissa kilpailijat eivät voi
+              kilpailla
+            reason: Syy ja lisätiedot koskien lajiyhdistelmien rajoituksia
+            per_registration_limit:
+          main_event_id: Päälaji
+        remarks: Huomautukset
+        clone_tabs: Haluan monistaa myös kaikki lisätietoa sisältävät välilehdet
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Kilpailun koko nimi sisältäen vuosiluvun lopussa (esim. Danish Open
+          2016). Muista isot alkukirjaimet. Nimi saa sisältää vain kirjaimia, numeroita,
+          yhdysmerkkejä (-), ja-merkkejä (&), pisteitä (.), kaksoispisteitä (:), heittomerkkejä
+          (') ja välilyöntejä ( ).
+        short_name: Kilpailun lyhennetty nimi. Jos kilpailun koko nimi on lyhyt, voit
+          käyttää samaa nimeä uudelleen (esim. Europe 2006).
+        name_reason_html: Lyhyt selitys kilpailun nimelle. Nimen täytyy noudattaa
+          <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          Competition Name Policyn</a> vaatimuksia.
+        venue:
+          country_id: ''
+          city_name: Kaupunki (ja osavaltio, jos olemassa), jossa kilpailu pidetään.
+            Älä sisällytä maata. Esimerkiksi "Helsinki" tai "San Francisco, California".
+          name_html: 'Kilpailupaikka. %{md}. Esimerkiksi: [Cité des Sciences et de
+            l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Lisätietoa kilpailupaikasta (esim. Ensimmäisen kerroksen perällä,
+            seuraa opasteita). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Kilpailijoille tärkeää tietoa, joka näytetään kilpailun pääsivulla.
+          <br/>Kirjoita tämä <b>englanniksi<b/> ja muilla kilpailijoiden todennäköisesti
+          puhumilla kielillä.
+        competitor_limit:
+          enabled: Vaikka säännöt eivät vaadi kilpailijarajan asettamista, se on suositeltavaa.
+          count: Kilpailuun osallistuvien sallittu määrä. Rajan asettaminen ei vielä
+            estä enempää kilpailijoita rekisteröitymästä; siitä pitää huolehtia manuaalisesti.
+          reason: Mikä on peruste kilpailijarajalle? Täytä englanniksi!
+        staff:
+          staff_delegate_ids: Kilpailun WCA-delegaatit.
+          trainee_delegate_ids: Kilpailun delegaattiharjoittelijat
+          organizer_ids: Kilpailun järjestäjät (heillä pitää olla tili, jotta voit
+            lisätä heidät tähän).
+          contact_html: 'Yhteystiedot (valinnainen). Jos et täytä tätä, yhteydenottopyynnöt
+            tehdään erillisen lomakkeen kautta näyttämättä järjestäjien sähköpostiosoitteita.
+            %{md}. Esimerkiksi: [Näytettävä teksti](mailto:esim@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Kilpailun verkkosivusto. Pätevä http(s)-osoite.
+          external_registration_page: Sivu, jolla kilpailijoiden täytyy rekisteröityä
+            kilpailuun. Pätevä http(s)-osoite.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Osallistumismaksujen valuuttatunnus.
+          base_entry_fee: 'Osallistumismaksu kilpailuun. Maksu näytetään kilpailusivun
+            Tietoa-osiossa ja rekisteröitymissivulla, jos käytössä. Jos arvoksi asetetaan
+            0, kilpailusivulla lukee, että osallistuminen on ilmaista. <br><br><b>DISCLAIMER:
+            The following WCA Dues estimate is solely an approximation based on current
+            exchange rates and is in no way legally binding for the Dues payment.</b><br>Click
+            "Update Competition" after changing currency code to synchronize it with
+            the estimation. If there are no available exchange rates for the selected
+            currency, nothing will be displayed.'
+          on_the_spot_entry_fee: Jos arvoksi asetetaan 0, kilpailusivulla lukee, että
+            paikan päällä rekisteröityminen on ilmaista.
+          guest_entry_fee: Vaikka vieraiden pääsymaksun suuruus näytetään kilpailusivulla,
+            näitä maksuja ei voi hallita tämän sivuston kautta. Jos arvoksi asetetaan
+            0, itse valitsemasi teksti näytetään.
+          donations_enabled: ''
+          refund_policy_percent: Tämä numero ilmoitetaan kilpailusivulla, mutta palautukset
+            täytyy käsitellä manuaalisesti. Jos arvoksi asetetaan 0, kilpailusivulla
+            lukee, ettei osallistumismaksuja palauteta missään tilanteessa.
+          refund_policy_limit_date: Päivä, jonka jälkeen osallistumismaksuja ei enää
+            palauteta.
+        registration:
+          opening_date_time: 'Huomio: Rekisteröitymisen alkamis- ja päättymisajat
+            ovat UTC-yleisaikoja'
+          closing_date_time: ''
+          waiting_list_deadline_date: Päivä, jolloin jonotuslistalla olevia kilpailijoita
+            ei enää hyväksytä. Tämän ei pitäisi olla ennen kilpailumaksun palautuksen
+            takarajaa (jos voimassa).
+          event_change_deadline_date: Rekisteröidyillä kilpailijoilla on oikeus päivittää
+            kilpailulajejaan tähän päivään asti, ottamalla järjestäjäryhmään yhteyttä.
+            Tämä takaraja ei saa olla ennen rekisteröitymisen päättymisaikaa. Jättämällä
+            tämän tyhjäksi, kilpailijat voivat lisätä lajin rekisteröitymiseensä siihen
+            asti, kun laji pidetään kilpailussa. Jos paikan päällä rekisteröityminen
+            on käytössä, tähän tulee asettaa kilpailun päivä.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements: Kerro tässä kaikki ylimääräiset rekisteröitymisohjeet,
+            joita ei ole käsitelty yläpuolella (esimerkiksi maksuohjeet). <br/>Kirjoita
+            tämä <b>englanniksi<b/> ja muilla kilpailijoiden todennäköisesti puhumilla
+            kielillä. Tämä näytetään kilpailusivun Tietoa-osiossa sekä rekisteröitymissivulla,
+            jos käytät sitä.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Please elaborate here why you would like to require competitors
+              to submit puzzles early. Please fill this out in English!
+          qualification_results:
+            enabled: ''
+            reason: Please elaborate here why you would like to use qualification
+              times. Please fill this out in English!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Please elaborate here why you would like to restrict certain event
+              combinations. Please fill this out in English!
+            per_registration_limit:
+          main_event_id: Tämän lajin voittaja ilmoitetaan kilpailun voittajaksi.
+        remarks: Some additional information you want to pass on to the WCAT. For
+          example, if there is something you are uncertain about, or if there are
+          any special requests for the WCAT. Please fill this out in English!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

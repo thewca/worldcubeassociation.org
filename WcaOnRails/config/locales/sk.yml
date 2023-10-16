@@ -1687,6 +1687,169 @@ sk:
       coordinates: Koordinátori
       #original_hash: a672984
       add_championship: Pridať Šampionát
+      labels:
+        admin:
+          is_confirmed:
+          is_visible: Zverejni súťaž
+        competition_id: ID
+        name: Meno
+        short_name: Prezývka súťaže
+        name_reason:
+        venue:
+          country_id: Krajina
+          city_name: Meno mesta
+          name: Destinácia
+          details: Detaily destinácie
+          address: Adresa destinácie
+          coordinates:
+        start_date: Dátum začiatku
+        end_date: Dátum konca
+        information: Informácie
+        competitor_limit:
+          enabled: Rád by som špecifikoval limit počtu súťažiacich, ktorí sa môžu
+            zúčastniť tejto súťaže.
+          count: Maximálny počet súťažiacich
+          reason: Dôvod pre limit súťažiacich
+        staff:
+          staff_delegate_ids: WCA delegát(i)
+          trainee_delegate_ids:
+          organizer_ids: Organizátor(i)
+          contact: Kontakt
+        championships:
+        website:
+          generate_website: Chcel by som použiť WCA stránku namiesto externej pre
+            dodatkové informácie
+          external_website: Webová stránka
+          external_registration_page:
+          uses_wca_registration: Chcel by som použiť WCA stránku pre registráciu
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Notifikuj ma emailom, keď sa niekto prihlási
+            na túto súťaž
+        entry_fees:
+          currency_code: Kód meny
+          base_entry_fee: Základná vstupná cena
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: Chcem povoliť donaty dodatočne ku registračným poplatkom
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: Registrácia sa otvorí
+          closing_date_time: Registrácia sa uzavrie
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot:
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: Hostia
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: Poznámky
+        clone_tabs: Chcel by som tiež zklonovať všetky taby s dodatkovými informáciami
+      hints:
+        admin:
+          is_confirmed:
+          is_visible: ''
+        competition_id: ''
+        name: Celé meno súťaže aj s rokom na konci(napr. Danish Open 2016).Dávajte
+          si pozor, aby meno bolo kapitalizované. Meno musí obsahovať iba alfanumerické
+          znaky, pomlčky(-), ampersandy(&), bodky(.), dvojbodky(:), apostrofy(') a
+          medzery( ).
+        short_name: Krátke meno pre súťaž, na zobrazenie. Ak je meno súťaže dostatočne
+          krátke, môžete ho znovu použiť(napr. Europe 2006).
+        name_reason_html:
+        venue:
+          country_id: ''
+          city_name: Meno mesta a štátu(ak je), kde sa súťaž bude nachádzať. Nepíšte
+            krajinu(napr. Paris ALEBO San Francisco, Kalifornia)
+          name_html: 'Miesto, kde sa daná súťaž bude konať. %{md}. Napríklad: [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Detaily o mieste (napr. On the first floor far in the back,
+            follow the signs). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informácie o limite súťažiacich, vstupných poplatkoch pre súťažiacich
+          a divákov a iné detaily relevantné pre ľudí, ktorí maju záujem v zúčastnení
+          sa súťaže.
+        competitor_limit:
+          enabled: Pre teraz je toto číslo iba pre informačné použitie a nepreventuje
+            registrácie ostatných ľudí. Pracujeme na pridávaní podpory na zrýchlenie
+            registrácie, ale vyžaduje si to inú prácu.
+          count: Počet súťažiacich povolených na túto súťaž.
+          reason: Aký je dôvod na takýto limit súťažiacich? Vyplňte toto prosím v
+            angličtine.
+        staff:
+          staff_delegate_ids: WCA delegáti pre túto súťaž.
+          trainee_delegate_ids:
+          organizer_ids: Organizátori súťaže(potrebujú mať účet, na to aby mohli byť
+            organizátormi)
+          contact_html: 'Voliteľné informácie o kontakte. Ak toto nevyplníte, emaily
+            organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
+          external_registration_page:
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Kód meny pre vstupné poplatky.
+          base_entry_fee: Základný vstupný poplatok pre súťaž. Vstupný poplatok bude
+            ukázaný na informačnej stránke súťaže a tiež na registračnej stránke(ak
+            je použitá).
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: ''
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: 'Poznámka: Otvorenie a zatvorenie súťaže sú v čase UTC.'
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot:
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks:
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

@@ -2977,6 +2977,214 @@ pl:
         per_competitor: 'Przewidywane WCA Dues na zawodnika to %{estimate}'
         #original_hash: 83d4cdc
         ajax_error: "Wystąpił\_błąd w estymowaniu Dues, prosimy ustaw zero a następnie wprowadź ponownie bazową kwotę wpisowego"
+      labels:
+        admin:
+          is_confirmed: Nie pozwól organizatorom na edytowanie tych zawodów
+          is_visible: Uczyń zawody publicznie widocznymi
+        competition_id: ID
+        name: Nazwa
+        short_name: Skrócona nazwa zawodów
+        name_reason: Powód użycia danej nazwy
+        venue:
+          country_id: Państwo
+          city_name: Nazwa miasta
+          name: Miejsce
+          details: Szczegóły dotyczące miejsca
+          address: Adres miejsca
+          coordinates:
+        start_date: Data początkowa
+        end_date: Data końcowa
+        information: Informacje
+        competitor_limit:
+          enabled: Limit zawodników
+          count: Maksymalna liczba zawodników
+          reason: Powód określenia limitu zawodników
+        staff:
+          staff_delegate_ids: Delegat/Delegaci WCA
+          trainee_delegate_ids: Delegat(ci) Praktykant(ci) WCA
+          organizer_ids: Organizator/organizatorzy
+          contact: Kontakt
+        championships:
+        website:
+          generate_website: Chciałbym używać strony WCA zamiast zewnętrznej w celu
+            zapewnienia dodatkowych informacji.
+          external_website: Strona internetowa
+          external_registration_page: Strona rejestracji
+          uses_wca_registration: Chciałbym używać systemu rejestracji zawodników na
+            stronie WCA
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Zawiadom mnie mailowo, kiedy ktoś zarejestruje
+            się na te zawody
+        entry_fees:
+          currency_code: Kod waluty
+          base_entry_fee: Bazowe wpisowe
+          on_the_spot_entry_fee: Bazowe wpisowe na miejscu
+          guest_entry_fee: Wpisowe dla gości
+          donations_enabled: Chcę włączyć możliwość przekazywania darowizn jako dodatek
+            do wpisowego podczas rejestracji
+          refund_policy_percent: Zwracany procent płatności
+          refund_policy_limit_date: Ostateczny termin zwracania płatności
+        registration:
+          opening_date_time: Rejestracja otwarta
+          closing_date_time: Rejestracja zamknięta
+          waiting_list_deadline_date: Termin przyjmowania zawodników z listy rezerwowej.
+          event_change_deadline_date: Termin do którego zawodnicy mogą zmieniać konkurencje
+            w swoich rejestracjach.
+          allow_on_the_spot: Rejestracja na miejscu
+          allow_self_delete_after_acceptance:
+          allow_self_edits: Edytowanie rejestracji
+          guests_enabled: Goście
+          guest_entry_status: Wyświetl informacje o darmowym wejściu dla gości
+          guests_per_registration:
+          extra_requirements: Dodatkowe wymagania rejestracyjne
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Chciałbym wymagać od zawodników dostarczenia układanek w określonym
+              czasie przed rozpoczęciem konkurencji
+            reason: Powód i szczegóły dotyczące wczesnego dostarczania układanek
+          qualification_results:
+            enabled: Chciałbym wykorzystać wyniki jako sposób kwalifikacji by ograniczyć
+              osoby mogące brać udział w danej konkurencji
+            reason: Powód i szczegóły dotyczące wyników kwalifikujących
+            allow_registration_without:
+          event_limitation:
+            enabled: Chciałbym uniemożliwić zawodnikom rejestrowanie się na określone
+              kombinacje konkurencji
+            reason: Powód i szczegóły dotyczące ograniczenia konkurencji
+            per_registration_limit:
+          main_event_id: Główna konkurencja
+        remarks: Uwagi
+        clone_tabs: Chciałbym również sklonować wszystkie zakładki z dodatkowymi informacjami
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Pełna nazwa zawodów kończąca się rokiem (np. Danish Open 2016). Upewnij
+          się, że słowa są zapisane wielką literą. Nazwa może zawierać tylko znaki
+          alfanumeryczne, myślniki (-), ampersandy (&), kropki (.), dwukropki (:),
+          apostrofy (') i spacje ( ).
+        short_name: Krótka nazwa służąca do wyświetlania. Jeżeli nazwa zawodów jest
+          już krótka, możesz użyć ją ponownie (np. Euro 2016).
+        name_reason_html: Krótkie wyjaśnienie nazwy zawodów. Nazwa musi być zgodna
+          z <a href='/documents/policies/external/Competition%20Requirements.pdf'>Polityką
+          Wymagań Zawodów WCA</a>.
+        venue:
+          country_id: ''
+          city_name: Nazwa miasta gdzie zawody mają miejsce. Nie powinna zawierać
+            nazwy państwa (np. Warszawa).
+          name_html: 'Miejsce, gdzie odbywają się zawody. %{md}. Na przykład: [Spodek](www.spodekkatowice.pl)'
+          details_html: Szczegóły na temat miejsca (np. Na pierwszym piętrze, podążaj
+            za znakami). %{md}.
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Ważne informacje, z którymi powinien zapoznać się zawodnik. Będą
+          one wyświetlone na głównej stronie zawodów. <br/>Prosimy o wypełnienie tego
+          <b>w języku angielskim</b> oraz jakichkolwiek innych językach używanych
+          przez twoich zawodników.
+        competitor_limit:
+          enabled: Pomimo że Regulamin nie wymaga określania limitu zawodników, jest
+            to wysoce wskazane.
+          count: Liczba zawodników dopuszczona do udziału w zawodach. Obecnie ta liczba
+            pełni wyłącznie funkcję informacyjną i nie powstrzymuje większej ilości
+            osób przed zarejestrowaniem się. Pracujemy nad dodaniem pełnego wsparcia
+            dla właściwego przebiegu rejestracji z limitem zawodników.
+          reason: Jaki jest powód wyznaczenia limitu zawodników dla tych zawodów?
+            Prosimy o wypełnienie w języku angielskim!
+        staff:
+          staff_delegate_ids: Delegaci WCA dla tych zawodów.
+          trainee_delegate_ids: Delegaci Praktykanci WCA dla tych zawodów.
+          organizer_ids: Organizatorzy zawodów (potrzebują konta, aby mogli być wyświetleni
+            tutaj).
+          contact_html: 'Opcjonalne informacje kontaktowe. Jeżeli nie wypełnisz tego
+            pola, próby kontaktu będą wysyłane przez formularz bez upubliczniania
+            adresów email organizatorów. %{md}. Przykład: [Tekst do wyświetlenia](mailto:ktoś@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Strona internetowa zawodów. Musi być poprawnym adresem
+            url, zawierającym protokół http(s).
+          external_registration_page: Strona na której zawodnicy muszą się zarejestrować
+            na zawody. Musi być poprawnym adresem url, zawierającym protokół http(s).
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Kod waluty w której wyrażone są opłaty wpisowe.
+          base_entry_fee: 'Bazowe wpisowe na zawody. To będzie wyświetlane na stronie
+            informacyjnej zawodów i stronie rejestracji, jeżeli jest używana. Jeżeli
+            wynosi 0, zostanie wyświetlone zdanie informujące o tym, że rejestracje
+            będą akceptowane za darmo. <br><br><b>DISCLAIMER: Poniższa estymacja WCA
+            Dues jest jedynie przybliżeniem opartym na obecnym kursie wymiany i nie
+            jest w jakimkolwiek stopniu wiążąca dla płatności Dues</b><br>Kliknij
+            "Aktualizuj zawody po zmianie waluty aby zsynchronizować estymację. Jeżeli
+            nie jest dostępny kurs wymiany dla obecnie wybranej waluty nic nie zostanie
+            wyświetlone.'
+          on_the_spot_entry_fee: Jeżeli wynosi 0, zostanie wyświetlone zdanie informujące
+            o tym, że rejestracja na miejscu będzie możliwa za darmo.
+          guest_entry_fee: Obecnie liczba ta pełni jedynie rolę informacyjną, wpisowe
+            dla gości nie może być zarządzane za pomocą strony. Jeżeli wynosi 0, zostanie
+            wyświetlone wybrane przez ciebie zdanie informujące o polityce wstępu
+            dla gości.
+          donations_enabled: ''
+          refund_policy_percent: Obecnie liczba ta pełni jedynie rolę informacyjną,
+            zwroty płatności będą musiały być dokonywane ręcznie. Jeżeli wynosi 0,
+            zostanie wyświetlone zdanie informujące o tym, że wpisowe nie będzie zwracane
+            pod żadnym warunkiem.
+          refund_policy_limit_date: Data po której płatności nie będą już zwracane
+        registration:
+          opening_date_time: 'Zauważ: Daty startowa i końcowa rejestracji są w czasie
+            UTC.'
+          closing_date_time: ''
+          waiting_list_deadline_date: Data po której zawodnicy z listy rezerwowej
+            nie będą akceptowani. Jeżeli istnieje końcowy termin zwrotu kosztów, termin
+            akceptacji z listy rezerwowej nie powinien być ustawiony wcześniej niż
+            termin zwrotu kosztów.
+          event_change_deadline_date: Zarejestrowani zawodnicy mają prawo zmieniać
+            wybrane konkurencje przed tym terminem przez kontakt z zespołem organizacyjnym.
+            Ten termin nie może być ustawiony przed terminem zamknięcia rejestracji.
+            Pozostawienie tego pola pustego oznacza, że zawodnicy mogą dodawać konkurencje
+            do swoich rejestracji aż do początku trwania danej konkurencji. Jeżeli
+            dozwolona jest rejestracja na miejscu to pole musi być ustawione na dzień
+            zawodów.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements: Wskaż tutaj wszelkie dodatkowe wymagania rejestracyjne
+            nieuwzględnione powyżej, na przykład sposób płatności. <br/>Prosimy o
+            wypełnienie tego <b>w języku angielskim</b> oraz jakichkolwiek innych
+            językach używanych przez twoich zawodników. Tekst ten będzie wyświetlany
+            na stronie informacyjnej zawodów oraz na stronie rejestracji, jeżeli używasz
+            systemu rejestracji WCA.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Opisz dlaczego chciałbyś, aby zawodnicy dostarczyli układanki
+              wcześniej. Prosimy o wypełnienie w języku angielskim!
+          qualification_results:
+            enabled: ''
+            reason: Opisz dlaczego chciałbyś użyć wyników kwalifikujących. Prosimy
+              o wypełnienie w języku angielskim!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Opisz dlaczego chciałbyś uniemożliwić branie udziału w konkretnych
+              kombinacjach konkurencji. Prosimy o wypełnienie w języku angielskim!
+            per_registration_limit:
+          main_event_id: Zwycięzca tej konkurencji będzie zwycięzcą tych zawodów.
+        remarks: Dodatkowe informacje które chcesz przekazać WCAT. Przykładowo, jeżeli
+          nie masz co do czegoś pewności lub jeśli masz specjalne prośby dla WCAT.
+          Prosimy o wypełnienie w języku angielskim!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

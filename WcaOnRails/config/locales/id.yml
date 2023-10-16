@@ -3097,6 +3097,219 @@ id:
         ajax_error: >-
           Terjadi galat pada estimasi Iuran, kemungkinan dikarenakan tidak
           adanya nilai tukar untuk mata uang yang dipilih.
+      labels:
+        admin:
+          is_confirmed: Panitia dilarang menyunting kompetisi ini
+          is_visible: Buat kompetisi terlihat secara publik
+        competition_id: ID
+        name: Nama
+        short_name: Julukan kompetisi
+        name_reason: Alasan pemilihan nama
+        venue:
+          country_id: Negara
+          city_name: Nama kota
+          name: Lokasi
+          details: Detail lokasi
+          address: Alamat lokasi
+          coordinates:
+        start_date: Tanggal mulai
+        end_date: Tanggal berakhir
+        information: Informasi
+        competitor_limit:
+          enabled: Batas kompetitor
+          count: Jumlah kompetitor maksimal
+          reason: Alasan membatasi jumlah kompetitor
+        staff:
+          staff_delegate_ids: Delegate WCA
+          trainee_delegate_ids: Delegate Magang WCA
+          organizer_ids: Panitia
+          contact: Kontak
+        championships:
+        website:
+          generate_website: Saya ingin menggunakan situs web WCA daripada situs web
+            eksternal untuk informasi tambahan.
+          external_website: Situs web
+          external_registration_page: Laman pendaftaran
+          uses_wca_registration: Saya ingin menggunakan situs web WCA untuk pendaftaran
+          uses_wca_live: Saya akan menggunakan WCA Live untuk input hasil.
+        user_settings:
+          receive_registration_emails: Beritahu saya dengan email jika ada yang mendaftar
+            pada kompetisi ini
+        entry_fees:
+          currency_code: Kode mata uang
+          base_entry_fee: Biaya dasar pendaftaran
+          on_the_spot_entry_fee: Biaya dasar pendaftaran di tempat
+          guest_entry_fee: Biaya masuk untuk pendamping
+          donations_enabled: Saya ingin mengaktifkan donasi sebagai sarana tambahan
+            pengumpulan biaya pendaftaran
+          refund_policy_percent: Persentase uang yang dikembalikan
+          refund_policy_limit_date: Batas tanggal untuk pengembalian uang
+        registration:
+          opening_date_time: Pendaftaran dibuka
+          closing_date_time: Pendaftaran ditutup
+          waiting_list_deadline_date: Batas waktu untuk menyetujui kompetitor dari
+            daftar tunggu
+          event_change_deadline_date: Batas waktu kompetitor untuk mengubah cabang
+            yang diikuti
+          allow_on_the_spot: Pendaftaran di tempat
+          allow_self_delete_after_acceptance: Pembatalan pendaftaran
+          allow_self_edits: Perubahan pendaftaran
+          guests_enabled: Pendamping
+          guest_entry_status: Tampilkan pesan bebas biaya masuk untuk pendamping
+          guests_per_registration: Jumlah pendamping maksimal per pendaftaran
+          extra_requirements: Syarat pendaftaran ekstra
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Saya ingin kompetitor untuk mengumpulkan puzzle pada waktu tertentu
+              sebelum cabang dimulai
+            reason: Alasan dan detail pengumpulan puzzle lebih awal
+          qualification_results:
+            enabled: Saya ingin menggunakan hasil kualifikasi untuk membatasi jumlah
+              kompetitor pada cabang tertentu
+            reason: Alasan dan detail hasil kualifikasi
+            allow_registration_without: Cabang dengan Kualifikasi
+          event_limitation:
+            enabled: Saya ingin membatasi kompetitor dari pendaftaran kombinasi cabang
+              tertentu
+            reason: Alasan dan detail pembatasan cabang
+            per_registration_limit:
+          main_event_id: Cabang utama
+        remarks: Komentar
+        clone_tabs: Saya ingin menduplikasi semua tab dengan informasi tambahan yang
+          sama
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: 'Nama lengkap kompetisi termasuk tahun pelaksnaan di akhir (contoh:
+          Danish Open 2016). Pastikan memakai huruf kapital di setiap awal kata. Nama
+          harus hanya tersusun dari karakter alfanumerik, strip(-), dan(&), titik(.),
+          titik dua(:), apostrof(''), dan spasi( ).'
+        short_name: 'Nama pendek untuk ditampilkan. Jika nama kompetisi sudah pendek,
+          Anda dapat memakai ulang kata-kata penyusun nama kompetisi (contoh: Europe
+          2006).'
+        name_reason_html: Penjelasan singkat tentang nama kompetisi. Nama kompetisi
+          harus memenuhi <a href='/documents/policies/Competition%20Requirements.pdf'>Kebijakan
+          Syarat Kompetisi WCA</a>.
+        venue:
+          country_id: ''
+          city_name: 'Nama kota dan provinsi (jika memungkinkan) di mana kompetisi
+            dilaksanakan. Jangan menuliskan nama negara (contoh: Paris ATAU San Francisco,
+            California).'
+          name_html: 'Lokasi di mana kompetisi berada. %{md}. Sebagai contoh: [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: 'Detail tentang lokasi (contoh: Pada lantai pertama, jalan
+            ke bagian belakang lalu ikuti petunjuk. %{md}'
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informasi penting yang harus diketahui oleh kompetitor. Informasi
+          ini akan ditampilkan dalam halaman utama kompetisi. <br/>Harap isi bagian
+          ini <b>dalam Bahasa Inggris</b> dan bahasa apapun yang dimengerti oleh calon
+          kompetitor.
+        competitor_limit:
+          enabled: Walaupun pernyataan batas kompetitor tidak diperlukan berdasarkan
+            Regulasi, hal ini sangat direkomendasikan.
+          count: Jumlah kompetitor yang boleh mendaftar pada kompetisi ini. Untuk
+            saat ini, angka ini hanya digunakan sebagai informasi dan tidak mencegah
+            orang-orang untuk mendaftar. Kami sedang bekerja untuk menambah dukungan
+            eksplisit untuk hal ini pada alur pendaftaran, namun hal ini butuh pekerjaan
+            lainnya yang harus selesai terlebih dulu.
+          reason: Apa alasan jumlah kompetitor dibatasi? Harap ditulis dengan Bahasa
+            Inggris!
+        staff:
+          staff_delegate_ids: Delegate WCA untuk kompetisi ini.
+          trainee_delegate_ids: Delegate Magang WCA untuk kompetisi ini.
+          organizer_ids: Panitia kompetisi (dibutuhkan akun panitia untuk ditulis
+            di sini).
+          contact_html: 'Informasi kontak opsional. Jika Anda tidak mengisinya, kontak
+            untuk pertanyaan akan ditetapkan pada formulir tanpa memperlihatkan email
+            panitia. %{md}. Contohnya: [Teks untuk ditampilkan](mailto:some@email.com)'
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: Situs web kompetisi. Wajib merupakan url http(s) yang
+            valid.
+          external_registration_page: Laman di mana pendaftaran kompetisi dilakukan
+            oleh kompetitor. Wajib merupakan url http(s) yang valid.
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Kode mata uang untuk biaya.
+          base_entry_fee: 'Biaya dasar pendaftaran untuk kompetisi. Biaya ini akan
+            ditampilkan pada halaman informasi kompetisi dan pendaftaran jika dipakai.
+            Jika diisi dengan nilai 0, akan ditampilkan bahwa pendaftaran dapat dilakukan
+            dengan gratis. <br><br><b>PENYANGKALAN: Estimasi Iuran WCA berikut merupakan
+            perkiraan berdasarkan nilai tukar saat ini dan sama sekali tidak berkaitan
+            dengan pembayaran Iuran.</b>'
+          on_the_spot_entry_fee: Jika diisi dengan nilai 0, akan ditampilkan bahwa
+            pendaftaran di tempat dapat dilakukan secara gratis.
+          guest_entry_fee: Untuk saat ini, angka ini hanya digunakan sebagai informasi,
+            biaya pendamping tidak dapat diatur melalui situs web ini. Jika diisi
+            dengan angka 0, pernyataan pilihan Anda akan ditampilkan tentang kebijakan
+            penonton.
+          donations_enabled: ''
+          refund_policy_percent: Untuk saat ini, angka ini hanya digunakan sebagai
+            informasi, pengembalian uang perlu dilaporkan secara manual. Jika diisi
+            dengan nilai 0, akan ditampilkan bahwa biaya registrasi tidak akan dikembalikan
+            dalam kondisi apapun.
+          refund_policy_limit_date: Tanggal setelahnya tidak akan ada lagi laporan
+            pengembalian uang.
+        registration:
+          opening_date_time: 'Catatan: Waktu pendaftaran dibuka dan ditutup mengikuti
+            standar waktu UTC'
+          closing_date_time: ''
+          waiting_list_deadline_date: Tanggal di mana semua calon kompetitor di daftar
+            tunggu akan ditolak. Jika Anda menentukan batas waktu untuk pengembalian
+            uang, batas waktu penyetujuan calon kompetitor tidak boleh terjadi sebelum
+            batas waktu pengembalian uang.
+          event_change_deadline_date: Kompetitor yang sudah terdaftar mempunyai hak
+            untuk memperbarui cabang yang diikuti sampai waktu tertera dengan cara
+            menghubungi tim panitia. Batas waktu dilarang untuk diisi dengan waktu
+            sebelum registrasi ditutup. Jika kolom ini dikosongkan, maka kompetitor
+            dapat menambah cabang yang diikuti sampai jadwal cabang tersebut diselenggarakan.
+            Jika Anda memperbolehkan pendaftaran di tempat, maka batas waktu harus
+            diisi dengan tanggal kompetisi dimulai.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: Jumlah pendamping per pendaftaran yang diperbolehkan
+            pada kompetisi ini. Pendaftaran dengan jumlah pendamping yang terlalu
+            banyak akan diblokir. Kosongkan jika pembatasan tidak diperlukan.
+          extra_requirements: Harap tunjukkan di sini tentang syarat pendaftaran ekstra
+            yang belum ditulis di atas, seperti cara membayar. <br/>Harap isi <b>dalam
+            Bahasa Inggris</b> dan bahasa yang dimengerti oleh calon kompetitor; hal
+            ini akan ditampilkan di halaman informasi kompetisi, dan juga halaman
+            pendaftaran jika Anda menggunakan situs web pendaftaran WCA.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Harap uraikan di sini alasan Anda ingin kompetitor untuk mengumpulkan
+              puzzle lebih awal. Harap diisi dengan bahasa Inggris!
+          qualification_results:
+            enabled: ''
+            reason: Harap uraikan di sini alasan Anda ingin menggunakan waktu kualifikasi.
+              Harap diisi dengan bahasa Inggris!
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: Harap uraikan di sini alasan Anda ingin membatasi kombinasi cabang
+              tertentu. Harap diisi dengan bahasa Inggris!
+            per_registration_limit:
+          main_event_id: Pemenang cabang ini merupakan pemenang kompetisi.
+        remarks: Beberapa informasi tambahan yang ingin Anda sampaikan kepada WCAT.
+          Sebagai contoh, jika ada hal yang Anda belum yakin, atau jika ada permintaan
+          khusus kepada WCAT. Harap isi dengan bahasa Inggris!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

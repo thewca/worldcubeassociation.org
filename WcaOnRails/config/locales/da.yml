@@ -2875,6 +2875,204 @@ da:
         greater_china: Storkina Mesterskab
         #original_hash: 3b920b7
         generic: 'Mesterskab: %{type}'
+      labels:
+        admin:
+          is_confirmed: Lad ikke arrangørerne redigere konkurrencen
+          is_visible: Gør konkurrencen offentlig
+        competition_id: ID
+        name: Navn
+        short_name: Kaldenavn for konkurrencen
+        name_reason: Årsagen til navnet for konkurrencen
+        venue:
+          country_id: Land
+          city_name: By navn
+          name: Lokale
+          details: Lokale detaljer
+          address: Lokale adresse
+          coordinates:
+        start_date: Start dato
+        end_date: Slut dato
+        information: Information
+        competitor_limit:
+          enabled: Deltagergrænse
+          count: Max antal deltagere
+          reason: Grunden til deltagergrænsen
+        staff:
+          staff_delegate_ids: WCA Delegeret/Delegerede
+          trainee_delegate_ids: WCA Lærlingdelegerede
+          organizer_ids: Arrangør(er)
+          contact: Kontakt
+        championships:
+        website:
+          generate_website: Jeg vil gerne bruge WCA hjemmesiden i stedet for at bruge
+            en anden hjemmeside.
+          external_website: Hjemmeside
+          external_registration_page: Tilmeldingsside
+          uses_wca_registration: Jeg vil gerne bruge WCA hjemmesiden til tilmelding
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Send mig en email når nogen tilmelder sig til
+            denne konkurrence.
+        entry_fees:
+          currency_code: Valuta kode
+          base_entry_fee: Basis deltagergebyr
+          on_the_spot_entry_fee: Deltagergebyret for tilmelding i konkurrencelokalet
+          guest_entry_fee: Indgangsgebyr for tilskuere
+          donations_enabled: Jeg vil give mulighed for donationer oven i at indsamle
+            deltagergebyrene
+          refund_policy_percent: Procent der vil blive tilbagebetalt
+          refund_policy_limit_date: Sidste frist for tilbagebetaling
+        registration:
+          opening_date_time: Tilmelding er åben
+          closing_date_time: Tilmelding er lukket
+          waiting_list_deadline_date: Deadline for accepting competitors from the
+            waiting list
+          event_change_deadline_date: Deadline for competitors to update their registered
+            events
+          allow_on_the_spot: Tilmeldinger i konkurrencelokalet
+          allow_self_delete_after_acceptance:
+          allow_self_edits: Redigering af tilmeldinger
+          guests_enabled: Gæster
+          guest_entry_status: Vis tekst om at det er gratis for gæster
+          guests_per_registration:
+          extra_requirements: Ekstra tilmeldingskrav
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Jeg vil gerne have at deltagerne skal aflevere deres terninger
+              på et bestemt tidspunkt før en event skal starte starte
+            reason: Årsagen og detaljerne for at aflevere terninger tidligt
+          qualification_results:
+            enabled: Jeg vil gerne bruge kvalifikations resultater for at begrænse
+              den mængde deltagere, der kan deltage i bestemte discipliner
+            reason: Årsagen og detaljer for brugen af kvalifikations resultater
+            allow_registration_without:
+          event_limitation:
+            enabled: Jeg vil begrænse deltagerne i at tilmelde sig i en specifik kombination
+              af discipliner
+            reason: Årsagen og detaljerne for brugen af restriktion af discipliner
+            per_registration_limit:
+          main_event_id: Hoveddisciplinen
+        remarks: Bemærkninger
+        clone_tabs: Jeg vil gerne kopiere alle faner med yderligere informationer
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Konkurrencens fulde navn inklusiv året i slutningen (eksempel, Danish
+          Open 2016). Husk at lave store bogstaver. Navnet må kun indeholde alfanumeriske
+          tegn, streger(-), og-tegn(&), punktummer(.), kolonner(:), apostroffer(')
+          og mellemrum( ).
+        short_name: Et kort navn for visning. Hvis navnet på konkurrencen allerede
+          er kort, kan du bruge navnet igen (eksempel, Europe 2006)
+        name_reason_html: En kort forklaring på konkurrencens navn. Navnet skal overholde
+          <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          Konkurrence Kravs Politikken</a>.
+        venue:
+          country_id: ''
+          city_name: Byens navn og stat (hvis det er relevant) hvor konkurrencen bliver
+            afholdt. Inkluder ikke land (eksempel, Paris eller San Francisco, California).
+          name_html: 'Lokalet som konkurrencen vil blive afholdt. %{md}. For eksempel:  [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Detaljer om lokalet (eksempel, På første sal lagt bagved,
+            følg skiltene). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Vigtig information som deltagerne burde vide. Det vil blive vist
+          på konkurrencens forside. <br/>Udfyld venligst det her på engelsk</b> og
+          andre sprog som dine deltagere snakker.
+        competitor_limit:
+          enabled: Selvom at det ikke er nødvendigt ifølge Regelsættet, så er det
+            foreslået at have en deltagergrænse.
+          count: Antal deltagere tilladt for denne konkurrence. For nu er det tal
+            kun brugt for information, og forhindrer ikke folk i at tilmelde sig konkurrencen.
+            Der arbejdes på sagen.
+          reason: Hvad er grunden til deltagergrænsen? Udfyld det her på engelsk!
+        staff:
+          staff_delegate_ids: WCA Delegerede for konkurrencen.
+          trainee_delegate_ids: WCA Lærlingdelegerede for konkurrencen.
+          organizer_ids: Konkurrence arrangører (de har brug for en konto for at være
+            skrevet her)
+          contact_html: 'Optional contact information. If you do not fill this in,
+            contact inquiries will be submitted through a form without revealing organizers''
+            emails. %{md}. Example: [Text to display](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s)
+            url.
+          external_registration_page: Siden hvor deltagerne skal tilmelde for konkurrencen.
+            Det skal være en http(s) url.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Valutakoden for deltagergebyret.
+          base_entry_fee: Basis deltagergebyret for konkurrencen. Deltagergebyret
+            vil blive vist på konkurrencens informationsside og tilmeldingssiden hvis
+            den bliver brugt. Hvis den bliver sat på 0, så vil en sætning blive vist,
+            der fortæller at tilmeldingen for konkurrencen er gratis.
+          on_the_spot_entry_fee: Hvis den bliver sat til 0, så vil en sætning blive
+            vist, der siger at tilmelding i lokalet vil være gratis.
+          guest_entry_fee: For now this number is informational only, guest fees cannot
+            be managed through this website. If this is set to 0, a sentence of your
+            choice will be displayed about the spectator policy.
+          donations_enabled: ''
+          refund_policy_percent: For nu, er dette tal kun for information. Refunderinger
+            skal stadig tilbagebetales manuelt. Hvis dette bliver sat til 0, så vil
+            en sætning blive vist, der vil sige, at det ikke vil være nogle refunderinger.
+          refund_policy_limit_date: Datoen hvorefter at der ikke vil blive tilbagebetalt
+            nogle deltagergebyrer.
+        registration:
+          opening_date_time: 'Note: Registreringens åbningstider og lukketider er
+            i UTC-tid'
+          closing_date_time: ''
+          waiting_list_deadline_date: The date when waitlisted registrants will no
+            longer be accepted. If you have a deadline for refunds, the deadline for
+            being accepted should not be before the deadline for refunds.
+          event_change_deadline_date: Registered competitors have the right to update
+            their registered events until this time by contacting the organization
+            team. This deadline must not be set to a time before registration is set
+            to close. Leaving this field blank means that competitors may add an event
+            to their registered events up until that event is held. If you have on
+            the spot registration, this must be set to the same day as the competition.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements: Indikere venligst her ekstra tilmeldingskrav, som ikke
+            er nævnt oven over. Det kan være eksempler på hvordan man betaler. <br/>Udfyld
+            det her <b>på engelsk</b> og hvilke andre sprog som dine deltagere taler.
+            Det her vil blive vist på konkurrencens forside, og på tilmeldingssiden,
+            hvis der bruges WCA's tilmeldingssystem.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Uddyb hvorfor du gerne vil have at deltagerne skal aflevere deres
+              terninger tidligt. Udfyld det på engelsk!
+          qualification_results:
+            enabled: ''
+            reason: Uddyb hvorfor du gerne vil bruge kvalifikationsresultater. Udfyld
+              det på engelsk!
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Uddyb hvorfor du gerne vil begrænse kombinationen af bestemte
+              discipliner. Udfyld det på engelsk!
+            per_registration_limit:
+          main_event_id: Vinderen af denne disciplin vil blive erklæret vinderen af
+            konkurrencen.
+        remarks: Ekstra information som du vil fortælle WCAT. For eksempel, hvis der
+          er noget som du er usikker på, eller hvis der er en speciel forespørgsel
+          til WCAT. Udfyld det her på engelsk!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

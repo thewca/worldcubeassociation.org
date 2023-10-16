@@ -1393,6 +1393,151 @@ ko:
     #original_hash: ee89a3e
     registration_requirements: '이 대회의 참가 필수 요건:'
   competitions:
+    competition_form:
+      labels:
+        admin:
+          is_confirmed: 문서 내용 변경 불가 (주최자)
+          is_visible: 대회 공개
+        competition_id: ID
+        name: 이름
+        short_name: 대회 별명
+        name_reason:
+        venue:
+          country_id: 나라
+          city_name: 도시
+          name: 장소
+          details: 자세한 장소
+          address: 장소 주소
+          coordinates:
+        start_date: 시작 날짜
+        end_date: 끝 날짜
+        information: 정보
+        competitor_limit:
+          enabled: 대회 참가자 수 제한
+          count: 대회 참가자 제한
+          reason: 대회 참가자 제한 이유
+        staff:
+          staff_delegate_ids: WCA 파견위원
+          trainee_delegate_ids:
+          organizer_ids: 주최자
+          contact: 문의
+        championships:
+        website:
+          generate_website: 외부 홈페이지 대신 WCA 홈페이지 사용
+          external_website: 홈페이지
+          external_registration_page:
+          uses_wca_registration: 등록을 위해 WCA홈페이지 사용
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: 이 대회의 참가 신청 접수시 이메일 통보
+        entry_fees:
+          currency_code: 화폐 단위
+          base_entry_fee: 기본 참가비
+          on_the_spot_entry_fee: 즉석 참가 신청 비용
+          guest_entry_fee: 관객 입장료
+          donations_enabled: 참가비와 더불어 후원금도 지급가능
+          refund_policy_percent: 환불 비율
+          refund_policy_limit_date: 환불 기한
+        registration:
+          opening_date_time: 참가기간 시작
+          closing_date_time: 참가기간 종료
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: 즉석 참가 신청
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: 참관객
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: 참가 신청 추가 필수 사항
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: 비고
+        clone_tabs: 모든 탭 복사
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name:
+        short_name:
+        name_reason_html:
+        venue:
+          country_id: ''
+          city_name:
+          name_html:
+          details_html:
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information:
+        competitor_limit:
+          enabled:
+          count:
+          reason:
+        staff:
+          staff_delegate_ids:
+          trainee_delegate_ids:
+          organizer_ids:
+          contact_html:
+        championships:
+        website:
+          generate_website: ''
+          external_website:
+          external_registration_page:
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code:
+          base_entry_fee:
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: ''
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time:
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks:
+        clone_tabs: ''
     messages:
       #original_hash: 07de612
       upload_results: 이미 끝난 대회 입니다. 대회 결과가 승인되기를 기다리는 중입니다.

@@ -2987,6 +2987,218 @@ fr:
         greater_china: Championnats de Grande Chine
         #original_hash: 3b920b7
         generic: 'Championnat : %{type}'
+      labels:
+        admin:
+          is_confirmed: Ne pas laisser les organisateurs modifier cette compétition
+          is_visible: Rendre la compétition publique
+        competition_id: ID
+        name: Nom
+        short_name: Alias
+        name_reason: Explication du nom
+        venue:
+          country_id: Pays
+          city_name: Ville
+          name: Salle
+          details: Détails de la salle
+          address: Adresse de la salle
+          coordinates:
+        start_date: Date de début
+        end_date: Date de fin
+        information: Informations
+        competitor_limit:
+          enabled: Nombre maximum de compétiteurs
+          count: Nombre maximum de compétiteurs
+          reason: Raison pour la limite au nombre de compétiteurs
+        staff:
+          staff_delegate_ids: Délégué(s) WCA
+          trainee_delegate_ids: Délégué(es) WCA Stagiaire(s)
+          organizer_ids: Organisateur(s)
+          contact: Contact
+        championships:
+        website:
+          generate_website: Je veux utiliser le site de la WCA plutôt qu'un site externe
+            pour les informations complémentaires concernant la compétition.
+          external_website: Site internet
+          external_registration_page: Page pour les inscriptions
+          uses_wca_registration: Je souhaite utiliser le site de la WCA pour les inscriptions
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: M'avertir par email quand quelqu'un s'inscrit
+            à cette compétition
+        entry_fees:
+          currency_code: Monnaie
+          base_entry_fee: Frais d'inscription de base
+          on_the_spot_entry_fee: Coût de base des inscriptions sur place
+          guest_entry_fee: Frais d'inscription pour les accompagnateurs
+          donations_enabled: Je souhaite activer les donations, en plus de récolter
+            des frais d'inscription
+          refund_policy_percent: Pourcentage qui sera remboursé
+          refund_policy_limit_date: Date limite pour les remboursements
+        registration:
+          opening_date_time: Ouverture des inscriptions
+          closing_date_time: Fermeture des inscriptions
+          waiting_list_deadline_date: Date limite pour accepter les compétiteurs en
+            liste d'attente
+          event_change_deadline_date: Date limite pour que les compétiteurs mettent
+            à jour leurs épreuves
+          allow_on_the_spot: Inscriptions sur place
+          allow_self_delete_after_acceptance:
+          allow_self_edits: Modifier les inscriptions
+          guests_enabled: Accompagnateurs
+          guest_entry_status: Afficher un message pour l'admission gratuite des accompagnateurs
+          guests_per_registration:
+          extra_requirements: Conditions d'inscription additionnelles
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Je voudrais imposer au compétiteur la soumission de leur puzzle
+              à un moment précis avant le début prévu d'une épreuve
+            reason: Raison et détails concernant la soumission avancée des puzzles
+          qualification_results:
+            enabled: Je souhaite utiliser des résultats de qualification pour limiter
+              qui peut participer à certaines épreuves
+            reason: Raison et détails pour les résultats de qualification
+            allow_registration_without:
+          event_limitation:
+            enabled: Je souhaite restreindre les inscriptions des compétiteurs pour
+              certaines combinaisons d'épreuves
+            reason: Raison et détails pour la restriction
+            per_registration_limit:
+          main_event_id: Épreuve principale
+        remarks: Remarques
+        clone_tabs: Je souhaite cloner les onglets ainsi que les informations additionnelles
+          également.
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: Le nom complet de la compétition, avec la date à la fin (Par exemple,
+          European Rubik's Cube Championship 2006). Pensez à mettre la première lettre
+          des mots en majuscule. Le nom doit contenir uniquement des caractères alphanumériques,
+          ainsi que des tirets(-), esperluettes(&), points(.), deux-points(:), apostrophes('),
+          et espaces( ).
+        short_name: Un nom court pour l'affichage. Si le nom de la compétition est
+          déjà court, vous pouvez réutiliser ce nom (par exemple, France 2006).
+        name_reason_html: Une brève explication du nom de la compétition. Le nom doit
+          être en accord avec la <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          Competition Requirements Policy</a>.
+        venue:
+          country_id: ''
+          city_name: Nom de la ville où la compétition a lieu. Ne pas mettre le pays
+            (Par exemple, Paris).
+          name_html: 'La salle où la compétition à lieu. %{md}. Par exemple : [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: Détails concernant la salle (Par exemple, au première étage
+            au fond à gauche, suivez les panneaux). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informations importantes que les compétiteurs devraient avoir.
+          Elles seront affichées sur la page principale de la compétition. <br/>Merci
+          de remplir ces informations <b>en anglais</b> et dans les langues que vos
+          compétiteurs parlent.
+        competitor_limit:
+          enabled: Bien que le Règlement n'impose pas de fournir une limite au nombre
+            de compétiteurs, il est vivement recommandé de le faire.
+          count: Le nombre de compétiteurs autorisés dans cette compétition. Pour
+            l'instant ce nombre est informatif, et ne permet pas d'empêcher plus de
+            personnes de s'inscrire. Nous sommes entrain de travailler sur l'intégration
+            de cette limite dans la procédure d'inscription, mais cela demande un
+            peu de travail.
+          reason: Quelle est la raison pour la limite au nombre de compétiteurs ?
+            Merci de l'indiquer en Anglais !
+        staff:
+          staff_delegate_ids: Délégué(s) WCA pour la compétition.
+          trainee_delegate_ids: Délégués WCA Stagiaire pour la compétition.
+          organizer_ids: Organisateur(s) de la compétition (ils doivent avoir un compte
+            pour être listé ici).
+          contact_html: 'Information de contact (optionnel). Si vous ne remplissez
+            pas ce champ, les demandes de contact seront envoyées à travers un formulaire
+            ne révélant pas les adresses email des organisateurs. %{md}. Exemple :
+            [Texte à afficher](mailto:un@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Le site internet de la compétition. Doit être une adresse
+            http(s) valide.
+          external_registration_page: La page sur laquelle les compétiteurs doivent
+            s'inscrire pour la compétition. Doit être une url http(s) valide.
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: La monnaie utilisée pour les différents frais
+          base_entry_fee: Les frais d'inscriptions de base pour la compétition. Les
+            frais d'inscriptions seront affichés dans les informations de la compétition
+            et lors de l'inscription (si utilisée). S'ils sont mis à 0, une phrase
+            sera affichée informant que les inscriptions sont gratuites.
+          on_the_spot_entry_fee: Si mis à 0, une phrase indiquera que les inscriptions
+            sur place seront gratuites.
+          guest_entry_fee: Pour l'instant, ce nombre est seulement informatif, les
+            frais d'entrée pour les accompagnateurs ne peuvent pas être gérés via
+            ce site. Si ce nombre est défini à 0, une phrase de votre choix sera affichée
+            concernant votre politique sur l'admission des spectateurs.
+          donations_enabled: ''
+          refund_policy_percent: Pour le moment ce nombre est à titre informatif,
+            les remboursements doivent être effectués manuellement. Si mis à 0, une
+            phrase indiquera que les frais d'inscriptions ne seront pas remboursés.
+          refund_policy_limit_date: Date après laquelle aucun remboursement ne sera
+            effectué.
+        registration:
+          opening_date_time: 'Note : Les dates d''ouverture et de fermeture des inscriptions
+            sont au fuseau horaire UTC !'
+          closing_date_time: ''
+          waiting_list_deadline_date: La date à laquelle les participants en liste
+            d'attente ne sont plus acceptés. Si vous avez une date limite pour les
+            remboursements, la date limite pour être accepté ne doit pas être positionnée
+            avant la date limite pour les remboursements.
+          event_change_deadline_date: Les compétiteurs inscrits ont le droit de mettre
+            à jour les épreuves dans lesquelles ils sont inscrits jusqu'à cette date,
+            en contactant l'équipe d'organisation. Cette date limite ne doit pas être
+            positionnée avant la date à laquelle les inscriptions se terminent. Laisser
+            ce champ vide signifie que les compétiteurs peuvent ajouter une épreuve
+            à la liste des épreuves auxquelles ils sont inscrits jusqu'à ce que cette
+            épreuve ait lieu. Si vous acceptez les inscriptions sur place, cette date
+            doit être positionnée le jour de la compétition.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements: Merci d'indiquer ici toute autre conditions d'inscriptions
+            non couverte ci dessus, comme par exemple comment payer les frais d'inscription.
+            <br/>Merci de remplir ces informations <b>en anglais</b> et dans les langues
+            que vos compétiteurs parlent. Ces informations seront affichées sur la
+            page principale de la compétition, ainsi que sur la page d'inscription
+            si vous utilisez les inscriptions sur le site de la WCA.
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Merci de détailler ici pourquoi vous souhaiteriez imposer aux
+              compétiteurs la soumission avancée de leurs puzzles. Merci de remplir
+              ce champ en Anglais !
+          qualification_results:
+            enabled: ''
+            reason: Merci de détailler ici pourquoi vous souhaiteriez utiliser des
+              résultats de qualification. Merci de remplir ce champ en Anglais !
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: Merci de détailler ici pourquoi vous souhaiteriez restreindre
+              certaines combinaisons d'épreuves. Merci de remplir ce champ en Anglais
+              !
+            per_registration_limit:
+          main_event_id: Le gagnant de cette épreuve sera le gagnant de la compétition.
+        remarks: Des informations supplémentaires que vous souhaiteriez passer au
+          WCAT. Par exemple, s'il y a certaines choses dont vous n'êtes pas sûr, ou
+          si vous avez des requêtes spéciales à faire au WCAT. Merci de remplir ça
+          en Anglais!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

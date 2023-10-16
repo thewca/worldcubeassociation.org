@@ -1927,6 +1927,168 @@ sl:
       coordinates: Koordinate
       #original_hash: a672984
       add_championship: Dodaj Prvenstvo
+      labels:
+        admin:
+          is_confirmed:
+          is_visible: Napravi tekmovanje vidno javnosti
+        competition_id: ID
+        name: Ime
+        short_name: Vzdevek tekmovanja
+        name_reason:
+        venue:
+          country_id: Država
+          city_name: Ime mesta
+          name: Prostor tekmovanja
+          details: Podrobnosti prostora tekmovanja
+          address: Naslov prostora tekmovanja
+          coordinates:
+        start_date: Datum začetka
+        end_date: Datum konca
+        information: Informacije
+        competitor_limit:
+          enabled: Rad bi specificiral številčno omejitev tekmovalcev, ki se lahko
+            udeležijo tekmovanja
+          count: Maksimalno število tekmovalcev
+          reason: Razlog za omejitev števila tekmovalcev
+        staff:
+          staff_delegate_ids: WCA Delegat(i)
+          trainee_delegate_ids:
+          organizer_ids: Organizator(ji)
+          contact: Kontakt
+        championships:
+        website:
+          generate_website: Namesto zunanje spletne strani bi za dodatne informacije
+            rad uporabil WCA spletno mesto.
+          external_website: Spletna stran
+          external_registration_page:
+          uses_wca_registration: Za registracije bi rad uporabil WCA spletno mesto
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: Pošlji mi E-pošto ob novi registraciji za to
+            tekmovanje
+        entry_fees:
+          currency_code: Koda valute
+          base_entry_fee: Osnovna vstopnina
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: Zraven vstopnin bi še rad omogočil prejem donacij
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: Registracije so odprte
+          closing_date_time: Registracije so zaprte
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot:
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: Gostje
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: Opombe
+        clone_tabs: Rad bi kopiral vse zavihke z dodatnimi informacijami
+      hints:
+        admin:
+          is_confirmed:
+          is_visible: ''
+        competition_id: ''
+        name: Polno ime tekmovanja, vključujoč datum na koncu (primer Slovenian Open
+          2017). Ne pozabit na velike začetnice. Ime lahko vsebuje samo alfa-numerične
+          znake, vezaje(-), "and" znake(&), pike(.), dvopičja (:), apostrofe (') in
+          presledke ( ).
+        short_name: Kratko ime za prikaz. Če je samo ime tekmovanja kratko, se lahko
+          to tudi uporabi (primer Maribor 2017).
+        name_reason_html:
+        venue:
+          country_id: ''
+          city_name: Ime mesta in pokrajine (če je potrebno) kjer bo potekalo tekmovanje.
+            Ime države se NE vključi (primer Maribor ALI San Francisco, Californija).
+          name_html: 'Prostor, kjer bo potekalo tekmovanje. %{md}. Na primer: [Prometna
+            šola Maribor](http://www.prometna.net/spletna/)'
+          details_html: Podrobnosti o prostoru tekmovanja (primer prvo nadstropje,
+            sledite znakom). %{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informacije o omejitvi tekmovalcev, vstopnini za tekmovalce in
+          gledalce in ostale relevantne informacije.
+        competitor_limit:
+          enabled: Začasno je ta številka le informativnega značaja in ne preprečuje
+            nadaljnje registracije. Trenutno delamo na dodajanju eksplicitne podpore
+            za tok registracij, vendar so za to potrebna ostala dela.
+          count: Število dovoljenih tekmovalcev za to tekmovanje
+          reason: Kaj je razlog za omejitev tekmovalcev? Prosim izpolnite to v angleščini!
+        staff:
+          staff_delegate_ids: WCA Delegati tekmovanja.
+          trainee_delegate_ids:
+          organizer_ids: Organizatorji tekmovanja (za vnos je potreben uporabniški
+            račun).
+          contact_html: 'Poljubne kontaktne informacije. Javnosti bodi vidni E-naslovi
+            organizatorjev, če se to polje ne izpolni. %{md}. Primer: [Besedilo za
+            prikaz](mailto:some@email.com)'
+        championships:
+        website:
+          generate_website: ''
+          external_website: Spletna stran tekmovanja. http(s) URL mora biti veljavni.
+          external_registration_page:
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Koda valute za vstopnine.
+          base_entry_fee: Osnovna vstopnina za tekmovanje. Vstopnina bo zapisana na
+            strani z informacijami in na strani za registracijo.
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: ''
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: Registracije se odprejo in zaprejo po univerzalnem koordiniranem
+            času (UTC)
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot:
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks:
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

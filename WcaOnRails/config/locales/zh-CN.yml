@@ -2001,6 +2001,152 @@ zh-CN:
         world: 世界锦标赛
         #original_hash: e045169
         greater_china: 中国锦标赛
+      labels:
+        admin:
+          is_confirmed: 不要让组织者编辑这个比赛
+          is_visible: 公开比赛
+        competition_id: ID
+        name: 名字
+        short_name: 比赛昵称
+        name_reason: 命名的原因
+        venue:
+          country_id: 国家/地区
+          city_name: 城市
+          name: 地点
+          details: 地点详情
+          address: 地址
+          coordinates:
+        start_date: 开始日期
+        end_date: 结束日期
+        information: 基本信息
+        competitor_limit:
+          enabled: 我想指定本次比赛的日人数限制。
+          count: 最大人数
+          reason: 人数限制原因
+        staff:
+          staff_delegate_ids: WCA 代表
+          trainee_delegate_ids:
+          organizer_ids: 主办方
+          contact: 联系方式
+        championships:
+        website:
+          generate_website: 我想使用 WCA 网站来显示更多信息。
+          external_website: 比赛官网
+          external_registration_page:
+          uses_wca_registration: 我想使用 WCA 报名系统
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: 当有人报名本次比赛时发邮件通知我
+        entry_fees:
+          currency_code: 货币代码
+          base_entry_fee: 基础报名费
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: 除了报名费之外，我想要开启捐赠功能
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: 报名开放时间
+          closing_date_time: 报名结束时间
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot:
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: 随行人员
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: 备注
+        clone_tabs: 我想复制所有 tab，连同额外信息
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: 比赛全名需在结尾包含年份（例：Danish Open 2016）。注意大小写。名字只能包含字母、数字、标点（-&.:'）和空格。
+        short_name: 用于显示的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
+        name_reason_html:
+        venue:
+          country_id: ''
+          city_name: 比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。
+          name_html: 比赛举办的地点。%{md}。比如[Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)
+          details_html: 详细地点（例：教学楼一楼）。%{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
+        competitor_limit:
+          enabled: 目前这个数字只是纯展示，不会限制选手报名。我们在努力为注册流程添加人数限制的功能。
+          count: 该比赛的人数限制。
+          reason: 为啥限制比赛人数？请使用英文填写！
+        staff:
+          staff_delegate_ids: 比赛的WCA代表们。
+          trainee_delegate_ids:
+          organizer_ids: 主办方（需要提前注册帐号）
+          contact_html: 可选的联系信息。如果你不填写此项，将会显示主办方的邮件。%{md}。例：[Text to display](mailto:some@email.com)
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: 比赛官网。必须是一个合法的http(s)地址。
+          external_registration_page:
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: 报名费的货币代码。
+          base_entry_fee: 比赛的基础报名费。如果填写报名费，将在比赛信息页和报名页显示。如果设置为 0，将显示一句话，表示将免费接受报名。<br><br><b>免责声明：以下
+            WCA 费用估算仅是基于当前汇率的近似值，费用没有任何法律约束力。</b>
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: ''
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: 注意：报名开放和结束是UTC时间
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason:
+          qualification_results:
+            enabled: ''
+            reason:
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: 一些你想和董事会说的额外信息。比如为啥这个比赛没有提前一个月申请之类的。请使用英文填写！
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必须以年份结尾，并且只能包含数字、字母、标点（-&.:''）和空格'

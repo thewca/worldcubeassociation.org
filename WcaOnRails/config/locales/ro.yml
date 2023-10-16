@@ -3261,6 +3261,218 @@ ro:
         ajax_error: >-
           A apărut o eroare la estimare Cotizațiilor, posibil din cauza faptului
           că nu există un curs de schimb valabil pentru valuta selectată.
+      labels:
+        admin:
+          is_confirmed: Nu permite organizatorilor să editeze competiția
+          is_visible: Fă competiția vizibilă
+        competition_id: Id
+        name: Nume
+        short_name: Apelativ pentru competiție
+        name_reason: Explicatie pentru nume
+        venue:
+          country_id: Țară
+          city_name: Numele orașului
+          name: Locație
+          details: Detalii despre locație
+          address: Adresa locației
+          coordinates:
+        start_date: Prima zi
+        end_date: Ultima zi
+        information: Informații
+        competitor_limit:
+          enabled: Limita de concurenți
+          count: Numărul maxim de concurenți
+          reason: Motivul pentru limita de concurenți
+        staff:
+          staff_delegate_ids: Delegat/Delegați WCA
+          trainee_delegate_ids: 'Delegați Candidați WCA:'
+          organizer_ids: Organizatori
+          contact: Contact
+        championships:
+        website:
+          generate_website: Voi folosi site-ul WCA pentru informații suplimentare
+            în loc de alt site
+          external_website: Site
+          external_registration_page: Pagina de înregistrare
+          uses_wca_registration: Vreau să folosesc site-ul WCA pentru înregistrare
+          uses_wca_live: Voi folosi WCA Live pentru scoruri.
+        user_settings:
+          receive_registration_emails: Trimite-mi notificare pe e-mail când cineva
+            se înregistrează pentru competiție
+        entry_fees:
+          currency_code: RON
+          base_entry_fee: Taxa de înregistrare de bază
+          on_the_spot_entry_fee: Taxa de bază pentru înregistrare pe loc
+          guest_entry_fee: Taxa de intrare pentru spectatori
+          donations_enabled: Vreau să accept donații, îm plus față de colectarea taxei
+            de înregistrare.
+          refund_policy_percent: Procent de restituit
+          refund_policy_limit_date: Data limită pentru restituiri
+        registration:
+          opening_date_time: Înregistrare deschisă
+          closing_date_time: Înregistrare închisă
+          waiting_list_deadline_date: Termen limită pentru acceptarea concurenților
+            de pe lista de așteptare
+          event_change_deadline_date: Termen limită pentru actualizarea de către concurenți
+            a probelor
+          allow_on_the_spot: Înregistrări pe loc
+          allow_self_delete_after_acceptance: Anulare înscrieri
+          allow_self_edits: Editare înscrieri
+          guests_enabled: Însoțitori
+          guest_entry_status: Afișează mesaj pentru accesul gratuit al spectatorilor
+          guests_per_registration: Numărul maxim de spectatori per înregistrare
+          extra_requirements: Alte cerințe pentru înregistrare
+          force_comment: Cere-le concurenților să scrie un comentariu obligatoriu
+            la înregistrare
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: Vreau să le cer concurenților să își depună puzzleurile la un
+              moment de timp specificat înainte de începutul unei probe
+            reason: Motivație pentru depunerea din timp a puzzle-urilor
+          qualification_results:
+            enabled: Vreau să folosesc rezultatele din calificări pentru a limita
+              numărul de concurenți la anumite probe
+            reason: Motivație pentru folosirea rezultatelor din calificări
+            allow_registration_without: Probe cu Calificare
+          event_limitation:
+            enabled: Vreau să nu le permit concurențiilor să se înscrie la anumite
+              combinații de probe
+            reason: Motivație pentru restricțiile legate de probe
+            per_registration_limit: Număr maxim de probe per înregistrare
+          main_event_id: Proba principală
+        remarks: Observații
+        clone_tabs: Vreau să multiplic, de asemenea, toate taburile cu informații
+          suplimentare
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: 'Numele complet al competiției, inclusiv anul la sfârșitul ei (de exemplu
+          U.R.A. Spring 2016). Asigură-te că începi cuvintele cu literă mare. Numele
+          trebuie să conțină numai caractere alfanumerice, spații și următoareel caractere
+          speciale  -  &  .  :  '''
+        short_name: Un nume mai scurt pentru a fi afișat. Dacă numele competiției
+          are mai puțin de %{short_name_limit} caractere, nu trebuie să editezi acest
+          câmp, întrucât trebuie să fie identic cu numele complet.
+        name_reason_html: O scurtă explicație a numelui competiției. Numele trebuie
+          să respecte <a href='/documents/policies/external/Competition%20Requirements.pdf'>Politica
+          de Competiții WCA</a>.
+        venue:
+          country_id: ''
+          city_name: 'Numele orașului și statului (unde este cazul) în care are loc
+            competiția. Nu scrieți țara (exemplu: Paris SAU San Francisco, California)'
+          name_html: 'Locația unde se desfășoară competiția. %{md}. De exemplu: [Cité
+            des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
+          details_html: 'Detalii despre locație (exemplu: La parter, urmați semnele
+            din partea dreaptă a holului).  %{md}'
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: Informații despre numărul maxim de concurenți, taxe de înregistrare
+          pentru concurenți și spectatori și alte detalii relevante pentru pamenii
+          ce vor să concureze sau să fie în public.
+        competitor_limit:
+          enabled: Deși nu este cerut de Regulament, este foarte indicat să se precizeze
+            limita numărului de concurenți.
+          count: Numărul maxim de concurenți permis în această competiție. Deocamdată,
+            acest număr este doar informativ și nu poate împiedica înscrierea concurenților
+            suplimentari. Lucrăm pentru a remedia această situație, dar implică și
+            alte eforturi.
+          reason: De ce există limita numărului de concurenți? Te rugăm să scrii în
+            limba engleză!
+        staff:
+          staff_delegate_ids: Delegați WCA pentru competiție
+          trainee_delegate_ids: Delegați Candidați WCA pentru această competiție
+          organizer_ids: Organizatorii competiției (trebuie să aibă cont WCA pentru
+            a apărea aici)
+          contact_html: 'Informații de contact opționale. Dacă nu completezi această
+            secțiune, cererile vor fi transmise printr-un formular fără a dezvălui
+            adresele de e-mail ale organizatorilor. %{md} Exemplu: [Text de afișat](mailto:some@email.com)'
+        championships:
+          championship_type: ''
+        website:
+          generate_website: ''
+          external_website: Site-ul competiției. Trebuie să aiba un URL http sau https
+            valid.
+          external_registration_page: Pagina unde concurenții se pot înregistra pentru
+            competiție. Trebuie să fi un URL http(s) valid .
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: Codul valutei pentru taxe
+          base_entry_fee: 'Taxa de înregistrare de bază. Va fi afișată pe pagina de
+            informații a competiției și pe pagina de înregistrare, dacă există. Dacă
+            este setată la 0, un mesaj conform căruia înregistrările sunt acceptate
+            gratuit va fi afișat. <br><br><b>DISCLAIMER: Următorul estimat al Cotizațiilor
+            WCA este doar o aproximație bazată pe cursul valutar curent și nu are
+            sub nicio formă un caracter juridic obligatoriu pentru plata Cotizațiilor
+            </b>'
+          on_the_spot_entry_fee: Dacă este setată la 0, va fi afișat un mesaj conform
+            căruia înregistrările pe loc vor fi acceptate gratuit.
+          guest_entry_fee: Deocamdată, acest număr este doar informativ, taxele pentru
+            spectatori nu pot fi administrate prin acest site. Dacă este setat la
+            0, va fi afișat un mesaj la alegerea ta despre regimul spectatorilor.
+          donations_enabled: ''
+          refund_policy_percent: Deocamdată, acest număr este doar informativ, restituirile
+            vor trebui să fie cerute manual. Dacă este setat la 0, va fi afișat un
+            mesaj conform căruia taxele de înregistrare nu vor fi restituite sub nicio
+            circumstanță.
+          refund_policy_limit_date: Data după care nu se vor mai acorda restituiri
+        registration:
+          opening_date_time: 'Notă: Orele pentru începutul și sfarșitul înregistrării
+            sunt în UTC'
+          closing_date_time: ''
+          waiting_list_deadline_date: Data la care ce înscriși pe lista de așteptare
+            nu vor mai fi aceptați. Dacă ai termen limită pentru rambursări, termenul
+            limită pentru acceptare nu ar trebui să preceadă celui pentru rambursări.
+          event_change_deadline_date: Concurenții înscriși au dreptul să-și actualizeze
+            probele până la momentul specificat, contactând echipa de organizare.
+            Acest termen limită nu poate fi setat înainte de închiderea înscrierilor.
+            Dacă acest câmp nu este completat, atunci concurenții își pot adăuga o
+            probă până la momentul desfășurării acesteia. Dacă accepți înscrieri pe
+            loc, acest lucru trebuie să se întâmple în ziua competiției.
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration: Numărul de spectatori per înregistrare permis în
+            cadrul acestei competiții. Înregistrările care au prea mulți spectatori
+            asociați vor fi blocate. Lasă câmpul gol dacă nu există limită.
+          extra_requirements: Te rugăm să specifici aici orice alt criteriu pentru
+            înregistrare care nu a fost acoperit mai sus, de exemplu informații despre
+            efectuarea plății. <br/>Te rugăm să completezi <b>în engleză</b> și în
+            orice alte limbi care te aștepți să fie vorbite la competiție; acestea
+            vor fi afișate pe pagina de informații a competiției, precum și pe pagina
+            de înregistrări (dacă folosești interfața WCA).
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: Te rugăm să elaborezi aici de ce soliciți depunerea puzzle-urilor
+              mai devreme. Completează în engleză!
+          qualification_results:
+            enabled: ''
+            reason: Te rugăm să elaborezi aici de ce soliciți utilizarea timpilor
+              din calificări. Completează în engleză!
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason: Te rugăm să elaborezi aici de ce soliciți restricționarea participării
+              la anumite combinații de probe. Completează în engleză!
+            per_registration_limit: Opțional, setează numărul total de probe pentru
+              care un concurent se poate înregostra (folosit în mod uzual pentru competițiile
+              din categoria "Favorites"). Trebuie să adaugi probe înainte de a utiliza
+              acest câmp. Lasă câmpul gol dacă nu există nicio limită.
+          main_event_id: Câștigătorul acestei probe va fi câștigătorul competiției.
+        remarks: Informații adiționale pe care vrei să le transmiți către WCAT. De
+          exemplu, dacă este ceva de care nu ești sigur, sau dacă ai orice cerere
+          specială către WCAT. Completează în engleză!
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

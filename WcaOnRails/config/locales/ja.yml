@@ -2355,6 +2355,156 @@ ja:
         greater_china: 中国統一大会
         #original_hash: 3b920b7
         generic: '地域別大会: %{type}'
+      labels:
+        admin:
+          is_confirmed: 運営メンバー (代理人除く) による大会編集を許可しない。
+          is_visible: 大会を一般公開する
+        competition_id: ID
+        name: 大会名
+        short_name: 大会名略称
+        name_reason: 大会名の由来 (命名理由)
+        venue:
+          country_id: 開催国
+          city_name: 都市名
+          name: 会場
+          details: 会場詳細
+          address: 会場所在地
+          coordinates:
+        start_date: 開始日
+        end_date: 終了日
+        information: 概要
+        competitor_limit:
+          enabled: 大会定員
+          count: 大会定員
+          reason: 大会定員設定の理由
+        staff:
+          staff_delegate_ids: WCA 代理人
+          trainee_delegate_ids: WCA 代理人候補
+          organizer_ids: 主催者
+          contact: 連絡先
+        championships:
+        website:
+          generate_website: 追加情報用の外部ウェブサイトを用意せずに WCA ウェブサイトを使用する
+          external_website: ウェブサイト
+          external_registration_page: 参加申込ページ
+          uses_wca_registration: 参加申し込みに WCA ウェブサイトを使用する
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: 大会に参加申し込みがあったとき電子メールで通知する
+        entry_fees:
+          currency_code: 通貨コード
+          base_entry_fee: 基本参加費
+          on_the_spot_entry_fee: 会場申込の場合の参加費
+          guest_entry_fee: 見学者の入場料
+          donations_enabled: 寄付金の受け入れを有効にする
+          refund_policy_percent: キャンセル時返金率 (％)
+          refund_policy_limit_date: 返金可能なキャンセル期日
+        registration:
+          opening_date_time: 参加申し込みを開始する
+          closing_date_time: 参加申し込みを停止する
+          waiting_list_deadline_date: キャンセル待ちリストにいる競技者を繰り上げて承認できる締め切り日時
+          event_change_deadline_date: すでに登録済みの申込内容（参加種目など）を変更できる締切日時
+          allow_on_the_spot: 会場申込について
+          allow_self_delete_after_acceptance:
+          allow_self_edits: 申し込み登録内容の編集
+          guests_enabled: 見学者人数
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: 大会申し込み要件 (追加) ※自動生成される大会申し込み要件の後に追加される情報です。
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: 競技の開始以前に特定の時点で、競技者のパズル提出を求める
+            reason: パズル提出を早く設定する理由および詳細
+          qualification_results:
+            enabled: 特定の種目の参加者を制限するために、過去の記録を使用する
+            reason: 過去の記録の適用の理由および詳細
+            allow_registration_without:
+          event_limitation:
+            enabled: 特定の種目への同時参加を制限する。
+            reason: 特定種目への同時参加を制限する理由および詳細
+            per_registration_limit:
+          main_event_id: メイン種目
+        remarks: 備考
+        clone_tabs: すべてのタブを追加情報とともに複製する
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: '大会の正式名称 (英名) 。<p> (1) 必ず末尾に年号を含める (例 : SCJ Kansai Winter 2020)</p><p>
+          (2) 語頭を大文字にする</p><p> (3) 英数字と - & . : '' および半角スペースのみ使用可。</p>'
+        short_name: 大会名の略称 (Kansai 2017 など正式名が短い場合は正式名と重複可)
+        name_reason_html: 大会名の簡潔な説明。大会名は <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          大会要件方針</a>に沿っている必要があります。
+        venue:
+          country_id: ''
+          city_name: '開催都市名 (例 : Kawasaki, Kanagawa や Shibuya, Tokyo など「市区町村, 都道府県」の順)'
+          name_html: '大会が開催される会場。%{md}。例: [Takatsu Civic Hall](http://www.city.kawasaki.jp/takatsu/category/111-11-1-0-0-0-0-0-0-0.html)。'
+          details_html: '会場の詳細 (例: 12階)。%{md}'
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: '大会の概要 (例 : UT Open 2010 is the first students-organized competition
+          in Japan.)'
+        competitor_limit:
+          enabled: WCA 大会規則では大会定員の設定は必須とはされていませんが、強く推奨されています。
+          count: この大会で許容される参加者数の上限。現在のところ定員による締切システムは未実装のため、この値は表示されるのみで自動処理は行われません。
+          reason: 大会定員設定の理由 (英語で記入してください)
+        staff:
+          staff_delegate_ids: 'WCA 代理人 (例 : Yuji Suse)'
+          trainee_delegate_ids: この大会の代理人候補
+          organizer_ids: 大会運営チーム (WCA アカウントが必要です)
+          contact_html: "[任意項目] speedcubing.or.jpドメインのメーリングリストを使用することを推奨します。詳細はSCJ社員に尋ねてください。記載がない場合、主催者がWCAアカウントに登録しているメールアドレスが公開されます。%{md}の文法で書いてください　例:
+            [○○大会実行委員会](mailto:○○@speedcubing.or.jp)"
+        championships:
+        website:
+          generate_website: ''
+          external_website: 大会ウェブサイトの URL
+          external_registration_page: 競技者が参加申込を行うためのページ。httpまたはhttpsのURLとしてください。
+          uses_wca_registration: ''
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: 参加費の通貨コード
+          base_entry_fee: 大会の基本参加費。大会情報ページおよび大会申込ページ (使用する場合) に表示されます。0に設定した場合、参加無料である旨表示されます。
+          on_the_spot_entry_fee: 0 と入力した場合、「見学者は入場無料です。」と表示されます。
+          guest_entry_fee: 現在のところ見学者入場料集金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の集金は手動で行ってください。<br/>0
+            と入力した場合、「見学者入場料は無料です。」と表示されます。
+          donations_enabled: ''
+          refund_policy_percent: 現在のところ返金システムは未実装のため、この値は表示されるのみで自動処理は行われません。実際の返金は手動で行ってください。<br/>0
+            と入力した場合、「キャンセル時の返金は行いません。」と表示されます。
+          refund_policy_limit_date: 返金対応期限
+        registration:
+          opening_date_time: 申し込み受付期間 (世界標準時。日本時間 -9 時間)
+          closing_date_time: ''
+          waiting_list_deadline_date: キャンセル待ちリストにいる競技参加者を繰り上げ承認できる期限。もし返金にも期限を設けていれば、返金期限が先、繰り上げ期限はそれと同時か後の関係とする。
+          event_change_deadline_date: 参加種目や同伴者の人数など、いったん承認済みの登録内容でも実行委員に問い合わせることで変更を受け付けることができます。この期限は申込期間の終了時と同じか、あるいは終了後も一定の猶予を設けることが可能。このフィールドを空欄にした場合、大会当日に実際に試技をする直前まで変更可能なことになる。もし飛び込み参加可能な大会を企画する場合は空欄となるが、日本での前例はほとんどありません。
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance:
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements: 支払い方法など、「大会申し込み要件」で不足する内容はこちらに入力してください。<br/>必ず<b>英語を併記して</b>記入してください。<br/>入力内容は大会情報ページと大会申込ページに表示されます。
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason: パズル提出を早く設定する理由を詳しく説明してください (英語で)
+          qualification_results:
+            enabled: ''
+            reason: 過去の記録の適用の理由および詳細を記載してください (英語で)
+            allow_registration_without:
+          event_limitation:
+            enabled: ''
+            reason: 特定種目への同時参加を制限する理由および詳細を記載してください (英語で)
+            per_registration_limit:
+          main_event_id: この種目の優勝者が本大会の優勝者となります。
+        remarks: WCATに伝達する追加情報（例：何か不安がある場合や、要望がある場合に記入）。必ず英語で記入してください。
+        clone_tabs: ''
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
