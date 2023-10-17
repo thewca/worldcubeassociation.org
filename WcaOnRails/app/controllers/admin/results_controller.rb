@@ -39,10 +39,6 @@ module Admin
       #   - intersect with the competitions in the parameters
       #   - either lock them and reply ok, or there is none to lock and reply
       #   it was a no-op.
-      @other_posting = Competition.where.not(posting_user: [nil, current_user]).any?
-      if @other_posting
-        return render json: { error: "Someone is already posting!" }
-      end
       @updated_competitions = Competition.pending_posting.where(posting_user: nil).where(id: params[:competition_ids])
       if @updated_competitions.empty?
         return render json: { error: "No competitions to lock." }
