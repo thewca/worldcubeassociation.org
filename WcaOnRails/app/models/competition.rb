@@ -2047,7 +2047,7 @@ class Competition < ApplicationRecord
         "usesWcaLive" => use_wca_live_for_scoretaking,
       },
       "userSettings" => {
-        "receiveRegistrationEmails" => receive_registration_emails || false,
+        "receiveRegistrationEmails" => self.editing_user_id.present? && receiving_registration_emails?(self.editing_user_id),
       },
       "entryFees" => {
         "currencyCode" => currency_code,

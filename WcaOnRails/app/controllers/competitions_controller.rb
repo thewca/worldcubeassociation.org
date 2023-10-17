@@ -70,11 +70,17 @@ class CompetitionsController < ApplicationController
       unless competition.user_can_view?(current_user)
         raise ActionController::RoutingError.new('Not Found')
       end
+
+      assign_editing_user(competition)
     end
   end
 
   private def assign_delegate(competition)
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
+  end
+
+  private def assign_editing_user(competition)
+    competition.editing_user_id = current_user.id
   end
 
   # Normalizes the params that old links to index still work.
@@ -265,6 +271,8 @@ class CompetitionsController < ApplicationController
 
   def new
     @competition = Competition.new
+
+    assign_editing_user(@competition)
     assign_delegate(@competition)
   end
 
