@@ -37,8 +37,7 @@ import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
 import AnnouncementActions from './AnnouncementActions';
-
-// TODO: Need to add cloning params
+import { teams } from '../../lib/wca-data.js.erb';
 
 function AnnouncementMessage() {
   const {
@@ -53,26 +52,27 @@ function AnnouncementMessage() {
 
   if (!isPersisted) return null;
 
+  const wcatTeam = teams.byId.wcat;
+
   let messageStyle = null;
 
   let i18nKey = null;
   let i18nReplacements = {};
 
-  // TODO: Replace the emails
   if (isConfirmed && isVisible) {
     messageStyle = 'success';
     i18nKey = 'competitions.competition_form.public_and_locked_html';
   } else if (isConfirmed && !isVisible) {
     messageStyle = 'warning';
     i18nKey = 'competitions.competition_form.confirmed_but_not_visible_html';
-    i18nReplacements = { contact: 'replace-me' };
+    i18nReplacements = { contact: wcatTeam.email };
   } else if (!isConfirmed && isVisible) {
     messageStyle = 'error';
     i18nKey = 'competitions.competition_form.is_visible';
   } else if (!isConfirmed && !isVisible) {
     messageStyle = 'warning';
     i18nKey = 'competitions.competition_form.pending_confirmation_html';
-    i18nReplacements = { contact: 'replace-me' };
+    i18nReplacements = { contact: wcatTeam.email };
   }
 
   return (

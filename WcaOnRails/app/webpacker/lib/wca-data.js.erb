@@ -136,3 +136,9 @@ export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_
 // ----- CHAMPIONSHIPS -----
 
 export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>
+
+// ----- TEAMS -----
+
+export const teams = {
+  byId: <%= Team.official.index_by(&:friendly_id).to_json.html_safe %>
+}
