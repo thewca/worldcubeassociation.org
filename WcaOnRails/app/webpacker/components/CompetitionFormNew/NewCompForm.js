@@ -31,13 +31,14 @@ import useToggleState from '../../lib/hooks/useToggleState';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import competitionFormReducer from './store/reducer';
-import { changesSaved, setErrors } from './store/actions';
+import { changesSaved } from './store/actions';
 import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
 import AnnouncementActions from './AnnouncementActions';
 import { teams } from '../../lib/wca-data.js.erb';
+import ConfirmationActions from './ConfirmationActions';
 
 function AnnouncementMessage() {
   const {
@@ -97,27 +98,21 @@ function NewCompForm() {
 
   const { save, saving } = useSaveAction();
 
+  const onSuccess = useCallback(() => dispatch(changesSaved()), [dispatch]);
+
+  const onError = useCallback((err) => {
+    // TODO
+    console.log(err);
+    throw err;
+  }, []);
+
   const createComp = useCallback(() => {
-    save('/competitions', competition, (data) => {
-      dispatch(setErrors(data));
-      // TODO we should probably check whether there are _actual_ errors here
-      //   -- in the backend, return errors only if there are errors as an error state!
-      dispatch(changesSaved());
-    }, { method: 'POST' });
-  }, [dispatch, competition, save]);
+    save('/competitions', competition, onSuccess, { method: 'POST' }, onError);
+  }, [competition, save, onSuccess, onError]);
 
   const updateComp = useCallback(() => {
-    save(`/competitions/${initialCompetition.id}`, competition, (data) => {
-      dispatch(setErrors(data));
-      // TODO see above
-      dispatch(changesSaved());
-    });
-  }, [dispatch, competition, initialCompetition.id, save]);
-
-  const saveComp = useMemo(
-    () => (isPersisted ? updateComp : createComp),
-    [isPersisted, createComp, updateComp],
-  );
+    save(`/competitions/${initialCompetition.id}`, competition, onSuccess, { method: 'PATCH' }, onError);
+  }, [competition, initialCompetition.id, save, onSuccess, onError]);
 
   const unsavedChanges = useMemo(() => (
     !_.isEqual(competition, initialCompetition)
@@ -147,7 +142,7 @@ function NewCompForm() {
       You have unsaved changes. Don&apos;t forget to
       {' '}
       <Button
-        onClick={saveComp}
+        onClick={isPersisted ? updateComp : createComp}
         disabled={saving}
         loading={saving}
         color="blue"
@@ -228,7 +223,10 @@ function NewCompForm() {
 
         <Divider />
 
-        <Button onClick={saveComp} primary>{isPersisted ? 'Update Competition' : 'Create Competition'}</Button>
+        <ConfirmationActions
+          createComp={createComp}
+          updateComp={updateComp}
+        />
       </Form>
     </>
   );

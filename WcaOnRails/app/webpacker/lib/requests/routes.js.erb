@@ -81,10 +81,13 @@ export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_hel
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
 
 export const competitionAnnouncementDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announcement_data_path("${competitionId}")) %>`
+export const competitionConfirmationDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_confirmation_data_path("${competitionId}")) %>`
 
 export const announceCompetitionUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announce_path("${competitionId}")) %>`
 export const cancelCompetitionUrl = (competitionId, undo = false) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_cancel_path("${competitionId}")) %>?undo=${undo}`
 export const closeRegistrationWhenFullUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_close_full_registration_path("${competitionId}")) %>`
+
+export const confirmCompetitionUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_confirm_path("${competitionId}")) %>`
 
 export const competitionNearbyJsonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.nearby_competitions_json_path)%>`;
 

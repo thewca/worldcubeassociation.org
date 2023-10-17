@@ -657,6 +657,17 @@ class CompetitionsController < ApplicationController
     }
   end
 
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
+
+  def confirmation_data
+    competition = competition_from_params
+
+    render json: {
+      canConfirm: current_user.can_confirm_competition?(competition),
+      cannotDeleteReason: current_user.get_cannot_delete_competition_reason(competition),
+    }
+  end
+
   before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: false) }, only: [:destroy]
 
   def destroy
