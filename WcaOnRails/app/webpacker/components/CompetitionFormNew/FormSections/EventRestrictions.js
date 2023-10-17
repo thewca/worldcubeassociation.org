@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Divider } from 'semantic-ui-react';
 import SubSection from './SubSection';
 import {
@@ -8,21 +8,8 @@ import {
   InputSelect,
   InputTextArea,
 } from '../Inputs/FormInputs';
-import { events } from '../../../lib/wca-data.js.erb';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
-
-const mainEventOptions = events.official.map((event) => ({
-  key: event.id,
-  value: event.id,
-  text: event.name,
-}));
-
-mainEventOptions.unshift({
-  key: '',
-  value: '',
-  text: '',
-});
 
 export default function EventRestrictions() {
   const {
@@ -33,7 +20,22 @@ export default function EventRestrictions() {
         eventLimitation,
       },
     },
+    storedEvents,
   } = useStore();
+
+  const mainEventOptions = useMemo(() => {
+    const storedEventOptions = storedEvents.map((event) => ({
+      key: event.id,
+      value: event.id,
+      text: event.name,
+    }));
+
+    return [{
+      key: '',
+      value: '',
+      text: '',
+    }, ...storedEventOptions];
+  }, [storedEvents]);
 
   const earlySubmission = earlyPuzzleSubmission.enabled;
   const needQualification = qualificationResults.enabled;

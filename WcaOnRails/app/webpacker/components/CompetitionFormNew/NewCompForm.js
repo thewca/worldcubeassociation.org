@@ -234,6 +234,7 @@ function NewCompForm() {
 
 export default function Wrapper({
   competition = null,
+  storedEvents = [],
   isAdminView = false,
   isPersisted = false,
   isCloning = false,
@@ -245,6 +246,7 @@ export default function Wrapper({
         competition,
         initialCompetition: competition,
         errors: null,
+        storedEvents,
         isAdminView,
         isPersisted,
         isCloning,
