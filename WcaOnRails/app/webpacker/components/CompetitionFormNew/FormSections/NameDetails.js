@@ -1,15 +1,19 @@
 import React from 'react';
 import { InputString } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
+import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 
 export default function NameDetails() {
-  const { isPersisted } = useStore();
+  const { competition: { name }, isPersisted, isAdminView } = useStore();
+
+  const nameAlreadyShort = name.length <= competitionMaxShortNameLength;
+  const disableIdAndShortName = !isAdminView && nameAlreadyShort;
 
   return (
     <>
-      {isPersisted && <InputString id="competitionId" />}
+      {isPersisted && <InputString id="competitionId" disabled={disableIdAndShortName} />}
       <InputString id="name" />
-      {isPersisted && <InputString id="shortName" />}
+      {isPersisted && <InputString id="shortName" disabled={disableIdAndShortName} />}
       <InputString id="nameReason" mdHint />
     </>
   );

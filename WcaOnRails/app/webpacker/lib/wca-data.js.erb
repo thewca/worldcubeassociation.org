@@ -133,6 +133,8 @@ export const nearbyCompetitionDistanceWarning = <%= Competition::NEARBY_DISTANCE
 
 export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_KM_DANGER.to_json.html_safe %>
 
+export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENGTH.to_json.html_safe %>
+
 // ----- CHAMPIONSHIPS -----
 
 export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>

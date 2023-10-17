@@ -102,7 +102,6 @@ function NewCompForm() {
 
   const onError = useCallback((err) => {
     // TODO
-    console.log(err);
     throw err;
   }, []);
 
@@ -213,7 +212,7 @@ function NewCompForm() {
 
         <EventRestrictions />
 
-        <InputTextArea id="remarks" />
+        <InputTextArea id="remarks" disabled={competition.admin.isConfirmed} />
 
         {isCloning && (
           <SubSection section="cloning">
