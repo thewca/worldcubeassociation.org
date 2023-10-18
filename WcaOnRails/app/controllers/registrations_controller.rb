@@ -531,7 +531,7 @@ class RegistrationsController < ApplicationController
             update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
           rescue Faraday::Error
             logger.error "Couldn't update Microservice"
-            return head: :internal_server_error
+            return head :internal_server_error
           end
         end
       end

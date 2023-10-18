@@ -3,14 +3,14 @@
 
 class PaymentController < ApplicationController
   def payment_config
-    return json: { error: "Please Log in" }, status: :unauthorized unless current_user.present?
+    return render json: { error: "Please Log in" }, status: :unauthorized unless current_user.present?
     payment_id = params.require(:payment_id)
     competition_id = params.require(:competition_id)
 
     competition = Competition.find(competition_id)
     stripe_transaction = StripeTransaction.find(payment_id)
 
-    render json: { stripe_publishable_key: EnvVars.STRIPE_PUBLISHABLE_KEY, connected_account_id: competition.connected_stripe_account_id, client_secret: stripe_transaction.client_secret }
+    render json: { stripe_publishable_key: EnvConfig.STRIPE_PUBLISHABLE_KEY, connected_account_id: competition.connected_stripe_account_id, client_secret: stripe_transaction.client_secret }
   end
 
   def payment_finish
