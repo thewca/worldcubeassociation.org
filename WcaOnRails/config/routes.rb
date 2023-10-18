@@ -61,11 +61,8 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
-  resources :competitions do
-    resources :v2 do
-      get '/:id/*' => 'competitions_v2#show'
-    end
-  end
+  get 'competitions/v2/:id' => 'competitions_v2#show', as: :competitions_v2
+  get 'competitions/v2/:id/*all' => 'competitions_v2#show'
 
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     get 'results/podiums' => 'competitions#show_podiums'

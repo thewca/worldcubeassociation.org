@@ -465,7 +465,7 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
       format.html do
-        return redirect_to competition_v2_path(@competition) if @competition.uses_new_registration_service? && !@competition.results_posted?
+        return redirect_to competitions_v2_path(id: @competition.id) if @competition.uses_new_registration_service? && !@competition.results_posted?
       end
       format.pdf do
         unless @competition.has_schedule?
