@@ -12,7 +12,7 @@ import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 
-function CreateOrUpdateButton({
+export function CreateOrUpdateButton({
   createComp,
   updateComp,
 }) {

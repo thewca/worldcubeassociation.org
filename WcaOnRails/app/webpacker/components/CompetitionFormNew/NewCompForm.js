@@ -38,7 +38,7 @@ import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
 import AnnouncementActions from './AnnouncementActions';
 import { teams } from '../../lib/wca-data.js.erb';
-import ConfirmationActions from './ConfirmationActions';
+import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 
 function AnnouncementMessage() {
   const {
@@ -83,6 +83,32 @@ function AnnouncementMessage() {
         options={i18nReplacements}
       />
     </Message>
+  );
+}
+
+function BottomConfirmationPanel({
+  createComp,
+  updateComp,
+}) {
+  const { isPersisted } = useStore();
+
+  // we only want to fetch data about confirming/deleting a competition when it's already persisted
+  // but we cannot wrap the "useLoadedData" call itself into an if-statement because then
+  // React suddenly becomes a crybaby about "rules of hooks". So we hack around it this way instead.
+  if (isPersisted) {
+    return (
+      <ConfirmationActions
+        createComp={createComp}
+        updateComp={updateComp}
+      />
+    );
+  }
+
+  return (
+    <CreateOrUpdateButton
+      createComp={createComp}
+      updateComp={updateComp}
+    />
   );
 }
 
@@ -222,7 +248,7 @@ function NewCompForm() {
 
         <Divider />
 
-        <ConfirmationActions
+        <BottomConfirmationPanel
           createComp={createComp}
           updateComp={updateComp}
         />
