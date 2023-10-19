@@ -3009,11 +3009,11 @@ ca:
           count: Nombre màxim de competidors
           reason: La raó del límit de competidors
         staff:
-          staff_delegate_ids:
+          staff_delegate_ids: Delegat(s) de la WCA
           trainee_delegate_ids: Delegat(s) en pràctiques de la WCA
           organizer_ids: Organitzador(s)
           contact: Contacte
-        championships:
+        championships: Tipus de campionat
         website:
           generate_website: M'agradaria utilitzar la pàgina web de la WCA en lloc
             d'una externa per informació addicional.
@@ -3045,7 +3045,7 @@ ca:
           allow_self_delete_after_acceptance: Cancel·lacions de registres
           allow_self_edits: Edicions dels registres
           guests_enabled: Espectadors
-          guest_entry_status:
+          guest_entry_status: Mostra missatge per entrada gratuïta dels espectadors
           guests_per_registration:
           extra_requirements: Requisits extra de registre
           force_comment:
@@ -3106,7 +3106,7 @@ ca:
           reason: Quina és la raó del límit de competidors? Si us plau, omple-ho en
             anglès!
         staff:
-          staff_delegate_ids:
+          staff_delegate_ids: Delegats de la WCA per la competició.
           trainee_delegate_ids: Delegats en pràctiques de la WCA per la competició.
           organizer_ids: Organitzadors de la competició (han de tenir un compte per
             sortir aquí).

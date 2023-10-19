@@ -11,34 +11,16 @@ import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 
-const guestsEnabledOptions = [
-  {
-    value: true,
-    text: I18n.t('competitions.competition_form.choices.guests_enabled.true'),
-  },
-  {
-    value: false,
-    text: I18n.t('competitions.competition_form.choices.guests_enabled.false'),
-  },
-];
+const guestsEnabledOptions = [].map((bool) => ({
+  value: bool,
+  text: I18n.t(`competitions.competition_form.choices.guests_enabled.${bool.toString()}`),
+}));
 
-const guestMessageOptions = [
-  {
-    key: 'unclear',
-    value: 'unclear',
-    text: I18n.t('enums.competition.guest_entry_status.unclear'),
-  },
-  {
-    key: 'free',
-    value: 'free',
-    text: I18n.t('enums.competition.guest_entry_status.free'),
-  },
-  {
-    key: 'restricted',
-    value: 'restricted',
-    text: I18n.t('enums.competition.guest_entry_status.restricted'),
-  },
-];
+const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
+  key: status,
+  value: status,
+  text: I18n.t(`competitions.competition_form.choices.registration.guest_entry_status.${status}`),
+}));
 
 export default function RegistrationDetails() {
   const { competition: { entryFees } } = useStore();

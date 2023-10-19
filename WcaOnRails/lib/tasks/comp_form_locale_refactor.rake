@@ -37,12 +37,12 @@ namespace :comp_form_locales do
             reason: comp_attr[:competitor_limit_reason],
           },
           staff: {
-            staff_delegate_ids: comp_attr[:staff_delegate_ids],
+            staff_delegate_ids: comp_attr[:delegate_ids],
             trainee_delegate_ids: comp_attr[:trainee_delegate_ids],
             organizer_ids: comp_attr[:organizer_ids],
             contact: comp_attr[:contact],
           },
-          championships: comp_attr[:championships],
+          championships: comp_attr[:championship_type],
           website: {
             generate_website: comp_attr[:generate_website],
             external_website: comp_attr[:external_website],
@@ -71,7 +71,7 @@ namespace :comp_form_locales do
             allow_self_delete_after_acceptance: comp_attr[:allow_registration_self_delete_after_acceptance],
             allow_self_edits: comp_attr[:allow_registration_edits],
             guests_enabled: comp_attr[:guests_enabled],
-            guest_entry_status: comp_attr[:guest_entry_status],
+            guest_entry_status: comp_attr[:free_guest_entry_status],
             guests_per_registration: comp_attr[:guests_per_registration_limit],
             extra_requirements: comp_attr[:extra_registration_requirements],
             force_comment: comp_attr[:force_comment_in_registration],
@@ -128,12 +128,12 @@ namespace :comp_form_locales do
             reason: comp_form_hints[:competitor_limit_reason],
           },
           staff: {
-            staff_delegate_ids: comp_form_hints[:staff_delegate_ids],
+            staff_delegate_ids: comp_form_hints[:delegate_ids],
             trainee_delegate_ids: comp_form_hints[:trainee_delegate_ids],
             organizer_ids: comp_form_hints[:organizer_ids],
             contact_html: comp_form_data&.dig(:contact_html),
           },
-          championships: comp_form_hints[:championships],
+          championships: comp_form_hints[:championship_type],
           website: {
             generate_website: comp_form_hints[:generate_website],
             external_website: comp_form_hints[:external_website],
@@ -162,7 +162,7 @@ namespace :comp_form_locales do
             allow_self_delete_after_acceptance: comp_form_hints[:allow_registration_self_delete_after_acceptance],
             allow_self_edits: comp_form_hints[:allow_registration_edits],
             guests_enabled: comp_form_hints[:guests_enabled],
-            guest_entry_status: comp_form_hints[:guest_entry_status],
+            guest_entry_status: comp_form_hints[:free_guest_entry_status],
             guests_per_registration: comp_form_hints[:guests_per_registration_limit],
             extra_requirements: comp_form_hints[:extra_registration_requirements],
             force_comment: comp_form_hints[:force_comment_in_registration],
@@ -190,14 +190,11 @@ namespace :comp_form_locales do
       end
 
       comp_form_options = trans.dig(l.to_sym, :simple_form, :options, :competition)
+      comp_form_enums = trans.dig(l.to_sym, :enums, :competition)
 
-      if comp_form_options.present?
+      if comp_form_options.present? || comp_form_enums.present?
         # rubocop:disable Lint/BooleanSymbol
         choices = {
-          guests_enabled: {
-            true: comp_form_options.dig(:guests_enabled, :true),
-            false: comp_form_options.dig(:guests_enabled, :false),
-          },
           competitor_limit: {
             enabled: {
               true: comp_form_options.dig(:competitor_limit_enabled, :true),
@@ -205,17 +202,26 @@ namespace :comp_form_locales do
             },
           },
           registration: {
-            on_the_spot_registration: {
+            allow_on_the_spot: {
               true: comp_form_options.dig(:on_the_spot_registration, :true),
               false: comp_form_options.dig(:on_the_spot_registration, :false),
-            },
-            allow_registration_edits: {
-              true: comp_form_options.dig(:allow_registration_edits, :true),
-              false: comp_form_options.dig(:allow_registration_edits, :false),
             },
             allow_self_delete_after_acceptance: {
               true: comp_form_options.dig(:allow_registration_self_delete_after_acceptance, :true),
               false: comp_form_options.dig(:allow_registration_self_delete_after_acceptance, :false),
+            },
+            allow_self_edits: {
+              true: comp_form_options.dig(:allow_registration_edits, :true),
+              false: comp_form_options.dig(:allow_registration_edits, :false),
+            },
+            guests_enabled: {
+              true: comp_form_options.dig(:guests_enabled, :true),
+              false: comp_form_options.dig(:guests_enabled, :false),
+            },
+            guest_entry_status: {
+              unclear: comp_form_enums.dig(:free_guest_entry_status, :unclear),
+              free: comp_form_enums.dig(:free_guest_entry_status, :anyone),
+              restricted: comp_form_enums.dig(:free_guest_entry_status, :restricted),
             },
           },
           event_restrictions: {
