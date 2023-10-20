@@ -15,6 +15,17 @@ class StaticPagesController < ApplicationController
 
   def delegates
     @delegates = User.where.not(delegate_status: nil)
+    respond_to do |format|
+      format.html do
+        render :delegates
+      end
+      format.json do
+        render json: {
+          delegates: @delegates,
+          canViewDelegateMatters: current_user&.can_view_delegate_matters?,
+        }
+      end
+    end
   end
 
   def panel_wfc
