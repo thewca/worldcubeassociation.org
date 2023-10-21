@@ -51,6 +51,13 @@ class ApplicationController < ActionController::Base
     { json: { error: "Not authorized" } }
   end
 
+  def react_component
+    render 'react_component', locals: {
+      component_name: params[:component_name],
+      title: t(params[:title]),
+    }
+  end
+
   before_action :configure_permitted_parameters, if: :devise_controller?
   protected def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [

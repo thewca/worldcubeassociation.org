@@ -19,7 +19,6 @@ import UserBadge from '../UserBadge';
 import { delegatesStaticPageDataUrl } from '../../lib/requests/routes.js.erb';
 import '../../stylesheets/delegates/style.scss';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import setTitle from '../../lib/helpers/application-helper';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
@@ -33,7 +32,7 @@ const dasherize = (string) => _.kebabCase(string);
 const seniorLocationToRegion = (string) => string.split('(')[0].trim();
 
 function sortedDelegates(delegates) {
-  return delegates.sort((user1, user2) => ((user1.location !== user2.location)
+  return delegates.sort((user1, user2) => (user1.location !== user2.location
     ? user1.location.localeCompare(user2.location)
     : user1.name.localeCompare(user2.name)));
 }
@@ -44,19 +43,25 @@ function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell collapsing />
-          <Table.HeaderCell>{I18n.t('delegates_page.table.name')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('delegates_page.table.role')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('delegates_page.table.region')}</Table.HeaderCell>
+          <Table.HeaderCell>
+            {I18n.t('delegates_page.table.name')}
+          </Table.HeaderCell>
+          <Table.HeaderCell>
+            {I18n.t('delegates_page.table.role')}
+          </Table.HeaderCell>
+          <Table.HeaderCell>
+            {I18n.t('delegates_page.table.region')}
+          </Table.HeaderCell>
         </Table.Row>
       </Table.Header>
 
       <Table.Body>
         {sortedDelegates([
           activeSeniorDelegate,
-          ...delegates.filter((user) => (
-            user.senior_delegate_id === activeSeniorDelegate.id
-              && (user.delegate_status !== 'trainee_delegate' || isAdminMode)
-          )),
+          ...delegates.filter(
+            (user) => user.senior_delegate_id === activeSeniorDelegate.id
+              && (user.delegate_status !== 'trainee_delegate' || isAdminMode),
+          ),
         ]).map((delegate) => (
           <Table.Row
             className={cn(`${dasherize(delegate.delegate_status)}`)}
@@ -64,15 +69,9 @@ function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
           >
             <Table.Cell verticalAlign="middle">
               <Button.Group vertical>
-                <Button
-                  href={`mailto:${delegate.email}`}
-                  icon="envelope"
-                />
+                <Button href={`mailto:${delegate.email}`} icon="envelope" />
                 {isAdminMode && (
-                  <Button
-                    href={`users/${delegate.id}/edit`}
-                    icon="edit"
-                  />
+                  <Button href={`users/${delegate.id}/edit`} icon="edit" />
                 )}
               </Button.Group>
             </Table.Cell>
@@ -87,9 +86,7 @@ function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
             <Table.Cell>
               {I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}
             </Table.Cell>
-            <Table.Cell>
-              {delegate.location}
-            </Table.Cell>
+            <Table.Cell>{delegate.location}</Table.Cell>
           </Table.Row>
         ))}
       </Table.Body>
@@ -101,16 +98,16 @@ export default function Delegates() {
   const { data, loading, error } = useLoadedData(delegatesStaticPageDataUrl);
 
   const { delegates, canViewDelegateMatters } = data || {};
-  const seniorDelegates = React.useMemo(() => !!delegates && delegates
-    .filter((user) => user.delegate_status === 'senior_delegate')
-    .sort((user1, user2) => (user1.location || '').localeCompare(user2.location || '')), [delegates]);
+  const seniorDelegates = React.useMemo(
+    () => !!delegates
+      && delegates
+        .filter((user) => user.delegate_status === 'senior_delegate')
+        .sort((user1, user2) => (user1.location || '').localeCompare(user2.location || '')),
+    [delegates],
+  );
 
-  const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState(seniorDelegates?.[0]);
+  const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState();
   const [adminMode, setAdminMode] = React.useState(false);
-
-  React.useEffect(() => {
-    setTitle(document, I18n.t('delegates_page.title'));
-  }, []);
 
   React.useEffect(() => {
     setActiveSeniorDelegate(seniorDelegates?.[0]);
@@ -132,17 +129,15 @@ export default function Delegates() {
         />
       </p>
       <p>
-        <I18nHTMLTranslate
-          i18nKey="delegates_page.acknowledges"
-        />
+        <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" />
       </p>
       {canViewDelegateMatters && (
-      <Checkbox
-        label="Enable admin mode"
-        toggle
-        checked={adminMode}
-        onChange={(__, { checked }) => setAdminMode(checked)}
-      />
+        <Checkbox
+          label="Enable admin mode"
+          toggle
+          checked={adminMode}
+          onChange={(__, { checked }) => setAdminMode(checked)}
+        />
       )}
       <Grid container>
         <Grid.Column only="computer" computer={4}>
@@ -153,9 +148,7 @@ export default function Delegates() {
                 key={`region-${seniorDelegate.id}`}
                 name={seniorLocationToRegion(seniorDelegate.location || '')}
                 active={activeSeniorDelegate === seniorDelegate}
-                onClick={() => {
-                  setActiveSeniorDelegate(seniorDelegate);
-                }}
+                onClick={() => setActiveSeniorDelegate(seniorDelegate)}
               >
                 {/* The 'name' shorthand above can populate the
                 label, but it sanitizes & signs :( */}
@@ -169,7 +162,9 @@ export default function Delegates() {
           <Segment>
             <Grid container centered>
               <Grid.Row only="computer">
-                <Header>{seniorLocationToRegion(activeSeniorDelegate.location || '')}</Header>
+                <Header>
+                  {seniorLocationToRegion(activeSeniorDelegate.location || '')}
+                </Header>
               </Grid.Row>
               <Grid.Row only="tablet mobile">
                 <Dropdown
@@ -182,7 +177,9 @@ export default function Delegates() {
                   value={activeSeniorDelegate.id}
                   onChange={(event, { value }) => {
                     setActiveSeniorDelegate(
-                      seniorDelegates.find((seniorDelegate) => seniorDelegate.id === value),
+                      seniorDelegates.find(
+                        (seniorDelegate) => seniorDelegate.id === value,
+                      ),
                     );
                   }}
                 />
@@ -191,13 +188,19 @@ export default function Delegates() {
             and enable this component for all devices */}
               <Grid.Row only="computer">
                 <Segment raised>
-                  <Label ribbon>{I18n.t('enums.user.delegate_status.senior_delegate')}</Label>
+                  <Label ribbon>
+                    {I18n.t('enums.user.delegate_status.senior_delegate')}
+                  </Label>
 
                   <UserBadge
                     user={activeSeniorDelegate}
                     hideBorder
                     leftAlign
-                    subtexts={activeSeniorDelegate.wca_id ? [activeSeniorDelegate.wca_id] : []}
+                    subtexts={
+                      activeSeniorDelegate.wca_id
+                        ? [activeSeniorDelegate.wca_id]
+                        : []
+                    }
                   />
                 </Segment>
               </Grid.Row>

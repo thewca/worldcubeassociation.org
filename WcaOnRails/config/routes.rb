@@ -189,7 +189,8 @@ Rails.application.routes.draw do
   get 'contact' => 'static_pages#contact'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
-  get 'delegates' => 'static_pages#delegates'
+  get 'delegates' => 'application#react_component', defaults: { component_name: "Delegates", title: 'delegates_page.title' }
+  get 'delegates_data' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'faq' => 'static_pages#faq'
   get 'logo' => 'static_pages#logo'

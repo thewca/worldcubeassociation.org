@@ -110,4 +110,4 @@ export const teamUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_he
 
 export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId`;
 
-export const delegatesStaticPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_path(format: "json")) %>`;
+export const delegatesStaticPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_data_path(format: "json")) %>`;
