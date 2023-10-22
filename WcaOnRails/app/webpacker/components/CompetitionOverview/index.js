@@ -1,7 +1,7 @@
 import React from 'react';
 
 import I18n from '../../lib/i18n';
-import { events } from '../../lib/wca-data.js.erb';
+import { events, continents } from '../../lib/wca-data.js.erb';
 
 function CompetitionOverview() {
   return (
@@ -26,6 +26,17 @@ function CompetitionOverview() {
               </React.Fragment>
             ))}
           </div>
+        </div>
+        <div className="form-group">
+          <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
+          <select name="region" id="region" className="form-control">
+            <option value="all">{I18n.t('common.all_regions')}</option>
+            <optgroup label={I18n.t('common.continent')}>
+              {Object.values(continents.real).map((continent) => (
+                <option value={continent.id} key={continent.id}>{continent.name}</option>
+              ))}
+            </optgroup>
+          </select>
         </div>
       </form>
     </div>

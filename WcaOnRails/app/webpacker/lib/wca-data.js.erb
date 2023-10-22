@@ -25,6 +25,19 @@ function extendCountries(country) {
   };
 }
 
+// ----- CONTINENTS -----
+
+export const continents = {
+  real: _.map(<%= Continent.real.to_json.html_safe %>, extendContinents),
+};
+
+function extendContinents(continent){
+  return {
+    ...continent,
+    name: I18n.t(`continents.${continent.name}`),
+  };
+}
+
 // ----- CURRENCIES -----
 
 <%
