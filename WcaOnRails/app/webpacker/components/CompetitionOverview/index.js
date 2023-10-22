@@ -1,7 +1,7 @@
 import React from 'react';
 
 import I18n from '../../lib/i18n';
-import { events, continents } from '../../lib/wca-data.js.erb';
+import { events, continents, countries } from '../../lib/wca-data.js.erb';
 
 function CompetitionOverview() {
   return (
@@ -34,6 +34,11 @@ function CompetitionOverview() {
             <optgroup label={I18n.t('common.continent')}>
               {Object.values(continents.real).map((continent) => (
                 <option value={continent.id} key={continent.id}>{continent.name}</option>
+              ))}
+            </optgroup>
+            <optgroup label={I18n.t('common.country')}>
+              {Object.values(countries.real).map((country) => (
+                <option value={country.id} key={country.id}>{country.name}</option>
               ))}
             </optgroup>
           </select>
