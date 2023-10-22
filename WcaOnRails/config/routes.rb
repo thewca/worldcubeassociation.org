@@ -282,6 +282,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
+    namespace :internal do
+      namespace :v1 do
+        get "/users/:id/permissions" => "permissions#index"
+      end
+    end
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'
