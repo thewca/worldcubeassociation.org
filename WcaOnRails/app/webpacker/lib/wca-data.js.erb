@@ -135,6 +135,12 @@ export const regionalMarkers = <%= Result::MARKERS.to_json.html_safe %>;
 
 export const defaultRoomColor = "<%= VenueRoom::DEFAULT_ROOM_COLOR %>";
 
+// ----- COMPETITION DATA -----
+
+export const competitionConstants = {
+  competitionRecentDays: <%= Competition::RECENT_DAYS %>,
+};
+
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';
