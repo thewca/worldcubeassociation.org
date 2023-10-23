@@ -1928,6 +1928,7 @@ en:
       inquiries:
         competition: "Contact the Organizers of a Specific Competition (please select below)"
         competitions_in_general: "Competitions in General (organizing, competition rules, etc.)"
+        results_team: "Contact the Results Team"
         wca_id_or_profile: "WCA ID or WCA Profile"
         media: "Media"
         software: "Software"

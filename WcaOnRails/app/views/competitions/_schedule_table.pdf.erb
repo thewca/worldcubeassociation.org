@@ -7,6 +7,7 @@
 
 <% @competition.start_date.upto(@competition.end_date) do |date| %>
   <% activities_for_day = activities_by_day[date.to_fs] %>
+  <% grouped_activities = activities_for_day&.group_by { |activity| [activity[:title], activity[:start], activity[:end]] } %>
   <% if activities_for_day&.any? %>
     <h1 class="break-before"><%= t("competitions.schedule.schedule_for_date", day_name: l(date, format: '%A'), full_date: l(date, format: :long)) %></h1>
     <table class="show-schedule-table break-after">
@@ -21,7 +22,8 @@
         </tr>
       </thead>
       <tbody>
-        <% activities_for_day.each do |a| %>
+        <% grouped_activities.each do |title, activities| %>
+          <% a = activities.first %>
           <% activity_code_without_attempt = "#{a[:activityDetails][:event_id]}-r#{a[:activityDetails][:round_number]}" %>
           <% round_data = rounds_by_wcif_id[activity_code_without_attempt] || {} %>
           <tr class="nobreak" style="<%= "background-color:#{a[:color]};" if @colored_schedule %>">
@@ -37,7 +39,7 @@
                   <% if output_venue_name %>
                     <%= t("competitions.schedule.room_in_venue", room: a[:roomName], venue: a[:venueName]) %>
                   <% else %>
-                    <%= a[:roomName] %>
+                    <%= activities.map { |a| "#{a[:roomName]}" }.join(", ") %>
                   <% end %>
                 </p>
               <% end %>
