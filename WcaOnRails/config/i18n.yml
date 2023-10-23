@@ -47,3 +47,4 @@ translations:
       - "*.round.*"
       - "*.search_results.*"
       - "*.continents.*"
+      - "*.layouts.*"

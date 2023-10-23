@@ -17,6 +17,7 @@ function CompetitionOverview() {
             <button type="button" id="select-all-events" className="btn btn-primary btn-xs">{I18n.t('competitions.index.all_events')}</button>
             <button type="button" id="clear-all-events" className="btn btn-default btn-xs">{I18n.t('competitions.index.clear')}</button>
           </label>
+
           <div id="events">
             {Object.values(events.official).map((event) => (
               <React.Fragment key={event.id}>
@@ -33,6 +34,7 @@ function CompetitionOverview() {
 
         <div className="form-group">
           <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
+
           <select name="region" id="region" className="form-control">
             <option value="all">{I18n.t('common.all_regions')}</option>
             <optgroup label={I18n.t('common.continent')}>
@@ -67,10 +69,12 @@ function CompetitionOverview() {
               <input type="radio" name="state" id="state_present" value="present" />
               <span className="caption">{I18n.t('competitions.index.present')}</span>
             </label>
+
             <label id="recent" className="btn btn-primary" data-toggle="tooltip" title={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })} htmlFor="state_recent">
               <input type="radio" name="state" id="state_recent" value="recent" />
               <span className="caption">{I18n.t('competitions.index.recent')}</span>
             </label>
+
             <ul className="dropdown-menu years">
               <input type="hidden" name="year" id="year" value="all years" autoComplete="off" />
               {/* Implement list of years later along with competition API data */}
@@ -79,13 +83,45 @@ function CompetitionOverview() {
               <input type="radio" name="state" id="state_past" value="past" />
               <span className="caption">{I18n.t('competitions.index.past')}</span>
             </label>
+
             <label id="by_announcement" className="btn btn-primary" data-toggle="tooltip" title={I18n.t('competitions.index.sort_by_announcement')} htmlFor="state_by_announcement">
               <input type="radio" name="state" id="state_by_announcement" value="by_announcement" />
               <span className="caption">{I18n.t('competitions.index.by_announcement')}</span>
             </label>
+
             <label id="custom" className="btn btn-primary" htmlFor="state_custom">
               <input type="radio" name="state" id="state_custom" value="custom" />
               <span className="caption">{I18n.t('competitions.index.custom')}</span>
+            </label>
+          </div>
+        </div>
+
+        <div id="delegate" className="form-group delegate-selector">
+          <label htmlFor="Delegate">{I18n.t('layouts.navigation.delegate')}</label>
+          <input type="text" name="delegate" id="delegate" className="wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_staff_delegates wca-autocomplete-users_search selectized" data-data="[]" tabIndex="-1" style={{ display: 'none' }} />
+        </div>
+
+        <div id="registration-status" className="form-group registration-status-selector">
+          <input type="checkbox" name="show_registration_status" id="show_registration_status" />
+          <label htmlFor="show_registration_status">{I18n.t('competitions.index.show_registration_status')}</label>
+        </div>
+
+        <div id="cancelled" className="form-group cancel-selector">
+          <input type="checkbox" name="show_cancelled" id="show_cancelled" />
+          <label htmlFor="show_cancelled">{I18n.t('competitions.index.show_cancelled')}</label>
+        </div>
+
+        <div id="display" className="form-group">
+          <div className="btn-group btn-group-justified" data-toggle="buttons">
+            <label id="display-list" className="btn btn-info active" htmlFor="display_list">
+              <input type="radio" name="display" id="display_list" value="list" />
+              <i className="icon list ul " />
+              {` ${I18n.t('competitions.index.list')} `}
+            </label>
+            <label id="display-map" className="btn btn-info" htmlFor="display_map">
+              <input type="radio" name="display" id="display_map" value="map" />
+              <i className="icon map marker alternate " />
+              {` ${I18n.t('competitions.index.map')} `}
             </label>
           </div>
         </div>
