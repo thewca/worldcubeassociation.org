@@ -1593,7 +1593,7 @@ en:
         admin:
           is_confirmed: "Do not let organizers edit this competition"
           is_visible: "Make competition visible to the public"
-        id: "ID"
+        competition_id: "ID"
         name: "Name"
         short_name: "Competition short name"
         name_reason: "The reason for the name"
@@ -1667,7 +1667,7 @@ en:
         admin:
           is_confirmed: ""
           is_visible: ""
-        id: ""
+        competition_id: ""
         name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
         short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
         name_reason_html: "A brief explanation of the competition name. The name must comply with the <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition Requirements Policy</a>."
@@ -1704,7 +1704,7 @@ en:
           currency_code: "The currency code for fees."
           base_entry_fee: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
           on_the_spot_entry_fee: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
-          guests_entry_fee: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
+          guest_entry_fee: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
           donations_enabled: ""
           refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
           refund_policy_limit_date: "Date after which no more refunds will be issued."
@@ -1755,6 +1755,10 @@ en:
           allow_self_delete_after_acceptance:
             "true": "Competitors may delete their own registration even after it has been accepted"
             "false": "Competitors may NOT delete their own registration once it has been accepted"
+          guest_entry_status:
+            unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
+            free: '"Any spectator can attend for free"'
+            restricted: '"Spectators are only permitted as companions of competitors"'
         event_restrictions:
           qualification_results:
             allow_registration_without:

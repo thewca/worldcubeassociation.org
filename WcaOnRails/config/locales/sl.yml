@@ -2042,7 +2042,7 @@ sl:
           contact_html: 'Poljubne kontaktne informacije. Javnosti bodi vidni E-naslovi
             organizatorjev, če se to polje ne izpolni. %{md}. Primer: [Besedilo za
             prikaz](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Spletna stran tekmovanja. http(s) URL mora biti veljavni.
@@ -2090,23 +2090,23 @@ sl:
         remarks:
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Vprašaj o gostih
-          'false': Ne vprašaj o gostih
         competitor_limit:
           enabled:
             'true':
             'false':
         registration:
-          on_the_spot_registration:
-            'true':
-            'false':
-          allow_registration_edits:
+          allow_on_the_spot:
             'true':
             'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': Vprašaj o gostih
+            'false': Ne vprašaj o gostih
         event_restrictions:
           qualification_results:
             allow_registration_without:

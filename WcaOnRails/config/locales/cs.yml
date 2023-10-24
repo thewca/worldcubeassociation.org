@@ -3244,7 +3244,6 @@ cs:
             budou odeslány přes kontaktní formulář bez odhalení emailů organizátorů.
             %{md}. Například: [Text k zobrazení](mailto:some@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Webové stránky soutěže. Musí to být platná http(s) url.
@@ -3347,6 +3346,11 @@ cs:
               Soutěžící mohou smazat svou vlastní registraci i pokud už byla
               přijata
             'false': 'Soutěžící NEsmí smazat svou registraci poté, co byla přijata'
+          guest_entry_status:
+            unclear: Nezobrazovat nic (prosíme rozepište v dalších podmínkách pro
+              registraci)
+            free: Každý divák může přijít zdarma
+            restricted: Diváci se mohou zůčastnit jen jako hosté soutěžících
         event_restrictions:
           qualification_results:
             allow_registration_without:

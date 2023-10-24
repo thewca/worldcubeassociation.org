@@ -2773,7 +2773,6 @@ zh-TW:
           organizer_ids: 比賽的主辦團隊（他們需要建立WCA帳號才能列在這裡）。
           contact_html: 可任意選擇聯絡資訊。若您未填寫，聯繫請求內容會由表格方式送出，主辦人的電子郵件將不會被顯示。%{md} 範例：[顯示內容](mailto:some@email.com)
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: 這場比賽的網站網站。必須為有效的http(s)網址。
@@ -2819,23 +2818,27 @@ zh-TW:
         remarks: 任何您想跟WCAT說明的事。例如，有疑問的事項，或是您想向WCAT請求特別事項。請用英文填寫！
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': 詢問是否有陪同者
-          'false': 不要詢問是否有陪同者
         competitor_limit:
           enabled:
             'true': 我想要設置參賽者上限
             'false': 我不想要設置參賽者上限
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': 接受現場報名
             'false': 不接受現場報名
-          allow_registration_edits:
-            'true': 參賽者可以修改他們的報名資訊直到修改比賽項目的截止日為止
-            'false': 參賽者無法在成功報名後修改報名內容
           allow_self_delete_after_acceptance:
             'true': 即使報名已完成，參賽者可以刪除自己的報名
             'false': 報名完成後，參賽者不可以刪除自己的報名
+          allow_self_edits:
+            'true': 參賽者可以修改他們的報名資訊直到修改比賽項目的截止日為止
+            'false': 參賽者無法在成功報名後修改報名內容
+          guests_enabled:
+            'true': 詢問是否有陪同者
+            'false': 不要詢問是否有陪同者
+          guest_entry_status:
+            unclear: 不要顯示任何東西（也許需要在「額外報名條件」中詳述）
+            free: 觀眾都可免費入場
+            restricted: 只有參賽者的陪同者才能入場當觀眾
         event_restrictions:
           qualification_results:
             allow_registration_without:

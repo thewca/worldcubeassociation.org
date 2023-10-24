@@ -2823,7 +2823,7 @@ kk:
           contact_html: 'Байланыс электрондық поштасы. Егер сіз оны толтырмасаңыз,
             ұйымдастырушылар электрондық поштаны жария етеді. %{md}. Мысалы: [Вася
             Пупкин](mailto:vasya@pupkin.ru)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Жарыс сайты. Дұрыс http(s) URL болуы керек.
@@ -2886,23 +2886,23 @@ kk:
           ағылшын тілінде толтырыңыз!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Қонақтар туралы сұрау
-          'false': Қонақтар туралы сұрамаңыз
         competitor_limit:
           enabled:
             'true': Мен қатысушылар санына шектеу қойғым келеді
             'false': Мен қатысушылар санына шектеу қойғым келмейді
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Орнында тіркелуге болады
             'false': Орнында тіркелуге БОЛМАЙДЫ
-          allow_registration_edits:
-            'true':
-            'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': Қонақтар туралы сұрау
+            'false': Қонақтар туралы сұрамаңыз
         event_restrictions:
           qualification_results:
             allow_registration_without:

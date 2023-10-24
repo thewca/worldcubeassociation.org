@@ -3068,7 +3068,7 @@ fi:
           contact_html: 'Yhteystiedot (valinnainen). Jos et täytä tätä, yhteydenottopyynnöt
             tehdään erillisen lomakkeen kautta näyttämättä järjestäjien sähköpostiosoitteita.
             %{md}. Esimerkiksi: [Näytettävä teksti](mailto:esim@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Kilpailun verkkosivusto. Pätevä http(s)-osoite.
@@ -3145,27 +3145,32 @@ fi:
           any special requests for the WCAT. Please fill this out in English!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Kysy vierailijoista
-          'false': Älä kysy vierailijoista
         competitor_limit:
           enabled:
             'true': Haluan asettaa kilpailijarajan
             'false': En halua asettaa kilpailijarajaa
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Paikan päällä voi rekisteröityä
             'false': Paikan päällä <b>ei voi rekisteröityä</b>
-          allow_registration_edits:
-            'true': Kilpailijat voivat muuttaa rekisteröitymistään lajimuutosten takarajaan
-              asti.
-            'false': Kilpailijat eivät voi muuttaa rekisteröitymistään sen hyväksymisen
-              jälkeen.
           allow_self_delete_after_acceptance:
             'true': Kilpailijat voivat poistaa rekisteröitymisensä, vaikka se olisi
               jo hyväksytty
             'false': Kilpailijat eivät voi poistaa rekisteröitymistään, kun se on
               hyväksytty
+          allow_self_edits:
+            'true': Kilpailijat voivat muuttaa rekisteröitymistään lajimuutosten takarajaan
+              asti.
+            'false': Kilpailijat eivät voi muuttaa rekisteröitymistään sen hyväksymisen
+              jälkeen.
+          guests_enabled:
+            'true': Kysy vierailijoista
+            'false': Älä kysy vierailijoista
+          guest_entry_status:
+            unclear: Do not display anything (and perhaps elaborate in the "Extra
+              registration requirements" section)
+            free: Kaikki katsojat pääsevät ilmaiseksi paikalle
+            restricted: Katsojat pääsevät paikalle vain kilpailijoiden seurassa
         event_restrictions:
           qualification_results:
             allow_registration_without:

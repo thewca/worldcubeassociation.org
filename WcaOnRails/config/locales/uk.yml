@@ -2695,7 +2695,7 @@ uk:
           contact_html: 'Додаткова контактна інформація. Якщо не заповнювати це поле,
             користувачі будуть бачити електронні адреси організаторів. %{md}. Наприклад:
             [Олег Ляшко](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Веб-сторінка змагання. Це має бути працююче http(s) посилання.
@@ -2759,23 +2759,23 @@ uk:
           Будь ласка, заповніть це англійською!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Питати про гостей
-          'false': Не питати про гостей
         competitor_limit:
           enabled:
             'true': Я хочу вказати ліміт учасників
             'false': Я не хочу вказувати ліміт учасників
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Реєстрація на місці дозволена
             'false': Реєстрація на місці заборонена
-          allow_registration_edits:
-            'true':
-            'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': Питати про гостей
+            'false': Не питати про гостей
         event_restrictions:
           qualification_results:
             allow_registration_without:

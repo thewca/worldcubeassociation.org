@@ -2101,7 +2101,6 @@ zh-CN:
           organizer_ids: 主办方（需要提前注册帐号）
           contact_html: 可选的联系信息。如果你不填写此项，将会显示主办方的邮件。%{md}。例：[Text to display](mailto:some@email.com)
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: 比赛官网。必须是一个合法的http(s)地址。
@@ -2148,23 +2147,23 @@ zh-CN:
         remarks: 一些你想和董事会说的额外信息。比如为啥这个比赛没有提前一个月申请之类的。请使用英文填写！
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': 询问随行人员
-          'false': 不询问随行人员
         competitor_limit:
           enabled:
             'true':
             'false':
         registration:
-          on_the_spot_registration:
-            'true':
-            'false':
-          allow_registration_edits:
+          allow_on_the_spot:
             'true':
             'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': 询问随行人员
+            'false': 不询问随行人员
         event_restrictions:
           qualification_results:
             allow_registration_without:

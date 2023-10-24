@@ -3298,7 +3298,6 @@ sv:
             kontaktförfrågningar att skickas via ett formulär utan att arrangörernas
             e-postadresser avslöjas. %{md}. Exempel: [Text som ska visas](mailto:någon@mejladress.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Tävlingens webbplats. Måste vara en giltig http(s)-url.
@@ -3381,25 +3380,29 @@ sv:
           till WCAT. Vänligen fyll i detta på engelska!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Fråga om gäster
-          'false': Fråga INTE om gäster
         competitor_limit:
           enabled:
             'true': Jag vill ange en gräns för antalet tävlande
             'false': Jag vill INTE ange en gräns för antalet tävlande
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Anmälningar på plats kommer accepteras
             'false': Anmälningar på plats kommer INTE accepteras
-          allow_registration_edits:
+          allow_self_delete_after_acceptance:
+            'true': Tävlande får ta bort sina anmälningar även efter att de har godkänts
+            'false': Tävlande får INTE ta bort sina anmälningar efter att de godkänts
+          allow_self_edits:
             'true': Tävlande får ändra sin anmälan fram till deadline för att uppdatera
               grenar
             'false': Tävlande får INTE ändra sin anmälan fram till deadline för att
               uppdatera grenar
-          allow_self_delete_after_acceptance:
-            'true': Tävlande får ta bort sina anmälningar även efter att de har godkänts
-            'false': Tävlande får INTE ta bort sina anmälningar efter att de godkänts
+          guests_enabled:
+            'true': Fråga om gäster
+            'false': Fråga INTE om gäster
+          guest_entry_status:
+            unclear: Visa ingenting (utveckla gärna i avsnittet "Extra anmälningskrav")
+            free: '"Åskådare välkomna utan avgift"'
+            restricted: '"Åskådare endast tillåtna som medföljande till tävlande"'
         event_restrictions:
           qualification_results:
             allow_registration_without:

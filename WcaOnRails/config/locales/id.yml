@@ -3229,7 +3229,6 @@ id:
             untuk pertanyaan akan ditetapkan pada formulir tanpa memperlihatkan email
             panitia. %{md}. Contohnya: [Teks untuk ditampilkan](mailto:some@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Situs web kompetisi. Wajib merupakan url http(s) yang
@@ -3311,27 +3310,32 @@ id:
           khusus kepada WCAT. Harap isi dengan bahasa Inggris!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Tanya tentang pendamping
-          'false': JANGAN tanya tentang pendamping
         competitor_limit:
           enabled:
             'true': Saya ingin menetapkan batas kompetitor
             'false': Saya TIDAK INGIN menetapkan batas kompetitor
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Pendaftaran di tempat dapat diterima
             'false': Pendaftaran di tempat TIDAK AKAN diterima
-          allow_registration_edits:
-            'true': Kompetitor dapat menyunting pendaftaran mereka sampai batas waktu
-              untuk memperbarui cabang
-            'false': Kompetitor TIDAK diperbolehkan untuk menyunting pendaftaran setelah
-              pendaftaran disetujui
           allow_self_delete_after_acceptance:
             'true': Kompetitor diperbolehkan untuk menghapus pendaftaran mereka walaupun
               pendaftaran sudah disetujui
             'false': Kompetitor TIDAK diperbolehkan untuk menghapus pendaftaran mereka
               setelah pendaftaran disetujui
+          allow_self_edits:
+            'true': Kompetitor dapat menyunting pendaftaran mereka sampai batas waktu
+              untuk memperbarui cabang
+            'false': Kompetitor TIDAK diperbolehkan untuk menyunting pendaftaran setelah
+              pendaftaran disetujui
+          guests_enabled:
+            'true': Tanya tentang pendamping
+            'false': JANGAN tanya tentang pendamping
+          guest_entry_status:
+            unclear: Jangan tampilkan apapun (dan harap dijelaskan pada bagian "Kebutuhan
+              pendaftaran ekstra")
+            free: '"Semua orang dapat menonton dengan gratis"'
+            restricted: '"Penonton hanya diperbolehkan sebagai pendamping kompetitor"'
         event_restrictions:
           qualification_results:
             allow_registration_without:

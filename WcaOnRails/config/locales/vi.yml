@@ -2372,7 +2372,7 @@ vi:
           contact_html: 'Thông tin liên hệ không bắt buộc. Nếu bạn không điền phần
             này, email của ban tổ chức sẽ được hiển thị công khai. %{md}. Ví dụ: [Text
             to display](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Trang chủ của giải đấu. Bắt buộc phải là đường dẫn http(s)
@@ -2437,23 +2437,23 @@ vi:
         remarks:
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Hỏi về khách mời
-          'false': Không hỏi về khách mời
         competitor_limit:
           enabled:
             'true': Tôi muốn đặt giới hạn số lượng thí sinh
             'false': Tôi không muốn đặt giới hạn số lượng thí sinh
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Đăng ký tại giải đấu sẽ được chấp nhận
             'false': Đăng ký tại giải đấu sẽ KHÔNG ĐƯỢC chấp nhận
-          allow_registration_edits:
-            'true':
-            'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': Hỏi về khách mời
+            'false': Không hỏi về khách mời
         event_restrictions:
           qualification_results:
             allow_registration_without:

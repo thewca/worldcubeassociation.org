@@ -1803,7 +1803,7 @@ sk:
             organizátormi)
           contact_html: 'Voliteľné informácie o kontakte. Ak toto nevyplníte, emaily
             organizátorov budú publikované verejnosti. %{md}. Príklad: [Text na ukážku](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Webová stránka súťaže. Musí mať pravý http(s) url.
@@ -1851,23 +1851,23 @@ sk:
         remarks:
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Opýtajte sa ohľadom hostí
-          'false': Nepýtajte sa ohľadom hostí
         competitor_limit:
           enabled:
             'true':
             'false':
         registration:
-          on_the_spot_registration:
-            'true':
-            'false':
-          allow_registration_edits:
+          allow_on_the_spot:
             'true':
             'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': Opýtajte sa ohľadom hostí
+            'false': Nepýtajte sa ohľadom hostí
         event_restrictions:
           qualification_results:
             allow_registration_without:

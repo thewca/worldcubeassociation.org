@@ -3391,7 +3391,6 @@ ro:
             secțiune, cererile vor fi transmise printr-un formular fără a dezvălui
             adresele de e-mail ale organizatorilor. %{md} Exemplu: [Text de afișat](mailto:some@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Site-ul competiției. Trebuie să aiba un URL http sau https
@@ -3474,27 +3473,33 @@ ro:
           specială către WCAT. Completează în engleză!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Întreabă despre însoțitori
-          'false': NU întreba despre însoțitori
         competitor_limit:
           enabled:
             'true': Vreau să specific o limită de concurenți
             'false': NU VREAU să specific o limită de concurenți
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Înregistrările pe loc vor fi acceptate
             'false': Înregistrările pe loc NU vor fi acceptate
-          allow_registration_edits:
-            'true': Concurenții își pot edita detaliile din înscriere până la termenul
-              limită pentru actualizarea probelor
-            'false': Concurenții NU își pot edita detaliile înscrierii după ce aceasta
-              a fost acceptată
           allow_self_delete_after_acceptance:
             'true': Concurenții își pot anula înregistrarea după ce aceasta a fost
               acceptată
             'false': Concurenții NU își pot anula înregistrarea după ce aceasta a
               fost acceptată
+          allow_self_edits:
+            'true': Concurenții își pot edita detaliile din înscriere până la termenul
+              limită pentru actualizarea probelor
+            'false': Concurenții NU își pot edita detaliile înscrierii după ce aceasta
+              a fost acceptată
+          guests_enabled:
+            'true': Întreabă despre însoțitori
+            'false': NU întreba despre însoțitori
+          guest_entry_status:
+            unclear: Nu afișa nimic (poate poți elabora în secțiunea "Cerințe suplimentare
+              pentru înregistrare")
+            free: '"Orice spectator poate participa gratuit"'
+            restricted: '"Accesul spectatorilor este permis doar dacă însoțesc un
+              concurent"'
         event_restrictions:
           qualification_results:
             allow_registration_without:

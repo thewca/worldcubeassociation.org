@@ -2974,7 +2974,7 @@ da:
           contact_html: 'Optional contact information. If you do not fill this in,
             contact inquiries will be submitted through a form without revealing organizers''
             emails. %{md}. Example: [Text to display](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Konkurrencens hjemmeside. Skal være en gyldig http(s)
@@ -3067,6 +3067,11 @@ da:
             'false': >-
               Competitors may NOT edit their registration once it has been
               accepted
+          guest_entry_status:
+            unclear: Vis ikke noget (du burde uddybe hvorfor i sektionen om tilmeldingskrav
+              nedenfor)
+            free: '"Alle tilskuere kan se med gratis"'
+            restricted: '"Tilskuere er kun tilladte som ledsagere af en deltager"'
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-

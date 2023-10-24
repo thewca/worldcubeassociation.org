@@ -3282,7 +3282,6 @@ eo:
             estos senditaj per formularo kiu ne konigos la retpoŝtadresojn de la organizantoj.
             %{md}. Ekzemple: [Videbla teksto](mailto:iu@retpoŝto.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: La retejo de la konkurso. Ĝi devas esti valida reteja
@@ -3363,27 +3362,32 @@ eo:
           plenigi tion en la angla!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Demandu pri gastoj
-          'false': NE demandu pri gastoj
         competitor_limit:
           enabled:
             'true': Mi volas difini limon de konkursantoj
             'false': Mi ne volas difini limon de konkursantoj
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Surlokaj registriĝoj eblos
             'false': Surlokaj registriĝoj NE eblos
-          allow_registration_edits:
-            'true': Konkursantoj povas redakti siajn registriĝojn ĝis la limdato por
-              redakti konkurserojn
-            'false': Konkursantoj NE povas redakti siajn registriĝojn kiam ĝi estas
-              akceptata
           allow_self_delete_after_acceptance:
             'true': La konkursantoj povas forigi sian propran registriĝon eĉ post
               kiam ĝi estas akceptita
             'false': La konkursantoj NE povas forigi sian propran registriĝon post
               kiam ĝi estas akceptita
+          allow_self_edits:
+            'true': Konkursantoj povas redakti siajn registriĝojn ĝis la limdato por
+              redakti konkurserojn
+            'false': Konkursantoj NE povas redakti siajn registriĝojn kiam ĝi estas
+              akceptata
+          guests_enabled:
+            'true': Demandu pri gastoj
+            'false': NE demandu pri gastoj
+          guest_entry_status:
+            unclear: Montru nenion (kaj eble detalu en la sekcio "Aldonaj registriĝaj
+              postuloj")
+            free: '"Ĉiuj spektantoj povas veni senpage"'
+            restricted: '"Spektantoj estas permesataj nur kiel akompanantoj de konkursantoj"'
         event_restrictions:
           qualification_results:
             allow_registration_without:

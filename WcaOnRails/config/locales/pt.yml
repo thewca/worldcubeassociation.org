@@ -3340,7 +3340,6 @@ pt:
             questões de contacto serão submetidas através de um formulário sem revelar
             o email dos organizadores. %{md}. Exemplo: [Texto mostrado](mailto:alguem@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: O website da competição. Deve ser uma hiperligação http(s)
@@ -3424,26 +3423,31 @@ pt:
           o WCAT. Por favor, preencha em inglês!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Perguntar sobre acompanhantes
-          'false': NÃO perguntar sobre acompanhantes
         competitor_limit:
           enabled:
             'true': Quero especificar um limite de competidores
             'false': NÃO QUERO especificar um limite de competidores
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Registos no local serão aceites
             'false': Registos no local NÃO serão aceites
-          allow_registration_edits:
-            'true': Competidores podem editar o seu registo até à data limite para
-              atualizar modalidades
-            'false': Competidores NÃO podem editar o seu registo após ter sido aceite
           allow_self_delete_after_acceptance:
             'true': Competidores podem apagar o seu registo mesmo depois de ter sido
               aceite
             'false': Competidores NÃO podem apagar o seu próprio registo após ter
               sido aceite
+          allow_self_edits:
+            'true': Competidores podem editar o seu registo até à data limite para
+              atualizar modalidades
+            'false': Competidores NÃO podem editar o seu registo após ter sido aceite
+          guests_enabled:
+            'true': Perguntar sobre acompanhantes
+            'false': NÃO perguntar sobre acompanhantes
+          guest_entry_status:
+            unclear: Não mostrar nada (e talvez elabore na secção "Requisitos extra
+              de registo")
+            free: '"Qualquer espetador pode assistir gratuitamente"'
+            restricted: '"Espetadores só são permitidos como acompanhantes de competidores"'
         event_restrictions:
           qualification_results:
             allow_registration_without:

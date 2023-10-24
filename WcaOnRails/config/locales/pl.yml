@@ -3103,7 +3103,7 @@ pl:
           contact_html: 'Opcjonalne informacje kontaktowe. Jeżeli nie wypełnisz tego
             pola, próby kontaktu będą wysyłane przez formularz bez upubliczniania
             adresów email organizatorów. %{md}. Przykład: [Tekst do wyświetlenia](mailto:ktoś@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Strona internetowa zawodów. Musi być poprawnym adresem
@@ -3186,23 +3186,28 @@ pl:
           Prosimy o wypełnienie w języku angielskim!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Pytaj o gości
-          'false': NIE pytaj o gości
         competitor_limit:
           enabled:
             'true': Chciałbym określić limit zawodników
             'false': NIE chcę określać limitu zawodników
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Rejestracja na miejscu będzie możliwa
             'false': Rejestracja na miejscu NIE będzie możliwa
-          allow_registration_edits:
-            'true': Zawodnicy mogą edytować swoje rejestracje do terminu zmian w konkurencjach.
-            'false': Zawodnicy nie mogą edytować swoich rejestracji po ich zaakceptowaniu
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          allow_self_edits:
+            'true': Zawodnicy mogą edytować swoje rejestracje do terminu zmian w konkurencjach.
+            'false': Zawodnicy nie mogą edytować swoich rejestracji po ich zaakceptowaniu
+          guests_enabled:
+            'true': Pytaj o gości
+            'false': NIE pytaj o gości
+          guest_entry_status:
+            unclear: Nie wyświetlaj nic (rozwiń temat w sekcji "Dodatkowe wymagania
+              rejestracyjne")
+            free: Każdy widz może wejść za darmo
+            restricted: Widzowie mogą wejść jedynie jako goście zawodników
         event_restrictions:
           qualification_results:
             allow_registration_without:

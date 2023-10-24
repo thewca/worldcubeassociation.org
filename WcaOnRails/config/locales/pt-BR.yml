@@ -3294,7 +3294,6 @@ pt-BR:
             campo, pedidos de contato serão enviados por um formulário sem revelar
             os emails dos organizadores. %{md}. Exemplo: [Texto mostrado](mailto:alguem@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Website da competição. Deve ser uma URL http(s) válida.
@@ -3376,27 +3375,33 @@ pt-BR:
           Por favor preencha em Inglês!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Perguntar sobre acompanhantes
-          'false': NÃO perguntar sobre acompanhantes
         competitor_limit:
           enabled:
             'true': Quero especificar um limite de competidores
             'false': NÃO QUERO especificar um limite de competidores
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Inscrições no local serão aceitas
             'false': Inscrições no local NÃO serão aceitas
-          allow_registration_edits:
-            'true': Competidores podem editar sua inscrição até a data limite para
-              atualizar eventos
-            'false': Competidores NÃO podem editar sua inscrição depois que tenha
-              sido aceita
           allow_self_delete_after_acceptance:
             'true': Os competidores podem excluir sua própria inscrição mesmo depois
               que ela tenha sido aceita
             'false': Os competidores NÃO podem excluir sua inscrição após ela ter
               sido aceita
+          allow_self_edits:
+            'true': Competidores podem editar sua inscrição até a data limite para
+              atualizar eventos
+            'false': Competidores NÃO podem editar sua inscrição depois que tenha
+              sido aceita
+          guests_enabled:
+            'true': Perguntar sobre acompanhantes
+            'false': NÃO perguntar sobre acompanhantes
+          guest_entry_status:
+            unclear: Não mostrar nada (e talvez detalhar na seção "Requerimentos adicionais
+              de inscrição")
+            free: Não há taxa para espectadores
+            restricted: Espectadores somente são permitidos como acompanhantes de
+              competidores
         event_restrictions:
           qualification_results:
             allow_registration_without:

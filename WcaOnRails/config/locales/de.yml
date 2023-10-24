@@ -3380,7 +3380,6 @@ de:
             werden Kontaktanfragen mit einem Formular übermittelt, ohne die Emails
             der Organisatoren zu veröffentlichen. %{md}. Beispiel: [Text zum Anzeigen](mailto:some@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Die Website des Wettbewerbs. Muss als gültige http(s)-URL
@@ -3490,6 +3489,11 @@ de:
             'false': >-
               Teilnehmer dürfen ihre eigene Registrierung NICHT löschen, nachdem
               sie akzeptiert wurde
+          guest_entry_status:
+            unclear: Zeige nichts an (und erläutere eventuelle Details im Bereich
+              "Zusätzliche Anmeldebedingungen“)
+            free: '"Jeder Gast kann die Competition kostenlos besuchen"'
+            restricted: '"Gäste werden nur als Begleitung von Teilnehmern zugelassen"'
         event_restrictions:
           qualification_results:
             allow_registrations_without:

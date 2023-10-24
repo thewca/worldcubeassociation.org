@@ -37,7 +37,7 @@ namespace :comp_form_locales do
             reason: comp_attr[:competitor_limit_reason],
           },
           staff: {
-            staff_delegate_ids: comp_attr[:delegate_ids],
+            staff_delegate_ids: comp_attr[:delegate_ids] || comp_attr[:staff_delegate_ids],
             trainee_delegate_ids: comp_attr[:trainee_delegate_ids],
             organizer_ids: comp_attr[:organizer_ids],
             contact: comp_attr[:contact],
@@ -128,7 +128,7 @@ namespace :comp_form_locales do
             reason: comp_form_hints[:competitor_limit_reason],
           },
           staff: {
-            staff_delegate_ids: comp_form_hints[:delegate_ids],
+            staff_delegate_ids: comp_form_hints[:delegate_ids] || comp_form_hints[:staff_delegate_ids],
             trainee_delegate_ids: comp_form_hints[:trainee_delegate_ids],
             organizer_ids: comp_form_hints[:organizer_ids],
             contact_html: comp_form_data&.dig(:contact_html),
@@ -190,11 +190,10 @@ namespace :comp_form_locales do
       end
 
       comp_form_options = trans.dig(l.to_sym, :simple_form, :options, :competition)
-      comp_form_enums = trans.dig(l.to_sym, :enums, :competition)
 
-      if comp_form_options.present? || comp_form_enums.present?
+      if comp_form_options.present?
         # rubocop:disable Lint/BooleanSymbol
-        choices = {
+        choices_opts = {
           competitor_limit: {
             enabled: {
               true: comp_form_options.dig(:competitor_limit_enabled, :true),
@@ -218,11 +217,6 @@ namespace :comp_form_locales do
               true: comp_form_options.dig(:guests_enabled, :true),
               false: comp_form_options.dig(:guests_enabled, :false),
             },
-            guest_entry_status: {
-              unclear: comp_form_enums.dig(:free_guest_entry_status, :unclear),
-              free: comp_form_enums.dig(:free_guest_entry_status, :anyone),
-              restricted: comp_form_enums.dig(:free_guest_entry_status, :restricted),
-            },
           },
           event_restrictions: {
             qualification_results: {
@@ -234,6 +228,26 @@ namespace :comp_form_locales do
           },
         }
         # rubocop:enable Lint/BooleanSymbol
+
+        choices ||= {}
+        choices.deep_merge! choices_opts
+      end
+
+      comp_form_enums = trans.dig(l.to_sym, :enums, :competition)
+
+      if comp_form_enums.present?
+        choices_enum = {
+          registration: {
+            guest_entry_status: {
+              unclear: comp_form_enums.dig(:guest_entry_status, :unclear) || comp_form_enums.dig(:free_guest_entry_status, :unclear),
+              free: comp_form_enums.dig(:guest_entry_status, :free) || comp_form_enums.dig(:free_guest_entry_status, :anyone),
+              restricted: comp_form_enums.dig(:guest_entry_status, :restricted) || comp_form_enums.dig(:free_guest_entry_status, :restricted),
+            },
+          },
+        }
+
+        choices ||= {}
+        choices.deep_merge! choices_enum
       end
 
       write_data = {

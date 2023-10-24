@@ -3018,7 +3018,7 @@ nl:
           contact_html: 'Optionele contactinformatie. Als je deze niet invult, worden
             contactverzoeken via een formulier ingestuurd, zonder dat de e-mailadressen
             van de organisatoren worden getoond. %{md}. Voorbeeld: [Tekst](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Link naar de website van de wedstrijd, inclusief http(s).
@@ -3090,25 +3090,30 @@ nl:
           verzoeken zijn voor de WCAT. Vul dit alstublieft in het Engels in!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Vraag naar gasten
-          'false': Vraag niet naar gasten
         competitor_limit:
           enabled:
             'true': Ik wil een deelnemerslimiet opgeven
             'false': Ik wil GEEN deelnemerslimiet opgeven
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Registratie op wedstrijdlocatie toegestaan
             'false': Nieuwe aanmeldingen op de wedstrijdlocatie worden NIET toegestaan
-          allow_registration_edits:
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+          allow_self_edits:
             'true': Deelnemers mogen hun registratie aanpassen tot de deadline voor
               het aanpassen van wedstrijdonderdelen
             'false': Deelnemers mogen hun registratie NIET aanpassen zodra ze zijn
               geaccepteerd
-          allow_self_delete_after_acceptance:
-            'true':
-            'false':
+          guests_enabled:
+            'true': Vraag naar gasten
+            'false': Vraag niet naar gasten
+          guest_entry_status:
+            unclear: Laat niks zien (en wellicht een toelichting geven in de sectie
+              Extra registratie-eisen)
+            free: Iedere gast kan gratis komen kijken
+            restricted: Gasten alleen toegestaan als begeleider van deelnemers
         event_restrictions:
           qualification_results:
             allow_registration_without:

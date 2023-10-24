@@ -3301,7 +3301,6 @@ hr:
             kontakt upiti će se poslati preko forme bez otkrivanja mail adresa organizatora.
             %{md}. Primjer: [Text to display](mailto:some@email.com)'
         championships:
-          championship_type: ''
         website:
           generate_website: ''
           external_website: Web-stranica natjecanja. Mora biti valjani http(s) URL.
@@ -3386,27 +3385,32 @@ hr:
           engleskom jeziku!
         clone_tabs: ''
       choices:
-        guests_enabled:
-          'true': Pitaj u vezi gostiju
-          'false': Ne pitaj u vezi gostiju
         competitor_limit:
           enabled:
             'true': Želim specificirati natjecateljski limit
             'false': NE ŽELIM specificirati natjecateljski limit
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Registracije na licu mjesta će se prihvatiti
             'false': Registracije na licu mjesta NEĆE SE prihvaćati
-          allow_registration_edits:
-            'true': Natjecatelji mogu uređivati svoju registraciju do roka za ažuriranje
-              registriranih disciplina
-            'false': Natjecatelji NE MOGU uređivati svoju registraciju nakon što je
-              prihvaćena
           allow_self_delete_after_acceptance:
             'true': Natjecatelji mogu obrisati svoju registraciju čak i nakon što
               su prihvaćeni
             'false': Natjecatelji NE MOGU obrisati svoju registraciju nakon što su
               prihvaćeni
+          allow_self_edits:
+            'true': Natjecatelji mogu uređivati svoju registraciju do roka za ažuriranje
+              registriranih disciplina
+            'false': Natjecatelji NE MOGU uređivati svoju registraciju nakon što je
+              prihvaćena
+          guests_enabled:
+            'true': Pitaj u vezi gostiju
+            'false': Ne pitaj u vezi gostiju
+          guest_entry_status:
+            unclear: Ne prikazuj ništa (možda elaboriraj unutar sekcije "Dodatni zahtjevi
+              za registraciju")
+            free: Svi gledatelji mogu doći besplatno
+            restricted: '"Gledatelji su dozvoljeni samo kao pratnja natjecatelja."'
         event_restrictions:
           qualification_results:
             allow_registration_without:

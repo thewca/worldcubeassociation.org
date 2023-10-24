@@ -1493,7 +1493,7 @@ ko:
           trainee_delegate_ids:
           organizer_ids:
           contact_html:
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website:
@@ -1547,15 +1547,19 @@ ko:
             'true':
             'false':
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true':
             'false':
-          allow_registration_edits:
+          allow_self_edits:
             'true':
             'false':
           allow_self_delete_after_acceptance:
             'true':
             'false':
+          guest_entry_status:
+            unclear:
+            free:
+            restricted:
         event_restrictions:
           qualification_results:
             allow_registration_without:

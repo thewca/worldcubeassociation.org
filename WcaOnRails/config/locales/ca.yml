@@ -3113,7 +3113,7 @@ ca:
           contact_html: 'Dades de contacte opcional. Si no ho omples, el contacte
             es farà a través d''un formulari sense revelar les adreces de correu electrònic
             dels organitzadors. %{md}. Exemple: [Text to display](mailto:some@email.com)'
-        championships:
+        championships: ''
         website:
           generate_website: ''
           external_website: Pàgina web de la competició. Ha de tenir un enllaç http(s)
@@ -3165,7 +3165,7 @@ ca:
           allow_self_delete_after_acceptance: ''
           allow_self_edits: ''
           guests_enabled: ''
-          guest_entry_status:
+          guest_entry_status: ''
           guests_per_registration:
           extra_requirements: Si us plau, indica aquí qualsevol requisit extra pel
             registre que encara no s'hagi indicat, com per exemple instruccions de
@@ -3221,6 +3221,11 @@ ca:
             'false': >-
               Els competidors NO haurien d'eliminar el seu registre un cop s'hagi
               acceptat
+          guest_entry_status:
+            unclear: No mostris res (i potser explica-ho millor a l'apartat "Requeriments
+              extra de registre")
+            free: Qualsevol espectador pot assistir gratuïtament
+            restricted: Els espectadors només són permesos com acompanyants de competidors
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
