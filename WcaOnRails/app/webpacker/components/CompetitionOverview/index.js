@@ -1,11 +1,17 @@
 import React from 'react';
 
 import I18n from '../../lib/i18n';
+import useLoadedData from '../../lib/hooks/useLoadedData';
+import { competitionsApiUrl } from '../../lib/requests/routes.js.erb';
 import {
   events, continents, countries, competitionConstants,
 } from '../../lib/wca-data.js.erb';
 
+import CompetitionTable from './CompetitionTable';
+
 function CompetitionOverview() {
+  const { loading, error, data } = useLoadedData(competitionsApiUrl);
+
   return (
     <div className="container">
       <h2>{I18n.t('competitions.index.title')}</h2>
@@ -126,6 +132,20 @@ function CompetitionOverview() {
           </div>
         </div>
       </form>
+
+      <div id="search-results" className="row competitions-list">
+        <div id="loading">
+          <div className="spinner-wrapper">
+            <i className="icon spinner fa-spin fa-5x" />
+          </div>
+        </div>
+        <div id="competitions-list">
+          {(!loading && !error) && <CompetitionTable competitions={data} title="Competitions" showRegistrationStatus={false} />}
+        </div>
+        <div className="col-xs-12 col-md-12">
+          <div id="competitions-map" />
+        </div>
+      </div>
     </div>
   );
 }
