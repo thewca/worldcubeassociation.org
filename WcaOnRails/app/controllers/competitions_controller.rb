@@ -348,14 +348,6 @@ class CompetitionsController < ApplicationController
     render :new
   end
 
-  def nearby_competitions
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
-    @nearby_competitions = get_nearby_competitions(@competition)
-    render partial: 'nearby_competitions'
-  end
-
   def competition_form_nearby_json(competition, other_comp)
     if current_user.can_admin_results?
       comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
@@ -445,20 +437,6 @@ class CompetitionsController < ApplicationController
     collisions = get_colliding_registration_start_competitions(competition)
 
     render json: collisions.map { |c| competition_form_registration_collision_json(competition, c) }
-  end
-
-  def series_eligible_competitions
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @series_eligible_competitions = get_series_eligible_competitions(@competition)
-    render partial: 'series_eligible_competitions'
-  end
-
-  def colliding_registration_start_competitions
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @colliding_registration_start_competitions = get_colliding_registration_start_competitions(@competition)
-    render partial: 'colliding_registration_start_competitions'
   end
 
   def time_until_competition

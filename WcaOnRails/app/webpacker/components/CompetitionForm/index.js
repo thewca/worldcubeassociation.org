@@ -113,7 +113,7 @@ function BottomConfirmationPanel({
 }
 
 // TODO: There are various parts which have overrides for enabled and disabled which need to done
-function NewCompForm() {
+function CompetitionForm() {
   const {
     competition,
     initialCompetition,
@@ -278,7 +278,7 @@ export default function Wrapper({
       }}
     >
       <SectionProvider>
-        <NewCompForm />
+        <CompetitionForm />
       </SectionProvider>
     </StoreProvider>
   );
