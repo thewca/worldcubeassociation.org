@@ -1631,7 +1631,7 @@ en:
       registration_period_after_start: "Registration period cannot be after start date."
       waiting_list_deadline_before_registration_close: "Wailting list deadline cannot be before registration close date."
       waiting_list_deadline_before_refund_date: "Waiting list deadline cannot be before limit date for refunds."
-      waiting_list_deadline_after_start: "Waiting list deadline must be before start date."
+      waiting_list_deadline_after_end: "Waiting list deadline must be before the competition ends."
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
