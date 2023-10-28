@@ -81,17 +81,22 @@ const reducers = {
     const roundIdsToRemove = event.rounds.slice(event.rounds.length - roundsToRemoveCount)
       .map((round) => round.id);
 
-    event.rounds = event.rounds.slice(0, event.rounds.length - roundsToRemoveCount);
+    // Creating a copy because otherwise, we would be mutating a reference that points to
+    // our reducer's state (and if you just only openend the page, also to the initialWcif state!)
+    const newEvent = {
+      ...event,
+      rounds: event.rounds.slice(0, event.rounds.length - roundsToRemoveCount),
+    };
 
-    if (event.rounds.length > 0) {
+    if (newEvent.rounds.length > 0) {
       // Final rounds must not have an advance to next round requirement.
-      event.rounds[event.rounds.length - 1].advancementCondition = null;
+      newEvent.rounds[newEvent.rounds.length - 1].advancementCondition = null;
     }
 
     return {
       ...state,
       wcifEvents: state.wcifEvents.map((e) => (
-        e.id === eventId ? event : removeSharedTimeLimits(e, roundIdsToRemove)
+        e.id === eventId ? newEvent : removeSharedTimeLimits(e, roundIdsToRemove)
       )),
     };
   },
