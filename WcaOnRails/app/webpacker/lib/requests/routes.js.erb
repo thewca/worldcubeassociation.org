@@ -94,10 +94,10 @@ export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers
 
 export const roleDataUrl = (userId, roleId) => {
   if (roleId) {
-    return `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}&roleId=${roleId}`;
+    return `<%= Rails.application.routes.url_helpers.api_v0_roles_get_path %>?userId=${userId}&roleId=${roleId}`;
   } else {
-    return `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}`;
+    return `<%= Rails.application.routes.url_helpers.api_v0_roles_get_path %>?userId=${userId}`;
   }
 }
 
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>`
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_patch_path %>`
