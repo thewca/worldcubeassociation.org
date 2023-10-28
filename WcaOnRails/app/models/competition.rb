@@ -590,7 +590,9 @@ class Competition < ApplicationRecord
              'series_competitions',
              'posting_user',
              'inbox_results',
-             'inbox_persons'
+             'inbox_persons',
+             'announced_by_user',
+             'cancelled_by_user'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
