@@ -80,7 +80,7 @@ class CompetitionsController < ApplicationController
   end
 
   private def assign_editing_user(competition)
-    competition.editing_user_id = current_user.id
+    competition.editing_user_id = current_user&.id
   end
 
   # Normalizes the params that old links to index still work.
