@@ -33,7 +33,7 @@ translations:
   - file: "app/webpacker/rails_translations/:locale.json"
     patterns:
       - "*.about.*"
-      - "*.activerecord.*"
+      - "*.activerecord.attributes.user.*"
       - "*.common.*"
       - "*.competitions.*"
       - "*.countries.*"

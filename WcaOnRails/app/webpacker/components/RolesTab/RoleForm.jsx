@@ -23,11 +23,10 @@ const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delega
 
 export default function RoleForm({ userId, roleId }) {
   const { data, loading, error } = useLoadedData(roleDataUrl(userId, roleId));
-  const { save } = useSaveAction();
+  const { save, saving } = useSaveAction();
   const selectedGroup = groups[0].value;
   const [formValues, setFormValues] = React.useState({});
   const [apiError, setError] = React.useState(false);
-  const [saving, setSaving] = React.useState(false);
   const [finished, setFinished] = React.useState(false);
 
   React.useEffect(() => {
@@ -39,7 +38,6 @@ export default function RoleForm({ userId, roleId }) {
   }, [data]);
 
   const updateRole = () => {
-    setSaving(true);
     save(
       roleUpdateUrl,
       {
@@ -56,7 +54,6 @@ export default function RoleForm({ userId, roleId }) {
   };
 
   const endRole = () => {
-    setSaving(true);
     save(
       roleUpdateUrl,
       {

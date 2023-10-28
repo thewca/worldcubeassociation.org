@@ -322,11 +322,13 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      get '/roles' => 'roles#get'
-      post '/roles' => 'roles#post'
-      patch '/roles' => 'roles#patch'
-      delete '/roles' => 'roles#delete'
-      get '/roles/list' => 'roles#list'
+      scope :roles do
+        get '/' => 'roles#get'
+        post '/' => 'roles#post'
+        patch '/' => 'roles#patch'
+        delete '/' => 'roles#delete'
+        get '/list' => 'roles#list'
+      end
     end
   end
 end
