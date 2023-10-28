@@ -13,7 +13,7 @@ class StaticPagesController < ApplicationController
   def home
   end
 
-  def delegates
+  def delegates_data
     @delegates = User.where.not(delegate_status: nil)
     render json: {
       delegates: @delegates,

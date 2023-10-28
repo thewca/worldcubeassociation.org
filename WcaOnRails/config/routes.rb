@@ -189,8 +189,7 @@ Rails.application.routes.draw do
   get 'contact' => 'static_pages#contact'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
-  get 'delegates' => 'application#react_component', defaults: { component_name: "Delegates", title: 'delegates_page.title' }
-  get 'delegates_data' => 'static_pages#delegates'
+  get 'delegates' => 'static_pages#delegates'
   get 'disclaimer' => 'static_pages#disclaimer'
   get 'faq' => 'static_pages#faq'
   get 'logo' => 'static_pages#logo'
@@ -207,6 +206,7 @@ Rails.application.routes.draw do
 
   scope 'page_data' do
     get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
+    get 'delegates' => 'static_pages#delegates_data', as: :page_data_delegates
   end
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
