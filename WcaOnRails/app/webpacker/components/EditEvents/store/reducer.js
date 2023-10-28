@@ -59,11 +59,13 @@ const reducers = {
 
   [AddRounds]: (state, { payload }) => {
     const { eventId, roundsToAddCount } = payload;
+
     const event = state.wcifEvents.find((e) => e.id === eventId);
     const existingRounds = event.rounds ?? [];
+
     const newRounds = Array(roundsToAddCount).fill(null).map((_, i) => (
       generateWcifRound(eventId, existingRounds.length + i + 1)
-    ))
+    ));
 
     return {
       ...state,
@@ -75,6 +77,7 @@ const reducers = {
 
   [RemoveRounds]: (state, { payload }) => {
     const { eventId, roundsToRemoveCount } = payload;
+
     const event = state.wcifEvents.find((e) => e.id === eventId);
 
     // For removing shared cumulative time limits from other rounds
@@ -132,12 +135,14 @@ const reducers = {
       (round) => (round.timeLimit?.cumulativeRoundIds ? {
         timeLimit: {
           ...round.timeLimit,
-          cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter(
-            (roundId) => ![payload.roundId, ...payload.timeLimit.cumulativeRoundIds].includes(roundId)
-          ),
+          cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter((roundId) => ![
+            payload.roundId,
+            ...payload.timeLimit.cumulativeRoundIds,
+          ].includes(roundId)),
         },
-      } : {})
+      } : {}),
     );
+
     // then, add the (potential) new shared cumulative time limit to _all involved rounds_
     return {
       ...state,
@@ -146,7 +151,7 @@ const reducers = {
         [payload.roundId, ...payload.timeLimit.cumulativeRoundIds],
         () => ({ timeLimit: payload.timeLimit }),
       ),
-    }
+    };
   },
 
   [UpdateAdvancementCondition]: (state, { payload }) => ({
