@@ -68,7 +68,7 @@
         <%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %>
       </li>
       <li>
-        <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
+        <%= link_to "Modify Delegates on Probation", delegate_probations_path %>
       </li>
     </ul>
   <% end %>
@@ -82,7 +82,7 @@
         <%= link_to "WFC panel", wfc_path %>
       </li>
       <li>
-        <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
+        <%= link_to "Modify Delegates on Probation", delegate_probations_path %>
       </li>
       <li>
         <%= link_to "Bands for WCA Dues", country_bands_path %>
