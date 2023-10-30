@@ -1,5 +1,9 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
+import {
+  OverlayTrigger,
+  Tooltip,
+} from 'react-bootstrap';
 
 import I18n from '../../lib/i18n';
 
@@ -25,7 +29,7 @@ function calculateDayDifference(comp, mode) {
 
 function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
   return index > 0 && competitions[index].year !== competitions[index - 1].year
-  && !sortByAnnouncement;
+    && !sortByAnnouncement;
 }
 
 function renderRegistrationStatus(comp) {
@@ -43,24 +47,41 @@ function renderRegistrationStatus(comp) {
 }
 
 function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
+  let tooltipInfo = '';
+  let iconClass = '';
+
   if (comp.isProbablyOver) {
     if (comp.resultsPosted) {
-      return <i className="icon check circle result-posted-indicator" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.posted')} />;
+      tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.posted');
+      iconClass = 'icon check circle result-posted-indicator';
+    } else {
+      tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) });
+      iconClass = 'icon hourglass end';
     }
-
-    return <i className="icon hourglass end" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) })} />;
-  }
-  if (comp.inProgress) {
-    return <i className="icon hourglass half" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.in_progress')} />;
-  }
-  if (sortByAnnouncement) {
-    return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate })} />;
-  }
-  if (showRegistrationStatus) {
+  } else if (comp.inProgress) {
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.in_progress');
+    iconClass = 'icon hourglass half';
+  } else if (sortByAnnouncement) {
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate });
+    iconClass = 'icon hourglass start';
+  } else if (showRegistrationStatus) {
     return renderRegistrationStatus(comp);
+  } else {
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) });
+    iconClass = 'icon hourglass start';
   }
 
-  return <i className="icon hourglass start" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
+  const tooltip = (
+    <Tooltip id={`tooltip-${comp.id}`}>
+      {tooltipInfo}
+    </Tooltip>
+  );
+
+  return (
+    <OverlayTrigger placement="top" overlay={tooltip}>
+      <i className={iconClass} />
+    </OverlayTrigger>
+  );
 }
 
 function CompetitionTable({

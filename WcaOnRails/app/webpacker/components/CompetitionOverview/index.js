@@ -2,6 +2,8 @@ import React from 'react';
 
 import I18n from '../../lib/i18n';
 import useLoadedData from '../../lib/hooks/useLoadedData';
+import Loading from '../Requests/Loading';
+import Errored from '../Requests/Errored';
 import { competitionsApiUrl } from '../../lib/requests/routes.js.erb';
 import {
   events, continents, countries, competitionConstants,
@@ -9,9 +11,15 @@ import {
 
 import CompetitionTable from './CompetitionTable';
 
-function CompetitionOverview() {
-  const { loading, error, data } = useLoadedData(competitionsApiUrl);
+function CompetitionList() {
+  const { loading, error, data } = useLoadedData(`${competitionsApiUrl}?page=19`);
 
+  if (loading) return <Loading />;
+  if (error) return <Errored />;
+  return <CompetitionTable competitions={data} title="Competitions" showRegistrationStatus={false} />;
+}
+
+function CompetitionOverview() {
   return (
     <div className="container">
       <h2>{I18n.t('competitions.index.title')}</h2>
@@ -140,7 +148,7 @@ function CompetitionOverview() {
           </div>
         </div>
         <div id="competitions-list">
-          {(!loading && !error) && <CompetitionTable competitions={data} title="Competitions" showRegistrationStatus={false} />}
+          <CompetitionList />
         </div>
         <div className="col-xs-12 col-md-12">
           <div id="competitions-map" />
