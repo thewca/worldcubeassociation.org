@@ -2,7 +2,7 @@
 
 class DelegatesController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to root unless user.can_view_delegate_matters? }, only: [:stats]
+  before_action -> { redirect_to_root_unless_user(:can_view_delegate_matters?) }, only: [:stats]
   before_action -> { redirect_to root_url unless current_user_is_authorized? }, only: [:delegate_probation_data, :probations]
   before_action :current_user_is_authorized_for_action!, only: [:delegate_probation_data, :start_delegate_probation, :end_delegate_probation]
   private def current_user_is_authorized_for_action!
@@ -16,7 +16,7 @@ class DelegatesController < ApplicationController
   end
 
   private def current_user_is_authorized?
-    current_user.senior_delegate? || current_user.team_leader?(Team.wfc) || current_user.team_senior_member?(Team.wfc)
+    current_user.senior_delegate? || current_user.team_leader?(Team.wfc) || current_user.team_senior_member?(Team.wfc) || current_user.board_member?
   end
 
   def delegate_probation_data
