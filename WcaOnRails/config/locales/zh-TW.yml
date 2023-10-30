@@ -1389,6 +1389,8 @@ zh-TW:
       teams: 團隊、委員會和理事會
       #original_hash: 7981fb3
       education: 學習資源
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: 聯絡資訊
       #original_hash: 8e12c09
@@ -1930,8 +1932,8 @@ zh-TW:
       failed: 無法更新報名
       #original_hash: 016b4ae
       deleted: '成功取消您%{comp}的報名'
-      #original_hash: 648424f
-      registered: 報名成功！
+      #original_hash: 7707307
+      registered: 已送出報名表，請確保有遵守所有比賽的報名條件裡所提到的事項，如此才能確保報名完成。
       #original_hash: 82fed60
       imported: 成功載入報名資料！
       #original_hash: 3614fd1
@@ -1943,25 +1945,25 @@ zh-TW:
       #original_hash: 72e2180
       regards_html: '致上我的問候，%{people}。'
       new:
-        #original_hash: a32db59
-        mail_subject: '您已經提交%{comp_name}的報名，並且等待審核通過。'
-        #original_hash: 8374583
-        registered_html: '您剛剛報名了%{comp_name}。'
-        #original_hash: 13fabed
-        awaits_approval: 我們已經收到您的報名，目前正在等待主辦團隊的批准。
+        #original_hash: 63591e5
+        mail_subject: '等待報名審核：%{comp_name}。'
+        #original_hash: 6aa057a
+        registered_html: '您%{comp_name}的報名目前正在等待主辦團隊的批准。'
+        #original_hash: f98b245
+        awaits_approval: 請確認您有遵守比賽的報名條件中的要求。例如：需要繳交報名費來完成報名。
         #original_hash: 826045f
         approval_info_html: >-
           當您的報名完成時，您會收到電子郵件。請注意報名並不是自動批准的，所以當您的報名沒有馬上批准時，請耐心等待。在您報名批准之前可能還有一些步驟需要完成，請至比賽網站或聯絡主辦團隊以了解報名的規則。您可以在%{here}檢查您的報名狀態。
       accepted:
-        #original_hash: 34515b5
-        mail_subject: '您%{comp_name}的報名已經被批准了'
+        #original_hash: 6f1fa1f
+        mail_subject: '報名已經被批准：%{comp_name}。'
         #original_hash: 24d2883
         message_html: '您%{comp_name}的報名已經被批准了。您可以在%{here}檢查您的報名狀態。'
         #original_hash: 1852cbf
         see_you_soon: '我們很期待在%{comp_name}與您相會！'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: '您%{comp_name}的報名已經被移至候補名單中。'
+        #original_hash: 8d26297
+        mail_subject: '報名已經被移至候補名單：%{comp_name}。'
         #original_hash: 6fd0a8e
         moved_html: '您%{comp_name}的報名已經被移至候補名單中。可能的原因為：'
         causes:
@@ -1972,8 +1974,8 @@ zh-TW:
         #original_hash: 8f7358f
         email_if_error: 若您認為這是錯誤，請回覆這篇電子郵件。
       deleted:
-        #original_hash: 268e248
-        mail_subject: '您%{comp_name}的報名已經被取消'
+        #original_hash: 8cbc6c0
+        mail_subject: '報名已經被取消：%{comp_name}。'
         #original_hash: f66ae63
         message_html: '您%{comp_name}的報名已經被取消。可能的原因為：'
         causes:
@@ -3204,6 +3206,8 @@ zh-TW:
         competition: 聯絡某場特定比賽的主辦單位（請在下面做選擇）
         #original_hash: f0bffb7
         competitions_in_general: 比賽相關（主辦比賽、競賽規則等）
+        #original_hash: aabfcf7
+        results_team: 聯絡WCA成績組
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID或WCA個人頁面
         #original_hash: 0c77aee
@@ -3392,11 +3396,11 @@ zh-TW:
     mission_footer: WCA的使命
     #original_hash: cdab446
     who_we_are_title: 我們是誰
-    #original_hash: 19b86da
+    #original_hash: c0d9a3e
     who_we_are_content_html: >-
       <p>世界方塊協會掌管方塊比賽，這些方塊是透過轉動一部份的零件來操控，通常稱之為「魔術方塊」（twisty
       puzzles）。其中最著名的就是由匈牙利的魯比克教授（professor Rubik）發明的3x3x3魔術方塊（Rubik's
-      Cube）。這些方塊中選出了一系列被當成是WCA的正式比賽項目。</p><p>WCA已經在過去的十年來已成長很多，超過100,000名參賽者已經參加過我們的比賽。儘管有如此的成長，我們的組織仍然幾乎都是志願者來經營，從最基本的當地團體，往上的WCA代表甚至是最上層的WCA董事會也不利外。我們非常感謝每一位貢獻自己的時間來讓WCA得以運作的人。有著更多的經濟上的支持後，我們希望在認可全球各地的比賽的同時，能夠把我們的比賽提升到更專業的層級。</p>
+      Cube）。這些方塊中選出了一系列被當成是WCA的正式比賽項目。</p><p>WCA已經在過去的十年來已成長很多，超過200,000名參賽者已經參加過我們的比賽。儘管有如此的成長，我們的組織仍然幾乎都是志願者來經營，從最基本的當地團體，往上的WCA代表甚至是最上層的WCA董事會也不利外。我們非常感謝每一位貢獻自己的時間來讓WCA得以運作的人。有著更多的經濟上的支持後，我們希望在認可全球各地的比賽的同時，能夠把我們的比賽提升到更專業的層級。</p>
     #original_hash: bccd8c5
     spirit: 我們的精神是，全世界的人們可以在一個友善的環境下一起玩得開心，互相幫助並保持著運動家風度。
     #original_hash: 69131cc
@@ -3409,9 +3413,9 @@ zh-TW:
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">這裡</a>閱覽。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA的下一步是甚麼？
-    #original_hash: 2fea363
+    #original_hash: 487c6a1
     whats_next_content_html: >-
-      <p>世界方塊協會已經有來自140個不同個區域，超過100,000名不同的參賽者，且我們短期內並不打算放慢成長速度！自從2004年我們創立以來，方塊社群持續穩定地成長，我們希望藉由能在新的地區接觸到比賽的方式來繼續成長。在未來，我們希望藉由向其他對方塊有興趣的人做推廣和合作來更加支持我們的社群。</p>
+      <p>世界方塊協會已經有來自158個不同個區域，超過200,000名不同的參賽者，且我們短期內並不打算放慢成長速度！自從2004年我們創立以來，方塊社群持續穩定地成長，我們希望藉由能在新的地區接觸到比賽的方式來繼續成長。在未來，我們希望藉由向其他對方塊有興趣的人做推廣和合作來更加支持我們的社群。</p>
     #original_hash: dc71704
     world_championship_title: 世界錦標賽
     #original_hash: 57cf7f7
