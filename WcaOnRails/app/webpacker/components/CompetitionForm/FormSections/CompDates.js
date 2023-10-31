@@ -25,8 +25,8 @@ export default function CompDates() {
 
   return (
     <Form.Group widths="equal">
-      <InputDate id="startDate" hint={daysUntil(startDate)} />
-      <InputDate id="endDate" />
+      <InputDate id="startDate" hint={daysUntil(startDate)} required />
+      <InputDate id="endDate" required />
     </Form.Group>
   );
 }

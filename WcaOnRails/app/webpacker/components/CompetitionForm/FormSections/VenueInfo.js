@@ -5,7 +5,12 @@ import {
   nearbyCompetitionDistanceDanger,
   nearbyCompetitionDistanceWarning,
 } from '../../../lib/wca-data.js.erb';
-import { InputMap, InputSelect, InputString } from '../Inputs/FormInputs';
+import {
+  InputMap,
+  InputNumber,
+  InputSelect,
+  InputString,
+} from '../Inputs/FormInputs';
 import SubSection from './SubSection';
 
 const countriesOptions = Object.values(countries.byIso2).map((country) => ({
@@ -22,16 +27,16 @@ export default function VenueInfo() {
 
   return (
     <SubSection section="venue">
-      <InputSelect id="countryId" options={countriesOptions} search />
-      <InputString id="cityName" />
-      <InputString id="name" mdHint />
-      <InputString id="details" mdHint />
-      <InputString id="address" />
+      <InputSelect id="countryId" options={countriesOptions} search required />
+      <InputString id="cityName" required />
+      <InputString id="name" mdHint required />
+      <InputString id="details" mdHint required />
+      <InputString id="address" required />
       <InputMap id="coordinates" htmlId="map" circles={circles} noHint="blank" />
       <SubSection section="coordinates">
         <Form.Group widths="equal">
-          <InputString id="lat" attachedLabel="Latitude" noLabel="blank" noHint />
-          <InputString id="long" attachedLabel="Longitude" noLabel="blank" noHint />
+          <InputNumber id="lat" attachedLabel="Latitude" step={0.01} noLabel="ignore" noHint="blank" />
+          <InputNumber id="long" attachedLabel="Longitude" step={0.01} noLabel="ignore" noHint="blank" />
         </Form.Group>
       </SubSection>
     </SubSection>

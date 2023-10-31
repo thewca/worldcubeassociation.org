@@ -75,20 +75,20 @@ export default function RegistrationFees() {
 
   return (
     <SubSection section="entryFees">
-      <InputSelect id="currencyCode" options={currenciesOptions} />
-      <InputCurrencyAmount id="baseEntryFee" currency={currency} />
+      <InputSelect id="currencyCode" options={currenciesOptions} required />
+      <InputCurrencyAmount id="baseEntryFee" currency={currency} required />
       <p className="help-block">
         <b>
           {duesText}
         </b>
       </p>
       <ConditionalSection showIf={canRegOnSite}>
-        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} />
+        <InputCurrencyAmount id="onTheSpotEntryFee" currency={currency} required={canRegOnSite} />
       </ConditionalSection>
       <InputCurrencyAmount id="guestEntryFee" currency={currency} />
       <InputBoolean id="donationsEnabled" />
-      <InputNumber id="refundPolicyPercent" />
-      <InputDate id="refundPolicyLimitDate" dateTime />
+      <InputNumber id="refundPolicyPercent" nullDefault={0} required />
+      <InputDate id="refundPolicyLimitDate" dateTime required />
     </SubSection>
   );
 }

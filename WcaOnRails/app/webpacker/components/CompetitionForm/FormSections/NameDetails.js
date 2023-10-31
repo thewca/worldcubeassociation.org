@@ -12,9 +12,9 @@ export default function NameDetails() {
   return (
     <>
       {isPersisted && <InputString id="competitionId" disabled={disableIdAndShortName} />}
-      <InputString id="name" />
+      <InputString id="name" required />
       {isPersisted && <InputString id="shortName" disabled={disableIdAndShortName} />}
-      <InputString id="nameReason" mdHint />
+      <InputString id="nameReason" mdHint required />
     </>
   );
 }

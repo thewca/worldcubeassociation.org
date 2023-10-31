@@ -204,6 +204,8 @@ function CompetitionForm() {
         <Admin />
         <NameDetails />
         <VenueInfo />
+        <Divider />
+
         <CompDates />
         <NearbyComps />
         <Series />
@@ -211,13 +213,13 @@ function CompetitionForm() {
 
         <SubSection section="registration">
           <Form.Group widths="equal">
-            <InputDate id="openingDateTime" dateTime />
-            <InputDate id="closingDateTime" dateTime />
+            <InputDate id="openingDateTime" dateTime required />
+            <InputDate id="closingDateTime" dateTime required />
           </Form.Group>
           <RegistrationCollisions />
         </SubSection>
 
-        <InputMarkdown id="information" />
+        <InputMarkdown id="information" required />
 
         <CompetitorLimit />
         <Staff />

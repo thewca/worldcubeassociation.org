@@ -14,7 +14,7 @@ export default function Website() {
     <SubSection section="website">
       <InputBoolean id="generateWebsite" />
       <ConditionalSection showIf={usingExternalWebsite}>
-        <InputString id="externalWebsite" />
+        <InputString id="externalWebsite" required={usingExternalWebsite} />
       </ConditionalSection>
       <InputBoolean id="usesWcaRegistration" />
       <ConditionalSection showIf={usingExternalRegistration}>

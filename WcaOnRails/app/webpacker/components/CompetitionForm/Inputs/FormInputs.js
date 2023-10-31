@@ -57,6 +57,7 @@ function FieldWrapper({
   mdHint,
   error,
   disabled,
+  required,
   children,
 }) {
   const section = useSections();
@@ -77,6 +78,7 @@ function FieldWrapper({
       error={!!error}
       className={error && 'has-error'}
       disabled={!!disabled}
+      required={!!required}
     >
       {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
       {!ignoreLabel && <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />}
@@ -92,8 +94,8 @@ function FieldWrapper({
 /* eslint-disable react/destructuring-assignment */
 const wrapInput = (
   WrappedInput,
-  additionalPropNames,
-  emptyStringForNull = false,
+  additionalPropNames = [],
+  nullDefault = undefined,
   inputValueKey = 'value',
 ) => function WcaFormInput(props) {
   const { isAdminView, errors, competition: { admin: { isConfirmed } } } = useStore();
@@ -115,7 +117,10 @@ const wrapInput = (
 
   let value = formValues[props.id];
 
-  if (emptyStringForNull && value === null) value = '';
+  // we want to provide "global default" for input components, as well as allow
+  // individual inputs to override their local default value. So we check for defaults twice.
+  if (value === null && props.defaultValue !== undefined) value = props.defaultValue;
+  if (value === null && nullDefault !== undefined) value = nullDefault;
 
   inputProps[inputValueKey] = value;
 
@@ -146,6 +151,7 @@ const wrapInput = (
       mdHint={props.mdHint}
       error={error}
       disabled={disabled}
+      required={props.required}
     >
       <WrappedInput
         {...inputProps}
@@ -163,7 +169,7 @@ export const InputString = wrapInput((props) => (
     value={props.value}
     onChange={props.onChange}
   />
-), ['attachedLabel'], true);
+), ['attachedLabel'], '');
 
 export const InputTextArea = wrapInput((props) => (
   <TextareaAutosize
@@ -172,7 +178,7 @@ export const InputTextArea = wrapInput((props) => (
     className="no-autosize"
     rows={2}
   />
-), [], true);
+), [], '');
 
 export const InputNumber = wrapInput((props) => {
   const onChangeNumber = useCallback((e, { value: newValue }) => {
@@ -183,6 +189,7 @@ export const InputNumber = wrapInput((props) => {
   return (
     <Input
       type="number"
+      label={props.attachedLabel}
       value={props.value}
       onChange={onChangeNumber}
       min={props.min}
@@ -190,7 +197,7 @@ export const InputNumber = wrapInput((props) => {
       step={props.step}
     />
   );
-}, ['min', 'max', 'step'], true);
+}, ['attachedLabel', 'min', 'max', 'step']);
 
 export const InputDate = wrapInput((props) => {
   const date = props.value && new Date(props.value);
@@ -216,7 +223,7 @@ export const InputDate = wrapInput((props) => {
       label={props.dateTime ? 'UTC' : null}
     />
   );
-}, ['dateTime'], true);
+}, ['dateTime'], '');
 
 export const InputSelect = wrapInput((props) => (
   <Select
@@ -244,7 +251,7 @@ export const InputRadio = wrapInput((props) => (
 
 export const InputMarkdown = wrapInput((props) => (
   <MarkdownEditor value={props.value} onChange={props.onChange} />
-), [], true);
+), [], '');
 
 export const InputUsers = wrapInput((props) => (
   <UserSearch
@@ -299,7 +306,7 @@ export const InputBooleanSelect = wrapInput((props) => {
       onChange={props.onChange}
     />
   );
-}, ['id', 'forcedChoice']);
+}, ['id', 'forceChoice']);
 
 export const InputMap = wrapInput((props) => {
   const coords = [props.value.lat, props.value.long];
@@ -364,4 +371,4 @@ export const InputChampionships = wrapInput((props) => {
       <AddChampionshipButton onClick={onClickAdd} />
     </>
   );
-}, []);
+});
