@@ -2,8 +2,20 @@
 
 require "rails_helper"
 
-def find_competition_field(label_text)
+def find_competition_input(label_text)
   find('label', text: label_text, match: :first).find(:xpath, './following-sibling::div/input')
+end
+
+def find_competition_checkbox_input(label_text)
+  find('label', text: label_text, match: :first).find(:xpath, './preceding-sibling::input', visible: false)
+end
+
+def set_competition_checkbox_input(label_text, value)
+  label = find('label', text: label_text, match: :first)
+  input = label.find(:xpath, './preceding-sibling::input', visible: false)
+  if input.checked? != value
+    label.click
+  end
 end
 
 RSpec.feature "Competition management" do
@@ -178,11 +190,14 @@ RSpec.feature "Competition management" do
     scenario 'example test', js: true do
       visit "/competitions/new"
 
-      find_competition_field('Name').set('New Comp 2015 lol')
+      find_competition_input('Name').set('New Comp 2015 lol')
+      set_competition_checkbox_input('I would like to use the WCA website for registration', true)
+      set_competition_checkbox_input('I would like to use the WCA website for registration', false)
+      set_competition_checkbox_input('I would like to use the WCA website for registration', true)
 
       click_button 'Show Debug'
 
-      expect(find_competition_field('Name').value).to eq 'New Comp 2015 lol'
+      expect(find_competition_input('Name').value).to eq 'New Comp 2015 lol'
       puts "======"
       puts "======"
       puts "======"
@@ -243,7 +258,7 @@ RSpec.feature "Competition management" do
 
       scenario 'can edit registration open datetime', js: true, retry: 3 do
         visit edit_competition_path(comp_with_fours)
-        check "competition_use_wca_registration"
+        find_field("I would like to use the WCA website for registration", :visible => :all, :disabled => :all).check
 
         expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .datepicker")
         expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .timepicker")
