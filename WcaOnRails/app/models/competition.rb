@@ -2127,7 +2127,7 @@ class Competition < ApplicationRecord
       },
       "startDate" => errors[:start_date],
       "endDate" => errors[:end_date],
-      "series" => competition_series.valid? ? [] : competition_series.form_errors,
+      "series" => competition_series&.valid? ? [] : competition_series&.form_errors,
       "information" => errors[:information],
       "competitorLimit" => {
         "enabled" => errors[:competitor_limit_enabled],
@@ -2330,14 +2330,14 @@ class Competition < ApplicationRecord
             "coordinates" => {
               "type" => "object",
               "properties" => {
-                "lat" => { "type" => "integer" },
-                "long" => { "type" => "integer" },
+                "lat" => { "type" => "number" },
+                "long" => { "type" => "number" },
               },
             },
           },
         },
-        "startDate" => { "type" => "string", "format" => "date-time" },
-        "endDate" => { "type" => "string", "format" => "date-time" },
+        "startDate" => { "type" => "string", "format" => "date" },
+        "endDate" => { "type" => "string", "format" => "date" },
         "series" => CompetitionSeries.form_data_json_schema,
         "information" => { "type" => "string" },
         "competitorLimit" => {
@@ -2366,7 +2366,7 @@ class Competition < ApplicationRecord
               "items" => { "type" => "integer" },
               "uniqueItems" => true,
             },
-            "contact" => { "type" => "string" },
+            "contact" => { "type" => ["string", "null"] },
           },
         },
         "championships" => {
@@ -2379,7 +2379,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "generateWebsite" => { "type" => "boolean" },
             "externalWebsite" => { "type" => ["string", "null"] },
-            "externalRegistrationPage" => { "type" => "string" },
+            "externalRegistrationPage" => { "type" => ["string", "null"] },
             "usesWcaRegistration" => { "type" => "boolean" },
             "usesWcaLive" => { "type" => "boolean" },
           },
@@ -2395,7 +2395,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "currencyCode" => { "type" => "string" },
             "baseEntryFee" => { "type" => "integer" },
-            "onTheSpotEntryFee" => { "type" => "integer" },
+            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
             "guestEntryFee" => { "type" => "integer" },
             "donationsEnabled" => { "type" => "boolean" },
             "refundPolicyPercent" => { "type" => "integer" },
@@ -2426,7 +2426,7 @@ class Competition < ApplicationRecord
               "type" => "object",
               "properties" => {
                 "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => "string" },
+                "reason" => { "type" => ["string", "null"] },
               },
             },
             "qualificationResults" => {

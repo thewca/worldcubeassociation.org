@@ -11,7 +11,7 @@ import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 
-const guestsEnabledOptions = [].map((bool) => ({
+const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,
   text: I18n.t(`competitions.competition_form.choices.guests_enabled.${bool.toString()}`),
 }));

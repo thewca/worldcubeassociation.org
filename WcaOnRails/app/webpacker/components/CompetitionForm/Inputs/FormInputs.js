@@ -174,15 +174,23 @@ export const InputTextArea = wrapInput((props) => (
   />
 ), [], true);
 
-export const InputNumber = wrapInput((props) => (
-  <Input
-    type="number"
-    value={props.value}
-    onChange={props.onChange}
-    min={props.min}
-    max={props.max}
-  />
-), ['min', 'max'], true);
+export const InputNumber = wrapInput((props) => {
+  const onChangeNumber = useCallback((e, { value: newValue }) => {
+    const convertedNumber = Number(newValue);
+    props.onChange(e, { value: convertedNumber });
+  }, [props]);
+
+  return (
+    <Input
+      type="number"
+      value={props.value}
+      onChange={onChangeNumber}
+      min={props.min}
+      max={props.max}
+      step={props.step}
+    />
+  );
+}, ['min', 'max', 'step'], true);
 
 export const InputDate = wrapInput((props) => {
   const date = props.value && new Date(props.value);
