@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Table } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -62,7 +62,7 @@ function ProbationListTable({
 }
 
 export default function DelegateProbations() {
-  const [wcaId, setWcaId] = useInputState('');
+  const [userId, setUserId] = React.useState();
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
@@ -76,24 +76,21 @@ export default function DelegateProbations() {
   return (
     <>
       <h1>Delegate Probations</h1>
-      <div style={{
-        display: 'flex',
-      }}
-      >
-        <UserSearch onSelect={(el) => {
-          if (el.length === 1) {
-            setWcaId(el[0].item.wca_id);
-          } else {
-            setWcaId('');
-          }
+      <UserSearch
+        value={userId}
+        onChange={setUserId}
+        multiple={false}
+        delegateOnly
+      />
+      <Button
+        onClick={() => {
+          save(startDelegateProbationUrl, { userId }, sync, { method: 'POST' });
+          setUserId(null);
         }}
-        />
-        <Button
-          onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
-        >
-          Start Probation
-        </Button>
-      </div>
+        disabled={!userId}
+      >
+        Start Probation
+      </Button>
       <h2>Active Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null

@@ -295,11 +295,11 @@ Rails.application.routes.draw do
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'
-      get '/search/users' => 'api#users_search'
+      get '/search/users' => 'api#users_search', as: :search_users
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
-      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }, as: :user
-      get '/users/:wca_id' => 'api#show_user_by_wca_id'
+      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
+      get '/users/:wca_id' => 'api#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person

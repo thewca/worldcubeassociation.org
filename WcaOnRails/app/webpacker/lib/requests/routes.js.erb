@@ -40,8 +40,6 @@ export const competitionAllResultsUrl = (id, eventId) => `<%= CGI.unescape(Rails
 
 export const omnisearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?q=${query}`;
 
-export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
-
 export const competitionSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_competitions_path %>?q=${query}`;
 
 export const competitionEventScramblesApiUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_scrambles_path("${id}", "${eventId}")) %>`;
@@ -75,6 +73,10 @@ export const adminFixResultsUrl = (personId, competition_id = undefined, event_i
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;
+
+export const userApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_path("${id}"))%>`;
+
+export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
 
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
 
