@@ -2110,8 +2110,8 @@ class Competition < ApplicationRecord
 
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
-      "competitionId" => errors[:id] + errors[:name],
-      "name" => [],
+      "competitionId" => self.persisted? ? (errors[:id] + errors[:name]) : [],
+      "name" => self.persisted? ? [] : errors[:name],
       "shortName" => errors[:cellName],
       "nameReason" => errors[:name_reason],
       "venue" => {

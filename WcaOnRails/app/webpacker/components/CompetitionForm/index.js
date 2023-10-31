@@ -25,13 +25,13 @@ import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
 import RegistrationCollisions from './Tables/RegistrationCollisions';
-import Errors from './Errors';
+import FormErrors from './FormErrors';
 import Series from './FormSections/Series';
 import useToggleState from '../../lib/hooks/useToggleState';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import competitionFormReducer from './store/reducer';
-import { changesSaved } from './store/actions';
+import { changesSaved, setErrors } from './store/actions';
 import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
@@ -127,9 +127,13 @@ function CompetitionForm() {
   const onSuccess = useCallback(() => dispatch(changesSaved()), [dispatch]);
 
   const onError = useCallback((err) => {
-    // TODO
-    throw err;
-  }, []);
+    // check whether the 'json' property is set AND that it's not a generic error message
+    if (err.json !== undefined && !err.json.error) {
+      dispatch(setErrors(err.json));
+    } else {
+      throw err;
+    }
+  }, [dispatch]);
 
   const createComp = useCallback(() => {
     save('/competitions', competition, onSuccess, { method: 'POST' }, onError);
@@ -198,7 +202,7 @@ function CompetitionForm() {
 
       {isPersisted && <AnnouncementActions />}
       <AnnouncementMessage />
-      <Errors />
+      <FormErrors />
 
       <Form>
         <Admin />

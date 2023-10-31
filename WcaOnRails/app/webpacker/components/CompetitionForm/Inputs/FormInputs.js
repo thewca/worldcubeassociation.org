@@ -106,10 +106,10 @@ const wrapInput = (
   const formValues = useCompetitionForm();
   const updateFormValue = useUpdateFormAction();
 
-  const inputProps = additionalPropNames.reduce((acc, propName) => {
-    acc[propName] = props[propName];
-    return acc;
-  }, {});
+  const inputProps = additionalPropNames.reduce((acc, propName) => ({
+    ...acc,
+    [propName]: props[propName],
+  }), {});
 
   const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
     dispatch(updateFormValue(props.id, newValue));
@@ -124,10 +124,11 @@ const wrapInput = (
 
   inputProps[inputValueKey] = value;
 
-  const snakeSections = section.map(_.snakeCase);
-  const errorSegment = readValueRecursive(errors, snakeSections);
+  const errorSegment = readValueRecursive(errors, section);
 
-  const error = errorSegment?.[props.id]?.join(', ');
+  // sometimes we nest errors deeper than the fields, so we need to be cautious about joining
+  const errorCandidates = errorSegment?.[props.id];
+  const error = Array.isArray(errorCandidates) && errorCandidates.join(', ');
 
   const passDownLabel = additionalPropNames.includes('label');
   if (passDownLabel) inputProps.label = (props.label || getFieldLabel(props.id, section));
