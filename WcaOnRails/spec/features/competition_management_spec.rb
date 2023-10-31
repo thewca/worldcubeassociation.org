@@ -2,6 +2,10 @@
 
 require "rails_helper"
 
+def find_competition_field(label_text)
+  find('label', text: label_text, match: :first).find(:xpath, './following-sibling::div/input')
+end
+
 RSpec.feature "Competition management" do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
@@ -169,6 +173,23 @@ RSpec.feature "Competition management" do
 
     before :each do
       sign_in delegate
+    end
+
+    scenario 'example test', js: true do
+      visit "/competitions/new"
+
+      find_competition_field('Name').set('New Comp 2015 lol')
+
+      click_button 'Show Debug'
+
+      expect(find_competition_field('Name').value).to eq 'New Comp 2015 lol'
+      puts "======"
+      puts "======"
+      puts "======"
+      print page.html
+      puts "======"
+      puts "======"
+      puts "======"
     end
 
     scenario 'create competition', js: true, retry: 3 do
