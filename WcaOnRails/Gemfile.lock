@@ -364,7 +364,7 @@ GEM
       ruby-vips (>= 2.0.17, < 3)
     iniparse (1.5.0)
     io-console (0.6.0)
-    irb (1.8.1)
+    irb (1.8.3)
       rdoc
       reline (>= 0.3.8)
     iso (0.2.2)
@@ -490,7 +490,7 @@ GEM
     pry (0.14.1)
       coderay (~> 1.1)
       method_source (~> 1.0)
-    psych (5.1.0)
+    psych (5.1.1.1)
       stringio
     public_suffix (5.0.3)
     raabro (1.4.0)
@@ -558,7 +558,7 @@ GEM
     redis-client (0.18.0)
       connection_pool
     regexp_parser (2.8.2)
-    reline (0.3.8)
+    reline (0.3.9)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
