@@ -247,6 +247,9 @@ GEM
     devise-bootstrap-views (1.1.0)
     devise-i18n (1.11.0)
       devise (>= 4.9.0)
+    devise-jwt (0.11.0)
+      devise (~> 4.0)
+      warden-jwt_auth (~> 0.8)
     devise-two-factor (5.0.0)
       activesupport (~> 7.0)
       devise (~> 4.0)
@@ -264,6 +267,15 @@ GEM
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
       railties (>= 3.2)
+    dry-auto_inject (1.0.1)
+      dry-core (~> 1.0)
+      zeitwerk (~> 2.6)
+    dry-configurable (1.1.0)
+      dry-core (~> 1.0, < 2)
+      zeitwerk (~> 2.6)
+    dry-core (1.0.1)
+      concurrent-ruby (~> 1.0)
+      zeitwerk (~> 2.6)
     enum_help (0.0.19)
       activesupport (>= 3.0.0)
     erubi (1.12.0)
@@ -730,6 +742,11 @@ GEM
     version_gem (1.1.1)
     warden (1.2.9)
       rack (>= 2.0.9)
+    warden-jwt_auth (0.8.0)
+      dry-auto_inject (>= 0.8, < 2)
+      dry-configurable (>= 0.13, < 2)
+      jwt (~> 2.1)
+      warden (~> 1.2)
     wca_i18n (0.4.4)
       colorize (~> 0.8)
     web-console (4.2.1)
@@ -778,6 +795,7 @@ DEPENDENCIES
   devise
   devise-bootstrap-views
   devise-i18n
+  devise-jwt
   devise-two-factor
   doorkeeper
   doorkeeper-i18n
