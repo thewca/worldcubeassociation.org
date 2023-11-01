@@ -402,7 +402,7 @@ GEM
     listen (3.6.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
-    loofah (2.21.3)
+    loofah (2.21.4)
       crass (~> 1.0.2)
       nokogiri (>= 1.12.0)
     lumberjack (1.2.8)
@@ -411,7 +411,7 @@ GEM
       net-imap
       net-pop
       net-smtp
-    mail_form (1.10.0)
+    mail_form (1.10.1)
       actionmailer (>= 5.2)
       activemodel (>= 5.2)
     marcel (1.0.2)
@@ -423,7 +423,7 @@ GEM
     mime-types-data (3.2021.0704)
     mini_magick (4.12.0)
     mini_mime (1.1.5)
-    mini_portile2 (2.8.4)
+    mini_portile2 (2.8.5)
     minitest (5.20.0)
     monetize (1.11.0)
       money (~> 6.12)
@@ -438,7 +438,7 @@ GEM
     multi_xml (0.6.0)
     mysql2 (0.5.5)
     nenv (0.3.0)
-    net-imap (0.3.7)
+    net-imap (0.4.3)
       date
       net-protocol
     net-pop (0.1.2)
