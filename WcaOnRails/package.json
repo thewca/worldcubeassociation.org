@@ -16,7 +16,7 @@
     "@babel/plugin-transform-regenerator": "^7.22.5",
     "@babel/plugin-transform-runtime": "^7.23.2",
     "@babel/plugin-transform-destructuring": "^7.22.5",
-    "@babel/preset-env": "^7.22.20",
+    "@babel/preset-env": "^7.23.2",
     "@babel/preset-react": "^7.22.15",
     "@babel/runtime": "^7.23.2",
     "@cubing/icons": "^1.1.0",
