@@ -1,25 +1,25 @@
 # frozen_string_literal: true
 
-module MicroServices
+module Microservices
   module Registrations
     # Because these routes don't live in the monolith anymore we need some helper functions
-    def competition_register_path(competition_id, stripe_status = nil)
-      "https://#{EnvConfig.ROOT_URL}/competitions/#{competition_id}/register&stripe_status=#{stripe_status}"
+    def self.competition_register_path(competition_id, stripe_status = nil)
+      "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/register&stripe_status=#{stripe_status}"
     end
 
-    def edit_registration_path(competition_id, user_id, stripe_error = nil)
-      "https://#{EnvConfig.ROOT_URL}/competitions/#{competition_id}/#{user_id}/edit&stripe_error=#{stripe_error}"
+    def self.edit_registration_path(competition_id, user_id, stripe_error = nil)
+      "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/#{user_id}/edit&stripe_error=#{stripe_error}"
     end
 
-    def update_payment_status_path
-      "https://#{EnvConfig.WCA_REGISTRATION_URL}/api/internal/v1/update_payment"
+    def self.update_payment_status_path
+      "/api/internal/v1/update_payment"
     end
 
-    def update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
+    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
       conn = Faraday.new(
-        url: update_payment_status_path,
-        headers: { MICROSERVICE_AUTH_HEADER => get_wca_token },
-      ) do |builder|
+        url: EnvConfig.WCA_REGISTRATION_URL,
+        headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
+        ) do |builder|
         # Sets headers and parses jsons automatically
         builder.request :json
         builder.response :json
@@ -30,11 +30,11 @@ module MicroServices
         builder.response :logger
       end
 
-      conn.post('/') do |req|
-        req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }
+      response = conn.post(self.update_payment_status_path) do |req|
+        req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
       end
       # If we ever need the response body
-      conn.body
+      response.body
     end
   end
 end
