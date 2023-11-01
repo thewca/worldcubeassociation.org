@@ -98,6 +98,11 @@ Rails.application.routes.draw do
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
 
+  get 'payment/config' => 'payment#payment_config'
+  get 'payment/finish' => 'payment#payment_finish'
+  get 'payment/refunds' => 'payment#available_refunds'
+  get 'payment/refund' => 'payment#payment_refund'
+
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'

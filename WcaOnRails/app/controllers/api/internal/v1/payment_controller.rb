@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
+  # We are using our own authentication method with vault
+  protect_from_forgery except: [:init]
   def init
     attendee_id = params.require(:attendee_id)
     iso_amount = params.require(:amount)
