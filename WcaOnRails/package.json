@@ -93,7 +93,7 @@
     "jshint": "^2.13.6",
     "stylelint": "^15.10.3",
     "stylelint-config-recommended-scss": "^13.0.0",
-    "stylelint-scss": "^5.0.1",
+    "stylelint-scss": "^5.3.0",
     "webpack-bundle-analyzer": "^4.9.1",
     "webpack-dev-server": "^4.15.1"
   },
