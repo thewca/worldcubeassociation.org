@@ -18,7 +18,7 @@
     "@babel/plugin-transform-destructuring": "^7.22.5",
     "@babel/preset-env": "^7.22.20",
     "@babel/preset-react": "^7.22.15",
-    "@babel/runtime": "^7.23.1",
+    "@babel/runtime": "^7.23.2",
     "@cubing/icons": "^1.1.0",
     "@rails/ujs": "^6.1.7",
     "autonumeric": "^4.10.0",
