@@ -44,12 +44,8 @@ class TranslationsController < ApplicationController
     branch_name = "translation-#{locale}-#{content_digest}"
     # We create a branch pointing to upstream master SHA. This stopped working
     # unless the commit exists in the fork repository, so we always sync first.
-    # Octokit doesn't expost a method for this, so we make a regular request.
-    RestClient.post("https://api.github.com/repos/#{origin_repo}/merge-upstream", '{"branch":"master"}', {
-                      accept: "application/vnd.github+json",
-                      authorization: "Bearer #{AppSecrets.GITHUB_CREATE_PR_ACCESS_TOKEN}",
-                      x_github_api_version: "2022-11-28",
-                    })
+    # Octokit doesn't expost a direct method for this, so we monkey-patch our request.
+    Octokit.client.post "#{Octokit::Repository.path origin_repo}/merge-upstream", { branch: 'master' }
     upstream_sha = Octokit.ref(upstream_repo, "heads/master")[:object][:sha]
     Octokit.create_ref(origin_repo, "heads/#{branch_name}", upstream_sha)
     current_content_sha = Octokit.content(origin_repo, path: file_path, ref: branch_name)[:sha]
