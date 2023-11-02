@@ -14,7 +14,7 @@ RSpec.describe Api::V0::RolesController do
       end
 
       it 'fetches list of roles' do
-        get :list, params: { userId: user_whose_delegate_status_changes.id }
+        get :index, params: { userId: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq({ activeRoles: [{
           role: "candidate_delegate",
@@ -22,7 +22,7 @@ RSpec.describe Api::V0::RolesController do
       end
 
       it 'fetches role data' do
-        get :get, params: { userId: user_whose_delegate_status_changes.id, roleId: "delegate" }
+        get :show, params: { id: 'dummyRoleId', userId: user_whose_delegate_status_changes.id, isActiveRole: "true" }
         parsed_body = JSON.parse(response.body)
 
         expect(parsed_body["roleData"]["delegateStatus"]).to eq "candidate_delegate"
@@ -38,7 +38,7 @@ RSpec.describe Api::V0::RolesController do
           "delegate",
         ).and_call_original
         expect do
-          patch :patch, params: { userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", seniorDelegateId: user_senior_delegate.id, location: "location" }
+          patch :update, params: { id: 'dummyRoleId', userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", seniorDelegateId: user_senior_delegate.id, location: "location" }
         end.to change { enqueued_jobs.size }.by(1)
 
         parsed_body = JSON.parse(response.body)
@@ -51,7 +51,7 @@ RSpec.describe Api::V0::RolesController do
       end
 
       it 'ends delegate role' do
-        delete :delete, params: { userId: user_whose_delegate_status_changes.id }
+        delete :destroy, params: { id: 'dummyRoleId', userId: user_whose_delegate_status_changes.id }
         parsed_body = JSON.parse(response.body)
 
         expect(parsed_body["success"]).to eq true

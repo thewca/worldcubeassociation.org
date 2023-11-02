@@ -90,14 +90,8 @@ export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.api_v0_roles_list_path %>?userId=${userId}`;
+// dummyRoleId is used temporarily because delegates is yet to get a role id
 
-export const roleDataUrl = (userId, roleId) => {
-  if (roleId) {
-    return `<%= Rails.application.routes.url_helpers.api_v0_roles_get_path %>?userId=${userId}&roleId=${roleId}`;
-  } else {
-    return `<%= Rails.application.routes.url_helpers.api_v0_roles_get_path %>?userId=${userId}`;
-  }
-}
-
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_patch_path %>`
+export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}`;
+export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId?userId=${userId}&isActiveRole=${isActiveRole}`;
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId`

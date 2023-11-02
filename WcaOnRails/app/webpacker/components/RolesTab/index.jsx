@@ -13,10 +13,8 @@ import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
 
-const delegateRoleId = 'delegate'; // This is a temporary roleID for delegate edit page, which will be changed to proper ID after implementation of roles table.
-
 function RoleFormModal({
-  trigger, userId, roleId, sync,
+  trigger, userId, isActiveRole, sync,
 }) {
   const [open, setOpen] = React.useState(false);
 
@@ -34,7 +32,7 @@ function RoleFormModal({
       <Modal.Content>
         <RoleForm
           userId={userId}
-          roleId={roleId}
+          isActiveRole={isActiveRole}
         />
       </Modal.Content>
     </Modal>
@@ -62,7 +60,7 @@ export default function RolesTab({ userId }) {
                 </Button.Group>
           )}
               userId={userId}
-              roleId={delegateRoleId}
+              isActiveRole
               sync={sync}
             />
 
@@ -75,6 +73,7 @@ export default function RolesTab({ userId }) {
         <RoleFormModal
           trigger={<Button>New Role</Button>}
           userId={userId}
+          isActiveRole={false}
           sync={sync}
         />
       </>

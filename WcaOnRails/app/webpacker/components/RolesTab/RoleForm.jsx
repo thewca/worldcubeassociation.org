@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Form } from 'semantic-ui-react';
+import { Form, Grid } from 'semantic-ui-react';
 
 import _ from 'lodash';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -21,8 +21,8 @@ const groups = [{
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate', 'senior_delegate'];
 
-export default function RoleForm({ userId, roleId }) {
-  const { data, loading, error } = useLoadedData(roleDataUrl(userId, roleId));
+export default function RoleForm({ userId, isActiveRole }) {
+  const { data, loading, error } = useLoadedData(roleDataUrl(userId, isActiveRole));
   const { save, saving } = useSaveAction();
   const selectedGroup = groups[0].value;
   const [formValues, setFormValues] = React.useState({});
@@ -42,12 +42,9 @@ export default function RoleForm({ userId, roleId }) {
       roleUpdateUrl,
       {
         userId,
-        roleId,
         ...formValues,
       },
-      () => {
-        setFinished(true);
-      },
+      () => setFinished(true),
       { method: 'PATCH' },
       () => setError(true),
     );
@@ -58,11 +55,8 @@ export default function RoleForm({ userId, roleId }) {
       roleUpdateUrl,
       {
         userId,
-        roleId,
       },
-      () => {
-        setFinished(true);
-      },
+      () => setFinished(true),
       { method: 'DELETE' },
       () => setError(true),
     );
@@ -102,26 +96,23 @@ export default function RoleForm({ userId, roleId }) {
             delegateStatusOptions={delegateStatusOptions}
           />
         )}
-      <div style={{
-        display: 'flex',
-      }}
-      >
+      <Grid>
         <Form.Button
           primary
           type="submit"
           disabled={(_.isEqual(formValues, data?.roleData))}
         >
-          {roleId ? 'Update Role' : 'Create Role'}
+          {isActiveRole ? 'Update Role' : 'Create Role'}
         </Form.Button>
         <Form.Button
           secondary
           type="button"
           onClick={endRole}
-          disabled={!roleId}
+          disabled={!isActiveRole}
         >
           End Role
         </Form.Button>
-      </div>
+      </Grid>
     </Form>
   );
 }

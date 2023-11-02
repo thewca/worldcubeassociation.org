@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
 class Api::V0::RolesController < Api::V0::ApiController
-  before_action :current_user_is_authorized_for_action!, only: [:patch, :delete]
+  before_action :current_user_is_authorized_for_action!, only: [:update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate?
       render json: {}, status: 401
     end
   end
 
-  def list
+  def index
     user_id = params.require(:userId)
     user = User.find(user_id)
     is_delegate = user.delegate_status.present?
@@ -19,17 +19,12 @@ class Api::V0::RolesController < Api::V0::ApiController
     }
   end
 
-  def get
+  def show
     user_id = params.require(:userId)
-    role_id = params[:roleId]
+    is_active_role = ActiveRecord::Type::Boolean.new.cast(params.require(:isActiveRole))
     senior_delegates = User.where(delegate_status: "senior_delegate")
 
-    if role_id.nil?
-      render json: {
-        roleData: {},
-        seniorDelegates: senior_delegates,
-      }
-    else
+    if is_active_role
       user = User.find(user_id)
       render json: {
         roleData: {
@@ -39,10 +34,15 @@ class Api::V0::RolesController < Api::V0::ApiController
         },
         seniorDelegates: senior_delegates,
       }
+    else
+      render json: {
+        roleData: {},
+        seniorDelegates: senior_delegates,
+      }
     end
   end
 
-  def patch
+  def update
     user_id = params.require(:userId)
     delegate_status = params.require(:delegateStatus)
     senior_delegate_id = params.require(:seniorDelegateId)
@@ -57,7 +57,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     }
   end
 
-  def delete
+  def destroy
     user_id = params.require(:userId)
 
     user = User.find(user_id)
