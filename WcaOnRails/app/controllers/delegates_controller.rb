@@ -36,10 +36,9 @@ class DelegatesController < ApplicationController
   def start_delegate_probation
     respond_to do |format|
       format.json do
-        wca_id = params[:wcaId]
-        user = User.find_by_wca_id!(wca_id)
+        user_id = params[:userId]
         Role.create!(
-          user_id: user.id,
+          user_id: user_id,
           group_id: UserGroup.find_by!(name: "Delegate Probation").id,
           start_date: Date.today,
         )

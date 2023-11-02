@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Table } from 'semantic-ui-react';
+import { Button, Table } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -10,6 +10,7 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import useInputState from '../../lib/hooks/useInputState';
+import UserSearch from '../SearchWidget/UserSearch';
 import Errored from '../Requests/Errored';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -61,7 +62,7 @@ function ProbationListTable({
 }
 
 export default function DelegateProbations() {
-  const [wcaId, setWcaId] = useInputState('');
+  const [userId, setUserId] = React.useState();
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
@@ -75,9 +76,18 @@ export default function DelegateProbations() {
   return (
     <>
       <h1>Delegate Probations</h1>
-      <Input value={wcaId} onChange={setWcaId} placeholder="Enter WCA ID" />
+      <UserSearch
+        value={userId}
+        onChange={setUserId}
+        multiple={false}
+        delegateOnly
+      />
       <Button
-        onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
+        onClick={() => save(startDelegateProbationUrl, { userId }, () => {
+          sync();
+          setUserId(null);
+        }, { method: 'POST' })}
+        disabled={!userId}
       >
         Start Probation
       </Button>
