@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
+  # TODO: We currently don't have a CSRF Token, but we could protect this with a JWT?
+  protect_from_forgery except: [:config]
   def payment_config
-    return render json: { error: "Please Log in" }, status: :unauthorized unless current_user.present?
-    # How to we make sure that people can't guess numerical payment ids?
     payment_id = params.require(:payment_id)
     competition_id = params.require(:competition_id)
 
@@ -48,8 +48,8 @@ class PaymentController < ApplicationController
   def available_refunds
     attendee_id = params.require(:attendee_id)
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    transactions = StripeTransaction.where(stripe_id: payment_request.stripe_payment_intent.id)
-    render json: { charges: transactions.pluck(:id) }, status: :ok
+    transactions = StripePaymentIntent.where(holder: payment_request)
+    render json: { charges: transactions.map { |t| { payment_id: t.stripe_transaction.id, amount: t.parameters["amount"] } } }, status: :ok
   end
 
   def payment_refund
@@ -57,7 +57,7 @@ class PaymentController < ApplicationController
     attendee_id = params.require(:attendee_id)
 
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    competition_id, user_id = payment_request.competition_and_user_id
+    competition_id, = payment_request.competition_and_user_id
     competition = Competition.find(competition_id)
 
     unless competition.using_stripe_payments?
@@ -77,7 +77,7 @@ class PaymentController < ApplicationController
     stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
 
     refund_args = {
-      charge: charge.id,
+      charge: charge.stripe_id,
       amount: stripe_amount,
     }
 
