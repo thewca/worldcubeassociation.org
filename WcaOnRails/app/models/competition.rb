@@ -2251,7 +2251,7 @@ class Competition < ApplicationRecord
       registration_open: form_data.dig('registration', 'openingDateTime'),
       registration_close: form_data.dig('registration', 'closingDateTime'),
       use_wca_registration: form_data.dig('website', 'usesWcaRegistration'),
-      guests_enabled: form_data.dig('entryFees', 'guestsEnabled'),
+      guests_enabled: form_data.dig('registration', 'guestsEnabled'),
       generate_website: form_data.dig('website', 'generateWebsite'),
       base_entry_fee_lowest_denomination: form_data.dig('entryFees', 'baseEntryFee'),
       currency_code: form_data.dig('entryFees', 'currencyCode'),

@@ -140,8 +140,8 @@ function CompetitionForm() {
   }, [competition, save, onSuccess, onError]);
 
   const updateComp = useCallback(() => {
-    save(`/competitions/${initialCompetition.id}`, competition, onSuccess, { method: 'PATCH' }, onError);
-  }, [competition, initialCompetition.id, save, onSuccess, onError]);
+    save(`/competitions/${initialCompetition.competitionId}`, competition, onSuccess, { method: 'PATCH' }, onError);
+  }, [competition, initialCompetition.competitionId, save, onSuccess, onError]);
 
   const unsavedChanges = useMemo(() => (
     !_.isEqual(competition, initialCompetition)
