@@ -295,6 +295,14 @@
         },
         {
           "info": "",
+          "name": "Chinese Taipei",
+          "continent_id": "_Asia",
+          "class": "state",
+          "iso2": "TW",
+          "id": "Taiwan"
+        },
+        {
+          "info": "",
           "name": "Colombia",
           "continent_id": "_South America",
           "class": "state",
@@ -1391,14 +1399,6 @@
         },
         {
           "info": "",
-          "name": "Chinese Taipei",
-          "continent_id": "_Asia",
-          "class": "state",
-          "iso2": "TW",
-          "id": "Taiwan"
-        },
-        {
-          "info": "",
           "name": "Tajikistan",
           "continent_id": "_Asia",
           "class": "state",
@@ -1601,6 +1601,6 @@
       "title": ""
     }
   ],
-  "version": "Version: March 06, 2020",
+  "version": "Version: January 1, 2024",
   "version_hash": "cd0e6f0"
 }
