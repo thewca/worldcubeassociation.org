@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
-  # TODO: We currently don't have a CSRF Token, but we could protect this with a JWT?
-  protect_from_forgery except: [:config]
   def payment_config
     payment_id = params.require(:payment_id)
     competition_id = params.require(:competition_id)
@@ -39,7 +37,7 @@ class PaymentController < ApplicationController
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
       ruby_money = charge.money_amount
       Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
-      # return redirect_to Microservices::Registrations.competition_register_path(competition_id, "registration_down")
+      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "registration_down")
     end
 
     redirect_to Microservices::Registrations.competition_register_path(competition_id, stored_transaction.status)
