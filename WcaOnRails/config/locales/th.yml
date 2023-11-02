@@ -1537,6 +1537,8 @@ th:
       teams: 'ทีม, คณะกรรมการและสภา'
       #original_hash: 7981fb3
       education: แหล่งข้อมูลศึกษา
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: ข้อมูลติดต่อ
       #original_hash: 8e12c09
@@ -3605,6 +3607,8 @@ th:
         competition: ติดต่อผู้จัดการการแข่งขัน (เลือกได้ที่ด้านล่าง)
         #original_hash: f0bffb7
         competitions_in_general: 'การแข่งขันโดยทั่วไป (การจัดการ, กติกาการแข่งขัน อื่น ๆ)'
+        #original_hash: aabfcf7
+        results_team: ติดต่อ Results Team
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID หรือ WCA Profile
         #original_hash: 0c77aee
