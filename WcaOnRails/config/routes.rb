@@ -321,6 +321,8 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
+
+      resources :roles, only: [:index, :show, :update, :destroy]
     end
   end
 end
