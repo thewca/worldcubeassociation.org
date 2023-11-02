@@ -83,10 +83,10 @@ export default function DelegateProbations() {
         delegateOnly
       />
       <Button
-        onClick={() => {
-          save(startDelegateProbationUrl, { userId }, sync, { method: 'POST' });
+        onClick={() => save(startDelegateProbationUrl, { userId }, () => {
+          sync();
           setUserId(null);
-        }}
+        }, { method: 'POST' })}
         disabled={!userId}
       >
         Start Probation
