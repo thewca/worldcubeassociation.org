@@ -6,39 +6,12 @@ import {
 import { wfcCompetitionsExportUrl } from '../../../lib/requests/routes.js.erb';
 
 import 'react-datepicker/dist/react-datepicker.css';
-import useRequest from '../../../lib/hooks/useRequest';
 
 const dateFormat = 'YYYY-MM-DD';
 
 export default function DuesExport() {
   const [fromDate, setFromDate] = React.useState(null);
   const [toDate, setToDate] = React.useState(null);
-  const [wcaRequest, loading, data, error] = useRequest(() => {
-    const fileUrl = URL.createObjectURL(new Blob([data], { type: 'text/tab-separated-value' }));
-    // Create a hidden link to generate the download
-    const a = document.createElement('a');
-    a.style.display = 'none';
-    a.href = fileUrl;
-    a.download = `wfc-competitions-export-${moment(fromDate).format(dateFormat)}-${moment(toDate).format(dateFormat)}.tsv`;
-    document.body.appendChild(a);
-    a.click();
-    window.URL.revokeObjectURL(fileUrl);
-  });
-
-  const downloadDuesExport = () => {
-    wcaRequest.get(wfcCompetitionsExportUrl, {
-      params: {
-        from_date: moment(fromDate).format(dateFormat),
-        to_date: moment(toDate).format(dateFormat),
-      },
-      responseType: 'text',
-    });
-  };
-
-  // TODO: Replace with Loading & Error, couldn't do it because these components are not shown due
-  // to some CSS issue, the height of the component is 0px.
-  if (loading) return 'Loading...';
-  if (error) return 'Error...';
 
   return (
     <Grid>
@@ -64,7 +37,11 @@ export default function DuesExport() {
         <GridColumn>
           <Button
             disabled={!fromDate || !toDate}
-            onClick={downloadDuesExport}
+            href={`${wfcCompetitionsExportUrl}?${new URLSearchParams({
+              from_date: moment(fromDate).format(dateFormat),
+              to_date: moment(toDate).format(dateFormat),
+            }).toString()}`}
+            target="_blank"
           >
             Download
           </Button>
