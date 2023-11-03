@@ -1609,6 +1609,8 @@ pt:
       teams: 'Equipas, Comités e Conselhos'
       #original_hash: 7981fb3
       education: Recursos educativos
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: Informação de Contacto
       #original_hash: 8e12c09
@@ -4042,10 +4044,12 @@ pt:
       inquiries:
         #original_hash: 92ea7e8
         competition: >-
-          Contacte os Organizadores de uma competição específica (escolher
+          Contactar os Organizadores de uma competição específica (escolher
           abaixo)
         #original_hash: f0bffb7
         competitions_in_general: 'Competições em geral (organização, regras para competições, etc.)'
+        #original_hash: aabfcf7
+        results_team: Contactar a Equipa de Resultados
         #original_hash: f6ffa78
         wca_id_or_profile: ID da WCA ou Perfil da WCA
         #original_hash: 0c77aee

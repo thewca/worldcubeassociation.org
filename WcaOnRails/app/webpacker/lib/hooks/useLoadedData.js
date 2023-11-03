@@ -47,7 +47,7 @@ export const useManyLoadedData = (ids, urlFn) => {
 
   const [anyLoading, setAnyLoading] = useState(true);
 
-  const promises = useMemo(() => ids.map((id) => {
+  const promises = useMemo(() => ids.map(async (id) => {
     const url = urlFn(id);
 
     return fetchJsonOrError(url)
