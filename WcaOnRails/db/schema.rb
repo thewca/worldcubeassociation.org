@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_03_103433) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1107,8 +1107,10 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.boolean "cookies_acknowledged", default: false, null: false
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
+    t.bigint "region_id"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
@@ -1157,4 +1159,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
   add_foreign_key "stripe_transactions", "stripe_transactions", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
+  add_foreign_key "users", "user_groups", column: "region_id"
 end
