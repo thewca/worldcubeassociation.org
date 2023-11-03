@@ -2318,20 +2318,20 @@ class Competition < ApplicationRecord
         "competitionId" => { "type" => "string" },
         "name" => { "type" => "string" },
         "shortName" => { "type" => "string" },
-        "nameReason" => { "type" => "string" },
+        "nameReason" => { "type" => ["string", "null"] },
         "venue" => {
           "type" => "object",
           "properties" => {
             "name" => { "type" => "string" },
             "cityName" => { "type" => "string" },
             "countryId" => { "type" => "string" },
-            "details" => { "type" => "string" },
-            "address" => { "type" => "string" },
+            "details" => { "type" => ["string", "null"] },
+            "address" => { "type" => ["string", "null"] },
             "coordinates" => {
               "type" => "object",
               "properties" => {
-                "lat" => { "type" => "number" },
-                "long" => { "type" => "number" },
+                "lat" => { "type" => ["number", "string"] },
+                "long" => { "type" => ["number", "string"] },
               },
             },
           },
@@ -2339,11 +2339,11 @@ class Competition < ApplicationRecord
         "startDate" => { "type" => "string", "format" => "date" },
         "endDate" => { "type" => "string", "format" => "date" },
         "series" => CompetitionSeries.form_data_json_schema,
-        "information" => { "type" => "string" },
+        "information" => { "type" => ["string", "null"] },
         "competitorLimit" => {
           "type" => "object",
           "properties" => {
-            "enabled" => { "type" => "boolean" },
+            "enabled" => { "type" => ["boolean", "null"] },
             "count" => { "type" => ["integer", "null"] },
             "reason" => { "type" => ["string", "null"] },
           },
@@ -2377,7 +2377,7 @@ class Competition < ApplicationRecord
         "website" => {
           "type" => "object",
           "properties" => {
-            "generateWebsite" => { "type" => "boolean" },
+            "generateWebsite" => { "type" => ["boolean", "null"] },
             "externalWebsite" => { "type" => ["string", "null"] },
             "externalRegistrationPage" => { "type" => ["string", "null"] },
             "usesWcaRegistration" => { "type" => "boolean" },
@@ -2394,11 +2394,11 @@ class Competition < ApplicationRecord
           "type" => "object",
           "properties" => {
             "currencyCode" => { "type" => "string" },
-            "baseEntryFee" => { "type" => "integer" },
+            "baseEntryFee" => { "type" => ["integer", "null"] },
             "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
-            "guestEntryFee" => { "type" => "integer" },
-            "donationsEnabled" => { "type" => "boolean" },
-            "refundPolicyPercent" => { "type" => "integer" },
+            "guestEntryFee" => { "type" => ["integer", "null"] },
+            "donationsEnabled" => { "type" => ["boolean", "null"] },
+            "refundPolicyPercent" => { "type" => ["integer", "null"] },
             "refundPolicyLimitDate" => { "type" => ["string", "null"], "format" => "date-time" },
           },
         },
@@ -2409,14 +2409,14 @@ class Competition < ApplicationRecord
             "closingDateTime" => { "type" => "string", "format" => "date-time" },
             "waitingListDeadlineDate" => { "type" => ["string", "null"], "format" => "date-time" },
             "eventChangeDeadlineDate" => { "type" => ["string", "null"], "format" => "date-time" },
-            "allowOnTheSpot" => { "type" => "boolean" },
+            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
             "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
             "allowSelfEdits" => { "type" => "boolean" },
             "guestsEnabled" => { "type" => "boolean" },
             "guestEntryStatus" => { "type" => "string" },
             "guestsPerRegistration" => { "type" => ["integer", "null"] },
-            "extraRequirements" => { "type" => "string" },
-            "forceComment" => { "type" => "boolean" },
+            "extraRequirements" => { "type" => ["string", "null"] },
+            "forceComment" => { "type" => ["boolean", "null"] },
           },
         },
         "eventRestrictions" => {
@@ -2448,7 +2448,7 @@ class Competition < ApplicationRecord
             "mainEventId" => { "type" => ["string", "null"] },
           },
         },
-        "remarks" => { "type" => "string" },
+        "remarks" => { "type" => ["string", "null"] },
         "admin" => {
           "type" => "object",
           "properties" => {
