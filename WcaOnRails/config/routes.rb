@@ -305,7 +305,7 @@ Rails.application.routes.draw do
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'
-      get '/search/users' => 'api#users_search'
+      get '/search/users' => 'api#users_search', as: :search_users
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
@@ -331,6 +331,8 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
+
+      resources :roles, only: [:index, :show, :update, :destroy]
     end
   end
 end

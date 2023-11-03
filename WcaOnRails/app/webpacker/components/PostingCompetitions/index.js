@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 
 import {
   Button, Checkbox, Header, Segment, Table,
@@ -25,14 +25,8 @@ function checkboxesStateFromData(competitions) {
   return competitions.reduce(stateReducer, {});
 }
 
-function findUserId(competitions) {
-  const ids = competitions.map((c) => (c.posting_user ? c.posting_user.id : null));
-  return ids.filter(Boolean)[0];
-}
-
 function PostingCompetitionsIndex({
   competitions,
-  currentUser,
   save,
   saving,
   setMessage,
@@ -44,19 +38,9 @@ function PostingCompetitionsIndex({
   const updater = useCallback((competitionId, value) => {
     setCheckboxes((prevState) => ({ ...prevState, [competitionId]: value }));
   }, [setCheckboxes]);
-  const postingUserId = findUserId(competitions);
 
-  const someoneElsePosting = postingUserId && postingUserId !== currentUser.id;
-  // We want to deactivate the form if:
-  //   - it's saving
-  //   - someone else is posting!
-  const globalDisable = saving || someoneElsePosting;
-
-  useEffect(() => {
-    if (someoneElsePosting) {
-      setMessage({ color: 'orange', text: 'Someone else is posting' });
-    }
-  }, [someoneElsePosting, setMessage]);
+  // We want to deactivate the form if it's saving.
+  const globalDisable = saving;
 
   const handleResponse = useCallback((json) => {
     if (json.error) {
@@ -105,7 +89,7 @@ function PostingCompetitionsIndex({
                 Competition page
               </Button>
               {/* Only display these if we can post. */}
-              {!someoneElsePosting && initialState[c.id] && (
+              {initialState[c.id] && (
                 <>
                   <Button
                     target="_blank"
@@ -200,7 +184,6 @@ function PostingCompetitionsTable() {
           {!loading && data && (
             <PostingCompetitionsIndex
               competitions={data.competitions}
-              currentUser={data.current_user}
               save={save}
               saving={saving}
               sync={sync}

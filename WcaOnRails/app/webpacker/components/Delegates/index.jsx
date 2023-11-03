@@ -1,13 +1,91 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 
-import { Button, Table } from 'semantic-ui-react';
+import {
+  Button,
+  Dropdown,
+  Grid,
+  Header,
+  Label,
+  Menu,
+  Segment,
+  Table,
+} from 'semantic-ui-react';
+import cn from 'classnames';
+import _ from 'lodash';
 import I18n from '../../lib/i18n';
 import UserBadge from '../UserBadge';
 
 import '../../stylesheets/delegates/style.scss';
 
-const dasherize = (string) => string.replace(/_/g, '-');
+const dasherize = (string) => _.kebabCase(string);
+// In the current status quo, we have no standardized list of Senior regions.
+// We use the Senior's location, which has the format "Region (actual Location)" to guess the region
+const seniorLocationToRegion = (string) => string.split('(')[0].trim();
+
+function sortedDelegates(delegates) {
+  return delegates.sort((user1, user2) => ((user1.location !== user2.location)
+    ? user1.location.localeCompare(user2.location)
+    : user1.name.localeCompare(user2.name)));
+}
+
+function DelegatesOfRegion({ activeSeniorDelegate, delegates, isAdminMode }) {
+  return (
+    <Table className="delegates-table" unstackable>
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell collapsing />
+          <Table.HeaderCell>{I18n.t('delegates_page.table.name')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('delegates_page.table.role')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('delegates_page.table.region')}</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+
+      <Table.Body>
+        {sortedDelegates([
+          activeSeniorDelegate,
+          ...delegates.filter((user) => (
+            user.senior_delegate_id === activeSeniorDelegate.id
+              && user.delegate_status !== 'trainee_delegate'
+          )),
+        ]).map((delegate) => (
+          <Table.Row
+            className={cn(`${dasherize(delegate.delegate_status)}`)}
+            key={delegate.id}
+          >
+            <Table.Cell verticalAlign="middle">
+              <Button.Group vertical>
+                <Button
+                  href={`mailto:${delegate.email}`}
+                  icon="envelope"
+                />
+                {isAdminMode && (
+                  <Button
+                    href={`users/${delegate.id}/edit`}
+                    icon="edit"
+                  />
+                )}
+              </Button.Group>
+            </Table.Cell>
+            <Table.Cell>
+              <UserBadge
+                user={delegate}
+                hideBorder
+                leftAlign
+                subtexts={delegate.wca_id ? [delegate.wca_id] : []}
+              />
+            </Table.Cell>
+            <Table.Cell>
+              {I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}
+            </Table.Cell>
+            <Table.Cell>
+              {delegate.location}
+            </Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}
 
 export default function Delegates({
   delegates,
@@ -15,73 +93,78 @@ export default function Delegates({
 }) {
   const seniorDelegates = React.useMemo(() => delegates
     .filter((user) => user.delegate_status === 'senior_delegate')
-    .sort((user1, user2) => user1.location.localeCompare(user2.location)), [delegates]);
+    .sort((user1, user2) => (user1.location || '').localeCompare(user2.location || '')), [delegates]);
+
+  const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState(seniorDelegates?.[0]);
 
   // NOTE: The UI currently assumes that the delegates always have a
   // senior delegate unless they themselves are a senior delegate.
 
-  return seniorDelegates.map((seniorDelegate) => {
-    const delegatesUnderSenior = [seniorDelegate, ...delegates
-      .filter((user) => user.senior_delegate_id === seniorDelegate.id && user.delegate_status !== 'trainee_delegate')
-      .sort((user1, user2) => ((user1.location !== user2.location)
-        ? user1.location.localeCompare(user2.location)
-        : user1.name.localeCompare(user2.name)))];
-    return (
-      <div
-        className="table-responsive"
-        key={`region-${seniorDelegate.id}`}
-      >
+  return (
+    <Grid container>
+      <Grid.Column only="computer" computer={4}>
+        <Header>Regions</Header>
+        <Menu vertical>
+          {seniorDelegates.map((seniorDelegate) => (
+            <Menu.Item
+              key={`region-${seniorDelegate.id}`}
+              name={seniorLocationToRegion(seniorDelegate.location || '')}
+              active={activeSeniorDelegate === seniorDelegate}
+              onClick={() => {
+                setActiveSeniorDelegate(seniorDelegate);
+              }}
+            >
+              {/* The 'name' shorthand above can populate the label, but it sanitizes & signs :( */}
+              {seniorLocationToRegion(seniorDelegate.location || '')}
+            </Menu.Item>
+          ))}
+        </Menu>
+      </Grid.Column>
 
-        <Table className="delegates-table">
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell width={5}>{I18n.t('delegates_page.table.name')}</Table.HeaderCell>
-              <Table.HeaderCell width={2}>{I18n.t('delegates_page.table.role')}</Table.HeaderCell>
-              <Table.HeaderCell width={2}>{I18n.t('delegates_page.table.region')}</Table.HeaderCell>
-            </Table.Row>
-          </Table.Header>
+      <Grid.Column stretched computer={12} mobile={16} tablet={16}>
+        <Segment>
+          <Grid container centered>
+            <Grid.Row only="computer">
+              <Header>{seniorLocationToRegion(activeSeniorDelegate.location || '')}</Header>
+            </Grid.Row>
+            <Grid.Row only="computer">
+              <Segment raised>
+                <Label ribbon>Senior Delegate</Label>
 
-          <Table.Body>
-            {delegatesUnderSenior.map((delegate) => (
-              <Table.Row
-                className={`${dasherize(delegate.delegate_status)}`}
-                key={delegate.id}
-              >
-                <Table.Cell>
-                  <div style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                  }}
-                  >
-                    <Button
-                      href={`mailto:${delegate.email}`}
-                      icon="envelope"
-                    />
-                    {isEditVisible && (
-                      <Button
-                        href={`users/${delegate.id}/edit`}
-                        icon="edit"
-                      />
-                    )}
-                    <UserBadge
-                      user={delegate}
-                      hideBorder
-                      leftAlign
-                      subtexts={delegate.wca_id ? [delegate.wca_id] : []}
-                    />
-                  </div>
-                </Table.Cell>
-                <Table.Cell>
-                  {I18n.t(`enums.user.delegate_status.${delegate.delegate_status}`)}
-                </Table.Cell>
-                <Table.Cell>
-                  {delegate.location}
-                </Table.Cell>
-              </Table.Row>
-            ))}
-          </Table.Body>
-        </Table>
-      </div>
-    );
-  });
+                <UserBadge
+                  user={activeSeniorDelegate}
+                  hideBorder
+                  leftAlign
+                  subtexts={activeSeniorDelegate.wca_id ? [activeSeniorDelegate.wca_id] : []}
+                />
+              </Segment>
+            </Grid.Row>
+            <Grid.Row only="tablet mobile">
+              <Dropdown
+                inline
+                options={seniorDelegates.map((seniorDelegate) => ({
+                  key: `senior-delegate-${seniorDelegate.id}`,
+                  text: seniorLocationToRegion(seniorDelegate.location || ''),
+                  value: seniorDelegate.id,
+                }))}
+                value={activeSeniorDelegate.id}
+                onChange={(event, { value }) => {
+                  setActiveSeniorDelegate(
+                    seniorDelegates.find((seniorDelegate) => seniorDelegate.id === value),
+                  );
+                }}
+              />
+            </Grid.Row>
+            <Grid.Row style={{ overflowX: 'scroll' }}>
+              <DelegatesOfRegion
+                activeSeniorDelegate={activeSeniorDelegate}
+                delegates={delegates}
+                isAdminMode={isEditVisible}
+              />
+            </Grid.Row>
+          </Grid>
+        </Segment>
+      </Grid.Column>
+    </Grid>
+  );
 }

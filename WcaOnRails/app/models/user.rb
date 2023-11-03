@@ -684,9 +684,7 @@ class User < ApplicationRecord
     can_manage_teams? ||
       team_leader?(team) ||
       # The leader of the WDC can edit the banned competitors list
-      (team == Team.banned && team_leader?(Team.wdc)) ||
-      # Senior Delegates and WFC Leader and Senior Members can edit Delegates on probation
-      (team == Team.probation && (senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)))
+      (team == Team.banned && team_leader?(Team.wdc))
   end
 
   def can_view_banned_competitors?
@@ -1248,5 +1246,9 @@ class User < ApplicationRecord
   def senior_or_self
     return nil unless self.delegate_status.present?
     self.delegate_status == "senior_delegate" ? self : self.senior_delegate
+  end
+
+  def is_delegate_in_probation
+    Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
   end
 end
