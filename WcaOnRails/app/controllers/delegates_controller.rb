@@ -56,6 +56,7 @@ class DelegatesController < ApplicationController
         probation_role_id = params[:probationRoleId]
         role = Role.find_by_id(probation_role_id)
         role.update!(end_date: Date.safe_parse(params[:endDate]))
+        RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
         render json: {
           success: true,
         }
