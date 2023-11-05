@@ -7,7 +7,6 @@ class UserGroup < ApplicationRecord
   }
 
   def self.regions
-    delegate_regions_base = UserGroup.find_by!(parent_group_id: nil, group_type: "delegate_regions")
-    UserGroup.where(group_type: "delegate_regions", parent_group_id: delegate_regions_base.id)
+    UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
   end
 end
