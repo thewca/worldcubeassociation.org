@@ -37,11 +37,12 @@ class DelegatesController < ApplicationController
     respond_to do |format|
       format.json do
         user_id = params[:userId]
-        Role.create!(
+        role = Role.create!(
           user_id: user_id,
           group_id: UserGroup.find_by!(name: "Delegate Probation").id,
           start_date: Date.today,
         )
+        RoleChangeMailer.notify_start_probation(role, current_user).deliver_later
         render json: {
           success: true,
         }

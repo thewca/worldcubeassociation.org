@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Table } from 'semantic-ui-react';
+import { Button, Confirm, Table } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -17,46 +17,66 @@ const dateFormat = 'YYYY-MM-DD';
 function ProbationListTable({
   roleList, userMap, isActive, save, sync,
 }) {
-  return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell width={5}>User</Table.HeaderCell>
-          <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
-          <Table.HeaderCell width={2}>{isActive ? 'Action' : 'End date'}</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
+  const [endProbationParams, setEndProbationParams] = React.useState();
 
-      <Table.Body>
-        {roleList.map((probationRole) => (
-          <Table.Row key={probationRole.id}>
-            <Table.Cell>
-              <UserBadge
-                user={userMap[probationRole.user_id]}
-                hideBorder
-                leftAlign
-              />
-            </Table.Cell>
-            <Table.Cell>
-              {probationRole.start_date}
-            </Table.Cell>
-            <Table.Cell>
-              {
+  const endProbation = () => {
+    save(endDelegateProbationUrl, endProbationParams, sync, { method: 'POST' });
+    setConfirmOpen(false);
+    setEndProbationParams(null);
+  };
+
+  return (
+    <>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell width={5}>User</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
+            <Table.HeaderCell width={2}>End date</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {roleList.map((probationRole) => (
+            <Table.Row key={probationRole.id}>
+              <Table.Cell>
+                <UserBadge
+                  user={userMap[probationRole.user_id]}
+                  hideBorder
+                  leftAlign
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {probationRole.start_date}
+              </Table.Cell>
+              <Table.Cell>
+                {
                 isActive ? (
                   <DatePicker
-                    onChange={(date) => save(endDelegateProbationUrl, {
-                      probationRoleId: probationRole.id,
-                      endDate: moment(date).format(dateFormat),
-                    }, sync, { method: 'POST' })}
+                    onChange={(date) => {
+                      setEndProbationParams({
+                        probationRoleId: probationRole.id,
+                        endDate: moment(date).format(dateFormat),
+                      });
+                      setConfirmOpen(true);
+                    }}
                     selected={probationRole.end_date ? new Date(probationRole.end_date) : null}
                   />
                 ) : probationRole.end_date
               }
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+      <Confirm
+        open={confirmOpen}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={endProbation}
+        content="Are you sure you want to change end date of this probation?"
+      />
+    </>
   );
 }
 
