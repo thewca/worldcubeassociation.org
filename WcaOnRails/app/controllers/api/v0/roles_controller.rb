@@ -22,7 +22,6 @@ class Api::V0::RolesController < Api::V0::ApiController
   def show
     user_id = params.require(:userId)
     is_active_role = ActiveRecord::Type::Boolean.new.cast(params.require(:isActiveRole))
-    senior_delegates = User.where(delegate_status: "senior_delegate")
 
     if is_active_role
       user = User.find(user_id)
@@ -37,7 +36,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     else
       render json: {
         roleData: {},
-        seniorDelegates: senior_delegates,
+        regions: UserGroup.regions,
       }
     end
   end

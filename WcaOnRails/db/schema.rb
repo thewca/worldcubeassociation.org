@@ -1077,6 +1077,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_103433) do
     t.datetime "updated_at", precision: nil
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
+    t.bigint "region_id"
     t.integer "senior_delegate_id"
     t.string "location", limit: 255
     t.string "wca_id"
@@ -1107,7 +1108,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_103433) do
     t.boolean "cookies_acknowledged", default: false, null: false
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
-    t.bigint "region_id"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["region_id"], name: "index_users_on_region_id"

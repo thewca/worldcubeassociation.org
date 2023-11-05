@@ -32,7 +32,7 @@ export default function DelegateForm({
         onChange={handleFormChange}
       />
       <Form.Dropdown
-        label="Region"
+        label={I18n.t('activerecord.attributes.user.region')}
         fluid
         selection
         name="regionId"
