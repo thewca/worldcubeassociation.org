@@ -108,7 +108,7 @@ export default function ConfirmationActions({
   createComp,
   updateComp,
 }) {
-  const { isAdminView, isPersisted, competition: { competitionId } } = useStore();
+  const { isAdminView, isPersisted, initialCompetition: { competitionId } } = useStore();
   const dispatch = useDispatch();
 
   const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);

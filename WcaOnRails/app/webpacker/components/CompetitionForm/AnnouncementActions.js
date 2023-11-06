@@ -167,7 +167,7 @@ function CloseRegistrationAction({
 }
 
 export default function AnnouncementActions() {
-  const { isAdminView, competition: { competitionId } } = useStore();
+  const { isAdminView, initialCompetition: { competitionId } } = useStore();
 
   const dataUrl = useMemo(() => competitionAnnouncementDataUrl(competitionId), [competitionId]);
 
