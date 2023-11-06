@@ -189,6 +189,7 @@ class Competition < ApplicationRecord
   validates :external_website, format: { with: URL_RE }, allow_blank: true
   validates :external_registration_page, presence: true, format: { with: URL_RE }, if: :external_registration_page_required?
 
+  validates_inclusion_of :countryId, in: Country.real.map(&:id).freeze
   validates :currency_code, inclusion: { in: Money::Currency, message: proc { I18n.t('competitions.errors.invalid_currency_code') } }
 
   validates_numericality_of :refund_policy_percent, greater_than_or_equal_to: 0, less_than_or_equal_to: 100, if: :refund_policy_percent_required?
@@ -274,6 +275,7 @@ class Competition < ApplicationRecord
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
+  validates :start_date, :end_date, presence: { message: I18n.t('simple_form.required.text') }
   validates :registration_open, :registration_close, presence: { message: I18n.t('simple_form.required.text') }, if: :registration_period_required?
 
   # NOTE: we only validate when confirming, until we have a unified events/rounds editor.
@@ -2336,8 +2338,8 @@ class Competition < ApplicationRecord
             },
           },
         },
-        "startDate" => { "type" => "string", "format" => "date" },
-        "endDate" => { "type" => "string", "format" => "date" },
+        "startDate" => { "anyOf" => [{ "type" => "string", "format" => "date" }, { "type" => "null" }]},
+        "endDate" => { "anyOf" => [{ "type" => "string", "format" => "date" }, { "type" => "null" }]},
         "series" => CompetitionSeries.form_data_json_schema,
         "information" => { "type" => ["string", "null"] },
         "competitorLimit" => {
@@ -2399,16 +2401,16 @@ class Competition < ApplicationRecord
             "guestEntryFee" => { "type" => ["integer", "null"] },
             "donationsEnabled" => { "type" => ["boolean", "null"] },
             "refundPolicyPercent" => { "type" => ["integer", "null"] },
-            "refundPolicyLimitDate" => { "type" => ["string", "null"], "format" => "date-time" },
+            "refundPolicyLimitDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }]},
           },
         },
         "registration" => {
           "type" => "object",
           "properties" => {
-            "openingDateTime" => { "type" => "string", "format" => "date-time" },
-            "closingDateTime" => { "type" => "string", "format" => "date-time" },
-            "waitingListDeadlineDate" => { "type" => ["string", "null"], "format" => "date-time" },
-            "eventChangeDeadlineDate" => { "type" => ["string", "null"], "format" => "date-time" },
+            "openingDateTime" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }]},
+            "closingDateTime" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }]},
+            "waitingListDeadlineDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }]},
+            "eventChangeDeadlineDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }]},
             "allowOnTheSpot" => { "type" => ["boolean", "null"] },
             "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
             "allowSelfEdits" => { "type" => "boolean" },

@@ -18,7 +18,16 @@ def set_competition_checkbox_input(label_text, value)
   end
 end
 
-RSpec.feature "Competition management" do
+def find_modal(&)
+  all(:css, '.modal.visible', &).last
+end
+
+def within_modal(&)
+  within(find_modal(&))
+end
+
+
+RSpec.feature "Competition management", js: true do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
     before :each do
@@ -73,7 +82,11 @@ RSpec.feature "Competition management" do
       visit edit_competition_path(competition)
       click_button "Confirm"
 
-      expect(page).to have_text("Successfully confirmed competition.")
+      within_modal do
+        click_button "Yes"
+      end
+
+      expect(page).to have_text("You've confirmed this competition")
     end
 
     scenario "change competition id of long name" do
