@@ -33,23 +33,14 @@ export default function Wfc() {
   const { data, loading, error } = useLoadedData(panelWfcPageDataUrl);
 
   if (loading) return <Loading />;
-  if (error) {
-    return (
+  return (
       <>
-        <Errored />
+        {error && <Errored />}
         <PanelTemplate
           heading="WFC Panel"
-          sections={sections.filter((section) => !section.forAtleastSeniorMember)}
+          sections={sections
+            .filter((section) => !section.forAtleastSeniorMember || (data?.isAtleastSeniorMember == true))}
         />
       </>
     );
-  }
-
-  return (
-    <PanelTemplate
-      heading="WFC Panel"
-      sections={sections
-        .filter((section) => !(section.forAtleastSeniorMember) || data.isAtleastSeniorMember)}
-    />
-  );
 }
