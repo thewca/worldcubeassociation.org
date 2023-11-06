@@ -34,13 +34,15 @@ export default function Wfc() {
 
   if (loading) return <Loading />;
   return (
-      <>
-        {error && <Errored />}
-        <PanelTemplate
-          heading="WFC Panel"
-          sections={sections
-            .filter((section) => !section.forAtleastSeniorMember || (data?.isAtleastSeniorMember == true))}
-        />
-      </>
-    );
+    <>
+      {error && <Errored />}
+      <PanelTemplate
+        heading="WFC Panel"
+        sections={sections
+          .filter(
+            (section) => !section.forAtleastSeniorMember || (data?.isAtleastSeniorMember === true),
+          )}
+      />
+    </>
+  );
 }
