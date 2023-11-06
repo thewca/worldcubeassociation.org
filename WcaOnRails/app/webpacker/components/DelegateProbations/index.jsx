@@ -9,8 +9,7 @@ import {
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import useInputState from '../../lib/hooks/useInputState';
-import UserSearch from '../SearchWidget/UserSearch';
+import WcaSearch from '../SearchWidget/WcaSearch';
 import Errored from '../Requests/Errored';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -62,7 +61,7 @@ function ProbationListTable({
 }
 
 export default function DelegateProbations() {
-  const [userId, setUserId] = React.useState();
+  const [user, setUser] = React.useState();
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
@@ -76,18 +75,19 @@ export default function DelegateProbations() {
   return (
     <>
       <h1>Delegate Probations</h1>
-      <UserSearch
-        value={userId}
-        onChange={setUserId}
+      <WcaSearch
+        selectedValue={user}
+        setSelectedValue={setUser}
         multiple={false}
-        delegateOnly
+        model="user"
+        params={{ only_staff_delegates: true }}
       />
       <Button
-        onClick={() => save(startDelegateProbationUrl, { userId }, () => {
+        onClick={() => save(startDelegateProbationUrl, { userId: user.id }, () => {
           sync();
-          setUserId(null);
+          setUser(null);
         }, { method: 'POST' })}
-        disabled={!userId}
+        disabled={!user}
       >
         Start Probation
       </Button>

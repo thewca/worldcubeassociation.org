@@ -256,7 +256,7 @@ class Person < ApplicationRecord
     %w(m f).include? gender
   end
 
-  def self.search(query)
+  def self.search(query, params = {})
     persons = Person.current.includes(:user)
     query.split.each do |part|
       persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")

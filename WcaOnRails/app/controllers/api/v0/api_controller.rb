@@ -121,6 +121,10 @@ class Api::V0::ApiController < ApplicationController
     search(User)
   end
 
+  def persons_search
+    search(Person)
+  end
+
   def regulations_search
     search(Regulation)
   end
