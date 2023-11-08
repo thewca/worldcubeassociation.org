@@ -560,7 +560,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok" }
+      render json: { status: "ok", redirect: edit_competition_path(competition) }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -580,6 +580,7 @@ class CompetitionsController < ApplicationController
     form_data = params.permit!.to_h
 
     # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
+    old_id = params[:id]
     new_id = form_data.delete(:competitionId)
 
     competition.set_form_data(form_data, current_user)
@@ -618,7 +619,14 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      render json: { status: "ok" }
+      redirect = {}
+      if old_id != new_id
+        redirect = {
+          redirect: @competition_admin_view ? admin_edit_competition_path(competition) : edit_competition_path(competition),
+        }
+      end
+
+      render json: { status: "ok" }.merge(redirect)
     else
       render status: :bad_request, json: competition.form_errors
     end

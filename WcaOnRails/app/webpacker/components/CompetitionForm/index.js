@@ -124,7 +124,29 @@ function CompetitionForm() {
 
   const { save, saving } = useSaveAction();
 
-  const onSuccess = useCallback(() => dispatch(changesSaved()), [dispatch]);
+  const unsavedChanges = useMemo(() => (
+    !_.isEqual(competition, initialCompetition)
+  ), [competition, initialCompetition]);
+
+  const onUnload = useCallback((e) => {
+    // Prompt the user before letting them navigate away from this page with unsaved changes.
+    if (unsavedChanges) {
+      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
+      e.returnValue = confirmationMessage;
+      return confirmationMessage;
+    }
+
+    return null;
+  }, [unsavedChanges]);
+
+  const onSuccess = useCallback((data) => {
+    dispatch(changesSaved());
+    const { redirect } = data;
+    if (redirect) {
+      window.removeEventListener('beforeunload', onUnload);
+      window.location.href = redirect;
+    }
+  }, [dispatch, onUnload]);
 
   const onError = useCallback((err) => {
     // check whether the 'json' property is set AND that it's not a generic error message
@@ -142,21 +164,6 @@ function CompetitionForm() {
   const updateComp = useCallback(() => {
     save(`/competitions/${initialCompetition.competitionId}`, competition, onSuccess, { method: 'PATCH' }, onError);
   }, [competition, initialCompetition.competitionId, save, onSuccess, onError]);
-
-  const unsavedChanges = useMemo(() => (
-    !_.isEqual(competition, initialCompetition)
-  ), [competition, initialCompetition]);
-
-  const onUnload = useCallback((e) => {
-    // Prompt the user before letting them navigate away from this page with unsaved changes.
-    if (unsavedChanges) {
-      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
-      e.returnValue = confirmationMessage;
-      return confirmationMessage;
-    }
-
-    return null;
-  }, [unsavedChanges]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
