@@ -76,7 +76,7 @@ function FieldWrapper({
   return (
     <Form.Field
       error={!!error}
-      className={error && 'has-error'}
+      className={(error && 'has-error') || ''}
       disabled={!!disabled}
       required={!!required}
     >

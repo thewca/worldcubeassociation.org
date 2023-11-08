@@ -6,7 +6,7 @@ import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 export default function NameDetails() {
   const { competition: { name }, isPersisted, isAdminView } = useStore();
 
-  const nameAlreadyShort = name.length <= competitionMaxShortNameLength;
+  const nameAlreadyShort = !name || name.length <= competitionMaxShortNameLength;
   const disableIdAndShortName = !isAdminView && nameAlreadyShort;
 
   return (
