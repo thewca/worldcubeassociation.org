@@ -37,12 +37,15 @@ RSpec.feature "Competition management", js: true do
     feature "create a competition" do
       scenario "with valid data" do
         visit "/competitions/new"
-        fill_in "Name", with: "My Competition 2015"
-        select "United States", from: "Region"
-        uncheck "I would like to use the WCA website for registration"
+        click_button "Show Debug"
+        find_competition_input('Name').fill_in(with: 'My Competition 2015')
+        find_competition_input('Region').fill_in(with: 'United States')
+        find_competition_input('Start date').fill_in(with: '08/11/2015')
+        find_competition_input('End date').fill_in(with: '08/11/2015')
+        set_competition_checkbox_input('I would like to use the WCA website for registration', false)
         click_button "Create Competition"
 
-        expect(page).to have_text("Successfully created new competition!")
+        expect(page).to have_current_path('/competitions/MyCompetition2015/edit')
       end
 
       scenario "with validation errors" do
