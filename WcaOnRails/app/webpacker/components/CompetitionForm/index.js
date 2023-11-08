@@ -144,7 +144,7 @@ function CompetitionForm() {
     const { redirect } = data;
     if (redirect) {
       window.removeEventListener('beforeunload', onUnload);
-      window.location.href = redirect;
+      window.location.replace(redirect);
     }
   }, [dispatch, onUnload]);
 

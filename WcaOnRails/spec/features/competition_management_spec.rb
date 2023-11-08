@@ -99,8 +99,12 @@ RSpec.feature "Competition management", js: true do
       find_competition_input('ID').set('NewId2016')
       click_button "Update Competition"
 
-      # expect(page).not_to have_text("You have unsaved changes")
-      # expect(Competition.find("NewId2016")).not_to be_nil
+      expect(page).to have_text("This competition is not visible to the public.")
+      expect(page).to have_current_path('/competitions/NewId2016/edit')
+      puts "Comps: "
+      Competition.all.each { |c| puts c.id }
+      puts "End"
+      expect(Competition.find("NewId2016")).not_to be_nil
     end
 
     scenario "change competition id to invalid id" do
