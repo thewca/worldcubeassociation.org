@@ -22,22 +22,21 @@ class Api::V0::RolesController < Api::V0::ApiController
   def show
     user_id = params.require(:userId)
     is_active_role = ActiveRecord::Type::Boolean.new.cast(params.require(:isActiveRole))
-    senior_delegates = User.where(delegate_status: "senior_delegate")
 
     if is_active_role
       user = User.find(user_id)
       render json: {
         roleData: {
           delegateStatus: user.delegate_status,
-          seniorDelegateId: user.senior_delegate.id,
+          regionId: user.region_id,
           location: user.location,
         },
-        seniorDelegates: senior_delegates,
+        regions: UserGroup.regions,
       }
     else
       render json: {
         roleData: {},
-        seniorDelegates: senior_delegates,
+        regions: UserGroup.regions,
       }
     end
   end
@@ -45,11 +44,17 @@ class Api::V0::RolesController < Api::V0::ApiController
   def update
     user_id = params.require(:userId)
     delegate_status = params.require(:delegateStatus)
-    senior_delegate_id = params.require(:seniorDelegateId)
+    region_id = params.require(:regionId)
     location = params.require(:location)
 
     user = User.find(user_id)
-    user.update!(delegate_status: delegate_status, senior_delegate_id: senior_delegate_id, location: location)
+    if delegate_status == "senior_delegate"
+      senior_delegate_id = nil
+      User.where(region_id: region_id).where.not(id: user_id).update_all(senior_delegate_id: user_id)
+    else
+      senior_delegate_id = User.where(delegate_status: "senior_delegate", region_id: region_id).first.id
+    end
+    user.update!(delegate_status: delegate_status, senior_delegate_id: senior_delegate_id, region_id: region_id, location: location)
     send_role_change_notification(user)
 
     render json: {
@@ -61,7 +66,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     user_id = params.require(:userId)
 
     user = User.find(user_id)
-    user.update!(delegate_status: '', senior_delegate_id: '', location: '')
+    user.update!(delegate_status: '', senior_delegate_id: '', region_id: '', location: '')
     send_role_change_notification(user)
 
     render json: {

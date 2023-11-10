@@ -4,9 +4,10 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::RolesController do
   describe 'GET #list' do
+    let!(:africa_region) { FactoryBot.create(:africa_region) }
     let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
     let(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
-    let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate) }
+    let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate, region_id: africa_region.id) }
 
     context 'when user is logged in and changing role data' do
       before do
@@ -26,7 +27,7 @@ RSpec.describe Api::V0::RolesController do
         parsed_body = JSON.parse(response.body)
 
         expect(parsed_body["roleData"]["delegateStatus"]).to eq "candidate_delegate"
-        expect(parsed_body["roleData"]["seniorDelegateId"]).to eq user_senior_delegate.id
+        expect(parsed_body["roleData"]["regionId"]).to eq africa_region.id
       end
 
       it 'update delegate status' do
@@ -38,7 +39,7 @@ RSpec.describe Api::V0::RolesController do
           "delegate",
         ).and_call_original
         expect do
-          patch :update, params: { id: 'dummyRoleId', userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", seniorDelegateId: user_senior_delegate.id, location: "location" }
+          patch :update, params: { id: 'dummyRoleId', userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate.region_id, location: "location" }
         end.to change { enqueued_jobs.size }.by(1)
 
         parsed_body = JSON.parse(response.body)

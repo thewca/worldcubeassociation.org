@@ -88,10 +88,10 @@ export default function RoleForm({ userId, isActiveRole }) {
                 ...values,
               });
             }}
-            seniorDelegates={data?.seniorDelegates.map((seniorDelegate) => ({
-              key: seniorDelegate.id,
-              text: seniorDelegate.name,
-              value: seniorDelegate.id,
+            regions={data?.regions.map((region) => ({
+              key: region.id,
+              text: region.name,
+              value: region.id,
             })) || []}
             delegateStatusOptions={delegateStatusOptions}
           />
