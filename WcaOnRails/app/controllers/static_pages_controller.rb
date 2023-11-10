@@ -5,7 +5,7 @@ class StaticPagesController < ApplicationController
 
   before_action :current_user_is_authorized_for_action!, only: [:panel_wfc]
   private def current_user_is_authorized_for_action!
-    unless current_user.team_member?(Team.wfc)
+    unless current_user.team_member?(Team.wfc) || current_user.admin?
       render json: {}, status: 401
     end
   end
@@ -19,7 +19,7 @@ class StaticPagesController < ApplicationController
 
   def panel_wfc
     render json: {
-      isAtleastSeniorMember: current_user.team_senior_member?(Team.wfc) || current_user.team_leader?(Team.wfc),
+      isAtleastSeniorMember: current_user.team_senior_member?(Team.wfc) || current_user.team_leader?(Team.wfc) || current_user.admin?,
     }
   end
 
