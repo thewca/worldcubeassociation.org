@@ -2,7 +2,7 @@
 
 class AddUserGroups < ActiveRecord::Migration[7.0]
   def change
-    User.find_each(delegate_status: "senior_delegate") do |delegate|
+    User.where(delegate_status: "senior_delegate").find_each do |delegate|
       region = delegate.location
       if region.include?("(")
         region = region[0, region.index("(")]
