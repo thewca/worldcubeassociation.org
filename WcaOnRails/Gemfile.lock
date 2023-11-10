@@ -29,10 +29,10 @@ GIT
 
 GIT
   remote: https://github.com/thewca/starburst.git
-  revision: 491be263ca5186eb298006cfe2da0cb738673791
+  revision: 2abd20b32206d970c8d4b3c21e35c25b3c21d2cc
   specs:
     starburst (2.0.0.rc0)
-      rails (>= 4.2.0, < 7.1)
+      rails (>= 4.2.0, < 7.2)
 
 GIT
   remote: https://github.com/thewca/time_will_tell.git
