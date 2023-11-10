@@ -158,6 +158,7 @@ Rails.application.routes.draw do
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   get 'panel/seniors' => 'panel#seniors'
+  get 'panel/wfc' => 'panel#wfc'
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -199,6 +200,10 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
+
+  scope 'page_data' do
+    get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
+  end
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
@@ -260,7 +265,6 @@ Rails.application.routes.draw do
   get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
 
   # WFC section
-  get '/wfc' => 'wfc#panel'
   scope 'wfc' do
     get '/competitions_export' => 'wfc#competition_export', defaults: { format: :csv }, as: :wfc_competitions_export
     resources :country_bands, only: [:index, :update, :edit], path: '/country-bands'

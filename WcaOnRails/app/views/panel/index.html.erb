@@ -73,24 +73,6 @@
     </ul>
   <% end %>
 
-
-  <% if current_user.can_admin_finances? %>
-    <h2><%= Team.wfc.name %></h2>
-
-    <ul>
-      <li>
-        <%= link_to "WFC panel", wfc_path %>
-      </li>
-      <li>
-        <%= link_to "Modify Delegates on Probation", delegate_probations_path %>
-      </li>
-      <li>
-        <%= link_to "Bands for WCA Dues", country_bands_path %>
-      </li>
-    </ul>
-  <% end %>
-
-
   <% if current_user&.can_view_leader_material? %>
     <h2>Committee/Team Leaders</h2>
 
@@ -107,6 +89,19 @@
     <ul>
       <li>
         <%= link_to "List of Senior Delegates", panel_seniors_path %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user.can_admin_finances? %>
+    <h2>Other Panels</h2>
+
+    <%# Other Panels will list the list of panels that have separate panel page - like WFC panel.%>
+    <%# Currently, there is only WFC panel, but in the future, there might be more panels. %>
+
+    <ul>
+      <li>
+        <%= link_to "WFC panel", panel_wfc_path %>
       </li>
     </ul>
   <% end %>

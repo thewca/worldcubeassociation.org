@@ -671,9 +671,6 @@ en:
         extra_file: "Must be in PDF format. If you need to add more files, please merge them together"
         start_date: ""
         end_date: ""
-      wfc:
-        from_date: ""
-        to_date: ""
     #context: and a label for an option
     options:
       #context: about registration
