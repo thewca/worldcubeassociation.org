@@ -18,7 +18,8 @@ RSpec.describe Api::V0::RolesController do
         get :index, params: { userId: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq({ activeRoles: [{
-          role: "candidate_delegate",
+          group: africa_region,
+          status: "candidate_delegate",
         }] }.to_json)
       end
 

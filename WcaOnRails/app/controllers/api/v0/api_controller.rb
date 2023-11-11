@@ -19,6 +19,10 @@ class Api::V0::ApiController < ApplicationController
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
   end
 
+  def loggedin_user
+    render json: current_user
+  end
+
   def auth_results
     if !current_user
       return render status: :unauthorized, json: { error: "Please log in" }
