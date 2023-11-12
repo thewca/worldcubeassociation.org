@@ -1339,4 +1339,8 @@ class User < ApplicationRecord
     end
     roles
   end
+
+  def can_access_board_panel?
+    admin? || board_member?
+  end
 end

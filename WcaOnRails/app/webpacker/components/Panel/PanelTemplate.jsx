@@ -41,7 +41,7 @@ export default function PanelTemplate({ heading, sections }) {
 
         <Grid.Column stretched computer={12} mobile={16} tablet={16}>
           <Segment>
-            <Grid container centered>
+            <Grid container padded>
               <Grid.Row only="tablet mobile">
                 <Dropdown
                   inline
@@ -55,7 +55,9 @@ export default function PanelTemplate({ heading, sections }) {
                   onChange={(_, { value }) => menuClickHandler(value)}
                 />
               </Grid.Row>
-              <Grid.Row><SelectedComponent /></Grid.Row>
+              {/* TODO: Fix the next line by removing style and using appropriate props from
+                        semantic-ui */}
+              <Grid.Row style={{ margin: 0 }}><div><SelectedComponent /></div></Grid.Row>
             </Grid>
           </Segment>
         </Grid.Column>

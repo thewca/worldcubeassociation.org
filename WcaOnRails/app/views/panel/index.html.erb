@@ -93,16 +93,23 @@
     </ul>
   <% end %>
 
-  <% if current_user.can_admin_finances? %>
+  <% if current_user.financial_committee? || current_user.board_member? || current_user.admin? %>
     <h2>Other Panels</h2>
 
     <%# Other Panels will list the list of panels that have separate panel page - like WFC panel.%>
     <%# Currently, there is only WFC panel, but in the future, there might be more panels. %>
 
     <ul>
-      <li>
-        <%= link_to "WFC panel", panel_wfc_path %>
-      </li>
+      <% if current_user.financial_committee? || current_user.admin? %>
+        <li>
+          <%= link_to "WFC panel", panel_wfc_path %>
+        </li>
+      <% end %>
+      <% if current_user.board_member? || current_user.admin? %>
+        <li>
+          <%= link_to "Board panel", panel_board_path %>
+        </li>
+      <% end %>
     </ul>
   <% end %>
 </div>

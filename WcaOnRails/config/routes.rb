@@ -161,8 +161,10 @@ Rails.application.routes.draw do
   get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
-  get 'panel/seniors' => 'panel#seniors'
-  get 'panel/wfc' => 'panel#wfc'
+  scope 'panel' do
+    get 'wfc' => 'panel#wfc'
+    get 'board' => 'panel#board'
+  end
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -346,6 +348,7 @@ Rails.application.routes.draw do
         get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
         get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
       end
+      resources :user_groups, only: [:index, :create, :update]
       namespace :wfc do
         resources :xero_users, only: [:index, :create]
         resources :dues_redirects, only: [:index, :create]

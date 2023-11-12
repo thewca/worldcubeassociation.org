@@ -7,7 +7,7 @@ RSpec.describe "WFC controller" do
     context "when not signed in" do
       sign_out
       it "redirect to login page" do
-        get panel_wfc_path
+        get '/panel/wfc'
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -15,7 +15,7 @@ RSpec.describe "WFC controller" do
     context "when signed in as a regular user" do
       sign_in { FactoryBot.create :user }
       it "redirect to root" do
-        get panel_wfc_path
+        get '/panel/wfc'
         expect(response).to redirect_to root_url
       end
     end
@@ -23,7 +23,7 @@ RSpec.describe "WFC controller" do
     context "when signed in as a WFC member" do
       sign_in { FactoryBot.create :user, :wfc_member }
       it "shows the page" do
-        get panel_wfc_path
+        get '/panel/wfc'
         expect(response).to be_successful
       end
     end
