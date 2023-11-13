@@ -23,7 +23,7 @@ jobs:
         with:
           working-directory: WcaOnRails
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v3 # this also includes Yarn
+      - uses: actions/setup-node@v4 # this also includes Yarn
         with:
           node-version: '16'
       - uses: actions/cache@v3

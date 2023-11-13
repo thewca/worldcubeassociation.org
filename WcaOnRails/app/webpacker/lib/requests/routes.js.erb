@@ -76,6 +76,10 @@ export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_h
 
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;
 
+export const userApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_path("${id}"))%>`;
+
+export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
+
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
 
 export const adminPostingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.results_posting_dashboard_path(format: "json")) %>`;
@@ -91,3 +95,13 @@ export const delegateProbationDataUrl = `<%= CGI.unescape(Rails.application.rout
 export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_delegate_probation_path) %>`;
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
+
+// dummyRoleId is used temporarily because delegates is yet to get a role id
+
+export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}`;
+export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId?userId=${userId}&isActiveRole=${isActiveRole}`;
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId`
+
+export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_panel_wfc_path) %>`;
+export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
+export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;

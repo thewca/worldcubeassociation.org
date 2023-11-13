@@ -48,7 +48,7 @@ RSpec.describe DelegatesController do
     it 'senior delegates can start the probation role' do
       sign_in FactoryBot.create :senior_delegate
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -64,7 +64,7 @@ RSpec.describe DelegatesController do
     it 'WFC leader can start the probation role' do
       sign_in FactoryBot.create :user, :wfc_member, team_leader: true
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -80,7 +80,7 @@ RSpec.describe DelegatesController do
     it 'WFC senior members can start the probation role' do
       sign_in FactoryBot.create :user, :wfc_member, team_senior_member: true
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -96,7 +96,7 @@ RSpec.describe DelegatesController do
     it 'normal user cannot start the probation role' do
       sign_in FactoryBot.create :user
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       expect(response.status).to eq 401
     end
 

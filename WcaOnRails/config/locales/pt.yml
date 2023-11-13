@@ -433,6 +433,8 @@ pt:
         delegate_status: Estatuto de delegado
         #original_hash: d219c68
         location: Localização
+        #original_hash: 0f21717
+        region: Região
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -834,8 +836,6 @@ pt:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -845,8 +845,6 @@ pt:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1268,11 +1266,6 @@ pt:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1609,6 +1602,8 @@ pt:
       teams: 'Equipas, Comités e Conselhos'
       #original_hash: 7981fb3
       education: Recursos educativos
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: Informação de Contacto
       #original_hash: 8e12c09
@@ -3798,10 +3793,12 @@ pt:
       inquiries:
         #original_hash: 92ea7e8
         competition: >-
-          Contacte os Organizadores de uma competição específica (escolher
+          Contactar os Organizadores de uma competição específica (escolher
           abaixo)
         #original_hash: f0bffb7
         competitions_in_general: 'Competições em geral (organização, regras para competições, etc.)'
+        #original_hash: aabfcf7
+        results_team: Contactar a Equipa de Resultados
         #original_hash: f6ffa78
         wca_id_or_profile: ID da WCA ou Perfil da WCA
         #original_hash: 0c77aee

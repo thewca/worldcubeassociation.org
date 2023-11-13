@@ -17,7 +17,7 @@ hr:
     #original_hash: db871b0
     GW: Gvineja Bisau
     #original_hash: e758117
-    HK: Hong Kong, Kina
+    HK: 'Hong Kong, Kina'
     #original_hash: 3ad2dd8
     KN: Sveti Kristofor i Nevis
     #original_hash: 5c34abb
@@ -31,7 +31,7 @@ hr:
     #original_hash: 928b7c4
     MM: Mjanmar
     #original_hash: 77e4070
-    MO: Makao, Kina
+    MO: 'Makao, Kina'
     #original_hash: 05a15c1
     PS: Palestina
     #original_hash: 655191a
@@ -41,7 +41,7 @@ hr:
     #original_hash: 4d206a8
     TT: Trinidad i Tobago
     #original_hash: fefc818
-    TW: Kineski Tajpej
+    TW: Kineski Taipei
     #original_hash: 3fa9b2d
     VC: Sveti Vincent i Grenadini
     #original_hash: 9af4622
@@ -315,8 +315,8 @@ hr:
     world: Svijet
     #original_hash: 2513cf0
     continent: Kontinent
-    #original_hash: d523ebb
-    country: Država
+    #original_hash: 0f21717
+    country: Regija
     #original_hash: 0154c0d
     here: ovdje
     #original_hash: 77003d0
@@ -335,8 +335,8 @@ hr:
     user:
       #original_hash: 603a218
       wca_id: WCA ID
-      #original_hash: e0f64f7
-      citizen_of: Državljanin
+      #original_hash: fa4c045
+      representing: Državljanstvo
     #original_hash: 3fc0ba1
     all_regions: Sve regije
     errors:
@@ -413,7 +413,7 @@ hr:
         unconfirmed_wca_id: Nepotvrđeni WCA ID
         #original_hash: 8ed8874
         login: E-mail ili WCA ID
-        #original_hash: 1528d10
+        #original_hash: fa4c045
         country_iso2: Državljanstvo
         #original_hash: ab58155
         dob: Datum rođenja
@@ -441,8 +441,8 @@ hr:
           prilože nove registracije.
         #original_hash: de60ab8
         delegate_status: Status delegata
-        #original_hash: 0f21717
-        region: Regija
+        #original_hash: d219c68
+        location: Lokacija
         #original_hash: 730db33
         receive_delegate_reports: Htio bi primati Delegatove izvještaje s WCA Natjecanja preko e-maila
         #original_hash: 57eaf24
@@ -460,10 +460,10 @@ hr:
         name: Ime
         #original_hash: f91b080
         name_reason: Razlog za ime
-        #original_hash: b649210
-        cellName: Nadimak natjecanja
-        #original_hash: d523ebb
-        countryId: Država
+        #original_hash: fdba578
+        cellName: Kratko ime natjecanja
+        #original_hash: 0f21717
+        countryId: Regija
         #original_hash: 25b7b06
         cityName: Ime grada
         #original_hash: 67cd406
@@ -595,6 +595,8 @@ hr:
         paid_entry_fees: Plaćeno
         #original_hash: bae7d5b
         status: Status
+        #original_hash: a6e8a0b
+        administrative_notes: Administrativne bilješke
         #original_hash: 709a232
         name: Ime
         #original_hash: a6b9d69
@@ -634,8 +636,8 @@ hr:
       person:
         #original_hash: 8c41ae8
         wca_id: Osoba
-        #original_hash: d523ebb
-        countryId: Država
+        #original_hash: fa4c045
+        countryId: Državljanstvo
         #original_hash: ab58155
         dob: Datum rođenja
         #original_hash: 8a754c6
@@ -705,8 +707,8 @@ hr:
       regional_organization:
         #original_hash: 709a232
         name: Ime
-        #original_hash: d523ebb
-        country: Država
+        #original_hash: 0f21717
+        country: Regija
         #original_hash: 2e8a57c
         website: Web-stranica
         #original_hash: 83fce83
@@ -848,7 +850,7 @@ hr:
         #original_hash: da39a3e
         password_confirmation: ''
         #original_hash: da39a3e
-        region: ''
+        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -877,10 +879,11 @@ hr:
           2016). Ne zaboravi pisati velika slova. Ime mora sadržavati samo
           alfanumeričke znakove, crtice(-), ampersand znakove(&), točke(.),
           dvotočje(:), apostrofe(') i razmake( ).
-        #original_hash: 525fcc8
+        #original_hash: fbcda66
         cellName: >-
-          Kratko ime za prikaz. Ako je ime natjecanja već kratko, može se
-          koristiti to ime (npr. Croatia 2016).
+          Kratko ime za prikaz. Ako je ime natjecanja ispod %{short_name_limit}
+          znakova, ovo se ne bi trebalo uređivati i trebalo bi biti isto kao i
+          normalno ime.
         #original_hash: bce4589
         cityName: >-
           Ime grada i pokrajine (ukoliko je potrebno) gdje se natjecanje
@@ -1206,6 +1209,10 @@ hr:
         guests: ''
         #original_hash: da39a3e
         status: ''
+        #original_hash: 34ef763
+        administrative_notes: >-
+          Dodatne bilješke koje se spremaju prilikom upravljanja registracijom.
+          Natjecatelji ih ne mogu vidjeti.
       vote:
         #original_hash: da39a3e
         comment: ''
@@ -1608,6 +1615,8 @@ hr:
       teams: 'Timovi, Odbori, Vijeća'
       #original_hash: 7981fb3
       education: Edukacijski resursi
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: Kontakt informacije
       #original_hash: 8e12c09
@@ -1638,8 +1647,10 @@ hr:
       statistics: Statistika
       #original_hash: 82dabd0
       multimedia: Multimedija
-      #original_hash: 4fd2a7f
-      db_export: Izvoz baze podataka
+      #original_hash: cfde9db
+      db_results_export: Izvezi rezultate
+      #original_hash: 7533c29
+      db_dev_export: Developerski izvoz
       #original_hash: 1fa73f3
       regulations: Pravila
       #original_hash: 6bce1b5
@@ -1670,8 +1681,10 @@ hr:
       results_team: Tim za rezultate
       #original_hash: 4e7afeb
       results_admin: Admin
-      #original_hash: f158a5a
-      results_phpmyadmin: phpMyAdmin
+      #original_hash: 61074f1
+      results_database: Baza podataka
+      #original_hash: 54e0548
+      results_sidekiq: Sidekiq upravljačka ploča
       #original_hash: aee74b8
       new_post: Nova objava
       #original_hash: 0d67445
@@ -1766,7 +1779,7 @@ hr:
     support:
       #original_hash: 610edba
       title: Podrži WCA
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       text: >-
         World Cube Association je 501(c)(3) organizacija oslobođena od poreza.
         Kao 100% volontersko neprofitna organizacija, prihvaćamo donacije koje
@@ -2006,10 +2019,12 @@ hr:
         organizatori, članovi tima) i ne mogu se obrisati. Pošaljite email WCA
         Results Teamu ukoliko trebate promijeniti WCA ID na neki drugi račun.
       cannot_edit:
-        #original_hash: 13e8b80
+        #original_hash: 8bb2def
         msg: >-
-          Ne možeš mijenjati svoje ime, datum rođenja, spol ili državu. Razlog:
-          %{reason}. Kontaktiraj svog <a href='%{delegate_url}'>Delegata</a>
+          Ne možeš mijenjati svoje ime, datum rođenja, spol ili regiju. Razlog:
+          %{reason}. Kontaktiraj svog <a
+          href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Tim
+          za rezultate</a> ili svog <a href='%{delegate_url}'>Delegata</a>
           ukoliko trebaš nešto promijeniti.
         reason:
           #original_hash: 370ff12
@@ -2106,11 +2121,11 @@ hr:
       dob_past: mora biti u prošlosti
       #original_hash: b320913
       dob_recent: mora imati barem dvije godine
-      #original_hash: b64df45
+      #original_hash: afbf275
       already_represented_country: >-
         Ne može se mijenjati državu nazad na onu državu koja se koristila u
         prošlosti.
-      #original_hash: b589014
+      #original_hash: 5fe15d4
       must_have_a_change: Ime ili država moraju biti različiti kako bi se moglo ažurirati osobu.
       #original_hash: 012f032
       must_be_senior: mora biti Senior Delegat
@@ -2186,7 +2201,7 @@ hr:
       need_gender: Potreban je spol
       #original_hash: ebf1ecb
       need_dob: Potreban je datum rođenja
-      #original_hash: d84a54f
+      #original_hash: aab7355
       need_country: Potrebna je država
       #original_hash: e0bb243
       cannot_be_deleted_and_accepted: Registracija ne može biti obrisana i prihvaćena u isto vrijeme
@@ -2212,7 +2227,7 @@ hr:
       series_more_than_one_accepted: Možeš biti prihvaćen samo za jednu Seriju natjecanja odjednom.
       #original_hash: 13bfcd6
       can_only_register_for_qualified_events: Ne možeš se registrirati za discipline za koje nisi kvalificiran.
-      #original_hash: 812cd02
+      #original_hash: 22ca413
       cannot_register_without_comment: >-
         Morate ostaviti komentar. Svakako pročitajte zahtjeve za registraciju
         što sve mora biti uključeno (npr. u FMC na više lokacija, na kojoj
@@ -2273,8 +2288,10 @@ hr:
       failed: Nije moguće ažurirati registraciju
       #original_hash: 016b4ae
       deleted: 'Uspješno je obrisana tvoja registracija za %{comp}'
-      #original_hash: 648424f
-      registered: Uspješno si registriran/na!
+      #original_hash: 7707307
+      registered: >-
+        Registracijska forma poslana - pratite sve upute iz taba "Registracija"
+        kako bi se upotpunila registracija.
       #original_hash: 82fed60
       imported: Uspješno uvezene registracije!
       #original_hash: 3614fd1
@@ -2286,12 +2303,17 @@ hr:
       #original_hash: 72e2180
       regards_html: 'S poštovanjem, %{people}.'
       new:
-        #original_hash: a32db59
-        mail_subject: 'Tvoja registracija za %{comp_name} je poslana i čeka na potvrdu'
-        #original_hash: 8374583
-        registered_html: 'Upravo si se registrirao/la za %{comp_name}.'
-        #original_hash: 13fabed
-        awaits_approval: Tvoja registracija je primljena te čeka potvrdu organizacijskog tima.
+        #original_hash: 63591e5
+        mail_subject: 'Registracija na čekanju: %{comp_name}'
+        #original_hash: 6aa057a
+        registered_html: >-
+          Tvoja registracija za %{comp_name} je sada na čekanju i čeka potvrdu
+          od Organizacijskog tima.
+        #original_hash: f98b245
+        awaits_approval: >-
+          Obratite pozornost jeste li ispunili sve zahtjeve za registraciju.
+          Primjerice, možda se treba unaprijed platiti kotizacija prije nego se
+          upotpuni registracija.
         #original_hash: 826045f
         approval_info_html: >-
           Bit ćeš obaviješten/a e-mailom kada ti se prihvati registracija. Uzmi
@@ -2302,8 +2324,8 @@ hr:
           web-stranicu natjecanja ili kontaktiraj organizatore. Također, možeš
           provjeriti status svoje registracije %{here}.
       accepted:
-        #original_hash: 34515b5
-        mail_subject: 'Tvoja registracija za %{comp_name} je prihvaćena'
+        #original_hash: 6f1fa1f
+        mail_subject: 'Registracija prihvaćena: %{comp_name}'
         #original_hash: 24d2883
         message_html: >-
           Tvoja registracija za %{comp_name} je prihvaćena. Kao i uvijek, možeš
@@ -2311,8 +2333,8 @@ hr:
         #original_hash: 1852cbf
         see_you_soon: 'Veselimo se vidjeti te na %{comp_name}!'
       pending:
-        #original_hash: e48d8bd
-        mail_subject: 'Pomaknut/a si na listi čekanja za %{comp_name}'
+        #original_hash: 8d26297
+        mail_subject: 'Registracija pomaknuta na listu čekanja: %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           Tvoja registracija za %{comp_name} je pomaknuta na listu čekanja.
@@ -2325,8 +2347,8 @@ hr:
         #original_hash: 8f7358f
         email_if_error: 'Ukoliko misliš da je ovo greška, javi se na ovaj e-mail.'
       deleted:
-        #original_hash: 268e248
-        mail_subject: 'Tvoja registracija za %{comp_name} je obrisana'
+        #original_hash: 8cbc6c0
+        mail_subject: 'Registracija obrisana: %{comp_name}'
         #original_hash: f66ae63
         message_html: 'Tvoja registracija za %{comp_name} je obrisana. Mogući razlozi su:'
         causes:
@@ -2350,7 +2372,7 @@ hr:
       title: 'Registracije za %{comp}'
       #original_hash: 5301648
       edit: Uredi
-      #original_hash: 0ab725c
+      #original_hash: beffc45
       country_plural:
         zero: 0 država
         one: 1 država
@@ -2500,27 +2522,41 @@ hr:
       payment_successful: >-
         Tvoje plaćanje je uspješno i registracija bi trebala prikazivati da je
         plaćena.
+      #original_hash: 92dde77
+      payment_processing: 'Vaša uplata je potvrđena, no transakcija je i dalje u tijeku.'
+      #original_hash: 62d7351
+      button_text: Plati sada!
       hints:
         #original_hash: bf3a39e
         donation: Neobavezna donacija koja će ići direktno organizacijskom timu
-        #original_hash: 16cf92d
-        card_information: >-
-          Tvoje kartične informacije nikada neće doći do WCA web stranice.
-          Sigurno su proslijeđene Stripeu koji upravlja procesom plaćanja i
-          javlja se povratno nama.
+        #original_hash: f7fa263
+        payment_button: >-
+          Tvoje informacije plaćanja nikada ne idu na WCA stranicu. Sigurno su
+          poslane prema Stripeu koji upravlja procesom plaćanja i šalje nazad
+          potvrdu.
       labels:
         #original_hash: 4de825f
         entry_fees: Kotizacije
+        #original_hash: dc9d458
+        fees_paid: Plaćeno
+        #original_hash: cc632b5
+        fees_remaining: Preostalo
         #original_hash: 2c09302
         donation: Donacija
-        #original_hash: 184150d
-        card_information: Kartične informacije
-        #original_hash: bc8091a
-        cardholder_name: Ime korisnika kartice
         #original_hash: 919710d
         show_donation: >-
           Želim napraviti neobaveznu donaciju koja će ići samo organizacijskom
           timu
+        #original_hash: 4930c06
+        payment_information: Informacije plaćanja
+        #original_hash: de0fc95
+        payment_button: Plati kotizaciju putem Stripea
+        #original_hash: f94d00f
+        ajax_error: WCA greška servera
+        #original_hash: e62c56c
+        stripe_error: Stripe greška
+        #original_hash: 97f7359
+        subtotal: Ukupno
       alerts:
         #original_hash: a34940e
         not_a_number: Unesi valjan iznos.
@@ -2528,19 +2564,27 @@ hr:
         amount_too_low: >-
           Ukupan iznos mora biti barem u visini kotizacije kako bi se mogao
           platiti.
+        #original_hash: 5cf6ce2
+        amount_rather_high: >-
+          Platit ćete barem dvostruko više od potrebnog iznosa za registraciju.
+          Potvrdite plaćanje s OK.
       errors:
         #original_hash: 166d48c
         already_paid: Kartica nije terečena jer je kotizacija već plaćena.
-        #original_hash: b2bc8ed
-        not_allowed: Ne možeš platiti ovu registraciju
-        #original_hash: 630dbb9
-        intent_not_found: >-
-          Nismo mogli naći tvoju namjeru plaćanja i potvrdu na našem serveru.
-          Proces plaćanja je prekinut i kartica nije terećena.
-        #original_hash: 63e0ec1
-        cardholder_name: Provjeri ime korisnika kartice.
-    #original_hash: 8607a87
-    payment_button_text: Plati svoju kotizaciju s karticom
+        #original_hash: f10c80c
+        not_allowed: Ne možeš platiti ovu registraciju.
+        #original_hash: a073600
+        stripe_failed: Provjerite Stripe transakciju.
+        #original_hash: a32e40f
+        stripe_not_found: Stripe je vratio transakcijski ID koji se ne može pronaći.
+        #original_hash: aaa8ab7
+        stripe_secret_invalid: >-
+          Stripe je vratio transakcijsku tajnu koja se ne podudara s našim
+          podacima.
+        #original_hash: 8d1a199
+        payment_reset: Stripe je odbio plaćanje.
+        #original_hash: bcf6a93
+        payment_pending: Plaćanje se nije još završilo.
     #original_hash: 4cf01a2
     preferred_events_prompt_html: >-
       Kako bi ubrzao/la buduće registracije, možeš namjestiti preferirane
@@ -2560,10 +2604,10 @@ hr:
         podataka će se ažurirati.
       #original_hash: 779b272
       registrations_file_label: Datoteka registracija
-      #original_hash: 4017f0e
+      #original_hash: 224f3a6
       registrations_file_hint: >-
-        CSV datoteka sa stupcima: Status, Name, Country, WCA ID, Birth Date,
-        Gender, Email i po jedan stupac za svaku disciplinu.
+        CSV datoteka sa stupcima: Status, Ime, Država, WCA ID, Datum rođenja,
+        Spol, Email i po jedan stupac za svaku disciplinu.
       #original_hash: d6fbc9d
       import: Uvezi
       errors:
@@ -2628,10 +2672,10 @@ hr:
       advancement_condition_must_be_present_for_all_non_final_rounds: >-
         Provjerite da sve ne-finalne runde imaju specificirani uvjet prolaska u
         sljedeći krug.
-      #original_hash: b73c67a
+      #original_hash: f50ffd8
       cutoff_is_greater_than_time_limit: >-
         Runda %{round_number} u %{event} ima cutoff veći od time limita. Molimo
-        provjerite da je cutoff manji od time limita.
+        provjerite da cutoff nije veći od time limita.
       #original_hash: c1580b1
       cutoff_is_too_fast: >-
         Runda %{round_number} u %{event} ima cutoff manji od 5 sekundi.
@@ -2660,7 +2704,7 @@ hr:
       not_announced: 'Ovo natjecanje je javno vidljivo, no nije još najavljeno.'
       #original_hash: ab61991
       announced: Uspješno najavljeno natjecanje!
-      #original_hash: a582c89
+      #original_hash: cbff8ce
       cancelled: >-
         Ovo natjecanje je otkazano. Molimo pogledajte sekciju s informacijama za
         više detalja.
@@ -2702,14 +2746,18 @@ hr:
       tooltip_registered: Registriran/a si.
       #original_hash: f2d092f
       tooltip_waiting_list: Trenutno si na listi čekanja.
-      #original_hash: 9ecd976
-      confirmed_visible: Ovo natjecanje je potvrđeno i vidljivo
-      #original_hash: fa186a9
-      confirmed_not_visible: 'Ovo natjecanje je potvrđeno, ali nije vidljivo'
-      #original_hash: a66bbe3
-      not_confirmed_visible: 'Ovo natjecanje nije potvrđeno, ali je vidljivo'
-      #original_hash: 0f44e45
-      not_confirmed_not_visible: Ovo natjecanje nije ni potvrđeno ni vidljivo
+      #original_hash: f97246a
+      tooltip_deleted: >-
+        Nažalost, Vaša registracija je obrisana. Provjerite svoj email za
+        detalje ili kontaktirajte organizatora/e.
+      #original_hash: 1b6dc61
+      confirmed_visible: Ovo natjecanje je potvrđeno i vidljivo.
+      #original_hash: abc2f96
+      confirmed_not_visible: 'Ovo natjecanje je potvrđeno, ali nije vidljivo.'
+      #original_hash: 6d6290b
+      not_confirmed_visible: 'Ovo natjecanje nije potvrđeno, ali je vidljivo.'
+      #original_hash: b299b27
+      not_confirmed_not_visible: Ovo natjecanje nije ni potvrđeno ni vidljivo.
       #original_hash: a821396
       stripe_connected: >-
         Uspješno si povezao/la svoj Stripe račun i možeš primati uplate
@@ -2720,12 +2768,18 @@ hr:
       stripe_disconnected_failure: Dogodila se greška prilikom odspajanja sa Stripe računom.
       #original_hash: 0a4bb53
       stripe_not_connected: Dogodio se problem i nismo mogli spojiti tvoj Stripe račun.
-      #original_hash: 724cf0d
-      championship_exists: 'Već postoji %{championship_type} u %{year}'
+      #original_hash: 1b92d16
+      championship_exists: 'Već postoji %{championship_type} u %{year}.'
       #original_hash: 0644bdc
       orga_closed_reg_success: Uspješno zatvorene registracije.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Nemoguće je zatvoriti registracije.
+      #original_hash: 74caf1a
+      no_waiting_list_specified: >-
+        Ovo natjecanje nema krajnji rok za prihvaćanje natjecatelja s liste
+        čekanja. Ukoliko koristite listu čekanja, specificirajte krajnji rok.
+        Ukoliko ne koristite listu čekanja, specificirajte informacije o ovome u
+        uvjetima registracije.
     my_competitions:
       #original_hash: 5c6d3ea
       title: Moja natjecanja
@@ -2970,10 +3024,6 @@ hr:
     index:
       #original_hash: db98a68
       title: Natjecanja
-      #original_hash: f483b9c
-      disclaimer: >-
-        Uzmite u obzir da je zbog COVID-19 pandemije u nekim država nemoguće
-        održavati natjecanja.
       #original_hash: 6a72085
       all_events: Sve
       #original_hash: 6d76b81
@@ -3337,8 +3387,6 @@ hr:
     cancelled_by_html: 'Otkazao %{name} dana %{date_time}'
     #original_hash: 25e68c3
     cancel_confirm: Sigurno želite otkazati ovo natjecanje?
-    #original_hash: 9a42672
-    upload_results: Pošalji rezultate
     #original_hash: 01de5ee
     post_results: Objavi rezultate
     #original_hash: b6513f1
@@ -3403,13 +3451,11 @@ hr:
         qualification_html: >-
           Kvalifikacijska vremena se moraju postaviti na ostalim WCA
           natjecanjima kako bi se moglo natjecati.
-        #original_hash: 3b524fd
-        qualification_all_events_html: >-
-          Krajnji rok za postavljanje kvalifikacijskih vremena je
-          <b>%{date}</b>.
-        #original_hash: 0d791e9
+        #original_hash: 51dfad5
+        qualification_all_events_html: 'Kvalifikacijska vremena se moraju postaviti prije <b>%{date}</b>.'
+        #original_hash: 5eac9e5
         qualification_some_events_html: >-
-          Krajnji rok za postavljanje kvalifikacijskih vremena u %{events} je
+          Kvalifikacijska vremena u %{events} moraju se postaviti prije
           <b>%{date}</b>.
       #original_hash: 041a5de
       format: Format
@@ -3649,8 +3695,8 @@ hr:
       name: Ime
       #original_hash: 5faa59d
       result: Rezultat
-      #original_hash: e0f64f7
-      citizen_of: Državljanin
+      #original_hash: fa4c045
+      representing: Državljanstvo
       #original_hash: 1917f4f
       competition: Natjecanje
       #original_hash: e7f6fc5
@@ -3681,7 +3727,7 @@ hr:
       name_or_wca_id: Upiši dijelove ili WCA ID
       #original_hash: 709a232
       name: Ime
-      #original_hash: d523ebb
+      #original_hash: fa4c045
       country: Država
       #original_hash: 02ae2bd
       podiums: Postolja
@@ -3694,7 +3740,7 @@ hr:
       completed_solves: Ukupni broj slaganja
       #original_hash: fc78642
       personal_records: Trenutni osobni rekordi
-      #original_hash: e631f13
+      #original_hash: 2ad8fd5
       odd_rank_reason: >-
         Nepostojeći rang ili lošiji rang u državi od onoga na kontinentu jest
         zbog mijenjanja države. Rezultati prijašnje države nisu uzeti u obzir u
@@ -3762,6 +3808,8 @@ hr:
         competition: Kontaktiraj organizatore specifičnog natjecanja (izaberi ispod)
         #original_hash: f0bffb7
         competitions_in_general: 'Generalno o natjecanjima (organiziranje, pravila natjecanja i sl.)'
+        #original_hash: aabfcf7
+        results_team: Kontaktiraj Tim za rezultate
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID ili WCA Profil
         #original_hash: 0c77aee
@@ -4010,16 +4058,16 @@ hr:
     mission_footer: WCA Izjava o Misiji
     #original_hash: cdab446
     who_we_are_title: Tko smo mi
-    #original_hash: 9248dc4
+    #original_hash: c0d9a3e
     who_we_are_content_html: >-
       <p> World Cube Association upravlja natjecanjima za mehaničke mozgalice
       koje se korite okretanjem grupe dijelova, poznatije kao "twisty puzzles".
       Najpoznatija među njima je Rubikova kocka, koju je izumio profesor Rubik
       iz Mađarske. Odabrane mozgalice su službene discipline WCA.</p> <p>Kako se
-      WCA razvijao u proteklom desetljeću, preko 100 000 ljudi se natjecalo na
-      našim natjecanjima. Unatoč ovom rastu, i dalje smo organizacija koja je u
-      potpunosti pogonjena volonterima, od lokalnih organizatora do Delegata, pa
-      i do Upravnog odbora. Veoma smo zahvalni svima koji svoje osobno vrijeme
+      WCA razvijao u proteklom desetljeću, preko 200 000 ljudi se natjecalo na
+      našim natjecanjima. Unatoč ovom rastu, i dalje smo organizacija koja je
+      većinom pogonjena volonterima, od lokalnih organizatora do Delegata, pa i
+      do Upravnog odbora. Veoma smo zahvalni svima koji svoje osobno vrijeme
       izdvajaju kako bi dopustili da WCA nastavi funkcionirati. S više
       financijske potpore, nadamo se podići razinu profesionalizma naših
       natjecanja jer se trudimo organizirati ih što više diljem svijeta.</p>
@@ -4043,9 +4091,9 @@ hr:
       href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">ovdje</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Što je slijedeće za WCA?
-    #original_hash: a08c67f
+    #original_hash: 487c6a1
     whats_next_content_html: >-
-      <p>World Cube Association je podržao preko 100 000 natjecatelja diljem 140
+      <p>World Cube Association je podržao preko 200 000 natjecatelja diljem 158
       zemalja svijeta i ne mislimo usporiti tempo! Cubing zajednica se postepeno
       razvijala otkad smo mi nastali 2004. godine i želimo da se ovaj trend
       nastavi i u budućnosti kroz omogućavanje natjecanja na novim područjima. U
@@ -4076,7 +4124,7 @@ hr:
       e-mail na <a
       href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>.</p>
     donation_banner:
-      #original_hash: 6253f90
+      #original_hash: 1aaf818
       content: >-
         World Cube Association je 501(c)(3) organizacija oslobođena od poreza.
         Kao 100% volontersko neprofitna organizacija, prihvaćamo donacije koje
@@ -4113,7 +4161,7 @@ hr:
         mjesta za odbore, tim ili viječa, informacije o tome kako se prijaviti
         za određeno mjesto budu dostupne na glavnoj stranici WCA.
       #original_hash: c366473
-      senior_member: Stariji član
+      senior_member: Senior član
       #original_hash: e26c936
       leader: Vođa
       officers:
@@ -4354,7 +4402,7 @@ hr:
     how_to:
       #original_hash: b243b1f
       title: Kako postati WCA Regionalna organizacija
-      #original_hash: f042a88
+      #original_hash: 9f31403
       description: >-
         WCA priznaje razne Regionalne organizacije diljem svijeta. Svrha WCA
         Regionalnih organizacija jest organiziranje WCA Natjecanja i podrška WCA
@@ -5013,7 +5061,7 @@ hr:
       olist1:
         #original_hash: de00462
         '1': Ova 2 natjecanja nemaju zajedničke discipline.
-        #original_hash: f7bacc5
+        #original_hash: b8ff462
         '2': Ova 2 natjecanja će se održati u različitim državama.
       #original_hash: 5c5cf04
       content2: >-
@@ -5304,3 +5352,54 @@ hr:
       API zahtjeve. Na primjer, za pristup podacima o vašem računu:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Legalna TNoodle verzija
+  merch:
+    #original_hash: 96a95a1
+    title: WCA Merch
+    paragraphs:
+      #original_hash: 8a23af2
+      '1': >-
+        WCA ima puno dostupnog mercha! Od majici kratkih rukava, duks trenerki,
+        naljepnica, Stackmatova, ruksaka i ostalog! Naši dizajni su konstantno
+        ažurirani s klasičnim WCA logotipom, službenim merchom Svjetskih
+        prvenstava i dizajnovima svjetskih rekorda.
+      #original_hash: 2865e1d
+      '2': >-
+        Kupnjom WCA Mercha direktno kroz našu trgovinu najbolje podržavate WCA -
+        neprofitnu i većinom volontersku organizaciju. Sav profit od mercha
+        koristimo za financiranje natjecanja, opremu i ostale WCA aktivnosti.
+      #original_hash: 8e57552
+      '3': >-
+        Možete kupiti merch bilo gdje u svijetu, s trgovinama baziranim u
+        Europi, Americi i Indiji te više njih u dolasku!
+  database:
+    results_export:
+      #original_hash: 15d00e1
+      heading: WCA Izvoz rezultata
+      #original_hash: f9fe9df
+      description: >-
+        Na ovoj stranici nudimo WCA Rezultate u više oblika za preuzimanje kako
+        bi ih mogli koristiti/analizirati. Većinom ih ažuriramo nakon svakog
+        natjecateljskog vikenda. Datoteke su numerirane i imaju datume tako da
+        možete vidjeti imate li najnoviju verziju.
+      #original_hash: 4f59283
+      permalink: permalink
+      file_formats:
+        #original_hash: b086d79
+        sql: 'SQL izvadci, za uvoz u SQL bazu podataka'
+        #original_hash: 5f6fb6e
+        tsv: >-
+          Tab-separated vrijednosti, za spreadsheetove u OpenOffice.org, Excel i
+          sl.
+      #original_hash: 178506e
+      hint_readme_html: >-
+        %{readme_filename} sadrži uvjete korištenja i generalni opis (na
+        engleskom jeziku, nije prevedeno):
+    developer_export:
+      #original_hash: 97d6025
+      heading: WST Izvoz za developere
+      #original_hash: eba769a
+      description_html: >-
+        Na ovoj stranici nudimo WST Izvoz za developere kao SQL dump. Detalji se
+        mogu pronaći na %{github_link}.
+      #original_hash: a479c9c
+      download: Preuzmi
