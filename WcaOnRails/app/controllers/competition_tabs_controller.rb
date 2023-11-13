@@ -43,7 +43,7 @@ class CompetitionTabsController < ApplicationController
 
   def destroy
     @competition = competition_from_params
-    CompetitionTab.find_by(id: params[:id], competition: @competition)&.destroy
+    CompetitionTab.find_by!(id: params[:id], competition: @competition).destroy
     redirect_to competition_tabs_path(@competition)
   end
 
