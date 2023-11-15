@@ -4,6 +4,7 @@ class UserGroup < ApplicationRecord
   enum :group_type, {
     delegate_probation: "delegate_probation",
     delegate_regions: "delegate_regions",
+    teams: "teams",
   }
 
   def self.regions

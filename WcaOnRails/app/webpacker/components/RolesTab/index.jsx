@@ -85,12 +85,12 @@ export default function RolesTab({ userId, loggedInUserId }) {
                   <List.Content>
                     {canEditTeamOfRole(role) && (
                       <List.Header as="a" href={`${teamUrl(role.group.id)}/edit`}>
-                        {`${I18n.t(`enums.user.role_status.teams.${role.status}`)}, ${role.group.name}`}
+                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.status}`)}, ${role.group.name}`}
                       </List.Header>
                     )}
                     {!canEditTeamOfRole(role) && (
                       <List.Header>
-                        {`${I18n.t(`enums.user.role_status.delegate_regions.${role.status}`)}, ${role.group.name}`}
+                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.status}`)}, ${role.group.name}`}
                       </List.Header>
                     )}
                     {!!role.start_date && (
