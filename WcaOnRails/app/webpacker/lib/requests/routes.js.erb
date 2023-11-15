@@ -104,6 +104,4 @@ export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.ur
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
 
-export const currentUserUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_loggedin_user_path) %>`;
-
 export const teamUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.team_path("${id}"))%>`;

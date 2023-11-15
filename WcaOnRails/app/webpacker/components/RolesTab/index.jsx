@@ -6,12 +6,7 @@ import {
   List,
 } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import useSaveAction from '../../lib/hooks/useSaveAction';
-import {
-  roleListUrl,
-  currentUserUrl,
-  teamUrl,
-} from '../../lib/requests/routes.js.erb';
+import { roleListUrl, teamUrl } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
@@ -26,58 +21,57 @@ import I18n from '../../lib/i18n';
 // i18n-tasks-use t('enums.user.role_status.senior_member')
 // i18n-tasks-use t('enums.user.role_status.leader')
 
-export default function RolesTab({ userId }) {
-  const loggedInUserFetch = useLoadedData(currentUserUrl);
+export default function RolesTab({ userId, loggedInUserId }) {
   const roleListFetch = useLoadedData(roleListUrl(userId));
-  const { data, sync } = roleListFetch;
-  const { save, saving } = useSaveAction();
+  const loggedInUserRolesFetch = useLoadedData(roleListUrl(loggedInUserId));
 
   const [open, setOpen] = React.useState(false);
-  const [currentUserRoles, setCurrentUserRoles] = React.useState(null);
-  const [error, setError] = React.useState(null);
 
   const activeNonHiddenRoles = React.useMemo(
     () => {
-      if (data) {
-        return data.activeRoles.filter((role) => role.group.is_hidden === false);
+      if (roleListFetch.data) {
+        return roleListFetch.data.activeRoles.filter((role) => role.group.is_hidden === false);
       }
       return [];
     },
-    [data],
+    [roleListFetch.data],
   );
+
+  const loggedInUserRoles = React.useMemo(
+    () => {
+      if (loggedInUserRolesFetch.data) {
+        return loggedInUserRolesFetch.data.activeRoles.reduce((roleMap, role) => ({
+          ...roleMap,
+          [role.group.id]: role,
+        }), {});
+      }
+      return {};
+    },
+    [loggedInUserRolesFetch.data],
+  );
+
   const isDelegate = React.useMemo(
     () => {
-      if (data) {
-        return data.activeRoles.some((role) => role.group.group_type === 'delegate_regions');
+      if (roleListFetch.data) {
+        return roleListFetch.data.activeRoles.some(
+          (role) => role.group.group_type === 'delegate_regions',
+        );
       }
       return false;
     },
-    [data],
+    [roleListFetch.data],
   );
 
-  React.useEffect(() => {
-    if (!loggedInUserFetch.loading) {
-      save(roleListUrl(loggedInUserFetch.data.id), {}, (roles) => {
-        setCurrentUserRoles(roles.activeRoles.reduce((roleMap, role) => ({
-          ...roleMap,
-          [role.group.id]: role,
-        }), {}));
-      }, { method: 'GET', body: null }, setError);
-    }
-  }, [loggedInUserFetch.data, loggedInUserFetch.loading, save]);
-
   const canEditRole = (role) => role.group.group_type === 'delegate_regions' && (
-    !!currentUserRoles.admin || currentUserRoles[role.group.id].status === 'senior_delegate'
+    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.id]?.status === 'senior_delegate'
   );
 
   const canEditTeamOfRole = (role) => role.group.group_type !== 'delegate_regions' && (
-    !!currentUserRoles.admin || currentUserRoles[role.group.name]?.status === 'leader'
+    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.name]?.status === 'leader'
   );
 
-  if (
-    roleListFetch.loading || loggedInUserFetch.loading || saving || currentUserRoles === null
-  ) return <Loading />;
-  if (roleListFetch.error || loggedInUserFetch.error || error) return <Errored />;
+  if (roleListFetch.loading || loggedInUserRolesFetch.loading) return <Loading />;
+  if (roleListFetch.error || loggedInUserRolesFetch.error) return <Errored />;
 
   return (
     <>
@@ -98,19 +92,19 @@ export default function RolesTab({ userId }) {
                   />
                   <List.Content>
                     {canEditTeamOfRole(role) && (
-                    <List.Header as="a" href={`${teamUrl(role.group.id)}/edit`}>
-                      {`${I18n.t(`enums.user.role_status.${role.status}`)}, ${role.group.name}`}
-                    </List.Header>
+                      <List.Header as="a" href={`${teamUrl(role.group.id)}/edit`}>
+                        {`${I18n.t(`enums.user.role_status.${role.status}`)}, ${role.group.name}`}
+                      </List.Header>
                     )}
                     {!canEditTeamOfRole(role) && (
-                    <List.Header>
-                      {`${I18n.t(`enums.user.role_status.${role.status}`)}, ${role.group.name}`}
-                    </List.Header>
+                      <List.Header>
+                        {`${I18n.t(`enums.user.role_status.${role.status}`)}, ${role.group.name}`}
+                      </List.Header>
                     )}
                     {!!role.start_date && (
-                    <List.Description>
-                      {`Since ${role.start_date}`}
-                    </List.Description>
+                      <List.Description>
+                        {`Since ${role.start_date}`}
+                      </List.Description>
                     )}
                   </List.Content>
                 </List.Item>
@@ -126,9 +120,12 @@ export default function RolesTab({ userId }) {
         size="fullscreen"
         onClose={() => {
           setOpen(false);
-          sync();
+          roleListFetch.sync();
           window.location.reload(); // TODO: This is a hack to force the page to reload after
-          // closing the modal, so that avatar tab will be visible.
+          // closing the modal, so that avatar tab will be visible. A common use case of a
+          // Senior Delegate is that after creating a new delegate, they will want to crop the
+          // thumbnail. But the avatar tab is not visible until the page is reloaded because that
+          // part of code is still in erb. This can be fixed while migrating completely to React.
         }}
         open={open}
       >
