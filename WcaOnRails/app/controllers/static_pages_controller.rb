@@ -3,9 +3,9 @@
 class StaticPagesController < ApplicationController
   include DocumentsHelper
 
-  before_action :current_user_is_authorized_for_action!, only: [:panel_wfc]
-  private def current_user_is_authorized_for_action!
-    unless current_user.team_member?(Team.wfc) || current_user.admin?
+  before_action :current_user_can_view_wfc_matters!, only: [:panel_wfc]
+  private def current_user_can_view_wfc_matters!
+    unless current_user.can_view_wfc_matters?
       render json: {}, status: 401
     end
   end
