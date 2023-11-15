@@ -1259,8 +1259,4 @@ class User < ApplicationRecord
   def region
     UserGroup.find_by_id(self.region_id)
   end
-  
-  def can_view_wfc_matters?
-    team_member?(Team.wfc) || admin?
-  end
 end
