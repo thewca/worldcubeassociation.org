@@ -33,6 +33,7 @@ class Api::V0::RolesController < Api::V0::ApiController
         group: {
           id: team.id,
           name: team.name,
+          group_type: UserGroup.group_types[:teams],
           is_hidden: team.hidden,
         },
         status: status,
