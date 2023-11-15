@@ -426,6 +426,8 @@ zh-TW:
         delegate_status: WCA代表狀態
         #original_hash: d219c68
         location: 地點
+        #original_hash: 0f21717
+        region: 區域
         #original_hash: 730db33
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         #original_hash: 57eaf24
@@ -805,8 +807,6 @@ zh-TW:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -816,8 +816,6 @@ zh-TW:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1121,11 +1119,6 @@ zh-TW:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
