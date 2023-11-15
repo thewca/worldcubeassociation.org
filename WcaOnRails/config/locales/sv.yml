@@ -745,6 +745,23 @@ sv:
         delegate: Delegat
         #original_hash: d463c23
         senior_delegate: Senior-delegat
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Trainee-delegat
+          #original_hash: 9b97968
+          candidate_delegate: Junior-delegat
+          #original_hash: 12ab214
+          delegate: Delegat
+          #original_hash: d463c23
+          senior_delegate: Senior-delegat
+        teams:
+          #original_hash: 6853c98
+          member: Medlem
+          #original_hash: c366473
+          senior_member: Senior-medlem
+          #original_hash: e26c936
+          leader: Ledare
     person:
       gender:
         #original_hash: 3f3a489
@@ -1935,8 +1952,6 @@ sv:
       preferences: Preferenser
       #original_hash: 8be3c94
       password: Lösenord
-      #original_hash: 3fc6dbe
-      member_of: Medlem i
       #original_hash: 42619dd
       preferred_events_desc: Genom att välja favoritgrenar kan anmälan till tävlingar göras snabbare.
       #original_hash: b402e03
