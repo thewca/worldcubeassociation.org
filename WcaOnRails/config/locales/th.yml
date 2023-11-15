@@ -430,6 +430,8 @@ th:
         delegate_status: สถานะ Delegate
         #original_hash: d219c68
         location: สถานที่
+        #original_hash: 0f21717
+        region: Region
         #original_hash: 730db33
         receive_delegate_reports: ฉันต้องการรับ email รายงานการแข่งขันของ WCA
         #original_hash: 57eaf24
@@ -732,6 +734,21 @@ th:
         delegate: Delegate
         #original_hash: d463c23
         senior_delegate: Senior Delegate
+      role_status:
+        delegate_regions:
+          #original_hash: 9b97968
+          candidate_delegate: Junior Delegate
+          #original_hash: 12ab214
+          delegate: Delegate
+          #original_hash: d463c23
+          senior_delegate: Senior Delegate
+        teams:
+          #original_hash: 6853c98
+          member: สมาชิก
+          #original_hash: c366473
+          senior_member: สมาชิกอาวุโส
+          #original_hash: e26c936
+          leader: หัวหน้าทีม
     person:
       gender:
         #original_hash: 3f3a489
@@ -816,8 +833,6 @@ th:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -827,8 +842,6 @@ th:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1225,11 +1238,6 @@ th:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1876,8 +1884,6 @@ th:
       preferences: ความชอบ
       #original_hash: 8be3c94
       password: รหัสผ่าน
-      #original_hash: 3fc6dbe
-      member_of: สมาชิกของ
       #original_hash: 42619dd
       preferred_events_desc: การเลือกประเภทที่คุณชอบ ทำให้การลงทะเบียนสำหรับการแข่งขันเร็วขึ้น
       #original_hash: b402e03
