@@ -11,8 +11,45 @@ class Api::V0::RolesController < Api::V0::ApiController
   def index
     user_id = params.require(:userId)
     user = User.find(user_id)
-    is_delegate = user.delegate_status.present?
-    active_roles = is_delegate ? [{ role: user.delegate_status }] : []
+    active_roles = []
+
+    if user.delegate_status.present?
+      active_roles << {
+        group: user.region,
+        status: user.delegate_status,
+      }
+    end
+
+    user.current_teams.each do |team|
+      team_membership_details = user.team_membership_details(team)
+      if team_membership_details.leader?
+        status = 'leader'
+      elsif team_membership_details.senior_member?
+        status = 'senior_member'
+      else
+        status = 'member'
+      end
+      active_roles << {
+        group: {
+          id: team.id,
+          name: team.name,
+          is_hidden: team.hidden,
+        },
+        status: status,
+        start_date: team_membership_details.start_date,
+      }
+    end
+
+    if user.admin? || user.board_member?
+      active_roles << {
+        group: {
+          id: 'admin',
+          name: 'Admin Group',
+          is_hidden: true,
+        },
+        status: 'member',
+      }
+    end
 
     render json: {
       activeRoles: active_roles,
