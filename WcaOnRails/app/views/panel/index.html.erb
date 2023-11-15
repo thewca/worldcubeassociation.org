@@ -83,16 +83,6 @@
     </ul>
   <% end %>
 
-  <% if current_user&.board_member? %>
-    <h2>Board</h2>
-
-    <ul>
-      <li>
-        <%= link_to "List of Senior Delegates", panel_seniors_path %>
-      </li>
-    </ul>
-  <% end %>
-
   <% if current_user.financial_committee? || current_user.board_member? || current_user.admin? %>
     <h2>Other Panels</h2>
 
