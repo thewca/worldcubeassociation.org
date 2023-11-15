@@ -22,8 +22,8 @@ import I18n from '../../lib/i18n';
 // i18n-tasks-use t('enums.user.role_status.teams.leader')
 
 export default function RolesTab({ userId, loggedInUserId }) {
-  const roleListFetch = useLoadedData(rolesOfUser(userId));
-  const loggedInUserRolesFetch = useLoadedData(rolesOfUser(loggedInUserId));
+  const roleListFetch = useLoadedData(roleListUrl({ userId }));
+  const loggedInUserRolesFetch = useLoadedData(roleListUrl({ userId: loggedInUserId }));
 
   const [open, setOpen] = React.useState(false);
 

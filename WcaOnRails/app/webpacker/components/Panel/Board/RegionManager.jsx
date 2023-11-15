@@ -18,22 +18,14 @@ const defaultRegion = {
 
 function UserGroupVisibility({ userGroup, save, sync }) {
   const [open, setOpen] = React.useState(false);
+  const iconName = userGroup.is_hidden ? 'eye slash' : 'eye';
   return (
     <>
-      {!userGroup.is_hidden && (
       <List.Icon
-        name="eye"
+        name={iconName}
         link
         onClick={() => setOpen(true)}
       />
-      )}
-      {userGroup.is_hidden && (
-      <List.Icon
-        name="eye slash"
-        link
-        onClick={() => setOpen(true)}
-      />
-      )}
       <Confirm
         open={open}
         content={`Are you sure you want to ${userGroup.is_hidden ? 'unhide' : 'hide'} ${userGroup.name}?`}
@@ -58,17 +50,11 @@ export default function RegionManager() {
     groupType: 'delegate_regions',
   }));
   const { save, saving } = useSaveAction();
-  const [openNewRegionModal, setOpenNewRegionModal] = React.useState(false);
-  const [openNewSubregionModal, setOpenNewSubregionModal] = React.useState(false);
+  const [openModalType, setOpenModalType] = React.useState();
   const [newRegion, setNewRegion] = React.useState(defaultRegion);
+  const [saveError, setSaveError] = React.useState();
 
-  const closeModal = () => {
-    if (openNewRegionModal) {
-      setOpenNewRegionModal(false);
-    } else {
-      setOpenNewSubregionModal(false);
-    }
-  };
+  const closeModal = () => setOpenModalType(null);
 
   const regions = React.useMemo(() => data?.filter((group) => !group.parent_group_id).sort(
     (group1, group2) => group1.name.localeCompare(group2.name),
@@ -88,7 +74,7 @@ export default function RegionManager() {
   }, [data]);
 
   if (loading || saving) return <Loading />;
-  if (error) return <Errored />;
+  if (error || saveError) return <Errored />;
 
   return (
     <>
@@ -114,8 +100,18 @@ export default function RegionManager() {
         ))}
       </List>
       <ButtonGroup>
-        <Button onClick={() => setOpenNewRegionModal(true)}>Add new region</Button>
-        <Button onClick={() => setOpenNewSubregionModal(true)}>Add new subregion</Button>
+        <Button
+          onClick={() => setOpenModalType('newRegion')}
+          disabled={saving}
+        >
+          Add new region
+        </Button>
+        <Button
+          onClick={() => setOpenModalType('newSubregion')}
+          disabled={saving}
+        >
+          Add new subregion
+        </Button>
       </ButtonGroup>
       <Modal
         size="fullscreen"
@@ -123,23 +119,23 @@ export default function RegionManager() {
           closeModal();
           setNewRegion(defaultRegion);
         }}
-        open={openNewRegionModal || openNewSubregionModal}
+        open={openModalType === 'newRegion' || openModalType === 'newSubregion'}
       >
         <Modal.Content>
           <Form>
-            {openNewSubregionModal && (
-            <Form.Dropdown
-              label="Parent region"
-              fluid
-              selection
-              value={newRegion.parent_group_id}
-              onChange={(e, { value }) => setNewRegion({ ...newRegion, parent_group_id: value })}
-              options={regions.map((region) => ({
-                key: region.id,
-                text: region.name,
-                value: region.id,
-              }))}
-            />
+            {openModalType === 'newSubregion' && (
+              <Form.Dropdown
+                label="Parent region"
+                fluid
+                selection
+                value={newRegion.parent_group_id}
+                onChange={(e, { value }) => setNewRegion({ ...newRegion, parent_group_id: value })}
+                options={regions.map((region) => ({
+                  key: region.id,
+                  text: region.name,
+                  value: region.id,
+                }))}
+              />
             )}
             <Form.Input
               label="Name"
@@ -155,9 +151,13 @@ export default function RegionManager() {
               Cancel
             </Form.Button>
             <Form.Button
+              disabled={
+                newRegion.name.length === 0
+                || (openModalType === 'newSubregion' && !newRegion.parent_group_id)
+              }
               onClick={() => {
                 closeModal();
-                save(userGroupsUrl(), newRegion, () => sync(), { method: 'POST' });
+                save(userGroupsUrl(), newRegion, () => sync(), { method: 'POST' }, setSaveError);
                 sync();
                 setNewRegion(defaultRegion);
               }}
