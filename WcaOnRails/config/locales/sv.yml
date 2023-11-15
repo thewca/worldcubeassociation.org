@@ -433,6 +433,8 @@ sv:
         delegate_status: Delegatstatus
         #original_hash: d219c68
         location: Plats
+        #original_hash: 0f21717
+        region: Region
         #original_hash: 730db33
         receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
         #original_hash: 57eaf24
@@ -829,8 +831,6 @@ sv:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -840,8 +840,6 @@ sv:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1262,11 +1260,6 @@ sv:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1597,6 +1590,8 @@ sv:
       teams: 'Teams, Kommittéer och Råd'
       #original_hash: 7981fb3
       education: Utbildningsresurser
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: Kontaktinformation
       #original_hash: 8e12c09
@@ -3754,6 +3749,8 @@ sv:
         competition: Kontakta arrangörerna av en specifik tävling (välj nedan)
         #original_hash: f0bffb7
         competitions_in_general: 'Tävlingar i allmänhet (arrangerande, tävlingsregler, etc.)'
+        #original_hash: aabfcf7
+        results_team: Kontakta WCA Results Team
         #original_hash: f6ffa78
         wca_id_or_profile: WCA-ID eller WCA-profil
         #original_hash: 0c77aee
