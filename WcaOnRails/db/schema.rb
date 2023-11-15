@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_03_103433) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_15_153211) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -903,6 +903,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_03_103433) do
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
+    t.string "email_to"
     t.index ["name"], name: "index_sanity_check_categories_on_name", unique: true
   end
 
