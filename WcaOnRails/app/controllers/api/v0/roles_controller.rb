@@ -21,7 +21,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     end
 
     user.current_teams.each do |team|
-      team_membership_details = user.team_membership_details?(team)
+      team_membership_details = user.team_membership_details(team)
       if team_membership_details.leader?
         status = 'leader'
       elsif team_membership_details.senior_member?

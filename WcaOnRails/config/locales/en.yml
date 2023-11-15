@@ -460,13 +460,15 @@ en:
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
       role_status:
-        trainee_delegate: "Trainee Delegate"
-        candidate_delegate: "Junior Delegate"
-        delegate: "Delegate"
-        senior_delegate: "Senior Delegate"
-        member: "Member"
-        senior_member: "Senior Member"
-        leader: "Leader"
+        delegate_regions:
+          trainee_delegate: "Trainee Delegate"
+          candidate_delegate: "Junior Delegate"
+          delegate: "Delegate"
+          senior_delegate: "Senior Delegate"
+        teams:
+          member: "Member"
+          senior_member: "Senior Member"
+          leader: "Leader"
     person:
       gender:
         m: "Male"

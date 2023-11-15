@@ -568,7 +568,7 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
-  def team_membership_details?(team)
+  def team_membership_details(team)
     self.current_team_members.find_by(team_id: team.id)
   end
 

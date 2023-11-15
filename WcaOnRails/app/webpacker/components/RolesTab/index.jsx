@@ -13,13 +13,13 @@ import RoleForm from './RoleForm';
 import I18n from '../../lib/i18n';
 
 // let i18n-tasks know the key is used
-// i18n-tasks-use t('enums.user.role_status.trainee_delegate')
-// i18n-tasks-use t('enums.user.role_status.candidate_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate')
-// i18n-tasks-use t('enums.user.role_status.senior_delegate')
-// i18n-tasks-use t('enums.user.role_status.member')
-// i18n-tasks-use t('enums.user.role_status.senior_member')
-// i18n-tasks-use t('enums.user.role_status.leader')
+// i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
+// i18n-tasks-use t('enums.user.role_status.delegate_regions.candidate_delegate')
+// i18n-tasks-use t('enums.user.role_status.delegate_regions.delegate')
+// i18n-tasks-use t('enums.user.role_status.delegate_regions.senior_delegate')
+// i18n-tasks-use t('enums.user.role_status.teams.member')
+// i18n-tasks-use t('enums.user.role_status.teams.senior_member')
+// i18n-tasks-use t('enums.user.role_status.teams.leader')
 
 export default function RolesTab({ userId, loggedInUserId }) {
   const roleListFetch = useLoadedData(roleListUrl(userId));
@@ -50,16 +50,8 @@ export default function RolesTab({ userId, loggedInUserId }) {
     [loggedInUserRolesFetch.data],
   );
 
-  const isDelegate = React.useMemo(
-    () => {
-      if (roleListFetch.data) {
-        return roleListFetch.data.activeRoles.some(
-          (role) => role.group.group_type === 'delegate_regions',
-        );
-      }
-      return false;
-    },
-    [roleListFetch.data],
+  const isDelegate = roleListFetch.data && roleListFetch.data.activeRoles.some(
+    (role) => role.group.group_type === 'delegate_regions',
   );
 
   const canEditRole = (role) => role.group.group_type === 'delegate_regions' && (
@@ -93,12 +85,12 @@ export default function RolesTab({ userId, loggedInUserId }) {
                   <List.Content>
                     {canEditTeamOfRole(role) && (
                       <List.Header as="a" href={`${teamUrl(role.group.id)}/edit`}>
-                        {`${I18n.t(`enums.user.role_status.${role.status}`)}, ${role.group.name}`}
+                        {`${I18n.t(`enums.user.role_status.teams.${role.status}`)}, ${role.group.name}`}
                       </List.Header>
                     )}
                     {!canEditTeamOfRole(role) && (
                       <List.Header>
-                        {`${I18n.t(`enums.user.role_status.${role.status}`)}, ${role.group.name}`}
+                        {`${I18n.t(`enums.user.role_status.delegate_regions.${role.status}`)}, ${role.group.name}`}
                       </List.Header>
                     )}
                     {!!role.start_date && (
