@@ -751,6 +751,23 @@ pt:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Sénior
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Delegado em Treino
+          #original_hash: 9b97968
+          candidate_delegate: Delegado Júnior
+          #original_hash: 12ab214
+          delegate: Delegado
+          #original_hash: d463c23
+          senior_delegate: Delegado Sénior
+        teams:
+          #original_hash: 6853c98
+          member: Membro
+          #original_hash: c366473
+          senior_member: Membro Sénior
+          #original_hash: e26c936
+          leader: Líder
     person:
       gender:
         #original_hash: 3f3a489
@@ -1956,8 +1973,6 @@ pt:
       preferences: Preferências
       #original_hash: 8be3c94
       password: Senha
-      #original_hash: 3fc6dbe
-      member_of: Membro de
       #original_hash: 42619dd
       preferred_events_desc: >-
         Selecionar os seus eventos favoritos agiliza o processo de inscrição em
