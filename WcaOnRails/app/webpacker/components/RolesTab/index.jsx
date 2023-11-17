@@ -22,15 +22,15 @@ import I18n from '../../lib/i18n';
 // i18n-tasks-use t('enums.user.role_status.teams.leader')
 
 export default function RolesTab({ userId, loggedInUserId }) {
-  const roleListFetch = useLoadedData(roleListUrl(userId));
-  const loggedInUserRolesFetch = useLoadedData(roleListUrl(loggedInUserId));
+  const roleListFetch = useLoadedData(roleListUrl({ userId }));
+  const loggedInUserRolesFetch = useLoadedData(roleListUrl({ userId: loggedInUserId }));
 
   const [open, setOpen] = React.useState(false);
 
   const activeNonHiddenRoles = React.useMemo(
     () => {
       if (roleListFetch.data) {
-        return roleListFetch.data.activeRoles.filter((role) => role.group.is_hidden === false);
+        return roleListFetch.data.filter((role) => role.group.is_hidden === false);
       }
       return [];
     },
@@ -40,7 +40,7 @@ export default function RolesTab({ userId, loggedInUserId }) {
   const loggedInUserRoles = React.useMemo(
     () => {
       if (loggedInUserRolesFetch.data) {
-        return loggedInUserRolesFetch.data.activeRoles.reduce((roleMap, role) => ({
+        return loggedInUserRolesFetch.data.reduce((roleMap, role) => ({
           ...roleMap,
           [role.group.id]: role,
         }), {});
@@ -50,16 +50,16 @@ export default function RolesTab({ userId, loggedInUserId }) {
     [loggedInUserRolesFetch.data],
   );
 
-  const isDelegate = roleListFetch.data && roleListFetch.data.activeRoles.some(
+  const isDelegate = roleListFetch.data && roleListFetch.data.some(
     (role) => role.group.group_type === 'delegate_regions',
   );
 
   const canEditRole = (role) => role.group.group_type === 'delegate_regions' && (
-    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.id]?.status === 'senior_delegate'
+    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.id]?.metadata.status === 'senior_delegate'
   );
 
   const canEditTeamOfRole = (role) => role.group.group_type !== 'delegate_regions' && (
-    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.name]?.status === 'leader'
+    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.name]?.metadata.status === 'leader'
   );
 
   if (roleListFetch.loading || loggedInUserRolesFetch.loading) return <Loading />;
@@ -85,12 +85,12 @@ export default function RolesTab({ userId, loggedInUserId }) {
                   <List.Content>
                     {canEditTeamOfRole(role) && (
                       <List.Header as="a" href={`${teamUrl(role.group.id)}/edit`}>
-                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.status}`)}, ${role.group.name}`}
+                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, ${role.group.name}`}
                       </List.Header>
                     )}
                     {!canEditTeamOfRole(role) && (
                       <List.Header>
-                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.status}`)}, ${role.group.name}`}
+                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, ${role.group.name}`}
                       </List.Header>
                     )}
                     {!!role.start_date && (

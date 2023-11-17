@@ -17,10 +17,14 @@ RSpec.describe Api::V0::RolesController do
       it 'fetches list of roles' do
         get :index, params: { userId: user_whose_delegate_status_changes.id }
 
-        expect(response.body).to eq({ activeRoles: [{
+        expect(response.body).to eq([{
+          end_date: nil,
           group: africa_region,
-          status: "candidate_delegate",
-        }] }.to_json)
+          user: user_whose_delegate_status_changes,
+          metadata: {
+            status: "candidate_delegate",
+          },
+        }].to_json)
       end
 
       it 'fetches role data' do

@@ -3,8 +3,8 @@
 class DelegatesController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_view_delegate_matters?) }, only: [:stats]
-  before_action -> { redirect_to root_url unless current_user_is_authorized? }, only: [:delegate_probation_data, :probations]
-  before_action :current_user_is_authorized_for_action!, only: [:delegate_probation_data, :start_delegate_probation, :end_delegate_probation]
+  before_action -> { redirect_to root_url unless current_user_is_authorized? }, only: [:probations]
+  before_action :current_user_is_authorized_for_action!, only: [:start_delegate_probation, :end_delegate_probation]
   private def current_user_is_authorized_for_action!
     unless current_user_is_authorized?
       render json: {}, status: 401
@@ -17,20 +17,6 @@ class DelegatesController < ApplicationController
 
   private def current_user_is_authorized?
     current_user.senior_delegate? || current_user.team_leader?(Team.wfc) || current_user.team_senior_member?(Team.wfc) || current_user.board_member?
-  end
-
-  def delegate_probation_data
-    respond_to do |format|
-      format.json do
-        @probation_roles = Role.where(group_id: UserGroup.where(group_type: "delegate_probation"))
-        user_ids = @probation_roles.pluck(:user_id)
-        @probation_users = User.find(user_ids).index_by(&:id)
-        render json: {
-          probationUsers: @probation_users,
-          probationRoles: @probation_roles,
-        }
-      end
-    end
   end
 
   def start_delegate_probation

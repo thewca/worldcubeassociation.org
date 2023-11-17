@@ -88,15 +88,16 @@ export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.
 
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
 
-export const delegateProbationDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_probation_data_path(format: "json")) %>`;
-
 export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_delegate_probation_path) %>`;
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-// dummyRoleId is used temporarily because delegates is yet to get a role id
+export const roleListUrl = (params) => {
+  const searchParams = new URLSearchParams(params);
+  return `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?${searchParams.toString()}`;
+}
 
-export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}`;
+// dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId?userId=${userId}&isActiveRole=${isActiveRole}`;
 export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId`
 

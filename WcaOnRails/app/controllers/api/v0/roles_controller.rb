@@ -8,53 +8,95 @@ class Api::V0::RolesController < Api::V0::ApiController
     end
   end
 
+  # Returns a list of roles based on the request parameters.
   def index
-    user_id = params.require(:userId)
-    user = User.find(user_id)
-    active_roles = []
+    # Initial list will be fetched based on one of userId, groupId, or groupType.
+    if params[:userId].present?
+      user_id = params.require(:userId)
 
-    if user.delegate_status.present?
-      active_roles << {
-        group: user.region,
-        status: user.delegate_status,
-      }
-    end
+      # Since most of the roles are yet to be migrated to the new system, we'll fetch this list in a
+      # bit of a complicated way.
+      user = User.find(user_id)
+      roles = []
 
-    user.current_teams.each do |team|
-      team_membership_details = user.team_membership_details(team)
-      if team_membership_details.leader?
-        status = 'leader'
-      elsif team_membership_details.senior_member?
-        status = 'senior_member'
-      else
-        status = 'member'
+      if user.delegate_status.present?
+        roles << user.delegate_role
       end
-      active_roles << {
-        group: {
-          id: team.id,
-          name: team.name,
-          group_type: UserGroup.group_types[:teams],
-          is_hidden: team.hidden,
-        },
-        status: status,
-        start_date: team_membership_details.start_date,
-      }
+
+      roles.concat(user.team_roles)
+
+      if user.admin? || user.board_member?
+        roles << {
+          group: {
+            id: 'admin',
+            name: 'Admin Group',
+            group_type: UserGroup.group_types[:teams],
+            is_hidden: false,
+            is_active: true,
+          },
+          user: user,
+          metadata: {
+            status: 'member',
+          },
+        }
+      end
+
+    elsif params[:groupId].present?
+      group_id = params.require(:groupId)
+      roles = Role.where(group_id: group_id)
+
+    elsif params[:groupType].present?
+      group_type = params.require(:groupType)
+      if group_type == UserGroup.group_types[:delegate_regions]
+        roles = []
+        # Temporary hack to support the old delegate structure, will be removed once all roles are
+        # migrated to the new system.
+        User.where.not(delegate_status: nil).find_each do |delegate|
+          roles << delegate.delegate_role
+        end
+      else
+        group_ids = UserGroup.where(group_type: group_type).pluck(:id)
+        roles = Role.where(group_id: group_ids)
+      end
+
+    else
+      raise "Must provide userId, groupId, or groupType"
     end
 
-    if user.admin? || user.board_member?
-      active_roles << {
-        group: {
-          id: 'admin',
-          name: 'Admin Group',
-          is_hidden: true,
-        },
-        status: 'member',
-      }
+    # Filter the list based on the permissions of the current user.
+    roles = roles.select do |role|
+      is_actual_role = role.is_a?(Role) # Eventually, all roles will be migrated to the new system,
+      # till then some roles will actually be hashes.
+      group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
+      # hence, to reduce the number of lines to be edited in future, will be using ternary operator
+      # to access the parameters of group.
+      if is_actual_role ? group.is_hidden : group[:is_hidden]
+        if group.group_type == UserGroup.group_types[:delegate_probation]
+          current_user.can_manage_delegate_probation?
+        else
+          false # Don't accept any other hidden groups.
+        end
+      else
+        true # Accept all non-hidden groups.
+      end
     end
 
-    render json: {
-      activeRoles: active_roles,
-    }
+    # Filter the list based on the other parameters.
+    if params[:isActive].present?
+      is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:isActive))
+      roles = roles.select { |role| role.is_active == is_active }
+    end
+
+    if params[:status].present?
+      status = params.require(:status)
+      roles = roles.select do |role|
+        is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
+        status = is_actual_role ? role.metadata.status : role[:metadata][:status]
+        status == params[:status]
+      end
+    end
+
+    render json: roles
   end
 
   def show
