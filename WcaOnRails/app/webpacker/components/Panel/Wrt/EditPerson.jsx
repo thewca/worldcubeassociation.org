@@ -8,6 +8,7 @@ import { adminUpdatePersonUrl } from '../../../lib/requests/routes.js.erb';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import Loading from '../../Requests/Loading';
+import I18n from '../../../lib/i18n';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const description = `
@@ -25,6 +26,11 @@ const description = `
 `;
 
 const dateFormat = 'YYYY-MM-DD';
+
+// let i18n-tasks know the key is used
+// i18n-tasks-use t('enums.person.gender.m')
+// i18n-tasks-use t('enums.person.gender.f')
+// i18n-tasks-use t('enums.person.gender.o')
 
 function EditPerson({ countryList, genderList }) {
   const [person, setPerson] = React.useState();
@@ -44,11 +50,14 @@ function EditPerson({ countryList, genderList }) {
         gender: person.item.gender,
         dob: person.item.dob,
       };
-      setOriginalUserDetails({ ...userDetails });
-      setEditedUserDetails({ ...userDetails });
+      setOriginalUserDetails(userDetails);
+      setEditedUserDetails(userDetails);
       setIncorrectClaimCount(person.item.incorrect_wca_id_claim_count);
+      setMessage({});
     } else {
+      setOriginalUserDetails(null);
       setEditedUserDetails(null);
+      setIncorrectClaimCount(0);
     }
   }, [person]);
 
@@ -61,10 +70,8 @@ function EditPerson({ countryList, genderList }) {
       person: editedUserDetails,
       method,
     }, (data) => {
-      setEditedUserDetails(null);
       setMessage(data);
       setPerson(null);
-      setIncorrectClaimCount(0);
     });
   };
 
@@ -98,7 +105,7 @@ function EditPerson({ countryList, genderList }) {
       />
       <Form>
         <Form.Input
-          label="Name"
+          label={I18n.t('activerecord.attributes.user.name')}
           name="name"
           disabled={!editedUserDetails}
           value={editedUserDetails?.name || ''}
@@ -106,22 +113,22 @@ function EditPerson({ countryList, genderList }) {
         />
         <Form.Select
           options={countryList.map((c) => ({ text: c.name, value: c.iso2 }))}
-          label="Representing"
+          label={I18n.t('activerecord.attributes.user.country_iso2')}
           name="representing"
           disabled={!editedUserDetails}
           value={editedUserDetails?.representing || ''}
           onChange={handleFormChange}
         />
         <Form.Select
-          options={genderList.map((g) => ({ text: g, value: g }))}
-          label="Gender"
+          options={genderList.map((g) => ({ text: I18n.t(`enums.person.gender.${g}`), value: g }))}
+          label={I18n.t('activerecord.attributes.user.gender')}
           name="gender"
           disabled={!editedUserDetails}
           value={editedUserDetails?.gender || ''}
           onChange={handleFormChange}
         />
         <Form.Field
-          label="Birthdate"
+          label={I18n.t('activerecord.attributes.user.dob')}
           name="dob"
           control={DatePicker}
           showYearDropdown

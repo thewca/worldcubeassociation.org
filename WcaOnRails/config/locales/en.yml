@@ -632,14 +632,8 @@ en:
         content: ""
       #context: for a person
       person:
-        dob: "Date of birth should have the format YYYY-MM-DD."
-        countryId: ""
-        gender: ""
-        name: ""
         person1_wca_id: ""
         person2_wca_id: ""
-        wca_id: ""
-        incorrect_wca_id_claim_count: ""
         person_wca_id: ""
       poll:
         comment: ""
