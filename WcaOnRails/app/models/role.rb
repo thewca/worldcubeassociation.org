@@ -5,9 +5,13 @@ class Role < ApplicationRecord
   belongs_to :group, class_name: "UserGroup"
   belongs_to :metadata, polymorphic: true, optional: true
 
-  def group_type
-    self.group.group_type
-  end
+  delegate :group_type, to: :group
+
+  enum :team_status, {
+    leader: "leader",
+    senior_member: "senior_member",
+    member: "member",
+  }
 
   def is_active
     self.end_date.nil? || self.end_date >= Date.today

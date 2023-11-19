@@ -6,7 +6,7 @@ import {
   List,
 } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import { roleListUrl, teamUrl } from '../../lib/requests/routes.js.erb';
+import { rolesOfUser, teamUrl } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
@@ -22,8 +22,8 @@ import I18n from '../../lib/i18n';
 // i18n-tasks-use t('enums.user.role_status.teams.leader')
 
 export default function RolesTab({ userId, loggedInUserId }) {
-  const roleListFetch = useLoadedData(roleListUrl({ userId }));
-  const loggedInUserRolesFetch = useLoadedData(roleListUrl({ userId: loggedInUserId }));
+  const roleListFetch = useLoadedData(rolesOfUser(userId));
+  const loggedInUserRolesFetch = useLoadedData(rolesOfUser(loggedInUserId));
 
   const [open, setOpen] = React.useState(false);
 

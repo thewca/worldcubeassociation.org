@@ -1280,11 +1280,11 @@ class User < ApplicationRecord
     self.current_teams.each do |team|
       team_membership_details = self.team_membership_details(team)
       if team_membership_details.leader?
-        status = 'leader'
+        status = Role.team_statuses[:leader]
       elsif team_membership_details.senior_member?
-        status = 'senior_member'
+        status = Role.team_statuses[:senior_member]
       else
-        status = 'member'
+        status = Role.team_statuses[:member]
       end
       roles << {
         start_date: team_membership_details.start_date,

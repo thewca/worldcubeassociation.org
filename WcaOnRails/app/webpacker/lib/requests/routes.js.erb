@@ -92,14 +92,25 @@ export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-export const roleListUrl = (params) => {
+export const rolesOfUser = (userId, params) => {
   const searchParams = new URLSearchParams(params);
-  return `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?${searchParams.toString()}`;
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${searchParams.toString()}`;
 }
 
+export const rolesOfGroup = (groupId, params) => {
+  const searchParams = new URLSearchParams(params);
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${searchParams.toString()}`;
+}
+
+
+export const rolesOfGroupType = (groupType, params) => {
+  const searchParams = new URLSearchParams(params);
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${searchParams.toString()}`;
+};
+
 // dummyRoleId is used temporarily because delegates is yet to get a role id
-export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId?userId=${userId}&isActiveRole=${isActiveRole}`;
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId`
+export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>`
 
 export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_panel_wfc_path) %>`;
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;

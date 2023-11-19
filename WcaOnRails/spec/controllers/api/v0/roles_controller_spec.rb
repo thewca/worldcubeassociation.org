@@ -14,8 +14,8 @@ RSpec.describe Api::V0::RolesController do
         allow(controller).to receive(:current_user) { user_who_makes_the_change }
       end
 
-      it 'fetches list of roles' do
-        get :index, params: { userId: user_whose_delegate_status_changes.id }
+      it 'fetches list of roles of a user' do
+        get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq([{
           end_date: nil,
