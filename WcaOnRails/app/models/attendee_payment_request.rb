@@ -5,4 +5,9 @@ class AttendeePaymentRequest < ApplicationRecord
   def competition_and_user_id
     self.attendee_id.split("-")
   end
+
+  def competition
+    competition_id, = competition_and_user_id
+    Competition.find(competition_id)
+  end
 end

@@ -524,13 +524,12 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
-        end
-        if stored_intent.holder.is_a? AttendeePaymentRequest
+        elsif stored_intent.holder.is_a? AttendeePaymentRequest
           ruby_money = charge_transaction.money_amount
           begin
             update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
-          rescue Faraday::Error
-            logger.error "Couldn't update Microservice"
+          rescue Faraday::Error => e
+            logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
             return head :internal_server_error
           end
         end
@@ -543,6 +542,7 @@ class RegistrationsController < ApplicationController
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
+
     head :ok
   end
 

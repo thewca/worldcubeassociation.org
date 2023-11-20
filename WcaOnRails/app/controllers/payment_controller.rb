@@ -16,9 +16,8 @@ class PaymentController < ApplicationController
   def payment_finish
     attendee_id = params.require(:attendee_id)
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    return redirect_to Microservices::Registrations.competition_register_path(competition, "not_found") unless payment_request.present?
-    competition_id, = payment_request.competition_and_user_id
-    competition = Competition.find(competition_id)
+    return redirect_to Microservices::Registrations.competition_register_path(competition, "payment_not_found") unless payment_request.present?
+    competition = payment_request.competition
 
     # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
     intent_id = params[:payment_intent]
@@ -32,12 +31,15 @@ class PaymentController < ApplicationController
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
     stripe_intent = stored_intent.retrieve_intent
 
-    return redirect_to Microservices::Registrations.competition_register_path(competition, "not_found") unless stripe_intent.present?
+    return redirect_to Microservices::Registrations.competition_register_path(competition, "intent_not_found") unless stripe_intent.present?
 
     stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
       ruby_money = charge.money_amount
-      Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "registration_down")
+      begin
+        Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+      rescue Faraday::Error
+        return redirect_to Microservices::Registrations.competition_register_path(competition_id, "registration_unreachable")
+      end
     end
 
     redirect_to Microservices::Registrations.competition_register_path(competition_id, stored_transaction.status)
@@ -47,7 +49,14 @@ class PaymentController < ApplicationController
     attendee_id = params.require(:attendee_id)
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
     transactions = StripePaymentIntent.where(holder: payment_request)
-    render json: { charges: transactions.map { |t| { payment_id: t.stripe_transaction.id, amount: t.parameters["amount"] } } }, status: :ok
+
+    charges = transactions.map { |t|
+      {
+        payment_id: t.stripe_transaction.id,
+        amount: t.parameters["amount"],
+      }
+    }
+    render json: { charges: charges }, status: :ok
   end
 
   def payment_refund
@@ -55,21 +64,18 @@ class PaymentController < ApplicationController
     attendee_id = params.require(:attendee_id)
 
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    competition_id, = payment_request.competition_and_user_id
-    competition = Competition.find(competition_id)
+    competition = payment_request.competition
 
-    unless competition.using_stripe_payments?
-      return render json: { error: "no_stripe" }
-    end
+    return render json: { error: "no_stripe" } unless competition.using_stripe_payments?
 
     charge = StripeTransaction.find(payment_id)
+
+    return render json: { error: "invalid_transaction" } unless charge.present?
 
     refund_amount_param = params.require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
-    if refund_amount < 0
-      return render json: { error: "refund_zero" }
-    end
+    return render json: { error: "refund_zero" } if refund_amount < 0
 
     currency_iso = competition.currency_code
     stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
@@ -91,10 +97,8 @@ class PaymentController < ApplicationController
 
     begin
       update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
-    rescue Faraday::Error => e
-      puts e.message
-      puts e.backtrace
-      return render json: { error: "registration_down" }
+    rescue Faraday::Error
+      return render json: { error: "registration_unreachable" }
     end
 
     render json: { status: "ok" }
