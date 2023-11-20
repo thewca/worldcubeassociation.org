@@ -66,27 +66,6 @@ RSpec.describe TeamsController do
       get :edit, params: { id: Team.banned.id }
       expect(response).to render_template :edit
     end
-
-    it "senior delegates can manage the probation team, despite not being a member of the probation team" do
-      sign_in FactoryBot.create :senior_delegate
-
-      get :edit, params: { id: Team.probation.id }
-      expect(response).to render_template :edit
-    end
-
-    it "leader of WFC can manage the probation team, despite not being a member of the probation team" do
-      sign_in FactoryBot.create :user, :wfc_member, team_leader: true
-
-      get :edit, params: { id: Team.probation.id }
-      expect(response).to render_template :edit
-    end
-
-    it "senior members of WFC can manage the probation team, despite not being a member of the probation team" do
-      sign_in FactoryBot.create :user, :wfc_member, team_senior_member: true
-
-      get :edit, params: { id: Team.probation.id }
-      expect(response).to render_template :edit
-    end
   end
 
   describe 'POST #update' do
@@ -197,42 +176,6 @@ RSpec.describe TeamsController do
 
       it 'can add a member' do
         team = Team.banned
-        member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
-        expect(response).to redirect_to edit_team_path(team)
-        expect(team.reload.team_members.first.user.id).to eq member.id
-      end
-    end
-
-    context "senior delegates managing the probation team, despite not being a member of the probation team" do
-      sign_in { FactoryBot.create :senior_delegate }
-
-      it 'can add a member' do
-        team = Team.probation
-        member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
-        expect(response).to redirect_to edit_team_path(team)
-        expect(team.reload.team_members.first.user.id).to eq member.id
-      end
-    end
-
-    context "WFC leader managing the probation team, despite not being a member of the probation team" do
-      sign_in { FactoryBot.create :user, :wfc_member, team_leader: true }
-
-      it 'can add a member' do
-        team = Team.probation
-        member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
-        expect(response).to redirect_to edit_team_path(team)
-        expect(team.reload.team_members.first.user.id).to eq member.id
-      end
-    end
-
-    context "WFC senior member managing the probation team, despite not being a member of the probation team" do
-      sign_in { FactoryBot.create :user, :wfc_member, team_senior_member: true }
-
-      it 'can add a member' do
-        team = Team.probation
         member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)

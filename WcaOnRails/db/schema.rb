@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_15_153211) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -872,6 +872,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
   end
 
+  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.bigint "group_id", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.bigint "metadata_id"
+    t.string "metadata_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_roles_on_group_id"
+    t.index ["user_id"], name: "index_roles_on_user_id"
+  end
+
   create_table "rounds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "competition_event_id", null: false
     t.string "format_id", limit: 255, null: false
@@ -890,6 +903,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
+    t.string "email_to"
     t.index ["name"], name: "index_sanity_check_categories_on_name", unique: true
   end
 
@@ -1026,6 +1040,19 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
+  create_table "user_groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "group_type", null: false
+    t.bigint "parent_group_id"
+    t.boolean "is_active", null: false
+    t.boolean "is_hidden", null: false
+    t.bigint "metadata_id"
+    t.string "metadata_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_group_id"], name: "index_user_groups_on_parent_group_id"
+  end
+
   create_table "user_preferred_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id"
     t.string "event_id"
@@ -1051,6 +1078,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.datetime "updated_at", precision: nil
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
+    t.bigint "region_id"
     t.integer "senior_delegate_id"
     t.string "location", limit: 255
     t.string "wca_id"
@@ -1083,6 +1111,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.string "otp_secret"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
@@ -1122,10 +1151,14 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "roles", "user_groups", column: "group_id"
+  add_foreign_key "roles", "users"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"
   add_foreign_key "stripe_payment_intents", "users"
   add_foreign_key "stripe_transactions", "stripe_transactions", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
+  add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
+  add_foreign_key "users", "user_groups", column: "region_id"
 end

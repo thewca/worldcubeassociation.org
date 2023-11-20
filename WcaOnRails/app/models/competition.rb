@@ -379,6 +379,10 @@ class Competition < ApplicationRecord
     competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
 
+  def number_of_bookmarks
+    bookmarked_users.count
+  end
+
   def country
     Country.c_find(self.countryId)
   end
@@ -1911,6 +1915,11 @@ class Competition < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
+    # The intent behind this is to have a "good" default setup for serialization.
+    # We also want the caller to be able to be picky about the attributes included
+    # in the json (eg: specify an empty 'methods' to remove these attributes,
+    # or set a custom array in 'only' without getting the default ones), therefore
+    # we only use 'merge' here, which doesn't "deeply" merge into the default options.
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     # Fallback to the default 'serializable_hash' method, but always include our
     # custom 'class' attribute.
@@ -1987,5 +1996,10 @@ class Competition < ApplicationRecord
       r.event.id == event_id && r.round_type_id == round_type_id &&
         (format_id.nil? || format_id == r.format_id)
     end
+  end
+
+  def dues_per_competitor_in_usd
+    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
+    dues.present? ? dues : 0
   end
 end

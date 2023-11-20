@@ -1,3 +1,7 @@
+<%# i18n-tasks-use t('enums.user.delegate_status.trainee_delegate') %>
+<%# i18n-tasks-use t('enums.user.delegate_status.candidate_delegate') %>
+<%# i18n-tasks-use t('enums.user.delegate_status.delegate') %>
+<%# i18n-tasks-use t('enums.user.delegate_status.senior_delegate') %>
 <h1>
   <% old_status = User.delegate_statuses_i18n[@previous_delegate_status] || 'Registered Speedcuber' %>
   <% new_status = User.delegate_statuses_i18n[@new_delegate_status] || 'Registered Speedcuber' %>

@@ -10,13 +10,64 @@
     </p>
 
     <pre>
-      <code><%= @token %></code>
+      <code id="token-content"></code>
     </pre>
 
-    <label class="btn btn-primary" onclick="navigator.clipboard.writeText('<%= @token %>');">
+    <div class="form-group">
+      <label class="control-label" for="dbs">Choose a database:</label>
+
+      <select class="form-control" id="dbs" name="wrt-token">
+        <% @db_endpoints.each do |key, url| %>
+          <% db_token = @db_tokens[key] %>
+          <% db_server_index = @db_server_indices[key] %>
+
+          <option value="<%= key %>" data-wrt-token="<%= db_token %>" data-wrt-server-index="<%= db_server_index %>"><%= url %></option>
+        <% end %>
+      </select>
+    </div>
+
+    <br />
+
+    <label id="clipboard" class="btn btn-primary">
       Copy to clipboard
     </label>
 
-    <%= link_to t('layouts.navigation.results_database'), '/results/database/', class: 'btn btn-primary', target: '_blank' %>
+    <%= link_to t('layouts.navigation.results_database'), '/results/database/', id: 'db-link', class: 'btn btn-primary', target: '_blank' %>
+
+    <script>
+      const databaseDropdown = document.getElementById("dbs");
+
+      databaseDropdown.addEventListener("change", function (event) {
+        updateDbTokenAndLink(event.target);
+      });
+
+      function updateDbTokenAndLink(selectEl) {
+        const selectedOption = selectEl.options[selectEl.selectedIndex];
+        const selectedToken = selectedOption.dataset.wrtToken;
+
+        const tokenBox = document.getElementById('token-content');
+        tokenBox.innerText = selectedToken;
+
+        const dbLinkEl = document.getElementById('db-link');
+        const dbLinkUrl = new URL(dbLinkEl.href);
+
+        const uiServerIndex = selectedOption.dataset.wrtServerIndex;
+        dbLinkUrl.searchParams.set('server', uiServerIndex);
+
+        dbLinkEl.href = dbLinkUrl.toString();
+      }
+
+      document.getElementById("clipboard").addEventListener("click", copySelectedToClipboard);
+
+      function copySelectedToClipboard() {
+        const tokenBox = document.getElementById('token-content');
+        navigator.clipboard.writeText(tokenBox.textContent);
+      }
+
+      document.addEventListener("DOMContentLoaded", function() {
+        // trigger refresh with default data upon page load
+        updateDbTokenAndLink(databaseDropdown);
+      });
+    </script>
   <% end %>
 </div>
