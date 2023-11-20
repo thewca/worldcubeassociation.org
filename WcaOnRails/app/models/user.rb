@@ -43,6 +43,10 @@ class User < ApplicationRecord
     end
   }
 
+  TEAM_STATUS_LEADER = "leader"
+  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
+  TEAM_STATUS_MEMBER = "member"
+
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
@@ -1280,11 +1284,11 @@ class User < ApplicationRecord
     self.current_teams.each do |team|
       team_membership_details = self.team_membership_details(team)
       if team_membership_details.leader?
-        status = Role.team_statuses[:leader]
+        status = TEAM_STATUS_LEADER
       elsif team_membership_details.senior_member?
-        status = Role.team_statuses[:senior_member]
+        status = TEAM_STATUS_SENIOR_MEMBER
       else
-        status = Role.team_statuses[:member]
+        status = TEAM_STATUS_MEMBER
       end
       roles << {
         start_date: team_membership_details.start_date,

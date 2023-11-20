@@ -28,25 +28,6 @@ class Api::V0::RolesController < Api::V0::ApiController
     end
   end
 
-  # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles, params)
-    if params[:isActive].present?
-      is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:isActive))
-      roles = roles.select { |role| role.is_active == is_active }
-    end
-
-    if params[:status].present?
-      status = params.require(:status)
-      roles = roles.select do |role|
-        is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
-        status = is_actual_role ? role.metadata.status : role[:metadata][:status]
-        status == params[:status]
-      end
-    end
-
-    roles
-  end
-
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def user_roles_not_yet_in_new_system(user_id)
     user = User.find(user_id)
@@ -90,9 +71,6 @@ class Api::V0::RolesController < Api::V0::ApiController
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
 
-    # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(roles, params.except(:user_id))
-
     render json: roles
   end
 
@@ -103,9 +81,6 @@ class Api::V0::RolesController < Api::V0::ApiController
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
-
-    # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(roles, params.except(:group_id))
 
     render json: roles
   end
@@ -124,9 +99,6 @@ class Api::V0::RolesController < Api::V0::ApiController
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
-
-    # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(roles, params.except(:group_type))
 
     render json: roles
   end

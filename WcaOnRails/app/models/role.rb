@@ -7,12 +7,6 @@ class Role < ApplicationRecord
 
   delegate :group_type, to: :group
 
-  enum :team_status, {
-    leader: "leader",
-    senior_member: "senior_member",
-    member: "member",
-  }
-
   def is_active
     self.end_date.nil? || self.end_date >= Date.today
   end

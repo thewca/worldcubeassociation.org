@@ -92,21 +92,11 @@ export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-export const rolesOfUser = (userId, params) => {
-  const searchParams = new URLSearchParams(params);
-  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${searchParams.toString()}`;
-}
+export const rolesOfUser = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>`;
 
-export const rolesOfGroup = (groupId, params) => {
-  const searchParams = new URLSearchParams(params);
-  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${searchParams.toString()}`;
-}
+export const rolesOfGroup = (groupId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>`;
 
-
-export const rolesOfGroupType = (groupType, params) => {
-  const searchParams = new URLSearchParams(params);
-  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${searchParams.toString()}`;
-};
+export const rolesOfGroupType = (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>`;
 
 // dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
