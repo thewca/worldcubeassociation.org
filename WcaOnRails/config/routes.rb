@@ -169,7 +169,6 @@ Rails.application.routes.draw do
 
   get 'admin/delegates' => 'delegates#stats', as: :delegates_stats
   get 'admin/delegate_probations' => 'delegates#probations', as: :delegate_probations
-  get 'admin/delegate_probation_data' => 'delegates#delegate_probation_data', as: :delegate_probation_data
   post 'admin/start_delegate_probation' => 'delegates#start_delegate_probation', as: :start_delegate_probation
   post 'admin/end_delegate_probation' => 'delegates#end_delegate_probation', as: :end_delegate_probation
 
@@ -328,7 +327,12 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      resources :roles, only: [:index, :show, :update, :destroy]
+      resources :roles, only: [:show, :update, :destroy]
+      scope 'roles' do
+        get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
+        get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
+        get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      end
     end
   end
 end
