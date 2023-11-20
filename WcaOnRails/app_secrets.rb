@@ -82,7 +82,7 @@ AppSecrets = SuperConfig.new do
     mandatory :ACTIVERECORD_KEY_DERIVATION_SALT, :string
     mandatory :SECRET_KEY_BASE, :string
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
-    mandatroy :JWT_KEY, :string
+    mandatory :JWT_KEY, :string
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
