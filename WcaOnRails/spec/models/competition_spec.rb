@@ -333,7 +333,19 @@ RSpec.describe Competition do
     )
   end
 
-  it "requires the waiting list deadline to be before the competition start" do
+  it "allows the waiting list deadline to be during the competition" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now + 1.day,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   waiting_list_deadline_date: 1.months.from_now
+    expect(competition).to be_valid
+  end
+
+  it "requires the waiting list deadline to be before the competition ends" do
     competition = FactoryBot.build :competition,
                                    name: "Foo Test 2015",
                                    starts: 1.month.from_now,
@@ -343,7 +355,7 @@ RSpec.describe Competition do
                                    use_wca_registration: true,
                                    waiting_list_deadline_date: 2.months.from_now
     expect(competition).to be_invalid_with_errors(
-      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_after_start')],
+      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_after_end')],
     )
   end
 
