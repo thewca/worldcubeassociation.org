@@ -8,7 +8,7 @@ class Api::V0::UsersController < Api::V0::ApiController
         show_user(current_user, show_rankings: true)
       end
     else
-      render status: :unauthorized, json: { error: "Please log in" }
+      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end
   end
 
@@ -34,7 +34,15 @@ class Api::V0::UsersController < Api::V0::ApiController
         render json: current_user.permissions
       end
     else
-      render status: :unauthorized, json: { error: "Please log in" }
+      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
+    end
+  end
+  
+  def token
+    if current_user
+      render json: { status: "ok" }
+    else
+      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end
   end
 

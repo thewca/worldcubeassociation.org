@@ -2576,6 +2576,7 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
+    login_message: 'Please log in'
   merch:
       title: 'WCA Merchandise'
       paragraphs:
