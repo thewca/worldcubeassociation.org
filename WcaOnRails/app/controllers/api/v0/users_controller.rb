@@ -5,7 +5,7 @@ class Api::V0::UsersController < Api::V0::ApiController
     if current_user
       render json: { status: "ok" }
     else
-      render status: :unauthorized, json: { error: "Please log in" }
+      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end
   end
 end
