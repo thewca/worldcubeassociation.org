@@ -50,6 +50,7 @@ gem 'wca_i18n'
 gem 'cookies_eu'
 gem 'superconfig'
 gem 'eu_central_bank'
+gem 'devise-jwt'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -102,7 +103,6 @@ gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
-gem 'deep_merge', require: 'deep_merge/rails_compat'
 
 group :development, :test do
   gem 'spring'

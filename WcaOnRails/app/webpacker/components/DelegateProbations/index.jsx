@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Input, Table } from 'semantic-ui-react';
+import { Button, Confirm, Table } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -9,7 +9,7 @@ import {
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import useInputState from '../../lib/hooks/useInputState';
+import WcaSearch from '../SearchWidget/WcaSearch';
 import Errored from '../Requests/Errored';
 
 const dateFormat = 'YYYY-MM-DD';
@@ -17,51 +17,71 @@ const dateFormat = 'YYYY-MM-DD';
 function ProbationListTable({
   roleList, userMap, isActive, save, sync,
 }) {
-  return (
-    <Table>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell width={5}>User</Table.HeaderCell>
-          <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
-          <Table.HeaderCell width={2}>{isActive ? 'Action' : 'End date'}</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
+  const [confirmOpen, setConfirmOpen] = React.useState(false);
+  const [endProbationParams, setEndProbationParams] = React.useState();
 
-      <Table.Body>
-        {roleList.map((probationRole) => (
-          <Table.Row key={probationRole.id}>
-            <Table.Cell>
-              <UserBadge
-                user={userMap[probationRole.user_id]}
-                hideBorder
-                leftAlign
-              />
-            </Table.Cell>
-            <Table.Cell>
-              {probationRole.start_date}
-            </Table.Cell>
-            <Table.Cell>
-              {
+  const endProbation = () => {
+    save(endDelegateProbationUrl, endProbationParams, sync, { method: 'POST' });
+    setConfirmOpen(false);
+    setEndProbationParams(null);
+  };
+
+  return (
+    <>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell width={5}>User</Table.HeaderCell>
+            <Table.HeaderCell width={2}>Start date</Table.HeaderCell>
+            <Table.HeaderCell width={2}>End date</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {roleList.map((probationRole) => (
+            <Table.Row key={probationRole.id}>
+              <Table.Cell>
+                <UserBadge
+                  user={userMap[probationRole.user_id]}
+                  hideBorder
+                  leftAlign
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {probationRole.start_date}
+              </Table.Cell>
+              <Table.Cell>
+                {
                 isActive ? (
                   <DatePicker
-                    onChange={(date) => save(endDelegateProbationUrl, {
-                      probationRoleId: probationRole.id,
-                      endDate: moment(date).format(dateFormat),
-                    }, sync, { method: 'POST' })}
+                    onChange={(date) => {
+                      setEndProbationParams({
+                        probationRoleId: probationRole.id,
+                        endDate: moment(date).format(dateFormat),
+                      });
+                      setConfirmOpen(true);
+                    }}
                     selected={probationRole.end_date ? new Date(probationRole.end_date) : null}
                   />
                 ) : probationRole.end_date
               }
-            </Table.Cell>
-          </Table.Row>
-        ))}
-      </Table.Body>
-    </Table>
+              </Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
+      <Confirm
+        open={confirmOpen}
+        onCancel={() => setConfirmOpen(false)}
+        onConfirm={endProbation}
+        content="Are you sure you want to change end date of this probation?"
+      />
+    </>
   );
 }
 
 export default function DelegateProbations() {
-  const [wcaId, setWcaId] = useInputState('');
+  const [user, setUser] = React.useState();
   const {
     data, loading, error, sync,
   } = useLoadedData(delegateProbationDataUrl);
@@ -75,9 +95,19 @@ export default function DelegateProbations() {
   return (
     <>
       <h1>Delegate Probations</h1>
-      <Input value={wcaId} onChange={setWcaId} placeholder="Enter WCA ID" />
+      <WcaSearch
+        selectedValue={user}
+        setSelectedValue={setUser}
+        multiple={false}
+        model="user"
+        params={{ only_staff_delegates: true }}
+      />
       <Button
-        onClick={() => save(startDelegateProbationUrl, { wcaId }, sync, { method: 'POST' })}
+        onClick={() => save(startDelegateProbationUrl, { userId: user.id }, () => {
+          sync();
+          setUser(null);
+        }, { method: 'POST' })}
+        disabled={!user}
       >
         Start Probation
       </Button>

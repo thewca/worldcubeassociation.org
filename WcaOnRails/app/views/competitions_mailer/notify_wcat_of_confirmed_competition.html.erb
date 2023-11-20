@@ -23,7 +23,7 @@
 <% end %>
 
 <% @competition.delegates.map do |delegate| %>
-  <% if Team.probation.current_members.map { |member| member.user_id }.include?(delegate.id) %>
+  <% if delegate.is_delegate_in_probation %>
     <p class="alert">
       <%= delegate.name %> is currently on probation. Please check the <%= link_to "Delegates on Probation spreadsheet", "https://docs.google.com/spreadsheets/d/1ZU1lk0niGn-vjmbiDkoROU8qjmdHkNebZ2GCFHm6vvA/edit#gid=1887522006" %> for more details.
       You can view the Delegate's currently announced competitions <%= link_to "here", competitions_url(delegate: delegate.id) %>.

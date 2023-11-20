@@ -78,6 +78,11 @@ class User < ApplicationRecord
   devise :two_factor_backupable,
          otp_backup_code_length: BACKUP_CODES_LENGTH,
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
+  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+
+  def jwt_payload
+    { 'user_id' => id }
+  end
 
   # Backup OTP are stored as a string array in the db
   serialize :otp_backup_codes
@@ -568,6 +573,10 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
+  def team_membership_details(team)
+    self.current_team_members.find_by(team_id: team.id)
+  end
+
   def team_senior_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
   end
@@ -684,9 +693,7 @@ class User < ApplicationRecord
     can_manage_teams? ||
       team_leader?(team) ||
       # The leader of the WDC can edit the banned competitors list
-      (team == Team.banned && team_leader?(Team.wdc)) ||
-      # Senior Delegates and WFC Leader and Senior Members can edit Delegates on probation
-      (team == Team.probation && (senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)))
+      (team == Team.banned && team_leader?(Team.wdc))
   end
 
   def can_view_banned_competitors?
@@ -1248,5 +1255,13 @@ class User < ApplicationRecord
   def senior_or_self
     return nil unless self.delegate_status.present?
     self.delegate_status == "senior_delegate" ? self : self.senior_delegate
+  end
+
+  def is_delegate_in_probation
+    Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+  end
+
+  def region
+    UserGroup.find_by_id(self.region_id)
   end
 end

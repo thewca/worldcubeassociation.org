@@ -3,11 +3,24 @@
 class StaticPagesController < ApplicationController
   include DocumentsHelper
 
+  before_action :current_user_can_admin_finances!, only: [:panel_wfc]
+  private def current_user_can_admin_finances!
+    unless current_user.can_admin_finances?
+      render json: {}, status: 401
+    end
+  end
+
   def home
   end
 
   def delegates
     @delegates = User.where.not(delegate_status: nil)
+  end
+
+  def panel_wfc
+    render json: {
+      isAtleastSeniorMember: current_user.team_senior_member?(Team.wfc) || current_user.team_leader?(Team.wfc) || current_user.admin?,
+    }
   end
 
   def score_tools

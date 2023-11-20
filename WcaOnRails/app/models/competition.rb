@@ -1110,8 +1110,8 @@ class Competition < ApplicationRecord
       if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
       end
-      if waiting_list_deadline_date >= start_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      if waiting_list_deadline_date > end_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end'))
       end
     end
   end
@@ -1923,10 +1923,12 @@ class Competition < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    # This looks weird, but we need the 'deeper_merge' method to handle arrays inside hashes.
-    #   In turn, the 'deeper_merge' library has a quirk that even though it doesn't use the ! naming convention,
-    #   it tries to modify the source array in-place. This is not cool so we need to circumvent by duplicating.
-    json = super(DEFAULT_SERIALIZE_OPTIONS.deep_dup.deeper_merge(options || {}))
+    # The intent behind this is to have a "good" default setup for serialization.
+    # We also want the caller to be able to be picky about the attributes included
+    # in the json (eg: specify an empty 'methods' to remove these attributes,
+    # or set a custom array in 'only' without getting the default ones), therefore
+    # we only use 'merge' here, which doesn't "deeply" merge into the default options.
+    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     # Fallback to the default 'serializable_hash' method, but always include our
     # custom 'class' attribute.
     # We can't put that in our DEFAULT_SERIALIZE_OPTIONS because the 'class'
@@ -2002,5 +2004,10 @@ class Competition < ApplicationRecord
       r.event.id == event_id && r.round_type_id == round_type_id &&
         (format_id.nil? || format_id == r.format_id)
     end
+  end
+
+  def dues_per_competitor_in_usd
+    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
+    dues.present? ? dues : 0
   end
 end

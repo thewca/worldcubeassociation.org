@@ -59,11 +59,13 @@ const reducers = {
 
   [AddRounds]: (state, { payload }) => {
     const { eventId, roundsToAddCount } = payload;
+
     const event = state.wcifEvents.find((e) => e.id === eventId);
     const existingRounds = event.rounds ?? [];
+
     const newRounds = Array(roundsToAddCount).fill(null).map((_, i) => (
       generateWcifRound(eventId, existingRounds.length + i + 1)
-    ))
+    ));
 
     return {
       ...state,
@@ -75,23 +77,29 @@ const reducers = {
 
   [RemoveRounds]: (state, { payload }) => {
     const { eventId, roundsToRemoveCount } = payload;
+
     const event = state.wcifEvents.find((e) => e.id === eventId);
 
     // For removing shared cumulative time limits from other rounds
     const roundIdsToRemove = event.rounds.slice(event.rounds.length - roundsToRemoveCount)
       .map((round) => round.id);
 
-    event.rounds = event.rounds.slice(0, event.rounds.length - roundsToRemoveCount);
+    // Creating a copy because otherwise, we would be mutating a reference that points to
+    // our reducer's state (and if you just only openend the page, also to the initialWcif state!)
+    const newEvent = {
+      ...event,
+      rounds: event.rounds.slice(0, event.rounds.length - roundsToRemoveCount),
+    };
 
-    if (event.rounds.length > 0) {
+    if (newEvent.rounds.length > 0) {
       // Final rounds must not have an advance to next round requirement.
-      event.rounds[event.rounds.length - 1].advancementCondition = null;
+      newEvent.rounds[newEvent.rounds.length - 1].advancementCondition = null;
     }
 
     return {
       ...state,
       wcifEvents: state.wcifEvents.map((e) => (
-        e.id === eventId ? event : removeSharedTimeLimits(e, roundIdsToRemove)
+        e.id === eventId ? newEvent : removeSharedTimeLimits(e, roundIdsToRemove)
       )),
     };
   },
@@ -127,12 +135,14 @@ const reducers = {
       (round) => (round.timeLimit?.cumulativeRoundIds ? {
         timeLimit: {
           ...round.timeLimit,
-          cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter(
-            (roundId) => ![payload.roundId, ...payload.timeLimit.cumulativeRoundIds].includes(roundId)
-          ),
+          cumulativeRoundIds: round.timeLimit.cumulativeRoundIds.filter((roundId) => ![
+            payload.roundId,
+            ...payload.timeLimit.cumulativeRoundIds,
+          ].includes(roundId)),
         },
-      } : {})
+      } : {}),
     );
+
     // then, add the (potential) new shared cumulative time limit to _all involved rounds_
     return {
       ...state,
@@ -141,7 +151,7 @@ const reducers = {
         [payload.roundId, ...payload.timeLimit.cumulativeRoundIds],
         () => ({ timeLimit: payload.timeLimit }),
       ),
-    }
+    };
   },
 
   [UpdateAdvancementCondition]: (state, { payload }) => ({
