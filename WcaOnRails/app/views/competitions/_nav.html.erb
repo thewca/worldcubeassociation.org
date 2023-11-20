@@ -121,7 +121,7 @@
             icon: "align left",
           }
         end
-        if current_user&.can_manage_competition?(@competition) && !@competition.uses_new_registration_service? && !@competition.registration_opened?
+        if !EnvConfig.WCA_LIVE_SITE? && current_user&.can_manage_competition?(@competition) && !@competition.uses_new_registration_service? && !@competition.registration_opened?
           nav_items << {
             text: t('.menu.enable_v2'),
             path: enable_v2_path(@competition),

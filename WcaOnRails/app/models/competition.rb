@@ -660,7 +660,7 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
-  def enable_v2_registrations
+  def enable_v2_registrations!
     update_column :uses_v2_registrations, true
   end
 

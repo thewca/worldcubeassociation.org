@@ -539,7 +539,7 @@ class CompetitionsController < ApplicationController
       flash.now[:danger] = t('.cannot_activate_v2')
       return redirect_to competition_path(@competition)
     end
-    @competition.enable_v2_registrations
+    @competition.enable_v2_registrations!
     redirect_to competition_v2_path(@competition)
   end
 
