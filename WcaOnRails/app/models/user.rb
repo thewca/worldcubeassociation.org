@@ -573,6 +573,10 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
+  def team_membership_details(team)
+    self.current_team_members.find_by(team_id: team.id)
+  end
+
   def team_senior_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
   end
@@ -1255,5 +1259,9 @@ class User < ApplicationRecord
 
   def is_delegate_in_probation
     Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+  end
+
+  def region
+    UserGroup.find_by_id(self.region_id)
   end
 end

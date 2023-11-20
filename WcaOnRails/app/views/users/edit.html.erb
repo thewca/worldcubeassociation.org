@@ -68,6 +68,9 @@
     <% if current_user.can_change_users_avatar?(@user) %>
       <li><a href="#avatar" data-toggle="tab">Avatar</a></li>
     <% end %>
+    <% if current_user.can_view_all_users? %>
+      <li><a href="#roles" data-toggle="tab">Roles</a></li>
+    <% end %>
   </ul>
 
   <div class="tab-content" id="edit-user-tabs">
@@ -121,21 +124,6 @@
               <%= t '.have_wca_id_html', link_id: wca_id_link(@user.wca_id) %>
             <% end %>
           </p>
-        <% end %>
-
-        <% if current_user.can_view_all_users? %>
-          <%= f.input :delegate_status, disabled: !editable_fields.include?(:senior_delegate_id) %>
-          <%= f.association :senior_delegate, disabled: !editable_fields.include?(:senior_delegate_id) %>
-          <%= f.input :location, disabled: !editable_fields.include?(:location) %>
-        <% end %>
-
-        <% unless @user.current_teams.reject(&:hidden?).empty? %>
-          <div class="form-group">
-            <label><%= t '.member_of' %></label>
-            <% @user.current_teams.reject(&:hidden?).each do |team| %>
-              <%= link_to team.name, edit_team_path(team), class: "btn btn-xs btn-info #{"disabled" unless current_user.can_edit_team?(team)}" %>
-            <% end %>
-          </div>
         <% end %>
 
         <% if @user.staff_or_any_delegate? && (current_user.can_view_all_users? || current_user == @user) %>
@@ -265,6 +253,12 @@
         </div>
       </div>
     <% end %>
+    <div class="tab-pane" id="roles">
+      <%= react_component("RolesTab", {
+        userId: @user.id,
+        loggedInUserId: @current_user.id,
+      }) %>
+    </div>
   </div>
   <script>
     $('a[href="#<%=j tab_to_show(params[:section]) %>"]').tab('show');

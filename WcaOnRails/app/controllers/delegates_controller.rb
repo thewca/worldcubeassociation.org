@@ -36,13 +36,13 @@ class DelegatesController < ApplicationController
   def start_delegate_probation
     respond_to do |format|
       format.json do
-        wca_id = params[:wcaId]
-        user = User.find_by_wca_id!(wca_id)
-        Role.create!(
-          user_id: user.id,
+        user_id = params[:userId]
+        role = Role.create!(
+          user_id: user_id,
           group_id: UserGroup.find_by!(name: "Delegate Probation").id,
           start_date: Date.today,
         )
+        RoleChangeMailer.notify_start_probation(role, current_user).deliver_later
         render json: {
           success: true,
         }
@@ -56,6 +56,7 @@ class DelegatesController < ApplicationController
         probation_role_id = params[:probationRoleId]
         role = Role.find_by_id(probation_role_id)
         role.update!(end_date: Date.safe_parse(params[:endDate]))
+        RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
         render json: {
           success: true,
         }

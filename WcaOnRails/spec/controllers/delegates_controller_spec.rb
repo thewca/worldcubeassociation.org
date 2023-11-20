@@ -47,16 +47,22 @@ RSpec.describe DelegatesController do
 
     it 'senior delegates can start the probation role' do
       sign_in FactoryBot.create :senior_delegate
+      expect(RoleChangeMailer).to receive(:notify_start_probation).and_call_original
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      expect do
+        post :start_delegate_probation, params: { userId: users[0].id }, format: :json
+      end.to change { enqueued_jobs.size }.by(1)
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
 
     it 'senior delegates can end the probation role' do
       sign_in FactoryBot.create :senior_delegate
+      expect(RoleChangeMailer).to receive(:notify_change_probation_end_date).and_call_original
 
-      post :end_delegate_probation, params: { probationRoleId: Role.find_by_user_id(users[1].id).id }, format: :json
+      expect do
+        post :end_delegate_probation, params: { probationRoleId: Role.find_by_user_id(users[1].id).id }, format: :json
+      end.to change { enqueued_jobs.size }.by(1)
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -64,7 +70,7 @@ RSpec.describe DelegatesController do
     it 'WFC leader can start the probation role' do
       sign_in FactoryBot.create :user, :wfc_member, team_leader: true
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -80,7 +86,7 @@ RSpec.describe DelegatesController do
     it 'WFC senior members can start the probation role' do
       sign_in FactoryBot.create :user, :wfc_member, team_senior_member: true
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -96,7 +102,7 @@ RSpec.describe DelegatesController do
     it 'normal user cannot start the probation role' do
       sign_in FactoryBot.create :user
 
-      post :start_delegate_probation, params: { wcaId: users[0].wca_id }, format: :json
+      post :start_delegate_probation, params: { userId: users[0].id }, format: :json
       expect(response.status).to eq 401
     end
 

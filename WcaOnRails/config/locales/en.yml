@@ -287,6 +287,7 @@ en:
         registration_notifications_enabled: "When I organize or delegate a competition, email me when new registrations are submitted."
         delegate_status: "Delegate status"
         location: "Location"
+        region: "Region"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
@@ -458,6 +459,16 @@ en:
         candidate_delegate: "Junior Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
+      role_status:
+        delegate_regions:
+          trainee_delegate: "Trainee Delegate"
+          candidate_delegate: "Junior Delegate"
+          delegate: "Delegate"
+          senior_delegate: "Senior Delegate"
+        teams:
+          member: "Member"
+          senior_member: "Senior Member"
+          leader: "Leader"
     person:
       gender:
         m: "Male"
@@ -506,13 +517,11 @@ en:
         email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
-        delegate_status: ""
         dob_verification: ""
         gender: ""
         login: ""
         password: ""
         password_confirmation: ""
-        location: ""
         remember_me: ""
         results_notifications_enabled: ""
         registration_notifications_enabled: "This only applies for competitions you organize or delegate, and can be overridden on a per-competition basis."
@@ -673,9 +682,6 @@ en:
         extra_file: "Must be in PDF format. If you need to add more files, please merge them together"
         start_date: ""
         end_date: ""
-      wfc:
-        from_date: ""
-        to_date: ""
     #context: and a label for an option
     options:
       #context: about registration
@@ -1037,7 +1043,6 @@ en:
       email: "Email"
       preferences: "Preferences"
       password: "Password"
-      member_of: "Member of"
       preferred_events_desc: "Selecting your preferred events makes registration for competitions quicker."
       please_fix_profile: "In order to register for competitions, you need to fix the following problems:"
       profile: "Profile"
