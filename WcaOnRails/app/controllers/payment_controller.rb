@@ -90,7 +90,7 @@ class PaymentController < ApplicationController
     refund = Stripe::Refund.create(
       refund_args,
       stripe_account: account_id,
-      )
+    )
 
     refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
     refund_receipt.update!(parent_transaction: charge)
