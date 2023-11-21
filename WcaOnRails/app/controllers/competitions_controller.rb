@@ -520,7 +520,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_path(@competition)
     end
     @competition.enable_v2_registrations!
-    redirect_to competition_v2_path(@competition)
+    redirect_to competitions_v2_path(@competition)
   end
 
   def update
