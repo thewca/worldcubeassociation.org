@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header, List } from 'semantic-ui-react';
 import {
-  roleListUrl,
+  rolesOfGroupType,
   pendingClaimsUrl,
   competitionsForSeniorUrl,
 } from '../../../lib/requests/routes.js.erb';
@@ -10,10 +10,7 @@ import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 
 export default function SeniorDelegatesList() {
-  const { data, loading, error } = useLoadedData(roleListUrl({
-    groupType: 'delegate_regions',
-    status: 'senior_delegate',
-  }));
+  const { data, loading, error } = useLoadedData(rolesOfGroupType('delegate_regions', 'senior_delegate'));
   const seniorDelegates = React.useMemo(() => data?.sort(
     (role1, role2) => role1.user.name.localeCompare(role2.user.name),
   ), [data]);
