@@ -3267,8 +3267,10 @@ pt:
       waiting_list_deadline_before_refund_date: >-
         Prazo limite de lista de espera não pode ser antes da data limite para
         reembolsos.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: Prazo limite de lista de espera tem que ser antes da data de início.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: >-
+        O prazo limite para a lista de espera deve ser antes do fim da
+        competição.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         Prazo limite para atualizar eventos não pode ser antes da data de fecho
@@ -5414,6 +5416,8 @@ pt:
       sobre a sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão TNoodle legal
+    #original_hash: 32295ee
+    login_message: Por favor faça login
   merch:
     #original_hash: 96a95a1
     title: Merchandise WCA
