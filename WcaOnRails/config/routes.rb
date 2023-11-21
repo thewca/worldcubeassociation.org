@@ -57,8 +57,12 @@ Rails.application.routes.draw do
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
+  get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
+
+  get 'competitions/v2/:id' => 'competitions_v2#show', as: :competitions_v2
+  get 'competitions/v2/:id/*all' => 'competitions_v2#show'
 
   resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
     get 'results/podiums' => 'competitions#show_podiums'
@@ -165,6 +169,7 @@ Rails.application.routes.draw do
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   get 'panel/seniors' => 'panel#seniors'
+  get 'panel/wfc' => 'panel#wfc'
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -174,6 +179,9 @@ Rails.application.routes.draw do
   post 'upload/image', to: 'upload#image'
 
   get 'admin/delegates' => 'delegates#stats', as: :delegates_stats
+  get 'admin/delegate_probations' => 'delegates#probations', as: :delegate_probations
+  post 'admin/start_delegate_probation' => 'delegates#start_delegate_probation', as: :start_delegate_probation
+  post 'admin/end_delegate_probation' => 'delegates#end_delegate_probation', as: :end_delegate_probation
 
   get 'robots' => 'static_pages#robots'
 
@@ -202,6 +210,10 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
+
+  scope 'page_data' do
+    get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
+  end
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
@@ -263,7 +275,6 @@ Rails.application.routes.draw do
   get '/.well-known/change-password' => redirect('/profile/edit?section=password', status: 302)
 
   # WFC section
-  get '/wfc' => 'wfc#panel'
   scope 'wfc' do
     get '/competitions_export' => 'wfc#competition_export', defaults: { format: :csv }, as: :wfc_competitions_export
     resources :country_bands, only: [:index, :update, :edit], path: '/country-bands'
@@ -289,6 +300,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
+    namespace :internal do
+      namespace :v1 do
+        get "/users/:id/permissions" => "permissions#index"
+      end
+    end
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'
@@ -298,11 +314,16 @@ Rails.application.routes.draw do
       get '/search' => 'api#omni_search'
       get '/search/posts' => 'api#posts_search'
       get '/search/competitions' => 'api#competitions_search'
-      get '/search/users' => 'api#users_search'
+      get '/search/users' => 'api#users_search', as: :search_users
+      get '/search/persons' => 'api#persons_search', as: :search_persons
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
-      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
-      get '/users/:wca_id' => 'api#show_user_by_wca_id'
+      get '/users' => 'users#show_users_by_id'
+      get '/users/me' => 'users#show_me'
+      get '/users/me/permissions' => 'users#permissions'
+      get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
+      get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
+      get '/users/token' => 'users#token'
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
@@ -324,6 +345,13 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
+
+      resources :roles, only: [:show, :update, :destroy]
+      scope 'roles' do
+        get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
+        get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
+        get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      end
     end
   end
 end

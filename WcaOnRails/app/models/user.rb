@@ -43,6 +43,10 @@ class User < ApplicationRecord
     end
   }
 
+  TEAM_STATUS_LEADER = "leader"
+  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
+  TEAM_STATUS_MEMBER = "member"
+
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
@@ -78,6 +82,11 @@ class User < ApplicationRecord
   devise :two_factor_backupable,
          otp_backup_code_length: BACKUP_CODES_LENGTH,
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
+  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+
+  def jwt_payload
+    { 'user_id' => id }
+  end
 
   # Backup OTP are stored as a string array in the db
   serialize :otp_backup_codes
@@ -568,6 +577,10 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
+  def team_membership_details(team)
+    self.current_team_members.find_by(team_id: team.id)
+  end
+
   def team_senior_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
   end
@@ -632,13 +645,39 @@ class User < ApplicationRecord
     current_teams.include?(Team.banned)
   end
 
+  def current_ban
+    current_team_members.where(team: Team.banned).first
+  end
+
+  def ban_end
+    current_ban&.end_date
+  end
+
   def banned_at_date?(date)
     if banned?
-      ban_end = current_team_members.select(:team == Team.banned).first.end_date
       !ban_end.present? || date < ban_end
     else
       false
     end
+  end
+
+  def permissions
+    permissions = {
+      can_attend_competitions: {
+        scope: cannot_register_for_competition_reasons.empty? ? "*" : [],
+      },
+      can_organize_competitions: {
+        scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? "*" : [],
+      },
+      can_administer_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
+      },
+    }
+    if banned?
+      permissions[:can_attend_competitions][:scope] = []
+      permissions[:can_attend_competitions][:until] = ban_end || nil
+    end
+    permissions
   end
 
   def can_view_all_users?
@@ -684,9 +723,7 @@ class User < ApplicationRecord
     can_manage_teams? ||
       team_leader?(team) ||
       # The leader of the WDC can edit the banned competitors list
-      (team == Team.banned && team_leader?(Team.wdc)) ||
-      # Senior Delegates and WFC Leader and Senior Members can edit Delegates on probation
-      (team == Team.probation && (senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)))
+      (team == Team.banned && team_leader?(Team.wdc))
   end
 
   def can_view_banned_competitors?
@@ -1248,5 +1285,57 @@ class User < ApplicationRecord
   def senior_or_self
     return nil unless self.delegate_status.present?
     self.delegate_status == "senior_delegate" ? self : self.senior_delegate
+  end
+
+  def is_delegate_in_probation
+    Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+  end
+
+  def region
+    UserGroup.find_by_id(self.region_id)
+  end
+
+  def can_manage_delegate_probation?
+    admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
+  end
+
+  def delegate_role
+    {
+      end_date: nil,
+      group: self.region,
+      user: self,
+      metadata: {
+        status: self.delegate_status,
+      },
+    }
+  end
+
+  def team_roles
+    roles = []
+    self.current_teams.each do |team|
+      team_membership_details = self.team_membership_details(team)
+      if team_membership_details.leader?
+        status = TEAM_STATUS_LEADER
+      elsif team_membership_details.senior_member?
+        status = TEAM_STATUS_SENIOR_MEMBER
+      else
+        status = TEAM_STATUS_MEMBER
+      end
+      roles << {
+        start_date: team_membership_details.start_date,
+        group: {
+          id: team.id,
+          name: team.name,
+          group_type: UserGroup.group_types[:teams],
+          is_hidden: team[:hidden],
+          is_active: true,
+        },
+        user: self,
+        metadata: {
+          status: status,
+        },
+      }
+    end
+    roles
   end
 end

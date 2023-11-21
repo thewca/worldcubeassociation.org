@@ -10,8 +10,8 @@
 a[target=_blank]:not(.hide-new-window-icon):not(.fa),
 form[target=_blank] button[type=submit] {
   &::after {
-    font-family: 'Glyphicons Halflings';
-    content: "\e164"; /* glyphicon-new-window */
+    font-family: 'Icons';
+    content: "\f35d"; /* semantic external */
     display: inline-block; /* prevent underlining */
     margin-left: 0.3em;
     line-height: 1;

@@ -157,6 +157,7 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
+    uses_v2_registrations
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -377,6 +378,10 @@ class Competition < ApplicationRecord
 
   def registration_full?
     competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
+  end
+
+  def number_of_bookmarks
+    bookmarked_users.count
   end
 
   def country
@@ -654,6 +659,14 @@ class Competition < ApplicationRecord
 
   def trainee_delegate_ids
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
+  end
+
+  def enable_v2_registrations!
+    update_column :uses_v2_registrations, true
+  end
+
+  def uses_new_registration_service?
+    self.uses_v2_registrations
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -1098,8 +1111,8 @@ class Competition < ApplicationRecord
       if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
       end
-      if waiting_list_deadline_date >= start_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      if waiting_list_deadline_date > end_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end'))
       end
     end
   end
@@ -1911,6 +1924,11 @@ class Competition < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
+    # The intent behind this is to have a "good" default setup for serialization.
+    # We also want the caller to be able to be picky about the attributes included
+    # in the json (eg: specify an empty 'methods' to remove these attributes,
+    # or set a custom array in 'only' without getting the default ones), therefore
+    # we only use 'merge' here, which doesn't "deeply" merge into the default options.
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     # Fallback to the default 'serializable_hash' method, but always include our
     # custom 'class' attribute.
@@ -1987,5 +2005,10 @@ class Competition < ApplicationRecord
       r.event.id == event_id && r.round_type_id == round_type_id &&
         (format_id.nil? || format_id == r.format_id)
     end
+  end
+
+  def dues_per_competitor_in_usd
+    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
+    dues.present? ? dues : 0
   end
 end

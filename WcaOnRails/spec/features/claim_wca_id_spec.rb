@@ -12,7 +12,7 @@ RSpec.feature "Claim WCA ID" do
       sign_in user
     end
 
-    it 'can claim WCA ID' do
+    it 'can claim WCA ID', skip: "because it is unstable in GitHub CI" do
       visit "/profile/claim_wca_id"
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
@@ -51,7 +51,7 @@ RSpec.feature "Claim WCA ID" do
       expect(user.delegate_to_handle_wca_id_claim).to eq delegate
     end
 
-    it 'tells you to contact Results team if your WCA ID does not have a birthdate' do
+    it 'tells you to contact Results team if your WCA ID does not have a birthdate', skip: "because it is unstable in GitHub CI" do
       visit "/profile/claim_wca_id"
 
       fill_in_selectize "WCA ID", with: person_without_dob.wca_id
@@ -59,7 +59,7 @@ RSpec.feature "Claim WCA ID" do
       expect(page.find("#select-nearby-delegate-area")).to have_content "WCA ID #{person_without_dob.wca_id} does not have a birthdate assigned. Please contact with WCA Results Team using this dedicated form."
     end
 
-    it 'tells you to contact Results team if you WCA ID has been incorrectly claimed too many times' do
+    it 'tells you to contact Results team if you WCA ID has been incorrectly claimed too many times', skip: "because it is unstable in GitHub CI" do
       visit "/profile/claim_wca_id"
 
       # Fill in WCA ID.

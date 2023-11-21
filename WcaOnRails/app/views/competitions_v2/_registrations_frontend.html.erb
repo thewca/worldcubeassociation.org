@@ -1,0 +1,13 @@
+<div id="registration-app">
+  <script src="<%= EnvConfig.WCA_REGISTRATIONS_CDN_URL %>/dist/bundle.js"></script>
+  <script>
+    // inject the css file
+    const head = document.getElementsByTagName('HEAD')[0];
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = '<%= EnvConfig.WCA_REGISTRATIONS_CDN_URL %>/dist/bundle.css';
+    // Append link element to HTML head
+    head.appendChild(link);
+  </script>
+</div>
