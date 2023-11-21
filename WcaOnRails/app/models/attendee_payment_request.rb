@@ -12,7 +12,7 @@ class AttendeePaymentRequest < ApplicationRecord
   end
 
   def user
-    _,user_id = competition_and_user_id
+    _, user_id = competition_and_user_id
     User.find(user_id)
   end
 end
