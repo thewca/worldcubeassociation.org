@@ -516,7 +516,7 @@ class CompetitionsController < ApplicationController
   def enable_v2
     @competition = competition_from_params
     if EnvConfig.WCA_LIVE_SITE? || @competition.registration_opened?
-      flash.now[:danger] = t('.cannot_activate_v2')
+      flash.now[:danger] = t('competitions.messages.cannot_activate_v2')
       return redirect_to competition_path(@competition)
     end
     @competition.enable_v2_registrations!
