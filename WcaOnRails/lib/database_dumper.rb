@@ -828,6 +828,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "jwt_denylist" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {
