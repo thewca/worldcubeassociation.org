@@ -8,9 +8,29 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     end
   end
 
+  # Filters the list of groups based on the permissions of the current user.
+  private def filter_groups_for_logged_in_user(groups)
+    groups.select do |group|
+      if group.is_hidden
+        if group.group_type == UserGroup.group_types[:delegate_probation]
+          current_user.can_manage_delegate_probation?
+        else
+          false # Don't accept any other hidden groups.
+        end
+      else
+        true # Accept all non-hidden groups.
+      end
+    end
+  end
+
   def index
-    group_type = params.require(:groupType)
-    render json: UserGroup.where(group_type: group_type)
+    group_type = params.require(:group_type)
+    groups = UserGroup.where(group_type: group_type)
+
+    # Filters the list of groups based on the permissions of the current user.
+    groups = filter_groups_for_logged_in_user(groups)
+
+    render json: groups
   end
 
   def create

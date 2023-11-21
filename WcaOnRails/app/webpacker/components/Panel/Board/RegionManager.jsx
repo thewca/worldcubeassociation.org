@@ -3,7 +3,7 @@ import {
   Button, ButtonGroup, Confirm, Form, Header, List, Modal,
 } from 'semantic-ui-react';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { userGroupsUrl, userGroupsUpdateUrl } from '../../../lib/requests/routes.js.erb';
+import { fetchUserGroupsUrl, addUserGroupsUrl, userGroupsUpdateUrl } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
@@ -18,7 +18,7 @@ const defaultRegion = {
 
 function UserGroupVisibility({ userGroup, save, sync }) {
   const [open, setOpen] = React.useState(false);
-  const iconName = userGroup.is_hidden ? 'eye slash' : 'eye';
+  const iconName = userGroup.is_active ? 'eye' : 'eye slash';
   return (
     <>
       <List.Icon
@@ -28,13 +28,13 @@ function UserGroupVisibility({ userGroup, save, sync }) {
       />
       <Confirm
         open={open}
-        content={`Are you sure you want to ${userGroup.is_hidden ? 'unhide' : 'hide'} ${userGroup.name}?`}
+        content={`Are you sure you want to ${userGroup.is_active ? 'deactivate' : 'activate'} ${userGroup.name}?`}
         onCancel={() => setOpen(false)}
         onConfirm={() => {
           setOpen(false);
           save(
             userGroupsUpdateUrl(userGroup.id),
-            { is_hidden: !userGroup.is_hidden },
+            { is_active: !userGroup.is_active, is_hidden: false },
             sync,
           );
         }}
@@ -46,9 +46,7 @@ function UserGroupVisibility({ userGroup, save, sync }) {
 export default function RegionManager() {
   const {
     data, loading, error, sync,
-  } = useLoadedData(userGroupsUrl({
-    groupType: 'delegate_regions',
-  }));
+  } = useLoadedData(fetchUserGroupsUrl('delegate_regions'));
   const { save, saving } = useSaveAction();
   const [openModalType, setOpenModalType] = React.useState();
   const [newRegion, setNewRegion] = React.useState(defaultRegion);
@@ -157,7 +155,7 @@ export default function RegionManager() {
               }
               onClick={() => {
                 closeModal();
-                save(userGroupsUrl(), newRegion, () => sync(), { method: 'POST' }, setSaveError);
+                save(addUserGroupsUrl, newRegion, () => sync(), { method: 'POST' }, setSaveError);
                 sync();
                 setNewRegion(defaultRegion);
               }}

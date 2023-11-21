@@ -29,13 +29,15 @@ class Api::V0::RolesController < Api::V0::ApiController
   end
 
   # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles, params)
-    unless params[:status].nil?
-      status = params[:status]
+  private def filter_roles_for_parameters(roles, status)
+    unless status.nil?
       roles = roles.select do |role|
         is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
-        status = is_actual_role ? role.metadata.status : role[:metadata][:status]
-        status == params[:status]
+        if is_actual_role
+          role.metadata.status == status
+        else
+          role[:metadata][:status] == status
+        end
       end
     end
 
@@ -117,9 +119,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     # Filter the list based on the other parameters.
     roles = filter_roles_for_parameters(
       roles,
-      {
-        status: params.key?(:status) ? params.require(:status) : nil,
-      },
+      params.key?(:status) ? params.require(:status) : nil,
     )
 
     render json: roles

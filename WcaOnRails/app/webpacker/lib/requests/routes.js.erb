@@ -92,10 +92,13 @@ export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.rou
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-export const userGroupsUrl = (params) => {
-  const searchParams = new URLSearchParams(params);
+export const fetchUserGroupsUrl = (groupType) => {
+  const searchParams = new URLSearchParams();
+  searchParams.append('group_type', groupType);
   return `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>?${searchParams.toString()}`;
 };
+
+export const addUserGroupsUrl = `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>`;
 
 export const userGroupsUpdateUrl = (userGroupId) => `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>/${userGroupId}`;
 
