@@ -11,8 +11,8 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     holder = AttendeePaymentRequest.create(attendee_id: attendee_id)
     competition_id, user_id = holder.competition_and_user_id
 
-    competition = Competition.find(competition_id)
-    user = User.find(user_id)
+    competition = holder.competition
+    user = holder.user
     render json: { error: "Registration not found" }, status: :not_found unless competition.present? && user.present?
     account_id = competition.connected_stripe_account_id
 
