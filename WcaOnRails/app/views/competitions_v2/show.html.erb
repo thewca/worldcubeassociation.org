@@ -1,0 +1,8 @@
+<% provide(:title, @competition.display_name) %>
+<% if current_user&.can_manage_competition?(@competition) %>
+  <%= render layout: 'competitions/nav' do %>
+    <%= render 'registrations_frontend' %>
+  <% end %>
+<% else %>
+  <%= render 'registrations_frontend' %>
+<% end %>

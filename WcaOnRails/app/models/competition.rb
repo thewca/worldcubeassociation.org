@@ -157,6 +157,7 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
+    uses_v2_registrations
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -658,6 +659,14 @@ class Competition < ApplicationRecord
 
   def trainee_delegate_ids
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
+  end
+
+  def enable_v2_registrations!
+    update_column :uses_v2_registrations, true
+  end
+
+  def uses_new_registration_service?
+    self.uses_v2_registrations
   end
 
   before_validation :unpack_delegate_organizer_ids
