@@ -77,13 +77,14 @@ export function average(attemptResults, eventId) {
   if (eventId === '333fm') {
     const scaled = attemptResults.map((attemptResult) => attemptResult * 100);
     switch (attemptResults.length) {
+      case 1:
+      case 2:
+        return SKIPPED_VALUE;
       case 3:
         return meanOf3(scaled);
-      case 5:
-        return averageOf5(scaled);
       default:
         throw new Error(
-          `Invalid number of attempt results, expected 3 or 5, given ${attemptResults.length}.`,
+          `Invalid number of attempt results, expected 1, 2, or 3, given ${attemptResults.length}.`,
         );
     }
   }
