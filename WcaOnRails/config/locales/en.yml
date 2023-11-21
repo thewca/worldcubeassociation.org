@@ -1782,6 +1782,7 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        enable_v2: "Enable new Registration Service"
     results_table:
       wca_profile: "WCA profile"
       event: "Event"
