@@ -5,6 +5,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
   protect_from_forgery except: [:init]
   def init
     attendee_id = params.require(:attendee_id)
+    registration_service_user = params.require(:current_user)
     iso_amount = params.require(:amount)
 
     holder = AttendeePaymentRequest.create(attendee_id: attendee_id)
@@ -20,7 +21,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       registration_url: edit_registration_path(competition_id, user_id),
     }
 
-    currency_iso = params["currency_code"]
+    currency_iso = params.require(:currency_code)
     stripe_amount = StripeTransaction.amount_to_stripe(iso_amount, currency_iso)
 
     payment_intent_args = {
@@ -56,7 +57,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       holder: holder,
       stripe_transaction: stripe_transaction,
       client_secret: intent.client_secret,
-      user: user,
+      user: registration_service_user,
     )
 
     render json: { id: stripe_transaction.id }
