@@ -43,6 +43,10 @@ class User < ApplicationRecord
     end
   }
 
+  TEAM_STATUS_LEADER = "leader"
+  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
+  TEAM_STATUS_MEMBER = "member"
+
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
@@ -1263,5 +1267,49 @@ class User < ApplicationRecord
 
   def region
     UserGroup.find_by_id(self.region_id)
+  end
+
+  def can_manage_delegate_probation?
+    admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
+  end
+
+  def delegate_role
+    {
+      end_date: nil,
+      group: self.region,
+      user: self,
+      metadata: {
+        status: self.delegate_status,
+      },
+    }
+  end
+
+  def team_roles
+    roles = []
+    self.current_teams.each do |team|
+      team_membership_details = self.team_membership_details(team)
+      if team_membership_details.leader?
+        status = TEAM_STATUS_LEADER
+      elsif team_membership_details.senior_member?
+        status = TEAM_STATUS_SENIOR_MEMBER
+      else
+        status = TEAM_STATUS_MEMBER
+      end
+      roles << {
+        start_date: team_membership_details.start_date,
+        group: {
+          id: team.id,
+          name: team.name,
+          group_type: UserGroup.group_types[:teams],
+          is_hidden: team[:hidden],
+          is_active: true,
+        },
+        user: self,
+        metadata: {
+          status: status,
+        },
+      }
+    end
+    roles
   end
 end

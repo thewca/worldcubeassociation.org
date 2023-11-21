@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
-  delegateProbationDataUrl,
+  rolesOfGroupType,
   startDelegateProbationUrl,
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
@@ -15,7 +15,7 @@ import Errored from '../Requests/Errored';
 const dateFormat = 'YYYY-MM-DD';
 
 function ProbationListTable({
-  roleList, userMap, isActive, save, sync,
+  roleList, isActive, save, sync,
 }) {
   const [confirmOpen, setConfirmOpen] = React.useState(false);
   const [endProbationParams, setEndProbationParams] = React.useState();
@@ -42,7 +42,7 @@ function ProbationListTable({
             <Table.Row key={probationRole.id}>
               <Table.Cell>
                 <UserBadge
-                  user={userMap[probationRole.user_id]}
+                  user={probationRole.user}
                   hideBorder
                   leftAlign
                 />
@@ -83,14 +83,12 @@ function ProbationListTable({
 export default function DelegateProbations() {
   const [user, setUser] = React.useState();
   const {
-    data, loading, error, sync,
-  } = useLoadedData(delegateProbationDataUrl);
+    data: probationRoles, loading, error, sync,
+  } = useLoadedData(rolesOfGroupType('delegate_probation'));
   const { save, saving } = useSaveAction();
 
   if (loading || saving) return 'Loading...'; // No i18n because this page is used only by WCA Staff.
   if (error) return <Errored />;
-
-  const { probationRoles, probationUsers } = data;
 
   return (
     <>
@@ -115,7 +113,6 @@ export default function DelegateProbations() {
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null
            || probationRole.end_date > moment().format(dateFormat))}
-        userMap={probationUsers}
         isActive
         save={save}
         sync={sync}
@@ -124,7 +121,6 @@ export default function DelegateProbations() {
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null
           && probationRole.end_date <= moment().format(dateFormat))}
-        userMap={probationUsers}
         isActive={false}
       />
     </>
