@@ -79,6 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_20_172504) do
     t.integer "events_per_registration_limit"
     t.boolean "force_comment_in_registration"
     t.integer "posting_by"
+    t.boolean "uses_v2_registrations", default: false, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -711,6 +712,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_20_172504) do
     t.datetime "resolved_at", precision: nil
     t.boolean "digest_worthy", default: false
     t.datetime "digest_sent_at", precision: nil
+  end
+
+  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
   end
 
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
