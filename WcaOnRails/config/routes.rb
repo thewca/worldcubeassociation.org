@@ -293,6 +293,11 @@ Rails.application.routes.draw do
 
   namespace :api do
     get '/', to: redirect('/api/v0', status: 302)
+    namespace :internal do
+      namespace :v1 do
+        get "/users/:id/permissions" => "permissions#index"
+      end
+    end
     namespace :v0 do
       get '/' => 'api#help'
       get '/me' => 'api#me'
@@ -306,9 +311,12 @@ Rails.application.routes.draw do
       get '/search/persons' => 'api#persons_search', as: :search_persons
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
-      get '/users/:id' => 'api#show_user_by_id', constraints: { id: /\d+/ }
+      get '/users' => 'users#show_users_by_id'
+      get '/users/me' => 'users#show_me'
+      get '/users/me/permissions' => 'users#permissions'
+      get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
+      get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/users/token' => 'users#token'
-      get '/users/:wca_id' => 'api#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person

@@ -172,52 +172,6 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     end
   end
 
-  describe 'show_user_*' do
-    let!(:user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
-
-    it 'can query by id' do
-      get :show_user_by_id, params: { id: user.id }
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json["user"]["name"]).to eq "Jeremy"
-      expect(json["user"]["wca_id"]).to eq user.wca_id
-    end
-
-    it 'can query by wca id' do
-      get :show_user_by_wca_id, params: { wca_id: user.wca_id }
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json["user"]["name"]).to eq "Jeremy"
-      expect(json["user"]["wca_id"]).to eq user.wca_id
-    end
-
-    it '404s nicely' do
-      get :show_user_by_wca_id, params: { wca_id: "foo" }
-      expect(response.status).to eq 404
-      json = JSON.parse(response.body)
-      expect(json["user"]).to be nil
-    end
-
-    describe 'upcoming_competitions' do
-      let!(:upcoming_comp) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
-      let!(:registration) { FactoryBot.create(:registration, :accepted, user: user, competition: upcoming_comp) }
-
-      it 'does not render upcoming competitions by default' do
-        get :show_user_by_id, params: { id: user.id }
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-        expect(json.keys).not_to include "upcoming_competitions"
-      end
-
-      it 'renders upcoming competitions when upcoming_competitions param is set' do
-        get :show_user_by_id, params: { id: user.id, upcoming_competitions: true }
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-        expect(json["upcoming_competitions"].size).to eq 1
-      end
-    end
-  end
-
   describe 'GET #delegates' do
     it 'includes emails and regions' do
       senior_delegate = FactoryBot.create :senior_delegate

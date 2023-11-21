@@ -645,13 +645,39 @@ class User < ApplicationRecord
     current_teams.include?(Team.banned)
   end
 
+  def current_ban
+    current_team_members.where(team: Team.banned).first
+  end
+
+  def ban_end
+    current_ban&.end_date
+  end
+
   def banned_at_date?(date)
     if banned?
-      ban_end = current_team_members.select(:team == Team.banned).first.end_date
       !ban_end.present? || date < ban_end
     else
       false
     end
+  end
+
+  def permissions
+    permissions = {
+      can_attend_competitions: {
+        scope: cannot_register_for_competition_reasons.empty? ? "*" : [],
+      },
+      can_organize_competitions: {
+        scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? "*" : [],
+      },
+      can_administer_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
+      },
+    }
+    if banned?
+      permissions[:can_attend_competitions][:scope] = []
+      permissions[:can_attend_competitions][:until] = ban_end || nil
+    end
+    permissions
   end
 
   def can_view_all_users?
