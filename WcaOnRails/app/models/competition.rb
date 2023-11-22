@@ -2011,4 +2011,28 @@ class Competition < ApplicationRecord
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
     dues.present? ? dues : 0
   end
+
+  def dues_payer
+    country_id = self.country.id
+    country_redirect = WfcDuesRedirect.find_by(redirect_from_country_id: country_id)
+    if country_redirect.present?
+      return WfcXeroUser.find_by(id: country_redirect.redirect_to_id)
+    end
+    organizers.each do |organizer|
+      organizer_redirect = WfcDuesRedirect.find_by(redirect_from_organizer_id: organizer.id)
+      if organizer_redirect.present?
+        return WfcXeroUser.find_by(id: organizer_redirect.redirect_to_id)
+      end
+    end
+    staff_delegates.min_by(&:name)
+  end
+
+  def dues_payer_is_combined_invoice?
+    dues_payer = self.dues_payer
+    if dues_payer.is_a?(WfcXeroUser)
+      dues_payer.is_combined_invoice
+    else
+      false
+    end
+  end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_11_20_172504) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_22_153755) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -1156,6 +1156,26 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_20_172504) do
     t.index ["extendable_type", "extendable_id"], name: "index_wcif_extensions_on_extendable_type_and_extendable_id"
   end
 
+  create_table "wfc_dues_redirects", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "redirect_type", null: false
+    t.string "redirect_from_country_id"
+    t.integer "redirect_from_organizer_id"
+    t.bigint "redirect_to_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["redirect_from_country_id"], name: "index_wfc_dues_redirects_on_redirect_from_country_id"
+    t.index ["redirect_from_organizer_id"], name: "index_wfc_dues_redirects_on_redirect_from_organizer_id"
+    t.index ["redirect_to_id"], name: "index_wfc_dues_redirects_on_redirect_to_id"
+  end
+
+  create_table "wfc_xero_users", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "email", null: false
+    t.boolean "is_combined_invoice", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "roles", "user_groups", column: "group_id"
@@ -1168,4 +1188,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_20_172504) do
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "users", "user_groups", column: "region_id"
+  add_foreign_key "wfc_dues_redirects", "Countries", column: "redirect_from_country_id"
+  add_foreign_key "wfc_dues_redirects", "users", column: "redirect_from_organizer_id"
+  add_foreign_key "wfc_dues_redirects", "wfc_xero_users", column: "redirect_to_id"
 end
