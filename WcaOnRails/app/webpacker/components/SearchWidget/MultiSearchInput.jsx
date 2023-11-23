@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 
 import CompetitionItem from './CompetitionItem';
@@ -55,15 +55,18 @@ const createSearchItem = (search) => itemToOption({
 
 const DEBOUNCE_MS = 300;
 
-function MultiSearchInput({
+export default function MultiSearchInput({
   url,
-  goToItemOnSelect,
+  // If multiple is true, selectedValue is an array of items, otherwise it's a single item.
+  selectedValue,
+  // If multiple is true, setSelectedValue is a function that takes an array of items, otherwise
+  // it's a function that takes a single item.
+  setSelectedValue,
+  showOptionToGoToSearchPage = false,
   placeholder,
   removeNoResultsMessage,
-  selectedItems,
   disabled = false,
   multiple = true,
-  onChange,
 }) {
   const [search, setSearch] = useState('');
   const [results, setResults] = useState([]);
@@ -71,11 +74,9 @@ function MultiSearchInput({
 
   const debouncedSearch = useDebounce(search, DEBOUNCE_MS);
 
-  // wrap the 'onChange' handler because we want to reset the search string
-  const onChangeInternal = useCallback((_, { value }) => {
+  useEffect(() => {
     setSearch('');
-    onChange(value);
-  }, [onChange, setSearch]);
+  }, [selectedValue]);
 
   useEffect(() => {
     // Do nothing if search string is empty: we're just loading the page
@@ -95,21 +96,27 @@ function MultiSearchInput({
     }
   }, [debouncedSearch, url]);
 
-  const options = [...selectedItems, ...results].map((option) => ({
+  const dropDownOptions = [
+    ...(showOptionToGoToSearchPage && search.length > 0 ? [createSearchItem(search)] : []),
+    ...(multiple ? selectedValue : []),
+    ...results,
+  ].map((option) => ({
     ...option,
     text: <ItemFor item={option.item} />,
   }));
 
-  // If we go to item on select, we want to give the user the option to go to
-  // the search page.
-  if (goToItemOnSelect && search.length > 0) {
-    options.unshift(createSearchItem(search));
-  }
+  const onChangeInternal = (_, { value, options }) => {
+    const map = {};
+    options.forEach((option) => {
+      map[option.value] = option;
+    });
+    if (multiple) {
+      setSelectedValue(value.map((id) => itemToOption(map[id].item)));
+    } else {
+      setSelectedValue(map[value] ? itemToOption(map[value].item) : null);
+    }
+  };
 
-  // FIXME: the search filter from FUI is not the greatest: when searching for
-  // "galerie lafa" it won't match the "galeries lafayette" competitions
-  // (whereas searching for "galeries lafa" does).
-  // We should try to set our own search method that would match word by word.
   return (
     <Dropdown
       fluid
@@ -120,9 +127,9 @@ function MultiSearchInput({
       icon="search"
       className="omnisearch-dropdown"
       disabled={disabled}
-      value={multiple ? selectedItems.map((item) => item.id) : selectedItems[0]?.id}
+      value={multiple ? selectedValue.map((item) => item.id) : selectedValue?.id}
       searchQuery={search}
-      options={options}
+      options={dropDownOptions}
       onChange={onChangeInternal}
       onSearchChange={(e, { searchQuery }) => setSearch(searchQuery)}
       loading={loading}
@@ -132,5 +139,3 @@ function MultiSearchInput({
     />
   );
 }
-
-export default MultiSearchInput;

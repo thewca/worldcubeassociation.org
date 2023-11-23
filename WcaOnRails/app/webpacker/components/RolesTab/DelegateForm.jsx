@@ -3,15 +3,10 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 
-// let i18n-tasks know the key is used
-// i18n-tasks-use t('enums.user.delegate_status.trainee_delegate')
-// i18n-tasks-use t('enums.user.delegate_status.candidate_delegate')
-// i18n-tasks-use t('enums.user.delegate_status.delegate')
-
 export default function DelegateForm({
   formValues,
   updateFormProperty,
-  seniorDelegates,
+  regions,
   delegateStatusOptions,
 }) {
   const handleFormChange = (_, { name, value }) => updateFormProperty({ [name]: value });
@@ -25,23 +20,20 @@ export default function DelegateForm({
         name="delegateStatus"
         value={formValues.delegateStatus}
         options={delegateStatusOptions.map((option) => ({
-          text: I18n.t(`enums.user.delegate_status.${option}`),
+          text: I18n.t(`enums.user.role_status.delegate_regions.${option}`),
           value: option,
         }))}
         onChange={handleFormChange}
       />
-      {formValues.delegateStatus !== 'senior_delegate'
-        && (
-          <Form.Dropdown
-            label={I18n.t('enums.user.delegate_status.senior_delegate')}
-            fluid
-            selection
-            name="seniorDelegateId"
-            value={formValues.seniorDelegateId || ''}
-            options={seniorDelegates}
-            onChange={handleFormChange}
-          />
-        )}
+      <Form.Dropdown
+        label={I18n.t('activerecord.attributes.user.region')}
+        fluid
+        selection
+        name="regionId"
+        value={formValues.regionId || ''}
+        options={regions}
+        onChange={handleFormChange}
+      />
       <Form.Input
         label={I18n.t('activerecord.attributes.user.location')}
         name="location"

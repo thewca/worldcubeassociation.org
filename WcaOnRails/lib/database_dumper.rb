@@ -107,6 +107,7 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
+          uses_v2_registrations
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -643,6 +644,23 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "user_groups" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          name
+          group_type
+          parent_group_id
+          is_active
+          is_hidden
+          metadata_id
+          metadata_type
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "users" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -671,6 +689,7 @@ module DatabaseDumper
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
           senior_delegate_id unconfirmed_wca_id
+          region_id
           updated_at
           wca_id
           receive_delegate_reports
@@ -794,23 +813,6 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "user_groups" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          name
-          group_type
-          parent_group_id
-          is_active
-          is_hidden
-          metadata_id
-          metadata_type
-          created_at
-          updated_at
-        ),
-      ),
-    }.freeze,
     "roles" => {
       where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
       column_sanitizers: actions_to_column_sanitizers(
@@ -827,6 +829,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "jwt_denylist" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

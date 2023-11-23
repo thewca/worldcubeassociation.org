@@ -287,6 +287,7 @@ en:
         registration_notifications_enabled: "When I organize or delegate a competition, email me when new registrations are submitted."
         delegate_status: "Delegate status"
         location: "Location"
+        region: "Region"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
@@ -396,6 +397,16 @@ en:
         candidate_delegate: "Junior Delegate"
         delegate: "Delegate"
         senior_delegate: "Senior Delegate"
+      role_status:
+        delegate_regions:
+          trainee_delegate: "Trainee Delegate"
+          candidate_delegate: "Junior Delegate"
+          delegate: "Delegate"
+          senior_delegate: "Senior Delegate"
+        teams:
+          member: "Member"
+          senior_member: "Senior Member"
+          leader: "Leader"
     person:
       gender:
         m: "Male"
@@ -546,9 +557,6 @@ en:
         extra_file: "Must be in PDF format. If you need to add more files, please merge them together"
         start_date: ""
         end_date: ""
-      wfc:
-        from_date: ""
-        to_date: ""
     #context: and a label for an option
     options:
       #context: about registration
@@ -890,7 +898,6 @@ en:
       email: "Email"
       preferences: "Preferences"
       password: "Password"
-      member_of: "Member of"
       preferred_events_desc: "Selecting your preferred events makes registration for competitions quicker."
       please_fix_profile: "In order to register for competitions, you need to fix the following problems:"
       profile: "Profile"
@@ -1253,6 +1260,7 @@ en:
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
+      cannot_activate_v2: "You cannot activate the new registration system if registration is open."
       no_waiting_list_specified: "This competition does not have a deadline for accepting competitors on the waiting list. If you are using a waiting list, please specify a deadline. If you are not using a waiting list, please remember to specify this in the registration requirements."
     #context: on the "My competitions" page
     my_competitions:
@@ -1655,7 +1663,7 @@ en:
       registration_period_after_start: "Registration period cannot be after start date."
       waiting_list_deadline_before_registration_close: "Wailting list deadline cannot be before registration close date."
       waiting_list_deadline_before_refund_date: "Waiting list deadline cannot be before limit date for refunds."
-      waiting_list_deadline_after_start: "Waiting list deadline must be before start date."
+      waiting_list_deadline_after_end: "Waiting list deadline must be before the competition ends."
       event_change_deadline_before_registration_close: "Deadline for updating events cannot be before registration close date."
       event_change_deadline_after_end_date: "Deadline for updating events cannot be after the competition."
       event_change_deadline_with_ots: "Deadline for updating events must be during the competition if on the spot registrations are accepted."
@@ -1800,6 +1808,7 @@ en:
         register: "Register"
         competitors: "Competitors"
         scrambles: "Scrambles"
+        enable_v2: "Enable new Registration Service"
     results_table:
       wca_profile: "WCA profile"
       event: "Event"
@@ -2595,6 +2604,7 @@ en:
     user_password_placeholder: 'YOUR_PASSWORD'
     user_info_request_intro: 'An OAuth access token can be used, until it expires, to make authorized API requests. For example, to access information about your account:'
     legal_tnoodle_api_header: 'Legal TNoodle version'
+    login_message: 'Please log in'
   merch:
       title: 'WCA Merchandise'
       paragraphs:

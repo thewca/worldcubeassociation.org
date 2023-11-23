@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
+ActiveRecord::Schema[7.0].define(version: 2023_11_20_172504) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -79,6 +79,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.integer "events_per_registration_limit"
     t.boolean "force_comment_in_registration"
     t.integer "posting_by"
+    t.boolean "uses_v2_registrations", default: false, null: false
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -713,6 +714,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.datetime "digest_sent_at", precision: nil
   end
 
+  create_table "jwt_denylist", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "jti", null: false
+    t.datetime "exp", null: false
+    t.index ["jti"], name: "index_jwt_denylist_on_jti"
+  end
+
   create_table "locations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "latitude_microdegrees"
@@ -903,6 +910,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
 
   create_table "sanity_check_categories", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
+    t.string "email_to"
     t.index ["name"], name: "index_sanity_check_categories_on_name", unique: true
   end
 
@@ -1077,6 +1085,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.datetime "updated_at", precision: nil
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
+    t.bigint "region_id"
     t.integer "senior_delegate_id"
     t.string "location", limit: 255
     t.string "wca_id"
@@ -1109,6 +1118,7 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
     t.string "otp_secret"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["email"], name: "index_users_on_email", unique: true
+    t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
     t.index ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
@@ -1157,4 +1167,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_09_21_143204) do
   add_foreign_key "stripe_transactions", "stripe_transactions", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
+  add_foreign_key "users", "user_groups", column: "region_id"
 end

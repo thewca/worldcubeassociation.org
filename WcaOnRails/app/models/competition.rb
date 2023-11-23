@@ -159,6 +159,7 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
+    uses_v2_registrations
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -666,6 +667,14 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.pluck(:id).join(",")
   end
 
+  def enable_v2_registrations!
+    update_column :uses_v2_registrations, true
+  end
+
+  def uses_new_registration_service?
+    self.uses_v2_registrations
+  end
+
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
@@ -1108,8 +1117,8 @@ class Competition < ApplicationRecord
       if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
       end
-      if waiting_list_deadline_date >= start_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      if waiting_list_deadline_date > end_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end'))
       end
     end
   end

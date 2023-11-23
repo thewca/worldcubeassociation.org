@@ -7,6 +7,7 @@ import 'semantic-css/checkbox';
 import 'semantic-css/container';
 import 'semantic-css/dimmer';
 import 'semantic-css/divider';
+import 'semantic-css/accordion';
 import 'semantic-css/dropdown';
 import 'semantic-css/form';
 import 'semantic-css/grid';

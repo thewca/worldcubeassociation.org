@@ -433,6 +433,8 @@ pt:
         delegate_status: Estatuto de delegado
         #original_hash: d219c68
         location: Localização
+        #original_hash: 0f21717
+        region: Região
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -749,6 +751,23 @@ pt:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Sénior
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Delegado em Treino
+          #original_hash: 9b97968
+          candidate_delegate: Delegado Júnior
+          #original_hash: 12ab214
+          delegate: Delegado
+          #original_hash: d463c23
+          senior_delegate: Delegado Sénior
+        teams:
+          #original_hash: 6853c98
+          member: Membro
+          #original_hash: c366473
+          senior_member: Membro Sénior
+          #original_hash: e26c936
+          leader: Líder
     person:
       gender:
         #original_hash: 3f3a489
@@ -834,8 +853,6 @@ pt:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -845,8 +862,6 @@ pt:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1268,11 +1283,6 @@ pt:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1963,8 +1973,6 @@ pt:
       preferences: Preferências
       #original_hash: 8be3c94
       password: Senha
-      #original_hash: 3fc6dbe
-      member_of: Membro de
       #original_hash: 42619dd
       preferred_events_desc: >-
         Selecionar os seus eventos favoritos agiliza o processo de inscrição em
@@ -3503,8 +3511,10 @@ pt:
       waiting_list_deadline_before_refund_date: >-
         Prazo limite de lista de espera não pode ser antes da data limite para
         reembolsos.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: Prazo limite de lista de espera tem que ser antes da data de início.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: >-
+        O prazo limite para a lista de espera deve ser antes do fim da
+        competição.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         Prazo limite para atualizar eventos não pode ser antes da data de fecho
@@ -5650,6 +5660,8 @@ pt:
       sobre a sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão TNoodle legal
+    #original_hash: 32295ee
+    login_message: Por favor faça login
   merch:
     #original_hash: 96a95a1
     title: Merchandise WCA
