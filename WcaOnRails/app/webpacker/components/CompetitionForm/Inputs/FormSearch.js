@@ -1,13 +1,19 @@
 import React, { useCallback, useMemo } from 'react';
 import {
-  userSearchApiUrl,
   userApiUrl,
-  competitionSearchApiUrl,
   competitionApiUrl,
 } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
-import MultiSearchInput, { itemToOption } from '../../SearchWidget/MultiSearchInput';
+import { itemToOption } from '../../SearchWidget/MultiSearchInput';
 import { useManyLoadedData } from '../../../lib/hooks/useLoadedData';
+import WcaSearch from '../../SearchWidget/WcaSearch';
+
+const useWrapIdOnly = (originalCallback) => useCallback((values) => {
+  const extractedIds = values.map((value) => value.id);
+  // FIXME this is supposed to be an event that triggered the change.
+  // We lost this during the most recent refactor, but I'm not sure whether that's even a problem.
+  originalCallback(null, { value: extractedIds });
+}, [originalCallback]);
 
 export function UserSearch({
   value,
@@ -17,36 +23,27 @@ export function UserSearch({
 }) {
   const userIds = useMemo(() => (value || []), [value]);
 
-  const queryParams = useMemo(() => {
-    const params = new URLSearchParams();
-
-    if (delegateOnly) params.append('only_staff_delegates', true);
-    if (traineeOnly) params.append('only_trainee_delegates', true);
-
-    return params;
-  }, [delegateOnly, traineeOnly]);
-
-  const userSearchApiUrlFn = useCallback((query) => `${userSearchApiUrl(query)}&${queryParams.toString()}`, [queryParams]);
-
   const {
-    data,
+    data: initialData,
     anyLoading,
   } = useManyLoadedData(userIds, userApiUrl);
 
   const preSelected = useMemo(
     // the users API actually returns users in the format { "user": stuff_you_are_interested_in }
-    () => Object.values(data).map((item) => itemToOption(item.user)),
-    [data],
+    () => Object.values(initialData).map((item) => itemToOption(item.user)),
+    [initialData],
   );
+
+  const setSelectedValue = useWrapIdOnly(onChange);
 
   if (anyLoading) return <Loading />;
 
   return (
-    <MultiSearchInput
-      url={userSearchApiUrlFn}
-      goToItemOnSelect={false}
-      selectedItems={preSelected}
-      onChange={onChange}
+    <WcaSearch
+      selectedValue={preSelected}
+      setSelectedValue={setSelectedValue}
+      model="user"
+      params={{ only_staff_delegates: delegateOnly, only_trainee_delegates: traineeOnly }}
     />
   );
 }
@@ -68,15 +65,15 @@ export function CompetitionSearch({
     [initialData],
   );
 
+  const setSelectedValue = useWrapIdOnly(onChange);
+
   if (anyLoading) return <Loading />;
 
   return (
-    <MultiSearchInput
-      url={competitionSearchApiUrl}
-      goToItemOnSelect={false}
-      selectedItems={preSelected}
+    <WcaSearch
+      selectedValue={preSelected}
+      setSelectedValue={setSelectedValue}
       disabled={freeze}
-      onChange={onChange}
     />
   );
 }

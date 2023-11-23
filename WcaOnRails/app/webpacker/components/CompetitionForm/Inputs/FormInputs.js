@@ -11,7 +11,7 @@ import { Circle } from 'react-leaflet';
 import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
-import { CompetitionSearch, UserSearch } from './WCASearch';
+import { CompetitionSearch, UserSearch } from './FormSearch';
 import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import {
