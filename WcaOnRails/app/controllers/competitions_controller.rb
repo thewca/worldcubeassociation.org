@@ -55,7 +55,7 @@ class CompetitionsController < ApplicationController
 
     if is_message && permission_result
       return render status: :forbidden, json: { error: permission_result }
-    elsif !permission_result
+    elsif !is_message && !permission_result
       return render status: :forbidden, json: { error: "Missing permission #{action}" }
     end
 
@@ -675,7 +675,7 @@ class CompetitionsController < ApplicationController
     }
   end
 
-  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: false) }, only: [:destroy]
+  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: true) }, only: [:destroy]
 
   def destroy
     competition = competition_from_params

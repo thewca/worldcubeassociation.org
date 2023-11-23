@@ -276,7 +276,6 @@ class Competition < ApplicationRecord
   validates :name_reason, presence: true, if: :name_reason_required?
   validates :external_website, presence: true, if: -> { confirmed_or_visible? && !generate_website }
 
-  validates :start_date, :end_date, presence: { message: I18n.t('simple_form.required.text') }
   validates :registration_open, :registration_close, presence: { message: I18n.t('simple_form.required.text') }, if: :registration_period_required?
 
   # NOTE: we only validate when confirming, until we have a unified events/rounds editor.
