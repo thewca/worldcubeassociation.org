@@ -99,12 +99,9 @@ export default function Delegates() {
 
   const { delegates, canViewDelegateMatters } = data || {};
   const seniorDelegates = React.useMemo(() => {
-    if (delegates) {
-      return delegates
-        .filter((user) => user.delegate_status === 'senior_delegate')
-        .sort((user1, user2) => (user1.location || '').localeCompare(user2.location || ''));
-    }
-    return null;
+    return delegates
+        ?.filter((user) => user.delegate_status === 'senior_delegate')
+        ?.sort((user1, user2) => (user1.location || '').localeCompare(user2.location || ''));
   }, [delegates]);
 
   const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState();
