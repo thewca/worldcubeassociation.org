@@ -2748,6 +2748,8 @@ sv:
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Kunde inte stänga anmälan.
+      #original_hash: b16bd13
+      cannot_activate_v2: Du kan inte aktivera det nya anmälningssystemet om anmälan är öppen.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Denna tävling har ingen deadline för att acceptera anmälningar från
@@ -3466,10 +3468,8 @@ sv:
       waiting_list_deadline_before_refund_date: >-
         Deadline för att bli godkänd från väntelistan kan inte vara före sista
         datumet för återbetalningar.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: >-
-        Deadline för att bli godkänd från väntelistan måste vara före
-        startdatumet.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: Deadline för väntelistan måste vara innan tävlingen avslutas.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: Deadline för uppdatering av grenar kan inte vara före anmälan stänger.
       #original_hash: bc1ca0f
@@ -3738,6 +3738,8 @@ sv:
         competitors: Tävlande
         #original_hash: c4622c3
         scrambles: Blandningar
+        #original_hash: f632da3
+        enable_v2: Aktivera nya anmälningssystemet
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profil
@@ -4579,6 +4581,8 @@ sv:
     title: WCA-delegater
     #original_hash: 77b819c
     acknowledges: 'WCA erkänner följande WCA-delegater:'
+    #original_hash: 0397112
+    regions: Regioner
     table:
       #original_hash: 709a232
       name: Namn
@@ -5552,6 +5556,8 @@ sv:
       information om ditt konto:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Giltig TNoodle-version
+    #original_hash: 32295ee
+    login_message: Var vänlig logga in
   merch:
     #original_hash: 96a95a1
     title: WCA-merch

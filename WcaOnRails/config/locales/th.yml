@@ -4384,6 +4384,8 @@ th:
     title: WCA Delegates
     #original_hash: 77b819c
     acknowledges: WCA ยอมรับ WCA Delegate เหล่านี้
+    #original_hash: 0397112
+    regions: ภูมิภาค
     table:
       #original_hash: 709a232
       name: ชื่อ

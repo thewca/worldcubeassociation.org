@@ -63,6 +63,7 @@ export default function MultiSearchInput({
   // it's a function that takes a single item.
   setSelectedValue,
   showOptionToGoToSearchPage = false,
+  goToItemUrlOnClick = false,
   placeholder,
   removeNoResultsMessage,
   disabled = false,
@@ -106,14 +107,24 @@ export default function MultiSearchInput({
   }));
 
   const onChangeInternal = (_, { value, options }) => {
-    const map = {};
-    options.forEach((option) => {
-      map[option.value] = option;
-    });
+    const map = Object.fromEntries(
+      options.map((option) => [option.value, option]),
+    );
+
     if (multiple) {
       setSelectedValue(value.map((id) => itemToOption(map[id].item)));
     } else {
-      setSelectedValue(map[value] ? itemToOption(map[value].item) : null);
+      const newSelectedValue = map[value] ? itemToOption(map[value].item) : null;
+
+      setSelectedValue((oldSelectedValue) => {
+        // Redirect user to actual page if needed, and do not change the state.
+        if (goToItemUrlOnClick && newSelectedValue?.item?.url !== null) {
+          window.location.href = newSelectedValue.item.url;
+          return oldSelectedValue;
+        }
+
+        return newSelectedValue;
+      });
     }
   };
 

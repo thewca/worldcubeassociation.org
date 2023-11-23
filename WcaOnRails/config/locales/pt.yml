@@ -2781,6 +2781,8 @@ pt:
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
+      #original_hash: b16bd13
+      cannot_activate_v2: Não pode ativar o novo sistema de registos se o registo estiver aberto.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Esta competição não tem prazo para a aceitação de competidores em lista
@@ -3794,6 +3796,8 @@ pt:
         competitors: Competidores
         #original_hash: c4622c3
         scrambles: Embaralhamentos
+        #original_hash: f632da3
+        enable_v2: Ativar o novo Serviço de Registo
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Perfil da WCA
@@ -4661,6 +4665,8 @@ pt:
     title: Delegados da WCA
     #original_hash: 77b819c
     acknowledges: 'A WCA reconhece os seguintes Delegados da WCA:'
+    #original_hash: 0397112
+    regions: Regiões
     table:
       #original_hash: 709a232
       name: Nome

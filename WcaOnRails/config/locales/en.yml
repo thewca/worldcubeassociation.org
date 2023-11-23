@@ -2223,6 +2223,7 @@ en:
   delegates_page:
     title: "WCA Delegates"
     acknowledges: "The WCA acknowledges the following WCA Delegates:"
+    regions: "Regions"
     table:
       name: "Name"
       role: "Role"

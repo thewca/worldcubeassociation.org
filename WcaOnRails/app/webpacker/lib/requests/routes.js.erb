@@ -119,7 +119,9 @@ export const rolesOfGroupType = (groupType) => `<%= CGI.unescape(Rails.applicati
 
 // dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>`
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>`;
+
+export const delegatesStaticPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_delegates_path) %>`;
 
 export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_panel_wfc_path) %>`;
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
