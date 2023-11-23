@@ -206,6 +206,7 @@ Rails.application.routes.draw do
 
   scope 'page_data' do
     get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
+    get 'delegates' => 'static_pages#delegates_data', as: :page_data_delegates
   end
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
