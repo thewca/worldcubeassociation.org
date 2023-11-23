@@ -102,7 +102,7 @@ Rails.application.routes.draw do
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
 
-  namespace :payment do
+  scope :payment do
     get '/config' => 'payment#payment_config'
     get '/finish' => 'payment#payment_finish'
     get '/refunds' => 'payment#available_refunds'

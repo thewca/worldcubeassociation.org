@@ -13,7 +13,8 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
 
     competition = holder.competition
     user = holder.user
-    render json: { error: "Registration not found" }, status: :not_found unless competition.present? && user.present?
+    payee = User.find(registration_service_user)
+    render json: { error: "Registration not found" }, status: :not_found unless competition.present? && user.present? && payee.present?
     account_id = competition.connected_stripe_account_id
 
     registration_metadata = {
@@ -57,7 +58,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       holder: holder,
       stripe_transaction: stripe_transaction,
       client_secret: intent.client_secret,
-      user: registration_service_user,
+      user: payee,
     )
 
     render json: { id: stripe_transaction.id }
