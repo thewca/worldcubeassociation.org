@@ -26,7 +26,6 @@ def within_modal(&)
   within(find_modal(&))
 end
 
-
 RSpec.feature "Competition management", js: true do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
@@ -279,7 +278,7 @@ RSpec.feature "Competition management", js: true do
 
       scenario 'can edit registration open datetime', js: true, retry: 3 do
         visit edit_competition_path(comp_with_fours)
-        find_field("I would like to use the WCA website for registration", :visible => :all, :disabled => :all).check
+        find_field("I would like to use the WCA website for registration", visible: :all, disabled: :all).check
 
         expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .datepicker")
         expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .timepicker")

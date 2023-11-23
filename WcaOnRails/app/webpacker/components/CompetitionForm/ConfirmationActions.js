@@ -11,7 +11,7 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import {updateFormValue} from "./store/actions";
+import { updateFormValue } from './store/actions';
 
 export function CreateOrUpdateButton({
   createComp,
