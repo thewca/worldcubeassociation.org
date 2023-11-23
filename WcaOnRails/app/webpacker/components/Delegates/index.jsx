@@ -98,11 +98,9 @@ export default function Delegates() {
   const { data, loading, error } = useLoadedData(delegatesStaticPageDataUrl);
 
   const { delegates, canViewDelegateMatters } = data || {};
-  const seniorDelegates = React.useMemo(() => {
-    return delegates
-        ?.filter((user) => user.delegate_status === 'senior_delegate')
-        ?.sort((user1, user2) => (user1.location || '').localeCompare(user2.location || ''));
-  }, [delegates]);
+  const seniorDelegates = React.useMemo(() => delegates
+    ?.filter((user) => user.delegate_status === 'senior_delegate')
+    ?.sort((user1, user2) => (user1.location || '').localeCompare(user2.location || '')), [delegates]);
 
   const [activeSeniorDelegate, setActiveSeniorDelegate] = React.useState();
   const [adminMode, setAdminMode] = React.useState(false);
