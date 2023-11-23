@@ -2,30 +2,18 @@
 
 class WfcDuesRedirect < ApplicationRecord
   belongs_to :redirect_to, class_name: "WfcXeroUser", foreign_key: "redirect_to_id"
+  belongs_to :redirect_source, polymorphic: true
 
-  enum :redirect_type, {
-    country: "country",
-    organizer: "organizer",
+  enum :redirect_source_type, {
+    Country: "Country",
+    User: "User",
   }
-
-  def redirect_from_country
-    if redirect_from_country_id.nil?
-      return nil
-    end
-    Country.find_by_id(redirect_from_country_id)
-  end
-
-  def redirect_from_organizer
-    if redirect_from_organizer_id.nil?
-      return nil
-    end
-    User.find(redirect_from_organizer_id)
-  end
 
   def serializable_hash(options = nil)
     super({
-      only: %w[id redirect_type],
-      methods: %w[redirect_from_country redirect_from_organizer redirect_to],
+      only: %w[id redirect_source_type],
+      methods: %w[redirect_to],
+      include: %w[redirect_source],
     }.merge(options || {}))
   end
 end

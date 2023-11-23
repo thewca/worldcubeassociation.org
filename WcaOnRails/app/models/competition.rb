@@ -2012,25 +2012,27 @@ class Competition < ApplicationRecord
     dues.present? ? dues : 0
   end
 
-  def dues_payer
-    country_id = self.country.id
-    country_redirect = WfcDuesRedirect.find_by(redirect_from_country_id: country_id)
-    if country_redirect.present?
-      return WfcXeroUser.find_by(id: country_redirect.redirect_to_id)
+  private def xero_dues_payer
+    if self.country.wfc_dues_redirect.present?
+      self.country.wfc_dues_redirect.redirect_to
+    elsif self.organizers.any? { |organizer| organizer.wfc_dues_redirect.present? }
+      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }.wfc_dues_redirect.redirect_to
     end
-    organizers.each do |organizer|
-      organizer_redirect = WfcDuesRedirect.find_by(redirect_from_organizer_id: organizer.id)
-      if organizer_redirect.present?
-        return WfcXeroUser.find_by(id: organizer_redirect.redirect_to_id)
-      end
-    end
-    staff_delegates.min_by(&:name)
+  end
+
+  def dues_payer_name
+    dues_payer = xero_dues_payer || staff_delegates.min_by(&:name)
+    dues_payer&.name
+  end
+
+  def dues_payer_email
+    dues_payer = xero_dues_payer || staff_delegates.min_by(&:name)
+    dues_payer&.email
   end
 
   def dues_payer_is_combined_invoice?
-    dues_payer = self.dues_payer
-    if dues_payer.is_a?(WfcXeroUser)
-      dues_payer.is_combined_invoice
+    if xero_dues_payer.present?
+      xero_dues_payer.is_combined_invoice
     else
       false
     end

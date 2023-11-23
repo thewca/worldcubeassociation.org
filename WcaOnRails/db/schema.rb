@@ -1157,14 +1157,11 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_22_153755) do
   end
 
   create_table "wfc_dues_redirects", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "redirect_type", null: false
-    t.string "redirect_from_country_id"
-    t.integer "redirect_from_organizer_id"
+    t.string "redirect_source_id", null: false
+    t.string "redirect_source_type", null: false
     t.bigint "redirect_to_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["redirect_from_country_id"], name: "index_wfc_dues_redirects_on_redirect_from_country_id"
-    t.index ["redirect_from_organizer_id"], name: "index_wfc_dues_redirects_on_redirect_from_organizer_id"
     t.index ["redirect_to_id"], name: "index_wfc_dues_redirects_on_redirect_to_id"
   end
 
@@ -1188,7 +1185,5 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_22_153755) do
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "users", "user_groups", column: "region_id"
-  add_foreign_key "wfc_dues_redirects", "Countries", column: "redirect_from_country_id"
-  add_foreign_key "wfc_dues_redirects", "users", column: "redirect_from_organizer_id"
   add_foreign_key "wfc_dues_redirects", "wfc_xero_users", column: "redirect_to_id"
 end

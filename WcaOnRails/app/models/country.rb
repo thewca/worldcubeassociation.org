@@ -5,6 +5,8 @@ class Country < ApplicationRecord
   WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
   self.table_name = "Countries"
 
+  has_one :wfc_dues_redirect, as: :redirect_source
+
   ALL_TIMEZONES_MAPPING = begin
     all_tz = ActiveSupport::TimeZone::MAPPING
     grouped_tz = all_tz.group_by { |k, v| v }

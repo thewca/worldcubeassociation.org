@@ -17,7 +17,7 @@ export default function DuesRedirect() {
   const xeroUsersFetch = useLoadedData(wfcXeroUsersUrl);
   const { save, saving } = useSaveAction();
   const [open, setOpen] = React.useState(false);
-  const [formData, setFormData] = React.useState({ redirectType: 'country' });
+  const [formData, setFormData] = React.useState({ redirectType: 'Country' });
 
   if (loading || saving || xeroUsersFetch.loading) return <Loading />;
   if (error || xeroUsersFetch.err) return <Errored />;
@@ -34,14 +34,8 @@ export default function DuesRedirect() {
         <Table.Body>
           {data?.map((duesRedirect) => (
             <Table.Row key={duesRedirect.id}>
-              <Table.Cell>{duesRedirect.redirect_type}</Table.Cell>
-              <Table.Cell>
-                {
-                duesRedirect.redirect_type === 'country'
-                  ? duesRedirect.redirect_from_country.name
-                  : duesRedirect.redirect_from_organizer.name
-                }
-              </Table.Cell>
+              <Table.Cell>{duesRedirect.redirect_source_type}</Table.Cell>
+              <Table.Cell>{duesRedirect.redirect_source.name}</Table.Cell>
               <Table.Cell>{duesRedirect.redirect_to.name}</Table.Cell>
             </Table.Row>
           ))}
@@ -71,13 +65,13 @@ export default function DuesRedirect() {
               placeholder="Type"
               name="redirect_type"
               options={[
-                { key: 'country', text: 'Country', value: 'country' },
-                { key: 'organizer', text: 'Organizer', value: 'organizer' },
+                { key: 'country', text: 'Country', value: 'Country' },
+                { key: 'organizer', text: 'Organizer', value: 'User' },
               ]}
               value={formData.redirectType}
               onChange={(e, { value }) => setFormData({ ...formData, redirectType: value })}
             />
-            {formData.redirectType === 'country' && (
+            {formData.redirectType === 'Country' && (
               <CountrySelector
                 label="From"
                 name="redirect_from_country_id"
@@ -87,7 +81,7 @@ export default function DuesRedirect() {
                 }
               />
             )}
-            {formData.redirectType === 'organizer' && (
+            {formData.redirectType === 'User' && (
               <WcaSearch
                 selectedValue={formData.redirectFromOrganizer}
                 setSelectedValue={

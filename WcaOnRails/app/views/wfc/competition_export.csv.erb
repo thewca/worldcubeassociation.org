@@ -15,6 +15,6 @@
     competition_url(c.id), c.num_competitors, c.delegates.reject(&:trainee_delegate?).map(&:name).sort.join(","),
     c.currency_code, c.base_entry_fee_lowest_denomination, Money::Currency.new(c.currency_code).subunit_to_unit,
     c.championships.map(&:championship_type).sort.join(","), c.exempt_from_wca_dues?, c.organizers.map(&:name).sort.join(","),
-    c.dues_per_competitor_in_usd * c.num_competitors, c.dues_payer.name, c.dues_payer.email, c.dues_payer_is_combined_invoice?
+    c.dues_per_competitor_in_usd * c.num_competitors, c.dues_payer_name, c.dues_payer_email, c.dues_payer_is_combined_invoice?
   ], col_sep: "\t").html_safe -%>
 <% end %>
