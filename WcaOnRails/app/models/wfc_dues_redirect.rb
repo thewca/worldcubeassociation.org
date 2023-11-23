@@ -9,11 +9,13 @@ class WfcDuesRedirect < ApplicationRecord
     User: "User",
   }
 
+  DEFAULT_SERIALIZE_OPTIONS = {
+    only: %w[id redirect_source_type],
+    methods: %w[redirect_to],
+    include: %w[redirect_source],
+  }.freeze
+
   def serializable_hash(options = nil)
-    super({
-      only: %w[id redirect_source_type],
-      methods: %w[redirect_to],
-      include: %w[redirect_source],
-    }.merge(options || {}))
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
   end
 end

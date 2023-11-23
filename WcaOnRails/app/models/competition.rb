@@ -2013,28 +2013,28 @@ class Competition < ApplicationRecord
   end
 
   private def xero_dues_payer
-    if self.country.wfc_dues_redirect.present?
-      self.country.wfc_dues_redirect.redirect_to
-    elsif self.organizers.any? { |organizer| organizer.wfc_dues_redirect.present? }
-      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }.wfc_dues_redirect.redirect_to
-    end
+    (
+      self.country&.wfc_dues_redirect&.redirect_to ||
+      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+    )
+  end
+
+  # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
+  private def delegate_dues_payer
+    staff_delegates.min_by(&:name)
   end
 
   def dues_payer_name
-    dues_payer = xero_dues_payer || staff_delegates.min_by(&:name)
+    dues_payer = xero_dues_payer || delegate_dues_payer
     dues_payer&.name
   end
 
   def dues_payer_email
-    dues_payer = xero_dues_payer || staff_delegates.min_by(&:name)
+    dues_payer = xero_dues_payer || delegate_dues_payer
     dues_payer&.email
   end
 
   def dues_payer_is_combined_invoice?
-    if xero_dues_payer.present?
-      xero_dues_payer.is_combined_invoice
-    else
-      false
-    end
+    xero_dues_payer&.is_combined_invoice || false
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V0::WfcXeroUsersController < Api::V0::ApiController
+class Api::V0::Wfc::XeroUsersController < Api::V0::ApiController
   before_action :current_user_can_admin_finances!, only: [:index, :create]
   private def current_user_can_admin_finances!
     unless current_user.can_admin_finances?
