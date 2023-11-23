@@ -34,7 +34,7 @@ function UserGroupVisibility({ userGroup, save, sync }) {
           setOpen(false);
           save(
             userGroupsUpdateUrl(userGroup.id),
-            { is_active: !userGroup.is_active, is_hidden: false },
+            { is_active: !userGroup.is_active, is_hidden: userGroup.is_hidden },
             sync,
           );
         }}
@@ -59,16 +59,8 @@ export default function RegionManager() {
   ), [data]);
 
   const subRegions = React.useMemo(() => {
-    const subRegionsMap = {};
-    data?.forEach((group) => {
-      if (group.parent_group_id) {
-        if (!subRegionsMap[group.parent_group_id]) {
-          subRegionsMap[group.parent_group_id] = [];
-        }
-        subRegionsMap[group.parent_group_id].push(group);
-      }
-    });
-    return subRegionsMap;
+    const subRegionsList = data?.filter((group) => group.parent_group_id) || [];
+    return Object.groupBy(subRegionsList, (group) => group.parent_group_id);
   }, [data]);
 
   if (loading || saving) return <Loading />;
@@ -156,7 +148,6 @@ export default function RegionManager() {
               onClick={() => {
                 closeModal();
                 save(addUserGroupsUrl, newRegion, () => sync(), { method: 'POST' }, setSaveError);
-                sync();
                 setNewRegion(defaultRegion);
               }}
             >

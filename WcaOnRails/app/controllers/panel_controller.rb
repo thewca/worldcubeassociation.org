@@ -19,11 +19,6 @@ class PanelController < ApplicationController
     @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
   end
 
-  def seniors
-    # Show the list of seniors and actions available
-    @seniors = User.senior_delegates.order(:name)
-  end
-
   private def editable_post_fields
     [:body]
   end

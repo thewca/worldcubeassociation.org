@@ -3,7 +3,7 @@
 class Api::V0::UserGroupsController < Api::V0::ApiController
   before_action :current_user_is_authorized_for_action!, only: [:update]
   private def current_user_is_authorized_for_action!
-    unless current_user.board_member? || current_user.admin?
+    unless current_user.can_access_board_panel?
       render json: {}, status: 401
     end
   end

@@ -117,10 +117,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     roles = filter_roles_for_logged_in_user(roles)
 
     # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(
-      roles,
-      params.key?(:status) ? params.require(:status) : nil,
-    )
+    roles = filter_roles_for_parameters(roles, params[:status])
 
     render json: roles
   end

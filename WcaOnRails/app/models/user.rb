@@ -1340,7 +1340,15 @@ class User < ApplicationRecord
     roles
   end
 
+  def can_access_wfc_panel?
+    can_admin_finances?
+  end
+
   def can_access_board_panel?
     admin? || board_member?
+  end
+
+  def can_access_panel?
+    can_access_wfc_panel? || can_access_board_panel?
   end
 end

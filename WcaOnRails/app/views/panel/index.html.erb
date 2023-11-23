@@ -83,18 +83,18 @@
     </ul>
   <% end %>
 
-  <% if current_user.financial_committee? || current_user.board_member? || current_user.admin? %>
+  <% if current_user.can_access_panel? %>
     <h2>Other Panels</h2>
 
     <%# Other Panels will list the list of panels that have separate panel page.%>
 
     <ul>
-      <% if current_user.financial_committee? || current_user.admin? %>
+      <% if current_user.can_access_wfc_panel? %>
         <li>
           <%= link_to "WFC panel", panel_wfc_path %>
         </li>
       <% end %>
-      <% if current_user.board_member? || current_user.admin? %>
+      <% if current_user.can_access_board_panel? %>
         <li>
           <%= link_to "Board panel", panel_board_path %>
         </li>
