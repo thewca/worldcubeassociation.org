@@ -469,11 +469,6 @@ en:
           member: "Member"
           senior_member: "Senior Member"
           leader: "Leader"
-    person:
-      gender:
-        m: "Male"
-        f: "Female"
-        o: "Other"
     competition_medium:
       status:
         accepted: "Accepted"

@@ -4,11 +4,12 @@ import {
   Button, Form, Icon, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { adminUpdatePersonUrl } from '../../../lib/requests/routes.js.erb';
+import { adminUpdatePersonUrl, adminCheckRecordsUrl } from '../../../lib/requests/routes.js.erb';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
+import { genders } from '../../../lib/wca-data.js.erb';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const description = `
@@ -27,19 +28,21 @@ const description = `
 
 const dateFormat = 'YYYY-MM-DD';
 
-// let i18n-tasks know the key is used
-// i18n-tasks-use t('enums.person.gender.m')
-// i18n-tasks-use t('enums.person.gender.f')
-// i18n-tasks-use t('enums.person.gender.o')
+const genderOptions = _.map(genders.byId, (gender) => ({
+  key: gender.id,
+  text: gender.name,
+  value: gender.id,
+}));
 
-function EditPerson({ countryList, genderList }) {
+const countryChangeWarning = `The change you made may have affected national and continental records, be sure to run <a href=${adminCheckRecordsUrl}>check_regional_record_markers</a>.`;
+
+function EditPerson({ countryList }) {
   const [person, setPerson] = React.useState();
   const [editedUserDetails, setEditedUserDetails] = React.useState();
   const [originalUserDetails, setOriginalUserDetails] = React.useState();
   const [incorrectClaimCount, setIncorrectClaimCount] = useState(0);
   const { save, saving } = useSaveAction();
-  const [message, setMessage] = useState({});
-  const messageList = Object.values(message).filter((m) => m !== null).sort();
+  const [response, setResponse] = useState();
 
   React.useEffect(() => {
     if (person) {
@@ -53,7 +56,7 @@ function EditPerson({ countryList, genderList }) {
       setOriginalUserDetails(userDetails);
       setEditedUserDetails(userDetails);
       setIncorrectClaimCount(person.item.incorrect_wca_id_claim_count);
-      setMessage({});
+      setResponse(null);
     } else {
       setOriginalUserDetails(null);
       setEditedUserDetails(null);
@@ -61,7 +64,7 @@ function EditPerson({ countryList, genderList }) {
     }
   }, [person]);
 
-  const handleFormChange = (_, { name: formName, value }) => {
+  const handleFormChange = (e, { name: formName, value }) => {
     setEditedUserDetails((prev) => ({ ...prev, [formName]: value }));
   };
 
@@ -69,9 +72,19 @@ function EditPerson({ countryList, genderList }) {
     save(adminUpdatePersonUrl, {
       person: editedUserDetails,
       method,
-    }, (data) => {
-      setMessage(data);
+    }, () => {
+      setResponse({
+        success: true,
+        message: `Success. ${originalUserDetails.representing !== editedUserDetails.representing
+          ? countryChangeWarning : ''}
+          </p>`,
+      });
       setPerson(null);
+    }, {}, (error) => {
+      setResponse({
+        success: false,
+        message: `${error}`,
+      });
     });
   };
 
@@ -81,20 +94,16 @@ function EditPerson({ countryList, genderList }) {
     <>
       {/* eslint-disable-next-line react/no-danger */}
       <div dangerouslySetInnerHTML={{ __html: description }} />
-      {messageList.length > 0 && (
+      {response != null && (
         <Message
-          success={!!message.success_message}
-          error={!!message.error_message}
-          warning={!!message.warning_message}
+          success={response.success}
+          error={!response.success}
+          content={response.message}
         >
-          <Message.List>
-            {messageList.map((m) => (
-              <Message.Item>
-                {/* eslint-disable-next-line react/no-danger */}
-                <div dangerouslySetInnerHTML={{ __html: m }} />
-              </Message.Item>
-            ))}
-          </Message.List>
+          <Message.Content>
+            {/* eslint-disable-next-line react/no-danger */}
+            <div dangerouslySetInnerHTML={{ __html: response.message }} />
+          </Message.Content>
         </Message>
       )}
       <WcaSearch
@@ -120,7 +129,7 @@ function EditPerson({ countryList, genderList }) {
           onChange={handleFormChange}
         />
         <Form.Select
-          options={genderList.map((g) => ({ text: I18n.t(`enums.person.gender.${g}`), value: g }))}
+          options={genderOptions}
           label={I18n.t('activerecord.attributes.user.gender')}
           name="gender"
           disabled={!editedUserDetails}

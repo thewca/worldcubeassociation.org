@@ -135,3 +135,5 @@ export const pendingClaimsUrl = (userId) => `<%= CGI.unescape(Rails.application.
 export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>/${userId}`;
 
 export const adminUpdatePersonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_update_person_path)%>`;
+
+export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;

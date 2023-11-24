@@ -106,7 +106,15 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    render status: :ok, json: { result: result }, option_name: current_user&.can_admin_results? ? :can_admin_results : nil
+    if current_user && current_user.can_admin_results?
+      options = {
+        private_attributes: %w[incorrect_wca_id_claim_count dob],
+      }
+    else
+      options = {}
+    end
+
+    render status: :ok, json: { result: result.as_json(options) }
   end
 
   def posts_search

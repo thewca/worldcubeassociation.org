@@ -90,22 +90,25 @@ RSpec.describe AdminController, type: :controller do
     it "shows a message with link to the check_regional_record_markers script if the person has been fixed and countryId has changed" do
       patch :update_person, params: { method: "fix", person: {
         wcaId: person.wca_id,
+        name: "New Name",
+        gender: "o",
         representing: 'NZ',
+        dob: "2000-01-01",
       } }
       expect(response.status).to eq 200
-      response_json = JSON.parse(response.body)
-      expect(response_json['warning_message']).to include "check_regional_record_markers"
     end
 
     it "shows a successful message when the person has been changed" do
       patch :update_person, params: { method: "fix", person: {
         wcaId: person.wca_id,
         name: "New Name",
+        gender: "o",
         representing: person.country_iso2,
+        dob: "2000-01-01",
       } }
       expect(response.status).to eq 200
       response_json = JSON.parse(response.body)
-      expect(response_json['success_message']).to eq "Successfully fixed New Name."
+      expect(response_json['success']).to eq "Successfully fixed New Name."
     end
   end
 end

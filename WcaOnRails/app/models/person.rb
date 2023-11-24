@@ -280,8 +280,12 @@ class Person < ApplicationRecord
       id: self.wca_id,
     )
 
-    if options[:option_name] == :can_admin_results
+    private_attributes = options&.fetch(:private_attributes, []) || []
+    if private_attributes.include?("dob")
       json[:dob] = dob.to_s
+    end
+
+    if private_attributes.include?("incorrect_wca_id_claim_count")
       json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
     end
 
