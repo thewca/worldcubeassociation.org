@@ -3,21 +3,39 @@ import {
   Dropdown,
   Grid, Header, Icon, Menu, Segment,
 } from 'semantic-ui-react';
+import useHash from '../../lib/hooks/useHash';
 
 export default function PanelTemplate({ heading, sections }) {
-  const [selectedMenu, setSelectedMenu] = React.useState(0);
-  const SelectedComponent = React.useMemo(() => sections.find(
-    (_, index) => index === selectedMenu,
-  ).component, [sections, selectedMenu]);
+  const [hash, setHash] = useHash();
 
-  function menuClickHandler(index) {
-    const section = sections[index];
+  const selectedMenu = React.useMemo(() => (hash ? sections.findIndex(
+    (section) => section.id === hash,
+  ) : 0), [hash, sections]);
+
+  if (selectedMenu === -1) {
+    setHash(sections[0].id);
+  }
+
+  const SelectedComponent = React.useMemo(() => {
+    const selectedSectionIndex = sections.findIndex((section) => section.id === hash);
+    const selectedSection = sections[selectedSectionIndex] || sections[0];
+    if (selectedSectionIndex === -1) {
+      setHash(selectedSection.id);
+    }
+    if (selectedSection.component) {
+      return selectedSection.component;
+    }
+    window.location.href = selectedSection.link;
+    return () => null;
+  }, [sections, hash, setHash]);
+
+  const selectSection = React.useCallback((section) => {
     if (section.component) {
-      setSelectedMenu(index);
+      setHash(section.id);
     } else {
       window.open(section.link);
     }
-  }
+  }, [setHash]);
 
   return (
     <div className="container">
@@ -30,7 +48,7 @@ export default function PanelTemplate({ heading, sections }) {
                 key={section.id}
                 name={section.name}
                 active={selectedMenu === index}
-                onClick={() => menuClickHandler(index)}
+                onClick={() => selectSection(section)}
               >
                 {!section.component && <Icon name="external alternate" />}
                 {section.name}
@@ -52,7 +70,7 @@ export default function PanelTemplate({ heading, sections }) {
                     icon: !section.component && 'external alternate',
                   }))}
                   value={selectedMenu}
-                  onChange={(_, { value }) => menuClickHandler(value)}
+                  onChange={(_, { value }) => selectSection(sections[value])}
                 />
               </Grid.Row>
               <Grid.Row><SelectedComponent /></Grid.Row>
