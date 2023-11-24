@@ -189,7 +189,7 @@ RSpec.describe Competition do
 
     it "delegates for past comps no longer need to be delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :past
-      competition.delegates.first.update_columns(delegate_status: nil, senior_delegate_id: nil)
+      competition.delegates.first.update_columns(delegate_status: nil, region_id: nil)
 
       expect(competition).to be_valid
     end

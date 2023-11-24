@@ -88,6 +88,16 @@ class Api::V0::RolesController < Api::V0::ApiController
     roles
   end
 
+  # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
+  private def remove_pending_wca_id_claims(user)
+    region_senior_delegate = user.region.senior_delegate
+    user.confirmed_users_claiming_wca_id.each do |confirmed_user|
+      WcaIdClaimMailer.notify_user_of_delegate_demotion(confirmed_user, user, region_senior_delegate).deliver_later
+    end
+    # Clear all pending WCA IDs claims for the demoted Delegate
+    User.where(delegate_to_handle_wca_id_claim: user.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
+  end
+
   # Returns a list of roles primarily based on userId.
   def index_for_user
     user_id = params.require(:user_id)
@@ -168,13 +178,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     location = params.require(:location)
 
     user = User.find(user_id)
-    if delegate_status == "senior_delegate"
-      senior_delegate_id = nil
-      User.where(region_id: region_id).where.not(id: user_id).update_all(senior_delegate_id: user_id)
-    else
-      senior_delegate_id = User.where(delegate_status: "senior_delegate", region_id: region_id).first.id
-    end
-    user.update!(delegate_status: delegate_status, senior_delegate_id: senior_delegate_id, region_id: region_id, location: location)
+    user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
     send_role_change_notification(user)
 
     render json: {
@@ -186,7 +190,8 @@ class Api::V0::RolesController < Api::V0::ApiController
     user_id = params.require(:userId)
 
     user = User.find(user_id)
-    user.update!(delegate_status: '', senior_delegate_id: '', region_id: '', location: '')
+    remove_pending_wca_id_claims(user)
+    user.update!(delegate_status: '', region_id: '', location: '')
     send_role_change_notification(user)
 
     render json: {
@@ -197,14 +202,15 @@ class Api::V0::RolesController < Api::V0::ApiController
   private def send_role_change_notification(user)
     if user.saved_change_to_delegate_status
       if user.delegate_status
-        user_senior_delegate = user.senior_or_self
+        region_id = user.region_id
       else
-        user_senior_delegate = User.find(user.senior_delegate_id_before_last_save)
+        region_id = user.region_id_before_last_save
       end
+      region_senior_delegate = UserGroup.find_by(id: region_id).senior_delegate
       DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(
         user,
         current_user,
-        user_senior_delegate,
+        region_senior_delegate,
         user.delegate_status_before_last_save,
         user.delegate_status,
       ).deliver_later

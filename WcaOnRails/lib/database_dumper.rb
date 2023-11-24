@@ -699,7 +699,7 @@ module DatabaseDumper
           saved_pending_avatar_crop_w
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
-          senior_delegate_id unconfirmed_wca_id
+          unconfirmed_wca_id
           region_id
           updated_at
           wca_id

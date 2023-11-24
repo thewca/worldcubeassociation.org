@@ -6,11 +6,11 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
   describe "notify_board_and_assistants_of_delegate_status_change" do
     let(:senior_delegate1) { FactoryBot.create :senior_delegate, name: "Eddard Stark" }
     let(:senior_delegate2) { FactoryBot.create :senior_delegate, name: "Catelyn Stark" }
-    let(:delegate) { FactoryBot.create :delegate, name: "Daenerys Targaryen", delegate_status: "candidate_delegate", senior_delegate: senior_delegate1 }
+    let(:delegate) { FactoryBot.create :delegate, name: "Daenerys Targaryen", delegate_status: "candidate_delegate", region_id: senior_delegate1.region_id }
     let(:user) { FactoryBot.create :user, name: "Jon Snow" }
 
     it "email headers are correct" do
-      user.update!(delegate_status: "candidate_delegate", senior_delegate: senior_delegate1)
+      user.update!(delegate_status: "candidate_delegate", region_id: senior_delegate1.region_id)
       mail = DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(user, senior_delegate1, senior_delegate1, nil, "candidate_delegate")
 
       expect(mail.subject).to eq("Eddard Stark just changed the Delegate status of Jon Snow")
@@ -21,7 +21,7 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
     end
 
     it "promoting a registered speedcuber to a delegate" do
-      user.update!(delegate_status: "candidate_delegate", senior_delegate: senior_delegate1)
+      user.update!(delegate_status: "candidate_delegate", region_id: senior_delegate1.region_id)
       mail = DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(user, senior_delegate1, senior_delegate1, nil, "candidate_delegate")
 
       expect(mail.body.encoded).to match("Eddard Stark has changed the Delegate status of Jon Snow from Registered Speedcuber to Junior Delegate.")
@@ -39,7 +39,7 @@ RSpec.describe DelegateStatusChangeMailer, type: :mailer do
     end
 
     it "demoting a Junior delegate to a registered speedcuber" do
-      delegate.update!(delegate_status: nil, senior_delegate: nil)
+      delegate.update!(delegate_status: nil, region_id: nil)
       mail = DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(delegate, senior_delegate1, senior_delegate1, "candidate_delegate", nil)
 
       expect(mail.body.encoded).to match("Eddard Stark has changed the Delegate status of Daenerys Targaryen from Junior Delegate to Registered Speedcuber.")

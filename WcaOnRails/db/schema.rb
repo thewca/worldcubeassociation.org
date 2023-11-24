@@ -1098,7 +1098,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
     t.bigint "region_id"
-    t.integer "senior_delegate_id"
     t.string "location", limit: 255
     t.string "wca_id"
     t.string "avatar", limit: 255
@@ -1133,7 +1132,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["region_id", "delegate_status"], name: "index_users_on_region_id_and_delegate_status"
     t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
   end
 

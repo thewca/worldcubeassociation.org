@@ -175,7 +175,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
   describe 'GET #delegates' do
     it 'includes emails and regions' do
       senior_delegate = FactoryBot.create :senior_delegate
-      delegate = FactoryBot.create :delegate, location: "SF bay area, USA", senior_delegate: senior_delegate
+      delegate = FactoryBot.create :delegate, location: "SF bay area, USA", region_id: senior_delegate.region_id
 
       get :delegates
       expect(response.status).to eq 200
@@ -185,7 +185,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       delegate_json = json.find { |user| user["id"] == delegate.id }
       expect(delegate_json["email"]).to eq delegate.email
       expect(delegate_json["location"]).to eq "SF bay area, USA"
-      expect(delegate_json["senior_delegate_id"]).to eq senior_delegate.id
+      expect(delegate_json["region_id"]).to eq senior_delegate.region_id
     end
   end
 
