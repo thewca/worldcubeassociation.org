@@ -661,6 +661,17 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "user_groups_delegate_regions_metadata" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "users" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(

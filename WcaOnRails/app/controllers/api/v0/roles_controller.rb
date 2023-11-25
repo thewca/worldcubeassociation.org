@@ -115,12 +115,12 @@ class Api::V0::RolesController < Api::V0::ApiController
           regionId: user.region_id,
           location: user.location,
         },
-        regions: UserGroup.regions,
+        regions: UserGroup.delegate_regions,
       }
     else
       render json: {
         roleData: {},
-        regions: UserGroup.regions,
+        regions: UserGroup.delegate_regions,
       }
     end
   end

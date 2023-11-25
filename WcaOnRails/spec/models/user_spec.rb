@@ -85,22 +85,6 @@ RSpec.describe User, type: :model do
     expect(senior_delegate.reload.delegate_status).to eq nil
   end
 
-  it "requires senior delegate be a senior delegate" do
-    delegate = FactoryBot.create :delegate
-    user = FactoryBot.create :user
-
-    delegate.senior_delegate = user
-    expect(delegate).to be_invalid_with_errors(senior_delegate: ["must be a Senior Delegate"])
-
-    user.senior_delegate!
-    expect(delegate).to be_valid
-  end
-
-  it "requires senior delegate if delegate status allows it" do
-    delegate = FactoryBot.build :delegate, senior_delegate: nil
-    expect(delegate).to be_invalid_with_errors(senior_delegate: ["can't be blank"])
-  end
-
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
     # Create someone without a password and without a WCA ID. This simulates the kind
     # of accounts we originally created for all delegates without accounts.
@@ -117,18 +101,6 @@ RSpec.describe User, type: :model do
     expect(delegate.can_admin_results?).to be false
   end
 
-  it "does not allow senior delegate if senior delegate" do
-    senior_delegate1 = FactoryBot.create :user
-    senior_delegate1.senior_delegate!
-
-    senior_delegate2 = FactoryBot.create :user
-    senior_delegate2.senior_delegate!
-
-    expect(senior_delegate1).to be_valid
-    senior_delegate1.senior_delegate = senior_delegate2
-    expect(senior_delegate1).to be_invalid_with_errors(senior_delegate: ["must not be present"])
-  end
-
   it "allows senior delegate if board member" do
     board_member = FactoryBot.create :delegate, :board_member
 
@@ -138,17 +110,6 @@ RSpec.describe User, type: :model do
     expect(board_member).to be_valid
     board_member.senior_delegate = senior_delegate
     expect(board_member).to be_valid
-  end
-
-  it "does not allow senior delegate if regular user" do
-    user = FactoryBot.create :user
-
-    senior_delegate = FactoryBot.create :user
-    senior_delegate.senior_delegate!
-
-    expect(user).to be_valid
-    user.senior_delegate = senior_delegate
-    expect(user).to be_invalid_with_errors(senior_delegate: ["must not be present"])
   end
 
   describe "WCA ID" do

@@ -187,30 +187,6 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       expect(delegate_json["location"]).to eq "SF bay area, USA"
       expect(delegate_json["senior_delegate_id"]).to eq senior_delegate.id
     end
-
-    it 'paginates' do
-      15.times do
-        FactoryBot.create :delegate # Each delegate gets a senior delegate created, so there are 30 delegates in total
-      end
-
-      get :delegates
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json.length).to eq 25
-
-      # Parse HTTP Link header mess
-      link = response.headers["Link"]
-      links = link.split(/, */)
-      next_link = links[1]
-      url, rel = next_link.split(/; */)
-      url = url[1...-1]
-      expect(rel).to eq 'rel="next"'
-
-      get :delegates, params: Rack::Utils.parse_query(URI(url).query)
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json.length).to eq User.delegates.count - 25
-    end
   end
 
   describe 'GET #scramble_program' do
