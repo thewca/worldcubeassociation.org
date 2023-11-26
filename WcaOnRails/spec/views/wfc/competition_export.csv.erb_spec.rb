@@ -11,7 +11,8 @@ RSpec.describe "wfc/competition_export.csv.erb" do
       "Link on WCA", "Competitors", "Delegates",
       "Currency Code", "Base Registration Fee", "Currency Subunit",
       "Championship Type", "Exempt from WCA Dues", "Organizers",
-      "Calculated Dues"
+      "Calculated Dues", "Dues Payer Name", "Dues Payer Email",
+      "Is Combined Invoice"
     ]
 
     assign(:competitions, [])

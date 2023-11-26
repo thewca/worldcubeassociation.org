@@ -346,6 +346,10 @@ Rails.application.routes.draw do
         get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
         get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
       end
+      namespace :wfc do
+        resources :xero_users, only: [:index, :create]
+        resources :dues_redirects, only: [:index, :create]
+      end
     end
   end
 end

@@ -9,6 +9,8 @@ import Loading from '../../Requests/Loading';
 import DelegateProbations from '../../DelegateProbations';
 import DuesExport from './DuesExport';
 import PanelTemplate from '../PanelTemplate';
+import XeroUsers from './XeroUsers';
+import DuesRedirect from './DuesRedirect';
 
 const sections = [
   {
@@ -26,6 +28,16 @@ const sections = [
     name: 'Delegate Probations',
     component: DelegateProbations,
     forAtleastSeniorMember: true,
+  },
+  {
+    id: 'xero-users',
+    name: 'Xero Users',
+    component: XeroUsers,
+  },
+  {
+    id: 'dues-redirect',
+    name: 'Dues Redirect',
+    component: DuesRedirect,
   },
 ];
 

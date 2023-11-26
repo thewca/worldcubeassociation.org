@@ -109,3 +109,7 @@ export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_he
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
 
 export const teamUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.team_path("${id}"))%>`;
+
+export const wfcXeroUsersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_xero_users_path) %>`;
+
+export const wfcDuesRedirectsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_dues_redirects_path) %>`;
