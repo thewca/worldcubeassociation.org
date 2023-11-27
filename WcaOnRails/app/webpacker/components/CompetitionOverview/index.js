@@ -30,20 +30,16 @@ function CompetitionOverview() {
         <Form.Field>
           <label htmlFor="events">
             {` ${I18n.t('competitions.competition_form.events')} `}
+            <Button primary size="mini" id="select-all-events">{I18n.t('competitions.index.all_events')}</Button>
+            <Button size="mini" id="clear-all-events">{I18n.t('competitions.index.clear')}</Button>
           </label>
-
-          <Button primary size="mini" id="select-all-events">{I18n.t('competitions.index.all_events')}</Button>
-          <Button size="mini" id="clear-all-events">{I18n.t('competitions.index.clear')}</Button>
 
           <div id="events">
             {Object.values(events.official).map((event) => (
               <React.Fragment key={event.id}>
-                <span className="event-checkbox">
-                  <label htmlFor={`checkbox-${event.id}`}>
-                    <input type="checkbox" name="event_ids[]" id={`checkbox-${event.id}`} value={event.id} />
-                    <i data-toggle="tooltip" data-placement="top" className={` cubing-icon icon event-${event.id}`} data-original-title={event.name} />
-                  </label>
-                </span>
+                <Button basic icon toggle size="tiny" className="event-checkbox" name="event_ids[]" id={`checkbox-${event.id}`} value={event.id}>
+                  <Icon className={`cubing-icon event-${event.id}`} />
+                </Button>
               </React.Fragment>
             ))}
           </div>
@@ -74,6 +70,7 @@ function CompetitionOverview() {
           </Form.Field>
 
           <Form.Field width={6}>
+            {/* Search to be implemented in Semantic UI */}
             <label htmlFor="search-field">{I18n.t('competitions.index.search')}</label>
             <div id="search-field">
               <div className="input-group">
