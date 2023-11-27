@@ -9,7 +9,7 @@ import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import { competitionsApiUrl } from '../../lib/requests/routes.js.erb';
 import {
-  events, continents, countries,
+  events, continents, countries, competitionConstants,
 } from '../../lib/wca-data.js.erb';
 
 import CompetitionTable from './CompetitionTable';
@@ -37,7 +37,18 @@ function CompetitionOverview() {
           <div id="events">
             {Object.values(events.official).map((event) => (
               <React.Fragment key={event.id}>
-                <Button basic icon toggle size="tiny" className="event-checkbox" name="event_ids[]" id={`checkbox-${event.id}`} value={event.id}>
+                <Button
+                  basic
+                  icon
+                  toggle
+                  size="mini"
+                  className="event-checkbox"
+                  name="event_ids[]"
+                  id={`checkbox-${event.id}`}
+                  value={event.id}
+                  data-tooltip={I18n.t(`events.${event.id}`)}
+                  data-variation="tiny"
+                >
                   <Icon className={`cubing-icon event-${event.id}`} />
                 </Button>
               </React.Fragment>
@@ -74,7 +85,7 @@ function CompetitionOverview() {
             <label htmlFor="search-field">{I18n.t('competitions.index.search')}</label>
             <div id="search-field">
               <div className="input-group">
-                <span className="input-group-addon" data-toggle="tooltip" data-placement="top" title={I18n.t('competitions.index.tooltips.search')}>
+                <span className="input-group-addon" data-tooltip={I18n.t('competitions.index.tooltips.search')} data-variation="tiny">
                   <i className="icon search " />
                 </span>
                 <input type="text" name="search" id="search" className="form-control" />
@@ -90,7 +101,7 @@ function CompetitionOverview() {
               <Button primary name="state" id="present" value="present">
                 <span className="caption">{I18n.t('competitions.index.present')}</span>
               </Button>
-              <Button primary name="state" id="recent" value="recent">
+              <Button primary name="state" id="recent" value="recent" data-tooltip={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })} data-variation="tiny">
                 <span className="caption">{I18n.t('competitions.index.recent')}</span>
               </Button>
               <Button primary name="state" id="past" value="past">
@@ -114,7 +125,7 @@ function CompetitionOverview() {
                   </Dropdown.Menu>
                 </Dropdown>
               </Button>
-              <Button primary name="state" id="by_announcement" value="by_announcement">
+              <Button primary name="state" id="by_announcement" value="by_announcement" data-tooltip={I18n.t('competitions.index.sort_by_announcement')} data-variation="tiny">
                 <span className="caption">{I18n.t('competitions.index.by_announcement')}</span>
               </Button>
               <Button primary name="state" id="custom" value="custom">
