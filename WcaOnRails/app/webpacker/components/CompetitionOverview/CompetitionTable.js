@@ -1,9 +1,8 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import {
-  OverlayTrigger,
-  Tooltip,
-} from 'react-bootstrap';
+  List, Icon, Popup,
+} from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
 
@@ -34,16 +33,44 @@ function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
 
 function renderRegistrationStatus(comp) {
   if (comp.registration_status === 'not_yet_opened') {
-    return <i className="icon clock blue" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })} />;
+    return (
+      <Popup
+        trigger={<Icon className="clock blue" />}
+        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })}
+        position="top center"
+        size="tiny"
+      />
+    );
   }
   if (comp.registration_status === 'past') {
-    return <i className="icon user times red" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })} />;
+    return (
+      <Popup
+        trigger={<Icon className="user times red" />}
+        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })}
+        position="top center"
+        size="tiny"
+      />
+    );
   }
   if (comp.registration_status === 'full') {
-    return <i className="icon user clock orange" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.full')} />;
+    return (
+      <Popup
+        trigger={<Icon className="user clock orange" />}
+        content={I18n.t('competitions.index.tooltips.registration.full')}
+        position="top center"
+        size="tiny"
+      />
+    );
   }
 
-  return <i className="icon user plus green" data-toggle="tooltip" data-original-title={I18n.t('competitions.index.tooltips.registration.open')} />;
+  return (
+    <Popup
+      trigger={<Icon className="user plus green" />}
+      content={I18n.t('competitions.index.tooltips.registration.open')}
+      position="top center"
+      size="tiny"
+    />
+  );
 }
 
 function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
@@ -53,34 +80,31 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
   if (comp.isProbablyOver) {
     if (comp.resultsPosted) {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.posted');
-      iconClass = 'icon check circle result-posted-indicator';
+      iconClass = 'check circle result-posted-indicator';
     } else {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) });
-      iconClass = 'icon hourglass end';
+      iconClass = 'hourglass end';
     }
   } else if (comp.inProgress) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.in_progress');
-    iconClass = 'icon hourglass half';
+    iconClass = 'hourglass half';
   } else if (sortByAnnouncement) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate });
-    iconClass = 'icon hourglass start';
+    iconClass = 'hourglass start';
   } else if (showRegistrationStatus) {
     return renderRegistrationStatus(comp);
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) });
-    iconClass = 'icon hourglass start';
+    iconClass = 'hourglass start';
   }
 
-  const tooltip = (
-    <Tooltip id={`tooltip-${comp.id}`}>
-      {tooltipInfo}
-    </Tooltip>
-  );
-
   return (
-    <OverlayTrigger placement="top" overlay={tooltip}>
-      <i className={iconClass} />
-    </OverlayTrigger>
+    <Popup
+      trigger={<Icon className={iconClass} />}
+      content={tooltipInfo}
+      position="top center"
+      size="tiny"
+    />
   );
 }
 
@@ -91,16 +115,16 @@ function CompetitionTable({
   sortByAnnouncement = false,
 }) {
   return (
-    <ul className="list-group">
-      <li className="list-group-item">
+    <List divided relaxed floating>
+      <List.Item>
         <strong>
           {`${title} (${competitions.length})`}
         </strong>
-      </li>
+      </List.Item>
       {competitions.map((comp, index) => (
         <React.Fragment key={comp.id}>
-          {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <li className="list-group-item break">{comp.year}</li>}
-          <li className={`list-group-item${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
+          {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
+          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
             <span className="date">
               {renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement)}
               {comp.dateRange}
@@ -119,10 +143,10 @@ function CompetitionTable({
                 <ReactMarkdown linkTarget="_blank">{comp.venue}</ReactMarkdown>
               </div>
             </span>
-          </li>
+          </List.Item>
         </React.Fragment>
       ))}
-    </ul>
+    </List>
   );
 }
 

@@ -15,7 +15,7 @@ import {
 import CompetitionTable from './CompetitionTable';
 
 function CompetitionList() {
-  const { loading, error, data } = useLoadedData(`${competitionsApiUrl}?page=19`);
+  const { loading, error, data } = useLoadedData(`${competitionsApiUrl}?page=17`);
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
