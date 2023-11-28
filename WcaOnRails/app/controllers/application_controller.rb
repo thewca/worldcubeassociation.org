@@ -98,6 +98,7 @@ class ApplicationController < ActionController::Base
 
     def store_user_location!
       # :user is the scope we are authenticating
-      store_location_for(:user, request.fullpath)
+      referring_page_url = request.headers['Referer']
+      store_location_for(:user, referring_page_url)
     end
 end
