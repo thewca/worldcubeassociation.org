@@ -38,14 +38,6 @@ class Api::V0::UsersController < Api::V0::ApiController
     end
   end
 
-  def bookmarked_competitions
-    if current_user
-      render json: current_user.all_bookmarked
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
-    end
-  end
-
   def token
     if current_user
       render json: { status: "ok" }
