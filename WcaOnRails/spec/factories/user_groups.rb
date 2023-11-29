@@ -52,7 +52,7 @@ FactoryBot.define do
     end
   end
 
-  factory :user_groups_delegate_regions_metadata do
+  factory :groups_metadata_delegate_regions do
     email { "test@test.com" }
   end
 end

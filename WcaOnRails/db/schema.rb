@@ -686,6 +686,12 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_061943) do
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
   end
 
+  create_table "groups_metadata_delegate_regions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "incident_id", null: false
     t.string "competition_id", null: false
@@ -1058,12 +1064,6 @@ ActiveRecord::Schema[7.0].define(version: 2023_11_25_061943) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["parent_group_id"], name: "index_user_groups_on_parent_group_id"
-  end
-
-  create_table "user_groups_delegate_regions_metadata", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "user_preferred_events", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

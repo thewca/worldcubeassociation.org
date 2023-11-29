@@ -6,13 +6,13 @@ RSpec.describe SyncMailingListsJob, type: :job do
   it "syncs mailing lists" do
     # Regions
     africa_region = FactoryBot.create :africa_region
-    africa_region.update!(metadata: FactoryBot.create(:user_groups_delegate_regions_metadata, email: "delegates.africa@worldcubeassociation.org"))
+    africa_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.africa@worldcubeassociation.org"))
     asia_region = FactoryBot.create :asia_region
-    asia_region.update!(metadata: FactoryBot.create(:user_groups_delegate_regions_metadata, email: "delegates.asia@worldcubeassociation.org"))
+    asia_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.asia@worldcubeassociation.org"))
     europe_region = FactoryBot.create :europe_region
-    europe_region.update!(metadata: FactoryBot.create(:user_groups_delegate_regions_metadata, email: "delegates.europe@worldcubeassociation.org"))
+    europe_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.europe@worldcubeassociation.org"))
     north_america_region = FactoryBot.create :north_america_region
-    north_america_region.update!(metadata: FactoryBot.create(:user_groups_delegate_regions_metadata, email: "delegates.north-america@worldcubeassociation.org"))
+    north_america_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.north-america@worldcubeassociation.org"))
 
     # Senior delegates
     africa_senior_delegate = FactoryBot.create :senior_delegate, region_id: africa_region.id
