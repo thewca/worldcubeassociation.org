@@ -41,7 +41,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   def bookmarked_competitions
     if current_user
       bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-bookmarked", expires_in: 60.minutes) do
-        current_user.all_bookmarked
+        current_user.competitions_bookmarked.pluck(:competition_id)
       end
       render json: bookmarked_competitions
     else
