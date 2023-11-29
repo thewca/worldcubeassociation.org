@@ -8,34 +8,19 @@ import useHash from '../../lib/hooks/useHash';
 export default function PanelTemplate({ heading, sections }) {
   const [hash, setHash] = useHash();
 
-  const selectedMenu = React.useMemo(() => (hash ? sections.findIndex(
-    (section) => section.id === hash,
-  ) : 0), [hash, sections]);
-
-  if (selectedMenu === -1) {
-    setHash(sections[0].id);
-  }
-
   const SelectedComponent = React.useMemo(() => {
-    const selectedSectionIndex = sections.findIndex((section) => section.id === hash);
-    const selectedSection = sections[selectedSectionIndex] || sections[0];
-    if (selectedSectionIndex === -1) {
-      setHash(selectedSection.id);
+    const selectedMenuIndex = sections.findIndex((section) => section.id === hash);
+    if (selectedMenuIndex === -1) {
+      setHash(sections[0].id);
+      return () => null;
     }
+    const selectedSection = sections[selectedMenuIndex];
     if (selectedSection.component) {
       return selectedSection.component;
     }
-    window.location.href = selectedSection.link;
+    window.open(selectedSection.link);
     return () => null;
   }, [sections, hash, setHash]);
-
-  const selectSection = React.useCallback((section) => {
-    if (section.component) {
-      setHash(section.id);
-    } else {
-      window.open(section.link);
-    }
-  }, [setHash]);
 
   return (
     <div className="container">
@@ -43,12 +28,12 @@ export default function PanelTemplate({ heading, sections }) {
       <Grid container>
         <Grid.Column only="computer" computer={4}>
           <Menu vertical>
-            {sections.map((section, index) => (
+            {sections.map((section) => (
               <Menu.Item
                 key={section.id}
                 name={section.name}
-                active={selectedMenu === index}
-                onClick={() => selectSection(section)}
+                active={section.id === hash}
+                onClick={() => setHash(section.id)}
               >
                 {!section.component && <Icon name="external alternate" />}
                 {section.name}
@@ -63,14 +48,14 @@ export default function PanelTemplate({ heading, sections }) {
               <Grid.Row only="tablet mobile">
                 <Dropdown
                   inline
-                  options={sections.map((section, index) => ({
+                  options={sections.map((section) => ({
                     key: section.id,
                     text: section.name,
-                    value: index,
+                    value: section.id,
                     icon: !section.component && 'external alternate',
                   }))}
-                  value={selectedMenu}
-                  onChange={(_, { value }) => selectSection(sections[value])}
+                  value={hash}
+                  onChange={(_, { value }) => setHash(value)}
                 />
               </Grid.Row>
               <Grid.Row><SelectedComponent /></Grid.Row>
