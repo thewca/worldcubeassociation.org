@@ -315,6 +315,7 @@ Rails.application.routes.draw do
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/permissions' => 'users#permissions'
+      get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
