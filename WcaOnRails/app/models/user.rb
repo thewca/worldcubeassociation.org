@@ -1064,6 +1064,10 @@ class User < ApplicationRecord
     BookmarkedCompetition.where(competition: competition, user: self).present?
   end
 
+  def all_bookmarked
+    BookmarkedCompetition.where(user: self)
+  end
+
   def self.find_first_by_auth_conditions(warden_conditions)
     conditions = warden_conditions.dup
     login = conditions.delete(:login)
