@@ -40,7 +40,10 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def bookmarked_competitions
     if current_user
-      render json: current_user.all_bookmarked
+      bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-bookmarked", expires_in: 60.minutes) do
+        current_user.all_bookmarked
+      end
+      render json: bookmarked_competitions
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end
