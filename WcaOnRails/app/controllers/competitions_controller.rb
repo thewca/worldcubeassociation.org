@@ -691,15 +691,19 @@ class CompetitionsController < ApplicationController
   def confirm
     competition = competition_from_params
 
-    competition.update!(confirmed: true)
+    competition.confirmed = true
 
-    CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, competition).deliver_later
+    if competition.save
+      CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, competition).deliver_later
 
-    competition.organizers.each do |organizer|
-      CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
+      competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
+      end
+
+      render json: { status: "ok" }
+    else
+      render status: :bad_request, json: competition.form_errors
     end
-
-    render json: { status: "ok" }
   end
 
   before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:announce]
@@ -733,14 +737,14 @@ class CompetitionsController < ApplicationController
         competition.update!(cancelled_at: nil, cancelled_by: nil)
         render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
       else
-        render json: { error: t('competitions.messages.uncancel_failure') }
+        render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
     else
       if competition.can_be_cancelled?
         competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
         render json: { status: "ok", message: t('competitions.messages.cancel_success') }
       else
-        render json: { error: t('competitions.messages.cancel_failure') }
+        render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
       end
     end
   end
@@ -754,7 +758,7 @@ class CompetitionsController < ApplicationController
       competition.update!(registration_close: Time.now)
       render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
     else
-      render json: { error: t('competitions.messages.orga_closed_reg_failure') }
+      render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
     end
   end
 

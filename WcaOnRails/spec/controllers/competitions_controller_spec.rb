@@ -284,11 +284,12 @@ RSpec.describe CompetitionsController do
       it 'creates a new competition with organizers and expect them to receive a notification email' do
         organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(delegate, anything, organizer).and_call_original
+        creation_params = build_competition_update(Competition.new, name: "Test 2015", venue: { countryId: "USA" }, staff: { staffDelegateIds: [delegate.id], organizerIds: [organizer.id] }, website: { usesWcaRegistration: false })
         expect do
-          post :create, params: { competition: { name: "Test 2015", countryId: "USA", staff_delegate_ids: delegate.id, organizer_ids: organizer.id, use_wca_registration: false } }
+          post :create, params: creation_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
-        expect(response).to redirect_to edit_competition_path("Test2015")
-        new_comp = assigns(:competition)
+        expect(response).to be_successful
+        new_comp = Competition.find("Test2015")
         expect(new_comp.id).to eq "Test2015"
         expect(new_comp.name).to eq "Test 2015"
         expect(new_comp.cellName).to eq "Test 2015"
@@ -296,10 +297,11 @@ RSpec.describe CompetitionsController do
 
       it 'shows an error message under name when creating a competition with a duplicate id' do
         competition = FactoryBot.create :competition, :with_delegate
-        post :create, params: { competition: { name: competition.name } }
-        expect(response).to render_template(:new)
-        new_comp = assigns(:competition)
-        expect(new_comp.errors.messages[:name]).to eq ["has already been taken"]
+        creation_params = build_competition_update(competition, staff: { staffDelegateIds: [delegate.id] }, eventRestrictions: { mainEventId: nil })
+        post :create, params: creation_params, as: :json
+        expect(response).to have_http_status(:bad_request)
+        errors = JSON.parse(response.body)
+        expect(errors['name']).to eq ["has already been taken"]
       end
 
       it 'clones a competition' do
@@ -532,14 +534,14 @@ RSpec.describe CompetitionsController do
 
       it "board member can delete a non-visible competition" do
         competition.update(showAtAll: false)
-        delete :destroy, params: { competition_id: competition }
+        delete :destroy, params: { id: competition }
         expect(response).to be_successful
         expect(Competition.find_by_id(competition.id)).to be_nil
       end
 
       it "board member cannot delete a visible competition" do
         competition.update(showAtAll: true)
-        delete :destroy, params: { competition_id: competition }
+        delete :destroy, params: { id: competition }
         expect(response).to have_http_status(:forbidden)
         parsed_body = JSON.parse(response.body)
         expect(parsed_body["error"]).to eq "Cannot delete a competition that is publicly visible."
@@ -561,27 +563,28 @@ RSpec.describe CompetitionsController do
         new_organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         organizers = [competition.organizers.first, new_organizer]
-        organizer_ids = organizers.map(&:id).join(",")
+        update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
-          patch :update, params: { id: competition, competition: { organizer_ids: organizer_ids } }
+          patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
       it "notifies organizers correctly when id changes" do
         new_organizer = FactoryBot.create :user
-        old_id = competition.id
+        update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [new_organizer.id] })
         competition.id = "NewId2018"
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.delegates.last, competition, new_organizer).and_call_original
         expect do
-          patch :update, params: { id: old_id, competition: { id: "NewId2018", organizer_ids: new_organizer.id } }
+          patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
         competition.organizers << [organizer1, organizer2]
         expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.delegates.last, competition, organizer2).and_call_original
+        update_params = build_competition_update(competition, staff: { organizerIds: [organizer1.id] })
         expect do
-          patch :update, params: { id: competition, competition: { organizer_ids: organizer1.id } }
+          patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
@@ -591,15 +594,16 @@ RSpec.describe CompetitionsController do
         expect(CompetitionsMailer).to receive(:notify_organizer_of_confirmed_competition).with(competition.delegates.last, competition, organizer1).and_call_original
         expect(CompetitionsMailer).to receive(:notify_wcat_of_confirmed_competition).with(competition.delegates.last, competition).and_call_original
         expect do
-          patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+          put :confirm, params: { competition_id: competition }
         end.to change { enqueued_jobs.size }.by(2)
-        expect(response).to redirect_to edit_competition_path(competition)
+        expect(response).to be_successful
         expect(competition.reload.confirmed?).to eq true
       end
 
       it "cannot confirm a competition that is not at least 28 days in the future" do
         competition.update(start_date: 26.day.from_now, end_date: 26.day.from_now)
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        put :confirm, params: { competition_id: competition }
+        expect(response).to have_http_status(:bad_request)
         expect(competition.reload.confirmed?).to eq false
       end
 
@@ -628,7 +632,8 @@ RSpec.describe CompetitionsController do
           start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
           end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
         )
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        put :confirm, params: { competition_id: competition }
+        expect(response).to be_successful
         expect(competition.reload.confirmed?).to eq true
       end
 
@@ -645,7 +650,7 @@ RSpec.describe CompetitionsController do
           total_number_of_rounds: 2,
           scramble_set_count: 1,
         )
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
+        put :confirm, params: { competition_id: competition }
         expect(competition.reload.confirmed?).to eq false
       end
 
@@ -653,8 +658,10 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
-        expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
+        delete :destroy, params: { id: competition }
+        expect(response).to have_http_status(:forbidden)
+        errors = JSON.parse(response.body)
+        expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
 
@@ -662,8 +669,10 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
-        expect(flash[:danger]).to eq "Cannot delete a confirmed competition."
+        delete :destroy, params: { id: competition }
+        expect(response).to have_http_status(:forbidden)
+        errors = JSON.parse(response.body)
+        expect(errors['error']).to eq "Cannot delete a confirmed competition."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
 
@@ -671,9 +680,9 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
+        delete :destroy, params: { id: competition }
         expect(Competition.find_by_id(competition.id)).to be_nil
-        expect(response).to redirect_to root_url
+        expect(response).to be_successful
       end
 
       it "cannot change registration open/close of locked competition" do
@@ -685,14 +694,16 @@ RSpec.describe CompetitionsController do
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
-        patch :update, params: { id: competition, competition: { registration_open: new_open, registration_close: new_close } }
+        update_params = build_competition_update(competition, registration: { openingDateTime: new_open, closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
         expect(competition.reload.registration_open).to eq old_open
         expect(competition.reload.registration_close).to eq old_close
       end
 
       it "can change extra registration requirements field before competition is confirmed" do
         new_requirements = "New extra requirements"
-        patch :update, params: { id: competition, competition: { extra_registration_requirements: new_requirements } }
+        update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
+        patch :update, params: update_params, as: :json
         competition.reload
         expect(competition.extra_registration_requirements).to eq new_requirements
       end
@@ -700,7 +711,8 @@ RSpec.describe CompetitionsController do
       it "cannot change extra registration requirements field after competition is confirmed" do
         comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
-        patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
+        update_params = build_competition_update(comp, registration: { extraRequirements: new_requirements })
+        patch :update, params: update_params, as: :json
         comp.reload
         expect(comp.extra_registration_requirements).to eq "Extra requirements"
       end
@@ -722,36 +734,36 @@ RSpec.describe CompetitionsController do
         new_organizer = FactoryBot.create :user
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         organizers = [competition.organizers.first, new_organizer]
-        organizer_ids = organizers.map(&:id).join(",")
+        update_params = build_competition_update(competition, staff: { organizerIds: organizers.map(&:id) })
         expect do
-          patch :update, params: { id: competition, competition: { organizer_ids: organizer_ids } }
+          patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
       it "notifies organizers correctly when id changes" do
         new_organizer = FactoryBot.create :user
-        old_id = competition.id
+        update_params = build_competition_update(competition, competitionId: "NewId2018", staff: { organizerIds: [new_organizer.id] })
         competition.id = "NewId2018"
         expect(CompetitionsMailer).to receive(:notify_organizer_of_addition_to_competition).with(competition.trainee_delegates.last, competition, new_organizer).and_call_original
         expect do
-          patch :update, params: { id: old_id, competition: { id: "NewId2018", organizer_ids: new_organizer.id } }
+          patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
       it "removes an organizer and expects him to receive a notification email" do
         competition.organizers << [organizer1, organizer2]
         expect(CompetitionsMailer).to receive(:notify_organizer_of_removal_from_competition).with(competition.trainee_delegates.last, competition, organizer2).and_call_original
+        update_params = build_competition_update(competition, staff: { organizerIds: [organizer1.id] })
         expect do
-          patch :update, params: { id: competition, competition: { organizer_ids: organizer1.id } }
+          patch :update, params: update_params, as: :json
         end.to change { enqueued_jobs.size }.by(1)
       end
 
       it "cannot confirm a competition" do
         competition.organizers << organizer1
         competition.update(start_date: 5.week.from_now, end_date: 5.week.from_now)
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Confirm" }
-        expect(response).to redirect_to root_url
-        expect(flash[:danger]).to eq "You are not allowed to confirm competition"
+        put :confirm, params: { competition_id: competition }
+        expect(response).to have_http_status(:forbidden)
         expect(competition.reload.confirmed?).to eq false
       end
 
@@ -759,8 +771,10 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we only allow
         # deletion of (not confirmed and not visible) competitions.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
-        expect(flash[:danger]).to eq "Cannot delete a competition that is publicly visible."
+        delete :destroy, params: { id: competition }
+        expect(response).to have_http_status(:forbidden)
+        errors = JSON.parse(response.body)
+        expect(errors['error']).to eq "Cannot delete a competition that is publicly visible."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
 
@@ -768,8 +782,10 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: true, showAtAll: false)
         # Attempt to delete competition. This should not work, because we only let
         # delegates deleting unconfirmed competitions.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
-        expect(flash[:danger]).to eq "Cannot delete a confirmed competition."
+        delete :destroy, params: { id: competition }
+        expect(response).to have_http_status(:forbidden)
+        errors = JSON.parse(response.body)
+        expect(errors['error']).to eq "Cannot delete a confirmed competition."
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
 
@@ -777,9 +793,9 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: false, showAtAll: false)
         # Attempt to delete competition. This should work, because we allow
         # deletion of (not confirmed and not visible) competitions.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
+        delete :destroy, params: { id: competition }
         expect(Competition.find_by_id(competition.id)).to be_nil
-        expect(response).to redirect_to root_url
+        expect(response).to be_successful
       end
 
       it "cannot change registration open/close of locked competition" do
@@ -790,14 +806,16 @@ RSpec.describe CompetitionsController do
 
         new_open = 1.week.from_now.change(sec: 0)
         new_close = 2.weeks.from_now.change(sec: 0)
-        patch :update, params: { id: competition, competition: { registration_open: new_open, registration_close: new_close } }
+        update_params = build_competition_update(competition, registration: { openingDateTime: new_open, closingDateTime: new_close })
+        patch :update, params: update_params, as: :json
         expect(competition.reload.registration_open).to eq old_open
         expect(competition.reload.registration_close).to eq old_close
       end
 
       it "can change extra registration requirements field before competition is confirmed" do
         new_requirements = "New extra requirements"
-        patch :update, params: { id: competition, competition: { extra_registration_requirements: new_requirements } }
+        update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
+        patch :update, params: update_params, as: :json
         competition.reload
         expect(competition.extra_registration_requirements).to eq new_requirements
       end
@@ -805,7 +823,8 @@ RSpec.describe CompetitionsController do
       it "cannot change extra registration requirements field after competition is confirmed" do
         comp = FactoryBot.create(:competition, :confirmed, delegates: [delegate, trainee_delegate], extra_registration_requirements: "Extra requirements")
         new_requirements = "New extra requirements"
-        patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
+        update_params = build_competition_update(competition, registration: { extraRequirements: new_requirements })
+        patch :update, params: update_params, as: :json
         comp.reload
         expect(comp.extra_registration_requirements).to eq "Extra requirements"
       end
@@ -821,7 +840,7 @@ RSpec.describe CompetitionsController do
         competition.update(confirmed: false, showAtAll: true)
         # Attempt to delete competition. This should not work, because we're
         # not the delegate for this competition.
-        patch :update, params: { id: competition, competition: { name: competition.name }, commit: "Delete" }
+        delete :destroy, params: { id: competition }
         expect(Competition.find_by_id(competition.id)).not_to be_nil
       end
     end
@@ -840,7 +859,7 @@ RSpec.describe CompetitionsController do
         expect(competition.announced_by).to be nil
         expect(CompetitionsMailer).to receive(:notify_organizer_of_announced_competition).with(competition, organizer).and_call_original
         expect do
-          post :post_announcement, params: { id: competition }
+          put :announce, params: { competition_id: competition }
         end.to change { enqueued_jobs.size }.by(1)
         competition.reload
         expect(competition.announced_at.to_f).to be < Time.now.to_f
@@ -918,8 +937,8 @@ RSpec.describe CompetitionsController do
         comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         comp_with_full_reg.organizers << orga
         FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
-        patch :close_full_registration, params: { id: comp_with_full_reg }
-        expect(response).to redirect_to edit_competition_path(comp_with_full_reg)
+        put :close_full_registration, params: { competition_id: comp_with_full_reg }
+        expect(response).to be_successful
         expect(comp_with_full_reg.reload.registration_close).to be < Time.now
       end
 
@@ -928,8 +947,8 @@ RSpec.describe CompetitionsController do
         comp_without_full_reg.organizers << orga
         FactoryBot.create(:registration, :pending, :newcomer, competition: comp_without_full_reg)
         FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_without_full_reg)
-        patch :close_full_registration, params: { id: comp_without_full_reg }
-        expect(response).to redirect_to edit_competition_path(comp_without_full_reg)
+        put :close_full_registration, params: { competition_id: comp_without_full_reg }
+        expect(response).to have_http_status(:bad_request)
         expect(comp_without_full_reg.reload.registration_close).to be > Time.now
       end
     end
@@ -940,7 +959,7 @@ RSpec.describe CompetitionsController do
         comp_with_full_reg = FactoryBot.create(:competition, :registration_open, competitor_limit_enabled: true, competitor_limit: 1, competitor_limit_reason: "we have a tiny venue")
         FactoryBot.create(:registration, :accepted, :newcomer, competition: comp_with_full_reg)
         expect {
-          patch :close_full_registration, params: { id: comp_with_full_reg }
+          put :close_full_registration, params: { competition_id: comp_with_full_reg }
         }.to raise_error(ActionController::RoutingError)
         expect(comp_with_full_reg.reload.registration_close).to be > Time.now
       end
@@ -1303,5 +1322,5 @@ RSpec.describe CompetitionsController do
 end
 
 def build_competition_update(comp, **override_params)
-  comp.to_form_data.deep_symbolize_keys.merge({ id: comp }).deep_merge(override_params)
+  comp.to_form_data.deep_symbolize_keys.merge({ id: comp.id }).deep_merge(override_params)
 end
