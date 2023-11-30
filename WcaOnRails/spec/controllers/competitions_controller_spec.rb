@@ -467,7 +467,7 @@ RSpec.describe CompetitionsController do
 
         # Remove ourself as a delegate. This should be allowed, because we're
         # still an organizer.
-        update_params = build_competition_update( competiton, staff: { staffDelegateIds: [], organizerIds: [organizer.id] })
+        update_params = build_competition_update(competition, staff: { staffDelegateIds: [], organizerIds: [organizer.id] })
         patch :update, params: update_params, as: :json
         expect(response).to be_successful
         expect(competition.reload.delegates).to eq []
