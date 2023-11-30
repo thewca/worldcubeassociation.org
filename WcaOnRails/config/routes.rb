@@ -325,6 +325,7 @@ Rails.application.routes.draw do
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/permissions' => 'users#permissions'
+      get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
@@ -355,6 +356,10 @@ Rails.application.routes.draw do
         get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
         get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
         get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      end
+      namespace :wfc do
+        resources :xero_users, only: [:index, :create]
+        resources :dues_redirects, only: [:index, :create]
       end
     end
   end

@@ -830,6 +830,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "jwt_denylist" => :skip_all_rows,
+    "wfc_xero_users" => :skip_all_rows,
+    "wfc_dues_redirects" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

@@ -2317,6 +2317,8 @@ zh-TW:
       orga_closed_reg_success: 已成功關閉報名。
       #original_hash: 7f197a0
       orga_closed_reg_failure: 無法結束報名。
+      #original_hash: b16bd13
+      cannot_activate_v2: 如果是報名期間中，您就無法啟用新的報名系統。
       #original_hash: 74caf1a
       no_waiting_list_specified: 這場比沒有接受候補名單的截止時間。如果您要使用候補名單功能，請指定一個截止日期。如果您沒有要使用候補名單功能，請記得在報名條件中指定。
     my_competitions:
@@ -2891,8 +2893,8 @@ zh-TW:
       waiting_list_deadline_before_registration_close: 候補截止日期不能早於報名截止日期。
       #original_hash: ececa98
       waiting_list_deadline_before_refund_date: 候補截止日期不能早於退費日期。
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: 候補截止日期必須早於比賽開始日期。
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: 候補名單的截止日期必須要在比賽結束日期以前。
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: 更新項目的截止日期不能早於報名截止日期。
       #original_hash: bc1ca0f
@@ -3136,6 +3138,8 @@ zh-TW:
         competitors: 參賽者
         #original_hash: c4622c3
         scrambles: 轉亂步驟內容
+        #original_hash: f632da3
+        enable_v2: 啟用新的報名服務
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA個人頁面
@@ -3811,6 +3815,8 @@ zh-TW:
     title: WCA代表
     #original_hash: 77b819c
     acknowledges: WCA認可以下WCA代表：
+    #original_hash: 0397112
+    regions: 區域
     table:
       #original_hash: 709a232
       name: 姓名
@@ -4493,6 +4499,8 @@ zh-TW:
     user_info_request_intro: 在還未過期以前，OAuth使用權TOKEN可以用來授權 API請求。例如說用來存取您的帳號資訊：
     #original_hash: 040b3da
     legal_tnoodle_api_header: 合規定 TNoodle 版本
+    #original_hash: 32295ee
+    login_message: 請登入
   merch:
     #original_hash: 96a95a1
     title: WCA商品
