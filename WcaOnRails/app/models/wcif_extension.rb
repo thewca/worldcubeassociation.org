@@ -39,7 +39,7 @@ class WcifExtension < ApplicationRecord
       extension = parent.wcif_extensions.find do |wcif_extension|
         wcif_extension.extension_id == extension_wcif["id"]
       end
-      (extension || parent.wcif_extensions.build).set_wcif!(extension_wcif)
+      (extension || parent.wcif_extensions.build).load_wcif!(extension_wcif)
     end
     parent.wcif_extensions = updated_extensions
   end
