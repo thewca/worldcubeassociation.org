@@ -20,7 +20,7 @@ class Api::V0::UsersController < Api::V0::ApiController
   def show_users_by_id
     user_ids = params.require(:ids)
     users = User.where(id: user_ids)
-    render status: ok, json: { users: users }
+    render status: :ok, json: { users: users }
   end
 
   def show_user_by_wca_id
@@ -33,6 +33,17 @@ class Api::V0::UsersController < Api::V0::ApiController
       if stale?(current_user)
         render json: current_user.permissions
       end
+    else
+      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
+    end
+  end
+
+  def bookmarked_competitions
+    if current_user
+      bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-bookmarked", expires_in: 60.minutes) do
+        current_user.competitions_bookmarked.pluck(:competition_id)
+      end
+      render json: bookmarked_competitions
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end

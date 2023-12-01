@@ -168,8 +168,10 @@ Rails.application.routes.draw do
   get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
-  get 'panel/seniors' => 'panel#seniors'
-  get 'panel/wfc' => 'panel#wfc'
+  scope 'panel' do
+    get 'wfc' => 'panel#wfc', as: :panel_wfc
+    get 'board' => 'panel#board', as: :panel_board
+  end
   resources :notifications, only: [:index]
 
   root 'posts#homepage'
@@ -213,6 +215,7 @@ Rails.application.routes.draw do
 
   scope 'page_data' do
     get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
+    get 'delegates' => 'static_pages#delegates_data', as: :page_data_delegates
   end
 
   resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
@@ -322,9 +325,10 @@ Rails.application.routes.draw do
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/permissions' => 'users#permissions'
+      get '/users/me/bookmarks' => 'users#bookmarked_competitions'
+      get '/users/me/token' => 'users#token'
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
-      get '/users/token' => 'users#token'
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
@@ -352,6 +356,11 @@ Rails.application.routes.draw do
         get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
         get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
         get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      end
+      resources :user_groups, only: [:index, :create, :update]
+      namespace :wfc do
+        resources :xero_users, only: [:index, :create]
+        resources :dues_redirects, only: [:index, :create]
       end
     end
   end

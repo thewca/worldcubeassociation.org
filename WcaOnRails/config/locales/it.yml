@@ -2835,6 +2835,10 @@ it:
       orga_closed_reg_success: Iscrizioni chiuse con successo.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Impossibile chiudere le iscrizioni.
+      #original_hash: b16bd13
+      cannot_activate_v2: >-
+        Non puoi attivare il nuovo sistema di iscrizioni se queste sono già
+        aperte.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Questa competizione non ha una data limite per l'accettazione di
@@ -3340,10 +3344,10 @@ it:
       waiting_list_deadline_before_refund_date: >-
         La data limite per la lista d'attesa non può essere precedente alla data
         limite per i rimborsi.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: >-
-        La data limite per la lista d'attesa deve essere precedente all'inizio
-        della competizione.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: >-
+        La scadenza per la lista d'attesa deve essere precedente la fine della
+        competizione.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         La data limite per aggiornare gli eventi non deve essere precedente alla
@@ -3631,6 +3635,8 @@ it:
         competitors: Partecipanti
         #original_hash: c4622c3
         scrambles: Scramble
+        #original_hash: f632da3
+        enable_v2: Abilita il nuovo sistema per le registrazioni
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Profilo WCA
@@ -4503,6 +4509,8 @@ it:
     title: Delegati WCA
     #original_hash: 77b819c
     acknowledges: 'La WCA riconosce i seguenti Delegati WCA:'
+    #original_hash: 0397112
+    regions: Regioni
     table:
       #original_hash: 709a232
       name: Nome
@@ -5522,6 +5530,8 @@ it:
       informazioni sul tuo account:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versione legale di TNoodle
+    #original_hash: 32295ee
+    login_message: 'Per favore, esegui l''accesso'
   merch:
     #original_hash: 96a95a1
     title: Merchandising WCA

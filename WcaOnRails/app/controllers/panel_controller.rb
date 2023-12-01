@@ -8,6 +8,7 @@ class PanelController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:pending_claims_for_subordinate_delegates]
   before_action -> { redirect_to_root_unless_user(:board_member?) }, only: [:seniors]
   before_action -> { redirect_to_root_unless_user(:can_admin_finances?) }, only: [:wfc]
+  before_action -> { redirect_to_root_unless_user(:can_access_board_panel?) }, only: [:board]
 
   def index
   end
@@ -16,11 +17,6 @@ class PanelController < ApplicationController
     # Show pending claims for a given user, or the current user, if they can see them
     @user = User.includes(subordinate_delegates: [:confirmed_users_claiming_wca_id]).find_by_id!(params[:user_id] || current_user.id)
     @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
-  end
-
-  def seniors
-    # Show the list of seniors and actions available
-    @seniors = User.senior_delegates.order(:name)
   end
 
   private def editable_post_fields
@@ -33,5 +29,8 @@ class PanelController < ApplicationController
   end
 
   def wfc
+  end
+
+  def board
   end
 end

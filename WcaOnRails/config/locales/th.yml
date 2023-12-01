@@ -736,6 +736,8 @@ th:
         senior_delegate: Senior Delegate
       role_status:
         delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Trainee Delegate
           #original_hash: 9b97968
           candidate_delegate: Junior Delegate
           #original_hash: 12ab214
@@ -2623,6 +2625,8 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
+      #original_hash: b16bd13
+      cannot_activate_v2: คุณไม่สามารถเปิดใช้งานระบบการสมัครแบบใหม่ได้หากการสมัครเปิดอยู่
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
@@ -3090,8 +3094,8 @@ th:
       waiting_list_deadline_before_refund_date: >-
         วันสุดท้ายของ Waiting list
         ไม่สามารถอยู่ก่อนวันสุดท้ายที่จะได้รับเงินคืนได้
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: วันสุดท้ายของ Waiting list ต้องอยู่ก่อนวันเริ่มการแข่งขัน
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: กำหนดเวลา Waiting list จะต้องมาก่อนการแข่งขันจะสิ้นสุดลง
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         วันสุดท้ายของการแก้ไขประเภทการแข่งขันไม่สามารถอยู่ก่อนวันปิดรับสมัครการแข่งขันได้
@@ -3358,6 +3362,8 @@ th:
         competitors: ผู้เข้าแข่งขัน
         #original_hash: c4622c3
         scrambles: โจทย์
+        #original_hash: f632da3
+        enable_v2: เปิดใช้บริการการสมัครแบบใหม่
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
@@ -4176,6 +4182,8 @@ th:
     title: WCA Delegates
     #original_hash: 77b819c
     acknowledges: WCA ยอมรับ WCA Delegate เหล่านี้
+    #original_hash: 0397112
+    regions: ภูมิภาค
     table:
       #original_hash: 709a232
       name: ชื่อ
@@ -5105,6 +5113,8 @@ th:
       ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Legal TNoodle version
+    #original_hash: 32295ee
+    login_message: กรุณาเข้าสู่ระบบ
   merch:
     #original_hash: 96a95a1
     title: WCA Merchandise

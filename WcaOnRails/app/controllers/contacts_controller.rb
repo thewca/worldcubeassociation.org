@@ -8,7 +8,9 @@ class ContactsController < ApplicationController
   end
 
   def website_create
-    @contact = WebsiteContact.new(params[:website_contact])
+    website_contact_params = params[:website_contact]
+    website_contact_params[:logged_in_email] = current_user&.email || 'None'
+    @contact = WebsiteContact.new(website_contact_params)
     @contact.request = request
     maybe_send_email success_url: contact_website_url, fail_view: :website
   end

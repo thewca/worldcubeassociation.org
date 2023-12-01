@@ -14,7 +14,7 @@ export default function DuesExport() {
   const [toDate, setToDate] = React.useState(null);
 
   return (
-    <Grid>
+    <Grid centered>
       <GridRow>
         <GridColumn width={8}>Start Date</GridColumn>
         <GridColumn width={8}>

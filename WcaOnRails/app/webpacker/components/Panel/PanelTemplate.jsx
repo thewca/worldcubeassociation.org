@@ -3,21 +3,24 @@ import {
   Dropdown,
   Grid, Header, Icon, Menu, Segment,
 } from 'semantic-ui-react';
+import useHash from '../../lib/hooks/useHash';
 
 export default function PanelTemplate({ heading, sections }) {
-  const [selectedMenu, setSelectedMenu] = React.useState(0);
-  const SelectedComponent = React.useMemo(() => sections.find(
-    (_, index) => index === selectedMenu,
-  ).component, [sections, selectedMenu]);
+  const [hash, setHash] = useHash();
 
-  function menuClickHandler(index) {
-    const section = sections[index];
-    if (section.component) {
-      setSelectedMenu(index);
-    } else {
-      window.open(section.link);
+  const SelectedComponent = React.useMemo(() => {
+    const selectedMenuIndex = sections.findIndex((section) => section.id === hash);
+    if (selectedMenuIndex === -1) {
+      setHash(sections[0].id);
+      return () => null;
     }
-  }
+    const selectedSection = sections[selectedMenuIndex];
+    if (selectedSection.component) {
+      return selectedSection.component;
+    }
+    window.open(selectedSection.link);
+    return () => null;
+  }, [sections, hash, setHash]);
 
   return (
     <div className="container">
@@ -25,12 +28,12 @@ export default function PanelTemplate({ heading, sections }) {
       <Grid container>
         <Grid.Column only="computer" computer={4}>
           <Menu vertical>
-            {sections.map((section, index) => (
+            {sections.map((section) => (
               <Menu.Item
                 key={section.id}
                 name={section.name}
-                active={selectedMenu === index}
-                onClick={() => menuClickHandler(index)}
+                active={section.id === hash}
+                onClick={() => setHash(section.id)}
               >
                 {!section.component && <Icon name="external alternate" />}
                 {section.name}
@@ -41,21 +44,23 @@ export default function PanelTemplate({ heading, sections }) {
 
         <Grid.Column stretched computer={12} mobile={16} tablet={16}>
           <Segment>
-            <Grid container centered>
+            <Grid container padded>
               <Grid.Row only="tablet mobile">
                 <Dropdown
                   inline
-                  options={sections.map((section, index) => ({
+                  options={sections.map((section) => ({
                     key: section.id,
                     text: section.name,
-                    value: index,
+                    value: section.id,
                     icon: !section.component && 'external alternate',
                   }))}
-                  value={selectedMenu}
-                  onChange={(_, { value }) => menuClickHandler(value)}
+                  value={hash}
+                  onChange={(_, { value }) => setHash(value)}
                 />
               </Grid.Row>
-              <Grid.Row><SelectedComponent /></Grid.Row>
+              {/* TODO: Fix the next line by removing style and using appropriate props from
+                        semantic-ui */}
+              <Grid.Row style={{ margin: 0 }}><div><SelectedComponent /></div></Grid.Row>
             </Grid>
           </Segment>
         </Grid.Column>

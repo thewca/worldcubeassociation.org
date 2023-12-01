@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
   has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
   has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
+  has_one :wfc_dues_redirect, as: :redirect_source
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -426,15 +427,6 @@ class User < ApplicationRecord
       errors.add(:senior_delegate, I18n.t('users.errors.must_be_senior'))
     end
   end
-
-  validate :senior_delegate_presence
-  def senior_delegate_presence
-    if !User.delegate_status_requires_senior_delegate(delegate_status) && senior_delegate
-      errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
-    end
-  end
-
-  validates :senior_delegate, presence: true, if: -> { User.delegate_status_requires_senior_delegate(delegate_status) && !senior_delegate }
 
   # This is a copy of def self.delegate_status_requires_senior_delegate(delegate_status) in the user model
   # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
@@ -1299,6 +1291,10 @@ class User < ApplicationRecord
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
   end
 
+  def senior_delegate
+    User.find_by(delegate_status: "senior_delegate", region_id: self.region_id)
+  end
+
   def delegate_role
     {
       end_date: nil,
@@ -1337,5 +1333,17 @@ class User < ApplicationRecord
       }
     end
     roles
+  end
+
+  def can_access_wfc_panel?
+    can_admin_finances?
+  end
+
+  def can_access_board_panel?
+    admin? || board_member?
+  end
+
+  def can_access_panel?
+    can_access_wfc_panel? || can_access_board_panel?
   end
 end
