@@ -8,7 +8,7 @@ class AvatarUploader < AvatarUploaderBase
 
     # override `store!` method from CarrierWave
     def store!(new_file = nil)
-      super new_file
+      super(new_file)
       invalidate_cdn_cache "thumbnail-crop-#{Time.now.to_i}"
     end
   end
