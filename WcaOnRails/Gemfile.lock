@@ -165,7 +165,7 @@ GEM
     babel-transpiler (0.7.0)
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
-    base64 (0.1.1)
+    base64 (0.2.0)
     bcrypt (3.1.19)
     better_errors (2.10.1)
       erubi (>= 1.0.0)
@@ -292,7 +292,7 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.1)
       i18n (>= 1.8.11, < 2)
-    faraday (2.7.11)
+    faraday (2.7.12)
       base64
       faraday-net_http (>= 2.0, < 3.1)
       ruby2_keywords (>= 0.0.4)
