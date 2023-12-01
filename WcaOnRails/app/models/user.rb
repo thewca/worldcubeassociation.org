@@ -90,7 +90,7 @@ class User < ApplicationRecord
   end
 
   # Backup OTP are stored as a string array in the db
-  serialize :otp_backup_codes
+  serialize :otp_backup_codes, coder: YAML
 
   def two_factor_enabled?
     otp_required_for_login
