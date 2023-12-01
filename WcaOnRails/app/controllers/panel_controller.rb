@@ -6,7 +6,6 @@ class PanelController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:staff_or_any_delegate?) }
   before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:pending_claims_for_subordinate_delegates]
-  before_action -> { redirect_to_root_unless_user(:board_member?) }, only: [:seniors]
   before_action -> { redirect_to_root_unless_user(:can_admin_finances?) }, only: [:wfc]
   before_action -> { redirect_to_root_unless_user(:can_access_board_panel?) }, only: [:board]
 
