@@ -527,7 +527,7 @@ class RegistrationsController < ApplicationController
         elsif stored_intent.holder.is_a? AttendeePaymentRequest
           ruby_money = charge_transaction.money_amount
           begin
-            update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
+            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
           rescue Faraday::Error => e
             logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
             return head :internal_server_error
