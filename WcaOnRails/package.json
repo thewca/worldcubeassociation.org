@@ -46,7 +46,7 @@
     "jquery": "3.4.1",
     "js-yaml": "^4.1.0",
     "leaflet": "^1.9.4",
-    "leaflet-geosearch": "^3.10.2",
+    "leaflet-geosearch": "^3.11.0",
     "lodash": "^4.17.21",
     "mini-css-extract-plugin": "^2.7.6",
     "path-complete-extname": "^1.0.0",

@@ -5045,10 +5045,10 @@ launch-editor@^2.6.0:
     picocolors "^1.0.0"
     shell-quote "^1.7.3"
 
-leaflet-geosearch@^3.10.2:
-  version "3.10.2"
-  resolved "https://registry.yarnpkg.com/leaflet-geosearch/-/leaflet-geosearch-3.10.2.tgz#1c336fbb4ad03e774ece173fb4c16dc1121011d5"
-  integrity sha512-tXi+/7Mt+K3n3rvPmORUra8BrGxY8/e22XSsCciZNQfMan4a2lID4MLzzvnZomiEHEdlYxVLId/yUxRPvf60fA==
+leaflet-geosearch@^3.11.0:
+  version "3.11.0"
+  resolved "https://registry.yarnpkg.com/leaflet-geosearch/-/leaflet-geosearch-3.11.0.tgz#d35e7837cfb880da49ae9807ef9e0a4487b4d6eb"
+  integrity sha512-lWmryKXg7S//7q53fMyooCAyAzYxMtozeEmjrQqtkmsPmeHphaKMuFEm/uD4ZwoblBIIMXsUnuNBLvg6bSfjqA==
   optionalDependencies:
     "@googlemaps/js-api-loader" "^1.14.3"
     leaflet "^1.6.0"
