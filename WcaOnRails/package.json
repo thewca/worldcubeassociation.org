@@ -60,7 +60,7 @@
     "rails-erb-loader": "^5.5.2",
     "react": "^16.14.0",
     "react-bootstrap": "^0.33.1",
-    "react-datepicker": "^4.21.0",
+    "react-datepicker": "^4.24.0",
     "react-dom": "^16.14.0",
     "react-leaflet": "^2.8.0",
     "react_ujs": "^2.7.1",
