@@ -7,14 +7,14 @@
   <%= label_tag(t("results.selector_elements.events_selector.event")) %>
   <div id="event">
     <% if show_records_options %>
-      <a href="<%= url_for(request.params.merge(event_id: "all events")) %>"><span class="event-radio all-events <%= (params[:event_id] == "all events" ? " active" : "") %>"
+      <a href="<%= url_for(result_params_merge(event_id: "all events")) %>"><span class="event-radio all-events <%= (params[:event_id] == "all events" ? " active" : "") %>"
                                                                                    id="cubing-icon" data-toggle="tooltip" data-placement="top"
                                                                                    title="<%= t("results.selector_elements.events_selector.all_events") %>">ALL</span></a>
     <% end %>
     <% Event.official.each do |event| %>
       <span class="event-radio">
         <%= link_to cubing_icon(event.id),
-                    request.params.merge(event_id: event.id),
+                    result_params_merge(event_id: event.id),
                     class: (event.id == params[:event_id] ? " active" : ""),
                     id: "cubing-icon",
                     data: {
@@ -40,7 +40,7 @@
     <div id="type" class="btn-group">
       <% @types.each do |type| %>
         <%= link_to t("results.selector_elements.type_selector.#{type}"),
-                      request.params.merge(type: type),
+                      result_params_merge(type: type),
                       class: "btn btn-primary" + (type == params[:type] ? " active" : "") %>
       <% end %>
     </div>
@@ -50,11 +50,11 @@
 <div class="form-group">
   <%= label_tag(t("results.selector_elements.years_selector.years")) %>
   <div id="years" class="btn-group">
-    <%= link_to t("results.selector_elements.years_selector.all_years"), request.params.merge(years: "all years"), class: "btn btn-info" + (@is_all_years ? " active" : "") %>
+    <%= link_to t("results.selector_elements.years_selector.all_years"), result_params_merge(years: "all years"), class: "btn btn-info" + (@is_all_years ? " active" : "") %>
     <div class="btn-group">
       <ul class="dropdown-menu years-only">
         <% @years.each do |year| %>
-          <li title="<%= t('results.tooltip_no_years') %>" class="disabled only <%= (@is_only && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "only #{year}") %></li>
+          <li title="<%= t('results.tooltip_no_years') %>" class="disabled only <%= (@is_only && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, result_params_merge(years: "only #{year}") %></li>
         <% end %>
       </ul>
       <label id="only-years" class="btn btn-info <%= @is_only ? " active" : "" %>" data-toggle="dropdown">
@@ -70,7 +70,7 @@
     <div class="btn-group">
       <ul class="dropdown-menu years-until">
         <% @years.each do |year| %>
-          <li title="<%= t('results.tooltip_no_years') %>" class="disabled until <%= (@is_until && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, request.params.merge(years: "until #{year}") %></li>
+          <li title="<%= t('results.tooltip_no_years') %>" class="disabled until <%= (@is_until && year.to_s == @year ? " active" : "") %>"><%= link_to year.to_s, result_params_merge(years: "until #{year}") %></li>
         <% end %>
       </ul>
       <label id="until-years" class="btn btn-info <%= @is_until ? " active" : "" %>" data-toggle="dropdown">
@@ -89,9 +89,9 @@
 <div class="form-group">
   <%= label_tag(t("results.selector_elements.gender_selector.gender")) %>
   <div id="gender" class="btn-group">
-    <%= link_to t("results.selector_elements.gender_selector.gender_all"), request.params.merge(gender: "All"), class: "btn btn-info" + (@gender == "All" ? " active" : "") %>
-    <%= link_to t("results.selector_elements.gender_selector.male"), request.params.merge(gender: "Male"), class: "btn btn-info" + (@gender == "Male" ? " active" : "") %>
-    <%= link_to t("results.selector_elements.gender_selector.female"), request.params.merge(gender: "Female"), class: "btn btn-info" + (@gender == "Female" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.gender_all"), result_params_merge(gender: "All"), class: "btn btn-info" + (@gender == "All" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.male"), result_params_merge(gender: "Male"), class: "btn btn-info" + (@gender == "Male" ? " active" : "") %>
+    <%= link_to t("results.selector_elements.gender_selector.female"), result_params_merge(gender: "Female"), class: "btn btn-info" + (@gender == "Female" ? " active" : "") %>
   </div>
 </div>
 
@@ -111,7 +111,7 @@
         </label>
         <ul class="dropdown-menu show-persons">
           <% @quantities.each do |quantity| %>
-            <li title="<%= (quantity.to_s != @quantities[0] ? t('results.tooltip_no_quantities') : "") %>" class="persons <%= (@is_persons && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>"><%= link_to quantity.to_s, request.params.merge(show: "#{quantity} persons") %></li>
+            <li title="<%= (quantity.to_s != @quantities[0] ? t('results.tooltip_no_quantities') : "") %>" class="persons <%= (@is_persons && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>"><%= link_to quantity.to_s, result_params_merge(show: "#{quantity} persons") %></li>
           <% end %>
         </ul>
       </div>
@@ -129,12 +129,12 @@
           <% @quantities.each do |quantity| %>
             <%# querying more than 100 single ranking rows fries our DB, so we block it both here and in the controller until we figure out a more permanent solution %>
               <li title="<%= (quantity.to_s != @quantities[0] ? t('results.tooltip_no_quantities') : "") %>" class="results <%= (@is_results && quantity.to_s == @show ? " active" : "") %> <%= (quantity.to_s != @quantities[0] ? " disabled" : "") %>">
-                <%= link_to quantity.to_s, request.params.merge(show: "#{quantity} results")  %>
+                <%= link_to quantity.to_s, result_params_merge(show: "#{quantity} results")  %>
               </li>
           <% end %>
         </ul>
       </div>
-      <%= link_to t("results.selector_elements.show_selector.by_region"), request.params.merge(show: "by region"), class: "btn btn-info" + (@is_by_region ? " active" : "") %>
+      <%= link_to t("results.selector_elements.show_selector.by_region"), result_params_merge(show: "by region"), class: "btn btn-info" + (@is_by_region ? " active" : "") %>
     </div>
   </div>
 <% elsif show_records_options %>
@@ -143,7 +143,7 @@
     <div id="show" class="btn-group">
       <% @shows.each do |show| %>
         <%= link_to t("results.selector_elements.show_selector.#{show.tr(" ", "_")}"),
-                      request.params.merge(show: show),
+                      result_params_merge(show: show),
                       class: "btn btn-primary" + (show == params[:show] ? " active" : "") %>
       <% end %>
     </div>
@@ -152,10 +152,9 @@
 
 <script>
   $(function() {
-    $('#region').bind('change', function () {
-      var params = window.wca.getUrlParams();
-      params.region = $(this).val();
-      window.location.search = $.param(params);
-    });
+    const highlighted = document.getElementsByClassName("highlight-focus");
+    if (highlighted.length > 0) {
+      highlighted[0].scrollIntoView({ block: "center" });
+    }
   });
 </script>

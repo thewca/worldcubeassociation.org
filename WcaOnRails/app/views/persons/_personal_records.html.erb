@@ -24,22 +24,18 @@
               <%= cubing_icon rank_single.event.id %>
               <%= t "events.#{rank_single.event.id}" %>
             </td>
-            <%= rank_td rank_single, "country" %>
-            <%= rank_td rank_single, "continent" %>
-            <%= rank_td rank_single, "world" %>
+            <%= rank_td rank_single, "single", @person.wca_id, @country.id %>
+            <%= rank_td rank_single, "single", @person.wca_id, @continent.id %>
+            <%= rank_td rank_single, "single", @person.wca_id%>
             <td class="single">
-              <%= link_to rankings_path(rank_single.event_id, "single"), class: "plain" do %>
-                <%= rank_single.solve_time.clock_format %>
-              <% end %>
+              <%= rank_single.solve_time.clock_format %>
             </td>
             <td class="average">
-              <%= link_to rankings_path(rank_single.event_id, "average"), class: "plain" do %>
-                <%= rank_average&.solve_time&.clock_format %>
-              <% end %>
+              <%= rank_average&.solve_time&.clock_format %>
             </td>
-            <%= rank_td rank_average, "world" %>
-            <%= rank_td rank_average, "continent" %>
-            <%= rank_td rank_average, "country" %>
+            <%= rank_td rank_average, "average", @person.wca_id %>
+            <%= rank_td rank_average, "average", @person.wca_id, @continent.id %>
+            <%= rank_td rank_average, "average", @person.wca_id, @country.id %>
             <td><%= odd_rank_reason if odd_rank_reason_needed?(rank_single, rank_average) %></td>
           </tr>
         <% end %>

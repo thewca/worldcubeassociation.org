@@ -25,7 +25,7 @@
       <% rank = value == previous_value ? previous_rank : i+1 %>
       <% tied_previous = rank == previous_rank %>
 
-      <tr>
+      <tr class="<%= params[:focus] == result.personId ? "highlight-focus" : "" %>">
         <td class="pos <%= tied_previous ? "tied-previous" : "" %>"> <%= rank %> </td>
         <td class="name"> <%= link_to result.personName, person_path(result.personId) %> </td>
         <td class="result"> <%= SolveTime.new(params[:event_id], @is_average ? :average : :single, value).clock_format %> </td>
