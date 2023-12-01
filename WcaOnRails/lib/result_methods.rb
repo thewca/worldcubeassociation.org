@@ -2,7 +2,7 @@
 
 module ResultMethods
   def wca_id
-    @personId
+    @personId || self.personId
   end
 
   def best_solve
