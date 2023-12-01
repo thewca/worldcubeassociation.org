@@ -53,7 +53,7 @@ class PaymentController < ApplicationController
     charges = transaction.stripe_transaction.child_transactions.charge.map { |t|
       {
         payment_id: t.id,
-        amount: t.amount_stripe_denomination,
+        amount: t.amount_stripe_denomination - t.child_transactions.refund.sum(:amount_stripe_denomination),
       }
     }
     render json: { charges: charges }, status: :ok
