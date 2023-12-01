@@ -28,6 +28,22 @@ class Api::V0::RolesController < Api::V0::ApiController
     end
   end
 
+  # Filters the list of roles based on given parameters.
+  private def filter_roles_for_parameters(roles, status)
+    unless status.nil?
+      roles = roles.select do |role|
+        is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
+        if is_actual_role
+          role.metadata.status == status
+        else
+          role[:metadata][:status] == status
+        end
+      end
+    end
+
+    roles
+  end
+
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def user_roles_not_yet_in_new_system(user_id)
     user = User.find(user_id)
@@ -77,7 +93,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on groupId.
   def index_for_group
     group_id = params.require(:group_id)
-    roles = Role.where(group_id: group_id)
+    roles = Role.where(group_id: group_id).to_a # to_a is for the same reason as in index_for_user.
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
@@ -89,7 +105,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   def index_for_group_type
     group_type = params.require(:group_type)
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
-    roles = Role.where(group_id: group_ids)
+    roles = Role.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
 
     # Temporary hack to support the old delegate structure, will be removed once all roles are
     # migrated to the new system.
@@ -99,6 +115,9 @@ class Api::V0::RolesController < Api::V0::ApiController
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
+
+    # Filter the list based on the other parameters.
+    roles = filter_roles_for_parameters(roles, params[:status])
 
     render json: roles
   end
