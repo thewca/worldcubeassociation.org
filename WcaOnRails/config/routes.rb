@@ -211,12 +211,9 @@ Rails.application.routes.draw do
     get 'delegates' => 'static_pages#delegates_data', as: :page_data_delegates
   end
 
-  resources :regional_organizations, only: [:new, :update, :edit, :destroy], path: '/regional-organizations'
+  resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
-  delete 'admin/regional-organizations' => 'regional_organizations#destroy'
-  patch 'regional-organizations/:id/edit' => 'regional_organizations#update'
-  post 'regional-organizations/new' => 'regional_organizations#create'
 
   get 'disciplinary' => 'wdc#root'
 
