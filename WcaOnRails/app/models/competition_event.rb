@@ -14,7 +14,7 @@ class CompetitionEvent < ApplicationRecord
            as: "fee",
            with_model_currency: :currency_code
 
-  serialize :qualification, Qualification
+  serialize :qualification, coder: Qualification
   validates_associated :qualification
 
   validate do

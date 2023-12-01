@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class WcifExtension < ApplicationRecord
-  serialize :data, JSON
+  serialize :data, coder: JSON
 
   validates :extension_id, format: { with: /\A\w+(\.\w+)*\z/ }
   validates :spec_url, url: true
