@@ -703,7 +703,7 @@ GEM
     stringio (3.0.8)
     strip_attributes (1.13.0)
       activemodel (>= 3.0, < 8.0)
-    stripe (10.0.0)
+    stripe (10.2.0)
     superconfig (2.1.1)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
