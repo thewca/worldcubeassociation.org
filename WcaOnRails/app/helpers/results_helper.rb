@@ -106,11 +106,6 @@ module ResultsHelper
     record_class
   end
 
-  def result_params_merge(**params)
-    # We should unset the focus every time we change the selectors
-    request.params.merge(**params, focus: nil)
-  end
-
   def execute_cached_query(cache_key, sql_query)
     # As we are using the native Rails cache we set the expiry date to 7 days
     # as CAD is ran usually before that
