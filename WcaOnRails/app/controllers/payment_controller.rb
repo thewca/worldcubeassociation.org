@@ -48,7 +48,7 @@ class PaymentController < ApplicationController
   def available_refunds
     attendee_id = params.require(:attendee_id)
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    transaction = payment_request.holder
+    transaction = payment_request.stripe_payment_intent
 
     charges = transaction.stripe_transaction.child_transactions.charge.map { |t|
       {
