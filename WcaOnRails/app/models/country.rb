@@ -14,12 +14,14 @@ class Country < ApplicationRecord
     duplicates.each do |tz_id, tz_entries|
       selected_name = tz_id
       # Try to be smarter here, and find the closest matching name
-      tz_entries.each_key do |tz_name|
+      # rubocop:disable Style/HashEachMethods
+      tz_entries.each do |tz_name, _|
         if tz_id.include?(tz_name.tr(' ', '_'))
           selected_name = tz_name
         end
         all_tz.delete(tz_name)
       end
+      # rubocop:enable Style/HashEachMethods
       all_tz[selected_name] = tz_id
     end
     all_tz
