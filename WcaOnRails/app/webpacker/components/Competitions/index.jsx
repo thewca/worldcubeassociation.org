@@ -17,6 +17,8 @@ import {
   personUrl,
   meAPIUrl,
   permissionsAPIUrl,
+  editCompetitionsUrl,
+  competitionRegistrationsUrl,
 } from '../../lib/requests/routes.js.erb';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import Loading from '../Requests/Loading';
