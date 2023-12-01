@@ -32,5 +32,6 @@
     <p><b><%= I18n.t attribute, :scope => [ :mail_form, :request ], :default => attribute.to_s.humanize %>:</b>
     <%= value.include?("\n") ? simple_format(value) : value %></p>
   <% end %>
+  <p><b>Logged-In Email:</b> <%= @resource.logged_in_email %></p>
   <br />
 <% end %>
