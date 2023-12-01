@@ -98,7 +98,7 @@ class PaymentController < ApplicationController
     refund_receipt.update!(parent_transaction: charge)
 
     begin
-      update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+      Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
     rescue Faraday::Error
       return render json: { error: "registration_unreachable" }
     end
