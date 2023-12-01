@@ -32,6 +32,12 @@ export const competitionUrl = (id) => `<%= CGI.unescape(Rails.application.routes
 
 export const competitionReportUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_report_path("${id}"))%>`;
 
+export const myCompetitionsAPIUrl = `<%= Rails.application.routes.url_helpers.api_v0_users_my_competitions_path %>`;
+
+export const meAPIUrl = `<%= Rails.application.routes.url_helpers.api_v0_users_show_me_path %>`;
+
+export const permissionsAPIUrl = `<%= Rails.application.routes.url_helpers.api_v0_users_permissions_path %>`;
+
 export const competitionReportEditUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_report_path("${id}"))%>/edit`;
 
 export const competitionApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
