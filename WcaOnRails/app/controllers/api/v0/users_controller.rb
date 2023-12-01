@@ -47,12 +47,7 @@ class Api::V0::UsersController < Api::V0::ApiController
       competitions = Competition.includes(:delegate_report, :delegates)
                                 .where(id: competition_ids.uniq).where("cancelled_at is null or end_date >= curdate()")
                                 .sort_by { |comp| comp.start_date || (Date.today + 20.year) }.reverse
-      @past_competitions, @not_past_competitions = competitions.partition(&:is_probably_over?)
-      bookmarked_ids = current_user.competitions_bookmarked.pluck(:competition_id)
-      @bookmarked_competitions = Competition.not_over
-                                            .where(id: bookmarked_ids.uniq)
-                                            .sort_by(&:start_date)
-      render json: { status: "ok" }
+      render json: { competitions: competitions }
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
     end
