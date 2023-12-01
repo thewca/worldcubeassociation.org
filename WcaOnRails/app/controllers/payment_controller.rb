@@ -48,12 +48,12 @@ class PaymentController < ApplicationController
   def available_refunds
     attendee_id = params.require(:attendee_id)
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    transactions = StripePaymentIntent.where(holder: payment_request)
+    transaction = payment_request.holder
 
-    charges = transactions.map { |t|
+    charges = transaction.stripe_transaction.child_transactions.charge.map { |t|
       {
-        payment_id: t.stripe_transaction.id,
-        amount: t.parameters["amount"],
+        payment_id: t.id,
+        amount: t.amount_stripe_denomination,
       }
     }
     render json: { charges: charges }, status: :ok
@@ -71,6 +71,8 @@ class PaymentController < ApplicationController
     charge = StripeTransaction.find(payment_id)
 
     return render json: { error: "invalid_transaction" } unless charge.present?
+
+    return render json: { error: "non_refundable" } unless charge.charge?
 
     refund_amount_param = params.require(:refund_amount)
     refund_amount = refund_amount_param.to_i
