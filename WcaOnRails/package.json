@@ -83,7 +83,7 @@
     "defaults"
   ],
   "devDependencies": {
-    "eslint": "^8.52.0",
+    "eslint": "^8.54.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-plugin-import": "^2.29.0",
     "eslint-plugin-jquery": "^1.5.1",
