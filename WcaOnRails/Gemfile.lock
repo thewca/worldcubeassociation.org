@@ -29,7 +29,7 @@ GIT
 
 GIT
   remote: https://github.com/thewca/starburst.git
-  revision: 2abd20b32206d970c8d4b3c21e35c25b3c21d2cc
+  revision: 2b3bcfb56a1b552a68c95b19569a1b481989be4f
   specs:
     starburst (2.0.0.rc0)
       rails (>= 4.2.0, < 7.2)
