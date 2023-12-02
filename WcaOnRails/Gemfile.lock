@@ -729,6 +729,8 @@ GEM
     superconfig (2.1.1)
     terminal-table (3.0.2)
       unicode-display_width (>= 1.1.1, < 3)
+    terser (1.1.20)
+      execjs (>= 0.3.0, < 3)
     thor (1.3.0)
     tilt (2.1.0)
     timecop (0.9.8)
@@ -743,8 +745,6 @@ GEM
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
-    uglifier (4.2.0)
-      execjs (>= 0.3.0, < 3)
     unf (0.1.4)
       unf_ext
     unf_ext (0.0.8.2)
@@ -889,11 +889,11 @@ DEPENDENCIES
   strip_attributes
   stripe
   superconfig
+  terser
   time_will_tell!
   timecop
   translighterate
   twitter_cldr
-  uglifier
   unicorn
   valid_email
   vault
