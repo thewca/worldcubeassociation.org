@@ -134,6 +134,12 @@ export const pendingClaimsUrl = (userId) => `<%= CGI.unescape(Rails.application.
 
 export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>/${userId}`;
 
-export const adminUpdatePersonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_update_person_path)%>`;
-
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
+
+export const apiV0Urls = {
+  wrt: {
+    edit: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_path("${wcaId}"))%>`,
+    destroy: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_path("${wcaId}"))%>`,
+    resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_reset_claim_count_path("${wcaId}"))%>`,
+  },
+}

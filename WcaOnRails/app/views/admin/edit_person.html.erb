@@ -4,8 +4,6 @@
   <%= render layout: "nav" do %>
     <h1><%= yield(:title) %></h1>
 
-    <%= react_component("Panel/Wrt/EditPerson", {
-      countryList: Country.all,
-    }) %>
+    <%= react_component("Panel/Wrt/EditPerson") %>
   <% end %>
 </div>

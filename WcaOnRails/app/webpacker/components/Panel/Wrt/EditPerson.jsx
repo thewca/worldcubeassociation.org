@@ -1,30 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import {
   Button, Form, Icon, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { adminUpdatePersonUrl, adminCheckRecordsUrl } from '../../../lib/requests/routes.js.erb';
+import { adminCheckRecordsUrl, apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
-import { genders } from '../../../lib/wca-data.js.erb';
+import { genders, countries } from '../../../lib/wca-data.js.erb';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const description = `
-  <p>
-  Choose 'Fix' if you want to replace a person's information in the database.
-  It will modify the Persons table accordingly and the Results table if the person's name is different.
-  This should be used to fix mistakes in the database.
-  </p>
-
-  <p>
-  Choose 'Update' if the person's name or country has been changed.
-  It will add a new entry in the Persons table and make it the current information for that person (subId=1)
-  but it will not modify the Results table so previous results keep the old name.
-  </p>
-`;
+const countryChangeWarning = `The change you made may have affected national and continental records, be sure to run <a href=${adminCheckRecordsUrl}>check_regional_record_markers</a>.`;
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -34,17 +22,22 @@ const genderOptions = _.map(genders.byId, (gender) => ({
   value: gender.id,
 }));
 
-const countryChangeWarning = `The change you made may have affected national and continental records, be sure to run <a href=${adminCheckRecordsUrl}>check_regional_record_markers</a>.`;
+const countryOptions = _.map(countries.byIso2, (country) => ({
+  key: country.iso2,
+  text: country.name,
+  value: country.iso2,
+}));
 
-function EditPerson({ countryList }) {
-  const [person, setPerson] = React.useState();
-  const [editedUserDetails, setEditedUserDetails] = React.useState();
-  const [originalUserDetails, setOriginalUserDetails] = React.useState();
+function EditPerson() {
+  const [person, setPerson] = useState();
+  const [editedUserDetails, setEditedUserDetails] = useState();
+  const [originalUserDetails, setOriginalUserDetails] = useState();
   const [incorrectClaimCount, setIncorrectClaimCount] = useState(0);
   const { save, saving } = useSaveAction();
   const [response, setResponse] = useState();
+  const wcaId = useMemo(() => person?.item?.wca_id, [person]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (person) {
       const userDetails = {
         wcaId: person.item.wca_id,
@@ -69,7 +62,7 @@ function EditPerson({ countryList }) {
   };
 
   const editPerson = (method) => {
-    save(adminUpdatePersonUrl, {
+    save(apiV0Urls.wrt.edit(wcaId), {
       person: editedUserDetails,
       method,
     }, () => {
@@ -80,7 +73,9 @@ function EditPerson({ countryList }) {
           </p>`,
       });
       setPerson(null);
-    }, {}, (error) => {
+    }, {
+      method: 'PATCH',
+    }, (error) => {
       setResponse({
         success: false,
         message: `${error}`,
@@ -88,12 +83,28 @@ function EditPerson({ countryList }) {
     });
   };
 
+  const handleDestroy = () => {
+    save(apiV0Urls.wrt.destroy(wcaId), {}, () => {
+      setResponse({ success: true, message: 'Success' });
+      setPerson(null);
+    }, { method: 'DELETE' }, (error) => setResponse({ success: false, message: `${error}` }));
+  };
+
+  const handleResetClaimCount = () => {
+    save(apiV0Urls.wrt.resetClaimCount(wcaId), {}, () => {
+      setResponse({ success: true, message: 'Success' });
+      setPerson(null);
+    }, { method: 'PUT' }, (error) => setResponse({ success: false, message: `${error}` }));
+  };
+
   if (saving) return <Loading />;
 
   return (
     <>
-      {/* eslint-disable-next-line react/no-danger */}
-      <div dangerouslySetInnerHTML={{ __html: description }} />
+      <div>
+        To know the difference between fix and update, refer delegate crash course&apos;s
+        &#34;Requesting changes to person data&#34; section.
+      </div>
       {response != null && (
         <Message
           success={response.success}
@@ -121,7 +132,7 @@ function EditPerson({ countryList }) {
           onChange={handleFormChange}
         />
         <Form.Select
-          options={countryList.map((c) => ({ text: c.name, value: c.iso2 }))}
+          options={countryOptions}
           label={I18n.t('activerecord.attributes.user.country_iso2')}
           name="representing"
           disabled={!editedUserDetails}
@@ -163,15 +174,12 @@ function EditPerson({ countryList }) {
           <Icon name="clone" />
           Update
         </Button>
-        <Button
-          disabled={!editedUserDetails}
-          onClick={() => editPerson('destroy')}
-        >
+        <Button disabled={!editedUserDetails} onClick={handleDestroy}>
           <Icon name="trash" />
           Destroy
         </Button>
         {incorrectClaimCount > 0 && (
-          <Button onClick={() => editPerson('reset-claim-count')}>
+          <Button onClick={handleResetClaimCount}>
             <Icon name="redo" />
             Reset Claim Count
           </Button>

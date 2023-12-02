@@ -235,7 +235,6 @@ Rails.application.routes.draw do
   get '/admin/edit_person' => 'admin#edit_person'
   get '/admin/fix_results' => 'admin#fix_results'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
-  patch '/admin/update_person' => 'admin#update_person', as: :admin_update_person
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
@@ -346,6 +345,12 @@ Rails.application.routes.draw do
         get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
       end
       resources :user_groups, only: [:index, :create, :update]
+      namespace :wrt do
+        resources :persons, only: [:update, :destroy]
+        scope 'persons' do
+          put '/:id/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count
+        end
+      end
       namespace :wfc do
         resources :xero_users, only: [:index, :create]
         resources :dues_redirects, only: [:index, :create]
