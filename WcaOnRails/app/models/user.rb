@@ -133,7 +133,10 @@ class User < ApplicationRecord
     senior_delegate: "senior_delegate",
   }
   has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true
+  # ATTENTION! This association contains a hack while we slowly transition to user_groups!
+  # Instead of querying the senior_delegate_id, we query the same region by making Rails believe that the Senior Delegate's ID
+  # is called "region_id" -- in reality, this hack makes it so that only Delegates from the same region are considered
+  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, foreign_key: "region_id", primary_key: "region_id", class_name: "User", optional: true
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -1289,10 +1292,6 @@ class User < ApplicationRecord
 
   def can_manage_delegate_probation?
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
-  end
-
-  def senior_delegate
-    User.find_by(delegate_status: "senior_delegate", region_id: self.region_id)
   end
 
   def delegate_role
