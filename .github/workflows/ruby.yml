@@ -23,9 +23,12 @@ jobs:
         with:
           working-directory: WcaOnRails
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v4 # this also includes Yarn
+      - name: Set up Corepack/Yarn
+        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
+          cache: 'yarn'
       - uses: actions/cache@v3
         with:
           path: '**/node_modules'
