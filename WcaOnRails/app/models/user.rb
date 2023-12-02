@@ -132,8 +132,8 @@ class User < ApplicationRecord
     delegate: "delegate",
     senior_delegate: "senior_delegate",
   }
-  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true
+  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id", inverse_of: :senior_delegate
+  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true, inverse_of: :subordinate_delegates
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
