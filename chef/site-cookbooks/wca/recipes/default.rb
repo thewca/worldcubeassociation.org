@@ -4,8 +4,8 @@ require 'securerandom'
 
 include_recipe "wca::base"
 
-node.default['nodejs']['version'] = '16.15.0'
-node.default['nodejs']['repo'] = 'https://deb.nodesource.com/node_16.x'
+node.default['nodejs']['version'] = '20.10.0'
+node.default['nodejs']['repo'] = 'https://deb.nodesource.com/node_20.x'
 include_recipe "nodejs"
 
 npm_package 'yarn' do
