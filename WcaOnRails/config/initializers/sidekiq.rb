@@ -20,3 +20,6 @@ end
 Sidekiq.configure_client do |config|
   config.redis = { url: EnvConfig.SIDEKIQ_REDIS_URL }
 end
+
+# Make sure that job inserts during transaction are only inserted when the transaction completes.
+Sidekiq.transactional_push!

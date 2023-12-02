@@ -103,6 +103,7 @@ gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
+gem 'after_commit_everywhere'
 
 group :development, :test do
   gem 'spring'
