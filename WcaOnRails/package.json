@@ -12,19 +12,19 @@
     "@babel/plugin-proposal-throw-expressions": "^7.23.3",
     "@babel/plugin-syntax-dynamic-import": "^7.8.3",
     "@babel/plugin-syntax-import-meta": "^7.10.4",
+    "@babel/plugin-transform-destructuring": "^7.23.3",
     "@babel/plugin-transform-object-rest-spread": "^7.23.4",
     "@babel/plugin-transform-regenerator": "^7.23.3",
     "@babel/plugin-transform-runtime": "^7.23.7",
-    "@babel/plugin-transform-destructuring": "^7.23.3",
     "@babel/preset-env": "^7.23.7",
     "@babel/preset-react": "^7.23.3",
     "@babel/runtime": "^7.23.7",
     "@cubing/icons": "^1.1.2",
-    "@fullcalendar/react": "^6.1.10",
     "@fullcalendar/core": "^6.1.10",
     "@fullcalendar/interaction": "^6.1.10",
-    "@fullcalendar/timegrid": "^6.1.10",
     "@fullcalendar/luxon3": "^6.1.10",
+    "@fullcalendar/react": "^6.1.10",
+    "@fullcalendar/timegrid": "^6.1.10",
     "@rails/ujs": "^6.1.7",
     "autonumeric": "^4.10.2",
     "autoprefixer": "^10.4.16",
@@ -104,5 +104,6 @@
   },
   "scripts": {
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"
-  }
+  },
+  "packageManager": "yarn@4.0.2"
 }
