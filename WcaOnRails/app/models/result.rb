@@ -9,6 +9,7 @@ class Result < ApplicationRecord
   alias_attribute :person_name, :personName
   validates :personName, presence: true
   alias_attribute :person_id, :personId
+  alias_attribute :wca_id, :personId
   alias_attribute :person_name, :personName
   belongs_to :country, foreign_key: :countryId
   alias_attribute :country_id, :countryId
