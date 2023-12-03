@@ -306,7 +306,11 @@ class Competition < ApplicationRecord
     end
   end
 
-  validate :registation_must_not_be_past, if: :confirmed_or_visible?
+  def should_registration_closing?
+    confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?)
+  end
+
+  validate :registation_must_not_be_past, if: :should_registration_closing?
   private def registation_must_not_be_past
     if registration_range_specified? && registration_past?
       errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
@@ -526,6 +530,7 @@ class Competition < ApplicationRecord
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
       end
+    end
     if registration_range_specified? && registration_past?
       if !self.announced?
         warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
