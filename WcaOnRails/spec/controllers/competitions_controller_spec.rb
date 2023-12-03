@@ -877,7 +877,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can uncancel competition" do
-        cancelled_competition = FactoryBot.create(:competition, :cancelled, :future )
+        cancelled_competition = FactoryBot.create(:competition, :cancelled, :future)
         patch :cancel_competition, params: { id: cancelled_competition, undo: true }
         expect(response).to redirect_to admin_edit_competition_path(cancelled_competition)
         expect(cancelled_competition.reload.cancelled?).to eq false
