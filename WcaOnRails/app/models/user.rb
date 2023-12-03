@@ -1299,7 +1299,7 @@ class User < ApplicationRecord
         group: {
           id: team.id,
           name: team.name,
-          group_type: UserGroup.group_types[:teams],
+          group_type: UserGroup.group_types[:teams_committees],
           is_hidden: team[:hidden],
           is_active: true,
         },

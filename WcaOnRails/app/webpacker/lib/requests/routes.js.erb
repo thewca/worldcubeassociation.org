@@ -1,3 +1,9 @@
+function jsonToQueryString(json) {
+  return Object.keys(json)
+    .filter((key) => json[key] !== undefined && json[key] !== null)
+    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`).join('&');
+}
+
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
 
 export const personsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_path) %>`;
@@ -106,13 +112,7 @@ export const rolesOfUser = (userId) => `<%= CGI.unescape(Rails.application.route
 
 export const rolesOfGroup = (groupId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>`;
 
-export const rolesOfGroupType = (groupType, status) => {
-  const searchParams = new URLSearchParams();
-  if (status) {
-    searchParams.append('status', status);
-  }
-  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${searchParams.toString()}`;
-};
+export const rolesOfGroupType = (groupType, status, isActive = true) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive })}`;
 
 // dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
@@ -139,6 +139,11 @@ export const apiV0Urls = {
     edit: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_path("${wcaId}"))%>`,
     destroy: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_path("${wcaId}"))%>`,
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
+  },
+  userRoles: {
+    create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_roles_path) %>`,
+    update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_roles_path) %>/${roleId}`,
+    delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_roles_path) %>/${roleId}`,
   },
 }
 

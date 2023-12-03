@@ -4,7 +4,8 @@ class UserGroup < ApplicationRecord
   enum :group_type, {
     delegate_probation: "delegate_probation",
     delegate_regions: "delegate_regions",
-    teams: "teams",
+    teams_committees: "teams_committees",
+    councils: "councils",
   }
 
   belongs_to :metadata, polymorphic: true, optional: true

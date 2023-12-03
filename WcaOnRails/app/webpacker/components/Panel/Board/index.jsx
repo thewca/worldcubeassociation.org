@@ -3,12 +3,18 @@ import DelegateProbations from '../../DelegateProbations';
 import PanelTemplate from '../PanelTemplate';
 import SeniorDelegatesList from './SeniorDelegatesList';
 import RegionManager from './RegionManager';
+import CouncilLeaders from './CouncilLeaders';
 
 const sections = [
   {
     id: 'senior-delegates-list',
     name: 'Senior Delegates List',
     component: SeniorDelegatesList,
+  },
+  {
+    id: 'council-leaders',
+    name: 'Council Leaders',
+    component: CouncilLeaders,
   },
   {
     id: 'regions-manager',
