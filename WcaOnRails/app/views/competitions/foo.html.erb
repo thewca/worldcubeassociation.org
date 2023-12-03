@@ -1,0 +1,44 @@
+<%# DO NOT DELETE THIS FILE OR YOUR HAMSTER WILL EXPLODE %>
+<%= block do %>
+  <script>
+    function Foo() {
+      var compLimitEnabled = 'true' === $('#competition_competitor_limit_enabled')
+        .val();
+      var compLimit = compLimitEnabled ? $('#competition_competitor_limit')
+        .val() : null;
+      var currencyCode = $('#competition_currency_code')
+        .val();
+      var countryId = $('#competition_countryId')
+        .val();
+      var entryFee = $('#competition_base_entry_fee_lowest_denomination')
+        .val();
+      window.wca.cancelPendingAjaxAndAjax('calculate_dues', {
+        data: {
+          competitor_limit_enabled: compLimitEnabled,
+          competitor_limit: compLimit,
+          currency_code: currencyCode,
+          country_id: countryId,
+          base_entry_fee_lowest_denomination: entryFee,
+        },
+        success: function (data) {
+          if (data.dues_value == null) {
+            <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.ajax_error') %>
+            $('#dues_estimate')
+              .html('<b>' + I18n.t('competitions.competition_form.dues_estimate.ajax_error') + '</b>');
+          } else if (compLimitEnabled) {
+            <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.calculated') %>
+            $('#dues_estimate')
+              .html('<b>' + I18n.t('competitions.competition_form.dues_estimate.calculated', {
+                limit: compLimit,
+                estimate: data.dues_value
+              }) + ' (' + currencyCode + ')</b>');
+          } else {
+            <% # i18n-tasks-use t('competitions.competition_form.dues_estimate.per_competitor') %>
+            $('#dues_estimate')
+              .html('<b>' + I18n.t('competitions.competition_form.dues_estimate.per_competitor', { estimate: data.dues_value }) + ' (' + currencyCode + ')</b>');
+          }
+        },
+      });
+    }
+  </script>
+<% end %>
