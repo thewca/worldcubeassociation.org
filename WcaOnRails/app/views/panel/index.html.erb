@@ -83,26 +83,22 @@
     </ul>
   <% end %>
 
-  <% if current_user&.board_member? %>
-    <h2>Board</h2>
-
-    <ul>
-      <li>
-        <%= link_to "List of Senior Delegates", panel_seniors_path %>
-      </li>
-    </ul>
-  <% end %>
-
-  <% if current_user.can_admin_finances? %>
+  <% if current_user.can_access_panel? %>
     <h2>Other Panels</h2>
 
-    <%# Other Panels will list the list of panels that have separate panel page - like WFC panel.%>
-    <%# Currently, there is only WFC panel, but in the future, there might be more panels. %>
+    <%# Other Panels will list the list of panels that have separate panel page.%>
 
     <ul>
-      <li>
-        <%= link_to "WFC panel", panel_wfc_path %>
-      </li>
+      <% if current_user.can_access_wfc_panel? %>
+        <li>
+          <%= link_to "WFC panel", panel_wfc_path %>
+        </li>
+      <% end %>
+      <% if current_user.can_access_board_panel? %>
+        <li>
+          <%= link_to "Board panel", panel_board_path %>
+        </li>
+      <% end %>
     </ul>
   <% end %>
 </div>

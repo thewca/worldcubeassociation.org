@@ -50,11 +50,9 @@ RSpec.describe ApplicationHelper do
       user = FactoryBot.create :user
       user.wca_id = '1999FLEI01'
       user.dob = 2.days.from_now
-      user.senior_delegate = FactoryBot.create :senior_delegate
       expect(user).to be_invalid_with_errors(
         wca_id: ["not found"],
         dob: ["must be in the past"],
-        senior_delegate: ["must not be present"],
       )
 
       form_html = helper.simple_form_for(user) do |f|
@@ -65,7 +63,7 @@ RSpec.describe ApplicationHelper do
         buf
       end
 
-      expect(form_html).to include "The form contains 3 errors"
+      expect(form_html).to include "The form contains 2 errors"
 
       # Test that our error messages internally link to the correct field to make user's lives easier.
       # We cannot link to the appropriate field if the field does not exist, however.

@@ -39,9 +39,11 @@ development:
   developer_dump:
     <<: *default
     database: wca_dump_developer
+    database_tasks: false
   results_dump:
     <<: *default
     database: wca_dump_results
+    database_tasks: false
     migrations_paths: db/results_migrate
 
 # Warning: The database defined as "test" will be erased and

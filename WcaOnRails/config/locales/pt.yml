@@ -2137,8 +2137,6 @@ pt:
       must_have_a_change: O nome da região tem que ser diferente para atualizar o competidor.
       #original_hash: 012f032
       must_be_senior: deve ser um Delegado Sénior
-      #original_hash: 2e582eb
-      must_not_be_present: não pode estar presente
       #original_hash: 5b4eac9
       senior_has_delegate: não pode despromover Delegado Sénior que tenha Delegados subordinados
       #original_hash: 48653a9

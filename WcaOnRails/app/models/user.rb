@@ -90,7 +90,7 @@ class User < ApplicationRecord
   end
 
   # Backup OTP are stored as a string array in the db
-  serialize :otp_backup_codes
+  serialize :otp_backup_codes, coder: YAML
 
   def two_factor_enabled?
     otp_required_for_login
@@ -132,8 +132,8 @@ class User < ApplicationRecord
     delegate: "delegate",
     senior_delegate: "senior_delegate",
   }
-  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true
+  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id", inverse_of: :senior_delegate
+  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true, inverse_of: :subordinate_delegates
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -427,15 +427,6 @@ class User < ApplicationRecord
       errors.add(:senior_delegate, I18n.t('users.errors.must_be_senior'))
     end
   end
-
-  validate :senior_delegate_presence
-  def senior_delegate_presence
-    if !User.delegate_status_requires_senior_delegate(delegate_status) && senior_delegate
-      errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
-    end
-  end
-
-  validates :senior_delegate, presence: true, if: -> { User.delegate_status_requires_senior_delegate(delegate_status) && !senior_delegate }
 
   # This is a copy of def self.delegate_status_requires_senior_delegate(delegate_status) in the user model
   # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
@@ -1300,6 +1291,10 @@ class User < ApplicationRecord
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
   end
 
+  def senior_delegate
+    User.find_by(delegate_status: "senior_delegate", region_id: self.region_id)
+  end
+
   def delegate_role
     {
       end_date: nil,
@@ -1338,5 +1333,17 @@ class User < ApplicationRecord
       }
     end
     roles
+  end
+
+  def can_access_wfc_panel?
+    can_admin_finances?
+  end
+
+  def can_access_board_panel?
+    admin? || board_member?
+  end
+
+  def can_access_panel?
+    can_access_wfc_panel? || can_access_board_panel?
   end
 end

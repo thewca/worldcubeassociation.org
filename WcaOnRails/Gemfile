@@ -13,7 +13,7 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
-gem 'uglifier'
+gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
 gem 'sdoc', group: :doc
@@ -103,6 +103,7 @@ gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
+gem 'after_commit_everywhere'
 
 group :development, :test do
   gem 'spring'

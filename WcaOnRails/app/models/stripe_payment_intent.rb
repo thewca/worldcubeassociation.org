@@ -16,7 +16,7 @@ class StripePaymentIntent < ApplicationRecord
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
 
-  serialize :error_details, JSON
+  serialize :error_details, coder: JSON
 
   def pending?
     self.confirmed_at.nil? && self.canceled_at.nil?

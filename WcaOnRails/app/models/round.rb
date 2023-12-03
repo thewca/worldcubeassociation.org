@@ -17,16 +17,16 @@ class Round < ApplicationRecord
 
   delegate :can_change_time_limit?, to: :event
 
-  serialize :time_limit, TimeLimit
+  serialize :time_limit, coder: TimeLimit
   validates_associated :time_limit
 
-  serialize :cutoff, Cutoff
+  serialize :cutoff, coder: Cutoff
   validates_associated :cutoff
 
-  serialize :advancement_condition, AdvancementConditions::AdvancementCondition
+  serialize :advancement_condition, coder: AdvancementConditions::AdvancementCondition
   validates_associated :advancement_condition
 
-  serialize :round_results, RoundResults
+  serialize :round_results, coder: RoundResults
   validates_associated :round_results
 
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all

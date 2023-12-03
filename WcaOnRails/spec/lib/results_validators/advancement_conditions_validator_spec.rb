@@ -5,7 +5,7 @@ require 'rails_helper'
 RV = ResultsValidators
 ACV = RV::AdvancementConditionsValidator
 
-RSpec.describe ACV do
+RSpec.describe ResultsValidators::AdvancementConditionsValidator do
   context "on InboxResult and Result" do
     let!(:competition1) { FactoryBot.create(:competition, starts: Date.new(2010, 3, 1), event_ids: ["333oh"]) }
     let!(:competition2) { FactoryBot.create(:competition, :past, event_ids: ["222"]) }

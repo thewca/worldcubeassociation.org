@@ -113,8 +113,8 @@ module CheckRegionalRecords
   def self.check_records(event_id = nil, competition_id = nil)
     SOLUTION_TYPES.to_h do |value_column, value_name|
       # some helper symbols for further down
-      regional_record_symbol = "regional#{value_name}Record".to_sym
-      value_solve_symbol = "#{value_column}_solve".to_sym
+      regional_record_symbol = :"regional#{value_name}Record"
+      value_solve_symbol = :"#{value_column}_solve"
 
       base_records = {}
 
