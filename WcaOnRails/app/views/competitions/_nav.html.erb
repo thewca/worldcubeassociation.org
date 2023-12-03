@@ -3,64 +3,64 @@
   <div class="row">
     <div id="competition-nav">
       <%
-      nav_items = []
-      if @competition.user_can_view_results?(current_user)
-        nav_items << {
-          text: t('.menu.results'),
-          path: competition_path(@competition),
-          icon: "trophy",
-          children: [
-            { text: t('.menu.podiums'), path: competition_results_podiums_path(@competition), icon: "cubes" },
-            {
-              text: t('.menu.all'),
-              path: competition_results_all_path(@competition),
-              icon: "list",
-              tiny_children: @competition.events.map do |event|
-                { text: event.id, path: competition_results_all_path(@competition, event: event.id), cubing_icon: event.id, title: event.name }
-              end
-            },
-            { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), icon: "user" },
-          ],
-        }
-        nav_items << {
-          text: t('.menu.scrambles'),
-          path: competition_scrambles_path(@competition),
-          icon: "cubing-icon unofficial-333mts",
-        }
-      else
-        nav_items << {
-          text: t('.menu.info'),
-          path: competition_path(@competition),
-          icon: "info circle",
-        }
-      end
-      if current_user&.can_manage_competition?(@competition)
-        nav_items << {
-          text: t('.menu.edit'),
-          icon: "lock",
-          collapsible: true,
-          children: [
-            { text: t('.menu.orga_view'), path: edit_competition_path(@competition), icon: "lock" },
-            { text: t('.menu.event_view'), path: edit_events_path(@competition), icon: "cubes" },
-            { text: t('.menu.schedule_view'), path: edit_schedule_path(@competition), icon: "calendar" },
-            { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), icon: "cc stripe" },
-          ] +
-          (current_user.can_admin_competitions? ? [
-            { text: t('.menu.admin_view'), path: competition_admin_edit_path(@competition), icon: "lock" },
-          ] : [])
-        }
-        if @competition.use_wca_registration?
+        nav_items = []
+        if @competition.user_can_view_results?(current_user)
           nav_items << {
-            text: t('.menu.registration'),
-            path: competition_edit_registrations_path(@competition),
-            icon: "list ul",
-            notification_count: @competition.registrations.pending.count,
-            children: [{
-                         hidden: true,
-                         is_active: lambda do
-                           controller.is_a?(RegistrationsController) && ["edit", "update"].include?(action_name)
-                         end,
-                       }],
+            text: t('.menu.results'),
+            path: competition_path(@competition),
+            icon: "trophy",
+            children: [
+              { text: t('.menu.podiums'), path: competition_results_podiums_path(@competition), icon: "cubes" },
+              {
+                text: t('.menu.all'),
+                path: competition_results_all_path(@competition),
+                icon: "list",
+                tiny_children: @competition.events.map do |event|
+                  { text: event.id, path: competition_results_all_path(@competition, event: event.id), cubing_icon: event.id, title: event.name }
+                end
+              },
+              { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), icon: "user" },
+            ],
+          }
+          nav_items << {
+            text: t('.menu.scrambles'),
+            path: competition_scrambles_path(@competition),
+            icon: "cubing-icon unofficial-333mts",
+          }
+        else
+          nav_items << {
+            text: t('.menu.info'),
+            path: competition_path(@competition),
+            icon: "info circle",
+          }
+        end
+        if current_user&.can_manage_competition?(@competition)
+          nav_items << {
+            text: t('.menu.edit'),
+            icon: "lock",
+            collapsible: true,
+            children: [
+              { text: t('.menu.orga_view'), path: edit_competition_path(@competition), icon: "lock" },
+              { text: t('.menu.event_view'), path: edit_events_path(@competition), icon: "cubes" },
+              { text: t('.menu.schedule_view'), path: edit_schedule_path(@competition), icon: "calendar" },
+              { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), icon: "cc stripe" },
+            ] +
+              (current_user.can_admin_competitions? ? [
+                { text: t('.menu.admin_view'), path: competition_admin_edit_path(@competition), icon: "lock" },
+              ] : [])
+          }
+          if @competition.use_wca_registration? && !@competition.uses_new_registration_service?
+            nav_items << {
+              text: t('.menu.registration'),
+              path: competition_edit_registrations_path(@competition),
+              icon: "list ul",
+              notification_count: @competition.registrations.pending.count,
+              children: [{
+                           hidden: true,
+                           is_active: lambda do
+                             controller.is_a?(RegistrationsController) && ["edit", "update"].include?(action_name)
+                           end,
+                         }],
             }
           else
             nav_items << {

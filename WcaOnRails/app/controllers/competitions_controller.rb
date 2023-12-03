@@ -637,7 +637,7 @@ class CompetitionsController < ApplicationController
       redirect = {}
       if old_id != new_id
         redirect = {
-          redirect: @competition_admin_view ? admin_edit_competition_path(competition) : edit_competition_path(competition),
+          redirect: @competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
         }
       end
 

@@ -31,12 +31,12 @@ module ApplicationHelper
 
   def link_to_google_maps_place(text, latitude, longitude)
     url = "https://www.google.com/maps/place/#{latitude},#{longitude}"
-    ActionController::Base.helpers.link_to text, url, target: "_blank"
+    link_to text, url, target: "_blank"
   end
 
   def link_to_google_maps_dir(text, start_latitude, start_longitude, end_latitude, end_longitude)
     url = "https://www.google.com/maps/dir/#{start_latitude},#{start_longitude}/#{end_latitude},#{end_longitude}/"
-    ActionController::Base.helpers.link_to text, url, target: "_blank"
+    link_to text, url, target: "_blank"
   end
 
   def link_to_competition_schedule_tab(comp)
