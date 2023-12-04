@@ -1,47 +1,6 @@
 # frozen_string_literal: true
 
 class SyncMailingListsJob < WcaCronjob
-  SENIOR_DELEGATES_REGIONS_INFO = [
-    {
-      mailing_list: "delegates.africa@worldcubeassociation.org",
-      query: "%Africa%",
-    },
-    {
-      mailing_list: "delegates.asia-east@worldcubeassociation.org",
-      query: "%Asia East%",
-    },
-    {
-      mailing_list: "delegates.asia-southeast@worldcubeassociation.org",
-      query: "%Asia Southeast%",
-    },
-    {
-      mailing_list: "delegates.asia-west-south@worldcubeassociation.org",
-      query: "%Asia West & South%",
-    },
-    {
-      mailing_list: "delegates.central-eurasia@worldcubeassociation.org",
-      query: "%Central Eurasia%",
-    },
-    {
-      mailing_list: "delegates.europe@worldcubeassociation.org",
-      # NOTE: Adding the '(' as 'Europe' matches 'Europe North' too, and all
-      # Seniors have a more specific region anyway.
-      query: "%Europe (%",
-    },
-    {
-      mailing_list: "delegates.latin-america@worldcubeassociation.org",
-      query: "%Latin America%",
-    },
-    {
-      mailing_list: "delegates.oceania@worldcubeassociation.org",
-      query: "%Oceania%",
-    },
-    {
-      mailing_list: "delegates.usa-canada@worldcubeassociation.org",
-      query: "%USA & Canada%",
-    },
-  ].freeze
-
   before_enqueue do
     # NOTE: we want to only do this on the actual "production" server, as we need the real users' emails.
     throw :abort unless EnvConfig.WCA_LIVE_SITE?
@@ -75,17 +34,9 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("sports@worldcubeassociation.org", Team.wsot.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("archive@worldcubeassociation.org", Team.wat.current_members.includes(:user).map(&:user).map(&:email))
 
-    SENIOR_DELEGATES_REGIONS_INFO.each do |region|
-      senior_delegates = User.senior_delegates.where("location like ?", region[:query])
-      if senior_delegates.length > 1
-        raise "Multiple Senior Delegates match #{region[:query]}"
-      elsif senior_delegates.empty?
-        raise "No Senior Delegate matches #{region[:query]}"
-      else
-        senior_delegate = senior_delegates.first
-      end
-      delegates = senior_delegate.subordinate_delegates
-      GsuiteMailingLists.sync_group(region[:mailing_list], (delegates + [senior_delegate]).map(&:email))
+    UserGroup.delegate_regions.each do |region|
+      emails = region.roles.map { |role| role[:user][:email] }
+      GsuiteMailingLists.sync_group(region.metadata.email, emails)
     end
 
     organizations = RegionalOrganization.currently_acknowledged + [Team.board]

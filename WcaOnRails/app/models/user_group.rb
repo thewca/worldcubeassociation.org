@@ -7,7 +7,19 @@ class UserGroup < ApplicationRecord
     teams: "teams",
   }
 
-  def self.regions
+  belongs_to :metadata, polymorphic: true, optional: true
+
+  def self.delegate_regions
     UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
+  end
+
+  def roles
+    if self.group_type == "delegate_regions"
+      User.where(region_id: self.id).where.not(delegate_status: nil).map do |delegate_user|
+        delegate_user.delegate_role
+      end
+    else
+      Role.where(group_id: self.id)
+    end
   end
 end

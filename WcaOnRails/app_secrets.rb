@@ -9,7 +9,7 @@ SuperConfig::Base.class_eval do
   #   (method SuperConfig::Base#credential). The inner Vault fetching logic is custom-written :)
   def vault(secret_name, &block)
     define_singleton_method(secret_name) do
-      @__cache__["_vault_#{secret_name}".to_sym] ||= begin
+      @__cache__[:"_vault_#{secret_name}"] ||= begin
         value = self.vault_read(secret_name)[:value]
         block ? block.call(value) : value
       end

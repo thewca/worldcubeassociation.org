@@ -51,4 +51,8 @@ FactoryBot.define do
       is_hidden { true }
     end
   end
+
+  factory :groups_metadata_delegate_regions do
+    email { "test@test.com" }
+  end
 end
