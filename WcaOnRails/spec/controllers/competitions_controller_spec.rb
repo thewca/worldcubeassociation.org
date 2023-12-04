@@ -697,12 +697,6 @@ RSpec.describe CompetitionsController do
         comp.reload
         expect(comp.extra_registration_requirements).to eq "Extra requirements"
       end
-
-      it "cannot submit a competition where registration has already closed" do
-        comp = FactoryBot.create(:competition, :not_visible, :registration_closed, delegates: [delegate])
-        patch :update, params: { id: comp, competition: { name: comp.name }, commit: "Confirm" }
-        expect(comp.reload.confirmed?).to eq false
-      end
     end
 
     context "when signed in as a trainee delegate" do

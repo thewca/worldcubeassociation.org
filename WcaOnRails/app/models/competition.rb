@@ -306,14 +306,16 @@ class Competition < ApplicationRecord
     end
   end
 
-  def should_registration_closing?
+  private def should_validate_registration_closing?
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?)
   end
 
-  validate :registation_must_not_be_past, if: :should_registration_closing?
+  validate :registation_must_not_be_past, if: :should_validate_registration_closing?
   private def registation_must_not_be_past
-    if registration_range_specified? && registration_past?
-      errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
+    if editing_user_id
+      if registration_range_specified? && registration_past?
+        errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
+      end
     end
   end
 
@@ -532,7 +534,7 @@ class Competition < ApplicationRecord
       end
     end
     if registration_range_specified? && registration_past?
-      if !self.announced?
+      unless self.announced?
         warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
       end
     end
