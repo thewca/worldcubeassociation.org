@@ -184,7 +184,7 @@ RSpec.describe "API Competitions" do
     end
 
     describe "events" do
-      let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible) }
+      let!(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible) }
 
       context "when signed in as a board member" do
         sign_in { FactoryBot.create :user, :board_member }
@@ -212,7 +212,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "confirmed competition" do
-          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "can add events" do
             patch api_v0_competition_update_wcif_path(competition), params: create_wcif_with_events(%w(333 333oh 222)).to_json, headers: headers
@@ -228,7 +228,7 @@ RSpec.describe "API Competitions" do
         end
 
         context "competition with results posted" do
-          let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
+          let(:competition) { FactoryBot.create(:competition, :past, :with_delegate, :with_organizer, :visible, :confirmed, :results_posted, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by_event_id("333").rounds.delete_all
@@ -244,7 +244,7 @@ RSpec.describe "API Competitions" do
         before { sign_in competition.delegates.first }
 
         context "confirmed competition" do
-          let!(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
+          let!(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, :visible, :confirmed, event_ids: %w(222 333)) }
 
           it "allows adding rounds to an event" do
             competition.competition_events.find_by_event_id("333").rounds.delete_all
