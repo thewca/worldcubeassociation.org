@@ -310,10 +310,12 @@ class Competition < ApplicationRecord
     confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?)
   end
 
+  # Same comment as for start_date_must_be_28_days_in_advance
   validate :registation_must_not_be_past, if: :should_validate_registration_closing?
   private def registation_must_not_be_past
     if editing_user_id
-      if registration_range_specified? && registration_past?
+      editing_user = User.find(editing_user_id)
+      if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
         errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
       end
     end

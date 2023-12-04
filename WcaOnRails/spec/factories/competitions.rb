@@ -32,6 +32,7 @@ FactoryBot.define do
 
     trait :past do
       starts { 1.week.ago }
+      registration_close { 2.weeks.ago.change(usec: 0) }
     end
 
     trait :results_posted do
