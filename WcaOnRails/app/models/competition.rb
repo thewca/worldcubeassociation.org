@@ -376,6 +376,10 @@ class Competition < ApplicationRecord
     self.confirmed? || self.showAtAll
   end
 
+  def visible?
+    self.showAtAll
+  end
+
   def registration_full?
     competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
   end
@@ -1369,6 +1373,10 @@ class Competition < ApplicationRecord
 
   def upcoming?
     !results_posted? && (start_date.nil? || start_date > Date.today)
+  end
+
+  def report_posted?
+    delegate_report.posted?
   end
 
   def city_and_country

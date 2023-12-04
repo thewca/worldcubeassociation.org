@@ -30,13 +30,18 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def my_competitions
     if current_user
+      options = {
+        only: %w[id name website start_date end_date],
+        methods: %w[url city country_iso2 registration_not_yet_opened? registration_full? registration_past? results_posted? visible? confirmed? cancelled? report_posted?],
+        include: %w[],
+      }
       ActiveRecord::Base.connected_to(role: :read_replica) do
         competition_ids = current_user.organized_competitions.pluck(:competition_id)
         competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
         registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
         registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
         registered_for_by_competition_id = registrations.uniq.to_h do |r|
-          [r.competition.id, r]
+          [r.competition.id, r.as_json({only: [], methods: ["wcif_status"] })]
         end
         competition_ids.concat(registered_for_by_competition_id.keys)
         if current_user.person
@@ -53,7 +58,10 @@ class Api::V0::UsersController < Api::V0::ApiController
         bookmarked_competitions = Competition.not_over
                                              .where(id: bookmarked_ids.uniq)
                                              .sort_by(&:start_date)
-        render json: { past_competitions: past_competitions, future_competitions: not_past_competitions, registered_for_by_competition_id: registered_for_by_competition_id, bookmarked_competitions: bookmarked_competitions }
+        render json: { past_competitions: past_competitions.as_json(options),
+                       future_competitions: not_past_competitions.as_json(options),
+                       registered_for_by_competition_id: registered_for_by_competition_id,
+                       bookmarked_competitions: bookmarked_competitions.as_json(options) }
       end
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
