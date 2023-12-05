@@ -17,7 +17,7 @@ module Microservices
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
       conn = Faraday.new(
-        url: EnvConfig.WCA_REGISTRATION_URL,
+        url: EnvConfig.WCA_REGISTRATIONS_URL,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
       ) do |builder|
         # Sets headers and parses jsons automatically
