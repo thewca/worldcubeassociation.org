@@ -409,7 +409,7 @@ class AdminController < ApplicationController
         next unless marker.present?
 
         result_id, result_type = id_and_type.split('-')
-        record_marker = "regional#{result_type}Record".to_sym
+        record_marker = :"regional#{result_type}Record"
 
         Result.where(id: result_id).update_all(record_marker => marker)
       end

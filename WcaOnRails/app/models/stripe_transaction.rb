@@ -34,7 +34,7 @@ class StripeTransaction < ApplicationRecord
 
   # We don't need the native JSON type on DB level, so we serialize in Ruby.
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
-  serialize :parameters, JSON
+  serialize :parameters, coder: JSON
 
   def find_account_id
     self.account_id || parent_transaction&.find_account_id

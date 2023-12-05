@@ -120,13 +120,13 @@ RSpec.describe "Regional Organizations management", type: :request do
       it "creates a new regional organization" do
         sign_in board_member
         expect {
-          post new_regional_organization_path, params: { regional_organization: valid_attributes }
+          post regional_organizations_path, params: { regional_organization: valid_attributes }
         }.to change(RegionalOrganization, :count).by(1)
       end
 
       it "redirects to the created regional organization" do
         sign_in board_member
-        post new_regional_organization_path, params: { regional_organization: valid_attributes }
+        post regional_organizations_path, params: { regional_organization: valid_attributes }
         expect(response).to redirect_to edit_regional_organization_path(RegionalOrganization.last)
       end
     end
@@ -135,7 +135,7 @@ RSpec.describe "Regional Organizations management", type: :request do
       it "renders the new regional organization form" do
         sign_in board_member
         expect {
-          post new_regional_organization_path, params: { regional_organization: invalid_attributes }
+          post regional_organizations_path, params: { regional_organization: invalid_attributes }
         }.to change(RegionalOrganization, :count).by(0)
         expect(response).to be_successful
       end
@@ -145,13 +145,13 @@ RSpec.describe "Regional Organizations management", type: :request do
       it "creates a new regional organization" do
         sign_in user
         expect {
-          post new_regional_organization_path, params: { regional_organization: valid_attributes }
+          post regional_organizations_path, params: { regional_organization: valid_attributes }
         }.to change(RegionalOrganization, :count).by(1)
       end
 
       it "redirects to the homepage" do
         sign_in user
-        post new_regional_organization_path, params: { regional_organization: valid_attributes }
+        post regional_organizations_path, params: { regional_organization: valid_attributes }
         expect(response).to redirect_to root_url
       end
     end
@@ -160,7 +160,7 @@ RSpec.describe "Regional Organizations management", type: :request do
       it "renders the new regional organization form" do
         sign_in user
         expect {
-          post new_regional_organization_path, params: { regional_organization: invalid_attributes }
+          post regional_organizations_path, params: { regional_organization: invalid_attributes }
         }.to change(RegionalOrganization, :count).by(0)
         expect(response).to be_successful
       end
@@ -182,7 +182,7 @@ RSpec.describe "Regional Organizations management", type: :request do
       it "updates the requested requested regional organization and redirects to the regional organization" do
         sign_in board_member
         regional_organization = RegionalOrganization.create! valid_attributes
-        patch edit_regional_organization_path(regional_organization), params: { regional_organization: new_attributes }
+        patch regional_organization_path(regional_organization), params: { regional_organization: new_attributes }
         expect(response).to redirect_to edit_regional_organization_path(regional_organization)
         regional_organization.reload
         expect(regional_organization.name).to eq new_attributes[:name]
@@ -195,7 +195,7 @@ RSpec.describe "Regional Organizations management", type: :request do
       it "doesn't update the regional organization" do
         sign_in board_member
         name = regional_organization.name
-        patch edit_regional_organization_path(regional_organization), params: { regional_organization: invalid_attributes }
+        patch regional_organization_path(regional_organization), params: { regional_organization: invalid_attributes }
         regional_organization.reload
         expect(response).to be_successful
         expect(regional_organization.name).to eq name
@@ -205,7 +205,7 @@ RSpec.describe "Regional Organizations management", type: :request do
     context "when signed in as a user" do
       it "does not allow access" do
         sign_in user
-        patch edit_regional_organization_path(regional_organization), params: { regional_organization: valid_attributes }
+        patch regional_organization_path(regional_organization), params: { regional_organization: valid_attributes }
         expect(response).to redirect_to root_url
       end
     end

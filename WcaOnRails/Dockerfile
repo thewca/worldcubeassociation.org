@@ -3,7 +3,7 @@ EXPOSE 3000
 
 ENV DEBIAN_FRONTEND noninteractive
 WORKDIR /app
-ARG NODE_MAJOR=16
+ARG NODE_MAJOR=20
 
 # Add PPA needed to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
