@@ -6,19 +6,24 @@ import Loading from '../../Requests/Loading';
 import { COUNCILS_STATUS } from '../../../lib/helpers/groups-and-roles-constants';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 
-const oldLeaderStatusOptions = ['senior_member', 'member', 'resign'];
-const oldLeaderStatusOptionsMap = {
-  senior_member: 'Senior Member',
-  member: 'Member',
-  resign: 'Resign',
+const OLD_LEADER_STATUS = {
+  SENIOR_MEMBER: 'senior_member',
+  MEMBER: 'member',
+  RESIGN: 'resign',
 };
+
+const oldLeaderStatusOptions = [
+  { name: 'Senior Member', value: OLD_LEADER_STATUS.SENIOR_MEMBER },
+  { name: 'Member', value: OLD_LEADER_STATUS.MEMBER },
+  { name: 'Resign', value: OLD_LEADER_STATUS.RESIGN },
+];
 
 export default function LeaderChangeForm({
   setEditLeader, syncData, group, oldLeader,
 }) {
   const [formValues, setFormValues] = useState({
     newLeader: null,
-    oldLeaderStatus: oldLeaderStatusOptions[0],
+    oldLeaderStatus: oldLeaderStatusOptions[0].value,
   });
   const { save } = useSaveAction();
   const [saving, setSaving] = useState(false);
@@ -30,7 +35,7 @@ export default function LeaderChangeForm({
       resolve();
       return;
     }
-    if (formValues.oldLeaderStatus === oldLeaderStatusOptions[2]) { // Resign
+    if (formValues.oldLeaderStatus === OLD_LEADER_STATUS.RESIGN) {
       save(
         apiV0Urls.userRoles.delete(oldLeader.id),
         {
@@ -40,7 +45,7 @@ export default function LeaderChangeForm({
         resolve,
         { method: 'DELETE' },
       );
-    } else { // Change member status
+    } else {
       save(
         apiV0Urls.userRoles.update(oldLeader.id),
         {
@@ -91,18 +96,20 @@ export default function LeaderChangeForm({
         model="user"
         multiple={false}
       />
-      <Form.Field
-        label="Old Leader Status"
-        control={Form.Dropdown}
-        name="oldLeaderStatus"
-        value={formValues?.oldLeaderStatus}
-        onChange={handleFormChange}
-        options={oldLeaderStatusOptions.map((option) => ({
-          key: option,
-          text: oldLeaderStatusOptionsMap[option],
-          value: option,
-        }))}
-      />
+      {oldLeader && (
+        <Form.Field
+          label="Old Leader Status"
+          control={Form.Dropdown}
+          name="oldLeaderStatus"
+          value={formValues?.oldLeaderStatus}
+          onChange={handleFormChange}
+          options={oldLeaderStatusOptions.map((option) => ({
+            key: option.value,
+            text: option.name,
+            value: option.value,
+          }))}
+        />
+      )}
       <Form.Button onClick={() => setEditLeader(null)}>Cancel</Form.Button>
       <Form.Button type="submit">Save</Form.Button>
     </Form>
