@@ -8,7 +8,12 @@ import AutoNumeric from 'autonumeric';
 import { Input } from 'semantic-ui-react';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 
-export default function AutonumericField({ value, onChange, currency }) {
+export default function AutonumericField({
+  id,
+  value,
+  onChange,
+  currency,
+}) {
   const [autoNumeric, setAutoNumeric] = useState(null);
 
   const currencyInfo = useMemo(
@@ -55,5 +60,5 @@ export default function AutonumericField({ value, onChange, currency }) {
     onChange(event, { value: autoNumeric.getNumber() * currencyInfo.subunitToUnit });
   };
 
-  return <Input ref={autoNumericRef} type="text" onChange={onChangeAutonumeric} />;
+  return <Input id={id} ref={autoNumericRef} type="text" onChange={onChangeAutonumeric} />;
 }

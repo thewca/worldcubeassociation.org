@@ -117,12 +117,17 @@ function getOptions(disabled) {
   };
 }
 
-export default function MarkdownEditor({ value, onChange }) {
+export default function MarkdownEditor({
+  id,
+  value,
+  onChange,
+}) {
   const options = useMemo(() => getOptions(false), []);
   const mdChange = useCallback((text) => onChange(null, { value: text }), [onChange]);
 
   return (
     <SimpleMDE
+      id={id}
       value={value}
       onChange={mdChange}
       options={options}

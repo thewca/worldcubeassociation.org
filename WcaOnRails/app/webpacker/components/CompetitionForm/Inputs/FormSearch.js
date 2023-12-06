@@ -51,7 +51,7 @@ export function UserSearch({
 export function CompetitionSearch({
   value,
   onChange,
-  freeze,
+  disabled,
 }) {
   const competitionIds = useMemo(() => (value?.split(',').filter(Boolean) || []), [value]);
 
@@ -73,7 +73,7 @@ export function CompetitionSearch({
     <WcaSearch
       selectedValue={preSelected}
       setSelectedValue={setSelectedValue}
-      disabled={freeze}
+      disabled={disabled}
     />
   );
 }

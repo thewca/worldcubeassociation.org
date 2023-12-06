@@ -48,6 +48,10 @@ function getFieldHint(id, section = [], isMarkdown = false) {
   return I18n.t(`competitions.competition_form.hints.${yamlId}`);
 }
 
+function getHtmlId(id, section = []) {
+  return [...section, id].join('-');
+}
+
 function FieldWrapper({
   id,
   label,
@@ -73,6 +77,8 @@ function FieldWrapper({
   const fallbackHint = blankHint ? '' : '&nbsp;';
   const htmlHint = noHint ? fallbackHint : hint || getFieldHint(id, section, mdHint);
 
+  const htmlId = getHtmlId(id, section);
+
   return (
     <Form.Field
       error={!!error}
@@ -81,7 +87,7 @@ function FieldWrapper({
       required={!!required}
     >
       {/* eslint-disable-next-line react/no-danger, jsx-a11y/label-has-associated-control */}
-      {!ignoreLabel && <label dangerouslySetInnerHTML={{ __html: htmlLabel }} />}
+      {!ignoreLabel && <label htmlFor={htmlId} dangerouslySetInnerHTML={{ __html: htmlLabel }} />}
       {children}
       {/* eslint-disable-next-line react/no-danger */}
       {error && (<p dangerouslySetInnerHTML={{ __html: error || '' }} className="help-block" />)}
@@ -141,6 +147,9 @@ const wrapInput = (
   const passDownDisabled = additionalPropNames.includes('disabled');
   if (passDownDisabled) inputProps.disabled = disabled;
 
+  const htmlId = getHtmlId(props.id, section);
+  const htmlName = getFieldLabel(props.id, section);
+
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <FieldWrapper
@@ -156,6 +165,8 @@ const wrapInput = (
     >
       <WrappedInput
         {...inputProps}
+        htmlId={htmlId}
+        htmlName={htmlName}
         onChange={onChange}
       />
     </FieldWrapper>
@@ -166,6 +177,8 @@ const wrapInput = (
 
 export const InputString = wrapInput((props) => (
   <Input
+    id={props.htmlId}
+    name={props.htmlName}
     label={props.attachedLabel}
     value={props.value}
     onChange={props.onChange}
@@ -174,6 +187,8 @@ export const InputString = wrapInput((props) => (
 
 export const InputTextArea = wrapInput((props) => (
   <TextareaAutosize
+    id={props.htmlId}
+    name={props.htmlName}
     value={props.value}
     onChange={(e) => props.onChange(e, { value: e.target.value })}
     className="no-autosize"
@@ -189,6 +204,8 @@ export const InputNumber = wrapInput((props) => {
 
   return (
     <Input
+      id={props.htmlId}
+      name={props.htmlName}
       type="number"
       label={props.attachedLabel}
       value={props.value}
@@ -217,6 +234,8 @@ export const InputDate = wrapInput((props) => {
 
   return (
     <Input
+      id={props.htmlId}
+      name={props.htmlName}
       type={props.dateTime ? 'datetime-local' : 'date'}
       value={date && date.toISOString().slice(0, props.dateTime ? 16 : 10)}
       onChange={onChange}
@@ -228,6 +247,8 @@ export const InputDate = wrapInput((props) => {
 
 export const InputSelect = wrapInput((props) => (
   <Select
+    id={props.htmlId}
+    name={props.htmlName}
     options={props.options}
     value={props.value}
     onChange={props.onChange}
@@ -241,7 +262,9 @@ export const InputRadio = wrapInput((props) => (
       <React.Fragment key={option.value}>
         {idx !== 0 && <br />}
         <Radio
+          name={props.htmlName}
           label={option.text}
+          value={option.value.toString()}
           checked={props.value === option.value}
           onChange={() => props.onChange(null, { value: option.value })}
         />
@@ -251,11 +274,17 @@ export const InputRadio = wrapInput((props) => (
 ), ['options']);
 
 export const InputMarkdown = wrapInput((props) => (
-  <MarkdownEditor value={props.value} onChange={props.onChange} />
+  <MarkdownEditor
+    id={props.htmlId}
+    name={props.htmlName}
+    value={props.value}
+    onChange={props.onChange}
+  />
 ), [], '');
 
 export const InputUsers = wrapInput((props) => (
   <UserSearch
+    id={props.htmlId}
     value={props.value}
     onChange={props.onChange}
     delegateOnly={props.delegateOnly}
@@ -265,19 +294,29 @@ export const InputUsers = wrapInput((props) => (
 
 export const InputCompetitions = wrapInput((props) => (
   <CompetitionSearch
-    id={props.id}
+    id={props.htmlId}
     value={props.value}
     onChange={props.onChange}
-    freeze={props.freeze}
+    disabled={props.disabled}
   />
-), ['id', 'freeze']);
+), ['disabled']);
 
 export const InputCurrencyAmount = wrapInput((props) => (
-  <AutonumericField currency={props.currency} value={props.value} onChange={props.onChange} />
+  <AutonumericField
+    id={props.htmlId}
+    currency={props.currency}
+    value={props.value}
+    onChange={props.onChange}
+  />
 ), ['currency']);
 
 export const InputBoolean = wrapInput((props) => (
-  <Checkbox checked={props.checked} onChange={props.onChange} label={props.label} />
+  <Checkbox
+    id={props.htmlId}
+    checked={props.checked}
+    onChange={props.onChange}
+    label={props.label}
+  />
 ), ['label'], false, 'checked');
 
 export const InputBooleanSelect = wrapInput((props) => {
@@ -321,7 +360,7 @@ export const InputMap = wrapInput((props) => {
 
   return (
     <div id="venue-map-wrapper">
-      <CompetitionsMap id={props.htmlId} coords={coords} setCoords={setCoords}>
+      <CompetitionsMap id={props.wrapperId} coords={coords} setCoords={setCoords}>
         {props.circles && props.circles.map((circle) => (
           <Circle
             key={circle.id}
@@ -338,7 +377,7 @@ export const InputMap = wrapInput((props) => {
       </CompetitionsMap>
     </div>
   );
-}, ['htmlId', 'circles', 'markers', 'disabled']);
+}, ['wrapperId', 'circles', 'markers', 'disabled']);
 
 export const InputChampionships = wrapInput((props) => {
   const championships = props.value;

@@ -43,7 +43,7 @@ export default function Series() {
       )}
       <InputCompetitions
         id="competitionIds"
-        freeze
+        disabled
         label={I18n.t('activerecord.attributes.competition_series.competition_ids')}
         hint={I18n.t('simple_form.hints.competition.competition_series.competition_ids')}
       />
