@@ -34,11 +34,6 @@ module ApplicationHelper
     link_to text, url, target: "_blank"
   end
 
-  def link_to_google_maps_dir(text, start_latitude, start_longitude, end_latitude, end_longitude)
-    url = "https://www.google.com/maps/dir/#{start_latitude},#{start_longitude}/#{end_latitude},#{end_longitude}/"
-    link_to text, url, target: "_blank"
-  end
-
   def link_to_competition_schedule_tab(comp)
     competition_url(comp, anchor: "competition-schedule")
   end

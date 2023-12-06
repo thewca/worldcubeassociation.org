@@ -368,13 +368,17 @@ class CompetitionsController < ApplicationController
       startDate: other_comp.start_date,
       endDate: other_comp.end_date,
       location: "#{other_comp.cityName}, #{other_comp.countryId}",
-      distance: link_to_google_maps_dir(
-        "#{competition.kilometers_to(other_comp).round(2)} km",
-        other_comp.latitude_degrees,
-        other_comp.longitude_degrees,
-        competition.latitude_degrees,
-        competition.longitude_degrees,
-      ),
+      distance: {
+        km: competition.kilometers_to(other_comp).round(2),
+        from: {
+          lat: other_comp.latitude_degrees,
+          long: other_comp.longitude_degrees,
+        },
+        to: {
+          lat: competition.latitude_degrees,
+          long: competition.longitude_degrees,
+        },
+      },
       limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
       competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
       events: other_comp.events.map { |event|

@@ -121,7 +121,13 @@ function CompsTableCompRow({ comp, action, showEvents }) {
         {comp.location}
       </Table.Cell>
       <Table.Cell name="distance" width={2} singleLine>
-        <span dangerouslySetInnerHTML={{ __html: comp.distance }} />
+        <a
+          href={`https://www.google.com/maps/dir/${comp.distance.from.lat},${comp.distance.from.long}/${comp.distance.to.lat},${comp.distance.to.long}/`}
+          target="_blank"
+          rel="noreferrer"
+        >
+          {`${comp.distance.km} km`}
+        </a>
       </Table.Cell>
       <Table.Cell name="limit" width={1}>
         {comp.limit ? comp.limit : '-'}
