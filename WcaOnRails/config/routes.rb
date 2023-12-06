@@ -101,12 +101,13 @@ Rails.application.routes.draw do
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
-
-  scope :payment do
-    get '/config' => 'payment#payment_config'
-    get '/finish' => 'payment#payment_finish'
-    get '/refunds' => 'payment#available_refunds'
-    get '/refund' => 'payment#payment_refund'
+  unless EnvConfig.WCA_LIVE_SITE?
+    scope :payment do
+      get '/config' => 'payment#payment_config'
+      get '/finish' => 'payment#payment_finish'
+      get '/refunds' => 'payment#available_refunds'
+      get '/refund' => 'payment#payment_refund'
+    end
   end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
