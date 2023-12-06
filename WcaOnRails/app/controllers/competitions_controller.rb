@@ -599,7 +599,7 @@ class CompetitionsController < ApplicationController
     form_data = params.permit!.to_h
 
     # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
-    old_id = params[:id]
+    old_id = competition.id
     new_id = form_data.delete(:competitionId)
 
     competition.set_form_data(form_data, current_user)
@@ -607,7 +607,6 @@ class CompetitionsController < ApplicationController
     if competition.save
       # Automatically compute the cellName and ID for competitions with a short name.
       if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
-        old_competition_id = competition.id
         competition.create_id_and_cell_name(force_override: true)
 
         # Save the newly computed cellName without breaking the ID associations
@@ -615,7 +614,7 @@ class CompetitionsController < ApplicationController
         competition.with_old_id { competition.save! }
 
         # Try to update the ID only if it _actually_ changed
-        new_id = competition.id unless competition.id == old_competition_id
+        new_id = competition.id unless competition.id == old_id
       end
 
       if new_id && !competition.update(id: new_id)
@@ -638,14 +637,13 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      redirect = {}
+      response_data = { status: "ok" }
+
       if old_id != new_id
-        redirect = {
-          redirect: @competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
-        }
+        response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
       end
 
-      render json: { status: "ok" }.merge(redirect)
+      render json: response_data
     else
       render status: :bad_request, json: competition.form_errors
     end
