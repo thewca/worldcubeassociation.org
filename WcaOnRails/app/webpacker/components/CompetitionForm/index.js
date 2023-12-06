@@ -38,6 +38,7 @@ import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
 import AnnouncementActions from './AnnouncementActions';
 import { teams } from '../../lib/wca-data.js.erb';
+import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 
 function AnnouncementMessage() {
@@ -119,6 +120,7 @@ function CompetitionForm() {
     initialCompetition,
     isPersisted,
     isCloning,
+    isAdminView,
   } = useStore();
   const dispatch = useDispatch();
 
@@ -158,12 +160,12 @@ function CompetitionForm() {
   }, [dispatch]);
 
   const createComp = useCallback(() => {
-    save('/competitions', competition, onSuccess, { method: 'POST' }, onError);
+    save(createCompetitionUrl, competition, onSuccess, { method: 'POST' }, onError);
   }, [competition, save, onSuccess, onError]);
 
   const updateComp = useCallback(() => {
-    save(`/competitions/${initialCompetition.competitionId}`, competition, onSuccess, { method: 'PATCH' }, onError);
-  }, [competition, initialCompetition.competitionId, save, onSuccess, onError]);
+    save(`${competitionUrl(initialCompetition.competitionId)}?adminView=${isAdminView}`, competition, onSuccess, { method: 'PATCH' }, onError);
+  }, [competition, initialCompetition.competitionId, isAdminView, save, onSuccess, onError]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', onUnload);

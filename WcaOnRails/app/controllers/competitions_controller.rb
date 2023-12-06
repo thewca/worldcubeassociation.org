@@ -590,7 +590,9 @@ class CompetitionsController < ApplicationController
   def update
     competition = competition_from_params
 
-    competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
+    admin_view_param = params.delete(:adminView)
+
+    competition_admin_view = ActiveRecord::Type::Boolean.new.cast(admin_view_param) && current_user.can_admin_competitions?
     competition_organizer_view = !competition_admin_view
 
     old_organizers = competition.organizers.to_a
@@ -638,7 +640,10 @@ class CompetitionsController < ApplicationController
         # code, just revert the attempted id change. The user will have to deal with
         # editing the ID text box manually. This will go away once we have proper
         # immutable ids for competitions.
-        render status: :bad_request, json: competition.form_errors
+        return render json: {
+          status: "ok",
+          redirect: competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
+        }
       end
 
       new_organizers = competition.organizers - old_organizers

@@ -26,7 +26,9 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  # Using append_after to allow our E2E tests to finish all requests first and THEN clean the database
+  # as per https://github.com/DatabaseCleaner/database_cleaner#rspec-with-capybara-example
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 end

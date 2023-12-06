@@ -2141,7 +2141,7 @@ class Competition < ApplicationRecord
   # It is quite uncool that we have to duplicate the internal form_data formatting like this
   # but as long as we let our backend handle the complete error validation we literally have no other choice
   def form_errors
-    return nil if self.valid?
+    return {} if self.valid?
 
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
@@ -2494,7 +2494,7 @@ class Competition < ApplicationRecord
         "cloning" => {
           "type" => "object",
           "properties" => {
-            "fromId" => { "type" => ["integer", "null"] },
+            "fromId" => { "type" => ["string", "null"] },
             "cloneTabs" => { "type" => "boolean" },
           },
         },
