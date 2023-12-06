@@ -598,9 +598,24 @@ class CompetitionsController < ApplicationController
     # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
     form_data = params.permit!.to_h
 
+    #####
+    # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
+    #####
+
     # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
-    old_id = competition.id
-    new_id = form_data.delete(:competitionId)
+    persisted_id = competition.id
+    new_id = nil # Initialize under the assumption that nothing changed.
+
+    form_id = form_data[:competitionId]
+    new_id = form_id unless form_id == persisted_id
+
+    # In the first update pass, we need to pretend like the ID never changed.
+    # Changing ID needs a special hack which we handle below.
+    form_data[:competitionId] = persisted_id
+
+    #####
+    # HACK END
+    #####
 
     competition.set_form_data(form_data, current_user)
 
@@ -614,7 +629,7 @@ class CompetitionsController < ApplicationController
         competition.with_old_id { competition.save! }
 
         # Try to update the ID only if it _actually_ changed
-        new_id = competition.id unless competition.id == old_id
+        new_id = competition.id unless competition.id == persisted_id
       end
 
       if new_id && !competition.update(id: new_id)
@@ -639,7 +654,7 @@ class CompetitionsController < ApplicationController
 
       response_data = { status: "ok" }
 
-      if old_id != new_id
+      if persisted_id != competition.id
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
       end
 
