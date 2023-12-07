@@ -1,6 +1,6 @@
 import {
   Button,
-  Container,
+  Container, Dimmer,
   Header,
   List,
 } from 'semantic-ui-react';
@@ -19,6 +19,7 @@ import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider
 import useSaveAction from '../../lib/hooks/useSaveAction';
 
 function AnnounceAction({
+  competitionId,
   data,
   sync,
 }) {
@@ -27,8 +28,6 @@ function AnnounceAction({
     announcedBy,
     announcedAt,
   } = data;
-
-  const { competition: { competitionId } } = useStore();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -60,6 +59,7 @@ function AnnounceAction({
 }
 
 function CancelAction({
+  competitionId,
   data,
   sync,
 }) {
@@ -69,8 +69,6 @@ function CancelAction({
     cancelledAt,
     canBeCancelled,
   } = data;
-
-  const { competition: { competitionId } } = useStore();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -125,6 +123,7 @@ function CancelAction({
 }
 
 function CloseRegistrationAction({
+  competitionId,
   data,
   sync,
 }) {
@@ -133,8 +132,6 @@ function CloseRegistrationAction({
     isRegistrationFull,
     canCloseFullRegistration,
   } = data;
-
-  const { competition: { competitionId } } = useStore();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -175,7 +172,7 @@ function CloseRegistrationAction({
   );
 }
 
-export default function AnnouncementActions() {
+export default function AnnouncementActions({ disabled = false }) {
   const { isAdminView, initialCompetition: { competitionId } } = useStore();
 
   const dataUrl = useMemo(() => competitionAnnouncementDataUrl(competitionId), [competitionId]);
@@ -190,14 +187,18 @@ export default function AnnouncementActions() {
 
   return (
     <ConfirmProvider>
-      <Container fluid>
+      <Dimmer.Dimmable as={Container} fluid blurring dimmed={disabled}>
+        <Dimmer active={disabled}>
+          You have unsaved changes. Please save the competition before taking any other action.
+        </Dimmer>
+
         <Header>{I18n.t('competitions.announcements')}</Header>
-        <List bulleted>
-          {isAdminView && <AnnounceAction data={data} sync={sync} />}
-          {isAdminView && <CancelAction data={data} sync={sync} />}
-          <CloseRegistrationAction data={data} sync={sync} />
+        <List bulleted verticalAlign="middle">
+          {isAdminView && <AnnounceAction competitionId={competitionId} data={data} sync={sync} />}
+          {isAdminView && <CancelAction competitionId={competitionId} data={data} sync={sync} />}
+          <CloseRegistrationAction competitionId={competitionId} data={data} sync={sync} />
         </List>
-      </Container>
+      </Dimmer.Dimmable>
     </ConfirmProvider>
   );
 }

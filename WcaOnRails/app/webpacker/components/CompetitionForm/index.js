@@ -218,7 +218,7 @@ function CompetitionForm() {
       )}
       <Divider />
 
-      {isPersisted && <AnnouncementActions />}
+      {isPersisted && <AnnouncementActions disabled={unsavedChanges} />}
       <AnnouncementMessage />
       <FormErrors />
 

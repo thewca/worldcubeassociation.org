@@ -35,17 +35,11 @@ export function CreateOrUpdateButton({
 }
 
 function ConfirmButton({
+  competitionId,
   data,
   sync,
 }) {
   const { canConfirm } = data;
-
-  const {
-    competition: {
-      competitionId,
-      admin: { isConfirmed },
-    },
-  } = useStore();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -70,7 +64,7 @@ function ConfirmButton({
     });
   };
 
-  if (isConfirmed || !canConfirm) return null;
+  if (!canConfirm) return null;
 
   return (
     <Button
@@ -83,17 +77,11 @@ function ConfirmButton({
 }
 
 function DeleteButton({
+  competitionId,
   data,
   sync,
 }) {
   const { cannotDeleteReason } = data;
-
-  const {
-    competition: {
-      competitionId,
-      admin: { isConfirmed },
-    },
-  } = useStore();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -109,7 +97,7 @@ function DeleteButton({
     });
   };
 
-  if (isConfirmed || cannotDeleteReason) return null;
+  if (cannotDeleteReason) return null;
 
   return (
     <Button
@@ -125,7 +113,14 @@ export default function ConfirmationActions({
   createComp,
   updateComp,
 }) {
-  const { isAdminView, isPersisted, competition: { competitionId } } = useStore();
+  const {
+    isAdminView,
+    isPersisted,
+    initialCompetition: {
+      competitionId,
+      admin: { isConfirmed },
+    },
+  } = useStore();
 
   const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);
 
@@ -141,8 +136,12 @@ export default function ConfirmationActions({
     <ConfirmProvider>
       <Button.Group>
         <CreateOrUpdateButton createComp={createComp} updateComp={updateComp} />
-        {isPersisted && !isAdminView && <ConfirmButton data={data} sync={sync} />}
-        {isPersisted && <DeleteButton data={data} sync={sync} />}
+        {isPersisted && !isAdminView && !isConfirmed && (
+          <ConfirmButton competitionId={competitionId} data={data} sync={sync} />
+        )}
+        {isPersisted && !isConfirmed && (
+          <DeleteButton competitionId={competitionId} data={data} sync={sync} />
+        )}
       </Button.Group>
     </ConfirmProvider>
   );
