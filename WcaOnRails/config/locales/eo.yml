@@ -567,15 +567,6 @@ eo:
       championship:
         #original_hash: 4baf44b
         championship_type: Tipo de ĉampionado
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: Identigilo de serio
-        #original_hash: 75ceb67
-        name: Nomo de serio
-        #original_hash: 8a6bee1
-        short_name: Kromnomo de serio
-        #original_hash: af3d38e
-        competition_ids: Ĉiuj konkursoj
       registration:
         #original_hash: 3c23a67
         guests: Gastoj
@@ -1043,23 +1034,6 @@ eo:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            La plena nomo de la Konkursa Serio kun la jaro ĉe la fino (ekz.,
-            Suda Aŭstralio 2022). Nepre majuskligu. La samaj reguloj kiel por la
-            nomo de la individuaj konkursoj validas.
-          #original_hash: 778c20c
-          short_name: >-
-            Mallonga nomo por afiŝi. La samaj reguloj kiel por la nomo de
-            individuaj konkursoj validas.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Ĉi tiu kampo ne estas redaktebla!</b><br/>Por aldoni konkursojn
-            al ĉi tiu Serio, vi devas iri al la individuaj 'Redakti'-paĝoj de la
-            konkursoj kiujn vi volas aldoni.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3177,6 +3151,11 @@ eo:
           coordinates:
         start_date: Komencdato
         end_date: Findato
+        series:
+          series_id: Identigilo de serio
+          name: Nomo de serio
+          short_name: Kromnomo de serio
+          competition_ids: Ĉiuj konkursoj
         information: Informo
         competitor_limit:
           enabled: Limo de konkursantoj
@@ -3262,6 +3241,19 @@ eo:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            La plena nomo de la Konkursa Serio kun la jaro ĉe la fino (ekz.,
+            Suda Aŭstralio 2022). Nepre majuskligu. La samaj reguloj kiel por la
+            nomo de la individuaj konkursoj validas.
+          short_name: >-
+            Mallonga nomo por afiŝi. La samaj reguloj kiel por la nomo de
+            individuaj konkursoj validas.
+          competition_ids: >-
+            <b>Ĉi tiu kampo ne estas redaktebla!</b><br/>Por aldoni konkursojn
+            al ĉi tiu Serio, vi devas iri al la individuaj 'Redakti'-paĝoj de la
+            konkursoj kiujn vi volas aldoni.
         information: Gravaj informoj kiujn la konkursantoj devus scii. Ĝi aperos en
           la ĉefpaĝo de la konkurso. <br/>Bonvolu plenigi tion <b>en la angla</b>
           kaj en ĉiuj lingvoj parolataj de viaj konkursantoj.

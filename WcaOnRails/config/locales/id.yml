@@ -562,15 +562,6 @@ id:
       championship:
         #original_hash: 4baf44b
         championship_type: Tipe kejuaraan
-      competition_series:
-        #original_hash: 89f89c0
-        wcif_id: ID
-        #original_hash: 709a232
-        name: Nama
-        #original_hash: 8a6bee1
-        short_name: Nama singkat rangkaian
-        #original_hash: af3d38e
-        competition_ids: Semua kompetisi
       registration:
         #original_hash: 3c23a67
         guests: Pendamping
@@ -1038,23 +1029,6 @@ id:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Nama lengkap Rangkaian Kompetisi termasuk tahun di belakang (cth:
-            Southern Australia 2022). Pastikan menggunakan huruf kapital di awal
-            kata. Aturan ini juga berlaku untuk nama dari setiap kompetisi.
-          #original_hash: 778c20c
-          short_name: >-
-            Nama singkat yang ditampilkan. Aturan ini juga berlaku untuk nama
-            dari setiap kompetisi.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Kolom ini tidak dapat diubah!</b><br/>Untuk menambahkan kompetisi
-            pada Rangkaian, Anda harus membuka setiap halaman 'Edit' pada
-            kompetisi yang ingin Anda tambah.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3114,6 +3088,11 @@ id:
           coordinates:
         start_date: Tanggal mulai
         end_date: Tanggal berakhir
+        series:
+          series_id: ID
+          name: Nama
+          short_name: Nama singkat rangkaian
+          competition_ids: Semua kompetisi
         information: Informasi
         competitor_limit:
           enabled: Batas kompetitor
@@ -3206,6 +3185,19 @@ id:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Nama lengkap Rangkaian Kompetisi termasuk tahun di belakang (cth:
+            Southern Australia 2022). Pastikan menggunakan huruf kapital di awal
+            kata. Aturan ini juga berlaku untuk nama dari setiap kompetisi.
+          short_name: >-
+            Nama singkat yang ditampilkan. Aturan ini juga berlaku untuk nama
+            dari setiap kompetisi.
+          competition_ids: >-
+            <b>Kolom ini tidak dapat diubah!</b><br/>Untuk menambahkan kompetisi
+            pada Rangkaian, Anda harus membuka setiap halaman 'Edit' pada
+            kompetisi yang ingin Anda tambah.
         information: Informasi penting yang harus diketahui oleh kompetitor. Informasi
           ini akan ditampilkan dalam halaman utama kompetisi. <br/>Harap isi bagian
           ini <b>dalam Bahasa Inggris</b> dan bahasa apapun yang dimengerti oleh calon

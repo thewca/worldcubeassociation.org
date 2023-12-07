@@ -554,15 +554,6 @@ zh-TW:
       championship:
         #original_hash: 4baf44b
         championship_type: 錦標賽種類
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: 系列比賽ID
-        #original_hash: 75ceb67
-        name: 系列比賽名稱
-        #original_hash: 8a6bee1
-        short_name: 系列比賽暱稱
-        #original_hash: af3d38e
-        competition_ids: 所有比賽
       registration:
         #original_hash: 3c23a67
         guests: 陪同者
@@ -964,15 +955,6 @@ zh-TW:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: 系列賽比賽全名的最後有年份，（例如：Southern Australia 2022）。務必要首字母大寫。單獨比賽所用的名字規則也適用。
-          #original_hash: 778c20c
-          short_name: 用來顯示用的簡短名字。單獨比賽所用的名字規則也適用。
-          #original_hash: 3e27501
-          competition_ids: <b>這個區域不能被編輯！</b><br/>要在系列賽中增加比賽，您需要去想要加入的比賽頁面中的「編輯」頁面來增加。
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -2701,6 +2683,11 @@ zh-TW:
           coordinates:
         start_date: 開始日期
         end_date: 結束日期
+        series:
+          series_id: 系列比賽ID
+          name: 系列比賽名稱
+          short_name: 系列比賽暱稱
+          competition_ids: 所有比賽
         information: 資訊
         competitor_limit:
           enabled: 限制參賽者人數
@@ -2774,6 +2761,11 @@ zh-TW:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: 系列賽比賽全名的最後有年份，（例如：Southern Australia 2022）。務必要首字母大寫。單獨比賽所用的名字規則也適用。
+          short_name: 用來顯示用的簡短名字。單獨比賽所用的名字規則也適用。
+          competition_ids: <b>這個區域不能被編輯！</b><br/>要在系列賽中增加比賽，您需要去想要加入的比賽頁面中的「編輯」頁面來增加。
         information: 參賽者須知的重要資訊，將會顯示在比賽主頁面。<br/>請用 <b>英文</b> 和您當地參賽者使用的語言填寫此欄。
         competitor_limit:
           enabled: 儘管規則沒有要求比賽要設置人數上限，但我們強烈建議您要設。

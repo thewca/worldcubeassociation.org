@@ -577,15 +577,6 @@ hr:
       championship:
         #original_hash: 4baf44b
         championship_type: Tip prvenstva
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: ID serije
-        #original_hash: 75ceb67
-        name: Ime serije
-        #original_hash: 8a6bee1
-        short_name: Nadimak serije
-        #original_hash: af3d38e
-        competition_ids: Sva natjecanja
       registration:
         #original_hash: 3c23a67
         guests: Gosti
@@ -1060,23 +1051,6 @@ hr:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Puno ime Serije natjecanja uključujući godinu na kraju (npr.
-            Southern Australia 2022). Obavezno pišite gramatički točno. Ista
-            pravila vrijede i za pojedinačna natjecanja.
-          #original_hash: 778c20c
-          short_name: >-
-            Kratko ime za prikazivanje. Ista pravila vrijede i za pojedinačna
-            natjecanja..
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Ovo se polje ne može uređivati!</b><br/>Kako bi dodali natjecanja
-            u Seriju, morate otići na individualne "Uredi" stranice natjecanja
-            koja želite dodati.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3243,6 +3217,11 @@ hr:
           coordinates:
         start_date: Datum početka
         end_date: Datum završetka
+        series:
+          series_id: ID serije
+          name: Ime serije
+          short_name: Nadimak serije
+          competition_ids: Sva natjecanja
         information: Informacije
         competitor_limit:
           enabled: Natjecateljski limit
@@ -3330,6 +3309,19 @@ hr:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Puno ime Serije natjecanja uključujući godinu na kraju (npr.
+            Southern Australia 2022). Obavezno pišite gramatički točno. Ista
+            pravila vrijede i za pojedinačna natjecanja.
+          short_name: >-
+            Kratko ime za prikazivanje. Ista pravila vrijede i za pojedinačna
+            natjecanja..
+          competition_ids: >-
+            <b>Ovo se polje ne može uređivati!</b><br/>Kako bi dodali natjecanja
+            u Seriju, morate otići na individualne "Uredi" stranice natjecanja
+            koja želite dodati.
         information: Važne informacije koje natjecatelji moraju znati. Bit će prikazano
           na glavnoj stranici natjecanja. <br/>Molimo ispunite ovo <b>na engleskom</b>
           ili na bilo kojem drugom jeziku kojeg natjecatelji razumiju.

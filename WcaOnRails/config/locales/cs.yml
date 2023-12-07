@@ -572,15 +572,6 @@ cs:
       championship:
         #original_hash: 4baf44b
         championship_type: Typ šampionátu
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: ID série
-        #original_hash: 75ceb67
-        name: Jméno série
-        #original_hash: 8a6bee1
-        short_name: Název série
-        #original_hash: af3d38e
-        competition_ids: Všechny soutěže
       registration:
         #original_hash: 3c23a67
         guests: Hosté
@@ -1049,23 +1040,6 @@ cs:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Celé jméno série soutěží včetně roku na konci (např. Southern
-            Australia 2022). Slova začínejte velkými písmeny. Platí stejná
-            pravidla jako pro názvy jednotlivých soutěží.
-          #original_hash: 778c20c
-          short_name: >-
-            Krátké jméno pro zobrazení. Platí stejná pravidla jako pro jména
-            jednotlivých soutěží.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Toto pole nelze upravovat!</b> <br/>Pro přidání jednotlivých
-            soutěží, musíte na individuální stránku „Upravit” soutěží, které
-            chcete přidat.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3137,6 +3111,11 @@ cs:
           coordinates:
         start_date: Datum zahájení
         end_date: Datum ukončení
+        series:
+          series_id: ID série
+          name: Jméno série
+          short_name: Název série
+          competition_ids: Všechny soutěže
         information: Informace
         competitor_limit:
           enabled: Limit pro soutěžící
@@ -3223,6 +3202,19 @@ cs:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Celé jméno série soutěží včetně roku na konci (např. Southern
+            Australia 2022). Slova začínejte velkými písmeny. Platí stejná
+            pravidla jako pro názvy jednotlivých soutěží.
+          short_name: >-
+            Krátké jméno pro zobrazení. Platí stejná pravidla jako pro jména
+            jednotlivých soutěží.
+          competition_ids: >-
+            <b>Toto pole nelze upravovat!</b> <br/>Pro přidání jednotlivých
+            soutěží, musíte na individuální stránku „Upravit” soutěží, které
+            chcete přidat.
         information: Důležité informace, které by soutěžící měli vědět. Zobrazí se
           na hlavní stránce soutěže. <br/>Prosíme, napište to <b>v angličtině</b>
           a v jakémkoli dalším jazyce, kterým vaši soutěžící mluví.

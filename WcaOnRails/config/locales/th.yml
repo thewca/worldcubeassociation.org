@@ -558,15 +558,6 @@ th:
       championship:
         #original_hash: 4baf44b
         championship_type: ประเภทการแข่งขันชิงแชมป์
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: ID ของซีรียส์
-        #original_hash: 75ceb67
-        name: ชื่อของซีรียส์
-        #original_hash: 8a6bee1
-        short_name: ชื่อเล่น
-        #original_hash: af3d38e
-        competition_ids: การแข่งขันทั้งหมด
       registration:
         #original_hash: 3c23a67
         guests: ผู้ติดตาม
@@ -1035,20 +1026,6 @@ th:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            ชื่อเต็มของการแข่งขันซีรีส์รวมทั้งปีที่สิ้นสุด (เช่น Southern
-            Australia 2022) ให้แน่ใจว่าได้ใช้ตัวพิมพ์ใหญ่
-            ใช้กฎเดียวกันกับชื่อการแข่งขันแต่ละรายการ
-          #original_hash: 778c20c
-          short_name: ชื่อย่อสำหรับแสดง รูปแบบเดียวกันกับชื่อการแข่งขันย่อย
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>ฟิลด์นี้ไม่สามารถแก้ไขได้!</b><br/>หากต้องการเพิ่มการแข่งขันลงในซีรีส์นี้
-            คุณต้องไปที่หน้า 'แก้ไข' แต่ละรายการของการแข่งขันที่คุณต้องการเพิ่ม
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3069,6 +3046,11 @@ th:
           coordinates:
         start_date: วันที่เริ่ม
         end_date: วันที่สิ้นสุด
+        series:
+          series_id: ID ของซีรียส์
+          name: ชื่อของซีรียส์
+          short_name: ชื่อเล่น
+          competition_ids: การแข่งขันทั้งหมด
         information: ข้อมูล
         competitor_limit:
           enabled: จำกัดผู้เข้าแข่งขัน
@@ -3150,6 +3132,16 @@ th:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            ชื่อเต็มของการแข่งขันซีรีส์รวมทั้งปีที่สิ้นสุด (เช่น Southern
+            Australia 2022) ให้แน่ใจว่าได้ใช้ตัวพิมพ์ใหญ่
+            ใช้กฎเดียวกันกับชื่อการแข่งขันแต่ละรายการ
+          short_name: ชื่อย่อสำหรับแสดง รูปแบบเดียวกันกับชื่อการแข่งขันย่อย
+          competition_ids: >-
+            <b>ฟิลด์นี้ไม่สามารถแก้ไขได้!</b><br/>หากต้องการเพิ่มการแข่งขันลงในซีรีส์นี้
+            คุณต้องไปที่หน้า 'แก้ไข' แต่ละรายการของการแข่งขันที่คุณต้องการเพิ่ม
         information: ข้อมูลสำคัญที่ผู้เข้าแข่งขันควรรู้ มันจะปรากฏในหน้าหลักของการแข่งขัน
           <br/>กรุณากรอกเป็น <b>ภาษาอังกฤษ</b> และภาษาอื่นที่ผู้เข้าแข่งขันใช้.
         competitor_limit:

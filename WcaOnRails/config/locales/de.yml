@@ -574,15 +574,6 @@ de:
       championship:
         #original_hash: 4baf44b
         championship_type: Meisterschaftstyp
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: Serien-ID
-        #original_hash: 75ceb67
-        name: Name der Serie
-        #original_hash: 8a6bee1
-        short_name: Spitzname der Serie
-        #original_hash: af3d38e
-        competition_ids: Alle Wettbewerbe
       registration:
         #original_hash: 3c23a67
         guests: Gäste
@@ -1060,24 +1051,6 @@ de:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Der volle Name der Wettbewerbsserie, inklusive des Jahres am Ende
-            (z.B. Southern Australia 2022). Achte auf Großschreibung. Dieselben
-            Regeln wie für Namen von individuellen Wettbewerben finden auch hier
-            Anwendung.
-          #original_hash: 778c20c
-          short_name: >-
-            Ein Kurzname zum Anzeigen. Dieselben Regeln wie für den Namen des
-            individuellen Wettbewerbs finden auch hier Anwendung.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Dieses Feld kann nicht editiert werden!</b><br/>Um Wettbewerbe
-            dieser Serie hinzuzufügen, musst du zur jeweiligen 'Bearbeite'-Seite
-            des Wettbewerbs gehen, den du hinzufügen möchtest.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3267,6 +3240,11 @@ de:
           coordinates:
         start_date: Startdatum
         end_date: Enddatum
+        series:
+          series_id: Serien-ID
+          name: Name der Serie
+          short_name: Spitzname der Serie
+          competition_ids: Alle Wettbewerbe
         information: Informationen
         competitor_limit:
           enabled: Teilnehmerlimit
@@ -3359,6 +3337,20 @@ de:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Der volle Name der Wettbewerbsserie, inklusive des Jahres am Ende
+            (z.B. Southern Australia 2022). Achte auf Großschreibung. Dieselben
+            Regeln wie für Namen von individuellen Wettbewerben finden auch hier
+            Anwendung.
+          short_name: >-
+            Ein Kurzname zum Anzeigen. Dieselben Regeln wie für den Namen des
+            individuellen Wettbewerbs finden auch hier Anwendung.
+          competition_ids: >-
+            <b>Dieses Feld kann nicht editiert werden!</b><br/>Um Wettbewerbe
+            dieser Serie hinzuzufügen, musst du zur jeweiligen 'Bearbeite'-Seite
+            des Wettbewerbs gehen, den du hinzufügen möchtest.
         information: Wichtige Informationen, die Teilnehmer wissen sollten. Sie werden
           auf der Hauptseite des Wettbewerbs angezeigt. <br/>Bitte fülle diese in
           <b>Englisch</b> und in jeder anderen Sprache, die die Teilnehmer sprechen,
@@ -3472,10 +3464,10 @@ de:
             'true': Ich möchte ein Teilnehmerlimit angeben
             'false': Ich will KEIN Teilnehmerimit angeben
         registration:
-          on_the_spot_registration:
+          allow_on_the_spot:
             'true': Vor-Ort Registrierung wird akzeptiert
             'false': Vor-Ort Registrierung wird NICHT akzeptiert
-          allow_registration_edits:
+          allow_self_edits:
             'true': >-
               Teilnehmer dürfen ihre Registrierung bis zur Deadline zum
               Aktualisieren von Events verändern

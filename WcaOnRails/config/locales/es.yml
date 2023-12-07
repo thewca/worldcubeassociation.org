@@ -573,15 +573,6 @@ es:
       championship:
         #original_hash: 4baf44b
         championship_type: Tipo de campeonato
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: Id de la serie
-        #original_hash: 75ceb67
-        name: Nombre de la serie
-        #original_hash: 8a6bee1
-        short_name: Nombre corto de la serie
-        #original_hash: af3d38e
-        competition_ids: Todas las competiciones
       registration:
         #original_hash: 3c23a67
         guests: Acompañantes
@@ -1064,23 +1055,6 @@ es:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            El nombre completo de la serie de competiciones incluyendo el año al
-            fina (p.e. Southern Australia 2022). Asegúrate de poner mayúsculas.
-            Se aplican las mismas reglas que para competiciones individuales.
-          #original_hash: 778c20c
-          short_name: >-
-            Un nombre corto para mostrar. Se aplican las mismas reglas que para
-            el nombre de competiciones individuales.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>¡Este campo no puede ser editado!</b><br/> Para añadir
-            competiciones a esta serie, tienes que ir a la página de edición de
-            la competición que quieres añadir.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3280,6 +3254,11 @@ es:
           coordinates:
         start_date: Fecha de comienzo
         end_date: Fecha de finalización
+        series:
+          series_id: Id de la serie
+          name: Nombre de la serie
+          short_name: Nombre corto de la serie
+          competition_ids: Todas las competiciones
         information: Información
         competitor_limit:
           enabled: Límite de competidores
@@ -3370,6 +3349,19 @@ es:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            El nombre completo de la serie de competiciones incluyendo el año al
+            fina (p.e. Southern Australia 2022). Asegúrate de poner mayúsculas.
+            Se aplican las mismas reglas que para competiciones individuales.
+          short_name: >-
+            Un nombre corto para mostrar. Se aplican las mismas reglas que para
+            el nombre de competiciones individuales.
+          competition_ids: >-
+            <b>¡Este campo no puede ser editado!</b><br/> Para añadir
+            competiciones a esta serie, tienes que ir a la página de edición de
+            la competición que quieres añadir.
         information: Información importante que el competidor debería conocer. Se
           mostrará en la página principal de la competición. <br/> Por favor rellena
           esto <b>en Inglés</b> y demás idiomas adicionales que hablen tus competidores.

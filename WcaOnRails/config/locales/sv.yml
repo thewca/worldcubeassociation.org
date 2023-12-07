@@ -569,15 +569,6 @@ sv:
       championship:
         #original_hash: 4baf44b
         championship_type: Typ av mästerskap
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: Serie-ID
-        #original_hash: 75ceb67
-        name: Serienamn
-        #original_hash: 8a6bee1
-        short_name: Smeknamn för tävlingsserien
-        #original_hash: af3d38e
-        competition_ids: Alla tävlingar
       registration:
         #original_hash: 3c23a67
         guests: Gäster
@@ -1058,23 +1049,6 @@ sv:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Tävlingsseriens fullständiga namn med året på slutet (t.ex. Southern
-            Australia 2022). Var noga med att använda stor bokstav på korrekt
-            sätt. Samma regler som för namnet på enskilda tävlingar gäller.
-          #original_hash: 778c20c
-          short_name: >-
-            Ett kort namn för visning. Samma regler som för namnet på enskilda
-            tävlingar gäller.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Detta fält kan inte redigeras!</b><br/>För att lägga till
-            tävlingar i denna serie måste du gå till de enskilda
-            "Redigera"-sidorna för de tävlingar som du vill lägga till.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3203,6 +3177,11 @@ sv:
           coordinates:
         start_date: Startdatum
         end_date: Slutdatum
+        series:
+          series_id: Serie-ID
+          name: Serienamn
+          short_name: Smeknamn för tävlingsserien
+          competition_ids: Alla tävlingar
         information: Information
         competitor_limit:
           enabled: Gräns för antalet tävlande
@@ -3290,6 +3269,19 @@ sv:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Tävlingsseriens fullständiga namn med året på slutet (t.ex. Southern
+            Australia 2022). Var noga med att använda stor bokstav på korrekt
+            sätt. Samma regler som för namnet på enskilda tävlingar gäller.
+          short_name: >-
+            Ett kort namn för visning. Samma regler som för namnet på enskilda
+            tävlingar gäller.
+          competition_ids: >-
+            <b>Detta fält kan inte redigeras!</b><br/>För att lägga till
+            tävlingar i denna serie måste du gå till de enskilda
+            "Redigera"-sidorna för de tävlingar som du vill lägga till.
         information: Viktig information som tävlande bör veta. Det kommer att visas
           på tävlingens huvudsida. <br/>Fyll i det här <b>på engelska</b>< och eventuella
           andra språk dina tävlande talar.>

@@ -577,15 +577,6 @@ ru:
       championship:
         #original_hash: 4baf44b
         championship_type: Тип чемпионата
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: ID серии
-        #original_hash: 75ceb67
-        name: Название серии
-        #original_hash: 8a6bee1
-        short_name: Название серии соревнований
-        #original_hash: af3d38e
-        competition_ids: Все соревнования
       registration:
         #original_hash: 3c23a67
         guests: Гости
@@ -1069,23 +1060,6 @@ ru:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Полное название серии соревнований, включая год в конце, каждое
-            слово начинается с заглавной буквы, например, Southern Australia
-            2022. Применяются те же правила, что и для отдельных соревнований.
-          #original_hash: 778c20c
-          short_name: >-
-            Короткое название для отображения. Применяются те же правила, что и
-            для отдельных соревнований.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Это поле нельзя редактировать!</b><br/>Чтобы добавить
-            соревнования в эту серию, нужно зайти на страницу редактирования
-            отдельных соревнований.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3185,6 +3159,11 @@ ru:
           coordinates:
         start_date: Дата начала
         end_date: Дата окончания
+        series:
+          series_id: ID серии
+          name: Название серии
+          short_name: Название серии соревнований
+          competition_ids: Все соревнования
         information: Информация
         competitor_limit:
           enabled: Лимит на число участников
@@ -3275,6 +3254,19 @@ ru:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Полное название серии соревнований, включая год в конце, каждое
+            слово начинается с заглавной буквы, например, Southern Australia
+            2022. Применяются те же правила, что и для отдельных соревнований.
+          short_name: >-
+            Короткое название для отображения. Применяются те же правила, что и
+            для отдельных соревнований.
+          competition_ids: >-
+            <b>Это поле нельзя редактировать!</b><br/>Чтобы добавить
+            соревнования в эту серию, нужно зайти на страницу редактирования
+            отдельных соревнований.
         information: Важная информация, которую следует знать участникам. Она будет
           отображена на главной странице соревнования. <br/>Пожалуйста, заполняйте
           это поле <b>на английском</b> и на других языках, на которых говорят ваши

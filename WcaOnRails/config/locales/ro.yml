@@ -582,15 +582,6 @@ ro:
       championship:
         #original_hash: 4baf44b
         championship_type: Tipul campionatului
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: ID-ul Seriei
-        #original_hash: 75ceb67
-        name: Numele Seriei
-        #original_hash: 8a6bee1
-        short_name: Nickname pentru serie
-        #original_hash: af3d38e
-        competition_ids: Toate competițiile
       registration:
         #original_hash: 3c23a67
         guests: Însoțitori
@@ -1064,24 +1055,6 @@ ro:
         championships:
           #original_hash: da39a3e
           championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            Numele complet al Seriei de Competiții, incluzând anul la sfârșit
-            (de ex. Southern Australia 2022). Folosește majuscule pentru prima
-            literă a cuvintelor. Aceleașo reguli se aplică și pentru numele
-            fiecărei competiții.
-          #original_hash: 778c20c
-          short_name: >-
-            Un nume scurt de afișat. Se aplică aceleași reguli ca la numele
-            pentru competiția individuală.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Acest câmp nu poate fi editat!</b><br/>Pentru a adăuga concurenți
-            în această Serie trebuie să accesezi pagina "Editare" a fiecărei
-            competiții pentru care vrei să efectuezi adăugare.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -3278,6 +3251,11 @@ ro:
           coordinates:
         start_date: Prima zi
         end_date: Ultima zi
+        series:
+          series_id: ID-ul Seriei
+          name: Numele Seriei
+          short_name: Nickname pentru serie
+          competition_ids: Toate competițiile
         information: Informații
         competitor_limit:
           enabled: Limita de concurenți
@@ -3370,6 +3348,20 @@ ro:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Numele complet al Seriei de Competiții, incluzând anul la sfârșit
+            (de ex. Southern Australia 2022). Folosește majuscule pentru prima
+            literă a cuvintelor. Aceleașo reguli se aplică și pentru numele
+            fiecărei competiții.
+          short_name: >-
+            Un nume scurt de afișat. Se aplică aceleași reguli ca la numele
+            pentru competiția individuală.
+          competition_ids: >-
+            <b>Acest câmp nu poate fi editat!</b><br/>Pentru a adăuga concurenți
+            în această Serie trebuie să accesezi pagina "Editare" a fiecărei
+            competiții pentru care vrei să efectuezi adăugare.
         information: Informații despre numărul maxim de concurenți, taxe de înregistrare
           pentru concurenți și spectatori și alte detalii relevante pentru pamenii
           ce vor să concureze sau să fie în public.
