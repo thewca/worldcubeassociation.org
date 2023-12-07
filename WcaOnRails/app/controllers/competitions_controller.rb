@@ -579,7 +579,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok", redirect: edit_competition_path(competition) }
+      render json: { status: "ok", message: t('competitions.messages.create_success'), redirect: edit_competition_path(competition) }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -657,7 +657,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      response_data = { status: "ok" }
+      response_data = { status: "ok", message: t('competitions.update.save_success') }
 
       if persisted_id != competition.id
         response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
@@ -705,7 +705,7 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
     competition.destroy
 
-    render json: { status: "ok" }
+    render json: { status: "ok", message: t('competitions.update.delete_success') }
   end
 
   before_action -> { require_user_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
@@ -722,7 +722,7 @@ class CompetitionsController < ApplicationController
         CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
       end
 
-      render json: { status: "ok" }
+      render json: { status: "ok", message: t('competitions.update.confirm_success') }
     else
       render status: :bad_request, json: competition.form_errors
     end
@@ -743,7 +743,7 @@ class CompetitionsController < ApplicationController
       CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
     end
 
-    render json: { status: "ok" }
+    render json: { status: "ok", message: t('competitions.messages.announced_success') }
   end
 
   before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
