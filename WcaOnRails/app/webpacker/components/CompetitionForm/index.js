@@ -149,11 +149,13 @@ function CompetitionForm() {
   }, [unsavedChanges]);
 
   const onSuccess = useCallback((data) => {
-    dispatch(changesSaved());
     const { redirect } = data;
+
     if (redirect) {
       window.removeEventListener('beforeunload', onUnload);
       window.location.replace(redirect);
+    } else {
+      dispatch(changesSaved());
     }
   }, [dispatch, onUnload]);
 
