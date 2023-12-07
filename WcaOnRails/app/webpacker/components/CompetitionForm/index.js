@@ -110,7 +110,7 @@ function BottomConfirmationPanel({
     <>
       {unsavedChanges && (
         <Message info>
-          You have unsaved changes. Please save the competition before confirming.
+          You have unsaved changes. Please save the competition before taking any other action.
         </Message>
       )}
       <CreateOrUpdateButton
