@@ -30,6 +30,7 @@ RSpec.describe Api::V0::RolesController do
 
         expect(response.body).to eq([{
           end_date: nil,
+          is_active: true,
           group: africa_region,
           user: user_whose_delegate_status_changes,
           metadata: {

@@ -1274,6 +1274,7 @@ class User < ApplicationRecord
   def delegate_role
     {
       end_date: nil,
+      is_active: true,
       group: self.region,
       user: self,
       metadata: {
@@ -1296,6 +1297,7 @@ class User < ApplicationRecord
       end
       roles << {
         start_date: team_membership_details.start_date,
+        is_active: true,
         group: {
           id: team.id,
           name: team.name,

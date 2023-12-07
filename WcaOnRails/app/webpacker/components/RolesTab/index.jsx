@@ -4,6 +4,7 @@ import {
   Button,
   Header,
   List,
+  Icon,
 } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { rolesOfUser, teamUrl } from '../../lib/requests/routes.js.erb';
@@ -11,6 +12,8 @@ import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
 import I18n from '../../lib/i18n';
+import useRoleData from '../../lib/hooks/useRoleData';
+import { GROUP_TYPE } from '../../lib/helpers/user-groups-and-roles-constants';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
@@ -24,78 +27,53 @@ import I18n from '../../lib/i18n';
 // i18n-tasks-use t('enums.user.role_status.councils.senior_member')
 // i18n-tasks-use t('enums.user.role_status.councils.leader')
 
+const isHyperlinkableGroup = (groupType) => groupType === GROUP_TYPE.TEAMS_COMMITTEES;
+
 export default function RolesTab({ userId, loggedInUserId }) {
-  const roleListFetch = useLoadedData(rolesOfUser(userId));
-  const loggedInUserRolesFetch = useLoadedData(rolesOfUser(loggedInUserId));
+  const roleListFetch = useLoadedData(rolesOfUser(
+    userId,
+    { isActive: true, isGroupHidden: false },
+  ));
+  const [loggedInUserRole, roleLoading, roleError] = useRoleData(
+    loggedInUserId,
+    { isActive: true },
+  );
 
   const [open, setOpen] = React.useState(false);
-
-  const activeNonHiddenRoles = React.useMemo(
-    () => {
-      if (roleListFetch.data) {
-        return roleListFetch.data.filter((role) => role.group.is_hidden === false);
-      }
-      return [];
-    },
-    [roleListFetch.data],
-  );
-
-  const loggedInUserRoles = React.useMemo(
-    () => {
-      if (loggedInUserRolesFetch.data) {
-        return loggedInUserRolesFetch.data.reduce((roleMap, role) => ({
-          ...roleMap,
-          [role.group.id]: role,
-        }), {});
-      }
-      return {};
-    },
-    [loggedInUserRolesFetch.data],
-  );
 
   const isDelegate = roleListFetch.data && roleListFetch.data.some(
     (role) => role.group.group_type === 'delegate_regions',
   );
 
-  const canEditRole = (role) => role.group.group_type === 'delegate_regions' && (
-    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.id]?.metadata.status === 'senior_delegate'
-  );
-
-  const canEditTeamOfRole = (role) => role.group.group_type !== 'delegate_regions' && (
-    !!loggedInUserRoles.admin || loggedInUserRoles[role.group.name]?.metadata.status === 'leader'
-  );
-
-  if (roleListFetch.loading || loggedInUserRolesFetch.loading) return <Loading />;
-  if (roleListFetch.error || loggedInUserRolesFetch.error) return <Errored />;
+  if (roleListFetch.loading || roleLoading) return <Loading />;
+  if (roleListFetch.error || roleError) return <Errored />;
 
   return (
     <>
-      {activeNonHiddenRoles.length > 0
+      {roleListFetch.data?.length > 0
         ? (
           <>
             <Header>Active Roles</Header>
             <List divided relaxed>
-              {activeNonHiddenRoles.map((role) => (
-                <List.Item>
-                  <List.Icon
-                    name="edit"
-                    size="large"
-                    verticalAlign="middle"
-                    link
-                    disabled={!canEditRole(role)}
-                    onClick={() => setOpen(true)}
-                  />
+              {roleListFetch.data?.map((role) => (
+                <List.Item key={role.id}>
+                  <List.Content
+                    floated="left"
+                    href={isHyperlinkableGroup(role.group.group_type) ? `${teamUrl(role.group.id)}/edit` : null}
+                  >
+                    <Icon
+                      name="edit"
+                      size="large"
+                      link
+                      disabled={!loggedInUserRole.canEditRole(role)}
+                      onClick={isHyperlinkableGroup(role.group.group_type)
+                        ? null : () => setOpen(true)}
+                    />
+                  </List.Content>
                   <List.Content>
-                    {canEditTeamOfRole(role) && (
-                      <List.Header as="a" href={`${teamUrl(role.group.id)}/edit`}>
-                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, ${role.group.name}`}
-                      </List.Header>
-                    )}
-                    {!canEditTeamOfRole(role) && (
-                      <List.Header>
-                        {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, ${role.group.name}`}
-                      </List.Header>
-                    )}
+                    <List.Header>
+                      {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, ${role.group.name}`}
+                    </List.Header>
                     {!!role.start_date && (
                       <List.Description>
                         {`Since ${role.start_date}`}
@@ -107,7 +85,7 @@ export default function RolesTab({ userId, loggedInUserId }) {
             </List>
           </>
         ) : (
-          <p>No Active Delegate Roles...</p>
+          <p>No Active Roles...</p>
         )}
       <Button onClick={() => setOpen(true)} disabled={isDelegate}>New Role</Button>
 
