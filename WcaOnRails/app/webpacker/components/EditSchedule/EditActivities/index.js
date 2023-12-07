@@ -70,7 +70,7 @@ function EditActivities({
   //   we can only "instantiate" a modal once the user actually clicks somewhere on the calendar.
   //   So we pre-fill the modal with empty state and set it accordingly on every event click.
   // If somebody has a better idea how to handle this, please shout.
-  const [showActivityModal, setShowActivityModal] = useState(false);
+  const [isActivityModalOpen, setActivityModalOpen] = useState(false);
 
   const [modalActivity, setModalActivity] = useState();
 
@@ -207,7 +207,7 @@ function EditActivities({
     setModalLuxonStart(startLuxon);
     setModalLuxonEnd(endLuxon);
 
-    setShowActivityModal(true);
+    setActivityModalOpen(true);
   };
 
   const addActivityFromCalendarClick = ({ date, view: { calendar } }) => {
@@ -239,12 +239,12 @@ function EditActivities({
       setModalLuxonStart(startLuxon);
       setModalLuxonEnd(endLuxon);
 
-      setShowActivityModal(true);
+      setActivityModalOpen(true);
     }
   };
 
   const onActivityModalClose = (ok, modalData) => {
-    setShowActivityModal(false);
+    setActivityModalOpen(false);
 
     const { activityCode, activityName } = modalData;
 
@@ -280,12 +280,12 @@ function EditActivities({
       <Container textAlign="center">
         <Dropdown fluid placeholder="Venue" clearable selection options={venueOptions} value={selectedRoomId} onChange={setSelectedRoomId} />
       </Container>
-      {!!selectedRoomId && (
+      {selectedRoomId && (
         <>
           <Divider />
           <Container fluid>
             <EditActivityModal
-              showModal={showActivityModal}
+              isModalOpen={isActivityModalOpen}
               activity={modalActivity}
               startLuxon={modalLuxonStart}
               endLuxon={modalLuxonEnd}

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useMemo } from 'react';
 import {
   Button,
   Card,
@@ -15,7 +15,6 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import { addRoom, editVenue, removeVenue } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
-import useInputState from '../../../lib/hooks/useInputState';
 
 const countryOptions = countries.real.map((country) => ({
   key: country.iso2,
@@ -29,26 +28,11 @@ function VenuePanel({
   countryZones,
 }) {
   const dispatch = useDispatch();
-
   const confirm = useConfirm();
 
-  const [latitudeDegrees, setLatitudeDegrees] = useInputState(
-    toDegrees(venue.latitudeMicrodegrees),
-  );
-
-  const [longitudeDegrees, setLongitudeDegrees] = useInputState(
-    toDegrees(venue.longitudeMicrodegrees),
-  );
-
-  useEffect(() => {
-    const latitudeMicrodegrees = toMicrodegrees(latitudeDegrees);
-    dispatch(editVenue(venue.id, 'latitudeMicrodegrees', latitudeMicrodegrees));
-  }, [dispatch, venue.id, latitudeDegrees]);
-
-  useEffect(() => {
-    const longitudeMicrodegrees = toMicrodegrees(longitudeDegrees);
-    dispatch(editVenue(venue.id, 'longitudeMicrodegrees', longitudeMicrodegrees));
-  }, [dispatch, venue.id, longitudeDegrees]);
+  const handleCoordinateChange = (evt, { name, value }) => {
+    dispatch(editVenue(venue.id, name, toMicrodegrees(value)));
+  };
 
   const handleVenueChange = (evt, { name, value }) => {
     dispatch(editVenue(venue.id, name, value));
@@ -70,15 +54,18 @@ function VenuePanel({
   // We want to display the "country_zones" first, so that it's more convenient for the user.
   // In the end the array should look like that:
   //   - country_zone_a, country_zone_b, [...], other_tz_a, other_tz_b, [...]
-  const competitionZonesKeys = Object.keys(countryZones);
-  let selectKeys = _.difference(Object.keys(timezoneData), competitionZonesKeys);
-  selectKeys = _.union(competitionZonesKeys.sort(), selectKeys.sort());
+  const timezoneOptions = useMemo(() => {
+    const competitionZonesKeys = Object.keys(countryZones);
 
-  const timezoneOptions = selectKeys.map((key) => ({
-    key,
-    text: key,
-    value: timezoneData[key] || key,
-  }));
+    const selectKeys = _.difference(Object.keys(timezoneData), competitionZonesKeys);
+    const sortedKeys = _.union(competitionZonesKeys.sort(), selectKeys.sort());
+
+    return sortedKeys.map((key) => ({
+      key,
+      text: key,
+      value: timezoneData[key] || key,
+    }));
+  }, [countryZones]);
 
   return (
     <Card fluid raised>
@@ -95,13 +82,13 @@ function VenuePanel({
               label="Latitude"
               name="latitudeMicrodegrees"
               value={toDegrees(venue.latitudeMicrodegrees)}
-              onChange={setLatitudeDegrees}
+              onChange={handleCoordinateChange}
             />
             <Form.Input
               label="Longitude"
               name="longitudeMicrodegrees"
               value={toDegrees(venue.longitudeMicrodegrees)}
-              onChange={setLongitudeDegrees}
+              onChange={handleCoordinateChange}
             />
           </Form.Group>
           <Form.Input

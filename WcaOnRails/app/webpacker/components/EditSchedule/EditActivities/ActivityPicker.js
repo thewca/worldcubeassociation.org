@@ -73,7 +73,6 @@ function PickerRow({
     <ActivityLabel
       wcifRoom={wcifRoom}
       activityCode={wcifRound.id}
-      attemptNumber={null}
     />
   );
 }

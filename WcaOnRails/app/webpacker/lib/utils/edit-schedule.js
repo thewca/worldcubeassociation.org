@@ -20,24 +20,24 @@ function withNestedActivities(activities) {
   ];
 }
 
-const maxId = (objects) => _.max(objects.map((wcifObj) => wcifObj.id)) || 0;
+const maxIdOrZero = (objects) => _.max(objects.map((wcifObj) => wcifObj.id)) || 0;
 
 export function nextVenueId(wcifSchedule) {
   // Explore the WCIF to get the highest ids.
-  return maxId(wcifSchedule.venues) + 1;
+  return maxIdOrZero(wcifSchedule.venues) + 1;
 }
 
 export function nextRoomId(wcifSchedule) {
   // Explore the WCIF to get the highest ids.
   const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
-  return maxId(rooms) + 1;
+  return maxIdOrZero(rooms) + 1;
 }
 
 export function nextActivityId(wcifSchedule) {
   // Explore the WCIF to get the highest ids.
   const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
   const activities = rooms.flatMap((room) => withNestedActivities(room.activities));
-  return maxId(activities) + 1;
+  return maxIdOrZero(activities) + 1;
 }
 
 export function defaultDurationFromActivityCode(activityCode) {

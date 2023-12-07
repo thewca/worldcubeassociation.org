@@ -20,14 +20,15 @@ const commonActivityCodes = {
   'other-misc': 'Other',
 };
 
-const otherActivityCodeOptions = Object.keys(commonActivityCodes).map((activityCode) => ({
-  key: activityCode,
-  text: commonActivityCodes[activityCode],
-  value: activityCode,
-}));
+const otherActivityCodeOptions = Object.entries(commonActivityCodes)
+  .map(([activityCode, description]) => ({
+    key: activityCode,
+    text: description,
+    value: activityCode,
+  }));
 
 function EditActivityModal({
-  showModal,
+  isModalOpen,
   activity,
   startLuxon,
   endLuxon,
@@ -57,7 +58,7 @@ function EditActivityModal({
 
   return (
     <Modal
-      open={showModal}
+      open={isModalOpen}
       dimmer="blurring"
     >
       <Modal.Header>Add a custom activity</Modal.Header>
