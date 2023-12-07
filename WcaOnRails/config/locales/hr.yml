@@ -2703,7 +2703,7 @@ hr:
       #original_hash: ba067f0
       not_announced: 'Ovo natjecanje je javno vidljivo, no nije još najavljeno.'
       #original_hash: ab61991
-      announced: Uspješno najavljeno natjecanje!
+      announced_success: Uspješno najavljeno natjecanje!
       #original_hash: cbff8ce
       cancelled: >-
         Ovo natjecanje je otkazano. Molimo pogledajte sekciju s informacijama za

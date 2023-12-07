@@ -1217,7 +1217,7 @@ en:
       create_success: "Successfully created new competition!"
       registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
       not_announced: "This competition is visible to the public but hasn't been announced yet."
-      announced: "Successfully announced competition!"
+      announced_success: "Successfully announced competition!"
       cancelled: "This competition has been cancelled. Please check the information section for more details."
       cancel_success: "Successfully cancelled competition!"
       cancel_failure: "Cannot cancel the competition."
@@ -1678,17 +1678,6 @@ en:
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
       competition_was: "Competition was %{n_days} ago."
-    #context: in the Proximity Policy "nearby competitions" list
-    nearby_competitions:
-      #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
-      competitions:
-        zero: "No competitions"
-        one: "1 competition"
-        other: "%{count} competitions"
-      label_admin: "Last %{days} days"
-      nearby_admin: "%{x_competitions} within %{kms} km and %{days} days."
-      within: "Within %{days} days"
-      show: "Show"
     #context: in any general "nearby competitions" list
     adjacent_competitions:
       label: "Nearby competitions (within %{days} days and %{kms} km)"
@@ -1718,6 +1707,7 @@ en:
     announcements: "Announcements"
     post_announcement: "Announce the competition"
     announced_by_html: "Announced by %{announcer_name} on %{date_time}"
+    announce_confirm: "Are you sure you want to announce this competition?"
     cancel: "Cancel the competition"
     uncancel: "Uncancel the competition"
     cancelled_by_html: "Cancelled by %{name} on %{date_time}"

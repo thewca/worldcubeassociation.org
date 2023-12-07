@@ -2756,7 +2756,7 @@ it:
         Questa competizione è visibile al pubblico ma non è stata ancora
         annunciata.
       #original_hash: ab61991
-      announced: Competizione annunciata con successo!
+      announced_success: Competizione annunciata con successo!
       #original_hash: cbff8ce
       cancelled: >-
         Questa competizione è stata cancellata. Controlla la sezione

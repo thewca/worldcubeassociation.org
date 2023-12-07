@@ -35,7 +35,7 @@ function AnnounceAction({
 
   const postAnnouncement = () => {
     confirm({
-      content: 'Do you really want to announce?',
+      content: I18n.t('competitions.announce_confirm'),
     }).then(() => {
       save(announceCompetitionUrl(competitionId), null, sync, {
         body: null,
@@ -75,15 +75,24 @@ function CancelAction({
   const { save } = useSaveAction();
   const confirm = useConfirm();
 
-  const cancelCompetition = (undo) => {
-    confirm({
-      content: 'Do you really want to (un)cancel?',
-    }).then(() => {
-      save(cancelCompetitionUrl(competitionId, undo), null, sync, {
-        body: null,
-        method: 'PUT',
-      });
+  const submitCancelToBackend = (undo) => {
+    save(cancelCompetitionUrl(competitionId, undo), null, sync, {
+      body: null,
+      method: 'PUT',
     });
+  };
+
+  const cancelCompetition = (undo) => {
+    if (undo) {
+      // No confirmation message for undoing the cancel
+      submitCancelToBackend(undo);
+    } else {
+      confirm({
+        content: I18n.t('competitions.cancel_confirm'),
+      }).then(() => {
+        submitCancelToBackend(undo);
+      });
+    }
   };
 
   if (isCancelled) {
@@ -132,7 +141,7 @@ function CloseRegistrationAction({
 
   const closeRegistrationWhenFull = () => {
     confirm({
-      content: 'Do you really want to close the registration?',
+      content: I18n.t('competition.orga_close_reg_confirm'),
     }).then(() => {
       save(closeRegistrationWhenFullUrl(competitionId), null, sync, {
         body: null,

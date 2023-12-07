@@ -2256,7 +2256,7 @@ zh-TW:
       #original_hash: ba067f0
       not_announced: 這場比賽已是公開狀態，但尚未公告。
       #original_hash: ab61991
-      announced: 已成功公告比賽！
+      announced_success: 已成功公告比賽！
       #original_hash: cbff8ce
       cancelled: 這場比賽已被取消。比賽資訊處有取消細節。
       #original_hash: b4aa5ee

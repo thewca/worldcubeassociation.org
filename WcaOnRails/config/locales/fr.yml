@@ -2525,7 +2525,7 @@ fr:
         Cette compétition est visible publiquement mais n'a pas encore été
         annoncée.
       #original_hash: ab61991
-      announced: Compétition annoncée avec succès !
+      announced_success: Compétition annoncée avec succès !
       #original_hash: a582c89
       cancelled: >-
         Cette compétition a été annulée. Merci de consulter la section

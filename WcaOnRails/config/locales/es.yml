@@ -2733,7 +2733,7 @@ es:
         Esta competición es visible por el público pero no ha sido anunciada
         todavía.
       #original_hash: ab61991
-      announced: ¡Competición anunciada con éxito!
+      announced_success: ¡Competición anunciada con éxito!
       #original_hash: cbff8ce
       cancelled: >-
         La competición ha sido cancelada. Por favor revisa la sección de

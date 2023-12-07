@@ -2019,7 +2019,7 @@ ja:
       #original_hash: ba067f0
       not_announced: この大会は公開されていますが、まだ告知アナウンスはされていません。
       #original_hash: ab61991
-      announced: 大会が告知アナウンスされました。
+      announced_success: 大会が告知アナウンスされました。
       #original_hash: a582c89
       cancelled: この大会の開催は中止されました。詳細は別箇所に記載しています。
       #original_hash: b4aa5ee

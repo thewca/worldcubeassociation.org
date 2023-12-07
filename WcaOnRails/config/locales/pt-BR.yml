@@ -2689,7 +2689,7 @@ pt-BR:
       #original_hash: ba067f0
       not_announced: Essa competição está visível para o público mas ainda não foi anunciada.
       #original_hash: ab61991
-      announced: Competição anunciada com sucesso!
+      announced_success: Competição anunciada com sucesso!
       #original_hash: cbff8ce
       cancelled: >-
         Esta competição foi cancelada. Por favor verifique a seção de

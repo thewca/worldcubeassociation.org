@@ -2554,7 +2554,7 @@ th:
       #original_hash: ba067f0
       not_announced: การแข่งขันนี้ปรากฏต่อสาธารณชน แต่ยังไม่ได้ประกาศ
       #original_hash: ab61991
-      announced: ประกาศผลการแข่งขันสำเร็จแล้ว!
+      announced_success: ประกาศผลการแข่งขันสำเร็จแล้ว!
       #original_hash: cbff8ce
       cancelled: >-
         การแข่งขันนี้ถูกยกเลิก

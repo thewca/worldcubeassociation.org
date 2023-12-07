@@ -2296,7 +2296,7 @@ kk:
       #original_hash: ba067f0
       not_announced: 'Бұл жарыс көпшілікке қол жетімді, бірақ әлі жарияланбаған.'
       #original_hash: ab61991
-      announced: Жарыс сәтті жарияланды!
+      announced_success: Жарыс сәтті жарияланды!
       #original_hash: a582c89
       cancelled: >-
         Бұл жарыстар тоқтатылды. Қосымша ақпарат алу үшін «Ақпарат» қойындысын

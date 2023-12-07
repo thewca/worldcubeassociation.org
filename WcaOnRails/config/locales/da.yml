@@ -2405,7 +2405,7 @@ da:
         Konkurrencen er synlig for offentligheden, men den er ikke blevet
         annonceret endnu.
       #original_hash: ab61991
-      announced: Annoncerede konkurrencen!
+      announced_success: Annoncerede konkurrencen!
       #original_hash: a582c89
       cancelled: >-
         Denne konkurrence er aflyst. Læs diverse faner på konkurrencesiden for

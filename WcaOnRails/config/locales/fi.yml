@@ -2490,7 +2490,7 @@ fi:
         Tämä kilpailu on nähtävillä julkisesti, mutta sitä ei ole vielä
         ilmoitettu.
       #original_hash: ab61991
-      announced: Kilpailu ilmoitettu onnistuneesti!
+      announced_success: Kilpailu ilmoitettu onnistuneesti!
       #original_hash: a582c89
       cancelled: Tämä kilpailu on peruttu. Lisätiedot löytyvät Tietoa-osiosta.
       #original_hash: b4aa5ee

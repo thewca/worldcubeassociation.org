@@ -2677,7 +2677,7 @@ sv:
       #original_hash: ba067f0
       not_announced: Tävlingen är synlig för allmänheten men har inte publicerats ännu.
       #original_hash: ab61991
-      announced: Tävlingen publicerades!
+      announced_success: Tävlingen publicerades!
       #original_hash: cbff8ce
       cancelled: Tävlingen har ställts in. Se tävlingens information för mer detaljer.
       #original_hash: b4aa5ee

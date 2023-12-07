@@ -2450,7 +2450,7 @@ nl:
         Deze wedstrijd is zichtbaar voor het publiek maar is nog niet
         aangekondigd.
       #original_hash: ab61991
-      announced: Wedstrijd succesvol aangekondigd!
+      announced_success: Wedstrijd succesvol aangekondigd!
       #original_hash: a582c89
       cancelled: De wedstrijd is geannuleerd. Zie de Informatie-sectie voor meer details.
       #original_hash: b4aa5ee

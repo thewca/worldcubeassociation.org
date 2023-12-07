@@ -2518,7 +2518,7 @@ pl:
       #original_hash: ba067f0
       not_announced: 'Te zawody są widoczne publicznie, ale nie zostały jeszcze ogłoszone.'
       #original_hash: ab61991
-      announced: Ogłaszanie zawodów zostało zakończone sukcesem!
+      announced_success: Ogłaszanie zawodów zostało zakończone sukcesem!
       #original_hash: a582c89
       cancelled: >-
         Te zawody zostały odwołane. Zobacz sekcję informacji w celu zobaczenia

@@ -2653,7 +2653,7 @@ eo:
       #original_hash: ba067f0
       not_announced: Tiu konkurso publike videblas sed ĝi ankoraŭ ne estis anoncita.
       #original_hash: ab61991
-      announced: Konkurso sukcese anoncita!
+      announced_success: Konkurso sukcese anoncita!
       #original_hash: cbff8ce
       cancelled: >-
         Tiu konkurso estis nuligita. Bonvolu kontroli la informaj sekcioj por

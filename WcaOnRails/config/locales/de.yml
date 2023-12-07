@@ -2722,7 +2722,7 @@ de:
       #original_hash: ba067f0
       not_announced: 'Der Wettbewerb ist öffentlich sichtbar, wurde aber nicht angekündigt.'
       #original_hash: ab61991
-      announced: Turnier wurde erfolgreich angekündigt!
+      announced_success: Turnier wurde erfolgreich angekündigt!
       #original_hash: cbff8ce
       cancelled: >-
         Dieser Wettbewerb wurde abgesagt. Bitte beachte die Informationsseite

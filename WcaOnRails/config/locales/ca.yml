@@ -2517,7 +2517,7 @@ ca:
       #original_hash: ba067f0
       not_announced: 'Aquesta competició és visible al públic, però encara no s''ha anunciat.'
       #original_hash: ab61991
-      announced: Competició anunciada exitosament!
+      announced_success: Competició anunciada exitosament!
       #original_hash: a582c89
       cancelled: >-
         Aquesta competició s'ha cancel·lat. Si us plau, revisa la secció

@@ -2600,7 +2600,7 @@ id:
       #original_hash: ba067f0
       not_announced: Kompetisi ini dapat terlihat oleh publik namun belum diumumkan.
       #original_hash: ab61991
-      announced: Berhasil mengumumkan kompetisi!
+      announced_success: Berhasil mengumumkan kompetisi!
       #original_hash: a582c89
       cancelled: >-
         Kompetisi ini telah dibatalkan. Harap cek bagian informasi untuk detail

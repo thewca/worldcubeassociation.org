@@ -2735,7 +2735,7 @@ ro:
       #original_hash: ba067f0
       not_announced: 'Această competiție este vizibilă, dar nu a fost încă anunțată.'
       #original_hash: ab61991
-      announced: Competiție anunțată cu succes!
+      announced_success: Competiție anunțată cu succes!
       #original_hash: cbff8ce
       cancelled: >-
         Această competiție a fost anulată. Verifică secțiunea de informații

@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 import {
-  Button, Table, Message, Popup, TableCell,
+  Button, Table, Message, Popup, TableCell, Transition,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -185,7 +185,9 @@ function CompsTableContent({ comps, action }) {
               active={showEvents}
               onClick={setShowEvents}
             >
-              {showEvents ? 'Hide Events' : 'Show Events'}
+              {showEvents
+                ? I18n.t('competitions.adjacent_competitions.hide_events')
+                : I18n.t('competitions.adjacent_competitions.show_events')}
             </Button>
           </Table.HeaderCell>
         </Table.Row>

@@ -2615,7 +2615,7 @@ cs:
       #original_hash: ba067f0
       not_announced: 'Tato soutěž je veřejně viditelná, ale ještě nebyla ohlášená.'
       #original_hash: ab61991
-      announced: Soutěž byla úspěšně ohlášena!
+      announced_success: Soutěž byla úspěšně ohlášena!
       #original_hash: cbff8ce
       cancelled: >-
         Soutěž byla zrušena. Prosíme přečtěte si informační sekci pro více
