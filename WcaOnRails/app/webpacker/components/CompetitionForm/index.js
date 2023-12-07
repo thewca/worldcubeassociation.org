@@ -116,7 +116,6 @@ function BottomConfirmationPanel({
   );
 }
 
-// TODO: There are various parts which have overrides for enabled and disabled which need to done
 function CompetitionForm() {
   const {
     competition,

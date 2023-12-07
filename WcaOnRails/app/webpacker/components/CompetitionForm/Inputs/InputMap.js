@@ -9,9 +9,9 @@ import {
   ZoomControl,
   useLeaflet,
 } from 'react-leaflet';
-import { GeoSearchControl as SearchControl, OpenStreetMapProvider } from 'leaflet-geosearch';
+import { GeoSearchControl as SearchControl } from 'leaflet-geosearch';
 import { blueMarker } from '../../../lib/leaflet-wca/markers';
-import { userTileProvider } from '../../../lib/leaflet-wca/providers';
+import { searchProvider, userTileProvider } from '../../../lib/leaflet-wca/providers';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {
@@ -64,7 +64,7 @@ function GeoSearchControl({
 
   useEffect(() => {
     const searchControl = new SearchControl({
-      provider: new OpenStreetMapProvider(), // TODO: Use our own, but that doesnt seem to work
+      provider: searchProvider,
       showMarker: false,
       showPopup: false,
       style: 'bar',
