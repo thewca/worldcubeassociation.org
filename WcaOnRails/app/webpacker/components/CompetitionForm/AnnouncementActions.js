@@ -1,8 +1,9 @@
 import {
   Button,
-  Container, Dimmer,
+  Dimmer,
   Header,
-  List, Segment,
+  List,
+  Segment,
 } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
