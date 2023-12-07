@@ -141,7 +141,7 @@ function CloseRegistrationAction({
 
   const closeRegistrationWhenFull = () => {
     confirm({
-      content: I18n.t('competition.orga_close_reg_confirm'),
+      content: I18n.t('competitions.orga_close_reg_confirm'),
     }).then(() => {
       save(closeRegistrationWhenFullUrl(competitionId), null, sync, {
         body: null,
