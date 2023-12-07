@@ -1,7 +1,7 @@
 import { Button } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
-import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import { useStore } from '../../lib/providers/StoreProvider';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   competitionConfirmationDataUrl,
@@ -11,7 +11,6 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { updateFormValue } from './store/actions';
 
 export function CreateOrUpdateButton({
   createComp,
@@ -22,14 +21,14 @@ export function CreateOrUpdateButton({
   if (isPersisted) {
     return (
       <Button primary onClick={updateComp}>
-        {I18n.t('competitions.submit_update_value')}
+        {I18n.t('competitions.competition_form.submit_update_value')}
       </Button>
     );
   }
 
   return (
     <Button primary onClick={createComp}>
-      {I18n.t('competitions.submit_create_value')}
+      {I18n.t('competitions.competition_form.submit_create_value')}
     </Button>
   );
 }
@@ -52,7 +51,7 @@ function ConfirmButton({
 
   const confirmCompetition = () => {
     confirm({
-      content: 'Do you really want to confirm the competition?',
+      content: I18n.t('competitions.competition_form.submit_confirm'),
     }).then(() => {
       save(confirmCompetitionUrl(competitionId), null, sync, {
         body: null,
@@ -91,7 +90,7 @@ function DeleteButton({
 
   const deleteCompetition = () => {
     confirm({
-      content: 'Do you really want to delete the competition?',
+      content: I18n.t('competitions.competition_form.submit_delete'),
     }).then(() => {
       save(competitionUrl(competitionId), null, sync, {
         body: null,
@@ -116,8 +115,7 @@ export default function ConfirmationActions({
   createComp,
   updateComp,
 }) {
-  const { isAdminView, isPersisted, initialCompetition: { competitionId } } = useStore();
-  const dispatch = useDispatch();
+  const { isAdminView, isPersisted, competition: { competitionId } } = useStore();
 
   const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);
 
@@ -127,19 +125,13 @@ export default function ConfirmationActions({
     sync,
   } = useLoadedData(dataUrl);
 
-  const onConfirmSuccess = () => {
-    sync();
-    // TODO: This is currently leaving the form in the unsaved state
-    dispatch(updateFormValue('isConfirmed', true, ['admin']));
-  };
-
   if (loading) return <Loading />;
 
   return (
     <ConfirmProvider>
       <Button.Group>
         <CreateOrUpdateButton createComp={createComp} updateComp={updateComp} />
-        {isPersisted && !isAdminView && <ConfirmButton data={data} sync={onConfirmSuccess} />}
+        {isPersisted && !isAdminView && <ConfirmButton data={data} sync={sync} />}
         {isPersisted && <DeleteButton data={data} sync={sync} />}
       </Button.Group>
     </ConfirmProvider>

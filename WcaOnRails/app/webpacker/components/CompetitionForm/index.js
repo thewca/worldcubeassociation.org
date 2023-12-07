@@ -93,13 +93,11 @@ function AnnouncementMessage() {
 function BottomConfirmationPanel({
   createComp,
   updateComp,
+  unsavedChanges,
 }) {
   const { isPersisted } = useStore();
 
-  // we only want to fetch data about confirming/deleting a competition when it's already persisted
-  // but we cannot wrap the "useLoadedData" call itself into an if-statement because then
-  // React suddenly becomes a crybaby about "rules of hooks". So we hack around it this way instead.
-  if (isPersisted) {
+  if (isPersisted && !unsavedChanges) {
     return (
       <ConfirmationActions
         createComp={createComp}
@@ -109,10 +107,17 @@ function BottomConfirmationPanel({
   }
 
   return (
-    <CreateOrUpdateButton
-      createComp={createComp}
-      updateComp={updateComp}
-    />
+    <>
+      {unsavedChanges && (
+        <Message info>
+          You have unsaved changes. Please save the competition before confirming.
+        </Message>
+      )}
+      <CreateOrUpdateButton
+        createComp={createComp}
+        updateComp={updateComp}
+      />
+    </>
   );
 }
 
@@ -178,14 +183,14 @@ function CompetitionForm() {
   }, [onUnload]);
 
   const renderUnsavedChangesAlert = () => (
-    <Message color="blue">
+    <Message info>
       You have unsaved changes. Don&apos;t forget to
       {' '}
       <Button
         onClick={isPersisted ? updateComp : createComp}
         disabled={saving}
         loading={saving}
-        color="blue"
+        primary
       >
         save your changes!
       </Button>
@@ -262,14 +267,15 @@ function CompetitionForm() {
             <InputBoolean id="cloneTabs" />
           </SubSection>
         )}
-
-        <Divider />
-
-        <BottomConfirmationPanel
-          createComp={createComp}
-          updateComp={updateComp}
-        />
       </Form>
+
+      <Divider />
+
+      <BottomConfirmationPanel
+        createComp={createComp}
+        updateComp={updateComp}
+        unsavedChanges={unsavedChanges}
+      />
     </>
   );
 }
