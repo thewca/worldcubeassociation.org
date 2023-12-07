@@ -144,7 +144,9 @@ function CollisionsTable({ comps }) {
               active={showEvents}
               onClick={setShowEvents}
             >
-              {showEvents ? 'Hide Events' : 'Show Events'}
+              {showEvents
+                ? I18n.t('competitions.adjacent_competitions.hide_events')
+                : I18n.t('competitions.adjacent_competitions.show_events')}
             </Button>
           </Table.HeaderCell>
         </Table.Row>

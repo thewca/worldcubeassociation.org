@@ -20,10 +20,18 @@ export function CreateOrUpdateButton({
   const { isPersisted } = useStore();
 
   if (isPersisted) {
-    return <Button primary onClick={updateComp}>Update Competition</Button>;
+    return (
+      <Button primary onClick={updateComp}>
+        {I18n.t('competitions.submit_update_value')}
+      </Button>
+    );
   }
 
-  return <Button primary onClick={createComp}>Create Competition</Button>;
+  return (
+    <Button primary onClick={createComp}>
+      {I18n.t('competitions.submit_create_value')}
+    </Button>
+  );
 }
 
 function ConfirmButton({
