@@ -27,7 +27,6 @@ import NearbyComps from './Tables/NearbyComps';
 import RegistrationCollisions from './Tables/RegistrationCollisions';
 import FormErrors from './FormErrors';
 import Series from './FormSections/Series';
-import useToggleState from '../../lib/hooks/useToggleState';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import competitionFormReducer from './store/reducer';
@@ -199,24 +198,14 @@ function CompetitionForm() {
     </Message>
   );
 
-  const [showDebug, setShowDebug] = useToggleState(false);
-
   return (
     <>
-      {unsavedChanges && renderUnsavedChangesAlert()}
-      <Button toggle active={showDebug} onClick={setShowDebug}>
-        {showDebug ? 'Hide' : 'Show'}
-        {' '}
-        Debug
-      </Button>
-      {showDebug && (
-        <pre>
-          <code>
-            {JSON.stringify(competition, null, 2)}
-          </code>
-        </pre>
+      {unsavedChanges && (
+        <>
+          {renderUnsavedChangesAlert()}
+          <Divider />
+        </>
       )}
-      <Divider />
 
       {isPersisted && <AnnouncementActions disabled={unsavedChanges} />}
       <AnnouncementMessage />
