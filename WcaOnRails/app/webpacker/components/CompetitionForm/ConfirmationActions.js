@@ -6,7 +6,7 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   competitionConfirmationDataUrl,
   competitionUrl,
-  confirmCompetitionUrl,
+  confirmCompetitionUrl, homepageUrl,
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
@@ -79,7 +79,6 @@ function ConfirmButton({
 function DeleteButton({
   competitionId,
   data,
-  sync,
 }) {
   const { cannotDeleteReason } = data;
 
@@ -90,7 +89,9 @@ function DeleteButton({
     confirm({
       content: I18n.t('competitions.competition_form.submit_delete'),
     }).then(() => {
-      save(competitionUrl(competitionId), null, sync, {
+      save(competitionUrl(competitionId), null, () => {
+        window.location.replace(homepageUrl);
+      }, {
         body: null,
         method: 'DELETE',
       });
@@ -140,7 +141,7 @@ export default function ConfirmationActions({
           <ConfirmButton competitionId={competitionId} data={data} sync={sync} />
         )}
         {isPersisted && !isConfirmed && (
-          <DeleteButton competitionId={competitionId} data={data} sync={sync} />
+          <DeleteButton competitionId={competitionId} data={data} />
         )}
       </Button.Group>
     </ConfirmProvider>
