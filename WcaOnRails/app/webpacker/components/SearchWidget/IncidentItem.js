@@ -5,7 +5,7 @@ function IncidentItem({
   item,
 }) {
   return (
-    <div className="omnisearch-item-incident">
+    <div className="multisearch-item-incident">
       {I18n.t('incidents_log.incident')}
       {' '}
       {item.title}
