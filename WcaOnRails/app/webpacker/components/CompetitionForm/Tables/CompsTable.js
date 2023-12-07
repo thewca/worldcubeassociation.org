@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 import {
-  Button, Table, Message, Popup, TableCell, Transition,
+  Button, Table, Message, Popup, TableCell,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';

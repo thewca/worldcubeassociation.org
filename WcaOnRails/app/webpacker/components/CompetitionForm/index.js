@@ -43,13 +43,14 @@ import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions
 
 function AnnouncementMessage() {
   const {
-    competition: {
+    initialCompetition: {
       admin: {
         isConfirmed,
         isVisible,
       },
     },
     isPersisted,
+    isAdminView,
   } = useStore();
 
   if (!isPersisted) return null;
@@ -62,6 +63,8 @@ function AnnouncementMessage() {
   let i18nReplacements = {};
 
   if (isConfirmed && isVisible) {
+    if (isAdminView) return null;
+
     messageStyle = 'success';
     i18nKey = 'competitions.competition_form.public_and_locked_html';
   } else if (isConfirmed && !isVisible) {
