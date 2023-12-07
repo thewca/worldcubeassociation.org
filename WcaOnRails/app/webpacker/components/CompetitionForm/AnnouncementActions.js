@@ -2,7 +2,7 @@ import {
   Button,
   Container, Dimmer,
   Header,
-  List,
+  List, Segment,
 } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
@@ -187,12 +187,12 @@ export default function AnnouncementActions({ disabled = false }) {
 
   return (
     <ConfirmProvider>
-      <Dimmer.Dimmable as={Container} fluid blurring dimmed={disabled}>
+      <Dimmer.Dimmable as={Segment} blurring dimmed={disabled}>
         <Dimmer active={disabled}>
           You have unsaved changes. Please save the competition before taking any other action.
         </Dimmer>
 
-        <Header>{I18n.t('competitions.announcements')}</Header>
+        <Header style={{ marginTop: 0 }}>{I18n.t('competitions.announcements')}</Header>
         <List bulleted verticalAlign="middle">
           {isAdminView && <AnnounceAction competitionId={competitionId} data={data} sync={sync} />}
           {isAdminView && <CancelAction competitionId={competitionId} data={data} sync={sync} />}

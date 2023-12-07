@@ -27,6 +27,7 @@ import 'semantic-css/reset';
 import 'semantic-css/segment';
 import 'semantic-css/site';
 import 'semantic-css/step';
+import 'semantic-css/sticky';
 import 'semantic-css/table';
 import 'semantic-css/transition';
 // NOTE: This is the js, wouldn't go fine through our module-resolver!

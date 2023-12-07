@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef } from 'react';
 import {
   Button,
   Divider,
   Form,
-  Message,
+  Message, Sticky,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
@@ -198,13 +198,14 @@ function CompetitionForm() {
     </Message>
   );
 
+  const stickyRef = useRef();
+
   return (
-    <>
+    <div ref={stickyRef}>
       {unsavedChanges && (
-        <>
+        <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
           {renderUnsavedChangesAlert()}
-          <Divider />
-        </>
+        </Sticky>
       )}
 
       {isPersisted && <AnnouncementActions disabled={unsavedChanges} />}
@@ -267,7 +268,7 @@ function CompetitionForm() {
         updateComp={updateComp}
         unsavedChanges={unsavedChanges}
       />
-    </>
+    </div>
   );
 }
 
