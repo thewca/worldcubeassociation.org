@@ -61,10 +61,10 @@ class Championship < ApplicationRecord
 
   def self.grouped_championship_types
     {
-      "Planetary Championship" => [["World", CHAMPIONSHIP_TYPE_WORLD]],
-      "Continental Championship" => Continent.all_sorted_by(I18n.locale, real: true).map { |continent| [continent.name, continent.id] },
-      "Multi-country Championship" => EligibleCountryIso2ForChampionship.championship_types.map { |championship_type| [championship_type.titleize, championship_type] },
-      "National Championship" => Country.all_sorted_by(I18n.locale, real: true).map { |country| [country.name, country.iso2] },
+      "planetary" => [CHAMPIONSHIP_TYPE_WORLD],
+      "continental" => Continent.all_sorted_by(I18n.locale, real: true).map(&:name),
+      "multi-national" => EligibleCountryIso2ForChampionship.championship_types,
+      "national" => Country.all_sorted_by(I18n.locale, real: true).map(&:iso2),
     }
   end
 end

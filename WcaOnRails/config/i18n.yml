@@ -37,6 +37,7 @@ translations:
       - "*.common.*"
       - "*.competitions.*"
       - "*.countries.*"
+      - "*.continents.*"
       - "*.delegates_page.*"
       - "*.enums.*"
       - "*.events.*"

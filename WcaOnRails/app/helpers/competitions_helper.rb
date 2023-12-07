@@ -205,15 +205,6 @@ module CompetitionsHelper
     end.to_json.html_safe
   end
 
-  def grouped_championship_types
-    Championship.grouped_championship_types
-  end
-
-  def championship_option_tags(selected: nil)
-    championship_types = grouped_championship_types
-    grouped_options_for_select(championship_types, selected)
-  end
-
   def first_and_last_time_from_activities(activities, timezone)
     # The goal of this function is to determine what should be the starting and ending points in the time axis of the calendar.
     # Which means we need to find the earliest start_time (and latest end_time) for any activity occuring on all days, expressed in the local timezone.

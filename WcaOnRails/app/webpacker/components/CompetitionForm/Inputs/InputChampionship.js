@@ -5,21 +5,37 @@ import {
   Form,
   Icon,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import { groupedChampionshipTypes } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 
-const championshipOptions = Object.keys(groupedChampionshipTypes).flatMap((region) => {
-  const actualOptions = groupedChampionshipTypes[region].map((championship) => ({
-    key: championship[1],
-    value: championship[1],
-    text: championship[0],
+const generateChampionshipName = (type, championship) => {
+  switch (type) {
+    case 'planetary':
+      return I18n.t('competitions.competition_form.championship_types.world');
+    case 'continental':
+      return I18n.t(`continents.${championship}`);
+    case 'multi-national':
+      return I18n.t(`competitions.competition_form.championship_types.${championship}`) || I18n.t('competitions.competition_form.championship_types.generic', { type: championship });
+    case 'national':
+      return I18n.t(`countries.${championship}`);
+    default:
+      return championship;
+  }
+};
+
+const championshipOptions = Object.keys(groupedChampionshipTypes).flatMap((type) => {
+  const actualOptions = groupedChampionshipTypes[type].map((championship) => ({
+    key: championship,
+    value: championship,
+    text: generateChampionshipName(type, championship),
   }));
 
   return [
     {
       as: DropdownHeader,
-      key: region,
-      text: region,
+      key: type,
+      text: _.capitalize(type),
       disabled: true,
     },
     ...actualOptions,
