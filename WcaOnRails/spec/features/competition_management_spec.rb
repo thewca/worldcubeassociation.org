@@ -10,6 +10,19 @@ def within_modal(&)
   within(find_modal(&))
 end
 
+# HTML 'select' dropdowns in SemUI are not actual <select> fields.
+# They are patched together as a combination of <div>s, so we have to write our custom find method.
+def region_input
+  all(:css, 'div#venue-countryId>input.search').last
+end
+
+# HTML 'checkbox' elements in SemUI are not actual <checkbox> fields.
+# They are a label with a rectangle and a tick mark injected via CSS, so we have to write our custom find method.
+def wca_registration_checkbox
+  # WARNING: Do not use Capybara "unckeck" on this, because it technically (in the HTML sense) isn't even a checkbox.
+  all(:css, "label[for='website-usesWcaRegistration']").last
+end
+
 RSpec.feature "Competition management", js: true do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
@@ -21,10 +34,10 @@ RSpec.feature "Competition management", js: true do
       scenario "with valid data" do
         visit new_competition_path
         fill_in "Name", with: "My Competition 2015"
-        fill_in "Region", with: "United States"
+        region_input.fill_in with: "United States"
         fill_in "Start date", with: '08/11/2015'
         fill_in "End date", with: '08/11/2015'
-        uncheck "I would like to use the WCA website for registration"
+        wca_registration_checkbox.click
 
         click_button "Create Competition"
 
@@ -150,6 +163,7 @@ RSpec.feature "Competition management", js: true do
     scenario "cannot change id of short name from organizer view" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
+
       expect { fill_in "ID", with: "NewId2016" }.to raise_error(Capybara::ElementNotFound)
     end
 
@@ -200,10 +214,13 @@ RSpec.feature "Competition management", js: true do
       visit new_competition_path
 
       fill_in "Name", with: "New Comp 2015"
-      select "United States", from: "Region"
-      uncheck "I would like to use the WCA website for registration"
+      region_input.fill_in with: "United States"
+      fill_in "Start date", with: '08/11/2015'
+      fill_in "End date", with: '08/11/2015'
+      wca_registration_checkbox.click
       click_button "Create Competition"
-      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
+
+      expect(page).to have_current_path(edit_competition_path("NewComp2015")) # wait for request to complete
 
       expect(Competition.all.length).to eq 1
       new_competition = Competition.find("NewComp2015")
@@ -256,7 +273,7 @@ RSpec.feature "Competition management", js: true do
         expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)
         expect(page).to have_field("registration-closingDateTime", type: 'datetime-local', disabled: false)
 
-        find("label[for='website-usesWcaRegistration']").click
+        wca_registration_checkbox.click
 
         expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)
         expect(page).to have_field("registration-closingDateTime", type: 'datetime-local', disabled: false)

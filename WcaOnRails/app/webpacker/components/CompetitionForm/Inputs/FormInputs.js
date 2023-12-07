@@ -181,9 +181,10 @@ export const InputString = wrapInput((props) => (
     name={props.htmlName}
     label={props.attachedLabel}
     value={props.value}
+    disabled={props.disabled}
     onChange={props.onChange}
   />
-), ['attachedLabel'], '');
+), ['attachedLabel', 'disabled'], '');
 
 export const InputTextArea = wrapInput((props) => (
   <TextareaAutosize
