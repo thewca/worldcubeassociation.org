@@ -9,6 +9,7 @@ import TextItem from './TextItem';
 import useDebounce from '../../lib/hooks/useDebounce';
 import I18n from '../../lib/i18n';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
+import '../../stylesheets/search_widget/MultisearchInput.scss';
 
 const classToComponent = {
   user: UserItem,
@@ -31,7 +32,7 @@ function ItemFor({ item }) {
 const renderLabel = ({ item }) => ({
   color: 'blue',
   content: <ItemFor item={item} />,
-  className: 'omnisearch-item',
+  className: 'multisearch-item',
   as: 'div',
 });
 
@@ -136,7 +137,7 @@ export default function MultiSearchInput({
       search={(values) => values.slice(0, 5)}
       clearable={!multiple}
       icon="search"
-      className="omnisearch-dropdown"
+      className="multisearch-dropdown"
       disabled={disabled}
       value={multiple ? selectedValue.map((item) => item.id) : selectedValue?.id}
       searchQuery={search}
