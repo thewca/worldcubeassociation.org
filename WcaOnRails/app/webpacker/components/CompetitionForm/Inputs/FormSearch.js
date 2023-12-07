@@ -53,7 +53,7 @@ export function CompetitionSearch({
   onChange,
   disabled,
 }) {
-  const competitionIds = useMemo(() => (value?.split(',').filter(Boolean) || []), [value]);
+  const competitionIds = useMemo(() => (value || []), [value]);
 
   const {
     data: initialData,

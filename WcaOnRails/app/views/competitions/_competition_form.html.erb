@@ -3,4 +3,5 @@
   storedEvents: @competition.events,
   isAdminView: @competition_admin_view,
   isPersisted: @competition.persisted?,
+  isSeriesPersisted: @competition.competition_series&.persisted? || false,
 }) %>

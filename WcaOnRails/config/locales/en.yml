@@ -291,11 +291,6 @@ en:
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
-      competition_series:
-        wcif_id: "Series ID"
-        name: "Series name"
-        short_name: "Series nickname"
-        competition_ids: "All competitions"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -462,12 +457,6 @@ en:
         wca_id: ""
         receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
-      #context: when part of a Competition Series
-      competition_series:
-        wcif_id: ""
-        name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
-        short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
-        competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
       website_contact:
         inquiry: ""
         competition_id: ""
@@ -1484,7 +1473,11 @@ en:
           coordinates: "Coordinates"
         start_date: "Start date"
         end_date: "End date"
-        series: "Series"
+        series:
+          series_id: "Series ID"
+          name: "Series name"
+          short_name: "Series nickname"
+          competition_ids: "All competitions"
         information: "Information"
         competitor_limit:
           enabled: "Competitor limit"
@@ -1560,6 +1553,12 @@ en:
             long: ""
         start_date: ""
         end_date: ""
+        #context: when part of a Competition Series
+        series:
+          series_id: ""
+          name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
+          short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
+          competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
         information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
         competitor_limit:
           enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."

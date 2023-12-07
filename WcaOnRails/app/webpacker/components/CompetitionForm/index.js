@@ -277,6 +277,7 @@ export default function Wrapper({
   storedEvents = [],
   isAdminView = false,
   isPersisted = false,
+  isSeriesPersisted = false,
   isCloning = false,
 }) {
   return (
@@ -289,6 +290,7 @@ export default function Wrapper({
         storedEvents,
         isAdminView,
         isPersisted,
+        isSeriesPersisted,
         isCloning,
       }}
     >
