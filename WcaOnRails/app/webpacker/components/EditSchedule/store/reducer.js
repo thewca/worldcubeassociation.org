@@ -120,20 +120,18 @@ const reducers = {
       venues: state.wcifSchedule.venues.map((venue) => (venue.id === payload.venueId ? {
         ...venue,
         [payload.propertyKey]: payload.newProperty,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: (
-            payload.propertyKey === 'timezone'
-              ? room.activities.map((activity) => (
-                changeActivityTimezone(
-                  activity,
-                  venue.timezone,
-                  payload.newProperty,
-                )
-              ))
-              : room.activities
-          ),
-        })),
+        rooms: payload.propertyKey === 'timezone'
+          ? venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              changeActivityTimezone(
+                activity,
+                venue.timezone,
+                payload.newProperty,
+              )
+            )),
+          }))
+          : venue.rooms,
       } : venue)),
     },
   }),
