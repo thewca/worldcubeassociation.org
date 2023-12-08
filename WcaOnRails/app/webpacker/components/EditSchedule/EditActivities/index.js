@@ -269,13 +269,14 @@ function EditActivities({
       <Container textAlign="center">
         <List horizontal size="large">
           {wcifSchedule.venues.map((venue) => (
-            <List.Item>
+            <List.Item key={venue.id}>
               <Icon name="home" />
               <List.Content>
                 <List.Header>{venue.name}</List.Header>
                 <List.List>
                   {venue.rooms.map((room) => (
                     <List.Item
+                      key={room.id}
                       as="a"
                       onClick={() => setSelectedRoomId(room.id)}
                     >
