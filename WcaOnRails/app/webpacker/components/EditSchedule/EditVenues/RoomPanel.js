@@ -29,27 +29,30 @@ function RoomPanel({
   return (
     <Card fluid raised>
       <Card.Content>
-        <Form>
-          <Form.Input
-            label="Name"
-            name="name"
-            value={room.name}
-            onChange={handleChange}
-          />
-          <Form.Input
-            className="room-color-cell"
-            label="Color"
-            name="color"
-            type="color"
-            value={room.color}
-            onChange={handleChange}
-          />
-        </Form>
-      </Card.Content>
-      <Card.Content>
-        <Button negative icon onClick={handleDeleteRoom}>
-          <Icon name="trash" />
-        </Button>
+        <Card.Header>
+          <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteRoom}>
+            <Icon name="trash" />
+            Remove
+          </Button>
+        </Card.Header>
+        <Card.Description>
+          <Form>
+            <Form.Input
+              label="Name"
+              name="name"
+              value={room.name}
+              onChange={handleChange}
+            />
+            <Form.Input
+              className="room-color-cell"
+              label="Color"
+              name="color"
+              type="color"
+              value={room.color}
+              onChange={handleChange}
+            />
+          </Form>
+        </Card.Description>
       </Card.Content>
     </Card>
   );

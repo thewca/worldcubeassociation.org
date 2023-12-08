@@ -5,6 +5,7 @@ import {
   Container,
   Form,
   Icon,
+  Image,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 
@@ -70,52 +71,66 @@ function VenuePanel({
   return (
     <Card fluid raised>
       { /* Needs the className 'image' so that SemUI fills the top of the card */ }
-      <Container className="image venue-map" style={{ height: '300px' }}>
+      <Container as={Image} className="venue-map" style={{ height: '300px' }}>
         <VenueLocationMap
           venue={venue}
         />
       </Container>
       <Card.Content>
-        <Form>
-          <Form.Group widths="equal">
+        <Card.Header>
+          <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteVenue}>
+            <Icon name="trash" />
+            Remove
+          </Button>
+        </Card.Header>
+        <Card.Description>
+          <Form>
+            <Form.Group widths="equal">
+              <Form.Input
+                label="Latitude"
+                name="latitudeMicrodegrees"
+                value={toDegrees(venue.latitudeMicrodegrees)}
+                onChange={handleCoordinateChange}
+              />
+              <Form.Input
+                label="Longitude"
+                name="longitudeMicrodegrees"
+                value={toDegrees(venue.longitudeMicrodegrees)}
+                onChange={handleCoordinateChange}
+              />
+            </Form.Group>
             <Form.Input
-              label="Latitude"
-              name="latitudeMicrodegrees"
-              value={toDegrees(venue.latitudeMicrodegrees)}
-              onChange={handleCoordinateChange}
+              label="Name"
+              name="name"
+              value={venue.name}
+              onChange={handleVenueChange}
             />
-            <Form.Input
-              label="Longitude"
-              name="longitudeMicrodegrees"
-              value={toDegrees(venue.longitudeMicrodegrees)}
-              onChange={handleCoordinateChange}
+            <Form.Select
+              search
+              label="Country"
+              name="countryIso2"
+              options={countryOptions}
+              value={venue.countryIso2}
+              onChange={handleVenueChange}
             />
-          </Form.Group>
-          <Form.Input
-            label="Name"
-            name="name"
-            value={venue.name}
-            onChange={handleVenueChange}
-          />
-          <Form.Select
-            search
-            label="Country"
-            name="countryIso2"
-            options={countryOptions}
-            value={venue.countryIso2}
-            onChange={handleVenueChange}
-          />
-          <Form.Select
-            label="Timezone"
-            name="timezone"
-            options={timezoneOptions}
-            value={venue.timezone}
-            onChange={handleVenueChange}
-          />
-        </Form>
+            <Form.Select
+              label="Timezone"
+              name="timezone"
+              options={timezoneOptions}
+              value={venue.timezone}
+              onChange={handleVenueChange}
+            />
+          </Form>
+        </Card.Description>
       </Card.Content>
       <Card.Content>
-        <Card.Header>Rooms</Card.Header>
+        <Card.Header>
+          <Button floated="right" compact icon labelPosition="left" positive onClick={handleAddRoom}>
+            <Icon name="add" />
+            Add room
+          </Button>
+          Rooms
+        </Card.Header>
         <Card.Description>
           <Card.Group itemsPerRow={2}>
             {venue.rooms.map((room) => (
@@ -125,13 +140,7 @@ function VenuePanel({
               />
             ))}
           </Card.Group>
-          <Button positive onClick={handleAddRoom}>Add room</Button>
         </Card.Description>
-      </Card.Content>
-      <Card.Content>
-        <Button negative icon onClick={handleDeleteVenue}>
-          <Icon name="trash" />
-        </Button>
       </Card.Content>
     </Card>
   );

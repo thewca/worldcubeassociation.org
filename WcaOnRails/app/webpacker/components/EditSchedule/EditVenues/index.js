@@ -1,5 +1,11 @@
 import React from 'react';
-import { Button, Card, Container } from 'semantic-ui-react';
+import {
+  Button,
+  Card,
+  Container,
+  Icon,
+  Segment
+} from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
 import { addVenue } from '../store/actions';
@@ -18,10 +24,14 @@ function EditVenues({
   return (
     <>
       <Container text>
-        <p>Please add all your venues and rooms below:</p>
+        <Button floated="right" compact icon labelPosition="left" positive onClick={handleAddVenue}>
+          <Icon name="add" />
+          Add room
+        </Button>
+        Please add all your venues and rooms below:
       </Container>
 
-      <Container>
+      <Segment basic>
         <Card.Group centered itemsPerRow={2}>
           {wcifSchedule.venues.map((venue) => (
             <VenuePanel
@@ -31,8 +41,7 @@ function EditVenues({
             />
           ))}
         </Card.Group>
-        <Button positive onClick={handleAddVenue}>Add a venue</Button>
-      </Container>
+      </Segment>
     </>
   );
 }
