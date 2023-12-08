@@ -17,14 +17,18 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "can add a venue and a room", js: true do
-      click_link "Add a venue"
-      fill_in(nil, with: "Venue", class: "venue-name-input")
-      click_on "Add room"
-      fill_in(nil, with: "Youpitralala", class: "room-name-input")
-      within('.venue-timezone-input') do
-        select "Pacific Time (US & Canada)"
+      within(:css, "#venues-edit-panel-body", visible: :all) do
+        click_link "Add a venue"
+        fill_in(nil, with: "Venue", class: "venue-name-input")
+        click_on "Add room"
+        fill_in(nil, with: "Youpitralala", class: "room-name-input")
+        within('.venue-timezone-input') do
+          select "Pacific Time (US & Canada)"
+        end
       end
+
       save_schedule_react
+
       expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
       expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
     end
@@ -38,8 +42,8 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "room calendar is rendered", js: true do
-      within(:css, "#schedules-edit-panel-body") do
-        select('"Room 1 for venue 1" in "Venue 1"', from: 'venue-room-selector')
+      within(:css, "#schedules-edit-panel-body", visible: :all) do
+        click_link "Room 1 for venue 1"
         # 2 is the number of non-nested activities created by the factory
         # Nested activity are not supported (yet) in the schedule manager
         expect(all('.fc-event').size).to eq(2)

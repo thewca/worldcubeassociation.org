@@ -22,11 +22,11 @@ function EditVenues({
   };
 
   return (
-    <>
+    <div id="venues-edit-panel-body">
       <Container text>
         <Button floated="right" compact icon labelPosition="left" positive onClick={handleAddVenue}>
           <Icon name="add" />
-          Add room
+          Add a venue
         </Button>
         Please add all your venues and rooms below:
       </Container>
@@ -42,7 +42,7 @@ function EditVenues({
           ))}
         </Card.Group>
       </Segment>
-    </>
+    </div>
   );
 }
 

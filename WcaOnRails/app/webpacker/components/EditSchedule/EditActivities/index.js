@@ -265,7 +265,7 @@ function EditActivities({
   };
 
   return (
-    <>
+    <div id="schedules-edit-panel-body">
       <Container textAlign="center">
         <List horizontal size="large">
           {wcifSchedule.venues.map((venue) => (
@@ -446,7 +446,7 @@ function EditActivities({
           </Grid>
         </Container>
       )}
-    </>
+    </div>
   );
 }
 
