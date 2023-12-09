@@ -118,8 +118,8 @@ function EditPerson() {
         </Message>
       )}
       <WcaSearch
-        selectedValue={person}
-        setSelectedValue={setPerson}
+        value={person}
+        onChange={(e, { value }) => setPerson(value)}
         multiple={false}
         model="person"
       />
