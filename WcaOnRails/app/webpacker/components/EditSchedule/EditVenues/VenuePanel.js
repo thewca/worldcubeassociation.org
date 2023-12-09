@@ -100,6 +100,7 @@ function VenuePanel({
               />
             </Form.Group>
             <Form.Input
+              id="venue-name"
               label="Name"
               name="name"
               value={venue.name}

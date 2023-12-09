@@ -38,6 +38,7 @@ function RoomPanel({
         <Card.Description>
           <Form>
             <Form.Input
+              id="room-name"
               label="Name"
               name="name"
               value={room.name}

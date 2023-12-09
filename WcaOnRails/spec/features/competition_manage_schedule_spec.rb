@@ -17,13 +17,15 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "can add a venue and a room", js: true do
-      within(:css, "#venues-edit-panel-body", visible: :all) do
-        click_link "Add a venue"
-        fill_in(nil, with: "Venue", class: "venue-name-input")
-        click_on "Add room"
-        fill_in(nil, with: "Youpitralala", class: "room-name-input")
-        within('.venue-timezone-input') do
-          select "Pacific Time (US & Canada)"
+      find("div", class: 'title', text: 'Edit venues information').click
+
+      within(:css, "#venues-edit-panel-body") do
+        click_button "Add a venue"
+        fill_in("Venue Name", with: "Venue")
+        click_button "Add room"
+        fill_in("Room Name", with: "Youpitralala")
+        within(:css, "div[name='timezone'][role='listbox']>div.menu", visible: :all) do
+          find("div", class: "item", text: "Pacific Time (US & Canada)", visible: :all).trigger(:click)
         end
       end
 
@@ -42,7 +44,9 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "room calendar is rendered", js: true do
-      within(:css, "#schedules-edit-panel-body", visible: :all) do
+      find("div", class: 'title', text: 'Edit schedules').click
+
+      within(:css, "#schedules-edit-panel-body") do
         click_link "Room 1 for venue 1"
         # 2 is the number of non-nested activities created by the factory
         # Nested activity are not supported (yet) in the schedule manager
