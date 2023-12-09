@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
-import WcaSearchFormControl from '../../SearchWidget/WcaSearchFormControl';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import Loading from '../../Requests/Loading';
 import { COUNCILS_STATUS } from '../../../lib/helpers/groups-and-roles-constants';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
+import WcaSearch from '../../SearchWidget/WcaSearch';
 
 const OLD_LEADER_STATUS = {
   SENIOR_MEMBER: 'senior_member',
@@ -89,7 +89,7 @@ export default function LeaderChangeForm({
     <Form onSubmit={leaderChangeAction}>
       <Form.Field
         label="New Leader"
-        control={WcaSearchFormControl}
+        control={WcaSearch}
         name="newLeader"
         value={formValues?.newLeader}
         onChange={handleFormChange}
