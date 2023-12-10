@@ -13,6 +13,5 @@
   <%= t('.submit_media_html') %>
   <hr>
 
-  <%= react_component("Media/MediaTable", {media: @media, competition: @media.map {|medium| medium.competition}
-  }) %>
+  <%= react_component("Media/MediaTable", {isValidate: false}) %>
 </div>
