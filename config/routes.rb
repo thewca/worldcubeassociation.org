@@ -401,6 +401,7 @@ Rails.application.routes.draw do
         resources :xero_users, only: [:index, :create]
         resources :dues_redirects, only: [:index, :create, :destroy]
       end
+      resources :media, only: [:index, :update, :destroy]
     end
   end
 

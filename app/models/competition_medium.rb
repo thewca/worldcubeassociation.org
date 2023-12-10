@@ -33,4 +33,12 @@ class CompetitionMedium < ApplicationRecord
       self.timestampDecided = Time.now
     end
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[competition],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end
