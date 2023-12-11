@@ -431,6 +431,8 @@ th:
         delegate_status: สถานะ Delegate
         #original_hash: d219c68
         location: สถานที่
+        #original_hash: 0f21717
+        region: Region
         #original_hash: 730db33
         receive_delegate_reports: ฉันต้องการรับ email รายงานการแข่งขันของ WCA
         #original_hash: 57eaf24
@@ -733,6 +735,23 @@ th:
         delegate: Delegate
         #original_hash: d463c23
         senior_delegate: Senior Delegate
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Trainee Delegate
+          #original_hash: 9b97968
+          candidate_delegate: Junior Delegate
+          #original_hash: 12ab214
+          delegate: Delegate
+          #original_hash: d463c23
+          senior_delegate: Senior Delegate
+        teams:
+          #original_hash: 6853c98
+          member: สมาชิก
+          #original_hash: c366473
+          senior_member: สมาชิกอาวุโส
+          #original_hash: e26c936
+          leader: หัวหน้าทีม
     person:
       gender:
         #original_hash: 3f3a489
@@ -817,8 +836,6 @@ th:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -828,8 +845,6 @@ th:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1226,11 +1241,6 @@ th:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1877,8 +1887,6 @@ th:
       preferences: ความชอบ
       #original_hash: 8be3c94
       password: รหัสผ่าน
-      #original_hash: 3fc6dbe
-      member_of: สมาชิกของ
       #original_hash: 42619dd
       preferred_events_desc: การเลือกประเภทที่คุณชอบ ทำให้การลงทะเบียนสำหรับการแข่งขันเร็วขึ้น
       #original_hash: b402e03
@@ -2618,6 +2626,8 @@ th:
       orga_closed_reg_success: ปิดการลงทะเบียนเรียบร้อยแล้ว
       #original_hash: 7f197a0
       orga_closed_reg_failure: ไม่สามารถปิดการลงทะเบียนได้
+      #original_hash: b16bd13
+      cannot_activate_v2: คุณไม่สามารถเปิดใช้งานระบบการสมัครแบบใหม่ได้หากการสมัครเปิดอยู่
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         การแข่งขันนี้ไม่มีกำหนดเวลาในการรับผู้เข้าแข่งขันใน waiting list
@@ -3085,8 +3095,8 @@ th:
       waiting_list_deadline_before_refund_date: >-
         วันสุดท้ายของ Waiting list
         ไม่สามารถอยู่ก่อนวันสุดท้ายที่จะได้รับเงินคืนได้
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: วันสุดท้ายของ Waiting list ต้องอยู่ก่อนวันเริ่มการแข่งขัน
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: กำหนดเวลา Waiting list จะต้องมาก่อนการแข่งขันจะสิ้นสุดลง
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         วันสุดท้ายของการแก้ไขประเภทการแข่งขันไม่สามารถอยู่ก่อนวันปิดรับสมัครการแข่งขันได้
@@ -3353,6 +3363,8 @@ th:
         competitors: ผู้เข้าแข่งขัน
         #original_hash: c4622c3
         scrambles: โจทย์
+        #original_hash: f632da3
+        enable_v2: เปิดใช้บริการการสมัครแบบใหม่
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA profile
@@ -4171,6 +4183,8 @@ th:
     title: WCA Delegates
     #original_hash: 77b819c
     acknowledges: WCA ยอมรับ WCA Delegate เหล่านี้
+    #original_hash: 0397112
+    regions: ภูมิภาค
     table:
       #original_hash: 709a232
       name: ชื่อ
@@ -5100,6 +5114,8 @@ th:
       ในการเข้าถึงข้อมูลเกี่ยวกับบัญชีของคุณ:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Legal TNoodle version
+    #original_hash: 32295ee
+    login_message: กรุณาเข้าสู่ระบบ
   merch:
     #original_hash: 96a95a1
     title: WCA Merchandise

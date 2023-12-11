@@ -43,5 +43,16 @@ FactoryBot.define do
       is_active { true }
       is_hidden { false }
     end
+
+    factory :delegate_probations_user_group do
+      name { "Delegate Probation" }
+      group_type { :delegate_probation }
+      is_active { true }
+      is_hidden { true }
+    end
+  end
+
+  factory :groups_metadata_delegate_regions do
+    email { "test@test.com" }
   end
 end

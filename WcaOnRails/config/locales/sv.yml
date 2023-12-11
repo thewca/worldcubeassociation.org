@@ -433,6 +433,8 @@ sv:
         delegate_status: Delegatstatus
         #original_hash: d219c68
         location: Plats
+        #original_hash: 0f21717
+        region: Region
         #original_hash: 730db33
         receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
         #original_hash: 57eaf24
@@ -743,6 +745,23 @@ sv:
         delegate: Delegat
         #original_hash: d463c23
         senior_delegate: Senior-delegat
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Trainee-delegat
+          #original_hash: 9b97968
+          candidate_delegate: Junior-delegat
+          #original_hash: 12ab214
+          delegate: Delegat
+          #original_hash: d463c23
+          senior_delegate: Senior-delegat
+        teams:
+          #original_hash: 6853c98
+          member: Medlem
+          #original_hash: c366473
+          senior_member: Senior-medlem
+          #original_hash: e26c936
+          leader: Ledare
     person:
       gender:
         #original_hash: 3f3a489
@@ -829,8 +848,6 @@ sv:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -840,8 +857,6 @@ sv:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -1262,11 +1277,6 @@ sv:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1597,6 +1607,8 @@ sv:
       teams: 'Teams, Kommittéer och Råd'
       #original_hash: 7981fb3
       education: Utbildningsresurser
+      #original_hash: c66444f
+      wca_live: WCA Live
       #original_hash: a34b69f
       contact: Kontaktinformation
       #original_hash: 8e12c09
@@ -1940,8 +1952,6 @@ sv:
       preferences: Preferenser
       #original_hash: 8be3c94
       password: Lösenord
-      #original_hash: 3fc6dbe
-      member_of: Medlem i
       #original_hash: 42619dd
       preferred_events_desc: Genom att välja favoritgrenar kan anmälan till tävlingar göras snabbare.
       #original_hash: b402e03
@@ -2738,6 +2748,8 @@ sv:
       orga_closed_reg_success: Anmälan har stängts.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Kunde inte stänga anmälan.
+      #original_hash: b16bd13
+      cannot_activate_v2: Du kan inte aktivera det nya anmälningssystemet om anmälan är öppen.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Denna tävling har ingen deadline för att acceptera anmälningar från
@@ -3220,10 +3232,8 @@ sv:
       waiting_list_deadline_before_refund_date: >-
         Deadline för att bli godkänd från väntelistan kan inte vara före sista
         datumet för återbetalningar.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: >-
-        Deadline för att bli godkänd från väntelistan måste vara före
-        startdatumet.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: Deadline för väntelistan måste vara innan tävlingen avslutas.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: Deadline för uppdatering av grenar kan inte vara före anmälan stänger.
       #original_hash: bc1ca0f
@@ -3492,6 +3502,8 @@ sv:
         competitors: Tävlande
         #original_hash: c4622c3
         scrambles: Blandningar
+        #original_hash: f632da3
+        enable_v2: Aktivera nya anmälningssystemet
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: WCA-profil
@@ -3754,6 +3766,8 @@ sv:
         competition: Kontakta arrangörerna av en specifik tävling (välj nedan)
         #original_hash: f0bffb7
         competitions_in_general: 'Tävlingar i allmänhet (arrangerande, tävlingsregler, etc.)'
+        #original_hash: aabfcf7
+        results_team: Kontakta WCA Results Team
         #original_hash: f6ffa78
         wca_id_or_profile: WCA-ID eller WCA-profil
         #original_hash: 0c77aee
@@ -4331,6 +4345,8 @@ sv:
     title: WCA-delegater
     #original_hash: 77b819c
     acknowledges: 'WCA erkänner följande WCA-delegater:'
+    #original_hash: 0397112
+    regions: Regioner
     table:
       #original_hash: 709a232
       name: Namn
@@ -5304,6 +5320,8 @@ sv:
       information om ditt konto:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Giltig TNoodle-version
+    #original_hash: 32295ee
+    login_message: Var vänlig logga in
   merch:
     #original_hash: 96a95a1
     title: WCA-merch

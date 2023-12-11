@@ -7,7 +7,7 @@ function CompetitionItem({
   item,
 }) {
   return (
-    <div className="omnisearch-item-competition">
+    <div className="multisearch-item-competition">
       <div>{item.name}</div>
       <div className="extra-details">
         <CountryFlag iso2={item.country_iso2} />

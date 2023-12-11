@@ -5,6 +5,8 @@ class Country < ApplicationRecord
   WCA_STATES_JSON_PATH = Rails.root.to_s + "/config/wca-states.json"
   self.table_name = "Countries"
 
+  has_one :wfc_dues_redirect, as: :redirect_source
+
   ALL_TIMEZONES_MAPPING = begin
     all_tz = ActiveSupport::TimeZone::MAPPING
     grouped_tz = all_tz.group_by { |k, v| v }
@@ -12,12 +14,14 @@ class Country < ApplicationRecord
     duplicates.each do |tz_id, tz_entries|
       selected_name = tz_id
       # Try to be smarter here, and find the closest matching name
+      # rubocop:disable Style/HashEachMethods
       tz_entries.each do |tz_name, _|
         if tz_id.include?(tz_name.tr(' ', '_'))
           selected_name = tz_name
         end
         all_tz.delete(tz_name)
       end
+      # rubocop:enable Style/HashEachMethods
       all_tz[selected_name] = tz_id
     end
     all_tz

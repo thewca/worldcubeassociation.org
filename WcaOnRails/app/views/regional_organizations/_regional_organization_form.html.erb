@@ -8,7 +8,9 @@
   <%= f.input :website %>
 
   <%= f.input :logo %>
-  <% if @regional_organization.logo.attached? %>
+  <% if @regional_organization.logo.attached? &&
+    @regional_organization.logo.blob.present? &&
+    @regional_organization.logo.blob.persisted? %>
     <%= image_tag @regional_organization.logo.variant(resize: "200x200") %>
   <% end %>
 
@@ -18,7 +20,10 @@
   <%= f.input :address %>
 
   <%= f.input :bylaws %>
-  <% if @regional_organization.bylaws.attached? && @regional_organization.bylaws.previewable? %>
+  <% if @regional_organization.bylaws.attached? &&
+    @regional_organization.bylaws.blob.present? &&
+    @regional_organization.bylaws.blob.persisted? &&
+    @regional_organization.bylaws.previewable? %>
     <%= link_to(image_tag(@regional_organization.bylaws.preview(resize: "200x200")), rails_blob_path(@regional_organization.bylaws, disposition: "attachment")) %>
   <% end %>
 
@@ -30,7 +35,7 @@
 
   <%= f.input :extra_file %>
   <% if @regional_organization.extra_file.attached? && @regional_organization.extra_file.previewable? %>
-    <%= link_to(image_tag(@regional_organization.extra_file.preview(resize: "200x200")), rails_blob_path(@regional_organization.extra_file, disposition: "attachment"))  %>
+    <%= link_to(image_tag(@regional_organization.extra_file.preview(resize: "200x200")), rails_blob_path(@regional_organization.extra_file, disposition: "attachment")) %>
   <% end %>
 
   <% if @current_user.can_manage_regional_organizations? %>

@@ -25,7 +25,7 @@ jobs:
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
       - uses: actions/setup-node@v4 # this also includes Yarn
         with:
-          node-version: '16'
+          node-version: '20'
       - uses: actions/cache@v3
         with:
           path: '**/node_modules'

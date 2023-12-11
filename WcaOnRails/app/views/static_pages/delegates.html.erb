@@ -1,12 +1,2 @@
 <% provide(:title, t('delegates_page.title')) %>
-
-<div class="container">
-  <h1><%= yield(:title) %></h1>
-  <p><%= t('about.structure.delegates_html', see_link: "") %></p>
-  <p><%= t('delegates_page.acknowledges') %></p>
-
-  <%= react_component("Delegates", {
-    delegates: @delegates,
-    isEditVisible: current_user&.can_view_all_users?
-  }) %>
-</div>
+<%= react_component("Delegates") %>

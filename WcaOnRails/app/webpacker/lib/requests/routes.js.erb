@@ -76,7 +76,7 @@ export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_h
 
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;
 
-export const userApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_path("${id}"))%>`;
+export const personSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_persons_path %>?q=${query}`;
 
 export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
 
@@ -90,18 +90,48 @@ export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.
 
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
 
-export const delegateProbationDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_probation_data_path(format: "json")) %>`;
-
 export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_delegate_probation_path) %>`;
 
 export const endDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.end_delegate_probation_path) %>`;
 
-// dummyRoleId is used temporarily because delegates is yet to get a role id
+export const fetchUserGroupsUrl = (groupType) => {
+  const searchParams = new URLSearchParams();
+  searchParams.append('group_type', groupType);
+  return `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>?${searchParams.toString()}`;
+};
 
-export const roleListUrl = (userId) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>?userId=${userId}`;
-export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId?userId=${userId}&isActiveRole=${isActiveRole}`;
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_roles_path %>/dummyRoleId`
+export const addUserGroupsUrl = `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>`;
+
+export const userGroupsUpdateUrl = (userGroupId) => `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>/${userGroupId}`;
+
+export const rolesOfUser = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>`;
+
+export const rolesOfGroup = (groupId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>`;
+
+export const rolesOfGroupType = (groupType, status) => {
+  const searchParams = new URLSearchParams();
+  if (status) {
+    searchParams.append('status', status);
+  }
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${searchParams.toString()}`;
+};
+
+// dummyRoleId is used temporarily because delegates is yet to get a role id
+export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
+export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>`;
+
+export const delegatesStaticPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_delegates_path) %>`;
 
 export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_panel_wfc_path) %>`;
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
+
+export const teamUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.team_path("${id}"))%>`;
+
+export const wfcXeroUsersUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_xero_users_path) %>`;
+
+export const wfcDuesRedirectsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wfc_dues_redirects_path) %>`;
+
+export const pendingClaimsUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_claims_path) %>/${userId}`;
+
+export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>/${userId}`;

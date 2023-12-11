@@ -751,6 +751,23 @@ pt:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Sénior
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Delegado em Treino
+          #original_hash: 9b97968
+          candidate_delegate: Delegado Júnior
+          #original_hash: 12ab214
+          delegate: Delegado
+          #original_hash: d463c23
+          senior_delegate: Delegado Sénior
+        teams:
+          #original_hash: 6853c98
+          member: Membro
+          #original_hash: c366473
+          senior_member: Membro Sénior
+          #original_hash: e26c936
+          leader: Líder
     person:
       gender:
         #original_hash: 3f3a489
@@ -1956,8 +1973,6 @@ pt:
       preferences: Preferências
       #original_hash: 8be3c94
       password: Senha
-      #original_hash: 3fc6dbe
-      member_of: Membro de
       #original_hash: 42619dd
       preferred_events_desc: >-
         Selecionar os seus eventos favoritos agiliza o processo de inscrição em
@@ -2122,8 +2137,6 @@ pt:
       must_have_a_change: O nome da região tem que ser diferente para atualizar o competidor.
       #original_hash: 012f032
       must_be_senior: deve ser um Delegado Sénior
-      #original_hash: 2e582eb
-      must_not_be_present: não pode estar presente
       #original_hash: 5b4eac9
       senior_has_delegate: não pode despromover Delegado Sénior que tenha Delegados subordinados
       #original_hash: 48653a9
@@ -2766,6 +2779,8 @@ pt:
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não pode fechar as inscrições.
+      #original_hash: b16bd13
+      cannot_activate_v2: Não pode ativar o novo sistema de registos se o registo estiver aberto.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Esta competição não tem prazo para a aceitação de competidores em lista
@@ -3252,8 +3267,10 @@ pt:
       waiting_list_deadline_before_refund_date: >-
         Prazo limite de lista de espera não pode ser antes da data limite para
         reembolsos.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: Prazo limite de lista de espera tem que ser antes da data de início.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: >-
+        O prazo limite para a lista de espera deve ser antes do fim da
+        competição.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         Prazo limite para atualizar eventos não pode ser antes da data de fecho
@@ -3533,6 +3550,8 @@ pt:
         competitors: Competidores
         #original_hash: c4622c3
         scrambles: Embaralhamentos
+        #original_hash: f632da3
+        enable_v2: Ativar o novo Serviço de Registo
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Perfil da WCA
@@ -4400,6 +4419,8 @@ pt:
     title: Delegados da WCA
     #original_hash: 77b819c
     acknowledges: 'A WCA reconhece os seguintes Delegados da WCA:'
+    #original_hash: 0397112
+    regions: Regiões
     table:
       #original_hash: 709a232
       name: Nome
@@ -5399,6 +5420,8 @@ pt:
       sobre a sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão TNoodle legal
+    #original_hash: 32295ee
+    login_message: Por favor faça login
   merch:
     #original_hash: 96a95a1
     title: Merchandise WCA

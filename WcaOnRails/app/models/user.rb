@@ -34,6 +34,7 @@ class User < ApplicationRecord
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
   has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
   has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
+  has_one :wfc_dues_redirect, as: :redirect_source
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -42,6 +43,10 @@ class User < ApplicationRecord
       where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
     end
   }
+
+  TEAM_STATUS_LEADER = "leader"
+  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
+  TEAM_STATUS_MEMBER = "member"
 
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
@@ -78,9 +83,14 @@ class User < ApplicationRecord
   devise :two_factor_backupable,
          otp_backup_code_length: BACKUP_CODES_LENGTH,
          otp_number_of_backup_codes: NUMBER_OF_BACKUP_CODES
+  devise :jwt_authenticatable, jwt_revocation_strategy: JwtDenylist
+
+  def jwt_payload
+    { 'user_id' => id }
+  end
 
   # Backup OTP are stored as a string array in the db
-  serialize :otp_backup_codes
+  serialize :otp_backup_codes, coder: YAML
 
   def two_factor_enabled?
     otp_required_for_login
@@ -122,8 +132,8 @@ class User < ApplicationRecord
     delegate: "delegate",
     senior_delegate: "senior_delegate",
   }
-  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id"
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true
+  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id", inverse_of: :senior_delegate
+  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true, inverse_of: :subordinate_delegates
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -418,15 +428,6 @@ class User < ApplicationRecord
     end
   end
 
-  validate :senior_delegate_presence
-  def senior_delegate_presence
-    if !User.delegate_status_requires_senior_delegate(delegate_status) && senior_delegate
-      errors.add(:senior_delegate, I18n.t('users.errors.must_not_be_present'))
-    end
-  end
-
-  validates :senior_delegate, presence: true, if: -> { User.delegate_status_requires_senior_delegate(delegate_status) && !senior_delegate }
-
   # This is a copy of def self.delegate_status_requires_senior_delegate(delegate_status) in the user model
   # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
   # It is necessary to fix both files for changes to work
@@ -568,6 +569,10 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
+  def team_membership_details(team)
+    self.current_team_members.find_by(team_id: team.id)
+  end
+
   def team_senior_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
   end
@@ -632,13 +637,39 @@ class User < ApplicationRecord
     current_teams.include?(Team.banned)
   end
 
+  def current_ban
+    current_team_members.where(team: Team.banned).first
+  end
+
+  def ban_end
+    current_ban&.end_date
+  end
+
   def banned_at_date?(date)
     if banned?
-      ban_end = current_team_members.select(:team == Team.banned).first.end_date
       !ban_end.present? || date < ban_end
     else
       false
     end
+  end
+
+  def permissions
+    permissions = {
+      can_attend_competitions: {
+        scope: cannot_register_for_competition_reasons.empty? ? "*" : [],
+      },
+      can_organize_competitions: {
+        scope: can_create_competitions? && cannot_organize_competition_reasons.empty? ? "*" : [],
+      },
+      can_administer_competitions: {
+        scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
+      },
+    }
+    if banned?
+      permissions[:can_attend_competitions][:scope] = []
+      permissions[:can_attend_competitions][:until] = ban_end || nil
+    end
+    permissions
   end
 
   def can_view_all_users?
@@ -1250,5 +1281,69 @@ class User < ApplicationRecord
 
   def is_delegate_in_probation
     Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+  end
+
+  def region
+    UserGroup.find_by_id(self.region_id)
+  end
+
+  def can_manage_delegate_probation?
+    admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
+  end
+
+  def senior_delegate
+    User.find_by(delegate_status: "senior_delegate", region_id: self.region_id)
+  end
+
+  def delegate_role
+    {
+      end_date: nil,
+      group: self.region,
+      user: self,
+      metadata: {
+        status: self.delegate_status,
+      },
+    }
+  end
+
+  def team_roles
+    roles = []
+    self.current_teams.each do |team|
+      team_membership_details = self.team_membership_details(team)
+      if team_membership_details.leader?
+        status = TEAM_STATUS_LEADER
+      elsif team_membership_details.senior_member?
+        status = TEAM_STATUS_SENIOR_MEMBER
+      else
+        status = TEAM_STATUS_MEMBER
+      end
+      roles << {
+        start_date: team_membership_details.start_date,
+        group: {
+          id: team.id,
+          name: team.name,
+          group_type: UserGroup.group_types[:teams],
+          is_hidden: team[:hidden],
+          is_active: true,
+        },
+        user: self,
+        metadata: {
+          status: status,
+        },
+      }
+    end
+    roles
+  end
+
+  def can_access_wfc_panel?
+    can_admin_finances?
+  end
+
+  def can_access_board_panel?
+    admin? || board_member?
+  end
+
+  def can_access_panel?
+    can_access_wfc_panel? || can_access_board_panel?
   end
 end

@@ -9,7 +9,7 @@ SuperConfig::Base.class_eval do
   #   (method SuperConfig::Base#credential). The inner Vault fetching logic is custom-written :)
   def vault(secret_name, &block)
     define_singleton_method(secret_name) do
-      @__cache__["_vault_#{secret_name}".to_sym] ||= begin
+      @__cache__[:"_vault_#{secret_name}"] ||= begin
         value = self.vault_read(secret_name)[:value]
         block ? block.call(value) : value
       end
@@ -66,6 +66,7 @@ AppSecrets = SuperConfig.new do
     vault :NEW_RELIC_LICENSE_KEY
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
+    vault :JWT_KEY
     vault_file :GOOGLE_APPLICATION_CREDENTIALS, "../secrets/application_default_credentials.json"
   else
     mandatory :DATABASE_PASSWORD, :string
@@ -81,6 +82,7 @@ AppSecrets = SuperConfig.new do
     mandatory :ACTIVERECORD_KEY_DERIVATION_SALT, :string
     mandatory :SECRET_KEY_BASE, :string
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
+    mandatory :JWT_KEY, :string
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''

@@ -20,7 +20,7 @@ class Registration < ApplicationRecord
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
   has_many :stripe_payment_intents, as: :holder, dependent: :delete_all
 
-  serialize :roles, Array
+  serialize :roles, coder: YAML
 
   accepts_nested_attributes_for :registration_competition_events, allow_destroy: true
 

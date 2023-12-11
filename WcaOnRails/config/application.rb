@@ -95,5 +95,7 @@ module WcaOnRails
     config.active_record.encryption.primary_key = AppSecrets.ACTIVERECORD_PRIMARY_KEY
     config.active_record.encryption.deterministic_key = AppSecrets.ACTIVERECORD_DETERMINISTIC_KEY
     config.active_record.encryption.key_derivation_salt = AppSecrets.ACTIVERECORD_KEY_DERIVATION_SALT
+
+    config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA256
   end
 end

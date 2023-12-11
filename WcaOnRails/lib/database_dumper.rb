@@ -107,6 +107,7 @@ module DatabaseDumper
           competition_series_id
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
+          uses_v2_registrations
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -660,6 +661,17 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "groups_metadata_delegate_regions" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "users" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -828,6 +840,9 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "jwt_denylist" => :skip_all_rows,
+    "wfc_xero_users" => :skip_all_rows,
+    "wfc_dues_redirects" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

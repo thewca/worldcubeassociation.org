@@ -121,6 +121,10 @@ class Api::V0::ApiController < ApplicationController
     search(User)
   end
 
+  def persons_search
+    search(Person)
+  end
+
   def regulations_search
     search(Regulation)
   end
@@ -134,31 +138,6 @@ class Api::V0::ApiController < ApplicationController
     # them yet.
     params[:persons_table] = true
     search(Competition, User, Regulation, Incident)
-  end
-
-  def show_user(user)
-    if user
-      json = { user: user }
-      if params[:upcoming_competitions]
-        json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
-      end
-      if params[:ongoing_competitions]
-        json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
-      end
-      render status: :ok, json: json
-    else
-      render status: :not_found, json: { user: nil }
-    end
-  end
-
-  def show_user_by_id
-    user = User.find_by_id(params[:id])
-    show_user(user)
-  end
-
-  def show_user_by_wca_id
-    user = User.find_by_wca_id(params[:wca_id])
-    show_user(user)
   end
 
   def delegates

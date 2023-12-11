@@ -157,6 +157,7 @@ class Competition < ApplicationRecord
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
+    uses_v2_registrations
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -660,6 +661,14 @@ class Competition < ApplicationRecord
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
   end
 
+  def enable_v2_registrations!
+    update_column :uses_v2_registrations, true
+  end
+
+  def uses_new_registration_service?
+    self.uses_v2_registrations
+  end
+
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
@@ -1113,8 +1122,8 @@ class Competition < ApplicationRecord
       if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
       end
-      if waiting_list_deadline_date >= start_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      if waiting_list_deadline_date > end_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end'))
       end
     end
   end
@@ -2027,5 +2036,31 @@ class Competition < ApplicationRecord
   def dues_per_competitor_in_usd
     dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
     dues.present? ? dues : 0
+  end
+
+  private def xero_dues_payer
+    (
+      self.country&.wfc_dues_redirect&.redirect_to ||
+      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+    )
+  end
+
+  # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
+  private def delegate_dues_payer
+    staff_delegates.min_by(&:name)
+  end
+
+  def dues_payer_name
+    dues_payer = xero_dues_payer || delegate_dues_payer
+    dues_payer&.name
+  end
+
+  def dues_payer_email
+    dues_payer = xero_dues_payer || delegate_dues_payer
+    dues_payer&.email
+  end
+
+  def dues_payer_is_combined_invoice?
+    xero_dues_payer&.is_combined_invoice || false
   end
 end
