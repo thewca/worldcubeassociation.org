@@ -107,6 +107,19 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.competitors
   end
 
+  def competitor_info
+    competition = competition_from_params
+    require_can_manage!(competition)
+
+    registrations = Microservices::Registrations.get_all_registrations(competition.id)
+    competitors = registrations.map { |c| c["user_id"] }
+
+    users = User.find_all(competitors)
+    render json: users.to_json({
+                                 only: %w[id wca_id name gender country_iso2 email dob],
+                               })
+  end
+
   def registrations
     competition = competition_from_params
     render json: competition.registrations.accepted.includes(:events)
