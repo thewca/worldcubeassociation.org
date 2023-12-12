@@ -12,10 +12,13 @@ export default function Series() {
   const {
     competition: {
       series,
+      admin: { isConfirmed },
     },
     isAdminView,
     isSeriesPersisted,
   } = useStore();
+
+  const formDisabled = isConfirmed && !isAdminView;
 
   const dispatch = useDispatch();
 
@@ -39,6 +42,7 @@ export default function Series() {
       />
       <Button
         negative
+        disabled={formDisabled}
         onClick={removeFromSeries}
       >
         {I18n.t('competitions.competition_series_fields.remove_series')}
