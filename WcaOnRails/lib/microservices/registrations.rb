@@ -15,11 +15,11 @@ module Microservices
       "/api/internal/v1/update_payment"
     end
 
-    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
-      conn = Faraday.new(
+    def self.registration_connection
+      Faraday.new(
         url: EnvConfig.WCA_REGISTRATIONS_URL,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
-      ) do |builder|
+        ) do |builder|
         # Sets headers and parses jsons automatically
         builder.request :json
         builder.response :json
@@ -29,8 +29,10 @@ module Microservices
         # By default, it only logs the request method and URL, and the request/response headers.
         builder.response :logger
       end
+    end
 
-      response = conn.post(self.update_payment_status_path) do |req|
+    def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
+      response = self.registration_connection.post(self.update_payment_status_path) do |req|
         req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
       end
       # If we ever need the response body
