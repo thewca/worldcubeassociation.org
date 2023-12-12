@@ -23,16 +23,6 @@ body, html {
     opacity: 1 !important;
   }
 
-  // FIXME: yet another bootstrap conflict override :(
-  .ui.modal {
-    top: auto;
-    right: auto;
-    bottom: auto;
-    left: auto;
-    overflow: visible;
-    outline: none;
-  }
-
   .ui.form input[type=color] {
     // SCSS: "complex selectors may not be extended"
     // @extend .ui.form input[type=text];
@@ -44,17 +34,6 @@ body, html {
     .icon {
       margin: 0;
       width: auto;
-    }
-  }
-  // FIXME: the two rules below are to override conflicting bootstrap/semantic ui definition
-  .container {
-    padding-right: 0px;
-    padding-left: 0px;
-  }
-  @media only screen and (max-width: 768px) {
-    div.navbar-static-top > div.ui.ui.ui.container:not(.fluid) {
-      margin-left: auto;
-      margin-right: auto;
     }
   }
 
