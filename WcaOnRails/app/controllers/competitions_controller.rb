@@ -388,6 +388,7 @@ class CompetitionsController < ApplicationController
         lat: other_comp.latitude_degrees,
         long: other_comp.longitude_degrees,
       },
+      series: other_comp.competition_series&.to_form_data,
     }
   end
 

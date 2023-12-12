@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* eslint-disable camelcase */
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Message } from 'semantic-ui-react';
 import { seriesEligibleCompetitionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import I18n from '../../../lib/i18n';
@@ -67,6 +67,26 @@ export default function SeriesComps() {
     loading,
   } = useLoadedData(seriesEligibleDataUrl);
 
+  const createBaseSeries = useCallback((selectedComp) => {
+    if (selectedComp.series) {
+      const existingCompIds = selectedComp.series.competitionIds;
+
+      return {
+        ...selectedComp.series,
+        competitionIds: [...existingCompIds, competitionId],
+      };
+    }
+
+    return {
+      competitionIds: [selectedComp.id, competitionId],
+    };
+  }, [competitionId]);
+
+  const addToSeries = useCallback((selectedComp) => {
+    const newSeries = createBaseSeries(selectedComp);
+    dispatch(updateFormValue('series', newSeries));
+  }, [dispatch, createBaseSeries]);
+
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 33, kms: 200 });
 
   if (series) return null;
@@ -93,7 +113,7 @@ export default function SeriesComps() {
         comps={nearby}
         action={{
           label: I18n.t('competitions.competition_series_fields.add_series'),
-          onClick: (comp) => dispatch(updateFormValue('series', { competitionIds: comp.id })),
+          onClick: addToSeries,
         }}
       />
     </TableWrapper>
