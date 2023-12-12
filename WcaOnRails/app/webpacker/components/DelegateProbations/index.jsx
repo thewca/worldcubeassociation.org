@@ -94,8 +94,9 @@ export default function DelegateProbations() {
     <>
       <h1>Delegate Probations</h1>
       <WcaSearch
-        selectedValue={user}
-        setSelectedValue={setUser}
+        name="user"
+        value={user}
+        onChange={(_, { value }) => setUser(value)}
         multiple={false}
         model="user"
         params={{ only_staff_delegates: true }}

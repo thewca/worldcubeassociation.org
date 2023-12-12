@@ -19,6 +19,8 @@ export default function DuesRedirect() {
   const [open, setOpen] = React.useState(false);
   const [formData, setFormData] = React.useState({ redirectType: 'Country' });
 
+  const handleFormChange = (_, { name, value }) => setFormData({ ...formData, [name]: value });
+
   if (loading || saving || xeroUsersFetch.loading) return <Loading />;
   if (error || xeroUsersFetch.err) return <Errored />;
   return (
@@ -63,30 +65,27 @@ export default function DuesRedirect() {
             <Form.Select
               label="Type"
               placeholder="Type"
-              name="redirect_type"
+              name="redirectType"
               options={[
                 { key: 'country', text: 'Country', value: 'Country' },
                 { key: 'organizer', text: 'Organizer', value: 'User' },
               ]}
               value={formData.redirectType}
-              onChange={(e, { value }) => setFormData({ ...formData, redirectType: value })}
+              onChange={handleFormChange}
             />
             {formData.redirectType === 'Country' && (
               <CountrySelector
                 label="From"
-                name="redirect_from_country_id"
+                name="redirectFromCountryIso2"
                 value={formData.redirectFromCountryIso2}
-                onChange={
-                  (e, { value }) => setFormData({ ...formData, redirectFromCountryIso2: value })
-                }
+                onChange={handleFormChange}
               />
             )}
             {formData.redirectType === 'User' && (
               <WcaSearch
-                selectedValue={formData.redirectFromOrganizer}
-                setSelectedValue={
-                  (value) => setFormData({ ...formData, redirectFromOrganizer: value })
-                }
+                name="redirectFromOrganizer"
+                value={formData.redirectFromOrganizer}
+                onChange={handleFormChange}
                 multiple={false}
                 model="user"
               />
@@ -94,14 +93,14 @@ export default function DuesRedirect() {
             <Form.Select
               label="To"
               placeholder="To"
-              name="redirect_to"
+              name="redirectToId"
               options={xeroUsersFetch.data.map((xeroUser) => ({
                 key: xeroUser.id,
                 text: xeroUser.name,
                 value: xeroUser.id,
               }))}
               value={formData.redirectTo}
-              onChange={(e, { value }) => setFormData({ ...formData, redirectToId: value })}
+              onChange={handleFormChange}
             />
             <Form.Button
               type="submit"
