@@ -3,15 +3,14 @@ import React, {
   useEffect,
 } from 'react';
 import {
-  Map,
+  MapContainer,
   Marker,
   TileLayer,
   ZoomControl,
-  useLeaflet,
+  useMap,
 } from 'react-leaflet';
-import { GeoSearchControl as SearchControl } from 'leaflet-geosearch';
 import { blueMarker } from '../../../lib/leaflet-wca/markers';
-import { searchProvider, userTileProvider } from '../../../lib/leaflet-wca/providers';
+import { userTileProvider } from '../../../lib/leaflet-wca/providers';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {
@@ -44,7 +43,9 @@ export function DraggableMarker({
       draggable={!disabled}
       position={position}
       icon={blueMarker}
-      onDragend={updatePosition}
+      eventHandlers={{
+        dragend: updatePosition,
+      }}
       autoPanOnFocus={false}
     />
   );
@@ -60,18 +61,10 @@ function GeoSearchControl({
   setCoords,
   setZoom,
 }) {
-  const { map } = useLeaflet();
+  const map = useMap();
 
   useEffect(() => {
-    const searchControl = new SearchControl({
-      provider: searchProvider,
-      showMarker: false,
-      showPopup: false,
-      style: 'bar',
-      retainZoomLevel: true,
-      autoClose: true,
-      searchLabel: 'Enter an address',
-    });
+    const searchControl = window.wca.createSearchInput(map);
 
     map.addControl(searchControl);
     map.on('geosearch/showlocation', (e) => {
@@ -102,7 +95,7 @@ export function CompetitionsMap({
   const [zoom, setZoom] = useState(8);
 
   return (
-    <Map
+    <MapContainer
       id={id}
       center={coords}
       zoom={zoom}
@@ -117,6 +110,6 @@ export function CompetitionsMap({
       <GeoSearchControl setCoords={setCoords} setZoom={setZoom} />
       <ZoomControl position="topright" />
       {children}
-    </Map>
+    </MapContainer>
   );
 }
