@@ -57,7 +57,7 @@ export default function RegistrationFees() {
   } = useLoadedData(entryFeeDuesUrl);
 
   const duesText = useMemo(() => {
-    if (error) {
+    if (error || !duesJson?.dues_value) {
       return I18n.t('competitions.competition_form.dues_estimate.ajax_error');
     }
 
