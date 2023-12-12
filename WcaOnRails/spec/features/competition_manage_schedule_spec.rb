@@ -21,9 +21,9 @@ RSpec.feature "Competition events management" do
 
       within(:css, "#venues-edit-panel-body") do
         click_button "Add a venue"
-        fill_in("Venue Name", with: "Venue")
+        fill_in("venue-name", with: "Venue")
         click_button "Add room"
-        fill_in("Room Name", with: "Youpitralala")
+        fill_in("room-name", with: "Youpitralala")
         within(:css, "div[name='timezone'][role='listbox']>div.menu", visible: :all) do
           find("div", class: "item", text: "Pacific Time (US & Canada)", visible: :all).trigger(:click)
         end
