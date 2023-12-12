@@ -19,7 +19,7 @@
     "@babel/preset-env": "^7.23.5",
     "@babel/preset-react": "^7.23.3",
     "@babel/runtime": "^7.23.5",
-    "@cubing/icons": "^1.1.1",
+    "@cubing/icons": "^1.1.2",
     "@fullcalendar/react": "^6.1.9",
     "@fullcalendar/core": "^6.1.9",
     "@fullcalendar/interaction": "^6.1.9",
