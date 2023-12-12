@@ -21,6 +21,11 @@ export default function AutonumericField({
     [currency],
   );
 
+  const autoNumericValue = useMemo(
+    () => value / currencyInfo.subunitToUnit,
+    [value, currencyInfo],
+  );
+
   const autoNumericCurrency = useMemo(() => ({
     currencySymbol: currencyInfo.symbol,
     currencySymbolPlacement: currencyInfo.symbolFirst ? 'p' : 's',
@@ -36,18 +41,19 @@ export default function AutonumericField({
 
     const newAutoNumeric = new AutoNumeric(
       node.inputRef.current,
+      autoNumericValue,
       autoNumericCurrency,
     );
 
     setAutoNumeric(newAutoNumeric);
-  }, [autoNumeric, autoNumericCurrency]);
+  }, [autoNumeric, autoNumericValue, autoNumericCurrency]);
 
   // Hook to update AN's _value_
   useEffect(() => {
     if (!autoNumeric) return;
 
-    autoNumeric.set(value / currencyInfo.subunitToUnit);
-  }, [autoNumeric, value, currencyInfo]);
+    autoNumeric.set(autoNumericValue);
+  }, [autoNumeric, autoNumericValue]);
 
   // Hook to update AN's _currency_
   useEffect(() => {
