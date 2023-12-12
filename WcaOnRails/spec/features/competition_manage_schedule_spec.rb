@@ -27,6 +27,9 @@ RSpec.feature "Competition events management" do
         within(:css, "div[name='timezone'][role='listbox']>div.menu", visible: :all) do
           find("div", class: "item", text: "Pacific Time (US & Canada)", visible: :all).trigger(:click)
         end
+        within(:css, "div[name='countryIso2'][role='combobox']>div.menu[role='listbox']", visible: :all) do
+          find("div", class: "item", text: "United States", visible: :all).trigger(:click)
+        end
       end
 
       save_schedule_react
@@ -47,7 +50,8 @@ RSpec.feature "Competition events management" do
       find("div", class: 'title', text: 'Edit schedules').click
 
       within(:css, "#schedules-edit-panel-body") do
-        click_link "Room 1 for venue 1"
+        # click_link doesn't work because Capybara expects links to always have an href
+        find("a", class: 'item', text: "Room 1 for venue 1").click
         # 2 is the number of non-nested activities created by the factory
         # Nested activity are not supported (yet) in the schedule manager
         expect(all('.fc-event').size).to eq(2)
