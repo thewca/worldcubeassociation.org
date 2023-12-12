@@ -6,7 +6,7 @@ import {
   Radio,
   Select,
 } from 'semantic-ui-react';
-import TextareaAutosize from 'react-autosize-textarea';
+import TextareaAutosize from 'react-textarea-autosize';
 import { Circle } from 'react-leaflet';
 import _ from 'lodash';
 import I18n from '../../../lib/i18n';
