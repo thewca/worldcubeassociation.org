@@ -46,4 +46,12 @@ body, html {
       color: black;
     }
   }
+
+  i.flag {
+    &.tw::before {
+      background-size: contain;
+      background-color: white;
+      background-image: url("../images/ChineseTaipeiSquared.svg");
+    }
+  }
 }
