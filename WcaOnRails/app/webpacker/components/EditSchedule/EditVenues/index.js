@@ -4,7 +4,7 @@ import {
   Card,
   Container,
   Icon,
-  Segment
+  Segment,
 } from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
