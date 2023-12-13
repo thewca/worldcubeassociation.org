@@ -38,7 +38,7 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def preferred_events
     require_user!
-    preferred_events = Rails.cache.fetch("#{current_user.id}-preferred", expires_in: 60.minutes) do
+    preferred_events = Rails.cache.fetch("#{current_user.id}-preferred", expires_in: 24.hours) do
       current_user.preferred_events.pluck(:id)
     end
     render json: preferred_events
