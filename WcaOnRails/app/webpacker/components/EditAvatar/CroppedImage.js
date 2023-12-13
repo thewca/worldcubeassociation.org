@@ -51,6 +51,7 @@ function CroppedImage({
     return `-${(100 / relCrop.width) * relCrop.x}%`;
   };
 
+  /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Image
       {...imgProps}

@@ -38,7 +38,10 @@ function EditAvatar({
 
   const [isEditingPending, setIsEditingPending] = useCheckboxState(false);
 
-  const workingAvatar = useMemo(() => (isEditingPending ? data?.pendingAvatar : data?.avatar), [data, isEditingPending]);
+  const workingAvatar = useMemo(
+    () => (isEditingPending ? data?.pendingAvatar : data?.avatar),
+    [data, isEditingPending],
+  );
 
   const [uploadedImage, setUploadedImage] = useState();
   const [imageURL, setImageURL] = useState();
@@ -117,6 +120,7 @@ function EditAvatar({
     save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, sync);
   };
 
+  /* eslint-disable react/no-array-index-key */
   return (
     <Container>
       {error && <Errored />}
@@ -130,7 +134,7 @@ function EditAvatar({
           Click here if you want to edit its thumbnail instead:
           <Checkbox toggle checked={isEditingPending} onChange={setIsEditingPending} />
           {isEditingPending && <b>Editing pending avatar!</b>}
-          {/*TODO: Path to admin if permission*/}
+          {/* TODO: Path to admin if permission */}
         </Message>
       )}
       <Dimmer.Dimmable as={Grid}>
