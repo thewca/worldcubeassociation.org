@@ -48,12 +48,23 @@ export default function AutonumericField({
     setAutoNumeric(newAutoNumeric);
   }, [autoNumeric, autoNumericValue, autoNumericCurrency]);
 
+  const getCurrentUiValue = useCallback(() => {
+    if (!autoNumeric) return null;
+
+    return autoNumeric.getNumber() * currencyInfo.subunitToUnit;
+  }, [autoNumeric, currencyInfo]);
+
   // Hook to update AN's _value_
   useEffect(() => {
     if (!autoNumeric) return;
 
-    autoNumeric.set(autoNumericValue);
-  }, [autoNumeric, autoNumericValue]);
+    // AutoNumeric has an internal state that it remembers, based on the
+    // HTML <input> tag forwarded by `node.inputRef.current` above. We only need to
+    // manually update if the change came from the outside world, i.e. a new JSON was being loaded
+    if (value !== getCurrentUiValue()) {
+      autoNumeric.set(autoNumericValue);
+    }
+  }, [autoNumeric, value, autoNumericValue, getCurrentUiValue]);
 
   // Hook to update AN's _currency_
   useEffect(() => {
@@ -63,7 +74,7 @@ export default function AutonumericField({
   }, [autoNumeric, autoNumericCurrency]);
 
   const onChangeAutonumeric = (event) => {
-    onChange(event, { value: autoNumeric.getNumber() * currencyInfo.subunitToUnit });
+    onChange(event, { value: getCurrentUiValue() });
   };
 
   return <Input id={id} ref={autoNumericRef} type="text" onChange={onChangeAutonumeric} />;
