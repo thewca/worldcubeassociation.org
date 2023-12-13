@@ -197,6 +197,8 @@ class UsersController < ApplicationController
       if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
         AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
       end
+      # Clear preferred Events cache
+      Rails.cache.delete("#{current_user.id}-preferred") if user_params.key? "user_preferred_events_attributes"
     elsif @user.claiming_wca_id
       render :claim_wca_id
     else
