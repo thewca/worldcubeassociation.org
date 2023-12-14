@@ -12,7 +12,7 @@ import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
 import I18n from '../../lib/i18n';
-import useRoleData from '../../lib/hooks/useRoleData';
+import useRolePermissions from '../../lib/hooks/useRolePermissions';
 import { GROUP_TYPE } from '../../lib/helpers/user-groups-and-roles-constants';
 
 // let i18n-tasks know the key is used
@@ -34,10 +34,7 @@ export default function RolesTab({ userId, loggedInUserId }) {
     userId,
     { isActive: true, isGroupHidden: false },
   ));
-  const [loggedInUserRole, roleLoading, roleError] = useRoleData(
-    loggedInUserId,
-    { isActive: true },
-  );
+  const [loggedInUserRole, roleLoading, roleError] = useRolePermissions(loggedInUserId);
 
   const [open, setOpen] = React.useState(false);
 
