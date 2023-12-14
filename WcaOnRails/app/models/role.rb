@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Role < ApplicationRecord
+  DELEGATE_ROLE_ID = "dummyRoleId"
+
   belongs_to :user
   belongs_to :group, class_name: "UserGroup"
   belongs_to :metadata, polymorphic: true, optional: true

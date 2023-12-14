@@ -30,7 +30,7 @@ class Api::V0::RolesController < Api::V0::ApiController
 
   # Filters the list of roles based on given parameters.
   private def filter_roles_for_parameters(roles, status, is_active)
-    unless status.nil?
+    if status.present?
       roles = roles.select do |role|
         is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
         if is_actual_role
@@ -41,7 +41,7 @@ class Api::V0::RolesController < Api::V0::ApiController
       end
     end
 
-    unless is_active.nil?
+    if is_active.present?
       roles = roles.select do |role|
         is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
         if is_actual_role
@@ -151,7 +151,7 @@ class Api::V0::RolesController < Api::V0::ApiController
       roles.concat(User.where.not(delegate_status: nil).map(&:delegate_role))
     elsif group_type == UserGroup.group_types[:councils]
       Team.all_councils.each do |council|
-        leader = TeamMember.find_by(team_id: council.id, team_leader: true, end_date: nil)
+        leader = council.leader
         if leader.present?
           roles << {
             id: group_type + "_" + leader.id.to_s,
@@ -186,8 +186,8 @@ class Api::V0::RolesController < Api::V0::ApiController
 
     if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
-      original_group_id = group_id.split("_").last
       group_type = group_id.split("_").first
+      original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         status = params.require(:status)
         already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
@@ -231,7 +231,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   def update
     id = params.require(:id)
 
-    if id == "dummyRoleId" # dummyRoleId is temporarily reserved for delegate changes.
+    if id == Role::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
       delegate_status = params.require(:delegateStatus)
       region_id = params.require(:regionId)
@@ -271,7 +271,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   def destroy
     id = params.require(:id)
 
-    if id == "dummyRoleId" # dummyRoleId is temporarily reserved for delegate changes.
+    if id == Role::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
 
       user = User.find(user_id)

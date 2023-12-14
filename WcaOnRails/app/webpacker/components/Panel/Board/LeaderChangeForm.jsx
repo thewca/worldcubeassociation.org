@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import Loading from '../../Requests/Loading';
-import { COUNCILS_STATUS } from '../../../lib/helpers/groups-and-roles-constants';
+import { councilsStatus } from '../../../lib/wca-data.js.erb';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 
@@ -65,7 +65,7 @@ export default function LeaderChangeForm({
       {
         userId: formValues.newLeader.id,
         groupId: group.id,
-        status: COUNCILS_STATUS.LEADER,
+        status: councilsStatus.leader,
       },
       resolve,
       { method: 'POST' },
