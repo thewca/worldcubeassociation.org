@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class Api::Internal::V1::ApiController < ApplicationController
-  # DON'T APPROVE WITH THIS CHANGE
-  # prepend_before_action :validate_token
+  prepend_before_action :validate_token
 
   def validate_token
     service_token = request.headers[Microservices::Auth::MICROSERVICE_AUTH_HEADER]

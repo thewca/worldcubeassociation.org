@@ -12,7 +12,7 @@ import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
 import I18n from '../../lib/i18n';
-import useRolePermissions from '../../lib/hooks/useRolePermissions';
+import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { GROUP_TYPE } from '../../lib/helpers/user-groups-and-roles-constants';
 
 // let i18n-tasks know the key is used
@@ -29,12 +29,12 @@ import { GROUP_TYPE } from '../../lib/helpers/user-groups-and-roles-constants';
 
 const isHyperlinkableGroup = (groupType) => groupType === GROUP_TYPE.TEAMS_COMMITTEES;
 
-export default function RolesTab({ userId, loggedInUserId }) {
+export default function RolesTab({ userId }) {
   const roleListFetch = useLoadedData(rolesOfUser(
     userId,
     { isActive: true, isGroupHidden: false },
   ));
-  const [loggedInUserRole, roleLoading, roleError] = useRolePermissions(loggedInUserId);
+  const [loggedInUserRole, roleLoading, roleError] = useLoggedInUserPermissions();
 
   const [open, setOpen] = React.useState(false);
 
