@@ -1,12 +1,12 @@
 import React from 'react';
 import useLoadedData from './useLoadedData';
 import { permissionsUrl } from '../requests/routes.js.erb';
-import { GROUP_TYPE } from '../helpers/user-groups-and-roles-constants';
+import { groupTypes } from '../wca-data.js.erb';
 
 export default function useLoggedInUserPermissions() {
   const { data, loading, error } = useLoadedData(permissionsUrl);
 
-  const role = React.useMemo(() => {
+  const loggedInUserPermissions = React.useMemo(() => {
     if (data) {
       return {
         canEditRole: (_role) => {
@@ -14,9 +14,9 @@ export default function useLoggedInUserPermissions() {
           const roleGroupId = _role.group.id;
 
           switch (roleGroupType) {
-            case GROUP_TYPE.DELEGATE_REGIONS:
+            case groupTypes.delegate_regions:
               return data.can_edit_delegate_regions.scope === '*' || data.can_edit_delegate_regions.scope.some((groupId) => groupId === roleGroupId);
-            case GROUP_TYPE.TEAMS_COMMITTEES:
+            case groupTypes.teams_committees:
               return data.can_edit_teams_committees.scope === '*' || data.can_edit_teams_committees.scope.some((groupId) => groupId === roleGroupId);
             default:
               return false;
@@ -27,5 +27,5 @@ export default function useLoggedInUserPermissions() {
     return {};
   }, [data]);
 
-  return [role, loading, error];
+  return { loggedInUserPermissions, loading, error };
 }

@@ -13,7 +13,7 @@ import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
 import I18n from '../../lib/i18n';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
-import { GROUP_TYPE } from '../../lib/helpers/user-groups-and-roles-constants';
+import { groupTypes } from '../../lib/wca-data.js.erb';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
@@ -27,14 +27,14 @@ import { GROUP_TYPE } from '../../lib/helpers/user-groups-and-roles-constants';
 // i18n-tasks-use t('enums.user.role_status.councils.senior_member')
 // i18n-tasks-use t('enums.user.role_status.councils.leader')
 
-const isHyperlinkableGroup = (groupType) => groupType === GROUP_TYPE.TEAMS_COMMITTEES;
+const isHyperlinkableGroup = (groupType) => groupType === groupTypes.teams_committees;
 
 export default function RolesTab({ userId }) {
   const roleListFetch = useLoadedData(rolesOfUser(
     userId,
     { isActive: true, isGroupHidden: false },
   ));
-  const [loggedInUserRole, roleLoading, roleError] = useLoggedInUserPermissions();
+  const { loggedInUserPermissions, loading, error } = useLoggedInUserPermissions();
 
   const [open, setOpen] = React.useState(false);
 
@@ -42,8 +42,8 @@ export default function RolesTab({ userId }) {
     (role) => role.group.group_type === 'delegate_regions',
   );
 
-  if (roleListFetch.loading || roleLoading) return <Loading />;
-  if (roleListFetch.error || roleError) return <Errored />;
+  if (roleListFetch.loading || loading) return <Loading />;
+  if (roleListFetch.error || error) return <Errored />;
 
   return (
     <>
@@ -62,7 +62,7 @@ export default function RolesTab({ userId }) {
                       name="edit"
                       size="large"
                       link
-                      disabled={!loggedInUserRole.canEditRole(role)}
+                      disabled={!loggedInUserPermissions.canEditRole(role)}
                       onClick={isHyperlinkableGroup(role.group.group_type)
                         ? null : () => setOpen(true)}
                     />
