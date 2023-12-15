@@ -7,7 +7,7 @@ RSpec.describe Api::V0::RolesController do
     let!(:africa_region) { FactoryBot.create(:africa_region) }
     let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
     let(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
-    let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate, region_id: africa_region.id) }
+    let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate, region_id: africa_region.id, location: 'Australia') }
 
     context 'when user is logged in and changing role data' do
       before do
@@ -23,6 +23,7 @@ RSpec.describe Api::V0::RolesController do
           user: user_whose_delegate_status_changes,
           metadata: {
             status: "candidate_delegate",
+            location: "Australia",
           },
         }].to_json)
       end

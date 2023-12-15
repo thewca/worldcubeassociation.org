@@ -74,6 +74,20 @@ class Api::V0::RolesController < Api::V0::ApiController
     roles
   end
 
+  # Returns a list of roles by user which are not yet migrated to the new system.
+  private def group_roles_not_yet_in_new_system(group_id)
+    group = UserGroup.find(group_id)
+    roles = []
+
+    if group.group_type == UserGroup.group_types[:delegate_regions]
+      User.where(region_id: group.id).map do |delegate_user|
+        roles << delegate_user.delegate_role
+      end
+    end
+
+    roles
+  end
+
   # Returns a list of roles primarily based on userId.
   def index_for_user
     user_id = params.require(:user_id)
@@ -94,6 +108,9 @@ class Api::V0::RolesController < Api::V0::ApiController
   def index_for_group
     group_id = params.require(:group_id)
     roles = Role.where(group_id: group_id).to_a # to_a is for the same reason as in index_for_user.
+
+    # Appends roles which are not yet migrated to the new system.
+    roles.concat(group_roles_not_yet_in_new_system(group_id))
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
