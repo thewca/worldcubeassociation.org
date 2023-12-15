@@ -97,7 +97,7 @@ RSpec.describe "API Competitions" do
         patch api_v0_competition_wcif_path(competition)
         expect(response).to have_http_status(401)
         response_json = JSON.parse(response.body)
-        expect(response_json["error"]).to eq "Not logged in"
+        expect(response_json["error"]).to eq "Please log in"
       end
     end
 
@@ -167,7 +167,7 @@ RSpec.describe "API Competitions" do
         patch api_v0_competition_update_wcif_path(competition)
         expect(response).to have_http_status(401)
         response_json = JSON.parse(response.body)
-        expect(response_json["error"]).to eq "Not logged in"
+        expect(response_json["error"]).to eq "Please log in"
       end
     end
 
