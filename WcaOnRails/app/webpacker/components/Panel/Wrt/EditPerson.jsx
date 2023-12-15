@@ -12,8 +12,6 @@ import I18n from '../../../lib/i18n';
 import { genders, countries } from '../../../lib/wca-data.js.erb';
 import 'react-datepicker/dist/react-datepicker.css';
 
-const countryChangeWarning = `The change you made may have affected national and continental records, be sure to run <a href=${adminCheckRecordsUrl}>check_regional_record_markers</a>.`;
-
 const dateFormat = 'YYYY-MM-DD';
 
 const genderOptions = _.map(genders.byId, (gender) => ({
@@ -68,9 +66,8 @@ function EditPerson() {
     }, () => {
       setResponse({
         success: true,
-        message: `Success. ${originalUserDetails.representing !== editedUserDetails.representing
-          ? countryChangeWarning : ''}
-          </p>`,
+        showCountryChangeWarning:
+          originalUserDetails.representing !== editedUserDetails.representing,
       });
       setPerson(null);
     }, {
@@ -85,7 +82,7 @@ function EditPerson() {
 
   const handleDestroy = () => {
     save(apiV0Urls.wrt.destroy(wcaId), {}, () => {
-      setResponse({ success: true, message: 'Success' });
+      setResponse({ success: true });
       setPerson(null);
     }, { method: 'DELETE' }, (error) => setResponse({ success: false, message: `${error}` }));
   };
@@ -112,8 +109,22 @@ function EditPerson() {
           content={response.message}
         >
           <Message.Content>
-            {/* eslint-disable-next-line react/no-danger */}
-            <div dangerouslySetInnerHTML={{ __html: response.message }} />
+            {response.success && (
+              <>
+                Success!
+                <br />
+              </>
+            )}
+            {response.showCountryChangeWarning && (
+              <>
+                The change you made may have affected national and continental records, be sure to
+                run
+                {' '}
+                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
+                .
+              </>
+            )}
+            {!response.success && response.message}
           </Message.Content>
         </Message>
       )}

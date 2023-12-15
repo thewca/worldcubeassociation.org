@@ -346,9 +346,8 @@ Rails.application.routes.draw do
       end
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
-        resources :persons, only: [:update, :destroy]
-        scope 'persons' do
-          put '/:id/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count
+        resources :persons, only: [:update, :destroy] do
+          put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count
         end
       end
       namespace :wfc do

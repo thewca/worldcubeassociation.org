@@ -74,7 +74,7 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
   end
 
   def reset_claim_count
-    wca_id = params.require(:id)
+    wca_id = params.require(:person_id)
     person = Person.current.find_by(wca_id: wca_id)
 
     if person.nil?
