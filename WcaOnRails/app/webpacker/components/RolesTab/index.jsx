@@ -34,7 +34,7 @@ export default function RolesTab({ userId }) {
     userId,
     { isActive: true, isGroupHidden: false },
   ));
-  const { loggedInUserPermissions, loading, error } = useLoggedInUserPermissions();
+  const { loggedInUserPermissions, loading } = useLoggedInUserPermissions();
 
   const [open, setOpen] = React.useState(false);
 
@@ -43,7 +43,7 @@ export default function RolesTab({ userId }) {
   );
 
   if (roleListFetch.loading || loading) return <Loading />;
-  if (roleListFetch.error || error) return <Errored />;
+  if (roleListFetch.error) return <Errored />;
 
   return (
     <>
