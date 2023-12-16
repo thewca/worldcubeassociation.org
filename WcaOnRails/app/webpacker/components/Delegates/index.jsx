@@ -24,7 +24,7 @@ import DelegatesOfRegion from './DelegatesOfRegion';
 // i18n-tasks-use t('delegates_page.acknowledges')
 
 export default function Delegates() {
-  const { loggedInUserPermissions, loading, error } = useLoggedInUserPermissions();
+  const { loggedInUserPermissions, loading: permissionsLoading } = useLoggedInUserPermissions();
   const {
     data: delegateGroups,
     loading: delegateGroupsLoading,
@@ -42,8 +42,8 @@ export default function Delegates() {
     setActiveRegion(delegateRegions?.[0]);
   }, [delegateRegions]);
 
-  if (loading || delegateGroupsLoading || !activeRegion) return <Loading />;
-  if (error || delegateGroupsError) return <Errored />;
+  if (permissionsLoading || delegateGroupsLoading || !activeRegion) return <Loading />;
+  if (delegateGroupsError) return <Errored />;
 
   return (
     <div className="container">
@@ -57,7 +57,7 @@ export default function Delegates() {
       <p>
         <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" />
       </p>
-      {loggedInUserPermissions.canViewDelegateAdminPage && (
+      {loggedInUserPermissions.canViewDelegateAdminPage() && (
         <Checkbox
           label="Enable admin mode"
           toggle
