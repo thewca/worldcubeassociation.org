@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Button, Icon, Form, Container, Dropdown,
 } from 'semantic-ui-react';
@@ -14,8 +14,12 @@ import {
 
 import CompetitionTable from './CompetitionTable';
 
+const eventsIds = Object.values(events.official).map(e => e.id);
+const selectedEventsInitialState = {};
+eventsIds.forEach(id => { selectedEventsInitialState[id] = false; });
+
 function CompetitionList() {
-  const { loading, error, data } = useLoadedData(`${competitionsApiUrl}?page=17`);
+  const { loading, error, data } = useLoadedData(`${competitionsApiUrl}?page=1`);
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
@@ -23,6 +27,15 @@ function CompetitionList() {
 }
 
 function CompetitionOverview() {
+
+  const [selectedEvents, setSelectedEvents] = useState(selectedEventsInitialState);
+  const editSelectedEvents = (eventId) => {
+    setSelectedEvents((prevSelectedEvents) => ({
+      ...prevSelectedEvents,
+      [eventId]: !prevSelectedEvents[eventId],
+    }));
+  }
+
   return (
     <div className="container">
       <h2>{I18n.t('competitions.index.title')}</h2>
@@ -35,21 +48,22 @@ function CompetitionOverview() {
           </label>
 
           <div id="events">
-            {Object.values(events.official).map((event) => (
-              <React.Fragment key={event.id}>
+            {eventsIds.map((eventId) => (
+              <React.Fragment key={eventId}>
                 <Button
                   basic
                   icon
                   toggle
                   size="mini"
                   className="event-checkbox"
-                  name="event_ids[]"
-                  id={`checkbox-${event.id}`}
-                  value={event.id}
-                  data-tooltip={I18n.t(`events.${event.id}`)}
+                  id={`checkbox-${eventId}`}
+                  value={eventId}
+                  data-tooltip={I18n.t(`events.${eventId}`)}
                   data-variation="tiny"
+                  onClick={() => editSelectedEvents(eventId)}
+                  active={selectedEvents[eventId]}
                 >
-                  <Icon className={`cubing-icon event-${event.id}`} />
+                  <Icon className={`cubing-icon event-${eventId}`} />
                 </Button>
               </React.Fragment>
             ))}
