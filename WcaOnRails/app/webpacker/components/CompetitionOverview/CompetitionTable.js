@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 import {
   List, Icon, Popup,
 } from 'semantic-ui-react';
@@ -108,6 +107,25 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
   );
 }
 
+// Currently, the venue attribute of a competition object can be written as markdown,
+// and using third party libraries like react-markdown to parse it requires to much work
+function VenueMarkdown({ venueText }) {
+  const openBracketIndex = venueText.indexOf('[');
+  const closeBracketIndex = venueText.indexOf(']', openBracketIndex);
+  const openParenIndex = venueText.indexOf('(', closeBracketIndex);
+  const closeParenIndex = venueText.indexOf(')', openParenIndex);
+
+  if (openBracketIndex === -1 || closeBracketIndex === -1 || openParenIndex === -1 || closeParenIndex === -1) {
+    return <p>{venueText}</p>;
+  }
+
+  return (
+    <a href={venueText.slice(openParenIndex + 1, closeParenIndex)} target="_blank">
+      <p>{venueText.slice(openBracketIndex + 1, closeBracketIndex)}</p>
+    </a>
+  );
+}
+
 function CompetitionTable({
   competitions,
   title,
@@ -140,7 +158,7 @@ function CompetitionTable({
                 {`, ${comp.cityName}`}
               </div>
               <div className="venue-link">
-                <ReactMarkdown linkTarget="_blank">{comp.venue}</ReactMarkdown>
+                <VenueMarkdown venueText={comp.venue} />
               </div>
             </span>
           </List.Item>
