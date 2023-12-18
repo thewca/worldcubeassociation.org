@@ -10,11 +10,6 @@ updates:
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
-  ignore:
-  # We plan on migrating to Fomantic anyways, so no need to bother upgrading bootstrap.
-  - dependency-name: react-bootstrap
-    versions:
-    - ">= 1.0.0"
 - package-ecosystem: github-actions
   directory: "/"
   schedule:

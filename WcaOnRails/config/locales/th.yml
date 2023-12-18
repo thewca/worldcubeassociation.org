@@ -2034,8 +2034,6 @@ th:
       must_have_a_change: ชื่อหรือภูมิภาคต้องต่างกันในการแก้ไขบุคคล
       #original_hash: 012f032
       must_be_senior: ต้องเป็น Senior Delegate
-      #original_hash: 2e582eb
-      must_not_be_present: ต้องไม่เป็นปัจจุบัน
       #original_hash: 5b4eac9
       senior_has_delegate: ไม่สามารถลดขั้น Senior Delegate ที่อยู่ใต้บังคับบัญชาได้
       #original_hash: 48653a9
@@ -2594,6 +2592,8 @@ th:
         href='%{link_here}'>ที่นี่</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: การรับสมัครถูกตั้งค่าให้เริ่มน้อยกว่าที่กำหนด 48 ชั่วโมง
+      #original_hash: a25e7a2
+      registration_already_closed: กำหนดเวลาในการลงทะเบียนได้ผ่านไปแล้ว โปรดตั้งค่าให้เป็นเวลาในอนาคต
       #original_hash: 3322400
       tooltip_registered: คุณได้สมัครแล้ว
       #original_hash: f2d092f
@@ -3075,6 +3075,8 @@ th:
       not_all_delegates: ไม่ Delegates ทั้งหมด
       #original_hash: 43a23c2
       registration_close_after_open: การปิดรับสมัครต้องอยู่หลังจากการเปิดรับสมัคร
+      #original_hash: 2f8765e
+      registration_already_closed: การสมัครการแข่งขันจะต้องไม่ปิดอยู่ก่อนแล้ว
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: วันเริ่มการแข่งขันต้องอยู่ห่างออกไปอย่างน้อย 28 วัน
       #original_hash: 43a83a9

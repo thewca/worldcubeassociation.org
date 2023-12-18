@@ -4,7 +4,7 @@ require "rails_helper"
 require "csv"
 
 RSpec.describe "registrations" do
-  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, event_ids: %w(333 444)) }
+  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, event_ids: %w(333 444)) }
 
   describe "POST #do_import" do
     context "when signed in as a normal user" do
