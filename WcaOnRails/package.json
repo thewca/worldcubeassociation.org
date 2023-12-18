@@ -26,6 +26,7 @@
     "@fullcalendar/timegrid": "^6.1.9",
     "@fullcalendar/luxon3": "^6.1.9",
     "@rails/ujs": "^6.1.7",
+    "@tanstack/react-query": "^5.14.1",
     "autonumeric": "^4.10.0",
     "autoprefixer": "^10.4.16",
     "autosize": "^6.0.1",
