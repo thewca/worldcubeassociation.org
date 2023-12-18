@@ -19,7 +19,7 @@ module Microservices
       Faraday.new(
         url: EnvConfig.WCA_REGISTRATIONS_URL,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
-        ) do |builder|
+      ) do |builder|
         # Sets headers and parses jsons automatically
         builder.request :json
         builder.response :json
