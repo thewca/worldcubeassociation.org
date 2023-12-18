@@ -115,7 +115,7 @@ function CompetitionTable({
   sortByAnnouncement = false,
 }) {
   return (
-    <List divided relaxed floating>
+    <List divided relaxed floating="true">
       <List.Item>
         <strong>
           {`${title} (${competitions.length})`}

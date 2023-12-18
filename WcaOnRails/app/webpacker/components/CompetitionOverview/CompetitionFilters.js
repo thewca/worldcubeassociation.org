@@ -98,10 +98,12 @@ function CompetitionFilter() {
           <Form.Field width={6}>
             <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
             <Dropdown
-              selection
               name="region"
               id="region"
               defaultValue="all"
+              scrolling
+              upward={false}
+              style={{ border: '1px solid #ccc', borderRadius: '4px', height: '35px' }}
             >
               <Dropdown.Menu>
                 <Dropdown.Item selected value="all" key="all" text={I18n.t('common.all_regions')} />
