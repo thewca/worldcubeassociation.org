@@ -1642,6 +1642,10 @@ class Competition < ApplicationRecord
     competition_series&.to_wcif(authorized: authorized)
   end
 
+  def competition_series_ids
+    competition_series&.competition_ids || []
+  end
+
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
