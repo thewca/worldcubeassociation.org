@@ -1,5 +1,5 @@
-import React from 'react'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import React from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import CompetitionFilter from './CompetitionFilters';
 
@@ -10,7 +10,7 @@ function CompetitionOverview() {
     <QueryClientProvider client={queryClient}>
       <CompetitionFilter />
     </QueryClientProvider>
-  )
+  );
 }
 
 export default CompetitionOverview;

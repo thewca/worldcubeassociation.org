@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, Icon, Popup,
+  List, Icon, Popup, Loader,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -115,12 +115,13 @@ function VenueMarkdown({ venueText }) {
   const openParenIndex = venueText.indexOf('(', closeBracketIndex);
   const closeParenIndex = venueText.indexOf(')', openParenIndex);
 
-  if (openBracketIndex === -1 || closeBracketIndex === -1 || openParenIndex === -1 || closeParenIndex === -1) {
+  if (openBracketIndex === -1 || closeBracketIndex === -1
+    || openParenIndex === -1 || closeParenIndex === -1) {
     return <p>{venueText}</p>;
   }
 
   return (
-    <a href={venueText.slice(openParenIndex + 1, closeParenIndex)} target="_blank">
+    <a href={venueText.slice(openParenIndex + 1, closeParenIndex)} target="_blank" rel="noreferrer">
       <p>{venueText.slice(openBracketIndex + 1, closeBracketIndex)}</p>
     </a>
   );
@@ -131,15 +132,16 @@ function CompetitionTable({
   title,
   showRegistrationStatus,
   sortByAnnouncement = false,
+  loading,
 }) {
   return (
-    <List divided relaxed floating="true">
+    <List divided relaxed>
       <List.Item>
         <strong>
-          {`${title} (${competitions.length})`}
+          {`${title} (${competitions ? competitions.length : 0})`}
         </strong>
       </List.Item>
-      {competitions.map((comp, index) => (
+      {competitions?.map((comp, index) => (
         <React.Fragment key={comp.id}>
           {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
           <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
@@ -164,6 +166,8 @@ function CompetitionTable({
           </List.Item>
         </React.Fragment>
       ))}
+      {/* Could not figure out why the animated loader icon doesn't show */}
+      {loading && <List.Item style={{ textAlign: 'center' }}><Loader active inline="centered" size="small">Loading...</Loader></List.Item>}
     </List>
   );
 }

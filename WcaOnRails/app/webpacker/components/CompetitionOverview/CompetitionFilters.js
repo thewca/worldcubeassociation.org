@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useInView } from 'react-intersection-observer'
-import { QueryClient, QueryClientProvider, useInfiniteQuery } from '@tanstack/react-query'
+import { useInView } from 'react-intersection-observer';
+import { useInfiniteQuery } from '@tanstack/react-query';
 import {
   Button, Icon, Form, Container, Dropdown,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
-import useLoadedData from '../../lib/hooks/useLoadedData';
-import Loading from '../Requests/Loading';
-import Errored from '../Requests/Errored';
 import { competitionsApiUrl } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import {
@@ -18,39 +15,36 @@ import {
 import CompetitionTable from './CompetitionTable';
 
 const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
-const EVENT_IDS = Object.values(events.official).map(e => e.id);
+const EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 const selectedEventsInitialState = {};
-EVENT_IDS.forEach(id => { selectedEventsInitialState[id] = false; });
+EVENT_IDS.forEach((id) => { selectedEventsInitialState[id] = false; });
 
 function CompetitionFilter() {
-
   const [selectedEvents, setSelectedEvents] = useState(selectedEventsInitialState);
   const editSelectedEvents = (eventId) => {
     setSelectedEvents((prevSelectedEvents) => ({
       ...prevSelectedEvents,
       [eventId]: !prevSelectedEvents[eventId],
     }));
-  }
+  };
 
   const {
     data,
     fetchNextPage,
     isFetching,
-    isSuccess,
   } = useInfiniteQuery({
     queryKey: ['competitions'],
-    queryFn: ({ pageParam = 1 }) => {
-      return fetchJsonOrError(`${competitionsApiUrl}?page=${pageParam}`);
-    },
+    queryFn: ({ pageParam = 1 }) => fetchJsonOrError(`${competitionsApiUrl}?page=${pageParam}`),
     getNextPageParam: (lastPage, allPages) => {
+      // Assuming the last page has less than the max number of competitions fetched per query
       if (lastPage.data.length < COMPETITIONS_API_PAGINATION) {
         return undefined;
       }
 
       return allPages.length + 1;
     },
-  })
+  });
 
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -58,7 +52,6 @@ function CompetitionFilter() {
       fetchNextPage();
     }
   }, [inView]);
-
 
   return (
     <Container>
@@ -221,14 +214,14 @@ function CompetitionFilter() {
           </div>
         </div>
         <div id="competitions-list">
-          {isSuccess && <CompetitionTable competitions={data?.pages.map((p) => p.data).flatMap((d) => d)} title="Competitions" showRegistrationStatus={false} />}
+          <CompetitionTable competitions={data?.pages.map((p) => p.data).flatMap((d) => d)} title="Competitions" showRegistrationStatus={false} loading={isFetching} />
         </div>
         <div className="col-xs-12 col-md-12">
           <div id="competitions-map" />
         </div>
       </Container>
 
-      {!isFetching && <div ref={ref} name="page-bottom"></div>}
+      {!isFetching && <div ref={ref} name="page-bottom" />}
     </Container>
   );
 }
