@@ -13,8 +13,7 @@ export default function CompetitorLimit() {
 
   return (
     <SubSection section="competitorLimit">
-      {/* eslint-disable-next-line react/jsx-boolean-value */}
-      <InputBooleanSelect id="enabled" forceChoice defaultValue={true} />
+      <InputBooleanSelect id="enabled" forceChoice />
       <ConditionalSection showIf={hasLimit}>
         <InputNumber id="count" min={0} />
         <InputTextArea id="reason" />

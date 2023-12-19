@@ -270,7 +270,9 @@ class CompetitionsController < ApplicationController
   end
 
   def new
-    @competition = Competition.new
+    @competition = Competition.new(
+      competitor_limit_enabled: true,
+    )
 
     assign_editing_user(@competition)
     assign_delegate(@competition)
