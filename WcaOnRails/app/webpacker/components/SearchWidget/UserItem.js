@@ -7,7 +7,7 @@ function UserItem({
   item,
 }) {
   return (
-    <div className="omnisearch-item-user">
+    <div className="multisearch-item-user">
       <Image src={item.avatar.thumb_url} />
       <div className="details">
         <span>{item.name}</span>

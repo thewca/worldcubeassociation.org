@@ -2747,6 +2747,10 @@ pt:
         <a href='%{link_here}'>aqui</a>!
       #original_hash: 8ab1548
       reg_opens_too_early: Registo está definido começar antes das necessárias 48 horas.
+      #original_hash: a25e7a2
+      registration_already_closed: >-
+        A data limite para registos já foi ultrapassada. Por favor, defina-a
+        para ser no futuro.
       #original_hash: 3322400
       tooltip_registered: Está registado.
       #original_hash: f2d092f
@@ -3245,6 +3249,8 @@ pt:
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2
       registration_close_after_open: o fim das inscrições deve ser posterior ao início
+      #original_hash: 2f8765e
+      registration_already_closed: inscrições não podem estar já encerradas.
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: Data de início tem de ser pelo menos 28 dias no futuro.
       #original_hash: 43a83a9

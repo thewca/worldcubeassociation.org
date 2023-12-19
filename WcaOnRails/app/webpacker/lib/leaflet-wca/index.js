@@ -64,6 +64,7 @@ window.wca.createSearchInput = (map) => {
     searchLabel: 'Enter an address',
   });
   map.addControl(searchControl);
+  return searchControl;
 };
 
 window.wca.createCompetitionsMapLeaflet = (elementId, center = [0, 0], iframeTrick = true) => {

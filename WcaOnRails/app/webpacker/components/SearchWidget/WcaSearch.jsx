@@ -6,8 +6,9 @@ import { userSearchApiUrl, personSearchApiUrl } from '../../lib/requests/routes.
 import MultiSearchInput from './MultiSearchInput';
 
 export default function WcaSearch({
-  selectedValue,
-  setSelectedValue,
+  name,
+  value,
+  onChange,
   multiple = true,
   model,
   params,
@@ -21,11 +22,16 @@ export default function WcaSearch({
     return '';
   }, [params, model]);
 
+  const setValue = (setValueFn) => {
+    const newValue = setValueFn();
+    onChange(null, { name, value: newValue });
+  };
+
   return (
     <MultiSearchInput
       url={urlFn}
-      selectedValue={multiple ? selectedValue || [] : selectedValue}
-      setSelectedValue={setSelectedValue}
+      selectedValue={multiple ? value || [] : value}
+      setSelectedValue={setValue}
       multiple={multiple}
     />
   );

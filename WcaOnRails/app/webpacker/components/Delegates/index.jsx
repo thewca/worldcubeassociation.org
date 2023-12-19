@@ -112,7 +112,7 @@ export default function Delegates() {
   // NOTE: The UI currently assumes that the delegates always have a
   // senior delegate unless they themselves are a senior delegate.
 
-  if (loading) return <Loading />;
+  if (loading || !activeSeniorDelegate) return <Loading />;
   if (error) return <Errored />;
 
   return (

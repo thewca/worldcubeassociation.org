@@ -167,7 +167,6 @@ Rails.application.routes.draw do
 
   get 'panel' => 'panel#index'
   get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
-  patch 'panel/delegate-crash-course' => 'panel#update_delegate_crash_course'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
@@ -322,6 +321,8 @@ Rails.application.routes.draw do
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
+      get '/users/me/personal_records' => 'users#personal_records'
+      get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'
