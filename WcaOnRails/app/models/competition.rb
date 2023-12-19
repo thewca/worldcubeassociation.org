@@ -1643,7 +1643,7 @@ class Competition < ApplicationRecord
   end
 
   def competition_series_ids
-    competition_series&.competition_ids
+    competition_series&.competition_ids || []
   end
 
   def persons_wcif(authorized: false)
