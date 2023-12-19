@@ -30,6 +30,9 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     # Filters the list of groups based on the permissions of the current user.
     groups = filter_groups_for_logged_in_user(groups)
 
+    # Sorts the list of groups by name.
+    groups = groups.sort_by(&:name)
+
     render json: groups
   end
 

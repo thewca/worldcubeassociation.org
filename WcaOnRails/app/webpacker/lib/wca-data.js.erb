@@ -144,3 +144,7 @@ export const groupedChampionshipTypes = <%= Championship.grouped_championship_ty
 export const teams = {
   byId: <%= Team.official.index_by(&:friendly_id).to_json.html_safe %>
 }
+
+// ----- ROLES & GROUPS -----
+
+export const groupTypes = JSON.parse('<%= UserGroup.group_types.to_json.html_safe %>');
