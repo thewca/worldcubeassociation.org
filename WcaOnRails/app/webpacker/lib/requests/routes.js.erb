@@ -1,7 +1,8 @@
 function jsonToQueryString(json) {
-  return Object.keys(json)
-    .filter((key) => json[key] !== undefined && json[key] !== null)
-    .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(json[key])}`).join('&');
+  const jsonAfterRemovingUndefinedAndNull = Object.fromEntries(
+    Object.entries(json).filter(([key, value]) => value !== null)
+  );
+  return (new URLSearchParams(jsonAfterRemovingUndefinedAndNull)).toString();
 }
 
 export const personUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.person_path("${wcaId}"))%>`;
@@ -112,17 +113,17 @@ export const rolesOfUser = (userId) => `<%= CGI.unescape(Rails.application.route
 
 export const rolesOfGroup = (groupId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>`;
 
-export const rolesOfGroupType = (groupType, status, isActive = true) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive })}`;
+export const rolesOfGroupType = (groupType, status) => {
+  const searchParams = new URLSearchParams();
+  if (status) {
+    searchParams.append('status', status);
+  }
+  return `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${searchParams.toString()}`;
+};
 
 // dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
 export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>`;
-
-// Role::DELEGATE_ROLE_ID is used temporarily because delegates is yet to get a role id
-// export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path(Role::DELEGATE_ROLE_ID) %>?userId=${userId}&isActiveRole=${isActiveRole}`;
-// export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path(Role::DELEGATE_ROLE_ID) %>`;
-
-export const delegatesStaticPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_delegates_path) %>`;
 
 export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_panel_wfc_path) %>`;
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
@@ -147,10 +148,14 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
+    listOfGroupType: (groupType, status, isActive = true) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_roles_path) %>`,
-    update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_roles_path) %>/${roleId}`,
-    delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_roles_path) %>/${roleId}`,
+    update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_role_path("${roleId}")) %>`,
+    delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_role_path("${roleId}")) %>`,
   },
+  userGroups: {
+    list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
+  }
 }
 
 export const permissionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`;

@@ -171,7 +171,7 @@ class Team < ApplicationRecord
   end
 
   def self.wac
-    Team.c_find_by_friendly_id!('wac')
+    Team.c_find_by_friendly_id!('wac').reload
   end
 
   def self.wsot

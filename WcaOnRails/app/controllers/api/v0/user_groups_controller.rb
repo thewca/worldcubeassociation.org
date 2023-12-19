@@ -48,7 +48,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     groups = filter_groups_for_logged_in_user(groups)
 
     # Sorts the list of groups by name.
-    groups = groups.sort_by(&:name)
+    groups = groups.sort_by { |group| group[:name] } # Can be changed to `groups.sort_by(&:name)` once all groups are migrated to the new system.`
 
     render json: groups
   end

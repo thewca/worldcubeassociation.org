@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Icon, Modal, Table } from 'semantic-ui-react';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { rolesOfGroupType, fetchUserGroupsUrl } from '../../../lib/requests/routes.js.erb';
+import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 import LeaderChangeForm from './LeaderChangeForm';
@@ -9,9 +9,9 @@ import { groupTypes, councilsStatus } from '../../../lib/wca-data.js.erb';
 
 export default function CouncilLeaders() {
   const [editCouncil, setEditCouncil] = useState();
-  const councilsFetch = useLoadedData(fetchUserGroupsUrl(groupTypes.councils));
+  const councilsFetch = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils));
   const councilLeadersFetch = useLoadedData(
-    rolesOfGroupType(groupTypes.councils, councilsStatus.leader),
+    apiV0Urls.userRoles.listOfGroupType(groupTypes.councils, councilsStatus.leader),
   );
 
   const leaders = useMemo(() => {
