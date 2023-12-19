@@ -23,7 +23,7 @@ FactoryBot.define do
     end_date { ends.nil? ? nil : ends.strftime("%F") }
 
     trait :future do
-      starts { 1.week.from_now }
+      starts { 2.weeks.from_now }
     end
 
     trait :ongoing do
@@ -32,6 +32,7 @@ FactoryBot.define do
 
     trait :past do
       starts { 1.week.ago }
+      registration_close { 2.weeks.ago.change(usec: 0) }
     end
 
     trait :results_posted do
@@ -97,7 +98,7 @@ FactoryBot.define do
 
     use_wca_registration { false }
     registration_open { 54.weeks.ago.change(usec: 0) }
-    registration_close { 53.weeks.ago.change(usec: 0) }
+    registration_close { 1.weeks.from_now.change(usec: 0) }
 
     trait :with_valid_submitted_results do
       announced
@@ -119,6 +120,11 @@ FactoryBot.define do
       use_wca_registration { true }
       registration_open { 2.weeks.ago.change(usec: 0) }
       registration_close { 2.weeks.from_now.change(usec: 0) }
+    end
+
+    trait :registration_closed do
+      registration_open { 4.weeks.ago.change(usec: 0) }
+      registration_close { 1.weeks.ago.change(usec: 0) }
     end
 
     trait :editable_registrations do

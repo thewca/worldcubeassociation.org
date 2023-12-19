@@ -184,11 +184,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     api_user_can_manage || current_user&.can_manage_competition?(competition)
   end
 
-  private def require_user!
-    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
-    current_api_user || current_user
-  end
-
   private def require_scope!(scope)
     require_user!
     if current_api_user # If we deal with an OAuth user then check the scopes.

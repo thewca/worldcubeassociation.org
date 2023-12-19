@@ -13,6 +13,10 @@ class UserGroup < ApplicationRecord
     UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
   end
 
+  def senior_delegate
+    User.find_by(region_id: self.id, delegate_status: "senior_delegate")
+  end
+
   def roles
     if self.group_type == "delegate_regions"
       User.where(region_id: self.id).where.not(delegate_status: nil).map do |delegate_user|

@@ -53,7 +53,7 @@ RSpec.feature "Competition management" do
     end
 
     scenario "User confirms a competition" do
-      competition = FactoryBot.create(:competition, :with_delegate, :with_valid_schedule)
+      competition = FactoryBot.create(:competition, :future, :with_delegate, :with_valid_schedule)
       visit edit_competition_path(competition)
       click_button "Confirm"
 
@@ -196,6 +196,14 @@ RSpec.feature "Competition management" do
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
       expect(c.cellName).to eq "New Id 2016"
+    end
+
+    scenario "cannot submit a competition where registration has already closed" do
+      comp = FactoryBot.create(:competition, :not_visible, :registration_closed, delegates: [delegate])
+      visit edit_competition_path(comp)
+      # patch :update, params: { id: comp, competition: { name: comp.name }, commit: "Confirm" }
+      click_button "Confirm"
+      expect(comp.reload.confirmed?).to eq false
     end
 
     scenario 'clone competition', js: true, retry: 3 do

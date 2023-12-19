@@ -101,6 +101,14 @@ Rails.application.routes.draw do
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
+  unless EnvConfig.WCA_LIVE_SITE?
+    scope :payment do
+      get '/config' => 'payment#payment_config'
+      get '/finish' => 'payment#payment_finish'
+      get '/refunds' => 'payment#available_refunds'
+      get '/refund' => 'payment#payment_refund'
+    end
+  end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -207,7 +215,6 @@ Rails.application.routes.draw do
 
   scope 'page_data' do
     get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
-    get 'delegates' => 'static_pages#delegates_data', as: :page_data_delegates
   end
 
   resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
@@ -294,7 +301,8 @@ Rails.application.routes.draw do
     get '/', to: redirect('/api/v0', status: 302)
     namespace :internal do
       namespace :v1 do
-        get "/users/:id/permissions" => "permissions#index"
+        get '/users/:id/permissions' => 'permissions#index'
+        post '/payment/init' => 'payment#init'
       end
     end
     namespace :v0 do
@@ -312,6 +320,8 @@ Rails.application.routes.draw do
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
+      get '/users/me/personal_records' => 'users#personal_records'
+      get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'
