@@ -160,6 +160,7 @@ function CompetitionForm() {
       window.location.replace(redirect);
     } else {
       dispatch(changesSaved());
+      dispatch(setErrors(null));
     }
   }, [dispatch, onUnload]);
 
