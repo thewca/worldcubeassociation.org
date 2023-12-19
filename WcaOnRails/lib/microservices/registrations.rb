@@ -2,7 +2,6 @@
 
 module Microservices
   module Registrations
-
     def self.internal_get_registrations_path
       "/api/internal/v1/registrations"
     end
