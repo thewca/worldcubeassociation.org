@@ -839,7 +839,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
                           organizers: [organizer],
                           events: Event.where(id: %w(222 333)),
                           use_wca_registration: true,
-                          starts: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 1).days.ago)
+                          starts: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 1).days.ago,
+                          registration_close: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 3).days.ago)
       }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
 
