@@ -109,6 +109,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def competitor_info
     competition = competition_from_params
+    return render json: { error: "The new registration service has to be activated for this competition" }, status: :bad_request unless competition.uses_new_registration_service?
     require_can_manage!(competition)
 
     registrations = Microservices::Registrations.get_all_registrations(competition.id)
