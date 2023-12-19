@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  panelWfcPageDataUrl,
-  countryBandsUrl,
-} from '../../../lib/requests/routes.js.erb';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import Errored from '../../Requests/Errored';
+import { countryBandsUrl } from '../../../lib/requests/routes.js.erb';
+import useLoggedInUserPermissions from '../../../lib/hooks/useLoggedInUserPermissions';
 import Loading from '../../Requests/Loading';
 import DelegateProbations from '../../DelegateProbations';
 import DuesExport from './DuesExport';
@@ -42,19 +38,17 @@ const sections = [
 ];
 
 export default function Wfc() {
-  const { data, loading, error } = useLoadedData(panelWfcPageDataUrl);
+  const { loggedInUserPermissions, loading } = useLoggedInUserPermissions();
 
   if (loading) return <Loading />;
   return (
-    <>
-      {error && <Errored />}
-      <PanelTemplate
-        heading="WFC Panel"
-        sections={sections
-          .filter(
-            (section) => !section.forAtleastSeniorMember || (data?.isAtleastSeniorMember === true),
-          )}
-      />
-    </>
+    <PanelTemplate
+      heading="WFC Panel"
+      sections={sections
+        .filter(
+          (section) => (!section.forAtleastSeniorMember
+              || loggedInUserPermissions.canAccessWfcSeniorStuff()),
+        )}
+    />
   );
 }
