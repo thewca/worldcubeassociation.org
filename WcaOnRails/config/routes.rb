@@ -312,6 +312,8 @@ Rails.application.routes.draw do
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
+      get '/users/me/personal_records' => 'users#personal_records'
+      get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'

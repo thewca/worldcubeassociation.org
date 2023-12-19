@@ -2,13 +2,10 @@
 
 class Api::V0::UsersController < Api::V0::ApiController
   def show_me
-    if current_user
-      if stale?(current_user)
-        # Also include the users current prs so we can handle qualifications on the Frontend
-        show_user(current_user, show_rankings: true)
-      end
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
+    require_user!
+    if stale?(current_user)
+      # Also include the users current prs so we can handle qualifications on the Frontend
+      show_user(current_user, show_rankings: true)
     end
   end
 
@@ -29,32 +26,38 @@ class Api::V0::UsersController < Api::V0::ApiController
   end
 
   def permissions
-    if current_user
-      if stale?(current_user)
-        render json: current_user.permissions
-      end
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
+    require_user!
+    if stale?(current_user)
+      render json: current_user.permissions
     end
+  end
+
+  def personal_records
+    require_user!
+    return render json: { single: [], average: [] } unless current_user.wca_id.present?
+    person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
+    render json: { single: person.ranksSingle, average: person.ranksAverage }
+  end
+
+  def preferred_events
+    require_user!
+    preferred_events = Rails.cache.fetch("#{current_user.id}-preferred-events", expires_in: 24.hours) do
+      current_user.preferred_events.pluck(:id)
+    end
+    render json: preferred_events
   end
 
   def bookmarked_competitions
-    if current_user
-      bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-bookmarked", expires_in: 60.minutes) do
-        current_user.competitions_bookmarked.pluck(:competition_id)
-      end
-      render json: bookmarked_competitions
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
+    require_user!
+    bookmarked_competitions = Rails.cache.fetch("#{current_user.id}-competitions-bookmarked", expires_in: 60.minutes) do
+      current_user.competitions_bookmarked.pluck(:competition_id)
     end
+    render json: bookmarked_competitions
   end
 
   def token
-    if current_user
-      render json: { status: "ok" }
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
-    end
+    require_user!
+    render json: { status: "ok" }
   end
 
   private
@@ -69,7 +72,7 @@ class Api::V0::UsersController < Api::V0::ApiController
           json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
         end
         if show_rankings && user.wca_id.present?
-          person = Person.includes(:user, :ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
+          person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
           json[:rankings] = { single: person.ranksSingle, average: person.ranksAverage }
         end
         render status: :ok, json: json
