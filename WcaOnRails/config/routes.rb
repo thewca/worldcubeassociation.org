@@ -101,6 +101,14 @@ Rails.application.routes.draw do
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
+  unless EnvConfig.WCA_LIVE_SITE?
+    scope :payment do
+      get '/config' => 'payment#payment_config'
+      get '/finish' => 'payment#payment_finish'
+      get '/refunds' => 'payment#available_refunds'
+      get '/refund' => 'payment#payment_refund'
+    end
+  end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -294,7 +302,8 @@ Rails.application.routes.draw do
     get '/', to: redirect('/api/v0', status: 302)
     namespace :internal do
       namespace :v1 do
-        get "/users/:id/permissions" => "permissions#index"
+        get '/users/:id/permissions' => 'permissions#index'
+        post '/payment/init' => 'payment#init'
       end
     end
     namespace :v0 do
