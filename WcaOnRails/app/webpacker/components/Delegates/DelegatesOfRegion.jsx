@@ -47,13 +47,13 @@ function DelegatesTable({ delegates, isAdminMode }) {
         ]).map((delegate) => (
           <Table.Row
             className={cn(`${dasherize(delegate.metadata.status)}`)}
-            key={delegate.id}
+            key={delegate.user.id}
           >
             <Table.Cell verticalAlign="middle">
               <Button.Group vertical>
                 <Button href={`mailto:${delegate.user.email}`} icon="envelope" />
                 {isAdminMode && (
-                <Button href={`users/${delegate.id}/edit`} icon="edit" />
+                <Button href={`users/${delegate.user.id}/edit`} icon="edit" />
                 )}
               </Button.Group>
             </Table.Cell>
