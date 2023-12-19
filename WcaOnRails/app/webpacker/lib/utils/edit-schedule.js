@@ -1,4 +1,6 @@
 import _ from 'lodash';
+import { DateTime, Duration } from 'luxon';
+import { toLuxonDateTime } from '@fullcalendar/luxon3';
 import { parseActivityCode } from './wcif';
 
 export function toMicrodegrees(coord) {
@@ -9,65 +11,33 @@ export function toDegrees(coord) {
   return coord / 1e6;
 }
 
-const currentElementsIds = {
-  venue: 0,
-  room: 0,
-  activity: 0,
-};
-
 function withNestedActivities(activities) {
   if (activities.length === 0) return [];
+
   return [
     ...activities,
-    ...withNestedActivities(_.flatMap(activities, 'childActivities')),
+    ...withNestedActivities(activities.flatMap((activity) => activity.childActivities)),
   ];
 }
 
-export function initElementsIds(venues) {
+const maxIdOrZero = (objects) => _.max(objects.map((wcifObj) => wcifObj.id)) || 0;
+
+export function nextVenueId(wcifSchedule) {
   // Explore the WCIF to get the highest ids.
-  const maxId = (objects) => _.max(_.map(objects, 'id')) || 0;
-  const rooms = _.flatMap(venues, 'rooms');
-  const activities = _.flatMap(rooms, (room) => withNestedActivities(room.activities));
-  currentElementsIds.venue = maxId(venues);
-  currentElementsIds.room = maxId(rooms);
-  currentElementsIds.activity = maxId(activities);
+  return maxIdOrZero(wcifSchedule.venues) + 1;
 }
 
-export function newVenueId() {
-  currentElementsIds.venue += 1;
-  return currentElementsIds.venue;
+export function nextRoomId(wcifSchedule) {
+  // Explore the WCIF to get the highest ids.
+  const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
+  return maxIdOrZero(rooms) + 1;
 }
 
-export function newRoomId() {
-  currentElementsIds.room += 1;
-  return currentElementsIds.room;
-}
-
-export function newActivityId() {
-  currentElementsIds.activity += 1;
-  return currentElementsIds.activity;
-}
-
-export function convertVenueActivitiesToVenueTimezone(oldTZ, venueWcif) {
-  // Called when a venue's timezone has been updated, to update all the activities times.
-  // The WCA website expose times in UTC, so we need to do two steps:
-  //   - first, express each activity times in the old venue's timezone
-  //   - second, change the timezone without changing the actual time figure
-  //   (eg: 4pm stays 4pm, but in a different timezone).
-  const newTZ = venueWcif.timezone;
-  venueWcif.rooms.forEach((room) => {
-    withNestedActivities(room.activities).forEach((activity) => {
-      // Undocumented "keepTime" parameter, see here:
-      // https://stackoverflow.com/questions/28593304/same-date-in-different-time-zone/28615654#28615654
-      // This enables us to change the UTC offset without changing
-      // the *actual* time of the activity!
-      // NOTE: we intentionally modify the object referenced by activity.
-      /* eslint-disable-next-line */
-      activity.startTime = window.moment(activity.startTime).tz(oldTZ).tz(newTZ, true).format();
-      /* eslint-disable-next-line */
-      activity.endTime = window.moment(activity.endTime).tz(oldTZ).tz(newTZ, true).format();
-    });
-  });
+export function nextActivityId(wcifSchedule) {
+  // Explore the WCIF to get the highest ids.
+  const rooms = wcifSchedule.venues.flatMap((venue) => venue.rooms);
+  const activities = rooms.flatMap((room) => withNestedActivities(room.activities));
+  return maxIdOrZero(activities) + 1;
 }
 
 export function defaultDurationFromActivityCode(activityCode) {
@@ -77,4 +47,59 @@ export function defaultDurationFromActivityCode(activityCode) {
     return 60;
   }
   return 30;
+}
+
+export function luxonToWcifIso(luxonDateTime) {
+  return luxonDateTime.toUTC().toISO({ suppressMilliseconds: true });
+}
+
+export function moveByIsoDuration(isoDateTime, isoDuration) {
+  const luxonDuration = Duration.fromISO(isoDuration);
+  const luxonDateTime = DateTime.fromISO(isoDateTime);
+
+  const movedDateTime = luxonDateTime.plus(luxonDuration);
+
+  return luxonToWcifIso(movedDateTime);
+}
+
+export function rescaleDuration(isoDuration, scalingFactor) {
+  const luxonDuration = Duration.fromISO(isoDuration);
+
+  const durationMillis = luxonDuration.toMillis();
+  const scaledMillis = durationMillis * scalingFactor;
+
+  return Duration.fromMillis(scaledMillis).rescale().toISO();
+}
+
+export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTimezone) {
+  const luxonDateTime = DateTime.fromISO(isoDateTime);
+
+  const oldLocalDateTime = luxonDateTime.setZone(oldTimezone);
+  const newZoneSameLocalTime = oldLocalDateTime.setZone(newTimezone, { keepLocalTime: true });
+
+  return luxonToWcifIso(newZoneSameLocalTime);
+}
+
+export function fcEventToActivityAndDates(fcEvent, calendar) {
+  const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
+  const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
+
+  const utcStartIso = luxonToWcifIso(eventStartLuxon);
+  const utcEndIso = luxonToWcifIso(eventEndLuxon);
+
+  const { activityCode, childActivities } = fcEvent.extendedProps;
+
+  const activity = {
+    name: fcEvent.title,
+    activityCode,
+    startTime: utcStartIso,
+    endTime: utcEndIso,
+    childActivities: childActivities || [],
+  };
+
+  return {
+    activity,
+    startLuxon: eventStartLuxon,
+    endLuxon: eventEndLuxon,
+  };
 }

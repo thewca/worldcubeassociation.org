@@ -699,7 +699,7 @@ module DatabaseDumper
           saved_pending_avatar_crop_w
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
-          senior_delegate_id unconfirmed_wca_id
+          unconfirmed_wca_id
           region_id
           updated_at
           wca_id
@@ -843,6 +843,7 @@ module DatabaseDumper
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
+    "attendee_payment_requests" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

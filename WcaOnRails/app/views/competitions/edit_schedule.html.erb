@@ -1,41 +1,28 @@
 <% provide(:title, "Manage schedule for #{@competition.name}") %>
 <% add_to_packs("wca_maps") %>
-<% add_to_packs("edit_schedule") %>
-<% add_fullcalendar_to_packs %>
 
 <%= render layout: 'nav' do %>
   <% if !@competition.has_defined_dates? %>
     <div class="alert alert-danger">
       There is no start and/or end date assigned to this competition yet.
       Before you can manage your schedule, you have to add them
-      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_start_date")%>.
+      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_start_date") %>.
     </div>
   <% elsif @competition.country.blank? %>
     <div class="alert alert-danger">
       There is no country assigned to this competition yet.
       Before you can manage your schedule, you have to add one
-      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_countryId")%>.
+      <%= link_to "here", edit_competition_path(@competition, anchor: "competition_countryId") %>.
     </div>
   <% else %>
-    <div id="edit-schedule-area"></div>
-    <script>
-      $(function() {
-        competition_info = {
-          id: <%= @competition.id.to_json.html_safe %>,
-          venue: <%= @competition.venue.to_json.html_safe %>,
-          venueDetails: <%= @competition.venueDetails.to_json.html_safe %>,
-          countryIso2: <%= @competition.country.iso2.to_json.html_safe %>,
-          lat: <%= @competition.latitude.to_json.html_safe %>,
-          lng: <%= @competition.longitude.to_json.html_safe %>,
-          countryZones: <%= @competition.country_zones.to_json.html_safe %>,
-          scheduleWcif: <%= @competition.schedule_wcif.to_json.html_safe %>,
-          eventsWcif: <%= @competition.events_wcif.to_json.html_safe %>,
-        }
-        window.wca.initializeScheduleForm(
-          competition_info,
-          <%= I18n.locale.to_json.html_safe %>
-        );
-      });
-    </script>
+    <%= react_component("EditSchedule", {
+      competitionId: @competition.id,
+      wcifEvents: @competition.events_wcif,
+      wcifSchedule: @competition.schedule_wcif,
+      countryZones: @competition.country_zones,
+      calendarLocale: I18n.locale,
+    }, {
+      id: 'edit-schedule-area'
+    }) %>
   <% end %>
 <% end %>
