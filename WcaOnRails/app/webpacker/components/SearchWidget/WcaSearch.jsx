@@ -32,16 +32,15 @@ export default function WcaSearch({
     throw new Error(`Invalid search type in WcaSearch component: ${model}`);
   }, [params, model]);
 
-  const setValue = (setValueFn) => {
-    const newValue = setValueFn();
-    onChange(null, { name, value: newValue });
-  };
+  const onChangeInternal = useCallback((evt, data) => {
+    onChange(evt, { ...data, name });
+  }, [onChange, name]);
 
   return (
     <MultiSearchInput
       url={urlFn}
       selectedValue={multiple ? value || [] : value}
-      setSelectedValue={setValue}
+      onChange={onChangeInternal}
       multiple={multiple}
       disabled={disabled}
     />

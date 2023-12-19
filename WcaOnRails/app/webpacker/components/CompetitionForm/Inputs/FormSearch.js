@@ -8,11 +8,13 @@ import { itemToOption } from '../../SearchWidget/MultiSearchInput';
 import { useManyLoadedData } from '../../../lib/hooks/useLoadedData';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 
-const useWrapIdOnly = (originalCallback) => useCallback((values) => {
+const useWrapIdOnly = (originalCallback) => useCallback((evt, data) => {
+  const { value: values } = data;
+
   const extractedIds = values.map((value) => value.id);
-  // FIXME this is supposed to be an event that triggered the change.
-  // We lost this during the most recent refactor, but I'm not sure whether that's even a problem.
-  originalCallback(null, { value: extractedIds });
+  const changePayload = { ...data, value: extractedIds };
+
+  originalCallback(evt, changePayload);
 }, [originalCallback]);
 
 export function UserSearch({
@@ -34,14 +36,14 @@ export function UserSearch({
     [initialData],
   );
 
-  const setSelectedValue = useWrapIdOnly(onChange);
+  const onChangeIdOnly = useWrapIdOnly(onChange);
 
   if (anyLoading) return <Loading />;
 
   return (
     <WcaSearch
-      selectedValue={preSelected}
-      setSelectedValue={setSelectedValue}
+      value={preSelected}
+      onChange={onChangeIdOnly}
       model="user"
       params={{ only_staff_delegates: delegateOnly, only_trainee_delegates: traineeOnly }}
     />
@@ -65,14 +67,14 @@ export function CompetitionSearch({
     [initialData],
   );
 
-  const setSelectedValue = useWrapIdOnly(onChange);
+  const onChangeIdOnly = useWrapIdOnly(onChange);
 
   if (anyLoading) return <Loading />;
 
   return (
     <WcaSearch
-      selectedValue={preSelected}
-      setSelectedValue={setSelectedValue}
+      value={preSelected}
+      onChange={onChangeIdOnly}
       disabled={disabled}
     />
   );
