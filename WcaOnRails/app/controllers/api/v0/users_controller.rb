@@ -38,7 +38,7 @@ class Api::V0::UsersController < Api::V0::ApiController
         registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
         registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
         registered_for_by_competition_id = registrations.uniq.to_h do |r|
-          [r.competition.id, r.as_json({only: [], methods: ["wcif_status"] })]
+          [r.competition.id, r.as_json({ only: [], methods: ["wcif_status"] })]
         end
         competition_ids.concat(registered_for_by_competition_id.keys)
         if current_user.person
