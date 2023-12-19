@@ -664,6 +664,9 @@ class User < ApplicationRecord
       can_administer_competitions: {
         scope: can_admin_competitions? ? "*" : (delegated_competitions + organized_competitions).pluck(:id),
       },
+      can_view_delegate_admin_page: {
+        scope: can_view_delegate_matters? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -1302,6 +1305,7 @@ class User < ApplicationRecord
       user: self,
       metadata: {
         status: self.delegate_status,
+        location: self.location,
       },
     }
   end

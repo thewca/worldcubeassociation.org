@@ -125,3 +125,7 @@ export const defaultRoomColor = "<%= VenueRoom::DEFAULT_ROOM_COLOR %>";
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';
+
+// ----- ROLES & GROUPS -----
+
+export const groupTypes = JSON.parse('<%= UserGroup.group_types.to_json.html_safe %>');
