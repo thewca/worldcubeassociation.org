@@ -2,14 +2,15 @@
 
 module Microservices
   module Registrations
-    
+
     def self.internal_get_registrations_path
       "/api/internal/v1/registrations"
     end
 
     def self.external_get_registrations_path(competition_id)
       "/api/v1/registrations/#{competition_id}"
-    
+    end
+
     def self.competition_register_path(competition_id, stripe_status = nil)
       "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/register?&stripe_status=#{stripe_status}"
     end
@@ -51,7 +52,7 @@ module Microservices
       end
       response.body
     end
-      
+
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
       response = self.registration_connection.post(self.update_payment_status_path) do |req|
         req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
