@@ -319,6 +319,7 @@ Rails.application.routes.draw do
       get '/search/regulations' => 'api#regulations_search'
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
+      post '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
       get '/users/me/personal_records' => 'users#personal_records'
       get '/users/me/preferred_events' => 'users#preferred_events'
