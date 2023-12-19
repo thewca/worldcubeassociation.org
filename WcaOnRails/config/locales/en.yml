@@ -1107,7 +1107,6 @@ en:
       already_represented_country: "Cannot change the region to a region the person has already represented in the past."
       must_have_a_change: "The name or the region must be different to update the person."
       must_be_senior: "must be a Senior Delegate"
-      senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
       wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."

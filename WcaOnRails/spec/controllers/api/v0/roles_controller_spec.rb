@@ -6,8 +6,19 @@ RSpec.describe Api::V0::RolesController do
   describe 'GET #list' do
     let!(:africa_region) { FactoryBot.create(:africa_region) }
     let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
-    let(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
-    let(:user_whose_delegate_status_changes) { FactoryBot.create(:delegate, delegate_status: "candidate_delegate", senior_delegate: user_senior_delegate, region_id: africa_region.id, location: 'Australia') }
+    let!(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
+    let!(:user_whose_delegate_status_changes) { FactoryBot.create(:candidate_delegate, region_id: africa_region.id, location: 'Australia') }
+    let!(:delegate) { FactoryBot.create :delegate, region_id: user_senior_delegate.region_id }
+    let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
+    let!(:user_who_claims_wca_id) do
+      FactoryBot.create(
+        :user,
+        unconfirmed_wca_id: person.wca_id,
+        delegate_id_to_handle_wca_id_claim: user_whose_delegate_status_changes.id,
+        claiming_wca_id: true,
+        dob_verification: "1990-01-2",
+      )
+    end
 
     context 'when user is logged in and changing role data' do
       before do
@@ -53,7 +64,7 @@ RSpec.describe Api::V0::RolesController do
 
         expect(parsed_body["success"]).to eq true
         expect(user_whose_delegate_status_changes.delegate_status).to eq "delegate"
-        expect(user_whose_delegate_status_changes.senior_delegate_id).to eq user_senior_delegate.id
+        expect(user_whose_delegate_status_changes.region_id).to eq user_senior_delegate.region_id
         expect(user_whose_delegate_status_changes.location).to eq "location"
       end
 
@@ -63,8 +74,9 @@ RSpec.describe Api::V0::RolesController do
 
         expect(parsed_body["success"]).to eq true
         expect(user_whose_delegate_status_changes.reload.delegate_status).to eq nil
-        expect(user_whose_delegate_status_changes.reload.senior_delegate_id).to eq nil
+        expect(user_whose_delegate_status_changes.reload.region_id).to eq nil
         expect(user_whose_delegate_status_changes.reload.location).to eq ""
+        expect(user_who_claims_wca_id.reload.unconfirmed_wca_id).to eq nil
       end
     end
   end
