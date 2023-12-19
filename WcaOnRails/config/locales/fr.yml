@@ -3325,25 +3325,30 @@ fr:
           is_visible: Rendre la compétition publique
         competition_id: ID
         name: Nom
-        short_name: Alias
+        short_name: Nom abrégé de la compétition
         name_reason: Explication du nom
         venue:
-          country_id: Pays
-          city_name: Ville
+          country_id: Région
+          city_name: Nom de la ville
           name: Salle
           details: Détails de la salle
           address: Adresse de la salle
           coordinates:
         start_date: Date de début
         end_date: Date de fin
+        series:
+          series_id: ID de la série
+          name: Nom de la série
+          short_name: Surnom de la serie
+          competition_ids: Toutes les compétitions
         information: Informations
         competitor_limit:
-          enabled: Nombre maximum de compétiteurs
+          enabled: Limite de compétiteurs
           count: Nombre maximum de compétiteurs
           reason: Raison pour la limite au nombre de compétiteurs
         staff:
           staff_delegate_ids: Délégué(s) WCA
-          trainee_delegate_ids: Délégué(es) WCA Stagiaire(s)
+          trainee_delegate_ids: Délégué(s) WCA Stagiaire(s)
           organizer_ids: Organisateur(s)
           contact: Contact
         championships:
@@ -3351,18 +3356,17 @@ fr:
           generate_website: Je veux utiliser le site de la WCA plutôt qu'un site externe
             pour les informations complémentaires concernant la compétition.
           external_website: Site internet
-          external_registration_page: Page pour les inscriptions
+          external_registration_page: Page d'inscription
           uses_wca_registration: Je souhaite utiliser le site de la WCA pour les inscriptions
-          uses_wca_live:
+          uses_wca_live: Je souhaite utiliser WCA Live pour le scoretaking
         user_settings:
-          receive_registration_emails: M'avertir par email quand quelqu'un s'inscrit
-            à cette compétition
+          receive_registration_emails: M'avertir par e-mail quand quelqu'un s'inscrit à cette compétition
         entry_fees:
-          currency_code: Monnaie
+          currency_code: Devise
           base_entry_fee: Frais d'inscription de base
           on_the_spot_entry_fee: Coût de base des inscriptions sur place
           guest_entry_fee: Frais d'inscription pour les accompagnateurs
-          donations_enabled: Je souhaite activer les donations, en plus de récolter
+          donations_enabled: Je souhaite activer les dons, en plus de récolter
             des frais d'inscription
           refund_policy_percent: Pourcentage qui sera remboursé
           refund_policy_limit_date: Date limite pour les remboursements
@@ -3374,13 +3378,13 @@ fr:
           event_change_deadline_date: Date limite pour que les compétiteurs mettent
             à jour leurs épreuves
           allow_on_the_spot: Inscriptions sur place
-          allow_self_delete_after_acceptance:
-          allow_self_edits: Modifier les inscriptions
+          allow_self_delete_after_acceptance: Annulations d'inscription
+          allow_self_edits: Modifications d'inscription
           guests_enabled: Accompagnateurs
           guest_entry_status: Afficher un message pour l'admission gratuite des accompagnateurs
-          guests_per_registration:
+          guests_per_registration: Nombre maximal d'accompagnateurs par inscription
           extra_requirements: Conditions d'inscription additionnelles
-          force_comment:
+          force_comment: Forcer les compétiteurs à faire une commentaire lors de l'inscription
         event_restrictions:
           early_puzzle_submission:
             enabled: Je voudrais imposer au compétiteur la soumission de leur puzzle
@@ -3390,35 +3394,35 @@ fr:
             enabled: Je souhaite utiliser des résultats de qualification pour limiter
               qui peut participer à certaines épreuves
             reason: Raison et détails pour les résultats de qualification
-            allow_registration_without:
+            allow_registration_without: Épreuves avec qualification
           event_limitation:
             enabled: Je souhaite restreindre les inscriptions des compétiteurs pour
               certaines combinaisons d'épreuves
             reason: Raison et détails pour la restriction
-            per_registration_limit:
+            per_registration_limit: Limite d'épreuves par inscription
           main_event_id: Épreuve principale
         remarks: Remarques
-        clone_tabs: Je souhaite cloner les onglets ainsi que les informations additionnelles
-          également.
+        clone_tabs: Je souhaite cloner les onglets ainsi que les informations additionnelles.
       hints:
         admin:
           is_confirmed: ''
           is_visible: ''
         competition_id: ''
-        name: Le nom complet de la compétition, avec la date à la fin (Par exemple,
-          European Rubik's Cube Championship 2006). Pensez à mettre la première lettre
-          des mots en majuscule. Le nom doit contenir uniquement des caractères alphanumériques,
-          ainsi que des tirets(-), esperluettes(&), points(.), deux-points(:), apostrophes('),
-          et espaces( ).
-        short_name: Un nom court pour l'affichage. Si le nom de la compétition est
-          déjà court, vous pouvez réutiliser ce nom (par exemple, France 2006).
+        name: "Le nom complet de la compétition, avec la date à la fin ex : Paris
+          Open 2024). Pensez à mettre la première lettre des mots en majuscule.
+          Le nom doit contenir uniquement des caractères alphanumériques, ainsi
+          que des tirets (-), esperluettes (&), points (.), deux-points (:),
+          apostrophes ('), et espaces ( )."
+        short_name: Un nom court pour l’affichage. Si le nom de la compétition est que
+          plus court que %{short_name_limit} caractères, il ne doit pas être
+          modifié et doit être identique au nom normal.
         name_reason_html: Une brève explication du nom de la compétition. Le nom doit
           être en accord avec la <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
           country_id: ''
-          city_name: Nom de la ville où la compétition a lieu. Ne pas mettre le pays
-            (Par exemple, Paris).
+          city_name: "Nom de la ville où la compétition a lieu. Ne pas mettre le pays (ex :
+            Paris)."
           name_html: 'La salle où la compétition à lieu. %{md}. Par exemple : [Cité
             des Sciences et de l''Industrie](http://www.cite-sciences.fr)'
           details_html: Détails concernant la salle (Par exemple, au première étage
@@ -3427,25 +3431,38 @@ fr:
           coordinates:
         start_date: ''
         end_date: ''
+        series:
+          series_id: ''
+          name: >-
+            Le nom complet de la série de compétitions, en incluant l'année à la
+            fin (ex : Sud de la France 2024). Assurez-vous de mettre des
+            majuscules. Les mêmes règles que pour le nom de compétitions
+            individuelles s'appliquent.
+          short_name: >-
+            Un nom court pour affichage. Les mêmes règles que pour le nom des
+            compétitions individuelles s'appliquent.
+          competition_ids: >-
+            <b>Ce champ ne peut pas être modifié !</b><br/>Pour ajouter une
+            compétition à cette série, vous devez vous rendre sur la page
+            "Éditer" des compétitions que vous souhaitez ajouter.
         information: Informations importantes que les compétiteurs devraient avoir.
           Elles seront affichées sur la page principale de la compétition. <br/>Merci
-          de remplir ces informations <b>en anglais</b> et dans les langues que vos
+          de remplir ces informations <b>en Anglais</b> et dans les langues que vos
           compétiteurs parlent.
         competitor_limit:
-          enabled: Bien que le Règlement n'impose pas de fournir une limite au nombre
+          enabled: Bien que le règlement n'impose pas de fournir une limite au nombre
             de compétiteurs, il est vivement recommandé de le faire.
           count: Le nombre de compétiteurs autorisés dans cette compétition. Pour
             l'instant ce nombre est informatif, et ne permet pas d'empêcher plus de
-            personnes de s'inscrire. Nous sommes entrain de travailler sur l'intégration
+            personnes de s'inscrire. Nous sommes en train de travailler sur l'intégration
             de cette limite dans la procédure d'inscription, mais cela demande un
             peu de travail.
           reason: Quelle est la raison pour la limite au nombre de compétiteurs ?
             Merci de l'indiquer en Anglais !
         staff:
           staff_delegate_ids: Délégué(s) WCA pour la compétition.
-          trainee_delegate_ids: Délégués WCA Stagiaire pour la compétition.
-          organizer_ids: Organisateur(s) de la compétition (ils doivent avoir un compte
-            pour être listé ici).
+          trainee_delegate_ids: Délégué(s) WCA Stagiaire pour la compétition.
+          organizer_ids: Organisateurs de la compétition (ils doivent avoir un compte pour être listés ici).
           contact_html: 'Information de contact (optionnel). Si vous ne remplissez
             pas ce champ, les demandes de contact seront envoyées à travers un formulaire
             ne révélant pas les adresses email des organisateurs. %{md}. Exemple :
@@ -3458,15 +3475,12 @@ fr:
           external_registration_page: La page sur laquelle les compétiteurs doivent
             s'inscrire pour la compétition. Doit être une url http(s) valide.
           uses_wca_registration: ''
-          uses_wca_live:
+          uses_wca_live: ''
         user_settings:
           receive_registration_emails: ''
         entry_fees:
-          currency_code: La monnaie utilisée pour les différents frais
-          base_entry_fee: Les frais d'inscriptions de base pour la compétition. Les
-            frais d'inscriptions seront affichés dans les informations de la compétition
-            et lors de l'inscription (si utilisée). S'ils sont mis à 0, une phrase
-            sera affichée informant que les inscriptions sont gratuites.
+          currency_code: La devise utilisée pour les différents frais
+          base_entry_fee: "Les frais d’inscription de base pour la compétition. Ils seront affichés sur la page d’information de la compétition et sur la page d’inscription, le cas échéant. Si cette valeur est définie à 0, une phrase sera affichée indiquant que les inscriptions seront acceptées gratuitement.<br><br><b>REMARQUE\_: L’estimation suivante des dues WCA est uniquement une approximation basée sur les taux de change actuels et n’est en aucun cas contractuelle dans le cadre du paiement ultérieur des dues. </b>"
           on_the_spot_entry_fee: Si mis à 0, une phrase indiquera que les inscriptions
             sur place seront gratuites.
           guest_entry_fee: Pour l'instant, ce nombre est seulement informatif, les
@@ -3485,25 +3499,27 @@ fr:
           closing_date_time: ''
           waiting_list_deadline_date: La date à laquelle les participants en liste
             d'attente ne sont plus acceptés. Si vous avez une date limite pour les
-            remboursements, la date limite pour être accepté ne doit pas être positionnée
+            remboursements, la date limite pour être accepté ne devrait pas être positionnée
             avant la date limite pour les remboursements.
-          event_change_deadline_date: Les compétiteurs inscrits ont le droit de mettre
-            à jour les épreuves dans lesquelles ils sont inscrits jusqu'à cette date,
-            en contactant l'équipe d'organisation. Cette date limite ne doit pas être
-            positionnée avant la date à laquelle les inscriptions se terminent. Laisser
-            ce champ vide signifie que les compétiteurs peuvent ajouter une épreuve
-            à la liste des épreuves auxquelles ils sont inscrits jusqu'à ce que cette
-            épreuve ait lieu. Si vous acceptez les inscriptions sur place, cette date
-            doit être positionnée le jour de la compétition.
+          event_change_deadline_date: Les compétiteurs inscrits ont le droit de mettre à jour les épreuves
+            dans lesquelles ils sont inscrits jusqu'à cette date, en contactant
+            l'équipe organisatrie. Cette date limite ne doit pas être positionnée
+            avant la date à laquelle les inscriptions se terminent. Laisser ce
+            champ vide signifie que les compétiteurs peuvent ajouter une épreuve à
+            la liste des épreuves auxquelles ils sont inscrits jusqu'à ce que
+            cette épreuve ait lieu. Si vous acceptez les inscriptions sur place,
+            cette date doit être positionnée le jour de la compétition.
           allow_on_the_spot: ''
           allow_self_delete_after_acceptance:
           allow_self_edits: ''
           guests_enabled: ''
           guest_entry_status: ''
-          guests_per_registration:
+          guests_per_registration: Le nombre d’invités par inscription autorisés pour cette compétition.
+            Une inscription avec un nombre trop élevé d’accompagnants sera
+            bloquée. Laisser vide s’il n’y a pas de limite.
           extra_requirements: Merci d'indiquer ici toute autre conditions d'inscriptions
-            non couverte ci dessus, comme par exemple comment payer les frais d'inscription.
-            <br/>Merci de remplir ces informations <b>en anglais</b> et dans les langues
+            non couverte ci-dessus, comme par exemple comment payer les frais d'inscription.
+            <br/>Merci de remplir ces informations <b>en Anglais</b> et dans les langues
             que vos compétiteurs parlent. Ces informations seront affichées sur la
             page principale de la compétition, ainsi que sur la page d'inscription
             si vous utilisez les inscriptions sur le site de la WCA.
@@ -3524,12 +3540,16 @@ fr:
             reason: Merci de détailler ici pourquoi vous souhaiteriez restreindre
               certaines combinaisons d'épreuves. Merci de remplir ce champ en Anglais
               !
-            per_registration_limit:
+            per_registration_limit: (Facultatif) Imposez le nombre total d’épreuves auxquelles un
+              compétiteur peut s’inscrire (utilisé pour les compétitions
+              "favorites"). Vous devriez ajouter des épreuves avant d’utiliser ce
+              champ. Les inscriptions comportant trop d’événements seront bloquées.
+              Laissez ce champ vide s’il n’y a pas de limite.
           main_event_id: Le gagnant de cette épreuve sera le gagnant de la compétition.
         remarks: Des informations supplémentaires que vous souhaiteriez passer au
           WCAT. Par exemple, s'il y a certaines choses dont vous n'êtes pas sûr, ou
-          si vous avez des requêtes spéciales à faire au WCAT. Merci de remplir ça
-          en Anglais!
+          si vous avez des requêtes spéciales à faire au WCAT. Merci de remplir cela
+          en Anglais !
         clone_tabs: ''
       choices:
         competitor_limit:
@@ -3541,12 +3561,14 @@ fr:
             'true': Les inscriptions sur place seront acceptées
             'false': Les inscriptions sur place ne seront PAS acceptées
           allow_self_delete_after_acceptance:
-            'true':
-            'false':
+            'true': Les compétiteurs peuvent supprimer leur propre inscription, même
+              après qu'elle ait été acceptée
+            'false': Les compétiteurs ne peuvent PAS supprimer leur propre inscription
+              une fois qu'elle a été acceptée
           allow_self_edits:
             'true': Les compétiteurs peuvent modifier leur inscription jusqu'à la
               date limite pour mettre à jour leurs épreuves.
-            'false': Les compétiteurs ne peuvent pas modifier leur inscription une
+            'false': Les compétiteurs ne peuvent PAS modifier leur inscription une
               fois qu'elle a été acceptée.
           guests_enabled:
             'true': Demander de renseigner les accompagnateurs
@@ -3559,8 +3581,9 @@ fr:
         event_restrictions:
           qualification_results:
             allow_registration_without:
-              'true':
-              'false':
+              'true': Les compétiteurs seront autorisés à s'inscrire pour des épreuves
+                auxquelles ils ne se qualifient pas (je les retirerai plus tard)
+              'false': Les compétiteurs DOIVENT se qualifier pour s'inscrire à une épreuve
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
