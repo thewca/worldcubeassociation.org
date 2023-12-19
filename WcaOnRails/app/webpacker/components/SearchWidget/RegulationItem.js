@@ -6,7 +6,7 @@ function RegulationItem({
   item,
 }) {
   return (
-    <div className="omnisearch-item-reg">
+    <div className="multisearch-item-reg">
       <div className="reg-id">
         {item.id}
         :

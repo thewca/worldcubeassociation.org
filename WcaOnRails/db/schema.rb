@@ -556,6 +556,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
   end
 
+  create_table "attendee_payment_requests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "attendee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.integer "user_id", null: false
@@ -1092,7 +1098,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
     t.bigint "region_id"
-    t.integer "senior_delegate_id"
     t.string "location", limit: 255
     t.string "wca_id"
     t.string "avatar", limit: 255
@@ -1127,7 +1132,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["region_id", "delegate_status"], name: "index_users_on_region_id_and_delegate_status"
     t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
   end
 

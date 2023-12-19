@@ -204,7 +204,7 @@ RSpec.describe CompetitionsController do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
     let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, :with_valid_schedule, latitude: 11.0, longitude: 11.0, starts: 1.day.ago) }
+    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, :with_valid_schedule, latitude: 11.0, longitude: 11.0, starts: 5.weeks.from_now) }
 
     context 'when signed in as an organizer' do
       before :each do
@@ -423,7 +423,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can change extra registration requirements field after competition is confirmed" do
-        comp = FactoryBot.create(:competition, :confirmed)
+        comp = FactoryBot.create(:competition, :confirmed, :future)
         new_requirements = "New extra requirements"
         patch :update, params: { id: comp, competition: { extra_registration_requirements: new_requirements } }
         comp.reload
@@ -843,7 +843,7 @@ RSpec.describe CompetitionsController do
   end
 
   describe 'POST #cancel_competition' do
-    let(:competition) { FactoryBot.create(:competition, :confirmed, :announced) }
+    let(:competition) { FactoryBot.create(:competition, :confirmed, :announced, :future) }
     context 'when signed in as WCAT' do
       let(:wcat_member) { FactoryBot.create(:user, :wcat_member) }
       before :each do
@@ -871,7 +871,7 @@ RSpec.describe CompetitionsController do
       end
 
       it "can uncancel competition" do
-        cancelled_competition = FactoryBot.create(:competition, :cancelled)
+        cancelled_competition = FactoryBot.create(:competition, :cancelled, :future)
         patch :cancel_competition, params: { id: cancelled_competition, undo: true }
         expect(response).to redirect_to admin_edit_competition_path(cancelled_competition)
         expect(cancelled_competition.reload.cancelled?).to eq false

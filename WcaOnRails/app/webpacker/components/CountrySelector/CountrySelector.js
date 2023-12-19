@@ -12,11 +12,14 @@ const countryOptions = countries.real.map((country) => ({
   image: <CountryFlag iso2={country.iso2} />,
 }));
 
-function CountrySelector({ countryIso2, onChange, error }) {
+function CountrySelector({
+  name, countryIso2, onChange, error,
+}) {
   return (
     <Form.Select
       className="country-selector"
       search
+      name={name}
       label="Country"
       value={countryIso2}
       error={error}

@@ -130,8 +130,6 @@ export const rolesOfGroupType = (groupType, status) => {
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
 export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_role_path('dummyRoleId') %>`;
 
-export const delegatesStaticPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_delegates_path) %>`;
-
 export const panelWfcPageDataUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.page_data_panel_wfc_path) %>`;
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
 export const wfcCompetitionsExportUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.wfc_competitions_export_path) %>`;
@@ -145,3 +143,5 @@ export const wfcDuesRedirectsUrl = `<%= CGI.unescape(Rails.application.routes.ur
 export const pendingClaimsUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_claims_path) %>/${userId}`;
 
 export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>/${userId}`;
+
+export const permissionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`;

@@ -307,6 +307,21 @@ class Competition < ApplicationRecord
     end
   end
 
+  private def should_validate_registration_closing?
+    confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?)
+  end
+
+  # Same comment as for start_date_must_be_28_days_in_advance
+  validate :registation_must_not_be_past, if: :should_validate_registration_closing?
+  private def registation_must_not_be_past
+    if editing_user_id
+      editing_user = User.find(editing_user_id)
+      if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
+        errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
+      end
+    end
+  end
+
   def has_any_round_per_event?
     competition_events.map(&:rounds).none?(&:empty?)
   end
@@ -523,6 +538,11 @@ class Competition < ApplicationRecord
         if (self.registration_open - Time.now.utc) < REGISTRATION_OPENING_EARLIEST
           warnings[:regearly] = I18n.t('competitions.messages.reg_opens_too_early')
         end
+      end
+    end
+    if registration_range_specified? && registration_past?
+      unless self.announced?
+        warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
       end
     end
 

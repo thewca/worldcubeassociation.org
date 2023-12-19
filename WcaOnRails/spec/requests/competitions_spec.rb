@@ -3,7 +3,7 @@
 require "rails_helper"
 
 RSpec.describe "competitions" do
-  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule) }
+  let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
   describe "PATCH #update_competition" do
     context "when signed in as admin" do
