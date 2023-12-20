@@ -19,6 +19,7 @@ import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import DelegatesOfRegion from './DelegatesOfRegion';
+import useHash from '../../lib/hooks/useHash';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('delegates_page.acknowledges')
@@ -35,12 +36,28 @@ export default function Delegates() {
     [delegateGroups],
   );
 
-  const [activeRegion, setActiveRegion] = React.useState();
-  const [adminMode, setAdminMode] = React.useState(false);
+  const [hash, setHash] = useHash();
 
-  React.useEffect(() => {
-    setActiveRegion(delegateRegions?.[0]);
-  }, [delegateRegions]);
+  const SelectedComponent = React.useMemo(() => {
+    const selectedRegionIndex = delegateRegions.findIndex((region) => region.id === +hash);
+    if (selectedRegionIndex === -1) {
+      setHash(delegateRegions[0]?.id);
+      return () => null;
+    }
+    const selectedSection = delegateRegions[selectedRegionIndex];
+    if (selectedSection.component) {
+      return selectedSection.component;
+    }
+
+    return () => null;
+  }, [delegateRegions, hash, setHash]);
+
+  const activeRegion = React.useMemo(
+    () => delegateRegions.find((region) => region.id === +hash),
+    [delegateRegions, hash],
+  );
+
+  const [adminMode, setAdminMode] = React.useState(false);
 
   if (permissionsLoading || delegateGroupsLoading || !activeRegion) return <Loading />;
   if (delegateGroupsError) return <Errored />;
@@ -73,8 +90,8 @@ export default function Delegates() {
               <Menu.Item
                 key={region.id}
                 name={region.name}
-                active={activeRegion === region}
-                onClick={() => setActiveRegion(region)}
+                active={region.id === hash}
+                onClick={() => setHash(region.id)}
               />
             ))}
           </Menu>
@@ -94,12 +111,11 @@ export default function Delegates() {
                     text: region.name,
                     value: region.id,
                   }))}
-                  value={activeRegion.id}
-                  onChange={(__, { value }) => setActiveRegion(
-                    delegateRegions.find((region) => region.id === value),
-                  )}
+                  value={hash}
+                  onChange={(__, { value }) => setHash(value)}
                 />
               </Grid.Row>
+              <Grid.Row><SelectedComponent /></Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
                 isAdminMode={adminMode}
