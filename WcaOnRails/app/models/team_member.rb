@@ -23,6 +23,10 @@ class TeamMember < ApplicationRecord
     end_date.nil? || end_date > Date.today
   end
 
+  def is_atleast_senior_member?
+    current_member? && (senior_member? || leader?)
+  end
+
   validate :start_date_must_be_earlier_than_or_same_as_end_date
   def start_date_must_be_earlier_than_or_same_as_end_date
     if start_date && end_date && start_date > end_date

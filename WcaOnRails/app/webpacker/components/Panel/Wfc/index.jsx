@@ -47,7 +47,7 @@ export default function Wfc() {
       sections={sections
         .filter(
           (section) => (!section.forAtleastSeniorMember
-              || loggedInUserPermissions.canAccessWfcSeniorStuff()),
+              || loggedInUserPermissions.canAccessWfcSeniorMatters),
         )}
     />
   );

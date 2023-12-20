@@ -14,7 +14,7 @@ export default function useLoggedInUserPermissions() {
   const { data, loading } = useLoadedData(apiV0Urls.users.me.permissions());
 
   const loggedInUserPermissions = React.useMemo(() => ({
-    canViewDelegateAdminPage: () => Boolean(data?.can_view_delegate_admin_page.scope === '*'),
+    canViewDelegateAdminPage: Boolean(data?.can_view_delegate_admin_page.scope === '*'),
     canEditRole: (role) => {
       const roleGroupType = role.group.group_type;
       const roleGroupId = role.group.id;
@@ -28,7 +28,7 @@ export default function useLoggedInUserPermissions() {
           return false;
       }
     },
-    canAccessWfcSeniorStuff: () => Boolean(data?.can_access_wfc_senior_stuff.scope === '*'),
+    canAccessWfcSeniorMatters: Boolean(data?.can_access_wfc_senior_matters.scope === '*'),
   }), [data]);
 
   return { loggedInUserPermissions, loading };

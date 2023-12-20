@@ -651,8 +651,8 @@ class User < ApplicationRecord
       can_edit_teams_committees: {
         scope: can_edit_any_roles? ? "*" : self.leader_teams,
       },
-      can_access_wfc_senior_stuff: {
-        scope: can_access_wfc_senior_stuff? ? "*" : [],
+      can_access_wfc_senior_matters: {
+        scope: can_access_wfc_senior_matters? ? "*" : [],
       },
     }
     if banned?
@@ -1351,7 +1351,7 @@ class User < ApplicationRecord
     self.current_team_members.select { |member| member.team_leader? }.pluck(:team_id)
   end
 
-  def can_access_wfc_senior_stuff?
-    team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
+  def can_access_wfc_senior_matters?
+    financial_committee? && team_membership_details(Team.wfc).is_atleast_senior_member?
   end
 end
