@@ -15,9 +15,9 @@ export default function useLoggedInUserPermissions() {
 
   const loggedInUserPermissions = React.useMemo(() => ({
     canViewDelegateAdminPage: () => Boolean(data?.can_view_delegate_admin_page.scope === '*'),
-    canEditRole: (_role) => {
-      const roleGroupType = _role.group.group_type;
-      const roleGroupId = _role.group.id;
+    canEditRole: (role) => {
+      const roleGroupType = role.group.group_type;
+      const roleGroupId = role.group.id;
 
       switch (roleGroupType) {
         case groupTypes.delegate_regions:
