@@ -17,9 +17,12 @@ import I18n from '../../lib/i18n';
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.candidate_delegate')
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.delegate')
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.senior_delegate')
-// i18n-tasks-use t('enums.user.role_status.teams.member')
-// i18n-tasks-use t('enums.user.role_status.teams.senior_member')
-// i18n-tasks-use t('enums.user.role_status.teams.leader')
+// i18n-tasks-use t('enums.user.role_status.teams_committees.member')
+// i18n-tasks-use t('enums.user.role_status.teams_committees.senior_member')
+// i18n-tasks-use t('enums.user.role_status.teams_committees.leader')
+// i18n-tasks-use t('enums.user.role_status.councils.member')
+// i18n-tasks-use t('enums.user.role_status.councils.senior_member')
+// i18n-tasks-use t('enums.user.role_status.councils.leader')
 
 export default function RolesTab({ userId, loggedInUserId }) {
   const roleListFetch = useLoadedData(rolesOfUser(userId));

@@ -348,7 +348,7 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      resources :roles, only: [:show, :update, :destroy]
+      resources :roles, only: [:create, :show, :update, :destroy]
       scope 'roles' do
         get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
         get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group

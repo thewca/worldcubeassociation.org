@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::RolesController < Api::V0::ApiController
-  before_action :current_user_is_authorized_for_action!, only: [:update, :destroy]
+  before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate?
       render json: {}, status: 401
@@ -29,14 +29,25 @@ class Api::V0::RolesController < Api::V0::ApiController
   end
 
   # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles, status)
-    unless status.nil?
+  private def filter_roles_for_parameters(roles, status, is_active)
+    if status.present?
       roles = roles.select do |role|
         is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
         if is_actual_role
           role.metadata.status == status
         else
           role[:metadata][:status] == status
+        end
+      end
+    end
+
+    if is_active.present?
+      roles = roles.select do |role|
+        is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
+        if is_actual_role
+          role.is_active == ActiveRecord::Type::Boolean.new.cast(is_active)
+        else
+          true # All roles are active in the old system.
         end
       end
     end
@@ -60,7 +71,7 @@ class Api::V0::RolesController < Api::V0::ApiController
         group: {
           id: 'admin',
           name: 'Admin Group',
-          group_type: UserGroup.group_types[:teams],
+          group_type: UserGroup.group_types[:teams_committees],
           is_hidden: false,
           is_active: true,
         },
@@ -134,19 +145,65 @@ class Api::V0::RolesController < Api::V0::ApiController
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
     roles = Role.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
 
-    # Temporary hack to support the old delegate structure, will be removed once all roles are
+    # Temporary hack to support the old system roles, will be removed once all roles are
     # migrated to the new system.
     if group_type == UserGroup.group_types[:delegate_regions]
       roles.concat(User.where.not(delegate_status: nil).map(&:delegate_role))
+    elsif group_type == UserGroup.group_types[:councils]
+      Team.all_councils.each do |council|
+        leader = council.leader
+        if leader.present?
+          roles << {
+            id: group_type + "_" + leader.id.to_s,
+            group: {
+              id: group_type + "_" + council.id.to_s,
+              name: council.name,
+              group_type: UserGroup.group_types[:councils],
+              is_hidden: false,
+              is_active: true,
+            },
+            user: leader.user,
+            metadata: {
+              status: 'leader',
+            },
+          }
+        end
+      end
     end
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
 
     # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(roles, params[:status])
+    roles = filter_roles_for_parameters(roles, params[:status], params[:isActive])
 
     render json: roles
+  end
+
+  def create
+    user_id = params.require(:userId)
+    group_id = params.require(:groupId)
+
+    if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
+      # migrated to the new system.
+      group_type = group_id.split("_").first
+      original_group_id = group_id.split("_").last
+      if group_type == UserGroup.group_types[:councils]
+        status = params.require(:status)
+        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
+        if already_existing_member.present?
+          already_existing_member.update!(end_date: Date.today)
+        end
+        TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+        render json: {
+          success: true,
+        }
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
+    else
+      render status: :unprocessable_entity, json: { error: "Invalid group id" }
+    end
   end
 
   def show
@@ -172,31 +229,79 @@ class Api::V0::RolesController < Api::V0::ApiController
   end
 
   def update
-    user_id = params.require(:userId)
-    delegate_status = params.require(:delegateStatus)
-    region_id = params.require(:regionId)
-    location = params.require(:location)
+    id = params.require(:id)
 
-    user = User.find(user_id)
-    user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
-    send_role_change_notification(user)
+    if id == Role::DELEGATE_ROLE_ID
+      user_id = params.require(:userId)
+      delegate_status = params.require(:delegateStatus)
+      region_id = params.require(:regionId)
+      location = params.require(:location)
 
-    render json: {
-      success: true,
-    }
+      user = User.find(user_id)
+      user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
+      send_role_change_notification(user)
+
+      render json: {
+        success: true,
+      }
+    elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
+      # all roles are migrated to the new system.
+      group_id = params.require(:groupId)
+      status = params.require(:status)
+      group_type = id.split("_").first
+      original_group_id = group_id.split("_").last
+      if group_type == UserGroup.group_types[:councils]
+        user_id = params.require(:userId)
+        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
+        if already_existing_member.present?
+          already_existing_member.update!(end_date: Time.now)
+        end
+        TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+        render json: {
+          success: true,
+        }
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
+    else
+      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+    end
   end
 
   def destroy
-    user_id = params.require(:userId)
+    id = params.require(:id)
 
-    user = User.find(user_id)
-    remove_pending_wca_id_claims(user)
-    user.update!(delegate_status: '', region_id: '', location: '')
-    send_role_change_notification(user)
+    if id == Role::DELEGATE_ROLE_ID
+      user_id = params.require(:userId)
 
-    render json: {
-      success: true,
-    }
+      user = User.find(user_id)
+      remove_pending_wca_id_claims(user)
+      user.update!(delegate_status: '', region_id: '', location: '')
+      send_role_change_notification(user)
+
+      render json: {
+        success: true,
+      }
+    elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
+      # all roles are migrated to the new system.
+      group_id = params.require(:groupId)
+      group_type = id.split("_").first
+      original_group_id = group_id.split("_").last
+      if group_type == UserGroup.group_types[:councils]
+        user_id = params.require(:userId)
+        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
+        if already_existing_member.present?
+          already_existing_member.update!(end_date: Date.today)
+        end
+        render json: {
+          success: true,
+        }
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
+    else
+      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+    end
   end
 
   private def send_role_change_notification(user)

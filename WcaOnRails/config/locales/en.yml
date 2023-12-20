@@ -465,7 +465,11 @@ en:
           candidate_delegate: "Junior Delegate"
           delegate: "Delegate"
           senior_delegate: "Senior Delegate"
-        teams:
+        teams_committees:
+          member: "Member"
+          senior_member: "Senior Member"
+          leader: "Leader"
+        councils:
           member: "Member"
           senior_member: "Senior Member"
           leader: "Leader"
