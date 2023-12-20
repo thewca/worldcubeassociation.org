@@ -692,13 +692,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_20_090853) do
     t.index ["championship_type", "eligible_country_iso2"], name: "index_eligible_iso2s_for_championship_on_type_and_country_iso2", unique: true
   end
 
-  create_table "groups_metadata_councils", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "friendly_id", null: false
-    t.string "email", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
   create_table "groups_metadata_delegate_regions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
@@ -1134,7 +1127,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_20_090853) do
     t.boolean "cookies_acknowledged", default: false, null: false
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
-    t.integer "senior_delegate_id"
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["region_id", "delegate_status"], name: "index_users_on_region_id_and_delegate_status"

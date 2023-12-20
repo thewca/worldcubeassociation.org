@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 FactoryBot.define do
-  factory :role do
+  factory :user_role do
     factory :probation_role do
       user { FactoryBot.create(:delegate) }
       group_id { FactoryBot.create(:delegate_probations_user_group).id }
