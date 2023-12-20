@@ -28,14 +28,51 @@ function CompetitionFilter() {
       [eventId]: !prevSelectedEvents[eventId],
     }));
   };
+  const [timeOrder, setTimeOrder] = useState('present');
+  const editTimeOrder = (order) => {
+    setTimeOrder(order);
+  };
+
+  const [inProgressComps, setInProgressComps] = useState([]);
+  const [notInProgressComps, setNotInProgressComps] = useState([]);
+  const [recentComps, setRecentComps] = useState([]);
+  const [sortByAnnouncementComps, setSortByAnnouncementComps] = useState([]);
 
   const {
     data,
     fetchNextPage,
     isFetching,
   } = useInfiniteQuery({
-    queryKey: ['competitions'],
-    queryFn: ({ pageParam = 1 }) => fetchJsonOrError(`${competitionsApiUrl}?page=${pageParam}`),
+    queryKey: [timeOrder],
+    queryFn: ({ pageParam = 1 }) => {
+      const dateNow = new Date(Date.now());
+      let searchParams;
+
+      if (timeOrder === 'present') {
+        searchParams = new URLSearchParams({
+          sort: 'start_date',
+          start: dateNow.toISOString().split('T')[0],
+          page: pageParam,
+        });
+      } else if (timeOrder === 'recent') {
+        const thirtyDaysAgo = new Date();
+        thirtyDaysAgo.setDate(dateNow.getDate() - 30);
+
+        searchParams = new URLSearchParams({
+          sort: '-start_date',
+          start: thirtyDaysAgo.toISOString().split('T')[0],
+          end: dateNow.toISOString().split('T')[0],
+          page: pageParam,
+        });
+      } else if (timeOrder === 'by_announcement') {
+        searchParams = new URLSearchParams({
+          sort: '-announced_at',
+          page: pageParam,
+        });
+      }
+
+      return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
+    },
     getNextPageParam: (lastPage, allPages) => {
       // Assuming the last page has less than the max number of competitions fetched per query
       if (lastPage.data.length < COMPETITIONS_API_PAGINATION) {
@@ -45,6 +82,26 @@ function CompetitionFilter() {
       return allPages.length + 1;
     },
   });
+
+  useEffect(() => {
+    const flatData = data?.pages
+      .map((page) => page.data)
+      .flatMap((comp) => comp);
+
+    if (!flatData) return;
+
+    if (timeOrder === 'present') {
+      const inProgressData = flatData.filter((comp) => comp.inProgress);
+      const notInProgressData = flatData.filter((comp) => !comp.inProgress);
+
+      setInProgressComps(inProgressData);
+      setNotInProgressComps(notInProgressData);
+    } else if (timeOrder === 'recent') {
+      setRecentComps(flatData);
+    } else if (timeOrder === 'by_announcement') {
+      setSortByAnnouncementComps(flatData);
+    }
+  }, [data]);
 
   const { ref, inView } = useInView();
   useEffect(() => {
@@ -130,14 +187,37 @@ function CompetitionFilter() {
         <Form.Group>
           <Form.Field>
             <label htmlFor="state">{I18n.t('competitions.index.state')}</label>
-            <Button.Group toggle id="state">
-              <Button primary name="state" id="present" value="present">
+            <Button.Group id="state">
+              <Button
+                primary
+                name="state"
+                id="present"
+                value="present"
+                onClick={() => editTimeOrder('present')}
+                active={timeOrder === 'present'}
+              >
                 <span className="caption">{I18n.t('competitions.index.present')}</span>
               </Button>
-              <Button primary name="state" id="recent" value="recent" data-tooltip={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })} data-variation="tiny">
+              <Button
+                primary
+                name="state"
+                id="recent"
+                value="recent"
+                onClick={() => editTimeOrder('recent')}
+                active={timeOrder === 'recent'}
+                data-tooltip={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })}
+                data-variation="tiny"
+              >
                 <span className="caption">{I18n.t('competitions.index.recent')}</span>
               </Button>
-              <Button primary name="state" id="past" value="past">
+              <Button
+                primary
+                name="state"
+                id="past"
+                value="past"
+                onClick={() => editTimeOrder('past')}
+                active={timeOrder === 'past'}
+              >
                 <span className="caption">{I18n.t('competitions.index.past')}</span>
                 <Dropdown
                   pointing
@@ -158,10 +238,26 @@ function CompetitionFilter() {
                   </Dropdown.Menu>
                 </Dropdown>
               </Button>
-              <Button primary name="state" id="by_announcement" value="by_announcement" data-tooltip={I18n.t('competitions.index.sort_by_announcement')} data-variation="tiny">
+              <Button
+                primary
+                name="state"
+                id="by_announcement"
+                value="by_announcement"
+                onClick={() => editTimeOrder('by_announcement')}
+                active={timeOrder === 'by_announcement'}
+                data-tooltip={I18n.t('competitions.index.sort_by_announcement')}
+                data-variation="tiny"
+              >
                 <span className="caption">{I18n.t('competitions.index.by_announcement')}</span>
               </Button>
-              <Button primary name="state" id="custom" value="custom">
+              <Button
+                primary
+                name="state"
+                id="custom"
+                value="custom"
+                onClick={() => editTimeOrder('custom')}
+                active={timeOrder === 'custom'}
+              >
                 <span className="caption">{I18n.t('competitions.index.custom')}</span>
               </Button>
             </Button.Group>
@@ -214,7 +310,48 @@ function CompetitionFilter() {
           </div>
         </div>
         <div id="competitions-list">
-          <CompetitionTable competitions={data?.pages.map((p) => p.data).flatMap((d) => d)} title="Competitions" showRegistrationStatus={false} loading={isFetching} />
+          {
+            timeOrder === 'present'
+            && (
+              <>
+                <CompetitionTable
+                  competitions={inProgressComps}
+                  title={I18n.t('competitions.index.titles.in_progress')}
+                  showRegistrationStatus={false}
+                  loading={isFetching && !notInProgressComps}
+                />
+                <CompetitionTable
+                  competitions={notInProgressComps}
+                  title={I18n.t('competitions.index.titles.upcoming')}
+                  showRegistrationStatus={false}
+                  loading={isFetching}
+                />
+              </>
+            )
+          }
+          {
+            timeOrder === 'recent'
+            && (
+              <CompetitionTable
+                competitions={recentComps}
+                title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
+                showRegistrationStatus={false}
+                loading={isFetching}
+              />
+            )
+          }
+          {
+            timeOrder === 'by_announcement'
+            && (
+              <CompetitionTable
+                competitions={sortByAnnouncementComps}
+                title={I18n.t('competitions.index.titles.by_announcement')}
+                showRegistrationStatus={false}
+                loading={isFetching}
+                sortByAnnouncement
+              />
+            )
+          }
         </div>
         <div className="col-xs-12 col-md-12">
           <div id="competitions-map" />
