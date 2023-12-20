@@ -1,6 +1,7 @@
 import React from 'react';
 import useLoadedData from './useLoadedData';
 import { permissionsUrl } from '../requests/routes.js.erb';
+import { groupTypes } from '../wca-data.js.erb';
 
 export default function useLoggedInUserPermissions() {
   // FIXME: We won't be knowing whether the user is logged in or not. If the user is not logged in,
@@ -14,6 +15,19 @@ export default function useLoggedInUserPermissions() {
 
   const loggedInUserPermissions = React.useMemo(() => ({
     canViewDelegateAdminPage: () => Boolean(data?.can_view_delegate_admin_page.scope === '*'),
+    canEditRole: (role) => {
+      const roleGroupType = role.group.group_type;
+      const roleGroupId = role.group.id;
+
+      switch (roleGroupType) {
+        case groupTypes.delegate_regions:
+          return Boolean(data?.can_edit_delegate_regions.scope === '*' || data?.can_edit_delegate_regions.scope.some((groupId) => groupId === roleGroupId));
+        case groupTypes.teams_committees:
+          return Boolean(data?.can_edit_teams_committees.scope === '*' || data?.can_edit_teams_committees.scope.some((groupId) => groupId === roleGroupId));
+        default:
+          return false;
+      }
+    },
   }), [data]);
 
   return { loggedInUserPermissions, loading };

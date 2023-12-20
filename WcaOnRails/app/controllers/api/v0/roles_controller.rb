@@ -29,30 +29,23 @@ class Api::V0::RolesController < Api::V0::ApiController
   end
 
   # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles, status, is_active)
-    if status.present?
-      roles = roles.select do |role|
-        is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
-        if is_actual_role
-          role.metadata.status == status
-        else
-          role[:metadata][:status] == status
-        end
-      end
+  private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil)
+    roles.reject do |role|
+      is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
+      # In future, the following lines will be replaced by the following:
+      # (
+      #   status.present? && status != role.metadata.status ||
+      #   is_active.present? && is_active != role.is_active ||
+      #   is_group_hidden.present? && is_group_hidden != role.group.is_hidden
+      # )
+      # Till then, we need to support both the old and new systems. So, we will be using ternary
+      # operator to access the parameters.
+      (
+        (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
+        (is_active.present? && is_active != (is_actual_role ? role.is_active : role[:is_active])) ||
+        (is_group_hidden.present? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
+      )
     end
-
-    if is_active.present?
-      roles = roles.select do |role|
-        is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
-        if is_actual_role
-          role.is_active == ActiveRecord::Type::Boolean.new.cast(is_active)
-        else
-          true # All roles are active in the old system.
-        end
-      end
-    end
-
-    roles
   end
 
   # Returns a list of roles by user which are not yet migrated to the new system.
@@ -69,12 +62,13 @@ class Api::V0::RolesController < Api::V0::ApiController
     if user.admin? || user.board_member?
       roles << {
         group: {
-          id: 'admin',
-          name: 'Admin Group',
+          id: user.admin? ? 'admin' : 'board',
+          name: user.admin? ? 'Admin Group' : 'Board Group',
           group_type: UserGroup.group_types[:teams_committees],
           is_hidden: false,
           is_active: true,
         },
+        is_active: true,
         user: user,
         metadata: {
           status: 'member',
@@ -121,6 +115,13 @@ class Api::V0::RolesController < Api::V0::ApiController
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
+
+    # Filter the list based on the other parameters.
+    roles = filter_roles_for_parameters(
+      roles: roles,
+      is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
+      is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
+    )
 
     render json: roles
   end
@@ -175,7 +176,7 @@ class Api::V0::RolesController < Api::V0::ApiController
     roles = filter_roles_for_logged_in_user(roles)
 
     # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(roles, params[:status], params[:isActive])
+    roles = filter_roles_for_parameters(roles: roles, status: params[:status], is_active: params[:isActive])
 
     render json: roles
   end

@@ -645,6 +645,12 @@ class User < ApplicationRecord
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
+      can_edit_delegate_regions: {
+        scope: can_edit_any_roles? ? "*" : senior_delegate_regions,
+      },
+      can_edit_teams_committees: {
+        scope: can_edit_any_roles? ? "*" : self.leader_teams,
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -1274,6 +1280,7 @@ class User < ApplicationRecord
   def delegate_role
     {
       end_date: nil,
+      is_active: true,
       group: self.region,
       user: self,
       metadata: {
@@ -1296,6 +1303,7 @@ class User < ApplicationRecord
       end
       roles << {
         start_date: team_membership_details.start_date,
+        is_active: true,
         group: {
           id: team.id,
           name: team.name,
@@ -1326,5 +1334,17 @@ class User < ApplicationRecord
 
   def subordinate_delegates
     senior_delegate? ? User.where(region_id: self.region_id).where.not(id: self.id) : []
+  end
+
+  def can_edit_any_roles?
+    admin? || board_member?
+  end
+
+  def senior_delegate_regions
+    self.senior_delegate? ? [self.region_id] : []
+  end
+
+  def leader_teams
+    self.current_team_members.select { |member| member.team_leader? }.pluck(:team_id)
   end
 end
