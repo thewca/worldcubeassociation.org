@@ -143,7 +143,7 @@ export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.u
 export const apiV0Urls = {
   users: {
     me: {
-      permissions: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`,
+      permissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`,
     },
   },
   wrt: {
