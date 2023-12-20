@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Accordion,
   Header,
@@ -31,9 +31,9 @@ const defaultPermissions = {
 };
 
 const dateRange = (startDate, endDate) => {
-  // One Day competition
   const momentStart = moment(startDate);
   const momentEnd = moment(endDate);
+  // One Day competition
   if (momentStart.isSame(momentEnd)) {
     return `${momentStart.format('ll')}`;
   }
@@ -87,7 +87,7 @@ const competitionStatusIcon = (competition) => {
   return <Icon name="user plus" color="green" />;
 };
 
-function ReportColumn({ permissions, competitionId, isReportPosted }) {
+function ReportTableCell({ permissions, competitionId, isReportPosted }) {
   return (
     <Table.Cell>
       {(permissions.can_administer_competitions.scope === '*' || permissions.can_administer_competitions.scope.includes(competitionId)) && (
@@ -146,8 +146,8 @@ function UpcomingCompetitionTable({
           <Table.HeaderCell />
           <Table.HeaderCell />
         </Table.Row>
-
       </TableHeader>
+
       <TableBody>
         {competitions.map((competition) => (
           <Popup
@@ -186,7 +186,7 @@ function UpcomingCompetitionTable({
                   </a>
                   )}
                 </Table.Cell>
-                <ReportColumn competitionId={competition.id} permissions={permissions} />
+                <ReportTableCell competitionId={competition.id} permissions={permissions} />
               </Table.Row>
 )}
           />
@@ -214,8 +214,8 @@ function PastCompetitionsTable({ competitions, permissions }) {
           <Table.HeaderCell />
           <Table.HeaderCell />
         </Table.Row>
-
       </TableHeader>
+
       <TableBody>
         {competitions.map((competition) => (
           <Table.Row key={competition.id}>
@@ -243,7 +243,7 @@ function PastCompetitionsTable({ competitions, permissions }) {
               />
               )}
             </Table.Cell>
-            <ReportColumn competitionId={competition.id} permissions={permissions} />
+            <ReportTableCell competitionId={competition.id} permissions={permissions} />
           </Table.Row>
         ))}
       </TableBody>
@@ -252,8 +252,8 @@ function PastCompetitionsTable({ competitions, permissions }) {
 }
 
 export default function MyCompetitions() {
-  const [isAccordionOpen, setIsAccordionOpen] = React.useState(false);
-  const [shouldShowRegistrationStatus, setShouldShowRegistrationStatus] = React.useState(false);
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
+  const [shouldShowRegistrationStatus, setShouldShowRegistrationStatus] = useState(false);
 
   const { data: competitions, loading: competitionsLoading } = useLoadedData(myCompetitionsAPIUrl);
   const { data: me, loading: meLoading } = useLoadedData(meAPIUrl);
@@ -269,9 +269,9 @@ export default function MyCompetitions() {
           {I18n.t('competitions.my_competitions.disclaimer')}
         </p>
         <UpcomingCompetitionTable
-          competitions={competitions.future_competitions ?? []}
+          competitions={competitions?.future_competitions ?? []}
           permissions={permissions ?? defaultPermissions}
-          registrationStatuses={competitions.registered_for_by_competition_id ?? {}}
+          registrationStatuses={competitions?.registered_for_by_competition_id ?? {}}
         />
         <Accordion fluid styled>
           <Accordion.Title
@@ -282,7 +282,7 @@ export default function MyCompetitions() {
           </Accordion.Title>
           <Accordion.Content active={isAccordionOpen}>
             <PastCompetitionsTable
-              competitions={competitions.past_competitions ?? []}
+              competitions={competitions?.past_competitions ?? []}
               permissions={permissions ?? defaultPermissions}
             />
           </Accordion.Content>
@@ -299,9 +299,9 @@ export default function MyCompetitions() {
           onChange={() => setShouldShowRegistrationStatus(!shouldShowRegistrationStatus)}
         />
         <UpcomingCompetitionTable
-          competitions={competitions.bookmarked_competitions ?? []}
+          competitions={competitions?.bookmarked_competitions ?? []}
           permissions={permissions ?? defaultPermissions}
-          registrationStatuses={competitions.registered_for_by_competition_id ?? {}}
+          registrationStatuses={competitions?.registered_for_by_competition_id ?? {}}
           shouldShowRegistrationStatus={shouldShowRegistrationStatus}
         />
       </>
