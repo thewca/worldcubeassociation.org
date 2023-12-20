@@ -1,4 +1,4 @@
-<% url = @regional_organization.new_record? ? new_regional_organization_path : edit_regional_organization_path(@regional_organization) %>
+<% url = @regional_organization.new_record? ? new_regional_organization_path : regional_organization_path(@regional_organization) %>
 <%= simple_form_for @regional_organization, url: url, html: { class: 'form-horizontal' } do |f| %>
   <p><%= t('.filling_instructions_html') %></p>
 
