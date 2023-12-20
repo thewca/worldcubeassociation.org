@@ -24,7 +24,7 @@ class UserGroup < ApplicationRecord
         delegate_user.delegate_role
       end
     else
-      Role.where(group_id: self.id)
+      UserRole.where(group_id: self.id)
     end
   end
 end
