@@ -23,7 +23,7 @@ const sections = [
     id: 'delegate-probations',
     name: 'Delegate Probations',
     component: DelegateProbations,
-    forAtleastSeniorMember: true,
+    forAtLeastSeniorMember: true,
   },
   {
     id: 'xero-users',
@@ -46,7 +46,7 @@ export default function Wfc() {
       heading="WFC Panel"
       sections={sections
         .filter(
-          (section) => (!section.forAtleastSeniorMember
+          (section) => (!section.forAtLeastSeniorMember
               || loggedInUserPermissions.canAccessWfcSeniorMatters),
         )}
     />

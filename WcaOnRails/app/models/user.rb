@@ -1352,6 +1352,6 @@ class User < ApplicationRecord
   end
 
   def can_access_wfc_senior_matters?
-    financial_committee? && team_membership_details(Team.wfc).atleast_senior_member?
+    financial_committee? && team_membership_details(Team.wfc).at_least_senior_member?
   end
 end

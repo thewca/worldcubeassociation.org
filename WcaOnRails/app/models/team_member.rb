@@ -23,7 +23,7 @@ class TeamMember < ApplicationRecord
     end_date.nil? || end_date > Date.today
   end
 
-  def atleast_senior_member?
+  def at_least_senior_member?
     current_member? && (senior_member? || leader?)
   end
 
