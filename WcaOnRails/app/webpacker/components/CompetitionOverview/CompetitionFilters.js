@@ -17,19 +17,39 @@ import CompetitionTable from './CompetitionTable';
 const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
 const EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
+const PAST_YEARS_WITH_COMPETITIONS = [];
+for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
+  PAST_YEARS_WITH_COMPETITIONS.push(year);
+}
+PAST_YEARS_WITH_COMPETITIONS.push(1982);
+
 const selectedEventsInitialState = {};
 EVENT_IDS.forEach((id) => { selectedEventsInitialState[id] = false; });
 
 function CompetitionFilter() {
+  const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '' });
   const [selectedEvents, setSelectedEvents] = useState(selectedEventsInitialState);
+  const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
+  const [timeOrder, setTimeOrder] = useState('present');
+
   const editSelectedEvents = (eventId) => {
     setSelectedEvents((prevSelectedEvents) => ({
       ...prevSelectedEvents,
       [eventId]: !prevSelectedEvents[eventId],
     }));
   };
-  const [timeOrder, setTimeOrder] = useState('present');
+  const editPastSelectedYear = (newYear) => {
+    setPastSelectedYear(newYear);
+    if (timeOrder === 'past') {
+      setCompetitionApiKey({ sort_by: 'past', year: newYear });
+    }
+  };
   const editTimeOrder = (order) => {
+    if (order !== 'past') {
+      setCompetitionApiKey({ sort_by: order, year: '' });
+    } else {
+      setCompetitionApiKey({ sort_by: 'past', year: pastSelectedYear });
+    }
     setTimeOrder(order);
   };
 
@@ -37,20 +57,28 @@ function CompetitionFilter() {
   const [notInProgressComps, setNotInProgressComps] = useState([]);
   const [recentComps, setRecentComps] = useState([]);
   const [sortByAnnouncementComps, setSortByAnnouncementComps] = useState([]);
+  const [pastComps, setPastComps] = useState({});
+
+  const editPastComps = (comps, year) => {
+    setPastComps((prevPastComps) => ({
+      ...prevPastComps,
+      [year]: comps,
+    }));
+  };
 
   const {
     data,
     fetchNextPage,
     isFetching,
   } = useInfiniteQuery({
-    queryKey: [timeOrder],
+    queryKey: ['competitions', competitionApiKey],
     queryFn: ({ pageParam = 1 }) => {
       const dateNow = new Date(Date.now());
       let searchParams;
 
       if (timeOrder === 'present') {
         searchParams = new URLSearchParams({
-          sort: 'start_date',
+          sort: 'start_date,end_date,name',
           start: dateNow.toISOString().split('T')[0],
           page: pageParam,
         });
@@ -59,14 +87,29 @@ function CompetitionFilter() {
         thirtyDaysAgo.setDate(dateNow.getDate() - 30);
 
         searchParams = new URLSearchParams({
-          sort: '-start_date',
+          sort: '-end_date,-start_date,name',
           start: thirtyDaysAgo.toISOString().split('T')[0],
           end: dateNow.toISOString().split('T')[0],
           page: pageParam,
         });
+      } else if (timeOrder === 'past') {
+        if (pastSelectedYear === 'all_years') {
+          searchParams = new URLSearchParams({
+            sort: '-end_date,-start_date,name',
+            end: dateNow.toISOString().split('T')[0],
+            page: pageParam,
+          });
+        } else {
+          searchParams = new URLSearchParams({
+            sort: '-end_date,-start_date,name',
+            start: `${pastSelectedYear}-1-1`,
+            end: dateNow.getFullYear() === pastSelectedYear ? dateNow.toISOString().split('T')[0] : `${pastSelectedYear}-12-31`,
+            page: pageParam,
+          });
+        }
       } else if (timeOrder === 'by_announcement') {
         searchParams = new URLSearchParams({
-          sort: '-announced_at',
+          sort: '-announced_at,name',
           page: pageParam,
         });
       }
@@ -93,22 +136,23 @@ function CompetitionFilter() {
     if (timeOrder === 'present') {
       const inProgressData = flatData.filter((comp) => comp.inProgress);
       const notInProgressData = flatData.filter((comp) => !comp.inProgress);
-
       setInProgressComps(inProgressData);
       setNotInProgressComps(notInProgressData);
     } else if (timeOrder === 'recent') {
       setRecentComps(flatData);
+    } else if (timeOrder === 'past') {
+      editPastComps(flatData, pastSelectedYear);
     } else if (timeOrder === 'by_announcement') {
       setSortByAnnouncementComps(flatData);
     }
-  }, [data]);
+  }, [data, timeOrder, pastSelectedYear]);
 
   const { ref, inView } = useInView();
   useEffect(() => {
     if (inView) {
       fetchNextPage();
     }
-  }, [inView]);
+  }, [inView, fetchNextPage]);
 
   return (
     <Container>
@@ -218,23 +262,36 @@ function CompetitionFilter() {
                 onClick={() => editTimeOrder('past')}
                 active={timeOrder === 'past'}
               >
-                <span className="caption">{I18n.t('competitions.index.past')}</span>
+                <span className="caption">
+                  {
+                    pastSelectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
+                      : I18n.t('competitions.index.past_from', { year: pastSelectedYear })
+                  }
+                </span>
                 <Dropdown
-                  pointing
                   name="year"
                   id="year"
-                  defaultValue="all years"
+                  pointing
+                  scrolling
+                  upward={false}
                 >
                   <Dropdown.Menu>
-                    {/* Implement list of years later along with competition API data */}
-                    <Dropdown.Item>All</Dropdown.Item>
-                    <Dropdown.Item>2023</Dropdown.Item>
-                    <Dropdown.Item>2022</Dropdown.Item>
-                    <Dropdown.Item>2021</Dropdown.Item>
-                    <Dropdown.Item>2020</Dropdown.Item>
-                    <Dropdown.Item>2019</Dropdown.Item>
-                    <Dropdown.Item>2018</Dropdown.Item>
-                    <Dropdown.Item>2017</Dropdown.Item>
+                    <Dropdown.Item
+                      key="past_select_all_years"
+                      onClick={() => editPastSelectedYear('all_years')}
+                      active={pastSelectedYear === 'all_years'}
+                    >
+                      {I18n.t('competitions.index.all_years')}
+                    </Dropdown.Item>
+                    {PAST_YEARS_WITH_COMPETITIONS.map((year) => (
+                      <Dropdown.Item
+                        key={`past_select_${year}`}
+                        onClick={() => editPastSelectedYear(year)}
+                        active={pastSelectedYear === year}
+                      >
+                        {year}
+                      </Dropdown.Item>
+                    ))}
                   </Dropdown.Menu>
                 </Dropdown>
               </Button>
@@ -335,6 +392,17 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitions={recentComps}
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
+                showRegistrationStatus={false}
+                loading={isFetching}
+              />
+            )
+          }
+          {
+            timeOrder === 'past'
+            && (
+              <CompetitionTable
+                competitions={pastComps[pastSelectedYear]}
+                title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
                 showRegistrationStatus={false}
                 loading={isFetching}
               />
