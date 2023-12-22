@@ -2,8 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
-  Button, Icon, Form, Container, Dropdown,
+  Button, Icon, Form, Container, Dropdown, Popup, List,
 } from 'semantic-ui-react';
+import DatePicker from 'react-datepicker';
 
 import I18n from '../../lib/i18n';
 import { competitionsApiUrl } from '../../lib/requests/routes.js.erb';
@@ -13,6 +14,8 @@ import {
 } from '../../lib/wca-data.js.erb';
 
 import CompetitionTable from './CompetitionTable';
+
+import 'react-datepicker/dist/react-datepicker.css';
 
 const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
 const EVENT_IDS = Object.values(events.official).map((e) => e.id);
@@ -30,7 +33,17 @@ function CompetitionFilter() {
   const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '' });
   const [selectedEvents, setSelectedEvents] = useState(selectedEventsInitialState);
   const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
+  const [customStartDate, setCustomStartDate] = useState();
+  const [customEndDate, setCustomEndDate] = useState();
   const [timeOrder, setTimeOrder] = useState('present');
+
+  const updateCustomCompetitionApiKey = () => {
+    setCompetitionApiKey({
+      sort_by: 'custom',
+      year: `start${customStartDate ? customStartDate.toISOString().split('T')[0] : ''}
+      end${customEndDate ? customEndDate.toISOString().split('T')[0] : ''}`,
+    });
+  };
 
   const editSelectedEvents = (eventId) => {
     setSelectedEvents((prevSelectedEvents) => ({
@@ -44,12 +57,33 @@ function CompetitionFilter() {
       setCompetitionApiKey({ sort_by: 'past', year: newYear });
     }
   };
+  const editCustomStartDate = (date) => {
+    setCustomStartDate(date);
+    setCompetitionApiKey({
+      sort_by: 'custom',
+      year: `start${date ? date.toISOString().split('T')[0] : ''}
+      end${customEndDate ? customEndDate.toISOString().split('T')[0] : ''}`,
+    });
+  };
+  const editCustomEndDate = (date) => {
+    setCustomEndDate(date);
+    setCompetitionApiKey({
+      sort_by: 'custom',
+      year: `start${customStartDate ? customStartDate.toISOString().split('T')[0] : ''}
+      end${date ? date.toISOString().split('T')[0] : ''}`,
+    });
+  };
   const editTimeOrder = (order) => {
-    if (order !== 'past') {
-      setCompetitionApiKey({ sort_by: order, year: '' });
-    } else {
+    if (order === 'past') {
       setCompetitionApiKey({ sort_by: 'past', year: pastSelectedYear });
+    } else if (order === 'custom') {
+      // Calling this in a separate function somehow avoids the problem with setState
+      // being asynchronous and causing the query key to be strangely changed back and forth
+      updateCustomCompetitionApiKey();
+    } else {
+      setCompetitionApiKey({ sort_by: order, year: '' });
     }
+
     setTimeOrder(order);
   };
 
@@ -58,6 +92,7 @@ function CompetitionFilter() {
   const [recentComps, setRecentComps] = useState([]);
   const [sortByAnnouncementComps, setSortByAnnouncementComps] = useState([]);
   const [pastComps, setPastComps] = useState({});
+  const [customDatesComps, setCustomDatesComps] = useState([]);
 
   const editPastComps = (comps, year) => {
     setPastComps((prevPastComps) => ({
@@ -112,6 +147,13 @@ function CompetitionFilter() {
           sort: '-announced_at,name',
           page: pageParam,
         });
+      } else if (timeOrder === 'custom') {
+        searchParams = new URLSearchParams({
+          sort: 'start_date,end_date,name',
+          start: customStartDate ? customStartDate.toISOString().split('T')[0] : '',
+          end: customEndDate ? customEndDate.toISOString().split('T')[0] : '',
+          page: pageParam,
+        });
       }
 
       return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
@@ -144,6 +186,8 @@ function CompetitionFilter() {
       editPastComps(flatData, pastSelectedYear);
     } else if (timeOrder === 'by_announcement') {
       setSortByAnnouncementComps(flatData);
+    } else if (timeOrder === 'custom') {
+      setCustomDatesComps(flatData);
     }
   }, [data, timeOrder, pastSelectedYear]);
 
@@ -153,6 +197,19 @@ function CompetitionFilter() {
       fetchNextPage();
     }
   }, [inView, fetchNextPage]);
+
+  const customTimeSelectionButton = (
+    <Button
+      primary
+      name="state"
+      id="custom"
+      value="custom"
+      onClick={() => editTimeOrder('custom')}
+      active={timeOrder === 'custom'}
+    >
+      <span className="caption">{I18n.t('competitions.index.custom')}</span>
+    </Button>
+  );
 
   return (
     <Container>
@@ -307,16 +364,35 @@ function CompetitionFilter() {
               >
                 <span className="caption">{I18n.t('competitions.index.by_announcement')}</span>
               </Button>
-              <Button
-                primary
-                name="state"
-                id="custom"
-                value="custom"
-                onClick={() => editTimeOrder('custom')}
-                active={timeOrder === 'custom'}
+              <Popup
+                on="click"
+                position="bottom center"
+                pinned
+                trigger={customTimeSelectionButton}
               >
-                <span className="caption">{I18n.t('competitions.index.custom')}</span>
-              </Button>
+                <List>
+                  <List.Item>
+                    <DatePicker
+                      name="start-date"
+                      showIcon
+                      placeholderText={I18n.t('competitions.index.from_date')}
+                      selected={customStartDate}
+                      onChange={(date) => editCustomStartDate(date)}
+                      maxDate={customEndDate}
+                    />
+                  </List.Item>
+                  <List.Item>
+                    <DatePicker
+                      name="end-date"
+                      showIcon
+                      placeholderText={I18n.t('competitions.index.to_date')}
+                      selected={customEndDate}
+                      onChange={(date) => editCustomEndDate(date)}
+                      minDate={customStartDate}
+                    />
+                  </List.Item>
+                </List>
+              </Popup>
             </Button.Group>
           </Form.Field>
 
@@ -417,6 +493,17 @@ function CompetitionFilter() {
                 showRegistrationStatus={false}
                 loading={isFetching}
                 sortByAnnouncement
+              />
+            )
+          }
+          {
+            timeOrder === 'custom'
+            && (
+              <CompetitionTable
+                competitions={customDatesComps}
+                title={I18n.t('competitions.index.titles.custom')}
+                showRegistrationStatus={false}
+                loading={isFetching}
               />
             )
           }
