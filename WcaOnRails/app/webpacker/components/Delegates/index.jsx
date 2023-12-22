@@ -38,24 +38,14 @@ export default function Delegates() {
 
   const [hash, setHash] = useHash();
 
-  const SelectedComponent = React.useMemo(() => {
+  const activeRegion = React.useMemo(() => {
     const selectedRegionIndex = delegateRegions.findIndex((region) => region.id === +hash);
     if (selectedRegionIndex === -1) {
       setHash(delegateRegions[0]?.id);
-      return () => null;
+      return null;
     }
-    const selectedSection = delegateRegions[selectedRegionIndex];
-    if (selectedSection.component) {
-      return selectedSection.component;
-    }
-
-    return () => null;
+    return delegateRegions[selectedRegionIndex];
   }, [delegateRegions, hash, setHash]);
-
-  const activeRegion = React.useMemo(
-    () => delegateRegions.find((region) => region.id === +hash),
-    [delegateRegions, hash],
-  );
 
   const [adminMode, setAdminMode] = React.useState(false);
 
@@ -115,7 +105,6 @@ export default function Delegates() {
                   onChange={(__, { value }) => setHash(value)}
                 />
               </Grid.Row>
-              <Grid.Row><SelectedComponent /></Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
                 isAdminMode={adminMode}
