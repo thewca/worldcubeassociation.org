@@ -40,7 +40,7 @@ export default function Delegates() {
 
   const activeRegion = React.useMemo(() => {
     const selectedRegionIndex = delegateRegions.findIndex((region) => region.id === +hash);
-    if (selectedRegionIndex === -1) {
+    if (selectedRegionIndex === -1 && delegateRegions.length > 0) {
       setHash(delegateRegions[0]?.id);
       return null;
     }
