@@ -11,31 +11,32 @@ import DuesExport from './DuesExport';
 import PanelTemplate from '../PanelTemplate';
 import XeroUsers from './XeroUsers';
 import DuesRedirect from './DuesRedirect';
+import PANEL_LIST from '../PanelList';
 
 const sections = [
   {
-    id: 'dues-export',
+    id: PANEL_LIST.wfc.duesExport,
     name: 'Dues Export',
     component: DuesExport,
   },
   {
-    id: 'country-bands',
+    id: PANEL_LIST.wfc.countryBands,
     name: 'Country Bands',
     link: countryBandsUrl,
   },
   {
-    id: 'delegate-probations',
+    id: PANEL_LIST.wfc.delegateProbations,
     name: 'Delegate Probations',
     component: DelegateProbations,
     forAtleastSeniorMember: true,
   },
   {
-    id: 'xero-users',
+    id: PANEL_LIST.wfc.xeroUsers,
     name: 'Xero Users',
     component: XeroUsers,
   },
   {
-    id: 'dues-redirect',
+    id: PANEL_LIST.wfc.duesRedirect,
     name: 'Dues Redirect',
     component: DuesRedirect,
   },

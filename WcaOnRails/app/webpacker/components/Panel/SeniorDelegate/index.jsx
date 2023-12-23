@@ -6,25 +6,26 @@ import {
 import DelegateProbations from '../../DelegateProbations';
 import PanelTemplate from '../PanelTemplate';
 import DelegateForms from './DelegateForms';
+import PANEL_LIST from '../PanelList';
 
 const sections = [
   {
-    id: 'delegate-forms',
+    id: PANEL_LIST.seniorDelegate.delegateForms,
     name: 'Delegate Forms',
     component: DelegateForms,
   },
   {
-    id: 'delegate-probations',
+    id: PANEL_LIST.seniorDelegate.delegateProbations,
     name: 'Delegate Probations',
     component: DelegateProbations,
   },
   {
-    id: 'subordinate-delegate-claims',
+    id: PANEL_LIST.seniorDelegate.subordinateDelegateClaims,
     name: 'Subordinate Delegate Claims',
     link: subordinateDelegateClaimsUrl,
   },
   {
-    id: 'subordinate-upcoming-competitions',
+    id: PANEL_LIST.seniorDelegate.subordinateUpcomingCompetitions,
     name: 'Subordinate Upcoming Competitions',
     link: subordinateUpcomingCompetitionsUrl,
   },
