@@ -171,6 +171,7 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'board' => 'panel#board', as: :panel_board
+    get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
   end
   resources :notifications, only: [:index]
 

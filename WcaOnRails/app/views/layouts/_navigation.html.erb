@@ -218,11 +218,24 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.staff_or_any_delegate? %>
+            <% if current_user.can_access_panel? %>
               <li class="divider"></li>
+              <li role="presentation" class="dropdown-header">
+                <%= t '.panel' %>
+              </li>
               <li><%= link_to t('.panel'), panel_path %></li>
+              <% if current_user.can_access_wfc_panel? %>
+                <li><%= link_to "WFC panel", panel_wfc_path %></li>
+              <% end %>
+              <% if current_user.can_access_board_panel? %>
+                <li><%= link_to "Board panel", panel_board_path %></li>
+              <% end %>
+              <% if current_user.can_access_senior_delegate_panel? %>
+                <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
+              <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
+              <li class="divider"></li>
               <li><%= link_to t('.polls'), polls_path %></li>
             <% end %>
 

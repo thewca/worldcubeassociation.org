@@ -663,10 +663,6 @@ class User < ApplicationRecord
     admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
   end
 
-  def can_view_senior_delegate_material?
-    admin? || board_member? || senior_delegate?
-  end
-
   def can_view_leader_material?
     admin? || board_member? || leader_of_any_official_team?
   end
@@ -1328,8 +1324,12 @@ class User < ApplicationRecord
     admin? || board_member?
   end
 
+  def can_access_senior_delegate_panel?
+    admin? || board_member? || senior_delegate?
+  end
+
   def can_access_panel?
-    can_access_wfc_panel? || can_access_board_panel?
+    can_access_wfc_panel? || can_access_board_panel? || can_access_senior_delegate_panel? || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
   end
 
   def subordinate_delegates

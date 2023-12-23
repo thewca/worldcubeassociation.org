@@ -47,7 +47,7 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
-  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
+  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
