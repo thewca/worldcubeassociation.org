@@ -35,6 +35,8 @@ function CompetitionFilter() {
   const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
   const [customStartDate, setCustomStartDate] = useState();
   const [customEndDate, setCustomEndDate] = useState();
+  const [showRegistration, setShowRegistration] = useState(false);
+  const [showCancelled, setShowCancelled] = useState(false);
   const [timeOrder, setTimeOrder] = useState('present');
 
   const updateCustomCompetitionApiKey = () => {
@@ -410,6 +412,7 @@ function CompetitionFilter() {
               label={I18n.t('competitions.index.show_registration_status')}
               name="show_registration_status"
               id="show_registration_status"
+              onChange={() => { setShowRegistration(!showRegistration); }}
             />
           </div>
 
@@ -418,6 +421,7 @@ function CompetitionFilter() {
               label={I18n.t('competitions.index.show_cancelled')}
               name="show_cancelled"
               id="show_cancelled"
+              onChange={() => { setShowCancelled(!showCancelled); }}
             />
           </div>
         </Form.Group>
@@ -450,13 +454,13 @@ function CompetitionFilter() {
                 <CompetitionTable
                   competitions={inProgressComps}
                   title={I18n.t('competitions.index.titles.in_progress')}
-                  showRegistrationStatus={false}
+                  showRegistrationStatus={showRegistration}
                   loading={isFetching && !notInProgressComps}
                 />
                 <CompetitionTable
                   competitions={notInProgressComps}
                   title={I18n.t('competitions.index.titles.upcoming')}
-                  showRegistrationStatus={false}
+                  showRegistrationStatus={showRegistration}
                   loading={isFetching}
                 />
               </>
@@ -468,7 +472,7 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitions={recentComps}
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
-                showRegistrationStatus={false}
+                showRegistrationStatus={showRegistration}
                 loading={isFetching}
               />
             )
@@ -479,7 +483,7 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitions={pastComps[pastSelectedYear]}
                 title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
-                showRegistrationStatus={false}
+                showRegistrationStatus={showRegistration}
                 loading={isFetching}
               />
             )
@@ -490,7 +494,7 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitions={sortByAnnouncementComps}
                 title={I18n.t('competitions.index.titles.by_announcement')}
-                showRegistrationStatus={false}
+                showRegistrationStatus={showRegistration}
                 loading={isFetching}
                 sortByAnnouncement
               />
@@ -502,7 +506,7 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitions={customDatesComps}
                 title={I18n.t('competitions.index.titles.custom')}
-                showRegistrationStatus={false}
+                showRegistrationStatus={showRegistration}
                 loading={isFetching}
               />
             )
