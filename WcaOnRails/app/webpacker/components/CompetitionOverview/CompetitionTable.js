@@ -128,12 +128,15 @@ function VenueMarkdown({ venueText }) {
 }
 
 function CompetitionTable({
-  competitions,
+  competitionData,
   title,
   showRegistrationStatus,
+  showCancelled,
   sortByAnnouncement = false,
   loading,
 }) {
+  const competitions = competitionData?.filter((comp) => !comp.cancelled_at || showCancelled);
+
   return (
     <List divided relaxed>
       <List.Item>
@@ -144,7 +147,7 @@ function CompetitionTable({
       {competitions?.map((comp, index) => (
         <React.Fragment key={comp.id}>
           {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
-          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
+          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
             <span className="date">
               {renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement)}
               {comp.dateRange}

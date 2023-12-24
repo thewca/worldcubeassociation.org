@@ -452,15 +452,17 @@ function CompetitionFilter() {
             && (
               <>
                 <CompetitionTable
-                  competitions={inProgressComps}
+                  competitionData={inProgressComps}
                   title={I18n.t('competitions.index.titles.in_progress')}
                   showRegistrationStatus={showRegistration}
+                  showCancelled={showCancelled}
                   loading={isFetching && !notInProgressComps}
                 />
                 <CompetitionTable
-                  competitions={notInProgressComps}
+                  competitionData={notInProgressComps}
                   title={I18n.t('competitions.index.titles.upcoming')}
                   showRegistrationStatus={showRegistration}
+                  showCancelled={showCancelled}
                   loading={isFetching}
                 />
               </>
@@ -470,9 +472,10 @@ function CompetitionFilter() {
             timeOrder === 'recent'
             && (
               <CompetitionTable
-                competitions={recentComps}
+                competitionData={recentComps}
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
                 showRegistrationStatus={showRegistration}
+                showCancelled={showCancelled}
                 loading={isFetching}
               />
             )
@@ -481,9 +484,10 @@ function CompetitionFilter() {
             timeOrder === 'past'
             && (
               <CompetitionTable
-                competitions={pastComps[pastSelectedYear]}
+                competitionData={pastComps[pastSelectedYear]}
                 title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
                 showRegistrationStatus={showRegistration}
+                showCancelled={showCancelled}
                 loading={isFetching}
               />
             )
@@ -492,9 +496,10 @@ function CompetitionFilter() {
             timeOrder === 'by_announcement'
             && (
               <CompetitionTable
-                competitions={sortByAnnouncementComps}
+                competitionData={sortByAnnouncementComps}
                 title={I18n.t('competitions.index.titles.by_announcement')}
                 showRegistrationStatus={showRegistration}
+                showCancelled={showCancelled}
                 loading={isFetching}
                 sortByAnnouncement
               />
@@ -504,9 +509,10 @@ function CompetitionFilter() {
             timeOrder === 'custom'
             && (
               <CompetitionTable
-                competitions={customDatesComps}
+                competitionData={customDatesComps}
                 title={I18n.t('competitions.index.titles.custom')}
                 showRegistrationStatus={showRegistration}
+                showCancelled={showCancelled}
                 loading={isFetching}
               />
             )
