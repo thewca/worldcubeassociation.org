@@ -116,7 +116,7 @@ function CompetitionFilter() {
       if (timeOrder === 'present') {
         searchParams = new URLSearchParams({
           sort: 'start_date,end_date,name',
-          start: dateNow.toISOString().split('T')[0],
+          ongoing_and_future: dateNow.toISOString().split('T')[0],
           page: pageParam,
         });
       } else if (timeOrder === 'recent') {

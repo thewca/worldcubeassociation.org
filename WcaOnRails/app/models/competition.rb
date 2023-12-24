@@ -1596,6 +1596,14 @@ class Competition < ApplicationRecord
       competitions = competitions.where("end_date <= ?", end_date)
     end
 
+    if params[:ongoing_and_future].present?
+      target_date = Date.safe_parse(params[:ongoing_and_future])
+      if !target_date
+        raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
+      end
+      competitions = competitions.where("(start_date <= ? AND end_date >= ?) OR start_date >= ?", target_date, target_date, target_date)
+    end
+
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
       if !announced_date
