@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
-  Button, Icon, Form, Container, Dropdown, Popup, List,
+  Button, Icon, Form, Container, Dropdown, Popup, List, Input,
 } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
@@ -18,6 +18,11 @@ import CompetitionTable from './CompetitionTable';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
+const DELEGATE_OPTIONS = [
+  { key: 'AKam', text: 'Antonio Kam', value: 'Antonio Kam' },
+  { key: 'ELiu', text: 'Evan Liu', value: 'Evan Liu' },
+  { key: 'ZRid', text: 'Zachary Ridall', value: 'Zachary Ridall' },
+];
 const EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 const PAST_YEARS_WITH_COMPETITIONS = [];
@@ -274,16 +279,8 @@ function CompetitionFilter() {
           </Form.Field>
 
           <Form.Field width={6}>
-            {/* Search to be implemented in Semantic UI */}
-            <label htmlFor="search-field">{I18n.t('competitions.index.search')}</label>
-            <div id="search-field">
-              <div className="input-group">
-                <span className="input-group-addon" data-tooltip={I18n.t('competitions.index.tooltips.search')} data-variation="tiny">
-                  <i className="icon search " />
-                </span>
-                <input type="text" name="search" id="search" className="form-control" />
-              </div>
-            </div>
+            <label htmlFor="search">{I18n.t('competitions.index.search')}</label>
+            <Input name="search" id="search" icon="search" placeholder={I18n.t('competitions.index.tooltips.search')} />
           </Form.Field>
         </Form.Group>
 
@@ -399,10 +396,16 @@ function CompetitionFilter() {
           </Form.Field>
 
           <Form.Field>
-            <div id="delegate" className="field delegate-selector">
-              <label htmlFor="Delegate">{I18n.t('layouts.navigation.delegate')}</label>
-              <input type="text" name="delegate" id="delegate" className="wca-autocomplete wca-autocomplete-only_one wca-autocomplete-only_staff_delegates wca-autocomplete-users_search selectized" data-data="[]" tabIndex="-1" style={{ display: 'none' }} />
-            </div>
+            <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
+            <Dropdown
+              name="delegate"
+              id="delegate"
+              fluid
+              multiple
+              search
+              selection
+              options={DELEGATE_OPTIONS}
+            />
           </Form.Field>
         </Form.Group>
 
