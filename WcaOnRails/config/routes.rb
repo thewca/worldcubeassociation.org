@@ -345,11 +345,11 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      resources :roles, only: [:create, :show, :update, :destroy]
-      scope 'roles' do
-        get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
-        get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
-        get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      resources :user_roles, only: [:create, :show, :update, :destroy]
+      scope 'user_roles' do
+        get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
+        get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
+        get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
       end
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do

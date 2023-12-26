@@ -824,7 +824,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "roles" => {
+    "user_roles" => {
       where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(

@@ -1261,7 +1261,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+    UserRole.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
   end
 
   def region

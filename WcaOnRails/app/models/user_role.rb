@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Role < ApplicationRecord
+class UserRole < ApplicationRecord
   DELEGATE_ROLE_ID = "dummyRoleId"
 
   belongs_to :user

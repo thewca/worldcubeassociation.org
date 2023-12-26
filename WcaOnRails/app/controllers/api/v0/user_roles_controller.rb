@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V0::RolesController < Api::V0::ApiController
+class Api::V0::UserRolesController < Api::V0::ApiController
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate?
@@ -11,7 +11,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
-      is_actual_role = role.is_a?(Role) # Eventually, all roles will be migrated to the new system,
+      is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system,
       # till then some roles will actually be hashes.
       group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
       # hence, to reduce the number of lines to be edited in future, will be using ternary operator
@@ -31,7 +31,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   # Filters the list of roles based on given parameters.
   private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil)
     roles.reject do |role|
-      is_actual_role = role.is_a?(Role) # See previous is_actual_role comment.
+      is_actual_role = role.is_a?(UserRole) # See previous is_actual_role comment.
       # In future, the following lines will be replaced by the following:
       # (
       #   status.present? && status != role.metadata.status ||
@@ -106,7 +106,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on userId.
   def index_for_user
     user_id = params.require(:user_id)
-    roles = Role.where(user_id: user_id).to_a # to_a is to convert the ActiveRecord::Relation to an
+    roles = UserRole.where(user_id: user_id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
 
@@ -129,7 +129,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on groupId.
   def index_for_group
     group_id = params.require(:group_id)
-    roles = Role.where(group_id: group_id).to_a # to_a is for the same reason as in index_for_user.
+    roles = UserRole.where(group_id: group_id).to_a # to_a is for the same reason as in index_for_user.
 
     # Appends roles which are not yet migrated to the new system.
     roles.concat(group_roles_not_yet_in_new_system(group_id))
@@ -144,7 +144,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   def index_for_group_type
     group_type = params.require(:group_type)
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
-    roles = Role.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
+    roles = UserRole.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
 
     # Temporary hack to support the old system roles, will be removed once all roles are
     # migrated to the new system.
@@ -232,7 +232,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   def update
     id = params.require(:id)
 
-    if id == Role::DELEGATE_ROLE_ID
+    if id == UserRole::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
       delegate_status = params.require(:delegateStatus)
       region_id = params.require(:regionId)
@@ -272,7 +272,7 @@ class Api::V0::RolesController < Api::V0::ApiController
   def destroy
     id = params.require(:id)
 
-    if id == Role::DELEGATE_ROLE_ID
+    if id == UserRole::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
 
       user = User.find(user_id)
