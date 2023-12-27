@@ -10,6 +10,16 @@ class UserGroup < ApplicationRecord
 
   belongs_to :metadata, polymorphic: true, optional: true
 
+  # Returns human readable name of group type
+  def self.group_type_name
+    {
+      delegate_probation: "Delegate Probation",
+      delegate_regions: "Delegate Regions",
+      teams_committees: "Teams & Committees",
+      councils: "Councils",
+    }
+  end
+
   def self.delegate_regions
     UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
   end

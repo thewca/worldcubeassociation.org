@@ -24,7 +24,7 @@ class DelegatesController < ApplicationController
           group_id: UserGroup.find_by!(name: "Delegate Probation").id,
           start_date: Date.today,
         )
-        RoleChangeMailer.notify_start_probation(role, current_user).deliver_later
+        RoleChangeMailer.notify_role_start(role, current_user).deliver_later
         render json: {
           success: true,
         }
