@@ -667,6 +667,7 @@ module DatabaseDumper
         copy: %w(
           id
           email
+          friendly_id
           created_at
           updated_at
         ),
