@@ -7,7 +7,7 @@ import {
 import DatePicker from 'react-datepicker';
 
 import I18n from '../../lib/i18n';
-import { competitionsApiUrl } from '../../lib/requests/routes.js.erb';
+import { competitionsApiUrl, delegatesApiUrl } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import {
   events, continents, countries, competitionConstants,
@@ -18,11 +18,6 @@ import CompetitionTable from './CompetitionTable';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
-const DELEGATE_OPTIONS = [
-  { key: 'AKam', text: 'Antonio Kam', value: 'Antonio Kam' },
-  { key: 'ELiu', text: 'Evan Liu', value: 'Evan Liu' },
-  { key: 'ZRid', text: 'Zachary Ridall', value: 'Zachary Ridall' },
-];
 const EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 const PAST_YEARS_WITH_COMPETITIONS = [];
@@ -109,9 +104,9 @@ function CompetitionFilter() {
   };
 
   const {
-    data,
-    fetchNextPage,
-    isFetching,
+    data: competitionsData,
+    fetchNextPage: competitionsFetchNextPage,
+    isFetching: competitionsIsFetching,
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionApiKey],
     queryFn: ({ pageParam = 1 }) => {
@@ -176,7 +171,7 @@ function CompetitionFilter() {
   });
 
   useEffect(() => {
-    const flatData = data?.pages
+    const flatData = competitionsData?.pages
       .map((page) => page.data)
       .flatMap((comp) => comp);
 
@@ -196,14 +191,32 @@ function CompetitionFilter() {
     } else if (timeOrder === 'custom') {
       setCustomDatesComps(flatData);
     }
-  }, [data, timeOrder, pastSelectedYear]);
+  }, [competitionsData, timeOrder, pastSelectedYear]);
 
-  const { ref, inView } = useInView();
+  const { ref, inView: bottomInView } = useInView();
   useEffect(() => {
-    if (inView) {
-      fetchNextPage();
+    if (bottomInView) {
+      competitionsFetchNextPage();
     }
-  }, [inView, fetchNextPage]);
+  }, [bottomInView, competitionsFetchNextPage]);
+
+  const [delegatesInfo, setDelegatesInfo] = useState([]);
+  const {
+    data: delegatesData,
+    fetchNextPage: delegateFetchNextPage,
+    hasNextPage: delegateHasNextPage,
+  } = useInfiniteQuery({
+    queryKey: ['delegates'],
+    queryFn: ({ pageParam = 1 }) => fetchJsonOrError(`${delegatesApiUrl}?page=${pageParam}`),
+    getNextPageParam: (lastPage, allPages) => {
+      // Assuming the last page has less than the max number of competitions fetched per query
+      if (lastPage.data.length < COMPETITIONS_API_PAGINATION) {
+        return undefined;
+      }
+
+      return allPages.length + 1;
+    },
+  });
 
   const customTimeSelectionButton = (
     <Button
@@ -217,6 +230,17 @@ function CompetitionFilter() {
       <span className="caption">{I18n.t('competitions.index.custom')}</span>
     </Button>
   );
+
+  useEffect(() => {
+    const flatData = delegatesData?.pages
+      .map((page) => page.data)
+      .flatMap((delegate) => delegate);
+    setDelegatesInfo(flatData);
+
+    if (delegateHasNextPage) {
+      delegateFetchNextPage();
+    }
+  }, [delegatesData, delegateHasNextPage, delegateFetchNextPage]);
 
   return (
     <Container>
@@ -394,8 +418,7 @@ function CompetitionFilter() {
               </Popup>
             </Button.Group>
           </Form.Field>
-
-          <Form.Field>
+          <Form.Field width={8}>
             <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
             <Dropdown
               name="delegate"
@@ -404,7 +427,14 @@ function CompetitionFilter() {
               multiple
               search
               selection
-              options={DELEGATE_OPTIONS}
+              options={delegatesInfo?.map((delegate) => (
+                {
+                  key: delegate.id,
+                  text: delegate.name === 'WCA Board' ? delegate.name : `${delegate.name} (${delegate.wca_id})`,
+                  value: delegate.wca_id || delegate.name,
+                  image: { avatar: true, src: delegate.avatar?.thumb_url },
+                }
+              ))}
             />
           </Form.Field>
         </Form.Group>
@@ -459,14 +489,14 @@ function CompetitionFilter() {
                   title={I18n.t('competitions.index.titles.in_progress')}
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
-                  loading={isFetching && !notInProgressComps}
+                  loading={competitionsIsFetching && !notInProgressComps}
                 />
                 <CompetitionTable
                   competitionData={notInProgressComps}
                   title={I18n.t('competitions.index.titles.upcoming')}
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
-                  loading={isFetching}
+                  loading={competitionsIsFetching}
                 />
               </>
             )
@@ -479,7 +509,7 @@ function CompetitionFilter() {
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
-                loading={isFetching}
+                loading={competitionsIsFetching}
               />
             )
           }
@@ -491,7 +521,7 @@ function CompetitionFilter() {
                 title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
-                loading={isFetching}
+                loading={competitionsIsFetching}
               />
             )
           }
@@ -503,7 +533,7 @@ function CompetitionFilter() {
                 title={I18n.t('competitions.index.titles.by_announcement')}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
-                loading={isFetching}
+                loading={competitionsIsFetching}
                 sortByAnnouncement
               />
             )
@@ -516,7 +546,7 @@ function CompetitionFilter() {
                 title={I18n.t('competitions.index.titles.custom')}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
-                loading={isFetching}
+                loading={competitionsIsFetching}
               />
             )
           }
@@ -526,7 +556,7 @@ function CompetitionFilter() {
         </div>
       </Container>
 
-      {!isFetching && <div ref={ref} name="page-bottom" />}
+      {!competitionsIsFetching && <div ref={ref} name="page-bottom" />}
     </Container>
   );
 }
