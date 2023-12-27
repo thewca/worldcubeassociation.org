@@ -18,6 +18,10 @@ const PANEL_LIST = {
     xeroUsers: 'xero-users',
     duesRedirect: 'dues-redirect',
   },
+  wrt: {
+    postingDashboard: 'posting-dashboard',
+    editPerson: 'edit-person',
+  },
   wst: {
     translators: 'translators',
   },
