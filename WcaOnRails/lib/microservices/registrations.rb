@@ -2,14 +2,6 @@
 
 module Microservices
   module Registrations
-    def self.internal_get_registrations_path
-      "/api/internal/v1/registrations"
-    end
-
-    def self.external_get_registrations_path(competition_id)
-      "/api/v1/registrations/#{competition_id}"
-    end
-
     def self.competition_register_path(competition_id, stripe_status = nil)
       "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/register?&stripe_status=#{stripe_status}"
     end
@@ -36,20 +28,6 @@ module Microservices
         # By default, it only logs the request method and URL, and the request/response headers.
         builder.response :logger
       end
-    end
-
-    def self.get_all_registrations(competition_id)
-      response = self.registration_connection.post(self.internal_get_registrations_path) do |req|
-        req.body = { competition_id: competition_id }
-      end
-      response.body
-    end
-
-    def self.get_registrations_by_status(competition_id, status)
-      response = self.registration_connection.post(self.internal_get_registrations_path) do |req|
-        req.body = { competition_id: competition_id, status: status }
-      end
-      response.body
     end
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)

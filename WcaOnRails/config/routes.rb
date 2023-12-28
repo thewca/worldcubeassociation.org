@@ -302,6 +302,7 @@ Rails.application.routes.draw do
     namespace :internal do
       namespace :v1 do
         get '/users/:id/permissions' => 'permissions#index'
+        post '/users/competitor-info' => 'uers#competitor_info'
         post '/payment/init' => 'payment#init'
       end
     end
@@ -341,7 +342,6 @@ Rails.application.routes.draw do
         get '/results' => 'competitions#results', as: :results
         get '/results/:event_id' => 'competitions#event_results', as: :event_results
         get '/competitors' => 'competitions#competitors'
-        get '/competitor-info' => 'competitions#competitor_info'
         get '/registrations' => 'competitions#registrations'
         get '/schedule' => 'competitions#schedule'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
