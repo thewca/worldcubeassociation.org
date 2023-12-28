@@ -1538,6 +1538,7 @@ en:
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      no_delegates: "None"
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
       #context: titles for the competitions list

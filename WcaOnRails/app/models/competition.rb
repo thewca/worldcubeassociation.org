@@ -1580,6 +1580,15 @@ class Competition < ApplicationRecord
       competitions = competitions.where(countryId: country.id)
     end
 
+    if params[:delegate].present?
+      delegate = User.find_by(wca_id: params[:delegate])
+      if !delegate
+        raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
+      end
+      competitions = competitions.joins(:delegates)
+                                 .where(competition_delegates: { delegate_id: delegate.id })
+    end
+
     if params[:start].present?
       start_date = Date.safe_parse(params[:start])
       if !start_date
@@ -1601,7 +1610,7 @@ class Competition < ApplicationRecord
       if !target_date
         raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
       end
-      competitions = competitions.where("(start_date <= ? AND end_date >= ?) OR start_date >= ?", target_date, target_date, target_date)
+      competitions = competitions.where("end_date >= ?", target_date)
     end
 
     if params[:announced_after].present?

@@ -30,8 +30,9 @@ const selectedEventsInitialState = {};
 EVENT_IDS.forEach((id) => { selectedEventsInitialState[id] = false; });
 
 function CompetitionFilter() {
-  const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '' });
+  const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '', delegate: '' });
   const [selectedEvents, setSelectedEvents] = useState(selectedEventsInitialState);
+  const [selectedDelegate, setSelectedDelegate] = useState();
   const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
   const [customStartDate, setCustomStartDate] = useState();
   const [customEndDate, setCustomEndDate] = useState();
@@ -40,11 +41,12 @@ function CompetitionFilter() {
   const [timeOrder, setTimeOrder] = useState('present');
 
   const updateCustomCompetitionApiKey = () => {
-    setCompetitionApiKey({
+    setCompetitionApiKey((prevKey) => ({
+      ...prevKey,
       sort_by: 'custom',
-      year: `start${customStartDate ? customStartDate.toISOString().split('T')[0] : ''}
-      end${customEndDate ? customEndDate.toISOString().split('T')[0] : ''}`,
-    });
+      year: `start${customStartDate?.toISOString().split('T')[0] || ''}
+      end${customEndDate?.toISOString().split('T')[0] || ''}`,
+    }));
   };
 
   const editSelectedEvents = (eventId) => {
@@ -53,37 +55,46 @@ function CompetitionFilter() {
       [eventId]: !prevSelectedEvents[eventId],
     }));
   };
+  const editSelectedDelegate = (delegateId) => {
+    setSelectedDelegate(delegateId === 'None' ? '' : delegateId);
+    setCompetitionApiKey((prevKey) => ({
+      ...prevKey,
+      delegate: delegateId === 'None' ? '' : delegateId,
+    }));
+  };
   const editPastSelectedYear = (newYear) => {
     setPastSelectedYear(newYear);
     if (timeOrder === 'past') {
-      setCompetitionApiKey({ sort_by: 'past', year: newYear });
+      setCompetitionApiKey((prevKey) => ({ ...prevKey, sort_by: 'past', year: newYear }));
     }
   };
   const editCustomStartDate = (date) => {
     setCustomStartDate(date);
-    setCompetitionApiKey({
+    setCompetitionApiKey((prevKey) => ({
+      ...prevKey,
       sort_by: 'custom',
-      year: `start${date ? date.toISOString().split('T')[0] : ''}
-      end${customEndDate ? customEndDate.toISOString().split('T')[0] : ''}`,
-    });
+      year: `start${date?.toISOString().split('T')[0] || ''}
+      end${customEndDate?.toISOString().split('T')[0] || ''}`,
+    }));
   };
   const editCustomEndDate = (date) => {
     setCustomEndDate(date);
-    setCompetitionApiKey({
+    setCompetitionApiKey((prevKey) => ({
+      ...prevKey,
       sort_by: 'custom',
-      year: `start${customStartDate ? customStartDate.toISOString().split('T')[0] : ''}
-      end${date ? date.toISOString().split('T')[0] : ''}`,
-    });
+      year: `start${customStartDate?.toISOString().split('T')[0] || ''}
+      end${date?.toISOString().split('T')[0] || ''}`,
+    }));
   };
   const editTimeOrder = (order) => {
     if (order === 'past') {
-      setCompetitionApiKey({ sort_by: 'past', year: pastSelectedYear });
+      setCompetitionApiKey((prevKey) => ({ ...prevKey, sort_by: 'past', year: pastSelectedYear }));
     } else if (order === 'custom') {
       // Calling this in a separate function somehow avoids the problem with setState
       // being asynchronous and causing the query key to be strangely changed back and forth
       updateCustomCompetitionApiKey();
     } else {
-      setCompetitionApiKey({ sort_by: order, year: '' });
+      setCompetitionApiKey((prevKey) => ({ ...prevKey, sort_by: order, year: '' }));
     }
 
     setTimeOrder(order);
@@ -152,10 +163,14 @@ function CompetitionFilter() {
       } else if (timeOrder === 'custom') {
         searchParams = new URLSearchParams({
           sort: 'start_date,end_date,name',
-          start: customStartDate ? customStartDate.toISOString().split('T')[0] : '',
-          end: customEndDate ? customEndDate.toISOString().split('T')[0] : '',
+          start: customStartDate?.toISOString().split('T')[0] || '',
+          end: customEndDate?.toISOString().split('T')[0] || '',
           page: pageParam,
         });
+      }
+
+      if (selectedDelegate) {
+        searchParams.append('delegate', selectedDelegate);
       }
 
       return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
@@ -424,17 +439,20 @@ function CompetitionFilter() {
               name="delegate"
               id="delegate"
               fluid
-              multiple
               search
+              deburr
               selection
-              options={delegatesInfo?.map((delegate) => (
+              defaultValue="None"
+              style={{ textAlign: 'center' }}
+              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: 'None' }, ...(delegatesInfo?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
                 {
                   key: delegate.id,
-                  text: delegate.name === 'WCA Board' ? delegate.name : `${delegate.name} (${delegate.wca_id})`,
-                  value: delegate.wca_id || delegate.name,
+                  text: `${delegate.name} (${delegate.wca_id})`,
+                  value: delegate.wca_id,
                   image: { avatar: true, src: delegate.avatar?.thumb_url },
                 }
-              ))}
+              )) || [])]}
+              onChange={(event, data) => editSelectedDelegate(data.value)}
             />
           </Form.Field>
         </Form.Group>
