@@ -1631,7 +1631,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| column + " LIKE :part" }.join(" OR ")
+      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 

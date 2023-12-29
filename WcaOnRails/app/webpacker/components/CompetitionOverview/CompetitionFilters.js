@@ -44,7 +44,7 @@ const regionsOptions = [
 
 function CompetitionFilter() {
   const [competitionApiKey, setCompetitionApiKey] = useState({
-    sort_by: 'present', year: '', region: '', delegate: '',
+    sort_by: 'present', year: '', region: '', delegate: '', search: '',
   });
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [selectedRegion, setSelectedRegion] = useState();
@@ -54,6 +54,7 @@ function CompetitionFilter() {
   const [customEndDate, setCustomEndDate] = useState();
   const [showRegistration, setShowRegistration] = useState(false);
   const [showCancelled, setShowCancelled] = useState(false);
+  const [searchQuery, setSearchQuery] = useState();
   const [timeOrder, setTimeOrder] = useState('present');
 
   const updateCustomCompetitionApiKey = () => {
@@ -108,6 +109,13 @@ function CompetitionFilter() {
       sort_by: 'custom',
       year: `start${customStartDate?.toISOString().split('T')[0] || ''}
       end${date?.toISOString().split('T')[0] || ''}`,
+    }));
+  };
+  const editSearchQuery = (q) => {
+    setSearchQuery(q);
+    setCompetitionApiKey((prevKey) => ({
+      ...prevKey,
+      search: q,
     }));
   };
   const editTimeOrder = (order) => {
@@ -200,6 +208,9 @@ function CompetitionFilter() {
       }
       if (selectedDelegate) {
         searchParams.append('delegate', selectedDelegate);
+      }
+      if (searchQuery) {
+        searchParams.append('q', searchQuery);
       }
 
       return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
@@ -333,7 +344,13 @@ function CompetitionFilter() {
           </Form.Field>
           <Form.Field width={6}>
             <label htmlFor="search">{I18n.t('competitions.index.search')}</label>
-            <Input name="search" id="search" icon="search" placeholder={I18n.t('competitions.index.tooltips.search')} />
+            <Input
+              name="search"
+              id="search"
+              icon="search"
+              placeholder={I18n.t('competitions.index.tooltips.search')}
+              onChange={(event, data) => editSearchQuery(data.value)}
+            />
           </Form.Field>
         </Form.Group>
 
