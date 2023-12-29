@@ -18,7 +18,7 @@ import CompetitionTable from './CompetitionTable';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
-const EVENT_IDS = Object.values(events.official).map((e) => e.id);
+const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 const PAST_YEARS_WITH_COMPETITIONS = [];
 for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
@@ -26,12 +26,9 @@ for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
 }
 PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
-const selectedEventsInitialState = {};
-EVENT_IDS.forEach((id) => { selectedEventsInitialState[id] = false; });
-
 function CompetitionFilter() {
   const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '', delegate: '' });
-  const [selectedEvents, setSelectedEvents] = useState(selectedEventsInitialState);
+  const [selectedEvents, setSelectedEvents] = useState([]);
   const [selectedDelegate, setSelectedDelegate] = useState();
   const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
   const [customStartDate, setCustomStartDate] = useState();
@@ -50,10 +47,11 @@ function CompetitionFilter() {
   };
 
   const editSelectedEvents = (eventId) => {
-    setSelectedEvents((prevSelectedEvents) => ({
-      ...prevSelectedEvents,
-      [eventId]: !prevSelectedEvents[eventId],
-    }));
+    setSelectedEvents((prevSelectedEvents) => (
+      prevSelectedEvents.includes(eventId)
+        ? prevSelectedEvents.filter((id) => id !== eventId)
+        : [...prevSelectedEvents, eventId]
+    ));
   };
   const editSelectedDelegate = (delegateId) => {
     setSelectedDelegate(delegateId === 'None' ? '' : delegateId);
@@ -264,12 +262,12 @@ function CompetitionFilter() {
         <Form.Field>
           <label htmlFor="events">
             {` ${I18n.t('competitions.competition_form.events')} `}
-            <Button primary size="mini" id="select-all-events">{I18n.t('competitions.index.all_events')}</Button>
-            <Button size="mini" id="clear-all-events">{I18n.t('competitions.index.clear')}</Button>
+            <Button primary size="mini" id="select-all-events" onClick={() => setSelectedEvents(WCA_EVENT_IDS)}>{I18n.t('competitions.index.all_events')}</Button>
+            <Button size="mini" id="clear-all-events" onClick={() => setSelectedEvents([])}>{I18n.t('competitions.index.clear')}</Button>
           </label>
 
           <div id="events">
-            {EVENT_IDS.map((eventId) => (
+            {WCA_EVENT_IDS.map((eventId) => (
               <React.Fragment key={eventId}>
                 <Button
                   basic
@@ -282,7 +280,7 @@ function CompetitionFilter() {
                   data-tooltip={I18n.t(`events.${eventId}`)}
                   data-variation="tiny"
                   onClick={() => editSelectedEvents(eventId)}
-                  active={selectedEvents[eventId]}
+                  active={selectedEvents.includes(eventId)}
                 >
                   <Icon className={`cubing-icon event-${eventId}`} />
                 </Button>
@@ -507,6 +505,7 @@ function CompetitionFilter() {
                   title={I18n.t('competitions.index.titles.in_progress')}
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
+                  selectedEvents={selectedEvents}
                   loading={competitionsIsFetching && !notInProgressComps}
                 />
                 <CompetitionTable
@@ -514,6 +513,7 @@ function CompetitionFilter() {
                   title={I18n.t('competitions.index.titles.upcoming')}
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
+                  selectedEvents={selectedEvents}
                   loading={competitionsIsFetching}
                 />
               </>
@@ -527,6 +527,7 @@ function CompetitionFilter() {
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
+                selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
               />
             )
@@ -539,6 +540,7 @@ function CompetitionFilter() {
                 title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
+                selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
               />
             )
@@ -551,6 +553,7 @@ function CompetitionFilter() {
                 title={I18n.t('competitions.index.titles.by_announcement')}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
+                selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
                 sortByAnnouncement
               />
@@ -564,6 +567,7 @@ function CompetitionFilter() {
                 title={I18n.t('competitions.index.titles.custom')}
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
+                selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
               />
             )

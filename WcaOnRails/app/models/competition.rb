@@ -1585,8 +1585,8 @@ class Competition < ApplicationRecord
       if !delegate
         raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
       end
-      competitions = competitions.joins(:delegates)
-                                 .where(competition_delegates: { delegate_id: delegate.id })
+      competitions = competitions.left_outer_joins(:delegates)
+                                 .where('competition_delegates.delegate_id = ?', delegate.id)
     end
 
     if params[:start].present?
