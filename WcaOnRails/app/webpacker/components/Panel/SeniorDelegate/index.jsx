@@ -6,7 +6,7 @@ import {
 import DelegateProbations from '../../DelegateProbations';
 import PanelTemplate from '../PanelTemplate';
 import DelegateForms from './DelegateForms';
-import PANEL_LIST from '../PanelList';
+import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 
 const sections = [
   {

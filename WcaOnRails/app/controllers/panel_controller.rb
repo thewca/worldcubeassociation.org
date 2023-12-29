@@ -28,9 +28,34 @@ class PanelController < ApplicationController
     params.require(:post).permit(*editable_post_fields)
   end
 
-  def wfc
-  end
-
-  def board
+  def self.panel_list
+    {
+      "board" => {
+        "seniorDelegatesList" => "senior-delegates-list",
+        "councilLeaders" => "council-leaders",
+        "regionsManager" => "regions-manager",
+        "delegateProbations" => "delegate-probations",
+      },
+      "seniorDelegate" => {
+        "delegateForms" => "delegate-forms",
+        "delegateProbations" => "delegate-probations",
+        "subordinateDelegateClaims" => "subordinate-delegate-claims",
+        "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
+      },
+      "wfc" => {
+        "duesExport" => "dues-export",
+        "countryBands" => "country-bands",
+        "delegateProbations" => "delegate-probations",
+        "xeroUsers" => "xero-users",
+        "duesRedirect" => "dues-redirect",
+      },
+      "wrt" => {
+        "postingDashboard" => "posting-dashboard",
+        "editPerson" => "edit-person",
+      },
+      "wst" => {
+        "translators" => "translators",
+      },
+    }
   end
 end
