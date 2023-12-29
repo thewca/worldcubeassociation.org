@@ -38,13 +38,16 @@ const regionsOptions = [
     key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
   },
   ...(Object.values(countries.real).map((country) => (
-    { key: country.id, text: country.name, value: country.id }
+    { key: country.id, text: country.name, value: country.iso2 }
   ))),
 ];
 
 function CompetitionFilter() {
-  const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '', delegate: '' });
+  const [competitionApiKey, setCompetitionApiKey] = useState({
+    sort_by: 'present', year: '', region: '', delegate: '',
+  });
   const [selectedEvents, setSelectedEvents] = useState([]);
+  const [selectedRegion, setSelectedRegion] = useState();
   const [selectedDelegate, setSelectedDelegate] = useState();
   const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
   const [customStartDate, setCustomStartDate] = useState();
@@ -68,6 +71,13 @@ function CompetitionFilter() {
         ? prevSelectedEvents.filter((id) => id !== eventId)
         : [...prevSelectedEvents, eventId]
     ));
+  };
+  const editSelectedRegion = (region) => {
+    setSelectedRegion(region === 'all' ? '' : region);
+    setCompetitionApiKey((prevKey) => ({
+      ...prevKey,
+      region: region === 'all' ? '' : region,
+    }));
   };
   const editSelectedDelegate = (delegateId) => {
     setSelectedDelegate(delegateId === 'None' ? '' : delegateId);
@@ -183,6 +193,11 @@ function CompetitionFilter() {
         });
       }
 
+      if (selectedRegion) {
+        // Continent IDs begin with underscore
+        const regionParam = selectedRegion[0] === '_' ? 'continent' : 'country_iso2';
+        searchParams.append(regionParam, selectedRegion);
+      }
       if (selectedDelegate) {
         searchParams.append('delegate', selectedDelegate);
       }
@@ -313,6 +328,7 @@ function CompetitionFilter() {
               selection
               defaultValue="all"
               options={regionsOptions}
+              onChange={(event, data) => editSelectedRegion(data.value)}
             />
           </Form.Field>
           <Form.Field width={6}>
