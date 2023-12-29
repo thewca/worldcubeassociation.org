@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-RSpec.describe Api::V0::RolesController do
+RSpec.describe Api::V0::UserRolesController do
   describe 'GET #list' do
     let!(:africa_region) { FactoryBot.create(:africa_region) }
     let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
@@ -41,7 +41,7 @@ RSpec.describe Api::V0::RolesController do
       end
 
       it 'fetches role data' do
-        get :show, params: { id: Role::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, isActiveRole: "true" }
+        get :show, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, isActiveRole: "true" }
         parsed_body = JSON.parse(response.body)
 
         expect(parsed_body["roleData"]["delegateStatus"]).to eq "candidate_delegate"
@@ -57,7 +57,7 @@ RSpec.describe Api::V0::RolesController do
           "delegate",
         ).and_call_original
         expect do
-          patch :update, params: { id: Role::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate.region_id, location: "location" }
+          patch :update, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate.region_id, location: "location" }
         end.to change { enqueued_jobs.size }.by(1)
 
         parsed_body = JSON.parse(response.body)
@@ -70,7 +70,7 @@ RSpec.describe Api::V0::RolesController do
       end
 
       it 'ends delegate role' do
-        delete :destroy, params: { id: Role::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id }
+        delete :destroy, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id }
         parsed_body = JSON.parse(response.body)
 
         expect(parsed_body["success"]).to eq true

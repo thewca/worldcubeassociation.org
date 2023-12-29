@@ -64,7 +64,7 @@ export default function Delegates() {
       <p>
         <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" />
       </p>
-      {loggedInUserPermissions.canViewDelegateAdminPage() && (
+      {loggedInUserPermissions.canViewDelegateAdminPage && (
         <Checkbox
           label="Enable admin mode"
           toggle

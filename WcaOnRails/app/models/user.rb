@@ -651,6 +651,9 @@ class User < ApplicationRecord
       can_edit_teams_committees: {
         scope: can_edit_any_roles? ? "*" : self.leader_teams,
       },
+      can_access_wfc_senior_matters: {
+        scope: can_access_wfc_senior_matters? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -661,10 +664,6 @@ class User < ApplicationRecord
 
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
-  end
-
-  def can_view_senior_delegate_material?
-    admin? || board_member? || senior_delegate?
   end
 
   def can_view_leader_material?
@@ -1262,7 +1261,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+    UserRole.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
   end
 
   def region
@@ -1328,8 +1327,12 @@ class User < ApplicationRecord
     admin? || board_member?
   end
 
+  def can_access_senior_delegate_panel?
+    admin? || board_member? || senior_delegate?
+  end
+
   def can_access_panel?
-    can_access_wfc_panel? || can_access_board_panel?
+    can_access_wfc_panel? || can_access_board_panel? || can_access_senior_delegate_panel? || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
   end
 
   def subordinate_delegates
@@ -1346,5 +1349,9 @@ class User < ApplicationRecord
 
   def leader_teams
     self.current_team_members.select { |member| member.team_leader? }.pluck(:team_id)
+  end
+
+  def can_access_wfc_senior_matters?
+    financial_committee? && team_membership_details(Team.wfc).at_least_senior_member?
   end
 end

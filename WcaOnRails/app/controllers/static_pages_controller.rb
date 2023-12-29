@@ -13,12 +13,6 @@ class StaticPagesController < ApplicationController
   def home
   end
 
-  def panel_wfc
-    render json: {
-      isAtleastSeniorMember: current_user.team_senior_member?(Team.wfc) || current_user.team_leader?(Team.wfc) || current_user.admin?,
-    }
-  end
-
   def score_tools
   end
 

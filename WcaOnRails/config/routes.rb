@@ -171,6 +171,7 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'board' => 'panel#board', as: :panel_board
+    get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
   end
   resources :notifications, only: [:index]
 
@@ -212,10 +213,6 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
-
-  scope 'page_data' do
-    get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
-  end
 
   resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
@@ -301,6 +298,7 @@ Rails.application.routes.draw do
     namespace :internal do
       namespace :v1 do
         get '/users/:id/permissions' => 'permissions#index'
+        post '/users/competitor-info' => 'users#competitor_info'
         post '/payment/init' => 'payment#init'
       end
     end
@@ -348,11 +346,11 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      resources :roles, only: [:create, :show, :update, :destroy]
-      scope 'roles' do
-        get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
-        get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
-        get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      resources :user_roles, only: [:create, :show, :update, :destroy]
+      scope 'user_roles' do
+        get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
+        get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
+        get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
       end
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
