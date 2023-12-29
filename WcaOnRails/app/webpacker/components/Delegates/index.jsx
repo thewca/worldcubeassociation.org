@@ -39,9 +39,11 @@ export default function Delegates() {
   const [hash, setHash] = useHash();
 
   const activeRegion = React.useMemo(() => {
-    const selectedRegionIndex = delegateRegions.findIndex((region) => region.id === +hash);
+    const selectedRegionIndex = delegateRegions.findIndex(
+      (region) => region.metadata.friendly_id === hash,
+    );
     if (selectedRegionIndex === -1 && delegateRegions.length > 0) {
-      setHash(delegateRegions[0]?.id);
+      setHash(delegateRegions[0]?.metadata.friendly_id);
       return null;
     }
     return delegateRegions[selectedRegionIndex];
@@ -80,8 +82,8 @@ export default function Delegates() {
               <Menu.Item
                 key={region.id}
                 name={region.name}
-                active={region.id === hash}
-                onClick={() => setHash(region.id)}
+                active={region.metadata.friendly_id === hash}
+                onClick={() => setHash(region.metadata.friendly_id)}
               />
             ))}
           </Menu>
@@ -99,7 +101,7 @@ export default function Delegates() {
                   options={delegateRegions.map((region) => ({
                     key: region.id,
                     text: region.name,
-                    value: region.id,
+                    value: region.metadata.friendly_id,
                   }))}
                   value={hash}
                   onChange={(__, { value }) => setHash(value)}
