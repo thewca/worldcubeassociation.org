@@ -134,7 +134,9 @@ function CompetitionTable({
   showCancelled,
   sortByAnnouncement = false,
   selectedEvents,
+  renderedAboveAnotherTable = false,
   loading,
+  loaded,
 }) {
   const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || showCancelled)
     && (selectedEvents.every((event) => comp.event_ids.includes(event))));
@@ -143,7 +145,7 @@ function CompetitionTable({
     <List divided relaxed>
       <List.Item>
         <strong>
-          {`${title} (${competitions ? competitions.length : 0})`}
+          {`${title} (${competitions ? competitions.length : 0}${!loaded ? '...' : ''})`}
         </strong>
       </List.Item>
       {competitions?.map((comp, index) => (
@@ -172,7 +174,8 @@ function CompetitionTable({
         </React.Fragment>
       ))}
       {/* Could not figure out why the animated loader icon doesn't show */}
-      {loading && <List.Item style={{ textAlign: 'center' }}><Loader active inline="centered" size="small">Loading...</Loader></List.Item>}
+      {!loaded && loading && <List.Item style={{ textAlign: 'center' }}><Loader active inline="centered" size="small">Loading...</Loader></List.Item>}
+      {loaded && !renderedAboveAnotherTable && <List.Item style={{ textAlign: 'center' }}>No more competitions.</List.Item>}
     </List>
   );
 }

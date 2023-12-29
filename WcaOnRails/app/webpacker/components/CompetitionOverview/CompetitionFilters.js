@@ -150,6 +150,7 @@ function CompetitionFilter() {
     data: competitionsData,
     fetchNextPage: competitionsFetchNextPage,
     isFetching: competitionsIsFetching,
+    hasNextPage: hasUnloadedCompetitions,
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionApiKey],
     queryFn: ({ pageParam = 1 }) => {
@@ -539,7 +540,9 @@ function CompetitionFilter() {
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
                   selectedEvents={selectedEvents}
-                  loading={competitionsIsFetching && !notInProgressComps}
+                  loading={competitionsIsFetching && !notInProgressComps.length}
+                  loaded={notInProgressComps.length}
+                  renderedAboveAnotherTable
                 />
                 <CompetitionTable
                   competitionData={notInProgressComps}
@@ -548,6 +551,7 @@ function CompetitionFilter() {
                   showCancelled={showCancelled}
                   selectedEvents={selectedEvents}
                   loading={competitionsIsFetching}
+                  loaded={!hasUnloadedCompetitions}
                 />
               </>
             )
@@ -562,6 +566,7 @@ function CompetitionFilter() {
                 showCancelled={showCancelled}
                 selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
+                loaded={!hasUnloadedCompetitions}
               />
             )
           }
@@ -575,6 +580,7 @@ function CompetitionFilter() {
                 showCancelled={showCancelled}
                 selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
+                loaded={!hasUnloadedCompetitions}
               />
             )
           }
@@ -587,8 +593,9 @@ function CompetitionFilter() {
                 showRegistrationStatus={showRegistration}
                 showCancelled={showCancelled}
                 selectedEvents={selectedEvents}
-                loading={competitionsIsFetching}
                 sortByAnnouncement
+                loading={competitionsIsFetching}
+                loaded={!hasUnloadedCompetitions}
               />
             )
           }
@@ -602,6 +609,7 @@ function CompetitionFilter() {
                 showCancelled={showCancelled}
                 selectedEvents={selectedEvents}
                 loading={competitionsIsFetching}
+                loaded={!hasUnloadedCompetitions}
               />
             )
           }
@@ -611,7 +619,7 @@ function CompetitionFilter() {
         </div>
       </Container>
 
-      {!competitionsIsFetching && <div ref={ref} name="page-bottom" />}
+      {!competitionsIsFetching && hasUnloadedCompetitions && <div ref={ref} name="page-bottom" />}
     </Container>
   );
 }
