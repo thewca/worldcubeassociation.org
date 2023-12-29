@@ -330,7 +330,10 @@ Rails.application.routes.draw do
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
+      get '/records' => "api#records"
       get '/competition_series/:id' => 'api#competition_series'
+      get '/results/personal_records/:user_id' => "results#personal_records", as: :personal_records
+
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
         get '/wcif/public' => 'competitions#show_wcif_public'
@@ -343,7 +346,10 @@ Rails.application.routes.draw do
         get '/scrambles/:event_id' => 'competitions#event_scrambles', as: :event_scrambles
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
-      get '/records' => "api#records"
+
+      # namespace :results do
+      #   get '/personal_records/:user_id' => "results#personal_records", as: :personal_records
+      # end
 
       resources :user_roles, only: [:create, :show, :update, :destroy]
       scope 'user_roles' do
