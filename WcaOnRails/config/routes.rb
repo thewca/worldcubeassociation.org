@@ -302,7 +302,7 @@ Rails.application.routes.draw do
     namespace :internal do
       namespace :v1 do
         get '/users/:id/permissions' => 'permissions#index'
-        post '/users/competitor-info' => 'uers#competitor_info'
+        post '/users/competitor-info' => 'users#competitor_info'
         post '/payment/init' => 'payment#init'
       end
     end
