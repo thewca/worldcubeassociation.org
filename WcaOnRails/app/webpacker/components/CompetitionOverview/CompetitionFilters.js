@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
-  Button, Icon, Form, Container, Dropdown, Popup, List, Input,
+  Button, Icon, Form, Container, Dropdown, Popup, List, Input, Header,
 } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 
@@ -25,6 +25,22 @@ for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
   PAST_YEARS_WITH_COMPETITIONS.push(year);
 }
 PAST_YEARS_WITH_COMPETITIONS.push(1982);
+
+const regionsOptions = [
+  { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
+  {
+    key: 'continents_header', value: '', disabled: true, content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
+  },
+  ...(Object.values(continents.real).map((continent) => (
+    { key: continent.id, text: continent.name, value: continent.id }
+  ))),
+  {
+    key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
+  },
+  ...(Object.values(countries.real).map((country) => (
+    { key: country.id, text: country.name, value: country.id }
+  ))),
+];
 
 function CompetitionFilter() {
   const [competitionApiKey, setCompetitionApiKey] = useState({ sort_by: 'present', year: '', delegate: '' });
@@ -293,28 +309,12 @@ function CompetitionFilter() {
           <Form.Field width={6}>
             <label htmlFor="region">{I18n.t('competitions.index.region')}</label>
             <Dropdown
-              name="region"
-              id="region"
+              search
+              selection
               defaultValue="all"
-              scrolling
-              upward={false}
-              style={{ border: '1px solid #ccc', borderRadius: '4px', height: '35px' }}
-            >
-              <Dropdown.Menu>
-                <Dropdown.Item selected value="all" key="all" text={I18n.t('common.all_regions')} />
-                <Dropdown.Header>{I18n.t('common.all_regions')}</Dropdown.Header>
-                {Object.values(continents.real).map((continent) => (
-                  <Dropdown.Item value={continent.id} key={continent.id} text={continent.name} />
-                ))}
-                <Dropdown.Divider />
-                <Dropdown.Header>{I18n.t('common.country')}</Dropdown.Header>
-                {Object.values(countries.real).map((country) => (
-                  <Dropdown.Item value={country.id} key={country.id} text={country.name} />
-                ))}
-              </Dropdown.Menu>
-            </Dropdown>
+              options={regionsOptions}
+            />
           </Form.Field>
-
           <Form.Field width={6}>
             <label htmlFor="search">{I18n.t('competitions.index.search')}</label>
             <Input name="search" id="search" icon="search" placeholder={I18n.t('competitions.index.tooltips.search')} />
