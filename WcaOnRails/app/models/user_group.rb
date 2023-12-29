@@ -27,4 +27,12 @@ class UserGroup < ApplicationRecord
       UserRole.where(group_id: self.id)
     end
   end
+
+  DEFAULT_SERIALIZE_OPTIONS = {
+    include: %w[metadata],
+  }.freeze
+
+  def serializable_hash(options = nil)
+    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+  end
 end
