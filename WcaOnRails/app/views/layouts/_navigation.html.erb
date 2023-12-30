@@ -236,6 +236,9 @@
               <% if current_user.can_access_board_panel? %>
                 <li><%= link_to "Board panel", panel_board_path %></li>
               <% end %>
+              <% if current_user.can_access_leader_panel? %>
+                <li><%= link_to "Leader panel", panel_leader_path %></li>
+              <% end %>
               <% if current_user.can_access_senior_delegate_panel? %>
                 <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
               <% end %>

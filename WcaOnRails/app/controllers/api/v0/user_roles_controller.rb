@@ -81,12 +81,25 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def group_roles_not_yet_in_new_system(group_id)
-    group = UserGroup.find(group_id)
     roles = []
+    if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
+      # migrated to the new system.
+      group_type = group_id.split("_").reverse.drop(1).reverse.join("_")
+      original_group_id = group_id.split("_").last
+      if group_type == UserGroup.group_types[:teams_committees]
+        TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
+          roles << team_member.role
+        end
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
+    else
+      group = UserGroup.find(group_id)
 
-    if group.group_type == UserGroup.group_types[:delegate_regions]
-      User.where(region_id: group.id).map do |delegate_user|
-        roles << delegate_user.delegate_role
+      if group.group_type == UserGroup.group_types[:delegate_regions]
+        User.where(region_id: group.id).map do |delegate_user|
+          roles << delegate_user.delegate_role
+        end
       end
     end
 
@@ -121,6 +134,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       roles: roles,
       is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
       is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
+      status: params[:status],
     )
 
     render json: roles
@@ -195,7 +209,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
-      group_type = group_id.split("_").first
+      group_type = group_id.split("_").reverse.drop(1).reverse.join("_")
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         status = params.require(:status)
@@ -257,7 +271,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # all roles are migrated to the new system.
       group_id = params.require(:groupId)
       status = params.require(:status)
-      group_type = id.split("_").first
+      group_type = id.split("_").reverse.drop(1).reverse.join("_")
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         user_id = params.require(:userId)
@@ -294,7 +308,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       group_id = params.require(:groupId)
-      group_type = id.split("_").first
+      group_type = id.split("_").reverse.drop(1).reverse.join("_")
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         user_id = params.require(:userId)

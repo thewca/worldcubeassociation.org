@@ -44,10 +44,6 @@ class User < ApplicationRecord
     end
   }
 
-  TEAM_STATUS_LEADER = "leader"
-  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
-  TEAM_STATUS_MEMBER = "member"
-
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
@@ -664,10 +660,6 @@ class User < ApplicationRecord
 
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
-  end
-
-  def can_view_leader_material?
-    admin? || board_member? || leader_of_any_official_team?
   end
 
   def can_edit_user?(user)
@@ -1293,28 +1285,7 @@ class User < ApplicationRecord
     roles = []
     self.current_teams.each do |team|
       team_membership_details = self.team_membership_details(team)
-      if team_membership_details.leader?
-        status = TEAM_STATUS_LEADER
-      elsif team_membership_details.senior_member?
-        status = TEAM_STATUS_SENIOR_MEMBER
-      else
-        status = TEAM_STATUS_MEMBER
-      end
-      roles << {
-        start_date: team_membership_details.start_date,
-        is_active: true,
-        group: {
-          id: team.id,
-          name: team.name,
-          group_type: UserGroup.group_types[:teams_committees],
-          is_hidden: team[:hidden],
-          is_active: true,
-        },
-        user: self,
-        metadata: {
-          status: status,
-        },
-      }
+      roles << team_membership_details.role
     end
     roles
   end
@@ -1335,12 +1306,16 @@ class User < ApplicationRecord
     admin? || board_member?
   end
 
+  def can_access_leader_panel?
+    admin? || leader_of_any_official_team?
+  end
+
   def can_access_senior_delegate_panel?
     admin? || board_member? || senior_delegate?
   end
 
   def can_access_panel?
-    can_access_wfc_panel? || can_access_wrt_panel? || can_access_wst_panel? || can_access_board_panel? || can_access_senior_delegate_panel? || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
+    can_access_wfc_panel? || can_access_wrt_panel? || can_access_wst_panel? || can_access_leader_panel? || can_access_senior_delegate_panel? || can_access_board_panel || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
   end
 
   def subordinate_delegates
