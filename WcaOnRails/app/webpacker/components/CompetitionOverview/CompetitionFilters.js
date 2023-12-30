@@ -14,6 +14,7 @@ import {
 } from '../../lib/wca-data.js.erb';
 
 import CompetitionTable from './CompetitionTable';
+import CompetitionMap from './CompetitionMap';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -56,6 +57,7 @@ function CompetitionFilter() {
   const [showCancelled, setShowCancelled] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const [timeOrder, setTimeOrder] = useState('present');
+  const [displayMode, setDisplayMode] = useState('list');
 
   const updateCustomCompetitionApiKey = () => {
     setCompetitionApiKey((prevKey) => ({
@@ -133,7 +135,7 @@ function CompetitionFilter() {
   };
 
   const [inProgressComps, setInProgressComps] = useState([]);
-  const [notInProgressComps, setNotInProgressComps] = useState([]);
+  const [notInProgressFutureComps, setNotInProgressFutureComps] = useState([]);
   const [recentComps, setRecentComps] = useState([]);
   const [sortByAnnouncementComps, setSortByAnnouncementComps] = useState([]);
   const [pastComps, setPastComps] = useState({});
@@ -237,7 +239,7 @@ function CompetitionFilter() {
       const inProgressData = flatData.filter((comp) => comp.inProgress);
       const notInProgressData = flatData.filter((comp) => !comp.inProgress);
       setInProgressComps(inProgressData);
-      setNotInProgressComps(notInProgressData);
+      setNotInProgressFutureComps(notInProgressData);
     } else if (timeOrder === 'recent') {
       setRecentComps(flatData);
     } else if (timeOrder === 'past') {
@@ -304,7 +306,8 @@ function CompetitionFilter() {
       <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
         <Form.Field>
           <label htmlFor="events">
-            {` ${I18n.t('competitions.competition_form.events')} `}
+            {`${I18n.t('competitions.competition_form.events')}`}
+            <br />
             <Button primary size="mini" id="select-all-events" onClick={() => setSelectedEvents(WCA_EVENT_IDS)}>{I18n.t('competitions.index.all_events')}</Button>
             <Button size="mini" id="clear-all-events" onClick={() => setSelectedEvents([])}>{I18n.t('competitions.index.clear')}</Button>
           </label>
@@ -351,6 +354,31 @@ function CompetitionFilter() {
               icon="search"
               placeholder={I18n.t('competitions.index.tooltips.search')}
               onChange={(event, data) => editSearchQuery(data.value)}
+            />
+          </Form.Field>
+        </Form.Group>
+
+        <Form.Group>
+          <Form.Field width={8}>
+            <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
+            <Dropdown
+              name="delegate"
+              id="delegate"
+              fluid
+              search
+              deburr
+              selection
+              defaultValue="None"
+              style={{ textAlign: 'center' }}
+              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: 'None' }, ...(delegatesInfo?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
+                {
+                  key: delegate.id,
+                  text: `${delegate.name} (${delegate.wca_id})`,
+                  value: delegate.wca_id,
+                  image: { avatar: true, src: delegate.avatar?.thumb_url },
+                }
+              )) || [])]}
+              onChange={(event, data) => editSelectedDelegate(data.value)}
             />
           </Form.Field>
         </Form.Group>
@@ -465,28 +493,6 @@ function CompetitionFilter() {
               </Popup>
             </Button.Group>
           </Form.Field>
-          <Form.Field width={8}>
-            <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
-            <Dropdown
-              name="delegate"
-              id="delegate"
-              fluid
-              search
-              deburr
-              selection
-              defaultValue="None"
-              style={{ textAlign: 'center' }}
-              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: 'None' }, ...(delegatesInfo?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
-                {
-                  key: delegate.id,
-                  text: `${delegate.name} (${delegate.wca_id})`,
-                  value: delegate.wca_id,
-                  image: { avatar: true, src: delegate.avatar?.thumb_url },
-                }
-              )) || [])]}
-              onChange={(event, data) => editSelectedDelegate(data.value)}
-            />
-          </Form.Field>
         </Form.Group>
 
         <Form.Group inline>
@@ -511,11 +517,11 @@ function CompetitionFilter() {
 
         <Form.Group>
           <Button.Group toggle fluid id="display">
-            <Button active name="display" id="display-list" value="list">
+            <Button name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
               <Icon className="icon list ul " />
               {` ${I18n.t('competitions.index.list')} `}
             </Button>
-            <Button name="display" id="display-map" value="map">
+            <Button name="display" id="display-map" active={displayMode === 'map'} onClick={() => setDisplayMode('map')}>
               <Icon className="icon map marker alternate " />
               {` ${I18n.t('competitions.index.map')} `}
             </Button>
@@ -524,14 +530,10 @@ function CompetitionFilter() {
       </Form>
 
       <Container id="search-results" className="row competitions-list">
-        <div id="loading">
-          <div className="spinner-wrapper">
-            <i className="icon spinner fa-spin fa-5x" />
-          </div>
-        </div>
         <div id="competitions-list">
           {
-            timeOrder === 'present'
+            displayMode === 'list'
+            && timeOrder === 'present'
             && (
               <>
                 <CompetitionTable
@@ -540,12 +542,12 @@ function CompetitionFilter() {
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
                   selectedEvents={selectedEvents}
-                  loading={competitionsIsFetching && !notInProgressComps.length}
-                  loaded={notInProgressComps.length}
+                  loading={competitionsIsFetching && !notInProgressFutureComps}
+                  loaded={!hasUnloadedCompetitions || notInProgressFutureComps.length > 0}
                   renderedAboveAnotherTable
                 />
                 <CompetitionTable
-                  competitionData={notInProgressComps}
+                  competitionData={notInProgressFutureComps}
                   title={I18n.t('competitions.index.titles.upcoming')}
                   showRegistrationStatus={showRegistration}
                   showCancelled={showCancelled}
@@ -557,7 +559,8 @@ function CompetitionFilter() {
             )
           }
           {
-            timeOrder === 'recent'
+            displayMode === 'list'
+            && timeOrder === 'recent'
             && (
               <CompetitionTable
                 competitionData={recentComps}
@@ -571,7 +574,8 @@ function CompetitionFilter() {
             )
           }
           {
-            timeOrder === 'past'
+            displayMode === 'list'
+            && timeOrder === 'past'
             && (
               <CompetitionTable
                 competitionData={pastComps[pastSelectedYear]}
@@ -585,7 +589,8 @@ function CompetitionFilter() {
             )
           }
           {
-            timeOrder === 'by_announcement'
+            displayMode === 'list'
+            && timeOrder === 'by_announcement'
             && (
               <CompetitionTable
                 competitionData={sortByAnnouncementComps}
@@ -600,7 +605,8 @@ function CompetitionFilter() {
             )
           }
           {
-            timeOrder === 'custom'
+            displayMode === 'list'
+            && timeOrder === 'custom'
             && (
               <CompetitionTable
                 competitionData={customDatesComps}
@@ -614,8 +620,9 @@ function CompetitionFilter() {
             )
           }
         </div>
-        <div className="col-xs-12 col-md-12">
-          <div id="competitions-map" />
+        {/* old code does a lot of things to #competitions-map... to be included? */}
+        <div name="competitions-map">
+          {displayMode === 'map' && <CompetitionMap competitions={notInProgressFutureComps} />}
         </div>
       </Container>
 
