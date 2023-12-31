@@ -33,7 +33,8 @@ class Api::V0::Wfc::DuesRedirectsController < Api::V0::ApiController
   end
 
   def destroy
-    wfc_dues_redirect = WfcDuesRedirect.find(params[:id])
+    id = params.require(:id)
+    wfc_dues_redirect = WfcDuesRedirect.find(id)
     wfc_dues_redirect.destroy
     render json: wfc_dues_redirect
   end

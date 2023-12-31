@@ -127,14 +127,16 @@ export default function DuesRedirect() {
       <Confirm
         open={toDeleteId}
         content="Are you sure you want to delete?"
-        onCancel={() => setOpen(false)}
+        onCancel={() => setToDeleteId(null)}
         onConfirm={() => {
           const duesRedirectId = toDeleteId;
-          setToDeleteId(null);
           save(
             `${wfcDuesRedirectsUrl}/${duesRedirectId}`,
             {},
-            () => sync(),
+            () => {
+              setToDeleteId(null);
+              sync();
+            },
             { method: 'DELETE' },
           );
         }}
