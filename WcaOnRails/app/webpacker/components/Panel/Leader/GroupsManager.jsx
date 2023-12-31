@@ -9,10 +9,11 @@ import Loading from '../../Requests/Loading';
 function GroupTable({ groupId }) {
   const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
     groupId,
-    { isActive: true, isGroupHidden: false, status: 'leader' },
+    'status,startDate,name', // Sort params
+    { isActive: true },
   ));
 
-  if (loading || loading) return <Loading />;
+  if (loading) return <Loading />;
   if (error) return <Errored />;
 
   return (

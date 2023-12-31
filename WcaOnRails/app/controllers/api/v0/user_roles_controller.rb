@@ -8,6 +8,40 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
+  private def status_sort_rank(status)
+    case status
+    when 'leader'
+      1
+    when 'senior_member'
+      2
+    when 'member'
+      3
+    else
+      4
+    end
+  end
+
+  # Sorts the list of roles based on the given list of sort keys and directions.
+  private def sorted_roles(roles, sort_param)
+    # The value of sort_param is inspired from https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html.
+    sort_param ||= ''
+    sort_keys_and_directions = sort_param.split(',')
+    roles.sort_by { |role|
+      sort_keys_and_directions.map { |sort_key_and_direction|
+        sort_key = sort_key_and_direction.split(':').first
+        # FIXME: Utilize sort direction as well and reverse sort wherever necessary.
+        case sort_key
+        when 'startDate'
+          role[:start_date] # Can be changed to `role.start_date` once all roles are migrated to the new system.
+        when 'status'
+          status_sort_rank(role[:metadata][:status]) # Can be changed to `status_sort_rank(role.metadata.status)` once all roles are migrated to the new system.
+        when 'name'
+          role[:user][:name] # Can be changed to `role.user.name` once all roles are migrated to the new system.
+        end
+      }
+    }
+  end
+
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
@@ -137,6 +171,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       status: params[:status],
     )
 
+    # Sort the roles.
+    roles = sorted_roles(roles, params[:sort])
+
     render json: roles
   end
 
@@ -150,6 +187,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
+
+    # Filter the list based on the other parameters.
+    roles = filter_roles_for_parameters(
+      roles: roles,
+      is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
+      is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
+      status: params[:status],
+    )
+
+    # Sort the roles.
+    roles = sorted_roles(roles, params[:sort])
 
     render json: roles
   end
@@ -199,6 +247,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       status: status,
       is_active: is_active,
     )
+
+    # Sort the roles.
+    roles = sorted_roles(roles, params[:sort])
 
     render json: roles
   end
