@@ -69,7 +69,7 @@
     "react-dom": "^18.2.0",
     "react-leaflet": "^4.2.1",
     "react_ujs": "^2.7.1",
-    "regenerator-runtime": "^0.14.0",
+    "regenerator-runtime": "^0.14.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.69.5",
     "sass-loader": "^13.3.2",
