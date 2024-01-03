@@ -5,7 +5,7 @@ import {
 } from 'react-leaflet';
 
 import { userTileProvider } from '../../lib/leaflet-wca/providers';
-import { redMarker } from '../../lib/leaflet-wca/markers';
+import { redMarker, blueMarker } from '../../lib/leaflet-wca/markers';
 import 'leaflet/dist/leaflet.css';
 
 function CompetitionMap({ competitions }) {
@@ -22,7 +22,7 @@ function CompetitionMap({ competitions }) {
       {competitions?.map((comp) => (
         <Marker
           position={{ lat: comp.latitude_degrees, lng: comp.longitude_degrees }}
-          icon={redMarker}
+          icon={comp.isProbablyOver ? blueMarker : redMarker}
         >
           <Popup>
             <a href={comp.url}>{comp.name}</a>

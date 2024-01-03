@@ -18,7 +18,12 @@ import CompetitionMap from './CompetitionMap';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-const COMPETITIONS_API_PAGINATION = 25; // Max number of competitions fetched per query
+// Max number of competitions fetched per query
+const COMPETITIONS_API_PAGINATION = 25;
+
+// Limit number of markers on map, especially for "All Past Competitions"
+const MAP_DISPLAY_LIMIT = 500;
+
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 const PAST_YEARS_WITH_COMPETITIONS = [];
@@ -140,6 +145,7 @@ function CompetitionFilter() {
   const [sortByAnnouncementComps, setSortByAnnouncementComps] = useState([]);
   const [pastComps, setPastComps] = useState({});
   const [customDatesComps, setCustomDatesComps] = useState([]);
+  const [mapDisplayComps, setMapDisplayComps] = useState([]);
 
   const editPastComps = (comps, year) => {
     setPastComps((prevPastComps) => ({
@@ -249,7 +255,15 @@ function CompetitionFilter() {
     } else if (timeOrder === 'custom') {
       setCustomDatesComps(flatData);
     }
-  }, [competitionsData, timeOrder, pastSelectedYear]);
+
+    if (displayMode === 'map') {
+      if (timeOrder === 'present') {
+        setMapDisplayComps(flatData.filter((comp) => !comp.inProgress));
+      } else {
+        setMapDisplayComps(flatData);
+      }
+    }
+  }, [competitionsData, timeOrder, pastSelectedYear, displayMode]);
 
   const { ref, inView: bottomInView } = useInView();
   useEffect(() => {
@@ -257,6 +271,12 @@ function CompetitionFilter() {
       competitionsFetchNextPage();
     }
   }, [bottomInView, competitionsFetchNextPage]);
+  useEffect(() => {
+    if (hasUnloadedCompetitions && displayMode === 'map' && mapDisplayComps.length < MAP_DISPLAY_LIMIT) {
+      competitionsFetchNextPage();
+    }
+  }, [competitionsData, displayMode, hasUnloadedCompetitions, mapDisplayComps,
+    competitionsFetchNextPage]);
 
   const [delegatesInfo, setDelegatesInfo] = useState([]);
   const {
@@ -622,11 +642,11 @@ function CompetitionFilter() {
         </div>
         {/* old code does a lot of things to #competitions-map... to be included? */}
         <div name="competitions-map">
-          {displayMode === 'map' && <CompetitionMap competitions={notInProgressFutureComps} />}
+          {displayMode === 'map' && <CompetitionMap competitions={mapDisplayComps} />}
         </div>
       </Container>
 
-      {!competitionsIsFetching && hasUnloadedCompetitions && <div ref={ref} name="page-bottom" />}
+      {!competitionsIsFetching && hasUnloadedCompetitions && displayMode === 'list' && <div ref={ref} name="page-bottom" />}
     </Container>
   );
 }
