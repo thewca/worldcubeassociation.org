@@ -6,9 +6,86 @@ import {
 import I18n from '../../lib/i18n';
 import calculateDayDifference from '../../lib/utils/competition-table';
 
-function shouldShowYearHeader(competitions, index, isSortedByAnnouncement) {
-  return index > 0 && competitions[index].year !== competitions[index - 1].year
-    && !isSortedByAnnouncement;
+function CompetitionTable({
+  competitionData,
+  title,
+  shouldShowRegStatus,
+  shouldShowCancelled,
+  selectedEvents,
+  isLoading,
+  hasMoreCompsToLoad,
+  isSortedByAnnouncement = false,
+  isRenderedAboveAnotherTable = false,
+}) {
+  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || shouldShowCancelled)
+    && (selectedEvents.every((event) => comp.event_ids.includes(event))));
+
+  return (
+    <List divided relaxed>
+      <List.Item>
+        <strong>
+          {`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad ? '...' : ''})`}
+        </strong>
+      </List.Item>
+      {competitions?.map((comp, index) => (
+        <React.Fragment key={comp.id}>
+          <ConditionalYearHeader
+            competitions={competitions}
+            index={index}
+            isSortedByAnnouncement={isSortedByAnnouncement}
+          />
+          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
+            <span className="date">
+              <DateIcon
+                comp={comp}
+                shouldShowRegStatus={shouldShowRegStatus}
+                isSortedByAnnouncement={isSortedByAnnouncement}
+              />
+              {comp.dateRange}
+            </span>
+            <span className="competition-info">
+              <div className="competition-link">
+                <span className={` fi fi-${comp.country_iso2}`} />
+                &nbsp;
+                <a href={comp.url}>{comp.displayName}</a>
+              </div>
+              <div className="location">
+                <strong>{comp.countryName}</strong>
+                {`, ${comp.cityName}`}
+              </div>
+              <div className="venue-link">
+                <VenueMarkdown venueText={comp.venue} />
+              </div>
+            </span>
+          </List.Item>
+        </React.Fragment>
+      ))}
+      {/* Could not figure out why Semantic UI's animated loader icon doesn't show */}
+      {
+        isLoading
+        && (
+          <List.Item style={{ textAlign: 'center' }}>
+            <Loader active inline="centered" size="small">
+              {I18n.t('competitions.index.loading_comps')}
+            </Loader>
+          </List.Item>
+        )
+      }
+      {
+        !hasMoreCompsToLoad
+        && !isLoading
+        && !isRenderedAboveAnotherTable
+        && <FinishedLoadingCompsMsg numCompetitions={competitions?.length} />
+      }
+    </List>
+  );
+}
+
+function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) {
+  if (index > 0 && competitions[index].year !== competitions[index - 1].year
+    && !isSortedByAnnouncement) {
+    return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{competitions[index].year}</List.Item>;
+  }
 }
 
 function RegistrationStatus({ comp }) {
@@ -113,77 +190,6 @@ function FinishedLoadingCompsMsg({ numCompetitions }) {
     <List.Item style={{ textAlign: 'center' }}>
       {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
     </List.Item>
-  );
-}
-
-function CompetitionTable({
-  competitionData,
-  title,
-  shouldShowRegStatus,
-  shouldShowCancelled,
-  selectedEvents,
-  isLoading,
-  hasMoreCompsToLoad,
-  isSortedByAnnouncement = false,
-  isRenderedAboveAnotherTable = false,
-}) {
-  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || shouldShowCancelled)
-    && (selectedEvents.every((event) => comp.event_ids.includes(event))));
-
-  return (
-    <List divided relaxed>
-      <List.Item>
-        <strong>
-          {`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad ? '...' : ''})`}
-        </strong>
-      </List.Item>
-      {competitions?.map((comp, index) => (
-        <React.Fragment key={comp.id}>
-          {shouldShowYearHeader(competitions, index, isSortedByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
-          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
-            <span className="date">
-              <DateIcon
-                comp={comp}
-                shouldShowRegStatus={shouldShowRegStatus}
-                isSortedByAnnouncement={isSortedByAnnouncement}
-              />
-              {comp.dateRange}
-            </span>
-            <span className="competition-info">
-              <div className="competition-link">
-                <span className={` fi fi-${comp.country_iso2}`} />
-                &nbsp;
-                <a href={comp.url}>{comp.displayName}</a>
-              </div>
-              <div className="location">
-                <strong>{comp.countryName}</strong>
-                {`, ${comp.cityName}`}
-              </div>
-              <div className="venue-link">
-                <VenueMarkdown venueText={comp.venue} />
-              </div>
-            </span>
-          </List.Item>
-        </React.Fragment>
-      ))}
-      {/* Could not figure out why Semantic UI's animated loader icon doesn't show */}
-      {
-        isLoading
-        && (
-          <List.Item style={{ textAlign: 'center' }}>
-            <Loader active inline="centered" size="small">
-              {I18n.t('competitions.index.loading_comps')}
-            </Loader>
-          </List.Item>
-        )
-      }
-      {
-        !hasMoreCompsToLoad
-        && !isLoading
-        && !isRenderedAboveAnotherTable
-        && <FinishedLoadingCompsMsg numCompetitions={competitions?.length} />
-      }
-    </List>
   );
 }
 
