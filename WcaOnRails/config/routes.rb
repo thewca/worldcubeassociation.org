@@ -347,10 +347,6 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
 
-      # namespace :results do
-      #   get '/personal_records/:user_id' => "results#personal_records", as: :personal_records
-      # end
-
       resources :user_roles, only: [:create, :show, :update, :destroy]
       scope 'user_roles' do
         get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
