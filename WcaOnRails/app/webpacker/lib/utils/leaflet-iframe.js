@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useRef } from 'react';
 import { useMap } from 'react-leaflet';
 
-export function ResizeMapIFrame() {
+export default function ResizeMapIFrame() {
   const map = useMap();
   const iframeRef = useRef();
 
@@ -26,5 +26,3 @@ export function ResizeMapIFrame() {
     />
   );
 }
-
-export default ResizeMapIFrame;

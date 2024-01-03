@@ -4,26 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
-
-function calculateDayDifference(comp, mode) {
-  const dateToday = new Date();
-  const startDate = new Date(comp.start_date);
-  const endDate = new Date(comp.end_date);
-  const msInADay = 1000 * 3600 * 24;
-
-  if (mode === 'future') {
-    const msDifference = startDate.getTime() - dateToday.getTime();
-    const dayDifference = Math.ceil(msDifference / msInADay);
-    return dayDifference;
-  }
-  if (mode === 'past') {
-    const msDifference = dateToday.getTime() - endDate.getTime();
-    const dayDifference = Math.floor(msDifference / msInADay);
-    return dayDifference;
-  }
-
-  return -1;
-}
+import calculateDayDifference from '../../lib/utils/competition-table';
 
 function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
   return index > 0 && competitions[index].year !== competitions[index - 1].year
@@ -45,7 +26,7 @@ function RegistrationStatus({ comp }) {
     return (
       <Popup
         trigger={<Icon className="user times red" />}
-        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) })}
+        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'future') }) })}
         position="top center"
         size="tiny"
       />
@@ -81,7 +62,7 @@ function DateIcon({ comp, showRegistrationStatus, sortByAnnouncement }) {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.posted');
       iconClass = 'check circle result-posted-indicator';
     } else {
-      tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'past') }) });
+      tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'past') }) });
       iconClass = 'hourglass end';
     }
   } else if (comp.inProgress) {
@@ -93,7 +74,7 @@ function DateIcon({ comp, showRegistrationStatus, sortByAnnouncement }) {
   } else if (showRegistrationStatus) {
     return <RegistrationStatus comp={comp} />;
   } else {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) });
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'future') }) });
     iconClass = 'hourglass start';
   }
 
