@@ -30,7 +30,7 @@ function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
     && !sortByAnnouncement;
 }
 
-function renderRegistrationStatus(comp) {
+function RegistrationStatus({ comp }) {
   if (comp.registration_status === 'not_yet_opened') {
     return (
       <Popup
@@ -72,7 +72,7 @@ function renderRegistrationStatus(comp) {
   );
 }
 
-function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
+function DateIcon({ comp, showRegistrationStatus, sortByAnnouncement }) {
   let tooltipInfo = '';
   let iconClass = '';
 
@@ -91,7 +91,7 @@ function renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate });
     iconClass = 'hourglass start';
   } else if (showRegistrationStatus) {
-    return renderRegistrationStatus(comp);
+    return <RegistrationStatus comp={comp} />;
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp, 'future') }) });
     iconClass = 'hourglass start';
@@ -127,6 +127,14 @@ function VenueMarkdown({ venueText }) {
   );
 }
 
+function LoadedDisplay({ numCompetitions }) {
+  return (
+    <List.Item style={{ textAlign: 'center' }}>
+      {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
+    </List.Item>
+  );
+}
+
 function CompetitionTable({
   competitionData,
   title,
@@ -153,7 +161,11 @@ function CompetitionTable({
           {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
           <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
             <span className="date">
-              {renderDateIcon(comp, showRegistrationStatus, sortByAnnouncement)}
+              <DateIcon
+                comp={comp}
+                showRegistrationStatus={showRegistrationStatus}
+                sortByAnnouncement={sortByAnnouncement}
+              />
               {comp.dateRange}
             </span>
             <span className="competition-info">
@@ -173,9 +185,23 @@ function CompetitionTable({
           </List.Item>
         </React.Fragment>
       ))}
-      {/* Could not figure out why the animated loader icon doesn't show */}
-      {loading && <List.Item style={{ textAlign: 'center' }}><Loader active inline="centered" size="small">Loading...</Loader></List.Item>}
-      {loaded && !loading && !renderedAboveAnotherTable && <List.Item style={{ textAlign: 'center' }}>No more competitions.</List.Item>}
+      {/* Could not figure out why Semantic UI's animated loader icon doesn't show */}
+      {
+        loading
+        && (
+          <List.Item style={{ textAlign: 'center' }}>
+            <Loader active inline="centered" size="small">
+              {I18n.t('competitions.index.loading_comps')}
+            </Loader>
+          </List.Item>
+        )
+      }
+      {
+        loaded
+        && !loading
+        && !renderedAboveAnotherTable
+        && <LoadedDisplay numCompetitions={competitions.length} />
+      }
     </List>
   );
 }
