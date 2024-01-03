@@ -101,6 +101,14 @@ Rails.application.routes.draw do
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
+  unless EnvConfig.WCA_LIVE_SITE?
+    scope :payment do
+      get '/config' => 'payment#payment_config'
+      get '/finish' => 'payment#payment_finish'
+      get '/refunds' => 'payment#available_refunds'
+      get '/refund' => 'payment#payment_refund'
+    end
+  end
 
   get 'competitions/:competition_id/report/edit' => 'delegate_reports#edit', as: :delegate_report_edit
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
@@ -163,6 +171,7 @@ Rails.application.routes.draw do
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'board' => 'panel#board', as: :panel_board
+    get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
   end
   resources :notifications, only: [:index]
 
@@ -205,11 +214,6 @@ Rails.application.routes.draw do
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
 
-  scope 'page_data' do
-    get 'panel/wfc' => 'static_pages#panel_wfc', as: :page_data_panel_wfc
-    get 'delegates' => 'static_pages#delegates_data', as: :page_data_delegates
-  end
-
   resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
   get 'admin/regional-organizations' => 'regional_organizations#admin'
@@ -235,7 +239,6 @@ Rails.application.routes.draw do
   get '/admin/edit_person' => 'admin#edit_person'
   get '/admin/fix_results' => 'admin#fix_results'
   get '/admin/fix_results_selector' => 'admin#fix_results_selector', as: :admin_fix_results_ajax
-  patch '/admin/update_person' => 'admin#update_person'
   get '/admin/person_data' => 'admin#person_data'
   get '/admin/compute_auxiliary_data' => 'admin#compute_auxiliary_data'
   get '/admin/do_compute_auxiliary_data' => 'admin#do_compute_auxiliary_data'
@@ -294,7 +297,9 @@ Rails.application.routes.draw do
     get '/', to: redirect('/api/v0', status: 302)
     namespace :internal do
       namespace :v1 do
-        get "/users/:id/permissions" => "permissions#index"
+        get '/users/:id/permissions' => 'permissions#index'
+        post '/users/competitor-info' => 'users#competitor_info'
+        post '/payment/init' => 'payment#init'
       end
     end
     namespace :v0 do
@@ -312,6 +317,8 @@ Rails.application.routes.draw do
       get '/search/incidents' => 'api#incidents_search'
       get '/users' => 'users#show_users_by_id'
       get '/users/me' => 'users#show_me'
+      get '/users/me/personal_records' => 'users#personal_records'
+      get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'
@@ -339,16 +346,21 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      resources :roles, only: [:show, :update, :destroy]
-      scope 'roles' do
-        get '/user/:user_id' => 'roles#index_for_user', as: :index_for_user
-        get '/group/:group_id' => 'roles#index_for_group', as: :index_for_group
-        get '/group-type/:group_type' => 'roles#index_for_group_type', as: :index_for_group_type
+      resources :user_roles, only: [:create, :show, :update, :destroy]
+      scope 'user_roles' do
+        get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
+        get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
+        get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
       end
       resources :user_groups, only: [:index, :create, :update]
+      namespace :wrt do
+        resources :persons, only: [:update, :destroy] do
+          put '/reset_claim_count' => 'persons#reset_claim_count', as: :reset_claim_count
+        end
+      end
       namespace :wfc do
         resources :xero_users, only: [:index, :create]
-        resources :dues_redirects, only: [:index, :create]
+        resources :dues_redirects, only: [:index, :create, :destroy]
       end
     end
   end

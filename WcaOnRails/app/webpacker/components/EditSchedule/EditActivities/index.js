@@ -290,10 +290,10 @@ function EditActivities({
         </List>
       </Container>
       <Divider />
-      {!selectedRoomId && (
+      {selectedRoomId === undefined && (
         <Message info>Please select a room by clicking one of the labels above</Message>
       )}
-      {selectedRoomId && (
+      {selectedRoomId !== undefined && (
         <Container fluid>
           <EditActivityModal
             isModalOpen={isActivityModalOpen}

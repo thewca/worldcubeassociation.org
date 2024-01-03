@@ -290,46 +290,6 @@ class AdminController < ApplicationController
     @person ||= Person.new
   end
 
-  def update_person
-    @person = Person.current.find_by(wca_id: params[:person][:wca_id])
-    if @person
-      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :incorrect_wca_id_claim_count)
-      case params[:method]
-      when "fix"
-        if @person.update(person_params)
-          flash.now[:success] = "Successfully fixed #{@person.name}."
-          if @person.saved_change_to_countryId?
-            flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
-            <a href='#{admin_check_regional_records_path}'>check_regional_record_markers</a>.".html_safe
-          end
-        else
-          flash.now[:danger] = "Error while fixing #{@person.name}."
-        end
-      when "update"
-        if @person.update_using_sub_id(person_params)
-          flash.now[:success] = "Successfully updated #{@person.name}."
-        else
-          flash.now[:danger] = "Error while updating #{@person.name}."
-        end
-      when "destroy"
-        if @person.results.any?
-          flash.now[:danger] = "#{@person.name} has results, can't destroy them."
-        elsif @person.user.present?
-          flash.now[:danger] = "#{@person.wca_id} is linked to a user, can't destroy them."
-        else
-          name = @person.name
-          @person.destroy
-          flash.now[:success] = "Successfully destroyed #{name}."
-          @person = Person.new
-        end
-      end
-    else
-      @person = Person.new
-      flash.now[:danger] = "No person has been chosen."
-    end
-    render :edit_person
-  end
-
   def person_data
     @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 

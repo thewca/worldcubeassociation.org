@@ -197,6 +197,8 @@ class UsersController < ApplicationController
       if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
         AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
       end
+      # Clear preferred Events cache
+      Rails.cache.delete("#{current_user.id}-preferred-events") if user_params.key? "user_preferred_events_attributes"
     elsif @user.claiming_wca_id
       render :claim_wca_id
     else
@@ -280,7 +282,7 @@ class UsersController < ApplicationController
   private def user_params
     params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       if user_params.key?(:delegate_status) && !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
-        user_params["senior_delegate_id"] = nil
+        user_params["region_id"] = nil
       end
       if user_params.key?(:wca_id)
         user_params[:wca_id] = user_params[:wca_id].upcase

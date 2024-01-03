@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
+ActiveRecord::Schema[7.1].define(version: 2023_12_27_095728) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -556,6 +556,12 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
   end
 
+  create_table "attendee_payment_requests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "attendee_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "bookmarked_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id", null: false
     t.integer "user_id", null: false
@@ -690,6 +696,7 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "friendly_id"
   end
 
   create_table "incident_competitions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -885,19 +892,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
   end
 
-  create_table "roles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.bigint "group_id", null: false
-    t.date "start_date", null: false
-    t.date "end_date"
-    t.bigint "metadata_id"
-    t.string "metadata_type"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["group_id"], name: "index_roles_on_group_id"
-    t.index ["user_id"], name: "index_roles_on_user_id"
-  end
-
   create_table "rounds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "competition_event_id", null: false
     t.string "format_id", limit: 255, null: false
@@ -1072,6 +1066,19 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["user_id", "event_id"], name: "index_user_preferred_events_on_user_id_and_event_id", unique: true
   end
 
+  create_table "user_roles", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.bigint "group_id", null: false
+    t.date "start_date", null: false
+    t.date "end_date"
+    t.bigint "metadata_id"
+    t.string "metadata_type"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["group_id"], name: "index_user_roles_on_group_id"
+    t.index ["user_id"], name: "index_user_roles_on_user_id"
+  end
+
   create_table "users", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email", default: "", null: false
     t.string "encrypted_password", limit: 255, default: "", null: false
@@ -1092,7 +1099,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.string "name", limit: 255
     t.string "delegate_status", limit: 255
     t.bigint "region_id"
-    t.integer "senior_delegate_id"
     t.string "location", limit: 255
     t.string "wca_id"
     t.string "avatar", limit: 255
@@ -1127,7 +1133,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
     t.index ["region_id", "delegate_status"], name: "index_users_on_region_id_and_delegate_status"
     t.index ["region_id"], name: "index_users_on_region_id"
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
-    t.index ["senior_delegate_id"], name: "index_users_on_senior_delegate_id"
     t.index ["wca_id"], name: "index_users_on_wca_id", unique: true
   end
 
@@ -1182,8 +1187,6 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
-  add_foreign_key "roles", "user_groups", column: "group_id"
-  add_foreign_key "roles", "users"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"
@@ -1191,6 +1194,8 @@ ActiveRecord::Schema[7.1].define(version: 2023_12_02_155158) do
   add_foreign_key "stripe_transactions", "stripe_transactions", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
+  add_foreign_key "user_roles", "user_groups", column: "group_id"
+  add_foreign_key "user_roles", "users"
   add_foreign_key "users", "user_groups", column: "region_id"
   add_foreign_key "wfc_dues_redirects", "wfc_xero_users", column: "redirect_to_id"
 end

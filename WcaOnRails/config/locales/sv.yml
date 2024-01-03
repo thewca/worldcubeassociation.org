@@ -755,21 +755,20 @@ sv:
           delegate: Delegat
           #original_hash: d463c23
           senior_delegate: Senior-delegat
-        teams:
+        teams_committees:
           #original_hash: 6853c98
           member: Medlem
           #original_hash: c366473
-          senior_member: Senior-medlem
+          senior_member: Senior medlem
           #original_hash: e26c936
           leader: Ledare
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: Man
-        #original_hash: b7c17e9
-        f: Kvinna
-        #original_hash: 6e6a6f2
-        o: Övrigt
+        councils:
+          #original_hash: 6853c98
+          member: Medlem
+          #original_hash: c366473
+          senior_member: Senior medlem
+          #original_hash: e26c936
+          leader: Ledare
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1177,22 +1176,10 @@ sv:
         #original_hash: da39a3e
         content: ''
       person:
-        #original_hash: 498f4c5
-        dob: Födelsedatumet ska ha formatet ÅÅÅÅ-MM-DD.
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
         #original_hash: da39a3e
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
       poll:
@@ -2116,10 +2103,6 @@ sv:
         uppdateras.
       #original_hash: 012f032
       must_be_senior: måste vara senior-delegat
-      #original_hash: 2e582eb
-      must_not_be_present: får inte vara närvarande
-      #original_hash: 5b4eac9
-      senior_has_delegate: kan inte degradera senior-delegat med underordnade delegater
       #original_hash: 48653a9
       already_have_id: >-
         kan inte göra anspråk på ett WCA-ID eftersom du redan har WCA-ID
@@ -2716,6 +2699,10 @@ sv:
       reg_opens_too_early: >-
         Anmälan är satt till att börja om mindre än 48 timmar, vilket inte är
         tillåtet.
+      #original_hash: a25e7a2
+      registration_already_closed: >-
+        Deadline för anmälan har redan passerat. Vänligen ange en framtida
+        tidpunkt.
       #original_hash: 3322400
       tooltip_registered: Du är anmäld.
       #original_hash: f2d092f
@@ -3208,6 +3195,8 @@ sv:
       not_all_delegates: är inte alla delegater
       #original_hash: 43a23c2
       registration_close_after_open: anmälan måste stänga efter att anmälan öppnar
+      #original_hash: 2f8765e
+      registration_already_closed: anmälan får inte redan vara stängd.
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: Startdatumet måste vara om minst 28 dagar.
       #original_hash: 43a83a9

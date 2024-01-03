@@ -280,6 +280,15 @@ class Person < ApplicationRecord
       id: self.wca_id,
     )
 
+    private_attributes = options&.fetch(:private_attributes, []) || []
+    if private_attributes.include?("dob")
+      json[:dob] = dob.to_s
+    end
+
+    if private_attributes.include?("incorrect_wca_id_claim_count")
+      json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
+    end
+
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.
     (user || User.new).serializable_hash(options).merge(json)

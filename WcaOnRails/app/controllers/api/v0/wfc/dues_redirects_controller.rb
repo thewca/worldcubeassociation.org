@@ -31,4 +31,11 @@ class Api::V0::Wfc::DuesRedirectsController < Api::V0::ApiController
       render json: wfc_dues_redirect.errors, status: :unprocessable_entity
     end
   end
+
+  def destroy
+    id = params.require(:id)
+    wfc_dues_redirect = WfcDuesRedirect.find(id)
+    wfc_dues_redirect.destroy
+    render json: wfc_dues_redirect
+  end
 end
