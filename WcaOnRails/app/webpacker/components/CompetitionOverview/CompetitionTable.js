@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
-import calculateDayDifference from '../../lib/utils/competition-table';
+import { calculateDayDifference, PseudoLinkMarkdown } from '../../lib/utils/competition-table';
 
 function CompetitionTable({
   competitionData,
@@ -54,7 +54,7 @@ function CompetitionTable({
                 {`, ${comp.cityName}`}
               </div>
               <div className="venue-link">
-                <VenueMarkdown venueText={comp.venue} />
+                <PseudoLinkMarkdown text={comp.venue} />
               </div>
             </span>
           </List.Item>
@@ -162,26 +162,6 @@ function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
       position="top center"
       size="tiny"
     />
-  );
-}
-
-// Currently, the venue attribute of a competition object can be written as markdown,
-// and using third party libraries like react-markdown to parse it requires to much work
-function VenueMarkdown({ venueText }) {
-  const openBracketIndex = venueText.indexOf('[');
-  const closeBracketIndex = venueText.indexOf(']', openBracketIndex);
-  const openParenIndex = venueText.indexOf('(', closeBracketIndex);
-  const closeParenIndex = venueText.indexOf(')', openParenIndex);
-
-  if (openBracketIndex === -1 || closeBracketIndex === -1
-    || openParenIndex === -1 || closeParenIndex === -1) {
-    return <p>{venueText}</p>;
-  }
-
-  return (
-    <a href={venueText.slice(openParenIndex + 1, closeParenIndex)} target="_blank" rel="noreferrer">
-      <p>{venueText.slice(openBracketIndex + 1, closeBracketIndex)}</p>
-    </a>
   );
 }
 
