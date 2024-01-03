@@ -272,7 +272,7 @@ function CompetitionFilter() {
     }
   }, [bottomInView, competitionsFetchNextPage]);
   useEffect(() => {
-    if (hasUnloadedCompetitions && displayMode === 'map' && mapDisplayComps.length < MAP_DISPLAY_LIMIT) {
+    if (hasUnloadedCompetitions && displayMode === 'map' && mapDisplayComps?.length < MAP_DISPLAY_LIMIT) {
       competitionsFetchNextPage();
     }
   }, [competitionsData, displayMode, hasUnloadedCompetitions, mapDisplayComps,
@@ -327,7 +327,7 @@ function CompetitionFilter() {
           <label htmlFor="events">
             {`${I18n.t('competitions.competition_form.events')}`}
             <br />
-            <Button primary size="mini" id="select-all-events" onClick={() => setSelectedEvents(WCA_EVENT_IDS)}>{I18n.t('competitions.index.all_events')}</Button>
+            <Button primary type="button" size="mini" id="select-all-events" onClick={() => setSelectedEvents(WCA_EVENT_IDS)}>{I18n.t('competitions.index.all_events')}</Button>
             <Button size="mini" id="clear-all-events" onClick={() => setSelectedEvents([])}>{I18n.t('competitions.index.clear')}</Button>
           </label>
 
@@ -562,7 +562,7 @@ function CompetitionFilter() {
                   showCancelled={showCancelled}
                   selectedEvents={selectedEvents}
                   loading={competitionsIsFetching && !notInProgressFutureComps}
-                  loaded={!hasUnloadedCompetitions || notInProgressFutureComps.length > 0}
+                  loaded={!hasUnloadedCompetitions || notInProgressFutureComps?.length > 0}
                   renderedAboveAnotherTable
                 />
                 <CompetitionTable

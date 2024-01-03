@@ -181,7 +181,7 @@ function CompetitionTable({
         loaded
         && !loading
         && !renderedAboveAnotherTable
-        && <LoadedDisplay numCompetitions={competitions.length} />
+        && <LoadedDisplay numCompetitions={competitions?.length} />
       }
     </List>
   );
