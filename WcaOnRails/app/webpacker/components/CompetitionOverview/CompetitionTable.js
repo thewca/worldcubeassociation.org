@@ -174,8 +174,8 @@ function CompetitionTable({
         </React.Fragment>
       ))}
       {/* Could not figure out why the animated loader icon doesn't show */}
-      {!loaded && loading && <List.Item style={{ textAlign: 'center' }}><Loader active inline="centered" size="small">Loading...</Loader></List.Item>}
-      {loaded && !renderedAboveAnotherTable && <List.Item style={{ textAlign: 'center' }}>No more competitions.</List.Item>}
+      {loading && <List.Item style={{ textAlign: 'center' }}><Loader active inline="centered" size="small">Loading...</Loader></List.Item>}
+      {loaded && !loading && !renderedAboveAnotherTable && <List.Item style={{ textAlign: 'center' }}>No more competitions.</List.Item>}
     </List>
   );
 }
