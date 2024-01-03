@@ -6,6 +6,7 @@ import {
 
 import { userTileProvider } from '../../lib/leaflet-wca/providers';
 import { redMarker, blueMarker } from '../../lib/leaflet-wca/markers';
+import { ResizeMapIFrame } from '../../lib/utils/leaflet-iframe';
 import 'leaflet/dist/leaflet.css';
 
 function CompetitionMap({
@@ -24,6 +25,7 @@ function CompetitionMap({
       scrollWheelZoom
       style={{ height: '400px', width: '100%' }}
     >
+      <ResizeMapIFrame />
       <TileLayer url={provider.url} attribution={provider.attribution} />
       {competitions?.map((comp) => (
         <Marker
