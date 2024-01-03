@@ -912,13 +912,14 @@ class Competition < ApplicationRecord
 
   def registration_status
     if registration_not_yet_opened?
-      return "not_yet_opened"
+      "not_yet_opened"
     elsif registration_past?
-      return "past"
+      "past"
     elsif registration_full?
-      return "full"
+      "full"
+    else
+      "open"
     end
-    "open"
   end
 
   def registration_opened?
@@ -1995,7 +1996,7 @@ class Competition < ApplicationRecord
     json.merge!(
       class: self.class.to_s.downcase,
       displayName: display_name(short: true),
-      countryName: country ? country.name : nil,
+      countryName: country&.name,
       cityName: cityName,
       year: start_date.year,
       isProbablyOver: is_probably_over?,
@@ -2003,10 +2004,10 @@ class Competition < ApplicationRecord
       resultsPosted: results_posted?,
       inProgress: in_progress?,
       dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
-      announcedDate: announced_at ? announced_at.strftime(" %F %H:%M:%S") : nil,
+      announcedDate: announced_at&.strftime(" %F %H:%M:%S"),
       venue: venue,
       url: url,
-      country_iso2: country_iso2 ? country_iso2.downcase : nil,
+      country_iso2: country_iso2&.downcase,
       timeUntilRegistration: registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil,
       registration_status: registration_status,
     )
