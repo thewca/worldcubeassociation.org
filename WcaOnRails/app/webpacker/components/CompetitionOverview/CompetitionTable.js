@@ -36,7 +36,7 @@ function CompetitionTable({
           />
           <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
             <span className="date">
-              <DateIcon
+              <StatusIcon
                 comp={comp}
                 shouldShowRegStatus={shouldShowRegStatus}
                 isSortedByAnnouncement={isSortedByAnnouncement}
@@ -75,7 +75,7 @@ function CompetitionTable({
         !hasMoreCompsToLoad
         && !isLoading
         && !isRenderedAboveAnotherTable
-        && <FinishedLoadingCompsMsg numCompetitions={competitions?.length} />
+        && <EndOfCompListMessage numCompetitions={competitions?.length} />
       }
     </List>
   );
@@ -130,7 +130,7 @@ function RegistrationStatus({ comp }) {
   );
 }
 
-function DateIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
+function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
   let tooltipInfo = '';
   let iconClass = '';
 
@@ -185,7 +185,7 @@ function VenueMarkdown({ venueText }) {
   );
 }
 
-function FinishedLoadingCompsMsg({ numCompetitions }) {
+function EndOfCompListMessage({ numCompetitions }) {
   return (
     <List.Item style={{ textAlign: 'center' }}>
       {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}

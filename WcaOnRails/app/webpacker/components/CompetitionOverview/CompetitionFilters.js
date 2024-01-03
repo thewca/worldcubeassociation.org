@@ -48,7 +48,7 @@ const regionsOptions = [
   ))),
 ];
 
-function CompetitionFilter() {
+function CompetitionFilters() {
   const [competitionApiKey, setCompetitionApiKey] = useState({
     sort_by: 'present', year: '', region: '', delegate: '', search: '',
   });
@@ -659,4 +659,4 @@ function CompetitionFilter() {
   );
 }
 
-export default CompetitionFilter;
+export default CompetitionFilters;
