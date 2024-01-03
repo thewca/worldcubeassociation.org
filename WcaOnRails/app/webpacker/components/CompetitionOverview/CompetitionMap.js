@@ -8,8 +8,14 @@ import { userTileProvider } from '../../lib/leaflet-wca/providers';
 import { redMarker, blueMarker } from '../../lib/leaflet-wca/markers';
 import 'leaflet/dist/leaflet.css';
 
-function CompetitionMap({ competitions }) {
+function CompetitionMap({
+  competitionData,
+  selectedEvents,
+  showCancelled,
+}) {
   const provider = userTileProvider;
+  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || showCancelled)
+    && (selectedEvents.every((event) => comp.event_ids.includes(event))));
 
   return (
     <MapContainer

@@ -295,6 +295,16 @@ function CompetitionFilter() {
       return allPages.length + 1;
     },
   });
+  useEffect(() => {
+    const flatData = delegatesData?.pages
+      .map((page) => page.data)
+      .flatMap((delegate) => delegate);
+    setDelegatesInfo(flatData);
+
+    if (delegateHasNextPage) {
+      delegateFetchNextPage();
+    }
+  }, [delegatesData, delegateHasNextPage, delegateFetchNextPage]);
 
   const customTimeSelectionButton = (
     <Button
@@ -308,17 +318,6 @@ function CompetitionFilter() {
       <span className="caption">{I18n.t('competitions.index.custom')}</span>
     </Button>
   );
-
-  useEffect(() => {
-    const flatData = delegatesData?.pages
-      .map((page) => page.data)
-      .flatMap((delegate) => delegate);
-    setDelegatesInfo(flatData);
-
-    if (delegateHasNextPage) {
-      delegateFetchNextPage();
-    }
-  }, [delegatesData, delegateHasNextPage, delegateFetchNextPage]);
 
   return (
     <Container>
@@ -642,7 +641,16 @@ function CompetitionFilter() {
         </div>
         {/* old code does a lot of things to #competitions-map... to be included? */}
         <div name="competitions-map">
-          {displayMode === 'map' && <CompetitionMap competitions={mapDisplayComps} />}
+          {
+            displayMode === 'map'
+            && (
+              <CompetitionMap
+                competitionData={mapDisplayComps}
+                selectedEvents={selectedEvents}
+                showCancelled={showCancelled}
+              />
+            )
+          }
         </div>
       </Container>
 

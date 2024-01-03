@@ -132,11 +132,11 @@ function CompetitionTable({
   title,
   showRegistrationStatus,
   showCancelled,
-  sortByAnnouncement = false,
   selectedEvents,
-  renderedAboveAnotherTable = false,
   loading,
   loaded,
+  sortByAnnouncement = false,
+  renderedAboveAnotherTable = false,
 }) {
   const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || showCancelled)
     && (selectedEvents.every((event) => comp.event_ids.includes(event))));
