@@ -6,9 +6,9 @@ import {
 import I18n from '../../lib/i18n';
 import calculateDayDifference from '../../lib/utils/competition-table';
 
-function shouldShowYearHeader(competitions, index, sortByAnnouncement) {
+function shouldShowYearHeader(competitions, index, isSortedByAnnouncement) {
   return index > 0 && competitions[index].year !== competitions[index - 1].year
-    && !sortByAnnouncement;
+    && !isSortedByAnnouncement;
 }
 
 function RegistrationStatus({ comp }) {
@@ -53,7 +53,7 @@ function RegistrationStatus({ comp }) {
   );
 }
 
-function DateIcon({ comp, showRegistrationStatus, sortByAnnouncement }) {
+function DateIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
   let tooltipInfo = '';
   let iconClass = '';
 
@@ -68,10 +68,10 @@ function DateIcon({ comp, showRegistrationStatus, sortByAnnouncement }) {
   } else if (comp.inProgress) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.in_progress');
     iconClass = 'hourglass half';
-  } else if (sortByAnnouncement) {
+  } else if (isSortedByAnnouncement) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate });
     iconClass = 'hourglass start';
-  } else if (showRegistrationStatus) {
+  } else if (shouldShowRegStatus) {
     return <RegistrationStatus comp={comp} />;
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'future') }) });
@@ -108,7 +108,7 @@ function VenueMarkdown({ venueText }) {
   );
 }
 
-function LoadedDisplay({ numCompetitions }) {
+function FinishedLoadingCompsMsg({ numCompetitions }) {
   return (
     <List.Item style={{ textAlign: 'center' }}>
       {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
@@ -119,33 +119,33 @@ function LoadedDisplay({ numCompetitions }) {
 function CompetitionTable({
   competitionData,
   title,
-  showRegistrationStatus,
-  showCancelled,
+  shouldShowRegStatus,
+  shouldShowCancelled,
   selectedEvents,
-  loading,
-  loaded,
-  sortByAnnouncement = false,
-  renderedAboveAnotherTable = false,
+  isLoading,
+  hasMoreCompsToLoad,
+  isSortedByAnnouncement = false,
+  isRenderedAboveAnotherTable = false,
 }) {
-  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || showCancelled)
+  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || shouldShowCancelled)
     && (selectedEvents.every((event) => comp.event_ids.includes(event))));
 
   return (
     <List divided relaxed>
       <List.Item>
         <strong>
-          {`${title} (${competitions ? competitions.length : 0}${!loaded ? '...' : ''})`}
+          {`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad ? '...' : ''})`}
         </strong>
       </List.Item>
       {competitions?.map((comp, index) => (
         <React.Fragment key={comp.id}>
-          {shouldShowYearHeader(competitions, index, sortByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
+          {shouldShowYearHeader(competitions, index, isSortedByAnnouncement) && <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{comp.year}</List.Item>}
           <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
             <span className="date">
               <DateIcon
                 comp={comp}
-                showRegistrationStatus={showRegistrationStatus}
-                sortByAnnouncement={sortByAnnouncement}
+                shouldShowRegStatus={shouldShowRegStatus}
+                isSortedByAnnouncement={isSortedByAnnouncement}
               />
               {comp.dateRange}
             </span>
@@ -168,7 +168,7 @@ function CompetitionTable({
       ))}
       {/* Could not figure out why Semantic UI's animated loader icon doesn't show */}
       {
-        loading
+        isLoading
         && (
           <List.Item style={{ textAlign: 'center' }}>
             <Loader active inline="centered" size="small">
@@ -178,10 +178,10 @@ function CompetitionTable({
         )
       }
       {
-        loaded
-        && !loading
-        && !renderedAboveAnotherTable
-        && <LoadedDisplay numCompetitions={competitions?.length} />
+        !hasMoreCompsToLoad
+        && !isLoading
+        && !isRenderedAboveAnotherTable
+        && <FinishedLoadingCompsMsg numCompetitions={competitions?.length} />
       }
     </List>
   );

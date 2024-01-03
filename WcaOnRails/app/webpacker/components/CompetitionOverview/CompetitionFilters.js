@@ -58,8 +58,8 @@ function CompetitionFilter() {
   const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
   const [customStartDate, setCustomStartDate] = useState();
   const [customEndDate, setCustomEndDate] = useState();
-  const [showRegistration, setShowRegistration] = useState(false);
-  const [showCancelled, setShowCancelled] = useState(false);
+  const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
+  const [shouldShowCancelled, setShouldShowCancelled] = useState(false);
   const [searchQuery, setSearchQuery] = useState();
   const [timeOrder, setTimeOrder] = useState('present');
   const [displayMode, setDisplayMode] = useState('list');
@@ -158,7 +158,7 @@ function CompetitionFilter() {
     data: competitionsData,
     fetchNextPage: competitionsFetchNextPage,
     isFetching: competitionsIsFetching,
-    hasNextPage: hasUnloadedCompetitions,
+    hasNextPage: hasMoreCompsToLoad,
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionApiKey],
     queryFn: ({ pageParam = 1 }) => {
@@ -272,10 +272,10 @@ function CompetitionFilter() {
     }
   }, [bottomInView, competitionsFetchNextPage]);
   useEffect(() => {
-    if (hasUnloadedCompetitions && displayMode === 'map' && mapDisplayComps?.length < MAP_DISPLAY_LIMIT) {
+    if (hasMoreCompsToLoad && displayMode === 'map' && mapDisplayComps?.length < MAP_DISPLAY_LIMIT) {
       competitionsFetchNextPage();
     }
-  }, [competitionsData, displayMode, hasUnloadedCompetitions, mapDisplayComps,
+  }, [competitionsData, displayMode, hasMoreCompsToLoad, mapDisplayComps,
     competitionsFetchNextPage]);
 
   const [delegatesInfo, setDelegatesInfo] = useState([]);
@@ -520,7 +520,7 @@ function CompetitionFilter() {
               label={I18n.t('competitions.index.show_registration_status')}
               name="show_registration_status"
               id="show_registration_status"
-              onChange={() => { setShowRegistration(!showRegistration); }}
+              onChange={() => { setShouldShowRegStatus(!shouldShowRegStatus); }}
             />
           </div>
 
@@ -529,7 +529,7 @@ function CompetitionFilter() {
               label={I18n.t('competitions.index.show_cancelled')}
               name="show_cancelled"
               id="show_cancelled"
-              onChange={() => { setShowCancelled(!showCancelled); }}
+              onChange={() => { setShouldShowCancelled(!shouldShowCancelled); }}
             />
           </div>
         </Form.Group>
@@ -558,21 +558,21 @@ function CompetitionFilter() {
                 <CompetitionTable
                   competitionData={inProgressComps}
                   title={I18n.t('competitions.index.titles.in_progress')}
-                  showRegistrationStatus={showRegistration}
-                  showCancelled={showCancelled}
+                  shouldShowRegStatus={shouldShowRegStatus}
+                  shouldShowCancelled={shouldShowCancelled}
                   selectedEvents={selectedEvents}
-                  loading={competitionsIsFetching && !notInProgressFutureComps}
-                  loaded={!hasUnloadedCompetitions || notInProgressFutureComps?.length > 0}
-                  renderedAboveAnotherTable
+                  isLoading={competitionsIsFetching && !notInProgressFutureComps}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad && !notInProgressFutureComps}
+                  isRenderedAboveAnotherTable
                 />
                 <CompetitionTable
                   competitionData={notInProgressFutureComps}
                   title={I18n.t('competitions.index.titles.upcoming')}
-                  showRegistrationStatus={showRegistration}
-                  showCancelled={showCancelled}
+                  shouldShowRegStatus={shouldShowRegStatus}
+                  shouldShowCancelled={shouldShowCancelled}
                   selectedEvents={selectedEvents}
-                  loading={competitionsIsFetching}
-                  loaded={!hasUnloadedCompetitions}
+                  isLoading={competitionsIsFetching}
+                  hasMoreCompsToLoad={hasMoreCompsToLoad}
                 />
               </>
             )
@@ -584,11 +584,11 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitionData={recentComps}
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
-                showRegistrationStatus={showRegistration}
-                showCancelled={showCancelled}
+                shouldShowRegStatus={shouldShowRegStatus}
+                shouldShowCancelled={shouldShowCancelled}
                 selectedEvents={selectedEvents}
-                loading={competitionsIsFetching}
-                loaded={!hasUnloadedCompetitions}
+                isLoading={competitionsIsFetching}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
               />
             )
           }
@@ -599,11 +599,11 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitionData={pastComps[pastSelectedYear]}
                 title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
-                showRegistrationStatus={showRegistration}
-                showCancelled={showCancelled}
+                shouldShowRegStatus={shouldShowRegStatus}
+                shouldShowCancelled={shouldShowCancelled}
                 selectedEvents={selectedEvents}
-                loading={competitionsIsFetching}
-                loaded={!hasUnloadedCompetitions}
+                isLoading={competitionsIsFetching}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
               />
             )
           }
@@ -614,12 +614,12 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitionData={sortByAnnouncementComps}
                 title={I18n.t('competitions.index.titles.by_announcement')}
-                showRegistrationStatus={showRegistration}
-                showCancelled={showCancelled}
+                shouldShowRegStatus={shouldShowRegStatus}
+                shouldShowCancelled={shouldShowCancelled}
                 selectedEvents={selectedEvents}
-                sortByAnnouncement
-                loading={competitionsIsFetching}
-                loaded={!hasUnloadedCompetitions}
+                isLoading={competitionsIsFetching}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
+                isSortedByAnnouncement
               />
             )
           }
@@ -630,11 +630,11 @@ function CompetitionFilter() {
               <CompetitionTable
                 competitionData={customDatesComps}
                 title={I18n.t('competitions.index.titles.custom')}
-                showRegistrationStatus={showRegistration}
-                showCancelled={showCancelled}
+                shouldShowRegStatus={shouldShowRegStatus}
+                shouldShowCancelled={shouldShowCancelled}
                 selectedEvents={selectedEvents}
-                loading={competitionsIsFetching}
-                loaded={!hasUnloadedCompetitions}
+                isLoading={competitionsIsFetching}
+                hasMoreCompsToLoad={hasMoreCompsToLoad}
               />
             )
           }
@@ -647,14 +647,14 @@ function CompetitionFilter() {
               <CompetitionMap
                 competitionData={mapDisplayComps}
                 selectedEvents={selectedEvents}
-                showCancelled={showCancelled}
+                shouldShowCancelled={shouldShowCancelled}
               />
             )
           }
         </div>
       </Container>
 
-      {!competitionsIsFetching && hasUnloadedCompetitions && displayMode === 'list' && <div ref={ref} name="page-bottom" />}
+      {!competitionsIsFetching && hasMoreCompsToLoad && displayMode === 'list' && <div ref={ref} name="page-bottom" />}
     </Container>
   );
 }
