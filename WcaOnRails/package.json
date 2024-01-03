@@ -36,7 +36,7 @@
     "babel-plugin-module-resolver": "^5.0.0",
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "blueimp-load-image": "^5.16.0",
-    "classnames": "^2.3.2",
+    "classnames": "^2.5.1",
     "compression-webpack-plugin": "^10.0.0",
     "core-js": "^3.34.0",
     "css-loader": "^6.8.1",
