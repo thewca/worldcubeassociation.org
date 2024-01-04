@@ -3,7 +3,7 @@
 class Api::V0::UserRolesController < Api::V0::ApiController
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
-    unless current_user.board_member? || current_user.senior_delegate?
+    unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
       render json: {}, status: 401
     end
   end
@@ -276,7 +276,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def create
     user_id = params.require(:userId)
-    group_id = params.require(:groupId)
+    group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
 
     if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
@@ -306,6 +306,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         user = User.find(user_id)
         user.update!(delegate_status: status, region_id: group.id, location: location)
         send_role_change_notification(user)
+        render json: {
+          success: true,
+        }
+      elsif group.group_type == UserGroup.group_types[:delegate_probation]
+        role = UserRole.create!(
+          user_id: user_id,
+          group_id: group_id,
+          start_date: Date.today,
+        )
+        RoleChangeMailer.notify_role_start(role, current_user).deliver_later
         render json: {
           success: true,
         }

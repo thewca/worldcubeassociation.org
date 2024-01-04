@@ -3,7 +3,7 @@
 class DelegatesController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:can_manage_delegate_probation?) }, only: [:probations]
-  before_action :current_user_can_manage_delegate_probation!, only: [:start_delegate_probation, :end_delegate_probation]
+  before_action :current_user_can_manage_delegate_probation!, only: [:end_delegate_probation]
   private def current_user_can_manage_delegate_probation!
     unless current_user.can_manage_delegate_probation?
       render json: {}, status: 401

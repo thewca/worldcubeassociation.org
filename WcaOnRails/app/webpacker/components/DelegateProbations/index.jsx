@@ -5,7 +5,6 @@ import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   apiV0Urls,
-  startDelegateProbationUrl,
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
@@ -103,7 +102,10 @@ export default function DelegateProbations() {
         params={{ only_staff_delegates: true }}
       />
       <Button
-        onClick={() => save(startDelegateProbationUrl, { userId: user.id }, () => {
+        onClick={() => save(apiV0Urls.userRoles.create(), {
+          userId: user.id,
+          groupType: groupTypes.delegate_probation,
+        }, () => {
           sync();
           setUser(null);
         }, { method: 'POST' })}
