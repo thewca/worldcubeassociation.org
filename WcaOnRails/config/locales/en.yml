@@ -545,7 +545,7 @@ en:
         end_date: ""
         generate_website: ""
         external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
-        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
+        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment. There is a known bug that may result in the Dues estimate for Band 1 and 2 countries being significantly overstated.</b>'
         currency_code: "The currency code for fees."
         guests_enabled: ""
         enable_donations: ""
