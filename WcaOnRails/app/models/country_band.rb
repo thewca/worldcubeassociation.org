@@ -27,6 +27,16 @@ class CountryBand < ApplicationRecord
   # larger than the due amount per competitor calculated from the competition's country band.
   PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT = 0.15
 
+  def self.percent_registration_fee_used_for_due_amount(country_band)
+    if country_band.present? && country_band >= 3
+      0.15
+    elsif country_band.present? && country_band >= 1
+      0.05
+    else
+      0.00
+    end
+  end
+
   belongs_to :country, foreign_key: :iso2, primary_key: :iso2
   validates_inclusion_of :iso2, in: Country.real.map(&:iso2).freeze
   validates_inclusion_of :number, in: BANDS.keys.freeze
