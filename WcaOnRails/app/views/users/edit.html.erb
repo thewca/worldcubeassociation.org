@@ -199,7 +199,7 @@
                     <li><%= guideline %></li>
                   <% end %>
                 </ul>
-                <% if @user.staff? %>
+                <% if @user.staff? || @user.trainee_delegate? %>
                   <br /><strong><%= t('.staff_avatar_guidelines.title') %></strong>
                   <ul>
                     <% t('.staff_avatar_guidelines.paragraphs').values.each do |guideline| %>
