@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  unless ENV['SKIP_PRETEST_SETUP']
+  unless ENV['SKIP_PRETEST_SETUP'] == 'true'
     config.before(:suite) do
       DatabaseCleaner.clean_with :truncation
       TestDbManager.fill_tables
