@@ -18,7 +18,7 @@ import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes } from '../../lib/wca-data.js.erb';
-import DelegatesOfRegion from './DelegatesOfRegion';
+import DelegatesOfRegion, { ALL_REGIONS } from './DelegatesOfRegion';
 import useHash from '../../lib/hooks/useHash';
 
 // let i18n-tasks know the key is used
@@ -39,6 +39,7 @@ export default function Delegates() {
   const [hash, setHash] = useHash();
 
   const activeRegion = React.useMemo(() => {
+    if (hash === ALL_REGIONS.id) return ALL_REGIONS;
     const selectedRegionIndex = delegateRegions.findIndex(
       (region) => region.metadata.friendly_id === hash,
     );
@@ -51,8 +52,23 @@ export default function Delegates() {
 
   const [adminMode, setAdminMode] = React.useState(false);
 
+  React.useEffect(() => {
+    if (
+      activeRegion === ALL_REGIONS
+       && !adminMode
+       && loggedInUserPermissions.canViewDelegateAdminPage) {
+      setAdminMode(true);
+    }
+  }, [activeRegion, adminMode, loggedInUserPermissions.canViewDelegateAdminPage]);
+
   if (permissionsLoading || delegateGroupsLoading || !activeRegion) return <Loading />;
   if (delegateGroupsError) return <Errored />;
+  if (activeRegion === ALL_REGIONS && !adminMode) {
+    if (loggedInUserPermissions.canViewDelegateAdminPage) {
+      return <Loading />;
+    }
+    return <Errored />;
+  }
 
   return (
     <div className="container">
@@ -86,6 +102,14 @@ export default function Delegates() {
                 onClick={() => setHash(region.metadata.friendly_id)}
               />
             ))}
+            {adminMode && (
+              <Menu.Item
+                key={ALL_REGIONS.id}
+                name={ALL_REGIONS.name}
+                active={activeRegion === ALL_REGIONS}
+                onClick={() => setHash(ALL_REGIONS.id)}
+              />
+            )}
           </Menu>
         </Grid.Column>
 

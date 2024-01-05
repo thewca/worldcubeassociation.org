@@ -2191,6 +2191,7 @@ en:
     title: "WCA Delegates"
     acknowledges: "The WCA acknowledges the following WCA Delegates:"
     regions: "Regions"
+    all_regions: "All Regions"
     table:
       name: "Name"
       role: "Role"
