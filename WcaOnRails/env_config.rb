@@ -42,6 +42,7 @@ EnvConfig = SuperConfig.new do
 
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false
+    optional :SKIP_PRETEST_SETUP, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
   end
 
