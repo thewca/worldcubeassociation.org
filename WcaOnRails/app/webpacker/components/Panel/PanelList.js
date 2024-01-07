@@ -18,6 +18,9 @@ const PANEL_LIST = {
     xeroUsers: 'xero-users',
     duesRedirect: 'dues-redirect',
   },
+  wst: {
+    translators: 'translators',
+  },
 };
 
 export default PANEL_LIST;

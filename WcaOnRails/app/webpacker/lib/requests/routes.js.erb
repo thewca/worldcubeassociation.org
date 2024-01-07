@@ -1,6 +1,6 @@
 function jsonToQueryString(json) {
   const jsonAfterRemovingUndefinedAndNull = Object.fromEntries(
-    Object.entries(json).filter(([key, value]) => value !== null)
+    Object.entries(json).filter(([key, value]) => value !== null && value !== undefined)
   );
   return (new URLSearchParams(jsonAfterRemovingUndefinedAndNull)).toString();
 }
