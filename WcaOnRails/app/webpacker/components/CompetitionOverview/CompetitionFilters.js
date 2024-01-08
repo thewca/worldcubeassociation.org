@@ -83,7 +83,7 @@ function CompetitionFilters() {
   const [inProgressComps, setInProgressComps] = useState([]);
   const [notInProgressFutureComps, setNotInProgressFutureComps] = useState([]);
   const [recentComps, setRecentComps] = useState([]);
-  const [sortByAnnouncementComps, setSortByAnnouncementComps] = useState([]);
+  const [sortedByAnnouncementComps, setSortedByAnnouncementComps] = useState([]);
   const [pastComps, setPastComps] = useState({});
   const [customDatesComps, setCustomDatesComps] = useState([]);
   const [mapDisplayComps, setMapDisplayComps] = useState([]);
