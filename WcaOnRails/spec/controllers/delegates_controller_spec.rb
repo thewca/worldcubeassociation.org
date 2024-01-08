@@ -47,7 +47,7 @@ RSpec.describe DelegatesController do
 
     it 'senior delegates can start the probation role' do
       sign_in FactoryBot.create :senior_delegate
-      expect(RoleChangeMailer).to receive(:notify_start_probation).and_call_original
+      expect(RoleChangeMailer).to receive(:notify_role_start).and_call_original
 
       expect do
         post :start_delegate_probation, params: { userId: users[0].id }, format: :json

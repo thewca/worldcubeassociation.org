@@ -19,6 +19,7 @@ import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import DelegatesOfRegion from './DelegatesOfRegion';
+import useHash from '../../lib/hooks/useHash';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('delegates_page.acknowledges')
@@ -35,12 +36,20 @@ export default function Delegates() {
     [delegateGroups],
   );
 
-  const [activeRegion, setActiveRegion] = React.useState();
-  const [adminMode, setAdminMode] = React.useState(false);
+  const [hash, setHash] = useHash();
 
-  React.useEffect(() => {
-    setActiveRegion(delegateRegions?.[0]);
-  }, [delegateRegions]);
+  const activeRegion = React.useMemo(() => {
+    const selectedRegionIndex = delegateRegions.findIndex(
+      (region) => region.metadata.friendly_id === hash,
+    );
+    if (selectedRegionIndex === -1 && delegateRegions.length > 0) {
+      setHash(delegateRegions[0]?.metadata.friendly_id);
+      return null;
+    }
+    return delegateRegions[selectedRegionIndex];
+  }, [delegateRegions, hash, setHash]);
+
+  const [adminMode, setAdminMode] = React.useState(false);
 
   if (permissionsLoading || delegateGroupsLoading || !activeRegion) return <Loading />;
   if (delegateGroupsError) return <Errored />;
@@ -73,8 +82,8 @@ export default function Delegates() {
               <Menu.Item
                 key={region.id}
                 name={region.name}
-                active={activeRegion === region}
-                onClick={() => setActiveRegion(region)}
+                active={region.metadata.friendly_id === hash}
+                onClick={() => setHash(region.metadata.friendly_id)}
               />
             ))}
           </Menu>
@@ -92,12 +101,10 @@ export default function Delegates() {
                   options={delegateRegions.map((region) => ({
                     key: region.id,
                     text: region.name,
-                    value: region.id,
+                    value: region.metadata.friendly_id,
                   }))}
-                  value={activeRegion.id}
-                  onChange={(__, { value }) => setActiveRegion(
-                    delegateRegions.find((region) => region.id === value),
-                  )}
+                  value={hash}
+                  onChange={(__, { value }) => setHash(value)}
                 />
               </Grid.Row>
               <DelegatesOfRegion
