@@ -103,7 +103,7 @@ function CompetitionFilters() {
   } = useInfiniteQuery({
     queryKey: ['competitions', filterState],
     queryFn: ({ pageParam = 1 }) => {
-      const dateNow = new Date(Date.now());
+      const dateNow = new Date();
       let searchParams;
 
       if (filterState.timeOrder === 'present') {
