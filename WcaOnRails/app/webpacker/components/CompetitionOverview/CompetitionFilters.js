@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
@@ -33,7 +33,7 @@ for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
 PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
 const regionsOptions = [
-  { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
+  { key: 'all', text: I18n.t('common.all_regions'), value: 'all_regions' },
   {
     key: 'continents_header', value: '', disabled: true, content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
   },
@@ -48,30 +48,29 @@ const regionsOptions = [
   ))),
 ];
 
+const filterInitialState = {
+  timeOrder: 'present',
+  selectedYear: 'all_years',
+  customStartDate: null,
+  customEndDate: null,
+  region: 'all_regions',
+  delegate: '',
+  search: '',
+};
+
+const filterReducer = (state, action) => (
+  {
+    ...state,
+    ...action,
+  }
+);
+
 function CompetitionFilters() {
-  const [competitionApiKey, setCompetitionApiKey] = useState({
-    sort_by: 'present', year: '', region: '', delegate: '', search: '',
-  });
   const [selectedEvents, setSelectedEvents] = useState([]);
-  const [selectedRegion, setSelectedRegion] = useState();
-  const [selectedDelegate, setSelectedDelegate] = useState();
-  const [pastSelectedYear, setPastSelectedYear] = useState('all_years');
-  const [customStartDate, setCustomStartDate] = useState();
-  const [customEndDate, setCustomEndDate] = useState();
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const [shouldShowCancelled, setShouldShowCancelled] = useState(false);
-  const [searchQuery, setSearchQuery] = useState();
-  const [timeOrder, setTimeOrder] = useState('present');
   const [displayMode, setDisplayMode] = useState('list');
-
-  const updateCustomCompetitionApiKey = () => {
-    setCompetitionApiKey((prevKey) => ({
-      ...prevKey,
-      sort_by: 'custom',
-      year: `start${customStartDate?.toISOString().split('T')[0] || ''}
-      end${customEndDate?.toISOString().split('T')[0] || ''}`,
-    }));
-  };
+  const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
 
   const editSelectedEvents = (eventId) => {
     setSelectedEvents((prevSelectedEvents) => (
@@ -79,64 +78,6 @@ function CompetitionFilters() {
         ? prevSelectedEvents.filter((id) => id !== eventId)
         : [...prevSelectedEvents, eventId]
     ));
-  };
-  const editSelectedRegion = (region) => {
-    setSelectedRegion(region === 'all' ? '' : region);
-    setCompetitionApiKey((prevKey) => ({
-      ...prevKey,
-      region: region === 'all' ? '' : region,
-    }));
-  };
-  const editSelectedDelegate = (delegateId) => {
-    setSelectedDelegate(delegateId === 'None' ? '' : delegateId);
-    setCompetitionApiKey((prevKey) => ({
-      ...prevKey,
-      delegate: delegateId === 'None' ? '' : delegateId,
-    }));
-  };
-  const editPastSelectedYear = (newYear) => {
-    setPastSelectedYear(newYear);
-    if (timeOrder === 'past') {
-      setCompetitionApiKey((prevKey) => ({ ...prevKey, sort_by: 'past', year: newYear }));
-    }
-  };
-  const editCustomStartDate = (date) => {
-    setCustomStartDate(date);
-    setCompetitionApiKey((prevKey) => ({
-      ...prevKey,
-      sort_by: 'custom',
-      year: `start${date?.toISOString().split('T')[0] || ''}
-      end${customEndDate?.toISOString().split('T')[0] || ''}`,
-    }));
-  };
-  const editCustomEndDate = (date) => {
-    setCustomEndDate(date);
-    setCompetitionApiKey((prevKey) => ({
-      ...prevKey,
-      sort_by: 'custom',
-      year: `start${customStartDate?.toISOString().split('T')[0] || ''}
-      end${date?.toISOString().split('T')[0] || ''}`,
-    }));
-  };
-  const editSearchQuery = (q) => {
-    setSearchQuery(q);
-    setCompetitionApiKey((prevKey) => ({
-      ...prevKey,
-      search: q,
-    }));
-  };
-  const editTimeOrder = (order) => {
-    if (order === 'past') {
-      setCompetitionApiKey((prevKey) => ({ ...prevKey, sort_by: 'past', year: pastSelectedYear }));
-    } else if (order === 'custom') {
-      // Calling this in a separate function somehow avoids the problem with setState
-      // being asynchronous and causing the query key to be strangely changed back and forth
-      updateCustomCompetitionApiKey();
-    } else {
-      setCompetitionApiKey((prevKey) => ({ ...prevKey, sort_by: order, year: '' }));
-    }
-
-    setTimeOrder(order);
   };
 
   const [inProgressComps, setInProgressComps] = useState([]);
@@ -160,18 +101,18 @@ function CompetitionFilters() {
     isFetching: competitionsIsFetching,
     hasNextPage: hasMoreCompsToLoad,
   } = useInfiniteQuery({
-    queryKey: ['competitions', competitionApiKey],
+    queryKey: ['competitions', filterState],
     queryFn: ({ pageParam = 1 }) => {
       const dateNow = new Date(Date.now());
       let searchParams;
 
-      if (timeOrder === 'present') {
+      if (filterState.timeOrder === 'present') {
         searchParams = new URLSearchParams({
           sort: 'start_date,end_date,name',
           ongoing_and_future: dateNow.toISOString().split('T')[0],
           page: pageParam,
         });
-      } else if (timeOrder === 'recent') {
+      } else if (filterState.timeOrder === 'recent') {
         const thirtyDaysAgo = new Date();
         thirtyDaysAgo.setDate(dateNow.getDate() - 30);
 
@@ -181,8 +122,8 @@ function CompetitionFilters() {
           end: dateNow.toISOString().split('T')[0],
           page: pageParam,
         });
-      } else if (timeOrder === 'past') {
-        if (pastSelectedYear === 'all_years') {
+      } else if (filterState.timeOrder === 'past') {
+        if (filterState.selectedYear === 'all_years') {
           searchParams = new URLSearchParams({
             sort: '-end_date,-start_date,name',
             end: dateNow.toISOString().split('T')[0],
@@ -191,35 +132,35 @@ function CompetitionFilters() {
         } else {
           searchParams = new URLSearchParams({
             sort: '-end_date,-start_date,name',
-            start: `${pastSelectedYear}-1-1`,
-            end: dateNow.getFullYear() === pastSelectedYear ? dateNow.toISOString().split('T')[0] : `${pastSelectedYear}-12-31`,
+            start: `${filterState.selectedYear}-1-1`,
+            end: dateNow.getFullYear() === filterState.selectedYear ? dateNow.toISOString().split('T')[0] : `${filterState.selectedYear}-12-31`,
             page: pageParam,
           });
         }
-      } else if (timeOrder === 'by_announcement') {
+      } else if (filterState.timeOrder === 'by_announcement') {
         searchParams = new URLSearchParams({
           sort: '-announced_at,name',
           page: pageParam,
         });
-      } else if (timeOrder === 'custom') {
+      } else if (filterState.timeOrder === 'custom') {
         searchParams = new URLSearchParams({
           sort: 'start_date,end_date,name',
-          start: customStartDate?.toISOString().split('T')[0] || '',
-          end: customEndDate?.toISOString().split('T')[0] || '',
+          start: filterState.customStartDate?.toISOString().split('T')[0] || '',
+          end: filterState.customEndDate?.toISOString().split('T')[0] || '',
           page: pageParam,
         });
       }
 
-      if (selectedRegion) {
+      if (filterState.region && filterState.region !== 'all_regions') {
         // Continent IDs begin with underscore
-        const regionParam = selectedRegion[0] === '_' ? 'continent' : 'country_iso2';
-        searchParams.append(regionParam, selectedRegion);
+        const regionParam = filterState.region[0] === '_' ? 'continent' : 'country_iso2';
+        searchParams.append(regionParam, filterState.region);
       }
-      if (selectedDelegate) {
-        searchParams.append('delegate', selectedDelegate);
+      if (filterState.delegate) {
+        searchParams.append('delegate', filterState.delegate);
       }
-      if (searchQuery) {
-        searchParams.append('q', searchQuery);
+      if (filterState.search) {
+        searchParams.append('q', filterState.search);
       }
 
       return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
@@ -241,29 +182,29 @@ function CompetitionFilters() {
 
     if (!flatData) return;
 
-    if (timeOrder === 'present') {
+    if (filterState.timeOrder === 'present') {
       const inProgressData = flatData.filter((comp) => comp.inProgress);
       const notInProgressData = flatData.filter((comp) => !comp.inProgress);
       setInProgressComps(inProgressData);
       setNotInProgressFutureComps(notInProgressData);
-    } else if (timeOrder === 'recent') {
+    } else if (filterState.timeOrder === 'recent') {
       setRecentComps(flatData);
-    } else if (timeOrder === 'past') {
-      editPastComps(flatData, pastSelectedYear);
-    } else if (timeOrder === 'by_announcement') {
+    } else if (filterState.timeOrder === 'past') {
+      editPastComps(flatData, filterState.selectedYear);
+    } else if (filterState.timeOrder === 'by_announcement') {
       setSortByAnnouncementComps(flatData);
-    } else if (timeOrder === 'custom') {
+    } else if (filterState.timeOrder === 'custom') {
       setCustomDatesComps(flatData);
     }
 
     if (displayMode === 'map') {
-      if (timeOrder === 'present') {
+      if (filterState.timeOrder === 'present') {
         setMapDisplayComps(flatData.filter((comp) => !comp.inProgress));
       } else {
         setMapDisplayComps(flatData);
       }
     }
-  }, [competitionsData, timeOrder, pastSelectedYear, displayMode]);
+  }, [competitionsData, filterState, displayMode]);
 
   const { ref, inView: bottomInView } = useInView();
   useEffect(() => {
@@ -312,8 +253,8 @@ function CompetitionFilters() {
       name="state"
       id="custom"
       value="custom"
-      onClick={() => editTimeOrder('custom')}
-      active={timeOrder === 'custom'}
+      onClick={() => dispatchFilter({ timeOrder: 'custom' })}
+      active={filterState.timeOrder === 'custom'}
     >
       <span className="caption">{I18n.t('competitions.index.custom')}</span>
     </Button>
@@ -362,7 +303,7 @@ function CompetitionFilters() {
               selection
               defaultValue="all"
               options={regionsOptions}
-              onChange={(event, data) => editSelectedRegion(data.value)}
+              onChange={(_, data) => dispatchFilter({ region: data.value })}
             />
           </Form.Field>
           <Form.Field width={6}>
@@ -372,7 +313,7 @@ function CompetitionFilters() {
               id="search"
               icon="search"
               placeholder={I18n.t('competitions.index.tooltips.search')}
-              onChange={(event, data) => editSearchQuery(data.value)}
+              onChange={(_, data) => dispatchFilter({ search: data.value })}
             />
           </Form.Field>
         </Form.Group>
@@ -389,7 +330,7 @@ function CompetitionFilters() {
               selection
               defaultValue="None"
               style={{ textAlign: 'center' }}
-              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: 'None' }, ...(delegatesInfo?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
+              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesInfo?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
                 {
                   key: delegate.id,
                   text: `${delegate.name} (${delegate.wca_id})`,
@@ -397,7 +338,7 @@ function CompetitionFilters() {
                   image: { avatar: true, src: delegate.avatar?.thumb_url },
                 }
               )) || [])]}
-              onChange={(event, data) => editSelectedDelegate(data.value)}
+              onChange={(event, data) => dispatchFilter({ delegate: data.value })}
             />
           </Form.Field>
         </Form.Group>
@@ -411,8 +352,8 @@ function CompetitionFilters() {
                 name="state"
                 id="present"
                 value="present"
-                onClick={() => editTimeOrder('present')}
-                active={timeOrder === 'present'}
+                onClick={() => dispatchFilter({ timeOrder: 'present' })}
+                active={filterState.timeOrder === 'present'}
               >
                 <span className="caption">{I18n.t('competitions.index.present')}</span>
               </Button>
@@ -421,8 +362,8 @@ function CompetitionFilters() {
                 name="state"
                 id="recent"
                 value="recent"
-                onClick={() => editTimeOrder('recent')}
-                active={timeOrder === 'recent'}
+                onClick={() => dispatchFilter({ timeOrder: 'recent' })}
+                active={filterState.timeOrder === 'recent'}
                 data-tooltip={I18n.t('competitions.index.tooltips.recent', { count: competitionConstants.competitionRecentDays })}
                 data-variation="tiny"
               >
@@ -433,13 +374,13 @@ function CompetitionFilters() {
                 name="state"
                 id="past"
                 value="past"
-                onClick={() => editTimeOrder('past')}
-                active={timeOrder === 'past'}
+                onClick={() => dispatchFilter({ timeOrder: 'past' })}
+                active={filterState.timeOrder === 'past'}
               >
                 <span className="caption">
                   {
-                    pastSelectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
-                      : I18n.t('competitions.index.past_from', { year: pastSelectedYear })
+                    filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.past_all')
+                      : I18n.t('competitions.index.past_from', { year: filterState.selectedYear })
                   }
                 </span>
                 <Dropdown
@@ -452,16 +393,16 @@ function CompetitionFilters() {
                   <Dropdown.Menu>
                     <Dropdown.Item
                       key="past_select_all_years"
-                      onClick={() => editPastSelectedYear('all_years')}
-                      active={pastSelectedYear === 'all_years'}
+                      onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: 'all_years' })}
+                      active={filterState.selectedYear === 'all_years'}
                     >
                       {I18n.t('competitions.index.all_years')}
                     </Dropdown.Item>
                     {PAST_YEARS_WITH_COMPETITIONS.map((year) => (
                       <Dropdown.Item
                         key={`past_select_${year}`}
-                        onClick={() => editPastSelectedYear(year)}
-                        active={pastSelectedYear === year}
+                        onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: year })}
+                        active={filterState.selectedYear === year}
                       >
                         {year}
                       </Dropdown.Item>
@@ -474,8 +415,8 @@ function CompetitionFilters() {
                 name="state"
                 id="by_announcement"
                 value="by_announcement"
-                onClick={() => editTimeOrder('by_announcement')}
-                active={timeOrder === 'by_announcement'}
+                onClick={() => dispatchFilter({ timeOrder: 'by_announcement' })}
+                active={filterState.timeOrder === 'by_announcement'}
                 data-tooltip={I18n.t('competitions.index.sort_by_announcement')}
                 data-variation="tiny"
               >
@@ -493,9 +434,9 @@ function CompetitionFilters() {
                       name="start-date"
                       showIcon
                       placeholderText={I18n.t('competitions.index.from_date')}
-                      selected={customStartDate}
-                      onChange={(date) => editCustomStartDate(date)}
-                      maxDate={customEndDate}
+                      selected={filterState.customStartDate}
+                      onChange={(date) => dispatchFilter({ customStartDate: date })}
+                      maxDate={filterState.customEndDate}
                     />
                   </List.Item>
                   <List.Item>
@@ -503,9 +444,9 @@ function CompetitionFilters() {
                       name="end-date"
                       showIcon
                       placeholderText={I18n.t('competitions.index.to_date')}
-                      selected={customEndDate}
-                      onChange={(date) => editCustomEndDate(date)}
-                      minDate={customStartDate}
+                      selected={filterState.customEndDate}
+                      onChange={(date) => dispatchFilter({ customEndDate: date })}
+                      minDate={filterState.customStartDate}
                     />
                   </List.Item>
                 </List>
@@ -552,7 +493,7 @@ function CompetitionFilters() {
         <div id="competitions-list">
           {
             displayMode === 'list'
-            && timeOrder === 'present'
+            && filterState.timeOrder === 'present'
             && (
               <>
                 <CompetitionTable
@@ -579,7 +520,7 @@ function CompetitionFilters() {
           }
           {
             displayMode === 'list'
-            && timeOrder === 'recent'
+            && filterState.timeOrder === 'recent'
             && (
               <CompetitionTable
                 competitionData={recentComps}
@@ -594,11 +535,11 @@ function CompetitionFilters() {
           }
           {
             displayMode === 'list'
-            && timeOrder === 'past'
+            && filterState.timeOrder === 'past'
             && (
               <CompetitionTable
-                competitionData={pastComps[pastSelectedYear]}
-                title={pastSelectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: pastSelectedYear })}
+                competitionData={pastComps[filterState.selectedYear]}
+                title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
                 shouldShowRegStatus={shouldShowRegStatus}
                 shouldShowCancelled={shouldShowCancelled}
                 selectedEvents={selectedEvents}
@@ -609,7 +550,7 @@ function CompetitionFilters() {
           }
           {
             displayMode === 'list'
-            && timeOrder === 'by_announcement'
+            && filterState.timeOrder === 'by_announcement'
             && (
               <CompetitionTable
                 competitionData={sortByAnnouncementComps}
@@ -625,7 +566,7 @@ function CompetitionFilters() {
           }
           {
             displayMode === 'list'
-            && timeOrder === 'custom'
+            && filterState.timeOrder === 'custom'
             && (
               <CompetitionTable
                 competitionData={customDatesComps}
