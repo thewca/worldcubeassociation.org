@@ -667,6 +667,7 @@ module DatabaseDumper
         copy: %w(
           id
           email
+          friendly_id
           created_at
           updated_at
         ),
@@ -699,7 +700,7 @@ module DatabaseDumper
           saved_pending_avatar_crop_w
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
-          senior_delegate_id unconfirmed_wca_id
+          unconfirmed_wca_id
           region_id
           updated_at
           wca_id
@@ -824,7 +825,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "roles" => {
+    "user_roles" => {
       where_clause: "JOIN user_groups ON user_groups.id=group_id WHERE NOT user_groups.is_hidden",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
@@ -843,6 +844,7 @@ module DatabaseDumper
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
+    "attendee_payment_requests" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

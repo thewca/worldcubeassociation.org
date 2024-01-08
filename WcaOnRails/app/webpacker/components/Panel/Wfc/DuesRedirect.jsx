@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Button, Form, Modal, Table,
+  Button, Confirm, Form, Icon, Modal, Table,
 } from 'semantic-ui-react';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import { wfcDuesRedirectsUrl, wfcXeroUsersUrl } from '../../../lib/requests/routes.js.erb';
@@ -17,6 +17,7 @@ export default function DuesRedirect() {
   const xeroUsersFetch = useLoadedData(wfcXeroUsersUrl);
   const { save, saving } = useSaveAction();
   const [open, setOpen] = React.useState(false);
+  const [toDeleteId, setToDeleteId] = React.useState();
   const [formData, setFormData] = React.useState({ redirectType: 'Country' });
 
   const handleFormChange = (_, { name, value }) => setFormData({ ...formData, [name]: value });
@@ -31,6 +32,7 @@ export default function DuesRedirect() {
             <Table.HeaderCell>Type</Table.HeaderCell>
             <Table.HeaderCell>From</Table.HeaderCell>
             <Table.HeaderCell>To</Table.HeaderCell>
+            <Table.HeaderCell />
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -39,6 +41,13 @@ export default function DuesRedirect() {
               <Table.Cell>{duesRedirect.redirect_source_type}</Table.Cell>
               <Table.Cell>{duesRedirect.redirect_source.name}</Table.Cell>
               <Table.Cell>{duesRedirect.redirect_to.name}</Table.Cell>
+              <Table.Cell>
+                <Icon
+                  name="trash"
+                  link
+                  onClick={() => setToDeleteId(duesRedirect.id)}
+                />
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
@@ -115,6 +124,23 @@ export default function DuesRedirect() {
           </Form>
         </Modal.Content>
       </Modal>
+      <Confirm
+        open={toDeleteId}
+        content="Are you sure you want to delete?"
+        onCancel={() => setToDeleteId(null)}
+        onConfirm={() => {
+          const duesRedirectId = toDeleteId;
+          save(
+            `${wfcDuesRedirectsUrl}/${duesRedirectId}`,
+            {},
+            () => {
+              setToDeleteId(null);
+              sync();
+            },
+            { method: 'DELETE' },
+          );
+        }}
+      />
     </>
   );
 }

@@ -47,7 +47,7 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
-  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
+  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
@@ -503,14 +503,14 @@ class CompetitionsController < ApplicationController
   def bookmark
     @competition = competition_from_params
     BookmarkedCompetition.find_or_create_by(competition: @competition, user: current_user)
-    Rails.cache.delete("#{current_user.id}-bookmarked")
+    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
   end
 
   def unbookmark
     @competition = competition_from_params
     BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
-    Rails.cache.delete("#{current_user.id}-bookmarked")
+    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
   end
 
@@ -627,7 +627,8 @@ class CompetitionsController < ApplicationController
   end
 
   def for_senior
-    @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
+    user_id = params[:user_id] || current_user.id
+    @user = User.find(user_id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
   end
 

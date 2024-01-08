@@ -465,15 +465,14 @@ en:
           candidate_delegate: "Junior Delegate"
           delegate: "Delegate"
           senior_delegate: "Senior Delegate"
-        teams:
+        teams_committees:
           member: "Member"
           senior_member: "Senior Member"
           leader: "Leader"
-    person:
-      gender:
-        m: "Male"
-        f: "Female"
-        o: "Other"
+        councils:
+          member: "Member"
+          senior_member: "Senior Member"
+          leader: "Leader"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -632,14 +631,8 @@ en:
         content: ""
       #context: for a person
       person:
-        dob: "Date of birth should have the format YYYY-MM-DD."
-        countryId: ""
-        gender: ""
-        name: ""
         person1_wca_id: ""
         person2_wca_id: ""
-        wca_id: ""
-        incorrect_wca_id_claim_count: ""
         person_wca_id: ""
       poll:
         comment: ""
@@ -1107,7 +1100,6 @@ en:
       already_represented_country: "Cannot change the region to a region the person has already represented in the past."
       must_have_a_change: "The name or the region must be different to update the person."
       must_be_senior: "must be a Senior Delegate"
-      senior_has_delegate: "cannot demote Senior Delegate with subordinate Delegates"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
       wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
