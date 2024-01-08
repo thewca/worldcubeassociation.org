@@ -3,6 +3,22 @@
 require 'rails_helper'
 
 RSpec.describe Competition do
+  describe '#registration_service_persons_wcif.unauthorized', focus: true do
+    it 'array length matches number of registrations' do
+      # Create a competition from factory
+      competition = FactoryBot.build(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10)
+      puts "competition id: #{competition.id}"
+
+      # Set up a mocked registration endpoint for that comp
+      registrations = FactoryBot.build(:registrations_request)
+      # TODO: Refactor URL to shared constant/env variable
+      stub_request(:get, "#{EnvConfig.WCA_REGISTRATIONS_URL}/api/v1/registrations/#{competition.id}")
+        .to_return(status: 200, body: registrations.to_json)
+
+      expect(competition.registration_service_persons_wcif['registrations'].length).to eq(1)
+    end
+  end
+
   it "defines a valid competition" do
     competition = FactoryBot.build :competition, name: "Foo: Test - 2015"
     expect(competition).to be_valid

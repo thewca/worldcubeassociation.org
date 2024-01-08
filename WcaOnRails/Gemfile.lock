@@ -238,6 +238,8 @@ GEM
     connection_pool (2.4.1)
     cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
+    crack (0.4.5)
+      rexml
     crass (1.0.6)
     css_parser (1.12.0)
       addressable
@@ -355,6 +357,7 @@ GEM
       guard (~> 2.1)
       guard-compat (~> 1.1)
       rspec (>= 2.99.0, < 4.0)
+    hashdiff (1.1.0)
     hashie (5.0.0)
     high_voltage (3.1.2)
     highline (2.1.0)
@@ -776,6 +779,10 @@ GEM
       activemodel (>= 6.0.0)
       bindex (>= 0.4.0)
       railties (>= 6.0.0)
+    webmock (3.19.1)
+      addressable (>= 2.8.0)
+      crack (>= 0.3.2)
+      hashdiff (>= 0.4.0, < 2.0.0)
     webrick (1.8.1)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
@@ -901,6 +908,7 @@ DEPENDENCIES
   vault
   wca_i18n
   web-console
+  webmock
   wicked_pdf
 
 BUNDLED WITH

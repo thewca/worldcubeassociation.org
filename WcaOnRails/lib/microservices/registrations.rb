@@ -15,19 +15,39 @@ module Microservices
       "/api/internal/v1/update_payment"
     end
 
+    def self.registrations_path(competition_id)
+      "/api/v1/registrations/#{competition_id}"
+    end
+
     def self.registration_connection
-      Faraday.new(
-        url: EnvConfig.WCA_REGISTRATIONS_URL,
-        headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
-      ) do |builder|
-        # Sets headers and parses jsons automatically
-        builder.request :json
-        builder.response :json
-        # Raises an error on 4xx and 5xx responses.
-        builder.response :raise_error
-        # Logs requests and responses.
-        # By default, it only logs the request method and URL, and the request/response headers.
-        builder.response :logger
+      # TODO: Add endpoint mocking for vault so that we don't have to limit environments where this is used
+      if Rails.env.production?
+        Faraday.new(
+          url: EnvConfig.WCA_REGISTRATIONS_URL,
+          headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
+        ) do |builder|
+          # Sets headers and parses jsons automatically
+          builder.request :json
+          builder.response :json
+          # Raises an error on 4xx and 5xx responses.
+          builder.response :raise_error
+          # Logs requests and responses.
+          # By default, it only logs the request method and URL, and the request/response headers.
+          builder.response :logger
+        end
+      else
+        Faraday.new(
+          url: EnvConfig.WCA_REGISTRATIONS_URL,
+        ) do |builder|
+          # Sets headers and parses jsons automatically
+          builder.request :json
+          builder.response :json
+          # Raises an error on 4xx and 5xx responses.
+          builder.response :raise_error
+          # Logs requests and responses.
+          # By default, it only logs the request method and URL, and the request/response headers.
+          builder.response :logger
+        end
       end
     end
 
@@ -37,6 +57,14 @@ module Microservices
       end
       # If we ever need the response body
       response.body
+    end
+
+    def self.get_registrations(competition_id)
+      response = self.registration_connection.get(self.registrations_path(competition_id))
+      body = JSON.parse(response.body)
+      puts body
+      puts body.class
+      body
     end
   end
 end

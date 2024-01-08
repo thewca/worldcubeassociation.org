@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# Enable webmock
+require 'webmock'
+require 'webmock/rspec'
+
 # Enable SimpleCov as per https://github.com/fortissimo1997/simplecov-lcov#output-report-as-single-file
 require 'simplecov'
 require 'simplecov-lcov'

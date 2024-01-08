@@ -1673,6 +1673,11 @@ class Competition < ApplicationRecord
     persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }
   end
 
+  def registration_service_persons_wcif(authorized: false)
+    # Request registrations for competition
+    registrations = Microservices::Registrations.get_registrations(id)
+  end
+
   def events_wcif
     includes_associations = [
       { rounds: [:competition_event, :wcif_extensions] },
