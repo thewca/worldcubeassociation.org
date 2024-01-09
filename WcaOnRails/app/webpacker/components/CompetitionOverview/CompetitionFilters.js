@@ -173,9 +173,10 @@ function CompetitionFilters() {
 
       return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
     },
-    getNextPageParam: (lastPage, allPages) => {
-      // Assuming the last page has less than the max number of competitions fetched per query
-      if (lastPage.data.length < COMPETITIONS_API_PAGINATION) {
+    getNextPageParam: (previousPage, allPages) => {
+      // Continue until less than a full page of data is fetched,
+      // which indicates the very last page.
+      if (previousPage.data.length < COMPETITIONS_API_PAGINATION) {
         return undefined;
       }
 
