@@ -10,6 +10,8 @@ export const RemoveVenue = 'REMOVE_VENUE';
 export const RemoveRoom = 'REMOVE_ROOM';
 export const AddVenue = 'ADD_VENUE';
 export const AddRoom = 'ADD_ROOM';
+export const ReorderRoom = 'REORDER_ROOM';
+export const ReorderVenue = 'REORDER_VENUE';
 
 /**
  * Action creator for marking changes as saved
@@ -164,5 +166,35 @@ export const addRoom = (venueId) => ({
   type: AddRoom,
   payload: {
     venueId,
+  },
+});
+
+/**
+ * Action creator for moving a venue to a different position.
+ * @param {int} to
+ * @param {int} from
+ * @returns {Action}
+ */
+export const reorderVenue = (from, to) => ({
+  type: ReorderVenues,
+  payload: {
+    from,
+    to,
+  },
+});
+
+/**
+ * Action creator for moving a room to a different position.
+ * @param {int} venueId
+ * @param {int} to
+ * @param {int} from
+ * @returns {Action}
+ */
+export const reorderRoom = (venueId, from, to) => ({
+  type: ReorderRooms,
+  payload: {
+    venueId,
+    from,
+    to,
   },
 });
