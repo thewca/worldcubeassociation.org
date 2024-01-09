@@ -20,19 +20,19 @@ function CompetitionList({
       return (
         <>
           <CompetitionTable
-            competitionData={competitionData.filter((comp) => comp.inProgress)}
+            competitionData={competitionData?.filter((comp) => comp.inProgress)}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
             shouldIncludeCancelled={shouldIncludeCancelled}
             selectedEvents={selectedEvents}
             isLoading={isLoading
-              && !competitionData.filter((comp) => !comp.inProgress)}
+              && !competitionData?.filter((comp) => !comp.inProgress)}
             hasMoreCompsToLoad={hasMoreCompsToLoad
-              && !competitionData.filter((comp) => !comp.inProgress)}
+              && !competitionData?.filter((comp) => !comp.inProgress)}
             isRenderedAboveAnotherTable
           />
           <CompetitionTable
-            competitionData={competitionData.filter((comp) => !comp.inProgress)}
+            competitionData={competitionData?.filter((comp) => !comp.inProgress)}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
             shouldIncludeCancelled={shouldIncludeCancelled}

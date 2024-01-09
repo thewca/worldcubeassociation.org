@@ -114,9 +114,7 @@ function CompetitionFilters() {
       .map((page) => page.data)
       .flat();
 
-    if (flatData) {
-      setCompetitionData(flatData);
-    }
+    setCompetitionData(flatData);
   }, [rawCompetitionData]);
 
   const { ref, inView: bottomInView } = useInView();
