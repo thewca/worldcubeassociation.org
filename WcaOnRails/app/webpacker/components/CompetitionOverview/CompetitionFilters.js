@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, {
+  useState, useEffect, useReducer, useMemo,
+} from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import {
@@ -48,16 +50,6 @@ const regionsOptions = [
   ))),
 ];
 
-const filterInitialState = {
-  timeOrder: 'present',
-  selectedYear: 'all_years',
-  customStartDate: null,
-  customEndDate: null,
-  region: 'all_regions',
-  delegate: '',
-  search: '',
-};
-
 const calculateQueryKey = (filterState) => {
   let timeKey = '';
   if (filterState?.timeOrder === 'past') {
@@ -75,15 +67,28 @@ const calculateQueryKey = (filterState) => {
   };
 };
 
+const filterInitialState = {
+  timeOrder: 'present',
+  selectedYear: 'all_years',
+  customStartDate: null,
+  customEndDate: null,
+  region: 'all_regions',
+  delegate: '',
+  search: '',
+};
+const filterReducer = (state, action) => (
+  { ...state, ...action }
+);
+
 function CompetitionFilters() {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const [shouldShowCancelled, setShouldShowCancelled] = useState(false);
   const [displayMode, setDisplayMode] = useState('list');
   const [competitionData, setCompetitionData] = useState([]);
-  const [competitionQueryKey, setCompetitionQueryKey] = useState({
-    timeOrder: 'present', region: 'all_regions', delegate: '', search: '', time: '',
-  });
+
+  const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
+  const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
 
   const editSelectedEvents = (eventId) => {
     setSelectedEvents((prevSelectedEvents) => (
@@ -92,14 +97,6 @@ function CompetitionFilters() {
         : [...prevSelectedEvents, eventId]
     ));
   };
-
-  const filterReducer = (state, action) => {
-    const newState = { ...state, ...action };
-    setCompetitionQueryKey(calculateQueryKey(newState));
-
-    return newState;
-  };
-  const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
 
   const {
     data: rawCompetitionData,
