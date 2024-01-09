@@ -97,10 +97,6 @@ function CompetitionFilters() {
     const newState = { ...state, ...action };
     setCompetitionQueryKey(calculateQueryKey(newState));
 
-    if (newState.timeOrder !== state.timeOrder) {
-      setCompetitionData([]);
-    }
-
     return newState;
   };
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
