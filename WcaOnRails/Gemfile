@@ -13,7 +13,7 @@ gem 'rails-i18n'
 gem 'i18n-js'
 gem 'activerecord-import'
 gem 'sass-rails'
-gem 'uglifier'
+gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
 gem 'sdoc', group: :doc
@@ -50,6 +50,7 @@ gem 'wca_i18n'
 gem 'cookies_eu'
 gem 'superconfig'
 gem 'eu_central_bank'
+gem 'devise-jwt'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -85,7 +86,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '7.0.3'
+gem 'shakapacker', '7.2.0'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -102,6 +103,7 @@ gem 'sprockets-rails'
 gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
+gem 'after_commit_everywhere'
 
 group :development, :test do
   gem 'spring'

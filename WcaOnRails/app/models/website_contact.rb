@@ -8,6 +8,7 @@ class WebsiteContact < ContactForm
 
   attr_accessor :inquiry
   attr_accessor :competition_id
+  attr_accessor :logged_in_email
 
   # Override the `to_mail` validation, to show errors for `inquiry` instead.
   def validate_to_email
@@ -24,6 +25,8 @@ class WebsiteContact < ContactForm
       if competition.present?
         return ValidateEmail.valid?(competition.contact) ? competition.contact : competition.managers.map(&:email)
       end
+    elsif inquiry == "results_team"
+      return Team.wrt.email
     end
 
     "contact@worldcubeassociation.org"
@@ -33,6 +36,7 @@ class WebsiteContact < ContactForm
     topic = case inquiry
             when "competition" then "Comment for #{Competition.find_by_id(competition_id)&.name}"
             when "competitions_in_general" then "General Competition Comment"
+            when "results_team" then "Results Team Comment"
             when "wca_id_or_profile" then "WCA ID or WCA Profile Comment"
             when "media" then "Media Comment"
             when "software" then "Software Comment"

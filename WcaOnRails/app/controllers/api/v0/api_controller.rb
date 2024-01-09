@@ -46,13 +46,13 @@ class Api::V0::ApiController < ApplicationController
 
     render json: {
       "current" => {
-        "name" => "TNoodle-WCA-1.1.2",
+        "name" => "TNoodle-WCA-1.2.1",
         "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.1.2.jar",
+        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.2.1.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-1.1.1",
-        "TNoodle-WCA-1.1.2",
+        "TNoodle-WCA-1.2.0",
+        "TNoodle-WCA-1.2.1",
       ],
       "publicKeyBytes" => public_key,
       "history" => [
@@ -82,6 +82,8 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-1.1.0",
         "TNoodle-WCA-1.1.1",
         "TNoodle-WCA-1.1.2",
+        "TNoodle-WCA-1.2.0",
+        "TNoodle-WCA-1.2.1",
       ],
     }
   end
@@ -90,19 +92,31 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def search(*models)
-    ActiveRecord::Base.connected_to(role: :read_replica) do
-      query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
-      unless query
-        render status: :bad_request, json: { error: "No query specified" }
-        return
-      end
-      concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-      cache_key = ["search", *models, concise_results_date.iso8601, query]
-      result = Rails.cache.fetch(cache_key) do
+    query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
+
+    unless query
+      render status: :bad_request, json: { error: "No query specified" }
+      return
+    end
+
+    concise_results_date = ComputeAuxiliaryData.end_date || Date.current
+    cache_key = ["search", *models, concise_results_date.iso8601, query]
+
+    result = Rails.cache.fetch(cache_key) do
+      ActiveRecord::Base.connected_to(role: :read_replica) do
         models.flat_map { |model| model.search(query, params: params).limit(DEFAULT_API_RESULT_LIMIT) }
       end
-      render status: :ok, json: { result: result }
     end
+
+    if current_user && current_user.can_admin_results?
+      options = {
+        private_attributes: %w[incorrect_wca_id_claim_count dob],
+      }
+    else
+      options = {}
+    end
+
+    render status: :ok, json: { result: result.as_json(options) }
   end
 
   def posts_search
@@ -115,6 +129,10 @@ class Api::V0::ApiController < ApplicationController
 
   def users_search
     search(User)
+  end
+
+  def persons_search
+    search(Person)
   end
 
   def regulations_search
@@ -130,31 +148,6 @@ class Api::V0::ApiController < ApplicationController
     # them yet.
     params[:persons_table] = true
     search(Competition, User, Regulation, Incident)
-  end
-
-  def show_user(user)
-    if user
-      json = { user: user }
-      if params[:upcoming_competitions]
-        json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
-      end
-      if params[:ongoing_competitions]
-        json[:ongoing_competitions] = user.accepted_competitions.select(&:in_progress?)
-      end
-      render status: :ok, json: json
-    else
-      render status: :not_found, json: { user: nil }
-    end
-  end
-
-  def show_user_by_id
-    user = User.find_by_id(params[:id])
-    show_user(user)
-  end
-
-  def show_user_by_wca_id
-    user = User.find_by_wca_id(params[:wca_id])
-    show_user(user)
   end
 
   def delegates
@@ -211,6 +204,11 @@ class Api::V0::ApiController < ApplicationController
     return @current_api_user if defined?(@current_api_user)
 
     @current_api_user = User.find_by_id(doorkeeper_token&.resource_owner_id)
+  end
+
+  private def require_user!
+    raise WcaExceptions::MustLogIn.new if current_api_user.nil? && current_user.nil?
+    current_api_user || current_user
   end
 
   def countries

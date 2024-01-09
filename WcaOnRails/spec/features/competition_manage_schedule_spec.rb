@@ -17,14 +17,23 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "can add a venue and a room", js: true do
-      click_link "Add a venue"
-      fill_in(nil, with: "Venue", class: "venue-name-input")
-      click_on "Add room"
-      fill_in(nil, with: "Youpitralala", class: "room-name-input")
-      within('.venue-timezone-input') do
-        select "Pacific Time (US & Canada)"
+      find("div", class: 'title', text: 'Edit venues information').click
+
+      within(:css, "#venues-edit-panel-body") do
+        click_button "Add a venue"
+        fill_in("venue-name", with: "Venue")
+        click_button "Add room"
+        fill_in("room-name", with: "Youpitralala")
+        within(:css, "div[name='timezone'][role='listbox']>div.menu", visible: :all) do
+          find("div", class: "item", text: "Pacific Time (US & Canada)", visible: :all).trigger(:click)
+        end
+        within(:css, "div[name='countryIso2'][role='combobox']>div.menu[role='listbox']", visible: :all) do
+          find("div", class: "item", text: "United States", visible: :all).trigger(:click)
+        end
       end
+
       save_schedule_react
+
       expect(competition.competition_venues.map(&:name)).to match_array %w(Venue)
       expect(competition.competition_venues.flat_map(&:venue_rooms).map(&:name)).to match_array %w(Youpitralala)
     end
@@ -38,8 +47,11 @@ RSpec.feature "Competition events management" do
     end
 
     scenario "room calendar is rendered", js: true do
+      find("div", class: 'title', text: 'Edit schedules').click
+
       within(:css, "#schedules-edit-panel-body") do
-        select('"Room 1 for venue 1" in "Venue 1"', from: 'venue-room-selector')
+        # click_link doesn't work because Capybara expects links to always have an href
+        find("a", class: 'item', text: "Room 1 for venue 1").click
         # 2 is the number of non-nested activities created by the factory
         # Nested activity are not supported (yet) in the schedule manager
         expect(all('.fc-event').size).to eq(2)

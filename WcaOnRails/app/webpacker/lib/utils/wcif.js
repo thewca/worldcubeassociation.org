@@ -1,41 +1,36 @@
-import _ from 'lodash';
+import { useCallback } from 'react';
 import { events } from '../wca-data.js.erb';
-import { fetchWithAuthenticityToken } from '../requests/fetchWithAuthenticityToken';
 import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
+import useSaveAction from '../hooks/useSaveAction';
 
-function promiseSaveWcif(competitionId, data) {
-  const url = `/api/v0/competitions/${competitionId}/wcif`;
-  const fetchOptions = {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    credentials: 'include',
-    method: 'PATCH',
-    body: JSON.stringify(data),
+export function useSaveWcifAction() {
+  const { save, saving } = useSaveAction();
+
+  const alertWcifError = (err) => {
+    /* eslint-disable-next-line */
+    alert(`Something went wrong while saving.\n${err.message}`);
   };
 
-  return fetchWithAuthenticityToken(url, fetchOptions);
-}
+  const saveWcif = useCallback(
+    (
+      competitionId,
+      wcifData,
+      onSuccess,
+      options = {},
+      onError = alertWcifError,
+    ) => {
+      const url = `/api/v0/competitions/${competitionId}/wcif`;
 
-export function getAuthenticityToken() {
-  return document.querySelector('meta[name=csrf-token]').content;
-}
+      save(url, wcifData, onSuccess, options, onError);
+    },
+    [save],
+  );
 
-export function saveWcif(competitionId, data, onSuccess, onFailure) {
-  promiseSaveWcif(competitionId, data)
-    .then((response) => Promise.all([response, response.json()]))
-    .then(([response, json]) => {
-      if (!response.ok) {
-        throw new Error(`${response.status}: ${response.statusText}\n${json.error}`);
-      }
-      onSuccess();
-    })
-    .catch((e) => {
-      onFailure();
-      /* eslint-disable-next-line */
-      alert(`Something went wrong while saving.\n${e.message}`);
-    });
+  return {
+    saveWcif,
+    saving,
+  };
 }
 
 // Copied from https://github.com/jfly/tnoodle/blob/c2b529e6292469c23f33b1d73839e22f041443e0/tnoodle-ui/src/WcaCompetitionJson.js#L52
@@ -83,16 +78,12 @@ export function buildActivityCode(activity) {
 
 export function roomWcifFromId(scheduleWcif, id) {
   const intId = parseInt(id, 10);
-  return _.find(_.flatMap(scheduleWcif.venues, 'rooms'), { id: intId });
+  return scheduleWcif.venues.flatMap((venue) => venue.rooms).find((room) => room.id === intId);
 }
 
 export function venueWcifFromRoomId(scheduleWcif, id) {
   const intId = parseInt(id, 10);
-  return _.find(scheduleWcif.venues, (venue) => _.some(venue.rooms, { id: intId }));
-}
-
-export function activityCodeListFromWcif(scheduleWcif) {
-  return _.map(_.flatMap(_.flatMap(scheduleWcif.venues, 'rooms'), 'activities'), 'activityCode');
+  return scheduleWcif.venues.find((venue) => venue.rooms.some((room) => room.id === intId));
 }
 
 export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {

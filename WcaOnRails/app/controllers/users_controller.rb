@@ -131,6 +131,12 @@ class UsersController < ApplicationController
 
     @user = user_to_edit
     nil if redirect_if_cannot_edit_user(@user)
+    @current_user = current_user
+  end
+
+  def role
+    @user_id = params[:user_id]
+    @role_id = params[:role_id]
   end
 
   def claim_wca_id
@@ -169,20 +175,6 @@ class UsersController < ApplicationController
 
     old_confirmation_sent_at = @user.confirmation_sent_at
     if @user.update(user_params)
-      if @user.saved_change_to_delegate_status
-        if @user.delegate_status
-          @user_senior_delegate = @user.senior_or_self
-        else
-          @user_senior_delegate = User.find(@user.senior_delegate_id_before_last_save)
-        end
-        DelegateStatusChangeMailer.notify_board_and_assistants_of_delegate_status_change(
-          @user,
-          current_user,
-          @user_senior_delegate,
-          @user.delegate_status_before_last_save,
-          @user.delegate_status,
-        ).deliver_later
-      end
       if current_user == @user
         # Sign in the user, bypassing validation in case their password changed
         bypass_sign_in @user
@@ -205,6 +197,8 @@ class UsersController < ApplicationController
       if ActiveRecord::Type::Boolean.new.cast(user_params['remove_avatar'])
         AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
       end
+      # Clear preferred Events cache
+      Rails.cache.delete("#{current_user.id}-preferred-events") if user_params.key? "user_preferred_events_attributes"
     elsif @user.claiming_wca_id
       render :claim_wca_id
     else
@@ -288,7 +282,7 @@ class UsersController < ApplicationController
   private def user_params
     params.require(:user).permit(current_user.editable_fields_of_user(user_to_edit).to_a).tap do |user_params|
       if user_params.key?(:delegate_status) && !User.delegate_status_requires_senior_delegate(user_params[:delegate_status])
-        user_params["senior_delegate_id"] = nil
+        user_params["region_id"] = nil
       end
       if user_params.key?(:wca_id)
         user_params[:wca_id] = user_params[:wca_id].upcase

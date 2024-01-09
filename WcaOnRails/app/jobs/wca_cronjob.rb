@@ -34,6 +34,8 @@ class WcaCronjob < ApplicationJob
     statistics = job.class.cronjob_statistics
 
     statistics.touch :run_start
+
+    statistics.run_end = nil
     statistics.enqueued_at = nil
 
     statistics.save!

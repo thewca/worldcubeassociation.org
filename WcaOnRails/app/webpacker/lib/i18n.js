@@ -13,13 +13,31 @@ const DEFAULT_LOCALE = 'en';
  */
 function tArray(scope, options) {
   let res = window.I18n.t(scope, options);
-  if (typeof res !== 'object' || !Array.isArray(res)) {
+
+  if (typeof res === 'object') {
+    const resKeys = Object.keys(res);
+
+    const maybeNumericKeys = resKeys.map(Number);
+    maybeNumericKeys.sort();
+
+    // Our i18n export library changed behavior in a minor version bump (sigh…) to maintain numeric
+    // keys as JS objects even when the keys clearly indicate index ordering, implying an array.
+    // We need to circumvent this behavior because we rely on external tools for our translators,
+    // which require the YML to contain string keys (instead "proper" YML arrays)
+    const isPseudoArray = maybeNumericKeys.every((key, idx) => key === (idx + 1));
+
+    if (isPseudoArray) {
+      res = maybeNumericKeys.map((key) => res[key.toString()]);
+    }
+  }
+
+  if (!Array.isArray(res)) {
     // throw errors in same style as I18n.t:
     // return a valid result, just the error message not the content.
     return [`Expected Array from: ${scope}`];
   }
-  res = res.filter(Boolean);
-  return res;
+
+  return res.filter(Boolean);
 }
 
 window.I18n = window.I18n || new I18n();

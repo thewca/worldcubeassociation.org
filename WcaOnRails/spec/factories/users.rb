@@ -220,22 +220,23 @@ FactoryBot.define do
     factory :user_with_wca_id, traits: [:wca_id]
 
     factory :delegate, traits: [:wca_id] do
-      association :senior_delegate
       delegate_status { "delegate" }
+      region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
-      association :senior_delegate
       delegate_status { "candidate_delegate" }
+      region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :trainee_delegate, traits: [:wca_id] do
-      association :senior_delegate
       delegate_status { "trainee_delegate" }
+      region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :senior_delegate, traits: [:wca_id] do
       delegate_status { "senior_delegate" }
+      region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :dummy_user, traits: [:wca_id] do

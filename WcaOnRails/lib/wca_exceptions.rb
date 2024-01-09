@@ -23,7 +23,7 @@ module WcaExceptions
 
   class MustLogIn < ApiException
     def initialize
-      super(:unauthorized, "Not logged in")
+      super(:unauthorized, I18n.t('api.login_message'))
     end
   end
 

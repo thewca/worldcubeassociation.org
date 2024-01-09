@@ -22,6 +22,8 @@ EnvConfig = SuperConfig.new do
     mandatory :VAULT_APPLICATION, :string
     mandatory :VAULT_AWS_REGION, :string
     mandatory :TASK_ROLE, :string
+    mandatory :WCA_REGISTRATIONS_URL, :string
+    mandatory :WCA_REGISTRATIONS_CDN_URL, :string
   else
     optional :READ_REPLICA_HOST, :string, ''
     optional :CACHE_REDIS_URL, :string, ''
@@ -35,9 +37,12 @@ EnvConfig = SuperConfig.new do
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :DATABASE_AWS_REGION, :string, ''
     optional :DATABASE_WRT_USER, :string, ''
+    optional :WCA_REGISTRATIONS_URL, :string, ''
+    optional :WCA_REGISTRATIONS_CDN_URL, :string, ''
 
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false
+    optional :SKIP_PRETEST_SETUP, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
   end
 

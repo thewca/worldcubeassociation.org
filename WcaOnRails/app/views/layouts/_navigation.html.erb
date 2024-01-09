@@ -55,8 +55,6 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" role="menu">
-          <li><a href="https://live.worldcubeassociation.org"><%= ui_icon('sort numeric down') %>WCA Live</a></li>
-          <li class="divider"></li>
           <li><a href="<%= rankings_path("333", "single") %>"><%= ui_icon('signal', class: 'fa-rotate-90') %> <%= t '.rankings' %></a></li>
           <li><a href="<%= records_path %>"><%= ui_icon('trophy') %> <%= t '.records' %></a></li>
           <li><a href="<%= persons_path %>"><%= ui_icon('users') %> <%= t '.persons' %></a></li>
@@ -149,6 +147,12 @@
           <span class="visible-lg-inline visible-xs-inline"><%= t '.forum' %></span>
         </a>
       </li>
+      <li>
+        <a href="https://live.worldcubeassociation.org/" target="_blank" class="top-nav hide-new-window-icon">
+          <%= ui_icon('sort numeric down') %>
+          <span class="visible-lg-inline visible-xs-inline"><%= t '.wca_live'%></span>
+        </a>
+      </li>
     </ul>
 
 
@@ -214,11 +218,24 @@
               <li><%= link_to t('.my_results'), person_path(current_user.wca_id) %></li>
             <% end %>
 
-            <% if current_user.staff_or_any_delegate? %>
+            <% if current_user.can_access_panel? %>
               <li class="divider"></li>
+              <li role="presentation" class="dropdown-header">
+                <%= t '.panel' %>
+              </li>
               <li><%= link_to t('.panel'), panel_path %></li>
+              <% if current_user.can_access_wfc_panel? %>
+                <li><%= link_to "WFC panel", panel_wfc_path %></li>
+              <% end %>
+              <% if current_user.can_access_board_panel? %>
+                <li><%= link_to "Board panel", panel_board_path %></li>
+              <% end %>
+              <% if current_user.can_access_senior_delegate_panel? %>
+                <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
+              <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
+              <li class="divider"></li>
               <li><%= link_to t('.polls'), polls_path %></li>
             <% end %>
 

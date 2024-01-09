@@ -16,6 +16,7 @@ class WfcController < ApplicationController
     ]
     from = params.require(:from_date)
     to = params.require(:to_date)
+    response.headers["Content-Disposition"] = "attachment; filename=\"wfc-competitions-export-#{from}-#{to}.tsv\""
     @competitions = Competition
                     .select(select_attributes)
                     .includes(:delegates, :championships, :organizers, :events)

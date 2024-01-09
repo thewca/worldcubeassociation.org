@@ -75,6 +75,13 @@ zh-CN:
     Oceania: 大洋洲
     #original_hash: b1ffb4c
     South America: 南美洲
+  country_bands:
+    #original_hash: 2b5976e
+    title: WCA国家层级
+    #original_hash: df5f4ea
+    band_title: '层级%{number}'
+    #original_hash: 6521e5d
+    due_value: '每场比赛每位參賽者$%{value}'
   events:
     #original_hash: 3732390
     '222': 二阶
@@ -2504,6 +2511,10 @@ zh-CN:
       title: 组织架构
       #original_hash: d54d953
       committees: WCA的各项活动由以下委员会负责：
+      #original_hash: e26c936
+      leader: 组长
+      #original_hash: c366473
+      senior_member: 高级成员
       wdc:
         #original_hash: c97077a
         name: WCA纪律委员会
@@ -2545,6 +2556,27 @@ zh-CN:
         #original_hash: 0171b3b
         description: >-
           该委员会负责支持和促进WCA内持续的质量改进，以及在全球范围内应用质量标准，以确保一致的高质量流程，WCA工作人员，区域组织，比赛组织者和工作人员。
+      wcat:
+        #original_hash: 2b81984
+        name: WCA比赛公示组
+        #original_hash: f511502
+        description: 该组负责审核和公示WCA比赛，并确保此类比赛符合WCA标准。
+      weat:
+        #original_hash: d1dbb86
+        name: WCA董事会助理团队
+        #original_hash: 889dd90
+        description: 该团队是负责执行处理WCA董事会的行政事务。
+      wsot:
+        #original_hash: 58765c7
+        name: WCA竞技组织团队
+        #original_hash: 8f888d6
+        description: 该团队负责监督和协助WCA成为一个国际认可的竞技组织。
+      wat:
+        #original_hash: fae6850
+        info_html: WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
+      wac:
+        #original_hash: fb6cd86
+        info_html: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。
       #original_hash: 7e849d2
       delegates_html: >-
         <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>、<strong>WCA初级代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。

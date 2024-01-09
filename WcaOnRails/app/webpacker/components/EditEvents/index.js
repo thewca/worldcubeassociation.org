@@ -1,10 +1,14 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+} from 'react';
 import _ from 'lodash';
 
 import { Button, Message } from 'semantic-ui-react';
 import { events } from '../../lib/wca-data.js.erb';
 
-import { saveWcif } from '../../lib/utils/wcif';
+import { useSaveWcifAction } from '../../lib/utils/wcif';
 import EventPanel from './EventPanel';
 import { changesSaved } from './store/actions';
 import wcifEventsReducer from './store/reducer';
@@ -16,7 +20,6 @@ function EditEvents() {
     competitionId, wcifEvents, initialWcifEvents,
   } = useStore();
   const dispatch = useDispatch();
-  const [saving, setSaving] = useState(false);
 
   const unsavedChanges = useMemo(() => (
     !_.isEqual(wcifEvents, initialWcifEvents)
@@ -33,7 +36,7 @@ function EditEvents() {
     return null;
   }, [unsavedChanges]);
 
-  useState(() => {
+  useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
 
     return () => {
@@ -41,20 +44,15 @@ function EditEvents() {
     };
   }, [onUnload]);
 
+  const { saveWcif, saving } = useSaveWcifAction();
+
   const save = useCallback(() => {
-    setSaving(true);
-
-    const onSuccess = () => {
-      setSaving(false);
-      dispatch(changesSaved());
-    };
-
-    const onFailure = () => {
-      setSaving(false);
-    };
-
-    saveWcif(competitionId, { events: wcifEvents }, onSuccess, onFailure);
-  }, [competitionId, dispatch, wcifEvents]);
+    saveWcif(
+      competitionId,
+      { events: wcifEvents },
+      () => dispatch(changesSaved()),
+    );
+  }, [competitionId, dispatch, saveWcif, wcifEvents]);
 
   const renderUnsavedChangesAlert = () => (
     <Message color="blue">

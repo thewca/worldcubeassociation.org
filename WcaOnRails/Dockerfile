@@ -2,7 +2,7 @@ FROM ruby:3.2.2
 
 ENV DEBIAN_FRONTEND noninteractive
 WORKDIR /app
-ARG NODE_MAJOR=16
+ARG NODE_MAJOR=20
 
 # Set production environment
 ENV RAILS_LOG_TO_STDOUT="1" \

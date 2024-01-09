@@ -189,7 +189,7 @@ RSpec.describe Competition do
 
     it "delegates for past comps no longer need to be delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :past
-      competition.delegates.first.update_columns(delegate_status: nil, senior_delegate_id: nil)
+      competition.delegates.first.update_columns(delegate_status: nil, region_id: nil)
 
       expect(competition).to be_valid
     end
@@ -333,7 +333,19 @@ RSpec.describe Competition do
     )
   end
 
-  it "requires the waiting list deadline to be before the competition start" do
+  it "allows the waiting list deadline to be during the competition" do
+    competition = FactoryBot.build :competition,
+                                   name: "Foo Test 2015",
+                                   starts: 1.month.from_now,
+                                   ends: 1.month.from_now + 1.day,
+                                   registration_open: 1.month.ago,
+                                   registration_close: 1.week.from_now,
+                                   use_wca_registration: true,
+                                   waiting_list_deadline_date: 1.months.from_now
+    expect(competition).to be_valid
+  end
+
+  it "requires the waiting list deadline to be before the competition ends" do
     competition = FactoryBot.build :competition,
                                    name: "Foo Test 2015",
                                    starts: 1.month.from_now,
@@ -343,7 +355,7 @@ RSpec.describe Competition do
                                    use_wca_registration: true,
                                    waiting_list_deadline_date: 2.months.from_now
     expect(competition).to be_invalid_with_errors(
-      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_after_start')],
+      waiting_list_deadline_date: [I18n.t('competitions.errors.waiting_list_deadline_after_end')],
     )
   end
 
@@ -453,13 +465,13 @@ RSpec.describe Competition do
     end
 
     it "warns if competition is visible and hasn't been announced" do
-      competition = FactoryBot.create :competition, :confirmed, :visible, announced_at: nil, announced_by: nil
+      competition = FactoryBot.create :competition, :confirmed, :visible, :future, announced_at: nil, announced_by: nil
       expect(competition).to be_valid
       expect(competition.warnings_for(nil)[:announcement]).to eq "This competition is visible to the public but hasn't been announced yet."
     end
 
     it "warns if competition has results and haven't been posted" do
-      competition = FactoryBot.create :competition, :confirmed, :visible, results_posted_at: nil, results_posted_by: nil
+      competition = FactoryBot.create :competition, :confirmed, :announced, :visible, :past, results_posted_at: nil, results_posted_by: nil
       FactoryBot.create(:result, person: FactoryBot.create(:person), competitionId: competition.id)
 
       expect(competition).to be_valid
@@ -659,7 +671,7 @@ RSpec.describe Competition do
   describe "adding/removing events" do
     let(:two_by_two) { Event.find "222" }
     let(:three_by_three) { Event.find "333" }
-    let(:competition) { FactoryBot.create(:competition, use_wca_registration: true, events: [two_by_two, three_by_three]) }
+    let(:competition) { FactoryBot.create(:competition, :future, use_wca_registration: true, events: [two_by_two, three_by_three]) }
 
     it "removes registrations when event is removed" do
       r = FactoryBot.create(:registration, competition: competition, competition_events: competition.competition_events)
@@ -674,7 +686,7 @@ RSpec.describe Competition do
   end
 
   describe "when changing the id of a competition" do
-    let(:competition) { FactoryBot.create(:competition, :with_delegate, :with_organizer, use_wca_registration: true) }
+    let(:competition) { FactoryBot.create(:competition, :future, :with_delegate, :with_organizer, use_wca_registration: true) }
 
     it "changes the competition_id of registrations" do
       reg1 = FactoryBot.create(:registration, competition_id: competition.id)
@@ -802,7 +814,7 @@ RSpec.describe Competition do
     end
 
     it "sets confirmed_at when setting confirmed true" do
-      competition = FactoryBot.create :competition, :with_delegate, :with_valid_schedule
+      competition = FactoryBot.create :competition, :future, :with_delegate, :with_valid_schedule
       expect(competition.confirmed_at).to be_nil
 
       now = Time.at(Time.now.to_i)
@@ -813,7 +825,7 @@ RSpec.describe Competition do
     end
 
     it "does not update confirmed_at when confirming already confirmed competition" do
-      competition = FactoryBot.create :competition, :confirmed
+      competition = FactoryBot.create :competition, :future, :confirmed
 
       confirmed_at = competition.confirmed_at
       expect(confirmed_at).not_to be_nil

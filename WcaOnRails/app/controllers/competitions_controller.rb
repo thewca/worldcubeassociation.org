@@ -47,7 +47,7 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
-  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [:for_senior]
+  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
@@ -255,7 +255,9 @@ class CompetitionsController < ApplicationController
     end
 
     ActiveRecord::Base.transaction do
-      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id)
+      # It's important to clearout the 'posting_by' here to make sure
+      # another WRT member can start posting other results.
+      comp.update!(results_posted_at: Time.now, results_posted_by: current_user.id, posting_by: nil)
       comp.competitor_users.each { |user| user.notify_of_results_posted(comp) }
       comp.registrations.accepted.each { |registration| registration.user.maybe_assign_wca_id_by_results(comp) }
     end
@@ -412,31 +414,11 @@ class CompetitionsController < ApplicationController
 
   def calculate_dues
     country_iso2 = Country.find_by(id: params[:country_id])&.iso2
-    country_band = CountryBand.find_by(iso2: country_iso2)&.number
-
-    update_exchange_rates_if_needed
-    input_money_us_dollars = Money.new(params[:entry_fee_cents].to_i, params[:currency_code]).exchange_to("USD").amount
-
-    registration_fee_dues_us_dollars = input_money_us_dollars * CountryBand::PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT
-    country_band_dues_us_dollars = CountryBand::BANDS[country_band][:value] if country_band.present? && country_band > 0
-
-    # times 100 because later currency conversions require lowest currency subunit, which is cents for USD
-    price_per_competitor_us_cents = [registration_fee_dues_us_dollars, country_band_dues_us_dollars].compact.max * 100
-
-    if ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled])
-      estimated_dues_us_cents = price_per_competitor_us_cents * params[:competitor_limit].to_i
-      estimated_dues = Money.new(estimated_dues_us_cents, "USD").exchange_to(params[:currency_code]).format
-
-      render json: {
-        dues_value: estimated_dues,
-      }
-    else
-      price_per_competitor = Money.new(price_per_competitor_us_cents, "USD").exchange_to(params[:currency_code]).format
-
-      render json: {
-        dues_value: price_per_competitor,
-      }
-    end
+    multiplier = ActiveRecord::Type::Boolean.new.cast(params[:competitor_limit_enabled]) ? params[:competitor_limit].to_i : 1
+    total_dues = DuesCalculator.dues_for_n_competitors(country_iso2, params[:base_entry_fee_lowest_denomination].to_i, params[:currency_code], multiplier)
+    render json: {
+      dues_value: total_dues.present? ? total_dues.format : nil,
+    }
   end
 
   def show
@@ -462,7 +444,9 @@ class CompetitionsController < ApplicationController
     }
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
-      format.html
+      format.html do
+        return redirect_to competitions_v2_path(id: @competition.id) if @competition.uses_new_registration_service? && !@competition.results_posted?
+      end
       format.pdf do
         unless @competition.has_schedule?
           flash[:danger] = t('.no_schedule')
@@ -519,13 +503,26 @@ class CompetitionsController < ApplicationController
   def bookmark
     @competition = competition_from_params
     BookmarkedCompetition.find_or_create_by(competition: @competition, user: current_user)
+    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
   end
 
   def unbookmark
     @competition = competition_from_params
     BookmarkedCompetition.where(competition: @competition, user: current_user).each(&:destroy!)
+    Rails.cache.delete("#{current_user.id}-competitions-bookmarked")
     head :ok
+  end
+
+  # Enables the New Registration Service for a Competition
+  def enable_v2
+    @competition = competition_from_params
+    if EnvConfig.WCA_LIVE_SITE? || @competition.registration_opened?
+      flash.now[:danger] = t('competitions.messages.cannot_activate_v2')
+      return redirect_to competition_path(@competition)
+    end
+    @competition.enable_v2_registrations!
+    redirect_to competitions_v2_path(@competition)
   end
 
   def update
@@ -630,18 +627,13 @@ class CompetitionsController < ApplicationController
   end
 
   def for_senior
-    @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
+    user_id = params[:user_id] || current_user.id
+    @user = User.find(user_id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
   end
 
   private def confirming?
     params[:commit] == "Confirm"
-  end
-
-  private def update_exchange_rates_if_needed
-    if !Money.default_bank.rates_updated_at || Money.default_bank.rates_updated_at < 1.day.ago
-      Money.default_bank.update_rates
-    end
   end
 
   private def competition_params

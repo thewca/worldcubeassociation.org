@@ -29,6 +29,7 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
+  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
   has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
 
@@ -77,6 +78,7 @@ class Competition < ApplicationRecord
   scope :order_by_announcement_date, -> { where.not(announced_at: nil).order(announced_at: :desc) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
   scope :not_confirmed, -> { where(confirmed_at: nil) }
+  scope :pending_posting, -> { where.not(results_submitted_at: nil).where(results_posted_at: nil) }
 
   enum guest_entry_status: {
     unclear: 0,
@@ -150,10 +152,12 @@ class Competition < ApplicationRecord
     announced_by
     cancelled_by
     results_posted_by
+    posting_by
     main_event_id
     waiting_list_deadline_date
     event_change_deadline_date
     competition_series_id
+    uses_v2_registrations
   ).freeze
   VALID_NAME_RE = /\A([-&.:' [:alnum:]]+) (\d{4})\z/
   VALID_ID_RE = /\A[a-zA-Z0-9]+\Z/
@@ -303,6 +307,21 @@ class Competition < ApplicationRecord
     end
   end
 
+  private def should_validate_registration_closing?
+    confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?)
+  end
+
+  # Same comment as for start_date_must_be_28_days_in_advance
+  validate :registation_must_not_be_past, if: :should_validate_registration_closing?
+  private def registation_must_not_be_past
+    if editing_user_id
+      editing_user = User.find(editing_user_id)
+      if !editing_user.can_admin_competitions? && registration_range_specified? && registration_past?
+        errors.add(:registration_close, I18n.t('competitions.errors.registration_already_closed'))
+      end
+    end
+  end
+
   def has_any_round_per_event?
     competition_events.map(&:rounds).none?(&:empty?)
   end
@@ -374,6 +393,10 @@ class Competition < ApplicationRecord
 
   def registration_full?
     competitor_limit_enabled? && registrations.accepted_and_paid_pending_count >= competitor_limit
+  end
+
+  def number_of_bookmarks
+    bookmarked_users.count
   end
 
   def country
@@ -513,6 +536,11 @@ class Competition < ApplicationRecord
         end
       end
     end
+    if registration_range_specified? && registration_past?
+      unless self.announced?
+        warnings[:regclosed] = I18n.t('competitions.messages.registration_already_closed')
+      end
+    end
 
     warnings
   end
@@ -579,6 +607,7 @@ class Competition < ApplicationRecord
              'bookmarked_users',
              'competition_series',
              'series_competitions',
+             'posting_user',
              'inbox_results',
              'inbox_persons'
           # Do nothing as they shouldn't be cloned.
@@ -629,7 +658,7 @@ class Competition < ApplicationRecord
         # Generate competition id from name
         # By replacing accented chars with their ascii equivalents, and then
         # removing everything that isn't a digit or a character.
-        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year).gsub(/[^a-z0-9]+/i, '')
+        safe_name_without_year = ActiveSupport::Inflector.transliterate(name_without_year, locale: :en).gsub(/[^a-z0-9]+/i, '')
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if cellName.blank? || force_override
@@ -650,6 +679,14 @@ class Competition < ApplicationRecord
 
   def trainee_delegate_ids
     @trainee_delegate_ids || trainee_delegates.map(&:id).join(",")
+  end
+
+  def enable_v2_registrations!
+    update_column :uses_v2_registrations, true
+  end
+
+  def uses_new_registration_service?
+    self.uses_v2_registrations
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -1094,8 +1131,8 @@ class Competition < ApplicationRecord
       if refund_policy_limit_date? && waiting_list_deadline_date < refund_policy_limit_date
         errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_before_refund_date'))
       end
-      if waiting_list_deadline_date >= start_date
-        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_start'))
+      if waiting_list_deadline_date > end_date
+        errors.add(:waiting_list_deadline_date, I18n.t('competitions.errors.waiting_list_deadline_after_end'))
       end
     end
   end
@@ -1605,6 +1642,10 @@ class Competition < ApplicationRecord
     competition_series&.to_wcif(authorized: authorized)
   end
 
+  def competition_series_ids
+    competition_series&.competition_ids || []
+  end
+
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
@@ -1907,6 +1948,11 @@ class Competition < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
+    # The intent behind this is to have a "good" default setup for serialization.
+    # We also want the caller to be able to be picky about the attributes included
+    # in the json (eg: specify an empty 'methods' to remove these attributes,
+    # or set a custom array in 'only' without getting the default ones), therefore
+    # we only use 'merge' here, which doesn't "deeply" merge into the default options.
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     # Fallback to the default 'serializable_hash' method, but always include our
     # custom 'class' attribute.
@@ -1983,5 +2029,36 @@ class Competition < ApplicationRecord
       r.event.id == event_id && r.round_type_id == round_type_id &&
         (format_id.nil? || format_id == r.format_id)
     end
+  end
+
+  def dues_per_competitor_in_usd
+    dues = DuesCalculator.dues_per_competitor_in_usd(self.country_iso2, self.base_entry_fee_lowest_denomination.to_i, self.currency_code)
+    dues.present? ? dues : 0
+  end
+
+  private def xero_dues_payer
+    (
+      self.country&.wfc_dues_redirect&.redirect_to ||
+      self.organizers.find { |organizer| organizer.wfc_dues_redirect.present? }&.wfc_dues_redirect&.redirect_to
+    )
+  end
+
+  # WFC usually sends dues to the first staff delegate in alphabetical order if there are no redirects setup for the country or organizer.
+  private def delegate_dues_payer
+    staff_delegates.min_by(&:name)
+  end
+
+  def dues_payer_name
+    dues_payer = xero_dues_payer || delegate_dues_payer
+    dues_payer&.name
+  end
+
+  def dues_payer_email
+    dues_payer = xero_dues_payer || delegate_dues_payer
+    dues_payer&.email
+  end
+
+  def dues_payer_is_combined_invoice?
+    xero_dues_payer&.is_combined_invoice || false
   end
 end

@@ -158,10 +158,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('banned')
   end
 
-  def self.probation
-    Team.c_find_by_friendly_id!('probation')
-  end
-
   def self.wcat
     Team.c_find_by_friendly_id!('wcat')
   end
@@ -175,7 +171,7 @@ class Team < ApplicationRecord
   end
 
   def self.wac
-    Team.c_find_by_friendly_id!('wac')
+    Team.c_find_by_friendly_id!('wac').reload
   end
 
   def self.wsot

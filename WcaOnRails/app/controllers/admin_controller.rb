@@ -145,6 +145,7 @@ class AdminController < ApplicationController
   end
 
   def import_results
+    @competition = competition_from_params
     load_result_posting_steps
   end
 
@@ -289,46 +290,6 @@ class AdminController < ApplicationController
     @person ||= Person.new
   end
 
-  def update_person
-    @person = Person.current.find_by(wca_id: params[:person][:wca_id])
-    if @person
-      person_params = params.require(:person).permit(:name, :countryId, :gender, :dob, :incorrect_wca_id_claim_count)
-      case params[:method]
-      when "fix"
-        if @person.update(person_params)
-          flash.now[:success] = "Successfully fixed #{@person.name}."
-          if @person.saved_change_to_countryId?
-            flash.now[:warning] = "The change you made may have affected national and continental records, be sure to run
-            <a href='#{admin_check_regional_records_path}'>check_regional_record_markers</a>.".html_safe
-          end
-        else
-          flash.now[:danger] = "Error while fixing #{@person.name}."
-        end
-      when "update"
-        if @person.update_using_sub_id(person_params)
-          flash.now[:success] = "Successfully updated #{@person.name}."
-        else
-          flash.now[:danger] = "Error while updating #{@person.name}."
-        end
-      when "destroy"
-        if @person.results.any?
-          flash.now[:danger] = "#{@person.name} has results, can't destroy them."
-        elsif @person.user.present?
-          flash.now[:danger] = "#{@person.wca_id} is linked to a user, can't destroy them."
-        else
-          name = @person.name
-          @person.destroy
-          flash.now[:success] = "Successfully destroyed #{name}."
-          @person = Person.new
-        end
-      end
-    else
-      @person = Person.new
-      flash.now[:danger] = "No person has been chosen."
-    end
-    render :edit_person
-  end
-
   def person_data
     @person = Person.current.find_by!(wca_id: params[:person_wca_id])
 
@@ -363,14 +324,26 @@ class AdminController < ApplicationController
   end
 
   def generate_db_token
+    @db_endpoints = {
+      main: EnvConfig.DATABASE_HOST,
+      replica: EnvConfig.READ_REPLICA_HOST,
+    }
+
     role_credentials = Aws::InstanceProfileCredentials.new
     token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
 
-    @token = token_generator.auth_token({
-                                          region: EnvConfig.DATABASE_AWS_REGION,
-                                          endpoint: "#{EnvConfig.DATABASE_HOST}:3306",
-                                          user_name: EnvConfig.DATABASE_WRT_USER,
-                                        })
+    @db_tokens = @db_endpoints.transform_values do |url|
+      token_generator.auth_token({
+                                   region: EnvConfig.DATABASE_AWS_REGION,
+                                   endpoint: "#{url}:3306",
+                                   user_name: EnvConfig.DATABASE_WRT_USER,
+                                 })
+    end
+
+    @db_server_indices = {
+      main: 1,
+      replica: 2,
+    }
   end
 
   def check_regional_records
@@ -396,7 +369,7 @@ class AdminController < ApplicationController
         next unless marker.present?
 
         result_id, result_type = id_and_type.split('-')
-        record_marker = "regional#{result_type}Record".to_sym
+        record_marker = :"regional#{result_type}Record"
 
         Result.where(id: result_id).update_all(record_marker => marker)
       end

@@ -65,40 +65,31 @@ RSpec.describe User, type: :model do
     user.confirm
   end
 
-  it "doesn't allow demotion of a senior delegate with subordinate delegates" do
-    delegate = FactoryBot.create :delegate
-    senior_delegate = FactoryBot.create :senior_delegate
-
-    delegate.senior_delegate = senior_delegate
-    delegate.save!
-
-    senior_delegate.delegate_status = ""
-    expect(senior_delegate.save).to eq false
-    expect(senior_delegate.errors.messages[:delegate_status]).to eq ["cannot demote Senior Delegate with subordinate Delegates"]
-  end
-
   it "allows demotion of a senior delegate with no subordinate delegates" do
     senior_delegate = FactoryBot.create :senior_delegate
 
     senior_delegate.delegate_status = ""
+    senior_delegate.region_id = nil
     expect(senior_delegate.save).to eq true
     expect(senior_delegate.reload.delegate_status).to eq nil
   end
 
   it "requires senior delegate be a senior delegate" do
     delegate = FactoryBot.create :delegate
+    region_id = delegate.region_id
     user = FactoryBot.create :user
 
-    delegate.senior_delegate = user
-    expect(delegate).to be_invalid_with_errors(senior_delegate: ["must be a Senior Delegate"])
+    delegate.region_id = user.region_id
+    expect(delegate).to be_invalid_with_errors(region_id: ["can't be blank"])
 
-    user.senior_delegate!
+    delegate.region_id = region_id
+    user.update(delegate_status: "delegate", region_id: region_id)
     expect(delegate).to be_valid
   end
 
   it "requires senior delegate if delegate status allows it" do
-    delegate = FactoryBot.build :delegate, senior_delegate: nil
-    expect(delegate).to be_invalid_with_errors(senior_delegate: ["can't be blank"])
+    delegate = FactoryBot.build :delegate, region_id: nil
+    expect(delegate).to be_invalid_with_errors(region_id: ["can't be blank"])
   end
 
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
@@ -117,38 +108,14 @@ RSpec.describe User, type: :model do
     expect(delegate.can_admin_results?).to be false
   end
 
-  it "does not allow senior delegate if senior delegate" do
-    senior_delegate1 = FactoryBot.create :user
-    senior_delegate1.senior_delegate!
-
-    senior_delegate2 = FactoryBot.create :user
-    senior_delegate2.senior_delegate!
-
-    expect(senior_delegate1).to be_valid
-    senior_delegate1.senior_delegate = senior_delegate2
-    expect(senior_delegate1).to be_invalid_with_errors(senior_delegate: ["must not be present"])
-  end
-
   it "allows senior delegate if board member" do
     board_member = FactoryBot.create :delegate, :board_member
 
-    senior_delegate = FactoryBot.create :user
-    senior_delegate.senior_delegate!
+    senior_delegate = FactoryBot.create :senior_delegate
 
     expect(board_member).to be_valid
-    board_member.senior_delegate = senior_delegate
+    board_member.region_id = senior_delegate.region_id
     expect(board_member).to be_valid
-  end
-
-  it "does not allow senior delegate if regular user" do
-    user = FactoryBot.create :user
-
-    senior_delegate = FactoryBot.create :user
-    senior_delegate.senior_delegate!
-
-    expect(user).to be_valid
-    user.senior_delegate = senior_delegate
-    expect(user).to be_invalid_with_errors(senior_delegate: ["must not be present"])
   end
 
   describe "WCA ID" do
@@ -394,7 +361,7 @@ RSpec.describe User, type: :model do
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
     let!(:senior_delegate) { FactoryBot.create :senior_delegate }
-    let!(:delegate) { FactoryBot.create :delegate, senior_delegate: senior_delegate }
+    let!(:delegate) { FactoryBot.create :delegate, region_id: senior_delegate.region_id }
     let!(:user) do
       FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
                                delegate_id_to_handle_wca_id_claim: delegate.id,
@@ -516,27 +483,6 @@ RSpec.describe User, type: :model do
       user_with_wca_id.unconfirmed_wca_id = person.wca_id
       user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
       expect(user_with_wca_id).to be_invalid_with_errors(unconfirmed_wca_id: ["cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}"])
-    end
-
-    context "when the delegate to handle WCA ID claim is demoted" do
-      it "sets delegate_id_to_handle_wca_id_claim and unconfirmed_wca_id to nil" do
-        delegate.update!(delegate_status: nil, senior_delegate_id: nil)
-        user.reload
-        expect(user.delegate_id_to_handle_wca_id_claim).to eq nil
-        expect(user.unconfirmed_wca_id).to eq nil
-      end
-
-      it "notifies the user via email" do
-        unconfirmed_user = FactoryBot.create(:user,
-                                             confirmed: false,
-                                             unconfirmed_wca_id: person.wca_id,
-                                             delegate_id_to_handle_wca_id_claim: delegate.id,
-                                             claiming_wca_id: true,
-                                             dob_verification: "1990-01-2")
-        expect(WcaIdClaimMailer).to receive(:notify_user_of_delegate_demotion).with(user, delegate, senior_delegate).and_call_original
-        expect(WcaIdClaimMailer).not_to receive(:notify_user_of_delegate_demotion).with(unconfirmed_user, delegate, senior_delegate).and_call_original
-        delegate.update!(delegate_status: nil, senior_delegate_id: nil)
-      end
     end
 
     it "when empty, is set to nil" do
@@ -674,7 +620,7 @@ RSpec.describe User, type: :model do
       user = FactoryBot.create :user
       senior_delegate = FactoryBot.create :senior_delegate
       expect(senior_delegate.can_edit_user?(user)).to eq true
-      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :senior_delegate_id, :location)
+      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :region_id, :location)
     end
 
     it "disallows delegates to edit WCA IDs of special accounts" do
@@ -699,7 +645,7 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for users that are delegates" do
-      senior_delegate = FactoryBot.create :user, :senior_delegate
+      senior_delegate = FactoryBot.create :senior_delegate
       expect(senior_delegate.is_special_account?).to eq true
     end
 

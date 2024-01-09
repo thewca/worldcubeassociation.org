@@ -25,6 +25,9 @@
         <%= link_to "Delegate Crash course", panel_delegate_crash_course_path %>
       </li>
       <li>
+        <%= link_to "Guidelines for Disciplinary Incidents", "/edudoc/guidelines-for-disciplinary-incidents/guidelines-for-disciplinary-incidents.pdf" %>
+      </li>
+      <li>
         <%= link_to "Delegates", delegates_stats_path %>
       </li>
       <li>
@@ -45,65 +48,12 @@
     </ul>
   <% end %>
 
-  <% if current_user&.can_view_senior_delegate_material? %>
-    <h2>Senior Delegates</h2>
-
-    <ul>
-      <li>
-        <%= link_to "WCA Delegate Nomination form", "https://docs.google.com/forms/d/e/1FAIpQLSfji_fOKEKcqS1Fb9fpu3qsBx-O8LiSJu_fG0TU7DJnR9Yj8g/viewform" %>
-      </li>
-      <li>
-        <%= link_to "WCA Delegate Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLScq0JIOq1-2PHJoty5IE_uln_1Uq26Isp4mr3bqpfXKELQoqQ/viewform" %>
-      </li>
-      <li>
-        <%= link_to "WCA Delegate Demotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf5BnccDL656ZPD3zl72Xgz7LmzLjFeTtjXKqvupo9Tn_VIRg/viewform" %>
-      </li>
-      <li>
-        <%= link_to "Pending claims for your subordinate Delegates", pending_claims_path %>
-      </li>
-      <li>
-        <%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %>
-      </li>
-      <li>
-        <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
-      </li>
-    </ul>
-  <% end %>
-
-
-  <% if current_user.can_admin_finances? %>
-    <h2><%= Team.wfc.name %></h2>
-
-    <ul>
-      <li>
-        <%= link_to "WFC panel", wfc_path %>
-      </li>
-      <li>
-        <%= link_to "Modify Delegates on Probation", edit_team_path(Team.probation) %>
-      </li>
-      <li>
-        <%= link_to "Bands for WCA Dues", country_bands_path %>
-      </li>
-    </ul>
-  <% end %>
-
-
   <% if current_user&.can_view_leader_material? %>
     <h2>Committee/Team Leaders</h2>
 
     <ul>
       <li>
         <%= link_to "WCA Committee/Team Member Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf3079GXcGUYDmJIIdRt0GPlDA_-aMSBZqk93zDgaFRxG15xQ/viewform" %>
-      </li>
-    </ul>
-  <% end %>
-
-  <% if current_user&.board_member? %>
-    <h2>Board</h2>
-
-    <ul>
-      <li>
-        <%= link_to "List of Senior Delegates", panel_seniors_path %>
       </li>
     </ul>
   <% end %>

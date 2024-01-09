@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination]
+  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -20,7 +20,7 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:new, :create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy, :update]
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy, :update]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
   private def competition_must_be_using_wca_registration!
@@ -509,7 +509,7 @@ class RegistrationsController < ApplicationController
       stored_intent = stored_transaction.stripe_payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
-        if stored_intent.holder.is_a? Registration # currently, the only holders that we pay for are Registrations.
+        if stored_intent.holder.is_a? Registration
           ruby_money = charge_transaction.money_amount
 
           stored_payment = stored_intent.holder.record_payment(
@@ -524,6 +524,14 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
+        elsif stored_intent.holder.is_a? AttendeePaymentRequest
+          ruby_money = charge_transaction.money_amount
+          begin
+            Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
+          rescue Faraday::Error => e
+            logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
+            return head :internal_server_error
+          end
         end
       end
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
@@ -774,7 +782,7 @@ class RegistrationsController < ApplicationController
     end
     @registration = @competition.registrations.build(registration_params.merge(user_id: current_user.id))
     if @registration.save
-      flash[:success] = I18n.t('registrations.flash.registered')
+      flash[:warning] = I18n.t('registrations.flash.registered')
       RegistrationsMailer.notify_organizers_of_new_registration(@registration).deliver_later
       RegistrationsMailer.notify_registrant_of_new_registration(@registration).deliver_later
       redirect_to competition_register_path

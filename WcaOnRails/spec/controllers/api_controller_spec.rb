@@ -172,56 +172,10 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     end
   end
 
-  describe 'show_user_*' do
-    let!(:user) { FactoryBot.create(:user_with_wca_id, name: "Jeremy") }
-
-    it 'can query by id' do
-      get :show_user_by_id, params: { id: user.id }
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json["user"]["name"]).to eq "Jeremy"
-      expect(json["user"]["wca_id"]).to eq user.wca_id
-    end
-
-    it 'can query by wca id' do
-      get :show_user_by_wca_id, params: { wca_id: user.wca_id }
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json["user"]["name"]).to eq "Jeremy"
-      expect(json["user"]["wca_id"]).to eq user.wca_id
-    end
-
-    it '404s nicely' do
-      get :show_user_by_wca_id, params: { wca_id: "foo" }
-      expect(response.status).to eq 404
-      json = JSON.parse(response.body)
-      expect(json["user"]).to be nil
-    end
-
-    describe 'upcoming_competitions' do
-      let!(:upcoming_comp) { FactoryBot.create(:competition, :confirmed, :visible, starts: 2.weeks.from_now) }
-      let!(:registration) { FactoryBot.create(:registration, :accepted, user: user, competition: upcoming_comp) }
-
-      it 'does not render upcoming competitions by default' do
-        get :show_user_by_id, params: { id: user.id }
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-        expect(json.keys).not_to include "upcoming_competitions"
-      end
-
-      it 'renders upcoming competitions when upcoming_competitions param is set' do
-        get :show_user_by_id, params: { id: user.id, upcoming_competitions: true }
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-        expect(json["upcoming_competitions"].size).to eq 1
-      end
-    end
-  end
-
   describe 'GET #delegates' do
     it 'includes emails and regions' do
       senior_delegate = FactoryBot.create :senior_delegate
-      delegate = FactoryBot.create :delegate, location: "SF bay area, USA", senior_delegate: senior_delegate
+      delegate = FactoryBot.create :delegate, location: "SF bay area, USA", region_id: senior_delegate.region_id
 
       get :delegates
       expect(response.status).to eq 200
@@ -231,31 +185,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       delegate_json = json.find { |user| user["id"] == delegate.id }
       expect(delegate_json["email"]).to eq delegate.email
       expect(delegate_json["location"]).to eq "SF bay area, USA"
-      expect(delegate_json["senior_delegate_id"]).to eq senior_delegate.id
-    end
-
-    it 'paginates' do
-      15.times do
-        FactoryBot.create :delegate # Each delegate gets a senior delegate created, so there are 30 delegates in total
-      end
-
-      get :delegates
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json.length).to eq 25
-
-      # Parse HTTP Link header mess
-      link = response.headers["Link"]
-      links = link.split(/, */)
-      next_link = links[1]
-      url, rel = next_link.split(/; */)
-      url = url[1...-1]
-      expect(rel).to eq 'rel="next"'
-
-      get :delegates, params: Rack::Utils.parse_query(URI(url).query)
-      expect(response.status).to eq 200
-      json = JSON.parse(response.body)
-      expect(json.length).to eq User.delegates.count - 25
+      expect(delegate_json["region_id"]).to eq senior_delegate.region_id
     end
   end
 
@@ -264,7 +194,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       get :scramble_program
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.1.2"
+      expect(json["current"]["name"]).to eq "TNoodle-WCA-1.2.1"
       # the actual key resides in regulations-data, so in the test environment it will simply prompt "false"
       expect(json["publicKeyBytes"]).to eq false
     end

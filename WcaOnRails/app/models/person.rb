@@ -256,7 +256,7 @@ class Person < ApplicationRecord
     %w(m f).include? gender
   end
 
-  def self.search(query)
+  def self.search(query, params: {})
     persons = Person.current.includes(:user)
     query.split.each do |part|
       persons = persons.where("name LIKE :part OR wca_id LIKE :part", part: "%#{part}%")
@@ -279,6 +279,15 @@ class Person < ApplicationRecord
       class: self.class.to_s.downcase,
       id: self.wca_id,
     )
+
+    private_attributes = options&.fetch(:private_attributes, []) || []
+    if private_attributes.include?("dob")
+      json[:dob] = dob.to_s
+    end
+
+    if private_attributes.include?("incorrect_wca_id_claim_count")
+      json[:incorrect_wca_id_claim_count] = incorrect_wca_id_claim_count
+    end
 
     # If there's a user for this Person, merge in all their data,
     # the Person's data takes priority, though.

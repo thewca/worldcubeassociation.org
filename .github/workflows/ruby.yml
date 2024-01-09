@@ -16,16 +16,16 @@ jobs:
       run:
         working-directory: WcaOnRails
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
           working-directory: WcaOnRails
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v3 # this also includes Yarn
+      - uses: actions/setup-node@v4 # this also includes Yarn
         with:
-          node-version: '16'
+          node-version: '20'
       - uses: actions/cache@v3
         with:
           path: '**/node_modules'
@@ -61,7 +61,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: 'WcaOnRails/coverage/lcov/WcaOnRails.lcov'
           base-path: 'WcaOnRails'
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always() && steps.rspec.outcome == 'failure'
         with:
           name: capybara-screenshots

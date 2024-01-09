@@ -1,0 +1,12 @@
+.multisearch-dropdown {
+  & > .ui.label.multisearch-item {
+    display: inline-flex;
+  }
+  .selected-item {
+    display: inline-flex;
+    img {
+      height: 2.1em;
+      margin-right: 5px;
+    }
+  }
+}
