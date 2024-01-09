@@ -17,6 +17,7 @@ import {
 
 import CompetitionList from './CompetitionList';
 import CompetitionMap from './CompetitionMap';
+import { calculateQueryKey, createSearchParams } from './QueryHelper';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -49,23 +50,6 @@ const regionsOptions = [
     { key: country.id, text: country.name, value: country.iso2 }
   ))),
 ];
-
-const calculateQueryKey = (filterState) => {
-  let timeKey = '';
-  if (filterState?.timeOrder === 'past') {
-    timeKey = `${filterState.selectedYear}`;
-  } else if (filterState?.timeOrder === 'custom') {
-    timeKey = `start${filterState.customStartDate}-end${filterState.customEndDate}`;
-  }
-
-  return {
-    timeOrder: filterState?.timeOrder,
-    region: filterState?.region,
-    delegate: filterState?.delegate,
-    search: filterState?.search,
-    time: timeKey,
-  };
-};
 
 const filterInitialState = {
   timeOrder: 'present',
@@ -111,66 +95,7 @@ function CompetitionFilters() {
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
-      const dateNow = new Date();
-      let searchParams;
-
-      if (filterState.timeOrder === 'present') {
-        searchParams = new URLSearchParams({
-          sort: 'start_date,end_date,name',
-          ongoing_and_future: dateNow.toISOString().split('T')[0],
-          page: pageParam,
-        });
-      } else if (filterState.timeOrder === 'recent') {
-        const thirtyDaysAgo = new Date();
-        thirtyDaysAgo.setDate(dateNow.getDate() - 30);
-
-        searchParams = new URLSearchParams({
-          sort: '-end_date,-start_date,name',
-          start: thirtyDaysAgo.toISOString().split('T')[0],
-          end: dateNow.toISOString().split('T')[0],
-          page: pageParam,
-        });
-      } else if (filterState.timeOrder === 'past') {
-        if (filterState.selectedYear === 'all_years') {
-          searchParams = new URLSearchParams({
-            sort: '-end_date,-start_date,name',
-            end: dateNow.toISOString().split('T')[0],
-            page: pageParam,
-          });
-        } else {
-          searchParams = new URLSearchParams({
-            sort: '-end_date,-start_date,name',
-            start: `${filterState.selectedYear}-1-1`,
-            end: dateNow.getFullYear() === filterState.selectedYear ? dateNow.toISOString().split('T')[0] : `${filterState.selectedYear}-12-31`,
-            page: pageParam,
-          });
-        }
-      } else if (filterState.timeOrder === 'by_announcement') {
-        searchParams = new URLSearchParams({
-          sort: '-announced_at,name',
-          page: pageParam,
-        });
-      } else if (filterState.timeOrder === 'custom') {
-        searchParams = new URLSearchParams({
-          sort: 'start_date,end_date,name',
-          start: filterState.customStartDate?.toISOString().split('T')[0] || '',
-          end: filterState.customEndDate?.toISOString().split('T')[0] || '',
-          page: pageParam,
-        });
-      }
-
-      if (filterState.region && filterState.region !== 'all_regions') {
-        // Continent IDs begin with underscore
-        const regionParam = filterState.region[0] === '_' ? 'continent' : 'country_iso2';
-        searchParams.append(regionParam, filterState.region);
-      }
-      if (filterState.delegate) {
-        searchParams.append('delegate', filterState.delegate);
-      }
-      if (filterState.search) {
-        searchParams.append('q', filterState.search);
-      }
-
+      const searchParams = createSearchParams(filterState, pageParam);
       return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
     },
     getNextPageParam: (previousPage, allPages) => {
