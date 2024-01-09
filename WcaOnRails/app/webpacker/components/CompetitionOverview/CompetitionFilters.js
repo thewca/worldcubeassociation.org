@@ -321,7 +321,7 @@ function CompetitionFilters() {
                   image: { avatar: true, src: delegate.avatar?.thumb_url },
                 }
               )) || [])]}
-              onChange={(event, data) => dispatchFilter({ delegate: data.value })}
+              onChange={(_, data) => dispatchFilter({ delegate: data.value })}
             />
           </Form.Field>
         </Form.Group>
