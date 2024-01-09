@@ -13,7 +13,7 @@ import {
   events, continents, countries, competitionConstants,
 } from '../../lib/wca-data.js.erb';
 
-import CompetitionTable from './CompetitionTable';
+import CompetitionList from './CompetitionList';
 import CompetitionMap from './CompetitionMap';
 
 import 'react-datepicker/dist/react-datepicker.css';
@@ -479,86 +479,10 @@ function CompetitionFilters() {
         <div id="competitions-list">
           {
             displayMode === 'list'
-            && filterState.timeOrder === 'present'
             && (
-              <>
-                <CompetitionTable
-                  competitionData={competitionData.filter((comp) => comp.inProgress)}
-                  title={I18n.t('competitions.index.titles.in_progress')}
-                  shouldShowRegStatus={shouldShowRegStatus}
-                  shouldShowCancelled={shouldShowCancelled}
-                  selectedEvents={selectedEvents}
-                  isLoading={competitionsIsFetching
-                    && !competitionData.filter((comp) => !comp.inProgress)}
-                  hasMoreCompsToLoad={hasMoreCompsToLoad
-                    && !competitionData.filter((comp) => !comp.inProgress)}
-                  isRenderedAboveAnotherTable
-                />
-                <CompetitionTable
-                  competitionData={competitionData.filter((comp) => !comp.inProgress)}
-                  title={I18n.t('competitions.index.titles.upcoming')}
-                  shouldShowRegStatus={shouldShowRegStatus}
-                  shouldShowCancelled={shouldShowCancelled}
-                  selectedEvents={selectedEvents}
-                  isLoading={competitionsIsFetching}
-                  hasMoreCompsToLoad={hasMoreCompsToLoad}
-                />
-              </>
-            )
-          }
-          {
-            displayMode === 'list'
-            && filterState.timeOrder === 'recent'
-            && (
-              <CompetitionTable
+              <CompetitionList
                 competitionData={competitionData}
-                title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
-                shouldShowRegStatus={shouldShowRegStatus}
-                shouldShowCancelled={shouldShowCancelled}
-                selectedEvents={selectedEvents}
-                isLoading={competitionsIsFetching}
-                hasMoreCompsToLoad={hasMoreCompsToLoad}
-              />
-            )
-          }
-          {
-            displayMode === 'list'
-            && filterState.timeOrder === 'past'
-            && (
-              <CompetitionTable
-                competitionData={competitionData}
-                title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
-                shouldShowRegStatus={shouldShowRegStatus}
-                shouldShowCancelled={shouldShowCancelled}
-                selectedEvents={selectedEvents}
-                isLoading={competitionsIsFetching}
-                hasMoreCompsToLoad={hasMoreCompsToLoad}
-              />
-            )
-          }
-          {
-            displayMode === 'list'
-            && filterState.timeOrder === 'by_announcement'
-            && (
-              <CompetitionTable
-                competitionData={competitionData}
-                title={I18n.t('competitions.index.titles.by_announcement')}
-                shouldShowRegStatus={shouldShowRegStatus}
-                shouldShowCancelled={shouldShowCancelled}
-                selectedEvents={selectedEvents}
-                isLoading={competitionsIsFetching}
-                hasMoreCompsToLoad={hasMoreCompsToLoad}
-                isSortedByAnnouncement
-              />
-            )
-          }
-          {
-            displayMode === 'list'
-            && filterState.timeOrder === 'custom'
-            && (
-              <CompetitionTable
-                competitionData={competitionData}
-                title={I18n.t('competitions.index.titles.custom')}
+                filterState={filterState}
                 shouldShowRegStatus={shouldShowRegStatus}
                 shouldShowCancelled={shouldShowCancelled}
                 selectedEvents={selectedEvents}
@@ -568,7 +492,7 @@ function CompetitionFilters() {
             )
           }
         </div>
-        {/* old code does a lot of things to #competitions-map... to be included? */}
+        {/* Old JS code does a lot of things to id=comeptitions-map, to be included? */}
         <div name="competitions-map">
           {
             displayMode === 'map'
