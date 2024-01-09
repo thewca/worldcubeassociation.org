@@ -75,28 +75,33 @@ const filterInitialState = {
   region: 'all_regions',
   delegate: '',
   search: '',
+  selectedEvents: [],
+  shouldShowRegStatus: false,
+  shouldIncludeCancelled: false,
+  displayMode: 'list',
 };
-const filterReducer = (state, action) => (
-  { ...state, ...action }
-);
+const filterReducer = (state, action) => {
+  switch (action.type) {
+    case 'toggle_event':
+      return {
+        ...state,
+        selectedEvents: state.selectedEvents.includes(action.eventId)
+          ? state.selectedEvents.filter((id) => id !== action.eventId)
+          : [...state.selectedEvents, action.eventId],
+      };
+    case 'select_all_events':
+      return { ...state, selectedEvents: WCA_EVENT_IDS };
+    case 'clear_events':
+      return { ...state, selectedEvents: [] };
+    default:
+      return { ...state, ...action };
+  }
+};
 
 function CompetitionFilters() {
-  const [selectedEvents, setSelectedEvents] = useState([]);
-  const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
-  const [shouldIncludeCancelled, setShouldIncludeCancelled] = useState(false);
-  const [displayMode, setDisplayMode] = useState('list');
   const [competitionData, setCompetitionData] = useState([]);
-
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
   const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
-
-  const editSelectedEvents = (eventId) => {
-    setSelectedEvents((prevSelectedEvents) => (
-      prevSelectedEvents.includes(eventId)
-        ? prevSelectedEvents.filter((id) => id !== eventId)
-        : [...prevSelectedEvents, eventId]
-    ));
-  };
 
   const {
     data: rawCompetitionData,
@@ -196,10 +201,10 @@ function CompetitionFilters() {
   }, [bottomInView, competitionsFetchNextPage]);
   useEffect(() => {
     // FIX: The limit may be surpassed if competitionData is already over the limit in list view
-    if (hasMoreCompsToLoad && displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
+    if (hasMoreCompsToLoad && filterState.displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
       competitionsFetchNextPage();
     }
-  }, [rawCompetitionData, displayMode, hasMoreCompsToLoad, competitionData,
+  }, [rawCompetitionData, filterState.displayMode, hasMoreCompsToLoad, competitionData,
     competitionsFetchNextPage]);
 
   const [delegatesInfo, setDelegatesInfo] = useState([]);
@@ -251,8 +256,8 @@ function CompetitionFilters() {
           <label htmlFor="events">
             {`${I18n.t('competitions.competition_form.events')}`}
             <br />
-            <Button primary type="button" size="mini" id="select-all-events" onClick={() => setSelectedEvents(WCA_EVENT_IDS)}>{I18n.t('competitions.index.all_events')}</Button>
-            <Button size="mini" id="clear-all-events" onClick={() => setSelectedEvents([])}>{I18n.t('competitions.index.clear')}</Button>
+            <Button primary type="button" size="mini" id="select-all-events" onClick={() => dispatchFilter({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+            <Button size="mini" id="clear-all-events" onClick={() => dispatchFilter({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
           </label>
 
           <div id="events">
@@ -268,8 +273,8 @@ function CompetitionFilters() {
                   value={eventId}
                   data-tooltip={I18n.t(`events.${eventId}`)}
                   data-variation="tiny"
-                  onClick={() => editSelectedEvents(eventId)}
-                  active={selectedEvents.includes(eventId)}
+                  onClick={() => dispatchFilter({ type: 'toggle_event', eventId })}
+                  active={filterState.selectedEvents.includes(eventId)}
                 >
                   <Icon className={`cubing-icon event-${eventId}`} />
                 </Button>
@@ -444,7 +449,9 @@ function CompetitionFilters() {
               label={I18n.t('competitions.index.show_registration_status')}
               name="show_registration_status"
               id="show_registration_status"
-              onChange={() => { setShouldShowRegStatus(!shouldShowRegStatus); }}
+              onChange={() => dispatchFilter(
+                { shouldShowRegStatus: !filterState.shouldShowRegStatus },
+              )}
             />
           </div>
 
@@ -453,18 +460,20 @@ function CompetitionFilters() {
               label={I18n.t('competitions.index.show_cancelled')}
               name="show_cancelled"
               id="show_cancelled"
-              onChange={() => { setShouldIncludeCancelled(!shouldIncludeCancelled); }}
+              onChange={() => dispatchFilter(
+                { shouldIncludeCancelled: !filterState.shouldIncludeCancelled },
+              )}
             />
           </div>
         </Form.Group>
 
         <Form.Group>
           <Button.Group toggle fluid id="display">
-            <Button name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
+            <Button name="display" id="display-list" active={filterState.displayMode === 'list'} onClick={() => dispatchFilter({ displayMode: 'list' })}>
               <Icon className="icon list ul " />
               {` ${I18n.t('competitions.index.list')} `}
             </Button>
-            <Button name="display" id="display-map" active={displayMode === 'map'} onClick={() => setDisplayMode('map')}>
+            <Button name="display" id="display-map" active={filterState.displayMode === 'map'} onClick={() => dispatchFilter({ displayMode: 'map' })}>
               <Icon className="icon map marker alternate " />
               {` ${I18n.t('competitions.index.map')} `}
             </Button>
@@ -475,14 +484,14 @@ function CompetitionFilters() {
       <Container id="search-results" className="row competitions-list">
         <div id="competitions-list">
           {
-            displayMode === 'list'
+            filterState.displayMode === 'list'
             && (
               <CompetitionList
                 competitionData={competitionData}
                 filterState={filterState}
-                shouldShowRegStatus={shouldShowRegStatus}
-                shouldIncludeCancelled={shouldIncludeCancelled}
-                selectedEvents={selectedEvents}
+                shouldShowRegStatus={filterState.shouldShowRegStatus}
+                shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+                selectedEvents={filterState.selectedEvents}
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
               />
@@ -492,19 +501,19 @@ function CompetitionFilters() {
         {/* Old JS code does a lot of things to id=comeptitions-map, to be included? */}
         <div name="competitions-map">
           {
-            displayMode === 'map'
+            filterState.displayMode === 'map'
             && (
               <CompetitionMap
                 competitionData={competitionData}
-                selectedEvents={selectedEvents}
-                shouldIncludeCancelled={shouldIncludeCancelled}
+                selectedEvents={filterState.selectedEvents}
+                shouldIncludeCancelled={filterState.shouldIncludeCancelled}
               />
             )
           }
         </div>
       </Container>
 
-      {!competitionsIsFetching && hasMoreCompsToLoad && displayMode === 'list' && <div ref={ref} name="page-bottom" />}
+      {!competitionsIsFetching && hasMoreCompsToLoad && filterState.displayMode === 'list' && <div ref={ref} name="page-bottom" />}
     </Container>
   );
 }
