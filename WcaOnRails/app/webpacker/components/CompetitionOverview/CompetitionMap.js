@@ -12,11 +12,13 @@ import 'leaflet/dist/leaflet.css';
 function CompetitionMap({
   competitionData,
   selectedEvents,
-  shouldShowCancelled,
+  shouldIncludeCancelled,
 }) {
   const provider = userTileProvider;
-  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || shouldShowCancelled)
-    && (selectedEvents.every((event) => comp.event_ids.includes(event))));
+  const competitions = competitionData?.filter((comp) => (
+    (!comp.cancelled_at || shouldIncludeCancelled)
+    && (selectedEvents.every((event) => comp.event_ids.includes(event)))
+  ));
 
   return (
     <MapContainer

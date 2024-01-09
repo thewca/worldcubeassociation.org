@@ -453,7 +453,7 @@ function CompetitionFilters() {
               label={I18n.t('competitions.index.show_cancelled')}
               name="show_cancelled"
               id="show_cancelled"
-              onChange={() => { setShouldShowCancelled(!shouldShowCancelled); }}
+              onChange={() => { setShouldIncludeCancelled(!shouldIncludeCancelled); }}
             />
           </div>
         </Form.Group>
@@ -481,7 +481,7 @@ function CompetitionFilters() {
                 competitionData={competitionData}
                 filterState={filterState}
                 shouldShowRegStatus={shouldShowRegStatus}
-                shouldShowCancelled={shouldShowCancelled}
+                shouldIncludeCancelled={shouldIncludeCancelled}
                 selectedEvents={selectedEvents}
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -497,7 +497,7 @@ function CompetitionFilters() {
               <CompetitionMap
                 competitionData={competitionData}
                 selectedEvents={selectedEvents}
-                shouldShowCancelled={shouldShowCancelled}
+                shouldIncludeCancelled={shouldIncludeCancelled}
               />
             )
           }

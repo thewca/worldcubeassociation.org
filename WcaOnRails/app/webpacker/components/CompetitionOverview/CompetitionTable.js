@@ -10,15 +10,17 @@ function CompetitionTable({
   competitionData,
   title,
   shouldShowRegStatus,
-  shouldShowCancelled,
+  shouldIncludeCancelled,
   selectedEvents,
   isLoading,
   hasMoreCompsToLoad,
   isSortedByAnnouncement = false,
   isRenderedAboveAnotherTable = false,
 }) {
-  const competitions = competitionData?.filter((comp) => (!comp.cancelled_at || shouldShowCancelled)
-    && (selectedEvents.every((event) => comp.event_ids.includes(event))));
+  const competitions = competitionData?.filter((comp) => (
+    (!comp.cancelled_at || shouldIncludeCancelled)
+    && (selectedEvents.every((event) => comp.event_ids.includes(event)))
+  ));
 
   return (
     <List divided relaxed>
