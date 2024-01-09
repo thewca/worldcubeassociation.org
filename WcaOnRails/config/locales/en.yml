@@ -1923,7 +1923,7 @@ en:
   #context: Contact forms
   contacts:
     website:
-      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team, you can find their contact information on <a href="/teams-committees">this page</a>.'
+      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees">this page</a>.'
       title: "WCA Contact Form"
       inquiries:
         competition: "Contact the Organizers of a Specific Competition (please select below)"
