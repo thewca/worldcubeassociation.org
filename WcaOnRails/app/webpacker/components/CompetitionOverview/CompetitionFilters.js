@@ -58,12 +58,32 @@ const filterInitialState = {
   search: '',
 };
 
+const calculateQueryKey = (filterState) => {
+  let timeKey = '';
+  if (filterState?.timeOrder === 'past') {
+    timeKey = `${filterState.selectedYear}`;
+  } else if (filterState?.timeOrder === 'custom') {
+    timeKey = `start${filterState.customStartDate}-end${filterState.customEndDate}`;
+  }
+
+  return {
+    timeOrder: filterState?.timeOrder,
+    region: filterState?.region,
+    delegate: filterState?.delegate,
+    search: filterState?.search,
+    time: timeKey,
+  };
+};
+
 function CompetitionFilters() {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const [shouldShowCancelled, setShouldShowCancelled] = useState(false);
   const [displayMode, setDisplayMode] = useState('list');
-  const [comps, setComps] = useState([]);
+  const [competitionData, setCompetitionData] = useState([]);
+  const [competitionQueryKey, setCompetitionQueryKey] = useState({
+    timeOrder: 'present', region: 'all_regions', delegate: '', search: '', time: '',
+  });
 
   const editSelectedEvents = (eventId) => {
     setSelectedEvents((prevSelectedEvents) => (
@@ -74,24 +94,24 @@ function CompetitionFilters() {
   };
 
   const filterReducer = (state, action) => {
-    if ('timeOrder' in action) {
-      setComps([]);
+    const newState = { ...state, ...action };
+    setCompetitionQueryKey(calculateQueryKey(newState));
+
+    if (newState.timeOrder !== state.timeOrder) {
+      setCompetitionData([]);
     }
 
-    return {
-      ...state,
-      ...action,
-    };
+    return newState;
   };
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
 
   const {
-    data: competitionsData,
+    data: rawCompetitionData,
     fetchNextPage: competitionsFetchNextPage,
     isFetching: competitionsIsFetching,
     hasNextPage: hasMoreCompsToLoad,
   } = useInfiniteQuery({
-    queryKey: ['competitions', filterState],
+    queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
       const dateNow = new Date(Date.now());
       let searchParams;
@@ -166,14 +186,14 @@ function CompetitionFilters() {
   });
 
   useEffect(() => {
-    const flatData = competitionsData?.pages
+    const flatData = rawCompetitionData?.pages
       .map((page) => page.data)
       .flat();
 
     if (flatData) {
-      setComps(flatData);
+      setCompetitionData(flatData);
     }
-  }, [competitionsData]);
+  }, [rawCompetitionData]);
 
   const { ref, inView: bottomInView } = useInView();
   useEffect(() => {
@@ -182,11 +202,11 @@ function CompetitionFilters() {
     }
   }, [bottomInView, competitionsFetchNextPage]);
   useEffect(() => {
-    // FIX: The limit may be surpassed if comps is already over the limit
-    if (hasMoreCompsToLoad && displayMode === 'map' && comps?.length < MAP_DISPLAY_LIMIT) {
+    // FIX: The limit may be surpassed if competitionData is already over the limit in list view
+    if (hasMoreCompsToLoad && displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
       competitionsFetchNextPage();
     }
-  }, [competitionsData, displayMode, hasMoreCompsToLoad, comps,
+  }, [rawCompetitionData, displayMode, hasMoreCompsToLoad, competitionData,
     competitionsFetchNextPage]);
 
   const [delegatesInfo, setDelegatesInfo] = useState([]);
@@ -467,18 +487,19 @@ function CompetitionFilters() {
             && (
               <>
                 <CompetitionTable
-                  competitionData={comps.filter((comp) => comp.inProgress)}
+                  competitionData={competitionData.filter((comp) => comp.inProgress)}
                   title={I18n.t('competitions.index.titles.in_progress')}
                   shouldShowRegStatus={shouldShowRegStatus}
                   shouldShowCancelled={shouldShowCancelled}
                   selectedEvents={selectedEvents}
-                  isLoading={competitionsIsFetching && !comps.filter((comp) => !comp.inProgress)}
+                  isLoading={competitionsIsFetching
+                    && !competitionData.filter((comp) => !comp.inProgress)}
                   hasMoreCompsToLoad={hasMoreCompsToLoad
-                    && !comps.filter((comp) => !comp.inProgress)}
+                    && !competitionData.filter((comp) => !comp.inProgress)}
                   isRenderedAboveAnotherTable
                 />
                 <CompetitionTable
-                  competitionData={comps.filter((comp) => !comp.inProgress)}
+                  competitionData={competitionData.filter((comp) => !comp.inProgress)}
                   title={I18n.t('competitions.index.titles.upcoming')}
                   shouldShowRegStatus={shouldShowRegStatus}
                   shouldShowCancelled={shouldShowCancelled}
@@ -494,7 +515,7 @@ function CompetitionFilters() {
             && filterState.timeOrder === 'recent'
             && (
               <CompetitionTable
-                competitionData={comps}
+                competitionData={competitionData}
                 title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
                 shouldShowRegStatus={shouldShowRegStatus}
                 shouldShowCancelled={shouldShowCancelled}
@@ -509,7 +530,7 @@ function CompetitionFilters() {
             && filterState.timeOrder === 'past'
             && (
               <CompetitionTable
-                competitionData={comps}
+                competitionData={competitionData}
                 title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
                 shouldShowRegStatus={shouldShowRegStatus}
                 shouldShowCancelled={shouldShowCancelled}
@@ -524,7 +545,7 @@ function CompetitionFilters() {
             && filterState.timeOrder === 'by_announcement'
             && (
               <CompetitionTable
-                competitionData={comps}
+                competitionData={competitionData}
                 title={I18n.t('competitions.index.titles.by_announcement')}
                 shouldShowRegStatus={shouldShowRegStatus}
                 shouldShowCancelled={shouldShowCancelled}
@@ -540,7 +561,7 @@ function CompetitionFilters() {
             && filterState.timeOrder === 'custom'
             && (
               <CompetitionTable
-                competitionData={comps}
+                competitionData={competitionData}
                 title={I18n.t('competitions.index.titles.custom')}
                 shouldShowRegStatus={shouldShowRegStatus}
                 shouldShowCancelled={shouldShowCancelled}
@@ -557,7 +578,7 @@ function CompetitionFilters() {
             displayMode === 'map'
             && (
               <CompetitionMap
-                competitionData={comps}
+                competitionData={competitionData}
                 selectedEvents={selectedEvents}
                 shouldShowCancelled={shouldShowCancelled}
               />
