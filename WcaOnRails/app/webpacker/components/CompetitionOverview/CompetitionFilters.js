@@ -83,7 +83,7 @@ const filterReducer = (state, action) => (
 function CompetitionFilters() {
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
-  const [shouldShowCancelled, setShouldShowCancelled] = useState(false);
+  const [shouldIncludeCancelled, setShouldIncludeCancelled] = useState(false);
   const [displayMode, setDisplayMode] = useState('list');
   const [competitionData, setCompetitionData] = useState([]);
 
