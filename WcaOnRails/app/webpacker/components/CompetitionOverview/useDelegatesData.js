@@ -28,7 +28,7 @@ const useDelegatesData = () => {
     }
   }, [data, hasNextPage, fetchNextPage]);
 
-  const delegatesData = data?.pages?.flatMap((page) => page.data);
+  const delegatesData = data?.pages.flatMap((page) => page.data);
 
   return delegatesData;
 };

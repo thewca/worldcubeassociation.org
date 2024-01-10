@@ -1,5 +1,5 @@
 import React, {
-  useState, useEffect, useReducer, useMemo,
+  useEffect, useReducer, useMemo,
 } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -16,7 +16,6 @@ import { filterReducer, filterInitialState } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
 
 function CompetitionView() {
-  const [competitionData, setCompetitionData] = useState([]);
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
   const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
 
@@ -29,7 +28,7 @@ function CompetitionView() {
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
       const searchParams = createSearchParams(filterState, pageParam);
-      return fetchJsonOrError(`${competitionsApiUrl}?${searchParams.toString()}`);
+      return fetchJsonOrError(`${competitionsApiUrl}?${searchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,
@@ -40,15 +39,9 @@ function CompetitionView() {
       return allPages.length + 1;
     },
   });
+  const competitionData = rawCompetitionData?.pages.flatMap((page) => page.data);
 
-  useEffect(() => {
-    const flatData = rawCompetitionData?.pages
-      .map((page) => page.data)
-      .flat();
-    setCompetitionData(flatData);
-  }, [rawCompetitionData]);
-
-  const { ref, inView: bottomInView } = useInView();
+  const { ref: bottomRef, inView: bottomInView } = useInView();
   useEffect(() => {
     if (bottomInView) {
       competitionsFetchNextPage();
@@ -99,7 +92,7 @@ function CompetitionView() {
         </div>
       </Container>
 
-      {!competitionsIsFetching && hasMoreCompsToLoad && filterState.displayMode === 'list' && <div ref={ref} name="page-bottom" />}
+      {!competitionsIsFetching && hasMoreCompsToLoad && filterState.displayMode === 'list' && <div ref={bottomRef} name="page-bottom" />}
     </Container>
   );
 }
