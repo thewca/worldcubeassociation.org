@@ -10,8 +10,6 @@ function CompetitionList({
   competitionData,
   filterState,
   shouldShowRegStatus,
-  shouldIncludeCancelled,
-  selectedEvents,
   isLoading,
   hasMoreCompsToLoad,
 }) {
@@ -23,8 +21,8 @@ function CompetitionList({
             competitionData={competitionData?.filter((comp) => comp.inProgress)}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={shouldIncludeCancelled}
-            selectedEvents={selectedEvents}
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading
               && !competitionData?.filter((comp) => !comp.inProgress)}
             hasMoreCompsToLoad={hasMoreCompsToLoad
@@ -35,8 +33,8 @@ function CompetitionList({
             competitionData={competitionData?.filter((comp) => !comp.inProgress)}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={shouldIncludeCancelled}
-            selectedEvents={selectedEvents}
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
@@ -48,8 +46,8 @@ function CompetitionList({
           competitionData={competitionData}
           title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
           shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={shouldIncludeCancelled}
-          selectedEvents={selectedEvents}
+          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+          selectedEvents={filterState.selectedEvents}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
         />
@@ -60,8 +58,8 @@ function CompetitionList({
           competitionData={competitionData}
           title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
           shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={shouldIncludeCancelled}
-          selectedEvents={selectedEvents}
+          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+          selectedEvents={filterState.selectedEvents}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
         />
@@ -72,8 +70,8 @@ function CompetitionList({
           competitionData={competitionData}
           title={I18n.t('competitions.index.titles.by_announcement')}
           shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={shouldIncludeCancelled}
-          selectedEvents={selectedEvents}
+          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+          selectedEvents={filterState.selectedEvents}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
           isSortedByAnnouncement
@@ -85,8 +83,8 @@ function CompetitionList({
           competitionData={competitionData}
           title={I18n.t('competitions.index.titles.custom')}
           shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={shouldIncludeCancelled}
-          selectedEvents={selectedEvents}
+          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+          selectedEvents={filterState.selectedEvents}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
         />

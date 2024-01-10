@@ -78,8 +78,6 @@ function CompetitionView() {
                 competitionData={competitionData}
                 filterState={filterState}
                 shouldShowRegStatus={shouldShowRegStatus}
-                shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-                selectedEvents={filterState.selectedEvents}
                 isLoading={competitionsIsFetching}
                 hasMoreCompsToLoad={hasMoreCompsToLoad}
               />
