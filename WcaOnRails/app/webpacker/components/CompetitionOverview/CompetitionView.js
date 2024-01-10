@@ -82,7 +82,7 @@ const filterReducer = (state, action) => {
   }
 };
 
-function CompetitionFilters() {
+function CompetitionView() {
   const [competitionData, setCompetitionData] = useState([]);
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
   const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
@@ -442,4 +442,4 @@ function CompetitionFilters() {
   );
 }
 
-export default CompetitionFilters;
+export default CompetitionView;
