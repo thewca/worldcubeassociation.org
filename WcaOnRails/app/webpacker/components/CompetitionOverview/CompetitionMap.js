@@ -9,6 +9,9 @@ import { redMarker, blueMarker } from '../../lib/leaflet-wca/markers';
 import ResizeMapIFrame from '../../lib/utils/leaflet-iframe';
 import 'leaflet/dist/leaflet.css';
 
+// Limit number of markers on map, especially for "All Past Competitions"
+export const MAP_DISPLAY_LIMIT = 500;
+
 function CompetitionMap({
   competitionData,
   selectedEvents,
@@ -29,7 +32,7 @@ function CompetitionMap({
     >
       <ResizeMapIFrame />
       <TileLayer url={provider.url} attribution={provider.attribution} />
-      {competitions?.map((comp) => (
+      {competitions?.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
         <Marker
           key={comp.id}
           position={{ lat: comp.latitude_degrees, lng: comp.longitude_degrees }}

@@ -16,7 +16,7 @@ import {
 } from '../../lib/wca-data.js.erb';
 
 import CompetitionList from './CompetitionList';
-import CompetitionMap from './CompetitionMap';
+import CompetitionMap, { MAP_DISPLAY_LIMIT } from './CompetitionMap';
 import { filterReducer, filterInitialState } from './CompetitionFilters';
 import { calculateQueryKey, createSearchParams } from './QueryHelper';
 
@@ -24,9 +24,6 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 // Max number of competitions fetched per query
 const COMPETITIONS_API_PAGINATION = 25;
-
-// Limit number of markers on map, especially for "All Past Competitions"
-const MAP_DISPLAY_LIMIT = 500;
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
@@ -74,7 +71,6 @@ function CompetitionView() {
       if (previousPage.data.length < COMPETITIONS_API_PAGINATION) {
         return undefined;
       }
-
       return allPages.length + 1;
     },
   });
@@ -93,8 +89,8 @@ function CompetitionView() {
       competitionsFetchNextPage();
     }
   }, [bottomInView, competitionsFetchNextPage]);
+
   useEffect(() => {
-    // FIX: The limit may be surpassed if competitionData is already over the limit in list view
     if (hasMoreCompsToLoad && filterState.displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
       competitionsFetchNextPage();
     }
