@@ -9,7 +9,7 @@ import {
 import DatePicker from 'react-datepicker';
 
 import I18n from '../../lib/i18n';
-import { competitionsApiUrl, delegatesApiUrl } from '../../lib/requests/routes.js.erb';
+import { competitionsApiUrl, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import {
   events, continents, countries, competitionConstants,
@@ -19,14 +19,11 @@ import CompetitionList from './CompetitionList';
 import CompetitionMap, { MAP_DISPLAY_LIMIT } from './CompetitionMap';
 import { filterReducer, filterInitialState } from './CompetitionFilters';
 import { calculateQueryKey, createSearchParams } from './QueryHelper';
+import useDelegatesData from './useDelegatesData';
 
 import 'react-datepicker/dist/react-datepicker.css';
 
-// Max number of competitions fetched per query
-const COMPETITIONS_API_PAGINATION = 25;
-
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
-
 const PAST_YEARS_WITH_COMPETITIONS = [];
 for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
   PAST_YEARS_WITH_COMPETITIONS.push(year);
@@ -68,7 +65,7 @@ function CompetitionView() {
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,
       // which indicates the very last page.
-      if (previousPage.data.length < COMPETITIONS_API_PAGINATION) {
+      if (previousPage.data.length < WCA_API_PAGINATION) {
         return undefined;
       }
       return allPages.length + 1;
@@ -79,7 +76,6 @@ function CompetitionView() {
     const flatData = rawCompetitionData?.pages
       .map((page) => page.data)
       .flat();
-
     setCompetitionData(flatData);
   }, [rawCompetitionData]);
 
@@ -97,34 +93,6 @@ function CompetitionView() {
   }, [rawCompetitionData, filterState.displayMode, hasMoreCompsToLoad, competitionData,
     competitionsFetchNextPage]);
 
-  const [delegatesInfo, setDelegatesInfo] = useState([]);
-  const {
-    data: delegatesData,
-    fetchNextPage: delegateFetchNextPage,
-    hasNextPage: delegateHasNextPage,
-  } = useInfiniteQuery({
-    queryKey: ['delegates'],
-    queryFn: ({ pageParam = 1 }) => fetchJsonOrError(`${delegatesApiUrl}?page=${pageParam}`),
-    getNextPageParam: (lastPage, allPages) => {
-      // Assuming the last page has less than the max number of competitions fetched per query
-      if (lastPage.data.length < COMPETITIONS_API_PAGINATION) {
-        return undefined;
-      }
-
-      return allPages.length + 1;
-    },
-  });
-  useEffect(() => {
-    const flatData = delegatesData?.pages
-      .map((page) => page.data)
-      .flatMap((delegate) => delegate);
-    setDelegatesInfo(flatData);
-
-    if (delegateHasNextPage) {
-      delegateFetchNextPage();
-    }
-  }, [delegatesData, delegateHasNextPage, delegateFetchNextPage]);
-
   const customTimeSelectionButton = (
     <Button
       primary
@@ -137,6 +105,8 @@ function CompetitionView() {
       <span className="caption">{I18n.t('competitions.index.custom')}</span>
     </Button>
   );
+
+  const delegatesData = useDelegatesData();
 
   return (
     <Container>
@@ -208,7 +178,7 @@ function CompetitionView() {
               selection
               defaultValue="None"
               style={{ textAlign: 'center' }}
-              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesInfo?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
+              options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesData?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
                 {
                   key: delegate.id,
                   text: `${delegate.name} (${delegate.wca_id})`,
