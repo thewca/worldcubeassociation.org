@@ -13,7 +13,6 @@ export const filterInitialState = {
   selectedEvents: [],
   shouldShowRegStatus: false,
   shouldIncludeCancelled: false,
-  displayMode: 'list',
 };
 
 export const filterReducer = (state, action) => {

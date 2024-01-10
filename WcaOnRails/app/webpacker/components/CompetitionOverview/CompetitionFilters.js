@@ -19,7 +19,9 @@ for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
 }
 PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
-function CompetitionFilters({ filterState, dispatchFilter }) {
+function CompetitionFilters({
+  filterState, dispatchFilter, displayMode, setDisplayMode,
+}) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
       <Form.Field>
@@ -56,8 +58,8 @@ function CompetitionFilters({ filterState, dispatchFilter }) {
 
       <Form.Group>
         <ToggleListOrMapDisplay
-          displayMode={filterState.displayMode}
-          dispatchFilter={dispatchFilter}
+          displayMode={displayMode}
+          setDisplayMode={setDisplayMode}
         />
       </Form.Group>
     </Form>
@@ -347,14 +349,14 @@ function CompDisplayCheckboxes({ filterState, dispatchFilter }) {
   );
 }
 
-function ToggleListOrMapDisplay({ displayMode, dispatchFilter }) {
+function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   return (
     <Button.Group toggle fluid id="display">
-      <Button name="display" id="display-list" active={displayMode === 'list'} onClick={() => dispatchFilter({ displayMode: 'list' })}>
+      <Button name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
         <Icon className="icon list ul " />
         {` ${I18n.t('competitions.index.list')} `}
       </Button>
-      <Button name="display" id="display-map" active={displayMode === 'map'} onClick={() => dispatchFilter({ displayMode: 'map' })}>
+      <Button name="display" id="display-map" active={displayMode === 'map'} onClick={() => setDisplayMode('map')}>
         <Icon className="icon map marker alternate " />
         {` ${I18n.t('competitions.index.map')} `}
       </Button>

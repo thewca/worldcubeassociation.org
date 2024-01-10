@@ -1,5 +1,5 @@
 import React, {
-  useEffect, useReducer, useMemo,
+  useEffect, useReducer, useMemo, useState,
 } from 'react';
 import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
@@ -17,6 +17,7 @@ import { calculateQueryKey, createSearchParams } from './queryUtils';
 
 function CompetitionView() {
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
+  const [displayMode, setDisplayMode] = useState('list');
   const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
 
   const {
@@ -49,21 +50,26 @@ function CompetitionView() {
   }, [bottomInView, competitionsFetchNextPage]);
 
   useEffect(() => {
-    if (hasMoreCompsToLoad && filterState.displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
+    if (hasMoreCompsToLoad && displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
       competitionsFetchNextPage();
     }
-  }, [rawCompetitionData, filterState.displayMode, hasMoreCompsToLoad, competitionData,
+  }, [rawCompetitionData, displayMode, hasMoreCompsToLoad, competitionData,
     competitionsFetchNextPage]);
 
   return (
     <Container>
       <h2>{I18n.t('competitions.index.title')}</h2>
-      <CompetitionFilters filterState={filterState} dispatchFilter={dispatchFilter} />
+      <CompetitionFilters
+        filterState={filterState}
+        dispatchFilter={dispatchFilter}
+        displayMode={displayMode}
+        setDisplayMode={setDisplayMode}
+      />
 
       <Container id="search-results" className="row competitions-list">
         <div id="competitions-list">
           {
-            filterState.displayMode === 'list'
+            displayMode === 'list'
             && (
               <CompetitionList
                 competitionData={competitionData}
@@ -80,7 +86,7 @@ function CompetitionView() {
         {/* Old JS code does a lot of things to id=comeptitions-map, to be included? */}
         <div name="competitions-map">
           {
-            filterState.displayMode === 'map'
+            displayMode === 'map'
             && (
               <CompetitionMap
                 competitionData={competitionData}
@@ -92,7 +98,7 @@ function CompetitionView() {
         </div>
       </Container>
 
-      {!competitionsIsFetching && hasMoreCompsToLoad && filterState.displayMode === 'list' && <div ref={bottomRef} name="page-bottom" />}
+      {!competitionsIsFetching && hasMoreCompsToLoad && displayMode === 'list' && <div ref={bottomRef} name="page-bottom" />}
     </Container>
   );
 }
