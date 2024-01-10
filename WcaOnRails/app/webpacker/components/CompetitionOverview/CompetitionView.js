@@ -17,7 +17,7 @@ import {
 
 import CompetitionList from './CompetitionList';
 import CompetitionMap, { MAP_DISPLAY_LIMIT } from './CompetitionMap';
-import { filterReducer, filterInitialState } from './CompetitionFilters';
+import { filterReducer, filterInitialState } from './ManageFilterState';
 import { calculateQueryKey, createSearchParams } from './QueryHelper';
 import useDelegatesData from './useDelegatesData';
 
