@@ -13,7 +13,7 @@ import CompetitionFilters from './CompetitionFilters';
 import CompetitionList from './CompetitionList';
 import CompetitionMap, { MAP_DISPLAY_LIMIT } from './CompetitionMap';
 import { filterReducer, filterInitialState } from './filterUtils';
-import { calculateQueryKey, createSearchParams } from './QueryHelper';
+import { calculateQueryKey, createSearchParams } from './queryUtils';
 
 function CompetitionView() {
   const [competitionData, setCompetitionData] = useState([]);
