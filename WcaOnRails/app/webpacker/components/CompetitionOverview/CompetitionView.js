@@ -18,6 +18,7 @@ import { calculateQueryKey, createSearchParams } from './queryUtils';
 function CompetitionView() {
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
   const [displayMode, setDisplayMode] = useState('list');
+  const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
 
   const {
@@ -64,6 +65,8 @@ function CompetitionView() {
         dispatchFilter={dispatchFilter}
         displayMode={displayMode}
         setDisplayMode={setDisplayMode}
+        shouldShowRegStatus={shouldShowRegStatus}
+        setShouldShowRegStatus={setShouldShowRegStatus}
       />
 
       <Container id="search-results" className="row competitions-list">
@@ -74,7 +77,7 @@ function CompetitionView() {
               <CompetitionList
                 competitionData={competitionData}
                 filterState={filterState}
-                shouldShowRegStatus={filterState.shouldShowRegStatus}
+                shouldShowRegStatus={shouldShowRegStatus}
                 shouldIncludeCancelled={filterState.shouldIncludeCancelled}
                 selectedEvents={filterState.selectedEvents}
                 isLoading={competitionsIsFetching}

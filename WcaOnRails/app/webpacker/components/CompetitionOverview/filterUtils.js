@@ -11,7 +11,6 @@ export const filterInitialState = {
   delegate: '',
   search: '',
   selectedEvents: [],
-  shouldShowRegStatus: false,
   shouldIncludeCancelled: false,
 };
 

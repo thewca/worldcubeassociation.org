@@ -20,7 +20,12 @@ for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
 PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
 function CompetitionFilters({
-  filterState, dispatchFilter, displayMode, setDisplayMode,
+  filterState,
+  dispatchFilter,
+  displayMode,
+  setDisplayMode,
+  shouldShowRegStatus,
+  setShouldShowRegStatus,
 }) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
@@ -53,7 +58,12 @@ function CompetitionFilters({
       </Form.Group>
 
       <Form.Group inline>
-        <CompDisplayCheckboxes filterState={filterState} dispatchFilter={dispatchFilter} />
+        <CompDisplayCheckboxes
+          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+          dispatchFilter={dispatchFilter}
+          shouldShowRegStatus={shouldShowRegStatus}
+          setShouldShowRegStatus={setShouldShowRegStatus}
+        />
       </Form.Group>
 
       <Form.Group>
@@ -321,7 +331,9 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
   );
 }
 
-function CompDisplayCheckboxes({ filterState, dispatchFilter }) {
+function CompDisplayCheckboxes({
+  shouldIncludeCancelled, dispatchFilter, shouldShowRegStatus, setShouldShowRegStatus,
+}) {
   return (
     <>
       <div id="registration-status" className="registration-status-selector">
@@ -329,9 +341,7 @@ function CompDisplayCheckboxes({ filterState, dispatchFilter }) {
           label={I18n.t('competitions.index.show_registration_status')}
           name="show_registration_status"
           id="show_registration_status"
-          onChange={() => dispatchFilter(
-            { shouldShowRegStatus: !filterState.shouldShowRegStatus },
-          )}
+          onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
         />
       </div>
 
@@ -341,7 +351,7 @@ function CompDisplayCheckboxes({ filterState, dispatchFilter }) {
           name="show_cancelled"
           id="show_cancelled"
           onChange={() => dispatchFilter(
-            { shouldIncludeCancelled: !filterState.shouldIncludeCancelled },
+            { shouldIncludeCancelled: !shouldIncludeCancelled },
           )}
         />
       </div>
