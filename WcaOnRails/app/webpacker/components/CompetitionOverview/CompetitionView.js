@@ -12,7 +12,7 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import CompetitionFilters from './CompetitionFilters';
 import CompetitionList from './CompetitionList';
 import CompetitionMap, { MAP_DISPLAY_LIMIT } from './CompetitionMap';
-import { filterReducer, filterInitialState } from './ManageFilterState';
+import { filterReducer, filterInitialState } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './QueryHelper';
 
 function CompetitionView() {
