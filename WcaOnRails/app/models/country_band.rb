@@ -28,9 +28,10 @@ class CountryBand < ApplicationRecord
   PERCENT_REGISTRATION_FEE_USED_FOR_DUE_AMOUNT = 0.15
 
   def self.percent_registration_fee_used_for_due_amount(country_band)
-    if country_band.present? && country_band >= 3
+    return 0 if country_band.nil?
+    if country_band >= 3
       0.15
-    elsif country_band.present? && country_band >= 1
+    elsif country_band >= 1
       0.05
     else
       0.00
