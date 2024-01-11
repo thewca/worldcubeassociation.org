@@ -220,8 +220,8 @@ const reducers = {
       wcifSchedule: {
         ...state.wcifSchedule,
         venues,
-     },
-   }
+      },
+    };
   },
 
   [ReorderRoom]: (state, { payload }) => ({
@@ -243,7 +243,7 @@ const reducers = {
         return {
           ...venue,
           rooms,
-        }
+        };
       }),
     },
   }),
