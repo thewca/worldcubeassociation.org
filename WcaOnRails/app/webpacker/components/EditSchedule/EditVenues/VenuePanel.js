@@ -14,7 +14,7 @@ import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { addRoom, editVenue, removeVenue } from '../store/actions';
+import { addRoom, editVenue, removeVenue, reorderRoom } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 
 const countryOptions = countries.real.map((country) => ({
@@ -134,10 +134,11 @@ function VenuePanel({
         </Card.Header>
         <Card.Description>
           <Card.Group itemsPerRow={2}>
-            {venue.rooms.map((room) => (
+            {venue.rooms.map((room, index) => (
               <RoomPanel
                 key={room.id}
                 room={room}
+                sendToFront={index > 0 ? () => dispatch(reorderRoom(venue.id, index, 0)) : undefined}
               />
             ))}
           </Card.Group>

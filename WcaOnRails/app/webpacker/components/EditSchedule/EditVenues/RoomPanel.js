@@ -11,6 +11,7 @@ import { editRoom, removeRoom } from '../store/actions';
 
 function RoomPanel({
   room,
+  sendToFront,
 }) {
   const dispatch = useDispatch();
 
@@ -30,6 +31,12 @@ function RoomPanel({
     <Card fluid raised>
       <Card.Content>
         <Card.Header>
+          {sendToFront && (
+            <Button floated="left" compact icon labelPosition="left" onClick={sendToFront}>
+              <Icon name="up arrow" />
+              To front
+            </Button>
+          )}
           <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteRoom}>
             <Icon name="trash" />
             Remove
