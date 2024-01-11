@@ -7,55 +7,30 @@
     <% if @past_selected %>
       <div class="col-md-12" id="past-comps">
         <% table_title = year_is_a_number?(params[:year]) ? t('competitions.index.titles.past', year: params[:year]) : t('competitions.index.titles.past_all') %>
-        <%= react_component("CompetitionOverview/CompetitionTable", {
-          competitions: competitions,
-          title: table_title,
-          showRegistrationStatus: @show_registration_status,
-        }) %>
+        <%= render 'index_table', competitions: competitions, title: table_title %>
       </div>
     <% elsif @recent_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= react_component("CompetitionOverview/CompetitionTable", {
-          competitions: competitions,
-          title: t('competitions.index.titles.recent', count: Competition::RECENT_DAYS),
-          showRegistrationStatus: @show_registration_status,
-        }) %>
+        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.recent', count: Competition::RECENT_DAYS) %>
       </div>
     <% elsif @by_announcement_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= react_component("CompetitionOverview/CompetitionTable", {
-          competitions: competitions,
-          title: t('competitions.index.titles.by_announcement'),
-          showRegistrationStatus: @show_registration_status,
-          sortByAnnouncement: true,
-        }) %>
+        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.by_announcement') %>
       </div>
     <% elsif @custom_selected %>
       <div class="col-md-12" id="past-comps">
-        <%= react_component("CompetitionOverview/CompetitionTable", {
-          competitions: competitions,
-          title: t('competitions.index.titles.custom'),
-          showRegistrationStatus: @show_registration_status,
-        }) %>
+        <%= render 'index_table', competitions: competitions, title: t('competitions.index.titles.custom') %>
       </div>
     <% else %>
       <% in_progress_competitions, upcoming_competitions = competitions.partition(&:in_progress?) %>
       <% unless in_progress_competitions.empty? %>
         <div class="col-md-12" id="in-progress-comps">
-          <%= react_component("CompetitionOverview/CompetitionTable", {
-            competitions: in_progress_competitions,
-            title: t('competitions.index.titles.in_progress'),
-            showRegistrationStatus: @show_registration_status,
-          }) %>
+          <%= render 'index_table', competitions: in_progress_competitions, title: t('competitions.index.titles.in_progress') %>
         </div>
       <% end %>
       <% unless upcoming_competitions.empty? %>
         <div class="col-md-12" id="upcoming-comps">
-          <%= react_component("CompetitionOverview/CompetitionTable", {
-            competitions: upcoming_competitions,
-            title: t('competitions.index.titles.upcoming'),
-            showRegistrationStatus: @show_registration_status,
-          }) %>
+          <%= render 'index_table', competitions: upcoming_competitions, title: t('competitions.index.titles.upcoming') %>
         </div>
       <% end %>
     <% end %>
