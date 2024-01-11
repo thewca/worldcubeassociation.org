@@ -176,7 +176,7 @@ export const addRoom = (venueId) => ({
  * @returns {Action}
  */
 export const reorderVenue = (from, to) => ({
-  type: ReorderVenues,
+  type: ReorderVenue,
   payload: {
     from,
     to,
@@ -191,7 +191,7 @@ export const reorderVenue = (from, to) => ({
  * @returns {Action}
  */
 export const reorderRoom = (venueId, from, to) => ({
-  type: ReorderRooms,
+  type: ReorderRoom,
   payload: {
     venueId,
     from,
