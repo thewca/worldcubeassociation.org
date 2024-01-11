@@ -1340,7 +1340,7 @@ class User < ApplicationRecord
   end
 
   def can_access_panel?
-    can_access_wfc_panel? || can_access_wrt_panel? || can_access_board_panel? || can_access_senior_delegate_panel? || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
+    can_access_wfc_panel? || can_access_wrt_panel? || can_access_wst_panel? || can_access_board_panel? || can_access_senior_delegate_panel? || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
   end
 
   def subordinate_delegates
