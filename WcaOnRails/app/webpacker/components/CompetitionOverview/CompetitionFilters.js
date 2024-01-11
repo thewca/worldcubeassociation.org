@@ -2,6 +2,7 @@ import React from 'react';
 import {
   Button, Icon, Form, Dropdown, Popup, List, Input, Header,
 } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -14,7 +15,7 @@ import useDelegatesData from './useDelegatesData';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 const PAST_YEARS_WITH_COMPETITIONS = [];
-for (let year = new Date().getFullYear(); year >= 2003; year -= 1) {
+for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
   PAST_YEARS_WITH_COMPETITIONS.push(year);
 }
 PAST_YEARS_WITH_COMPETITIONS.push(1982);

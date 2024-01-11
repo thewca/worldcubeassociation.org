@@ -1,23 +1,15 @@
 import React from 'react';
+import { DateTime } from 'luxon';
 
-export function calculateDayDifference(startDateString, endDateString, mode) {
-  const dateToday = new Date();
-  const startDate = new Date(startDateString);
-  const endDate = new Date(endDateString);
-  const msInADay = 1000 * 3600 * 24;
+export function dayDifferenceFromToday(yyyymmddDateString) {
+  const dateLuxon = DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
+  const exactDaysDiff = dateLuxon.diffNow('days').days;
 
-  if (mode === 'future') {
-    const msDifference = startDate.getTime() - dateToday.getTime();
-    const dayDifference = Math.ceil(msDifference / msInADay);
-    return dayDifference;
-  }
-  if (mode === 'past') {
-    const msDifference = dateToday.getTime() - endDate.getTime();
-    const dayDifference = Math.floor(msDifference / msInADay);
-    return dayDifference;
+  if (dateLuxon > DateTime.now()) {
+    return Math.ceil(exactDaysDiff);
   }
 
-  return -1;
+  return Math.floor(exactDaysDiff * -1);
 }
 
 // Currently, the venue attribute of a competition object can be written as markdown,

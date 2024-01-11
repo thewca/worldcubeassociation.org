@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
-import { calculateDayDifference, PseudoLinkMarkdown } from '../../lib/utils/competition-table';
+import { dayDifferenceFromToday, PseudoLinkMarkdown } from '../../lib/utils/competition-table';
 
 function CompetitionTable({
   competitionData,
@@ -105,7 +105,7 @@ function RegistrationStatus({ comp }) {
     return (
       <Popup
         trigger={<Icon className="user times red" />}
-        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'future') }) })}
+        content={I18n.t('competitions.index.tooltips.registration.closed', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) })}
         position="top center"
         size="tiny"
       />
@@ -141,7 +141,7 @@ function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.posted');
       iconClass = 'check circle result-posted-indicator';
     } else {
-      tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'past') }) });
+      tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.end_date) }) });
       iconClass = 'hourglass end';
     }
   } else if (comp.inProgress) {
@@ -153,7 +153,7 @@ function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
   } else if (shouldShowRegStatus) {
     return <RegistrationStatus comp={comp} />;
   } else {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: calculateDayDifference(comp.start_date, comp.end_date, 'future') }) });
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });
     iconClass = 'hourglass start';
   }
 

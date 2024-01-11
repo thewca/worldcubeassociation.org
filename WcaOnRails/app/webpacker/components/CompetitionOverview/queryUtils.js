@@ -1,3 +1,5 @@
+import { DateTime } from 'luxon';
+
 const isContinent = (region) => region[0] === '_';
 
 export function calculateQueryKey(filterState) {
@@ -22,7 +24,7 @@ export function createSearchParams(filterState, pageParam) {
     region, delegate, search, timeOrder, selectedYear, customStartDate, customEndDate,
   } = filterState;
 
-  const dateNow = new Date();
+  const dateNow = DateTime.now();
   const searchParams = new URLSearchParams({});
 
   if (region && region !== 'all_regions') {
@@ -38,34 +40,36 @@ export function createSearchParams(filterState, pageParam) {
 
   if (timeOrder === 'present') {
     searchParams.append('sort', 'start_date,end_date,name');
-    searchParams.append('ongoing_and_future', dateNow.toISOString().split('T')[0]);
+    searchParams.append('ongoing_and_future', dateNow.toFormat('yyyy-MM-dd'));
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'recent') {
-    const thirtyDaysAgo = new Date();
-    thirtyDaysAgo.setDate(dateNow.getDate() - 30);
+    const thirtyDaysAgo = dateNow.minus({ days: 30 });
 
     searchParams.append('sort', '-end_date,-start_date,name');
-    searchParams.append('start', thirtyDaysAgo.toISOString().split('T')[0]);
-    searchParams.append('end', dateNow.toISOString().split('T')[0]);
+    searchParams.append('start', thirtyDaysAgo.toFormat('yyyy-MM-dd'));
+    searchParams.append('end', dateNow.toFormat('yyyy-MM-dd'));
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'past') {
     if (selectedYear === 'all_years') {
       searchParams.append('sort', '-end_date,-start_date,name');
-      searchParams.append('end', dateNow.toISOString().split('T')[0]);
+      searchParams.append('end', dateNow.toFormat('yyyy-MM-dd'));
       searchParams.append('page', pageParam);
     } else {
       searchParams.append('sort', '-end_date,-start_date,name');
       searchParams.append('start', `${selectedYear}-1-1`);
-      searchParams.append('end', dateNow.getFullYear() === selectedYear ? dateNow.toISOString().split('T')[0] : `${selectedYear}-12-31`);
+      searchParams.append('end', dateNow.year === selectedYear ? dateNow.toFormat('yyyy-MM-dd') : `${selectedYear}-12-31`);
       searchParams.append('page', pageParam);
     }
   } else if (timeOrder === 'by_announcement') {
     searchParams.append('sort', '-announced_at,name');
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'custom') {
+    const startLuxon = DateTime.fromJSDate(customStartDate);
+    const endLuxon = DateTime.fromJSDate(customEndDate);
+
     searchParams.append('sort', 'start_date,end_date,name');
-    searchParams.append('start', customStartDate?.toISOString().split('T')[0] || '');
-    searchParams.append('end', customEndDate?.toISOString().split('T')[0] || '');
+    searchParams.append('start', startLuxon.isValid ? startLuxon.toFormat('yyyy-MM-dd') : '');
+    searchParams.append('end', endLuxon.isValid ? endLuxon.toFormat('yyyy-MM-dd') : '');
     searchParams.append('page', pageParam);
   }
 
