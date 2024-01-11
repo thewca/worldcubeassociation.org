@@ -2,6 +2,10 @@
 
 module Microservices
   module Registrations
+    # TODO: Create draft PR
+    # TODO: Update list endpoint to put registrations in a `registrations` key
+    # TODO: Create new internal routes in wca-registration
+    # TODO: Eliminate my unnecessary/redundant routes
     # Because these routes don't live in the monolith anymore we need some helper functions
     def self.competition_register_path(competition_id, stripe_status = nil)
       "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/register?&stripe_status=#{stripe_status}"
@@ -15,7 +19,15 @@ module Microservices
       "/api/internal/v1/update_payment"
     end
 
-    def self.registrations_path(competition_id)
+    # def self.registrations_path(competition_id)
+    #   "/api/v1/registrations/#{competition_id}"
+    # end
+
+    def self.internal_get_registrations_path
+      "/api/internal/v1/registrations"
+    end
+
+    def self.external_get_registrations_path(competition_id)
       "/api/v1/registrations/#{competition_id}"
     end
 
@@ -59,12 +71,27 @@ module Microservices
       response.body
     end
 
-    def self.get_registrations(competition_id)
-      response = self.registration_connection.get(self.registrations_path(competition_id))
+    # def self.get_registrations(competition_id)
+    #   response = self.registration_connection.get(self.registrations_path(competition_id))
+    #   body = JSON.parse(response.body)
+    #   body['registrations']
+    # end
+
+    def self.get_all_registrations(competition_id)
+      puts competition_id
+      response = self.registration_connection.post(self.internal_get_registrations_path) do |req|
+        req.body = { competition_id: competition_id }
+      end
       body = JSON.parse(response.body)
-      puts body
-      puts body.class
-      body
+      body['registrations']
+    end
+
+    def self.get_registrations_by_status(competition_id, status)
+      response = self.registration_connection.post(self.internal_get_registrations_path) do |req|
+        req.body = { competition_id: competition_id, status: status }
+      end
+      body = JSON.parse(response.body)
+      body['registrations']
     end
   end
 end

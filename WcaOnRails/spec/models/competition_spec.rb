@@ -4,19 +4,65 @@ require 'rails_helper'
 
 RSpec.describe Competition do
   describe '#registration_service_persons_wcif.unauthorized', focus: true do
-    it 'array length matches number of registrations' do
+    # TODO: Could refactor all this to be in a context
+    before do
       # Create a competition from factory
-      competition = FactoryBot.build(:competition, name: "Foo: Test - 2015", base_entry_fee_lowest_denomination: 10)
-      puts "competition id: #{competition.id}"
+      @competition = FactoryBot.create(:competition)
+
+      # Create users who will register
+      user1 = FactoryBot.create(:user_with_wca_id)
+      user2 = FactoryBot.create(:user_with_wca_id)
+      user3 = FactoryBot.create(:user_with_wca_id)
+
+      @non_competing_user_id = user3.id
 
       # Set up a mocked registration endpoint for that comp
-      registrations = FactoryBot.build(:registrations_request)
-      # TODO: Refactor URL to shared constant/env variable
-      stub_request(:get, "#{EnvConfig.WCA_REGISTRATIONS_URL}/api/v1/registrations/#{competition.id}")
+      registrations = FactoryBot.build(:registrations_request, :includes_non_competing, user_ids: [user1.id, user2.id, @non_competing_user_id])
+      stub_request(:post, "#{EnvConfig.WCA_REGISTRATIONS_URL}/api/internal/v1/registrations")
         .to_return(status: 200, body: registrations.to_json)
 
-      expect(competition.registration_service_persons_wcif['registrations'].length).to eq(1)
+      @registrations_wcif = @competition.registration_service_persons_wcif
     end
+
+    it 'array length matches number of registrations' do
+      expect(@registrations_wcif.length).to eq(3)
+    end
+
+    it 'each person wcif has a registration key' do
+      # expect(true).to eq(false)
+      # registrations_wcif = @competition.registration_service_persons_wcif
+      @registrations_wcif.each do |reg|
+        puts reg.inspect
+        puts reg.key?('registration')
+        expect(reg.key?('registration')).to eq(true)
+      end
+    end
+
+    # it 'fields from monolith are included' do
+    #   expect(true).to eq(false)
+    # end
+
+    it 'isCompeting is false for non-competitor' do
+      # registrations_wcif = @competition.registration_service_persons_wcif
+      @registrations_wcif.each do |reg|
+        expect(reg['isCompeting']).to eq(false) if reg['user_id'] == @non_competing_user_id
+      end
+    end
+
+    it 'has the correct base-level keys' do
+      expected_keys = ['name', 'wcaUserId', 'wcaId', 'registrantId', 'gender']
+
+      expected_keys.each do |key|
+        puts key
+        expect(@registrations_wcif[0].key?(key)).to eq(true)
+      end
+    end
+
+    # it 'has the correct array keys' do
+    # end
+
+    # it 'presents data appropriately for users with no WCA account' do
+    # end
   end
 
   it "defines a valid competition" do

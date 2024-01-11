@@ -56,7 +56,7 @@ class TeamMember < ApplicationRecord
   DEFAULT_SERIALIZE_OPTIONS = {
     methods: %w[friendly_id leader name senior_member wca_id],
     only: %w[id],
-    include: %w[avatar],
+    # include: %w[avatar],
   }.freeze
 
   def serializable_hash(options = nil)

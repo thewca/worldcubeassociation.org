@@ -340,16 +340,16 @@ class User < ApplicationRecord
     }.freeze,
   }.freeze
 
-  mount_uploader :pending_avatar, PendingAvatarUploader
-  crop_uploaded :pending_avatar
-  validates :pending_avatar, AVATAR_PARAMETERS
+  # mount_uploader :pending_avatar, PendingAvatarUploader
+  # crop_uploaded :pending_avatar
+  # validates :pending_avatar, AVATAR_PARAMETERS
 
-  mount_uploader :avatar, AvatarUploader
-  # Don't delete avatar when this model is destroyed. User models should almost never be
-  # destroyed, except when we're deleting dummy accounts.
-  skip_callback :commit, :after, :remove_avatar!
-  crop_uploaded :avatar
-  validates :avatar, AVATAR_PARAMETERS
+  # mount_uploader :avatar, AvatarUploader
+  # # Don't delete avatar when this model is destroyed. User models should almost never be
+  # # destroyed, except when we're deleting dummy accounts.
+  # skip_callback :commit, :after, :remove_avatar!
+  # crop_uploaded :avatar
+  # validates :avatar, AVATAR_PARAMETERS
 
   def old_avatar_files
     # CarrierWave doesn't have a general "list uploaded files" feature
@@ -370,7 +370,7 @@ class User < ApplicationRecord
     end
   end
 
-  before_save :stash_rejected_avatar
+  # before_save :stash_rejected_avatar
   def stash_rejected_avatar
     if ActiveRecord::Type::Boolean.new.cast(remove_pending_avatar) && pending_avatar_was
       # hijacking internal S3 storage engine, see method `old_avatar_files` above
@@ -383,7 +383,7 @@ class User < ApplicationRecord
     end
   end
 
-  before_validation :maybe_save_crop_coordinates
+  # before_validation :maybe_save_crop_coordinates
   def maybe_save_crop_coordinates
     self.saved_avatar_crop_x = avatar_crop_x if avatar_crop_x
     self.saved_avatar_crop_y = avatar_crop_y if avatar_crop_y
@@ -396,7 +396,7 @@ class User < ApplicationRecord
     self.saved_pending_avatar_crop_h = pending_avatar_crop_h if pending_avatar_crop_h
   end
 
-  before_validation :maybe_clear_crop_coordinates
+  # before_validation :maybe_clear_crop_coordinates
   def maybe_clear_crop_coordinates
     if ActiveRecord::Type::Boolean.new.cast(remove_avatar)
       self.saved_avatar_crop_x = nil
@@ -931,7 +931,7 @@ class User < ApplicationRecord
     end
     fields += editable_personal_preference_fields(user)
     fields += editable_competitor_info_fields(user)
-    fields += editable_avatar_fields(user)
+    # fields += editable_avatar_fields(user)
     # Delegate Status Fields
     if admin? || board_member? || senior_delegate?
       fields += %i(delegate_status region_id location)
@@ -985,7 +985,7 @@ class User < ApplicationRecord
     if user == self || admin? || results_team? || is_senior_delegate_for?(user)
       fields += %i(
         pending_avatar pending_avatar_cache remove_pending_avatar
-        avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
+        # avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
         pending_avatar_crop_x pending_avatar_crop_y pending_avatar_crop_w pending_avatar_crop_h
         remove_avatar
       )

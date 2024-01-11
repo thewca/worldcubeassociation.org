@@ -30,6 +30,10 @@ FactoryBot.define do
       starts { Time.now }
     end
 
+    trait :mock_primary_key do
+      id { 'FooComp2015' }
+    end
+
     trait :past do
       starts { 1.week.ago }
       registration_close { 2.weeks.ago.change(usec: 0) }

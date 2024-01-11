@@ -1646,6 +1646,17 @@ class Competition < ApplicationRecord
     competition_series&.competition_ids || []
   end
 
+  def persons_wcif_associations
+    [
+      :events,
+      { assignments: [:schedule_activity] },
+      { user: {
+        person: [:ranksSingle, :ranksAverage],
+      } },
+      :wcif_extensions,
+    ]
+  end
+
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
@@ -1675,7 +1686,39 @@ class Competition < ApplicationRecord
 
   def registration_service_persons_wcif(authorized: false)
     # Request registrations for competition
-    registrations = Microservices::Registrations.get_registrations(id)
+    registrations = Microservices::Registrations.get_all_registrations(id)
+
+    # TODO: REMOVE
+    puts "registrations return object class: #{registrations.class}"
+    puts registrations
+
+    attendee_user_ids = []
+    registration_details_for_wcif = []
+    # Transform registrations to have user_id as key
+    registrations.each do |reg|
+      attendee_user_ids << reg['user_id']
+      registration_details_for_wcif << {
+        'registration' =>
+          {
+            'wcaRegistrationId' => reg['attendee_id'],
+            'eventIds' => reg.dig('competing', 'event_ids'),
+            'status' => reg.dig('competing', 'registration_status'),
+            'isCompeting' => reg.key?('competing'),
+          },
+      }
+    end
+
+    # users = User.find(attendee_user_ids)
+    byebug
+
+    # TODO: REMOVE
+    registration_details_for_wcif.each do |reg|
+      puts reg.inspect
+    end
+
+    # Build the list of registration details that go in the wcif
+
+    registration_details_for_wcif
   end
 
   def events_wcif
