@@ -10,9 +10,9 @@ import {
   RemoveActivity,
   RemoveRoom,
   RemoveVenue,
+  ReorderRoom,
+  ReorderVenue,
   ScaleActivity,
-  reorderRoom,
-  reorderVenue,
 } from './actions';
 import {
   nextActivityId, nextRoomId, nextVenueId,
@@ -206,7 +206,7 @@ const reducers = {
     },
   }),
 
-  [reorderVenue]: (state, { payload }) => {
+  [ReorderVenue]: (state, { payload }) => {
     const { from, to } = payload;
     const venues = [...state.wcifSchedule.venues];
 
@@ -224,7 +224,7 @@ const reducers = {
    }
   },
 
-  [reorderRoom]: (state, { payload }) => ({
+  [ReorderRoom]: (state, { payload }) => ({
     ...state,
     wcifSchedule: {
       ...state.wcifSchedule,
