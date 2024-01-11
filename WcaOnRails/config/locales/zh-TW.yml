@@ -336,6 +336,7 @@ zh-TW:
     #original_hash: 49d0140
     days:
       zero: 0天
+      one: 1天
       other: '%{count}天'
     #original_hash: 203e1b3
     these_events:

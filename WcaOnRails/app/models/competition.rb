@@ -910,6 +910,18 @@ class Competition < ApplicationRecord
     true
   end
 
+  def registration_status
+    if registration_not_yet_opened?
+      "not_yet_opened"
+    elsif registration_past?
+      "past"
+    elsif registration_full?
+      "full"
+    else
+      "open"
+    end
+  end
+
   def registration_opened?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
@@ -1561,12 +1573,30 @@ class Competition < ApplicationRecord
       competitions = Competition.visible
     end
 
+    if params[:continent].present?
+      continent = Continent.find(params[:continent])
+      if !continent
+        raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
+      end
+      competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
+                                 .where('continentId = ?', continent.id)
+    end
+
     if params[:country_iso2].present?
       country = Country.find_by_iso2(params[:country_iso2])
       if !country
         raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
       end
       competitions = competitions.where(countryId: country.id)
+    end
+
+    if params[:delegate].present?
+      delegate = User.find_by(wca_id: params[:delegate])
+      if !delegate
+        raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
+      end
+      competitions = competitions.left_outer_joins(:delegates)
+                                 .where('competition_delegates.delegate_id = ?', delegate.id)
     end
 
     if params[:start].present?
@@ -1585,6 +1615,14 @@ class Competition < ApplicationRecord
       competitions = competitions.where("end_date <= ?", end_date)
     end
 
+    if params[:ongoing_and_future].present?
+      target_date = Date.safe_parse(params[:ongoing_and_future])
+      if !target_date
+        raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
+      end
+      competitions = competitions.where("end_date >= ?", target_date)
+    end
+
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
       if !announced_date
@@ -1594,7 +1632,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| column + " LIKE :part" }.join(" OR ")
+      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1961,6 +1999,21 @@ class Competition < ApplicationRecord
     # we want to change the existing behavior of our API which returns a string.
     json.merge!(
       class: self.class.to_s.downcase,
+      displayName: display_name(short: true),
+      countryName: country&.name,
+      cityName: cityName,
+      year: start_date.year,
+      isProbablyOver: is_probably_over?,
+      cancelled: cancelled?,
+      resultsPosted: results_posted?,
+      inProgress: in_progress?,
+      dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
+      announcedDate: announced_at&.strftime(" %F %H:%M:%S"),
+      venue: venue,
+      url: url,
+      country_iso2: country_iso2&.downcase,
+      timeUntilRegistration: registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil,
+      registration_status: registration_status,
     )
   end
 
