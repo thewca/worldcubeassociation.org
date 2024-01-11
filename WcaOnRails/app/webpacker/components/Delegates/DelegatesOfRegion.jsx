@@ -116,11 +116,9 @@ export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
       : rolesOfGroup(activeRegion.id),
   );
 
-  const seniorDelegate = useMemo(
-    () => (isAllRegions
-      ? null
-      : delegates?.find((delegate) => delegate.metadata.status === 'senior_delegate')),
-    [delegates, isAllRegions],
+  const getSeniorDelegate = React.useCallback(
+    () => delegates?.find((delegate) => delegate.metadata.status === 'senior_delegate'),
+    [delegates],
   );
 
   if (loading) return <Loading />;
@@ -128,7 +126,7 @@ export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
 
   return (
     <>
-      {!isAllRegions && <SeniorDelegate seniorDelegate={seniorDelegate} />}
+      {!isAllRegions && <SeniorDelegate seniorDelegate={getSeniorDelegate()} />}
       <Grid.Row style={{ overflowX: 'scroll' }}>
         <DelegatesTable
           delegates={delegates}
