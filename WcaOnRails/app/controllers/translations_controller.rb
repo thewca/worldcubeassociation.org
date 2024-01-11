@@ -88,10 +88,9 @@ class TranslationsController < ApplicationController
   # rubocop:enable Style/NumericLiterals
 
   def self.translators_to_roles
-    roles = []
-    VERIFIED_TRANSLATORS_BY_LOCALE.each do |locale, user_ids|
-      user_ids.each do |user_id|
-        roles << {
+    VERIFIED_TRANSLATORS_BY_LOCALE.flat_map do |locale, user_ids|
+      user_ids.map do |user_id|
+        {
           end_date: nil,
           is_active: true,
           group: {
@@ -108,7 +107,6 @@ class TranslationsController < ApplicationController
         }
       end
     end
-    roles
   end
 
   private def pr_description_for(user, locale)

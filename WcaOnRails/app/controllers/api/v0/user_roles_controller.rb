@@ -180,10 +180,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = filter_roles_for_logged_in_user(roles)
 
     # Filter the list based on the other parameters.
+    status = params[:status]
+    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     roles = filter_roles_for_parameters(
       roles: roles,
-      status: params[:status],
-      is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
+      status: status,
+      is_active: is_active,
     )
 
     render json: roles
