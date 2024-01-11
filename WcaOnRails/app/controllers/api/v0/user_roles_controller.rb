@@ -8,17 +8,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
+  # The order in which the roles should be sorted.
+  STATUS_SORTING_ORDER = ['leader', 'senior_member', 'member'].freeze
+
   private def status_sort_rank(status)
-    case status
-    when 'leader'
-      1
-    when 'senior_member'
-      2
-    when 'member'
-      3
-    else
-      4
-    end
+    STATUS_SORTING_ORDER.find_index(status) || STATUS_SORTING_ORDER.length
   end
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -113,12 +107,18 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles
   end
 
+  private def group_id_of_old_system_to_group_type(group_id)
+    # group_id can be something like "teams_committees_1" or "delegate_regions_1", where 1 is the
+    # id of the group. This method will return "teams_committees" or "delegate_regions" respectively.
+    group_id.split("_").reverse.drop(1).reverse.join("_")
+  end
+
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def group_roles_not_yet_in_new_system(group_id)
     roles = []
     if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
-      group_type = group_id.split("_").reverse.drop(1).reverse.join("_")
+      group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:teams_committees]
         TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
@@ -260,7 +260,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
-      group_type = group_id.split("_").reverse.drop(1).reverse.join("_")
+      group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         status = params.require(:status)
@@ -322,7 +322,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # all roles are migrated to the new system.
       group_id = params.require(:groupId)
       status = params.require(:status)
-      group_type = id.split("_").reverse.drop(1).reverse.join("_")
+      group_type = group_id_of_old_system_to_group_type(id)
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         user_id = params.require(:userId)
@@ -359,7 +359,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       group_id = params.require(:groupId)
-      group_type = id.split("_").reverse.drop(1).reverse.join("_")
+      group_type = group_id_of_old_system_to_group_type(id)
       original_group_id = group_id.split("_").last
       if group_type == UserGroup.group_types[:councils]
         user_id = params.require(:userId)

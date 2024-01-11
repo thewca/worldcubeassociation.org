@@ -70,7 +70,7 @@ class TeamMember < ApplicationRecord
       start_date: start_date,
       is_active: current_member?,
       group: {
-        id: "teams_committees_" + team.id.to_s,
+        id: UserGroup.group_types[:teams_committees] + "_" + team.id.to_s,
         name: team.name,
         group_type: UserGroup.group_types[:teams_committees],
         is_hidden: team[:hidden],
