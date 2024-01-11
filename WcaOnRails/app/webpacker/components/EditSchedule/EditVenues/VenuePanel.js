@@ -27,6 +27,7 @@ const countryOptions = countries.real.map((country) => ({
 function VenuePanel({
   venue,
   countryZones,
+  sendToFront,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -78,6 +79,12 @@ function VenuePanel({
       </Container>
       <Card.Content>
         <Card.Header>
+          {sendToFront && (
+            <Button floated="left" compact icon labelPosition="left" onClick={sendToFront}>
+              <Icon name="up arrow" />
+              To front
+            </Button>
+          )}
           <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteVenue}>
             <Icon name="trash" />
             Remove

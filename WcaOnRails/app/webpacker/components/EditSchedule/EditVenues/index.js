@@ -8,7 +8,7 @@ import {
 } from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
-import { addVenue } from '../store/actions';
+import { addVenue, reorderVenue } from '../store/actions';
 
 function EditVenues({
   countryZones,
@@ -33,11 +33,12 @@ function EditVenues({
 
       <Segment basic>
         <Card.Group centered itemsPerRow={2}>
-          {wcifSchedule.venues.map((venue) => (
+          {wcifSchedule.venues.map((venue, index) => (
             <VenuePanel
               key={venue.id}
               venue={venue}
               countryZones={countryZones}
+              sendToFront={index > 0 ? () => dispatch(reorderVenue(index, 0)) : undefined}
             />
           ))}
         </Card.Group>
