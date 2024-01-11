@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Checkbox,
@@ -50,20 +50,14 @@ export default function Delegates() {
     return delegateRegions[selectedRegionIndex];
   }, [delegateRegions, hash, setHash]);
 
-  const [adminMode, setAdminMode] = React.useState(false);
-
-  React.useEffect(() => {
-    if (
-      activeRegion === ALL_REGIONS
-       && !adminMode
-       && loggedInUserPermissions.canViewDelegateAdminPage) {
-      setAdminMode(true);
-    }
-  }, [activeRegion, adminMode, loggedInUserPermissions.canViewDelegateAdminPage]);
+  const [toggleAdmin, setToggleAdmin] = useState(false);
+  const isAdminMode = toggleAdmin || (
+    activeRegion === ALL_REGIONS && loggedInUserPermissions.canViewDelegateAdminPage
+  );
 
   if (permissionsLoading || delegateGroupsLoading || !activeRegion) return <Loading />;
   if (delegateGroupsError) return <Errored />;
-  if (activeRegion === ALL_REGIONS && !adminMode) {
+  if (activeRegion === ALL_REGIONS && !isAdminMode) {
     if (loggedInUserPermissions.canViewDelegateAdminPage) {
       return <Loading />;
     }
@@ -86,8 +80,8 @@ export default function Delegates() {
         <Checkbox
           label="Enable admin mode"
           toggle
-          checked={adminMode}
-          onChange={(__, { checked }) => setAdminMode(checked)}
+          checked={isAdminMode}
+          onChange={(__, { checked }) => setToggleAdmin(checked)}
         />
       )}
       <Grid container>
@@ -102,7 +96,7 @@ export default function Delegates() {
                 onClick={() => setHash(region.metadata.friendly_id)}
               />
             ))}
-            {adminMode && (
+            {isAdminMode && (
               <Menu.Item
                 key={ALL_REGIONS.id}
                 name={ALL_REGIONS.name}
@@ -133,7 +127,7 @@ export default function Delegates() {
               </Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
-                isAdminMode={adminMode}
+                isAdminMode={isAdminMode}
               />
             </Grid>
           </Segment>

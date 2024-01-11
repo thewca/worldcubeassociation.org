@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   Button,
   Grid, Label, Segment, Table,
@@ -116,7 +116,7 @@ export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
       : rolesOfGroup(activeRegion.id),
   );
 
-  const getSeniorDelegate = React.useCallback(
+  const getSeniorDelegate = useCallback(
     () => delegates?.find((delegate) => delegate.metadata.status === 'senior_delegate'),
     [delegates],
   );
