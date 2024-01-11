@@ -6,7 +6,7 @@ import { useInfiniteQuery } from '@tanstack/react-query';
 import { Container } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
-import { competitionsApiUrl, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
+import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
 import CompetitionFilters from './CompetitionFilters';
@@ -30,7 +30,7 @@ function CompetitionView() {
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
       const searchParams = createSearchParams(filterState, pageParam);
-      return fetchJsonOrError(`${competitionsApiUrl}?${searchParams}`);
+      return fetchJsonOrError(`${apiV0Urls.competitions.list}?${searchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,

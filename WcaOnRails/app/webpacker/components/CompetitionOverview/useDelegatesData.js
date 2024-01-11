@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import { delegatesApiUrl, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
+import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
 const useDelegatesData = () => {
@@ -11,7 +11,7 @@ const useDelegatesData = () => {
     hasNextPage,
   } = useInfiniteQuery({
     queryKey: ['delegates'],
-    queryFn: ({ pageParam = 1 }) => fetchJsonOrError(`${delegatesApiUrl}?page=${pageParam}`),
+    queryFn: ({ pageParam = 1 }) => fetchJsonOrError(`${apiV0Urls.delegates.list}?page=${pageParam}`),
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,
       // which indicates the very last page.

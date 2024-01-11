@@ -41,8 +41,6 @@ export const competitionReportUrl = (id) => `<%= CGI.unescape(Rails.application.
 
 export const competitionApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${id}"))%>`;
 
-export const competitionsApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`;
-
 export const competitionEventResultsApiUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_event_results_path("${id}", "${eventId}")) %>`;
 
 export const competitionAllResultsUrl = (id, eventId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_results_all_path("${id}", event: "${eventId}")) %>`;
@@ -96,8 +94,6 @@ export const adminStartPostingUrl = `<%= CGI.unescape(Rails.application.routes.u
 export const adminImportResultsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_import_results_path("${competitionId}")) %>`;
 
 export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_upload_results_edit_path("${competitionId}"))%>`;
-
-export const delegatesApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`;
 
 export const startDelegateProbationUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.start_delegate_probation_path) %>`;
 
@@ -168,5 +164,11 @@ export const apiV0Urls = {
   },
   userGroups: {
     list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
-  }
+  },
+  competitions: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
+  },
+  delegates: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
+  },
 }
