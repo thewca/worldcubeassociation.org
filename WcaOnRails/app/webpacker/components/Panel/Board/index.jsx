@@ -4,7 +4,7 @@ import PanelTemplate from '../PanelTemplate';
 import SeniorDelegatesList from './SeniorDelegatesList';
 import RegionManager from './RegionManager';
 import CouncilLeaders from './CouncilLeaders';
-import PANEL_LIST from '../PanelList';
+import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 
 const sections = [
   {

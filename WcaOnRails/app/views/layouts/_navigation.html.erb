@@ -227,6 +227,9 @@
               <% if current_user.can_access_wfc_panel? %>
                 <li><%= link_to "WFC panel", panel_wfc_path %></li>
               <% end %>
+              <% if current_user.can_access_wrt_panel? %>
+                <li><%= link_to "WRT panel", panel_wrt_path %></li>
+              <% end %>
               <% if current_user.can_access_wst_panel? %>
                 <li><%= link_to "WST panel", panel_wst_path %></li>
               <% end %>

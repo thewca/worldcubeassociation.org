@@ -170,6 +170,7 @@ Rails.application.routes.draw do
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
+    get 'wrt' => 'panel#wrt', as: :panel_wrt
     get 'wst' => 'panel#wst', as: :panel_wst
     get 'board' => 'panel#board', as: :panel_board
     get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
