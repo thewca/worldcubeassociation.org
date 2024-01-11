@@ -1323,6 +1323,10 @@ class User < ApplicationRecord
     can_admin_finances?
   end
 
+  def can_access_wst_panel?
+    software_team?
+  end
+
   def can_access_board_panel?
     admin? || board_member?
   end

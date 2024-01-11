@@ -6,6 +6,7 @@ class UserGroup < ApplicationRecord
     delegate_regions: "delegate_regions",
     teams_committees: "teams_committees",
     councils: "councils",
+    translators: "translators",
   }
 
   belongs_to :metadata, polymorphic: true, optional: true
@@ -17,6 +18,7 @@ class UserGroup < ApplicationRecord
       delegate_regions: "Delegate Regions",
       teams_committees: "Teams & Committees",
       councils: "Councils",
+      translators: "Translators",
     }
   end
 
