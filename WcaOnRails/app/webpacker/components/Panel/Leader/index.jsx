@@ -1,8 +1,8 @@
 import React from 'react';
 import PanelTemplate from '../PanelTemplate';
-import PANEL_LIST from '../PanelList';
 import LeaderForms from './LeaderForms';
 import GroupsManager from './GroupsManager';
+import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 
 const sections = [
   {

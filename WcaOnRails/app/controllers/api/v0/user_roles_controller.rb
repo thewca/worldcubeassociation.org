@@ -189,11 +189,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = filter_roles_for_logged_in_user(roles)
 
     # Filter the list based on the other parameters.
+    status = params[:status]
+    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
     roles = filter_roles_for_parameters(
       roles: roles,
-      is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
-      is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
-      status: params[:status],
+      status: status,
+      is_active: is_active,
+      is_group_hidden: is_group_hidden,
     )
 
     # Sort the roles.
