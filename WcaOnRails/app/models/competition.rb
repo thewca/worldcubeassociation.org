@@ -1520,6 +1520,10 @@ class Competition < ApplicationRecord
         raise "Unknown 'sort_by' in psych sheet computation: #{sort_by}"
       end
 
+      if self.uses_new_registration_service?
+        return psych_sheet_microservice(competition_event, sort_by, sort_by_second)
+      end
+
       sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
 
       registrations = self.registrations
@@ -1573,6 +1577,70 @@ class Competition < ApplicationRecord
         sort_by_second: sort_by_second,
       )
     end
+  end
+
+  private def psych_sheet_microservice(competition_event, sort_by, sort_by_second)
+    accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', competition_event.event.id)
+    registered_user_ids = accepted_registrations[:user_ids]
+
+    users_with_rankings = User.eager_load(:ranksSingle, :ranksAverage)
+                              .find(registered_user_ids)
+
+    rank_symbol = :"ranks#{sort_by.capitalize}"
+
+    sorted_users = users_with_rankings.sort_by { |user|
+      rank = user.send(rank_symbol).find_by(event: competition_event.event)
+
+      [
+        # Competitors with ranks should appear first in the sorting,
+        # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
+        rank.present? ? 0 : 1,
+        rank&.worldRank,
+      ]
+    }
+
+    prev_sorted_ranking = nil
+
+    sorted_rankings = sorted_users.map.with_index { |user, i|
+      single_ranking = user.ranksSingle.find_by(event: competition_event.event)
+      average_ranking = user.ranksAverage.find_by(event: competition_event.event)
+
+      sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
+
+      if sort_by_ranking.present?
+        # Change position to previous if both single and average are tied with previous registration.
+        average_tied_previous = average_ranking.worldRank == prev_sorted_ranking&.average_rank
+        single_tied_previous = single_ranking.worldRank == prev_sorted_ranking&.single_rank
+
+        tied_previous = single_tied_previous && average_tied_previous
+
+        pos = tied_previous ? prev_sorted_ranking.pos : i + 1
+      else
+        # Hasn't competed in this event yet.
+        tied_previous = nil
+        pos = nil
+      end
+
+      sorted_ranking = SortedRanking.new(
+        name: user.name,
+        wca_id: user.wca_id,
+        country_id: user.country.id,
+        average_rank: average_ranking&.worldRank,
+        average_best: average_ranking&.best,
+        single_rank: single_ranking&.worldRank,
+        single_best: single_ranking&.best,
+        tied_previous: tied_previous,
+        pos: pos,
+      )
+
+      prev_sorted_ranking = sorted_ranking
+    }
+
+    PsychSheet.new(
+      sorted_rankings: sorted_rankings,
+      sort_by: sort_by,
+      sort_by_second: sort_by_second,
+    )
   end
 
   # For associated_events_picker

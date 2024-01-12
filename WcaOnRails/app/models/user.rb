@@ -34,6 +34,8 @@ class User < ApplicationRecord
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
   has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
   has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
+  has_many :ranksSingle, through: :person
+  has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
