@@ -8,7 +8,7 @@
     Sorted by: <%= @psych_sheet.sort_by %><% unless @event.multiple_blindfolded? %>, sort by <%= link_to @psych_sheet.sort_by_second, competition_psych_sheet_event_path(@competition, @event.id, sort_by: @psych_sheet.sort_by_second) %><% end %>
   </p>
 
-  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@sort_by}" do %>
+  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@psych_sheet.sort_by}" do %>
     <thead>
       <tr>
         <th class="pos">#</th>
@@ -28,25 +28,24 @@
     </thead>
 
     <tbody>
-      <% @psych_sheet.sorted_registrations.each do |sorted_registration| %>
-        <% registration = sorted_registration.registration %>
+      <% @psych_sheet.sorted_rankings.each do |sorted_ranking| %>
         <tr>
-          <td class="pos <%= sorted_registration.tied_previous ? "tied-previous" : "" %>">
-            <%= sorted_registration.pos %>
+          <td class="pos <%= sorted_ranking.tied_previous ? "tied-previous" : "" %>">
+            <%= sorted_ranking.pos %>
           </td>
-          <td class="name"><%= registration.select_name %></td>
+          <td class="name"><%= sorted_ranking.name %></td>
           <td class="wca-id">
-            <% if registration.select_wca_id %>
-              <%= wca_id_link registration.select_wca_id %>
+            <% if sorted_ranking.wca_id %>
+              <%= wca_id_link sorted_ranking.wca_id %>
             <% end %>
           </td>
-          <td class="country"><%= Country.c_find!(registration.select_country_id).name %></td>
+          <td class="country"><%= Country.c_find!(sorted_ranking.country_id).name %></td>
 
-          <td class="average"><%= SolveTime.new(@event.id, :average, registration.average_best).clock_format %></td>
-          <td class="world-rank-average"><%= registration.average_rank %></td>
+          <td class="average"><%= SolveTime.new(@event.id, :average, sorted_ranking.average_best).clock_format %></td>
+          <td class="world-rank-average"><%= sorted_ranking.average_rank %></td>
 
-          <td class="single"><%= SolveTime.new(@event.id, :single, registration.single_best).clock_format %></td>
-          <td class="world-rank-single"><%= registration.single_rank %></td>
+          <td class="single"><%= SolveTime.new(@event.id, :single, sorted_ranking.single_best).clock_format %></td>
+          <td class="world-rank-single"><%= sorted_ranking.single_rank %></td>
 
           <!-- Extra column for .table-greedy-last-column -->
           <td></td>

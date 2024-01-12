@@ -6,6 +6,8 @@ class CompetitionEvent < ApplicationRecord
   has_many :registration_competition_events, dependent: :destroy
   has_many :rounds, -> { order(:number) }, dependent: :destroy
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :formats, through: :rounds
+  has_many :preferred_formats, through: :event
 
   accepts_nested_attributes_for :rounds, allow_destroy: true
 
@@ -35,6 +37,10 @@ class CompetitionEvent < ApplicationRecord
 
   def event
     Event.c_find(event_id)
+  end
+
+  def recommended_format
+    preferred_formats.first&.format
   end
 
   def qualification_to_s

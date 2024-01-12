@@ -27,14 +27,13 @@ class Event < ApplicationRecord
     raise "#cellName is deprecated, and will eventually be removed. Use #name instead. See https://github.com/thewca/worldcubeassociation.org/issues/1054."
   end
 
-  # 'rank' is a reserved keywords from MySQL 8.0 onwards:
-  # https://dev.mysql.com/doc/refman/8.0/en/keywords.html#keywords-8-0-detailed-R
-  # Therefore we need to quote it in the query.
-  scope :official, -> { where("`rank` < 990") }
-  scope :deprecated, -> { where("`rank` between 990 and 999") }
+  # Pay special attention to the difference between .. (two dots) and ... (three dots)
+  # which map to different operators < and <= in SQL (inclusive VS exclusive range)
+  scope :official, -> { where(rank: ...990) }
+  scope :deprecated, -> { where(rank: 990..999) }
 
   def recommended_format
-    formats.recommended.first
+    preferred_formats.first&.format
   end
 
   def official?
