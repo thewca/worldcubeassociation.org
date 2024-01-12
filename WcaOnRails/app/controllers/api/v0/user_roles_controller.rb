@@ -20,7 +20,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     # The value of sort_param is inspired from https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html.
     sort_param ||= ''
     sort_keys_and_directions = sort_param.split(',')
-    roles.sort_by { |role|
+    roles.stable_sort_by { |role|
       sort_keys_and_directions.map { |sort_key_and_direction|
         sort_key = sort_key_and_direction.split(':').first
         # FIXME: Utilize sort direction as well and reverse sort wherever necessary.
