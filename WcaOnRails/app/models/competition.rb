@@ -1583,13 +1583,25 @@ class Competition < ApplicationRecord
     accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', competition_event.event.id)
     registered_user_ids = accepted_registrations[:user_ids]
 
+    # .includes doesn't work well here because under the hood, Rails will fire several calls:
+    # SELECT * FROM users where id IN (...)
+    # SELECT * FROM RanksSingle WHERE personId IN (...)
+    # SELECT * FROM RanksAverage WHERE personId IN (...)
+    #
+    # By using eager_load, we explicitly force Rails to do one query like so:
+    # SELECT * FROM users
+    #   LEFT JOIN Persons
+    #   LEFT JOIN RanksSingle
+    #   LEFT JOIN RanksAverage
+    # WHERE users.id IN (...)
     users_with_rankings = User.eager_load(:ranksSingle, :ranksAverage)
                               .find(registered_user_ids)
 
     rank_symbol = :"ranks#{sort_by.capitalize}"
 
     sorted_users = users_with_rankings.sort_by { |user|
-      rank = user.send(rank_symbol).find_by(event: competition_event.event)
+      # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
+      rank = user.send(rank_symbol).find { |r| r.event == competition_event.event }
 
       [
         # Competitors with ranks should appear first in the sorting,
@@ -1602,8 +1614,9 @@ class Competition < ApplicationRecord
     prev_sorted_ranking = nil
 
     sorted_rankings = sorted_users.map.with_index { |user, i|
-      single_ranking = user.ranksSingle.find_by(event: competition_event.event)
-      average_ranking = user.ranksAverage.find_by(event: competition_event.event)
+      # see comment about .find vs .find_by above.
+      single_ranking = user.ranksSingle.find { |r| r.event == competition_event.event }
+      average_ranking = user.ranksAverage.find { |r| r.event == competition_event.event }
 
       sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
 
