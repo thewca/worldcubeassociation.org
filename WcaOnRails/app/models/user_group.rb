@@ -9,6 +9,14 @@ class UserGroup < ApplicationRecord
     translators: "translators",
   }
 
+  def self.group_types_with_status_metadata
+    [
+      UserGroup.group_types[:delegate_regions],
+      UserGroup.group_types[:teams_committees],
+      UserGroup.group_types[:councils],
+    ]
+  end
+
   belongs_to :metadata, polymorphic: true, optional: true
 
   # Returns human readable name of group type
@@ -40,8 +48,25 @@ class UserGroup < ApplicationRecord
     end
   end
 
+  # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
+  def lead_user
+    self.senior_delegate if self.group_type == UserGroup.group_types[:delegate_regions]
+  end
+
+  # Unique status means that there can only be one active user with this status in the group.
+  def unique_status?(status)
+    if self.group_type == UserGroup.group_types[:delegate_regions]
+      ["senior_delegate", "regional_delegate"].include?(status)
+    elsif self.group_type == UserGroup.group_types[:teams_committees]
+      status == "leader"
+    else
+      false
+    end
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
+    methods: %w[lead_user],
   }.freeze
 
   def serializable_hash(options = nil)

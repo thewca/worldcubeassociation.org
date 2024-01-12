@@ -257,11 +257,28 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
+  private def end_delegate_role_for_user(user)
+    if user.delegate_status.present?
+      remove_pending_wca_id_claims(user)
+      user.update!(delegate_status: '', region_id: '', location: '')
+      send_role_change_notification(user)
+    end
+  end
+
+  private def end_role_for_user_in_group_with_status(group, status)
+    if group.group_type == UserGroup.group_types[:delegate_regions]
+      user = User.find_by(region_id: group.id, delegate_status: status)
+      if user.present?
+        end_delegate_role_for_user(user)
+      end
+    end
+  end
+
   def create
     user_id = params.require(:userId)
     group_id = params.require(:groupId)
 
-    if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
+    if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
@@ -279,7 +296,22 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
     else
-      render status: :unprocessable_entity, json: { error: "Invalid group id" }
+      group = UserGroup.find_by_id(group_id)
+      status = params.require(:status) if UserGroup.group_types_with_status_metadata.include?(group.group_type)
+      location = params.require(:location) if group.group_type == UserGroup.group_types[:delegate_regions]
+      if status.present? && group.unique_status?(status)
+        end_role_for_user_in_group_with_status(group, status)
+      end
+      if group.group_type == UserGroup.group_types[:delegate_regions]
+        user = User.find_by_id(user_id)
+        user.update!(delegate_status: status, region_id: group.id, location: location)
+        send_role_change_notification(user)
+        render json: {
+          success: true,
+        }
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
     end
   end
 
@@ -352,9 +384,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       user_id = params.require(:userId)
 
       user = User.find(user_id)
-      remove_pending_wca_id_claims(user)
-      user.update!(delegate_status: '', region_id: '', location: '')
-      send_role_change_notification(user)
+      end_delegate_role_for_user(user)
 
       render json: {
         success: true,
