@@ -48,7 +48,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         if group.group_type == UserGroup.group_types[:delegate_probation]
           current_user.can_manage_delegate_probation?
         else
-          false # Don't accept any other hidden groups.
+          group.group_type == UserGroup.group_types[:translators] # Don't accept any other hidden groups.
         end
       else
         true # Accept all non-hidden groups.
@@ -235,8 +235,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           }
         end
       end
-    elsif group_type == UserGroup.group_types[:translators]
-      roles.concat(TranslationsController.translators_to_roles)
     end
 
     # Filter the list based on the permissions of the logged in user.

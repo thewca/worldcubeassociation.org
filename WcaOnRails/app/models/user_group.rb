@@ -34,6 +34,10 @@ class UserGroup < ApplicationRecord
     UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
   end
 
+  def self.translators
+    UserGroup.where(group_type: UserGroup.group_types[:translators], parent_group_id: nil)
+  end
+
   def senior_delegate
     User.find_by(region_id: self.id, delegate_status: "senior_delegate")
   end

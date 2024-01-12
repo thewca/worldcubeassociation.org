@@ -50,6 +50,13 @@ FactoryBot.define do
       is_active { true }
       is_hidden { true }
     end
+
+    factory :translators_user_group do
+      name { "Translators" }
+      group_type { :translators }
+      is_active { true }
+      is_hidden { true }
+    end
   end
 
   factory :groups_metadata_delegate_regions do
