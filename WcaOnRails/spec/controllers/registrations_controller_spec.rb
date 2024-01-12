@@ -634,7 +634,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.accepted? }.all?).to be true
+      expect(psych_sheet.sorted_rankings.length).to eq competition.registrations.accepted.length
     end
 
     it "handles user without average" do
@@ -642,7 +642,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.accepted? }.all?).to be true
+      expect(psych_sheet.sorted_rankings.length).to eq competition.registrations.accepted.length
     end
 
     it "sorts 444 by single, and average, and handles ties" do
@@ -673,15 +673,15 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id, registration3.id, registration4.id, registration5.id, registration6.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
-      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration1.personId, registration2.personId, registration3.personId, registration4.personId, registration5.personId, registration6.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
+      expect(psych_sheet.sorted_rankings.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444", sort_by: :single }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id, registration3.id, registration4.id, registration5.id, registration6.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
-      expect(psych_sheet.sorted_registrations.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration1.personId, registration2.personId, registration3.personId, registration4.personId, registration5.personId, registration6.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1, 2, 2, 4, 5, nil]
+      expect(psych_sheet.sorted_rankings.map(&:tied_previous)).to eq [false, false, true, false, false, nil]
     end
 
     it "handles missing average" do
@@ -698,8 +698,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id, registration3.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, nil, nil]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration2.personId, registration1.personId, registration3.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1, nil, nil]
     end
 
     it "handles 1 registration" do
@@ -715,8 +715,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1]
     end
 
     it "sorts 333bf by single" do
@@ -758,13 +758,13 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration2.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration1.personId, registration2.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1, 2]
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf", sort_by: :average }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration2.id, registration1.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, 2]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration2.personId, registration1.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1, 2]
     end
 
     it "shows first timers on bottom" do
@@ -796,11 +796,11 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "333bf" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration1.id, registration3.id, registration2.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1, nil, nil]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration1.personId, registration3.personId, registration2.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1, nil, nil]
     end
 
-    it "handles 1 registration" do
+    it "handles 1 registration again" do
       registration = FactoryBot.create(:registration, :accepted, competition: competition, events: [Event.find("444")])
       RanksAverage.create!(
         personId: registration.personId,
@@ -813,8 +813,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
 
       get :psych_sheet_event, params: { competition_id: competition.id, event_id: "444" }
       psych_sheet = assigns(:psych_sheet)
-      expect(psych_sheet.sorted_registrations.map { |sr| sr.registration.id }).to eq [registration.id]
-      expect(psych_sheet.sorted_registrations.map(&:pos)).to eq [1]
+      expect(psych_sheet.sorted_rankings.map(&:wca_id)).to eq [registration.personId]
+      expect(psych_sheet.sorted_rankings.map(&:pos)).to eq [1]
     end
   end
 

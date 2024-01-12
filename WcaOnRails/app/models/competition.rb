@@ -1512,6 +1512,9 @@ class Competition < ApplicationRecord
       competition_event = competition_events.find_by!(event: event)
       recommended_format = competition_event.recommended_format || event.recommended_format
 
+      # Legacy code relies on there being a default behavior
+      sort_by ||= recommended_format.sort_by
+
       if sort_by == recommended_format.sort_by
         sort_by_second = recommended_format.sort_by_second
       elsif sort_by == recommended_format.sort_by_second
