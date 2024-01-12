@@ -1,7 +1,6 @@
 import React, {
-  useEffect, useReducer, useMemo, useState,
+  useReducer, useMemo, useState,
 } from 'react';
-import { useInView } from 'react-intersection-observer';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Container } from 'semantic-ui-react';
 
@@ -41,14 +40,8 @@ function CompetitionView() {
       return allPages.length + 1;
     },
   });
-  const competitionData = rawCompetitionData?.pages.flatMap((page) => page.data);
 
-  const { ref: bottomRef, inView: bottomInView } = useInView();
-  useEffect(() => {
-    if (bottomInView) {
-      competitionsFetchNextPage();
-    }
-  }, [bottomInView, competitionsFetchNextPage]);
+  const competitionData = rawCompetitionData?.pages.flatMap((page) => page.data);
 
   return (
     <Container>
@@ -71,6 +64,7 @@ function CompetitionView() {
               filterState={filterState}
               shouldShowRegStatus={shouldShowRegStatus}
               isLoading={competitionsIsFetching}
+              fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />
           )
@@ -89,8 +83,6 @@ function CompetitionView() {
           )
         }
       </Container>
-
-      {!competitionsIsFetching && hasMoreCompsToLoad && displayMode === 'list' && <div ref={bottomRef} name="page-bottom" />}
     </Container>
   );
 }

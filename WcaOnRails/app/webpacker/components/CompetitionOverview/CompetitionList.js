@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useInView } from 'react-intersection-observer';
 
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
@@ -11,8 +12,16 @@ function CompetitionList({
   filterState,
   shouldShowRegStatus,
   isLoading,
+  fetchMoreCompetitions,
   hasMoreCompsToLoad,
 }) {
+  const { ref: bottomRef, inView: bottomInView } = useInView();
+  useEffect(() => {
+    if (bottomInView) {
+      fetchMoreCompetitions();
+    }
+  }, [bottomInView, fetchMoreCompetitions]);
+
   switch (filterState.timeOrder) {
     case 'present':
       return (
@@ -38,6 +47,7 @@ function CompetitionList({
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
+          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
         </div>
       );
     case 'recent':
@@ -52,6 +62,7 @@ function CompetitionList({
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
+          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
         </div>
       );
     case 'past':
@@ -66,6 +77,7 @@ function CompetitionList({
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
+          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
         </div>
       );
     case 'by_announcement':
@@ -81,6 +93,7 @@ function CompetitionList({
             hasMoreCompsToLoad={hasMoreCompsToLoad}
             isSortedByAnnouncement
           />
+          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
         </div>
       );
     case 'custom':
@@ -95,6 +108,7 @@ function CompetitionList({
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
+          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
         </div>
       );
     default:
