@@ -24,28 +24,30 @@ function CompetitionMap({
   ));
 
   return (
-    <MapContainer
-      center={[0, 0]}
-      zoom={2}
-      scrollWheelZoom
-      style={{ height: '400px', width: '100%' }}
-    >
-      <ResizeMapIFrame />
-      <TileLayer url={provider.url} attribution={provider.attribution} />
-      {competitions?.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
-        <Marker
-          key={comp.id}
-          position={{ lat: comp.latitude_degrees, lng: comp.longitude_degrees }}
-          icon={comp.isProbablyOver ? blueMarker : redMarker}
-        >
-          <Popup>
-            <a href={comp.url}>{comp.name}</a>
-            <br />
-            {`${comp.dateRange} - ${comp.cityName}`}
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+    <div name="competitions-map">
+      <MapContainer
+        center={[0, 0]}
+        zoom={2}
+        scrollWheelZoom
+        style={{ height: '400px', width: '100%' }}
+      >
+        <ResizeMapIFrame />
+        <TileLayer url={provider.url} attribution={provider.attribution} />
+        {competitions?.slice(0, MAP_DISPLAY_LIMIT).map((comp) => (
+          <Marker
+            key={comp.id}
+            position={{ lat: comp.latitude_degrees, lng: comp.longitude_degrees }}
+            icon={comp.isProbablyOver ? blueMarker : redMarker}
+          >
+            <Popup>
+              <a href={comp.url}>{comp.name}</a>
+              <br />
+              {`${comp.dateRange} - ${comp.cityName}`}
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
   );
 }
 

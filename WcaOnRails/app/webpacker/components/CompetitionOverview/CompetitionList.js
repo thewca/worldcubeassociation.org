@@ -16,7 +16,7 @@ function CompetitionList({
   switch (filterState.timeOrder) {
     case 'present':
       return (
-        <>
+        <div id="competitions-list">
           <CompetitionTable
             competitionData={competitionData?.filter((comp) => comp.inProgress)}
             title={I18n.t('competitions.index.titles.in_progress')}
@@ -38,56 +38,64 @@ function CompetitionList({
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
-        </>
+        </div>
       );
     case 'recent':
       return (
-        <CompetitionTable
-          competitionData={competitionData}
-          title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
-          shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-          selectedEvents={filterState.selectedEvents}
-          isLoading={isLoading}
-          hasMoreCompsToLoad={hasMoreCompsToLoad}
-        />
+        <div id="competitions-list">
+          <CompetitionTable
+            competitionData={competitionData}
+            title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
+            shouldShowRegStatus={shouldShowRegStatus}
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            selectedEvents={filterState.selectedEvents}
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+          />
+        </div>
       );
     case 'past':
       return (
-        <CompetitionTable
-          competitionData={competitionData}
-          title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
-          shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-          selectedEvents={filterState.selectedEvents}
-          isLoading={isLoading}
-          hasMoreCompsToLoad={hasMoreCompsToLoad}
-        />
+        <div id="competitions-list">
+          <CompetitionTable
+            competitionData={competitionData}
+            title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
+            shouldShowRegStatus={shouldShowRegStatus}
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            selectedEvents={filterState.selectedEvents}
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+          />
+        </div>
       );
     case 'by_announcement':
       return (
-        <CompetitionTable
-          competitionData={competitionData}
-          title={I18n.t('competitions.index.titles.by_announcement')}
-          shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-          selectedEvents={filterState.selectedEvents}
-          isLoading={isLoading}
-          hasMoreCompsToLoad={hasMoreCompsToLoad}
-          isSortedByAnnouncement
-        />
+        <div id="competitions-list">
+          <CompetitionTable
+            competitionData={competitionData}
+            title={I18n.t('competitions.index.titles.by_announcement')}
+            shouldShowRegStatus={shouldShowRegStatus}
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            selectedEvents={filterState.selectedEvents}
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+            isSortedByAnnouncement
+          />
+        </div>
       );
     case 'custom':
       return (
-        <CompetitionTable
-          competitionData={competitionData}
-          title={I18n.t('competitions.index.titles.custom')}
-          shouldShowRegStatus={shouldShowRegStatus}
-          shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-          selectedEvents={filterState.selectedEvents}
-          isLoading={isLoading}
-          hasMoreCompsToLoad={hasMoreCompsToLoad}
-        />
+        <div id="competitions-list">
+          <CompetitionTable
+            competitionData={competitionData}
+            title={I18n.t('competitions.index.titles.custom')}
+            shouldShowRegStatus={shouldShowRegStatus}
+            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            selectedEvents={filterState.selectedEvents}
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+          />
+        </div>
       );
     default:
       return {};

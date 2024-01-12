@@ -70,33 +70,29 @@ function CompetitionView() {
       />
 
       <Container id="search-results" className="row competitions-list">
-        <div id="competitions-list">
-          {
-            displayMode === 'list'
-            && (
-              <CompetitionList
-                competitionData={competitionData}
-                filterState={filterState}
-                shouldShowRegStatus={shouldShowRegStatus}
-                isLoading={competitionsIsFetching}
-                hasMoreCompsToLoad={hasMoreCompsToLoad}
-              />
-            )
-          }
-        </div>
+        {
+          displayMode === 'list'
+          && (
+            <CompetitionList
+              competitionData={competitionData}
+              filterState={filterState}
+              shouldShowRegStatus={shouldShowRegStatus}
+              isLoading={competitionsIsFetching}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+            />
+          )
+        }
         {/* Old JS code does a lot of things to id=comeptitions-map, to be included? */}
-        <div name="competitions-map">
-          {
-            displayMode === 'map'
-            && (
-              <CompetitionMap
-                competitionData={competitionData}
-                selectedEvents={filterState.selectedEvents}
-                shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-              />
-            )
-          }
-        </div>
+        {
+          displayMode === 'map'
+          && (
+            <CompetitionMap
+              competitionData={competitionData}
+              selectedEvents={filterState.selectedEvents}
+              shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+            />
+          )
+        }
       </Container>
 
       {!competitionsIsFetching && hasMoreCompsToLoad && displayMode === 'list' && <div ref={bottomRef} name="page-bottom" />}
