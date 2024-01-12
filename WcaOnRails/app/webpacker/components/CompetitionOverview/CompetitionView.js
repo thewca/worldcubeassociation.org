@@ -11,7 +11,7 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 
 import CompetitionFilters from './CompetitionFilters';
 import CompetitionList from './CompetitionList';
-import CompetitionMap, { MAP_DISPLAY_LIMIT } from './CompetitionMap';
+import CompetitionMap from './CompetitionMap';
 import { filterReducer, filterInitialState } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
 
@@ -50,13 +50,6 @@ function CompetitionView() {
     }
   }, [bottomInView, competitionsFetchNextPage]);
 
-  useEffect(() => {
-    if (hasMoreCompsToLoad && displayMode === 'map' && competitionData?.length < MAP_DISPLAY_LIMIT) {
-      competitionsFetchNextPage();
-    }
-  }, [rawCompetitionData, displayMode, hasMoreCompsToLoad, competitionData,
-    competitionsFetchNextPage]);
-
   return (
     <Container>
       <h2>{I18n.t('competitions.index.title')}</h2>
@@ -90,6 +83,8 @@ function CompetitionView() {
               competitionData={competitionData}
               selectedEvents={filterState.selectedEvents}
               shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+              fetchMoreCompetitions={competitionsFetchNextPage}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
             />
           )
         }

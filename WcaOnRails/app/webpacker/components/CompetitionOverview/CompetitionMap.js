@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import {
   MapContainer, TileLayer, Marker, Popup,
@@ -10,13 +10,22 @@ import ResizeMapIFrame from '../../lib/utils/leaflet-iframe';
 import 'leaflet/dist/leaflet.css';
 
 // Limit number of markers on map, especially for "All Past Competitions"
-export const MAP_DISPLAY_LIMIT = 500;
+const MAP_DISPLAY_LIMIT = 500;
 
 function CompetitionMap({
   competitionData,
   selectedEvents,
   shouldIncludeCancelled,
+  fetchMoreCompetitions,
+  hasMoreCompsToLoad,
 }) {
+  useEffect(() => {
+    if (hasMoreCompsToLoad && competitionData?.length < MAP_DISPLAY_LIMIT) {
+      fetchMoreCompetitions();
+    }
+  }, [hasMoreCompsToLoad, competitionData,
+    fetchMoreCompetitions]);
+
   const provider = userTileProvider;
   const competitions = competitionData?.filter((comp) => (
     (!comp.cancelled_at || shouldIncludeCancelled)
