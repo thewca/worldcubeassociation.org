@@ -112,7 +112,7 @@ export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
   const isAllRegions = activeRegion.id === ALL_REGIONS.id;
   const { data: delegates, loading, error } = useLoadedData(
     isAllRegions
-      ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions)
+      ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, { isActive: true })
       : rolesOfGroup(activeRegion.id),
   );
 

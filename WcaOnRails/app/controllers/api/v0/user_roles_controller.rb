@@ -172,8 +172,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     elsif group_type == UserGroup.group_types[:translators]
       roles.concat(TranslationsController.translators_to_roles)
-    else
-      render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
 
     # Filter the list based on the permissions of the logged in user.
