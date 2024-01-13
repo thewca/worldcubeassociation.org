@@ -8,7 +8,7 @@ import { competitionConstants } from '../../lib/wca-data.js.erb';
 import CompetitionTable from './CompetitionTable';
 
 function CompetitionList({
-  competitionData,
+  competitions,
   filterState,
   shouldShowRegStatus,
   isLoading,
@@ -24,26 +24,22 @@ function CompetitionList({
 
   switch (filterState.timeOrder) {
     case 'present': {
-      const inProgressComps = competitionData?.filter((comp) => comp.inProgress);
-      const upcomingComps = competitionData?.filter((comp) => !comp.inProgress);
+      const inProgressComps = competitions?.filter((comp) => comp.inProgress);
+      const upcomingComps = competitions?.filter((comp) => !comp.inProgress);
       return (
         <div id="competitions-list">
           <CompetitionTable
-            competitionData={inProgressComps}
+            competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
             shouldShowEndOfListMsg={false}
           />
           <CompetitionTable
-            competitionData={upcomingComps}
+            competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
@@ -55,11 +51,9 @@ function CompetitionList({
       return (
         <div id="competitions-list">
           <CompetitionTable
-            competitionData={competitionData}
+            competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
@@ -70,11 +64,9 @@ function CompetitionList({
       return (
         <div id="competitions-list">
           <CompetitionTable
-            competitionData={competitionData}
+            competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
@@ -85,11 +77,9 @@ function CompetitionList({
       return (
         <div id="competitions-list">
           <CompetitionTable
-            competitionData={competitionData}
+            competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
             isSortedByAnnouncement
@@ -101,11 +91,9 @@ function CompetitionList({
       return (
         <div id="competitions-list">
           <CompetitionTable
-            competitionData={competitionData}
+            competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldIncludeCancelled={filterState.shouldIncludeCancelled}
-            selectedEvents={filterState.selectedEvents}
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />

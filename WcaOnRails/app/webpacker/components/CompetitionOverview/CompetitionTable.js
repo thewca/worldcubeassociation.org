@@ -7,21 +7,14 @@ import I18n from '../../lib/i18n';
 import { dayDifferenceFromToday, PseudoLinkMarkdown } from '../../lib/utils/competition-table';
 
 function CompetitionTable({
-  competitionData,
+  competitions,
   title,
   shouldShowRegStatus,
-  shouldIncludeCancelled,
-  selectedEvents,
   isLoading,
   hasMoreCompsToLoad,
   shouldShowEndOfListMsg = true,
   isSortedByAnnouncement = false,
 }) {
-  const competitions = competitionData?.filter((comp) => (
-    (!comp.cancelled_at || shouldIncludeCancelled)
-    && (selectedEvents.every((event) => comp.event_ids.includes(event)))
-  ));
-
   return (
     <List divided relaxed>
       <List.Item>

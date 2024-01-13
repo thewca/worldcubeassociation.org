@@ -13,24 +13,18 @@ import 'leaflet/dist/leaflet.css';
 const MAP_DISPLAY_LIMIT = 500;
 
 function CompetitionMap({
-  competitionData,
-  selectedEvents,
-  shouldIncludeCancelled,
+  competitions,
   fetchMoreCompetitions,
   hasMoreCompsToLoad,
 }) {
   useEffect(() => {
-    if (hasMoreCompsToLoad && competitionData?.length < MAP_DISPLAY_LIMIT) {
+    if (hasMoreCompsToLoad && competitions?.length < MAP_DISPLAY_LIMIT) {
       fetchMoreCompetitions();
     }
-  }, [hasMoreCompsToLoad, competitionData,
+  }, [hasMoreCompsToLoad, competitions,
     fetchMoreCompetitions]);
 
   const provider = userTileProvider;
-  const competitions = competitionData?.filter((comp) => (
-    (!comp.cancelled_at || shouldIncludeCancelled)
-    && (selectedEvents.every((event) => comp.event_ids.includes(event)))
-  ));
 
   return (
     <div name="competitions-map">

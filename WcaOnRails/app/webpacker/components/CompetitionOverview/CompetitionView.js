@@ -41,7 +41,11 @@ function CompetitionView() {
     },
   });
 
-  const competitionData = rawCompetitionData?.pages.flatMap((page) => page.data);
+  const competitions = rawCompetitionData?.pages.flatMap((page) => page.data)
+    .filter((comp) => (
+      (!comp.cancelled_at || filterState.shouldIncludeCancelled)
+      && (filterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
+    ));
 
   return (
     <Container>
@@ -60,7 +64,7 @@ function CompetitionView() {
           displayMode === 'list'
           && (
             <CompetitionList
-              competitionData={competitionData}
+              competitions={competitions}
               filterState={filterState}
               shouldShowRegStatus={shouldShowRegStatus}
               isLoading={competitionsIsFetching}
@@ -73,9 +77,7 @@ function CompetitionView() {
           displayMode === 'map'
           && (
             <CompetitionMap
-              competitionData={competitionData}
-              selectedEvents={filterState.selectedEvents}
-              shouldIncludeCancelled={filterState.shouldIncludeCancelled}
+              competitions={competitions}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />
