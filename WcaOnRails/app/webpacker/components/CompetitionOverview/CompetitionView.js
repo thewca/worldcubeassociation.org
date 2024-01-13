@@ -69,7 +69,6 @@ function CompetitionView() {
             />
           )
         }
-        {/* Old JS code does a lot of things to id=comeptitions-map, to be included? */}
         {
           displayMode === 'map'
           && (
