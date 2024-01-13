@@ -14,8 +14,8 @@ function CompetitionTable({
   selectedEvents,
   isLoading,
   hasMoreCompsToLoad,
+  shouldShowEndOfListMsg = true,
   isSortedByAnnouncement = false,
-  isRenderedAboveAnotherTable = false,
 }) {
   const competitions = competitionData?.filter((comp) => (
     (!comp.cancelled_at || shouldIncludeCancelled)
@@ -76,7 +76,7 @@ function CompetitionTable({
       {
         !hasMoreCompsToLoad
         && !isLoading
-        && !isRenderedAboveAnotherTable
+        && shouldShowEndOfListMsg
         && <EndOfCompListMessage numCompetitions={competitions?.length} />
       }
     </List>

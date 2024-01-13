@@ -36,7 +36,7 @@ function CompetitionList({
             selectedEvents={filterState.selectedEvents}
             isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
-            isRenderedAboveAnotherTable
+            shouldShowEndOfListMsg={false}
           />
           <CompetitionTable
             competitionData={upcomingComps}
