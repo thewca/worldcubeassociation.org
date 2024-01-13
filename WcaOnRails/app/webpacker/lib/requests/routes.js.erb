@@ -130,6 +130,8 @@ export const wfcDuesRedirectsUrl = `<%= CGI.unescape(Rails.application.routes.ur
 
 export const pendingClaimsUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_claims_path) %>/${userId}`;
 
+export const competitionsUrl = ({display, years, delegate}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_path) %>?${jsonToQueryString({ display, years, delegate })}`;
+
 export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>/${userId}`;
 
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
@@ -146,7 +148,7 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
-    listOfGroupType: (groupType, {status, isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive })}`,
+    listOfGroupType: (groupType, {status, isActive, extraMetadata} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive, extraMetadata })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
     update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
     delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,

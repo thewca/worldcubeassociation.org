@@ -1289,6 +1289,22 @@ class User < ApplicationRecord
     }
   end
 
+  def delegate_role_with_extra_metadata
+    {
+      end_date: nil,
+      is_active: true,
+      group: self.region,
+      user: self,
+      metadata: {
+        status: self.delegate_status,
+        location: self.location,
+        first_delegated: self.actually_delegated_competitions.min_by(&:start_date)&.start_date,
+        last_delegated: self.actually_delegated_competitions.max_by(&:start_date)&.start_date,
+        total_delegated: self.actually_delegated_competitions.count,
+      },
+    }
+  end
+
   def team_roles
     roles = []
     self.current_teams.each do |team|
