@@ -23,23 +23,23 @@ function CompetitionList({
   }, [bottomInView, fetchMoreCompetitions]);
 
   switch (filterState.timeOrder) {
-    case 'present':
+    case 'present': {
+      const inProgressComps = competitionData?.filter((comp) => comp.inProgress);
+      const upcomingComps = competitionData?.filter((comp) => !comp.inProgress);
       return (
         <div id="competitions-list">
           <CompetitionTable
-            competitionData={competitionData?.filter((comp) => comp.inProgress)}
+            competitionData={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
             shouldIncludeCancelled={filterState.shouldIncludeCancelled}
             selectedEvents={filterState.selectedEvents}
-            isLoading={isLoading
-              && !competitionData?.filter((comp) => !comp.inProgress)}
-            hasMoreCompsToLoad={hasMoreCompsToLoad
-              && !competitionData?.filter((comp) => !comp.inProgress)}
+            isLoading={isLoading && !upcomingComps?.length}
+            hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
             isRenderedAboveAnotherTable
           />
           <CompetitionTable
-            competitionData={competitionData?.filter((comp) => !comp.inProgress)}
+            competitionData={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
             shouldIncludeCancelled={filterState.shouldIncludeCancelled}
@@ -50,6 +50,7 @@ function CompetitionList({
           {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
         </div>
       );
+    }
     case 'recent':
       return (
         <div id="competitions-list">
