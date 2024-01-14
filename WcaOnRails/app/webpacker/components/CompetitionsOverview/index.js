@@ -1,16 +1,16 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-import CompetitionView from './CompetitionView';
+import CompetitionsView from './CompetitionsView';
 
 const queryClient = new QueryClient();
 
-function CompetitionOverview() {
+function CompetitionsOverview() {
   return (
     <QueryClientProvider client={queryClient}>
-      <CompetitionView />
+      <CompetitionsView />
     </QueryClientProvider>
   );
 }
 
-export default CompetitionOverview;
+export default CompetitionsOverview;

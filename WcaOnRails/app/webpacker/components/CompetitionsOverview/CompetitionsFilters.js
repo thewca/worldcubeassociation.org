@@ -20,7 +20,7 @@ for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
 }
 PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
-function CompetitionFilters({
+function CompetitionsFilters({
   filterState,
   dispatchFilter,
   displayMode,
@@ -375,4 +375,4 @@ function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   );
 }
 
-export default CompetitionFilters;
+export default CompetitionsFilters;

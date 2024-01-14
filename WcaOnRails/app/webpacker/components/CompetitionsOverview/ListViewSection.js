@@ -6,7 +6,7 @@ import {
 import I18n from '../../lib/i18n';
 import { dayDifferenceFromToday, PseudoLinkMarkdown } from '../../lib/utils/competition-table';
 
-function CompetitionTable({
+function ListViewSection({
   competitions,
   title,
   shouldShowRegStatus,
@@ -168,4 +168,4 @@ function EndOfCompListMessage({ numCompetitions }) {
   );
 }
 
-export default CompetitionTable;
+export default ListViewSection;

@@ -12,7 +12,7 @@ import 'leaflet/dist/leaflet.css';
 // Limit number of markers on map, especially for "All Past Competitions"
 const MAP_DISPLAY_LIMIT = 500;
 
-function CompetitionMap({
+function MapView({
   competitions,
   fetchMoreCompetitions,
   hasMoreCompsToLoad,
@@ -54,4 +54,4 @@ function CompetitionMap({
   );
 }
 
-export default CompetitionMap;
+export default MapView;

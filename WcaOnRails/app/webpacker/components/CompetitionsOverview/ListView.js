@@ -4,10 +4,9 @@ import { useInView } from 'react-intersection-observer';
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
 
-// Should CompetitionTable be renamed to CompetitionSubList or something?
-import CompetitionTable from './CompetitionTable';
+import ListViewSection from './ListViewSection';
 
-function CompetitionList({
+function ListView({
   competitions,
   filterState,
   shouldShowRegStatus,
@@ -28,7 +27,7 @@ function CompetitionList({
       const upcomingComps = competitions?.filter((comp) => !comp.inProgress);
       return (
         <div id="competitions-list">
-          <CompetitionTable
+          <ListViewSection
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
@@ -36,7 +35,7 @@ function CompetitionList({
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
             shouldShowEndOfListMsg={false}
           />
-          <CompetitionTable
+          <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
@@ -50,7 +49,7 @@ function CompetitionList({
     case 'recent':
       return (
         <div id="competitions-list">
-          <CompetitionTable
+          <ListViewSection
             competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
@@ -63,7 +62,7 @@ function CompetitionList({
     case 'past':
       return (
         <div id="competitions-list">
-          <CompetitionTable
+          <ListViewSection
             competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
@@ -76,7 +75,7 @@ function CompetitionList({
     case 'by_announcement':
       return (
         <div id="competitions-list">
-          <CompetitionTable
+          <ListViewSection
             competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
@@ -90,7 +89,7 @@ function CompetitionList({
     case 'custom':
       return (
         <div id="competitions-list">
-          <CompetitionTable
+          <ListViewSection
             competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
@@ -105,4 +104,4 @@ function CompetitionList({
   }
 }
 
-export default CompetitionList;
+export default ListView;

@@ -8,13 +8,13 @@ import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 
-import CompetitionFilters from './CompetitionFilters';
-import CompetitionList from './CompetitionList';
-import CompetitionMap from './CompetitionMap';
+import CompetitionsFilters from './CompetitionsFilters';
+import ListView from './ListView';
+import MapView from './MapView';
 import { filterReducer, filterInitialState } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
 
-function CompetitionView() {
+function CompetitionsView() {
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
   const [displayMode, setDisplayMode] = useState('list');
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
@@ -50,7 +50,7 @@ function CompetitionView() {
   return (
     <Container>
       <h2>{I18n.t('competitions.index.title')}</h2>
-      <CompetitionFilters
+      <CompetitionsFilters
         filterState={filterState}
         dispatchFilter={dispatchFilter}
         displayMode={displayMode}
@@ -63,7 +63,7 @@ function CompetitionView() {
         {
           displayMode === 'list'
           && (
-            <CompetitionList
+            <ListView
               competitions={competitions}
               filterState={filterState}
               shouldShowRegStatus={shouldShowRegStatus}
@@ -76,7 +76,7 @@ function CompetitionView() {
         {
           displayMode === 'map'
           && (
-            <CompetitionMap
+            <MapView
               competitions={competitions}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -88,4 +88,4 @@ function CompetitionView() {
   );
 }
 
-export default CompetitionView;
+export default CompetitionsView;
