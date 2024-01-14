@@ -1285,19 +1285,6 @@ class User < ApplicationRecord
       metadata: {
         status: self.delegate_status,
         location: self.location,
-      },
-    }
-  end
-
-  def delegate_role_with_extra_metadata
-    {
-      end_date: nil,
-      is_active: true,
-      group: self.region,
-      user: self,
-      metadata: {
-        status: self.delegate_status,
-        location: self.location,
         first_delegated: self.actually_delegated_competitions.minimum(:start_date),
         last_delegated: self.actually_delegated_competitions.maximum(:start_date),
         total_delegated: self.actually_delegated_competitions.count,

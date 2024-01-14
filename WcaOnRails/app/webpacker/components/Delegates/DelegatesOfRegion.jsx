@@ -143,7 +143,6 @@ export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
     isAllRegions
       ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, {
         isActive: true,
-        extraMetadata: true,
       })
       : rolesOfGroup(activeRegion.id),
   );
