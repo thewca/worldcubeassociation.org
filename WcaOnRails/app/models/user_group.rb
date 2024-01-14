@@ -9,7 +9,7 @@ class UserGroup < ApplicationRecord
     translators: "translators",
   }
 
-  def self.group_types_with_status_metadata
+  def self.group_types_containing_status_metadata
     [
       UserGroup.group_types[:delegate_regions],
       UserGroup.group_types[:teams_committees],

@@ -233,7 +233,7 @@ export default function RegionManager() {
             </Form.Button>
             <Form.Button
               disabled={!newLeadDelegate}
-              onClick={async () => {
+              onClick={() => {
                 closeModal();
                 setLoading(true);
                 save(

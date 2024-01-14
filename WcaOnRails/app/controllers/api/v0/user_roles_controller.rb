@@ -297,7 +297,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     else
       group = UserGroup.find(group_id)
-      status = params.require(:status) if UserGroup.group_types_with_status_metadata.include?(group.group_type)
+      status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params.require(:location) if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
         end_role_for_user_in_group_with_status(group, status)
