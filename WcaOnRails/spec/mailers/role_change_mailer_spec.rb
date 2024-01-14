@@ -3,17 +3,17 @@
 require "rails_helper"
 
 RSpec.describe RoleChangeMailer, type: :mailer do
-  describe 'notify_start_probation' do
+  describe 'notify_role_start' do
     let(:africa_region) { FactoryBot.create(:africa_region) }
     let(:senior_delegate) { FactoryBot.create(:senior_delegate, region_id: africa_region.id) }
     let(:role) { FactoryBot.create(:probation_role, user: FactoryBot.create(:senior_delegate, region_id: africa_region.id)) }
     let(:user_who_made_the_change) { FactoryBot.create(:user, name: 'Sherlock Holmes') }
-    let(:mail) { described_class.notify_start_probation(role, user_who_made_the_change) }
+    let(:mail) { described_class.notify_role_start(role, user_who_made_the_change) }
 
     it 'renders the headers' do
       expect(mail.to).to eq [user_who_made_the_change.email, Team.board.email, role.user.senior_delegate.email]
       expect(mail.reply_to).to eq [user_who_made_the_change.email]
-      expect(mail.subject).to eq "Delegate Probation started for #{role.user.name}"
+      expect(mail.subject).to eq "New role added for #{role.user.name} in Delegate Probation"
     end
 
     it 'renders the body' do

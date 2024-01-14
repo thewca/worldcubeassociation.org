@@ -1,60 +1,55 @@
 import React from 'react';
-import {
-  panelWfcPageDataUrl,
-  countryBandsUrl,
-} from '../../../lib/requests/routes.js.erb';
-import useLoadedData from '../../../lib/hooks/useLoadedData';
-import Errored from '../../Requests/Errored';
+import { countryBandsUrl } from '../../../lib/requests/routes.js.erb';
+import useLoggedInUserPermissions from '../../../lib/hooks/useLoggedInUserPermissions';
 import Loading from '../../Requests/Loading';
 import DelegateProbations from '../../DelegateProbations';
 import DuesExport from './DuesExport';
 import PanelTemplate from '../PanelTemplate';
 import XeroUsers from './XeroUsers';
 import DuesRedirect from './DuesRedirect';
+import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 
 const sections = [
   {
-    id: 'dues-export',
+    id: PANEL_LIST.wfc.duesExport,
     name: 'Dues Export',
     component: DuesExport,
   },
   {
-    id: 'country-bands',
+    id: PANEL_LIST.wfc.countryBands,
     name: 'Country Bands',
     link: countryBandsUrl,
   },
   {
-    id: 'delegate-probations',
+    id: PANEL_LIST.wfc.delegateProbations,
     name: 'Delegate Probations',
     component: DelegateProbations,
-    forAtleastSeniorMember: true,
+    forAtLeastSeniorMember: true,
   },
   {
-    id: 'xero-users',
+    id: PANEL_LIST.wfc.xeroUsers,
     name: 'Xero Users',
     component: XeroUsers,
   },
   {
-    id: 'dues-redirect',
+    id: PANEL_LIST.wfc.duesRedirect,
     name: 'Dues Redirect',
     component: DuesRedirect,
   },
 ];
 
 export default function Wfc() {
-  const { data, loading, error } = useLoadedData(panelWfcPageDataUrl);
+  const { loggedInUserPermissions, loading } = useLoggedInUserPermissions();
 
   if (loading) return <Loading />;
   return (
-    <>
-      {error && <Errored />}
-      <PanelTemplate
-        heading="WFC Panel"
-        sections={sections
-          .filter(
-            (section) => !section.forAtleastSeniorMember || (data?.isAtleastSeniorMember === true),
-          )}
-      />
-    </>
+    <PanelTemplate
+      heading="WFC Panel"
+      sections={sections
+        .filter(
+          (section) => (!section.forAtLeastSeniorMember
+              || loggedInUserPermissions.canAccessWfcSeniorMatters),
+        )}
+    />
   );
 }

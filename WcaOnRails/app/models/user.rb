@@ -132,8 +132,6 @@ class User < ApplicationRecord
     delegate: "delegate",
     senior_delegate: "senior_delegate",
   }
-  has_many :subordinate_delegates, class_name: "User", foreign_key: "senior_delegate_id", inverse_of: :senior_delegate
-  belongs_to :senior_delegate, -> { where(delegate_status: "senior_delegate").order(:name) }, class_name: "User", optional: true, inverse_of: :subordinate_delegates
 
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
@@ -172,13 +170,6 @@ class User < ApplicationRecord
       errors.add(:dob, I18n.t('users.errors.dob_past'))
     elsif dob && dob >= 2.years.ago
       errors.add(:dob, I18n.t('users.errors.dob_recent'))
-    end
-  end
-
-  validate :cannot_demote_senior_delegate_with_subordinate_delegates
-  def cannot_demote_senior_delegate_with_subordinate_delegates
-    if delegate_status_was == "senior_delegate" && delegate_status != "senior_delegate" && !subordinate_delegates.empty?
-      errors.add(:delegate_status, I18n.t('users.errors.senior_has_delegate'))
     end
   end
 
@@ -428,9 +419,8 @@ class User < ApplicationRecord
     end
   end
 
-  # This is a copy of def self.delegate_status_requires_senior_delegate(delegate_status) in the user model
-  # https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/app/assets/javascripts/users.js#L3-L11
-  # It is necessary to fix both files for changes to work
+  validates :region_id, presence: true, if: -> { delegate_status.present? }
+
   def self.delegate_status_requires_senior_delegate(delegate_status)
     {
       nil => false,
@@ -446,18 +436,6 @@ class User < ApplicationRecord
   def avatar_requires_wca_id
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
       errors.add(:avatar, I18n.t('users.errors.avatar_requires_wca_id'))
-    end
-  end
-
-  after_save :remove_pending_wca_id_claims
-  private def remove_pending_wca_id_claims
-    if saved_change_to_delegate_status? && !delegate_status
-      confirmed_users_claiming_wca_id.each do |user|
-        senior_delegate = User.find_by_id(senior_delegate_id_before_last_save)
-        WcaIdClaimMailer.notify_user_of_delegate_demotion(user, self, senior_delegate).deliver_later
-      end
-      # Clear all pending WCA IDs claims for the demoted Delegate
-      User.where(delegate_to_handle_wca_id_claim: self.id).update_all(delegate_id_to_handle_wca_id_claim: nil, unconfirmed_wca_id: nil)
     end
   end
 
@@ -667,6 +645,15 @@ class User < ApplicationRecord
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
+      can_edit_delegate_regions: {
+        scope: can_edit_any_roles? ? "*" : senior_delegate_regions,
+      },
+      can_edit_teams_committees: {
+        scope: can_edit_any_roles? ? "*" : self.leader_teams,
+      },
+      can_access_wfc_senior_matters: {
+        scope: can_access_wfc_senior_matters? ? "*" : [],
+      },
     }
     if banned?
       permissions[:can_attend_competitions][:scope] = []
@@ -677,10 +664,6 @@ class User < ApplicationRecord
 
   def can_view_all_users?
     admin? || board_member? || results_team? || communication_team? || wdc_team? || any_kind_of_delegate? || weat_team?
-  end
-
-  def can_view_senior_delegate_material?
-    admin? || board_member? || senior_delegate?
   end
 
   def can_view_leader_material?
@@ -951,7 +934,7 @@ class User < ApplicationRecord
     fields += editable_avatar_fields(user)
     # Delegate Status Fields
     if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status senior_delegate_id location)
+      fields += %i(delegate_status region_id location)
     end
     fields
   end
@@ -1129,7 +1112,7 @@ class User < ApplicationRecord
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
     if any_kind_of_delegate?
-      default_options[:methods].push("email", "location", "senior_delegate_id")
+      default_options[:methods].push("email", "location", "region_id")
     end
 
     options = default_options.merge(options || {})
@@ -1277,13 +1260,8 @@ class User < ApplicationRecord
         .map(&:competition)
   end
 
-  def senior_or_self
-    return nil unless self.delegate_status.present?
-    self.delegate_status == "senior_delegate" ? self : self.senior_delegate
-  end
-
   def is_delegate_in_probation
-    Role.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+    UserRole.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
   end
 
   def region
@@ -1301,6 +1279,7 @@ class User < ApplicationRecord
   def delegate_role
     {
       end_date: nil,
+      is_active: true,
       group: self.region,
       user: self,
       metadata: {
@@ -1323,10 +1302,11 @@ class User < ApplicationRecord
       end
       roles << {
         start_date: team_membership_details.start_date,
+        is_active: true,
         group: {
           id: team.id,
           name: team.name,
-          group_type: UserGroup.group_types[:teams],
+          group_type: UserGroup.group_types[:teams_committees],
           is_hidden: team[:hidden],
           is_active: true,
         },
@@ -1343,11 +1323,43 @@ class User < ApplicationRecord
     can_admin_finances?
   end
 
+  def can_access_wrt_panel?
+    can_admin_results?
+  end
+
+  def can_access_wst_panel?
+    software_team?
+  end
+
   def can_access_board_panel?
     admin? || board_member?
   end
 
+  def can_access_senior_delegate_panel?
+    admin? || board_member? || senior_delegate?
+  end
+
   def can_access_panel?
-    can_access_wfc_panel? || can_access_board_panel?
+    can_access_wfc_panel? || can_access_wrt_panel? || can_access_wst_panel? || can_access_board_panel? || can_access_senior_delegate_panel? || staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
+  end
+
+  def subordinate_delegates
+    senior_delegate? ? User.where(region_id: self.region_id).where.not(id: self.id) : []
+  end
+
+  def can_edit_any_roles?
+    admin? || board_member?
+  end
+
+  def senior_delegate_regions
+    self.senior_delegate? ? [self.region_id] : []
+  end
+
+  def leader_teams
+    self.current_team_members.select { |member| member.team_leader? }.pluck(:team_id)
+  end
+
+  def can_access_wfc_senior_matters?
+    financial_committee? && team_membership_details(Team.wfc).at_least_senior_member?
   end
 end

@@ -4,10 +4,11 @@ import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
-  rolesOfGroupType,
+  apiV0Urls,
   startDelegateProbationUrl,
   endDelegateProbationUrl,
 } from '../../lib/requests/routes.js.erb';
+import { groupTypes } from '../../lib/wca-data.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import WcaSearch from '../SearchWidget/WcaSearch';
 import Errored from '../Requests/Errored';
@@ -86,7 +87,7 @@ export default function DelegateProbations() {
 
   const {
     data: probationRoles, loading, error, sync,
-  } = useLoadedData(rolesOfGroupType('delegate_probation'));
+  } = useLoadedData(apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_probation));
   const { save, saving } = useSaveAction();
 
   if (loading || saving) return 'Loading...'; // No i18n because this page is used only by WCA Staff.

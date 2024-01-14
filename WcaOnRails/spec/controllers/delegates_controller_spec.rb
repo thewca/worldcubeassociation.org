@@ -38,7 +38,7 @@ RSpec.describe DelegatesController do
   context 'modify probation roles' do
     before do
       UserGroup.create!(name: "Delegate Probation", group_type: "delegate_probation", is_active: true, is_hidden: true)
-      Role.create!(
+      UserRole.create!(
         user_id: users[1].id,
         group_id: UserGroup.find_by!(name: "Delegate Probation").id,
         start_date: Date.today,
@@ -47,7 +47,7 @@ RSpec.describe DelegatesController do
 
     it 'senior delegates can start the probation role' do
       sign_in FactoryBot.create :senior_delegate
-      expect(RoleChangeMailer).to receive(:notify_start_probation).and_call_original
+      expect(RoleChangeMailer).to receive(:notify_role_start).and_call_original
 
       expect do
         post :start_delegate_probation, params: { userId: users[0].id }, format: :json
@@ -61,7 +61,7 @@ RSpec.describe DelegatesController do
       expect(RoleChangeMailer).to receive(:notify_change_probation_end_date).and_call_original
 
       expect do
-        post :end_delegate_probation, params: { probationRoleId: Role.find_by_user_id(users[1].id).id }, format: :json
+        post :end_delegate_probation, params: { probationRoleId: UserRole.find_by_user_id(users[1].id).id }, format: :json
       end.to change { enqueued_jobs.size }.by(1)
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
@@ -78,7 +78,7 @@ RSpec.describe DelegatesController do
     it 'WFC leader can end the probation role' do
       sign_in FactoryBot.create :user, :wfc_member, team_leader: true
 
-      post :end_delegate_probation, params: { probationRoleId: Role.find_by_user_id(users[1].id).id }, format: :json
+      post :end_delegate_probation, params: { probationRoleId: UserRole.find_by_user_id(users[1].id).id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -94,7 +94,7 @@ RSpec.describe DelegatesController do
     it 'WFC senior members end modify the probation role' do
       sign_in FactoryBot.create :user, :wfc_member, team_senior_member: true
 
-      post :end_delegate_probation, params: { probationRoleId: Role.find_by_user_id(users[1].id).id }, format: :json
+      post :end_delegate_probation, params: { probationRoleId: UserRole.find_by_user_id(users[1].id).id }, format: :json
       parsed_body = JSON.parse(response.body)
       expect(parsed_body["success"]).to eq true
     end
@@ -109,7 +109,7 @@ RSpec.describe DelegatesController do
     it 'normal user cannot end the probation role' do
       sign_in FactoryBot.create :user
 
-      post :end_delegate_probation, params: { probationRoleId: Role.find_by_user_id(users[1].id).id }, format: :json
+      post :end_delegate_probation, params: { probationRoleId: UserRole.find_by_user_id(users[1].id).id }, format: :json
       expect(response.status).to eq 401
     end
   end

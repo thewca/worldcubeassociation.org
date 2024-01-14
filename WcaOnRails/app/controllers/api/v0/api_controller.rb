@@ -46,13 +46,13 @@ class Api::V0::ApiController < ApplicationController
 
     render json: {
       "current" => {
-        "name" => "TNoodle-WCA-1.1.2",
+        "name" => "TNoodle-WCA-1.2.1",
         "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.1.2.jar",
+        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.2.1.jar",
       },
       "allowed" => [
-        "TNoodle-WCA-1.1.1",
-        "TNoodle-WCA-1.1.2",
+        "TNoodle-WCA-1.2.0",
+        "TNoodle-WCA-1.2.1",
       ],
       "publicKeyBytes" => public_key,
       "history" => [
@@ -82,6 +82,8 @@ class Api::V0::ApiController < ApplicationController
         "TNoodle-WCA-1.1.0",
         "TNoodle-WCA-1.1.1",
         "TNoodle-WCA-1.1.2",
+        "TNoodle-WCA-1.2.0",
+        "TNoodle-WCA-1.2.1",
       ],
     }
   end
@@ -106,7 +108,15 @@ class Api::V0::ApiController < ApplicationController
       end
     end
 
-    render status: :ok, json: { result: result }
+    if current_user && current_user.can_admin_results?
+      options = {
+        private_attributes: %w[incorrect_wca_id_claim_count dob],
+      }
+    else
+      options = {}
+    end
+
+    render status: :ok, json: { result: result.as_json(options) }
   end
 
   def posts_search

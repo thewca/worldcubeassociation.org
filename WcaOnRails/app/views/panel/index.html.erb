@@ -48,31 +48,6 @@
     </ul>
   <% end %>
 
-  <% if current_user&.can_view_senior_delegate_material? %>
-    <h2>Senior Delegates</h2>
-
-    <ul>
-      <li>
-        <%= link_to "WCA Delegate Nomination form", "https://docs.google.com/forms/d/e/1FAIpQLSfji_fOKEKcqS1Fb9fpu3qsBx-O8LiSJu_fG0TU7DJnR9Yj8g/viewform" %>
-      </li>
-      <li>
-        <%= link_to "WCA Delegate Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLScq0JIOq1-2PHJoty5IE_uln_1Uq26Isp4mr3bqpfXKELQoqQ/viewform" %>
-      </li>
-      <li>
-        <%= link_to "WCA Delegate Demotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf5BnccDL656ZPD3zl72Xgz7LmzLjFeTtjXKqvupo9Tn_VIRg/viewform" %>
-      </li>
-      <li>
-        <%= link_to "Pending claims for your subordinate Delegates", pending_claims_path %>
-      </li>
-      <li>
-        <%= link_to "Upcoming competitions for your subordinate Delegates", competitions_for_senior_path %>
-      </li>
-      <li>
-        <%= link_to "Modify Delegates on Probation", delegate_probations_path %>
-      </li>
-    </ul>
-  <% end %>
-
   <% if current_user&.can_view_leader_material? %>
     <h2>Committee/Team Leaders</h2>
 
@@ -80,25 +55,6 @@
       <li>
         <%= link_to "WCA Committee/Team Member Promotion form", "https://docs.google.com/forms/d/e/1FAIpQLSf3079GXcGUYDmJIIdRt0GPlDA_-aMSBZqk93zDgaFRxG15xQ/viewform" %>
       </li>
-    </ul>
-  <% end %>
-
-  <% if current_user.can_access_panel? %>
-    <h2>Other Panels</h2>
-
-    <%# Other Panels will list the list of panels that have separate panel page.%>
-
-    <ul>
-      <% if current_user.can_access_wfc_panel? %>
-        <li>
-          <%= link_to "WFC panel", panel_wfc_path %>
-        </li>
-      <% end %>
-      <% if current_user.can_access_board_panel? %>
-        <li>
-          <%= link_to "Board panel", panel_board_path %>
-        </li>
-      <% end %>
     </ul>
   <% end %>
 </div>

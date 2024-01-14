@@ -61,7 +61,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: 'WcaOnRails/coverage/lcov/WcaOnRails.lcov'
           base-path: 'WcaOnRails'
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         if: always() && steps.rspec.outcome == 'failure'
         with:
           name: capybara-screenshots

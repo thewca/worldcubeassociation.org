@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import {
   Checkbox,
@@ -18,7 +18,8 @@ import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes } from '../../lib/wca-data.js.erb';
-import DelegatesOfRegion from './DelegatesOfRegion';
+import DelegatesOfRegion, { ALL_REGIONS } from './DelegatesOfRegion';
+import useHash from '../../lib/hooks/useHash';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('delegates_page.acknowledges')
@@ -35,15 +36,33 @@ export default function Delegates() {
     [delegateGroups],
   );
 
-  const [activeRegion, setActiveRegion] = React.useState();
-  const [adminMode, setAdminMode] = React.useState(false);
+  const [hash, setHash] = useHash();
 
-  React.useEffect(() => {
-    setActiveRegion(delegateRegions?.[0]);
-  }, [delegateRegions]);
+  const activeRegion = React.useMemo(() => {
+    if (hash === ALL_REGIONS.id) return ALL_REGIONS;
+    const selectedRegionIndex = delegateRegions.findIndex(
+      (region) => region.metadata.friendly_id === hash,
+    );
+    if (selectedRegionIndex === -1 && delegateRegions.length > 0) {
+      setHash(delegateRegions[0]?.metadata.friendly_id);
+      return null;
+    }
+    return delegateRegions[selectedRegionIndex];
+  }, [delegateRegions, hash, setHash]);
+
+  const [toggleAdmin, setToggleAdmin] = useState(false);
+  const isAdminMode = toggleAdmin || (
+    activeRegion === ALL_REGIONS && loggedInUserPermissions.canViewDelegateAdminPage
+  );
 
   if (permissionsLoading || delegateGroupsLoading || !activeRegion) return <Loading />;
   if (delegateGroupsError) return <Errored />;
+  if (activeRegion === ALL_REGIONS && !isAdminMode) {
+    if (loggedInUserPermissions.canViewDelegateAdminPage) {
+      return <Loading />;
+    }
+    return <Errored />;
+  }
 
   return (
     <div className="container">
@@ -57,12 +76,12 @@ export default function Delegates() {
       <p>
         <I18nHTMLTranslate i18nKey="delegates_page.acknowledges" />
       </p>
-      {loggedInUserPermissions.canViewDelegateAdminPage() && (
+      {loggedInUserPermissions.canViewDelegateAdminPage && (
         <Checkbox
           label="Enable admin mode"
           toggle
-          checked={adminMode}
-          onChange={(__, { checked }) => setAdminMode(checked)}
+          checked={isAdminMode}
+          onChange={(__, { checked }) => setToggleAdmin(checked)}
         />
       )}
       <Grid container>
@@ -73,10 +92,18 @@ export default function Delegates() {
               <Menu.Item
                 key={region.id}
                 name={region.name}
-                active={activeRegion === region}
-                onClick={() => setActiveRegion(region)}
+                active={region.metadata.friendly_id === hash}
+                onClick={() => setHash(region.metadata.friendly_id)}
               />
             ))}
+            {isAdminMode && (
+              <Menu.Item
+                key={ALL_REGIONS.id}
+                name={ALL_REGIONS.name}
+                active={activeRegion === ALL_REGIONS}
+                onClick={() => setHash(ALL_REGIONS.id)}
+              />
+            )}
           </Menu>
         </Grid.Column>
 
@@ -92,17 +119,15 @@ export default function Delegates() {
                   options={delegateRegions.map((region) => ({
                     key: region.id,
                     text: region.name,
-                    value: region.id,
+                    value: region.metadata.friendly_id,
                   }))}
-                  value={activeRegion.id}
-                  onChange={(__, { value }) => setActiveRegion(
-                    delegateRegions.find((region) => region.id === value),
-                  )}
+                  value={hash}
+                  onChange={(__, { value }) => setHash(value)}
                 />
               </Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
-                isAdminMode={adminMode}
+                isAdminMode={isAdminMode}
               />
             </Grid>
           </Segment>

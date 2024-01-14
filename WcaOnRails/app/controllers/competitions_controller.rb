@@ -32,7 +32,7 @@ class CompetitionsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [
     :new,
   ]
-  before_action -> { redirect_to_root_unless_user(:can_view_senior_delegate_material?) }, only: [
+  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [
     :for_senior,
   ]
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
@@ -816,7 +816,8 @@ class CompetitionsController < ApplicationController
   end
 
   def for_senior
-    @user = User.includes(subordinate_delegates: { delegated_competitions: [:delegates, :delegate_report] }).find_by_id(params[:user_id] || current_user.id)
+    user_id = params[:user_id] || current_user.id
+    @user = User.find(user_id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
   end
 

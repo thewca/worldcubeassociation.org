@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class Role < ApplicationRecord
+class UserRole < ApplicationRecord
+  DELEGATE_ROLE_ID = "dummyRoleId"
+
   belongs_to :user
   belongs_to :group, class_name: "UserGroup"
   belongs_to :metadata, polymorphic: true, optional: true
@@ -8,7 +10,7 @@ class Role < ApplicationRecord
   delegate :group_type, to: :group
 
   def is_active
-    self.end_date.nil? || self.end_date >= Date.today
+    self.end_date.nil? || self.end_date > Date.today
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

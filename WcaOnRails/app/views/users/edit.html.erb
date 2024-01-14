@@ -199,7 +199,7 @@
                     <li><%= guideline %></li>
                   <% end %>
                 </ul>
-                <% if @user.staff? %>
+                <% if @user.staff_or_any_delegate? %>
                   <br /><strong><%= t('.staff_avatar_guidelines.title') %></strong>
                   <ul>
                     <% t('.staff_avatar_guidelines.paragraphs').values.each do |guideline| %>
@@ -256,7 +256,6 @@
     <div class="tab-pane" id="roles">
       <%= react_component("RolesTab", {
         userId: @user.id,
-        loggedInUserId: @current_user.id,
       }) %>
     </div>
   </div>

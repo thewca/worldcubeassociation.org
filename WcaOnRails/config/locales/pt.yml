@@ -752,21 +752,20 @@ pt:
           delegate: Delegado
           #original_hash: d463c23
           senior_delegate: Delegado Sénior
-        teams:
+        teams_committees:
           #original_hash: 6853c98
           member: Membro
           #original_hash: c366473
           senior_member: Membro Sénior
           #original_hash: e26c936
           leader: Líder
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: Masculino
-        #original_hash: b7c17e9
-        f: Feminino
-        #original_hash: 6e6a6f2
-        o: Outro
+        councils:
+          #original_hash: 6853c98
+          member: Membro
+          #original_hash: c366473
+          senior_member: Membro Sénior
+          #original_hash: e26c936
+          leader: Líder
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1159,22 +1158,10 @@ pt:
         #original_hash: da39a3e
         content: ''
       person:
-        #original_hash: 498f4c5
-        dob: Data de nascimento deve estar no formato AAAA-MM-DD.
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
         #original_hash: da39a3e
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
       poll:
@@ -2111,8 +2098,6 @@ pt:
       must_have_a_change: O nome da região tem que ser diferente para atualizar o competidor.
       #original_hash: 012f032
       must_be_senior: deve ser um Delegado Sénior
-      #original_hash: 5b4eac9
-      senior_has_delegate: não pode despromover Delegado Sénior que tenha Delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar um ID da WCA porque já tem o ID %{wca_id}'
       #original_hash: ec5db95

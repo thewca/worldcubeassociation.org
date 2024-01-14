@@ -20,9 +20,9 @@ RSpec.feature "Eligible voters csv" do
   let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
   let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }
-  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, senior_delegate: senior_delegate) }
-  let!(:delegate) { FactoryBot.create(:delegate, senior_delegate: senior_delegate) }
-  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true, senior_delegate: senior_delegate) }
+  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, region_id: senior_delegate.region_id) }
+  let!(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate.region_id) }
+  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true, region_id: senior_delegate.region_id) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
   let!(:officer) { FactoryBot.create(:user, :secretary) }
 

@@ -193,8 +193,8 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "notify_of_delegate_report_submission" do
     let(:senior) { FactoryBot.create(:senior_delegate) }
-    let(:delegate) { FactoryBot.create(:delegate, senior_delegate_id: senior.id) }
-    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate, senior_delegate_id: senior.id) }
+    let(:delegate) { FactoryBot.create(:delegate, region_id: senior.region_id) }
+    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate, region_id: senior.region_id) }
     let(:competition) do
       competition = FactoryBot.create(:competition, :with_delegate_report,
                                       countryId: "Australia",
