@@ -165,9 +165,25 @@ function CompetitionForm() {
   }, [dispatch, onUnload]);
 
   const onError = useCallback((err) => {
-    // check whether the 'json' property is set AND that it's not a generic error message
-    if (err.json !== undefined && !err.json.error) {
-      dispatch(setErrors(err.json));
+    // check whether the 'json' and 'response' properties are set,
+    // which means it's (very probably) a FetchJsonError
+    if (err.json !== undefined && err.response !== undefined) {
+      // The 'error' property means we pasted a generic error message in the backend.
+      if (err.json.error !== undefined) {
+        // json schema errors have only one error message, but our frontend supports
+        // an arbitrary number of messages per property. So we wrap it in an array.
+        if (err.response.status === 422 && err.json.schema !== undefined) {
+          const jsonSchemaError = {
+            [err.json.jsonProperty]: [
+              `Did not match the expected format: ${JSON.stringify(err.json.schema)}`,
+            ],
+          };
+
+          dispatch(setErrors(jsonSchemaError));
+        }
+      } else {
+        dispatch(setErrors(err.json));
+      }
     } else {
       throw err;
     }
