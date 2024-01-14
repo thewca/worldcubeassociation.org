@@ -29,7 +29,7 @@ function ListViewSection({
             index={index}
             isSortedByAnnouncement={isSortedByAnnouncement}
           />
-          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled_at ? ' cancelled' : ''}`}>
+          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
             <span className="date">
               <StatusIcon
                 comp={comp}

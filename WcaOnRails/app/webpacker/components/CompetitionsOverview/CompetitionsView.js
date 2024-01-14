@@ -43,7 +43,7 @@ function CompetitionsView() {
 
   const competitions = rawCompetitionData?.pages.flatMap((page) => page.data)
     .filter((comp) => (
-      (!comp.cancelled_at || filterState.shouldIncludeCancelled)
+      (!comp.cancelled || filterState.shouldIncludeCancelled)
       && (filterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
     ));
 
