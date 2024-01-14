@@ -1,121 +1,125 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import _ from 'lodash';
-import { Table, Confirm } from 'semantic-ui-react';
+import { Table, Confirm,Modal,Button } from 'semantic-ui-react';
 
 import { competitionUrl } from '../../lib/requests/routes.js.erb';
 import { countries } from '../../lib/wca-data.js.erb';
 import { dateRangeBetween } from '../../lib/helpers/media-table';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-
-
-function handleSort(previousState, action) {
-  switch (action.type) {
-    case 'SET_MEDIA_DATA':
-            return { ...previousState, mediaData: action.mediaData };
-    case 'CHANGE_SORT':
-      if (previousState.sortedColumn === action.column) {
-        // If the column is already the one being sorted, reverse the data order
-        return {
-          ...previousState,
-          sortedData: previousState.sortedData.slice().reverse(),
-          sortDirection: previousState.sortDirection === 'ascending' ? 'descending' : 'ascending',
-        };
-      }
-
-      // If a different column is selected, sort the data by the new column
-      return {
-        sortedColumn: action.column,
-        sortedData: _.sortBy(previousState.sortedData, [action.column]),
-        sortDirection: 'ascending',
-      };
-    default:
-      throw new Error();
-  }
-}
+import useSaveAction from '../../lib/hooks/useSaveAction';
 
 export default function MediaTable({ isValidate }) {
-  const { loading, error, data } = useLoadedData(
-    "/api/v0/media?status=pending",
+  const handleUpdateSuccess = () => {
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  };
+
+  const { save, saving } = useSaveAction();
+  const [mediaCombined, setMediaCombined] = useState([])
+  const type = isValidate ? 'pending' : 'accepted'
+  const loadUrl = `/api/v0/media?status=${type}`
+  const { loading, error, data,sync } = useLoadedData(
+    loadUrl,
   );
+  const [modalOpen, setModalOpen] = useState(false);
 
-
-  const mediaCombined = data?.map((medium, idx) => {
-    const iso2 = medium.competition.country_iso2;
-
-    const country = countries.byIso2[iso2];
-
-    return {
-      timestampSubmitted: new Date(medium.timestampSubmitted).toString(),
-      timestampDecided: medium.timestampDecided,
-      id: medium.competition.id,
-      name: medium.competition.name,
-      type: medium.type,
-      text: medium.text,
-      uri: medium.uri,
-      country_iso2: iso2,
-      country_name: country ? country.name : '',
-      city: medium.competition.city,
-      startDate: medium.competition.start_date,
-      endDate: medium.competition.end_date,
-      mediaId: medium.id,
-    };
-  });
-  const [sortingState, dispatchSorting] = React.useReducer(handleSort, {
-    column: null,
-    mediaData: [],
-    direction: null,
-  });
-  const { column,mediaData, direction } = sortingState;
-  React.useEffect(() => {
-    if (mediaCombined) {
-        dispatchSorting({ type: 'SET_MEDIA_DATA', mediaData: mediaCombined });
+  useEffect(() => {
+    if (data) {
+      setMediaCombined(data?.map((medium, idx) => {
+        const iso2 = medium.competition.country_iso2;
+        const country = countries.byIso2[iso2];
+        return {
+          timestampSubmitted: new Date(medium.timestampSubmitted).toString(),
+          timestampDecided: medium.timestampDecided,
+          id: medium.competition.id,
+          name: medium.competition.name,
+          type: medium.type,
+          text: medium.text,
+          uri: medium.uri,
+          country_iso2: iso2,
+          country_name: country ? country.name : '',
+          city: medium.competition.city,
+          startDate: medium.competition.start_date,
+          endDate: medium.competition.end_date,
+          mediaId: medium.id,
+          competetionDate: dateRangeBetween(medium.competition.start_date, medium.competition.end_date),
+          competetionUrl: competitionUrl(medium.competition.id)
+        };
+      }))
     }
-}, [mediaCombined]);
-  console.log(sortingState)
-  const [confirmOpen, setConfirmOpen] = React.useState(false);
-  const openConfirm = () => {
-    setConfirmOpen(true);
-  }
+  }, [data]);
+  const [modalParams, setModalParams] = React.useState({
+    open: false,
+    mediaId: null,
+    status: null,
+  });
   const confimMedia = () => {
-    setConfirmOpen(false);
-    setEndProbationParams(null);
+    const url = "/api/v0/media/" + modalParams.mediaId
+    save(url, { status: modalParams.status }, ()=>{sync();handleUpdateSuccess();setModalParams({ ...modalParams, open: false })
+  }, { method: 'PATCH' });
+  };
+  const [sortColumn, setSortColumn] = useState(null);
+  const [sortDirection, setSortDirection] = useState(null);
+  const handleSort = (clickedColumn) => () => {
+    if (sortColumn !== clickedColumn) {
+      setSortColumn(clickedColumn);
+      setSortDirection('ascending');
+      setMediaCombined([...mediaCombined].sort((a, b) => a[clickedColumn] - b[clickedColumn]));
+    } else {
+      setMediaCombined([...mediaCombined].reverse());
+      setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+    }
   };
   return (
     <Table sortable celled fixed>
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell
-            sorted={column === 'timestampSubmitted' ? direction : null}
-            onClick={() => dispatchSorting({ type: 'CHANGE_SORT', column: 'timestampSubmitted' })}
+            sorted={sortColumn === 'timestampSubmitted' ? sortDirection : null}
+            onClick={handleSort('timestampSubmitted')}
           >
             Submission Date
           </Table.HeaderCell>
           <Table.HeaderCell
-            sorted={column === 'timestampDecided' ? direction : null}
-            onClick={() => dispatchSorting({ type: 'CHANGE_SORT', column: 'timestampDecided' })}
+            sorted={sortColumn === 'timestampDecided' ? sortDirection : null}
+            onClick={handleSort('timestampDecided')}
           >
             Competition Date
           </Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('activerecord.attributes.competition_medium.competitionId')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('media.media_table.location')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('activerecord.attributes.competition_medium.type')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('activerecord.attributes.competition_medium.uri')}</Table.HeaderCell>
+          <Table.HeaderCell
+            sorted={sortColumn === 'competetion' ? sortDirection : null}
+            onClick={handleSort('competetion')}
+          >{I18n.t('activerecord.attributes.competition_medium.competitionId')}</Table.HeaderCell>
+          <Table.HeaderCell
+            sorted={sortColumn === 'location' ? sortDirection : null}
+            onClick={handleSort('location')}
+          >{I18n.t('media.media_table.location')}</Table.HeaderCell>
+          <Table.HeaderCell
+            sorted={sortColumn === 'type' ? sortDirection : null}
+            onClick={handleSort('type')}
+          >{I18n.t('activerecord.attributes.competition_medium.type')}</Table.HeaderCell>
+          <Table.HeaderCell
+            sorted={sortColumn === 'link' ? sortDirection : null}
+            onClick={handleSort('link')}>{I18n.t('activerecord.attributes.competition_medium.uri')}</Table.HeaderCell>
           {isValidate && <Table.HeaderCell></Table.HeaderCell>}
         </Table.Row>
       </Table.Header>
       <Table.Body>
 
-        {mediaData?.map((media_row) => (
+        {mediaCombined?.map((media_row) => (
           <Table.Row>
             <Table.Cell>
               {moment.utc(media_row.timestampSubmitted).format('MMMM DD, YYYY HH:mm UTC')}
             </Table.Cell>
             <Table.Cell>
-              {dateRangeBetween(media_row.startDate, media_row.endDate)}
+              {media_row.competetionDate}
             </Table.Cell>
             <Table.Cell>
-              <a href={competitionUrl(media_row.id)}>{media_row.name}</a>
+              <a href={media_row.competetionUrl}>{media_row.name}</a>
             </Table.Cell>
             <Table.Cell>
               {media_row.country_name}
@@ -130,25 +134,36 @@ export default function MediaTable({ isValidate }) {
             </Table.Cell>
             {isValidate &&
               <Table.Cell>
-                <a href="#" onClick={openConfirm}>
+                <a href="#" onClick={() => setModalParams({ open: true, mediaId: media_row.mediaId, status: "accepted" })}>
                   <i className="check icon"></i>
                 </a>
                 <a href={`/media/${media_row.mediaId}/edit`}>
                   <i class="edit icon"></i>
                 </a>
-                <a href="https://example.com">
-                  <i class="trash icon"></i>
+                <a href="#" onClick={() => setModalParams({ open: true, mediaId: media_row.mediaId, status: "rejected" })}>
+                  <i className="trash icon"></i>
                 </a>
               </Table.Cell>
             }
           </Table.Row>
         ))}
         <Confirm
-          open={confirmOpen}
+          open={modalParams.open}
           onCancel={() => setConfirmOpen(false)}
-          onConfirm={confimMedia}
-          content="Are you sure you want to accept this media?"
+          onConfirm={() => confimMedia()}
+          content={`Are you sure you want to ${modalParams.status === 'accepted' ? 'approve' : 'reject'} this media?`}
         />
+        <Modal open={modalOpen} onClose={handleCloseModal}>
+        <Modal.Header>Update Successful</Modal.Header>
+        <Modal.Content>
+          <p>Media {modalParams.status} successfully!</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button positive onClick={handleCloseModal}>
+            OK
+          </Button>
+        </Modal.Actions>
+      </Modal>
       </Table.Body>
     </Table>
 

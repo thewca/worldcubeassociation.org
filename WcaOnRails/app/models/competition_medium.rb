@@ -8,7 +8,7 @@ class CompetitionMedium < ApplicationRecord
 
   belongs_to :competition, foreign_key: "competitionId"
 
-  enum status: { accepted: "accepted", pending: "pending" }
+  enum status: { accepted: "accepted", pending: "pending", rejected: "rejected", }
   validates :status, presence: true
 
   enum type: { report: "report", article: "article", multimedia: "multimedia" }

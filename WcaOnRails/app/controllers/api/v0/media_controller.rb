@@ -11,29 +11,12 @@ class Api::V0::MediaController < Api::V0::ApiController
   end
   
   def update
-    @medium = CompetitionMedium.find(params[:id])
-    if @medium.update(medium_params)
-      render json: {
-          success: true,
-        }
-    else
-      render json: {
-          success: false,
-        }
-    end
+    medium_id = params.require(:id)
+    status = params.require(:status)
+    medium = CompetitionMedium.find(medium_id)
+    medium.update!(status: status)
+    render json: {
+      success: true,
+    }
   end
-
-  def destroy
-    @medium = CompetitionMedium.find(params[:id])
-    if @medium.destroy
-      render json: {
-          success: true,
-        }
-    else
-      render json: {
-          success: false,
-        }
-    end
-  end
-
 end
