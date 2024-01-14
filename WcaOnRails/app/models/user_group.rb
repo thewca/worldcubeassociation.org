@@ -52,6 +52,10 @@ class UserGroup < ApplicationRecord
     end
   end
 
+  def users
+    self.roles.map(&:user)
+  end
+
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
     self.senior_delegate if self.group_type == UserGroup.group_types[:delegate_regions]

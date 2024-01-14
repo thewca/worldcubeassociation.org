@@ -42,7 +42,7 @@ class CreateTranslatorsGroup < ActiveRecord::Migration[7.1]
         UserRole.create!(
           user_id: user_id,
           group_id: user_group.id,
-          start_date: '1900-01-01',
+          start_date: '2017-01-30',
           metadata: metadata,
         )
       end

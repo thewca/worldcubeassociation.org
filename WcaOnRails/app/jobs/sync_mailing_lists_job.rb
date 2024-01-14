@@ -26,7 +26,7 @@ class SyncMailingListsJob < WcaCronjob
     GsuiteMailingLists.sync_group("results@worldcubeassociation.org", Team.wrt.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("software@worldcubeassociation.org", Team.wst.current_members.includes(:user).map(&:user).map(&:email))
     GsuiteMailingLists.sync_group("software-admin@worldcubeassociation.org", Team.wst_admin.current_members.includes(:user).map(&:user).map(&:email))
-    translator_users = UserGroup.translators.map(&:roles).flatten.map(&:user)
+    translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
     User.clear_receive_delegate_reports_if_not_eligible
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
