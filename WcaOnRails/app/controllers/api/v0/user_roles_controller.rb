@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Api::V0::UserRolesController < Api::V0::ApiController
+  include EnumerableHelper
+
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate?
