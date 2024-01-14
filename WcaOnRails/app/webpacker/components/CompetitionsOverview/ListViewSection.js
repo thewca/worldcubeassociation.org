@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, Icon, Popup, Loader,
+  List, Icon, Popup,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -10,9 +10,7 @@ function ListViewSection({
   competitions,
   title,
   shouldShowRegStatus,
-  isLoading,
   hasMoreCompsToLoad,
-  shouldShowEndOfListMsg = true,
   isSortedByAnnouncement = false,
 }) {
   return (
@@ -55,23 +53,6 @@ function ListViewSection({
           </List.Item>
         </React.Fragment>
       ))}
-      {/* Could not figure out why Semantic UI's animated loader icon doesn't show */}
-      {
-        isLoading
-        && (
-          <List.Item style={{ textAlign: 'center' }}>
-            <Loader active inline="centered" size="small">
-              {I18n.t('competitions.index.loading_comps')}
-            </Loader>
-          </List.Item>
-        )
-      }
-      {
-        !hasMoreCompsToLoad
-        && !isLoading
-        && shouldShowEndOfListMsg
-        && <EndOfCompListMessage numCompetitions={competitions?.length} />
-      }
     </List>
   );
 }
@@ -157,14 +138,6 @@ function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
       position="top center"
       size="tiny"
     />
-  );
-}
-
-function EndOfCompListMessage({ numCompetitions }) {
-  return (
-    <List.Item style={{ textAlign: 'center' }}>
-      {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
-    </List.Item>
   );
 }
 

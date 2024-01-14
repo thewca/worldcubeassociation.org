@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
+import { Loader } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
@@ -16,10 +17,10 @@ function ListView({
 }) {
   const { ref: bottomRef, inView: bottomInView } = useInView();
   useEffect(() => {
-    if (bottomInView) {
+    if (hasMoreCompsToLoad && bottomInView) {
       fetchMoreCompetitions();
     }
-  }, [bottomInView, fetchMoreCompetitions]);
+  }, [bottomInView, hasMoreCompsToLoad, fetchMoreCompetitions]);
 
   switch (filterState.timeOrder) {
     case 'present': {
@@ -33,18 +34,20 @@ function ListView({
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
-            shouldShowEndOfListMsg={false}
           />
           <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
-          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
+          <ListViewFooter
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+            numCompetitions={competitions?.length}
+            bottomRef={bottomRef}
+          />
         </div>
       );
     }
@@ -55,10 +58,14 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
-          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
+          <ListViewFooter
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+            numCompetitions={competitions?.length}
+            bottomRef={bottomRef}
+          />
         </div>
       );
     case 'past':
@@ -68,10 +75,14 @@ function ListView({
             competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
-          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
+          <ListViewFooter
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+            numCompetitions={competitions?.length}
+            bottomRef={bottomRef}
+          />
         </div>
       );
     case 'by_announcement':
@@ -81,11 +92,15 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
             isSortedByAnnouncement
           />
-          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
+          <ListViewFooter
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+            numCompetitions={competitions?.length}
+            bottomRef={bottomRef}
+          />
         </div>
       );
     case 'custom':
@@ -95,15 +110,44 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
-          {!isLoading && hasMoreCompsToLoad && <div ref={bottomRef} name="page-bottom" />}
+          <ListViewFooter
+            isLoading={isLoading}
+            hasMoreCompsToLoad={hasMoreCompsToLoad}
+            numCompetitions={competitions?.length}
+            bottomRef={bottomRef}
+          />
         </div>
       );
     default:
       return {};
   }
+}
+
+function ListViewFooter({
+  isLoading, hasMoreCompsToLoad, numCompetitions, bottomRef,
+}) {
+  if (isLoading) {
+    /* Could not figure out why Semantic UI's animated loader icon doesn't show */
+    return (
+      <Loader active inline="centered" size="small">
+        <div style={{ textAlign: 'center' }}>
+          {I18n.t('competitions.index.loading_comps')}
+        </div>
+      </Loader>
+    );
+  }
+
+  if (!hasMoreCompsToLoad) {
+    return (
+      <div style={{ textAlign: 'center' }}>
+        {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
+      </div>
+    );
+  }
+
+  return <div ref={bottomRef} name="page-bottom" />;
 }
 
 export default ListView;
