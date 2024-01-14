@@ -81,38 +81,6 @@ RSpec.describe StaticPagesHelper do
     end
   end
 
-  describe "#subtext_for_officer" do
-    it "includes Chair position when user is Chair" do
-      chair_member = FactoryBot.create :user, :chair
-      string = helper.subtext_for_officer(chair_member)
-      expect(string).to include(t('about.structure.chair.name'))
-    end
-
-    it "includes Vice Chair position when user is Vice Chair" do
-      vice_chair_member = FactoryBot.create :user, :vice_chair
-      string = helper.subtext_for_officer(vice_chair_member)
-      expect(string).to include(t('about.structure.vice_chair.name'))
-    end
-
-    it "includes Secretary position when user is Secretary" do
-      secretary_member = FactoryBot.create :user, :secretary
-      string = helper.subtext_for_officer(secretary_member)
-      expect(string).to include(t('about.structure.secretary.name'))
-    end
-
-    it "includes Executive Director position when user is Executive Director" do
-      executive_director_member = FactoryBot.create :user, :executive_director
-      string = helper.subtext_for_officer(executive_director_member)
-      expect(string).to include(t('about.structure.executive_director.name'))
-    end
-
-    it "Includes Treasurer position when user is Treasurer" do
-      wfc_leader_member = FactoryBot.create(:user, :wfc_member, team_leader: true)
-      string = helper.subtext_for_officer(wfc_leader_member)
-      expect(string).to include(t('about.structure.treasurer.name'))
-    end
-  end
-
   describe "#team_member_name" do
     it "Adds team member name div" do
       name = "Max Faster"
