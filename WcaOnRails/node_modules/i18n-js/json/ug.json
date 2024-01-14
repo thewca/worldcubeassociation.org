@@ -1,0 +1,191 @@
+{
+  "ug": {
+    "date": {
+      "abbr_day_names": [
+        "يەكشەنبە",
+        "دۈشەنبە",
+        "سەيشەنبە",
+        "چارشەنبە",
+        "پەيشەنبە",
+        "جۈمە",
+        "شەنبە"
+      ],
+      "abbr_month_names": [
+        null,
+        "يانۋار",
+        "فېۋرال",
+        "مارت",
+        "ئاپرېل",
+        "ماي",
+        "ئىيۇن",
+        "ئىيۇل",
+        "ئاۋغۇست",
+        "سېنتەبىر",
+        "ئۆكتەبىر",
+        "نويابىر",
+        "دېكابىر"
+      ],
+      "day_names": [
+        "يەكشەنبە",
+        "دۈشەنبە",
+        "سەيشەنبە",
+        "چارشەنبە",
+        "پەيشەنبە",
+        "جۈمە",
+        "شەنبە"
+      ],
+      "formats": {
+        "default": "%Y-%m-%d",
+        "long": "%Y-%m-%d",
+        "short": "%b%d"
+      },
+      "month_names": [
+        null,
+        "يانۋار",
+        "فېۋرال",
+        "مارت",
+        "ئاپرېل",
+        "ماي",
+        "ئىيۇن",
+        "ئىيۇل",
+        "ئاۋغۇست",
+        "سېنتەبىر",
+        "ئۆكتەبىر",
+        "نويابىر",
+        "دېكابىر"
+      ],
+      "order": [
+        "year",
+        "month",
+        "day"
+      ]
+    },
+    "datetime": {
+      "distance_in_words": {
+        "about_x_hours": {
+          "one": "تەخمىنەن بىر سائەت",
+          "other": "تەخمىنەن %{count} سائەت"
+        },
+        "about_x_months": {
+          "one": "تەخمىنەن بىر ئاي",
+          "other": "تەخمىنەن %{count} ئاي"
+        },
+        "about_x_years": {
+          "one": "تەخمىنەن بىر يىل",
+          "other": "تەخمىنەن %{count} يىل"
+        },
+        "almost_x_years": {
+          "one": "بىر يىلغا يېقىن",
+          "other": "%{count} يىلغا يېقىن"
+        },
+        "half_a_minute": "يېرىم مىنۇت",
+        "less_than_x_seconds": {
+          "one": "بىر سىكۇنتقا يەتمىگەن",
+          "other": "%{count} سىكنۇتقا"
+        },
+        "less_than_x_minutes": {
+          "one": "بىر مىنۇتقا يەتمىگەن",
+          "other": "%{count} مىنۇتقا يەتمىگەن"
+        },
+        "over_x_years": {
+          "one": "بىر يىلدىن ئارتۇق",
+          "other": "%{count} يىلدىن ئارتۇق"
+        },
+        "x_seconds": {
+          "one": "بىر سىكنۇت",
+          "other": "%{count} سىكنۇت"
+        },
+        "x_minutes": {
+          "one": "بىر مىنۇت",
+          "other": "%{count} مىنۇت"
+        },
+        "x_days": {
+          "one": "بىر كۈن",
+          "other": "%{count} كۈن"
+        },
+        "x_months": {
+          "one": "بىر ئاي",
+          "other": "%{count} ئاي"
+        }
+      }
+    },
+    "number": {
+      "currency": {
+        "format": {
+          "delimiter": ",",
+          "format": "%u %n",
+          "precision": 2,
+          "separator": ".",
+          "significant": false,
+          "strip_insignificant_zeros": false,
+          "unit": "CN¥"
+        }
+      },
+      "format": {
+        "delimiter": ",",
+        "precision": 3,
+        "separator": ".",
+        "significant": false,
+        "strip_insignificant_zeros": false
+      },
+      "human": {
+        "decimal_units": {
+          "format": "%n %u",
+          "units": {
+            "billion": "مىليارد",
+            "million": "مىليون",
+            "quadrillion": "گېگابايت",
+            "thousand": "مىڭ",
+            "trillion": "مېگا",
+            "unit": ""
+          }
+        },
+        "format": {
+          "delimiter": "",
+          "precision": 1,
+          "significant": false,
+          "strip_insignificant_zeros": false
+        },
+        "storage_units": {
+          "format": "%n %u",
+          "units": {
+            "byte": {
+              "one": "بايت",
+              "other": "بايت"
+            },
+            "gb": "GB",
+            "kb": "KB",
+            "mb": "MB",
+            "tb": "TB"
+          }
+        }
+      },
+      "percentage": {
+        "format": {
+          "delimiter": ""
+        }
+      },
+      "precision": {
+        "format": {
+          "delimiter": ""
+        }
+      }
+    },
+    "support": {
+      "array": {
+        "last_word_connector": " ۋە ",
+        "two_words_connector": " ۋە ",
+        "words_connector": ", "
+      }
+    },
+    "time": {
+      "am": "چۈشتىن بۇرۇن",
+      "formats": {
+        "default": "%Y %b %d %A %H:%M:%S %Z",
+        "long": "%Y %b %d %H:%M",
+        "short": "%b %d %H:%M"
+      },
+      "pm": "چۈشتىن كېيىن"
+    }
+  }
+}

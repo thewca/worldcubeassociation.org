@@ -1,0 +1,21 @@
+# Send builds to container-based infrastructure
+# http://docs.travis-ci.com/user/workers/container-based-infrastructure/
+sudo: false
+language: node_js
+cache:
+  yarn: true
+  directories:
+  - node_modules
+node_js:
+  # LTS version(s)
+  - "8"
+env:
+  matrix:
+  - TRAVIS_WEBPACK_VERSION="2"
+  - TRAVIS_WEBPACK_VERSION="3"
+matrix:
+  fast_finish: true
+install:
+  - gem install erubis erubi
+  - npm install
+  - if [[ -v TRAVIS_WEBPACK_VERSION ]]; then npm install webpack@$TRAVIS_WEBPACK_VERSION --save-dev; fi

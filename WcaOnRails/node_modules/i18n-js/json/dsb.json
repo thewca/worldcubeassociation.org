@@ -1,0 +1,204 @@
+{
+  "dsb": {
+    "date": {
+      "abbr_day_names": [
+        "Nj",
+        "Pó",
+        "Wu",
+        "Sr",
+        "St",
+        "Pě",
+        "So"
+      ],
+      "abbr_month_names": [
+        null,
+        "jan",
+        "feb",
+        "měr",
+        "apr",
+        "maj",
+        "jun",
+        "jul",
+        "awg",
+        "sep",
+        "okt",
+        "now",
+        "dec"
+      ],
+      "day_names": [
+        "njeźela",
+        "pónjeźele",
+        "wałtora",
+        "srjoda",
+        "stwórtk",
+        "pětk",
+        "sobota"
+      ],
+      "formats": {
+        "default": "%d. %m. %Y",
+        "long": "%d. %B %Y",
+        "short": "%d %b"
+      },
+      "month_names": [
+        null,
+        "Januar",
+        "Februar",
+        "Měrc",
+        "Apryl",
+        "Maj",
+        "Junij",
+        "Julij",
+        "Awgust",
+        "September",
+        "Oktober",
+        "Nowember",
+        "December"
+      ],
+      "order": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "datetime": {
+      "distance_in_words": {
+        "about_x_hours": {
+          "few": "něźi %{count} góźinami",
+          "one": "něźi 1 góźinu",
+          "other": "něźi %{count} góźinami",
+          "two": "něźi %{count} góźinoma"
+        },
+        "about_x_months": {
+          "few": "něźi %{count} mjasecami",
+          "one": "něźi 1 mjasecom",
+          "other": "něźi %{count} mjasecami",
+          "two": "něźi %{count} mjasecoma"
+        },
+        "about_x_years": {
+          "few": "něźi %{count} lětami",
+          "one": "něźi 1 lětom",
+          "other": "něźi %{count} lětami",
+          "two": "něźi %{count} lětoma"
+        },
+        "half_a_minute": "poł minuty",
+        "less_than_x_minutes": {
+          "few": "mjenjej ako %{count} minutami",
+          "one": "mjenjej ako 1 minutu",
+          "other": "mjenjej ako %{count} minutami",
+          "two": "mjenjej ako %{count} minutoma"
+        },
+        "less_than_x_seconds": {
+          "few": "mjenjej ako %{count} sekundami",
+          "one": "mjenjej ako 1 sekundu",
+          "other": "mjenjej ako %{count} sekundami",
+          "two": "mjenjej ako %{count} sekundoma"
+        },
+        "over_x_years": {
+          "few": "wěcej ako %{count} lětami",
+          "one": "wěcej ako 1 lětom",
+          "other": "wěcej ako %{count} lětami",
+          "two": "wěcej ako %{count} lětoma"
+        },
+        "x_days": {
+          "few": "%{count} dnjami",
+          "one": "1 dnjom",
+          "other": "%{count} dnjami",
+          "two": "%{count} dnjoma"
+        },
+        "x_minutes": {
+          "few": "%{count} minutami",
+          "one": "1 minutu",
+          "other": "%{count} minutami",
+          "two": "%{count} minutoma"
+        },
+        "x_months": {
+          "few": "%{count} mjasecami",
+          "one": "1 mjasecom",
+          "other": "%{count} mjasecami",
+          "two": "%{count} mjasecoma"
+        },
+        "x_seconds": {
+          "few": "%{count} sekundami",
+          "one": "1 sekundu",
+          "other": "%{count} sekundami",
+          "two": "%{count} sekundoma"
+        }
+      }
+    },
+    "number": {
+      "currency": {
+        "format": {
+          "delimiter": " ",
+          "format": "%n %u",
+          "precision": 2,
+          "separator": ",",
+          "significant": false,
+          "strip_insignificant_zeros": false,
+          "unit": "€"
+        }
+      },
+      "format": {
+        "delimiter": ".",
+        "precision": 3,
+        "separator": ",",
+        "significant": false,
+        "strip_insignificant_zeros": false
+      },
+      "human": {
+        "decimal_units": {
+          "format": "%n %u",
+          "units": {
+            "unit": ""
+          }
+        },
+        "format": {
+          "delimiter": "",
+          "precision": 1,
+          "significant": true,
+          "strip_insignificant_zeros": true
+        },
+        "storage_units": {
+          "format": "%n %u",
+          "units": {
+            "byte": {
+              "few": "bajty",
+              "one": "bajt",
+              "other": "bajtow",
+              "two": "bajta"
+            },
+            "gb": "GB",
+            "kb": "KB",
+            "mb": "MB",
+            "tb": "TB"
+          }
+        }
+      },
+      "percentage": {
+        "format": {
+          "delimiter": ""
+        }
+      },
+      "precision": {
+        "format": {
+          "delimiter": ""
+        }
+      }
+    },
+    "support": {
+      "array": {
+        "last_word_connector": " a ",
+        "two_words_connector": " a ",
+        "words_connector": ", "
+      }
+    },
+    "time": {
+      "am": "dopołdnja",
+      "formats": {
+        "default": "%A, %d. %B %Y, %H:%M góź.",
+        "long": "%A, %d. %B %Y, %H:%M góź.",
+        "short": "%d. %B, %H:%M góź."
+      },
+      "pm": "wótpołdnja"
+    }
+  }
+}

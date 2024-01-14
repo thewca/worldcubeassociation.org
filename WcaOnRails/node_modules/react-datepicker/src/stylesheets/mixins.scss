@@ -1,0 +1,29 @@
+%navigation-chevron {
+  border-color: $datepicker__muted-color;
+  border-style: solid;
+  border-width: 3px 3px 0 0;
+  content: "";
+  display: block;
+  height: 9px;
+  position: absolute;
+  top: 6px;
+  width: 9px;
+
+  &--disabled,
+  &--disabled:hover {
+    border-color: $datepicker__navigation-disabled-color;
+    cursor: default;
+  }
+}
+
+%triangle-arrow-up {
+  fill: $datepicker__background-color;
+  color: $datepicker__background-color;
+  stroke: $datepicker__border-color;
+}
+
+%triangle-arrow-down {
+  fill: #fff;
+  color: #fff;
+  stroke: $datepicker__border-color;
+}

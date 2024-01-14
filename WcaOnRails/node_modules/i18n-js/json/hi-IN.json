@@ -1,0 +1,191 @@
+{
+  "hi-IN": {
+    "date": {
+      "abbr_day_names": [
+        "रवि",
+        "सोम",
+        "मंगल",
+        "बुध",
+        "गुरु",
+        "शुक्र",
+        "शनि"
+      ],
+      "abbr_month_names": [
+        null,
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec"
+      ],
+      "day_names": [
+        "रविवार",
+        "सोमवार",
+        "मंगलवार",
+        "बुधवार",
+        "गुरुवार",
+        "शुक्रवार",
+        "शनिवार"
+      ],
+      "formats": {
+        "default": "%d-%m-%Y",
+        "long": "%B %d, %Y",
+        "short": "%b %d"
+      },
+      "month_names": [
+        null,
+        "जनवरी",
+        "फरवरी",
+        "मार्च",
+        "अप्रैल",
+        "मई",
+        "जून",
+        "जुलाई",
+        "अगस्त",
+        "सितंबर",
+        "अक्टूबर",
+        "नवंबर",
+        "दिसंबर"
+      ],
+      "order": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "datetime": {
+      "distance_in_words": {
+        "about_x_hours": {
+          "one": "लग - भग एक घंटा",
+          "other": "लग - भग %{count} घंटा"
+        },
+        "about_x_months": {
+          "one": "लग - भग 1 महीना",
+          "other": "लग - भग %{count} महीना"
+        },
+        "about_x_years": {
+          "one": "लग - भग 1 साल",
+          "other": "लग - भग %{count} साल"
+        },
+        "almost_x_years": {
+          "one": "लग - भग एक साल",
+          "other": "लग - भग %{count} साल"
+        },
+        "half_a_minute": "एक आधा मिनट",
+        "less_than_x_seconds": {
+          "one": "एक सेकंड से कम",
+          "other": "%{count}  सेकंड से कम"
+        },
+        "less_than_x_minutes": {
+          "one": "एक मिनट से कम",
+          "other": "%{count} मिनट से कम"
+        },
+        "over_x_years": {
+          "one": "एक साल के ऊपर",
+          "other": "%{count} साल के ऊपर"
+        },
+        "x_seconds": {
+          "one": "एक सेकंड",
+          "other": "%{count} सेकंड"
+        },
+        "x_minutes": {
+          "one": "एक मिनट",
+          "other": "%{count} मिनट"
+        },
+        "x_days": {
+          "one": "एक दिन",
+          "other": "%{count} दिन"
+        },
+        "x_months": {
+          "one": "एक महीना",
+          "other": "%{count} महीना"
+        }
+      }
+    },
+    "number": {
+      "currency": {
+        "format": {
+          "delimiter": ",",
+          "format": "%u%n",
+          "precision": 2,
+          "separator": ".",
+          "significant": false,
+          "strip_insignificant_zeros": false,
+          "unit": "₹"
+        }
+      },
+      "format": {
+        "delimiter": ",",
+        "precision": 3,
+        "separator": ".",
+        "significant": false,
+        "strip_insignificant_zeros": false
+      },
+      "human": {
+        "decimal_units": {
+          "format": "%n %u",
+          "units": {
+            "billion": "अरब",
+            "million": "मिल्लिओंन",
+            "quadrillion": "करोड़ शंख",
+            "thousand": "हज़ार",
+            "trillion": "खरब",
+            "unit": ""
+          }
+        },
+        "format": {
+          "delimiter": "",
+          "precision": 3,
+          "significant": true,
+          "strip_insignificant_zeros": true
+        },
+        "storage_units": {
+          "format": "%n %u",
+          "units": {
+            "byte": {
+              "one": "Byte",
+              "other": "Bytes"
+            },
+            "gb": "GB",
+            "kb": "KB",
+            "mb": "MB",
+            "tb": "TB"
+          }
+        }
+      },
+      "percentage": {
+        "format": {
+          "delimiter": ""
+        }
+      },
+      "precision": {
+        "format": {
+          "delimiter": ""
+        }
+      }
+    },
+    "support": {
+      "array": {
+        "last_word_connector": ", और ",
+        "two_words_connector": " और ",
+        "words_connector": ", "
+      }
+    },
+    "time": {
+      "am": "am",
+      "formats": {
+        "default": "%a, %d %b %Y %H:%M:%S %z",
+        "long": "%B %d, %Y %H:%M",
+        "short": "%d %b %H:%M"
+      },
+      "pm": "pm"
+    }
+  }
+}

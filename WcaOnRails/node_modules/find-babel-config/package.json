@@ -1,0 +1,58 @@
+{
+  "name": "find-babel-config",
+  "version": "2.0.0",
+  "main": "lib/index.js",
+  "description": "Find the closest babel config based on a directory",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tleunen/find-babel-config.git"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "Tommy Leunen <tommy.leunen@gmail.com> (http://tommyleunen.com)",
+  "license": "MIT",
+  "keywords": [
+    "babel",
+    "config",
+    "loader",
+    "finder",
+    "babelrc"
+  ],
+  "dependencies": {
+    "json5": "^2.1.1",
+    "path-exists": "^4.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.7.5",
+    "@babel/preset-env": "^7.7.6",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.7.2",
+    "eslint-config-airbnb-base": "^14.0.0",
+    "eslint-plugin-import": "^2.19.1",
+    "jest": "^24.9.0",
+    "standard-version": "^7.0.1"
+  },
+  "scripts": {
+    "lint": "eslint src test",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watch",
+    "test": "jest",
+    "compile": "babel src --out-dir lib",
+    "prepublish": "npm run compile",
+    "release": "standard-version"
+  },
+  "jest": {
+    "testRegex": "/test/.*\\.test\\.js$",
+    "collectCoverageFrom": [
+      "src/**/*.js"
+    ]
+  },
+  "greenkeeper": {
+    "ignore": [
+      "eslint",
+      "eslint-plugin-import",
+      "babel-jest"
+    ]
+  }
+}

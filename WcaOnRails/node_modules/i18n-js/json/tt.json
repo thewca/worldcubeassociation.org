@@ -1,0 +1,207 @@
+{
+  "tt": {
+    "date": {
+      "abbr_day_names": [
+        "Якш",
+        "Дүш",
+        "Сиш",
+        "Чәр",
+        "Пән",
+        "Җом",
+        "Шим"
+      ],
+      "abbr_month_names": [
+        null,
+        "гыйн.",
+        "февр.",
+        "март",
+        "апр.",
+        "май",
+        "июнь",
+        "июль",
+        "авг.",
+        "сент.",
+        "окт.",
+        "нояб.",
+        "дек."
+      ],
+      "day_names": [
+        "якшәмбе",
+        "дүшәмбе",
+        "сишәмбе",
+        "чәршәмбе",
+        "пәнҗешәмбе",
+        "җомга",
+        "шимбә"
+      ],
+      "formats": {
+        "default": "%d.%m.%Y",
+        "long": "%-d %B %Y",
+        "short": "%-d %b"
+      },
+      "month_names": [
+        null,
+        "гыйнвар",
+        "февраль",
+        "март",
+        "апрель",
+        "май",
+        "июнь",
+        "июль",
+        "август",
+        "сентябрь",
+        "октябрь",
+        "ноябрь",
+        "декабрь"
+      ],
+      "order": [
+        "day",
+        "month",
+        "year"
+      ]
+    },
+    "datetime": {
+      "distance_in_words": {
+        "about_x_hours": {
+          "one": "бер сәгать чамасы",
+          "other": "%{count} сәгать чамасы"
+        },
+        "about_x_months": {
+          "one": "бер ай чамасы",
+          "other": "%{count} ай чамасы"
+        },
+        "about_x_years": {
+          "one": "бер ел чамасы",
+          "other": "%{count} ел чамасы"
+        },
+        "almost_x_years": {
+          "one": "бер ел диярлек",
+          "other": "%{count} ел диярлек"
+        },
+        "half_a_minute": "минуттан азрак",
+        "less_than_x_seconds": {
+          "one": "бер секундтан азрак",
+          "other": "%{count} секундтан азрак"
+        },
+        "less_than_x_minutes": {
+          "one": "бер минуттан азрак",
+          "other": "%{count} минуттан азрак"
+        },
+        "over_x_years": {
+          "one": "бер ел артык",
+          "other": "%{count} ел артык"
+        },
+        "x_seconds": {
+          "one": "бер секунд",
+          "other": "%{count} секунд"
+        },
+        "x_minutes": {
+          "one": "бер минут",
+          "other": "%{count} минут"
+        },
+        "x_days": {
+          "one": "бер көн",
+          "other": "%{count} көн"
+        },
+        "x_months": {
+          "one": "бер ай",
+          "other": "%{count} ай"
+        }
+      }
+    },
+    "number": {
+      "currency": {
+        "format": {
+          "delimiter": " ",
+          "format": "%n %u",
+          "precision": 2,
+          "separator": ",",
+          "significant": false,
+          "strip_insignificant_zeros": false,
+          "unit": "сум"
+        }
+      },
+      "format": {
+        "delimiter": " ",
+        "precision": 3,
+        "separator": ",",
+        "significant": false,
+        "strip_insignificant_zeros": false
+      },
+      "human": {
+        "decimal_units": {
+          "format": "%n %u",
+          "units": {
+            "billion": {
+              "one": "миллиард",
+              "other": "миллиард"
+            },
+            "million": {
+              "one": "миллион",
+              "other": "миллион"
+            },
+            "quadrillion": {
+              "one": "квадриллион",
+              "other": "квадриллион"
+            },
+            "thousand": {
+              "one": "мең",
+              "other": "мең"
+            },
+            "trillion": {
+              "one": "триллион",
+              "other": "триллион"
+            },
+            "unit": ""
+          }
+        },
+        "format": {
+          "delimiter": "",
+          "precision": 1,
+          "significant": false,
+          "strip_insignificant_zeros": false
+        },
+        "storage_units": {
+          "format": "%n %u",
+          "units": {
+            "byte": {
+              "one": "байт",
+              "other": "байт"
+            },
+            "gb": "ГБ",
+            "kb": "КБ",
+            "mb": "МБ",
+            "tb": "ТБ"
+          }
+        }
+      },
+      "percentage": {
+        "format": {
+          "delimiter": "",
+          "format": "%n%"
+        }
+      },
+      "precision": {
+        "format": {
+          "delimiter": ""
+        }
+      }
+    },
+    "support": {
+      "array": {
+        "last_word_connector": " һәм ",
+        "two_words_connector": " һәм ",
+        "words_connector": ", "
+      }
+    },
+    "time": {
+      "am": "иртәнге",
+      "formats": {
+        "default": "%a, %d %b %Y, %H:%M:%S %z",
+        "long": "%d %B %Y, %H:%M",
+        "short": "%d %b, %H:%M"
+      },
+      "pm": "кичке"
+    }
+  }
+}

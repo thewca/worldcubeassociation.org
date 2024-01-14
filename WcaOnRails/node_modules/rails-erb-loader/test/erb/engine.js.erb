@@ -1,0 +1,8 @@
+<%
+  def erb_engine
+    return 'erb' if defined?(ERB)
+    return 'erubis' if defined?(Erubis)
+    return 'erubi' if defined?(Erubi)
+  end
+%>
+var engine = '<%= erb_engine %>'

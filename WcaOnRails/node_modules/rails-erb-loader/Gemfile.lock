@@ -1,0 +1,15 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    erubi (1.6.1)
+    erubis (2.7.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  erubi
+  erubis
+
+BUNDLED WITH
+   1.15.1

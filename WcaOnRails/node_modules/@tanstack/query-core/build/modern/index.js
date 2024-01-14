@@ -1,0 +1,53 @@
+// src/index.ts
+import { CancelledError } from "./retryer.js";
+import { QueryCache } from "./queryCache.js";
+import { QueryClient } from "./queryClient.js";
+import { QueryObserver } from "./queryObserver.js";
+import { QueriesObserver } from "./queriesObserver.js";
+import { InfiniteQueryObserver } from "./infiniteQueryObserver.js";
+import { MutationCache } from "./mutationCache.js";
+import { MutationObserver } from "./mutationObserver.js";
+import { notifyManager } from "./notifyManager.js";
+import { focusManager } from "./focusManager.js";
+import { onlineManager } from "./onlineManager.js";
+import {
+  hashKey,
+  replaceEqualDeep,
+  isServer,
+  matchQuery,
+  keepPreviousData
+} from "./utils.js";
+import { isCancelledError } from "./retryer.js";
+import {
+  dehydrate,
+  hydrate,
+  defaultShouldDehydrateQuery,
+  defaultShouldDehydrateMutation
+} from "./hydration.js";
+export * from "./types.js";
+import { Query } from "./query.js";
+export {
+  CancelledError,
+  InfiniteQueryObserver,
+  MutationCache,
+  MutationObserver,
+  QueriesObserver,
+  Query,
+  QueryCache,
+  QueryClient,
+  QueryObserver,
+  defaultShouldDehydrateMutation,
+  defaultShouldDehydrateQuery,
+  dehydrate,
+  focusManager,
+  hashKey,
+  hydrate,
+  isCancelledError,
+  isServer,
+  keepPreviousData,
+  matchQuery,
+  notifyManager,
+  onlineManager,
+  replaceEqualDeep
+};
+//# sourceMappingURL=index.js.map
