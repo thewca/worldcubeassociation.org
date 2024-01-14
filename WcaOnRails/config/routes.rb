@@ -173,6 +173,7 @@ Rails.application.routes.draw do
     get 'wrt' => 'panel#wrt', as: :panel_wrt
     get 'wst' => 'panel#wst', as: :panel_wst
     get 'board' => 'panel#board', as: :panel_board
+    get 'leader' => 'panel#leader', as: :panel_leader
     get 'senior_delegate' => 'panel#senior_delegate', as: :panel_senior_delegate
   end
   resources :notifications, only: [:index]

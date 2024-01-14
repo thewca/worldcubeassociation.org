@@ -1,0 +1,4 @@
+<% provide(:title, 'Leader Panel') %>
+<%= react_component("Panel/Leader", {
+  loggedInUserId: current_user.id,
+}) %>
