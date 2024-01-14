@@ -24,7 +24,9 @@ function ListView({
   switch (filterState.timeOrder) {
     case 'present': {
       const inProgressComps = competitions?.filter((comp) => comp.inProgress);
-      const upcomingComps = competitions?.filter((comp) => !comp.inProgress);
+      const upcomingComps = competitions?.filter((comp) => (
+        !comp.inProgress && !comp.isProbablyOver
+      ));
       return (
         <div id="competitions-list">
           <ListViewSection
