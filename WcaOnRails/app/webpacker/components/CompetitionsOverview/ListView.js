@@ -129,14 +129,7 @@ function ListViewFooter({
   isLoading, hasMoreCompsToLoad, numCompetitions, bottomRef,
 }) {
   if (isLoading) {
-    /* Could not figure out why Semantic UI's animated loader icon doesn't show */
-    return (
-      <Loader active inline="centered" size="small">
-        <div style={{ textAlign: 'center' }}>
-          {I18n.t('competitions.index.loading_comps')}
-        </div>
-      </Loader>
-    );
+    return <Loader active inline="centered" size="small" />;
   }
 
   if (!hasMoreCompsToLoad) {
