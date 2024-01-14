@@ -1298,8 +1298,8 @@ class User < ApplicationRecord
       metadata: {
         status: self.delegate_status,
         location: self.location,
-        first_delegated: self.actually_delegated_competitions.min_by(&:start_date)&.start_date,
-        last_delegated: self.actually_delegated_competitions.max_by(&:start_date)&.start_date,
+        first_delegated: self.actually_delegated_competitions.minimum(:start_date),
+        last_delegated: self.actually_delegated_competitions.maximum(:start_date),
         total_delegated: self.actually_delegated_competitions.count,
       },
     }
