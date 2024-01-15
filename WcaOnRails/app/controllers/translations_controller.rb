@@ -57,7 +57,7 @@ class TranslationsController < ApplicationController
     info = ["WCA Account ID: *#{user.id}*"]
     info.unshift("WCA ID: *[#{user.wca_id}](#{person_url(user.wca_id)})*") if user.wca_id
     is_verified_translator = false
-    UserGroup.translators.each do |translators_group|
+    UserGroup.translator_groups.each do |translators_group|
       if translators_group.roles.any? { |role| role.user_id == user.id && role.metadata.locale == locale }
         is_verified_translator = true
         break
