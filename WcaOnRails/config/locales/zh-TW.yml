@@ -731,21 +731,20 @@ zh-TW:
           delegate: 代表
           #original_hash: d463c23
           senior_delegate: 高級代表
-        teams:
+        teams_committees:
           #original_hash: 6853c98
           member: 成員
           #original_hash: c366473
           senior_member: 資深成員
           #original_hash: e26c936
           leader: 領導者
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: 男性
-        #original_hash: b7c17e9
-        f: 女性
-        #original_hash: 6e6a6f2
-        o: 其他
+        councils:
+          #original_hash: 6853c98
+          member: 成員
+          #original_hash: c366473
+          senior_member: 資深成員
+          #original_hash: e26c936
+          leader: 領導者
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1024,22 +1023,10 @@ zh-TW:
         #original_hash: da39a3e
         content: ''
       person:
-        #original_hash: 498f4c5
-        dob: 生日請按照YYYY-MM-DD的格式。
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
         #original_hash: da39a3e
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
       poll:
@@ -1760,8 +1747,8 @@ zh-TW:
         #original_hash: 1a18831
         '7': 頭像不得含有冒犯他人內容（例如：無禮的手勢）
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: 針對WCA 員工的指導方針：
+        #original_hash: 5d5a47a
+        title: 針對WCA 員工和實習代表的指導方針：
         paragraphs:
           #original_hash: ff6d2e8
           '1': 個人頭像必須和現在的你不能有太大差距，描繪在比賽會場看到的樣子。
@@ -1803,10 +1790,6 @@ zh-TW:
       must_have_a_change: 姓名或區域必須不同才能更新此人。
       #original_hash: 012f032
       must_be_senior: 必須為高級代表
-      #original_hash: 2e582eb
-      must_not_be_present: 不得為現任
-      #original_hash: 5b4eac9
-      senior_has_delegate: 一般代表無法將高級代表降職
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
       #original_hash: ec5db95
@@ -2271,6 +2254,8 @@ zh-TW:
       in_progress_at_wca_live_html: '這場比賽正在進行中。您可以在<a href=''%{link_here}''>這裡</a>確認即時的成績。'
       #original_hash: 8ab1548
       reg_opens_too_early: 開始報名的時間短於規定的48小時。
+      #original_hash: a25e7a2
+      registration_already_closed: 報名截止日期已超過。請將截止日期設定成未來的日期。
       #original_hash: 3322400
       tooltip_registered: 您已經報名了。
       #original_hash: f2d092f
@@ -2867,6 +2852,8 @@ zh-TW:
       not_all_delegates: 不全是代表
       #original_hash: 43a23c2
       registration_close_after_open: 報名截止時間必須晚於報名開始時間
+      #original_hash: 2f8765e
+      registration_already_closed: 報名不能是已經結束的。
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: 開始日期必須是28天之後。
       #original_hash: 43a83a9
@@ -3371,9 +3358,9 @@ zh-TW:
       unstick_at_future: 必須要是之後的日期
   contacts:
     website:
-      #original_hash: 35c333c
+      #original_hash: d7707e7
       faq_note_html: >-
-        再詢問前，也許您可以先看看我們的<a href="/faq">常見問題</a>！如果您想要聯絡特定委員會或團隊，你可以<a
+        在詢問前，也許您可以先看看我們的<a href="/faq">常見問題</a>！如果您想要聯絡這邊沒有列出的特定委員會或團隊，你可以<a
         href="/teams-committees">這個頁面</a>找到聯絡資訊。
       #original_hash: 4ef2aad
       title: WCA聯絡表單
@@ -3809,6 +3796,8 @@ zh-TW:
     acknowledges: WCA認可以下WCA代表：
     #original_hash: 0397112
     regions: 區域
+    #original_hash: 0e57333
+    all_regions: 所有區域
     table:
       #original_hash: 709a232
       name: 姓名
@@ -3816,6 +3805,14 @@ zh-TW:
       role: 職位
       #original_hash: 0f21717
       region: 區域
+      #original_hash: fee4fb7
+      first_delegated: 第一次監督的比賽
+      #original_hash: e2232e5
+      last_delegated: 最後一次監督比賽
+      #original_hash: 5ab4a17
+      total_delegated: 總共監督
+      #original_hash: 90ccd64
+      history: 歷史
   regional_organizations:
     #original_hash: 37b8fdc
     title: 區域組織

@@ -23,14 +23,6 @@ module StaticPagesHelper
     end
   end
 
-  def subtext_for_officer(user)
-    positions = user.current_teams.select { |team| Team.all_officers.include? team }.map(&:name)
-    if user.team_leader?(Team.wfc)
-      positions.push(t('about.structure.treasurer.name'))
-    end
-    positions.join("<br />").html_safe
-  end
-
   def team_member_name(name, &)
     content_tag(:div, class: "team-member-name") do
       name.html_safe + tag.br + content_tag(:span, class: "team-subtext", &)

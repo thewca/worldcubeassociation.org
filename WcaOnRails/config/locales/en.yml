@@ -2211,6 +2211,10 @@ en:
       name: "Name"
       role: "Role"
       region: "Region"
+      first_delegated: "First Delegated"
+      last_delegated: "Last Delegated"
+      total_delegated: "Total Delegated"
+      history: "History"
   regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following Regional Organizations:"

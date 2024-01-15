@@ -42,6 +42,10 @@ class PanelController < ApplicationController
         "subordinateDelegateClaims" => "subordinate-delegate-claims",
         "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
       },
+      "leader" => {
+        "leaderForms" => "leader-forms",
+        "groupsManager" => "groups-manager",
+      },
       "wfc" => {
         "duesExport" => "dues-export",
         "countryBands" => "country-bands",

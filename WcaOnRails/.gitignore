@@ -48,3 +48,12 @@ yarn-debug.log*
 
 # Healthcheck flag for our Rails docker container
 .db-inited
+
+# Per https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
