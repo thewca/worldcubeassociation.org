@@ -77,7 +77,13 @@ function CompetitionsView() {
           displayMode === 'map'
           && (
             <MapView
-              competitions={competitions}
+              competitions={
+                filterState.timeOrder === 'present'
+                  ? competitions.filter((comp) => (
+                    !comp.inProgress && !comp.isProbablyOver
+                  ))
+                  : competitions
+              }
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />
