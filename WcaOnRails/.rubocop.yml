@@ -226,3 +226,6 @@ Style/OpenStructUse:
 
 Style/HashSyntax:
   EnforcedShorthandSyntax: never
+
+Naming/BlockForwarding:
+  Enabled: false
