@@ -369,11 +369,11 @@ function CompDisplayCheckboxes({
 function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   return (
     <Button.Group toggle fluid id="display">
-      <Button name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
+      <Button type="button" name="display" id="display-list" active={displayMode === 'list'} onClick={() => setDisplayMode('list')}>
         <Icon className="icon list ul " />
         {` ${I18n.t('competitions.index.list')} `}
       </Button>
-      <Button name="display" id="display-map" active={displayMode === 'map'} onClick={() => setDisplayMode('map')}>
+      <Button type="button" name="display" id="display-map" active={displayMode === 'map'} onClick={() => setDisplayMode('map')}>
         <Icon className="icon map marker alternate " />
         {` ${I18n.t('competitions.index.map')} `}
       </Button>
