@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Loader } from 'semantic-ui-react';
+import BarLoader from 'react-spinners/BarLoader';
 
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
@@ -129,7 +129,7 @@ function ListViewFooter({
   isLoading, hasMoreCompsToLoad, numCompetitions, bottomRef,
 }) {
   if (isLoading) {
-    return <Loader active inline="centered" size="small" />;
+    return <BarLoader cssOverride={{ width: '100%' }} />;
   }
 
   if (!hasMoreCompsToLoad) {
