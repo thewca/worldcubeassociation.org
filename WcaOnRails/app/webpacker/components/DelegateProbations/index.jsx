@@ -3,11 +3,7 @@ import { Button, Confirm, Table } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import {
-  apiV0Urls,
-  startDelegateProbationUrl,
-  endDelegateProbationUrl,
-} from '../../lib/requests/routes.js.erb';
+import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import WcaSearch from '../SearchWidget/WcaSearch';
@@ -22,7 +18,9 @@ function ProbationListTable({
   const [endProbationParams, setEndProbationParams] = React.useState();
 
   const endProbation = () => {
-    save(endDelegateProbationUrl, endProbationParams, sync, { method: 'POST' });
+    save(apiV0Urls.userRoles.update(endProbationParams.probationRoleId), {
+      endDate: endProbationParams.endDate,
+    }, sync, { method: 'PATCH' });
     setConfirmOpen(false);
     setEndProbationParams(null);
   };
@@ -103,7 +101,10 @@ export default function DelegateProbations() {
         params={{ only_staff_delegates: true }}
       />
       <Button
-        onClick={() => save(startDelegateProbationUrl, { userId: user.id }, () => {
+        onClick={() => save(apiV0Urls.userRoles.create(), {
+          userId: user.id,
+          groupType: groupTypes.delegate_probation,
+        }, () => {
           sync();
           setUser(null);
         }, { method: 'POST' })}
