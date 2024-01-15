@@ -5,10 +5,9 @@
          competitions_view += "?display=admin" if current_user.can_see_admin_competitions? %>
       <% [
         { text: "List competitions", path: competitions_view, fa_icon: "list" },
-        { text: "Delegates", path: delegates_stats_path, fa_icon: "sitemap" },
-        { text: "Delegate Probations", path: delegate_probations_path, fa_icon: "sitemap" },
+        { text: "Delegates", path: delegates_path(anchor: "all"), fa_icon: "sitemap" },
         { text: "Edit teams", path: teams_path, fa_icon: "users" },
-        { text: "Posting Dashboard", path: results_posting_dashboard_path, fa_icon: "user lock" },
+        { text: "Posting Dashboard", path: panel_wrt_path(anchor: PanelController.panel_list['wrt']['postingDashboard']), fa_icon: "user lock" },
         { text: "Run validators", path: admin_check_results_path, fa_icon: "check double" },
         { text: "Create newcomers", path: admin_finish_unfinished_persons_path, fa_icon: "user plus" },
         { text: "Check records", path: admin_check_regional_records_path, fa_icon: "trophy" },
@@ -16,7 +15,7 @@
         { text: "Generate data exports", path: admin_generate_exports_path, fa_icon: "cloud upload alt" },
         { text: "Generate DB token", path: admin_generate_db_token_path, fa_icon: "key" },
         { text: "Fix results", path: admin_fix_results_path, fa_icon: "pencil alt" },
-        { text: "Edit person", path: admin_edit_person_path, fa_icon: "user" },
+        { text: "Edit person", path: panel_wrt_path(anchor: PanelController.panel_list['wrt']['editPerson']), fa_icon: "user" },
         { text: "Merge people", path: admin_merge_people_path, fa_icon: "code branch" },
         { text: "Anonymize person", path: admin_anonymize_person_path, fa_icon: "id card" },
         { text: "Reassign connected wca id", path: admin_reassign_wca_id_path, fa_icon: "code branch" },
