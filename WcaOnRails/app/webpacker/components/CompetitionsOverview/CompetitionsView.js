@@ -79,7 +79,7 @@ function CompetitionsView() {
             <MapView
               competitions={
                 filterState.timeOrder === 'present'
-                  ? competitions.filter((comp) => (
+                  ? competitions?.filter((comp) => (
                     !comp.inProgress && !comp.isProbablyOver
                   ))
                   : competitions
