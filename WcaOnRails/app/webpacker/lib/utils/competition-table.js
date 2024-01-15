@@ -26,8 +26,10 @@ export function PseudoLinkMarkdown({ text }) {
   }
 
   return (
-    <a href={text.slice(openParenIndex + 1, closeParenIndex)} target="_blank" rel="noreferrer">
-      <p>{text.slice(openBracketIndex + 1, closeBracketIndex)}</p>
-    </a>
+    <p>
+      <a href={text.slice(openParenIndex + 1, closeParenIndex)} target="_blank" rel="noreferrer">
+        {text.slice(openBracketIndex + 1, closeBracketIndex)}
+      </a>
+    </p>
   );
 }
