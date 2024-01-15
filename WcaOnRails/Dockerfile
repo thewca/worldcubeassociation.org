@@ -43,7 +43,7 @@ COPY Gemfile Gemfile.lock ./
 RUN bundle install
 # Install node dependencies
 COPY package.json ./
-RUN yarn install
+RUN npm install
 
 COPY . .
 
