@@ -8,10 +8,7 @@ node.default['nodejs']['version'] = '20.10.0'
 node.default['nodejs']['repo'] = 'https://deb.nodesource.com/node_20.x'
 include_recipe "nodejs"
 
-npm_package 'yarn' do
-  version '1.22.18'
-  options ['--global']
-end
+execute "corepack enable"
 
 username, repo_root = WcaHelper.get_username_and_repo_root(self)
 rails_root = "#{repo_root}/WcaOnRails"

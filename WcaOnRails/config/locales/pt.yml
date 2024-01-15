@@ -427,7 +427,7 @@ pt:
         results_notifications_enabled: Enviar-me um email quando os resultados forem carregados.
         #original_hash: 29ce2ff
         registration_notifications_enabled: >-
-          Quando eu organizar for delegado de uma competição, envie-me email
+          Quando eu organizar ou for delegado de uma competição, envie-me email
           quando novos registos forem submetidos.
         #original_hash: de60ab8
         delegate_status: Estatuto de delegado
@@ -2063,8 +2063,8 @@ pt:
         #original_hash: 1a18831
         '7': O avatar não pode apresentar conteúdo ofensivo (ex. gestos ofensivos).
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: 'Orientações adicionais para membros de Staff:'
+        #original_hash: 5d5a47a
+        title: 'Orientações adicionais para membros de Staff e Delegados em Treino:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -3792,12 +3792,12 @@ pt:
       unstick_at_future: tem de ser no futuro
   contacts:
     website:
-      #original_hash: 35c333c
+      #original_hash: d7707e7
       faq_note_html: >-
         Antes de colocar uma questão, pode querer verificar a nossa <a
         href="/faq">Lista de Perguntas Frequentes </a>! Se desejar contactar um
-        comité ou equipa específicos, pode encontrar as informações de contacto
-        <a href="/teams-committees">nesta página</a>.
+        comité ou equipa específicos não listados aqui, pode encontrar as
+        informações de contacto <a href="/teams-committees">nesta página</a>.
       #original_hash: 4ef2aad
       title: Formulário de Contacto da WCA
       inquiries:
@@ -4412,6 +4412,8 @@ pt:
     acknowledges: 'A WCA reconhece os seguintes Delegados da WCA:'
     #original_hash: 0397112
     regions: Regiões
+    #original_hash: 0e57333
+    all_regions: Todas as Regiões
     table:
       #original_hash: 709a232
       name: Nome
@@ -4419,6 +4421,14 @@ pt:
       role: Posição
       #original_hash: 0f21717
       region: Região
+      #original_hash: fee4fb7
+      first_delegated: Primeira como Delegado
+      #original_hash: e2232e5
+      last_delegated: Última como Delegado
+      #original_hash: 5ab4a17
+      total_delegated: Total como Delegado
+      #original_hash: 90ccd64
+      history: História
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizações Regionais

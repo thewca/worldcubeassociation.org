@@ -8,5 +8,12 @@ FactoryBot.define do
       start_date { Date.today }
       end_date { Date.today + 1.year }
     end
+
+    factory :translator_role do
+      user { FactoryBot.create(:user) }
+      group_id { FactoryBot.create(:translators_user_group).id }
+      start_date { Date.today }
+      end_date { Date.today + 1.year }
+    end
   end
 end

@@ -65,12 +65,12 @@ PreCommit:
       # Others are handled by EsLint
       'WcaOnRails/app/assets'
     required_executable: 'WcaOnRails/bin/yarn'
-    flags: ['run', '-s', 'jshint', '--verbose']
+    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'jshint', '--verbose']
 
   Stylelint:
     enabled: true
     required_executable: 'WcaOnRails/bin/yarn'
-    flags: ['run', '-s', 'stylelint', '-f', 'compact']
+    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'stylelint', '-f', 'compact']
 
   TrailingWhitespace:
     enabled: true
