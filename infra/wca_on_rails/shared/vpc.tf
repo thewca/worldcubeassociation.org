@@ -33,7 +33,7 @@ resource "aws_default_subnet" "default_az4" {
 }
 
 output "private_subnets" {
-  value = [aws_default_subnet.default_az3, aws_default_subnet.default_az4]
+  value = [aws_default_subnet.default_az2]
 }
 
 output "vpc_id" {

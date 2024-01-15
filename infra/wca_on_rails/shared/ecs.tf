@@ -121,7 +121,7 @@ resource "aws_autoscaling_group" "t3_group" {
   min_size                  = 0
   max_size                  = 6
   desired_capacity          = 0
-  vpc_zone_identifier       = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id, aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
+  vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
   launch_configuration      = aws_launch_configuration.t3_launch_config.name
   health_check_grace_period = var.rails_startup_time
   health_check_type         = "EC2"
@@ -164,7 +164,7 @@ resource "aws_autoscaling_group" "m6i_group" {
   min_size                  = 0
   max_size                  = 2
   desired_capacity          = 0
-  vpc_zone_identifier       = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az2.id, aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
+  vpc_zone_identifier       = [aws_default_subnet.default_az2.id]
   launch_configuration      = aws_launch_configuration.m6i_launch_config.name
   health_check_grace_period = var.rails_startup_time
   health_check_type         = "EC2"
