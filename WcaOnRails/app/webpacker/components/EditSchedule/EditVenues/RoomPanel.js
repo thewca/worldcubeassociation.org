@@ -31,16 +31,14 @@ function RoomPanel({
     <Card fluid raised>
       <Card.Content>
         <Card.Header>
+          <Button floated="right" compact icon negative title="Remove" onClick={handleDeleteRoom}>
+            <Icon name="trash" />
+          </Button>
           {sendToFront && (
-            <Button floated="left" compact icon labelPosition="left" onClick={sendToFront}>
+            <Button floated="right" compact icon title="To front" onClick={sendToFront}>
               <Icon name="up arrow" />
-              To front
             </Button>
           )}
-          <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteRoom}>
-            <Icon name="trash" />
-            Remove
-          </Button>
         </Card.Header>
         <Card.Description>
           <Form>

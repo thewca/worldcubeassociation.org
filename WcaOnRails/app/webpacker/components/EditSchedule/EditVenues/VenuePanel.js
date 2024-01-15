@@ -84,16 +84,16 @@ function VenuePanel({
       </Container>
       <Card.Content>
         <Card.Header>
-          {sendToFront && (
-            <Button floated="left" compact icon labelPosition="left" onClick={sendToFront}>
-              <Icon name="up arrow" />
-              To front
-            </Button>
-          )}
           <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteVenue}>
             <Icon name="trash" />
             Remove
           </Button>
+          {sendToFront && (
+            <Button floated="right" compact icon labelPosition="left" onClick={sendToFront}>
+              <Icon name="up arrow" />
+              To front
+            </Button>
+          )}
         </Card.Header>
         <Card.Description>
           <Form>
