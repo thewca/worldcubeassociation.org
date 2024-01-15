@@ -10,6 +10,7 @@ function ListViewSection({
   competitions,
   title,
   shouldShowRegStatus,
+  isLoading,
   hasMoreCompsToLoad,
   isSortedByAnnouncement = false,
 }) {
@@ -17,7 +18,7 @@ function ListViewSection({
     <List divided relaxed>
       <List.Item>
         <strong>
-          {`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad ? '...' : ''})`}
+          {`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad || isLoading ? '...' : ''})`}
         </strong>
       </List.Item>
       {competitions?.map((comp, index) => (
