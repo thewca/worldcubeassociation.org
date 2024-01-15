@@ -8,11 +8,23 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
-  # The order in which the roles should be sorted.
-  STATUS_SORTING_ORDER = ['leader', 'senior_member', 'member'].freeze
-
-  private def status_sort_rank(status)
-    STATUS_SORTING_ORDER.find_index(status) || STATUS_SORTING_ORDER.length
+  private def sort_rank(group_type, status)
+    ranking_order = [ # This is the order in which the roles should be sorted when the sort key is "rank".
+      group_type == UserGroup.group_types[:board], # 1. Board members
+      group_type == UserGroup.group_types[:officers], # 2. Officers
+      group_type == UserGroup.group_types[:teams_committees] && status == 'leader', # 3. Team/Committee leaders
+      group_type == UserGroup.group_types[:delegate_regions] && status == 'senior_delegate', # 4. Senior Delegates
+      group_type == UserGroup.group_types[:delegate_regions] && status == 'regional_delegate', # 5. Regional Delegates
+      group_type == UserGroup.group_types[:councils] && status == 'leader', # 6. Council leaders
+      group_type == UserGroup.group_types[:teams_committees] && status == 'senior_member', # 7. Team/Committee senior members
+      group_type == UserGroup.group_types[:delegate_regions] && status == 'delegate', # 8. Delegates
+      group_type == UserGroup.group_types[:councils] && status == 'senior_member', # 9. Council senior members
+      group_type == UserGroup.group_types[:teams_committees] && status == 'member', # 10. Team/Committee members
+      group_type == UserGroup.group_types[:delegate_regions] && status == 'candidate_delegate', # 11. Junior Delegates
+      group_type == UserGroup.group_types[:councils] && status == 'member', # 12. Council members
+      group_type == UserGroup.group_types[:delegate_regions] && status == 'trainee_delegate', # 13. Trainee Delegates
+    ]
+    ranking_order.index(true) || ranking_order.length
   end
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -27,10 +39,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         case sort_key
         when 'startDate'
           role[:start_date] # Can be changed to `role.start_date` once all roles are migrated to the new system.
-        when 'status'
-          status_sort_rank(role[:metadata][:status]) # Can be changed to `status_sort_rank(role.metadata.status)` once all roles are migrated to the new system.
+        when 'rank'
+          sort_rank(role[:group][:group_type], role[:metadata][:status]) # Can be changed to `sort_rank(role.group.group_type, role.metadata.status)` once all roles are migrated to the new system.
         when 'name'
           role[:user][:name] # Can be changed to `role.user.name` once all roles are migrated to the new system.
+        when 'groupName'
+          role[:group][:name] # Can be changed to `role.group.name` once all roles are migrated to the new system.
         end
       }
     }
@@ -92,19 +106,67 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     roles.concat(user.team_roles)
 
-    if user.admin? || user.board_member?
+    if user.board_member?
       roles << {
         group: {
-          id: user.admin? ? 'admin' : 'board',
-          name: user.admin? ? 'Admin Group' : 'Board Group',
-          group_type: UserGroup.group_types[:teams_committees],
+          id: 'board',
+          name: 'WCA Board of Directors',
+          group_type: UserGroup.group_types[:board],
+          is_hidden: false,
+          is_active: true,
+          metadata: {
+            friendly_id: 'board',
+          },
+        },
+        is_active: true,
+        user: user,
+        metadata: {
+          status: 'member',
+        },
+      }
+    end
+
+    Team.all_officers.each do |officer_team|
+      if officer_team == Team.chair
+        status = 'chair'
+      elsif officer_team == Team.executive_director
+        status = 'executive_director'
+      elsif officer_team == Team.secretary
+        status = 'secretary'
+      elsif officer_team == Team.vice_chair
+        status = 'vice_chair'
+      end
+      if user.team_member?(officer_team)
+        roles << {
+          group: {
+            id: 'officers',
+            name: 'WCA Officers',
+            group_type: UserGroup.group_types[:officers],
+            is_hidden: false,
+            is_active: true,
+          },
+          is_active: true,
+          user: user,
+          metadata: {
+            status: status,
+          },
+        }
+      end
+    end
+
+    if Team.wfc.current_members.select(&:team_leader).map(&:user).include?(user)
+      roles << {
+        group: {
+          id: 'officers',
+          name: 'WCA Officers',
+          group_type: UserGroup.group_types[:officers],
           is_hidden: false,
           is_active: true,
         },
         is_active: true,
         user: user,
         metadata: {
-          status: 'member',
+          status: 'treasurer',
         },
       }
     end

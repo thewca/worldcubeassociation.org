@@ -9,7 +9,7 @@ import Loading from '../../Requests/Loading';
 function GroupTable({ groupId }) {
   const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
     groupId,
-    'status,startDate,name', // Sort params
+    'rank,startDate,name', // Sort params
     { isActive: true },
   ));
 
@@ -44,6 +44,7 @@ function GroupTable({ groupId }) {
 export default function GroupsManager({ loggedInUserId }) {
   const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
     loggedInUserId,
+    'groupName', // Sort params
     { isActive: true, isGroupHidden: false, status: 'leader' },
   ));
   const [selectedGroupId, setSelectedGroupId] = useState();

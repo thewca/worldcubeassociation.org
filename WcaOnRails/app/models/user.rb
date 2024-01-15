@@ -1286,10 +1286,12 @@ class User < ApplicationRecord
 
   def team_roles
     roles = []
-    self.current_teams.each do |team|
-      team_membership_details = self.team_membership_details(team)
-      roles << team_membership_details.role
-    end
+    self.current_teams
+        .reject { |team| team == Team.board || Team.all_officers.include?(team) }
+        .each do |team|
+          team_membership_details = self.team_membership_details(team)
+          roles << team_membership_details.role
+        end
     roles
   end
 
