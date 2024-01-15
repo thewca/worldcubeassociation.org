@@ -1,5 +1,7 @@
 import { DateTime } from 'luxon';
 
+import { competitionConstants } from '../../lib/wca-data.js.erb';
+
 const isContinent = (region) => region[0] === '_';
 
 export function calculateQueryKey(filterState) {
@@ -43,10 +45,10 @@ export function createSearchParams(filterState, pageParam) {
     searchParams.append('ongoing_and_future', dateNow.toFormat('yyyy-MM-dd'));
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'recent') {
-    const thirtyDaysAgo = dateNow.minus({ days: 30 });
+    const recentDaysAgo = dateNow.minus({ days: competitionConstants.competitionRecentDays });
 
     searchParams.append('sort', '-end_date,-start_date,name');
-    searchParams.append('start', thirtyDaysAgo.toFormat('yyyy-MM-dd'));
+    searchParams.append('start', recentDaysAgo.toFormat('yyyy-MM-dd'));
     searchParams.append('end', dateNow.toFormat('yyyy-MM-dd'));
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'past') {
