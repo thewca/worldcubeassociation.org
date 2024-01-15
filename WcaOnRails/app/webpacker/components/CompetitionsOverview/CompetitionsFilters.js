@@ -84,7 +84,7 @@ function EventSelector({ selectedEvents, dispatchFilter }) {
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
         <Button primary type="button" size="mini" id="select-all-events" onClick={() => dispatchFilter({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
-        <Button size="mini" id="clear-all-events" onClick={() => dispatchFilter({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        <Button type="button" size="mini" id="clear-all-events" onClick={() => dispatchFilter({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
 
       <div id="events">
@@ -94,6 +94,7 @@ function EventSelector({ selectedEvents, dispatchFilter }) {
               basic
               icon
               toggle
+              type="button"
               size="mini"
               className="event-checkbox"
               id={`checkbox-${eventId}`}
@@ -195,6 +196,7 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
 
         <Button
           primary
+          type="button"
           name="state"
           id="present"
           value="present"
@@ -206,6 +208,7 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
 
         <Button
           primary
+          type="button"
           name="state"
           id="recent"
           value="recent"
@@ -221,6 +224,7 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
 
         <Button
           primary
+          type="button"
           name="state"
           id="by_announcement"
           value="by_announcement"
@@ -243,6 +247,7 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
       primary
+      type="button"
       name="state"
       id="past"
       value="past"
@@ -289,6 +294,7 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
   const customTimeSelectionButton = (
     <Button
       primary
+      type="button"
       name="state"
       id="custom"
       value="custom"
