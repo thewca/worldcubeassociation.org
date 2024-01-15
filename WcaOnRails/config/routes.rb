@@ -184,7 +184,6 @@ Rails.application.routes.draw do
 
   post 'upload/image', to: 'upload#image'
 
-  get 'admin/delegate_probations' => 'delegates#probations', as: :delegate_probations
   post 'admin/end_delegate_probation' => 'delegates#end_delegate_probation', as: :end_delegate_probation
 
   get 'robots' => 'static_pages#robots'
