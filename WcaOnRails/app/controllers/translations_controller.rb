@@ -87,6 +87,28 @@ class TranslationsController < ApplicationController
   }.freeze
   # rubocop:enable Style/NumericLiterals
 
+  def self.translators_to_roles
+    VERIFIED_TRANSLATORS_BY_LOCALE.flat_map do |locale, user_ids|
+      user_ids.map do |user_id|
+        {
+          end_date: nil,
+          is_active: true,
+          group: {
+            id: "translators",
+            name: "Translators",
+            group_type: UserGroup.group_types[:translators],
+            is_hidden: false,
+            is_active: true,
+          },
+          user: User.find(user_id),
+          metadata: {
+            locale: locale,
+          },
+        }
+      end
+    end
+  end
+
   private def pr_description_for(user, locale)
     info = ["WCA Account ID: *#{user.id}*"]
     info.unshift("WCA ID: *[#{user.wca_id}](#{person_url(user.wca_id)})*") if user.wca_id

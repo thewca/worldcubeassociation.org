@@ -56,7 +56,7 @@ export default function RolesTab({ userId }) {
                 <List.Item key={role.id}>
                   <List.Content
                     floated="left"
-                    href={isHyperlinkableGroup(role.group.group_type) ? `${teamUrl(role.group.id)}/edit` : null}
+                    href={isHyperlinkableGroup(role.group.group_type) ? `${teamUrl(role.group.id.split('_').pop())}/edit` : null}
                   >
                     <Icon
                       name="edit"

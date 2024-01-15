@@ -7,7 +7,7 @@ import DuesExport from './DuesExport';
 import PanelTemplate from '../PanelTemplate';
 import XeroUsers from './XeroUsers';
 import DuesRedirect from './DuesRedirect';
-import PANEL_LIST from '../PanelList';
+import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 
 const sections = [
   {

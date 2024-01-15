@@ -75,4 +75,10 @@ Rails.configuration.to_prepare do
       @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind(self).call
     end
   end
+
+  Enumerable.class_eval do
+    def stable_sort_by
+      sort_by.with_index { |x, idx| [yield(x), idx] }
+    end
+  end
 end
