@@ -64,6 +64,7 @@ function CompetitionsFilters({
           dispatchFilter={dispatchFilter}
           shouldShowRegStatus={shouldShowRegStatus}
           setShouldShowRegStatus={setShouldShowRegStatus}
+          displayMode={displayMode}
         />
       </Form.Group>
 
@@ -339,19 +340,14 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
 }
 
 function CompDisplayCheckboxes({
-  shouldIncludeCancelled, dispatchFilter, shouldShowRegStatus, setShouldShowRegStatus,
+  shouldIncludeCancelled,
+  dispatchFilter,
+  shouldShowRegStatus,
+  setShouldShowRegStatus,
+  displayMode,
 }) {
   return (
     <>
-      <div id="registration-status" className="registration-status-selector">
-        <Form.Checkbox
-          label={I18n.t('competitions.index.show_registration_status')}
-          name="show_registration_status"
-          id="show_registration_status"
-          onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-        />
-      </div>
-
       <div id="cancelled" className="cancel-selector">
         <Form.Checkbox
           label={I18n.t('competitions.index.show_cancelled')}
@@ -362,6 +358,20 @@ function CompDisplayCheckboxes({
           )}
         />
       </div>
+
+      {
+        displayMode === 'list'
+        && (
+          <div id="registration-status" className="registration-status-selector">
+            <Form.Checkbox
+              label={I18n.t('competitions.index.show_registration_status')}
+              name="show_registration_status"
+              id="show_registration_status"
+              onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+            />
+          </div>
+        )
+      }
     </>
   );
 }
