@@ -39,6 +39,8 @@ RUN apt-get update && apt-get install -y \
   pipx \
   tzdata
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -O wkhtml.tar.xz && tar -xf wkhtml.tar.xz --strip-components=1 -C /usr/local
+# Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
+RUN corepack enable
 # Using pipx because PEP668 doesn't allow installing systemwide packages anymore
 RUN pipx install wrc
 
