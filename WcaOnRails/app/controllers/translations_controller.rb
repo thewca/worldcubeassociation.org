@@ -53,44 +53,17 @@ class TranslationsController < ApplicationController
     @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}", message, pr_description_for(current_user, locale))[:html_url]
   end
 
-  # rubocop:disable Style/NumericLiterals
-  VERIFIED_TRANSLATORS_BY_LOCALE = {
-    "ca" => [94007, 15295],
-    "cs" => [8583],
-    "da" => [6777],
-    "de" => [870, 7121, 7139],
-    "eo" => [1517],
-    "es" => [7340, 1439],
-    "fi" => [39072],
-    "fr" => [277],
-    "hr" => [46],
-    "hu" => [368],
-    "id" => [1285],
-    "it" => [19667],
-    "ja" => [32229, 1118],
-    "kk" => [201680],
-    "ko" => [14],
-    "nl" => [1, 41519],
-    "pl" => [6008, 1686],
-    "pt" => [331],
-    "pt-BR" => [18],
-    "ro" => [11918],
-    "ru" => [140, 1492],
-    "sk" => [7922],
-    "sl" => [1381],
-    "sv" => [17503],
-    "th" => [21095],
-    "uk" => [296],
-    "vi" => [7158],
-    "zh-CN" => [9],
-    "zh-TW" => [38, 77608],
-  }.freeze
-  # rubocop:enable Style/NumericLiterals
-
   private def pr_description_for(user, locale)
     info = ["WCA Account ID: *#{user.id}*"]
     info.unshift("WCA ID: *[#{user.wca_id}](#{person_url(user.wca_id)})*") if user.wca_id
-    verification_info = if VERIFIED_TRANSLATORS_BY_LOCALE[locale]&.include?(user.id)
+    is_verified_translator = false
+    UserGroup.translator_groups.each do |translators_group|
+      if translators_group.roles.any? { |role| role.user_id == user.id && role.metadata.locale == locale }
+        is_verified_translator = true
+        break
+      end
+    end
+    verification_info = if is_verified_translator
                           ":heavy_check_mark: This translation comes from a verified translator for this language."
                         else
                           ":warning: This translation doesn't come from a verified translator for this language."

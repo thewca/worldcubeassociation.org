@@ -744,21 +744,20 @@ th:
           delegate: Delegate
           #original_hash: d463c23
           senior_delegate: Senior Delegate
-        teams:
+        teams_committees:
           #original_hash: 6853c98
           member: สมาชิก
           #original_hash: c366473
-          senior_member: สมาชิกอาวุโส
+          senior_member: สมาชิกอวุโส
           #original_hash: e26c936
           leader: หัวหน้าทีม
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: ชาย
-        #original_hash: b7c17e9
-        f: หญิง
-        #original_hash: 6e6a6f2
-        o: อื่น ๆ
+        councils:
+          #original_hash: 6853c98
+          member: สมาชิก
+          #original_hash: c366473
+          senior_member: สมาชิกอวุโส
+          #original_hash: e26c936
+          leader: หัวหน้า
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1144,22 +1143,10 @@ th:
         #original_hash: da39a3e
         content: ''
       person:
-        #original_hash: 498f4c5
-        dob: วันเกิดต้องอยู่ในรูปแบบ YYYY-MM-DD
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
         #original_hash: da39a3e
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
       poll:
@@ -1977,8 +1964,8 @@ th:
         #original_hash: 1a18831
         '7': รูปแทนตัวจะต้องไม่มีเนื้อหาที่ไม่เหมาะสม (เช่น ท่าทางที่ไม่เหมาะสม)
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: แนวทางเพิ่มเติมสำหรับ Staff
+        #original_hash: 5d5a47a
+        title: 'แนวทางเพิ่มเติมสำหรับ Staff และ Trainee Delegates:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2033,8 +2020,6 @@ th:
       must_have_a_change: ชื่อหรือภูมิภาคต้องต่างกันในการแก้ไขบุคคล
       #original_hash: 012f032
       must_be_senior: ต้องเป็น Senior Delegate
-      #original_hash: 5b4eac9
-      senior_has_delegate: ไม่สามารถลดขั้น Senior Delegate ที่อยู่ใต้บังคับบัญชาได้
       #original_hash: 48653a9
       already_have_id: 'ไม่สามารถขอรับ WCA ID เพราะคุณมี WCA ID %{wca_id} แล้ว'
       #original_hash: ec5db95
@@ -3609,10 +3594,11 @@ th:
       unstick_at_future: ต้องอยู่ในอนาคต
   contacts:
     website:
-      #original_hash: 35c333c
+      #original_hash: d7707e7
       faq_note_html: >-
         ก่อนที่จะทำการสอบถามคุณอาจต้องดู <a href="/faq">คำถามที่พบบ่อย</a>!
-        หากคุณต้องการติดต่อคณะกรรมการหรือทีมเฉพาะคุณสามารถค้นหาข้อมูลติดต่อของพวกเขาได้ที่<a
+        หากคุณต้องการติดต่อคณะกรรมการหรือทีมแบบเฉพาะเจาะจง
+        หรือไม่ได้อยู่ในรายชื่อนี้ คุณสามารถค้นหาข้อมูลติดต่อของพวกเขาได้ที่ <a
         href="/teams-committees">หน้านี้</a>
       #original_hash: 4ef2aad
       title: WCA Contact Form
@@ -4186,6 +4172,8 @@ th:
     acknowledges: WCA ยอมรับ WCA Delegate เหล่านี้
     #original_hash: 0397112
     regions: ภูมิภาค
+    #original_hash: 0e57333
+    all_regions: ทุกภูมิภาค
     table:
       #original_hash: 709a232
       name: ชื่อ
@@ -4193,6 +4181,14 @@ th:
       role: ตำแหน่ง
       #original_hash: 0f21717
       region: ภูมิภาค
+      #original_hash: fee4fb7
+      first_delegated: Delegate ครั้งแรก
+      #original_hash: e2232e5
+      last_delegated: Delegate ครั้งล่าสุด
+      #original_hash: 5ab4a17
+      total_delegated: จำนวนครั้งที่ Delegate
+      #original_hash: 90ccd64
+      history: ประวัติ
   regional_organizations:
     #original_hash: 37b8fdc
     title: องค์กรระดับภูมิภาค

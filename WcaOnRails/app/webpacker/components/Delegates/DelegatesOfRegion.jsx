@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 import {
   Button,
   Grid, Label, Segment, Table,
@@ -6,11 +6,17 @@ import {
 import cn from 'classnames';
 import _ from 'lodash';
 import I18n from '../../lib/i18n';
-import { rolesOfGroup } from '../../lib/requests/routes.js.erb';
+import { rolesOfGroup, apiV0Urls, competitionsUrl } from '../../lib/requests/routes.js.erb';
+import { groupTypes } from '../../lib/wca-data.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import UserBadge from '../UserBadge';
+
+export const ALL_REGIONS = {
+  id: 'all',
+  name: I18n.t('delegates_page.all_regions'),
+};
 
 const dasherize = (string) => _.kebabCase(string);
 
@@ -21,7 +27,33 @@ function sortedDelegates(delegates) {
       : delegate1.user.name.localeCompare(delegate2.user.name)));
 }
 
-function DelegatesTable({ delegates, isAdminMode }) {
+function SeniorDelegate({ seniorDelegate }) {
+  return (
+    <>
+      <Grid.Row only="computer">
+        <Segment raised>
+          <Label ribbon>
+            {I18n.t('enums.user.delegate_status.senior_delegate')}
+          </Label>
+
+          {seniorDelegate && (
+            <UserBadge
+              user={seniorDelegate.user}
+              hideBorder
+              leftAlign
+              subtexts={seniorDelegate.user.wca_id ? [seniorDelegate.user.wca_id] : []}
+            />
+          )}
+        </Segment>
+      </Grid.Row>
+      { /* TODO: Fix Senior Delegate ribbon CSS for tablet and mobile view,
+           and enable the 'senior delegate' component for all devices */ }
+    </>
+
+  );
+}
+
+function DelegatesTable({ delegates, isAdminMode, isAllRegions }) {
   return (
     <Table className="delegates-table" unstackable>
       <Table.Header>
@@ -36,6 +68,20 @@ function DelegatesTable({ delegates, isAdminMode }) {
           <Table.HeaderCell>
             {I18n.t('delegates_page.table.region')}
           </Table.HeaderCell>
+          {isAllRegions && (
+            <>
+              <Table.HeaderCell>
+                {I18n.t('delegates_page.table.first_delegated')}
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                {I18n.t('delegates_page.table.last_delegated')}
+              </Table.HeaderCell>
+              <Table.HeaderCell>
+                {I18n.t('delegates_page.table.total_delegated')}
+              </Table.HeaderCell>
+              <Table.HeaderCell />
+            </>
+          )}
         </Table.Row>
       </Table.Header>
 
@@ -69,6 +115,21 @@ function DelegatesTable({ delegates, isAdminMode }) {
               {I18n.t(`enums.user.delegate_status.${delegate.metadata.status}`)}
             </Table.Cell>
             <Table.Cell>{delegate.metadata.location}</Table.Cell>
+            {isAllRegions && (
+              <>
+                <Table.Cell>{delegate.metadata.first_delegated}</Table.Cell>
+                <Table.Cell>{delegate.metadata.last_delegated}</Table.Cell>
+                <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
+                <Table.Cell href={competitionsUrl({
+                  display: 'admin',
+                  years: 'all',
+                  delegate: delegate.user.id,
+                })}
+                >
+                  {I18n.t('delegates_page.table.history')}
+                </Table.Cell>
+              </>
+            )}
           </Table.Row>
         ))}
       </Table.Body>
@@ -77,11 +138,16 @@ function DelegatesTable({ delegates, isAdminMode }) {
 }
 
 export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
+  const isAllRegions = activeRegion.id === ALL_REGIONS.id;
   const { data: delegates, loading, error } = useLoadedData(
-    rolesOfGroup(activeRegion.id),
+    isAllRegions
+      ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, {
+        isActive: true,
+      })
+      : rolesOfGroup(activeRegion.id),
   );
 
-  const seniorDelegate = useMemo(
+  const getSeniorDelegate = useCallback(
     () => delegates?.find((delegate) => delegate.metadata.status === 'senior_delegate'),
     [delegates],
   );
@@ -91,28 +157,12 @@ export default function DelegatesOfRegion({ activeRegion, isAdminMode }) {
 
   return (
     <>
-      <Grid.Row only="computer">
-        <Segment raised>
-          <Label ribbon>
-            {I18n.t('enums.user.delegate_status.senior_delegate')}
-          </Label>
-
-          {seniorDelegate && (
-            <UserBadge
-              user={seniorDelegate.user}
-              hideBorder
-              leftAlign
-              subtexts={seniorDelegate.user.wca_id ? [seniorDelegate.user.wca_id] : []}
-            />
-          )}
-        </Segment>
-      </Grid.Row>
-      {/* TODO: Fix Senior Delegate ribbon CSS for tablet and mobile view,
-            and enable the 'senior delegate' component for all devices */}
+      {!isAllRegions && <SeniorDelegate seniorDelegate={getSeniorDelegate()} />}
       <Grid.Row style={{ overflowX: 'scroll' }}>
         <DelegatesTable
           delegates={delegates}
           isAdminMode={isAdminMode}
+          isAllRegions={isAllRegions}
         />
       </Grid.Row>
     </>

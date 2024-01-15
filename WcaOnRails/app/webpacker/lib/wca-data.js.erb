@@ -138,3 +138,14 @@ export const councilsStatus = {
   senior_member: 'senior_member',
   leader: 'leader',
 };
+
+export const delegateRegionsStatus = {
+  trainee_delegate: 'trainee_delegate',
+  junior_delegate: 'candidate_delegate',
+  delegate: 'delegate',
+  senior_delegate: 'senior_delegate',
+};
+
+// ----- PANEL LIST -----
+
+export const PANEL_LIST = <%= PanelController.panel_list.to_json.html_safe %>;

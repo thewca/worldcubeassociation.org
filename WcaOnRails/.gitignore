@@ -39,9 +39,6 @@ pids/*.pid
 # Coveralls stuff
 /coverage/
 
-/public/packs
-/public/packs-test
-/node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
@@ -51,3 +48,12 @@ yarn-debug.log*
 
 # GCE secrets file
 **/application_default_credentials.json
+
+# Per https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
+.yarn/*
+!.yarn/cache
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
