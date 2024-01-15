@@ -239,7 +239,7 @@ GEM
     cookies_eu (1.7.8)
       js_cookie_rails (~> 2.2.0)
     crass (1.0.6)
-    css_parser (1.12.0)
+    css_parser (1.16.0)
       addressable
     daemons (1.4.1)
     database_cleaner (2.0.2)
@@ -511,7 +511,7 @@ GEM
     parser (3.2.2.4)
       ast (~> 2.4.1)
       racc
-    premailer (1.18.0)
+    premailer (1.22.0)
       addressable
       css_parser (>= 1.12.0)
       htmlentities (>= 4.0.0)
