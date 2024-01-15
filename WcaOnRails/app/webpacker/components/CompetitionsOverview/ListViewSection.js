@@ -122,11 +122,11 @@ function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
   } else if (comp.inProgress) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.in_progress');
     iconClass = 'hourglass half';
+  } else if (shouldShowRegStatus) {
+    return <RegistrationStatus comp={comp} />;
   } else if (isSortedByAnnouncement) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate });
     iconClass = 'hourglass start';
-  } else if (shouldShowRegStatus) {
-    return <RegistrationStatus comp={comp} />;
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });
     iconClass = 'hourglass start';
