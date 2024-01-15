@@ -45,8 +45,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # hence, to reduce the number of lines to be edited in future, will be using ternary operator
       # to access the parameters of group.
       if is_actual_role ? group.is_hidden : group[:is_hidden]
-        if group.group_type == UserGroup.group_types[:delegate_probation]
+        case group.group_type
+        when UserGroup.group_types[:delegate_probation]
           current_user.can_manage_delegate_probation?
+        when UserGroup.group_types[:translators]
+          current_user.software_team?
         else
           false # Don't accept any other hidden groups.
         end
@@ -235,8 +238,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           }
         end
       end
-    elsif group_type == UserGroup.group_types[:translators]
-      roles.concat(TranslationsController.translators_to_roles)
     end
 
     # Filter the list based on the permissions of the logged in user.
