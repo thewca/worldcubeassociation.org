@@ -383,7 +383,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
     else
-      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+      role = UserRole.find(id)
+      group_type = role.group.group_type
+      if group_type == UserGroup.group_types[:delegate_probation]
+        end_date = params.require(:endDate)
+        role.update!(end_date: Date.safe_parse(end_date))
+        RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
+        render json: { success: true }
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
     end
   end
 
