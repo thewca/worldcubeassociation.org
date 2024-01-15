@@ -38,6 +38,8 @@ RSpec.feature "Competition management", js: true do
         fill_in "Start date", with: '08/11/2015'
         fill_in "End date", with: '08/11/2015'
         wca_registration_checkbox.click
+        fill_in "Maximum number of competitors", with: '123'
+        fill_in "The reason for the competitor limit", with: 'Because it is required'
 
         click_button "Create Competition"
 
@@ -148,7 +150,7 @@ RSpec.feature "Competition management", js: true do
     end
 
     scenario "can change id of short name from admin view" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
+      competition = FactoryBot.create(:competition, :with_delegate, :with_competitor_limit, id: "OldId2016", name: "competition name short 2016")
       visit competition_admin_edit_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
@@ -218,6 +220,8 @@ RSpec.feature "Competition management", js: true do
       fill_in "Start date", with: '08/11/2015'
       fill_in "End date", with: '08/11/2015'
       wca_registration_checkbox.click
+      fill_in "Maximum number of competitors", with: '123'
+      fill_in "The reason for the competitor limit", with: 'Because it is required'
       click_button "Create Competition"
 
       expect(page).to have_current_path(edit_competition_path("NewComp2015")) # wait for request to complete
