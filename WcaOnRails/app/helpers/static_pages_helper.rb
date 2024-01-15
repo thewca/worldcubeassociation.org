@@ -23,9 +23,9 @@ module StaticPagesHelper
     end
   end
 
-  def team_member_name(name, &)
+  def team_member_name(name, &block)
     content_tag(:div, class: "team-member-name") do
-      name.html_safe + tag.br + content_tag(:span, class: "team-subtext", &)
+      name.html_safe + tag.br + content_tag(:span, class: "team-subtext", &block)
     end
   end
 
