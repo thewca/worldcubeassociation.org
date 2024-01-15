@@ -90,7 +90,7 @@ function VenuePanel({
           </Button>
           {sendToFront && (
             <Button floated="right" compact icon labelPosition="left" onClick={sendToFront}>
-              <Icon name="up arrow" />
+              <Icon name="angle double up" />
               To front
             </Button>
           )}

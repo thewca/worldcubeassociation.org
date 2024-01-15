@@ -36,7 +36,7 @@ function RoomPanel({
           </Button>
           {sendToFront && (
             <Button floated="right" compact icon title="To front" onClick={sendToFront}>
-              <Icon name="up arrow" />
+              <Icon name="angle double up" />
             </Button>
           )}
         </Card.Header>
