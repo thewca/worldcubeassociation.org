@@ -42,10 +42,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system,
       # till then some roles will actually be hashes.
       group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
+      group_type = is_actual_role ? group.group_type : group[:group_type] # In future this will be group_type = group.group_type
+      is_group_hidden = is_actual_role ? group.is_hidden : group[:is_hidden] # In future this will be is_group_hidden = group.is_hidden
       # hence, to reduce the number of lines to be edited in future, will be using ternary operator
       # to access the parameters of group.
-      if is_actual_role ? group.is_hidden : group[:is_hidden]
-        case group.group_type
+      if is_group_hidden
+        case group_type
         when UserGroup.group_types[:delegate_probation]
           current_user.can_manage_delegate_probation?
         when UserGroup.group_types[:translators]
