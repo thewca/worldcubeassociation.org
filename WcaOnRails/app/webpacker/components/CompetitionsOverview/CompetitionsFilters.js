@@ -179,7 +179,7 @@ function DelegateSelector({ dispatchFilter }) {
             key: delegate.id,
             text: `${delegate.name} (${delegate.wca_id})`,
             value: delegate.wca_id,
-            image: { avatar: true, src: delegate.avatar?.thumb_url },
+            image: { avatar: true, src: delegate.avatar?.thumb_url, style: { width: '28px', height: '28px' } },
           }
         )) || [])]}
         onChange={(_, data) => dispatchFilter({ delegate: data.value })}
