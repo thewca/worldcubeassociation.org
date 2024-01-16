@@ -262,7 +262,6 @@ class User < ApplicationRecord
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
   scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
-  scope :senior_delegates, -> { where(delegate_status: "senior_delegate") }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
@@ -1253,7 +1252,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    UserRole.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+    UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
   end
 
   def region

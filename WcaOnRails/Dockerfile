@@ -1,4 +1,5 @@
-FROM ruby:3.2.2
+FROM ruby:3.3.0
+EXPOSE 3000
 
 ENV DEBIAN_FRONTEND noninteractive
 WORKDIR /app
@@ -51,4 +52,3 @@ COPY . .
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
 # but can also take a rails command, like "console" or "runner" to start instead.
 ENTRYPOINT ["/app/bin/docker-entrypoint"]
-EXPOSE 3000

@@ -9,7 +9,7 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
-  def is_active
+  def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end
 
