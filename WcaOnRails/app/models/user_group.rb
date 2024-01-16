@@ -56,8 +56,16 @@ class UserGroup < ApplicationRecord
     end
   end
 
+  def active_roles
+    self.roles.select(&:is_active?)
+  end
+
   def users
     self.roles.map(&:user)
+  end
+
+  def active_users
+    self.active_roles.map(&:user)
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.

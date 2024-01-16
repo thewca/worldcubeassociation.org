@@ -1253,7 +1253,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    UserGroup.delegate_probation_groups.flat_map(&:users).include?(self)
+    UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
   end
 
   def region
