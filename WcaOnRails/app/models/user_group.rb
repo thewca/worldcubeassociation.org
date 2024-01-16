@@ -30,7 +30,7 @@ class UserGroup < ApplicationRecord
     }
   end
 
-  def self.delegate_regions
+  def self.delegate_region_groups
     UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
   end
 
@@ -61,7 +61,11 @@ class UserGroup < ApplicationRecord
   end
 
   def users
-    self.roles.map(&:user)
+    if self.group_type == UserGroup.group_types[:delegate_regions]
+      self.roles.map { |role| role[:user] }
+    else
+      self.roles.map(&:user)
+    end
   end
 
   def active_users
