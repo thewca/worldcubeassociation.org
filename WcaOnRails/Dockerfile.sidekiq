@@ -25,18 +25,19 @@ RUN apt-get update && apt-get install -y \
   mariadb-client \
   libssl-dev \
   libyaml-dev \
-  tzdata \
+  tzdata
 
 RUN corepack enable
 # Install application gems
 COPY Gemfile Gemfile.lock ./
+RUN gem update --system && gem install bundler
 RUN bundle install
 
 # Install node dependencies
 COPY package.json ./
-RUN npm install
+RUN yarn install
 
 COPY . .
 
 # Start sidekiq
-CMD ["/app/bin/bundle", "exec", "sidekiq"]
+ENTRYPOINT ["/app/bin/docker-entrypoint-sidekiq"]

@@ -40,10 +40,11 @@ RUN pipx install wrc
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
+RUN gem update --system && gem install bundler
 RUN bundle install
 # Install node dependencies
-COPY package.json ./
-RUN npm install
+COPY package.json yarn.lock ./
+RUN yarn install
 
 COPY . .
 

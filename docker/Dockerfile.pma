@@ -8,3 +8,4 @@ RUN chmod +x /custom-entrypoint.sh
 
 # Set custom entrypoint script as the entrypoint
 ENTRYPOINT ["/custom-entrypoint.sh"]
+CMD ["apache2-foreground"]
