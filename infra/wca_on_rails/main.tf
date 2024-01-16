@@ -33,7 +33,7 @@ module "production" {
   name_prefix = "${var.name_prefix}-prod"
   region = var.region
   shared = module.shared
-  VAULT_ADDR = "http://172.31.56.54:8200"
+  VAULT_ADDR = "http://172.31.63.154:8200"
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
   rails_startup_time = local.rails_startup_time
 }
@@ -42,7 +42,7 @@ module "staging" {
   source = "./staging"
   name_prefix = "${var.name_prefix}-staging"
   region = var.region
-  VAULT_ADDR = "http://172.31.43.54:8200"
+  VAULT_ADDR = "http://172.31.63.154:8200"
   DATABASE_WRT_USER = var.DATABASE_WRT_USER
   shared = module.shared
   rails_startup_time = local.rails_startup_time

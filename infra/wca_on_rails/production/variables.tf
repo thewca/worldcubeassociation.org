@@ -16,6 +16,18 @@ variable "ROOT_URL" {
   default     = "https://www.worldcubeassociation.org"
 }
 
+variable "WCA_REGISTRATIONS_URL" {
+  description = "The URL of the registrations service"
+  type = string
+  default = "https://registration.worldcubeassociation.org"
+}
+
+variable "WCA_REGISTRATIONS_CDN_URL" {
+  description = "The URL of the frontend of the registrations service"
+  type = string
+  default = "https://d1qizdh27al0a7.cloudfront.net"
+}
+
 variable "DISCOURSE_URL" {
   type        = string
   description = "The URL of the WCA forum"

@@ -69,6 +69,14 @@ locals {
       value = var.DATABASE_WRT_USER
     },
     {
+      name = "WCA_REGISTRATIONS_URL"
+      value = var.WCA_REGISTRATIONS_URL
+    },
+    {
+      name = "WCA_REGISTRATIONS_CDN_URL"
+      value = var.WCA_REGISTRATIONS_CDN_URL
+    },
+    {
       name = "VAULT_ADDR"
       value = var.VAULT_ADDR
     },
@@ -201,7 +209,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "sidekiq-staging"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
       cpu    = 256
-      memory = 512
+      memory = 1349
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"
@@ -268,7 +276,7 @@ resource "aws_ecs_service" "this" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 0
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50

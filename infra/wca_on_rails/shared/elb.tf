@@ -53,7 +53,7 @@ resource "aws_lb" "this" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.lb.id]
-  subnets            = [aws_default_subnet.default_az1.id, aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
+  subnets            = [aws_default_subnet.default_az1.id,"subnet-0349cc3938fa60ef5", aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
   ip_address_type    = "ipv4"
 
   idle_timeout = 60

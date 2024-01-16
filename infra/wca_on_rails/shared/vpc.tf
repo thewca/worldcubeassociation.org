@@ -12,9 +12,9 @@ resource "aws_default_subnet" "default_az1" {
 }
 resource "aws_default_subnet" "default_az2" {
   availability_zone = "us-west-2b"
-
+  map_public_ip_on_launch = false
   tags = {
-    Name = "Default subnet for us-west-2b"
+    Name = "Default subnet for us-west-2b PRIVATE"
   }
 }
 resource "aws_default_subnet" "default_az3" {

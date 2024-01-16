@@ -65,6 +65,14 @@ locals {
       value = "ELNTWW0SE1ZJ"
     },
     {
+      name = "WCA_REGISTRATIONS_URL"
+      value = var.WCA_REGISTRATIONS_URL
+    },
+    {
+      name = "WCA_REGISTRATIONS_CDN_URL"
+      value = var.WCA_REGISTRATIONS_CDN_URL
+    },
+    {
       name = "DATABASE_WRT_USER"
       value = var.DATABASE_WRT_USER
     },

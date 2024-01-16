@@ -54,6 +54,18 @@ variable "rds_iam_identifier" {
   default = "db-GEOER6N45337C3ZMAYEL2WBAOY"
 }
 
+variable "WCA_REGISTRATIONS_URL" {
+  description = "The URL of the backend of the registrations service"
+  type = string
+  default = "https://staging.registration.worldcubeassociation.org"
+}
+
+variable "WCA_REGISTRATIONS_CDN_URL" {
+  description = "The URL of the frontend of the registrations service"
+  type = string
+  default = "https://d1qizdh27al0a7.cloudfront.net/staging"
+}
+
 variable "shared" {
   type = object({
     vpc_id: string,
