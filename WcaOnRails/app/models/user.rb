@@ -1253,7 +1253,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    UserRole.where(user_id: self.id).where("end_date is null or end_date >= curdate()").present?
+    UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
   end
 
   def region
