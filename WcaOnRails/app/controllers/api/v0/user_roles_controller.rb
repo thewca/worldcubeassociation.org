@@ -75,7 +75,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # operator to access the parameters.
       (
         (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
-        (is_active.present? && is_active != (is_actual_role ? role.is_active : role[:is_active])) ||
+        (is_active.present? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
         (is_group_hidden.present? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
       )
     end
