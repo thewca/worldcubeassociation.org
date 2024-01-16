@@ -38,7 +38,7 @@ function ListView({
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
           />
           {
-            inProgressComps?.length === 0 && upcomingComps?.length > 0
+            inProgressComps?.length === 0
             && <div style={{ textAlign: 'center' }}>{I18n.t('competitions.index.no_comp_found')}</div>
           }
           <ListViewSection
@@ -51,7 +51,7 @@ function ListView({
           <ListViewFooter
             isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
-            numCompetitions={competitions?.length}
+            numCompetitions={upcomingComps?.length}
             bottomRef={bottomRef}
           />
         </div>
