@@ -3,6 +3,8 @@ import {
   AddRoom,
   AddVenue,
   ChangesSaved,
+  CopyRoom,
+  CopyVenue,
   EditActivity,
   EditRoom,
   EditVenue,
@@ -13,7 +15,7 @@ import {
   ScaleActivity,
 } from './actions';
 import {
-  nextActivityId, nextRoomId, nextVenueId,
+  copyRoom, copyVenue, nextActivityId, nextRoomId, nextVenueId,
 } from '../../../lib/utils/edit-schedule';
 import {
   changeActivityTimezone, moveActivityByDuration, scaleActivitiesByDuration,
@@ -201,6 +203,91 @@ const reducers = {
           },
         ],
       } : venue)),
+    },
+  }),
+
+  [CopyVenue]: (state, { payload }) => {
+    const venue = state.wcifSchedule.venues.find(({id}) => id === payload.venueId)
+    if (!venue) return state;
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: [
+          ...state.wcifSchedule.venues,
+          {
+            ...copyVenue(state.wcifSchedule, venue),
+            name: "Copy of " + venue.name,
+          },
+        ],
+      },
+    };
+  },
+
+  [CopyRoom]: (state, { payload }) => {
+    const venue = state.wcifSchedule.venues.find(({id}) => id === payload.venueId)
+    if (!venue) return state;
+    const room = venue.rooms.find(({id}) => id === payload.roomId)
+    if (!room) return state;
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => (venue.id === payload.venueId ? {
+          ...venue,
+          rooms: [
+            ...venue.rooms,
+            {
+              ...copyRoom(state.wcifSchedule, room),
+              name: "Copy of " + room.name,
+            },
+          ],
+        } : venue)),
+      },
+    };
+},
+
+  [ReorderVenue]: (state, { payload }) => {
+    const { from, to } = payload;
+    const venues = [...state.wcifSchedule.venues];
+
+    if (from < 0 || from >= venues.length || to < 0 || to >= venues.length || to === from) {
+      return state;
+    }
+
+    venues.splice(to, 0, venues.splice(from, 1)[0]);
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues,
+      },
+    };
+  },
+
+  [ReorderRoom]: (state, { payload }) => ({
+    ...state,
+    wcifSchedule: {
+      ...state.wcifSchedule,
+      venues: state.wcifSchedule.venues.map((venue) => {
+        const { venueId, from, to } = payload;
+        if (venue.id !== venueId) {
+          return venue;
+        }
+
+        const rooms = [...venue.rooms];
+        if (from < 0 || from >= rooms.length || to < 0 || to >= rooms.length || to === from) {
+          return venue;
+        }
+
+        rooms.splice(to, 0, rooms.splice(from, 1)[0]);
+        return {
+          ...venue,
+          rooms,
+        };
+      }),
     },
   }),
 };
