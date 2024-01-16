@@ -14,7 +14,12 @@ import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { addRoom, editVenue, removeVenue } from '../store/actions';
+import {
+  addRoom,
+  copyVenue,
+  editVenue,
+  removeVenue,
+} from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 
 const countryOptions = countries.real.map((country) => ({
@@ -49,6 +54,10 @@ function VenuePanel({
     dispatch(addRoom(venue.id));
   };
 
+  const handleCopyVenue = () => {
+    dispatch(copyVenue(venue.id))
+  }
+
   // Instead of giving *all* TZInfo, use uniq-fied rails "meaningful" subset
   // We'll add the "country_zones" to that, because some of our competitions
   // use TZs not included in this subset.
@@ -81,6 +90,10 @@ function VenuePanel({
           <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteVenue}>
             <Icon name="trash" />
             Remove
+          </Button>
+          <Button floated="right" compact icon labelPosition="left" onClick={handleCopyVenue}>
+            <Icon name="copy" />
+            Copy
           </Button>
         </Card.Header>
         <Card.Description>

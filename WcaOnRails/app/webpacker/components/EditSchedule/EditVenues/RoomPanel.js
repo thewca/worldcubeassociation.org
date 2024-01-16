@@ -7,7 +7,7 @@ import {
 } from 'semantic-ui-react';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { editRoom, removeRoom } from '../store/actions';
+import { copyRoom, editRoom, removeRoom } from '../store/actions';
 
 function RoomPanel({
   room,
@@ -26,6 +26,10 @@ function RoomPanel({
     }).then(() => dispatch(removeRoom(room.id)));
   };
 
+  const handleCopyRoom = () => {
+    dispatch(copyRoom(venueId, room.id))
+  }
+
   return (
     <Card fluid raised>
       <Card.Content>
@@ -33,6 +37,9 @@ function RoomPanel({
           <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteRoom}>
             <Icon name="trash" />
             Remove
+          </Button>
+          <Button floated="right" compact icon title="Copy" onClick={handleCopyRoom}>
+            <Icon name="copy" />
           </Button>
         </Card.Header>
         <Card.Description>
