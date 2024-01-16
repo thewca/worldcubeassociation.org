@@ -17,3 +17,5 @@ config/credentials/*.key
 /tmp/pids/*
 !/tmp/pids/
 !/tmp/pids/.keep
+
+node_modules

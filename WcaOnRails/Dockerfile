@@ -43,7 +43,7 @@ COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
 RUN bundle install
 # Install node dependencies
-COPY package.json yarn.lock ./
+COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install
 
 COPY . .
