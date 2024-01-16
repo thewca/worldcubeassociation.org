@@ -3,7 +3,11 @@ import { Popup } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import I18n from '../../lib/i18n';
 import { apiV0Urls, delegatesPageUrl, teamsCommitteesPageUrl } from '../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../lib/wca-data.js.erb';
+import { groupTypes, userRolesSortParams as sortParams } from '../../lib/wca-data.js.erb';
+
+// let i18n-tasks know the key is used
+// i18n-tasks-use t('user_groups.group_types.board')
+// i18n-tasks-use t('user_groups.group_types.officers')
 
 function badgeParams(role) {
   if (role.group.group_type === groupTypes.delegate_regions) {
@@ -13,24 +17,27 @@ function badgeParams(role) {
       badgeClass: 'delegate-badge',
       url: delegatesPageUrl,
     };
-  } if ([groupTypes.teams_committees, groupTypes.councils].includes(role.group.group_type)) {
+  }
+  if ([groupTypes.teams_committees, groupTypes.councils].includes(role.group.group_type)) {
     return {
       roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`,
-      groupTitle: role.group.name,
+      groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: `team-${role.metadata.status.replace('_', '-')}-badge`,
       url: teamsCommitteesPageUrl,
     };
-  } if (role.group.group_type === groupTypes.board) {
+  }
+  if (role.group.group_type === groupTypes.board) {
     return {
       roleTitle: role.group.metadata.friendly_id.toUpperCase(),
-      groupTitle: role.group.name,
+      groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: 'team-member-badge',
       url: teamsCommitteesPageUrl,
     };
-  } if (role.group.group_type === groupTypes.officers) {
+  }
+  if (role.group.group_type === groupTypes.officers) {
     return {
       roleTitle: `${I18n.t(`about.structure.${role.metadata.status}.name`)}`,
-      groupTitle: role.group.name,
+      groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: 'officer-badge',
       url: teamsCommitteesPageUrl,
     };
@@ -41,7 +48,7 @@ function badgeParams(role) {
 export default function Badges({ userId }) {
   const { data } = useLoadedData(apiV0Urls.userRoles.listOfUser(
     userId,
-    'rank,groupName', // Sort params
+    [sortParams.lead, sortParams.eligibleVoter, sortParams.groupTypeRank, sortParams.status, sortParams.groupName].join(','), // Sort params
     {
       isActive: true,
     },

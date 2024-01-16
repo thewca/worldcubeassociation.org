@@ -9,7 +9,7 @@ import Loading from '../../Requests/Loading';
 function GroupTable({ groupId }) {
   const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
     groupId,
-    'rank,startDate,name', // Sort params
+    'status,startDate,name', // Sort params
     { isActive: true },
   ));
 

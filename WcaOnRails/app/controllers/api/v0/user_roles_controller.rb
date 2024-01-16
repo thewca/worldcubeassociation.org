@@ -8,24 +8,38 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
-  private def sort_rank(group_type, status)
-    ranking_order = [ # This is the order in which the roles should be sorted when the sort key is "rank".
-      group_type == UserGroup.group_types[:board], # 1. Board members
-      group_type == UserGroup.group_types[:officers], # 2. Officers
-      group_type == UserGroup.group_types[:teams_committees] && status == 'leader', # 3. Team/Committee leaders
-      group_type == UserGroup.group_types[:delegate_regions] && status == 'senior_delegate', # 4. Senior Delegates
-      group_type == UserGroup.group_types[:delegate_regions] && status == 'regional_delegate', # 5. Regional Delegates
-      group_type == UserGroup.group_types[:councils] && status == 'leader', # 6. Council leaders
-      group_type == UserGroup.group_types[:teams_committees] && status == 'senior_member', # 7. Team/Committee senior members
-      group_type == UserGroup.group_types[:delegate_regions] && status == 'delegate', # 8. Delegates
-      group_type == UserGroup.group_types[:councils] && status == 'senior_member', # 9. Council senior members
-      group_type == UserGroup.group_types[:teams_committees] && status == 'member', # 10. Team/Committee members
-      group_type == UserGroup.group_types[:delegate_regions] && status == 'candidate_delegate', # 11. Junior Delegates
-      group_type == UserGroup.group_types[:councils] && status == 'member', # 12. Council members
-      group_type == UserGroup.group_types[:delegate_regions] && status == 'trainee_delegate', # 13. Trainee Delegates
-    ]
-    ranking_order.index(true) || ranking_order.length
+  STATUS_SORTING_ORDER = {
+    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
+    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:board].to_sym => ["member"],
+    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+  }.freeze
+
+  GROUP_TYPE_RANK_ORDER = [
+    UserGroup.group_types[:board],
+    UserGroup.group_types[:officers],
+    UserGroup.group_types[:teams_committees],
+    UserGroup.group_types[:delegate_regions],
+    UserGroup.group_types[:councils],
+  ].freeze
+
+  def self.status_sort_rank(role)
+    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
+    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
+    status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+    STATUS_SORTING_ORDER[group_type.to_sym].find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym].length
   end
+
+  SORT_PARAMS = {
+    startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
+    lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
+    eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
+    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role[:group][:group_type]) || GROUP_TYPE_RANK_ORDER.length },
+    status: lambda { |role| status_sort_rank(role) },
+    name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+  }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
   private def sorted_roles(roles, sort_param)
@@ -35,17 +49,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles.stable_sort_by { |role|
       sort_keys_and_directions.map { |sort_key_and_direction|
         sort_key = sort_key_and_direction.split(':').first
-        # FIXME: Utilize sort direction as well and reverse sort wherever necessary.
-        case sort_key
-        when 'startDate'
-          role[:start_date] # Can be changed to `role.start_date` once all roles are migrated to the new system.
-        when 'rank'
-          sort_rank(role[:group][:group_type], role[:metadata][:status]) # Can be changed to `sort_rank(role.group.group_type, role.metadata.status)` once all roles are migrated to the new system.
-        when 'name'
-          role[:user][:name] # Can be changed to `role.user.name` once all roles are migrated to the new system.
-        when 'groupName'
-          role[:group][:name] # Can be changed to `role.group.name` once all roles are migrated to the new system.
-        end
+        sort_direction = sort_key_and_direction.split(':').second || 'asc'
+        SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
       }
     }
   end
