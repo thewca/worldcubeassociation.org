@@ -1467,6 +1467,7 @@ class Competition < ApplicationRecord
 
   SortedRanking = Struct.new(
     :name,
+    :user_id,
     :wca_id,
     :country_id,
     :average_best,
@@ -1497,6 +1498,7 @@ class Competition < ApplicationRecord
 
       select_sql = <<-SQL
         registrations.id,
+        users.id select_id,
         users.name select_name,
         users.wca_id select_wca_id,
         registrations.accepted_at,
@@ -1560,6 +1562,7 @@ class Competition < ApplicationRecord
 
         sorted_ranking = SortedRanking.new(
           name: registration.select_name,
+          user_id: registration.select_id,
           wca_id: registration.select_wca_id,
           country_id: registration.select_country_id,
           average_rank: registration.average_rank,
@@ -1639,6 +1642,7 @@ class Competition < ApplicationRecord
 
       sorted_ranking = SortedRanking.new(
         name: user.name,
+        user_id: user.id,
         wca_id: user.wca_id,
         country_id: user.country.id,
         average_rank: average_ranking&.worldRank,
