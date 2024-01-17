@@ -30,8 +30,12 @@ class UserGroup < ApplicationRecord
     }
   end
 
-  def self.delegate_regions
+  def self.delegate_region_groups
     UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
+  end
+
+  def self.delegate_probation_groups
+    UserGroup.where(group_type: "delegate_probation", parent_group_id: nil)
   end
 
   def self.translator_groups
@@ -52,8 +56,20 @@ class UserGroup < ApplicationRecord
     end
   end
 
+  def active_roles
+    self.roles.select(&:is_active?)
+  end
+
   def users
-    self.roles.map(&:user)
+    if self.group_type == UserGroup.group_types[:delegate_regions]
+      self.roles.map { |role| role[:user] }
+    else
+      self.roles.map(&:user)
+    end
+  end
+
+  def active_users
+    self.active_roles.map(&:user)
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.

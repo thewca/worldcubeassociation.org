@@ -44,11 +44,15 @@
 
   .panel-events-filter {
     .panel-body {
-      padding-bottom: 5px;
       .events-filter {
-        display: inline-block;
-        vertical-align: top;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
         .cubing-icon {
+          line-height: unset;
+          height: 35px;
+          width: 35px;
+          margin: 0;
           font-size: 25px;
           color: #888;
           cursor: pointer;
@@ -58,14 +62,16 @@
         }
         .event-all {
           cursor: pointer;
-          padding-left: 2px;
-          padding-right: 2px;
+          margin-left: 5px;
+          margin-right: 5px;
+          text-align: center;
           vertical-align: top;
           display: inline-block;
           border-radius: 3px;
           font-size: 12px;
           color: white;
           height: 25px;
+          width: 25px;
           line-height: 25px;
           background-color: #888;
           &.selected {
@@ -90,8 +96,11 @@
         }
       }
       .schedule-event-icon {
-        .cubing-icon::before {
-          font-size: 40px;
+        .cubing-icon {
+          width: auto;
+          &::before {
+            font-size: 40px;
+          }
         }
       }
       @media (max-width : 992px){

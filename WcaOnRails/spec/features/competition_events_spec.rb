@@ -268,9 +268,9 @@ def within_event_panel(event_id, &)
   within(:css, ".event-panel.event-#{event_id}", &)
 end
 
-def within_round(event_id, round_number, &)
+def within_round(event_id, round_number, &block)
   within_event_panel(event_id) do
-    within(:css, "[name='round-#{round_number}']", &)
+    within(:css, "[name='round-#{round_number}']", &block)
   end
 end
 

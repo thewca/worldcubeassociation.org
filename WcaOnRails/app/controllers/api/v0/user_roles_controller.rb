@@ -3,7 +3,7 @@
 class Api::V0::UserRolesController < Api::V0::ApiController
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
-    unless current_user.board_member? || current_user.senior_delegate?
+    unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
       render json: {}, status: 401
     end
   end
@@ -42,10 +42,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system,
       # till then some roles will actually be hashes.
       group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
+      group_type = is_actual_role ? group.group_type : group[:group_type] # In future this will be group_type = group.group_type
+      is_group_hidden = is_actual_role ? group.is_hidden : group[:is_hidden] # In future this will be is_group_hidden = group.is_hidden
       # hence, to reduce the number of lines to be edited in future, will be using ternary operator
       # to access the parameters of group.
-      if is_actual_role ? group.is_hidden : group[:is_hidden]
-        case group.group_type
+      if is_group_hidden
+        case group_type
         when UserGroup.group_types[:delegate_probation]
           current_user.can_manage_delegate_probation?
         when UserGroup.group_types[:translators]
@@ -73,7 +75,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # operator to access the parameters.
       (
         (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
-        (is_active.present? && is_active != (is_actual_role ? role.is_active : role[:is_active])) ||
+        (is_active.present? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
         (is_group_hidden.present? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
       )
     end
@@ -277,7 +279,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def create
     user_id = params.require(:userId)
-    group_id = params.require(:groupId)
+    group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
 
     if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
@@ -310,6 +312,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render json: {
           success: true,
         }
+      elsif group.group_type == UserGroup.group_types[:delegate_probation]
+        role = UserRole.create!(
+          user_id: user_id,
+          group_id: group_id,
+          start_date: Date.today,
+        )
+        RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+        render json: {
+          success: true,
+        }
       else
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
@@ -328,12 +340,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           regionId: user.region_id,
           location: user.location,
         },
-        regions: UserGroup.delegate_regions,
+        regions: UserGroup.delegate_region_groups,
       }
     else
       render json: {
         roleData: {},
-        regions: UserGroup.delegate_regions,
+        regions: UserGroup.delegate_region_groups,
       }
     end
   end
@@ -374,7 +386,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
     else
-      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+      role = UserRole.find(id)
+      group_type = role.group.group_type
+      if group_type == UserGroup.group_types[:delegate_probation]
+        end_date = params.require(:endDate)
+        role.update!(end_date: Date.safe_parse(end_date))
+        RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
+        render json: { success: true }
+      else
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      end
     end
   end
 
