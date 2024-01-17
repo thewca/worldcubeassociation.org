@@ -16,14 +16,12 @@ Doorkeeper.configure do
   # :mongoid4, :mongo_mapper
   orm :active_record
 
-  # This callback needs to returns a falsey value if the current user can't be determined
+  # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
-    if current_user
-      current_user
-    else
-      warden.authenticate!(scope: :user)
-      nil
-    end
+    current_user || warden.authenticate!(scope: :user)
+    # Put your resource owner authentication logic here.
+    # Example implementation:
+    #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
   end
 
   # Copied from

@@ -1,9 +1,9 @@
 Doorkeeper::OpenidConnect.configure do
-  issuer = EnvConfig.ROOT_URL
+  issuer EnvConfig.ROOT_URL
   subject do |resource_owner|
     resource_owner.id
   end
-  signing_key = AppSecrets.OIDC_SECRET_KEY
+  signing_key AppSecrets.OIDC_SECRET_KEY
   # This is an asymmetric enccryption, meaning the clients validating the JWT Token use the Public key instead
   signing_algorithm = :rs256
 
@@ -19,7 +19,7 @@ Doorkeeper::OpenidConnect.configure do
   end
 
   # 5 Minutes expiration time (default is 2 minutes)
-  expiration = 300.seconds
+  expiration 300.seconds
 
   discovery_url_options do |request|
     {
