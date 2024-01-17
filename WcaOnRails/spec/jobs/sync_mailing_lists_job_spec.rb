@@ -44,6 +44,12 @@ RSpec.describe SyncMailingListsJob, type: :job do
     north_america_delegate_3 = FactoryBot.create :candidate_delegate, region_id: north_america_region.id
     north_america_delegate_4 = FactoryBot.create :trainee_delegate, region_id: north_america_region.id
 
+    # Translators
+    translators_group = FactoryBot.create :translators_user_group
+    translator_1 = FactoryBot.create :translator_role, group_id: translators_group.id
+    translator_2 = FactoryBot.create :translator_role, group_id: translators_group.id
+    translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
+
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "delegates@worldcubeassociation.org",
       a_collection_containing_exactly(
@@ -188,14 +194,10 @@ RSpec.describe SyncMailingListsJob, type: :job do
       a_collection_containing_exactly(wst_admin_member.email),
     )
 
-    stub_const "TranslationsController::VERIFIED_TRANSLATORS_BY_LOCALE", ({
-      "es" => [wst_member.id],
-      "fr" => [wrc_member.id, wrt_leader.id],
-    })
     # translators@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "translators@worldcubeassociation.org",
-      a_collection_containing_exactly(wst_member.email, wrc_member.email, wrt_leader.email),
+      a_collection_containing_exactly(translator_1.user.email, translator_2.user.email, translator_3.user.email),
     )
 
     # reports@ mailing list

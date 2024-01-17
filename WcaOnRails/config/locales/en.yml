@@ -1077,7 +1077,7 @@ en:
         '6': "The avatar must be submitted in correct orientation."
         '7': "The avatar must not contain offensive content (e.g. offensive gestures)."
       staff_avatar_guidelines:
-        title: "Additional guidelines for Staff Members:"
+        title: "Additional guidelines for Staff Members and Trainee Delegates:"
         paragraphs:
           '1': "The avatar must be of your current self, depicted in the same fashion as how you would appear at a competition."
           '2': "The avatar must be framed, cropped, angled, and lit, so that any competitor or spectator at a competition can use it to unambiguously identify you at a competition venue."
@@ -2191,10 +2191,15 @@ en:
     title: "WCA Delegates"
     acknowledges: "The WCA acknowledges the following WCA Delegates:"
     regions: "Regions"
+    all_regions: "All Regions"
     table:
       name: "Name"
       role: "Role"
       region: "Region"
+      first_delegated: "First Delegated"
+      last_delegated: "Last Delegated"
+      total_delegated: "Total Delegated"
+      history: "History"
   regional_organizations:
     title: "Regional Organizations"
     content: "The WCA acknowledges the following Regional Organizations:"

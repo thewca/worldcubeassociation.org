@@ -25,8 +25,8 @@
           <div class="panel-heading">
             <h3 class="panel-title">
               <%= link_to user.name, edit_user_path(user) %>
-              <% if user.staff? %>
-                (<strong>Staff Members</strong> - see guidelines above)
+              <% if user.staff_or_any_delegate? %>
+                (<strong>Staff Member or Trainee Delegate</strong> - see guidelines above)
               <% end %>
             </h3>
           </div>
