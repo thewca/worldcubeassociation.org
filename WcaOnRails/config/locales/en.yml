@@ -288,6 +288,7 @@ en:
         delegate_status: "Delegate status"
         location: "Location"
         region: "Region"
+        subregion: "Subregion"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"

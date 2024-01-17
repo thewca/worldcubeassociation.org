@@ -7,9 +7,23 @@ export default function DelegateForm({
   formValues,
   updateFormProperty,
   regions,
+  subRegions,
   delegateStatusOptions,
 }) {
   const handleFormChange = (_, { name, value }) => updateFormProperty({ [name]: value });
+
+  const subRegionsOfSelectedRegion = React.useMemo(() => {
+    let subregionsList = [];
+    if (!formValues.regionId) return [];
+    subregionsList = subRegions[formValues.regionId] || [];
+    if (subregionsList.length > 0) {
+      subregionsList.push({
+        name: 'None',
+        value: null,
+      });
+    }
+    return subregionsList;
+  }, [formValues.regionId, subRegions]);
 
   return (
     <>
@@ -31,9 +45,28 @@ export default function DelegateForm({
         selection
         name="regionId"
         value={formValues.regionId || ''}
-        options={regions}
+        options={regions.map((region) => ({
+          key: region.id,
+          text: region.name,
+          value: region.id,
+        }))}
         onChange={handleFormChange}
       />
+      {subRegionsOfSelectedRegion.length > 0 && (
+        <Form.Dropdown
+          label={I18n.t('activerecord.attributes.user.subregion')}
+          fluid
+          selection
+          name="subregionId"
+          value={formValues.subregionId || ''}
+          options={subRegionsOfSelectedRegion.map((subregion) => ({
+            key: subregion.id,
+            text: subregion.name,
+            value: subregion.id,
+          }))}
+          onChange={handleFormChange}
+        />
+      )}
       <Form.Input
         label={I18n.t('activerecord.attributes.user.location')}
         name="location"
