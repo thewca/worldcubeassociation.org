@@ -518,7 +518,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
     else
-      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+      role = UserRole.find(id)
+      role.update!(end_date: Date.today)
+      RoleChangeMailer.notify_role_end(role, current_user).deliver_later
+      render json: {
+        success: true,
+      }
     end
   end
 

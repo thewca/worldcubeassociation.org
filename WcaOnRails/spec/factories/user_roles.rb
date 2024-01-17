@@ -14,6 +14,7 @@ FactoryBot.define do
       group_id { FactoryBot.create(:translators_user_group).id }
       start_date { Date.today }
       end_date { Date.today + 1.year }
+      metadata { FactoryBot.create(:translator_en_role_metadata) }
     end
 
     factory :regional_delegate_role do
