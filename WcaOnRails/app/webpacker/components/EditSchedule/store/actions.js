@@ -12,6 +12,7 @@ export const AddVenue = 'ADD_VENUE';
 export const AddRoom = 'ADD_ROOM';
 export const CopyVenue = 'COPY_VENUE';
 export const CopyRoom = 'COPY_ROOM';
+export const CopyRoomActivities = 'COPY_ROOM_ACTIVITIES';
 
 /**
  * Action creator for marking changes as saved
@@ -192,5 +193,19 @@ export const copyRoom = (venueId, roomId) => ({
   payload: {
     venueId,
     roomId,
+  },
+});
+
+/**
+ * Action creator for copying a room's activities to another room.
+ * @param {int} sourceRoomId
+ * @param {int} targetRoomId
+ * @returns {Action}
+ */
+export const copyRoomActivities = (sourceRoomId, targetRoomId) => ({
+  type: CopyRoomActivities,
+  payload: {
+    sourceRoomId,
+    targetRoomId,
   },
 });

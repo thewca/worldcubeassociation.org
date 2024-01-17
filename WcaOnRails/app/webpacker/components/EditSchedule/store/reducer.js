@@ -4,6 +4,7 @@ import {
   AddVenue,
   ChangesSaved,
   CopyRoom,
+  CopyRoomActivities,
   CopyVenue,
   EditActivity,
   EditRoom,
@@ -15,7 +16,7 @@ import {
   ScaleActivity,
 } from './actions';
 import {
-  copyRoom, copyVenue, nextActivityId, nextRoomId, nextVenueId,
+  copyActivity, copyRoom, copyVenue, nextActivityId, nextRoomId, nextVenueId,
 } from '../../../lib/utils/edit-schedule';
 import {
   changeActivityTimezone, moveActivityByDuration, scaleActivitiesByDuration,
@@ -244,6 +245,28 @@ const reducers = {
               name: "Copy of " + room.name,
             },
           ],
+        } : venue)),
+      },
+    };
+  },
+
+  [CopyRoomActivities]: (state, { payload }) => {
+    const { sourceRoomId, targetRoomId } = payload;
+    const sourceRoomActivities = state.wcifSchedule.venues.flatMap(({ rooms }) => rooms).find(({ id }) => id === sourceRoomId).activities;
+    if (sourceRoomActivities.length === 0) return state;
+    const copiedActivities = sourceRoomActivities.map((activity) => copyActivity(state.wcifSchedule, activity));
+    const targetRoomVenueId = state.wcifSchedule.venues.find(({ rooms }) => rooms.map(({ id }) => id).includes(targetRoomId)).id;
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => (venue.id === targetRoomVenueId ? {
+          ...venue,
+          rooms: venue.rooms.map((room) => (room.id === targetRoomId ? {
+            ...room,
+            activities: [...room.activities, ...copiedActivities],
+          } : room)),
         } : venue)),
       },
     };
