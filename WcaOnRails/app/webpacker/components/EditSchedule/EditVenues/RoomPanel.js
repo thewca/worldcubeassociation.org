@@ -23,8 +23,8 @@ function RoomPanel({
   };
 
   const handleRoomToFront = () => {
-    dispatch(reorderRoom(venueId, roomIndex, 0))
-  }
+    dispatch(reorderRoom(venueId, roomIndex, 0));
+  };
 
   const handleDeleteRoom = () => {
     confirm({

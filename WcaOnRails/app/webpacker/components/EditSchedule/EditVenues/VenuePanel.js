@@ -46,8 +46,8 @@ function VenuePanel({
   };
 
   const handleVenueToFront = () => {
-    dispatch(reorderVenue(venueIndex, 0))
-  }
+    dispatch(reorderVenue(venueIndex, 0));
+  };
 
   const handleDeleteVenue = () => {
     confirm({
