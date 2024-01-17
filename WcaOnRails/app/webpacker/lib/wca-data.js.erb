@@ -146,8 +146,6 @@ export const delegateRegionsStatus = {
   senior_delegate: 'senior_delegate',
 };
 
-export const userRolesSortParams = <%= Hash[Api::V0::UserRolesController::SORT_PARAMS.map { |key, value| [key.to_s, key.to_s] }].to_json %>;
-
 // ----- PANEL LIST -----
 
 export const PANEL_LIST = <%= PanelController.panel_list.to_json.html_safe %>;

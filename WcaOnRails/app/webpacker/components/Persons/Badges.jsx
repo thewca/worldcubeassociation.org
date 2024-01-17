@@ -3,7 +3,7 @@ import { Popup } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import I18n from '../../lib/i18n';
 import { apiV0Urls, delegatesPageUrl, teamsCommitteesPageUrl } from '../../lib/requests/routes.js.erb';
-import { groupTypes, userRolesSortParams as sortParams } from '../../lib/wca-data.js.erb';
+import { groupTypes } from '../../lib/wca-data.js.erb';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('user_groups.group_types.board')
@@ -48,7 +48,7 @@ function badgeParams(role) {
 export default function Badges({ userId }) {
   const { data } = useLoadedData(apiV0Urls.userRoles.listOfUser(
     userId,
-    [sortParams.lead, sortParams.eligibleVoter, sortParams.groupTypeRank, sortParams.status, sortParams.groupName].join(','), // Sort params
+    ['lead', 'eligibleVoter', 'groupTypeRank', 'status', 'groupName'].join(','), // Sort params
     {
       isActive: true,
     },
