@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Doorkeeper::OpenidConnect.configure do
   issuer EnvConfig.ROOT_URL
   subject do |resource_owner|
@@ -24,7 +26,7 @@ Doorkeeper::OpenidConnect.configure do
   discovery_url_options do |request|
     {
       authorization: { host: EnvConfig.ROOT_URL },
-      jwks:          { protocol: request.ssl? ? :https : :http }
+      jwks: { protocol: request.ssl? ? :https : :http },
     }
   end
 
