@@ -673,7 +673,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "groups_metadata_translators" => {
+    "roles_metadata_translators" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
