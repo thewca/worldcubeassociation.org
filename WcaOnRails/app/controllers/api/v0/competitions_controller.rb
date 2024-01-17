@@ -103,6 +103,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     }
   end
 
+  def event_psych_sheet
+    competition = competition_from_params
+    event = Event.c_find!(params[:event_id])
+
+    # optional
+    sort_by = params[:sort_by]
+
+    render json: competition.psych_sheet_event(event, sort_by)
+  end
+
   def competitors
     competition = competition_from_params
     render json: competition.competitors
