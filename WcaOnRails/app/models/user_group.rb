@@ -7,6 +7,8 @@ class UserGroup < ApplicationRecord
     teams_committees: "teams_committees",
     councils: "councils",
     translators: "translators",
+    board: "board",
+    officers: "officers",
   }
 
   def self.group_types_containing_status_metadata

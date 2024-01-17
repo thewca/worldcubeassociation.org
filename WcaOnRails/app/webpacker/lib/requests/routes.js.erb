@@ -132,6 +132,10 @@ export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.appl
 
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
 
+export const delegatesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_path)%>`;
+
+export const teamsCommitteesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.teams_committees_path)%>`;
+
 export const apiV0Urls = {
   users: {
     me: {
@@ -144,7 +148,7 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
-    listOfUser: (userId, {isActive, isGroupHidden, status}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ isActive, isGroupHidden, status })}`,
+    listOfUser: (userId, sort, {isActive, isGroupHidden, status}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, status })}`,
     listOfGroup: (groupId, sort, {isActive, isGroupHidden, status}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, status })}`,
     listOfGroupType: (groupType, {status, isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
