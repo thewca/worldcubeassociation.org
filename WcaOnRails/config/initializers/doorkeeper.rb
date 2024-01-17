@@ -16,12 +16,14 @@ Doorkeeper.configure do
   # :mongoid4, :mongo_mapper
   orm :active_record
 
-  # This block will be called to check whether the resource owner is authenticated or not.
+  # This callback needs to returns a falsey value if the current user can't be determined
   resource_owner_authenticator do
-    current_user || warden.authenticate!(scope: :user)
-    # Put your resource owner authentication logic here.
-    # Example implementation:
-    #   User.find_by_id(session[:user_id]) || redirect_to(new_user_session_url)
+    if current_user
+      current_user
+    else
+      warden.authenticate!(scope: :user)
+      nil
+    end
   end
 
   # Copied from
@@ -110,7 +112,7 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.2
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
-  grant_flows %w(authorization_code implicit client_credentials password)
+  grant_flows %w(authorization_code implicit implicit_oidc client_credentials password)
 
   # Under some circumstances you might want to have applications auto-approved,
   # so that the user skips the authorization step.
