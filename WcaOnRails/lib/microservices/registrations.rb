@@ -15,8 +15,8 @@ module Microservices
       "/api/internal/v1/update_payment"
     end
 
-    def self.get_registrations_path
-      "/api/internal/v1/registrations"
+    def self.get_registrations_path(competition_id)
+      "/api/internal/v1/#{competition_id}/registrations"
     end
 
     def self.registration_connection
@@ -43,23 +43,15 @@ module Microservices
       response.body
     end
 
-    private def build_get_registrations_body(competition_id, status = nil, event_id = nil)
-      req_body = { competition_id: competition_id }
-
-      if status.present?
-        req_body[:status] = status
-      end
-
-      if event_id.present?
-        req_body[:event_id] = event_id
-      end
-
-      req_body
-    end
-
     def self.get_registrations(competition_id, status = nil, event_id = nil)
-      response = self.registration_connection.post(self.get_registrations_path) do |req|
-        req.body = self.build_get_registrations_body(competition_id, status, event_id)
+      response = self.registration_connection.get(self.get_registrations_path(competition_id)) do |req|
+        if status.present?
+          req.params[:status] = status
+        end
+
+        if event_id.present?
+          req.params[:event_id] = event_id
+        end
       end
 
       body = JSON.parse(response.body)
