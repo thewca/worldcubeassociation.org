@@ -1488,29 +1488,6 @@ class Competition < ApplicationRecord
 
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do
-      join_sql = <<-SQL
-        JOIN registration_competition_events ON registration_competition_events.registration_id = registrations.id
-        JOIN users ON users.id = registrations.user_id
-        JOIN Countries ON Countries.iso2 = users.country_iso2
-        LEFT JOIN RanksSingle ON RanksSingle.personId = users.wca_id AND RanksSingle.eventId = '#{event.id}'
-        LEFT JOIN RanksAverage ON RanksAverage.personId = users.wca_id AND RanksAverage.eventId = '#{event.id}'
-      SQL
-
-      select_sql = <<-SQL
-        registrations.id,
-        users.id select_id,
-        users.name select_name,
-        users.wca_id select_wca_id,
-        registrations.accepted_at,
-        registrations.deleted_at,
-        Countries.id select_country_id,
-        registration_competition_events.competition_event_id,
-        RanksAverage.worldRank average_rank,
-        IFNULL(RanksAverage.best, 0) average_best,
-        RanksSingle.worldRank single_rank,
-        IFNULL(RanksSingle.best, 0) single_best
-      SQL
-
       competition_event = competition_events.find_by!(event: event)
       recommended_format = competition_event.recommended_format || event.recommended_format
 
@@ -1526,30 +1503,58 @@ class Competition < ApplicationRecord
       end
 
       if self.uses_new_registration_service?
-        return psych_sheet_microservice(competition_event, sort_by, sort_by_second)
+        accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', competition_event.event.id)
+        registered_user_ids = accepted_registrations[:user_ids]
+      else
+        registered_user_ids = self.registrations.accepted.pluck(:user_id)
       end
 
-      sort_clause = Arel.sql("-#{sort_by}_rank desc, -#{sort_by_second}_rank desc, users.name")
+      concise_results_date = ComputeAuxiliaryData.end_date || Date.current
+      results_cache_key = ["psych-sheet", self.id, *registered_user_ids, concise_results_date]
 
-      registrations = self.registrations
-                          .accepted
-                          .joins(join_sql)
-                          .where(registration_competition_events: { competition_event: competition_event })
-                          .order(sort_clause)
-                          .select(select_sql)
+      users_with_rankings = Rails.cache.fetch(results_cache_key) do
+        # .includes doesn't work well here because under the hood, Rails will fire several calls:
+        # SELECT * FROM users where id IN (...)
+        # SELECT * FROM RanksSingle WHERE personId IN (...)
+        # SELECT * FROM RanksAverage WHERE personId IN (...)
+        #
+        # By using eager_load, we explicitly force Rails to do one query like so:
+        # SELECT * FROM users
+        #   LEFT JOIN Persons
+        #   LEFT JOIN RanksSingle
+        #   LEFT JOIN RanksAverage
+        # WHERE users.id IN (...)
+        User.eager_load(:ranksSingle, :ranksAverage)
+            .find(registered_user_ids)
+      end
+
+      rank_symbol = :"ranks#{sort_by.capitalize}"
+
+      sorted_users = users_with_rankings.sort_by { |user|
+        # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
+        rank = user.send(rank_symbol).find { |r| r.event == competition_event.event }
+
+        [
+          # Competitors with ranks should appear first in the sorting,
+          # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
+          rank.present? ? 0 : 1,
+          rank&.worldRank,
+        ]
+      }
 
       prev_sorted_ranking = nil
-      sorted_rankings = []
 
-      rank_symbol = :"#{sort_by}_rank"
+      sorted_rankings = sorted_users.map.with_index { |user, i|
+        # see comment about .find vs .find_by above.
+        single_ranking = user.ranksSingle.find { |r| r.event == competition_event.event }
+        average_ranking = user.ranksAverage.find { |r| r.event == competition_event.event }
 
-      registrations.each_with_index do |registration, i|
-        rank = registration.send(rank_symbol)
+        sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
 
-        if rank.present?
+        if sort_by_ranking.present?
           # Change position to previous if both single and average are tied with previous registration.
-          average_tied_previous = registration.average_rank == prev_sorted_ranking&.average_rank
-          single_tied_previous = registration.single_rank == prev_sorted_ranking&.single_rank
+          average_tied_previous = average_ranking.worldRank == prev_sorted_ranking&.average_rank
+          single_tied_previous = single_ranking.worldRank == prev_sorted_ranking&.single_rank
 
           tied_previous = single_tied_previous && average_tied_previous
 
@@ -1561,106 +1566,27 @@ class Competition < ApplicationRecord
         end
 
         sorted_ranking = SortedRanking.new(
-          name: registration.select_name,
-          user_id: registration.select_id,
-          wca_id: registration.select_wca_id,
-          country_id: registration.select_country_id,
-          average_rank: registration.average_rank,
-          average_best: registration.average_best,
-          single_rank: registration.single_rank,
-          single_best: registration.single_best,
+          name: user.name,
+          user_id: user.id,
+          wca_id: user.wca_id,
+          country_id: user.country.id,
+          average_rank: average_ranking&.worldRank,
+          average_best: average_ranking&.best,
+          single_rank: single_ranking&.worldRank,
+          single_best: single_ranking&.best,
           tied_previous: tied_previous,
           pos: pos,
-        )
+          )
 
-        sorted_rankings << sorted_ranking
         prev_sorted_ranking = sorted_ranking
-      end
+      }
 
       PsychSheet.new(
         sorted_rankings: sorted_rankings,
         sort_by: sort_by,
         sort_by_second: sort_by_second,
-      )
+        )
     end
-  end
-
-  private def psych_sheet_microservice(competition_event, sort_by, sort_by_second)
-    accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', competition_event.event.id)
-    registered_user_ids = accepted_registrations[:user_ids]
-
-    # .includes doesn't work well here because under the hood, Rails will fire several calls:
-    # SELECT * FROM users where id IN (...)
-    # SELECT * FROM RanksSingle WHERE personId IN (...)
-    # SELECT * FROM RanksAverage WHERE personId IN (...)
-    #
-    # By using eager_load, we explicitly force Rails to do one query like so:
-    # SELECT * FROM users
-    #   LEFT JOIN Persons
-    #   LEFT JOIN RanksSingle
-    #   LEFT JOIN RanksAverage
-    # WHERE users.id IN (...)
-    users_with_rankings = User.eager_load(:ranksSingle, :ranksAverage)
-                              .find(registered_user_ids)
-
-    rank_symbol = :"ranks#{sort_by.capitalize}"
-
-    sorted_users = users_with_rankings.sort_by { |user|
-      # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
-      rank = user.send(rank_symbol).find { |r| r.event == competition_event.event }
-
-      [
-        # Competitors with ranks should appear first in the sorting,
-        # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
-        rank.present? ? 0 : 1,
-        rank&.worldRank,
-      ]
-    }
-
-    prev_sorted_ranking = nil
-
-    sorted_rankings = sorted_users.map.with_index { |user, i|
-      # see comment about .find vs .find_by above.
-      single_ranking = user.ranksSingle.find { |r| r.event == competition_event.event }
-      average_ranking = user.ranksAverage.find { |r| r.event == competition_event.event }
-
-      sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
-
-      if sort_by_ranking.present?
-        # Change position to previous if both single and average are tied with previous registration.
-        average_tied_previous = average_ranking.worldRank == prev_sorted_ranking&.average_rank
-        single_tied_previous = single_ranking.worldRank == prev_sorted_ranking&.single_rank
-
-        tied_previous = single_tied_previous && average_tied_previous
-
-        pos = tied_previous ? prev_sorted_ranking.pos : i + 1
-      else
-        # Hasn't competed in this event yet.
-        tied_previous = nil
-        pos = nil
-      end
-
-      sorted_ranking = SortedRanking.new(
-        name: user.name,
-        user_id: user.id,
-        wca_id: user.wca_id,
-        country_id: user.country.id,
-        average_rank: average_ranking&.worldRank,
-        average_best: average_ranking&.best,
-        single_rank: single_ranking&.worldRank,
-        single_best: single_ranking&.best,
-        tied_previous: tied_previous,
-        pos: pos,
-      )
-
-      prev_sorted_ranking = sorted_ranking
-    }
-
-    PsychSheet.new(
-      sorted_rankings: sorted_rankings,
-      sort_by: sort_by,
-      sort_by_second: sort_by_second,
-    )
   end
 
   # For associated_events_picker
