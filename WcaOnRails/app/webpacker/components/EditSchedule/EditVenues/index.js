@@ -8,7 +8,7 @@ import {
 } from 'semantic-ui-react';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import VenuePanel from './VenuePanel';
-import { addVenue, reorderVenue } from '../store/actions';
+import { addVenue } from '../store/actions';
 
 function EditVenues({
   countryZones,
@@ -37,8 +37,8 @@ function EditVenues({
             <VenuePanel
               key={venue.id}
               venue={venue}
+              venueIndex={index}
               countryZones={countryZones}
-              sendToFront={index > 0 ? () => dispatch(reorderVenue(index, 0)) : undefined}
             />
           ))}
         </Card.Group>

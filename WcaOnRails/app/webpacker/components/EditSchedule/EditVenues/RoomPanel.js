@@ -7,11 +7,12 @@ import {
 } from 'semantic-ui-react';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { editRoom, removeRoom } from '../store/actions';
+import { editRoom, removeRoom, reorderRoom } from '../store/actions';
 
 function RoomPanel({
+  venueId,
   room,
-  sendToFront,
+  roomIndex,
 }) {
   const dispatch = useDispatch();
 
@@ -20,6 +21,10 @@ function RoomPanel({
   const handleChange = (evt, { name, value }) => {
     dispatch(editRoom(room.id, name, value));
   };
+
+  const handleRoomToFront = () => {
+    dispatch(reorderRoom(venueId, roomIndex, 0))
+  }
 
   const handleDeleteRoom = () => {
     confirm({
@@ -34,8 +39,8 @@ function RoomPanel({
           <Button floated="right" compact icon negative title="Remove" onClick={handleDeleteRoom}>
             <Icon name="trash" />
           </Button>
-          {sendToFront && (
-            <Button floated="right" compact icon title="To front" onClick={sendToFront}>
+          {roomIndex > 0 && (
+            <Button floated="right" compact icon title="To front" onClick={handleRoomToFront}>
               <Icon name="angle double up" />
             </Button>
           )}

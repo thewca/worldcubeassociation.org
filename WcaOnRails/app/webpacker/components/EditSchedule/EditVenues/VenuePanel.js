@@ -18,7 +18,7 @@ import {
   addRoom,
   editVenue,
   removeVenue,
-  reorderRoom,
+  reorderVenue,
 } from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 
@@ -31,8 +31,8 @@ const countryOptions = countries.real.map((country) => ({
 
 function VenuePanel({
   venue,
+  venueIndex,
   countryZones,
-  sendToFront,
 }) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
@@ -44,6 +44,10 @@ function VenuePanel({
   const handleVenueChange = (evt, { name, value }) => {
     dispatch(editVenue(venue.id, name, value));
   };
+
+  const handleVenueToFront = () => {
+    dispatch(reorderVenue(venueIndex, 0))
+  }
 
   const handleDeleteVenue = () => {
     confirm({
@@ -88,8 +92,8 @@ function VenuePanel({
             <Icon name="trash" />
             Remove
           </Button>
-          {sendToFront && (
-            <Button floated="right" compact icon labelPosition="left" onClick={sendToFront}>
+          {venueIndex > 0 && (
+            <Button floated="right" compact icon labelPosition="left" onClick={handleVenueToFront}>
               <Icon name="angle double up" />
               To front
             </Button>
@@ -149,10 +153,9 @@ function VenuePanel({
             {venue.rooms.map((room, index) => (
               <RoomPanel
                 key={room.id}
+                venueId={venue.id}
                 room={room}
-                sendToFront={
-                  index > 0 ? () => dispatch(reorderRoom(venue.id, index, 0)) : undefined
-                }
+                roomIndex={index}
               />
             ))}
           </Card.Group>
