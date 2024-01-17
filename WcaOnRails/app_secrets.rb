@@ -67,6 +67,7 @@ AppSecrets = SuperConfig.new do
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
     vault :JWT_KEY
+    vault :OIDC_SECRET_KEY
     vault_file :GOOGLE_APPLICATION_CREDENTIALS, "../secrets/application_default_credentials.json"
   else
     mandatory :DATABASE_PASSWORD, :string
@@ -83,6 +84,7 @@ AppSecrets = SuperConfig.new do
     mandatory :SECRET_KEY_BASE, :string
     mandatory :STRIPE_PUBLISHABLE_KEY, :string
     mandatory :JWT_KEY, :string
+    mandatory :OIDC_SECRET_KEY, :string
 
     optional :AWS_ACCESS_KEY_ID, :string, ''
     optional :AWS_SECRET_ACCESS_KEY, :string, ''
