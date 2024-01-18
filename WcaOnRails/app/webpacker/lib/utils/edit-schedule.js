@@ -117,10 +117,10 @@ export function fcEventToActivityAndDates(fcEvent, calendar) {
   const utcStartIso = luxonToWcifIso(eventStartLuxon);
   const utcEndIso = luxonToWcifIso(eventEndLuxon);
 
-  const { activityCode, childActivities } = fcEvent.extendedProps;
+  const { activityCode, activityName, childActivities } = fcEvent.extendedProps;
 
   const activity = {
-    name: fcEvent.title,
+    name: activityName,
     activityCode,
     startTime: utcStartIso,
     endTime: utcEndIso,

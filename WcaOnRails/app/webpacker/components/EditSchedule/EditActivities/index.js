@@ -26,7 +26,7 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
-import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
+import { getMatchingActivities, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 
 import {
@@ -96,17 +96,24 @@ function EditActivities({
   );
 
   const fcActivities = useMemo(() => (
-    wcifRoom?.activities.map((activity) => ({
-      title: activity.name,
-      start: activity.startTime,
-      end: activity.endTime,
-      extendedProps: {
-        activityId: activity.id,
-        activityCode: activity.activityCode,
-        childActivities: activity.childActivities,
-      },
-    }))
-  ), [wcifRoom?.activities]);
+    wcifRoom?.activities.map((activity) => {
+      const matchCount = getMatchingActivities(wcifSchedule, activity).length - 1;
+      const matchesText = ` (${matchCount} matching activit${matchCount === 1 ? "y" : "ies"})`
+
+      return {
+        title: activity.name + (shouldUpdateMatches && matchCount > 0 ? matchesText : ""),
+        start: activity.startTime,
+        end: activity.endTime,
+        extendedProps: {
+          activityId: activity.id,
+          activityCode: activity.activityCode,
+          activityName: activity.name,
+          childActivities: activity.childActivities,
+          matchCount,
+        },
+      };
+    })
+  ), [wcifRoom?.activities, wcifSchedule, shouldUpdateMatches]);
 
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
   // See https://medium.com/@teh_builder/ref-objects-inside-useeffect-hooks-eb7c15198780
@@ -150,10 +157,11 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
+      const { activityId, activityName, matchCount } = fcEvent.extendedProps;
+      const matchText = `all ${matchCount + 1} copies of `;
       confirm({
-        content: `Are you sure you want to delete the event ${fcEvent.title}${shouldUpdateMatches ? " from ALL rooms" : ""}? THIS ACTION CANNOT BE UNDONE!`,
+        content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ""}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
       }).then(() => {
-        const { activityId } = fcEvent.extendedProps;
         dispatch(removeActivity(activityId, shouldUpdateMatches));
       });
     }
