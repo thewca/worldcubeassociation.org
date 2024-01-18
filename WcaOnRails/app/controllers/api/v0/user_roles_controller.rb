@@ -339,7 +339,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if group.group_type == UserGroup.group_types[:delegate_regions]
       user = User.find_by(region_id: group.id, delegate_status: status)
       if user.present?
-        end_delegate_role_for_user(user)
+        user.update!(delegate_status: 'delegate')
+        send_role_change_notification(user)
       end
     end
   end
