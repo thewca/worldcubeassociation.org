@@ -125,13 +125,15 @@ function EditActivities({
       itemSelector: '.fc-draggable',
       eventData: (eventEl) => {
         const activityCode = eventEl.getAttribute('wcif-ac');
+        const activityName = eventEl.getAttribute('wcif-title')
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
         return {
-          title: eventEl.getAttribute('wcif-title'),
+          title: activityName,
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
             activityCode,
+            activityName,
           },
         };
       },
