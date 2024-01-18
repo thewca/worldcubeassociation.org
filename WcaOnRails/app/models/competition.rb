@@ -1529,6 +1529,7 @@ class Competition < ApplicationRecord
         #   LEFT JOIN RanksAverage
         # WHERE users.id IN (...)
         User.eager_load(:ranksSingle, :ranksAverage)
+            .select(:name, :wca_id, :country_iso2)
             .find(registered_user_ids)
       end
 
