@@ -41,26 +41,30 @@ export const addActivity = (wcifActivity, roomId) => ({
  * @param {int} activityId
  * @param {string} key
  * @param {string} value
+ * @param {boolean} updateMatches
  * @returns {Action}
  */
-export const editActivity = (activityId, key, value) => ({
+export const editActivity = (activityId, key, value, updateMatches) => ({
   type: EditActivity,
   payload: {
     activityId,
     key,
     value,
+    updateMatches,
   },
 });
 
 /**
  * Action creator for removing activity.
  * @param {int} activityId
+ * @param {boolean} updateMatches
  * @returns {Action}
  */
-export const removeActivity = (activityId) => ({
+export const removeActivity = (activityId, updateMatches) => ({
   type: RemoveActivity,
   payload: {
     activityId,
+    updateMatches,
   },
 });
 

@@ -49,37 +49,47 @@ const reducers = {
     },
   }),
 
-  [EditActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.map((activity) => (
-            activity.id === payload.activityId
-              ? { ...activity, [payload.key]: payload.value }
-              : activity
-          )),
-        })),
-      })),
-    },
-  }),
+  [EditActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
 
-  [RemoveActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.filter((activity) => activity.id !== payload.activityId),
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              (activity.id === payload.activityId || (payload.updateMatches && doActivitiesMatch(activity, selectedActivity)))
+                ? { ...activity, [payload.key]: payload.value }
+                : activity
+            )),
+          })),
         })),
-      })),
-    },
-  }),
+      },
+    };
+  },
+
+  [RemoveActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.filter((activity) => (
+              activity.id !== payload.activityId && (!payload.updateMatches || !doActivitiesMatch(activity, selectedActivity))
+            )),
+          })),
+        })),
+      },
+    };
+  },
 
   [MoveActivity]: (state, { payload }) => {
     const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
