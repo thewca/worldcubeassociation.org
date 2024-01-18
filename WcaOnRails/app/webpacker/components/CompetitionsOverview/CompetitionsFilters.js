@@ -367,6 +367,7 @@ function CompDisplayCheckboxes({
               label={I18n.t('competitions.index.show_registration_status')}
               name="show_registration_status"
               id="show_registration_status"
+              checked={shouldShowRegStatus}
               onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
             />
           </div>
