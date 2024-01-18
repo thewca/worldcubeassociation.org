@@ -57,6 +57,8 @@ function EditActivities({
 
   const [selectedRoomId, setSelectedRoomId] = useInputState();
 
+  const [shouldUpdateMatches, setShouldUpdateMatches] = useState(false);
+
   const [minutesPerRow, setMinutesPerRow] = useInputState(15);
   const [calendarStart, setCalendarStart] = useInputState(8);
   const [calendarEnd, setCalendarEnd] = useInputState(20);
@@ -149,10 +151,10 @@ function EditActivities({
         && jsEvent.pageY <= bottom
     ) {
       confirm({
-        content: `Are you sure you want to delete the event ${fcEvent.title}? THIS ACTION CANNOT BE UNDONE!`,
+        content: `Are you sure you want to delete the event ${fcEvent.title}${shouldUpdateMatches ? " from ALL rooms" : ""}? THIS ACTION CANNOT BE UNDONE!`,
       }).then(() => {
         const { activityId } = fcEvent.extendedProps;
-        dispatch(removeActivity(activityId));
+        dispatch(removeActivity(activityId, shouldUpdateMatches));
       });
     }
   };
@@ -173,7 +175,7 @@ function EditActivities({
     const duration = toLuxonDuration(delta, calendar);
     const deltaIso = duration.toISO();
 
-    dispatch(moveActivity(activityId, deltaIso));
+    dispatch(moveActivity(activityId, deltaIso, shouldUpdateMatches));
   };
 
   const resizeActivity = ({
@@ -190,7 +192,7 @@ function EditActivities({
     const endScaleDuration = toLuxonDuration(endDelta, calendar);
     const endScaleIso = endScaleDuration.toISO();
 
-    dispatch(scaleActivity(activityId, startScaleIso, endScaleIso));
+    dispatch(scaleActivity(activityId, startScaleIso, endScaleIso, shouldUpdateMatches));
   };
 
   const addActivityFromCalendar = (startLuxon, endLuxon) => {
@@ -240,8 +242,8 @@ function EditActivities({
 
     if (ok) {
       if (modalActivity) {
-        dispatch(editActivity(modalActivity.id, 'activityCode', activityCode));
-        dispatch(editActivity(modalActivity.id, 'name', activityName));
+        dispatch(editActivity(modalActivity.id, 'activityCode', activityCode, shouldUpdateMatches));
+        dispatch(editActivity(modalActivity.id, 'name', activityName, shouldUpdateMatches));
       } else {
         const utcStartIso = luxonToWcifIso(modalLuxonStart);
         const utcEndIso = luxonToWcifIso(modalLuxonEnd);
@@ -304,7 +306,12 @@ function EditActivities({
             dateLocale={calendarLocale}
             onModalClose={onActivityModalClose}
           />
-          <ActionsHeader wcifSchedule={wcifSchedule} selectedRoomId={selectedRoomId} />
+          <ActionsHeader
+            wcifSchedule={wcifSchedule}
+            selectedRoomId={selectedRoomId}
+            shouldUpdateMatches={shouldUpdateMatches}
+            setShouldUpdateMatches={setShouldUpdateMatches}
+          />
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Button,
+  Checkbox,
   Container,
   Form,
   Icon,
@@ -11,7 +12,12 @@ import { copyRoomActivities } from '../store/actions';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
-function ActionsHeader({ wcifSchedule, selectedRoomId }) {
+function ActionsHeader({
+  wcifSchedule,
+  selectedRoomId,
+  shouldUpdateMatches,
+  setShouldUpdateMatches
+}) {
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
   
   return (
@@ -27,6 +33,11 @@ function ActionsHeader({ wcifSchedule, selectedRoomId }) {
         <Icon name="calendar plus" />
         Copy another room
       </Button>
+      <Checkbox
+        label="Apply changes to matching activities (same type, start time, and end time) in other rooms"
+        checked={shouldUpdateMatches}
+        onChange={() => setShouldUpdateMatches(x => !x)}
+      />
     </Container>
   )
 }
