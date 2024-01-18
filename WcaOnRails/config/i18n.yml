@@ -49,3 +49,4 @@ translations:
       - "*.search_results.*"
       - "*.continents.*"
       - "*.layouts.*"
+      - "*.user_groups.*"

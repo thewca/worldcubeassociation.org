@@ -8,12 +8,38 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
-  # The order in which the roles should be sorted.
-  STATUS_SORTING_ORDER = ['leader', 'senior_member', 'member'].freeze
+  STATUS_SORTING_ORDER = {
+    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
+    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:board].to_sym => ["member"],
+    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+  }.freeze
 
-  private def status_sort_rank(status)
-    STATUS_SORTING_ORDER.find_index(status) || STATUS_SORTING_ORDER.length
+  GROUP_TYPE_RANK_ORDER = [
+    UserGroup.group_types[:board],
+    UserGroup.group_types[:officers],
+    UserGroup.group_types[:teams_committees],
+    UserGroup.group_types[:delegate_regions],
+    UserGroup.group_types[:councils],
+  ].freeze
+
+  def self.status_sort_rank(role)
+    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
+    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
+    status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+    STATUS_SORTING_ORDER[group_type.to_sym].find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym].length
   end
+
+  SORT_PARAMS = {
+    startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
+    lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
+    eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
+    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role[:group][:group_type]) || GROUP_TYPE_RANK_ORDER.length },
+    status: lambda { |role| status_sort_rank(role) },
+    name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+  }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
   private def sorted_roles(roles, sort_param)
@@ -23,15 +49,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles.stable_sort_by { |role|
       sort_keys_and_directions.map { |sort_key_and_direction|
         sort_key = sort_key_and_direction.split(':').first
-        # FIXME: Utilize sort direction as well and reverse sort wherever necessary.
-        case sort_key
-        when 'startDate'
-          role[:start_date] # Can be changed to `role.start_date` once all roles are migrated to the new system.
-        when 'status'
-          status_sort_rank(role[:metadata][:status]) # Can be changed to `status_sort_rank(role.metadata.status)` once all roles are migrated to the new system.
-        when 'name'
-          role[:user][:name] # Can be changed to `role.user.name` once all roles are migrated to the new system.
-        end
+        sort_direction = sort_key_and_direction.split(':').second || 'asc'
+        SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
       }
     }
   end
@@ -75,7 +94,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # operator to access the parameters.
       (
         (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
-        (is_active.present? && is_active != (is_actual_role ? role.is_active : role[:is_active])) ||
+        (is_active.present? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
         (is_group_hidden.present? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
       )
     end
@@ -92,19 +111,67 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     roles.concat(user.team_roles)
 
-    if user.admin? || user.board_member?
+    if user.board_member?
       roles << {
         group: {
-          id: user.admin? ? 'admin' : 'board',
-          name: user.admin? ? 'Admin Group' : 'Board Group',
-          group_type: UserGroup.group_types[:teams_committees],
+          id: 'board',
+          name: 'WCA Board of Directors',
+          group_type: UserGroup.group_types[:board],
+          is_hidden: false,
+          is_active: true,
+          metadata: {
+            friendly_id: 'board',
+          },
+        },
+        is_active: true,
+        user: user,
+        metadata: {
+          status: 'member',
+        },
+      }
+    end
+
+    Team.all_officers.each do |officer_team|
+      if officer_team == Team.chair
+        status = 'chair'
+      elsif officer_team == Team.executive_director
+        status = 'executive_director'
+      elsif officer_team == Team.secretary
+        status = 'secretary'
+      elsif officer_team == Team.vice_chair
+        status = 'vice_chair'
+      end
+      if user.team_member?(officer_team)
+        roles << {
+          group: {
+            id: 'officers',
+            name: 'WCA Officers',
+            group_type: UserGroup.group_types[:officers],
+            is_hidden: false,
+            is_active: true,
+          },
+          is_active: true,
+          user: user,
+          metadata: {
+            status: status,
+          },
+        }
+      end
+    end
+
+    if Team.wfc.current_members.select(&:team_leader).map(&:user).include?(user)
+      roles << {
+        group: {
+          id: 'officers',
+          name: 'WCA Officers',
+          group_type: UserGroup.group_types[:officers],
           is_hidden: false,
           is_active: true,
         },
         is_active: true,
         user: user,
         metadata: {
-          status: 'member',
+          status: 'treasurer',
         },
       }
     end
@@ -340,12 +407,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           regionId: user.region_id,
           location: user.location,
         },
-        regions: UserGroup.delegate_regions,
+        regions: UserGroup.delegate_region_groups,
       }
     else
       render json: {
         roleData: {},
-        regions: UserGroup.delegate_regions,
+        regions: UserGroup.delegate_region_groups,
       }
     end
   end
