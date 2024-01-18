@@ -44,6 +44,7 @@ import {
   luxonToWcifIso,
 } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
+import ActionsHeader from './ActionsHeader';
 
 function EditActivities({
   wcifEvents,
@@ -303,6 +304,7 @@ function EditActivities({
             dateLocale={calendarLocale}
             onModalClose={onActivityModalClose}
           />
+          <ActionsHeader wcifSchedule={wcifSchedule} selectedRoomId={selectedRoomId} />
           <Grid>
             <Grid.Row>
               <Grid.Column width={4}>
