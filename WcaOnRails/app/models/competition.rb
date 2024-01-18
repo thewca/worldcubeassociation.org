@@ -1545,8 +1545,9 @@ class Competition < ApplicationRecord
           # Competitors with ranks should appear first in the sorting,
           # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
           rank.present? ? 0 : 1,
-          rank&.worldRank,
-          second_rank&.worldRank,
+          rank&.worldRank || 0,
+          second_rank.present? ? 0 : 1,
+          second_rank&.worldRank || 0,
           user.name,
         ]
       }
@@ -1580,9 +1581,9 @@ class Competition < ApplicationRecord
           wca_id: user.wca_id,
           country_id: user.country.id,
           average_rank: average_ranking&.worldRank,
-          average_best: average_ranking&.best,
+          average_best: average_ranking&.best || 0,
           single_rank: single_ranking&.worldRank,
-          single_best: single_ranking&.best,
+          single_best: single_ranking&.best || 0,
           tied_previous: tied_previous,
           pos: pos,
         )
