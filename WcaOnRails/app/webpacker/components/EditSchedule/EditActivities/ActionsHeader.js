@@ -19,30 +19,45 @@ function ActionsHeader({
   setShouldUpdateMatches
 }) {
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
+
+  const otherRoomsWithNonEmptySchedules = wcifSchedule.venues.flatMap((venue) => venue.rooms.filter((room) => room.activities.length > 0 && room.id !== selectedRoomId).map((room) => ({
+    key: room.id,
+    text: venue.name + " - " + room.name,
+    value: room.id,
+  })))
   
   return (
-    <Container>
-      <CopyRoomScheduleModal
-        isOpen={isCopyModalOpen}
-        wcifSchedule={wcifSchedule}
-        selectedRoomId={selectedRoomId}
-        close={() => setIsCopyModalOpen(false)}
-      />
+    otherRoomsWithNonEmptySchedules.length > 0 && (
+      <Container>
+        <CopyRoomScheduleModal
+          isOpen={isCopyModalOpen}
+          wcifSchedule={wcifSchedule}
+          selectedRoomId={selectedRoomId}
+          roomOptions={otherRoomsWithNonEmptySchedules}
+          close={() => setIsCopyModalOpen(false)}
+        />
 
-      <Button compact icon labelPosition="left" onClick={()=> setIsCopyModalOpen(true)}>
-        <Icon name="calendar plus" />
-        Copy another room
-      </Button>
-      <Checkbox
-        label="Apply changes to matching activities (same type, start time, and end time) in other rooms"
-        checked={shouldUpdateMatches}
-        onChange={() => setShouldUpdateMatches(x => !x)}
-      />
-    </Container>
+        <Button compact icon labelPosition="left" onClick={()=> setIsCopyModalOpen(true)}>
+          <Icon name="calendar plus" />
+          Copy another room
+        </Button>
+        <Checkbox
+          label="Apply changes to matching activities (same type, start time, and end time) in other rooms"
+          checked={shouldUpdateMatches}
+          onChange={() => setShouldUpdateMatches(x => !x)}
+        />
+      </Container>
+    )
   )
 }
 
-function CopyRoomScheduleModal({ isOpen, wcifSchedule, selectedRoomId, close }) {
+function CopyRoomScheduleModal({
+  isOpen,
+  wcifSchedule,
+  selectedRoomId,
+  roomOptions,
+  close
+}) {
   const dispatch = useDispatch();
   const confirm = useConfirm();
 
@@ -50,12 +65,6 @@ function CopyRoomScheduleModal({ isOpen, wcifSchedule, selectedRoomId, close }) 
   const selectedRoomVenue = wcifSchedule.venues.find(({ rooms }) => rooms.map(({id}) => id).includes(selectedRoomId))
   const toCopyRoomVenue = wcifSchedule.venues.find(({ rooms }) => rooms.map(({id}) => id).includes(toCopyRoomId))
   const areRoomsInSameVenue = selectedRoomVenue.id === toCopyRoomVenue?.id
-
-  const roomOptions = wcifSchedule.venues.flatMap((venue) => venue.rooms.filter((room) => room.activities.length > 0 && room.id !== selectedRoomId).map((room) => ({
-    key: room.id,
-    text: venue.name + " - " + room.name,
-    value: room.id,
-  })))
 
   const dispatchAndClose = () => {
     dispatch(copyRoomActivities(toCopyRoomId, selectedRoomId));
