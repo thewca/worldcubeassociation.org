@@ -54,8 +54,7 @@ module Microservices
         end
       end
 
-      body = JSON.parse(response.body)
-      body['registrations']
+      response.body.deep_symbolize_keys
     end
   end
 end
