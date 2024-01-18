@@ -456,7 +456,7 @@ de:
         #original_hash: f91b080
         name_reason: Der Grund für diesen Namen
         #original_hash: fdba578
-        cellName: Competition-Kurzname
+        cellName: Competition Kurzname
         #original_hash: 0f21717
         countryId: Region
         #original_hash: 25b7b06
@@ -595,7 +595,7 @@ de:
         #original_hash: bae7d5b
         status: Status
         #original_hash: a6e8a0b
-        administrative_notes: Organisatorische Anmerkungen
+        administrative_notes: Administrative Anmerkungen
         #original_hash: 709a232
         name: Name
         #original_hash: a6b9d69
@@ -749,23 +749,23 @@ de:
         o: Andere
       delegate_status:
         #original_hash: 621101a
-        trainee_delegate: Trainee-Delegate
+        trainee_delegate: Trainee Delegate
         #original_hash: 9b97968
-        candidate_delegate: Junior-Delegate
+        candidate_delegate: Junior Delegate
         #original_hash: 12ab214
         delegate: Delegate
         #original_hash: d463c23
-        senior_delegate: Senior-Delegate
+        senior_delegate: Senior Delegate
       role_status:
         delegate_regions:
           #original_hash: 621101a
-          trainee_delegate: Trainee-Delegate
+          trainee_delegate: Trainee Delegate
           #original_hash: 9b97968
-          candidate_delegate: Junior-Delegate
+          candidate_delegate: Junior Delegate
           #original_hash: 12ab214
           delegate: Delegate
           #original_hash: d463c23
-          senior_delegate: Senior-Delegate
+          senior_delegate: Senior Delegate
         teams_committees:
           #original_hash: 6853c98
           member: Mitglied
@@ -1714,7 +1714,7 @@ de:
       #original_hash: 61074f1
       results_database: Datenbank
       #original_hash: 54e0548
-      results_sidekiq: Sidekiq-Dashboard
+      results_sidekiq: Sidekiq dashboard
       #original_hash: aee74b8
       new_post: Neuer Post
       #original_hash: 0d67445
@@ -2120,8 +2120,8 @@ de:
         #original_hash: 1a18831
         '7': Der Avatar darf keine offensiven Inhalte haben (z.B. offensive Gesten)
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: 'Zusätzliche Richtlinien für Mitarbeiter:'
+        #original_hash: 5d5a47a
+        title: 'Zusätzliche Richtlinien für Mitarbeiter und Trainee-Delegates:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2251,6 +2251,12 @@ de:
         spezielle Formular</a>, um das zu beheben.
       #original_hash: 92aa857
       unknown_wca_id_html: 'Die WCA-ID %{link_id} existiert nicht.'
+  user_groups:
+    group_types:
+      #original_hash: abd2828
+      board: WCA Vorstand
+      #original_hash: d79bd00
+      officers: WCA Officers
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2350,10 +2356,10 @@ de:
       regards_html: 'Viele Grüße, %{people}.'
       new:
         #original_hash: 63591e5
-        mail_subject: 'Anmeldung in Überprüfung: %{comp_name}'
+        mail_subject: 'Anmeldung Ausstehend: %{comp_name}'
         #original_hash: 6aa057a
         registered_html: >-
-          Deine Anmeldung für %{comp_name} befindet sich in Überprüfung und wartet auf
+          Deine Anmeldung für %{comp_name} steht nun aus und wartet auf
           Bestätigung des Organisationsteams.
         #original_hash: f98b245
         awaits_approval: >-
@@ -2381,7 +2387,7 @@ de:
         see_you_soon: 'Wir freuen uns darauf dich bei %{comp_name} zu sehen!'
       pending:
         #original_hash: 8d26297
-        mail_subject: 'Anmeldung auf die Warteliste Gesetzt: %{comp_name}'
+        mail_subject: 'Anmeldung auf die Warteliste gesetzt: %{comp_name}'
         #original_hash: 6fd0a8e
         moved_html: >-
           Deine Registrierung für die %{comp_name} wurde auf die Warteliste
@@ -2818,7 +2824,7 @@ de:
         erforderlichen 48 Stunden gesetzt.
       #original_hash: a25e7a2
       registration_already_closed: >-
-        Die Frist zur Anmeldung ist bereits abgelaufen. Bitte setze sie auf
+        Die Deadline zur Anmeldung ist bereits abgelaufen. Bitte setze sie auf
         einen in der Zukunft liegenden Zeitpunkt.
       #original_hash: 3322400
       tooltip_registered: Du bist angemeldet.
@@ -2857,10 +2863,10 @@ de:
       #original_hash: b16bd13
       cannot_activate_v2: >-
         Du kannst das neue Anmeldesystem nicht aktivieren, wenn die Anmeldung
-        bereits geöffnet ist.
+        geöffnet ist.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
-        Dieser Wettbewerb hat keine Frist zum Akzeptieren von Teilnehmern auf
+        Dieser Wettbewerb hat keine Deadline zum Akzeptieren von Teilnehmern auf
         der Warteliste. Wenn du eine Warteliste verwendest, gib bitte eine
         Deadline an. Wenn du keine Warteliste verwendest, bitte denke daran,
         dies in den Anmeldebedingungen zu erwähnen.
@@ -3903,12 +3909,13 @@ de:
       unstick_at_future: muss in der Zukunft liegen
   contacts:
     website:
-      #original_hash: 35c333c
+      #original_hash: d7707e7
       faq_note_html: >-
         Bevor du eine Anfrage erstellst, solltest du einen Blick in unsere <a
         href="/faq">Frequently Asked Questions</a> werfen! Falls du ein
-        bestimmtes Komitee oder Team kontaktieren willst, findest du dessen
-        Kontaktinformationen auf <a href="/teams-committees">dieser Seite</a>.
+        bestimmtes Komitee oder Team kontaktieren willst, die hier nicht
+        aufgeführt sind, findest du dessen Kontaktinformationen auf <a
+        href="/teams-committees">dieser Seite</a>.
       #original_hash: 4ef2aad
       title: WCA Kontaktformular
       inquiries:
@@ -3919,7 +3926,7 @@ de:
         #original_hash: f0bffb7
         competitions_in_general: 'Wettbewerbe im Allgemeinen (organisieren, Regeln, etc.)'
         #original_hash: aabfcf7
-        results_team: Kontaktiere das Results-Team
+        results_team: Kontaktiere das Results Team
         #original_hash: f6ffa78
         wca_id_or_profile: WCA ID oder WCA Profil
         #original_hash: 0c77aee
@@ -4537,6 +4544,8 @@ de:
     acknowledges: 'Die WCA erkennt die folgenden WCA Delegierten an:'
     #original_hash: 0397112
     regions: Regionen
+    #original_hash: 0e57333
+    all_regions: Alle Regionen
     table:
       #original_hash: 709a232
       name: Name
@@ -4544,6 +4553,14 @@ de:
       role: Rolle
       #original_hash: 0f21717
       region: Region
+      #original_hash: fee4fb7
+      first_delegated: Erstes Mal delegiert
+      #original_hash: e2232e5
+      last_delegated: Zuletzt delegiert
+      #original_hash: 5ab4a17
+      total_delegated: Gesamt delegiert
+      #original_hash: 90ccd64
+      history: Geschichte
   regional_organizations:
     #original_hash: 37b8fdc
     title: Regionale Organisationen
