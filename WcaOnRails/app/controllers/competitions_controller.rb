@@ -611,7 +611,6 @@ class CompetitionsController < ApplicationController
       form_data = params.permit!.to_h
     end
 
-
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
     #####
