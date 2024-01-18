@@ -21,6 +21,7 @@ import {
 import {
   changeActivityTimezone, moveActivityByDuration, scaleActivitiesByDuration,
 } from '../utils';
+import { activityWcifFromId, doActivitiesMatch, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 
 const reducers = {
   [ChangesSaved]: (state) => ({
@@ -80,41 +81,49 @@ const reducers = {
     },
   }),
 
-  [MoveActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.map((activity) => (
-            activity.id === payload.activityId
-              ? moveActivityByDuration(activity, payload.isoDuration)
-              : activity
-          )),
-        })),
-      })),
-    },
-  }),
+  [MoveActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
 
-  [ScaleActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.map((activity) => (
-            activity.id === payload.activityId
-              ? scaleActivitiesByDuration(activity, payload.isoDeltaStart, payload.isoDeltaEnd)
-              : activity
-          )),
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              (activity.id === payload.activityId || (payload.updateMatches && doActivitiesMatch(activity, selectedActivity)))
+                ? moveActivityByDuration(activity, payload.isoDuration)
+                : activity
+            )),
+          })),
         })),
-      })),
-    },
-  }),
+      },
+    };
+  },
+
+  [ScaleActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
+    
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              (activity.id === payload.activityId || (payload.updateMatches && doActivitiesMatch(activity, selectedActivity)))
+                ? scaleActivitiesByDuration(activity, payload.isoDeltaStart, payload.isoDeltaEnd)
+                : activity
+            )),
+          })),
+        })),
+      },
+    };
+  },
 
   [EditVenue]: (state, { payload }) => ({
     ...state,
@@ -252,10 +261,10 @@ const reducers = {
 
   [CopyRoomActivities]: (state, { payload }) => {
     const { sourceRoomId, targetRoomId } = payload;
-    const sourceRoomActivities = state.wcifSchedule.venues.flatMap(({ rooms }) => rooms).find(({ id }) => id === sourceRoomId).activities;
+    const sourceRoomActivities = roomWcifFromId(state.wcifSchedule, sourceRoomId).activities;
     if (sourceRoomActivities.length === 0) return state;
     const copiedActivities = sourceRoomActivities.map((activity) => copyActivity(state.wcifSchedule, activity));
-    const targetRoomVenueId = state.wcifSchedule.venues.find(({ rooms }) => rooms.map(({ id }) => id).includes(targetRoomId)).id;
+    const targetRoomVenueId = venueWcifFromRoomId(state.wcifSchedule, targetRoomId).id;
 
     return {
       ...state,

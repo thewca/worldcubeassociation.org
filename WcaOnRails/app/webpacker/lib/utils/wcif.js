@@ -86,6 +86,14 @@ export function venueWcifFromRoomId(scheduleWcif, id) {
   return scheduleWcif.venues.find((venue) => venue.rooms.some((room) => room.id === intId));
 }
 
+export function activityWcifFromId(scheduleWcif, id) {
+  return scheduleWcif.venues.flatMap(({rooms}) => rooms.flatMap(({activities}) => activities)).find((activity) => activity.id === id)
+}
+
+export function doActivitiesMatch(a1, a2) {
+  return a1.activityCode === a2.activityCode && a1.startTime === a2.startTime && a1.endTime === a2.endTime
+}
+
 export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {
   if (!qualification) {
     return '-';

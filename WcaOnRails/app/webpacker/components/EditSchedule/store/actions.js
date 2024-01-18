@@ -15,7 +15,7 @@ export const CopyRoom = 'COPY_ROOM';
 export const CopyRoomActivities = 'COPY_ROOM_ACTIVITIES';
 
 /**
- * Action creator for marking changes as saved
+ * Action creator for marking changes as saved.
  * @returns {Action}
  */
 export const changesSaved = () => ({
@@ -23,7 +23,7 @@ export const changesSaved = () => ({
 });
 
 /**
- * Action creator for adding activity
+ * Action creator for adding activity.
  * @param {Activity} wcifActivity
  * @param {int} roomId
  * @returns {Action}
@@ -37,8 +37,10 @@ export const addActivity = (wcifActivity, roomId) => ({
 });
 
 /**
- * Action creator for modifying details of an activity
+ * Action creator for modifying details of an activity.
  * @param {int} activityId
+ * @param {string} key
+ * @param {string} value
  * @returns {Action}
  */
 export const editActivity = (activityId, key, value) => ({
@@ -51,7 +53,7 @@ export const editActivity = (activityId, key, value) => ({
 });
 
 /**
- * Action creator for removing activity
+ * Action creator for removing activity.
  * @param {int} activityId
  * @returns {Action}
  */
@@ -63,38 +65,42 @@ export const removeActivity = (activityId) => ({
 });
 
 /**
- * Action creator for moving an activity's time
+ * Action creator for moving an activity's time.
  * @param {int} activityId
  * @param {string} isoDuration
+ * @param {boolean} updateMatches
  * @returns {Action}
  */
-export const moveActivity = (activityId, isoDuration) => ({
+export const moveActivity = (activityId, isoDuration, updateMatches = false) => ({
   type: MoveActivity,
   payload: {
     activityId,
     isoDuration,
+    updateMatches,
   },
 });
 
 /**
  * Action creator for scaling an activity's time,
- * i.e. changing the start and/or end date by some delta
+ * i.e. changing the start and/or end date by some delta.
  * @param {int} activityId
  * @param {string} isoDeltaStart
  * @param {string} isoDeltaEnd
+ * @param {boolean} updateMatches
  * @returns {Action}
  */
-export const scaleActivity = (activityId, isoDeltaStart, isoDeltaEnd) => ({
+export const scaleActivity = (activityId, isoDeltaStart, isoDeltaEnd, updateMatches = false) => ({
   type: ScaleActivity,
   payload: {
     activityId,
     isoDeltaStart,
     isoDeltaEnd,
+    updateMatches,
   },
 });
 
 /**
- * Action creator for changing a venue's properties
+ * Action creator for changing a venue's properties.
  * @param {int} venueId
  * @param {string} propertyKey
  * @param {string} newProperty
@@ -110,7 +116,7 @@ export const editVenue = (venueId, propertyKey, newProperty) => ({
 });
 
 /**
- * Action creator for changing a room's properties
+ * Action creator for changing a room's properties.
  * @param {int} roomId
  * @param {string} propertyKey
  * @param {string} newProperty
