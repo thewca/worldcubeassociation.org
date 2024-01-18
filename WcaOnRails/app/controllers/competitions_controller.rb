@@ -605,7 +605,12 @@ class CompetitionsController < ApplicationController
     old_organizers = competition.organizers.to_a
 
     # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
-    form_data = params.permit!.to_h
+    if competition.confirmed? && !current_user.can_admin_competitions?
+      form_data = params.slice(:userSettings).permit!.to_h
+    else
+      form_data = params.permit!.to_h
+    end
+
 
     #####
     # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS

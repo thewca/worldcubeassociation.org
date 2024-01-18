@@ -141,7 +141,7 @@ const wrapInput = (
 
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
-  const defaultDisabled = isConfirmed && !isAdminView;
+  const defaultDisabled = !props.alwaysEnabled && isConfirmed && !isAdminView;
   const disabled = defaultDisabled || props.disabled;
 
   const passDownDisabled = additionalPropNames.includes('disabled');

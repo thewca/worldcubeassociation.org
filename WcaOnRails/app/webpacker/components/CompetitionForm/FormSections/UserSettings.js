@@ -5,7 +5,7 @@ import { InputBoolean } from '../Inputs/FormInputs';
 export default function UserSettings() {
   return (
     <SubSection section="userSettings">
-      <InputBoolean id="receiveRegistrationEmails" />
+      <InputBoolean id="receiveRegistrationEmails" alwaysEnabled />
     </SubSection>
   );
 }

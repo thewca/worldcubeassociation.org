@@ -2264,10 +2264,12 @@ class Competition < ApplicationRecord
   end
 
   def set_form_data(form_data, current_user)
-    JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
+    only_set_user_settings = self.confirmed? && !current_user.can_admin_competitions?
 
-    if self.confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot change announced competition")
+    JSON::Validator.validate!(Competition.form_data_json_schema_user_settings, form_data)
+
+    unless only_set_user_settings
+      JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
     end
 
     ActiveRecord::Base.transaction do
@@ -2285,7 +2287,10 @@ class Competition < ApplicationRecord
         end
       end
 
-      assign_attributes(Competition.form_data_to_attributes(form_data))
+      assign_attributes(Competition.form_data_to_attributes_user_settings(form_data))
+      unless only_set_user_settings
+        assign_attributes(Competition.form_data_to_attributes(form_data))
+      end
     end
   end
 
@@ -2350,6 +2355,11 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
+    }
+  end
+
+  def self.form_data_to_attributes_user_settings(form_data)
+    {
       receive_registration_emails: form_data.dig('userSettings', 'receiveRegistrationEmails'),
     }
   end
@@ -2444,12 +2454,6 @@ class Competition < ApplicationRecord
             "usesWcaLive" => { "type" => "boolean" },
           },
         },
-        "userSettings" => {
-          "type" => "object",
-          "properties" => {
-            "receiveRegistrationEmails" => { "type" => "boolean" },
-          },
-        },
         "entryFees" => {
           "type" => "object",
           "properties" => {
@@ -2521,6 +2525,20 @@ class Competition < ApplicationRecord
           "properties" => {
             "fromId" => { "type" => ["string", "null"] },
             "cloneTabs" => { "type" => "boolean" },
+          },
+        },
+      },
+    }
+  end
+
+  def self.form_data_json_schema_user_settings
+    {
+      "type" => "object",
+      "properties" => {
+        "userSettings" => {
+          "type" => "object",
+          "properties" => {
+            "receiveRegistrationEmails" => { "type" => "boolean" },
           },
         },
       },
