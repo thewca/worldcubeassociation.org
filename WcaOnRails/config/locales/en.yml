@@ -963,6 +963,10 @@ en:
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
+  user_groups:
+    group_types:
+      board: "WCA Board of Directors"
+      officers: "WCA Officers"
   registrations:
     #context: and when an error is found
     errors:
