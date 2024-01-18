@@ -1503,10 +1503,14 @@ class Competition < ApplicationRecord
       end
 
       if self.uses_new_registration_service?
-        accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', competition_event.event.id)
+        accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', event.id)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
-        registered_user_ids = self.registrations.accepted.pluck(:user_id)
+        registered_user_ids = self.registrations
+                                  .accepted
+                                  .includes(:registration_competition_events)
+                                  .where(registration_competition_events: { competition_event: competition_event })
+                                  .pluck(:user_id)
       end
 
       concise_results_date = ComputeAuxiliaryData.end_date || Date.current
@@ -1529,16 +1533,20 @@ class Competition < ApplicationRecord
       end
 
       rank_symbol = :"ranks#{sort_by.capitalize}"
+      second_rank_symbol = :"ranks#{sort_by_second.capitalize}"
 
       sorted_users = users_with_rankings.sort_by { |user|
         # using '.find_by(event: ...)' fires another SQL query *despite* the ranks being pre-loaded :facepalm:
-        rank = user.send(rank_symbol).find { |r| r.event == competition_event.event }
+        rank = user.send(rank_symbol).find { |r| r.event == event }
+        second_rank = user.send(second_rank_symbol).find { |r| r.event == event }
 
         [
           # Competitors with ranks should appear first in the sorting,
           # competitors without ranks should appear last. That's why they get a higher number if rank is not present.
           rank.present? ? 0 : 1,
           rank&.worldRank,
+          second_rank&.worldRank,
+          user.name,
         ]
       }
 
@@ -1546,15 +1554,15 @@ class Competition < ApplicationRecord
 
       sorted_rankings = sorted_users.map.with_index { |user, i|
         # see comment about .find vs .find_by above.
-        single_ranking = user.ranksSingle.find { |r| r.event == competition_event.event }
-        average_ranking = user.ranksAverage.find { |r| r.event == competition_event.event }
+        single_ranking = user.ranksSingle.find { |r| r.event == event }
+        average_ranking = user.ranksAverage.find { |r| r.event == event }
 
         sort_by_ranking = sort_by == 'single' ? single_ranking : average_ranking
 
         if sort_by_ranking.present?
           # Change position to previous if both single and average are tied with previous registration.
-          average_tied_previous = average_ranking.worldRank == prev_sorted_ranking&.average_rank
-          single_tied_previous = single_ranking.worldRank == prev_sorted_ranking&.single_rank
+          average_tied_previous = average_ranking&.worldRank == prev_sorted_ranking&.average_rank
+          single_tied_previous = single_ranking&.worldRank == prev_sorted_ranking&.single_rank
 
           tied_previous = single_tied_previous && average_tied_previous
 
