@@ -1504,7 +1504,7 @@ class Competition < ApplicationRecord
 
       if self.uses_new_registration_service?
         accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', competition_event.event.id)
-        registered_user_ids = accepted_registrations.map { |reg| reg[:user_id] }
+        registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
         registered_user_ids = self.registrations.accepted.pluck(:user_id)
       end
@@ -1576,7 +1576,7 @@ class Competition < ApplicationRecord
           single_best: single_ranking&.best,
           tied_previous: tied_previous,
           pos: pos,
-          )
+        )
 
         prev_sorted_ranking = sorted_ranking
       }
@@ -1585,7 +1585,7 @@ class Competition < ApplicationRecord
         sorted_rankings: sorted_rankings,
         sort_by: sort_by,
         sort_by_second: sort_by_second,
-        )
+      )
     end
   end
 

@@ -54,7 +54,7 @@ module Microservices
         end
       end
 
-      response.body.deep_symbolize_keys
+      response.body
     end
   end
 end
