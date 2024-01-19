@@ -11,14 +11,11 @@ import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 
 export default function SeniorDelegatesList() {
-  const { data, loading, error } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, {
+  const { data: seniorDelegates, loading, error } = useLoadedData(
+    apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, 'name', {
       status: 'senior_delegate',
     }),
   );
-  const seniorDelegates = React.useMemo(() => data?.sort(
-    (role1, role2) => role1.user.name.localeCompare(role2.user.name),
-  ), [data]);
   if (loading) return <Loading />;
   if (error) return <Errored />;
   return (

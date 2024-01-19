@@ -39,6 +39,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     status: lambda { |role| status_sort_rank(role) },
     name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
     groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location: lambda { |role| role[:metadata][:location] }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -50,6 +51,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       sort_keys_and_directions.map { |sort_key_and_direction|
         sort_key = sort_key_and_direction.split(':').first
         sort_direction = sort_key_and_direction.split(':').second || 'asc'
+        # FIXME: The following line throws error for desc direction if SORT_PARAMS[sort_key.to_sym] is non-numeric.
         SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
       }
     }
