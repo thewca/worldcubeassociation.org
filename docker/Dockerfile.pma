@@ -2,6 +2,7 @@ FROM botsudo/phpmyadmin-snapshots:5.2-snapshot
 
 # Add custom entrypoint script to the image
 COPY load-ca-and-start.sh /custom-entrypoint.sh
+COPY apache-pma.conf /etc/apache2/apache2.conf
 
 # Make the custom entrypoint script executable
 RUN chmod +x /custom-entrypoint.sh
