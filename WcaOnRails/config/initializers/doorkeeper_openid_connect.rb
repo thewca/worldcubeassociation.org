@@ -12,9 +12,11 @@ Doorkeeper::OpenidConnect.configure do
   resource_owner_from_access_token do |access_token|
     User.find(access_token.resource_owner_id)
   end
+
   auth_time_from_resource_owner do |resource_owner|
-    # Do we have a last_login time in devise?
+    resource_owner.current_sign_in_at
   end
+
   reauthenticate_resource_owner do
     # Not sure about if we even want to support this
     redirect_to new_user_session_url
@@ -22,13 +24,6 @@ Doorkeeper::OpenidConnect.configure do
 
   # 5 Minutes expiration time (default is 2 minutes)
   expiration 300.seconds
-
-  discovery_url_options do |request|
-    {
-      authorization: { host: EnvConfig.ROOT_URL },
-      jwks: { protocol: request.ssl? ? :https : :http },
-    }
-  end
 
   claims do
     claim :email do |resource_owner|

@@ -7,7 +7,7 @@ Doorkeeper.configure do
   # For more information go to
   # https://github.com/doorkeeper-gem/doorkeeper/wiki/Using-Scopes
   default_scopes  :public
-  optional_scopes :dob, :email, :manage_competitions
+  optional_scopes :dob, :email, :manage_competitions, :openid
 
   base_controller 'ApplicationController'
 
