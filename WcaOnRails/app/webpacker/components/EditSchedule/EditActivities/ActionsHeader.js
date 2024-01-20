@@ -76,7 +76,7 @@ function CopyRoomScheduleModal({
       dispatchAndClose()
     } else {
      confirm({
-        content: `The room you selected is in a different venue. You should probably only be copying from a different venue for a multi-location fewest moves competition. Are you sure you want to proceed?`,
+        content: `The room you selected is in a different venue. You should probably only be copying from a different venue for a multi-location fewest moves competition. If so, make sure you correctly set all venue time zones BEFORE proceeding with this copy. Are you sure you want to proceed?`,
       }).then(dispatchAndClose)
     }
   }
