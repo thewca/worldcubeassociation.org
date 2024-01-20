@@ -40,24 +40,6 @@ export function nextActivityId(wcifSchedule) {
   return maxIdOrZero(activities) + 1;
 }
 
-export function copyVenue(wcifSchedule, venue) {
-  const newId = venue.id + nextVenueId(wcifSchedule)
-  return {
-    ...venue,
-    id: newId,
-    rooms: venue.rooms.map((room) => copyRoom(wcifSchedule, room)),
-  }
-}
-
-export function copyRoom(wcifSchedule, room) {
-  const newId = room.id + nextRoomId(wcifSchedule);
-  return {
-    ...room,
-    id: newId,
-    activities: room.activities.map((activity) => copyActivity(wcifSchedule, activity)),
-  }
-}
-
 export function copyActivity(wcifSchedule, activity) {
   const newId = activity.id + nextActivityId(wcifSchedule);
   return {
@@ -66,8 +48,26 @@ export function copyActivity(wcifSchedule, activity) {
     // the recursive call won't see the new activity id added here, but uniqueness
     // of original activity ids means adding the same constant nextActivityId
     // everywhere won't create duplicates
-    childActivities: activity.childActivities.map((act) => copyActivity(wcifSchedule, act))
-  }
+    childActivities: activity.childActivities.map((act) => copyActivity(wcifSchedule, act)),
+  };
+}
+
+export function copyRoom(wcifSchedule, room) {
+  const newId = room.id + nextRoomId(wcifSchedule);
+  return {
+    ...room,
+    id: newId,
+    activities: room.activities.map((activity) => copyActivity(wcifSchedule, activity)),
+  };
+}
+
+export function copyVenue(wcifSchedule, venue) {
+  const newId = venue.id + nextVenueId(wcifSchedule);
+  return {
+    ...venue,
+    id: newId,
+    rooms: venue.rooms.map((room) => copyRoom(wcifSchedule, room)),
+  };
 }
 
 export function defaultDurationFromActivityCode(activityCode) {

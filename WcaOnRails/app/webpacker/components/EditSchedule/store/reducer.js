@@ -21,7 +21,12 @@ import {
 import {
   changeActivityTimezone, moveActivityByDuration, scaleActivitiesByDuration,
 } from '../utils';
-import { activityWcifFromId, doActivitiesMatch, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
+import {
+  activityWcifFromId,
+  doActivitiesMatch,
+  roomWcifFromId,
+  venueWcifFromRoomId,
+} from '../../../lib/utils/wcif';
 import { defaultRoomColor } from '../../../lib/wca-data.js.erb';
 
 const reducers = {
@@ -62,7 +67,9 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.map((activity) => (
-              (activity.id === payload.activityId || (payload.updateMatches && doActivitiesMatch(activity, selectedActivity)))
+              (activity.id === payload.activityId || (
+                payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
+              ))
                 ? { ...activity, [payload.key]: payload.value }
                 : activity
             )),
@@ -84,7 +91,9 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.filter((activity) => (
-              activity.id !== payload.activityId && (!payload.updateMatches || !doActivitiesMatch(activity, selectedActivity))
+              activity.id !== payload.activityId && (
+                !payload.updateMatches || !doActivitiesMatch(activity, selectedActivity)
+              )
             )),
           })),
         })),
@@ -104,7 +113,9 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.map((activity) => (
-              (activity.id === payload.activityId || (payload.updateMatches && doActivitiesMatch(activity, selectedActivity)))
+              (activity.id === payload.activityId || (
+                payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
+              ))
                 ? moveActivityByDuration(activity, payload.isoDuration)
                 : activity
             )),
@@ -116,7 +127,7 @@ const reducers = {
 
   [ScaleActivity]: (state, { payload }) => {
     const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
-    
+
     return {
       ...state,
       wcifSchedule: {
@@ -126,7 +137,9 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.map((activity) => (
-              (activity.id === payload.activityId || (payload.updateMatches && doActivitiesMatch(activity, selectedActivity)))
+              (activity.id === payload.activityId || (
+                payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
+              ))
                 ? scaleActivitiesByDuration(activity, payload.isoDeltaStart, payload.isoDeltaEnd)
                 : activity
             )),
@@ -229,7 +242,7 @@ const reducers = {
   }),
 
   [CopyVenue]: (state, { payload }) => {
-    const venue = state.wcifSchedule.venues.find(({id}) => id === payload.venueId)
+    const venue = state.wcifSchedule.venues.find(({ id }) => id === payload.venueId);
     if (!venue) return state;
 
     return {
@@ -240,7 +253,7 @@ const reducers = {
           ...state.wcifSchedule.venues,
           {
             ...copyVenue(state.wcifSchedule, venue),
-            name: "Copy of " + venue.name,
+            name: `Copy of ${venue.name}`,
           },
         ],
       },
@@ -248,9 +261,9 @@ const reducers = {
   },
 
   [CopyRoom]: (state, { payload }) => {
-    const targetVenue = venueWcifFromRoomId(state.wcifSchedule, payload.roomId)
+    const targetVenue = venueWcifFromRoomId(state.wcifSchedule, payload.roomId);
     if (!targetVenue) return state;
-    const room = targetVenue.rooms.find(({id}) => id === payload.roomId)
+    const room = targetVenue.rooms.find(({ id }) => id === payload.roomId);
     if (!room) return state;
 
     return {
@@ -263,7 +276,7 @@ const reducers = {
             ...venue.rooms,
             {
               ...copyRoom(state.wcifSchedule, room),
-              name: "Copy of " + room.name,
+              name: `Copy of ${room.name}`,
             },
           ],
         } : venue)),
@@ -275,7 +288,9 @@ const reducers = {
     const { sourceRoomId, targetRoomId } = payload;
     const sourceRoomActivities = roomWcifFromId(state.wcifSchedule, sourceRoomId).activities;
     if (sourceRoomActivities.length === 0) return state;
-    const copiedActivities = sourceRoomActivities.map((activity) => copyActivity(state.wcifSchedule, activity));
+    const copiedActivities = sourceRoomActivities.map(
+      (activity) => copyActivity(state.wcifSchedule, activity),
+    );
     const targetRoomVenueId = venueWcifFromRoomId(state.wcifSchedule, targetRoomId).id;
 
     return {

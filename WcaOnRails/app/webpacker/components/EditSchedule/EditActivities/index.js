@@ -98,10 +98,10 @@ function EditActivities({
   const fcActivities = useMemo(() => (
     wcifRoom?.activities.map((activity) => {
       const matchCount = getMatchingActivities(wcifSchedule, activity).length - 1;
-      const matchesText = ` (${matchCount} matching activit${matchCount === 1 ? "y" : "ies"})`
+      const matchesText = ` (${matchCount} matching activit${matchCount === 1 ? 'y' : 'ies'})`;
 
       return {
-        title: activity.name + (shouldUpdateMatches && matchCount > 0 ? matchesText : ""),
+        title: activity.name + (shouldUpdateMatches && matchCount > 0 ? matchesText : ''),
         start: activity.startTime,
         end: activity.endTime,
         extendedProps: {
@@ -125,7 +125,7 @@ function EditActivities({
       itemSelector: '.fc-draggable',
       eventData: (eventEl) => {
         const activityCode = eventEl.getAttribute('wcif-ac');
-        const activityName = eventEl.getAttribute('wcif-title')
+        const activityName = eventEl.getAttribute('wcif-title');
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
         return {
@@ -162,7 +162,7 @@ function EditActivities({
       const { activityId, activityName, matchCount } = fcEvent.extendedProps;
       const matchText = `all ${matchCount + 1} copies of `;
       confirm({
-        content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ""}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
+        content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
       }).then(() => {
         dispatch(removeActivity(activityId, shouldUpdateMatches));
       });

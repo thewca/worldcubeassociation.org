@@ -87,15 +87,21 @@ export function venueWcifFromRoomId(scheduleWcif, id) {
 }
 
 export function activityWcifFromId(scheduleWcif, id) {
-  return scheduleWcif.venues.flatMap(({rooms}) => rooms.flatMap(({activities}) => activities)).find((activity) => activity.id === id)
-}
-
-export function getMatchingActivities(scheduleWcif, activity) {
-  return scheduleWcif.venues.flatMap(({rooms}) => rooms.flatMap(({activities}) => activities)).filter((act) => doActivitiesMatch(act, activity))
+  return scheduleWcif.venues.flatMap(
+    ({ rooms }) => rooms.flatMap(({ activities }) => activities),
+  ).find((activity) => activity.id === id);
 }
 
 export function doActivitiesMatch(a1, a2) {
-  return a1.activityCode === a2.activityCode && a1.startTime === a2.startTime && a1.endTime === a2.endTime
+  return a1.activityCode === a2.activityCode
+    && a1.startTime === a2.startTime
+    && a1.endTime === a2.endTime;
+}
+
+export function getMatchingActivities(scheduleWcif, activity) {
+  return scheduleWcif.venues.flatMap(
+    ({ rooms }) => rooms.flatMap(({ activities }) => activities),
+  ).filter((act) => doActivitiesMatch(act, activity));
 }
 
 export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {

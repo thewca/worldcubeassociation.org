@@ -27,8 +27,8 @@ function RoomPanel({
   };
 
   const handleCopyRoom = () => {
-    dispatch(copyRoom(room.id))
-  }
+    dispatch(copyRoom(room.id));
+  };
 
   return (
     <Card fluid raised>
