@@ -246,16 +246,16 @@ const reducers = {
   },
 
   [CopyRoom]: (state, { payload }) => {
-    const venue = state.wcifSchedule.venues.find(({id}) => id === payload.venueId)
-    if (!venue) return state;
-    const room = venue.rooms.find(({id}) => id === payload.roomId)
+    const targetVenue = venueWcifFromRoomId(state.wcifSchedule, payload.roomId)
+    if (!targetVenue) return state;
+    const room = targetVenue.rooms.find(({id}) => id === payload.roomId)
     if (!room) return state;
 
     return {
       ...state,
       wcifSchedule: {
         ...state.wcifSchedule,
-        venues: state.wcifSchedule.venues.map((venue) => (venue.id === payload.venueId ? {
+        venues: state.wcifSchedule.venues.map((venue) => (venue.id === targetVenue.id ? {
           ...venue,
           rooms: [
             ...venue.rooms,

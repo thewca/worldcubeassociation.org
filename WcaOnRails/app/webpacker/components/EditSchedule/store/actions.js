@@ -194,14 +194,12 @@ export const copyVenue = (venueId) => ({
 
 /**
  * Action creator for copying a room.
- * @param {int} venueId
  * @param {int} roomId
  * @returns {Action}
  */
-export const copyRoom = (venueId, roomId) => ({
+export const copyRoom = (roomId) => ({
   type: CopyRoom,
   payload: {
-    venueId,
     roomId,
   },
 });

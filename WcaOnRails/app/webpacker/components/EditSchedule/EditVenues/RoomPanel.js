@@ -27,7 +27,7 @@ function RoomPanel({
   };
 
   const handleCopyRoom = () => {
-    dispatch(copyRoom(venueId, room.id))
+    dispatch(copyRoom(room.id))
   }
 
   return (
