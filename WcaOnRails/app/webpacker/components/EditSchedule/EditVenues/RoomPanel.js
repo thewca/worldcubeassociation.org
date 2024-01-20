@@ -34,9 +34,8 @@ function RoomPanel({
     <Card fluid raised>
       <Card.Content>
         <Card.Header>
-          <Button floated="right" compact icon labelPosition="left" negative onClick={handleDeleteRoom}>
+          <Button floated="right" compact icon title="Remove" negative onClick={handleDeleteRoom}>
             <Icon name="trash" />
-            Remove
           </Button>
           <Button floated="right" compact icon title="Copy" onClick={handleCopyRoom}>
             <Icon name="copy" />
