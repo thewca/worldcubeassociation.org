@@ -22,6 +22,7 @@ import {
   changeActivityTimezone, moveActivityByDuration, scaleActivitiesByDuration,
 } from '../utils';
 import { activityWcifFromId, doActivitiesMatch, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
+import { defaultRoomColor } from '../../../lib/wca-data.js.erb';
 
 const reducers = {
   [ChangesSaved]: (state) => ({
@@ -218,6 +219,7 @@ const reducers = {
           ...venue.rooms,
           {
             id: nextRoomId(state.wcifSchedule),
+            color: defaultRoomColor,
             activities: [],
             extensions: [],
           },
