@@ -19,7 +19,7 @@ const groups = [{
   value: 'Delegates',
 }];
 
-const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate', 'senior_delegate'];
+const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 
 export default function RoleForm({ userId, isActiveRole }) {
   const { data, loading, error } = useLoadedData(roleDataUrl(userId, isActiveRole));

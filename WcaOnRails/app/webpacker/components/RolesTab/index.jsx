@@ -7,13 +7,13 @@ import {
   Icon,
 } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
-import { rolesOfUser, teamUrl } from '../../lib/requests/routes.js.erb';
+import { rolesOfUser, teamUrl, panelUrls } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
 import I18n from '../../lib/i18n';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
-import { groupTypes } from '../../lib/wca-data.js.erb';
+import { groupTypes, delegateRegionsStatus } from '../../lib/wca-data.js.erb';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
@@ -27,8 +27,6 @@ import { groupTypes } from '../../lib/wca-data.js.erb';
 // i18n-tasks-use t('enums.user.role_status.councils.senior_member')
 // i18n-tasks-use t('enums.user.role_status.councils.leader')
 
-const isHyperlinkableGroup = (groupType) => groupType === groupTypes.teams_committees;
-
 export default function RolesTab({ userId }) {
   const roleListFetch = useLoadedData(rolesOfUser(
     userId,
@@ -41,6 +39,44 @@ export default function RolesTab({ userId }) {
   const isDelegate = roleListFetch.data && roleListFetch.data.some(
     (role) => role.group.group_type === 'delegate_regions',
   );
+
+  function hyperlink(role) {
+    if (role.group.group_type === groupTypes.delegate_regions) {
+      if ([
+        delegateRegionsStatus.senior_delegate,
+        delegateRegionsStatus.regional_delegate,
+      ].includes(role.metadata.status)) {
+        return panelUrls.board.regionsManager;
+      }
+      return null;
+    }
+    if (role.group.group_type === groupTypes.teams_committees) {
+      return `${teamUrl(role.group.id.split('_').pop())}/edit`;
+    }
+    if (role.group.group_type === groupTypes.translators) {
+      return panelUrls.wst.translators;
+    }
+    return null;
+  }
+
+  function isHyperlinkableRole(role) {
+    if (role.group.group_type === groupTypes.delegate_regions) {
+      return [
+        delegateRegionsStatus.senior_delegate,
+        delegateRegionsStatus.regional_delegate,
+      ].includes(role.metadata.status);
+    }
+    return [groupTypes.teams_committees, groupTypes.translators].includes(role.group.group_type);
+  }
+
+  function getRoleDescription(role) {
+    let roleDescription = '';
+    if (role.metadata.status) {
+      roleDescription += `${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, `;
+    }
+    roleDescription += role.group.name;
+    return roleDescription;
+  }
 
   if (roleListFetch.loading || loading) return <Loading />;
   if (roleListFetch.error) return <Errored />;
@@ -56,20 +92,19 @@ export default function RolesTab({ userId }) {
                 <List.Item key={role.id}>
                   <List.Content
                     floated="left"
-                    href={isHyperlinkableGroup(role.group.group_type) ? `${teamUrl(role.group.id.split('_').pop())}/edit` : null}
+                    href={hyperlink(role)}
                   >
                     <Icon
                       name="edit"
                       size="large"
                       link
                       disabled={!loggedInUserPermissions.canEditRole(role)}
-                      onClick={isHyperlinkableGroup(role.group.group_type)
-                        ? null : () => setOpen(true)}
+                      onClick={isHyperlinkableRole(role) ? null : () => setOpen(true)}
                     />
                   </List.Content>
                   <List.Content>
                     <List.Header>
-                      {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, ${role.group.name}`}
+                      {getRoleDescription(role)}
                     </List.Header>
                     {!!role.start_date && (
                       <List.Description>

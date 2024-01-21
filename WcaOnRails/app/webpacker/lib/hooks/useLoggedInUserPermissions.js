@@ -24,6 +24,8 @@ export default function useLoggedInUserPermissions() {
           return Boolean(data?.can_edit_delegate_regions.scope === '*' || data?.can_edit_delegate_regions.scope.some((groupId) => groupId === roleGroupId));
         case groupTypes.teams_committees:
           return Boolean(data?.can_edit_teams_committees.scope === '*' || data?.can_edit_teams_committees.scope.some((groupId) => groupId === roleGroupId));
+        case groupTypes.translators:
+          return Boolean(data?.can_edit_translators.scope === '*');
         default:
           return false;
       }

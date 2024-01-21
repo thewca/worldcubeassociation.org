@@ -157,3 +157,12 @@ export const apiV0Urls = {
     list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
   }
 }
+
+export const panelUrls = {
+  board: {
+    regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_board_path(anchor: PanelController.panel_list['board']['regionsManager'])) %>`,
+  },
+  wst: {
+    translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wst_path(anchor: PanelController.panel_list['wst']['translators'])) %>`,
+  }
+}
