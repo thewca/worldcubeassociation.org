@@ -339,10 +339,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
-      user = User.find_by(region_id: group.id, delegate_status: status)
-      if user.present?
-        user.update!(delegate_status: 'delegate')
-        send_role_change_notification(user)
+      if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
+        role_to_end = UserRole.where(group_id: group.id).select { |role| role.metadata.status == status }.first
+        if role_to_end.present?
+          role_to_end.update!(end_date: Date.today)
+        end
+      else
+        user = User.find_by(region_id: group.id, delegate_status: status)
+        if user.present?
+          user.update!(delegate_status: 'delegate')
+          send_role_change_notification(user)
+        end
       end
     end
   end
@@ -371,14 +378,25 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       group = UserGroup.find(group_id)
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      location = params.require(:location) if group.group_type == UserGroup.group_types[:delegate_regions]
+      location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
         end_role_for_user_in_group_with_status(group, status)
       end
       if group.group_type == UserGroup.group_types[:delegate_regions]
-        user = User.find(user_id)
-        user.update!(delegate_status: status, region_id: group.id, location: location)
-        send_role_change_notification(user)
+        if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
+          metadata = RolesMetadataDelegateRegions.create!(status: status)
+          role = UserRole.create!(
+            user_id: user_id,
+            group_id: group_id,
+            start_date: Date.today,
+            metadata: metadata,
+          )
+          RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+        else
+          user = User.find(user_id)
+          user.update!(delegate_status: status, region_id: group.id, location: location)
+          send_role_change_notification(user)
+        end
         render json: {
           success: true,
         }
