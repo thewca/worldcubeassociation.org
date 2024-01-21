@@ -15,5 +15,15 @@ FactoryBot.define do
       start_date { Date.today }
       end_date { Date.today + 1.year }
     end
+
+    factory :regional_delegate_role do
+      user { FactoryBot.create(:user) }
+      group_id { FactoryBot.create(:africa_region).id }
+      start_date { Date.today }
+      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'regional_delegate') }
+    end
+  end
+
+  factory :roles_metadata_delegate_regions do
   end
 end

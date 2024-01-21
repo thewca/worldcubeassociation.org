@@ -46,4 +46,22 @@ RSpec.describe RoleChangeMailer, type: :mailer do
       expect(mail.body.encoded).to match user_who_made_the_change.name
     end
   end
+
+  describe 'notify_role_end' do
+    let(:translator) { FactoryBot.create :regional_delegate_role }
+    let(:user_who_made_the_change) { FactoryBot.create(:user, name: 'Sherlock Holmes') }
+    let(:mail) { described_class.notify_role_end(translator, user_who_made_the_change) }
+
+    it 'renders the headers' do
+      expect(mail.to).to eq [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      expect(mail.reply_to).to eq [user_who_made_the_change.email]
+      expect(mail.subject).to eq "Role removed for #{translator.user.name} in Delegate Regions"
+    end
+
+    it 'renders the body' do
+      translator.reload
+      expect(mail.body.encoded).to match translator.user.name
+      expect(mail.body.encoded).to match user_who_made_the_change.name
+    end
+  end
 end

@@ -74,13 +74,17 @@ class UserGroup < ApplicationRecord
     self.active_roles.map(&:user)
   end
 
+  def lead_role
+    self.active_roles.find { |role| role.is_a?(UserRole) ? role.is_lead? : role[:is_lead] }
+  end
+
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
     if self.group_type == UserGroup.group_types[:delegate_regions]
       if self.parent_group_id.nil?
         self.senior_delegate
       else
-        lead_role = self.active_roles.find { |role| role.is_a?(UserRole) ? role.is_lead? : role[:is_lead] }
+        lead_role = self.lead_role
         lead_role ? lead_role.user : nil
       end
     end
