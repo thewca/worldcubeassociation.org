@@ -19,6 +19,7 @@ import { groupTypes, delegateRegionsStatus } from '../../lib/wca-data.js.erb';
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.candidate_delegate')
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.delegate')
+// i18n-tasks-use t('enums.user.role_status.delegate_regions.regional_delegate')
 // i18n-tasks-use t('enums.user.role_status.delegate_regions.senior_delegate')
 // i18n-tasks-use t('enums.user.role_status.teams_committees.member')
 // i18n-tasks-use t('enums.user.role_status.teams_committees.senior_member')
