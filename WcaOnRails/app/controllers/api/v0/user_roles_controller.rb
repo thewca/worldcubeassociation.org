@@ -348,7 +348,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         user = User.find_by(region_id: group.id, delegate_status: status)
         if user.present?
           user.update!(delegate_status: 'delegate')
-        send_role_change_notification(user)
+          send_role_change_notification(user)
         end
       end
     end
