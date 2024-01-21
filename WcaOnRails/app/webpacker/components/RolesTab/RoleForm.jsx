@@ -25,35 +25,43 @@ const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delega
 
 export default function RoleForm({ userId, isActiveRole }) {
   const { data, loading, error } = useLoadedData(roleDataUrl(userId, isActiveRole));
-  const regionsFetching = useLoadedData(apiV0Urls.userGroups.list(groupTypes.delegate_regions));
+  const { data: regionsData, loading: regionsLoading, error: regionsError } = useLoadedData(
+    apiV0Urls.userGroups.list(groupTypes.delegate_regions),
+  );
   const { save, saving } = useSaveAction();
   const selectedGroup = groups[0].value;
   const [formValues, setFormValues] = React.useState({});
   const [apiError, setError] = React.useState(false);
   const [finished, setFinished] = React.useState(false);
 
-  const regions = React.useMemo(() => regionsFetching.data?.filter(
+  const regions = React.useMemo(() => regionsData?.filter(
     (group) => !group.parent_group_id,
-  ), [regionsFetching.data]);
+  ), [regionsData]);
 
   const subRegions = React.useMemo(() => {
-    const subRegionsList = regionsFetching.data?.filter((group) => group.parent_group_id) || [];
+    const subRegionsList = regionsData?.filter((group) => group.parent_group_id) || [];
     return Object.groupBy(subRegionsList, (group) => group.parent_group_id);
-  }, [regionsFetching.data]);
+  }, [regionsData]);
 
   React.useEffect(() => {
-    const loadingCompleted = !loading && !regionsFetching.loading;
+    const loadingCompleted = !loading && !regionsLoading;
     let regionId = null;
     let subregionId = null;
     if (loadingCompleted) {
       const roleData = data?.roleData || {};
+      // roleData.regionId is the id of either a region or a subregion. If the user is part of a
+      // subregion, roleData.regionId will be the id of the subregion and if the user is not part
+      // of any subregion, roleData.regionId will be the id of the region.
       if (roleData.regionId && !regions.find((region) => region.id === roleData.regionId)) {
-        // In this case, the regionId is having the subregionId.
+        // In this case, the regionId is actually the subregionId because the regionId is not
+        // present in the regions list. So, we need to find the regionId from the subRegions list.
         subregionId = roleData.regionId;
         regionId = parseInt(Object.keys(subRegions)
           .find((regionIndex) => subRegions[regionIndex]
             .find((subregion) => subregion.id === roleData.regionId)), 10);
       } else {
+        // In this case, the regionId is actually the regionId because the regionId is present in
+        // the regions list.
         regionId = roleData.regionId;
       }
       setFormValues({
@@ -64,12 +72,15 @@ export default function RoleForm({ userId, isActiveRole }) {
         subregionId,
       });
     }
-  }, [data, loading, regions, regionsFetching.loading, subRegions]);
+  }, [data, loading, regions, regionsLoading, subRegions]);
 
   React.useEffect(() => {
     if (formValues.regionId && formValues.subregionId) {
       const subRegionList = subRegions[formValues.regionId] || [];
-      if (!subRegionList.find((subregion) => subregion.id === formValues.subregionId)) {
+      const selectedSubRegion = subRegionList.find(
+        (subregion) => subregion.id === formValues.subregionId,
+      );
+      if (!selectedSubRegion) {
         setFormValues({
           ...formValues,
           subregionId: null,
@@ -103,8 +114,8 @@ export default function RoleForm({ userId, isActiveRole }) {
     );
   };
 
-  if (loading || regionsFetching.loading || !formValues) return <Loading />;
-  if (error || apiError || regionsFetching.error) return <Errored />;
+  if (loading || regionsLoading || !formValues) return <Loading />;
+  if (error || apiError || regionsError) return <Errored />;
   if (finished) return 'Success...';
 
   return (

@@ -13,14 +13,13 @@ export default function DelegateForm({
   const handleFormChange = (_, { name, value }) => updateFormProperty({ [name]: value });
 
   const subRegionsOfSelectedRegion = React.useMemo(() => {
-    let subregionsList = [];
     if (!formValues.regionId) return [];
-    subregionsList = subRegions[formValues.regionId] || [];
+    const subregionsList = subRegions[formValues.regionId] || [];
     if (subregionsList.length > 0) {
-      subregionsList.push({
+      return [...subregionsList, {
         name: 'None',
         value: null,
-      });
+      }];
     }
     return subregionsList;
   }, [formValues.regionId, subRegions]);
