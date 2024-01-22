@@ -51,29 +51,16 @@ export default function RolesTab({ userId }) {
     (role) => role.group.group_type === groupTypes.delegate_regions,
   );
 
-  function hasAtLeastOneRole() {
-    return activeRoles?.length > 0 || pastRoles?.length > 0;
-  }
+  const hasNoRoles = activeRoles?.length === 0 && pastRoles?.length === 0;
 
   if (activeRolesLoading || pastRolesLoading) return <Loading />;
   if (activeRolesError || pastRolesError) return <Errored />;
 
   return (
     <>
-      {hasAtLeastOneRole()
-        ? (
-          <>
-            {activeRoles?.length > 0 && (
-            <ActiveRoles
-              activeRoles={activeRoles}
-              setOpen={setOpen}
-            />
-            )}
-            {pastRoles?.length > 0 && (<PastRoles pastRoles={pastRoles} />)}
-          </>
-        ) : (
-          <p>No Roles...</p>
-        )}
+      {activeRoles?.length > 0 && (<ActiveRoles activeRoles={activeRoles} setOpen={setOpen} />)}
+      {pastRoles?.length > 0 && (<PastRoles pastRoles={pastRoles} />)}
+      {hasNoRoles && <p>No Roles...</p>}
       <Button onClick={() => setOpen(true)} disabled={isDelegate}>New Role</Button>
 
       <Modal
