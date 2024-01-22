@@ -495,6 +495,7 @@ module DatabaseDumper
     "oauth_access_grants" => :skip_all_rows,
     "oauth_access_tokens" => :skip_all_rows,
     "oauth_applications" => :skip_all_rows,
+    "oauth_openid_requests" => :skip_all_rows,
     "archive_registrations" => :skip_all_rows,
     "archive_phpbb3_forums" => :skip_all_rows,
     "archive_phpbb3_posts" => :skip_all_rows,
