@@ -13,7 +13,6 @@ if !allowed_environments[rack_env]
   raise "Unrecognized RACK_ENV: #{rack_env}, must be one of #{allowed_environments.keys.join ', '}"
 end
 if rack_env == "development"
-  listen 3000
   worker_processes 1
 else
   stderr_path "#{dir}/log/unicorn-#{rack_env}.log"
@@ -22,7 +21,7 @@ else
   worker_processes((Etc.nprocessors * 2).ceil)
 end
 
-listen "/tmp/unicorn.wca.sock"
+listen 3000
 pid "#{dir}/pids/unicorn.pid"
 
 timeout 60

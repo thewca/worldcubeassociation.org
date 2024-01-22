@@ -89,4 +89,4 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 EXPOSE 3000
-CMD ["./bin/rails", "server"]
+CMD [".bin/bundle", "exec", "unicorn", "-c", "/app/config/unicorn.rb"]
