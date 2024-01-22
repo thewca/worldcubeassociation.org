@@ -1,8 +1,3 @@
-#!/bin/sh
+#!/bin/bash -e
 
-if [ $# -eq 0 ]; then
-  ./bin/bundle exec sidekiq
-else
-  # Allow other commands, like console or runner, to be called
-  exec bin/rails "$@"
-fi
+./bin/bundle exec sidekiq
