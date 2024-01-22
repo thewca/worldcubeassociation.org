@@ -7,23 +7,26 @@ ENV DEBIAN_FRONTEND noninteractive
 # Add PPA needed to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
 RUN apt-get update -qq && \
-  apt-get install --no-install-recommends -y ca-certificates curl gnupg
+    apt-get install --no-install-recommends -y \
+      ca-certificates \
+      curl \
+      gnupg
 
 ARG NODE_MAJOR=20
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | sudo -E bash -
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
+    apt-get install nodejs
+
+# Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
+RUN corepack enable
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       git \
       build-essential \
-      nodejs \
       mariadb-client \
       libssl-dev \
       libyaml-dev \
       tzdata
-
-# Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
-RUN corepack enable
 
 RUN gem update --system && gem install bundler
 

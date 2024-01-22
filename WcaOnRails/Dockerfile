@@ -12,27 +12,30 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     BUNDLE_DEPLOYMENT="1" \
     BUNDLE_PATH="/usr/local/bundle"
 
-FROM base AS build
-
-# Add PPA needed to install nodejs.
+# Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y  \
-      build-essential \
-      curl \
-      git \
-      libvips \
-      node-gyp \
-      pkg-config \
-      python-is-python3 \
+    apt-get install --no-install-recommends -y \
       ca-certificates \
+      curl \
       gnupg
 
 ARG NODE_MAJOR=20
-RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | sudo -E bash - && \
+RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
     apt-get install -y nodejs
+
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
 RUN corepack enable
+
+FROM base AS build
+
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y  \
+      build-essential \
+      git \
+      libvips \
+      pkg-config \
+      python-is-python3
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
@@ -53,8 +56,6 @@ FROM base
 
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
-      curl \
-      nodejs \
       mariadb-client \
       libvips \
       libssl-dev \
@@ -70,8 +71,7 @@ RUN apt-get update -qq && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -O wkhtml.tar.xz && tar -xf wkhtml.tar.xz --strip-components=1 -C /usr/local
-# Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
-RUN corepack enable
+
 # Using pipx because PEP668 doesn't allow installing systemwide packages anymore
 RUN pipx install wrc
 
