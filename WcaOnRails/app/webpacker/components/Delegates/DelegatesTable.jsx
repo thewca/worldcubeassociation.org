@@ -69,19 +69,19 @@ export default function DelegatesTable({ delegates, isAdminMode, isAllRegions })
               </Table.Cell>
               <Table.Cell>{delegate.metadata.location}</Table.Cell>
               {isAllRegions && (
-              <>
-                <Table.Cell>{delegate.metadata.first_delegated}</Table.Cell>
-                <Table.Cell>{delegate.metadata.last_delegated}</Table.Cell>
-                <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
-                <Table.Cell href={competitionsUrl({
-                  display: 'admin',
-                  years: 'all',
-                  delegate: delegate.user.id,
-                })}
-                >
-                  {I18n.t('delegates_page.table.history')}
-                </Table.Cell>
-              </>
+                <>
+                  <Table.Cell>{delegate.metadata.first_delegated}</Table.Cell>
+                  <Table.Cell>{delegate.metadata.last_delegated}</Table.Cell>
+                  <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
+                  <Table.Cell href={competitionsUrl({
+                    display: 'admin',
+                    years: 'all',
+                    delegate: delegate.user.id,
+                  })}
+                  >
+                    {I18n.t('delegates_page.table.history')}
+                  </Table.Cell>
+                </>
               )}
             </Table.Row>
           ))}
