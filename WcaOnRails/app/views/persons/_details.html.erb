@@ -13,9 +13,9 @@
       </h4>
     <% end %>
     <% if @person.user %>
-      <div class="positions-container">
-        <%= all_user_badges(@person.user) %>
-      </div>
+      <%= react_component("Persons/Badges", {
+        userId: @person.user&.id,
+      }) %>
     <% end %>
     <% if @person.user&.avatar %>
       <%= image_tag @person.user.avatar.url, class: "avatar" %>
