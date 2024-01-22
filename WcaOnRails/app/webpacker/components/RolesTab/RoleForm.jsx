@@ -46,19 +46,19 @@ export default function RoleForm({ userId, isActiveRole }) {
   React.useEffect(() => {
     const loadingCompleted = !loading && !regionsLoading;
     let regionId = null;
-    let subregionId = null;
+    let subRegionId = null;
     if (loadingCompleted) {
       const roleData = data?.roleData || {};
-      // roleData.regionId is the id of either a region or a subregion. If the user is part of a
-      // subregion, roleData.regionId will be the id of the subregion and if the user is not part
-      // of any subregion, roleData.regionId will be the id of the region.
+      // roleData.regionId is the id of either a region or a subRegion. If the user is part of a
+      // subRegion, roleData.regionId will be the id of the subRegion and if the user is not part
+      // of any subRegion, roleData.regionId will be the id of the region.
       if (roleData.regionId && !regions.find((region) => region.id === roleData.regionId)) {
-        // In this case, the regionId is actually the subregionId because the regionId is not
+        // In this case, the regionId is actually the subRegionId because the regionId is not
         // present in the regions list. So, we need to find the regionId from the subRegions list.
-        subregionId = roleData.regionId;
+        subRegionId = roleData.regionId;
         regionId = parseInt(Object.keys(subRegions)
           .find((regionIndex) => subRegions[regionIndex]
-            .find((subregion) => subregion.id === roleData.regionId)), 10);
+            .find((subRegion) => subRegion.id === roleData.regionId)), 10);
       } else {
         // In this case, the regionId is actually the regionId because the regionId is present in
         // the regions list.
@@ -69,21 +69,21 @@ export default function RoleForm({ userId, isActiveRole }) {
         location: '',
         ...(data?.roleData || {}),
         regionId,
-        subregionId,
+        subRegionId,
       });
     }
   }, [data, loading, regions, regionsLoading, subRegions]);
 
   React.useEffect(() => {
-    if (formValues.regionId && formValues.subregionId) {
+    if (formValues.regionId && formValues.subRegionId) {
       const subRegionList = subRegions[formValues.regionId] || [];
       const selectedSubRegion = subRegionList.find(
-        (subregion) => subregion.id === formValues.subregionId,
+        (subRegion) => subRegion.id === formValues.subRegionId,
       );
       if (!selectedSubRegion) {
         setFormValues({
           ...formValues,
-          subregionId: null,
+          subRegionId: null,
         });
       }
     }

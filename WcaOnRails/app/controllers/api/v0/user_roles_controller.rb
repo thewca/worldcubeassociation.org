@@ -444,7 +444,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if id == UserRole::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
       delegate_status = params.require(:delegateStatus)
-      region_id = params[:subregionId] || params.require(:regionId)
+      region_id = params[:subRegionId] || params.require(:regionId)
       location = params.require(:location)
 
       user = User.find(user_id)

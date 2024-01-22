@@ -14,14 +14,14 @@ export default function DelegateForm({
 
   const subRegionsOfSelectedRegion = React.useMemo(() => {
     if (!formValues.regionId) return [];
-    const subregionsList = subRegions[formValues.regionId] || [];
-    if (subregionsList.length > 0) {
-      return [...subregionsList, {
+    const subRegionsList = subRegions[formValues.regionId] || [];
+    if (subRegionsList.length > 0) {
+      return [...subRegionsList, {
         name: 'None',
         value: null,
       }];
     }
-    return subregionsList;
+    return subRegionsList;
   }, [formValues.regionId, subRegions]);
 
   return (
@@ -53,15 +53,15 @@ export default function DelegateForm({
       />
       {subRegionsOfSelectedRegion.length > 0 && (
         <Form.Dropdown
-          label={I18n.t('activerecord.attributes.user.subregion')}
+          label={I18n.t('activerecord.attributes.user.subRegion')}
           fluid
           selection
-          name="subregionId"
-          value={formValues.subregionId || ''}
-          options={subRegionsOfSelectedRegion.map((subregion) => ({
-            key: subregion.id,
-            text: subregion.name,
-            value: subregion.id,
+          name="subRegionId"
+          value={formValues.subRegionId || ''}
+          options={subRegionsOfSelectedRegion.map((subRegion) => ({
+            key: subRegion.id,
+            text: subRegion.name,
+            value: subRegion.id,
           }))}
           onChange={handleFormChange}
         />
