@@ -75,6 +75,9 @@ class TeamMember < ApplicationRecord
         group_type: UserGroup.group_types[:teams_committees],
         is_hidden: team[:hidden],
         is_active: true,
+        metadata: {
+          friendly_id: team.friendly_id,
+        },
       },
       user: user,
       metadata: {

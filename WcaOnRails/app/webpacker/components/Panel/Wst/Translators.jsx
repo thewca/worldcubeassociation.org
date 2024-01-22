@@ -8,7 +8,7 @@ import Loading from '../../Requests/Loading';
 
 export default function Translators() {
   const { data, loading, error } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.translators, { isActive: true }),
+    apiV0Urls.userRoles.listOfGroupType(groupTypes.translators, 'name', { isActive: true }),
   );
 
   if (loading) return <Loading />;

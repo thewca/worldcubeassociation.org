@@ -646,6 +646,9 @@ class User < ApplicationRecord
       can_edit_teams_committees: {
         scope: can_edit_any_roles? ? "*" : self.leader_teams,
       },
+      can_edit_translators: {
+        scope: can_edit_translators? ? "*" : [],
+      },
       can_access_wfc_senior_matters: {
         scope: can_access_wfc_senior_matters? ? "*" : [],
       },
@@ -1285,10 +1288,12 @@ class User < ApplicationRecord
 
   def team_roles
     roles = []
-    self.current_teams.each do |team|
-      team_membership_details = self.team_membership_details(team)
-      roles << team_membership_details.role
-    end
+    self.current_teams
+        .reject { |team| team == Team.board || Team.all_officers.include?(team) }
+        .each do |team|
+          team_membership_details = self.team_membership_details(team)
+          roles << team_membership_details.role
+        end
     roles
   end
 
@@ -1346,5 +1351,9 @@ class User < ApplicationRecord
 
   def can_access_wfc_senior_matters?
     financial_committee? && team_membership_details(Team.wfc).at_least_senior_member?
+  end
+
+  def can_edit_translators?
+    can_edit_any_roles? || software_team?
   end
 end
