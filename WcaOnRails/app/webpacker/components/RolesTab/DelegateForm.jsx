@@ -6,23 +6,38 @@ import I18n from '../../lib/i18n';
 export default function DelegateForm({
   formValues,
   updateFormProperty,
-  regions,
-  subRegions,
+  delegateRegions,
   delegateStatusOptions,
 }) {
   const handleFormChange = (_, { name, value }) => updateFormProperty({ [name]: value });
 
-  const subRegionsOfSelectedRegion = React.useMemo(() => {
-    if (!formValues.regionId) return [];
-    const subRegionsList = subRegions[formValues.regionId] || [];
-    if (subRegionsList.length > 0) {
-      return [...subRegionsList, {
-        name: 'None',
-        value: null,
-      }];
-    }
-    return subRegionsList;
-  }, [formValues.regionId, subRegions]);
+  const selectedRegion = React.useMemo(
+    () => delegateRegions?.find((region) => region.id === formValues?.regionId),
+    [formValues?.regionId, delegateRegions],
+  );
+
+  const selectedRegionId = selectedRegion?.parent_group_id || selectedRegion?.id;
+  const selectedSubRegionId = selectedRegion?.parent_group_id ? selectedRegion?.id : null;
+
+  const regions = React.useMemo(() => {
+    if (!delegateRegions) return [];
+    return delegateRegions.filter((region) => !region.parent_group_id).map((region) => ({
+      key: region.id,
+      text: region.name,
+      value: region.id,
+    }));
+  }, [delegateRegions]);
+
+  const subRegions = React.useMemo(() => {
+    if (!delegateRegions) return [];
+    return (delegateRegions || [])
+      .filter((region) => region.parent_group_id === selectedRegionId)
+      .map((region) => ({
+        key: region.id,
+        text: region.name,
+        value: region.id,
+      }));
+  }, [delegateRegions, selectedRegionId]);
 
   return (
     <>
@@ -43,26 +58,18 @@ export default function DelegateForm({
         fluid
         selection
         name="regionId"
-        value={formValues.regionId || ''}
-        options={regions.map((region) => ({
-          key: region.id,
-          text: region.name,
-          value: region.id,
-        }))}
+        value={selectedRegionId}
+        options={regions}
         onChange={handleFormChange}
       />
-      {subRegionsOfSelectedRegion.length > 0 && (
+      {subRegions.length > 0 && (
         <Form.Dropdown
           label={I18n.t('activerecord.attributes.user.subRegion')}
           fluid
           selection
-          name="subRegionId"
-          value={formValues.subRegionId || ''}
-          options={subRegionsOfSelectedRegion.map((subRegion) => ({
-            key: subRegion.id,
-            text: subRegion.name,
-            value: subRegion.id,
-          }))}
+          name="regionId"
+          value={selectedSubRegionId}
+          options={subRegions}
           onChange={handleFormChange}
         />
       )}
