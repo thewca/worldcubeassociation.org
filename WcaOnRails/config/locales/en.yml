@@ -1492,8 +1492,6 @@ en:
           external_registration_page: "Registration page"
           uses_wca_registration: "I would like to use the WCA website for registration"
           uses_wca_live: "I will be using WCA Live for scoretaking"
-        user_settings:
-          receive_registration_emails: "Notify me by email when someone registers for this competition"
         entry_fees:
           currency_code: "Currency code"
           base_entry_fee: "Base registration fee"
@@ -1717,6 +1715,8 @@ en:
     orga_close_reg: "Close registration"
     orga_close_reg_confirm: "Are you sure you want to close registration? You cannot undo this."
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
+    user_preferences: "User Preferences"
+    receive_registration_emails: "Notify me by email when someone registers for this competition"
     stripe_disconnect: "Disconnect Stripe account"
     stripe_disconnect_confirm: "Are you sure you want to disconnect the Stripe account? This action cannot be undone."
     note_reg_closed_orga_close_reg: "Note: registration is already closed."

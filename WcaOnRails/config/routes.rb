@@ -69,12 +69,15 @@ Rails.application.routes.draw do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
 
     get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
+    get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
     get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
 
     put 'confirm' => 'competitions#confirm', as: :confirm
     put 'announce' => 'competitions#announce', as: :announce
     put 'cancel' => 'competitions#cancel_or_uncancel', as: :cancel
     put 'close_full_registration' => 'competitions#close_full_registration', as: :close_full_registration
+
+    patch 'user_preference/notifications' => 'competitions#update_user_notifications', as: :update_user_notifications
 
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'

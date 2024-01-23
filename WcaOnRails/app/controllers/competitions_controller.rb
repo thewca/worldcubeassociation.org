@@ -695,6 +695,16 @@ class CompetitionsController < ApplicationController
     }
   end
 
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
+
+  def user_preferences
+    competition = competition_from_params
+
+    render json: {
+      isReceivingNotifications: competition.receiving_registration_emails?(current_user.id),
+    }
+  end
+
   before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
 
   def confirmation_data
@@ -789,6 +799,20 @@ class CompetitionsController < ApplicationController
     else
       render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
     end
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:close_full_registration]
+
+  def update_user_notifications
+    competition = competition_from_params
+
+    receive_emails_flag = params.require(:receive_registration_emails)
+    receive_registration_emails = ActiveModel::Type::Boolean.new.cast(receive_emails_flag)
+
+    competition.receive_registration_emails = receive_registration_emails
+    competition.save!
+
+    render json: { status: "ok" }
   end
 
   def my_competitions

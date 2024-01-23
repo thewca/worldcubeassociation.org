@@ -2108,9 +2108,6 @@ class Competition < ApplicationRecord
         "usesWcaRegistration" => use_wca_registration,
         "usesWcaLive" => use_wca_live_for_scoretaking,
       },
-      "userSettings" => {
-        "receiveRegistrationEmails" => self.editing_user_id.present? && receiving_registration_emails?(self.editing_user_id),
-      },
       "entryFees" => {
         "currencyCode" => currency_code,
         "baseEntryFee" => base_entry_fee_lowest_denomination,
@@ -2207,9 +2204,6 @@ class Competition < ApplicationRecord
         "externalRegistrationPage" => errors[:external_registration_page],
         "usesWcaRegistration" => errors[:use_wca_registration],
         "usesWcaLive" => errors[:use_wca_live_for_scoretaking],
-      },
-      "userSettings" => {
-        "receiveRegistrationEmails" => errors[:receive_registration_emails],
       },
       "entryFees" => {
         "currencyCode" => errors[:currency_code],
@@ -2350,7 +2344,6 @@ class Competition < ApplicationRecord
       showAtAll: form_data.dig('admin', 'isVisible'),
       being_cloned_from_id: form_data.dig('cloning', 'fromId'),
       clone_tabs: form_data.dig('cloning', 'cloneTabs'),
-      receive_registration_emails: form_data.dig('userSettings', 'receiveRegistrationEmails'),
     }
   end
 

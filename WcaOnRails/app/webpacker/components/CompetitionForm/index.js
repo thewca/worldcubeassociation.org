@@ -22,7 +22,6 @@ import {
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
 import Website from './FormSections/Website';
-import PerUserSettings from './FormSections/UserSettings';
 import RegistrationFee from './FormSections/RegistrationFees';
 import RegistrationDetails from './FormSections/RegistrationDetails';
 import EventRestrictions from './FormSections/EventRestrictions';
@@ -44,6 +43,7 @@ import AnnouncementActions from './AnnouncementActions';
 import { teams } from '../../lib/wca-data.js.erb';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
+import UserPreferences from './UserPreferences';
 
 function AnnouncementMessage() {
   const {
@@ -231,6 +231,7 @@ function CompetitionForm() {
       )}
 
       {isPersisted && <AnnouncementActions disabled={unsavedChanges} />}
+      {isPersisted && <UserPreferences disabled={unsavedChanges} />}
       <AnnouncementMessage />
       <FormErrors />
 
@@ -263,9 +264,6 @@ function CompetitionForm() {
         <Divider />
 
         <Website />
-        <Divider />
-
-        <PerUserSettings />
         <Divider />
 
         <RegistrationDetails />
