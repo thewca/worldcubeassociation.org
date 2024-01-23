@@ -61,9 +61,9 @@ export default function RegistrationFees() {
       return I18n.t('competitions.competition_form.dues_estimate.ajax_error');
     }
 
-    if (competitorLimit.competitor_limit_enabled) {
+    if (competitorLimit.enabled) {
       return `${I18n.t('competitions.competition_form.dues_estimate.calculated', {
-        limit: competitorLimit.competitor_limit,
+        limit: competitorLimit.count,
         estimate: duesJson?.dues_value,
       })} (${currency})`;
     }
