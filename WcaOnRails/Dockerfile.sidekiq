@@ -31,8 +31,6 @@ RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
       git \
-      nodejs \
-      node-gyp \
       pkg-config \
       python-is-python3 \
       mariadb-client \
@@ -43,6 +41,7 @@ RUN apt-get update -qq && \
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
+RUN gem install mailcatcher
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
@@ -54,7 +53,7 @@ COPY . .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log tmp
+    chown -R rails:rails db log tmp public app
 USER rails:rails
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]

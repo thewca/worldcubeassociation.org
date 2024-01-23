@@ -1,3 +1,4 @@
 #!/bin/bash -e
-
+mailcatcher
+./bin/bundle exec rake assets:precompile
 ./bin/bundle exec sidekiq
