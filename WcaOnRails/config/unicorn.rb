@@ -15,8 +15,8 @@ end
 if rack_env == "development"
   worker_processes 1
 else
-  stderr_path "#{dir}/log/unicorn-#{rack_env}.log"
-  stdout_path "#{dir}/log/unicorn-#{rack_env}.log"
+  stderr_path $stdout
+  stdout_path $stdout
 
   worker_processes((Etc.nprocessors * 2).ceil)
 end

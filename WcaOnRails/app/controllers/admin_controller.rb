@@ -329,7 +329,7 @@ class AdminController < ApplicationController
       replica: EnvConfig.READ_REPLICA_HOST,
     }
 
-    role_credentials = Aws::InstanceProfileCredentials.new
+    role_credentials = Aws::ECSCredentials.new
     token_generator = Aws::RDS::AuthTokenGenerator.new credentials: role_credentials
 
     @db_tokens = @db_endpoints.transform_values do |url|
