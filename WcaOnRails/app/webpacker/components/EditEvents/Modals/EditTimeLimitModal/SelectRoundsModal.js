@@ -61,6 +61,7 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
       onOk={handleOk}
       reset={reset}
     >
+      <div style ={{ maxHeight: '300px, overlfowY: auto' }}>
       {wcifRounds.map((wcifRound) => {
         const roundId = wcifRound.id;
         const { eventId } = parseActivityCode(roundId);
@@ -94,6 +95,7 @@ export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
           </Form.Field>
         );
       })}
+      </div>
     </ButtonActivatedModal>
   );
 }
