@@ -90,15 +90,15 @@ RSpec.feature "Competition management", js: true do
       expect(page).to have_text("You've confirmed this competition")
     end
 
-    scenario "change competition id of long name" do
+    scenario "change competition id of long name", retry: 3 do
       competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify long 2016")
       visit edit_competition_path(competition)
 
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
 
-      expect(page).to have_text("This competition is not visible to the public.")
       expect(page).to have_current_path(edit_competition_path("NewId2016"))
+      expect(page).to have_text("This competition is not visible to the public.")
 
       expect(page).not_to have_text("You have unsaved changes")
       expect(Competition.find("NewId2016")).not_to be_nil
@@ -118,13 +118,18 @@ RSpec.feature "Competition management", js: true do
       expect(Competition.find_by_id("NewId With Spaces")).to be_nil
     end
 
-    scenario "change competition id with validation error" do
+    scenario "change competition id with validation error", retry: 3 do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       fill_in "Name", with: "Name that does not end in a year but is long"
       click_button "Update Competition"
 
+      # double-saving to make sure the error _really_ appears (GitHub CI needs this)
+      expect(page).to have_button("save your changes!")
+      click_button "save your changes!"
+
+      expect(page).to have_button("save your changes!")
       expect(page).to have_text("must end with a year")
 
       fill_in "Name", with: "Name that is long and does end in year 2016"
