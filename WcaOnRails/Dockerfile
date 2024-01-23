@@ -1,4 +1,4 @@
-FROM ruby:3.3.0 AS base
+FROM ruby:3.3.0
 
 WORKDIR /rails
 
@@ -9,8 +9,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
-    BUNDLE_DEPLOYMENT="1" \
-    BUNDLE_PATH="/usr/local/bundle"
+    BUNDLE_DEPLOYMENT="1"
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -27,35 +26,12 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
 RUN corepack enable
 
-FROM base AS build
-
-RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y  \
-      build-essential \
-      git \
-      libvips \
-      pkg-config \
-      python-is-python3
-
-# Install application gems
-COPY Gemfile Gemfile.lock ./
-RUN gem update --system && gem install bundler
-RUN bundle install && \
-    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
-
-# Install node dependencies
-COPY package.json yarn.lock .yarnrc.yml ./
-RUN yarn install --immutable
-
-COPY . .
-
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails i18n export
-RUN SECRET_KEY_BASE_DUMMY=1 ./bin/rails assets:precompile
-
-FROM base
-
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
+      build-essential \
+      git \
+      pkg-config \
+      python-is-python3 \
       mariadb-client \
       libvips \
       libssl-dev \
@@ -75,13 +51,22 @@ RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkh
 # Using pipx because PEP668 doesn't allow installing systemwide packages anymore
 RUN pipx install wrc
 
+# Install application gems
+COPY Gemfile Gemfile.lock ./
+RUN gem update --system && gem install bundler
+RUN bundle install && \
+    rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
+
+# Install node dependencies
+COPY package.json yarn.lock .yarnrc.yml ./
+RUN yarn install --immutable
+
 # Copy built artifacts: gems, application
-COPY --from=build /usr/local/bundle /usr/local/bundle
-COPY --from=build /rails /rails
+COPY . .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log storage tmp
+    chown -R rails:rails db log tmp
 USER rails:rails
 
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
@@ -89,4 +74,4 @@ USER rails:rails
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
 EXPOSE 3000
-CMD [".bin/bundle", "exec", "unicorn", "-c", "/app/config/unicorn.rb"]
+CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]

@@ -3,6 +3,9 @@
 # If running the rails server then create or migrate existing database
 if [ "${1}" == "./bin/bundle" ] && [ "${3}" == "unicorn" ]; then
   ./bin/rails db:prepare
+
+  ./bin/bundle exec i18n export
+  ./bin/bundle exec assets:precompile
 fi
 
 exec "${@}"
