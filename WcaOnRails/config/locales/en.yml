@@ -465,6 +465,7 @@ en:
           trainee_delegate: "Trainee Delegate"
           candidate_delegate: "Junior Delegate"
           delegate: "Delegate"
+          regional_delegate: "Regional Delegate"
           senior_delegate: "Senior Delegate"
         teams_committees:
           member: "Member"

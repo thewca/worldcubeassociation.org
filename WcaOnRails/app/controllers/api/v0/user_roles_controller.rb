@@ -37,9 +37,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
     groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role[:group][:group_type]) || GROUP_TYPE_RANK_ORDER.length },
     status: lambda { |role| status_sort_rank(role) },
-    name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
-    groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
-    location: lambda { |role| role[:metadata][:location] }, # Can be changed to `role.location` once all roles are migrated to the new system.
+    name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location: lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
