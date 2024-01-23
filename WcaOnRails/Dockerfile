@@ -1,5 +1,5 @@
 FROM ruby:3.3.0
-
+ARG BUILD_TAG=local
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -9,7 +9,8 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
-    BUNDLE_DEPLOYMENT="1"
+    BUNDLE_DEPLOYMENT="1" \
+    BUILD_TAG=$BUILD_TAG
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -49,8 +50,8 @@ RUN apt-get update -qq && \
 RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -O wkhtml.tar.xz && tar -xf wkhtml.tar.xz --strip-components=1 -C /usr/local
 
 # Using pipx because PEP668 doesn't allow installing systemwide packages anymore
+RUN pipx ensurepath
 RUN pipx install wrc
-
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
@@ -63,6 +64,9 @@ RUN yarn install --immutable
 
 # Copy built artifacts: gems, application
 COPY . .
+
+# Build Regulations
+RUN bash -e ./build_regulations.sh
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
