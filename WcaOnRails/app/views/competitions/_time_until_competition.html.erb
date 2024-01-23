@@ -1,9 +1,0 @@
-<% days_until = @competition.days_until %>
-<% if !days_until.nil? %>
-  <% if days_until >= 0 %>
-    <%= t('.competition_in', n_days: t('datetime.distance_in_words.x_days', count: days_until)) %>
-  <% else %>
-    <% days_until = days_until.abs %>
-    <%= t('.competition_was', n_days: t('datetime.distance_in_words.x_days', count: days_until)) %>
-  <% end %>
-<% end %>
