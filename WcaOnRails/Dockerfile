@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND noninteractive
 # Set production environment
 ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_SERVE_STATIC_FILES="true" \
-    RAILS_ENV="test" \
+    RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1"
 
