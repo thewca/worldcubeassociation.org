@@ -67,4 +67,7 @@ EnvConfig = SuperConfig.new do
   end
 
   optional :ROOT_URL, :string, default_root_url
+
+  # For server status
+  optional :BUILD_TAG, :string, "local"
 end
