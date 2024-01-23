@@ -158,12 +158,7 @@ export const councilsStatus = {
   leader: 'leader',
 };
 
-export const delegateRegionsStatus = {
-  trainee_delegate: 'trainee_delegate',
-  junior_delegate: 'candidate_delegate',
-  delegate: 'delegate',
-  senior_delegate: 'senior_delegate',
-};
+export const delegateRegionsStatus = <%= RolesMetadataDelegateRegions.statuses.to_json %>;
 
 // ----- PANEL LIST -----
 

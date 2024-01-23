@@ -39,6 +39,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     status: lambda { |role| status_sort_rank(role) },
     name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
     groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location: lambda { |role| role[:metadata][:location] }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -50,6 +51,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       sort_keys_and_directions.map { |sort_key_and_direction|
         sort_key = sort_key_and_direction.split(':').first
         sort_direction = sort_key_and_direction.split(':').second || 'asc'
+        # FIXME: The following line throws error for desc direction if SORT_PARAMS[sort_key.to_sym] is non-numeric.
         SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
       }
     }
@@ -337,9 +339,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
-      user = User.find_by(region_id: group.id, delegate_status: status)
-      if user.present?
-        end_delegate_role_for_user(user)
+      if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
+        role_to_end = UserRole.where(group_id: group.id).select { |role| role.metadata.status == status }.first
+        if role_to_end.present?
+          role_to_end.update!(end_date: Date.today)
+        end
+      else
+        user = User.find_by(region_id: group.id, delegate_status: status)
+        if user.present?
+          user.update!(delegate_status: 'delegate')
+          send_role_change_notification(user)
+        end
       end
     end
   end
@@ -368,14 +378,25 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       group = UserGroup.find(group_id)
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      location = params.require(:location) if group.group_type == UserGroup.group_types[:delegate_regions]
+      location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
         end_role_for_user_in_group_with_status(group, status)
       end
       if group.group_type == UserGroup.group_types[:delegate_regions]
-        user = User.find(user_id)
-        user.update!(delegate_status: status, region_id: group.id, location: location)
-        send_role_change_notification(user)
+        if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
+          metadata = RolesMetadataDelegateRegions.create!(status: status)
+          role = UserRole.create!(
+            user_id: user_id,
+            group_id: group_id,
+            start_date: Date.today,
+            metadata: metadata,
+          )
+          RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+        else
+          user = User.find(user_id)
+          user.update!(delegate_status: status, region_id: group.id, location: location)
+          send_role_change_notification(user)
+        end
         render json: {
           success: true,
         }

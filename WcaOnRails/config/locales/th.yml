@@ -2053,6 +2053,12 @@ th:
         href="%{dob_form_path}">แบบฟอร์มเฉพาะนี้</a>
       #original_hash: 92aa857
       unknown_wca_id_html: 'ไม่มี WCA ID %{link_id}'
+  user_groups:
+    group_types:
+      #original_hash: abd2828
+      board: WCA Board of Directors
+      #original_hash: d79bd00
+      officers: WCA Officers
   registrations:
     errors:
       #original_hash: 44ab952
