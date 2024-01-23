@@ -115,11 +115,10 @@ export default function EventPanel({
   return (
     <Card
       size="tiny"
-      compact
       className={`event-panel event-${wcifEvent.id}`}
     >
       <Card.Content
-        // replicate the way SemUI Cards handle images (borderless) without an actual image
+        // replicate the way SemUI Cards handle images (borderless) without passing an actual image
         style={{ padding: 0 }}
       >
         <Segment basic tertiary>
