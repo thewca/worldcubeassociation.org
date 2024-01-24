@@ -1,6 +1,6 @@
 <% provide(:title, t('.title')) %>
 
-<% if current_user&.can_see_admin_competitions? %>
+<% if current_user&.can_see_admin_competitions? || !@enable_react %>
   <div class="container">
     <h2><%= yield(:title) %></h2>
 
