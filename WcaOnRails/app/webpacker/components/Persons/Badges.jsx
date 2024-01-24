@@ -51,6 +51,7 @@ export default function Badges({ userId }) {
     ['lead', 'eligibleVoter', 'groupTypeRank', 'status', 'groupName'].join(','), // Sort params
     {
       isActive: true,
+      isGroupHidden: false,
     },
   ));
   const roles = data || [];
