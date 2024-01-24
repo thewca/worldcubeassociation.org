@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe Competition do
   describe '#registration_service_persons_wcif.unauthorized', focus: true do
+    # TODO: Move this to a more appropriate part of the spec file
     # TODO: Could refactor all this to be in a context
     before do
       # Create a competition from factory
