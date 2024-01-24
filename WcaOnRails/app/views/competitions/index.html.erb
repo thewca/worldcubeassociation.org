@@ -1,21 +1,25 @@
 <% provide(:title, t('.title')) %>
 
-<div class="container">
-  <h2><%= yield(:title) %></h2>
+<% if current_user&.can_see_admin_competitions? %>
+  <div class="container">
+    <h2><%= yield(:title) %></h2>
 
-  <%= form_tag competitions_path, method: :get, remote: true, class: "competition-select form-inline #{@display}", id: "competition-query-form" do %>
-    <%= render 'index_form' %>
-  <% end %>
+    <%= form_tag competitions_path, method: :get, remote: true, class: "competition-select form-inline #{@display}", id: "competition-query-form" do %>
+      <%= render 'index_form' %>
+    <% end %>
 
-  <div id="search-results" class="row competitions-<%= @display %>">
-    <div id="loading">
-      <div class="spinner-wrapper"><%= ui_icon("spinner", class: "fa-spin fa-5x") %></div>
-    </div>
-    <div id="competitions-list">
-      <%= render 'index_competitions_list', competitions: @competitions %>
-    </div>
-    <div class="col-xs-12 col-md-12">
-      <div id="competitions-map"></div>
+    <div id="search-results" class="row competitions-<%= @display %>">
+      <div id="loading">
+        <div class="spinner-wrapper"><%= ui_icon("spinner", class: "fa-spin fa-5x") %></div>
+      </div>
+      <div id="competitions-list">
+        <%= render 'index_competitions_list', competitions: @competitions %>
+      </div>
+      <div class="col-xs-12 col-md-12">
+        <div id="competitions-map"></div>
+      </div>
     </div>
   </div>
-</div>
+<% else %>
+  <%= react_component("CompetitionsOverview/index") %>
+<% end %>

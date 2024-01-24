@@ -128,6 +128,9 @@ export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.appl
 
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
 
+// Max number of objects fetched per query
+export const WCA_API_PAGINATION = 25;
+
 export const delegatesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_path)%>`;
 
 export const teamsCommitteesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.teams_committees_path)%>`;
@@ -153,7 +156,13 @@ export const apiV0Urls = {
   },
   userGroups: {
     list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
-  }
+  },
+  competitions: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
+  },
+  delegates: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
+  },
 }
 
 export const panelUrls = {
