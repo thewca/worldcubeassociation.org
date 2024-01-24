@@ -325,6 +325,7 @@ class CompetitionsController < ApplicationController
   end
 
   def payment_setup
+  s  puts "params: #{params}"
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
     # Stripe setup URL
@@ -337,9 +338,14 @@ class CompetitionsController < ApplicationController
     @authorize_url = client.auth_code.authorize_url(oauth_params)
 
     # Paypal setup URL
-    @paypal_onboarding_url = generate_paypal_onboarding_link
-    puts "onboarding link:"
-    puts @paypal_onboarding_url
+    # TODO: Refactor this? Shouldn't all be in the payment_setup method
+    if params.key?("merchantIdInPayPal")
+      @competition.connected_stripe_account_id = params["merchantIdInPayPal"]
+    else
+      @paypal_onboarding_url = generate_paypal_onboarding_link
+      puts "onboarding link:"
+      puts @paypal_onboarding_url
+    end
   end
 
   private def generate_paypal_onboarding_link
@@ -366,6 +372,10 @@ class CompetitionsController < ApplicationController
         },
       ],
       products: ['PPCP'], # TODO: Experiment with other payment types
+      partner_config_override: {
+        return_url: EnvConfig.ROOT_URL + "/competitions/#{@competition.id}/payment_setup",
+        return_url_description: "the url to return the WCA after the paypal onboarding process.",
+      },
       legal_consents: [
         {
           type: 'SHARE_DATA_CONSENT',

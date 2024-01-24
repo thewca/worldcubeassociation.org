@@ -28,6 +28,7 @@
     <p>
       Alternatively, you can connect a Paypal account:
     </p>
+    <%= puts @paypal_onboarding_url %>
     <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
       <%= ui_icon("cc stripe") %> Connect with Paypal
     <% end %>
