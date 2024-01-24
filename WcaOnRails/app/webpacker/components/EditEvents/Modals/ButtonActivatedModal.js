@@ -94,7 +94,7 @@ export default function ButtonActivatedModal({
       {...props}
     >
       <Modal.Header>{title}</Modal.Header>
-      <Modal.Content>
+      <Modal.Content scrolling>
         {children}
       </Modal.Content>
       <Modal.Actions>
