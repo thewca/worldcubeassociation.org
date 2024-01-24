@@ -428,6 +428,8 @@ zh-TW:
         location: 地點
         #original_hash: 0f21717
         region: 區域
+        #original_hash: e3fc6e9
+        subRegion: 子區域
         #original_hash: 730db33
         receive_delegate_reports: 我希望透過收到電子郵件收到WCA比賽報告
         #original_hash: 57eaf24
@@ -738,6 +740,8 @@ zh-TW:
           candidate_delegate: 初級代表
           #original_hash: 12ab214
           delegate: 代表
+          #original_hash: 45c2317
+          regional_delegate: 區域代表
           #original_hash: d463c23
           senior_delegate: 高級代表
         teams_committees:
@@ -1855,6 +1859,12 @@ zh-TW:
         href="%{dob_form_path}">這個專用表格</a>.來聯絡WCA成績組。
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA ID %{link_id}不存在。'
+  user_groups:
+    group_types:
+      #original_hash: abd2828
+      board: WCA董事會
+      #original_hash: d79bd00
+      officers: WCA 幹事
   registrations:
     errors:
       #original_hash: 44ab952
