@@ -37,9 +37,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
     groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role[:group][:group_type]) || GROUP_TYPE_RANK_ORDER.length },
     status: lambda { |role| status_sort_rank(role) },
-    name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
-    groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
-    location: lambda { |role| role[:metadata][:location] }, # Can be changed to `role.location` once all roles are migrated to the new system.
+    name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location: lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -340,9 +340,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
       if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
-        role_to_end = UserRole.where(group_id: group.id).select { |role| role.metadata.status == status }.first
+        role_to_end = group.lead_role
         if role_to_end.present?
           role_to_end.update!(end_date: Date.today)
+          RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later
         end
       else
         user = User.find_by(region_id: group.id, delegate_status: status)
@@ -517,7 +518,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
     else
-      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+      role = UserRole.find(id)
+      role.update!(end_date: Date.today)
+      RoleChangeMailer.notify_role_end(role, current_user).deliver_later
+      render json: {
+        success: true,
+      }
     end
   end
 

@@ -7,7 +7,9 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   roleDataUrl,
   roleUpdateUrl,
+  apiV0Urls,
 } from '../../lib/requests/routes.js.erb';
+import { groupTypes } from '../../lib/wca-data.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import Errored from '../Requests/Errored';
 import DelegateForm from './DelegateForm';
@@ -23,6 +25,9 @@ const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delega
 
 export default function RoleForm({ userId, isActiveRole }) {
   const { data, loading, error } = useLoadedData(roleDataUrl(userId, isActiveRole));
+  const { data: delegateRegions, loading: regionsLoading, error: regionsError } = useLoadedData(
+    apiV0Urls.userGroups.list(groupTypes.delegate_regions),
+  );
   const { save, saving } = useSaveAction();
   const selectedGroup = groups[0].value;
   const [formValues, setFormValues] = React.useState({});
@@ -62,8 +67,8 @@ export default function RoleForm({ userId, isActiveRole }) {
     );
   };
 
-  if (loading) return <Loading />;
-  if (error || apiError) return <Errored />;
+  if (!loading || !regionsLoading || !formValues) return <Loading />;
+  if (error || apiError || regionsError) return <Errored />;
   if (finished) return 'Success...';
 
   return (
@@ -88,11 +93,7 @@ export default function RoleForm({ userId, isActiveRole }) {
                 ...values,
               });
             }}
-            regions={data?.regions.map((region) => ({
-              key: region.id,
-              text: region.name,
-              value: region.id,
-            })) || []}
+            delegateRegions={delegateRegions}
             delegateStatusOptions={delegateStatusOptions}
           />
         )}
