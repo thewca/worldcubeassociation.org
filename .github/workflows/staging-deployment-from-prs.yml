@@ -63,6 +63,8 @@ jobs:
             ${{ steps.login-ecr.outputs.registry }}/wca-on-rails:staging
           cache-from: type=gha
           cache-to: type=gha,mode=max
+          build-args: |
+            BUILD_TAG=$GITHUB_SHA
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
