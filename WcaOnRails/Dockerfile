@@ -66,7 +66,7 @@ RUN yarn install --immutable
 COPY . .
 
 # Build Regulations
-RUN bash -e ./build_regulations.sh
+RUN bash -e ./build_regulations_and_docs.sh
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
