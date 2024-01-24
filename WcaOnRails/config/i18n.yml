@@ -48,6 +48,8 @@ translations:
       - "*.regional_organizations.*"
       - "*.round.*"
       - "*.search_results.*"
+      - "*.continents.*"
+      - "*.layouts.*"
       - "*.user_groups.*"
       - "*.simple_form.hints.competition.*"
       - "*.simple_form.options.competition.*"

@@ -21,7 +21,7 @@ function badgeParams(role) {
   if ([groupTypes.teams_committees, groupTypes.councils].includes(role.group.group_type)) {
     return {
       roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`,
-      groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
+      groupTitle: role.group.name,
       badgeClass: `team-${role.metadata.status.replace('_', '-')}-badge`,
       url: teamsCommitteesPageUrl,
     };
@@ -51,6 +51,7 @@ export default function Badges({ userId }) {
     ['lead', 'eligibleVoter', 'groupTypeRank', 'status', 'groupName'].join(','), // Sort params
     {
       isActive: true,
+      isGroupHidden: false,
     },
   ));
   const roles = data || [];

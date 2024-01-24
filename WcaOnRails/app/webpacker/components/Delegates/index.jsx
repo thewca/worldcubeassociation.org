@@ -35,6 +35,23 @@ export default function Delegates() {
     () => delegateGroups?.filter((group) => group.parent_group_id === null) || [],
     [delegateGroups],
   );
+  const delegateSubregions = React.useMemo(
+    () => delegateGroups?.reduce((_delegateSubregions, group) => {
+      if (group.parent_group_id) {
+        const parentGroup = delegateGroups.find(
+          (parent) => parent.id === group.parent_group_id,
+        );
+        if (parentGroup) {
+          const updatedSubregions = { ..._delegateSubregions };
+          updatedSubregions[parentGroup.id] = updatedSubregions[parentGroup.id] || [];
+          updatedSubregions[parentGroup.id].push(group);
+          return updatedSubregions;
+        }
+      }
+      return _delegateSubregions;
+    }, {}),
+    [delegateGroups],
+  );
 
   const [hash, setHash] = useHash();
 
@@ -127,6 +144,7 @@ export default function Delegates() {
               </Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
+                delegateSubregions={delegateSubregions[activeRegion.id] || []}
                 isAdminMode={isAdminMode}
               />
             </Grid>

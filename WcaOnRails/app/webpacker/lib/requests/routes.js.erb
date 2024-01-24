@@ -130,8 +130,6 @@ export const addUserGroupsUrl = `<%= Rails.application.routes.url_helpers.api_v0
 
 export const userGroupsUpdateUrl = (userGroupId) => `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>/${userGroupId}`;
 
-export const rolesOfUser = (userId, {isActive, isGroupHidden} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ isActive, isGroupHidden })}`;
-
 // dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_user_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
 export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_user_role_path('dummyRoleId') %>`;
@@ -154,6 +152,9 @@ export const competitionsUrl = ({display, years, delegate}) => `<%= CGI.unescape
 export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>/${userId}`;
 
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
+
+// Max number of objects fetched per query
+export const WCA_API_PAGINATION = 25;
 
 export const delegatesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_path)%>`;
 
@@ -180,7 +181,13 @@ export const apiV0Urls = {
   },
   userGroups: {
     list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
-  }
+  },
+  competitions: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
+  },
+  delegates: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
+  },
 }
 
 export const panelUrls = {

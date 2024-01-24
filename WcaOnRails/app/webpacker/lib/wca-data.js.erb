@@ -25,6 +25,19 @@ function extendCountries(country) {
   };
 }
 
+// ----- CONTINENTS -----
+
+export const continents = {
+  real: _.map(<%= Continent.real.to_json.html_safe %>, extendContinents),
+};
+
+function extendContinents(continent){
+  return {
+    ...continent,
+    name: I18n.t(`continents.${continent.name}`),
+  };
+}
+
 // ----- CURRENCIES -----
 
 <%
@@ -122,6 +135,12 @@ export const regionalMarkers = <%= Result::MARKERS.to_json.html_safe %>;
 // ----- VENUE ROOM COLORS -----
 
 export const defaultRoomColor = "<%= VenueRoom::DEFAULT_ROOM_COLOR %>";
+
+// ----- COMPETITION DATA -----
+
+export const competitionConstants = {
+  competitionRecentDays: <%= Competition::RECENT_DAYS %>,
+};
 
 // ----- RAILS ENV -----
 

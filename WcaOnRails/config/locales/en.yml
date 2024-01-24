@@ -288,6 +288,7 @@ en:
         delegate_status: "Delegate status"
         location: "Location"
         region: "Region"
+        subRegion: "Subregion"
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
@@ -397,6 +398,7 @@ en:
           trainee_delegate: "Trainee Delegate"
           candidate_delegate: "Junior Delegate"
           delegate: "Delegate"
+          regional_delegate: "Regional Delegate"
           senior_delegate: "Senior Delegate"
         teams_committees:
           member: "Member"
@@ -1378,6 +1380,7 @@ en:
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
+      no_delegates: "None"
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
       #context: titles for the competitions list
@@ -1410,6 +1413,7 @@ en:
           closed: "Registration has closed. Competition starts in %{days}"
           open: "Registration is open!"
           full: "Competitor limit reached, new registrations will go to the waiting list"
+      no_more_comps: "No more competitions."
       no_comp_found: "No competitions found."
       no_comp_match: "We didn't find any competitions with %{events}! Try searching for fewer events."
     #context: on the "My competitions" page
