@@ -95,7 +95,9 @@ export default function ButtonActivatedModal({
     >
       <Modal.Header>{title}</Modal.Header>
       <Modal.Content scrolling>
-        {children}
+        <Modal.Description>
+          {children}
+        </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
         <Button color="orange" type="button" onClick={onClose}>Close</Button>
