@@ -1,10 +1,14 @@
 # frozen_string_literal: true
 
 class Regulation < SimpleDelegator
-  REGULATIONS_JSON_PATH = Rails.root.to_s + "/app/views/regulations/wca-regulations.json"
+  REGULATIONS_JSON_PATH = "/regulations/wca-regulations.json"
 
   def self.reload_regulations
-    @regulations = JSON.parse(File.read(REGULATIONS_JSON_PATH)).freeze
+    s3 = Aws::S3::Resource.new(
+      region: EnvConfig.STORAGE_AWS_REGION,
+      credentials: Aws::InstanceProfileCredentials.new
+    )
+    @regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
     @regulations_by_id = @regulations.index_by { |r| r["id"] }
     @regulations_load_error = nil
   rescue StandardError => e
