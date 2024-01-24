@@ -70,9 +70,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       if is_group_hidden
         case group_type
         when UserGroup.group_types[:delegate_probation]
-          current_user.can_manage_delegate_probation?
+          current_user&.can_manage_delegate_probation?
         when UserGroup.group_types[:translators]
-          current_user.software_team?
+          current_user&.software_team?
         else
           false # Don't accept any other hidden groups.
         end
