@@ -88,6 +88,8 @@ echo "$git_reg_data_hash" > $outputdir/data_version
 rm -rf $tmp_dir
 mv $regs_folder $tmp_dir
 mv $outputdir $regs_folder
+mv $regs_folder/regulations/build/regulations/history/* $regs_folder/history
+mv $regs_folder/regulations/build/regulations/scrambles/* $regs_folder/scrambles
 rm -rf $tmp_dir
 
 echo "building documents"
