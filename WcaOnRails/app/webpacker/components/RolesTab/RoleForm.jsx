@@ -67,7 +67,7 @@ export default function RoleForm({ userId, isActiveRole }) {
     );
   };
 
-  if (!loading || !regionsLoading || !formValues) return <Loading />;
+  if (loading || regionsLoading || !formValues) return <Loading />;
   if (error || apiError || regionsError) return <Errored />;
   if (finished) return 'Success...';
 

@@ -65,7 +65,7 @@ export default function DelegatesTable({ delegates, isAdminMode, isAllRegions })
                 />
               </Table.Cell>
               <Table.Cell>
-                {I18n.t(`enums.user.delegate_status.${delegate.metadata.status}`)}
+                {I18n.t(`enums.user.role_status.delegate_regions.${delegate.metadata.status}`)}
               </Table.Cell>
               <Table.Cell>{delegate.metadata.location}</Table.Cell>
               {isAllRegions && (
