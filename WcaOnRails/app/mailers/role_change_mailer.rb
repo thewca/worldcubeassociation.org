@@ -37,12 +37,17 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       @metadata[:region_name] = role.group.name
       @metadata[:status] = role.metadata.status
+    when UserGroup.group_types[:translators]
+      @metadata[:locale] = role.metadata.locale
     end
 
     # Populate the recepient list.
     case role.group.group_type
     when UserGroup.group_types[:delegate_regions]
       to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:translators]
+      to_list = [user_who_made_the_change.email, Team.wst.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
