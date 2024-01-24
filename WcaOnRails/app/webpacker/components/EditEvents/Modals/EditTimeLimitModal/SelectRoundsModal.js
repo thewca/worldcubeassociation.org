@@ -1,101 +1,85 @@
 import _ from 'lodash';
-import React, { useMemo, useState } from 'react';
-import { Checkbox, Form, Popup } from 'semantic-ui-react';
-import { events } from '../../../../lib/wca-data.js.erb';
-import { useStore } from '../../../../lib/providers/StoreProvider';
-import { parseActivityCode, roundIdToString } from '../../../../lib/utils/wcif';
-import ButtonActivatedModal from '../ButtonActivatedModal';
+import React from 'react';
+import { centisecondsToString } from '../../../../lib/utils/edit-events';
+import { roundIdToString } from '../../../../lib/utils/wcif';
+import SelectRoundsModal from './SelectRoundsModal';
 
-export default function SelectRoundsModal({ timeLimit, excludeEventId, onOk }) {
-  const { wcifEvents } = useStore();
-  const [selectedRoundIds, setSelectedRoundIds] = useState(timeLimit.cumulativeRoundIds);
-
-  const Title = useMemo(() => (
+function RegulationLink({ regulation }) {
+  return (
     <span>
-      Choose rounds for cumulative time limit
+      regulation
+      {' '}
+      <a href={`https://www.worldcubeassociation.org/regulations/#${regulation}`} target="_blank" rel="noreferrer">
+        {regulation}
+      </a>
     </span>
-  ), []);
+  );
+}
 
-  const Trigger = useMemo(() => (
+function GuidelineLink({ guideline }) {
+  return (
     <span>
-      Share with other rounds
+      guideline
+      {' '}
+      <a href={`https://www.worldcubeassociation.org/regulations/guidelines.html#${guideline}`} target="_blank" rel="noreferrer">
+        {guideline}
+      </a>
     </span>
-  ), []);
+  );
+}
 
-  const handleOk = () => onOk(selectedRoundIds);
+export default function TimeLimitDescription({ wcifRound, timeLimit, onOk }) {
+  if (timeLimit.cumulativeRoundIds.length === 0) {
+    return `Competitors have ${centisecondsToString(timeLimit.centiseconds)} for each of their solves.`;
+  }
 
-  const reset = () => {
-    setSelectedRoundIds(timeLimit?.cumulativeRoundId ?? []);
-  };
+  if (timeLimit.cumulativeRoundIds.length === 1) {
+    return (
+      <>
+        <span>
+          Competitors have
+          {' '}
+          {centisecondsToString(timeLimit.centiseconds)}
+          {' '}
+          total for all of their solves in this round.
+          <br />
+          This is called a cumulative time limit (see
+          <RegulationLink regulation="A1a2" />
+          ).
+          <br />
+          The button below allows you to share this cumulative time limit with other rounds (see
+          <GuidelineLink guideline="A1a2++" />
+          ).
+        </span>
+        <SelectRoundsModal excludeEventId={wcifRound.id.split('-')[0]} timeLimit={timeLimit} onOk={onOk} />
+      </>
+    );
+  }
 
-  const hasUnsavedChanges = () => !_.isEqual(selectedRoundIds, timeLimit.cumulativeRoundIds);
-
-  const wcifRounds = _.compact(_.flatMap(wcifEvents, (wcifEvent) => {
-    // Cross round cumulative time limits may not include other rounds of
-    // the same event.
-    // See https://github.com/thewca/wca-regulations/issues/457.
-    const otherEvent = events.byId[wcifEvent.id];
-    if (!otherEvent.canChangeTimeLimit || excludeEventId === wcifEvent.id) {
-      return [];
-    }
-    return wcifEvent.rounds;
-  }));
-
-  const handleChecked = (_ev, data) => {
-    if (data.disabled) {
-      return;
-    }
-
-    if (data.checked) {
-      setSelectedRoundIds([...selectedRoundIds, data.value]);
-    } else {
-      setSelectedRoundIds(selectedRoundIds.filter((roundId) => roundId !== data.value));
-    }
-  };
+  const otherSelectedRoundIds = _.without(timeLimit.cumulativeRoundIds, wcifRound.id);
 
   return (
-    <ButtonActivatedModal
-      title={Title}
-      trigger={Trigger}
-      hasUnsavedChanges={hasUnsavedChanges()}
-      onOk={handleOk}
-      reset={reset}
-    >
-      <div style ={{ maxHeight: '300px, overlfowY: auto' }}>
-      {wcifRounds.map((wcifRound) => {
-        const roundId = wcifRound.id;
-        const { eventId } = parseActivityCode(roundId);
-        const event = events.byId[eventId];
-        const checked = selectedRoundIds.indexOf(roundId) > -1;
-
-        const eventAlreadySelected = !!selectedRoundIds.find((selectedRoundId) => (
-          parseActivityCode(selectedRoundId).eventId === eventId
-        ));
-
-        const disabled = !checked && eventAlreadySelected;
-        const disabledReason = disabled ? `Cannot select this round because you've already selected a round with ${event.name}` : null;
-
-        return (
-          <Form.Field key={roundId}>
-            <Popup
-              content={disabledReason}
-              disabled={!disabled}
-              position="right center"
-              trigger={(
-                <Checkbox
-                  name="round-id-radio-group"
-                  label={roundIdToString(roundId)}
-                  value={roundId}
-                  checked={checked}
-                  onClick={handleChecked}
-                  disabled={disabled}
-                />
-              )}
-            />
-          </Form.Field>
-        );
-      })}
-      </div>
-    </ButtonActivatedModal>
+    <>
+      <span>
+        This round has a cross round cumulative time limit (see
+        {' '}
+        <GuidelineLink guideline="A1a2++" />
+        ).
+        <br />
+        This means that competitors have
+        {' '}
+        {centisecondsToString(timeLimit.centiseconds)}
+        {' '}
+        total for all of their solves in this round (
+        {roundIdToString(wcifRound.id)}
+        ) shared with:
+        <ul>
+          {otherSelectedRoundIds.map((roundId) => (
+            <li key={roundId}>{roundIdToString(roundId)}</li>
+          ))}
+        </ul>
+      </span>
+      <SelectRoundsModal excludeEventId={wcifRound.id.split('-')[0]} timeLimit={timeLimit} onOk={onOk} />
+    </>
   );
 }
