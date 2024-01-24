@@ -45,6 +45,7 @@ class RoleChangeMailer < ApplicationMailer
     case role.group.group_type
     when UserGroup.group_types[:delegate_regions]
       to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:translators]
       to_list = [user_who_made_the_change.email, Team.wst.email]
       reply_to_list = [user_who_made_the_change.email]
