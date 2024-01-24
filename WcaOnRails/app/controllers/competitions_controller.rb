@@ -327,6 +327,7 @@ class CompetitionsController < ApplicationController
   def payment_setup
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
+    # Stripe setup URL
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
@@ -334,6 +335,8 @@ class CompetitionsController < ApplicationController
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
+
+    # Paypal setup URL
   end
 
   def stripe_connect

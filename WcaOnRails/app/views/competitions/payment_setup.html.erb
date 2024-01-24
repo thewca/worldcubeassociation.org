@@ -25,6 +25,13 @@
       <%= ui_icon("cc stripe") %> Connect with Stripe
     <% end %>
 
+    <p>
+      Alternatively, you can connect a Paypal account:
+    </p>
+    <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
+      <%= ui_icon("cc stripe") %> Connect with Paypal
+    <% end %>
+
   <% else %>
     <p>
       This competition is set up to accept payments through Stripe.
