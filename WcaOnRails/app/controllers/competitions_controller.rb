@@ -337,6 +337,66 @@ class CompetitionsController < ApplicationController
     @authorize_url = client.auth_code.authorize_url(oauth_params)
 
     # Paypal setup URL
+    @paypal_onboarding_url = generate_paypal_onboarding_link
+    puts "onboarding link:"
+    puts @paypal_onboarding_url
+  end
+
+  private def generate_paypal_onboarding_link
+    puts " *** GENERATING PAYPAL ONBOARDING LINK *** "
+    # TODO: Move to EnvConfig
+    url = 'https://api-m.sandbox.paypal.com/v2/customer/partner-referrals'
+    # TODO: This will need to be requested using our clientId and secret - for now, I'm using postman
+    access_token = ''
+
+    # TODO: We could add in a tracking ID if we want to - this would be a good idea
+    payload = {
+      operations: [
+        {
+          operation: 'API_INTEGRATION',
+          api_integration_preference: {
+            rest_api_integration: {
+              integration_method: 'PAYPAL',
+              integration_type: 'THIRD_PARTY',
+              third_party_details: {
+                features: ['PAYMENT', 'REFUND'],
+              },
+            },
+          },
+        },
+      ],
+      products: ['PPCP'], # TODO: Experiment with other payment types
+      legal_consents: [
+        {
+          type: 'SHARE_DATA_CONSENT',
+          granted: true,
+        },
+      ],
+    }
+
+    conn = Faraday.new(url) do |faraday|
+      faraday.request :json
+      faraday.adapter Faraday.default_adapter
+    end
+
+    response = conn.post do |req|
+      req.headers['Content-Type'] = 'application/json'
+      req.headers['Authorization'] = "Bearer #{access_token}"
+      req.body = payload.to_json
+    end
+
+    puts response.inspect
+
+    body = JSON.parse(response.body)
+    body['links'].each do |link|
+      puts "checking: #{link}"
+      puts "with link[ref] of: #{link['rel']}"
+      if link['rel'] == "action_url"
+        puts "found action url"
+        puts link['href']
+        return link['href']
+      end
+    end
   end
 
   def stripe_connect
