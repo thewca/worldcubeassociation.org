@@ -9,7 +9,7 @@ RSpec.feature "Competitions list" do
       let(:delegate) { competition.delegates.first }
 
       before do
-        visit "/competitions"
+        visit "/competitions?beta=0xDbOverload"
         within(:css, "#delegate") do
           find(".search").set(delegate.name)
           find(".search").send_keys(:enter)
