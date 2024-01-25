@@ -5,6 +5,10 @@ function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
 }
 
+function parseDateTimeString(isoDateTimeString) {
+  return DateTime.fromISO(isoDateTimeString);
+}
+
 export function dayDifferenceFromToday(yyyymmddDateString) {
   const dateLuxon = parseDateString(yyyymmddDateString);
   const exactDaysDiff = dateLuxon.diffNow('days').days;
@@ -16,8 +20,8 @@ export function dayDifferenceFromToday(yyyymmddDateString) {
   return Math.floor(exactDaysDiff * -1);
 }
 
-export function yearFromDateString(yyyymmddDateString) {
-  const dateLuxon = parseDateString(yyyymmddDateString);
+export function startYear(competition) {
+  const dateLuxon = parseDateString(competition.end_date);
   return dateLuxon.year;
 }
 
@@ -43,6 +47,20 @@ export function isInProgress(competition) {
   const running = Interval.fromDateTimes(startDate, endDate).contains(DateTime.now());
 
   return running && !hasResultsPosted(competition);
+}
+
+export function isRegistrationOpenYet(competition) {
+  if (!competition.registration_open) return false;
+
+  const regOpen = parseDateTimeString(competition.registration_open);
+  return DateTime.now() < regOpen;
+}
+
+export function isRegistrationClosedAlready(competition) {
+  if (!competition.registration_close) return false;
+
+  const regClose = parseDateTimeString(competition.registration_close);
+  return regClose < DateTime.now();
 }
 
 // Currently, the venue attribute of a competition object can be written as markdown,

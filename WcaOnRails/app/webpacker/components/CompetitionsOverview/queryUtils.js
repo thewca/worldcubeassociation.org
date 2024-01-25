@@ -45,6 +45,7 @@ export function createSearchParams(filterState, pageParam) {
     searchParams.append('ongoing_and_future', dateNow.toFormat('yyyy-MM-dd'));
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'recent') {
+    // noinspection JSAnnotator
     const recentDaysAgo = dateNow.minus({ days: competitionConstants.competitionRecentDays });
 
     searchParams.append('sort', '-end_date,-start_date,name');

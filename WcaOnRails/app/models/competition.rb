@@ -910,18 +910,6 @@ class Competition < ApplicationRecord
     true
   end
 
-  def registration_status
-    if registration_not_yet_opened?
-      "not_yet_opened"
-    elsif registration_past?
-      "past"
-    elsif registration_full?
-      "full"
-    else
-      "open"
-    end
-  end
-
   def registration_opened?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
@@ -1988,12 +1976,12 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "name", "website", "start_date", "registration_open",
-           "registration_close", "announced_at", "cancelled_at", "end_date",
-           "competitor_limit"],
-    methods: ["url", "website", "short_name", "city", "venue_address",
-              "venue_details", "latitude_degrees", "longitude_degrees",
-              "country_iso2", "event_ids"],
+    only: ["id", "name", "website", "start_date", "end_date",
+           "registration_open", "registration_close", "announced_at",
+           "cancelled_at", "results_posted_at", "competitor_limit", "venue"],
+    methods: ["url", "website", "short_name", "short_display_name", "city",
+              "venue_address", "venue_details", "latitude_degrees", "longitude_degrees",
+              "country_iso2", "event_ids", "time_until_registration", "date_range"],
     include: ["delegates", "organizers"],
   }.freeze
 

@@ -6,10 +6,10 @@ import {
 import I18n from '../../lib/i18n';
 import {
   dayDifferenceFromToday, hasResultsPosted, isCancelled, isInProgress,
-  isProbablyOver,
-  PseudoLinkMarkdown,
-  yearFromDateString,
+  isProbablyOver, isRegistrationClosedAlready, isRegistrationOpenYet,
+  PseudoLinkMarkdown, startYear,
 } from '../../lib/utils/competition-table';
+import { countries } from '../../lib/wca-data.js.erb';
 
 function ListViewSection({
   competitions,
@@ -49,7 +49,7 @@ function ListViewSection({
                 <a href={comp.url}>{comp.short_display_name}</a>
               </div>
               <div className="location">
-                <strong>{comp.country.name}</strong>
+                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                 {`, ${comp.city}`}
               </div>
               <div className="venue-link">
@@ -66,16 +66,16 @@ function ListViewSection({
 function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) {
   if (
     index > 0
-    && yearFromDateString(competitions[index].start_date)
-      !== yearFromDateString(competitions[index - 1].start_date)
+    && startYear(competitions[index])
+      !== startYear(competitions[index - 1])
     && !isSortedByAnnouncement
   ) {
-    return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{yearFromDateString(competitions[index].start_date)}</List.Item>;
+    return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{startYear(competitions[index])}</List.Item>;
   }
 }
 
 function RegistrationStatus({ comp }) {
-  if (comp.registration_status === 'not_yet_opened') {
+  if (!isRegistrationOpenYet(comp)) {
     return (
       <Popup
         trigger={<Icon className="clock blue" />}
@@ -85,7 +85,7 @@ function RegistrationStatus({ comp }) {
       />
     );
   }
-  if (comp.registration_status === 'past') {
+  if (isRegistrationClosedAlready(comp)) {
     return (
       <Popup
         trigger={<Icon className="user times red" />}
@@ -95,6 +95,8 @@ function RegistrationStatus({ comp }) {
       />
     );
   }
+  // TODO: This is currently not implemented because the query is *way* to expensive to execute
+  //   by default on production. We need to figure out a clever way to fetch this data on-demand.
   if (comp.registration_status === 'full') {
     return (
       <Popup
