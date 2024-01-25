@@ -2011,7 +2011,7 @@ class Competition < ApplicationRecord
       announcedDate: announced_at&.strftime(" %F %H:%M:%S"),
       venue: venue,
       url: url,
-      country_iso2: country_iso2&.downcase,
+      country_iso2: country_iso2,
       timeUntilRegistration: registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil,
       registration_status: registration_status,
     )
