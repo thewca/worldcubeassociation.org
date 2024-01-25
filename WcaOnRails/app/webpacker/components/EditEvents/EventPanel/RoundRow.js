@@ -71,6 +71,7 @@ export default function RoundRow({
             text: format.shortName,
           }))}
           compact
+          className="tiny"
         />
       </Table.Cell>
 
@@ -86,6 +87,7 @@ export default function RoundRow({
           value={wcifRound.scrambleSetCount}
           onChange={scrambleSetCountChanged}
           disabled={disabled}
+          className="tiny"
         />
       </Table.Cell>
 

@@ -14,6 +14,8 @@ export default function RoundsTable({ wcifEvent, disabled }) {
         unstackable
         basic="very"
         textAlign="center"
+        size="small"
+        compact
       >
         <Table.Header>
           <Table.Row>

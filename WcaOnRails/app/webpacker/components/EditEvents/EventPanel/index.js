@@ -5,7 +5,8 @@ import {
   Card,
   Header,
   Icon,
-  Label, Segment,
+  Label,
+  Segment,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
@@ -86,7 +87,6 @@ export default function EventPanel({
             }
             onClick={handleRemoveEvent}
             negative
-            size="small"
           >
             Remove event
           </Button>
@@ -122,13 +122,13 @@ export default function EventPanel({
         style={{ padding: 0 }}
       >
         <Segment basic tertiary>
-          <Header as="span">
+          <Header as="span" size="tiny">
             <Icon className="cubing-icon" name={`event-${event.id}`} />
             <Header.Content>
               {event.name}
             </Header.Content>
           </Header>
-          <Button.Group floated="right">
+          <Button.Group floated="right" size="tiny">
             {renderRoundCountInputs()}
           </Button.Group>
         </Segment>
@@ -143,10 +143,9 @@ export default function EventPanel({
             />
           </Card.Content>
           <Card.Content>
-            <Label basic>
-              {i18n.t('competitions.events.qualification')}
-              :
-            </Label>
+            {i18n.t('competitions.events.qualification')}
+            :
+            {' '}
             {/* Qualifications cannot be edited after the competition has been announced. */}
             {/* Qualifications cannot be added if the box from the competition form is unchecked. */}
             <EditQualificationModal
