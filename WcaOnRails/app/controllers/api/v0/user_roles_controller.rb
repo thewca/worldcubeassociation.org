@@ -35,7 +35,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
     lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
     eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
-    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role[:group][:group_type]) || GROUP_TYPE_RANK_ORDER.length },
+    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
     status: lambda { |role| status_sort_rank(role) },
     name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
     groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
