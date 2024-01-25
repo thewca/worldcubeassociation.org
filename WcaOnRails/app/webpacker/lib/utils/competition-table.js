@@ -1,8 +1,12 @@
 import React from 'react';
-import { DateTime } from 'luxon';
+import { DateTime, Interval } from 'luxon';
+
+function parseDateString(yyyymmddDateString) {
+  return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
+}
 
 export function dayDifferenceFromToday(yyyymmddDateString) {
-  const dateLuxon = DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
+  const dateLuxon = parseDateString(yyyymmddDateString);
   const exactDaysDiff = dateLuxon.diffNow('days').days;
 
   if (dateLuxon > DateTime.now()) {
@@ -10,6 +14,35 @@ export function dayDifferenceFromToday(yyyymmddDateString) {
   }
 
   return Math.floor(exactDaysDiff * -1);
+}
+
+export function yearFromDateString(yyyymmddDateString) {
+  const dateLuxon = parseDateString(yyyymmddDateString);
+  return dateLuxon.year;
+}
+
+export function isProbablyOver(competition) {
+  if (!competition.end_date) return false;
+
+  const dateLuxon = parseDateString(competition.end_date);
+  return dateLuxon < DateTime.now();
+}
+
+export function isCancelled(competition) {
+  return !!competition.cancelled_at;
+}
+
+export function hasResultsPosted(competition) {
+  return !!competition.results_posted_at;
+}
+
+export function isInProgress(competition) {
+  const startDate = parseDateString(competition.start_date);
+  const endDate = parseDateString(competition.end_date);
+
+  const running = Interval.fromDateTimes(startDate, endDate).contains(DateTime.now());
+
+  return running && !hasResultsPosted(competition);
 }
 
 // Currently, the venue attribute of a competition object can be written as markdown,

@@ -14,7 +14,13 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competitions = Competition.search(params[:q], params: params, managed_by_user: managed_by_user)
     competitions = competitions.includes(:delegates, :organizers, :events)
 
-    paginate json: competitions
+    options = {
+      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at results_posted_at end_date competitor_limit venue],
+      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2
+                  event_ids registration_status short_display_name time_until_registration date_range],
+      include: %w[delegates organizers events country],
+    }
+    paginate json: competitions.to_json(options)
   end
 
   def show

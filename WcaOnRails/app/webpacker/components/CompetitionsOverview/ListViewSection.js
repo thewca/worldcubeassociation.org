@@ -4,7 +4,12 @@ import {
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
-import { dayDifferenceFromToday, PseudoLinkMarkdown } from '../../lib/utils/competition-table';
+import {
+  dayDifferenceFromToday, hasResultsPosted, isCancelled, isInProgress,
+  isProbablyOver,
+  PseudoLinkMarkdown,
+  yearFromDateString,
+} from '../../lib/utils/competition-table';
 
 function ListViewSection({
   competitions,
@@ -28,24 +33,24 @@ function ListViewSection({
             index={index}
             isSortedByAnnouncement={isSortedByAnnouncement}
           />
-          <List.Item className={`${comp.isProbablyOver ? ' past' : ' not-past'}${comp.cancelled ? ' cancelled' : ''}`}>
+          <List.Item className={`${isProbablyOver(comp) ? ' past' : ' not-past'}${isCancelled(comp) ? ' cancelled' : ''}`}>
             <span className="date">
               <StatusIcon
                 comp={comp}
                 shouldShowRegStatus={shouldShowRegStatus}
                 isSortedByAnnouncement={isSortedByAnnouncement}
               />
-              {comp.dateRange}
+              {comp.date_range}
             </span>
             <span className="competition-info">
               <div className="competition-link">
-                <span className={` fi fi-${comp.country_iso2}`} />
+                <span className={` fi fi-${comp.country?.iso2?.toLowerCase()}`} />
                 &nbsp;
-                <a href={comp.url}>{comp.displayName}</a>
+                <a href={comp.url}>{comp.short_display_name}</a>
               </div>
               <div className="location">
-                <strong>{comp.countryName}</strong>
-                {`, ${comp.cityName}`}
+                <strong>{comp.country.name}</strong>
+                {`, ${comp.city}`}
               </div>
               <div className="venue-link">
                 <PseudoLinkMarkdown text={comp.venue} />
@@ -59,9 +64,13 @@ function ListViewSection({
 }
 
 function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) {
-  if (index > 0 && competitions[index].year !== competitions[index - 1].year
-    && !isSortedByAnnouncement) {
-    return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{competitions[index].year}</List.Item>;
+  if (
+    index > 0
+    && yearFromDateString(competitions[index].start_date)
+      !== yearFromDateString(competitions[index - 1].start_date)
+    && !isSortedByAnnouncement
+  ) {
+    return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{yearFromDateString(competitions[index].start_date)}</List.Item>;
   }
 }
 
@@ -70,7 +79,7 @@ function RegistrationStatus({ comp }) {
     return (
       <Popup
         trigger={<Icon className="clock blue" />}
-        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.timeUntilRegistration })}
+        content={I18n.t('competitions.index.tooltips.registration.opens_in', { duration: comp.time_until_registration })}
         position="top center"
         size="tiny"
       />
@@ -111,21 +120,21 @@ function StatusIcon({ comp, shouldShowRegStatus, isSortedByAnnouncement }) {
   let tooltipInfo = '';
   let iconClass = '';
 
-  if (comp.isProbablyOver) {
-    if (comp.resultsPosted) {
+  if (isProbablyOver(comp)) {
+    if (hasResultsPosted(comp)) {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.posted');
       iconClass = 'check circle result-posted-indicator';
     } else {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.end_date) }) });
       iconClass = 'hourglass end';
     }
-  } else if (comp.inProgress) {
+  } else if (isInProgress(comp)) {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.in_progress');
     iconClass = 'hourglass half';
   } else if (shouldShowRegStatus) {
     return <RegistrationStatus comp={comp} />;
   } else if (isSortedByAnnouncement) {
-    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announcedDate });
+    tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.announced_on', { announcement_date: comp.announced_at });
     iconClass = 'hourglass start';
   } else {
     tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.starts_in', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.start_date) }) });

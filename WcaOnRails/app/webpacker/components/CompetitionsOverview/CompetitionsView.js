@@ -13,6 +13,7 @@ import ListView from './ListView';
 import MapView from './MapView';
 import { filterReducer, filterInitialState } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
+import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/competition-table';
 
 function CompetitionsView() {
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
@@ -43,7 +44,7 @@ function CompetitionsView() {
 
   const competitions = rawCompetitionData?.pages.flatMap((page) => page.data)
     .filter((comp) => (
-      (!comp.cancelled || filterState.shouldIncludeCancelled)
+      (!isCancelled(comp) || filterState.shouldIncludeCancelled)
       && (filterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
     ));
 
@@ -80,7 +81,7 @@ function CompetitionsView() {
               competitions={
                 filterState.timeOrder === 'present'
                   ? competitions?.filter((comp) => (
-                    !comp.inProgress && !comp.isProbablyOver
+                    !isInProgress(comp) && !isProbablyOver(comp)
                   ))
                   : competitions
               }
