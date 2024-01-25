@@ -10,11 +10,11 @@ export default function RoundsTable({ wcifEvent, disabled }) {
 
   return (
     <Table
-      unstackable
+      className="tablet stackable"
       basic="very"
       textAlign="center"
       size="small"
-      compact
+      compact="very"
     >
       <Table.Header>
         <Table.Row>
