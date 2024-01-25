@@ -12,7 +12,7 @@ class RoleChangeMailer < ApplicationMailer
       to_list = [user_who_made_the_change.email, Team.board.email, role.user.senior_delegate.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, role.user.senior_delegate.email]
+      to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
