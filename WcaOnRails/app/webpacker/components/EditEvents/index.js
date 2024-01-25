@@ -74,6 +74,7 @@ function EditEvents() {
       {unsavedChanges && renderUnsavedChangesAlert()}
       <Card.Group
         itemsPerRow={3}
+        className="stackable"
         // this is necessary so that the cards "wrap" instead of growing to match the longest card
         style={{ alignItems: 'baseline' }}
       >

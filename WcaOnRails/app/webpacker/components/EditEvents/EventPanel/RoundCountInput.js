@@ -25,6 +25,7 @@ export default function RoundCountInput({ roundCount, onChange, disabled }) {
 
   return (
     <Dropdown
+      compact
       selection
       name="selectRoundCount"
       value={roundCount}
