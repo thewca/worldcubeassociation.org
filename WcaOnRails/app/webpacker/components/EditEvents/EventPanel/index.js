@@ -18,6 +18,7 @@ import {
   addEvent, addRounds, removeEvent, removeRounds,
 } from '../store/actions';
 import { EditQualificationModal } from '../Modals';
+import cn from 'classnames';
 
 export default function EventPanel({
   wcifEvent,
@@ -122,7 +123,7 @@ export default function EventPanel({
       >
         <Segment basic tertiary>
           <Header as="span" size="tiny">
-            <Icon className="cubing-icon" name={`event-${event.id}`} />
+            <Icon className={cn('cubing-icon', `event-${event.id}`)} />
             <Header.Content>
               {event.name}
             </Header.Content>
