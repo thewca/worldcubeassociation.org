@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class UserGroup < ApplicationRecord
-  has_many :child_groups, class_name: "UserGroup", foreign_key: "parent_group_id"
-
   enum :group_type, {
     delegate_probation: "delegate_probation",
     delegate_regions: "delegate_regions",
@@ -13,6 +11,10 @@ class UserGroup < ApplicationRecord
     officers: "officers",
   }
 
+  has_many :child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
+  belongs_to :metadata, polymorphic: true, optional: true
+  belongs_to :parent_group, class_name: "UserGroup", optional: true
+
   def self.group_types_containing_status_metadata
     [
       UserGroup.group_types[:delegate_regions],
@@ -20,9 +22,6 @@ class UserGroup < ApplicationRecord
       UserGroup.group_types[:councils],
     ]
   end
-
-  belongs_to :metadata, polymorphic: true, optional: true
-  belongs_to :parent_group, class_name: "UserGroup", optional: true
 
   # Returns human readable name of group type
   def self.group_type_name
