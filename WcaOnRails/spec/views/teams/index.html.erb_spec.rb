@@ -2,7 +2,7 @@
 
 require "rails_helper"
 
-RSpec.describe "teams/about.html.erb" do
+RSpec.describe "teams/index.html.erb" do
   describe "when signed in as an admin" do
     let!(:user) { FactoryBot.create :admin }
     let!(:teams) { Team.all_official }
