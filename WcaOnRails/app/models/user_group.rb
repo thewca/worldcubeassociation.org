@@ -20,6 +20,7 @@ class UserGroup < ApplicationRecord
   end
 
   belongs_to :metadata, polymorphic: true, optional: true
+  belongs_to :parent_group, class_name: "UserGroup", optional: true
 
   # Returns human readable name of group type
   def self.group_type_name
@@ -88,6 +89,10 @@ class UserGroup < ApplicationRecord
         lead_role ? lead_role.user : nil
       end
     end
+  end
+
+  def child_groups
+    UserGroup.where(parent_group_id: self.id)
   end
 
   # Unique status means that there can only be one active user with this status in the group.
