@@ -1,4 +1,5 @@
 <% add_to_packs("auto_numeric") %>
+<%= puts "merchant id: #{@competition.connected_stripe_account_id}" %>
 <%= horizontal_simple_form_for :payment, url: "", html: { id: :form_payment } do |f| %>
   <%= f.input :fees_paid, label: t('registrations.payment_form.labels.fees_paid'), hint: false do %>
     <p class="form-control-static"><%= format_money(@registration.paid_entry_fees) %></p>
@@ -34,6 +35,7 @@
   <% end %>
 
   <script src="https://js.stripe.com/v3/"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=HYJH9T9XSAKPN&currency=USD"></script>
 
   <script>
     // ----------
@@ -46,6 +48,48 @@
 
     const pendingAmountRuby = parseInt('<%= @registration.outstanding_entry_fees.cents %>');
     const currencyIsoCode = '<%= @registration.outstanding_entry_fees.currency.iso_code %>';
+
+    // ----------
+    // Init PayPal PaymentElement
+    // ----------
+
+    paypal.Buttons({
+        // Order is created on the server and the order id is returned
+        createOrder: (data, actions) => {
+          return fetch("/registration/create-paypal-order", {
+            method: "post",
+            body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
+            headers: {
+              'Content-Type': 'application/json' // Set the content type to JSON
+            }
+        })
+        .then((response) => response.json())
+        .then((order) => order.id);
+        },
+
+        // Finalize the transaction on the server after payer approval
+        onApprove: (data, actions) => {
+        return fetch(`/registration/capture-paypal-payment/${data.orderID}`, {
+            method: "post",
+            body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
+            headers: {
+              'Content-Type': 'application/json' // Set the content type to JSON
+            }
+        })
+        .then((response) => response.json())
+        .then((orderData) => {
+            // Successful capture! For dev/demo purposes:
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+            const transaction = orderData.purchase_units[0].payments.captures[0];
+            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+
+            // When ready to go live, remove the alert and show a success message within this page. For example:
+            // const element = document.getElementById('paypal-button-container');
+            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+            // Or go to another URL:  actions.redirect('thank_you.html');
+        });
+        }
+    }).render('#payment-element');
 
     // ----------
     // Init Stripe PaymentElement
@@ -68,7 +112,7 @@
     });
 
     const paymentElement = elements.create("payment");
-    paymentElement.mount("#payment-element");
+    // paymentElement.mount("#payment-element");
 
     const $paymentButton = $('#payment-button');
     $paymentButton.on('click', function(e) {

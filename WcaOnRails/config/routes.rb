@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/stripe-denomination' => 'registrations#stripe_denomination', as: :registration_stripe_denomination
+  post 'registration/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
+  post 'registration/capture-paypal-payment/:order_id' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'

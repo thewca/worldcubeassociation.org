@@ -325,7 +325,7 @@ class CompetitionsController < ApplicationController
   end
 
   def payment_setup
-  s  puts "params: #{params}"
+    puts "params: #{params}"
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
     # Stripe setup URL
@@ -341,6 +341,12 @@ class CompetitionsController < ApplicationController
     # TODO: Refactor this? Shouldn't all be in the payment_setup method
     if params.key?("merchantIdInPayPal")
       @competition.connected_stripe_account_id = params["merchantIdInPayPal"]
+      puts "merchant id: #{@competition.connected_stripe_account_id}"
+      if @competition.save
+        flash[:success] = t('competitions.messages.stripe_connected')
+      else
+        flash[:danger] = t('competitions.messages.stripe_not_connected')
+      end
     else
       @paypal_onboarding_url = generate_paypal_onboarding_link
       puts "onboarding link:"
