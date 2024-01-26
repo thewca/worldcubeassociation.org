@@ -30,7 +30,7 @@ EnvConfig = SuperConfig.new do
     optional :SIDEKIQ_REDIS_URL, :string, ''
     optional :DISCOURSE_URL, :string, ''
     optional :STORAGE_AWS_BUCKET, :string, ''
-    optional :STORAGE_AWS_REGION, :string, ''
+    optional :STORAGE_AWS_REGION, :string, 'us-west-2'
     optional :S3_AVATARS_BUCKET, :string, ''
     optional :S3_AVATARS_ASSET_HOST, :string, ''
     optional :S3_AVATARS_REGION, :string, ''
