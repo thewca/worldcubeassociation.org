@@ -1,13 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V0::UserGroupsController < Api::V0::ApiController
-  before_action :current_user_is_authorized_for_action!, only: [:update]
-  private def current_user_is_authorized_for_action!
-    unless current_user.can_access_board_panel?
-      render json: {}, status: 401
-    end
-  end
-
   # Filters the list of groups based on the permissions of the current user.
   private def filter_groups_for_logged_in_user(groups)
     groups.select do |group|
@@ -70,6 +63,12 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     user_group_params = params.require(:user_group).permit(:name, :is_active, :is_hidden)
     user_group_id = params.require(:id)
     user_group = UserGroup.find(user_group_id)
+
+    unless current_user.has_permission?(:can_edit_groups, user_group_id)
+      render json: {}, status: 401
+      return
+    end
+
     user_group.update!(user_group_params)
 
     render json: {

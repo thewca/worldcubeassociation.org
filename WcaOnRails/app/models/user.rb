@@ -626,6 +626,20 @@ class User < ApplicationRecord
     end
   end
 
+  private def can_edit_any_groups?
+    admin? || board_member? || results_team?
+  end
+
+  private def groups_with_edit_access
+    return "*" if can_edit_any_groups?
+    if senior_delegate?
+      region = UserGroup.find(self.region_id)
+      [region.id] + region.child_groups.pluck(:id)
+    else
+      [] # FIXME: Consider groups of other groupTypes as well.
+    end
+  end
+
   def permissions
     permissions = {
       can_attend_competitions: {
@@ -640,11 +654,11 @@ class User < ApplicationRecord
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
       },
-      can_edit_delegate_regions: {
-        scope: can_edit_any_roles? ? "*" : senior_delegate_regions,
+      can_edit_groups: {
+        scope: groups_with_edit_access,
       },
       can_edit_teams_committees: {
-        scope: can_edit_any_roles? ? "*" : self.leader_teams,
+        scope: can_edit_any_groups? ? "*" : self.leader_teams,
       },
       can_edit_translators: {
         scope: can_edit_translators? ? "*" : [],
@@ -658,6 +672,11 @@ class User < ApplicationRecord
       permissions[:can_attend_competitions][:until] = ban_end || nil
     end
     permissions
+  end
+
+  def has_permission?(permission_name, scope = nil)
+    permission = permissions[permission_name.to_sym]
+    permission.present? && (permission[:scope] == "*" || permission[:scope].include?(scope))
   end
 
   def can_view_all_users?
@@ -1337,14 +1356,6 @@ class User < ApplicationRecord
     senior_delegate? ? User.where(region_id: self.region_id).where.not(id: self.id) : []
   end
 
-  def can_edit_any_roles?
-    admin? || board_member?
-  end
-
-  def senior_delegate_regions
-    self.senior_delegate? ? [self.region_id] : []
-  end
-
   def leader_teams
     self.current_team_members.select { |member| member.team_leader? }.pluck(:team_id)
   end
@@ -1354,6 +1365,6 @@ class User < ApplicationRecord
   end
 
   def can_edit_translators?
-    can_edit_any_roles? || software_team?
+    can_edit_any_groups? || software_team?
   end
 end
