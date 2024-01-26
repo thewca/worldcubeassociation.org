@@ -2622,7 +2622,7 @@ zh-TW:
       #original_hash: e5cbb13
       name_reason_html: >-
         簡短解釋比賽名稱。名稱必須要符合<a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA比賽要求政策</a>
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA比賽要求政策</a>
       #original_hash: 9d9126e
       venue_html: >-
         舉行比賽的場地。%{md} 例如：[National Taiwan Normal
@@ -3419,7 +3419,7 @@ zh-TW:
     #original_hash: 743ca74
     our_goals_content_html: >-
       <p>世界方塊協會希望藉由增加參加「魔術方塊」比賽的方式，讓全世界更多的年輕人能夠有參與社群跟領導社群的機會。我們相信比賽經驗以及社群經驗可以讓年輕人有成長機會，並藉由新的方塊比賽項目接觸到更多的人群，能夠讓整個社群成長茁壯。關於董事會對於WCA願景與策略的文件可以在<a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">這裡</a>閱覽。</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">這裡</a>閱覽。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA的下一步是甚麼？
     #original_hash: 487c6a1
@@ -4124,7 +4124,7 @@ zh-TW:
       #original_hash: 66bf437
       content_html: >-
         比賽必須要在比賽開始前的28天公告（參見 <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>比賽要求政策</a>）。但是，這幾乎都不夠時間。您應該考慮所有跟籌辦比賽有關的事物，並給自己足夠的時間準備。還有，在比賽公告前，WCA比賽公告組需要時間來審查比賽申請內容。關於需要預留多少時間，可以跟您的WCA代表諮詢。
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>比賽要求政策</a>）。但是，這幾乎都不夠時間。您應該考慮所有跟籌辦比賽有關的事物，並給自己足夠的時間準備。還有，在比賽公告前，WCA比賽公告組需要時間來審查比賽申請內容。關於需要預留多少時間，可以跟您的WCA代表諮詢。
     paragraph4:
       #original_hash: b6dca56
       title: 鄰近比賽政策
@@ -4164,7 +4164,7 @@ zh-TW:
       #original_hash: bd8e6ee
       content_html: >-
         每場比賽或每個比賽項目可以有參賽者上限（參見<a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>比賽要求政策</a>）。WCA代表必須要從WCAT取得參賽者上限的許可。參賽者上限應該要謹慎決定，並根據有興趣參加的參賽者來做考量。上限不應該因為次要原因而設太低。當在尋找適合的比賽場地時，就應該設想到想要設定的參賽者上限。參賽者上限必須要清楚地在WCA網站上的比賽頁面中公告。
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>比賽要求政策</a>）。WCA代表必須要從WCAT取得參賽者上限的許可。參賽者上限應該要謹慎決定，並根據有興趣參加的參賽者來做考量。上限不應該因為次要原因而設太低。當在尋找適合的比賽場地時，就應該設想到想要設定的參賽者上限。參賽者上限必須要清楚地在WCA網站上的比賽頁面中公告。
     paragraph6:
       #original_hash: ce4c3d0
       title: 處理報名資訊

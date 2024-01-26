@@ -1351,7 +1351,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1911,7 +1911,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -2971,7 +2971,7 @@ th:
       #original_hash: e5cbb13
       name_reason_html: >-
         คำอธิบายสั้น ๆ ของชื่อการแข่งขัน ชื่อต้องปฎิบัติตาม <a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
         Competition Requirements Policy</a>
       #original_hash: 9d9126e
       venue_html: >-
@@ -3883,7 +3883,7 @@ th:
       เราเชื่อว่าประสบการณ์ในการแข่งขันและในชุมชนของเราสร้างโอกาสการเติบโตสำหรับคนหนุ่มสาวที่เกี่ยวข้องและการแนะนำกิจกรรมนี้ให้กับกลุ่มคนใหม่
       ๆ ทำให้ชุมชนโดยรวมของเราแข็งแกร่งขึ้น
       เอกสารแสดงวิสัยทัศน์และกลยุทธ์ของคณะกรรมการ WCA สามารถอ่านได้ <a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">
       ที่นี่ </a></p>
     #original_hash: f64ccc7
     whats_next_title: ก้าวต่อไปของ WCA
@@ -4818,7 +4818,7 @@ th:
       content_html: >-
         การประกาศการแข่งขันจำเป็นต้องทำล่วงหน้าอย่างน้อย 28
         วันก่อนการแข่งขันจะเริ่ม (ดู<a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>ข้อกำหนดการแข่งขัน</a>).
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>ข้อกำหนดการแข่งขัน</a>).
         อย่างไรก็ตาม จำนวนวันดังกล่าวมักจะไม่ค่อยเพียงพอ
         คุณควรพิจารณาทุกอย่างที่คุณจะนำไปใช้ในการแข่งขัน
         และให้เวลาตัวคุณเองในการเตรียมตัว นอกจากนี้ WCAT
@@ -4878,7 +4878,7 @@ th:
       #original_hash: bd8e6ee
       content_html: >-
         จำนวนผู้เข้าแข่งขันสามารถจำกัดต่อประเภทต่อการแข่งขันได้ (ดู<a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>ข้อกำหนดการแข่งขัน
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>ข้อกำหนดการแข่งขัน
 
         </a>) Delegate ต้องได้รับการอนุมัติจำนวนผู้เข้าแข่งขันจาก WCAT
         การจำกัดจำนวนผู้เข้าแข่งขันควรเลือกอย่างรอบคอบและสอดคล้องกับความสนใจของผู้เข้าแข่งขันในพิ้นที่นั้น

@@ -259,10 +259,10 @@ class Competition < ApplicationRecord
   ANNOUNCED_DAYS_DANGER = 28
   MAX_SPAN_DAYS = 6
 
-  # 1. on https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  # 1. on https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
 
-  # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  # Time in seconds from 6.2.1 in https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 

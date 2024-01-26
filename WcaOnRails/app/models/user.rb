@@ -534,7 +534,7 @@ class User < ApplicationRecord
 
   def staff_with_voting_rights?
     # See "Member with Voting Rights" in:
-    #  https://www.worldcubeassociation.org/documents/motions/02.2019.1%20-%20Definitions.pdf
+    #  https://documents.worldcubeassociation.org/documents/motions/02.2019.1%20-%20Definitions.pdf
     full_delegate? || senior_delegate? || senior_member_of_any_official_team? || leader_of_any_official_team? || board_member? || officer?
   end
 

@@ -2307,7 +2307,7 @@ ja:
       #original_hash: e5cbb13
       name_reason_html: >-
         大会名の簡潔な説明。大会名は <a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
         大会要件方針</a>に沿っている必要があります。
       #original_hash: 9d9126e
       venue_html: >-
@@ -3018,7 +3018,7 @@ ja:
     our_goals_content_html: >-
       <p>世界キューブ協会 (WCA)
       は、我々の「回転パズル」の大会により参加しやすくすることで、世界中の若者にコミュニティでのメンバーシップおよびリーダーシップを発揮する機会を提供しようとしています。大会およびコミュニティでの経験は若者にとっての成長の機会を創出し、また新たな人々にパズルイベントをもたらすことは、我々のコミュニティ全体をより強固にすると信じています。WCAにおける理事のビジョンおよび戦略などの文書は<a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">こちら</a>よりご覧いただけます。</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">こちら</a>よりご覧いただけます。</p>
     #original_hash: f64ccc7
     whats_next_title: WCA の今後
     #original_hash: a08c67f
@@ -3538,7 +3538,7 @@ ja:
       #original_hash: 3613823
       content_html: >-
         大会は少なくとも開始日の28日前には告知されなければなりません (<a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>大会要件</a>参照)。
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>大会要件</a>参照)。
     paragraph4:
       #original_hash: b6dca56
       title: 開催地の方針
@@ -3579,7 +3579,7 @@ ja:
       #original_hash: bd8e6ee
       content_html: >-
         競技者数は種目ごとまたは大会全体で制限することができます (<a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>大会要件</a>参照)。大会代理人は、競技者数制限についてWCATの認可を受けなければなりません。競技者数制限は、合理的に設定され、想定される競技者の需要に対応したものでなければなりません。制限は、些細な理由で低く設定されるべきではありません。想定する競技者数制限は、会場の選定の際にも考慮に入れることが望まれます。競技者数制限は、WCA
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>大会要件</a>参照)。大会代理人は、競技者数制限についてWCATの認可を受けなければなりません。競技者数制限は、合理的に設定され、想定される競技者の需要に対応したものでなければなりません。制限は、些細な理由で低く設定されるべきではありません。想定する競技者数制限は、会場の選定の際にも考慮に入れることが望まれます。競技者数制限は、WCA
         ウェブサイト上の大会ページで明確に記載されていなければなりません。
     paragraph6:
       #original_hash: ce4c3d0
