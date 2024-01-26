@@ -325,7 +325,6 @@ class CompetitionsController < ApplicationController
   end
 
   def payment_setup
-    puts "params: #{params}"
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
     # Stripe setup URL
@@ -348,71 +347,22 @@ class CompetitionsController < ApplicationController
         flash[:danger] = t('competitions.messages.stripe_not_connected')
       end
     else
-      @paypal_onboarding_url = generate_paypal_onboarding_link
-      puts "onboarding link:"
-      puts @paypal_onboarding_url
+      # @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id, competitions_paypal_return_path(@competition))
+      @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id)
     end
   end
 
-  private def generate_paypal_onboarding_link
-    puts " *** GENERATING PAYPAL ONBOARDING LINK *** "
-    # TODO: Move to EnvConfig
-    url = 'https://api-m.sandbox.paypal.com/v2/customer/partner-referrals'
-    # TODO: This will need to be requested using our clientId and secret - for now, I'm using postman
-    access_token = ''
+  def paypal_return
+    @competition = competition_from_params
 
-    # TODO: We could add in a tracking ID if we want to - this would be a good idea
-    payload = {
-      operations: [
-        {
-          operation: 'API_INTEGRATION',
-          api_integration_preference: {
-            rest_api_integration: {
-              integration_method: 'PAYPAL',
-              integration_type: 'THIRD_PARTY',
-              third_party_details: {
-                features: ['PAYMENT', 'REFUND'],
-              },
-            },
-          },
-        },
-      ],
-      products: ['PPCP'], # TODO: Experiment with other payment types
-      partner_config_override: {
-        return_url: EnvConfig.ROOT_URL + "/competitions/#{@competition.id}/payment_setup",
-        return_url_description: "the url to return the WCA after the paypal onboarding process.",
-      },
-      legal_consents: [
-        {
-          type: 'SHARE_DATA_CONSENT',
-          granted: true,
-        },
-      ],
-    }
-
-    conn = Faraday.new(url) do |faraday|
-      faraday.request :json
-      faraday.adapter Faraday.default_adapter
+    @competition.connected_stripe_account_id = params["merchantIdInPayPal"]
+    if @competition.save
+      flash[:success] = t('competitions.messages.stripe_connected')
+    else
+      flash[:danger] = t('competitions.messages.stripe_not_connected')
     end
 
-    response = conn.post do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{access_token}"
-      req.body = payload.to_json
-    end
-
-    puts response.inspect
-
-    body = JSON.parse(response.body)
-    body['links'].each do |link|
-      puts "checking: #{link}"
-      puts "with link[ref] of: #{link['rel']}"
-      if link['rel'] == "action_url"
-        puts "found action url"
-        puts link['href']
-        return link['href']
-      end
-    end
+    redirect_to competitions_payment_setup_path(@competition)
   end
 
   def stripe_connect

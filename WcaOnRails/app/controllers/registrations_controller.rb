@@ -8,7 +8,6 @@ class RegistrationsController < ApplicationController
   protect_from_forgery except: [:stripe_webhook]
 
   private def competition_from_params
-    puts "getting comp from params"
     competition = if params[:competition_id]
                     Competition.find(params[:competition_id])
                   else
@@ -25,7 +24,6 @@ class RegistrationsController < ApplicationController
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
   private def competition_must_be_using_wca_registration!
-    puts "competition_must_be_using_wca_registration"
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
       redirect_to competition_path(competition_from_params)
@@ -820,73 +818,21 @@ class RegistrationsController < ApplicationController
     params.require(:registration).permit(*permitted_params)
   end
 
+  private def registration_from_params
+    Registration.find(params[:id])
+  end
+
   def create_paypal_order
-    puts "creaing order"
-    order = create_order
-    puts "order created: #{order.inspect}"
-    render json: order
+    @registration = registration_from_params
+    @competition = @registration.competition
+    render json: PaypalInterface.create_order(@competition)
   end
 
   def capture_paypal_payment
+    @registration = registration_from_params
+    @competition = @registration.competition
     order_id = params[:order_id]
-    puts "order id: #{order_id}"
-    capture_data = capture_payment(order_id)
 
-    # TODO: Store payment information such as the transaction ID
-    puts "capture_data:"
-    puts capture_data
-    render json: capture_data
-  end
-
-  private def create_order
-    puts "in private create_order method"
-    access_token = generate_access_token
-    url = "#{base_url}/v2/checkout/orders"
-
-    response = Faraday.post(url) do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{access_token}"
-      req.body = {
-        intent: 'CAPTURE',
-        purchase_units: [
-          {
-            amount: { currency_code: 'USD', value: '100.00' },
-            payee: { email: "sb-2fdmg29127804@business.example.com" },
-            payment_instruction: { disbursement_mode: "INSTANT" },
-          },
-        ],
-      }.to_json
-    end
-
-    JSON.parse(response.body)
-  end
-
-  private def capture_payment(order_id)
-    access_token = generate_access_token
-    url = "#{base_url}/v2/checkout/orders/#{order_id}/capture"
-
-    response = Faraday.post(url) do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{access_token}"
-    end
-
-    # Create a Faraday
-    JSON.parse(response.body)
-  end
-
-  private def generate_access_token
-    puts "generating access token"
-    auth = Base64.strict_encode64("#{AppSecrets.PAYPAL_CLIENT_ID}:#{AppSecrets.PAYPAL_CLIENT_SECRET}")
-    response = Faraday.post("#{base_url}/v1/oauth2/token") do |req|
-      req.body = 'grant_type=client_credentials'
-      req.headers['Authorization'] = "Basic #{auth}"
-    end
-
-    data = JSON.parse(response.body)
-    data['access_token']
-  end
-
-  private def base_url
-    Rails.env.production? ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com'
+    render json: PaypalInterface.capture_payment(@competition, order_id)
   end
 end
