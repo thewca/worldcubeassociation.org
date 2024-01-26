@@ -26,11 +26,18 @@ export default function MediaTable({ isValidate }) {
     text: continent.name,
     value: continent.name,
   }));
-  const yearOptions = years.map((year) => ({
-    key: year,
-    text: year,
-    value: year,
-  }));
+  const yearOptions = [
+    {
+      key: 'all',
+      text: 'All Years',
+      value: 'All Years',
+    },
+    ...years.map((year) => ({
+      key: year,
+      text: year,
+      value: year,
+    })),
+  ];
 
 
   const handleUpdateSuccess = () => {
@@ -40,13 +47,13 @@ export default function MediaTable({ isValidate }) {
   const handleCloseModal = () => {
     setModalOpen(false);
   };
-
+  const [selectedYear, setSelectedYear] = useState(yearOptions[1].value);
+  const [selectedRegion, setSelectedRegion] = useState("All Regions");
   const { save, saving } = useSaveAction();
   const [mediaCombined, setMediaCombined] = useState([])
   const type = isValidate ? 'pending' : 'accepted'
-  const loadUrl = `/api/v0/media?status=${type}`
   const { loading, error, data, sync } = useLoadedData(
-    loadUrl,
+    `/api/v0/media?status=${type}&year=${selectedYear}&region=${selectedRegion}`,
   );
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -81,7 +88,7 @@ export default function MediaTable({ isValidate }) {
     status: null,
   });
   const confimMedia = () => {
-    const url = "/api/v0/media/" + modalParams.mediaId
+        const url = "/api/v0/media/" + modalParams.mediaId
     save(url, { status: modalParams.status }, () => {
       sync(); handleUpdateSuccess(); setModalParams({ ...modalParams, open: false })
     }, { method: 'PATCH' });
@@ -98,24 +105,60 @@ export default function MediaTable({ isValidate }) {
       setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
     }
   };
+  const handleSelectYear = (event, data) => {
+    setSelectedYear(data.value);
+  };
+  const handleSelectRegion = (event, data) => {
+    console.log(data)
+    setSelectedRegion(data.value);
+  };
   return (
     <div>
-      <Dropdown placeholder='Select Year'
-        search selection options={yearOptions} />
       <Dropdown
-        placeholder='Select Country'
+        placeholder='Select Year'
         search
         selection
+        options={yearOptions}
+        onChange={handleSelectYear}
+        value={selectedYear}
+        text={selectedYear}
+      />
+      <Dropdown
+        placeholder='Select Region'
+        search
+        selection
+        value={selectedRegion}
+        text={selectedRegion}
+        onChange={handleSelectRegion}
       >
         <DropdownMenu>
+          <DropdownItem
+            key={"all"}
+            onClick={handleSelectRegion}
+            value={"All Regions"}
+          >
+            {"All Regions"}
+          </DropdownItem>
           <DropdownHeader>Continent</DropdownHeader>
-          {continentOptions && continentOptions.map((continent) => (
-            <DropdownItem key={continent.id}>{continent.text}</DropdownItem>
+          {continentOptions.map((continent) => (
+            <DropdownItem
+              key={continent.id}
+              onClick={handleSelectRegion}
+              value={continent.text}
+            >
+              {continent.text}
+            </DropdownItem>
           ))}
           <DropdownDivider />
           <DropdownHeader>Region</DropdownHeader>
-          {countryOptions && countryOptions.map((country) => (
-            <DropdownItem key={country.key}>{country.text}</DropdownItem>
+          {countryOptions.map((country) => (
+            <DropdownItem
+              key={country.key}
+              onClick={handleSelectRegion}
+              value={country.text}
+            >
+              {country.text}
+            </DropdownItem>
           ))}
         </DropdownMenu>
       </Dropdown>
