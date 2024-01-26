@@ -33,15 +33,15 @@ class UserGroup < ApplicationRecord
   end
 
   def self.delegate_region_groups
-    UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
+    UserGroup.where(group_type: UserGroup.group_types[:delegate_regions])
   end
 
   def self.delegate_probation_groups
-    UserGroup.where(group_type: "delegate_probation", parent_group_id: nil)
+    UserGroup.where(group_type: UserGroup.group_types[:delegate_probation])
   end
 
   def self.translator_groups
-    UserGroup.where(group_type: UserGroup.group_types[:translators], parent_group_id: nil)
+    UserGroup.where(group_type: UserGroup.group_types[:translators])
   end
 
   def senior_delegate
