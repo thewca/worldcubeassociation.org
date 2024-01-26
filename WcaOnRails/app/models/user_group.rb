@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UserGroup < ApplicationRecord
+  has_many :child_groups, class_name: "UserGroup", foreign_key: "parent_group_id"
+
   enum :group_type, {
     delegate_probation: "delegate_probation",
     delegate_regions: "delegate_regions",
@@ -89,10 +91,6 @@ class UserGroup < ApplicationRecord
         lead_role ? lead_role.user : nil
       end
     end
-  end
-
-  def child_groups
-    UserGroup.where(parent_group_id: self.id)
   end
 
   # Unique status means that there can only be one active user with this status in the group.
