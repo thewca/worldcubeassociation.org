@@ -1,37 +1,31 @@
 # frozen_string_literal: true
 
 class RegulationsController < ApplicationController
-  include HighVoltage::StaticPage
+  def render_regulations_from_s3(route)
+    s3 = Aws::S3::Resource.new(
+      region: "us-west-2",
+      credentials: Aws::InstanceProfileCredentials.new,
+    )
 
-  before_action :ensure_trailing_slash
+    bucket_name = 'wca-regulations'
 
-  private def page_finder_factory
-    IndexPageFinder
+    erb_file = s3.bucket(bucket_name).object(route).get.body.read.strip
+    render inline: erb_file, :layout => "application"
   end
 
-  private def ensure_trailing_slash
-    desired_url = url_for(params.permit!.merge(trailing_slash: true))
-    # url_for doesn't always add a trailing slash (it won't add a slash to
-    # a url like example.com/index.html, for instance).
-    # Only attempt to redirect if the current url does not match the one
-    # url_for would want.
-    if trailing_slash?(request.env['REQUEST_URI']) != trailing_slash?(desired_url)
-      redirect_to desired_url, status: 301
-    end
+  def guidelines
+    render_regulations_from_s3("guidelines.html.erb")
   end
 
-  def trailing_slash?(url)
-    url.match(/[^?]+/).to_s.last == '/'
+  def show
+    render_regulations_from_s3("index.html.erb")
   end
-end
 
-class IndexPageFinder < HighVoltage::PageFinder
-  def find
-    path = super
-    is_dir = Dir.exist? "app/views/#{path}"
-    if is_dir
-      path = File.join(path, "index")
-    end
-    path
+  def historical_guidelines
+    render_regulations_from_s3("history/official/#{params[:id]}/guidelines.html.erb")
+  end
+
+  def historical_regulations
+    render_regulations_from_s3("history/official/#{params[:id]}/index.html.erb")
   end
 end

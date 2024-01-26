@@ -1,28 +1,2 @@
-# Compiled regulations assets
-WcaOnRails/app/views/regulations/*.*
-WcaOnRails/app/views/regulations/translations/*
-WcaOnRails/app/views/regulations/scrambles/*
-WcaOnRails/app/views/regulations/history/*
-/regulations/
-# Except static pages
-!WcaOnRails/app/views/regulations/translations/*.erb
-!WcaOnRails/app/views/regulations/scrambles/*.erb
-!WcaOnRails/app/views/regulations/history/*.erb
-WcaOnRails/app/views/regulations-todelete/
-
-# WCA Documents
-WcaOnRails/public/documents/*
-
 # byebug stuff
 .byebug_history
-
-# phpBB mess
-webroot/forum/cache/*
-!webroot/forum/cache/.htaccess
-!webroot/forum/cache/index.html
-webroot/forum/composer.phar
-webroot/forum/config*.php
-webroot/forum/files/*
-webroot/forum/images/avatars/gallery/*
-webroot/forum/images/avatars/upload/*
-webroot/forum/store/*

@@ -225,7 +225,12 @@ Rails.application.routes.draw do
   post 'contact/dob' => 'contacts#dob_create'
 
   get '/regulations' => 'regulations#show', id: 'index'
-  get '/regulations/*id' => 'regulations#show'
+  get '/regulations/about' => 'regulations#about'
+  get '/regulations/scrambles' => 'regulations#scrambles'
+  get '/regulations/guidelines' => 'regulations#guidelines'
+  get '/regulations/history' => 'regulations#history'
+  get '/regulations/history/official/:id' => 'regulations#historical_regulations'
+  get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
 
   get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
