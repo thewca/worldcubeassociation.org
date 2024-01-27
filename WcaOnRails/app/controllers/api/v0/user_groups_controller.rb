@@ -52,8 +52,19 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     parent_group_id = params[:parent_group_id]
     is_active = ActiveRecord::Type::Boolean.new.cast(params.require(:is_active))
     is_hidden = ActiveRecord::Type::Boolean.new.cast(params.require(:is_hidden))
+    friendly_id = params[:friendlyId]
 
-    UserGroup.create!(group_type: group_type, name: name, parent_group_id: parent_group_id, is_active: is_active, is_hidden: is_hidden)
+    unless current_user.has_permission?(:can_create_groups, group_type)
+      render json: {}, status: 401
+      return
+    end
+
+    ActiveRecord::Base.transaction do
+      if group_type == UserGroup.group_types[:delegate_regions]
+        metadata = GroupsMetadataDelegateRegions.create!(friendly_id: friendly_id)
+      end
+      UserGroup.create!(group_type: group_type, name: name, parent_group_id: parent_group_id, is_active: is_active, is_hidden: is_hidden, metadata: metadata)
+    end
     render json: {
       success: true,
     }
