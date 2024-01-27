@@ -18,8 +18,17 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     end
   end
 
+  # Filters the list of groups based on given parameters.
+  private def filter_groups_for_parameters(groups: [], is_active: nil)
+    groups.reject do |group|
+      (
+        !is_active.nil? && is_active != group.is_active
+      )
+    end
+  end
+
   def index
-    group_type = params.require(:group_type)
+    group_type = params.require(:groupType)
     groups = UserGroup.where(group_type: group_type).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append groups which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
@@ -39,6 +48,12 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
 
     # Filters the list of groups based on the permissions of the current user.
     groups = filter_groups_for_logged_in_user(groups)
+
+    # Filter the list based on the other parameters.
+    groups = filter_groups_for_parameters(
+      groups: groups,
+      is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
+    )
 
     # Sorts the list of groups by name.
     groups = groups.sort_by { |group| group[:name] } # Can be changed to `groups.sort_by(&:name)` once all groups are migrated to the new system.`
