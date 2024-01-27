@@ -37,14 +37,17 @@ class SyncMailingListsJob < WcaCronjob
     UserGroup.delegate_region_groups.each do |region|
       region_emails = []
       region.roles.each do |role|
-        region_emails << role[:user][:email]
-        if role[:metadata][:status] == "trainee_delegate"
-          trainee_emails << role[:user][:email]
+        is_actual_role = role.is_a?(UserRole)
+        role_email = is_actual_role ? role.user[:email] : role[:user][:email]
+        role_status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+        region_emails << role_email
+        if role_status == "trainee_delegate"
+          trainee_emails << role_email
         else
-          delegate_emails << role[:user][:email]
+          delegate_emails << role_email
         end
-        if role[:metadata][:status] == "senior_delegate"
-          senior_emails << role[:user][:email]
+        if role_status == "senior_delegate"
+          senior_emails << role_email
         end
       end
       region_email_id = region.metadata&.email
