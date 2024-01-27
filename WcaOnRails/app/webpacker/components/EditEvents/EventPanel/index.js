@@ -114,6 +114,7 @@ export default function EventPanel({
 
   return (
     <Card
+      style={{ minWidth: 'min-content' }}
       size="tiny"
       className={`event-panel event-${wcifEvent.id}`}
     >

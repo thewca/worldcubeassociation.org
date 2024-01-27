@@ -10,7 +10,7 @@ export default function RoundsTable({ wcifEvent, disabled }) {
 
   return (
     <Table
-      className="tablet stackable"
+      unstackable
       basic="very"
       textAlign="center"
       size="small"
