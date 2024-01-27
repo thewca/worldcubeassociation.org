@@ -97,7 +97,7 @@ export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Ra
 
 export const fetchUserGroupsUrl = (groupType) => {
   const searchParams = new URLSearchParams();
-  searchParams.append('group_type', groupType);
+  searchParams.append('groupType', groupType);
   return `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>?${searchParams.toString()}`;
 };
 
@@ -155,7 +155,7 @@ export const apiV0Urls = {
     delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
   },
   userGroups: {
-    list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
+    list: (groupType, sort, {isActive}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ groupType, sort, isActive })}`,
   },
   competitions: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
