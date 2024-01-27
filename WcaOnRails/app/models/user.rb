@@ -630,6 +630,11 @@ class User < ApplicationRecord
     admin? || board_member? || results_team?
   end
 
+  private def groups_with_create_access
+    # Currently, only Delegate Region groups can be created using API.
+    can_edit_any_groups? ? [UserGroup.group_types[:delegate_regions]] : []
+  end
+
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
     if senior_delegate?
@@ -653,6 +658,9 @@ class User < ApplicationRecord
       },
       can_view_delegate_admin_page: {
         scope: can_view_delegate_matters? ? "*" : [],
+      },
+      can_create_groups: {
+        scope: groups_with_create_access,
       },
       can_edit_groups: {
         scope: groups_with_edit_access,
