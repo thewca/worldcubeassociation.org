@@ -55,9 +55,9 @@ class SyncMailingListsJob < WcaCronjob
         GsuiteMailingLists.sync_group(region_email_id, region_emails)
       end
     end
-    GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails)
-    GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails)
-    GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails)
+    GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails.uniq)
+    GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails.uniq)
+    GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails.uniq)
 
     organizations = RegionalOrganization.currently_acknowledged + [Team.board]
     GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations.map(&:email))
