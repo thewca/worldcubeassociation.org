@@ -53,7 +53,7 @@ class SyncMailingListsJob < WcaCronjob
       end
       region_email_id = region.metadata&.email
       if region_email_id.present?
-        GsuiteMailingLists.sync_group(region_email_id, region_emails)
+        GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq)
       end
     end
     GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails.uniq)
