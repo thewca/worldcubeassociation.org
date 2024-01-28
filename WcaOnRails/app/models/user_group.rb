@@ -60,8 +60,16 @@ class UserGroup < ApplicationRecord
     role_list
   end
 
+  def child_roles
+    child_groups.flat_map(&:roles)
+  end
+
   def active_roles
     self.roles.select { |role| role.is_a?(UserRole) ? role.is_active? : role[:is_active] }
+  end
+
+  def active_child_roles
+    self.child_roles.select { |role| role.is_a?(UserRole) ? role.is_active? : role[:is_active] }
   end
 
   def users
