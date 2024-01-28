@@ -57,6 +57,9 @@ class UserGroup < ApplicationRecord
         delegate_user.delegate_role
       end
     end
+    child_groups.each do |child_group|
+      role_list += child_group.roles
+    end
     role_list
   end
 
