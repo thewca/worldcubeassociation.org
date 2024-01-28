@@ -61,7 +61,7 @@ class UserGroup < ApplicationRecord
   end
 
   def child_roles
-    child_groups.map(&:roles).flatten
+    child_groups.flat_map(&:roles)
   end
 
   def active_roles
