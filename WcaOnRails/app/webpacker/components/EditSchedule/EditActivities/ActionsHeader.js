@@ -11,6 +11,7 @@ import {
 import { copyRoomActivities } from '../store/actions';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import { venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import useInputState from '../../../lib/hooks/useInputState';
 
 function ActionsHeader({
@@ -67,12 +68,8 @@ function CopyRoomScheduleModal({
   const confirm = useConfirm();
 
   const [toCopyRoomId, setToCopyRoomId] = useInputState();
-  const selectedRoomVenue = wcifSchedule.venues.find(
-    ({ rooms }) => rooms.map(({ id }) => id).includes(selectedRoomId),
-  );
-  const toCopyRoomVenue = wcifSchedule.venues.find(
-    ({ rooms }) => rooms.map(({ id }) => id).includes(toCopyRoomId),
-  );
+  const selectedRoomVenue = venueWcifFromRoomId(wcifSchedule, selectedRoomId);
+  const toCopyRoomVenue = venueWcifFromRoomId(wcifSchedule, toCopyRoomId);
   const areRoomsInSameVenue = selectedRoomVenue.id === toCopyRoomVenue?.id;
 
   const dispatchAndClose = () => {
