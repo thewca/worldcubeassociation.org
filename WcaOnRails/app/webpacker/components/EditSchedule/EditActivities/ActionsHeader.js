@@ -9,15 +9,16 @@ import {
 } from 'semantic-ui-react';
 
 import { copyRoomActivities } from '../store/actions';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 function ActionsHeader({
-  wcifSchedule,
   selectedRoomId,
   shouldUpdateMatches,
   setShouldUpdateMatches,
 }) {
+  const { wcifSchedule } = useStore();
+
   const [isCopyModalOpen, setIsCopyModalOpen] = useState(false);
 
   const otherRoomsWithNonEmptySchedules = wcifSchedule.venues.flatMap(

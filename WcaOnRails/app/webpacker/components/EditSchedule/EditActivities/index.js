@@ -317,7 +317,6 @@ function EditActivities({
             onModalClose={onActivityModalClose}
           />
           <ActionsHeader
-            wcifSchedule={wcifSchedule}
             selectedRoomId={selectedRoomId}
             shouldUpdateMatches={shouldUpdateMatches}
             setShouldUpdateMatches={setShouldUpdateMatches}
