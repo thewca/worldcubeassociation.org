@@ -11,6 +11,7 @@ import {
 import { copyRoomActivities } from '../store/actions';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import useInputState from '../../../lib/hooks/useInputState';
 
 function ActionsHeader({
   selectedRoomId,
@@ -65,7 +66,7 @@ function CopyRoomScheduleModal({
   const dispatch = useDispatch();
   const confirm = useConfirm();
 
-  const [toCopyRoomId, setToCopyRoomId] = useState();
+  const [toCopyRoomId, setToCopyRoomId] = useInputState();
   const selectedRoomVenue = wcifSchedule.venues.find(
     ({ rooms }) => rooms.map(({ id }) => id).includes(selectedRoomId),
   );
@@ -106,7 +107,7 @@ function CopyRoomScheduleModal({
           name="roomId"
           options={roomOptions}
           value={toCopyRoomId}
-          onChange={(_, data) => setToCopyRoomId(data.value)}
+          onChange={setToCopyRoomId}
         />
       </Modal.Content>
       <Modal.Actions>
