@@ -4,6 +4,7 @@ import {
   Card,
   Form,
   Icon,
+  Popup,
 } from 'semantic-ui-react';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
@@ -34,12 +35,24 @@ function RoomPanel({
     <Card fluid raised>
       <Card.Content>
         <Card.Header>
-          <Button floated="right" compact icon title="Remove" negative onClick={handleDeleteRoom}>
-            <Icon name="trash" />
-          </Button>
-          <Button floated="right" compact icon title="Copy" onClick={handleCopyRoom}>
-            <Icon name="copy" />
-          </Button>
+          <Popup
+            content="Remove"
+            position='top center'
+            trigger={
+              <Button floated="right" compact icon negative onClick={handleDeleteRoom}>
+                <Icon name="trash" />
+              </Button>
+            }
+          />
+          <Popup
+            content="Copy"
+            position='top center'
+            trigger={
+              <Button floated="right" compact icon onClick={handleCopyRoom}>
+                <Icon name="copy" />
+              </Button>
+            }
+          />
         </Card.Header>
         <Card.Description>
           <Form>
