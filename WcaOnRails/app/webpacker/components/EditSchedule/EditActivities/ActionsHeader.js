@@ -36,7 +36,6 @@ function ActionsHeader({
       <Container>
         <CopyRoomScheduleModal
           isOpen={isCopyModalOpen}
-          wcifSchedule={wcifSchedule}
           selectedRoomId={selectedRoomId}
           roomOptions={otherRoomsWithNonEmptySchedules}
           close={() => setIsCopyModalOpen(false)}
@@ -58,11 +57,11 @@ function ActionsHeader({
 
 function CopyRoomScheduleModal({
   isOpen,
-  wcifSchedule,
   selectedRoomId,
   roomOptions,
   close,
 }) {
+  const { wcifSchedule } = useStore();
   const dispatch = useDispatch();
   const confirm = useConfirm();
 
