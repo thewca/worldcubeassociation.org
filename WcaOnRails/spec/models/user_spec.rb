@@ -65,16 +65,7 @@ RSpec.describe User, type: :model do
     user.confirm
   end
 
-  it "allows demotion of a senior delegate with no subordinate delegates" do
-    senior_delegate = FactoryBot.create :senior_delegate
-
-    senior_delegate.delegate_status = ""
-    senior_delegate.region_id = nil
-    expect(senior_delegate.save).to eq true
-    expect(senior_delegate.reload.delegate_status).to eq nil
-  end
-
-  it "requires senior delegate be a senior delegate" do
+  it "requires region_id for a delegate" do
     delegate = FactoryBot.create :delegate
     region_id = delegate.region_id
     user = FactoryBot.create :user
@@ -85,11 +76,6 @@ RSpec.describe User, type: :model do
     delegate.region_id = region_id
     user.update(delegate_status: "delegate", region_id: region_id)
     expect(delegate).to be_valid
-  end
-
-  it "requires senior delegate if delegate status allows it" do
-    delegate = FactoryBot.build :delegate, region_id: nil
-    expect(delegate).to be_invalid_with_errors(region_id: ["can't be blank"])
   end
 
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
@@ -106,16 +92,6 @@ RSpec.describe User, type: :model do
   it "does not give delegates results admin privileges" do
     delegate = FactoryBot.create :delegate
     expect(delegate.can_admin_results?).to be false
-  end
-
-  it "allows senior delegate if board member" do
-    board_member = FactoryBot.create :delegate, :board_member
-
-    senior_delegate = FactoryBot.create :senior_delegate
-
-    expect(board_member).to be_valid
-    board_member.region_id = senior_delegate.region_id
-    expect(board_member).to be_valid
   end
 
   describe "WCA ID" do
@@ -360,8 +336,7 @@ RSpec.describe User, type: :model do
 
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
-    let!(:senior_delegate) { FactoryBot.create :senior_delegate }
-    let!(:delegate) { FactoryBot.create :delegate, region_id: senior_delegate.region_id }
+    let!(:delegate) { FactoryBot.create :delegate, region_id: (FactoryBot.create :delegate_region_americas).id }
     let!(:user) do
       FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
                                delegate_id_to_handle_wca_id_claim: delegate.id,
@@ -618,7 +593,7 @@ RSpec.describe User, type: :model do
 
     it "allows senior delegates to assign delegate status" do
       user = FactoryBot.create :user
-      senior_delegate = FactoryBot.create :senior_delegate
+      senior_delegate = (FactoryBot.create :senior_delegate_role).user
       expect(senior_delegate.can_edit_user?(user)).to eq true
       expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :region_id, :location)
     end
@@ -645,8 +620,8 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for users that are delegates" do
-      senior_delegate = FactoryBot.create :senior_delegate
-      expect(senior_delegate.is_special_account?).to eq true
+      senior_delegate_role = FactoryBot.create :senior_delegate_role
+      expect(senior_delegate_role.user.is_special_account?).to eq true
     end
 
     it "returns true for users who organized or delegated a competition" do
@@ -791,21 +766,19 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for senior delegate if scope requested is own region" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
-      senior_delegate = FactoryBot.create(:senior_delegate, region_id: americas_region.id)
-      expect(senior_delegate.has_permission?(:can_edit_groups, americas_region.id)).to be true
+      senior_delegate_role = FactoryBot.create(:senior_delegate_role)
+      expect(senior_delegate_role.user.has_permission?(:can_edit_groups, senior_delegate_role.group.id)).to be true
     end
 
     it "returns true for senior delegate if scope requested is their subregion" do
       usa_region = FactoryBot.create(:delegate_region_usa)
-      senior_delegate = FactoryBot.create(:senior_delegate, region_id: usa_region.parent_group.id)
+      senior_delegate = FactoryBot.create(:senior_delegate_role, group: usa_region.parent_group).user
       expect(senior_delegate.has_permission?(:can_edit_groups, usa_region.id)).to be true
     end
 
     it "returns false for senior delegate if scope requested is other's region" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
       asia_pacific_region = FactoryBot.create(:delegate_region_asia_pacific)
-      senior_delegate = FactoryBot.create(:senior_delegate, region_id: americas_region.id)
+      senior_delegate = FactoryBot.create(:senior_delegate_role).user
       expect(senior_delegate.has_permission?(:can_edit_groups, asia_pacific_region.id)).to be false
     end
   end

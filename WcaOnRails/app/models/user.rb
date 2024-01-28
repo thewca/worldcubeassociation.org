@@ -19,6 +19,7 @@ class User < ApplicationRecord
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
+  has_many :roles, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -416,17 +417,6 @@ class User < ApplicationRecord
 
   validates :region_id, presence: true, if: -> { delegate_status.present? }
 
-  def self.delegate_status_requires_senior_delegate(delegate_status)
-    {
-      nil => false,
-      "" => false,
-      "trainee_delegate" => true,
-      "candidate_delegate" => true,
-      "delegate" => true,
-      "senior_delegate" => false,
-    }.fetch(delegate_status)
-  end
-
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
     if (!avatar.blank? || !pending_avatar.blank?) && wca_id.blank?
@@ -532,12 +522,6 @@ class User < ApplicationRecord
     staff_delegate? || member_of_any_official_team? || board_member? || officer?
   end
 
-  def staff_with_voting_rights?
-    # See "Member with Voting Rights" in:
-    #  https://documents.worldcubeassociation.org/documents/motions/02.2019.1%20-%20Definitions.pdf
-    full_delegate? || senior_delegate? || senior_member_of_any_official_team? || leader_of_any_official_team? || board_member? || officer?
-  end
-
   def team_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
@@ -579,7 +563,7 @@ class User < ApplicationRecord
   end
 
   def any_kind_of_delegate?
-    delegate_status.present?
+    delegate_status.present? || active_roles.any? { |role| role.group_type == UserGroup.group_types[:delegate_regions] }
   end
 
   def trainee_delegate?
@@ -1295,6 +1279,10 @@ class User < ApplicationRecord
 
   def senior_delegate
     region&.senior_delegate
+  end
+
+  def active_roles
+    roles.select { |role| role.is_active? }
   end
 
   def delegate_role
