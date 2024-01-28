@@ -72,6 +72,11 @@ function CopyRoomScheduleModal({
   const toCopyRoomVenue = venueWcifFromRoomId(wcifSchedule, toCopyRoomId);
   const areRoomsInSameVenue = selectedRoomVenue.id === toCopyRoomVenue?.id;
 
+  const onClose = () => {
+    setToCopyRoomId(undefined);
+    close();
+  };
+
   const dispatchAndClose = () => {
     dispatch(copyRoomActivities(toCopyRoomId, selectedRoomId));
     onClose();
@@ -85,11 +90,6 @@ function CopyRoomScheduleModal({
         content: 'The room you selected is in a different venue. You should probably only be copying from a different venue for a multi-location fewest moves competition. If so, make sure you correctly set all venue time zones BEFORE proceeding with this copy. Are you sure you want to proceed?',
       }).then(dispatchAndClose);
     }
-  };
-
-  const onClose = () => {
-    setToCopyRoomId(undefined);
-    close();
   };
 
   return (

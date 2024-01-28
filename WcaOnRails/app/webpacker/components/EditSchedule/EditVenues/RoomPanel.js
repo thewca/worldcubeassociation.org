@@ -37,21 +37,21 @@ function RoomPanel({
         <Card.Header>
           <Popup
             content="Remove"
-            position='top center'
-            trigger={
+            position="top center"
+            trigger={(
               <Button floated="right" compact icon negative onClick={handleDeleteRoom}>
                 <Icon name="trash" />
               </Button>
-            }
+            )}
           />
           <Popup
             content="Copy"
-            position='top center'
-            trigger={
+            position="top center"
+            trigger={(
               <Button floated="right" compact icon onClick={handleCopyRoom}>
                 <Icon name="copy" />
               </Button>
-            }
+            )}
           />
         </Card.Header>
         <Card.Description>
