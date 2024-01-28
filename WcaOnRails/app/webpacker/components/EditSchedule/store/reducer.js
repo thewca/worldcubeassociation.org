@@ -67,7 +67,7 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.map((activity) => (
-              (activity.id === payload.activityId || (
+              (activity.id === selectedActivity.activityId || (
                 payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
               ))
                 ? { ...activity, [payload.key]: payload.value }
@@ -113,7 +113,7 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.map((activity) => (
-              (activity.id === payload.activityId || (
+              (activity.id === selectedActivity.activityId || (
                 payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
               ))
                 ? moveActivityByDuration(activity, payload.isoDuration)
@@ -137,7 +137,7 @@ const reducers = {
           rooms: venue.rooms.map((room) => ({
             ...room,
             activities: room.activities.map((activity) => (
-              (activity.id === payload.activityId || (
+              (activity.id === selectedActivity.activityId || (
                 payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
               ))
                 ? scaleActivitiesByDuration(activity, payload.isoDeltaStart, payload.isoDeltaEnd)
