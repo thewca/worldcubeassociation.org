@@ -77,7 +77,7 @@ function CopyRoomScheduleModal({
 
   const dispatchAndClose = () => {
     dispatch(copyRoomActivities(toCopyRoomId, selectedRoomId));
-    close();
+    onClose();
   };
 
   const handleCopyRoom = () => {
