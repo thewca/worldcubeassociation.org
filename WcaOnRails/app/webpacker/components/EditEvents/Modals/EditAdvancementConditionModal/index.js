@@ -154,6 +154,7 @@ export default function EditAdvancementConditionModal({
       onOk={handleOk}
       hasUnsavedChanges={hasUnsavedChanges()}
       disabled={disabled}
+      triggerButtonProps={{ name: 'advancementCondition' }}
     >
       <AdvancementTypeField
         advancementType={type}

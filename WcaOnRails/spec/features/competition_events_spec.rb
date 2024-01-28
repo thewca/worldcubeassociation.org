@@ -52,7 +52,7 @@ RSpec.feature "Competition events management" do
       let(:round_333_1) { comp_event_333.rounds.first }
 
       scenario "close with unsaved changes prompts user before discarding changes", js: true, retry: 3 do
-        find_round("333", 1).find(".round-row__time-limit").find("button").click
+        find_round("333", 1).click_button("timeLimit")
 
         modal = find_modal
         modal.find(:css, "input[type='text']").fill_in with: "4:00.00"
@@ -64,7 +64,7 @@ RSpec.feature "Competition events management" do
         end
 
         # Now that we discarded that change, try opening the modal again and check what value is shown.
-        find_round("333", 1).find(".round-row__time-limit").find("button").click
+        find_round("333", 1).click_button("timeLimit")
 
         within_modal do
           expect(page).to have_text "Competitors have 10 minutes for each of their solves."
@@ -78,7 +78,7 @@ RSpec.feature "Competition events management" do
       end
 
       scenario "change time limit to 5 minutes", js: true, retry: 3 do
-        find_round("333", 1).find(".round-row__time-limit").find("button").click
+        find_round("333", 1).click_button("timeLimit")
 
         modal = find_modal
         modal.find(:css, "input[type='text']").fill_in with: "5:00.00"
@@ -90,7 +90,7 @@ RSpec.feature "Competition events management" do
       end
 
       scenario "change cutoff to best of 2 in 2 minutes", js: true, retry: 3 do
-        find_round("333", 1).find(".round-row__cutoff").find("button").click
+        find_round("333", 1).click_button("cutoff")
 
         modal = find_modal
         select_from_ui(modal, "cutoffFormat", "Best of 2")
@@ -107,7 +107,7 @@ RSpec.feature "Competition events management" do
         event_panel = find_event_panel("333")
         select_from_ui(event_panel, "selectRoundCount", "2 rounds")
 
-        find_round("333", 1).find(".round-row__advancement-condition").find("button").click
+        find_round("333", 1).click_button('advancementCondition')
 
         modal = find_modal
         select_from_ui(modal, "advancementType", "Ranking")
@@ -236,11 +236,11 @@ RSpec.feature "Competition events management" do
 
       round = find_round("333", 1)
 
-      expect(round.find(".round-row__format").find("div[name='format'].disabled")).to be
-      expect(round.find(".round-row__scramble-set-count").find("input").disabled?).to be
-      expect(round.find(".round-row__time-limit").find("button").disabled?).to be
-      expect(round.find(".round-row__cutoff").find("button").disabled?).to be
-      expect(round.find(".round-row__advancement-condition").find("button").disabled?).to be
+      expect(round).to have_css("div[name='format'].disabled")
+      expect(round).to have_field('scrambleSetCount', disabled: true)
+      expect(round).to have_button('timeLimit', disabled: true)
+      expect(round).to have_button('cutoff', disabled: true)
+      expect(round).to have_button('advancementCondition', disabled: true)
     end
 
     scenario "board member can update events", js: true do
