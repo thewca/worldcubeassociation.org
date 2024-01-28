@@ -28,6 +28,7 @@ import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
 import { getMatchingActivities, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 import {
   addActivity,
@@ -57,7 +58,7 @@ function EditActivities({
 
   const [selectedRoomId, setSelectedRoomId] = useInputState();
 
-  const [shouldUpdateMatches, setShouldUpdateMatches] = useState(false);
+  const [shouldUpdateMatches, setShouldUpdateMatches] = useCheckboxState(false);
 
   const [minutesPerRow, setMinutesPerRow] = useInputState(15);
   const [calendarStart, setCalendarStart] = useInputState(8);

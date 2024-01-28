@@ -49,7 +49,7 @@ function ActionsHeader({
         <Checkbox
           label="Apply changes to matching activities (same type, start time, and end time) in other rooms"
           checked={shouldUpdateMatches}
-          onChange={() => setShouldUpdateMatches((x) => !x)}
+          onChange={setShouldUpdateMatches}
         />
       </Container>
     )
