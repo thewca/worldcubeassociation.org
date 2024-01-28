@@ -47,4 +47,6 @@ translations:
       - "*.regional_organizations.*"
       - "*.round.*"
       - "*.search_results.*"
+      - "*.continents.*"
+      - "*.layouts.*"
       - "*.user_groups.*"

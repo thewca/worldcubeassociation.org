@@ -35,10 +35,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
     lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
     eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
-    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role[:group][:group_type]) || GROUP_TYPE_RANK_ORDER.length },
+    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
     status: lambda { |role| status_sort_rank(role) },
-    name: lambda { |role| role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
-    groupName: lambda { |role| role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location: lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -50,6 +51,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       sort_keys_and_directions.map { |sort_key_and_direction|
         sort_key = sort_key_and_direction.split(':').first
         sort_direction = sort_key_and_direction.split(':').second || 'asc'
+        # FIXME: The following line throws error for desc direction if SORT_PARAMS[sort_key.to_sym] is non-numeric.
         SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
       }
     }
@@ -68,9 +70,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       if is_group_hidden
         case group_type
         when UserGroup.group_types[:delegate_probation]
-          current_user.can_manage_delegate_probation?
+          current_user&.can_manage_delegate_probation?
         when UserGroup.group_types[:translators]
-          current_user.software_team?
+          current_user&.software_team?
         else
           false # Don't accept any other hidden groups.
         end
@@ -94,8 +96,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # operator to access the parameters.
       (
         (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
-        (is_active.present? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
-        (is_group_hidden.present? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
+        (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
+        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
       )
     end
   end
@@ -337,9 +339,18 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
-      user = User.find_by(region_id: group.id, delegate_status: status)
-      if user.present?
-        end_delegate_role_for_user(user)
+      if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
+        role_to_end = group.lead_role
+        if role_to_end.present?
+          role_to_end.update!(end_date: Date.today)
+          RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later
+        end
+      else
+        user = User.find_by(region_id: group.id, delegate_status: status)
+        if user.present?
+          user.update!(delegate_status: 'delegate')
+          send_role_change_notification(user)
+        end
       end
     end
   end
@@ -368,14 +379,25 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       group = UserGroup.find(group_id)
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      location = params.require(:location) if group.group_type == UserGroup.group_types[:delegate_regions]
+      location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
         end_role_for_user_in_group_with_status(group, status)
       end
       if group.group_type == UserGroup.group_types[:delegate_regions]
-        user = User.find(user_id)
-        user.update!(delegate_status: status, region_id: group.id, location: location)
-        send_role_change_notification(user)
+        if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
+          metadata = RolesMetadataDelegateRegions.create!(status: status)
+          role = UserRole.create!(
+            user_id: user_id,
+            group_id: group_id,
+            start_date: Date.today,
+            metadata: metadata,
+          )
+          RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+        else
+          user = User.find(user_id)
+          user.update!(delegate_status: status, region_id: group.id, location: location)
+          send_role_change_notification(user)
+        end
         render json: {
           success: true,
         }
@@ -496,7 +518,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
     else
-      render status: :unprocessable_entity, json: { error: "Invalid role id" }
+      role = UserRole.find(id)
+      role.update!(end_date: Date.today)
+      RoleChangeMailer.notify_role_end(role, current_user).deliver_later
+      render json: {
+        success: true,
+      }
     end
   end
 

@@ -83,7 +83,7 @@
             <% end %>
             <th class="events" data-sortable="true"><%= t 'registrations.list.n_events' %></th>
             <th class="guests"><%= t 'activerecord.attributes.registration.guests' %></th>
-            <th class="comments"><%= t 'activerecord.attributes.registration.comments' %></th>
+            <th class="comments" data-sortable="true"><%= t 'activerecord.attributes.registration.comments' %></th>
             <% if @competition.has_administrative_notes? %>
               <th class="administrative-notes"><%= t 'activerecord.attributes.registration.administrative_notes' %></th>
             <% end %>

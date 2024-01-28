@@ -276,6 +276,9 @@ GEM
       railties (>= 5)
     doorkeeper-i18n (5.2.7)
       doorkeeper (>= 5.2)
+    doorkeeper-openid_connect (1.8.7)
+      doorkeeper (>= 5.5, < 5.7)
+      jwt (>= 2.5)
     dotenv (2.8.1)
     dotenv-rails (2.8.1)
       dotenv (= 2.8.1)
@@ -825,6 +828,7 @@ DEPENDENCIES
   devise-two-factor
   doorkeeper
   doorkeeper-i18n
+  doorkeeper-openid_connect
   dotenv-rails
   enum_help
   eu_central_bank

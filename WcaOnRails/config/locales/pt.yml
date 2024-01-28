@@ -2187,6 +2187,12 @@ pt:
         href="%{dob_form_path}">este formulário</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID da WCA %{link_id} não existe.'
+  user_groups:
+    group_types:
+      #original_hash: abd2828
+      board: Conselho de Administração da WCA
+      #original_hash: d79bd00
+      officers: Oficiais da WCA
   registrations:
     errors:
       #original_hash: 44ab952

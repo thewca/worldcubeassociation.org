@@ -18,6 +18,7 @@ const defaultRegion = {
   parent_group_id: null,
   is_active: true,
   is_hidden: false,
+  friendlyId: '',
 };
 
 function UserGroupVisibility({ userGroup, save, sync }) {
@@ -88,6 +89,7 @@ export default function RegionManager() {
             <Table.HeaderCell>Region</Table.HeaderCell>
             <Table.HeaderCell>Senior Delegate</Table.HeaderCell>
             <Table.HeaderCell>Sub-Regions</Table.HeaderCell>
+            <Table.HeaderCell>Regional Delegate</Table.HeaderCell>
             <Table.HeaderCell>Visibility</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -118,6 +120,7 @@ export default function RegionManager() {
                     )}
                 </Table.Cell>
                 <Table.Cell />
+                <Table.Cell />
                 <Table.Cell>
                   <UserGroupVisibility userGroup={region} save={save} sync={sync} />
                 </Table.Cell>
@@ -128,6 +131,25 @@ export default function RegionManager() {
                   <Table.Cell />
                   <Table.Cell>
                     {subRegion.name}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {subRegion.lead_user
+                      ? (
+                        <>
+                          <Icon
+                            name="edit"
+                            link
+                            onClick={() => selectedGroupAndShowModal(subRegion)}
+                          />
+                          {subRegion.lead_user.name}
+                        </>
+                      ) : (
+                        <Icon
+                          name="plus"
+                          link
+                          onClick={() => selectedGroupAndShowModal(subRegion)}
+                        />
+                      )}
                   </Table.Cell>
                   <Table.Cell>
                     <UserGroupVisibility userGroup={subRegion} save={save} sync={sync} />
@@ -180,6 +202,11 @@ export default function RegionManager() {
               label="Name"
               value={newRegion.name}
               onChange={(e, { value }) => setNewRegion({ ...newRegion, name: value })}
+            />
+            <Form.Input
+              label="Friendly ID"
+              value={newRegion.friendlyId}
+              onChange={(e, { value }) => setNewRegion({ ...newRegion, friendlyId: value })}
             />
             <Form.Button
               onClick={() => {
@@ -241,7 +268,9 @@ export default function RegionManager() {
                   {
                     userId: newLeadDelegate.id,
                     groupId: selectedGroup.id,
-                    status: delegateRegionsStatus.senior_delegate,
+                    status: (selectedGroup.parent_group_id
+                      ? delegateRegionsStatus.regional_delegate
+                      : delegateRegionsStatus.senior_delegate),
                     location: selectedGroup.name,
                   },
                   () => {
