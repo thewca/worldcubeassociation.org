@@ -20,7 +20,6 @@ module RegulationTranslationsHelper
 
 
       metadata_objects = @@s3.objects(prefix: TRANSLATIONS_FOLDER_PATH)
-      puts metadata_objects.to_a
       metadata_index = metadata_objects.filter { |object| File.extname(object.key) == ".json" }
                                        .index_by { |object| File.basename(File.dirname(object.key)) }
                                        .transform_values { |object| object.get.body.read.strip }
