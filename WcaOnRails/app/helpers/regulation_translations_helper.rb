@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module RegulationTranslationsHelper
-  TRANSLATIONS_FOLDER_PATH = "translations".freeze
+  TRANSLATIONS_FOLDER_PATH = "translations"
 
   TRANSLATIONS_HASH_FILE = "#{TRANSLATIONS_FOLDER_PATH}/version".freeze
   TRANSLATIONS_DATE_FILE = "#{TRANSLATIONS_FOLDER_PATH}/version-date".freeze
@@ -9,7 +9,7 @@ module RegulationTranslationsHelper
 
   @@s3 = Aws::S3::Resource.new(
     region: EnvConfig.STORAGE_AWS_REGION,
-    credentials: Aws::InstanceProfileCredentials.new
+    credentials: Aws::InstanceProfileCredentials.new,
   ).bucket(BUCKET_NAME)
 
   private def translations_metadata
@@ -17,7 +17,6 @@ module RegulationTranslationsHelper
     build_hash = current_build_hash
 
     if @@metadata_cache.empty? || build_hash != @@cached_for_hash
-
 
       metadata_objects = @@s3.objects(prefix: TRANSLATIONS_FOLDER_PATH)
       metadata_index = metadata_objects.filter { |object| File.extname(object.key) == ".json" }

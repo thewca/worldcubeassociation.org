@@ -5,8 +5,9 @@ class RegulationsController < ApplicationController
 
   def render_regulations(route)
     erb_file = RegulationsS3Helper.fetch_regulations_from_s3(route, REGULATIONS_VERSION_FILE)
-    render inline: erb_file, :layout => "application"
+    render inline: erb_file, layout: "application"
   end
+
   def guidelines
     render_regulations("guidelines.html.erb")
   end

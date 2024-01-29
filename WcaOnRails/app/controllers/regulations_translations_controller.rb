@@ -22,8 +22,9 @@ class RegulationsTranslationsController < ApplicationController
 
   def render_translated_regulations(route, language)
     erb_file = RegulationsS3Helper.fetch_regulations_from_s3("translations/#{language}/#{route}", REGULATIONS_TRANSLATIONS_VERSION_FILE)
-    render inline: erb_file, :layout => "application"
+    render inline: erb_file, layout: "application"
   end
+
   def translated_regulation
     render_translated_regulations("index.html.erb", params[:language])
   end

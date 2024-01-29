@@ -6,7 +6,7 @@ class Regulation < SimpleDelegator
   def self.reload_regulations
     s3 = Aws::S3::Resource.new(
       region: EnvConfig.STORAGE_AWS_REGION,
-      credentials: Aws::InstanceProfileCredentials.new
+      credentials: Aws::InstanceProfileCredentials.new,
     )
     @regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
     @regulations_by_id = @regulations.index_by { |r| r["id"] }
