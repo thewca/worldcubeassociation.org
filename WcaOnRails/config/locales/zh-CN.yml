@@ -2595,6 +2595,27 @@ zh-CN:
       leader: 组长
       #original_hash: c366473
       senior_member: 高级成员
+      officers:
+        #original_hash: d79bd00
+        name: WCA董事
+        #original_hash: 312e799
+        description: >-
+          WCA董事负责负责处理与WCA非营利地位相关的任务。这些董事由WCA董事会选举产生。执行董事是WCA的首席执行官，主席主持所有董事会会议，秘书负责维护组织的文件，财务主管管理WCA的财务事务。
+      chair:
+        #original_hash: de34439
+        name: WCA董事长
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA执行董事
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA秘书
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA副董事长
+      treasurer:
+        #original_hash: 75e65d9
+        name: WCA财务主管
       wdc:
         #original_hash: c97077a
         name: WCA纪律委员会
@@ -2641,6 +2662,11 @@ zh-CN:
         name: WCA比赛公示组
         #original_hash: f511502
         description: 该组负责审核和公示WCA比赛，并确保此类比赛符合WCA标准。
+      wmt:
+        #original_hash: 2035811
+        name: WCA市场组
+        #original_hash: f2a0140
+        description: 该团队负责开发和管理WCA品牌、寻求赞助、支持WCA竞赛装备的分销以及营销WCA商品。
       weat:
         #original_hash: d1dbb86
         name: WCA董事会助理团队
@@ -2652,11 +2678,15 @@ zh-CN:
         #original_hash: 8f888d6
         description: 该团队负责监督和协助WCA成为一个国际认可的竞技组织。
       wat:
+        #original_hash: 90a1280
+        name: WCA资料整理组
         #original_hash: fae6850
-        info_html: WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
+        description: WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
       wac:
+        #original_hash: 1ce7604
+        name: WCA顾问委员会
         #original_hash: fb6cd86
-        info_html: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。
+        description: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。
       #original_hash: 7e849d2
       delegates_html: >-
         <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>、<strong>WCA初级代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
