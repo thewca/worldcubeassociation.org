@@ -229,6 +229,8 @@ Rails.application.routes.draw do
   get '/regulations/scrambles' => 'regulations#scrambles'
   get '/regulations/guidelines' => 'regulations#guidelines'
   get '/regulations/translations' => 'regulations#translations'
+  get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
+  get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
   get '/regulations/history' => 'regulations#history'
   get '/regulations/history/official/:id' => 'regulations#historical_regulations'
   get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
