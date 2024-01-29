@@ -1294,7 +1294,7 @@ class User < ApplicationRecord
   end
 
   def senior_delegate
-    region.senior_delegate
+    region&.senior_delegate
   end
 
   def delegate_role
