@@ -16,6 +16,7 @@ EnvConfig = SuperConfig.new do
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
     mandatory :DATABASE_AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
+    mandatory :PAYPAL_BASE_URL, :string
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
@@ -39,6 +40,7 @@ EnvConfig = SuperConfig.new do
     optional :DATABASE_WRT_USER, :string, ''
     optional :WCA_REGISTRATIONS_URL, :string, ''
     optional :WCA_REGISTRATIONS_CDN_URL, :string, ''
+    optional :PAYPAL_BASE_URL, :string, ''
 
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false

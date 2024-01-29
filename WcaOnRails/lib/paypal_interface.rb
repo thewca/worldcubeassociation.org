@@ -2,12 +2,8 @@
 
 module PaypalInterface
   def self.generate_paypal_onboarding_link(competition_id)
-    # TODO: Move to EnvConfig
-    url = 'https://api-m.sandbox.paypal.com/v2/customer/partner-referrals'
-    # TODO: This will need to be requested using our clientId and secret - for now, I'm using postman
-    access_token = generate_access_token
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/customer/partner-referrals"
 
-    # TODO: We could add in a tracking ID if we want to - this would be a good idea
     payload = {
       operations: [
         {
@@ -26,7 +22,6 @@ module PaypalInterface
       products: ['PPCP'], # TODO: Experiment with other payment types
       partner_config_override: {
         return_url: EnvConfig.ROOT_URL + Rails.application.routes.url_helpers.competitions_paypal_return_path(competition_id),
-        # return_url: EnvConfig.ROOT_URL + end_path,
         return_url_description: "the url to return the WCA after the paypal onboarding process.",
       },
       legal_consents: [
@@ -37,14 +32,7 @@ module PaypalInterface
       ],
     }
 
-    conn = Faraday.new(url) do |faraday|
-      faraday.request :json
-      faraday.adapter Faraday.default_adapter
-    end
-
-    response = conn.post do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{access_token}"
+    response = paypal_connection(url).post do |req|
       req.body = payload.to_json
     end
 
@@ -59,7 +47,7 @@ module PaypalInterface
   def self.create_order(competition)
     puts competition.inspect
     access_token = generate_access_token
-    url = "#{base_url}/v2/checkout/orders"
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
 
     response = Faraday.post(url) do |req|
       req.headers['Content-Type'] = 'application/json'
@@ -81,7 +69,7 @@ module PaypalInterface
 
   def self.capture_payment(competition, order_id)
     access_token = generate_access_token
-    url = "#{base_url}/v2/checkout/orders/#{order_id}/capture"
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
 
     response = Faraday.post(url) do |req|
       req.headers['Content-Type'] = 'application/json'
@@ -94,21 +82,36 @@ module PaypalInterface
   end
 
   class << self
-    def generate_access_token
-      auth = Base64.strict_encode64("#{AppSecrets.PAYPAL_CLIENT_ID}:#{AppSecrets.PAYPAL_CLIENT_SECRET}")
-      response = Faraday.post("#{base_url}/v1/oauth2/token") do |req|
-        req.body = 'grant_type=client_credentials'
-        req.headers['Authorization'] = "Basic #{auth}"
-      end
+    def paypal_connection(url)
+      conn = Faraday.new(
+        url: url,
+        headers: { 'Authorization' => "Bearer #{generate_access_token}" }
+      ) do |builder|
+        # Sets headers and parses jsons automatically
+        builder.request :json
+        builder.request :json
 
-      data = JSON.parse(response.body)
-      data['access_token']
+        # Raises an error on 4xx and 5xx responses.
+        builder.response :raise_error
+
+        # Logs requests and responses.
+        # By default, it only logs the request method and URL, and the request/response headers.
+        builder.response :logger
+
+        # faraday.adapter Faraday.default_adapter
+      end
     end
   end
 
   class << self
-    def base_url
-      Rails.env.production? ? 'https://api-m.paypal.com' : 'https://api-m.sandbox.paypal.com'
+    def generate_access_token
+      auth = Base64.strict_encode64("#{AppSecrets.PAYPAL_CLIENT_ID}:#{AppSecrets.PAYPAL_CLIENT_SECRET}")
+      response = Faraday.post("#{EnvConfig.PAYPAL_BASE_URL}/v1/oauth2/token") do |req|
+        req.body = 'grant_type=client_credentials'
+        req.headers['Authorization'] = "Basic #{auth}"
+      end
+
+      JSON.parse(response.body)['access_token']
     end
   end
 
