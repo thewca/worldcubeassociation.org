@@ -824,8 +824,7 @@ class RegistrationsController < ApplicationController
 
   def create_paypal_order
     @registration = registration_from_params
-    @competition = @registration.competition
-    render json: PaypalInterface.create_order(@competition)
+    render json: PaypalInterface.create_order(@registration)
   end
 
   def capture_paypal_payment

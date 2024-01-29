@@ -43,20 +43,25 @@ module PaypalInterface
     end
   end
 
-  def self.create_order(competition)
+  def self.create_order(registration)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+    outstanding_fees = registration.outstanding_entry_fees
+    fee_currency = outstanding_fees.currency.iso_code
+
+    payload = {
+      intent: 'CAPTURE',
+      purchase_units: [
+        {
+          amount: { currency_code: fee_currency.to_s, value: outstanding_fees.to_s },
+          # amount: { currency_code: "EUR", value: outstanding_fees.to_s },
+        },
+      ],
+    }.to_json
 
     response = paypal_connection(url).post do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = "FLAVORsb-noyt529176316_MP"
-      req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(competition)
-      req.body = {
-        intent: 'CAPTURE',
-        purchase_units: [
-          {
-            amount: { currency_code: 'USD', value: '100.00' },
-          },
-        ],
-      }.to_json
+      req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(registration.competition)
+      req.body = payload
     end
 
     response.body

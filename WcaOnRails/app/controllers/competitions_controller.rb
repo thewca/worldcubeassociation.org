@@ -324,6 +324,7 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
+  # TODO: Refactor for cleaner integration of Stripe and Paypal (and other payment services)
   def payment_setup
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
@@ -337,19 +338,7 @@ class CompetitionsController < ApplicationController
     @authorize_url = client.auth_code.authorize_url(oauth_params)
 
     # Paypal setup URL
-    # TODO: Refactor this? Shouldn't all be in the payment_setup method
-    if params.key?("merchantIdInPayPal")
-      @competition.connected_stripe_account_id = params["merchantIdInPayPal"]
-      puts "merchant id: #{@competition.connected_stripe_account_id}"
-      if @competition.save
-        flash[:success] = t('competitions.messages.stripe_connected')
-      else
-        flash[:danger] = t('competitions.messages.stripe_not_connected')
-      end
-    else
-      # @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id, competitions_paypal_return_path(@competition))
-      @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id)
-    end
+    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id)
   end
 
   def paypal_return

@@ -35,7 +35,7 @@
   <% end %>
 
   <script src="https://js.stripe.com/v3/"></script>
-  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=95XC2UKUP2CFW&currency=USD"></script>
+  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=95XC2UKUP2CFW&currency=<%= @registration.outstanding_entry_fees.currency.iso_code %>"></script>
 
   <script>
     // ----------
