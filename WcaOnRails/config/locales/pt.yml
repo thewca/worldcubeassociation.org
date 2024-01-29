@@ -435,6 +435,8 @@ pt:
         location: Localização
         #original_hash: 0f21717
         region: Região
+        #original_hash: e3fc6e9
+        subRegion: Subregião
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -759,6 +761,8 @@ pt:
           candidate_delegate: Delegado Júnior
           #original_hash: 12ab214
           delegate: Delegado
+          #original_hash: 45c2317
+          regional_delegate: Delegado Regional
           #original_hash: d463c23
           senior_delegate: Delegado Sénior
         teams_committees:
@@ -3049,6 +3053,8 @@ pt:
       past_from: 'Passadas - %{year}'
       #original_hash: 7cff459
       past_all: Passadas - todos os anos
+      #original_hash: 6eef664
+      no_delegates: Nenhum
       #original_hash: 819fe62
       show_cancelled: Mostrar competições canceladas
       #original_hash: 0eda967
@@ -3097,6 +3103,8 @@ pt:
           full: >-
             Limite de competidores atingido, novas inscrições irão para a lista
             de espera
+      #original_hash: 28531af
+      no_more_comps: Mais nenhuma competição.
       #original_hash: 8b09d74
       no_comp_found: Nenhuma competição encontrada.
       #original_hash: 7008166
