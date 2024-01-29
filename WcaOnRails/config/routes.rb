@@ -167,7 +167,7 @@ Rails.application.routes.draw do
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
   get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
+  get 'panel/delegate-crash-course', to: redirect('https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
