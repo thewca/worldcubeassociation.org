@@ -90,7 +90,7 @@ rebuild_regs() {
     # Clean up translations directories
     find $outputdir ! -name 'translations' -type d -exec rm -rf {} +
     # Rebuild all translations
-    for kind in html pdf; do
+    for kind in merged pdf; do
       for l in $languages; do
         lang_inputdir=$inputdir/${l}
         lang_outputdir=$outputdir/${l}
@@ -119,7 +119,7 @@ rebuild_regs() {
     find $outputdir -maxdepth 1 -type f -exec rm -f {} +
     # Rebuild Regulations
     wrc --target=json -o $outputdir -g "$git_reg_hash" $inputdir
-    wrc --target=html -o $outputdir -g "$git_reg_hash" $inputdir
+    wrc --target=merged -o $outputdir -g "$git_reg_hash" $inputdir
     wrc --target=pdf -o $outputdir -g "$git_reg_hash" $inputdir
     # Update version built
     echo "$git_reg_hash" > $outputdir/version
