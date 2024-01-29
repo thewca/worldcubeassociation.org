@@ -531,6 +531,32 @@ zh-CN:
         delegate: 代表
         #original_hash: d463c23
         senior_delegate: 高级代表
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: 实习代表
+          #original_hash: 9b97968
+          candidate_delegate: 初级代表
+          #original_hash: 12ab214
+          delegate: 代表
+          #original_hash: 45c2317
+          regional_delegate: 区域代表
+          #original_hash: d463c23
+          senior_delegate: 高级代表
+        teams_committees:
+          #original_hash: 6853c98
+          member: 成员
+          #original_hash: c366473
+          senior_member: 高级成员
+          #original_hash: e26c936
+          leader: 组长
+        councils:
+          #original_hash: 6853c98
+          member: 成员
+          #original_hash: c366473
+          senior_member: 高级成员
+          #original_hash: e26c936
+          leader: 组长
     person:
       gender:
         #original_hash: 3f3a489
