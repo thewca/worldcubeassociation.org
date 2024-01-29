@@ -1294,7 +1294,7 @@ class User < ApplicationRecord
   end
 
   def senior_delegate
-    User.find_by(delegate_status: "senior_delegate", region_id: self.region_id)
+    region&.senior_delegate
   end
 
   def delegate_role
