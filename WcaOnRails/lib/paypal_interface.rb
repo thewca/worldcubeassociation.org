@@ -36,8 +36,7 @@ module PaypalInterface
       req.body = payload.to_json
     end
 
-    body = JSON.parse(response.body)
-    body['links'].each do |link|
+    response.body['links'].each do |link|
       if link['rel'] == "action_url"
         return link['href']
       end
@@ -45,13 +44,9 @@ module PaypalInterface
   end
 
   def self.create_order(competition)
-    puts competition.inspect
-    access_token = generate_access_token
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
 
-    response = Faraday.post(url) do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{access_token}"
+    response = paypal_connection(url).post do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = "FLAVORsb-noyt529176316_MP"
       req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(competition)
       req.body = {
@@ -64,32 +59,32 @@ module PaypalInterface
       }.to_json
     end
 
-    JSON.parse(response.body)
+    response.body
   end
 
   def self.capture_payment(competition, order_id)
-    access_token = generate_access_token
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
 
-    response = Faraday.post(url) do |req|
-      req.headers['Content-Type'] = 'application/json'
-      req.headers['Authorization'] = "Bearer #{access_token}"
+    response = paypal_connection(url).post do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = "FLAVORsb-noyt529176316_MP"
       req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(competition)
     end
 
-    JSON.parse(response.body)
+    response.body
   end
 
   class << self
     def paypal_connection(url)
-      conn = Faraday.new(
+      Faraday.new(
         url: url,
-        headers: { 'Authorization' => "Bearer #{generate_access_token}" }
+        headers: {
+          'Authorization' => "Bearer #{generate_access_token}",
+          'Content-Type' => 'application/json',
+        },
       ) do |builder|
         # Sets headers and parses jsons automatically
         builder.request :json
-        builder.request :json
+        builder.response :json
 
         # Raises an error on 4xx and 5xx responses.
         builder.response :raise_error
@@ -97,8 +92,6 @@ module PaypalInterface
         # Logs requests and responses.
         # By default, it only logs the request method and URL, and the request/response headers.
         builder.response :logger
-
-        # faraday.adapter Faraday.default_adapter
       end
     end
   end
