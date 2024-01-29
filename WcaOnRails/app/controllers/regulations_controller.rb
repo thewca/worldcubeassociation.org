@@ -2,14 +2,15 @@
 
 class RegulationsController < ApplicationController
   def render_regulations_from_s3(route)
-    s3 = Aws::S3::Resource.new(
-      region: "us-west-2",
+    bucket = Aws::S3::Resource.new(
+      region: EnvConfig.STORAGE_AWS_REGION,
       credentials: Aws::InstanceProfileCredentials.new,
-    )
+    ).bucket('wca-regulations')
 
-    bucket_name = 'wca-regulations'
-
-    erb_file = s3.bucket(bucket_name).object(route).get.body.read.strip
+    version = bucket.object("version").get.body.read.strip
+    erb_file = Rails.cache.fetch("regulations-file-#{version}-#{route}", expires_in: 7.days) do
+      bucket.object(route).get.body.read.strip
+    end
     render inline: erb_file, :layout => "application"
   end
 
