@@ -3,11 +3,12 @@ import React from 'react';
 class showGuidelines extends React.Component {
     constructor(props) {
         super(props);
+        // Auto-select checkbox if the URL contains a "+".
+        // The user was linked to a Guideline, so we need to show them.
         if (window.location.hash.includes("+")) {
             this.state = {
                 checkboxChecked: true
             };
-            this.showGuidelinesSelected();
         } else {
             this.state = {
                 checkboxChecked: false
@@ -18,10 +19,8 @@ class showGuidelines extends React.Component {
     showGuidelines() {
         if (this.checkbox.checked) {
             this.showGuidelinesSelected();
-            this.state["checkboxChecked"] = true;
         } else {
             this.showGuidelinesNotSelected();
-            this.state["checkboxChecked"] = false;
         }
     }
 
@@ -35,7 +34,17 @@ class showGuidelines extends React.Component {
     showGuidelinesNotSelected() {
         const hiddenGuidelines = document.getElementsByClassName("hidden-guideline");
         for (let i = 0; i < hiddenGuidelines.length; i++) {
-            hiddenGuidelines[i].setAttribute("hidden", "true");  // Consider using "until-found".
+            hiddenGuidelines[i].setAttribute("hidden", "true");
+            // It would be good to use "until-found" instead of "true", but it's not that supported yet.
+        }
+    }
+
+    componentDidMount() {
+        if (this.state["checkboxChecked"]) {
+            this.showGuidelinesSelected();
+            this.checkbox.checked = true;
+        } else {
+            this.showGuidelinesNotSelected();
         }
     }
 
