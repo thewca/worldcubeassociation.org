@@ -43,15 +43,9 @@ RUN apt-get update -qq && \
       fonts-ipafont \
       lmodern \
       libxrender1 \
-      pipx \
       tzdata && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives \
 
-RUN wget https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.4/wkhtmltox-0.12.4_linux-generic-amd64.tar.xz -O wkhtml.tar.xz && tar -xf wkhtml.tar.xz --strip-components=1 -C /usr/local
-
-# Using pipx because PEP668 doesn't allow installing systemwide packages anymore
-RUN pipx ensurepath
-RUN pipx install wrc
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
@@ -64,9 +58,6 @@ RUN yarn install --immutable
 
 # Copy built artifacts: gems, application
 COPY . .
-
-# Build Regulations
-RUN bash -e ./build_regulations_and_docs.sh
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
