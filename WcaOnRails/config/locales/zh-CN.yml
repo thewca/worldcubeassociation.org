@@ -1170,6 +1170,8 @@ zh-CN:
     about_us:
       #original_hash: 3ffb811
       title: 关于我们
+      #original_hash: ed77e4c
+      text: 世界魔方协会负责管理魔方的比赛，这些魔方是通过转动一部分块来操作，通常称为“魔方”（twisty puzzles)。
     competitions:
       #original_hash: db98a68
       title: 比赛
@@ -2507,9 +2509,60 @@ zh-CN:
   about:
     #original_hash: 9ac918a
     title: 关于WCA
+    #original_hash: af00571
+    mission_statement: 我们的使命是：在公平、平等的条件下，在更多国家举办更多、更多人、更有趣的比赛。
+    #original_hash: e627278
+    mission_footer: WCA的使命
+    #original_hash: cdab446
+    who_we_are_title: 我们是谁
+    #original_hash: c0d9a3e
+    who_we_are_content_html: >-
+      <p>世界魔方协会负责管理魔方的比赛，这些魔方是通过转动一部分块来操作，通常称为“魔方”（twisty puzzles)。这些魔方中最著名的是三阶魔方，由匈牙利的鲁比克教授发明。这些魔方中的一部分被选为WCA的官方赛事项目。</p>
+      <p>随着WCA在过去十年的发展，已有超过200,000人参加了我们的比赛。尽管有这样的增长，我们仍然是一个几乎完全由志愿者运营的组织，从当地组织者到WCA代表，甚至WCA董事会。我们非常感谢所有抽出时间为WCA做出贡献的人。有了更多的财政支持后，我们希望在认可全球各地比赛的同时，能够为我们的比赛提升到更高水平的层次。</p>
+    #original_hash: bccd8c5
+    spirit: 我们的精神是：来自世界各地的人们在友好的气氛中一起玩的开心，互相帮助，并表现出运动员的精神。
+    #original_hash: 69131cc
+    spirit_footer: WCA精神
+    #original_hash: c1781ee
+    our_goals_title: 我们的目标
+    #original_hash: 743ca74
+    our_goals_content_html: >-
+      <p>世界魔方协会希望通过增加魔方比赛，为世界各地的年轻人带来参与社群和领导社群的机会。我们相信，比赛和社群内的经历为参与其中的年轻人创造了成长机会，让更多人群接触到魔方，让魔友群体茁壮成长。关于董事会对于WCA愿景与策略的文件可以在<a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">这里</a>查阅。</p>
+    #original_hash: dc71704
+    world_championship_title: 世界锦标赛
+    #original_hash: 57cf7f7
+    world_championship_content_html: '<p>每两年一次，我们将在比赛中决定谁是世界冠军。这些活动需要大量志愿者进行极其仔细的规划，并需要投入大量资金来预订场地并进行必要的准备。</p>'
+    #original_hash: 1aa5344
+    contributing_title: 对我们进行赞助
+    #original_hash: 538a82f
+    contributing_content_html: '您可以使用信用卡在Guidestar %{here_credit}或是Paypal %{here_paypal}平台捐款。如果您希望使用支票，请寄到：'
+    #original_hash: 2af9b71
+    tax_deductible_note: 在美国，捐款可以免税。
+    #original_hash: 6026d35
+    other_help_title: 其他方式的协助
+    #original_hash: cb228f6
+    other_help_content_html: >-
+      <p>如果您希望为WCA提供帮助，我们会感到很高兴！欢迎发送邮件至<a href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>与我们联系。</p>
+    donation_banner:
+      #original_hash: 1aaf818
+      content: >-
+        世界魔方协会是一个 501(c)(3) 免税组织。 作为一个 100% 由志愿者主导的非营利组织，我们欢迎您的捐赠，以帮助我们进一步实现在世界各地举办更有趣的比赛的愿景。
+      #original_hash: 24c87db
+      donate_credit: 用信用卡捐款
+      #original_hash: 0e5a9c3
+      donate_paypal: 用Paypal捐款
+      #original_hash: 96d77f3
+      donate_other: 其他方式捐款
     structure:
+      #original_hash: 0d62207
+      teams_committees_councils: WCA团队、委员会和理事会
       #original_hash: 9482c5d
       title: 组织架构
+      board:
+        #original_hash: abd2828
+        name: WCA董事会
+        #original_hash: e0d37a2
+        description: WCA董事会负责领导整个组织，并履行其他团队、委员会和理事会未履行的任何职责
       #original_hash: d54d953
       committees: WCA的各项活动由以下委员会负责：
       #original_hash: e26c936
