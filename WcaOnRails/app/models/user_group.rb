@@ -47,7 +47,11 @@ class UserGroup < ApplicationRecord
   end
 
   def senior_delegate
-    User.find_by(region_id: self.id, delegate_status: "senior_delegate")
+    if parent_group_id.nil?
+      User.find_by(region_id: self.id, delegate_status: "senior_delegate")
+    else
+      parent_group.senior_delegate
+    end
   end
 
   def roles
