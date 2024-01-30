@@ -117,7 +117,7 @@ RSpec.describe "RegulationsCheck" do
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to eq "NoSuchKey"
+    expect(description).to eq "Error while loading regulations: stubbed-response-error-message from Aws::S3::Errors::NoSuchKey"
   end
 
   it "warns about malformed regulations" do
@@ -129,6 +129,6 @@ RSpec.describe "RegulationsCheck" do
     expect(status).to eq :danger
     # The \d reference is a line number in the external `json` gem which might change every now and then.
     # We want to avoid having to change our tests whenever that library updates.
-    expect(description).to match(/Error while loading regulations: unexpected token at 'i am definitely not json'/)
+    expect(description).to match(/Error while loading regulations: unexpected token at 'i am definitely not json' from JSON::ParserError/)
   end
 end
