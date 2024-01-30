@@ -28,7 +28,7 @@ class Team < ApplicationRecord
   end
 
   # "Official" teams are teams recognized by Motion "10.2019.0":
-  #  https://www.worldcubeassociation.org/documents/motions/10.2019.0%20-%20Committees%20and%20Teams.pdf
+  #  https://documents.worldcubeassociation.org/documents/motions/10.2019.0%20-%20Committees%20and%20Teams.pdf
   # Motions starting with "10.YYYY.N" define these teams:
   #  https://www.worldcubeassociation.org/documents
   def self.all_official
@@ -50,7 +50,7 @@ class Team < ApplicationRecord
   end
 
   # Councils are recognized by Motion "20.2019.0":
-  #  https://www.worldcubeassociation.org/documents/motions/20.2019.0%20-%20Councils.pdf
+  #  https://documents.worldcubeassociation.org/documents/motions/20.2019.0%20-%20Councils.pdf
   # Motions starting with "20.YYYY.N" define these councils:
   #  https://www.worldcubeassociation.org/documents
   def self.all_councils

@@ -46,7 +46,7 @@ ca:
     XF: Països Múltiples (Àfrica)
     #original_hash: 374ac0d
     XM: Països Múltiples (Amèrica)
-    #original_hash: 3f8c9de 
+    #original_hash: 3f8c9de
     XA: Països Múltiples (Àsia)
     #original_hash: 090f3ce
     XE: Països Múltiples (Europa)
@@ -1456,7 +1456,7 @@ ca:
       #original_hash: 3f9db99
       unconfirmed: >-
         Has de confirmar la teva adreça de correu electrònic abans de continuar.
-        No has rebut cap correu? Ves a 
+        No has rebut cap correu? Ves a
         https://www.worldcubeassociation.org/users/confirmation/new per
         demanar-ne un de nou.
     mailer:
@@ -2943,7 +2943,7 @@ ca:
       name_reason_html: >-
         Una breu explicació pel nom de la competició. El nom ha de complir amb
         <a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
         Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
@@ -3846,13 +3846,13 @@ ca:
     our_goals_content_html: >-
       <p>La World Cube Association vol brindar oportunitats per formar part de
       la comunitat i liderar a persones joves d'arreu del món a través
-      d'incrementar l'accessibilitat de les nostres competicions de 
+      d'incrementar l'accessibilitat de les nostres competicions de
       'trencaclosques giratoris'. Creiem que les experiències a les competicions
       i dins de la nostra comunitat creen oportunitats de creixement per la gent
       jove involucrada i que introduir esdeveniments de cubs a grups nous de
       gent ens permet a tota la comunitat ser més forts. El document que conté
       la Visió i Estratègia de l'Executiu per la WCA pot ser trobat <a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Què és el següent per la WCA?
     #original_hash: a08c67f
@@ -4861,7 +4861,7 @@ ca:
       content_html: >-
         La competició ha de ser anunciada com a mínim 28 dies abans de l'inici
         d'aquesta (mira <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
         de Competició</a>). Tanmateix, aquest període és rarament suficient.
         Hauries de considerar tot el que necessitaràs per preparar la competició
         i deixar-te suficient temps per preparar-ho. WCAT també necessitarà
@@ -4926,7 +4926,7 @@ ca:
       content_html: >-
         El nombre de competidors pot ser limitat per categoria o per competició
         (mira <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
         de Competició</a>). El Delegat de la competició ha d'obtenir l'aprovació
         del límit de competidors per part de WCAT. Els límits dels competidors
         s'han de triar amb prudència i d'acord amb l'interès esperat del
