@@ -225,15 +225,18 @@ Rails.application.routes.draw do
   post 'contact/dob' => 'contacts#dob_create'
 
   get '/regulations' => 'regulations#show', id: 'index'
+  get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
   get '/regulations/about' => 'regulations#about'
   get '/regulations/scrambles' => 'regulations#scrambles'
   get '/regulations/guidelines' => 'regulations#guidelines'
   get '/regulations/translations' => 'regulations#translations'
   get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
+  get '/regulations/translations/:language/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/translations/%{language}/wca-regulations-and-guidelines.pdf', status: 302)
   get '/regulations/history' => 'regulations#history'
   get '/regulations/history/official/:id' => 'regulations#historical_regulations'
   get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
+  get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302)
 
   get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
