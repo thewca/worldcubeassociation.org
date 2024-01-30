@@ -102,7 +102,7 @@ RSpec.describe "RegulationsCheck" do
   let(:s3) { Aws::S3::Client.new(stub_responses: true) }
 
   it "passes" do
-    s3.stub_responses(:get_object, -> { "{}" })
+    s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
@@ -111,7 +111,7 @@ RSpec.describe "RegulationsCheck" do
   end
 
   it "warns about missing regulations" do
-    s3.stub_responses(:get_object, -> { "NoSuchKey" })
+    s3.stub_responses(:get_object, ->(_) { "NoSuchKey" })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
@@ -121,7 +121,7 @@ RSpec.describe "RegulationsCheck" do
   end
 
   it "warns about malformed regulations" do
-    s3.stub_responses(:get_object, -> { "i am definitely not json" })
+    s3.stub_responses(:get_object, ->(_) { { body: "i am definitely not json" } })
     Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
