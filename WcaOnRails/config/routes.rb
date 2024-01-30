@@ -232,7 +232,7 @@ Rails.application.routes.draw do
   get '/regulations/translations' => 'regulations#translations'
   get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
-  get '/regulations/translations/:language/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/translations/%{language}/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/translations/:language/:pdf' => "regulations_translations#translated_pdfs"
   get '/regulations/history' => 'regulations#history'
   get '/regulations/history/official/:id' => 'regulations#historical_regulations'
   get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
