@@ -99,11 +99,11 @@ end
 
 RSpec.describe "RegulationsCheck" do
   let(:check) { RegulationsCheck.new }
+  let(:s3) { Aws::S3::Client.new(stub_responses: true) }
 
   it "passes" do
-    allow(File).to receive(:read).with(any_args).and_call_original
-    allow(File).to receive(:read).with(Regulation::REGULATIONS_JSON_PATH).and_return("{}")
-    Regulation.reload_regulations
+    s3.stub_responses(:get_object, -> { "{}" })
+    Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
     expect(status).to eq :success
@@ -111,20 +111,18 @@ RSpec.describe "RegulationsCheck" do
   end
 
   it "warns about missing regulations" do
-    allow(File).to receive(:read).with(any_args).and_call_original
-    allow(File).to receive(:read).with(Regulation::REGULATIONS_JSON_PATH).and_raise(Errno::ENOENT.new)
-    Regulation.reload_regulations
+    s3.stub_responses(:get_object, -> { "NoSuchKey" })
+    Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
 
     expect(status).to eq :danger
-    expect(description).to eq "Error while loading regulations: No such file or directory"
+    expect(description).to eq "NoSuchKey"
   end
 
   it "warns about malformed regulations" do
-    allow(File).to receive(:read).with(any_args).and_call_original
-    allow(File).to receive(:read).with(Regulation::REGULATIONS_JSON_PATH).and_return("i am definitely not json")
-    Regulation.reload_regulations
+    s3.stub_responses(:get_object, -> { "i am definitely not json" })
+    Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     status, description = check.status_description
 
