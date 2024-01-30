@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_27_053701) do
+ActiveRecord::Schema[7.1].define(version: 2024_01_30_055245) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -641,6 +641,22 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_27_053701) do
     t.string "country_iso2", null: false
     t.index ["competition_id", "wcif_id"], name: "index_competition_venues_on_competition_id_and_wcif_id", unique: true
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
+  end
+
+  create_table "connected_payment_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "connected_account_type", null: false
+    t.bigint "connected_account_id", null: false
+    t.bigint "competition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_connected_payment_accounts_on_competition_id"
+    t.index ["connected_account_type", "connected_account_id"], name: "index_connected_payment_accounts_on_connected_account"
+  end
+
+  create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "country_bands", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
