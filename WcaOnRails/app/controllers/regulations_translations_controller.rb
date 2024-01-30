@@ -35,9 +35,6 @@ class RegulationsTranslationsController < ApplicationController
 
   def translated_pdfs
     respond_to do |format|
-      format.html do
-        return WcaExceptions::NotFound.new("This route only responds to pdfs")
-      end
       format.pdf do
         return redirect_to "https://regulations.worldcubeassociation.org/translations/#{params[:language]}/#{params[:pdf]}.pdf", status: 302, allow_other_host:true
       end
