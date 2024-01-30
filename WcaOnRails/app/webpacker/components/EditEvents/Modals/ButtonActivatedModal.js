@@ -73,8 +73,7 @@ export default function ButtonActivatedModal({
         disabled={disabled}
         {...triggerButtonProps}
         size="small"
-        className="editable-text-button"
-        >
+      >
         {trigger}
       </Button>
     </span>

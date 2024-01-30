@@ -237,7 +237,7 @@ $venue-map-wrapper-height: 400px;
       background-color: $table-bg-accent;
     }
 
-    li {
+    .item, li {
       padding: 5px 10px;
       font-size: 13px;
 
@@ -426,3 +426,7 @@ table.admin-competitions {
 .championship-trophy {
   color: $orange;
 }
+
+.leaflet-control { z-index: 0 !important}
+.leaflet-pane { z-index: 0 !important}
+.leaflet-top, .leaflet-bottom {z-index: 0 !important}

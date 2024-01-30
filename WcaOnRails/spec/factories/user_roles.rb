@@ -17,6 +17,15 @@ FactoryBot.define do
       metadata { FactoryBot.create(:translator_en_role_metadata) }
     end
 
+    factory :delegate_regions_role do
+      factory :senior_delegate_role do
+        user { FactoryBot.create(:user) }
+        group { FactoryBot.create(:delegate_region_americas) }
+        start_date { Date.today }
+        metadata { FactoryBot.create(:senior_delegate_role_metadata) }
+      end
+    end
+
     factory :regional_delegate_role do
       user { FactoryBot.create(:user) }
       group_id { FactoryBot.create(:africa_region).id }

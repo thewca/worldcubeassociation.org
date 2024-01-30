@@ -34,24 +34,31 @@ class SyncMailingListsJob < WcaCronjob
     delegate_emails = []
     trainee_emails = []
     senior_emails = []
-    UserGroup.delegate_region_groups.each do |region|
+    active_root_delegate_regions = UserGroup.delegate_region_groups.where(parent_group_id: nil, is_active: true)
+    active_root_delegate_regions.each do |region|
       region_emails = []
-      region.roles.each do |role|
-        region_emails << role[:user][:email]
-        if role[:metadata][:status] == "trainee_delegate"
-          trainee_emails << role[:user][:email]
+      (region.active_roles + region.active_child_roles).each do |role|
+        is_actual_role = role.is_a?(UserRole)
+        role_email = is_actual_role ? role.user[:email] : role[:user][:email]
+        role_status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+        region_emails << role_email
+        if role_status == "trainee_delegate"
+          trainee_emails << role_email
         else
-          delegate_emails << role[:user][:email]
+          delegate_emails << role_email
         end
-        if role[:metadata][:status] == "senior_delegate"
-          senior_emails << role[:user][:email]
+        if role_status == "senior_delegate"
+          senior_emails << role_email
         end
       end
-      GsuiteMailingLists.sync_group(region.metadata.email, region_emails)
+      region_email_id = region.metadata&.email
+      if region_email_id.present?
+        GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq)
+      end
     end
-    GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails)
-    GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails)
-    GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails)
+    GsuiteMailingLists.sync_group("delegates@worldcubeassociation.org", delegate_emails.uniq)
+    GsuiteMailingLists.sync_group("trainees@worldcubeassociation.org", trainee_emails.uniq)
+    GsuiteMailingLists.sync_group("seniors@worldcubeassociation.org", senior_emails.uniq)
 
     organizations = RegionalOrganization.currently_acknowledged + [Team.board]
     GsuiteMailingLists.sync_group("organizations@worldcubeassociation.org", organizations.map(&:email))

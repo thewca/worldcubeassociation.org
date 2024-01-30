@@ -56,6 +56,7 @@ class PanelController < ApplicationController
       "wrt" => {
         "postingDashboard" => "posting-dashboard",
         "editPerson" => "edit-person",
+        "regionsManager" => "regions-manager",
       },
       "wst" => {
         "translators" => "translators",

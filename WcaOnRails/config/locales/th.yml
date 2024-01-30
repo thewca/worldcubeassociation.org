@@ -338,6 +338,7 @@ th:
     #original_hash: 49d0140
     days:
       zero: '%{count} วัน'
+      one: '%{count} วัน'
       other: '%{count} วัน'
     #original_hash: 203e1b3
     these_events:
