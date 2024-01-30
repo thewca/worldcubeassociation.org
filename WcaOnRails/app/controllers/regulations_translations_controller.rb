@@ -6,10 +6,10 @@ class RegulationsTranslationsController < ApplicationController
   REGULATIONS_TRANSLATIONS_VERSION_FILE = "translations/version"
 
   # We need this so the links for the translated guidelines work
+  private def trailing_slash?(url)
+    url.match(/[^?]+/).to_s.last == '/'
+  end
   private def ensure_trailing_slash
-    def trailing_slash?(url)
-      url.match(/[^?]+/).to_s.last == '/'
-    end
     desired_url = url_for(params.permit!.merge(trailing_slash: true))
     # url_for doesn't always add a trailing slash (it won't add a slash to
     # a url like example.com/index.html, for instance).
