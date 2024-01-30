@@ -9,6 +9,22 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
+  def self.can_user_view?(user, group)
+    return true unless group[:is_hidden]
+    case group[:group_type]
+    when UserGroup.group_types[:delegate_probation]
+      user&.can_manage_delegate_probation?
+    when UserGroup.group_types[:translators]
+      user&.software_team?
+    else
+      false # Don't allow to view any other hidden groups.
+    end
+  end
+
+  def can_user_view?(user)
+    UserRole.can_user_view?(user, group)
+  end
+
   def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end

@@ -77,15 +77,19 @@ class UserGroup < ApplicationRecord
   end
 
   def users
-    if self.group_type == UserGroup.group_types[:delegate_regions]
-      self.roles.map { |role| role[:user] }
-    else
-      self.roles.map(&:user)
-    end
+    self.roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
+  end
+
+  def child_users
+    self.child_roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
   end
 
   def active_users
-    self.active_roles.map(&:user)
+    self.active_roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
+  end
+
+  def active_child_users
+    self.active_child_roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
   end
 
   def lead_role
