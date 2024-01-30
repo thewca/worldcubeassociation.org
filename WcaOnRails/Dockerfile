@@ -32,17 +32,10 @@ RUN apt-get update -qq && \
       build-essential \
       git \
       pkg-config \
-      python-is-python3 \
       mariadb-client \
       libvips \
       libssl-dev \
       libyaml-dev \
-      python3-pip \
-      fonts-unfonts-core \
-      fonts-wqy-microhei \
-      fonts-ipafont \
-      lmodern \
-      libxrender1 \
       tzdata && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives \
 
