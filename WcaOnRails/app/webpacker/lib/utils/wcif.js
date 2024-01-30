@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { DateTime } from 'luxon';
 import { events } from '../wca-data.js.erb';
 import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
@@ -92,10 +93,14 @@ export function activityWcifFromId(scheduleWcif, id) {
   ).find((activity) => activity.id === id);
 }
 
+function areISOTimesTheSame(t1, t2) {
+  return DateTime.fromISO(t1).toMillis() === DateTime.fromISO(t2).toMillis();
+}
+
 export function doActivitiesMatch(a1, a2) {
   return a1.activityCode === a2.activityCode
-    && a1.startTime === a2.startTime
-    && a1.endTime === a2.endTime;
+    && areISOTimesTheSame(a1.startTime, a2.startTime)
+    && areISOTimesTheSame(a1.endTime, a2.endTime);
 }
 
 export function getMatchingActivities(scheduleWcif, activity) {
