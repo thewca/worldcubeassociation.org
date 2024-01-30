@@ -21,6 +21,26 @@ class UserRole < ApplicationRecord
     end
   end
 
+  def self.is_group_type?(role, group_type)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.group.group_type == group_type : role[:group][:group_type] == group_type
+  end
+
+  def self.group(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.group : role[:group]
+  end
+
+  def self.user(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.user : role[:user]
+  end
+
+  def self.is_active?(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.is_active? : role[:is_active]
+  end
+
   def can_user_view?(user)
     UserRole.can_user_view?(user, group)
   end
@@ -32,7 +52,7 @@ class UserRole < ApplicationRecord
   # In future, we will remove the 'self.' and make this a class method.
   def self.is_lead?(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
-    group_type = is_actual_role ? role.group_type : role[:group_type]
+    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
     status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
     case group_type
     when UserGroup.group_types[:delegate_regions]

@@ -1361,19 +1361,11 @@ class User < ApplicationRecord
   end
 
   def subordinate_delegates
-    list = []
-    roles.each do |role|
-      is_actual_role = role.is_a?(UserRole)
-      group = is_actual_role ? role.group : role[:group]
-      group_type = group[:group_type]
-      if group_type == UserGroup.group_types[:delegate_regions]
-        status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
-        if ["senior_delegate", "regional_delegate"].include?(status)
-          list.concat((group.active_users + group.active_child_users).uniq)
-        end
-      end
-    end
-    list
+    roles
+      .filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+      .filter { |role| UserRole.is_lead?(role) }
+      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_child_users }
+      .uniq
   end
 
   def leader_teams

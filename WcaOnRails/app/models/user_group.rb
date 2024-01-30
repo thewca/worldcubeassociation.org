@@ -69,27 +69,27 @@ class UserGroup < ApplicationRecord
   end
 
   def active_roles
-    self.roles.select { |role| role.is_a?(UserRole) ? role.is_active? : role[:is_active] }
+    self.roles.select { |role| UserRole.is_active?(role) }
   end
 
   def active_child_roles
-    self.child_roles.select { |role| role.is_a?(UserRole) ? role.is_active? : role[:is_active] }
+    self.child_roles.select { |role| UserRole.is_active?(role) }
   end
 
   def users
-    self.roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
+    self.roles.map { |role| UserRole.user(role) }
   end
 
   def child_users
-    self.child_roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
+    self.child_roles.map { |role| UserRole.user(role) }
   end
 
   def active_users
-    self.active_roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
+    self.active_roles.map { |role| UserRole.user(role) }
   end
 
   def active_child_users
-    self.active_child_roles.map { |role| role.is_a?(UserRole) ? role.user : role[:user] }
+    self.active_child_roles.map { |role| UserRole.user(role) }
   end
 
   def lead_role
