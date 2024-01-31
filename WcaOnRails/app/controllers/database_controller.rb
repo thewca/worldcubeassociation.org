@@ -24,7 +24,7 @@ class DatabaseController < ApplicationController
   end
 
   def current_results_export(file_type)
-    export_timestamp = Time.new(DbDumpHelper::export_metadata["export_date"])
+    export_timestamp = Time.new(CronjobStatistic.find_by(name: "DumpPublicResultsDatabase").start_date)
 
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
       file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"

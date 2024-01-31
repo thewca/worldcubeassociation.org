@@ -44,11 +44,9 @@ module DbDumpHelper
     end
   end
 
-  def self.dump_results_db
+  def self.dump_results_db(export_timestamp = DateTime.now)
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
-        export_timestamp = DateTime.now
-
         tsv_folder_name = "TSV_export"
         FileUtils.mkpath tsv_folder_name
 
@@ -59,11 +57,9 @@ module DbDumpHelper
           'export_date' => export_timestamp,
         }
         File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
-        self.upload_to_s3("#{S3_BASE_PATH}/#{RESULTS_EXPORT_METADATA}", RESULTS_EXPORT_METADATA)
 
         readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp)
         File.write(RESULTS_EXPORT_README, readme_template)
-        self.upload_to_s3("#{S3_BASE_PATH}/#{RESULTS_EXPORT_README}", RESULTS_EXPORT_README)
 
         sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
         sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
@@ -92,28 +88,16 @@ module DbDumpHelper
     s3_path = "#{S3_BASE_PATH}/#{zip_filename}"
 
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
-      self.upload_to_s3(s3_path, zip_filename)
+      bucket = Aws::S3::Resource.new(
+        region: EnvConfig.STORAGE_AWS_REGION,
+        credentials: Aws::InstanceProfileCredentials.new,
+        ).bucket(BUCKET_NAME)
+      bucket.object(s3_path).upload_file(file)
     end
-  end
-
-  def self.upload_to_s3(s3_path, file)
-    bucket = Aws::S3::Resource.new(
-      region: EnvConfig.STORAGE_AWS_REGION,
-      credentials: Aws::InstanceProfileCredentials.new,
-      ).bucket(BUCKET_NAME)
-    bucket.object(s3_path).upload_file(file)
   end
 
   def self.use_staging_password?
     Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
   end
 
-  def self.export_metadata
-    s3_path = "#{S3_BASE_PATH}/#{RESULTS_EXPORT_METADATA}"
-    bucket = Aws::S3::Resource.new(
-      region: EnvConfig.STORAGE_AWS_REGION,
-      credentials: Aws::InstanceProfileCredentials.new,
-      ).bucket(BUCKET_NAME)
-    JSON.parse(bucket.object(s3_path).get.body.read)
-  end
 end
