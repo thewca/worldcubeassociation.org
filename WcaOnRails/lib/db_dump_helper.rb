@@ -38,8 +38,9 @@ module DbDumpHelper
         end
 
         DatabaseDumper.development_dump(DEVELOPER_EXPORT_SQL)
+        zip_file_name = File.basename(DEVELOPER_EXPORT_SQL_PERMALINK)
 
-        self.zip_and_upload_to_s3(DEVELOPER_EXPORT_FOLDER, DEVELOPER_EXPORT_SQL)
+        self.zip_and_upload_to_s3(zip_file_name, DEVELOPER_EXPORT_SQL_PERMALINK, DEVELOPER_EXPORT_SQL)
       end
     end
   end
@@ -64,7 +65,7 @@ module DbDumpHelper
         sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
         sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
 
-        self.zip_and_upload_to_s3(sql_zip_filename, *sql_zip_contents)
+        self.zip_and_upload_to_s3(sql_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{sql_zip_filename}", *sql_zip_contents)
 
         tsv_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.tsv.zip"
         tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
@@ -73,26 +74,24 @@ module DbDumpHelper
         end
 
         tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
-        self.zip_and_upload_to_s3(tsv_zip_filename, *tsv_zip_contents)
+        self.zip_and_upload_to_s3(tsv_zip_filename, "#{RESULTS_EXPORT_FOLDER}/#{tsv_zip_filename}", *tsv_zip_contents)
       end
     end
   end
 
-  def self.zip_and_upload_to_s3(zip_filename, *zip_contents)
+  def self.zip_and_upload_to_s3(zip_filename, s3_path, *zip_contents)
     zip_file_list = zip_contents.join(" ")
 
     LogTask.log_task "Zipping #{zip_contents.length} file entries to '#{zip_filename}'" do
-      system("zip #{zip_filename} #{zip_file_list}") || raise("Error running `zip`")
+      system("zip #{zip_filename} #{zip_file_list}", exception: true)
     end
-
-    s3_path = "#{S3_BASE_PATH}/#{zip_filename}"
 
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::InstanceProfileCredentials.new,
         ).bucket(BUCKET_NAME)
-      bucket.object(s3_path).upload_file(file)
+      bucket.object(s3_path).upload_file(zip_filename)
     end
   end
 
