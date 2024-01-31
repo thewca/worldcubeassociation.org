@@ -4,10 +4,18 @@
   <h1>Accept Registration Payments</h1>
 
   <%= alert :warning do %>
-    Please make sure the currency you have selected is supported by your Stripe
-    account! The supported currencies depends on the country where the Stripe
-    account is based, you can check them <%= link_to "here", "https://support.stripe.com/questions/which-currencies-does-stripe-support#supportedcurrencies", target: '_blank' %>.
+    Please make sure the currency you have selected is supported by your chosen payment integration!
+    The supported currencies will depend on the country where the account
+    account is based, you can check them below:
+    <ul>
+      <li><%= link_to "Stripe Supported Currencies", "https://support.stripe.com/questions/which-currencies-does-stripe-support#supportedcurrencies", target: '_blank' %></li>
+      <li><%= link_to "PayPal Supported Currencies", "https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/", target: '_blank' %></li>
+    </ul>
   <% end %>
+
+  <h2>Connect Stripe</h2>
+
+
 
   <% if @competition.connected_stripe_account_id.nil? %>
     <p>
@@ -17,10 +25,10 @@
       still click on the button below and it will guide you through the
       process.
     </p>
-    <p>
+    <p><b>
       Connecting your Stripe account gives the WCA website the ability to
       create charges, and issue refunds directly on your Stripe account.
-    </p>
+    </b></p>
     <%= link_to @authorize_url, class: "btn btn-primary" do %>
       <%= ui_icon("cc stripe") %> Connect with Stripe
     <% end %>
@@ -45,14 +53,12 @@
 
   <% end %>
 
-  <%= puts CompetitionPaymentIntegration.paypal_connected?(@competition) %>
+  <h2>Connect PayPal</h2>
+
   <% if CompetitionPaymentIntegration.paypal_connected?(@competition) %>
 
     <p>
-      This competition is set up to accept payments through Paypal.
-      If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard
-      <%= link_to "here", "https://dashboard.stripe.com/account/applications" %> (please note it will revoke access for all competitions using the account).
-      Before a new Stripe account can be connected, please request your Delegate to reach out to WCAT to clear the entry.
+      This competition is set up to accept payments through Paypal. Note that clicking disconnecting here will *not* revoke the permissions you have granted to the WCA - this must be done from your PayPal account.
     </p>
     <p>
       Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments.
@@ -67,15 +73,19 @@
   <% else %>
 
     <p>
-      Connect a paypal account:
+      A PayPal business account is required to accept PayPal payments via the competition page.
     </p>
+    <p>
+      If you don't already have a PayPal business account, you can still click on the button below
+      and it will guide you through the process.
+    </p>
+    <p><b>
+      Connecting your PayPal account gives the WCA website the ability to route payments
+      to you, and issue refunds directly from your PayPal account.
+    </b></p>
     <%= puts @paypal_onboarding_url %>
     <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
       <%= ui_icon("cc stripe") %> Connect with Paypal
     <% end %>
   <% end %>
-
-
-
-
-  <% end %>
+<% end %>
