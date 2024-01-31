@@ -1707,6 +1707,7 @@ en:
     orga_close_reg_confirm: "Are you sure you want to close registration? You cannot undo this."
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
     stripe_disconnect: "Disconnect Stripe account"
+    paypal_disconnect: "Disconnect Paypal account"
     stripe_disconnect_confirm: "Are you sure you want to disconnect the Stripe account? This action cannot be undone."
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:

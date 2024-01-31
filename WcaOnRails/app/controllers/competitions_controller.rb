@@ -43,7 +43,7 @@ class CompetitionsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
 
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe]
+  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe, :disconnect_paypal]
 
   before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
 
@@ -338,13 +338,22 @@ class CompetitionsController < ApplicationController
     @authorize_url = client.auth_code.authorize_url(oauth_params)
 
     # Paypal setup URL
+    # TODO: Don't generate this URL if there is already a connected paypal account?
     @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id)
   end
 
   def paypal_return
     @competition = competition_from_params
 
-    @competition.connected_stripe_account_id = params["merchantIdInPayPal"]
+    account_reference = ConnectedPaypalAccount.new(
+      paypal_merchant_id: params[:merchantIdInPayPal],
+      permissions_granted: params[:permissionsGranted],
+      account_status: params[:accountStatus],
+      consent_status: params[:consentStatus],
+    )
+
+    @competition.competition_payment_integrations.new(connected_account: account_reference)
+
     if @competition.save
       flash[:success] = t('competitions.messages.stripe_connected')
     else
@@ -380,6 +389,13 @@ class CompetitionsController < ApplicationController
     }
 
     OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
+  end
+
+  def disconnect_paypal
+    @competition = competition_from_params
+    CompetitionPaymentIntegration.disconnect(@competition, 'paypal')
+
+    redirect_to competitions_payment_setup_path(@competition)
   end
 
   def disconnect_stripe

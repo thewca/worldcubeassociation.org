@@ -168,6 +168,7 @@ Rails.application.routes.draw do
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
   post 'competitions/:id/orga_close_reg_when_full_limit' => 'competitions#orga_close_reg_when_full_limit', as: :competition_orga_close_reg_when_full_limit
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
+  post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
 
   get 'panel' => 'panel#index'
   get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)

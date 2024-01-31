@@ -25,14 +25,6 @@
       <%= ui_icon("cc stripe") %> Connect with Stripe
     <% end %>
 
-    <p>
-      Alternatively, you can connect a Paypal account:
-    </p>
-    <%= puts @paypal_onboarding_url %>
-    <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
-      <%= ui_icon("cc stripe") %> Connect with Paypal
-    <% end %>
-
   <% else %>
     <p>
       This competition is set up to accept payments through Stripe.
@@ -44,11 +36,46 @@
       Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments.
     </p>
 
+    <% if current_user&.can_admin_competitions? %>
+      <%= button_to competition_disconnect_stripe_path, class: 'btn btn-danger', disabled: @competition.connected_stripe_account_id.nil?, method: :post, data: { confirm: t('competitions.stripe_disconnect_confirm') } do %>
+        <%= t 'competitions.stripe_disconnect' %>
+      <% end %>
+    <% end %>
+
+
   <% end %>
 
-  <% if current_user&.can_admin_competitions? %>
-    <%= button_to competition_disconnect_stripe_path, class: 'btn btn-danger', disabled: @competition.connected_stripe_account_id.nil?, method: :post, data: { confirm: t('competitions.stripe_disconnect_confirm') } do %>
-      <%= t 'competitions.stripe_disconnect' %>
+  <%= puts CompetitionPaymentIntegration.paypal_connected?(@competition) %>
+  <% if CompetitionPaymentIntegration.paypal_connected?(@competition) %>
+
+    <p>
+      This competition is set up to accept payments through Paypal.
+      If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard
+      <%= link_to "here", "https://dashboard.stripe.com/account/applications" %> (please note it will revoke access for all competitions using the account).
+      Before a new Stripe account can be connected, please request your Delegate to reach out to WCAT to clear the entry.
+    </p>
+    <p>
+      Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments.
+    </p>
+
+    <% if current_user&.can_admin_competitions? %>
+      <%= button_to competition_disconnect_paypal_path, class: 'btn btn-danger' do %>
+        <%= t 'competitions.paypal_disconnect' %>
+      <% end %>
+    <% end %>
+
+  <% else %>
+
+    <p>
+      Connect a paypal account:
+    </p>
+    <%= puts @paypal_onboarding_url %>
+    <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
+      <%= ui_icon("cc stripe") %> Connect with Paypal
     <% end %>
   <% end %>
-<% end %>
+
+
+
+
+  <% end %>

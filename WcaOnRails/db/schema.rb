@@ -613,6 +613,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_30_055245) do
     t.index ["organizer_id"], name: "index_competition_organizers_on_organizer_id"
   end
 
+  create_table "competition_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "connected_account_type", null: false
+    t.bigint "connected_account_id", null: false
+    t.string "competition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_competition_payment_integrations_on_competition_id"
+    t.index ["connected_account_type", "connected_account_id"], name: "index_competition_payment_integrations_on_connected_account"
+  end
+
   create_table "competition_series", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "wcif_id", null: false
     t.string "name"
@@ -643,18 +653,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_30_055245) do
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
   end
 
-  create_table "connected_payment_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "connected_account_type", null: false
-    t.bigint "connected_account_id", null: false
-    t.bigint "competition_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["competition_id"], name: "index_connected_payment_accounts_on_competition_id"
-    t.index ["connected_account_type", "connected_account_id"], name: "index_connected_payment_accounts_on_connected_account"
-  end
-
   create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "account_id"
+    t.string "paypal_merchant_id"
+    t.string "permissions_granted"
+    t.string "account_status"
+    t.string "consent_status"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
