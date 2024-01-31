@@ -4,8 +4,10 @@ class DatabaseController < ApplicationController
   RESULTS_README_TEMPLATE = 'database/public_results_readme'
 
   def results_export
-    @sql_rel_path, @sql_filesize = get_current_export("sql")
-    @tsv_rel_path, @tsv_filesize = get_current_export("tsv")
+    @sql_path, @sql_filesize = get_current_export("sql")
+    @tsv_path, @tsv_filesize = get_current_export("tsv")
+    @sql_filename = File.basename(@sql_path)
+    @tsv_filename = File.basename(@tsv_path)
 
     @sql_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK}"
     @tsv_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK}"
