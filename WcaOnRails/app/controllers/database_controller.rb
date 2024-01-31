@@ -14,12 +14,12 @@ class DatabaseController < ApplicationController
   end
 
   def sql_permalink
-    url, _ = current_results_export("sql")
+    url, = current_results_export("sql")
     redirect_to url, status: 301, allow_other_host: true
   end
 
   def tsv_permalink
-    url, _ = current_results_export("sql")
+    url, = current_results_export("sql")
     redirect_to url, status: 301, allow_other_host: true
   end
 
@@ -31,7 +31,7 @@ class DatabaseController < ApplicationController
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::InstanceProfileCredentials.new,
-        ).bucket(DbDumpHelper::BUCKET_NAME)
+      ).bucket(DbDumpHelper::BUCKET_NAME)
       filesize_bytes = bucket.object(file_name).content_length
       ["https://s3.#{EnvConfig.AWS_STORAGE_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{file_name}", filesize_bytes]
     end
