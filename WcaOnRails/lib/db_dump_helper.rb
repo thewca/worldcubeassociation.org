@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module DbDumpHelper
-  EXPORT_PUBLIC_FOLDER = Rails.root.join('public', 'export')
+  S3_BASE_PATH = "/export/"
 
-  RESULTS_EXPORT_FOLDER = EXPORT_PUBLIC_FOLDER.join('results')
+  RESULTS_EXPORT_FOLDER = "#{S3_BASE_PATH}/results"
   RESULTS_EXPORT_FILENAME = 'WCA_export'
   RESULTS_EXPORT_SQL = "#{RESULTS_EXPORT_FILENAME}.sql".freeze
   RESULTS_EXPORT_README = 'README.md'
@@ -11,11 +11,11 @@ module DbDumpHelper
   RESULTS_EXPORT_SQL_PERMALINK = "#{RESULTS_EXPORT_SQL}.zip".freeze
   RESULTS_EXPORT_TSV_PERMALINK = "#{RESULTS_EXPORT_FILENAME}.tsv.zip".freeze
 
-  DEVELOPER_EXPORT_FOLDER = EXPORT_PUBLIC_FOLDER.join('developer')
+  DEVELOPER_EXPORT_FOLDER = "#{S3_BASE_PATH}/developer"
   DEVELOPER_EXPORT_FILENAME = 'wca-developer-database-dump'
   DEVELOPER_EXPORT_SQL = "#{DEVELOPER_EXPORT_FILENAME}.sql".freeze
   DEVELOPER_EXPORT_SQL_PERMALINK = "#{DEVELOPER_EXPORT_FILENAME}.zip".freeze
-
+  BUCKET_NAME = 'assets.worldcubeassociation.org'
   DEFAULT_DEV_PASSWORD = 'wca'
 
   def self.dump_developer_db
@@ -39,7 +39,7 @@ module DbDumpHelper
 
         DatabaseDumper.development_dump(DEVELOPER_EXPORT_SQL)
 
-        self.zip_and_permalink(DEVELOPER_EXPORT_FOLDER, DEVELOPER_EXPORT_SQL_PERMALINK, nil, DEVELOPER_EXPORT_SQL)
+        self.zip_and_upload_to_s3(DEVELOPER_EXPORT_FOLDER, DEVELOPER_EXPORT_SQL)
       end
     end
   end
@@ -59,17 +59,16 @@ module DbDumpHelper
           'export_date' => export_timestamp,
         }
         File.write(RESULTS_EXPORT_METADATA, JSON.dump(metadata))
+        self.upload_to_s3("#{S3_BASE_PATH}/#{RESULTS_EXPORT_METADATA}", RESULTS_EXPORT_METADATA)
 
         readme_template = DatabaseController.render_readme(ActionController::Base.new, export_timestamp)
         File.write(RESULTS_EXPORT_README, readme_template)
-
-        # Remove old exports to save storage space
-        FileUtils.rm_r RESULTS_EXPORT_FOLDER, force: true, secure: true
+        self.upload_to_s3("#{S3_BASE_PATH}/#{RESULTS_EXPORT_README}", RESULTS_EXPORT_README)
 
         sql_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.sql.zip"
         sql_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README, RESULTS_EXPORT_SQL]
 
-        self.zip_and_permalink(RESULTS_EXPORT_FOLDER, sql_zip_filename, RESULTS_EXPORT_SQL_PERMALINK, *sql_zip_contents)
+        self.zip_and_upload_to_s3(sql_zip_filename, *sql_zip_contents)
 
         tsv_zip_filename = "WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.tsv.zip"
         tsv_files = Dir.glob("#{tsv_folder_name}/*.tsv").map do |tsv|
@@ -78,34 +77,43 @@ module DbDumpHelper
         end
 
         tsv_zip_contents = [RESULTS_EXPORT_METADATA, RESULTS_EXPORT_README] | tsv_files
-        self.zip_and_permalink(RESULTS_EXPORT_FOLDER, tsv_zip_filename, RESULTS_EXPORT_TSV_PERMALINK, *tsv_zip_contents)
+        self.zip_and_upload_to_s3(tsv_zip_filename, *tsv_zip_contents)
       end
     end
   end
 
-  def self.zip_and_permalink(root_folder, zip_filename, permalink_filename = nil, *zip_contents)
+  def self.zip_and_upload_to_s3(zip_filename, *zip_contents)
     zip_file_list = zip_contents.join(" ")
 
     LogTask.log_task "Zipping #{zip_contents.length} file entries to '#{zip_filename}'" do
       system("zip #{zip_filename} #{zip_file_list}") || raise("Error running `zip`")
     end
 
-    public_zip_path = root_folder.join(zip_filename)
+    s3_path = "#{S3_BASE_PATH}/#{zip_filename}"
 
-    LogTask.log_task "Moving zipped file to '#{public_zip_path}'" do
-      FileUtils.mkpath(File.dirname(public_zip_path))
-      FileUtils.mv(zip_filename, public_zip_path)
-
-      if permalink_filename.present?
-        permalink_zip_path = root_folder.join(permalink_filename)
-
-        # Writing a RELATIVE link, so that we can do readlink in dev and prod and not care about stuff like Docker
-        FileUtils.ln_s(zip_filename, permalink_zip_path, force: true)
-      end
+    LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
+      self.upload_to_s3(s3_path, zip_filename)
     end
+  end
+
+  def self.upload_to_s3(s3_path, file)
+    bucket = Aws::S3::Resource.new(
+      region: EnvConfig.STORAGE_AWS_REGION,
+      credentials: Aws::InstanceProfileCredentials.new,
+      ).bucket(BUCKET_NAME)
+    bucket.object(s3_path).upload_file(file)
   end
 
   def self.use_staging_password?
     Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+  end
+
+  def self.export_metadata
+    s3_path = "#{S3_BASE_PATH}/#{RESULTS_EXPORT_METADATA}"
+    bucket = Aws::S3::Resource.new(
+      region: EnvConfig.STORAGE_AWS_REGION,
+      credentials: Aws::InstanceProfileCredentials.new,
+      ).bucket(BUCKET_NAME)
+    JSON.parse(bucket.object(s3_path).get.body.read)
   end
 end
