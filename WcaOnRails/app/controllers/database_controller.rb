@@ -11,22 +11,20 @@ class DatabaseController < ApplicationController
     @tsv_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK}"
   end
 
-  def results_permalink
-    type = if request.env['REQUEST_URI'].include?("tsv")
-             "tsv"
-           else
-             "sql"
-           end
-    link, _ = get_current_export(type)
-    respond_to do |format|
-      format.zip { redirect_to link, status: 301 }
-    end
+  def sql_permalink
+    url, _ = get_current_export("sql")
+    redirect_to url, status: 301, allow_other_host: true
+  end
+
+  def tsv_permalink
+    url, _ = get_current_export("sql")
+    redirect_to url, status: 301, allow_other_host: true
   end
 
   def get_current_export(type)
-    export_timestamp = DbDumpHelper::export_metadata["export_date"]
+    export_timestamp = Time.new(DbDumpHelper::export_metadata["export_date"])
 
-    Rails.cache.fetch("database-export-#{export_timestamp}-#{type}") do
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{type}", expires_in: 2.days) do
       file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{type}.zip"
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
