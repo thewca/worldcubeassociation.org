@@ -1197,7 +1197,7 @@ zh-CN:
       #original_hash: 3ffb811
       title: 关于我们
       #original_hash: ed77e4c
-      text: 世界魔方协会负责管理魔方的比赛，这些魔方是通过转动一部分块来操作，通常称为“魔方”（twisty puzzles)。
+      text: 世界魔方协会负责管理魔方的比赛，这些魔方是通过转动魔方的一部分来操作，通常称为“魔方”（twisty puzzles)。
     competitions:
       #original_hash: db98a68
       title: 比赛
@@ -2536,14 +2536,14 @@ zh-CN:
     #original_hash: 9ac918a
     title: 关于WCA
     #original_hash: af00571
-    mission_statement: 我们的使命是：在公平、平等的条件下，在更多国家举办更多、更多人、更有趣的比赛。
+    mission_statement: 我们的使命是：在公平、平等的条件下，在更多国家举办更多更有趣的比赛，并让更多人参与。
     #original_hash: e627278
     mission_footer: WCA的使命
     #original_hash: cdab446
     who_we_are_title: 我们是谁
     #original_hash: c0d9a3e
     who_we_are_content_html: >-
-      <p>世界魔方协会负责管理魔方的比赛，这些魔方是通过转动一部分块来操作，通常称为“魔方”（twisty puzzles)。这些魔方中最著名的是三阶魔方，由匈牙利的鲁比克教授发明。这些魔方中的一部分被选为WCA的官方赛事项目。</p>
+      <p>世界魔方协会负责管理魔方的比赛，这些魔方是通过转动魔方的一部分来操作，通常称为“魔方”（twisty puzzles)。这些魔方中最著名的是三阶魔方，由匈牙利的鲁比克教授发明。这些魔方中的一部分被选为WCA的官方赛事项目。</p>
       <p>随着WCA在过去十年的发展，已有超过200,000人参加了我们的比赛。尽管有这样的增长，我们仍然是一个几乎完全由志愿者运营的组织，从当地组织者到WCA代表，甚至WCA董事会。我们非常感谢所有抽出时间为WCA做出贡献的人。有了更多的财政支持后，我们希望在认可全球各地比赛的同时，能够为我们的比赛提升到更高水平的层次。</p>
     #original_hash: bccd8c5
     spirit: 我们的精神是：来自世界各地的人们在友好的气氛中一起玩的开心，互相帮助，并表现出运动员的精神。
@@ -2557,13 +2557,13 @@ zh-CN:
     #original_hash: dc71704
     world_championship_title: 世界锦标赛
     #original_hash: 57cf7f7
-    world_championship_content_html: '<p>每两年一次，我们将在比赛中决定谁是世界冠军。这些活动需要大量志愿者进行极其仔细的规划，并需要投入大量资金来预订场地并进行必要的准备。</p>'
+    world_championship_content_html: '<p>每两年，我们都会批准最终决定世界冠军的比赛。这些活动需要大量志愿者进行极其仔细的规划，并需要投入大量资金来预订场地并进行必要的准备。</p>'
     #original_hash: 1aa5344
     contributing_title: 对我们进行赞助
     #original_hash: 538a82f
     contributing_content_html: '您可以使用信用卡在Guidestar %{here_credit}或是Paypal %{here_paypal}平台捐款。如果您希望使用支票，请寄到：'
     #original_hash: 2af9b71
-    tax_deductible_note: 在美国，捐款可以免税。
+    tax_deductible_note: 在美国，捐款可以抵税。
     #original_hash: 6026d35
     other_help_title: 其他方式的协助
     #original_hash: cb228f6
@@ -2578,7 +2578,7 @@ zh-CN:
       #original_hash: 0e5a9c3
       donate_paypal: 用Paypal捐款
       #original_hash: 96d77f3
-      donate_other: 其他方式捐款
+      donate_other: 其他方式的协助
     structure:
       #original_hash: 0d62207
       teams_committees_councils: WCA团队、委员会和理事会
@@ -2664,7 +2664,7 @@ zh-CN:
         description: 该组负责审核和公示WCA比赛，并确保此类比赛符合WCA标准。
       wmt:
         #original_hash: 2035811
-        name: WCA市场组
+        name: WCA市场营销组
         #original_hash: f2a0140
         description: 该团队负责开发和管理WCA品牌、寻求赞助、支持WCA竞赛装备的分销以及营销WCA商品。
       weat:
