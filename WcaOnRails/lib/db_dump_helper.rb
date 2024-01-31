@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 module DbDumpHelper
-  S3_BASE_PATH = "/export/"
+  S3_BASE_PATH = "export"
 
-  RESULTS_EXPORT_FOLDER = "#{S3_BASE_PATH}/results"
+  RESULTS_EXPORT_FOLDER = "#{S3_BASE_PATH}/results".freeze
   RESULTS_EXPORT_FILENAME = 'WCA_export'
   RESULTS_EXPORT_SQL = "#{RESULTS_EXPORT_FILENAME}.sql".freeze
   RESULTS_EXPORT_README = 'README.md'
@@ -11,8 +11,8 @@ module DbDumpHelper
   RESULTS_EXPORT_SQL_PERMALINK = "#{RESULTS_EXPORT_SQL}.zip".freeze
   RESULTS_EXPORT_TSV_PERMALINK = "#{RESULTS_EXPORT_FILENAME}.tsv.zip".freeze
 
-  DEVELOPER_EXPORT_FOLDER = "#{S3_BASE_PATH}/developer"
-  DEVELOPER_EXPORT_FILENAME = 'wca-developer-database-dump'
+  DEVELOPER_EXPORT_FOLDER = "#{S3_BASE_PATH}/developer".freeze
+  DEVELOPER_EXPORT_FILENAME = "#{DEVELOPER_EXPORT_FOLDER}/wca-developer-database-dump".freeze
   DEVELOPER_EXPORT_SQL = "#{DEVELOPER_EXPORT_FILENAME}.sql".freeze
   DEVELOPER_EXPORT_SQL_PERMALINK = "#{DEVELOPER_EXPORT_FILENAME}.zip".freeze
   BUCKET_NAME = 'assets.worldcubeassociation.org'
