@@ -4,8 +4,8 @@ class DatabaseController < ApplicationController
   RESULTS_README_TEMPLATE = 'database/public_results_readme'
 
   def results_export
-    @sql_path, @sql_filesize = get_current_results_export("sql")
-    @tsv_path, @tsv_filesize = get_current_results_export("tsv")
+    @sql_path, @sql_filesize = current_results_export("sql")
+    @tsv_path, @tsv_filesize = current_results_export("tsv")
     @sql_filename = File.basename(@sql_path)
     @tsv_filename = File.basename(@tsv_path)
 
@@ -14,16 +14,16 @@ class DatabaseController < ApplicationController
   end
 
   def sql_permalink
-    url, _ = get_current_results_export("sql")
+    url, _ = current_results_export("sql")
     redirect_to url, status: 301, allow_other_host: true
   end
 
   def tsv_permalink
-    url, _ = get_current_results_export("sql")
+    url, _ = current_results_export("sql")
     redirect_to url, status: 301, allow_other_host: true
   end
 
-  def get_current_results_export(file_type)
+  def current_results_export(file_type)
     export_timestamp = Time.new(DbDumpHelper::export_metadata["export_date"])
 
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
