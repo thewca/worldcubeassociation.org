@@ -310,11 +310,10 @@ GEM
       railties (>= 5.0.0)
     faker (3.2.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.8.1)
-      base64
-      faraday-net_http (>= 2.0, < 3.1)
-      ruby2_keywords (>= 0.0.4)
-    faraday-net_http (3.0.2)
+    faraday (2.9.0)
+      faraday-net_http (>= 2.0, < 3.2)
+    faraday-net_http (3.1.0)
+      net-http
     faraday-retry (2.2.0)
       faraday (~> 2.0)
     ffi (1.16.3)
@@ -469,6 +468,8 @@ GEM
     mutex_m (0.2.0)
     mysql2 (0.5.5)
     nenv (0.3.0)
+    net-http (0.4.1)
+      uri
     net-imap (0.4.7)
       date
       net-protocol
@@ -760,6 +761,7 @@ GEM
       kgio (~> 2.6)
       raindrops (~> 0.7)
     uniform_notifier (1.16.0)
+    uri (0.13.0)
     valid_email (0.2.0)
       activemodel
       mail (>= 2.6.1)
