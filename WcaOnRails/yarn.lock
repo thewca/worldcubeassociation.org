@@ -9513,7 +9513,7 @@ __metadata:
     shakapacker: "npm:7.2.1"
     style-loader: "npm:^3.3.4"
     stylelint: "npm:^16.2.1"
-    stylelint-config-recommended-scss: "npm:^13.1.0"
+    stylelint-config-recommended-scss: "npm:^14.0.0"
     stylelint-scss: "npm:^6.1.0"
     terser-webpack-plugin: "npm:^5.3.10"
     webpack: "npm:^5.90.1"
@@ -10232,48 +10232,33 @@ __metadata:
   languageName: node
   linkType: hard
 
-"stylelint-config-recommended-scss@npm:^13.1.0":
-  version: 13.1.0
-  resolution: "stylelint-config-recommended-scss@npm:13.1.0"
+"stylelint-config-recommended-scss@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "stylelint-config-recommended-scss@npm:14.0.0"
   dependencies:
     postcss-scss: "npm:^4.0.9"
-    stylelint-config-recommended: "npm:^13.0.0"
-    stylelint-scss: "npm:^5.3.0"
+    stylelint-config-recommended: "npm:^14.0.0"
+    stylelint-scss: "npm:^6.0.0"
   peerDependencies:
     postcss: ^8.3.3
-    stylelint: ^15.10.0
+    stylelint: ^16.0.2
   peerDependenciesMeta:
     postcss:
       optional: true
-  checksum: e07d0172c7936b4f644138e4129df2f187d297f1f96ce5865ab21ccd1c22caf94220f7caf9d6985e93e515de4c0356f6cb9c924d00df2eee5b3bc237f7e5bb48
+  checksum: 9ddc92e7a5fa131b41cee1ab1f69251934ca35c0e2803dc613329cdead7b8b27d8457048a63db29f61a1442e7cdef14207f88a3abce00ec53fdefe0d604f7de3
   languageName: node
   linkType: hard
 
-"stylelint-config-recommended@npm:^13.0.0":
-  version: 13.0.0
-  resolution: "stylelint-config-recommended@npm:13.0.0"
+"stylelint-config-recommended@npm:^14.0.0":
+  version: 14.0.0
+  resolution: "stylelint-config-recommended@npm:14.0.0"
   peerDependencies:
-    stylelint: ^15.10.0
-  checksum: 80420a1ab616e8637b66223f88c597388990d9991cd6a28b8372049b83329d893412f83029bb253a82b52387e497b62e042bc898064a2f22574b0d8921f01dd2
+    stylelint: ^16.0.0
+  checksum: 4ad15c36e8c03291aa7bbe4b672ebfb0f46ab698e7580a0da8d29644046d102d7f31dbf00a2a6eab94b565c390c6fb0d5d528737b83ac3acf6dc2ef085a90b11
   languageName: node
   linkType: hard
 
-"stylelint-scss@npm:^5.3.0":
-  version: 5.3.2
-  resolution: "stylelint-scss@npm:5.3.2"
-  dependencies:
-    known-css-properties: "npm:^0.29.0"
-    postcss-media-query-parser: "npm:^0.2.3"
-    postcss-resolve-nested-selector: "npm:^0.1.1"
-    postcss-selector-parser: "npm:^6.0.13"
-    postcss-value-parser: "npm:^4.2.0"
-  peerDependencies:
-    stylelint: ^14.5.1 || ^15.0.0
-  checksum: d2cf3c9b3d2fad386f781ddf8056cdc12794048809f1f9dd7b87dba28c908ff37a9fb21f0fb6681a53cdbbe58614178a6ff78dce93180d3c4738144e0cf34062
-  languageName: node
-  linkType: hard
-
-"stylelint-scss@npm:^6.1.0":
+"stylelint-scss@npm:^6.0.0, stylelint-scss@npm:^6.1.0":
   version: 6.1.0
   resolution: "stylelint-scss@npm:6.1.0"
   dependencies:
