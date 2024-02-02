@@ -182,15 +182,12 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def export_public
-    sql_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK}"
-    tsv_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK}"
-
     timestamp = DumpPublicResultsDatabase.start_date
 
     render json: {
       export_date: timestamp&.iso8601,
-      sql_url: sql_perma_path,
-      tsv_url: tsv_perma_path,
+      sql_url: sql_permalink_url,
+      tsv_url: tsv_permalink_url,
     }
   end
 

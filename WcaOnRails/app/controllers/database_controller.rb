@@ -8,9 +8,6 @@ class DatabaseController < ApplicationController
     @tsv_path, @tsv_filesize = current_results_export("tsv")
     @sql_filename = File.basename(@sql_path)
     @tsv_filename = File.basename(@tsv_path)
-
-    @sql_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK}"
-    @tsv_perma_path = "#{EnvConfig.ROOT_URL}/export/results/#{DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK}"
   end
 
   def sql_permalink
@@ -27,18 +24,22 @@ class DatabaseController < ApplicationController
     export_timestamp = DumpPublicResultsDatabase.start_date
 
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
-      file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/WCA_export#{export_timestamp.strftime('%j')}_#{export_timestamp.strftime('%Y%m%dT%H%M%SZ')}.#{file_type}.zip"
+      file_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::InstanceProfileCredentials.new,
       ).bucket(DbDumpHelper::BUCKET_NAME)
       filesize_bytes = bucket.object(file_name).content_length
-      ["https://s3.#{EnvConfig.AWS_STORAGE_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{file_name}", filesize_bytes]
+      [get_s3_path(file_name), filesize_bytes]
     end
   end
 
   def developer_export
-    @rel_download_path = "https://s3.#{EnvConfig.AWS_STORAGE_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}"
+    @rel_download_path = get_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
+  end
+
+  def get_s3_path(file_name)
+    "https://s3.#{EnvConfig.AWS_STORAGE_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{file_name}"
   end
 
   def self.render_readme(rendering_engine, export_timestamp)
