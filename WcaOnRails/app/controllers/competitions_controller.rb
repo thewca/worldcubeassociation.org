@@ -355,9 +355,9 @@ class CompetitionsController < ApplicationController
     @competition.competition_payment_integrations.new(connected_account: account_reference)
 
     if @competition.save
-      flash[:success] = t('competitions.messages.stripe_connected')
+      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
     else
-      flash[:danger] = t('competitions.messages.stripe_not_connected')
+      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
     end
 
     redirect_to competitions_payment_setup_path(@competition)
@@ -373,9 +373,9 @@ class CompetitionsController < ApplicationController
     resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
     competition.connected_stripe_account_id = resp.params['stripe_user_id']
     if competition.save
-      flash[:success] = t('competitions.messages.stripe_connected')
+      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.stripe'))
     else
-      flash[:danger] = t('competitions.messages.stripe_not_connected')
+      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.stripe'))
     end
     redirect_to competitions_payment_setup_path(competition)
   end
@@ -395,6 +395,11 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params
     CompetitionPaymentIntegration.disconnect(@competition, 'paypal')
 
+    if !CompetitionPaymentIntegration.paypal_connected?(@competition)
+      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
+    else
+      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
+    end
     redirect_to competitions_payment_setup_path(@competition)
   end
 
@@ -403,8 +408,9 @@ class CompetitionsController < ApplicationController
     if comp.connected_stripe_account_id
       comp.update!(connected_stripe_account_id: nil)
       flash[:success] = t('competitions.messages.stripe_disconnected_success')
+      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
     else
-      flash[:danger] = t('competitions.messages.stripe_disconnected_failure')
+      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
     end
     redirect_to competitions_payment_setup_path(comp)
   end
