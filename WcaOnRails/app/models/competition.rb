@@ -910,18 +910,6 @@ class Competition < ApplicationRecord
     true
   end
 
-  def registration_status
-    if registration_not_yet_opened?
-      "not_yet_opened"
-    elsif registration_past?
-      "past"
-    elsif registration_full?
-      "full"
-    else
-      "open"
-    end
-  end
-
   def registration_opened?
     use_wca_registration? && !cancelled? && !registration_not_yet_opened? && !registration_past?
   end
@@ -1225,6 +1213,14 @@ class Competition < ApplicationRecord
     start_date ? ((start_date.to_time(:utc) - Time.now.utc)/(86_400)).to_i : nil
   end
 
+  def time_until_registration
+    registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil
+  end
+
+  def date_range
+    ApplicationController.helpers.wca_date_range(self.start_date, self.end_date)
+  end
+
   def has_date_errors?
     valid?
     !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
@@ -1319,6 +1315,10 @@ class Competition < ApplicationRecord
     else
       data
     end
+  end
+
+  def short_display_name
+    display_name(short: true)
   end
 
   def results_posted?
@@ -1976,12 +1976,12 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "name", "website", "start_date", "registration_open",
-           "registration_close", "announced_at", "cancelled_at", "end_date",
-           "competitor_limit"],
-    methods: ["url", "website", "short_name", "city", "venue_address",
-              "venue_details", "latitude_degrees", "longitude_degrees",
-              "country_iso2", "event_ids"],
+    only: ["id", "name", "website", "start_date", "end_date",
+           "registration_open", "registration_close", "announced_at",
+           "cancelled_at", "results_posted_at", "competitor_limit", "venue"],
+    methods: ["url", "website", "short_name", "short_display_name", "city",
+              "venue_address", "venue_details", "latitude_degrees", "longitude_degrees",
+              "country_iso2", "event_ids", "time_until_registration", "date_range"],
     include: ["delegates", "organizers"],
   }.freeze
 
@@ -1999,21 +1999,6 @@ class Competition < ApplicationRecord
     # we want to change the existing behavior of our API which returns a string.
     json.merge!(
       class: self.class.to_s.downcase,
-      displayName: display_name(short: true),
-      countryName: country&.name,
-      cityName: cityName,
-      year: start_date.year,
-      isProbablyOver: is_probably_over?,
-      cancelled: cancelled?,
-      resultsPosted: results_posted?,
-      inProgress: in_progress?,
-      dateRange: ApplicationController.helpers.wca_date_range(start_date, end_date),
-      announcedDate: announced_at&.strftime(" %F %H:%M:%S"),
-      venue: venue,
-      url: url,
-      country_iso2: country_iso2,
-      timeUntilRegistration: registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil,
-      registration_status: registration_status,
     )
   end
 
