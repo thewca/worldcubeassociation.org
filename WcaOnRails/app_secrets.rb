@@ -79,9 +79,6 @@ AppSecrets = SuperConfig.new do
     mandatory :STRIPE_API_KEY, :string
     mandatory :OTP_ENCRYPTION_KEY, :string
     mandatory :STRIPE_CLIENT_ID, :string
-    mandatory :PAYPAL_CLIENT_ID, :string
-    mandatory :PAYPAL_CLIENT_SECRET, :string
-    mandatory :PAYPAL_ATTRIBUTION_CODE, :string
     mandatory :DISCOURSE_SECRET, :string
     mandatory :SURVEY_SECRET, :string
     mandatory :ACTIVERECORD_PRIMARY_KEY, :string
@@ -102,5 +99,8 @@ AppSecrets = SuperConfig.new do
     optional :SMTP_USERNAME, :string, ''
     optional :SMTP_PASSWORD, :string, ''
     optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
+    optional :PAYPAL_CLIENT_ID, :string
+    optional :PAYPAL_CLIENT_SECRET, :string
+    optional :PAYPAL_ATTRIBUTION_CODE, :string
   end
 end
