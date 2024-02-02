@@ -37,7 +37,7 @@ RUN apt-get update -qq && \
       libssl-dev \
       libyaml-dev \
       tzdata && \
-    rm -rf /var/lib/apt/lists /var/cache/apt/archives \
+    rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
