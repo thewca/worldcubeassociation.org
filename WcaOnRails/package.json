@@ -41,7 +41,7 @@
     "compression-webpack-plugin": "^11.0.0",
     "core-js": "^3.35.1",
     "css-loader": "^6.10.0",
-    "css-minimizer-webpack-plugin": "^5.0.1",
+    "css-minimizer-webpack-plugin": "^6.0.0",
     "dompurify": "^3.0.8",
     "easymde": "^2.18.0",
     "expose-loader": "^5.0.0",
