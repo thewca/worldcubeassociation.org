@@ -9510,7 +9510,7 @@ __metadata:
     sass: "npm:^1.70.0"
     sass-loader: "npm:^14.1.0"
     semantic-ui-react: "npm:^2.1.5"
-    shakapacker: "npm:7.2.1"
+    shakapacker: "npm:7.2.2"
     style-loader: "npm:^3.3.4"
     stylelint: "npm:^16.2.1"
     stylelint-config-recommended-scss: "npm:^14.0.0"
@@ -9814,9 +9814,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shakapacker@npm:7.2.1":
-  version: 7.2.1
-  resolution: "shakapacker@npm:7.2.1"
+"shakapacker@npm:7.2.2":
+  version: 7.2.2
+  resolution: "shakapacker@npm:7.2.2"
   dependencies:
     glob: "npm:^7.2.0"
     js-yaml: "npm:^4.1.0"
@@ -9829,7 +9829,7 @@ __metadata:
     "@types/babel__core": ^7.0.0
     "@types/webpack": ^5.0.0
     babel-loader: ^8.2.4 || ^9.0.0
-    compression-webpack-plugin: ^9.0.0 || ^10.0.0
+    compression-webpack-plugin: ^9.0.0 || ^10.0.0|| ^11.0.0
     terser-webpack-plugin: ^5.3.1
     webpack: ^5.72.0
     webpack-assets-manifest: ^5.0.6
@@ -9841,7 +9841,7 @@ __metadata:
       optional: true
     "@types/webpack":
       optional: true
-  checksum: a35e7394f9be6a95a88a60fbc8df66c491802106b36bf9fa9bfca01a84e2222131d17369fb076421b2d36a744b0e4a0615ee6b2da4246babde80267069bbc9e3
+  checksum: 6f8e3e2228b9cb7b233cd84204710a11c61474ef68701ac721db8bf0c5a7b8427067a159554b458f63d655437dd886a737552cb637fa500c7de5baf11aef7815
   languageName: node
   linkType: hard
 
