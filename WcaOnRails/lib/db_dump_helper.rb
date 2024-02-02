@@ -90,7 +90,7 @@ module DbDumpHelper
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
         credentials: Aws::InstanceProfileCredentials.new,
-        ).bucket(BUCKET_NAME)
+      ).bucket(BUCKET_NAME)
       bucket.object(s3_path).upload_file(zip_filename, { acl: "public-read" })
     end
   end
