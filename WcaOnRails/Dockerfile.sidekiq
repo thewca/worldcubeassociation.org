@@ -54,7 +54,7 @@ COPY . .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log tmp public app
+    chown -R rails:rails db log tmp public app .yarn
 USER rails:rails
 
 ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
