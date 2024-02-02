@@ -27,7 +27,7 @@ class DatabaseController < ApplicationController
       file_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
-        credentials: Aws::InstanceProfileCredentials.new,
+        credentials: Aws::ECSCredentials.new,
       ).bucket(DbDumpHelper::BUCKET_NAME)
       filesize_bytes = bucket.object(file_name).content_length
       [public_s3_path(file_name), filesize_bytes]
