@@ -24,7 +24,7 @@
   <h2><%= t('payments.payment_setup.provider_heading', provider: t('payments.payment_providers.stripe')) %></h2>
 
   <%# Stripe not connected %>
-  <% if @competition.connected_stripe_account_id.nil? %>
+  <% if !CompetitionPaymentIntegration.stripe_connected?(@competition) %>
     <p><b><%= t('payments.payment_setup.stripe_connect_warning') %></b></p>
     <p><%= t('payments.payment_setup.stripe_payment_info') %></p>
     <%= link_to @authorize_url, class: "btn btn-primary" do %>
@@ -43,7 +43,7 @@
       <%= button_to(
         competition_disconnect_stripe_path,
         class: 'btn btn-danger',
-        disabled: @competition.connected_stripe_account_id.nil?,
+        disabled: !CompetitionPaymentIntegration.stripe_connected?(@competition),
         method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.stripe')) }
       ) do %>
         <%= t('payments.payment_setup.disconnect_account', provider: t('payments.payment_providers.stripe')) %>
