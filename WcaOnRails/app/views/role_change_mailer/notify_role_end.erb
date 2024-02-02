@@ -1,0 +1,10 @@
+<p>The role has been removed for <%= @role.user.name %> in <%= @group_type_name %> on <%= @role.end_date %>.</p>
+<p>The change has been executed by <%= @user_who_made_the_change.name %>.</p>
+<% if @metadata.present? %>
+  <p>More details of the role were:</p>
+  <ul>
+    <% @metadata.each do |key, value| %>
+      <li><%= key %>: <%= value %></li>
+    <% end %>
+  </ul>
+<% end %>

@@ -84,7 +84,7 @@ class RegulationsCheck < StatusCheck
     if Regulation.regulations_load_error.nil?
       [:success, nil]
     else
-      [:danger, "Error while loading regulations: #{Regulation.regulations_load_error}"]
+      [:danger, "Error while loading regulations: #{Regulation.regulations_load_error} from #{Regulation.regulations_load_error.class}"]
     end
   end
 end

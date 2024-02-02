@@ -765,4 +765,48 @@ RSpec.describe User, type: :model do
       expect(competitor.can_delete_registration?(registration)).to be false
     end
   end
+
+  describe "has_permission? method" do
+    it "returns false for any permissions that are not defined" do
+      user = FactoryBot.create(:user)
+      expect(user.has_permission?(:not_defined_permission)).to be false
+    end
+
+    it "returns true for board user for any group" do
+      americas_region = FactoryBot.create(:delegate_region_americas)
+      board_user = FactoryBot.create(:user, :board_member)
+      expect(board_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
+    end
+
+    it "returns true for WRT user for any group" do
+      americas_region = FactoryBot.create(:delegate_region_americas)
+      wrt_user = FactoryBot.create(:user, :wrt_member)
+      expect(wrt_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
+    end
+
+    it "returns true for admin user for any group" do
+      americas_region = FactoryBot.create(:delegate_region_americas)
+      admin_user = FactoryBot.create(:admin)
+      expect(admin_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
+    end
+
+    it "returns true for senior delegate if scope requested is own region" do
+      americas_region = FactoryBot.create(:delegate_region_americas)
+      senior_delegate = FactoryBot.create(:senior_delegate, region_id: americas_region.id)
+      expect(senior_delegate.has_permission?(:can_edit_groups, americas_region.id)).to be true
+    end
+
+    it "returns true for senior delegate if scope requested is their subregion" do
+      usa_region = FactoryBot.create(:delegate_region_usa)
+      senior_delegate = FactoryBot.create(:senior_delegate, region_id: usa_region.parent_group.id)
+      expect(senior_delegate.has_permission?(:can_edit_groups, usa_region.id)).to be true
+    end
+
+    it "returns false for senior delegate if scope requested is other's region" do
+      americas_region = FactoryBot.create(:delegate_region_americas)
+      asia_pacific_region = FactoryBot.create(:delegate_region_asia_pacific)
+      senior_delegate = FactoryBot.create(:senior_delegate, region_id: americas_region.id)
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_pacific_region.id)).to be false
+    end
+  end
 end

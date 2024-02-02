@@ -1,4 +1,5 @@
 import { useCallback } from 'react';
+import { DateTime } from 'luxon';
 import { events } from '../wca-data.js.erb';
 import I18n from '../i18n';
 import { attemptResultToString, attemptResultToMbPoints } from './edit-events';
@@ -84,6 +85,28 @@ export function roomWcifFromId(scheduleWcif, id) {
 export function venueWcifFromRoomId(scheduleWcif, id) {
   const intId = parseInt(id, 10);
   return scheduleWcif.venues.find((venue) => venue.rooms.some((room) => room.id === intId));
+}
+
+export function activityWcifFromId(scheduleWcif, id) {
+  return scheduleWcif.venues.flatMap(
+    ({ rooms }) => rooms.flatMap(({ activities }) => activities),
+  ).find((activity) => activity.id === id);
+}
+
+function areISOTimesTheSame(t1, t2) {
+  return DateTime.fromISO(t1).toMillis() === DateTime.fromISO(t2).toMillis();
+}
+
+export function doActivitiesMatch(a1, a2) {
+  return a1.activityCode === a2.activityCode
+    && areISOTimesTheSame(a1.startTime, a2.startTime)
+    && areISOTimesTheSame(a1.endTime, a2.endTime);
+}
+
+export function getMatchingActivities(scheduleWcif, activity) {
+  return scheduleWcif.venues.flatMap(
+    ({ rooms }) => rooms.flatMap(({ activities }) => activities),
+  ).filter((act) => doActivitiesMatch(act, activity));
 }
 
 export function eventQualificationToString(wcifEvent, qualification, { short } = {}) {

@@ -16,6 +16,7 @@ import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 import { userTileProvider } from '../../../lib/leaflet-wca/providers';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { editVenue } from '../store/actions';
+import ResizeMapIFrame from '../../../lib/utils/leaflet-iframe';
 
 function GeoSearchControl({
   onGeoSearchResult,
@@ -56,32 +57,6 @@ export function DraggableMarker({
     >
       {children}
     </Marker>
-  );
-}
-
-function ResizeMapIFrame() {
-  const map = useMap();
-  const iframeRef = useRef();
-
-  const onResizeAction = useCallback(() => map.invalidateSize(false), [map]);
-
-  useEffect(() => {
-    const iframeNode = iframeRef.current;
-
-    iframeNode.contentWindow.addEventListener('resize', onResizeAction);
-
-    return () => {
-      iframeNode.contentWindow.removeEventListener('resize', onResizeAction);
-    };
-  }, [iframeRef, onResizeAction]);
-
-  return (
-    <iframe
-      title="invisibleIFrame"
-      src="about:blank"
-      className="invisible-iframe-map"
-      ref={iframeRef}
-    />
   );
 }
 

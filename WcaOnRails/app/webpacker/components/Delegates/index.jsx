@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 
-import { fetchUserGroupsUrl } from '../../lib/requests/routes.js.erb';
+import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import '../../stylesheets/delegates/style.scss';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -30,9 +30,26 @@ export default function Delegates() {
     data: delegateGroups,
     loading: delegateGroupsLoading,
     error: delegateGroupsError,
-  } = useLoadedData(fetchUserGroupsUrl(groupTypes.delegate_regions));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.delegate_regions, 'name', { isActive: true }));
   const delegateRegions = React.useMemo(
     () => delegateGroups?.filter((group) => group.parent_group_id === null) || [],
+    [delegateGroups],
+  );
+  const delegateSubregions = React.useMemo(
+    () => delegateGroups?.reduce((_delegateSubregions, group) => {
+      if (group.parent_group_id) {
+        const parentGroup = delegateGroups.find(
+          (parent) => parent.id === group.parent_group_id,
+        );
+        if (parentGroup) {
+          const updatedSubregions = { ..._delegateSubregions };
+          updatedSubregions[parentGroup.id] = updatedSubregions[parentGroup.id] || [];
+          updatedSubregions[parentGroup.id].push(group);
+          return updatedSubregions;
+        }
+      }
+      return _delegateSubregions;
+    }, {}),
     [delegateGroups],
   );
 
@@ -127,6 +144,7 @@ export default function Delegates() {
               </Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
+                delegateSubregions={delegateSubregions[activeRegion.id] || []}
                 isAdminMode={isAdminMode}
               />
             </Grid>

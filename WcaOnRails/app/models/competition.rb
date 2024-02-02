@@ -259,10 +259,10 @@ class Competition < ApplicationRecord
   ANNOUNCED_DAYS_DANGER = 28
   MAX_SPAN_DAYS = 6
 
-  # 1. on https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  # 1. on https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS = 28
 
-  # Time in seconds from 6.2.1 in https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
+  # Time in seconds from 6.2.1 in https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf
   # 48 hours
   REGISTRATION_OPENING_EARLIEST = 172_800
 
@@ -1213,6 +1213,14 @@ class Competition < ApplicationRecord
     start_date ? ((start_date.to_time(:utc) - Time.now.utc)/(86_400)).to_i : nil
   end
 
+  def time_until_registration
+    registration_open ? ApplicationController.helpers.distance_of_time_in_words_to_now(registration_open) : nil
+  end
+
+  def date_range
+    ApplicationController.helpers.wca_date_range(self.start_date, self.end_date)
+  end
+
   def has_date_errors?
     valid?
     !errors[:start_date].empty? || !errors[:end_date].empty? || (!showAtAll && days_until && days_until < MUST_BE_ANNOUNCED_GTE_THIS_MANY_DAYS)
@@ -1307,6 +1315,10 @@ class Competition < ApplicationRecord
     else
       data
     end
+  end
+
+  def short_display_name
+    display_name(short: true)
   end
 
   def results_posted?
@@ -1561,12 +1573,30 @@ class Competition < ApplicationRecord
       competitions = Competition.visible
     end
 
+    if params[:continent].present?
+      continent = Continent.find(params[:continent])
+      if !continent
+        raise WcaExceptions::BadApiParameter.new("Invalid continent: '#{params[:continent]}'")
+      end
+      competitions = competitions.joins('INNER JOIN Countries ON Competitions.countryId = Countries.id')
+                                 .where('continentId = ?', continent.id)
+    end
+
     if params[:country_iso2].present?
       country = Country.find_by_iso2(params[:country_iso2])
       if !country
         raise WcaExceptions::BadApiParameter.new("Invalid country_iso2: '#{params[:country_iso2]}'")
       end
       competitions = competitions.where(countryId: country.id)
+    end
+
+    if params[:delegate].present?
+      delegate = User.find_by(wca_id: params[:delegate])
+      if !delegate
+        raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
+      end
+      competitions = competitions.left_outer_joins(:delegates)
+                                 .where('competition_delegates.delegate_id = ?', delegate.id)
     end
 
     if params[:start].present?
@@ -1585,6 +1615,14 @@ class Competition < ApplicationRecord
       competitions = competitions.where("end_date <= ?", end_date)
     end
 
+    if params[:ongoing_and_future].present?
+      target_date = Date.safe_parse(params[:ongoing_and_future])
+      if !target_date
+        raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
+      end
+      competitions = competitions.where("end_date >= ?", target_date)
+    end
+
     if params[:announced_after].present?
       announced_date = Date.safe_parse(params[:announced_after])
       if !announced_date
@@ -1594,7 +1632,7 @@ class Competition < ApplicationRecord
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| column + " LIKE :part" }.join(" OR ")
+      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1938,12 +1976,12 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "name", "website", "start_date", "registration_open",
-           "registration_close", "announced_at", "cancelled_at", "end_date",
-           "competitor_limit"],
-    methods: ["url", "website", "short_name", "city", "venue_address",
-              "venue_details", "latitude_degrees", "longitude_degrees",
-              "country_iso2", "event_ids"],
+    only: ["id", "name", "website", "start_date", "end_date",
+           "registration_open", "registration_close", "announced_at",
+           "cancelled_at", "results_posted_at", "competitor_limit", "venue"],
+    methods: ["url", "website", "short_name", "short_display_name", "city",
+              "venue_address", "venue_details", "latitude_degrees", "longitude_degrees",
+              "country_iso2", "event_ids", "time_until_registration", "date_range"],
     include: ["delegates", "organizers"],
   }.freeze
 

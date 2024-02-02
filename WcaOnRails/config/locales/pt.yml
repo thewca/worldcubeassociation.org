@@ -435,6 +435,8 @@ pt:
         location: Localização
         #original_hash: 0f21717
         region: Região
+        #original_hash: e3fc6e9
+        subRegion: Subregião
         #original_hash: 730db33
         receive_delegate_reports: Quero receber Relatórios de Competições da WCA de Delegados por email
         #original_hash: 57eaf24
@@ -759,6 +761,8 @@ pt:
           candidate_delegate: Delegado Júnior
           #original_hash: 12ab214
           delegate: Delegado
+          #original_hash: 45c2317
+          regional_delegate: Delegado Regional
           #original_hash: d463c23
           senior_delegate: Delegado Sénior
         teams_committees:
@@ -3049,6 +3053,8 @@ pt:
       past_from: 'Passadas - %{year}'
       #original_hash: 7cff459
       past_all: Passadas - todos os anos
+      #original_hash: 6eef664
+      no_delegates: Nenhum
       #original_hash: 819fe62
       show_cancelled: Mostrar competições canceladas
       #original_hash: 0eda967
@@ -3097,6 +3103,8 @@ pt:
           full: >-
             Limite de competidores atingido, novas inscrições irão para a lista
             de espera
+      #original_hash: 28531af
+      no_more_comps: Mais nenhuma competição.
       #original_hash: 8b09d74
       no_comp_found: Nenhuma competição encontrada.
       #original_hash: 7008166
@@ -3133,10 +3141,10 @@ pt:
       supports_md_html: >-
         Suporta <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: e5cbb13
+      #original_hash: 8ea1fac
       name_reason_html: >-
         Uma breve explicação do nome da competição. O nome deve cumprir com a <a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>Política
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Política
         de Requisitos de Competições da WCA</a>.
       #original_hash: 9d9126e
       venue_html: >-
@@ -4092,7 +4100,7 @@ pt:
     spirit_footer: Espírito da WCA
     #original_hash: c1781ee
     our_goals_title: Os nossos objetivos
-    #original_hash: 743ca74
+    #original_hash: 375db0f
     our_goals_content_html: >-
       <p>A World Cube Association quer trazer oportunidades de participação da
       comunidade e de liderança para jovens de todo o mundo, através do aumento
@@ -4102,7 +4110,7 @@ pt:
       de eventos de quebra-cabeças em novos grupos de pessoas permite que nossa
       comunidade em geral se fortaleça. Um documento contendo a Visão e
       Estratégia do Conselho da WCA pode ser encontrado <a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aqui</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: O que vem a seguir para a WCA?
     #original_hash: 487c6a1
@@ -5093,11 +5101,11 @@ pt:
     paragraph3:
       #original_hash: 00d3bf8
       title: Prazos para o anúncio de uma competição
-      #original_hash: 66bf437
+      #original_hash: 477a672
       content_html: >-
         Uma competição tem que ser anunciada pelo menos 28 dias antes do início
         da competição (ver <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
         de Competições</a>). No entanto, raramente é tempo suficiente. Deve
         considerar tudo o que será necessário para organizar a competição e dar
         a si mesmo tempo suficiente para se preparar. Além disso, o WCAT
@@ -5163,11 +5171,11 @@ pt:
     paragraph5:
       #original_hash: 17d01de
       title: Limite de competidores
-      #original_hash: bd8e6ee
+      #original_hash: 6bfef2c
       content_html: >-
         O número de competidores pode ser limitado por evento ou por competição
         (ver <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisitos
         de Competições</a>). O Delegado da competição tem de obter aprovação do
         limite de competidores pela Equipa de Competições da WCA. Limites de
         competidores devem ser escolhidos com cautela e de acordo com o

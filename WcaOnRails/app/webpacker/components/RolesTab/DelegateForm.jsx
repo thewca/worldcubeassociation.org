@@ -6,10 +6,38 @@ import I18n from '../../lib/i18n';
 export default function DelegateForm({
   formValues,
   updateFormProperty,
-  regions,
+  delegateRegions,
   delegateStatusOptions,
 }) {
   const handleFormChange = (_, { name, value }) => updateFormProperty({ [name]: value });
+
+  const selectedRegion = React.useMemo(
+    () => delegateRegions?.find((region) => region.id === formValues?.regionId),
+    [formValues?.regionId, delegateRegions],
+  );
+
+  const selectedRegionId = selectedRegion?.parent_group_id || selectedRegion?.id;
+  const selectedSubRegionId = selectedRegion?.parent_group_id ? selectedRegion?.id : null;
+
+  const regions = React.useMemo(() => {
+    if (!delegateRegions) return [];
+    return delegateRegions.filter((region) => !region.parent_group_id).map((region) => ({
+      key: region.id,
+      text: region.name,
+      value: region.id,
+    }));
+  }, [delegateRegions]);
+
+  const subRegions = React.useMemo(() => {
+    if (!delegateRegions) return [];
+    return (delegateRegions || [])
+      .filter((region) => region.parent_group_id === selectedRegionId)
+      .map((region) => ({
+        key: region.id,
+        text: region.name,
+        value: region.id,
+      }));
+  }, [delegateRegions, selectedRegionId]);
 
   return (
     <>
@@ -30,10 +58,21 @@ export default function DelegateForm({
         fluid
         selection
         name="regionId"
-        value={formValues.regionId || ''}
+        value={selectedRegionId}
         options={regions}
         onChange={handleFormChange}
       />
+      {subRegions.length > 0 && (
+        <Form.Dropdown
+          label={I18n.t('activerecord.attributes.user.subRegion')}
+          fluid
+          selection
+          name="regionId"
+          value={selectedSubRegionId}
+          options={subRegions}
+          onChange={handleFormChange}
+        />
+      )}
       <Form.Input
         label={I18n.t('activerecord.attributes.user.location')}
         name="location"

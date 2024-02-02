@@ -45,6 +45,12 @@ class UserRole < ApplicationRecord
   end
 
   # In future, we will remove the 'self.' and make this a class method.
+  def self.group_type(role)
+    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
+    is_actual_role ? role.group[:group_type] : role[:group][:group_type]
+  end
+
+  # In future, we will remove the 'self.' and make this a class method.
   def self.is_eligible_voter?(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
     group_type = is_actual_role ? role.group_type : role[:group_type]

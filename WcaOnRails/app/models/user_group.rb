@@ -11,6 +11,10 @@ class UserGroup < ApplicationRecord
     officers: "officers",
   }
 
+  has_many :child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
+  belongs_to :metadata, polymorphic: true, optional: true
+  belongs_to :parent_group, class_name: "UserGroup", optional: true
+
   def self.group_types_containing_status_metadata
     [
       UserGroup.group_types[:delegate_regions],
@@ -18,8 +22,6 @@ class UserGroup < ApplicationRecord
       UserGroup.group_types[:councils],
     ]
   end
-
-  belongs_to :metadata, polymorphic: true, optional: true
 
   # Returns human readable name of group type
   def self.group_type_name
@@ -33,19 +35,23 @@ class UserGroup < ApplicationRecord
   end
 
   def self.delegate_region_groups
-    UserGroup.where(group_type: "delegate_regions", parent_group_id: nil)
+    UserGroup.where(group_type: UserGroup.group_types[:delegate_regions])
   end
 
   def self.delegate_probation_groups
-    UserGroup.where(group_type: "delegate_probation", parent_group_id: nil)
+    UserGroup.where(group_type: UserGroup.group_types[:delegate_probation])
   end
 
   def self.translator_groups
-    UserGroup.where(group_type: UserGroup.group_types[:translators], parent_group_id: nil)
+    UserGroup.where(group_type: UserGroup.group_types[:translators])
   end
 
   def senior_delegate
-    User.find_by(region_id: self.id, delegate_status: "senior_delegate")
+    if parent_group_id.nil?
+      User.find_by(region_id: self.id, delegate_status: "senior_delegate")
+    else
+      parent_group.senior_delegate
+    end
   end
 
   def roles
@@ -58,8 +64,16 @@ class UserGroup < ApplicationRecord
     role_list
   end
 
+  def child_roles
+    child_groups.flat_map(&:roles)
+  end
+
   def active_roles
     self.roles.select { |role| role.is_a?(UserRole) ? role.is_active? : role[:is_active] }
+  end
+
+  def active_child_roles
+    self.child_roles.select { |role| role.is_a?(UserRole) ? role.is_active? : role[:is_active] }
   end
 
   def users
@@ -74,13 +88,17 @@ class UserGroup < ApplicationRecord
     self.active_roles.map(&:user)
   end
 
+  def lead_role
+    self.active_roles.find { |role| role.is_a?(UserRole) ? role.is_lead? : role[:is_lead] }
+  end
+
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
     if self.group_type == UserGroup.group_types[:delegate_regions]
       if self.parent_group_id.nil?
         self.senior_delegate
       else
-        lead_role = self.active_roles.find { |role| role.is_a?(UserRole) ? role.is_lead? : role[:is_lead] }
+        lead_role = self.lead_role
         lead_role ? lead_role.user : nil
       end
     end
