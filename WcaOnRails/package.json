@@ -42,7 +42,7 @@
     "core-js": "^3.35.1",
     "css-loader": "^6.8.1",
     "css-minimizer-webpack-plugin": "^5.0.1",
-    "dompurify": "^3.0.6",
+    "dompurify": "^3.0.8",
     "easymde": "^2.18.0",
     "expose-loader": "^5.0.0",
     "file-loader": "^6.2.0",
