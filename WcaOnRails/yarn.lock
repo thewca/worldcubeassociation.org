@@ -9002,12 +9002,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-intersection-observer@npm:^9.5.3":
-  version: 9.5.3
-  resolution: "react-intersection-observer@npm:9.5.3"
+"react-intersection-observer@npm:^9.6.0":
+  version: 9.6.0
+  resolution: "react-intersection-observer@npm:9.6.0"
   peerDependencies:
     react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 0a4be6262e5944c6f72448029dc28dd14c8b59142f8f24a0c33997ef39c98e9b10f069c2789de0cb79b8a2995f22ba043ce48403a565f6556de982fde456d0f6
+    react-dom: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 200ca442022028de6a609601d64ecfac7cf0fc92412ca5eea48c679402cb0af2202ffd61fb9b85e1d97635896dd45d81a2a1b48af5ec8552eed7ac0488c570b5
   languageName: node
   linkType: hard
 
@@ -9520,7 +9524,7 @@ __metadata:
     react: "npm:^18.2.0"
     react-datepicker: "npm:^6.0.0"
     react-dom: "npm:^18.2.0"
-    react-intersection-observer: "npm:^9.5.3"
+    react-intersection-observer: "npm:^9.6.0"
     react-leaflet: "npm:^4.2.1"
     react-spinners: "npm:^0.13.8"
     react_ujs: "npm:^3.2.0"
