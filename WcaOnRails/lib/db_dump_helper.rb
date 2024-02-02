@@ -12,7 +12,7 @@ module DbDumpHelper
   RESULTS_EXPORT_TSV_PERMALINK = "#{RESULTS_EXPORT_FILENAME}.tsv.zip".freeze
 
   DEVELOPER_EXPORT_FOLDER = "#{S3_BASE_PATH}/developer".freeze
-  DEVELOPER_EXPORT_FILENAME = "wca-developer-database-dump".freeze
+  DEVELOPER_EXPORT_FILENAME = "wca-developer-database-dump"
   DEVELOPER_EXPORT_SQL = "#{DEVELOPER_EXPORT_FILENAME}.sql".freeze
   DEVELOPER_EXPORT_SQL_PERMALINK = "#{DEVELOPER_EXPORT_FOLDER}/#{DEVELOPER_EXPORT_FILENAME}.zip".freeze
   BUCKET_NAME = 'assets.worldcubeassociation.org'
@@ -92,6 +92,9 @@ module DbDumpHelper
         credentials: Aws::InstanceProfileCredentials.new,
       ).bucket(BUCKET_NAME)
       bucket.object(s3_path).upload_file(zip_filename, { acl: "public-read" })
+
+      # Delete the zipfile now that it's uploaded
+      FileUtils.rm zip_filename
     end
   end
 
