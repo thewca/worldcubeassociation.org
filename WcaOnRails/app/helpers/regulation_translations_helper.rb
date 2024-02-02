@@ -9,7 +9,7 @@ module RegulationTranslationsHelper
 
   @@s3 = Aws::S3::Resource.new(
     region: EnvConfig.STORAGE_AWS_REGION,
-    credentials: Aws::InstanceProfileCredentials.new,
+    credentials: Aws::ECSCredentials.new,
   ).bucket(BUCKET_NAME)
 
   private def translations_metadata

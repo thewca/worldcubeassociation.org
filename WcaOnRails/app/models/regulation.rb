@@ -15,7 +15,7 @@ class Regulation < SimpleDelegator
 
   reload_regulations(Aws::S3::Resource.new(
                        region: EnvConfig.STORAGE_AWS_REGION,
-                       credentials: Aws::InstanceProfileCredentials.new,
+                       credentials: Aws::ECSCredentials.new,
                      ))
 
   class << self
