@@ -18,6 +18,7 @@ module ResultsValidators
                                    "Please leave a comment about that (or fix the events data if you applied a different advancement condition)."
     COMPETED_NOT_QUALIFIED_ERROR = "Round %{round_id}: %{ids} competed but did not meet the attempt result advancement condition (%{condition}). " \
                                    "Please make sure the advancement condition reflects what was used during the competition, and remove the results if needed."
+    ROUND_NOT_FOUND_ERROR = "Round %{round_id} could not be found. Please make sure that the WCA website Edit Events panel and WCA Live are in sync."
 
     # These are the old "(combined) qualification" and "b-final" rounds.
     # They are not taken into account in advancement conditions.
@@ -83,69 +84,80 @@ module ResultsValidators
               # competitions and we can check both what actually happens and what
               # was set to happen.
               previous_round = competition.find_round_for(event_id, previous_round_type_id)
-              previous_results = results_by_round_type_id[previous_round_type_id]
-              number_of_people_in_previous_round = previous_results.size
-              condition = previous_round.advancement_condition
 
-              # Check that no one proceeded if they shouldn't have
-              if condition.instance_of? AdvancementConditions::AttemptResultCondition
-                current_persons = results_by_round_type_id[round_type_id].map(&:wca_id)
-                people_over_condition = previous_results.filter do |r|
-                  sort_by_column = r.format.sort_by == "single" ? :best : :average
-                  current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
-                end.map(&:wca_id)
-                if people_over_condition.any?
-                  @errors << ValidationError.new(:rounds, competition.id,
-                                                 COMPETED_NOT_QUALIFIED_ERROR,
-                                                 round_id: round_id,
-                                                 ids: people_over_condition.join(","),
-                                                 condition: condition.to_s(previous_round))
-                end
-              end
+              # It can happen that the WCIF contains rounds which have been deleted on the WCA website.
+              # Most famously, this occurs when the organizers planned with four rounds but less than 100 competitors
+              # sign up and they don't realize it immediately. Then, the competition proceeds with four rounds but
+              # upon results submission the final round is deleted from the competition_events table.
+              if previous_round.present?
+                previous_results = results_by_round_type_id[previous_round_type_id]
+                number_of_people_in_previous_round = previous_results.size
+                condition = previous_round.advancement_condition
 
-              # Article 9p, since July 20, 2006 until April 13, 2010
-              if Date.new(2006, 7, 20) <= comp_start_date &&
-                 comp_start_date <= Date.new(2010, 4, 13)
-                if number_of_people_in_round >= number_of_people_in_previous_round
-                  @errors << ValidationError.new(:rounds, competition.id,
-                                                 OLD_REGULATION_9P_ERROR,
-                                                 round_id: round_id)
-                end
-              else
-                max_advancing = 3 * number_of_people_in_previous_round / 4
-                # Article 9p1, since April 14, 2010
-                # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.
-                if number_of_people_in_round > max_advancing
-                  @errors << ValidationError.new(:rounds, competition.id,
-                                                 REGULATION_9P1_ERROR,
-                                                 round_id: round_id)
-                end
-                if condition
-                  theoretical_number_of_people = condition.max_advancing(previous_results)
-                  if number_of_people_in_round > theoretical_number_of_people
-                    @warnings << ValidationWarning.new(:rounds, competition.id,
-                                                       TOO_MANY_QUALIFIED_WARNING,
-                                                       round_id: round_id,
-                                                       actual: number_of_people_in_round,
-                                                       expected: theoretical_number_of_people,
-                                                       condition: condition.to_s(previous_round))
-                  end
-                  if theoretical_number_of_people > max_advancing
+                # Check that no one proceeded if they shouldn't have
+                if condition.instance_of? AdvancementConditions::AttemptResultCondition
+                  current_persons = results_by_round_type_id[round_type_id].map(&:wca_id)
+                  people_over_condition = previous_results.filter do |r|
+                    sort_by_column = r.format.sort_by == "single" ? :best : :average
+                    current_persons.include?(r.wca_id) && r.send(sort_by_column) > condition.attempt_result
+                  end.map(&:wca_id)
+                  if people_over_condition.any?
                     @errors << ValidationError.new(:rounds, competition.id,
-                                                   ROUND_9P1_ERROR,
+                                                   COMPETED_NOT_QUALIFIED_ERROR,
                                                    round_id: round_id,
+                                                   ids: people_over_condition.join(","),
                                                    condition: condition.to_s(previous_round))
                   end
-                  # This comes from https://github.com/thewca/worldcubeassociation.org/issues/5587
-                  if theoretical_number_of_people - number_of_people_in_round >= 3 &&
-                     (number_of_people_in_round / theoretical_number_of_people) <= 0.8
-                    @warnings << ValidationWarning.new(:rounds, competition.id,
-                                                       NOT_ENOUGH_QUALIFIED_WARNING,
-                                                       round_id: round_id,
-                                                       expected: theoretical_number_of_people,
-                                                       actual: number_of_people_in_round)
+                end
+
+                # Article 9p, since July 20, 2006 until April 13, 2010
+                if Date.new(2006, 7, 20) <= comp_start_date &&
+                   comp_start_date <= Date.new(2010, 4, 13)
+                  if number_of_people_in_round >= number_of_people_in_previous_round
+                    @errors << ValidationError.new(:rounds, competition.id,
+                                                   OLD_REGULATION_9P_ERROR,
+                                                   round_id: round_id)
+                  end
+                else
+                  max_advancing = 3 * number_of_people_in_previous_round / 4
+                  # Article 9p1, since April 14, 2010
+                  # https://www.worldcubeassociation.org/regulations/#9p1: At least 25% of competitors must be eliminated between consecutive rounds of the same event.
+                  if number_of_people_in_round > max_advancing
+                    @errors << ValidationError.new(:rounds, competition.id,
+                                                   REGULATION_9P1_ERROR,
+                                                   round_id: round_id)
+                  end
+                  if condition
+                    theoretical_number_of_people = condition.max_advancing(previous_results)
+                    if number_of_people_in_round > theoretical_number_of_people
+                      @warnings << ValidationWarning.new(:rounds, competition.id,
+                                                         TOO_MANY_QUALIFIED_WARNING,
+                                                         round_id: round_id,
+                                                         actual: number_of_people_in_round,
+                                                         expected: theoretical_number_of_people,
+                                                         condition: condition.to_s(previous_round))
+                    end
+                    if theoretical_number_of_people > max_advancing
+                      @errors << ValidationError.new(:rounds, competition.id,
+                                                     ROUND_9P1_ERROR,
+                                                     round_id: round_id,
+                                                     condition: condition.to_s(previous_round))
+                    end
+                    # This comes from https://github.com/thewca/worldcubeassociation.org/issues/5587
+                    if theoretical_number_of_people - number_of_people_in_round >= 3 &&
+                       (number_of_people_in_round / theoretical_number_of_people) <= 0.8
+                      @warnings << ValidationWarning.new(:rounds, competition.id,
+                                                         NOT_ENOUGH_QUALIFIED_WARNING,
+                                                         round_id: round_id,
+                                                         expected: theoretical_number_of_people,
+                                                         actual: number_of_people_in_round)
+                    end
                   end
                 end
+              else
+                @errors << ValidationError.new(:rounds, competition.id,
+                                               ROUND_NOT_FOUND_ERROR,
+                                               round_id: "#{event_id}-#{previous_round_type_id}")
               end
             end
 
