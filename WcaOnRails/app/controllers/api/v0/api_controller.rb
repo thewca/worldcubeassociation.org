@@ -186,8 +186,8 @@ class Api::V0::ApiController < ApplicationController
 
     render json: {
       export_date: timestamp&.iso8601,
-      sql_url: sql_permalink_url,
-      tsv_url: tsv_permalink_url,
+      sql_url: "#{sql_permalink_url}.zip",
+      tsv_url: "#{tsv_permalink_url}.zip",
     }
   end
 
