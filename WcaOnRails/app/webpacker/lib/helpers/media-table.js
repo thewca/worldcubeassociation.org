@@ -1,3 +1,4 @@
+/* eslint import/prefer-default-export: "off" */
 export function dateRangeBetween(fromDate, toDate) {
   const format = new Intl.DateTimeFormat('en', {
     year: 'numeric',
@@ -9,7 +10,7 @@ export function dateRangeBetween(fromDate, toDate) {
   const date2 = new Date(toDate);
 
   // Validate date1 and date2
-  if (isNaN(date1.getTime()) || isNaN(date2.getTime())) {
+  if (Number.isNaN(date1.getTime()) || Number.isNaN(date2.getTime())) {
     return 'Invalid Date Range';
   }
 
