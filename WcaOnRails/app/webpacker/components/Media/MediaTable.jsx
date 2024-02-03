@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 
 import _ from 'lodash';
-import { Table, Confirm, Modal, Button, GridRow } from 'semantic-ui-react';
-
-import { competitionUrl } from '../../lib/requests/routes.js.erb';
+import { Table, Confirm, Modal, Button } from 'semantic-ui-react';
+import { competitionUrl, apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { countries, continents, years } from '../../lib/wca-data.js.erb';
 import { dateRangeBetween } from '../../lib/helpers/media-table';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -53,7 +52,7 @@ export default function MediaTable({ isValidate }) {
   const [mediaCombined, setMediaCombined] = useState([])
   const type = isValidate ? 'pending' : 'accepted'
   const { loading, error, data, sync } = useLoadedData(
-    `/api/v0/media?status=${type}&year=${selectedYear}&region=${selectedRegion}`,
+    apiV0Urls.media.list(type, selectedYear, selectedRegion)
   );
   const [modalOpen, setModalOpen] = useState(false);
 
@@ -88,8 +87,7 @@ export default function MediaTable({ isValidate }) {
     status: null,
   });
   const confimMedia = () => {
-        const url = "/api/v0/media/" + modalParams.mediaId
-    save(url, { status: modalParams.status }, () => {
+    save(apiV0Urls.media.update(modalParams.mediaId), { status: modalParams.status }, () => {
       sync(); handleUpdateSuccess(); setModalParams({ ...modalParams, open: false })
     }, { method: 'PATCH' });
   };

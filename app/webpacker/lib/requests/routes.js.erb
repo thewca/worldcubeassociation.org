@@ -197,6 +197,10 @@ export const apiV0Urls = {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
     searchIndex: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_search_index_path)%>`,
   },
+  media:{
+    list: (status,year,region) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_media_path)%>?${jsonToQueryString({ status, year, region })}`,
+    update: (mediaId) =>`<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_media_path("${roleId}")) %>`,
+  },
 }
 
 export const panelUrls = {
