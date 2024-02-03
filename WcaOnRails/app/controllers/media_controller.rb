@@ -15,7 +15,6 @@ class MediaController < ApplicationController
       "submitterEmail" => current_user.email,
     )
     @medium = CompetitionMedium.new(params)
-
     if @medium.save
       flash[:success] = "Thanks for sending us new media!"
       redirect_to new_medium_path
