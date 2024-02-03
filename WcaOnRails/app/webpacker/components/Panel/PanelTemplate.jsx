@@ -23,11 +23,11 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
   }, [sections, hash, setHash]);
 
   return (
-    <div className="container">
+    <div style={{ margin: '16px' }}>
       <Header as="h1">{heading}</Header>
-      <Grid container>
+      <Grid>
         <Grid.Column only="computer" computer={4}>
-          <Menu vertical>
+          <Menu vertical fluid>
             {sections.map((section) => (
               <Menu.Item
                 key={section.id}

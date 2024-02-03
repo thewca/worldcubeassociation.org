@@ -82,7 +82,7 @@ export default function Delegates() {
   }
 
   return (
-    <div className="container">
+    <div style={{ margin: '16px' }}>
       <Header as="h1">{I18n.t('delegates_page.title')}</Header>
       <p>
         <I18nHTMLTranslate
@@ -101,10 +101,10 @@ export default function Delegates() {
           onChange={(__, { checked }) => setToggleAdmin(checked)}
         />
       )}
-      <Grid container>
+      <Grid>
         <Grid.Column only="computer" computer={4}>
           <Header>{I18n.t('delegates_page.regions')}</Header>
-          <Menu vertical>
+          <Menu vertical fluid>
             {delegateRegions.map((region) => (
               <Menu.Item
                 key={region.id}
