@@ -3,7 +3,7 @@
 class Api::V0::MediaController < Api::V0::ApiController
   before_action :authenticate_user!, except: [:index]
   before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index, :new, :create]
-  
+
   def index
     params[:status] ||= "accepted"
     params[:year] ||= "All Years"
@@ -14,7 +14,7 @@ class Api::V0::MediaController < Api::V0::ApiController
     media = media.belongs_to_region(params[:region]) unless params[:region] == "All Regions"
     render json: media
   end
-  
+
   def update
     medium_id = params.require(:id)
     status = params.require(:status)
