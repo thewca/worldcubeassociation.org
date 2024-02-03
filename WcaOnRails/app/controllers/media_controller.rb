@@ -35,13 +35,6 @@ class MediaController < ApplicationController
     media
   end
 
-  def index
-    params[:status] = "accepted"
-    params[:year] ||= Date.today.year
-    @media = get_media
-    render :index
-  end
-
   def validate
     params[:status] ||= "pending"
     @media = get_media

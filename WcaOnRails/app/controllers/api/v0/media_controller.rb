@@ -1,4 +1,9 @@
+# frozen_string_literal: true
+
 class Api::V0::MediaController < Api::V0::ApiController
+  before_action :authenticate_user!, except: [:index]
+  before_action -> { redirect_to_root_unless_user(:can_approve_media?) }, except: [:index, :new, :create]
+  
   def index
     params[:status] ||= "accepted"
     params[:year] ||= "All Years"

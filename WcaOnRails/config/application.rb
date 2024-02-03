@@ -95,8 +95,6 @@ module WcaOnRails
     config.active_record.encryption.primary_key = AppSecrets.ACTIVERECORD_PRIMARY_KEY
     config.active_record.encryption.deterministic_key = AppSecrets.ACTIVERECORD_DETERMINISTIC_KEY
     config.active_record.encryption.key_derivation_salt = AppSecrets.ACTIVERECORD_KEY_DERIVATION_SALT
-    config.forgery_protection_origin_check = false
-    config.action_controller.forgery_protection_origin_check = false
 
     config.active_record.encryption.hash_digest_class = OpenSSL::Digest::SHA256
   end
