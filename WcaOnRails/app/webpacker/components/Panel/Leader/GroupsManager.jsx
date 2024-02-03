@@ -54,7 +54,7 @@ export default function GroupsManager({ loggedInUserId }) {
   }, [roles]);
 
   if (!loading && roles.length === 0) return <p>You are not a leader of any groups.</p>;
-  if (loading || selectedGroupId == null) return <Loading />;
+  if (loading || selectedGroupId === undefined) return <Loading />;
   if (error) return <Errored />;
 
   return (
