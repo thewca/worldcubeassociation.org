@@ -639,7 +639,7 @@ class User < ApplicationRecord
     return "*" if can_edit_any_groups?
     if senior_delegate?
       region = UserGroup.find(self.region_id)
-      [region.id] + region.child_groups.pluck(:id)
+      [region.id] + region.all_child_groups.pluck(:id)
     else
       [] # FIXME: Consider groups of other groupTypes as well.
     end
@@ -1364,7 +1364,7 @@ class User < ApplicationRecord
     roles
       .filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
       .filter { |role| UserRole.is_lead?(role) }
-      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_child_users }
+      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_users_of_all_child_groups }
       .uniq
   end
 
@@ -1461,10 +1461,7 @@ class User < ApplicationRecord
     end
 
     roles.select do |role|
-      is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system,
-      # till then some roles will actually be hashes.
-      group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
-      UserRole.can_user_view?(current_user, group)
+      UserRole.is_visible_to_user?(role, current_user)
     end
   end
 end

@@ -11,9 +11,67 @@ class UserGroup < ApplicationRecord
     officers: "officers",
   }
 
-  has_many :child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
+  has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
+
+  def all_child_groups
+    [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
+  end
+
+  def roles
+    role_list = UserRole.where(group_id: self.id).to_a
+    if self.group_type == "delegate_regions"
+      role_list += User.where(region_id: self.id).where.not(delegate_status: nil).map do |delegate_user|
+        delegate_user.delegate_role
+      end
+    end
+    role_list
+  end
+
+  def active_roles
+    self.roles.select { |role| UserRole.is_active?(role) }
+  end
+
+  def roles_of_direct_child_groups
+    self.direct_child_groups.map(&:roles).flatten
+  end
+
+  def roles_of_all_child_groups
+    self.all_child_groups.map(&:roles).flatten
+  end
+
+  def active_roles_of_direct_child_groups
+    self.direct_child_groups.map(&:active_roles).flatten
+  end
+
+  def active_roles_of_all_child_groups
+    self.all_child_groups.map(&:active_roles).flatten
+  end
+
+  def users
+    self.roles.map { |role| UserRole.user(role) }
+  end
+
+  def active_users
+    self.active_roles.map { |role| UserRole.user(role) }
+  end
+
+  def users_of_direct_child_groups
+    self.roles_of_direct_child_groups.map { |role| UserRole.user(role) }
+  end
+
+  def users_of_all_child_groups
+    self.roles_of_all_child_groups.map { |role| UserRole.user(role) }
+  end
+
+  def active_users_of_direct_child_groups
+    self.active_roles_of_direct_child_groups.map { |role| UserRole.user(role) }
+  end
+
+  def active_users_of_all_child_groups
+    self.active_roles_of_all_child_groups.map { |role| UserRole.user(role) }
+  end
 
   def self.group_types_containing_status_metadata
     [
@@ -52,44 +110,6 @@ class UserGroup < ApplicationRecord
     else
       parent_group.senior_delegate
     end
-  end
-
-  def roles
-    role_list = UserRole.where(group_id: self.id).to_a
-    if self.group_type == "delegate_regions"
-      role_list += User.where(region_id: self.id).where.not(delegate_status: nil).map do |delegate_user|
-        delegate_user.delegate_role
-      end
-    end
-    role_list
-  end
-
-  def child_roles
-    child_groups.flat_map(&:roles)
-  end
-
-  def active_roles
-    self.roles.select { |role| UserRole.is_active?(role) }
-  end
-
-  def active_child_roles
-    self.child_roles.select { |role| UserRole.is_active?(role) }
-  end
-
-  def users
-    self.roles.map { |role| UserRole.user(role) }
-  end
-
-  def child_users
-    self.child_roles.map { |role| UserRole.user(role) }
-  end
-
-  def active_users
-    self.active_roles.map { |role| UserRole.user(role) }
-  end
-
-  def active_child_users
-    self.active_child_roles.map { |role| UserRole.user(role) }
   end
 
   def lead_role

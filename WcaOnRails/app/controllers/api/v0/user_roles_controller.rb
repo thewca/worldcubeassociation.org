@@ -60,10 +60,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
-      is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system,
-      # till then some roles will actually be hashes.
-      group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
-      UserRole.can_user_view?(current_user, group)
+      UserRole.is_visible_to_user?(role, current_user)
     end
   end
 

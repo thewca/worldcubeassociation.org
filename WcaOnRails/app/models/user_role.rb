@@ -9,7 +9,9 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
-  def self.can_user_view?(user, group)
+  def self.is_visible_to_user?(role, user)
+    is_actual_role = role.is_a?(UserRole)
+    group = is_actual_role ? role.group : role[:group]
     return true unless group[:is_hidden]
     case group[:group_type]
     when UserGroup.group_types[:delegate_probation]
@@ -39,10 +41,6 @@ class UserRole < ApplicationRecord
   def self.is_active?(role)
     is_actual_role = role.is_a?(UserRole)
     is_actual_role ? role.is_active? : role[:is_active]
-  end
-
-  def can_user_view?(user)
-    UserRole.can_user_view?(user, group)
   end
 
   def is_active?
