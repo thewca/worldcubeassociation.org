@@ -16,7 +16,7 @@ class DatabaseController < ApplicationController
   end
 
   def tsv_permalink
-    url, = current_results_export("sql")
+    url, = current_results_export("tsv")
     redirect_to url, status: 301, allow_other_host: true
   end
 
