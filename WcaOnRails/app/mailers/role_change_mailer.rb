@@ -1,10 +1,25 @@
 # frozen_string_literal: true
 
 class RoleChangeMailer < ApplicationMailer
+  private def role_metadata(role)
+    metadata = {}
+
+    # Populate the metadata list.
+    case role.group.group_type
+    when UserGroup.group_types[:delegate_regions]
+      metadata[:region_name] = role.group.name
+      metadata[:status] = I18n.t("enums.user.role_status.delegate_regions.#{role.metadata.status}")
+    when UserGroup.group_types[:translators]
+      metadata[:locale] = role.group.metadata.locale
+    end
+    metadata
+  end
+
   def notify_role_start(role, user_who_made_the_change)
     @role = role
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
+    @metadata = role_metadata(role)
 
     # Populate the recepient list.
     case role.group.group_type
@@ -30,16 +45,7 @@ class RoleChangeMailer < ApplicationMailer
     @role = role
     @user_who_made_the_change = user_who_made_the_change
     @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
-    @metadata = {}
-
-    # Populate the metadata list.
-    case role.group.group_type
-    when UserGroup.group_types[:delegate_regions]
-      @metadata[:region_name] = role.group.name
-      @metadata[:status] = role.metadata.status
-    when UserGroup.group_types[:translators]
-      @metadata[:locale] = role.metadata.locale
-    end
+    @metadata = role_metadata(role)
 
     # Populate the recepient list.
     case role.group.group_type
