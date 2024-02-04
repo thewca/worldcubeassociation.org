@@ -1400,7 +1400,7 @@ class User < ApplicationRecord
     }
   end
 
-  def roles(logged_in_user)
+  def roles(logged_in_user = nil)
     roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
@@ -1443,7 +1443,7 @@ class User < ApplicationRecord
       end
     end
 
-    if Team.wfc.leader.id == self.id
+    if Team.wfc.leader&.id == self.id
       roles << {
         group: {
           id: 'officers',
