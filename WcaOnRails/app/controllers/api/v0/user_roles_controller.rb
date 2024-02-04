@@ -131,7 +131,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def index_for_user
     user_id = params.require(:user_id)
     user = User.find(user_id)
-    roles = user.roles
+    roles = user.roles(current_user)
 
     # Filter the list based on the other parameters.
     roles = filter_roles_for_parameters(
