@@ -2028,8 +2028,6 @@ ca:
         la persona al passat.
       #original_hash: b589014
       must_have_a_change: El nom o el país ha de ser diferent per actualitzar la persona.
-      #original_hash: 012f032
-      must_be_senior: ha de ser Delegat Sènior
       #original_hash: 2e582eb
       must_not_be_present: no pot ser present
       #original_hash: 5b4eac9

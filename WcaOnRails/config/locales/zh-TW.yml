@@ -1810,8 +1810,6 @@ zh-TW:
       already_represented_country: 不能將該人區域改為他過去所代表的區域。
       #original_hash: 5fe15d4
       must_have_a_change: 姓名或區域必須不同才能更新此人。
-      #original_hash: 012f032
-      must_be_senior: 必須為高級代表
       #original_hash: 48653a9
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
       #original_hash: ec5db95

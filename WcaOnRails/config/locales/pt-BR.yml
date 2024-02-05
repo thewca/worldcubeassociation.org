@@ -2119,8 +2119,6 @@ pt-BR:
         representado no passado.
       #original_hash: 5fe15d4
       must_have_a_change: O nome ou região precisam ser diferentes para atualizar a pessoa.
-      #original_hash: 012f032
-      must_be_senior: deve ser um Delegado Senior
       #original_hash: 2e582eb
       must_not_be_present: não pode ser presente
       #original_hash: 5b4eac9

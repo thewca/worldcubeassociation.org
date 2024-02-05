@@ -1107,8 +1107,6 @@ ko:
       unique: '은 이미 %{used_email}에 의해 "%{used_name}"가 사용하고 있습니다.'
       #original_hash: 26f70ed
       dob_past: 과거여야 합니다
-      #original_hash: 012f032
-      must_be_senior: 대표 파견위원이여야 합니다
       #original_hash: 2e582eb
       must_not_be_present: 현재가 아니여야 합니다
       #original_hash: 48653a9

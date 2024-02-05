@@ -1932,8 +1932,6 @@ da:
       must_have_a_change: >-
         Navnet eller landet skal være anderledes end før, for at opdatere
         personen.
-      #original_hash: 012f032
-      must_be_senior: skal være en Seniordelegeret
       #original_hash: 2e582eb
       must_not_be_present: må ikke være nuværende
       #original_hash: 5b4eac9

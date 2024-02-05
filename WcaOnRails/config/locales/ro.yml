@@ -2145,8 +2145,6 @@ ro:
       already_represented_country: Nu se poate schimba țara într-o fostă țară a concurentului
       #original_hash: b589014
       must_have_a_change: Numele țării trebuie să fie diferit pentru actualizarea persoanei
-      #original_hash: 012f032
-      must_be_senior: trebuie să fie Delegat Senior
       #original_hash: 2e582eb
       must_not_be_present: trebuie să nu fie prezent
       #original_hash: 5b4eac9

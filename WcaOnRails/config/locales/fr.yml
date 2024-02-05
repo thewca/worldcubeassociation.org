@@ -2186,8 +2186,6 @@ fr:
       must_have_a_change: >-
         Le nom de la région doit être différent pour mettre à jour cette
         personne.
-      #original_hash: 012f032
-      must_be_senior: doit être un·e Délégué·e Senior
       #original_hash: 5b4eac9
       senior_has_delegate: >-
         ne peut pas destituer un·e Délégué·e Senior qui supervise d'autres

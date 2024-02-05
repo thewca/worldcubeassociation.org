@@ -1457,8 +1457,6 @@ zh-CN:
       dob_past: 必须是过去的时间
       #original_hash: b320913
       dob_recent: 必须至少满两岁
-      #original_hash: 012f032
-      must_be_senior: 必须是一个高级代表
       #original_hash: 2e582eb
       must_not_be_present: 不能是当前时间
       #original_hash: 5b4eac9
