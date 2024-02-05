@@ -339,28 +339,30 @@ class CompetitionsController < ApplicationController
 
     # Paypal setup URL
     # TODO: Don't generate this URL if there is already a connected paypal account?
-    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id)
+    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless Rails.env.production?
   end
 
   def paypal_return
-    @competition = competition_from_params
+    unless Rails.env.production?
+      @competition = competition_from_params
 
-    account_reference = ConnectedPaypalAccount.new(
-      paypal_merchant_id: params[:merchantIdInPayPal],
-      permissions_granted: params[:permissionsGranted],
-      account_status: params[:accountStatus],
-      consent_status: params[:consentStatus],
-    )
+      account_reference = ConnectedPaypalAccount.new(
+        paypal_merchant_id: params[:merchantIdInPayPal],
+        permissions_granted: params[:permissionsGranted],
+        account_status: params[:accountStatus],
+        consent_status: params[:consentStatus],
+      )
 
-    @competition.competition_payment_integrations.new(connected_account: account_reference)
+      @competition.competition_payment_integrations.new(connected_account: account_reference)
 
-    if @competition.save
-      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
-    else
-      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
+      if @competition.save
+        flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
+      else
+        flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
+      end
+
+      redirect_to competitions_payment_setup_path(@competition)
     end
-
-    redirect_to competitions_payment_setup_path(@competition)
   end
 
   def stripe_connect
@@ -392,15 +394,17 @@ class CompetitionsController < ApplicationController
   end
 
   def disconnect_paypal
-    @competition = competition_from_params
-    CompetitionPaymentIntegration.disconnect(@competition, 'paypal')
+    unless Rails.env.production?
+      @competition = competition_from_params
+      CompetitionPaymentIntegration.disconnect(@competition, 'paypal')
 
-    if !CompetitionPaymentIntegration.paypal_connected?(@competition)
-      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
-    else
-      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
+      if !CompetitionPaymentIntegration.paypal_connected?(@competition)
+        flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
+      else
+        flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
+      end
+      redirect_to competitions_payment_setup_path(@competition)
     end
-    redirect_to competitions_payment_setup_path(@competition)
   end
 
   def disconnect_stripe

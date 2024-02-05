@@ -16,7 +16,7 @@ EnvConfig = SuperConfig.new do
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
     mandatory :DATABASE_AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
-    mandatory :PAYPAL_BASE_URL, :string
+    optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
