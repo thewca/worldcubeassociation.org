@@ -4,6 +4,8 @@ require "newrelic_rpm"
 
 class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
+  include Devise::Controllers::StoreLocation
+
   protect_from_forgery with: :exception
 
   before_action :store_user_location!, if: :storable_location?
@@ -73,8 +75,7 @@ class ApplicationController < ActionController::Base
     session[:locale] = nil
     set_locale
 
-    # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
-    stored_location_for(resource_or_scope) || super
+    super
   end
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
@@ -98,7 +99,6 @@ class ApplicationController < ActionController::Base
 
     def store_user_location!
       # :user is the scope we are authenticating
-      referring_page_url = request.headers['Referer']
-      store_location_for(:user, referring_page_url)
+      store_location_for(:user, request.fullpath)
     end
 end
