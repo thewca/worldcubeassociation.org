@@ -20,7 +20,8 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy, :update, :create_paypal_order, :capture_paypal_payment]
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :register_require_sign_in, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy,
+                         :update, :create_paypal_order, :capture_paypal_payment]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
   private def competition_must_be_using_wca_registration!
@@ -823,15 +824,19 @@ class RegistrationsController < ApplicationController
   end
 
   def create_paypal_order
-    @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration)
+    unless Rails.env.production?
+      @registration = registration_from_params
+      render json: PaypalInterface.create_order(@registration)
+    end
   end
 
   def capture_paypal_payment
-    @registration = registration_from_params
-    @competition = @registration.competition
-    order_id = params[:order_id]
+    unless Rails.env.production?
+      @registration = registration_from_params
+      @competition = @registration.competition
+      order_id = params[:order_id]
 
-    render json: PaypalInterface.capture_payment(@competition, order_id)
+      render json: PaypalInterface.capture_payment(@competition, order_id)
+    end
   end
 end
