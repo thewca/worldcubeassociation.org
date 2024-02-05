@@ -14,7 +14,11 @@ FactoryBot.define do
     end
 
     trait :delegate_probation do
+      user { FactoryBot.create(:delegate) }
       group { FactoryBot.create(:delegate_probations_user_group) }
+      after(:create) do |role|
+        FactoryBot.create(:senior_delegate_role, group: UserGroup.find(role.user.region_id))
+      end
     end
 
     trait :translators do
