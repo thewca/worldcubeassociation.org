@@ -43,6 +43,11 @@ class UserRole < ApplicationRecord
     is_actual_role ? role.is_active? : role[:is_active]
   end
 
+  def self.status(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+  end
+
   def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end

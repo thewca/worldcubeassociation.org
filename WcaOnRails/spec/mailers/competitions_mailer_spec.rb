@@ -161,6 +161,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     it "renders the body" do
+      delegate.reload
+      trainee_delegate.reload
+      senior.reload
       expect(mail.body.encoded).to match(/Over a week has passed since #{competition.name}/)
       expect(mail.body.encoded).to match(competition_submit_results_edit_path(competition.id))
     end
@@ -186,6 +189,9 @@ RSpec.describe CompetitionsMailer, type: :mailer do
     end
 
     it "renders the body" do
+      delegate.reload
+      trainee_delegate.reload
+      senior.reload
       expect(mail.body.encoded).to match(/Peculiar Comp 2016 took place 3 days ago/)
       expect(mail.body.encoded).to match(/Delegate report/)
     end

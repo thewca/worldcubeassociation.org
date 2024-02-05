@@ -24,7 +24,7 @@ class RoleChangeMailer < ApplicationMailer
     # Populate the recepient list.
     case role.group.group_type
     when UserGroup.group_types[:delegate_probation]
-      to_list = [user_who_made_the_change.email, Team.board.email, role.user.senior_delegate.email]
+      to_list = [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:delegate_regions]
       to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
@@ -72,7 +72,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
 
     mail(
-      to: [user_who_made_the_change.email, Team.board.email, role.user.senior_delegate.email],
+      to: [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten,
       reply_to: [user_who_made_the_change.email],
       subject: "Delegate Probation end date changed for #{role.user.name}",
     )

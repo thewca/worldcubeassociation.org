@@ -9,7 +9,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     let(:mail) { described_class.notify_role_start(role, user_who_made_the_change) }
 
     it 'renders the headers' do
-      expect(mail.to).to eq [user_who_made_the_change.email, Team.board.email, role.user.senior_delegate.email]
+      expect(mail.to).to eq [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten
       expect(mail.reply_to).to eq [user_who_made_the_change.email]
       expect(mail.subject).to eq "New role added for #{role.user.name} in Delegate Probation"
     end
@@ -26,7 +26,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     let(:mail) { described_class.notify_change_probation_end_date(role, user_who_made_the_change) }
 
     it 'renders the headers' do
-      expect(mail.to).to eq [user_who_made_the_change.email, Team.board.email, role.user.senior_delegate.email]
+      expect(mail.to).to eq [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten
       expect(mail.reply_to).to eq [user_who_made_the_change.email]
       expect(mail.subject).to eq "Delegate Probation end date changed for #{role.user.name}"
     end
