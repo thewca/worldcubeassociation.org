@@ -13,13 +13,20 @@ import ListView from './ListView';
 import MapView from './MapView';
 import { filterReducer, filterInitialState } from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
+import useDebounce from '../../lib/hooks/useDebounce';
 import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/competition-table';
+
+const DEBOUNCE_MS = 600;
 
 function CompetitionsView() {
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
+  const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
   const [displayMode, setDisplayMode] = useState('list');
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
-  const competitionQueryKey = useMemo(() => calculateQueryKey(filterState), [filterState]);
+  const competitionQueryKey = useMemo(
+    () => calculateQueryKey(debouncedFilterState),
+    [debouncedFilterState],
+  );
 
   const {
     data: rawCompetitionData,
@@ -29,7 +36,7 @@ function CompetitionsView() {
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
-      const searchParams = createSearchParams(filterState, pageParam);
+      const searchParams = createSearchParams(debouncedFilterState, pageParam);
       return fetchJsonOrError(`${apiV0Urls.competitions.list}?${searchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
@@ -44,8 +51,8 @@ function CompetitionsView() {
 
   const competitions = rawCompetitionData?.pages.flatMap((page) => page.data)
     .filter((comp) => (
-      (!isCancelled(comp) || filterState.shouldIncludeCancelled)
-      && (filterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
+      (!isCancelled(comp) || debouncedFilterState.shouldIncludeCancelled)
+      && (debouncedFilterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
     ));
 
   return (
@@ -66,7 +73,7 @@ function CompetitionsView() {
           && (
             <ListView
               competitions={competitions}
-              filterState={filterState}
+              filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
               isLoading={competitionsIsFetching}
               fetchMoreCompetitions={competitionsFetchNextPage}
@@ -79,7 +86,7 @@ function CompetitionsView() {
           && (
             <MapView
               competitions={
-                filterState.timeOrder === 'present'
+                debouncedFilterState.timeOrder === 'present'
                   ? competitions?.filter((comp) => (
                     !isInProgress(comp) && !isProbablyOver(comp)
                   ))
