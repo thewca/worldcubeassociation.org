@@ -16,3 +16,22 @@ resource "aws_s3_bucket" "avatars" {
     "Name" = "wca-avatar"
   }
 }
+resource "aws_s3_bucket" "documents" {
+  bucket = "wca-documents"
+  tags = {
+    "Name" = "wca-documents"
+  }
+}
+resource "aws_s3_bucket" "regulations" {
+  bucket = "wca-regulations"
+  tags = {
+    "Name" = "wca-regulations"
+  }
+}
+resource "aws_s3_bucket" "assets" {
+  bucket = "assets.worldcubeassociation.org"
+  tags = {
+    "Name" = "assets.worldcubeassociation.org"
+  }
+}
+

@@ -29,3 +29,8 @@ variable "DATABASE_WRT_USER" {
   description = "The name of the user to access phpmyadmin"
   default     = "phpmyadmin"
 }
+
+variable "pma_auth_secret" {
+  type = string
+  description = "The client secret for pma you can get it at https://www.worldcubeassociation.org/oauth/applications/1069"
+}

@@ -146,7 +146,13 @@ data "aws_iam_policy_document" "task_policy" {
                    aws_s3_bucket.storage-bucket.arn,
                 "${aws_s3_bucket.storage-bucket.arn}/*",
                   aws_s3_bucket.backup-bucket.arn,
-                  "${aws_s3_bucket.backup-bucket.arn}/*"]
+                  "${aws_s3_bucket.backup-bucket.arn}/*",
+                  aws_s3_bucket.documents.arn,
+                  "${aws_s3_bucket.documents.arn}/*",
+                  aws_s3_bucket.regulations.arn,
+                  "${aws_s3_bucket.regulations.arn}/*",
+                  aws_s3_bucket.assets.arn,
+                  "${aws_s3_bucket.assets.arn}/*"]
     }
   statement {
     actions = [

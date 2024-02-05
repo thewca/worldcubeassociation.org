@@ -54,4 +54,5 @@ module "shared" {
   region = var.region
   availability_zones = var.availability_zones
   rails_startup_time = local.rails_startup_time
+  pma_auth_secret = var.pma_auth_secret
 }

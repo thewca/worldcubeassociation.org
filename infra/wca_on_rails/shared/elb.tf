@@ -56,6 +56,12 @@ resource "aws_lb" "this" {
   subnets            = [aws_default_subnet.default_az1.id,"subnet-0349cc3938fa60ef5", aws_default_subnet.default_az3.id, aws_default_subnet.default_az4.id]
   ip_address_type    = "ipv4"
 
+  access_logs {
+    prefix = "elb-access-logs/log"
+    enabled = true
+    bucket = "wca-on-rails-prod"
+  }
+
   idle_timeout = 60
 }
 
@@ -74,11 +80,11 @@ resource "aws_lb_target_group" "rails-production" {
 
   deregistration_delay = 10
   health_check {
-    interval            = 60
+    interval            = 5
     path                = "/"
     port                = "traffic-port"
     protocol            = "HTTP"
-    timeout             = 5
+    timeout             = 2
     healthy_threshold   = 2
     unhealthy_threshold = 5
     matcher             = 200
@@ -122,11 +128,11 @@ resource "aws_lb_target_group" "rails-staging" {
 
   deregistration_delay = 10
   health_check {
-    interval            = 60
+    interval            = 5
     path                = "/"
     port                = "traffic-port"
     protocol            = "HTTP"
-    timeout             = 5
+    timeout             = 2
     healthy_threshold   = 2
     unhealthy_threshold = 5
     matcher             = 200
@@ -226,6 +232,20 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
   priority     = 3
 
   action {
+    authenticate_oidc {
+      authorization_endpoint = "https://www.worldcubeassociation.org/oauth/authorize"
+      client_id              = "B9ntPrf7icOTdAXUYAePf1Y_T2AMnhwQJsYdme95FC4"
+      client_secret          = var.pma_auth_secret
+      issuer                 = "https://www.worldcubeassociation.org"
+      token_endpoint         = "https://www.worldcubeassociation.org/oauth/token"
+      user_info_endpoint     = "https://www.worldcubeassociation.org/oauth/userinfo"
+      scope                  = "openid"
+      session_cookie_name    = "AWSELBAuthSessionCookie"
+      on_unauthenticated_request = "authenticate"
+    }
+    type = "authenticate-oidc"
+  }
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.auxiliary.arn
   }
@@ -238,7 +258,7 @@ resource "aws_lb_listener_rule" "pma_forward_prod" {
 
   condition {
     path_pattern {
-      values = ["/results/database"]
+      values = ["/results/database*"]
     }
   }
 }
@@ -264,6 +284,21 @@ resource "aws_lb_listener_rule" "pma_forward_staging" {
   priority     = 1
 
   action {
+    authenticate_oidc {
+      authorization_endpoint = "https://staging.worldcubeassociation.org/oauth/authorize"
+      client_id              = "example-application-id"
+      client_secret          = "example-secret"
+      issuer                 = "https://staging.worldcubeassociation.org"
+      token_endpoint         = "https://staging.worldcubeassociation.org/oauth/token"
+      user_info_endpoint     = "https://staging.worldcubeassociation.org/oauth/userinfo"
+      scope                  = "openid"
+      session_cookie_name    = "AWSELBAuthSessionCookieStaging"
+      on_unauthenticated_request = "authenticate"
+    }
+    type = "authenticate-oidc"
+  }
+
+  action {
     type             = "forward"
     target_group_arn = aws_lb_target_group.pma-staging.arn
   }
@@ -276,7 +311,7 @@ resource "aws_lb_listener_rule" "pma_forward_staging" {
 
   condition {
     path_pattern {
-      values = ["/results/database"]
+      values = ["/results/database*"]
     }
   }
 }

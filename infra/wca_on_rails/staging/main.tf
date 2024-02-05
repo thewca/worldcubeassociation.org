@@ -287,6 +287,11 @@ resource "aws_ecs_service" "this" {
     weight            = 1
   }
 
+  deployment_circuit_breaker {
+    enable   = true
+    rollback = true
+  }
+
   enable_execute_command = true
 
   ordered_placement_strategy {
