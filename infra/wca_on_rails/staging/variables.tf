@@ -88,6 +88,9 @@ variable "shared" {
     pma_staging: object({
       arn: string
     })
+    mailcatcher: object({
+      arn: string
+    })
     account_id: string
     private_subnets: any
   })

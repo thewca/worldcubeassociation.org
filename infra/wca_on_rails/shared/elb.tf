@@ -143,6 +143,30 @@ resource "aws_lb_target_group" "rails-staging" {
   }
 }
 
+resource "aws_lb_target_group" "mailcatcher-staging" {
+  name        = "wca-staging-mailcatcher"
+  port        = 1080
+  protocol    = "HTTP"
+  vpc_id      = aws_default_vpc.default.id
+  target_type = "ip"
+
+  deregistration_delay = 10
+  health_check {
+    interval            = 60
+    path                = "/"
+    port                = "traffic-port"
+    protocol            = "HTTP"
+    timeout             = 5
+    healthy_threshold   = 2
+    unhealthy_threshold = 5
+    matcher             = 200
+  }
+  tags = {
+    Name = "${var.name_prefix}-mailcatcher"
+    Env = "staging"
+  }
+}
+
 resource "aws_lb_target_group" "pma-staging" {
   name        = "wca-main-pma"
   port        = 80
@@ -187,6 +211,22 @@ resource "aws_lb_listener" "https" {
 
   tags = {
     Name = "${var.name_prefix}-https"
+  }
+}
+
+resource "aws_lb_listener" "mailcatcher" {
+  load_balancer_arn = aws_lb.this.arn
+
+  port            = 444
+  protocol        = "HTTP"
+
+  default_action {
+    target_group_arn = aws_lb_target_group.mailcatcher-staging.arn
+    type             = "forward"
+  }
+
+  tags = {
+    Name = "${var.name_prefix}-mailcatcher"
   }
 }
 
@@ -345,4 +385,8 @@ output "pma_production"{
 
 output "pma_staging"{
   value = aws_lb_target_group.pma-staging
+}
+
+output "mailcatcher"{
+  value = aws_lb_target_group.mailcatcher-staging
 }

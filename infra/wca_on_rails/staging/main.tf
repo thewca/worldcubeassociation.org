@@ -210,7 +210,11 @@ resource "aws_ecs_task_definition" "this" {
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
       cpu    = 256
       memory = 1349
-      portMappings = []
+      portMappings = [{
+        # Mailcatcher
+        containerPort = 1080
+        protocol      = "tcp"
+      }]
       logConfiguration = {
         logDriver = "awslogs"
         options = {
@@ -314,6 +318,12 @@ resource "aws_ecs_service" "this" {
     target_group_arn = var.shared.pma_staging.arn
     container_name   = "pma-staging"
     container_port   = 80
+  }
+
+  load_balancer {
+    target_group_arn = var.shared.mailcatcher.arn
+    container_name   = "sidekiq-staging"
+    container_port   = 1080
   }
 
   network_configuration {
