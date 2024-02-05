@@ -563,7 +563,7 @@ class User < ApplicationRecord
   end
 
   def any_kind_of_delegate?
-    delegate_status.present? || active_roles.any? { |role| role.group_type == UserGroup.group_types[:delegate_regions] }
+    delegate_status.present? || active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
   end
 
   def trainee_delegate?
@@ -1282,7 +1282,7 @@ class User < ApplicationRecord
   end
 
   def active_roles
-    roles.select { |role| role.is_active? }
+    roles.select { |role| UserRole.is_active?(role) }
   end
 
   def delegate_role
