@@ -1514,7 +1514,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.8.4":
+"@babel/runtime@npm:^7.10.4, @babel/runtime@npm:^7.10.5, @babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.20.13, @babel/runtime@npm:^7.23.2, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.8.4":
   version: 7.23.9
   resolution: "@babel/runtime@npm:7.23.9"
   dependencies:
@@ -2469,6 +2469,15 @@ __metadata:
   dependencies:
     "@types/tern": "npm:*"
   checksum: 02ec4f84b0ad8f1b1528c0f527cc06de01e3657e81f0d1478cc29fcb8da443e24b026327b1dfa208dcc961800c0c8f3054b5e03dde28259c3cda3f3bfc2036f9
+  languageName: node
+  linkType: hard
+
+"@types/codemirror@npm:~5.60.5":
+  version: 5.60.15
+  resolution: "@types/codemirror@npm:5.60.15"
+  dependencies:
+    "@types/tern": "npm:*"
+  checksum: 4d32ee8d335650956fc59b26f29909de0656ce9c68f7527caf2aa68e6a6a2e8be6ec7a6b80c02bfab7ac6b17040d6c2d83d394b9d00fdbf4b5588691f2efbba6
   languageName: node
   linkType: hard
 
@@ -8802,6 +8811,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-simplemde-editor@npm:^5.2.0":
+  version: 5.2.0
+  resolution: "react-simplemde-editor@npm:5.2.0"
+  dependencies:
+    "@types/codemirror": "npm:~5.60.5"
+  peerDependencies:
+    easymde: ">= 2.0.0 < 3.0.0"
+    react: ">=16.8.2"
+    react-dom: ">=16.8.2"
+  checksum: 6b352fe0634cc45277502b83eeb70030d50a0726943b8e343e4afccb0dd152a395a533c151795a9724ec61413a3567fd23ed209d60f0ec283006add12b0c120e
+  languageName: node
+  linkType: hard
+
 "react-spinners@npm:^0.13.8":
   version: 0.13.8
   resolution: "react-spinners@npm:0.13.8"
@@ -8809,6 +8831,19 @@ __metadata:
     react: ^16.0.0 || ^17.0.0 || ^18.0.0
     react-dom: ^16.0.0 || ^17.0.0 || ^18.0.0
   checksum: 59a030ece288f045a443e0b720c94636fc00667bcb8cd5a36ed8342cc2bc52a98106a676875551b3389ae5943bd7c4d4aa2ede0fb914bbde4322211f0f0120a8
+  languageName: node
+  linkType: hard
+
+"react-textarea-autosize@npm:^8.5.3":
+  version: 8.5.3
+  resolution: "react-textarea-autosize@npm:8.5.3"
+  dependencies:
+    "@babel/runtime": "npm:^7.20.13"
+    use-composed-ref: "npm:^1.3.0"
+    use-latest: "npm:^1.2.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 33d38a6d96cf584842695b50c341980944ece23a42155bf0bd1958f02396adb185c7720b88678dc677817fe111783059c0ebcdf7761644006892583b10e258ee
   languageName: node
   linkType: hard
 
@@ -9240,7 +9275,9 @@ __metadata:
     react-dom: "npm:^18.2.0"
     react-intersection-observer: "npm:^9.6.0"
     react-leaflet: "npm:^4.2.1"
+    react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.13.8"
+    react-textarea-autosize: "npm:^8.5.3"
     react_ujs: "npm:^3.2.0"
     regenerator-runtime: "npm:^0.14.1"
     resolve-url-loader: "npm:^5.0.0"
@@ -10419,6 +10456,41 @@ __metadata:
   dependencies:
     punycode: "npm:^2.1.0"
   checksum: 4ef57b45aa820d7ac6496e9208559986c665e49447cb072744c13b66925a362d96dd5a46c4530a6b8e203e5db5fe849369444440cb22ecfc26c679359e5dfa3c
+  languageName: node
+  linkType: hard
+
+"use-composed-ref@npm:^1.3.0":
+  version: 1.3.0
+  resolution: "use-composed-ref@npm:1.3.0"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: e64ce52f4b18c020407636784192726807404a2552609acf7497b66a2b7070674fb5d2b950d426c4aa85f353e2bbecb02ebf9c5b865cd06797938c70bcbf5d26
+  languageName: node
+  linkType: hard
+
+"use-isomorphic-layout-effect@npm:^1.1.1":
+  version: 1.1.2
+  resolution: "use-isomorphic-layout-effect@npm:1.1.2"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: d8deea8b85e55ac6daba237a889630bfdbf0ebf60e9e22b6a78a78c26fabe6025e04ada7abef1e444e6786227d921e648b2707db8b3564daf757264a148a6e23
+  languageName: node
+  linkType: hard
+
+"use-latest@npm:^1.2.1":
+  version: 1.2.1
+  resolution: "use-latest@npm:1.2.1"
+  dependencies:
+    use-isomorphic-layout-effect: "npm:^1.1.1"
+  peerDependencies:
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+  peerDependenciesMeta:
+    "@types/react":
+      optional: true
+  checksum: 1958886fc35262d973f5cd4ce16acd6ce3a66707a72761c93abd1b5ae64e1a11efa83f68e6c8c9bf1647628037980ce59df64cba50adb36bd4071851e70527d2
   languageName: node
   linkType: hard
 
