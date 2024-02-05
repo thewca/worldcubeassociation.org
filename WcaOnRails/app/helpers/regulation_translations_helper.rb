@@ -10,7 +10,7 @@ module RegulationTranslationsHelper
   private def translations_metadata
     @@metadata_cache ||= []
     s3 = regulations_bucket
-    build_hash = current_build_hash
+    build_hash = current_build_hash(s3)
 
     if @@metadata_cache.empty? || build_hash != @@cached_for_hash
 
@@ -34,19 +34,17 @@ module RegulationTranslationsHelper
   end
 
   private def regulations_bucket
-    @@s3 ||= Aws::S3::Resource.new(
+    Aws::S3::Resource.new(
       region: EnvConfig.STORAGE_AWS_REGION,
       credentials: Aws::ECSCredentials.new,
-      ).bucket(BUCKET_NAME)
+    ).bucket(BUCKET_NAME)
   end
 
-  private def current_build_hash
-    s3 = regulations_bucket
+  private def current_build_hash(s3 = regulations_bucket)
     s3.object(TRANSLATIONS_HASH_FILE).get.body.read.strip
   end
 
-  private def current_base_version
-    s3 = regulations_bucket
+  private def current_base_version(s3 = regulations_bucket)
     s3.object(TRANSLATIONS_DATE_FILE).get.body.read.strip
   end
 
