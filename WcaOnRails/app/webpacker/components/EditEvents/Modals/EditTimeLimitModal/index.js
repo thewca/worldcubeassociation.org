@@ -87,6 +87,7 @@ export default function EditTimeLimitModal({ wcifEvent, wcifRound, disabled }) {
       disabled={disabled}
       closeOnDocumentClick={false}
       closeOnDimmerClick={false}
+      triggerButtonProps={{ name: 'timeLimit' }}
     >
       <Label>
         Time Limit

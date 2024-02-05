@@ -15,6 +15,7 @@ RUN echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesourc
 RUN apt-get update && apt-get install -y \
   git \
   build-essential \
+  zip \
   nodejs \
   mariadb-client \
   libssl-dev \

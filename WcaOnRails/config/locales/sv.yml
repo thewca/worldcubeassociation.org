@@ -435,6 +435,8 @@ sv:
         location: Plats
         #original_hash: 0f21717
         region: Region
+        #original_hash: e3fc6e9
+        subRegion: Subregion
         #original_hash: 730db33
         receive_delegate_reports: Jag vill få delegatrapporter för WCA-tävlingar via e-post
         #original_hash: 57eaf24
@@ -744,6 +746,8 @@ sv:
           candidate_delegate: Junior-delegat
           #original_hash: 12ab214
           delegate: Delegat
+          #original_hash: 45c2317
+          regional_delegate: Regional delegat
           #original_hash: d463c23
           senior_delegate: Senior-delegat
         teams_committees:
@@ -2015,8 +2019,8 @@ sv:
           Profilbilden får inte innehålla stötande innehåll (t.ex. stötande
           gester).
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: 'Ytterligare riktlinjer för Personal:'
+        #original_hash: 5d5a47a
+        title: 'Ytterligare riktlinjer för personal och trainee-delegater:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2142,6 +2146,12 @@ sv:
         formulär</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'WCA-ID %{link_id} finns inte.'
+  user_groups:
+    group_types:
+      #original_hash: abd2828
+      board: 'WCA:s styrelse'
+      #original_hash: d79bd00
+      officers: WCA Officers
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2981,6 +2991,8 @@ sv:
       past_from: 'Tidigare tävlingar från %{year}'
       #original_hash: 7cff459
       past_all: Tidigare tävlingar från alla år
+      #original_hash: 6eef664
+      no_delegates: Inga
       #original_hash: 819fe62
       show_cancelled: Visa inställda tävlingar
       #original_hash: 0eda967
@@ -3029,6 +3041,8 @@ sv:
           full: >-
             Gränsen för antal tävlande har nåtts, nya anmälningar kommer sättas
             på väntelistan.
+      #original_hash: 28531af
+      no_more_comps: Inga fler tävlingar
       #original_hash: 8b09d74
       no_comp_found: Inga tävlingar hittades.
       #original_hash: 7008166
@@ -3065,10 +3079,10 @@ sv:
       supports_md_html: >-
         Stöder <a href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: e5cbb13
+      #original_hash: 8ea1fac
       name_reason_html: >-
         En kort förklaring av tävlingsnamnet. Namnet måste överensstämma med <a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
         Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
@@ -3242,7 +3256,7 @@ sv:
         short_name: Ett kort namn för visning. Om namnet på tävlingen är under %{short_name_limit}
           tecken bör detta inte ändras, utan bör vara samma som det vanliga namnet.
         name_reason_html: En kort förklaring av tävlingsnamnet. Namnet måste överensstämma
-          med <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          med <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
           country_id: ''
@@ -3970,12 +3984,12 @@ sv:
       unstick_at_future: måste vara i framtiden
   contacts:
     website:
-      #original_hash: 35c333c
+      #original_hash: d7707e7
       faq_note_html: >-
         Innan du gör en förfrågan får du gärna ta en titt på våra <a
         href="/faq">Vanliga Frågor</a>! Om du vill kontakta en viss kommitté
-        eller ett team kan du hitta deras kontaktinformation på <a
-        href="/teams-committees">den här sidan</a>.
+        eller ett team som inte listas här kan du hitta deras kontaktinformation
+        på <a href="/teams-committees">den här sidan</a>.
       #original_hash: 4ef2aad
       title: 'WCA:s Kontaktformulär'
       inquiries:
@@ -4254,7 +4268,7 @@ sv:
     spirit_footer: 'WCA:s Anda'
     #original_hash: c1781ee
     our_goals_title: Våra mål
-    #original_hash: 743ca74
+    #original_hash: 375db0f
     our_goals_content_html: >-
       <p>World Cube Association vill ge möjligheter till delaktighet och
       ledarskap för ungdomar runt om i världen genom att öka tillgängligheten
@@ -4263,7 +4277,7 @@ sv:
       involverade ungdomarna och att inkluderandet av nya grupper av människor
       gör det möjligt för vårt community att stärkas. Ett dokument som
       innehåller styrelsens vision och strategi för WCA finns <a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">här</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Hur ser framtiden för WCA ut?
     #original_hash: 487c6a1
@@ -4564,6 +4578,8 @@ sv:
     acknowledges: 'WCA erkänner följande WCA-delegater:'
     #original_hash: 0397112
     regions: Regioner
+    #original_hash: 0e57333
+    all_regions: Alla regioner
     table:
       #original_hash: 709a232
       name: Namn
@@ -4571,6 +4587,14 @@ sv:
       role: Roll
       #original_hash: 0f21717
       region: Region
+      #original_hash: fee4fb7
+      first_delegated: Första delegerade tävling
+      #original_hash: e2232e5
+      last_delegated: Sista delegerade tävling
+      #original_hash: 5ab4a17
+      total_delegated: Totalt antal delegerade tävlingar
+      #original_hash: 90ccd64
+      history: Historik
   regional_organizations:
     #original_hash: 37b8fdc
     title: Regionala Organisationer
@@ -5222,10 +5246,10 @@ sv:
     paragraph3:
       #original_hash: 00d3bf8
       title: Deadlines for the announcement of the competition
-      #original_hash: 66bf437
+      #original_hash: 477a672
       content_html: >-
         Tävlingen måste publiceras minst 28 dagar innan den börjar (se <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
         Detta är dock sällan tillräckligt med tid. Du bör överväga allt som
         kommer att ingå i att arrangera din tävling och ge dig själv
         tillräckligt med tid att förbereda dig. WCAT kommer också att behöva tid
@@ -5283,10 +5307,10 @@ sv:
     paragraph5:
       #original_hash: 17d01de
       title: Competitor limits
-      #original_hash: bd8e6ee
+      #original_hash: 6bfef2c
       content_html: >-
         Antalet tävlande kan begränsas per gren eller per tävling (se <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Tävlingskrav</a>).
         Delegaten för tävlingen måste få gränsen godkänd av WCAT. Gränser för
         antal tävlande bör noga övervägas, i enlighet med det förväntade
         tävlingsintresset. Om gränsen sätts till ett lägre antal bör det finnas

@@ -14,7 +14,11 @@ import { countries, timezoneData } from '../../../lib/wca-data.js.erb';
 import RoomPanel from './RoomPanel';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
-import { addRoom, editVenue, removeVenue } from '../store/actions';
+import {
+  addRoom,
+  editVenue,
+  removeVenue,
+} from '../store/actions';
 import { toDegrees, toMicrodegrees } from '../../../lib/utils/edit-schedule';
 
 const countryOptions = countries.real.map((country) => ({

@@ -10,7 +10,7 @@ import {
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 
-import { fetchUserGroupsUrl } from '../../lib/requests/routes.js.erb';
+import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import '../../stylesheets/delegates/style.scss';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -30,7 +30,7 @@ export default function Delegates() {
     data: delegateGroups,
     loading: delegateGroupsLoading,
     error: delegateGroupsError,
-  } = useLoadedData(fetchUserGroupsUrl(groupTypes.delegate_regions));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.delegate_regions, 'name', { isActive: true }));
   const delegateRegions = React.useMemo(
     () => delegateGroups?.filter((group) => group.parent_group_id === null) || [],
     [delegateGroups],

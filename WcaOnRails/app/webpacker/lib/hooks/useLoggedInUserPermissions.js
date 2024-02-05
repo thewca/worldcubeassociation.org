@@ -21,7 +21,7 @@ export default function useLoggedInUserPermissions() {
 
       switch (roleGroupType) {
         case groupTypes.delegate_regions:
-          return Boolean(data?.can_edit_delegate_regions.scope === '*' || data?.can_edit_delegate_regions.scope.some((groupId) => groupId === roleGroupId));
+          return Boolean(data?.can_edit_groups.scope === '*' || data?.can_edit_groups.scope.some((groupId) => groupId === roleGroupId));
         case groupTypes.teams_committees:
           return Boolean(data?.can_edit_teams_committees.scope === '*' || data?.can_edit_teams_committees.scope.some((groupId) => groupId === roleGroupId));
         case groupTypes.translators:

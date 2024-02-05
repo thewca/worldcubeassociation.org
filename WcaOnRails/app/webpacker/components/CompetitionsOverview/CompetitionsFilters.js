@@ -369,6 +369,7 @@ function CompDisplayCheckboxes({
               id="show_registration_status"
               checked={shouldShowRegStatus}
               onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+              disabled // FIXME Pending because of too expensive queries
             />
           </div>
         )

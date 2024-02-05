@@ -2909,7 +2909,7 @@ ca:
       name_reason_html: >-
         Una breu explicació pel nom de la competició. El nom ha de complir amb
         <a
-        href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
         Competition Requirements Policy</a>.
       #original_hash: 9d9126e
       venue_html: >-
@@ -3079,7 +3079,7 @@ ca:
         short_name: 'Un nom curt per mostrar. Si el nom de la competició ja és curt,
           pots reutilitzar el nom (exemple: Europe 2006).'
         name_reason_html: Una breu explicació pel nom de la competició. El nom ha
-          de complir amb <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA
+          de complir amb <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA
           Competition Requirements Policy</a>.
         venue:
           country_id: ''
@@ -4058,7 +4058,7 @@ ca:
       jove involucrada i que introduir esdeveniments de cubs a grups nous de
       gent ens permet a tota la comunitat ser més forts. El document que conté
       la Visió i Estratègia de l'Executiu per la WCA pot ser trobat <a
-      href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>.</p>
+      href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">aquí</a>.</p>
     #original_hash: f64ccc7
     whats_next_title: Què és el següent per la WCA?
     #original_hash: a08c67f
@@ -5067,7 +5067,7 @@ ca:
       content_html: >-
         La competició ha de ser anunciada com a mínim 28 dies abans de l'inici
         d'aquesta (mira <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
         de Competició</a>). Tanmateix, aquest període és rarament suficient.
         Hauries de considerar tot el que necessitaràs per preparar la competició
         i deixar-te suficient temps per preparar-ho. WCAT també necessitarà
@@ -5132,7 +5132,7 @@ ca:
       content_html: >-
         El nombre de competidors pot ser limitat per categoria o per competició
         (mira <a
-        href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
+        href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Requisits
         de Competició</a>). El Delegat de la competició ha d'obtenir l'aprovació
         del límit de competidors per part de WCAT. Els límits dels competidors
         s'han de triar amb prudència i d'acord amb l'interès esperat del

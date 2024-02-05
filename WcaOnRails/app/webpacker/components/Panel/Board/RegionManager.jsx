@@ -18,6 +18,7 @@ const defaultRegion = {
   parent_group_id: null,
   is_active: true,
   is_hidden: false,
+  friendlyId: '',
 };
 
 function UserGroupVisibility({ userGroup, save, sync }) {
@@ -201,6 +202,11 @@ export default function RegionManager() {
               label="Name"
               value={newRegion.name}
               onChange={(e, { value }) => setNewRegion({ ...newRegion, name: value })}
+            />
+            <Form.Input
+              label="Friendly ID"
+              value={newRegion.friendlyId}
+              onChange={(e, { value }) => setNewRegion({ ...newRegion, friendlyId: value })}
             />
             <Form.Button
               onClick={() => {
