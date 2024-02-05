@@ -8,7 +8,7 @@
   <p><%= t('full_organizer_guidelines.essential.description') %></p>
   <div class="list-group">
     <% %w(finding-venue orga-team-delegate budget schedule checklist registration venue-setup work-during-comp).each do |doc| %>
-      <%= link_to "/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
+      <%= link_to "https://documents.worldcubeassociation.org/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
         <%= ui_icon("file alt") %>
         <%= t("full_organizer_guidelines.essential.#{doc}") %>
       <% end %>
@@ -18,7 +18,7 @@
   <p><%= t('full_organizer_guidelines.recommended.title') %></p>
   <div class="list-group">
     <% %w(staff emails running-systems new-competitors enhancing-experience reflection).each do |doc| %>
-      <%= link_to "/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
+      <%= link_to "https://documents.worldcubeassociation.org/edudoc/organizer-guidelines/#{doc}.pdf", class: "list-group-item" do %>
         <%= ui_icon("file alt") %>
         <%= t("full_organizer_guidelines.recommended.#{doc}") %>
       <% end %>

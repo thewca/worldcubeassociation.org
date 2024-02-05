@@ -6,6 +6,7 @@ import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
 
 import ListViewSection from './ListViewSection';
+import { isInProgress, isProbablyOver } from '../../lib/utils/competition-table';
 
 function ListView({
   competitions,
@@ -24,9 +25,9 @@ function ListView({
 
   switch (filterState.timeOrder) {
     case 'present': {
-      const inProgressComps = competitions?.filter((comp) => comp.inProgress);
+      const inProgressComps = competitions?.filter((comp) => isInProgress(comp));
       const upcomingComps = competitions?.filter((comp) => (
-        !comp.inProgress && !comp.isProbablyOver
+        !isInProgress(comp) && !isProbablyOver(comp)
       ));
       return (
         <div id="competitions-list">

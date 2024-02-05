@@ -229,3 +229,6 @@ Style/HashSyntax:
 
 Naming/BlockForwarding:
   Enabled: false
+
+Style/ArgumentsForwarding:
+  RedundantBlockArgumentNames: []

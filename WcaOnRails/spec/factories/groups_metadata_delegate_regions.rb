@@ -21,5 +21,17 @@ FactoryBot.define do
     factory :delegate_region_usa_metadata do
       friendly_id { "us" }
     end
+
+    factory :delegate_region_california_metadata do
+      friendly_id { "ca" }
+    end
+
+    factory :delegate_region_texas_metadata do
+      friendly_id { "tx" }
+    end
+
+    factory :delegate_region_florida_metadata do
+      friendly_id { "fl" }
+    end
   end
 end
