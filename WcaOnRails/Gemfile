@@ -104,6 +104,7 @@ gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
+gem 'slack-ruby-client'
 
 group :development, :test do
   gem 'spring'
