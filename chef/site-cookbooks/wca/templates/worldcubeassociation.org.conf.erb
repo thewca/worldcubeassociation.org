@@ -33,6 +33,12 @@ server {
     deny all;
   }
 
+  # Allow access to /.well-known/*,
+  # including the Apple Pay domain association file.
+  location ^~ /.well-known/ {
+    allow all;
+  }
+
   # Redirect 401 to log in page
   # Unfortunately, I don't think there's any way to redirect back after the
   # user logs in.
