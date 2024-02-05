@@ -89,8 +89,6 @@ module PaypalInterface
   class << self
     def paypal_connection(url)
       unless Rails.env.production?
-
-
         Faraday.new(
           url: url,
           headers: {

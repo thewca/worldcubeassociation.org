@@ -398,10 +398,10 @@ class CompetitionsController < ApplicationController
       @competition = competition_from_params
       CompetitionPaymentIntegration.disconnect(@competition, 'paypal')
 
-      if !CompetitionPaymentIntegration.paypal_connected?(@competition)
-        flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
-      else
+      if CompetitionPaymentIntegration.paypal_connected?(@competition)
         flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
+      else
+        flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
       end
       redirect_to competitions_payment_setup_path(@competition)
     end
