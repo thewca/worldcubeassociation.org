@@ -1386,6 +1386,8 @@ en:
       past_from: "Past from %{year}"
       past_all: "Past from all years"
       no_delegates: "None"
+      delegates_loading: "Waiting to finish loading all Delegates..."
+      no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
       #context: titles for the competitions list

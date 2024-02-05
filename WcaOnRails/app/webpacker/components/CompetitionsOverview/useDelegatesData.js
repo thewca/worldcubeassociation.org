@@ -30,7 +30,7 @@ const useDelegatesData = () => {
 
   const delegatesData = data?.pages.flatMap((page) => page.data);
 
-  return delegatesData;
+  return { delegatesLoading: hasNextPage, delegatesData };
 };
 
 export default useDelegatesData;
