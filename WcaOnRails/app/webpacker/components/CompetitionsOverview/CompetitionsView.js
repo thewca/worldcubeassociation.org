@@ -20,10 +20,13 @@ const DEBOUNCE_MS = 600;
 
 function CompetitionsView() {
   const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
-  const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS)
+  const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
   const [displayMode, setDisplayMode] = useState('list');
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
-  const competitionQueryKey = useMemo(() => calculateQueryKey(debouncedFilterState), [debouncedFilterState]);
+  const competitionQueryKey = useMemo(
+    () => calculateQueryKey(debouncedFilterState),
+    [debouncedFilterState],
+  );
 
   const {
     data: rawCompetitionData,
