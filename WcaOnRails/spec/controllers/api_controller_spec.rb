@@ -144,6 +144,9 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     let!(:user) { FactoryBot.create(:delegate, name: "Jeremy Fleischman") }
     let!(:comp) { FactoryBot.create(:competition, :confirmed, :visible, name: "jeremy Jfly's Competition 2015", delegates: [user]) }
     let!(:post) { FactoryBot.create(:post, title: "jeremy post title", body: "post body", author: user) }
+    s3 = Aws::S3::Client.new(stub_responses: true)
+    s3.stub_responses(:get_object, ->(_) { { body: "{}" } })
+    Regulation.reload_regulations(Aws::S3::Resource.new(client: s3))
 
     it 'requires query parameter' do
       get :omni_search
