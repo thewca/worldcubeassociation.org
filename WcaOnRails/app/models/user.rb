@@ -1400,7 +1400,7 @@ class User < ApplicationRecord
     }
   end
 
-  def roles(logged_in_user = nil)
+  def roles
     roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
@@ -1460,8 +1460,6 @@ class User < ApplicationRecord
       }
     end
 
-    roles.select do |role|
-      UserRole.is_visible_to_user?(role, logged_in_user)
-    end
+    roles
   end
 end
