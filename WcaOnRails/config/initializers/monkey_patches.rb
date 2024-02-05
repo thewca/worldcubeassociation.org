@@ -75,4 +75,17 @@ Rails.configuration.to_prepare do
       @client.application.dangerously_allow_any_redirect_uri ? true : old_validate_redirect_uri.bind(self).call
     end
   end
+
+  Enumerable.class_eval do
+    def stable_sort_by_asc
+      sort_by.with_index { |x, idx| [yield(x), idx] }
+    end
+
+    # "sort and then reverse" is the usual Ruby hack for achieving DESC sort.
+    # But this kills stability when applying to "stable sort and then reverse"
+    # so because of the reversing we need to reverse the tie-breaker as well
+    def stable_sort_by_desc
+      sort_by.with_index { |x, idx| [yield(x), -idx] }.reverse
+    end
+  end
 end
