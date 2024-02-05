@@ -67,7 +67,7 @@ function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) 
   if (
     index > 0
     && startYear(competitions[index])
-    !== startYear(competitions[index - 1])
+      !== startYear(competitions[index - 1])
     && !isSortedByAnnouncement
   ) {
     return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{startYear(competitions[index])}</List.Item>;
