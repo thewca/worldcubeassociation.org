@@ -52,30 +52,32 @@
 
   <% end %>
 
-  <%# PayPal Payments %>
-  <h2><%= t('payments.payment_setup.provider_heading', provider: t('payments.payment_providers.paypal')) %></h2>
+  <% unless Rails.env.production? %>
+    <%# PayPal Payments %>
+    <h2><%= t('payments.payment_setup.provider_heading', provider: t('payments.payment_providers.paypal')) %></h2>
 
-  <%# PayPal not connected %>
-  <% if !CompetitionPaymentIntegration.paypal_connected?(@competition) %>
-    <p><b><%= t('payments.payment_setup.paypal_connect_warning') %></b></p>
-    <p><%= t('payments.payment_setup.paypal_payment_info') %></p>
-    <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
-      <%= ui_icon("cc stripe") %><%= t('payments.payment_setup.connect_button', provider: t('payments.payment_providers.paypal')) %>
-    <% end %>
+    <%# PayPal not connected %>
+    <% if !CompetitionPaymentIntegration.paypal_connected?(@competition) %>
+      <p><b><%= t('payments.payment_setup.paypal_connect_warning') %></b></p>
+      <p><%= t('payments.payment_setup.paypal_payment_info') %></p>
+      <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
+        <%= ui_icon("cc stripe") %><%= t('payments.payment_setup.connect_button', provider: t('payments.payment_providers.paypal')) %>
+      <% end %>
 
-  <%# PayPal is connected %>
-  <% else %>
-    <p><b><%= t('payments.payment_setup.paypal_disconnect_warning') %></b></p>
-    <p><%= t('payments.payment_setup.paypal_disconnect_info') %></p>
+    <%# PayPal is connected %>
+    <% else %>
+      <p><b><%= t('payments.payment_setup.paypal_disconnect_warning') %></b></p>
+      <p><%= t('payments.payment_setup.paypal_disconnect_info') %></p>
 
-    <% if current_user&.can_admin_competitions? %>
-      <%= button_to(
-        competition_disconnect_paypal_path,
-        class: 'btn btn-danger',
-        disabled: !CompetitionPaymentIntegration.paypal_connected?(@competition),
-        method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.paypal')) }
-       ) do %>
-        <%= t('payments.payment_setup.disconnect_account', provider: t('payments.payment_providers.paypal')) %>
+      <% if current_user&.can_admin_competitions? %>
+        <%= button_to(
+          competition_disconnect_paypal_path,
+          class: 'btn btn-danger',
+          disabled: !CompetitionPaymentIntegration.paypal_connected?(@competition),
+          method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.paypal')) }
+         ) do %>
+          <%= t('payments.payment_setup.disconnect_account', provider: t('payments.payment_providers.paypal')) %>
+        <% end %>
       <% end %>
     <% end %>
   <% end %>
