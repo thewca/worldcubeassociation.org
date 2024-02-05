@@ -1441,7 +1441,7 @@ class User < ApplicationRecord
           is_active: true,
         },
         is_active: true,
-        user: user,
+        user: self,
         metadata: {
           status: 'treasurer',
         },
