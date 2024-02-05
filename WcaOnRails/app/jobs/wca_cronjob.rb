@@ -52,6 +52,9 @@ class WcaCronjob < ApplicationJob
       # Inform WST about the error so we can investigate and take action if required
       JobFailureMailer.notify_admin_of_job_failure(job, e).deliver_now
 
+      failure_message = "Job #{job.class} (Sidekiq ID #{job.provider_job_id}) failed"
+      SlackBot.send_error_report(failure_message, e)
+
       # Propagate the error so that our job adapter can do retry-handling
       raise e
     ensure
