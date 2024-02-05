@@ -2090,8 +2090,6 @@ ru:
       already_represented_country: 'Невозможно поменять страну, которую этот участник уже представлял ранее.'
       #original_hash: b589014
       must_have_a_change: 'Имя или страна должны отличаться, чтобы было что обновлять.'
-      #original_hash: 012f032
-      must_be_senior: должен быть Старшим Делегатом
       #original_hash: 2e582eb
       must_not_be_present: должен отсутствовать
       #original_hash: 5b4eac9

@@ -1749,8 +1749,6 @@ uk:
       already_represented_country: 'Не можна змінити країну на таку, яку особа вже представляла в минулому.'
       #original_hash: b589014
       must_have_a_change: 'Ім’я або країна має відрізнятись, щоб оновити інформацію про особу.'
-      #original_hash: 012f032
-      must_be_senior: має бути Провідним делегатом
       #original_hash: 2e582eb
       must_not_be_present: не має бути теперешнім
       #original_hash: 5b4eac9

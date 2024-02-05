@@ -1304,8 +1304,6 @@ sl:
       unique: 'je že v uporabi s strani "%{used_name}" z %{used_email}'
       #original_hash: 26f70ed
       dob_past: mora biti v preteklosti
-      #original_hash: 012f032
-      must_be_senior: mora biti Senior Delegat
       #original_hash: 2e582eb
       must_not_be_present: ne sme biti sedanji
       #original_hash: 5b4eac9

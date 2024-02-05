@@ -1842,8 +1842,6 @@ kk:
       already_represented_country: Бұл қатысушы бұрын ұсынған елді өзгерту мүмкін емес.
       #original_hash: b589014
       must_have_a_change: Жаңарту үшін аты немесе елі әр түрлі болуы керек.
-      #original_hash: 012f032
-      must_be_senior: Үлкен Делегат болуы керек
       #original_hash: 2e582eb
       must_not_be_present: болмауы тиіс
       #original_hash: 5b4eac9

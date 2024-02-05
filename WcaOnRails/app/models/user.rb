@@ -408,13 +408,6 @@ class User < ApplicationRecord
     end
   end
 
-  validate :senior_delegate_must_be_senior_delegate
-  def senior_delegate_must_be_senior_delegate
-    if senior_delegate && !senior_delegate.senior_delegate?
-      errors.add(:senior_delegate, I18n.t('users.errors.must_be_senior'))
-    end
-  end
-
   validates :region_id, presence: true, if: -> { delegate_status.present? }
 
   validate :avatar_requires_wca_id

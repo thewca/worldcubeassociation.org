@@ -2079,8 +2079,6 @@ sv:
       must_have_a_change: >-
         Namnet eller regionen måste vara annorlunda för att personen ska kunna
         uppdateras.
-      #original_hash: 012f032
-      must_be_senior: måste vara senior-delegat
       #original_hash: 48653a9
       already_have_id: >-
         kan inte göra anspråk på ett WCA-ID eftersom du redan har WCA-ID

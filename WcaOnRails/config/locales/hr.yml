@@ -2101,8 +2101,6 @@ hr:
         prošlosti.
       #original_hash: 5fe15d4
       must_have_a_change: Ime ili država moraju biti različiti kako bi se moglo ažurirati osobu.
-      #original_hash: 012f032
-      must_be_senior: mora biti Senior Delegat
       #original_hash: 2e582eb
       must_not_be_present: ne smije biti trenutno
       #original_hash: 5b4eac9

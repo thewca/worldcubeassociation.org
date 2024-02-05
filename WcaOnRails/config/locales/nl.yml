@@ -1938,8 +1938,6 @@ nl:
       must_have_a_change: >-
         De naam of het land moet verschillend zijn om de persoon te kunnen
         bijwerken.
-      #original_hash: 012f032
-      must_be_senior: moet een senior delegate zijn
       #original_hash: 2e582eb
       must_not_be_present: moet niet aanwezig zijn
       #original_hash: 5b4eac9

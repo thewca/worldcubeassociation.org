@@ -1981,8 +1981,6 @@ fi:
       must_have_a_change: >-
         Nimen tai kansalaisuuden täytyy muuttua henkilön tietojen päivittämistä
         varten.
-      #original_hash: 012f032
-      must_be_senior: täytyy olla vastaava delegaatti
       #original_hash: 2e582eb
       must_not_be_present: ei saa olla paikalla
       #original_hash: 5b4eac9

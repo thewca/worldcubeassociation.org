@@ -2138,8 +2138,6 @@ it:
         rappresentato in passato.
       #original_hash: 5fe15d4
       must_have_a_change: Il nome o il paese deve essere diverso per aggiornare la persona.
-      #original_hash: 012f032
-      must_be_senior: deve essere un Delegato Senior
       #original_hash: 2e582eb
       must_not_be_present: non deve essere presente
       #original_hash: 5b4eac9

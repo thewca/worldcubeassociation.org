@@ -1979,8 +1979,6 @@ pl:
       must_have_a_change: >-
         Imię i nazwisko lub kraj musi zostać zmienione, aby zaktualizować daną
         osobę.
-      #original_hash: 012f032
-      must_be_senior: musi być Starszym Delegatem
       #original_hash: 2e582eb
       must_not_be_present: nie może być obecne
       #original_hash: 5b4eac9

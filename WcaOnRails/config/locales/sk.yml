@@ -1115,8 +1115,6 @@ sk:
       unique: 'už je použitý použivateľom "%{used_name}" s %{used_email}'
       #original_hash: 26f70ed
       dob_past: musí byť v minulosti
-      #original_hash: f599dc5
-      must_be_senior: musí byť skúsený delegát
       #original_hash: 2e582eb
       must_not_be_present: nemôže byť terajší
       #original_hash: b2c4ecc

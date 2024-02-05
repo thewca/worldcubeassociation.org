@@ -2056,8 +2056,6 @@ id:
         diwakili oleh orang tersebut.
       #original_hash: b589014
       must_have_a_change: Nama atau negara harus berbeda untuk memperbarui orang tersebut.
-      #original_hash: 012f032
-      must_be_senior: harus Delegate Senior yang mengubahnya
       #original_hash: 2e582eb
       must_not_be_present: tidak boleh ada
       #original_hash: 5b4eac9

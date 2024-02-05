@@ -2100,8 +2100,6 @@ pt:
         no passado.
       #original_hash: 5fe15d4
       must_have_a_change: O nome da região tem que ser diferente para atualizar o competidor.
-      #original_hash: 012f032
-      must_be_senior: deve ser um Delegado Sénior
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar um ID da WCA porque já tem o ID %{wca_id}'
       #original_hash: ec5db95

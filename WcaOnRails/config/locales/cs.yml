@@ -2027,8 +2027,6 @@ cs:
         reprezentovala.
       #original_hash: b589014
       must_have_a_change: Název země musí být jiný pro aktualizaci dané osoby.
-      #original_hash: 012f032
-      must_be_senior: musí být Vyšší Delegát
       #original_hash: 2e582eb
       must_not_be_present: nesmí být přítomný
       #original_hash: 5b4eac9

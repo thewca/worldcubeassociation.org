@@ -1999,8 +1999,6 @@ th:
       already_represented_country: ไม่สามารถเปลี่ยนภูมิภาคเป็นภูมิภาคที่มีการใช้ในอดีตได้
       #original_hash: 5fe15d4
       must_have_a_change: ชื่อหรือภูมิภาคต้องต่างกันในการแก้ไขบุคคล
-      #original_hash: 012f032
-      must_be_senior: ต้องเป็น Senior Delegate
       #original_hash: 48653a9
       already_have_id: 'ไม่สามารถขอรับ WCA ID เพราะคุณมี WCA ID %{wca_id} แล้ว'
       #original_hash: ec5db95

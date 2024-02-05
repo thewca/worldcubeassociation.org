@@ -2130,8 +2130,6 @@ es:
         representado en el pasado.
       #original_hash: 5fe15d4
       must_have_a_change: El nombre de la región debe ser distinta para actualizar.
-      #original_hash: 012f032
-      must_be_senior: debe ser un Delegado Senior
       #original_hash: 2e582eb
       must_not_be_present: debe no ser presente
       #original_hash: 5b4eac9
