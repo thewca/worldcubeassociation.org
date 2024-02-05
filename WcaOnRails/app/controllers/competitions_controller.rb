@@ -406,14 +406,14 @@ class CompetitionsController < ApplicationController
 
   def disconnect_stripe
     @competition = competition_from_params
+    CompetitionPaymentIntegration.disconnect(@competition, 'stripe')
+
     if CompetitionPaymentIntegration.stripe_connected?(@competition)
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
     else
-      comp.update!(connected_stripe_account_id: nil)
-      flash[:success] = t('competitions.messages.stripe_disconnected_success')
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
     end
-    redirect_to competitions_payment_setup_path(comp)
+    redirect_to competitions_payment_setup_path(@competition)
   end
 
   def clone_competition

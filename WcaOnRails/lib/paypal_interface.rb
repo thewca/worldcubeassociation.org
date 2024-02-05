@@ -117,7 +117,7 @@ module PaypalInterface
 
   class << self
     def get_paypal_auth_assertion(competition)
-      payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => competition.connected_stripe_account_id }
+      payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => CompetitionPaymentIntegration.account_for(competition, 'paypal').paypal_merchant_id }
       JWT.encode payload, nil, 'none'
     end
   end

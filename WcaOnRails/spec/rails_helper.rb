@@ -12,6 +12,8 @@ require "capybara/rspec"
 require 'capybara-screenshot/rspec'
 require 'capybara/apparition'
 
+require_relative 'support/webmock_setup'
+
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
 # run as spec files by default. This means that files in spec/support that end
@@ -59,6 +61,13 @@ RSpec.configure do |config|
   # See http://devblog.avdi.org/2012/08/31/configuring-database_cleaner-with-rails-rspec-capybara-and-selenium/
   # See https://github.com/DatabaseCleaner/database_cleaner
   config.use_transactional_fixtures = false
+
+  # Enable VCR for HTTP mocking using :vcr tags in spec definitions
+  config.around(:each, :vcr) do |example|
+    VCR.use_cassette(example.metadata[:full_description]) do
+      example.run
+    end
+  end
 
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and

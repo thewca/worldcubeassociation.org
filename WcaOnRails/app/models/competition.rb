@@ -504,7 +504,7 @@ class Competition < ApplicationRecord
         warnings = championship_warnings.merge(warnings)
       end
 
-      if has_fees? && !connected_stripe_account_id
+      if has_fees? && !CompetitionPaymentIntegration.stripe_connected?(self) && !CompetitionPaymentIntegration.paypal_connected?(self)
         warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info')
       end
     end
@@ -610,7 +610,8 @@ class Competition < ApplicationRecord
              'series_competitions',
              'posting_user',
              'inbox_results',
-             'inbox_persons'
+             'inbox_persons',
+             'competition_payment_integrations'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
