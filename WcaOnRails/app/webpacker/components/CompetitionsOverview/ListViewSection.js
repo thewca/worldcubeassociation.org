@@ -44,7 +44,7 @@ function ListViewSection({
             </span>
             <span className="competition-info">
               <div className="competition-link">
-                <span className={` fi fi-${comp.country?.iso2?.toLowerCase()}`} />
+                <span className={` fi fi-${comp.country_iso2?.toLowerCase()}`} />
                 &nbsp;
                 <a href={comp.url}>{comp.short_display_name}</a>
               </div>
@@ -67,7 +67,7 @@ function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) 
   if (
     index > 0
     && startYear(competitions[index])
-      !== startYear(competitions[index - 1])
+    !== startYear(competitions[index - 1])
     && !isSortedByAnnouncement
   ) {
     return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{startYear(competitions[index])}</List.Item>;
