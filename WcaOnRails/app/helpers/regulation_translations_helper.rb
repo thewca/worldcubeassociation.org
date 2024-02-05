@@ -7,18 +7,14 @@ module RegulationTranslationsHelper
   TRANSLATIONS_DATE_FILE = "#{TRANSLATIONS_FOLDER_PATH}/version-date".freeze
   BUCKET_NAME = 'wca-regulations'
 
-  @@s3 = Aws::S3::Resource.new(
-    region: EnvConfig.STORAGE_AWS_REGION,
-    credentials: Aws::ECSCredentials.new,
-  ).bucket(BUCKET_NAME)
-
   private def translations_metadata
     @@metadata_cache ||= []
+    s3 = regulations_bucket
     build_hash = current_build_hash
 
     if @@metadata_cache.empty? || build_hash != @@cached_for_hash
 
-      metadata_objects = @@s3.objects(prefix: TRANSLATIONS_FOLDER_PATH)
+      metadata_objects = s3.objects(prefix: TRANSLATIONS_FOLDER_PATH)
       metadata_index = metadata_objects.filter { |object| File.extname(object.key) == ".json" }
                                        .index_by { |object| File.basename(File.dirname(object.key)) }
                                        .transform_values { |object| object.get.body.read.strip }
@@ -37,12 +33,21 @@ module RegulationTranslationsHelper
     hash
   end
 
+  private def regulations_bucket
+    @@s3 ||= Aws::S3::Resource.new(
+      region: EnvConfig.STORAGE_AWS_REGION,
+      credentials: Aws::ECSCredentials.new,
+      ).bucket(BUCKET_NAME)
+  end
+
   private def current_build_hash
-    @@s3.object(TRANSLATIONS_HASH_FILE).get.body.read.strip
+    s3 = regulations_bucket
+    s3.object(TRANSLATIONS_HASH_FILE).get.body.read.strip
   end
 
   private def current_base_version
-    @@s3.object(TRANSLATIONS_DATE_FILE).get.body.read.strip
+    s3 = regulations_bucket
+    s3.object(TRANSLATIONS_DATE_FILE).get.body.read.strip
   end
 
   def current_reg_translations
