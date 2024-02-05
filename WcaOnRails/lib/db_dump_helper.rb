@@ -93,7 +93,7 @@ module DbDumpHelper
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
-        credentials: Aws::ECSCredentials.new,
+        credentials: Aws::InstanceProfileCredentials.new,
       ).bucket(BUCKET_NAME)
       bucket.object(s3_path).upload_file(zip_filename, { acl: "public-read" })
 

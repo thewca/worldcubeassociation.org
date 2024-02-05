@@ -16,7 +16,7 @@ class DatabaseController < ApplicationController
   end
 
   def tsv_permalink
-    url, = current_results_export("sql")
+    url, = current_results_export("tsv")
     redirect_to url, status: 301, allow_other_host: true
   end
 
@@ -24,11 +24,14 @@ class DatabaseController < ApplicationController
     export_timestamp = DumpPublicResultsDatabase.start_date
 
     Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
-      file_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
+      base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
+      file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
+
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
-        credentials: Aws::ECSCredentials.new,
+        credentials: Aws::InstanceProfileCredentials.new,
       ).bucket(DbDumpHelper::BUCKET_NAME)
+
       filesize_bytes = bucket.object(file_name).content_length
       [public_s3_path(file_name), filesize_bytes]
     end
@@ -39,7 +42,7 @@ class DatabaseController < ApplicationController
   end
 
   def public_s3_path(file_name)
-    "https://s3.#{EnvConfig.AWS_STORAGE_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{file_name}"
+    "https://s3.#{EnvConfig.STORAGE_AWS_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{file_name}"
   end
 
   def self.render_readme(rendering_engine, export_timestamp)
