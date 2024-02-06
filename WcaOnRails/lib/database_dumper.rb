@@ -192,7 +192,7 @@ module DatabaseDumper
           permissions_granted
         ),
         fake_values: {
-          "paypal_merchant_id" => "abcdefgh",
+          "paypal_merchant_id" => "'abcdefgh'",
         },
       ),
     }.freeze,
