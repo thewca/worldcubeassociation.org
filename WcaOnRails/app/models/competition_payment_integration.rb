@@ -41,4 +41,9 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
     competition.competition_payment_integrations.destroy_by(connected_account_type: AVAILABLE_INTEGRATIONS[integration_name])
   end
+
+  def set_as_inactive
+    self.integration_active = false
+    save
+  end
 end
