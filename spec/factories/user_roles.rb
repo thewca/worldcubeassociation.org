@@ -29,10 +29,6 @@ FactoryBot.define do
 
     trait :delegate_regions_senior_delegate do
       metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'senior_delegate') }
-      after(:create) do |role|
-        role.user.update(delegate_status: 'senior_delegate')
-        role.user.update(region_id: role.group.id)
-      end
     end
 
     trait :delegate_regions_regional_delegate do

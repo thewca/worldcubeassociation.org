@@ -71,7 +71,7 @@ class UserRole < ApplicationRecord
   end
 
   def is_lead?
-    status = metadata[:status]
+    status = metadata ? metadata[:status] : nil
     case group_type
     when UserGroup.group_types[:delegate_regions]
       ["senior_delegate", "regional_delegate"].include?(status)

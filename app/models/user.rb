@@ -20,6 +20,7 @@ class User < ApplicationRecord
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   has_many :roles, class_name: "UserRole"
+  has_many :roles_metadata_delegate_regions, through: :roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -50,10 +51,11 @@ class User < ApplicationRecord
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
-    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
+    eligible_delegates = User.where(delegate_status: %w(delegate))
+    eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
     officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
-    (team_leaders + team_senior_members + eligible_delegates + board_members + officers).uniq
+    (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
   end
 
   def self.leader_senior_voters
@@ -129,7 +131,6 @@ class User < ApplicationRecord
     trainee_delegate: "trainee_delegate",
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
-    senior_delegate: "senior_delegate",
   }
 
   validate :wca_id_is_unique_or_for_dummy_account
@@ -264,7 +265,15 @@ class User < ApplicationRecord
   scope :delegates, -> { where.not(delegate_status: nil) }
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
-  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
+  scope :staff_delegates, -> {
+    left_outer_joins(:roles)
+      .where(roles: { end_date: nil })
+      .or(where(roles: { end_date: Date.current.. }))
+      .left_outer_joins(:roles_metadata_delegate_regions)
+      .where(roles_metadata_delegate_regions: { status: 'senior_delegate' })
+      .or(where.not(delegate_status: [nil, "trainee_delegate"]))
+      .distinct
+  }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
@@ -1084,7 +1093,7 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = users.where(delegate_status: ["candidate_delegate", "delegate", "senior_delegate"])
+        users = User.staff_delegates
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
@@ -1300,7 +1309,7 @@ class User < ApplicationRecord
       is_active: true,
       group: self.region,
       user: self,
-      is_lead: delegate_status == RolesMetadataDelegateRegions.statuses[:senior_delegate],
+      is_lead: false,
       metadata: {
         status: self.delegate_status,
         location: self.location,

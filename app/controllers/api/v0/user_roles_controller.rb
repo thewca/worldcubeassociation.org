@@ -238,18 +238,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
-      if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
-        role_to_end = group.lead_role
-        if role_to_end.present?
-          role_to_end.update!(end_date: Date.today)
-          RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later
-        end
-      else
-        user = User.find_by(region_id: group.id, delegate_status: status)
-        if user.present?
-          user.update!(delegate_status: 'delegate')
-          send_role_change_notification(user)
-        end
+      role_to_end = group.lead_role
+      if role_to_end.present?
+        role_to_end.update!(end_date: Date.today)
+        RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later
       end
     end
   end
