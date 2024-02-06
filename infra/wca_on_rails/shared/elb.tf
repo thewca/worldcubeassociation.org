@@ -28,6 +28,14 @@ resource "aws_security_group" "lb" {
   }
 
   ingress {
+    from_port   = 444
+    to_port     = 444
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+    description = "Allow Mailcatcher"
+  }
+
+  ingress {
     from_port        = 443
     to_port          = 443
     protocol         = "tcp"
@@ -218,7 +226,9 @@ resource "aws_lb_listener" "mailcatcher" {
   load_balancer_arn = aws_lb.this.arn
 
   port            = 444
-  protocol        = "HTTP"
+  protocol        = "HTTPS"
+  ssl_policy      = "ELBSecurityPolicy-TLS13-1-2-2021-06"
+  certificate_arn = data.aws_acm_certificate.this.arn
 
   default_action {
     target_group_arn = aws_lb_target_group.mailcatcher-staging.arn
