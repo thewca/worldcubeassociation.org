@@ -56,7 +56,7 @@ namespace :db do
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dev_db_dump_url = "https://www.worldcubeassociation.org/export/developer/#{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}"
+          dev_db_dump_url = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
 
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
             system("curl -o #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK} #{dev_db_dump_url}") || raise("Error while running `curl`")
