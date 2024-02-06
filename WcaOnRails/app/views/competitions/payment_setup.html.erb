@@ -38,7 +38,7 @@
     <p><b><%= t('payments.payment_setup.stripe_disconnect_warning') %></b></p>
     <p>
       <%= t('payments.payment_setup.stripe_disconnect_info') %>
-      <ul><li><%= link_to(t('Stripe dashboard'), "https://dashboard.stripe.com/account/applications") %></li></ul>
+      <ul><li><%= link_to(t('payments.payment_setup.stripe_dashboard'), "https://dashboard.stripe.com/account/applications") %></li></ul>
     </p>
 
     <% if current_user&.can_admin_competitions? %>

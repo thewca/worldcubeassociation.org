@@ -1893,6 +1893,7 @@ en:
       stripe: 'Stripe'
     #context: Setting up and making payments
     payment_setup:
+      stripe_dashboard: 'Stripe Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
       account_disconnected_success: "Sucessfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."

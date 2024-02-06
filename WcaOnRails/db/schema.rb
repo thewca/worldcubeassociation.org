@@ -662,6 +662,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_03_180115) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "connected_stripe_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "account_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "country_bands", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "number", null: false
     t.string "iso2", limit: 2, null: false

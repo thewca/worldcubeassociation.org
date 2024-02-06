@@ -411,7 +411,6 @@ class CompetitionsController < ApplicationController
     comp = competition_from_params
     if comp.connected_stripe_account_id
       comp.update!(connected_stripe_account_id: nil)
-      flash[:success] = t('competitions.messages.stripe_disconnected_success')
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
     else
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
