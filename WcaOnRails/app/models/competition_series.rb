@@ -76,6 +76,63 @@ class CompetitionSeries < ApplicationRecord
     json
   end
 
+  def to_form_data
+    {
+      "id" => id,
+      "seriesId" => wcif_id,
+      "name" => name,
+      "shortName" => short_name,
+      "competitionIds" => competitions.pluck(:id),
+    }
+  end
+
+  # See competition#form_errors about the (almost) duplication of to_form_data
+  def form_errors
+    return nil if self.valid?
+
+    {
+      "id" => errors[:id],
+      "seriesId" => errors[:wcif_id],
+      "name" => errors[:name],
+      "shortName" => errors[:short_name],
+      "competitionIds" => errors[:competitions],
+    }
+  end
+
+  def set_form_data(form_data_series)
+    if form_data_series["competitionIds"].count <= 1
+      raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
+    end
+
+    self.competition_ids = form_data_series["competitionIds"].join(",")
+    assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
+  end
+
+  def self.form_data_to_attributes(form_data)
+    {
+      wcif_id: form_data["seriesId"],
+      name: form_data["name"],
+      short_name: form_data["shortName"],
+    }
+  end
+
+  def self.form_data_json_schema
+    {
+      "type" => ["object", "null"],
+      "properties" => {
+        "id" => { "type" => ["integer", "null"] },
+        "seriesId" => { "type" => "string" },
+        "name" => { "type" => "string" },
+        "shortName" => { "type" => "string" },
+        "competitionIds" => {
+          "type" => "array",
+          "items" => { "type" => "string" },
+          "uniqueItems" => true,
+        },
+      },
+    }
+  end
+
   def to_wcif(authorized: false)
     {
       "id" => wcif_id,
@@ -97,7 +154,9 @@ class CompetitionSeries < ApplicationRecord
     }
   end
 
-  def load_wcif!(wcif_series)
+  def set_wcif!(wcif_series)
+    JSON::Validator.validate!(CompetitionSeries.wcif_json_schema, wcif_series)
+
     if wcif_series["competitionIds"].count <= 1
       raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
     end

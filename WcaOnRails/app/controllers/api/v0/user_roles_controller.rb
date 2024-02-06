@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::UserRolesController < Api::V0::ApiController
+  include SortHelper
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
@@ -31,30 +32,29 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     STATUS_SORTING_ORDER[group_type.to_sym].find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym].length
   end
 
-  SORT_PARAMS = {
-    startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
-    lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
-    eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
-    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
-    status: lambda { |role| status_sort_rank(role) },
-    name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
-    groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
-    location: lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
+  SORT_WEIGHT_LAMBDAS = {
+    startDate:
+      lambda { |role| role[:start_date].to_time.to_i },
+    lead:
+      lambda { |role| UserRole.is_lead?(role) ? 0 : 1 },
+    eligibleVoter:
+      lambda { |role| UserRole.is_eligible_voter?(role) ? 0 : 1 },
+    groupTypeRank:
+      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
+    status:
+      lambda { |role| status_sort_rank(role) },
+    name:
+      lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName:
+      lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location:
+      lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
   private def sorted_roles(roles, sort_param)
-    # The value of sort_param is inspired from https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html.
     sort_param ||= ''
-    sort_keys_and_directions = sort_param.split(',')
-    roles.stable_sort_by { |role|
-      sort_keys_and_directions.map { |sort_key_and_direction|
-        sort_key = sort_key_and_direction.split(':').first
-        sort_direction = sort_key_and_direction.split(':').second || 'asc'
-        # FIXME: The following line throws error for desc direction if SORT_PARAMS[sort_key.to_sym] is non-numeric.
-        SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
-      }
-    }
+    sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
   # Filters the list of roles based on the permissions of the current user.
