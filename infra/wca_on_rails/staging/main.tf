@@ -273,6 +273,52 @@ data "aws_ecs_task_definition" "this" {
   task_definition = aws_ecs_task_definition.this.family
 }
 
+resource "aws_ecs_task_definition" "db-reset" {
+  family = "${var.name_prefix}-db-reset"
+
+  network_mode             = "awsvpc"
+  requires_compatibilities = ["EC2"]
+
+  # We configure the roles to allow `aws ecs execute-command` into a task,
+  # as in https://aws.amazon.com/blogs/containers/new-using-amazon-ecs-exec-access-your-containers-fargate-ec2
+  execution_role_arn = aws_iam_role.task_execution_role.arn
+  task_role_arn      = aws_iam_role.task_role.arn
+
+  # This is what our current staging instance is using
+  cpu = "2048"
+  memory = "7861"
+
+  container_definitions = jsonencode([
+    {
+      name              = "rails-staging-db-reset"
+      image             = "${var.shared.ecr_repository.repository_url}:staging"
+      cpu    = 2048
+      memory = 7861
+      command = ["./bin/rake","db:load:development"]
+      portMappings = []
+      logConfiguration = {
+        logDriver = "awslogs"
+        options = {
+          awslogs-group         = aws_cloudwatch_log_group.this.name
+          awslogs-region        = var.region
+          awslogs-stream-prefix = var.name_prefix
+        }
+      }
+      environment = local.rails_environment
+    }
+  ])
+
+  tags = {
+    Name = "${var.name_prefix}-db-reset"
+  }
+}
+
+
+
+data "aws_ecs_task_definition" "db-reset" {
+  task_definition = aws_ecs_task_definition.this.family
+}
+
 resource "aws_ecs_service" "this" {
   name                               = var.name_prefix
   cluster                            = var.shared.ecs_cluster.id
