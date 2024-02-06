@@ -64,29 +64,14 @@ FactoryBot.define do
 
     trait :with_delegate do
       delegates { [FactoryBot.create(:delegate)] }
-      after(:create) do |competition|
-        competition.delegates.each do |delegate|
-          FactoryBot.create(:senior_delegate, region_id: delegate.region_id)
-        end
-      end
     end
 
     trait :with_trainee_delegate do
       delegates { [FactoryBot.create(:trainee_delegate)] }
-      after(:create) do |competition|
-        competition.delegates.each do |delegate|
-          FactoryBot.create(:senior_delegate, region_id: delegate.region_id)
-        end
-      end
     end
 
     trait :with_delegates_and_trainee_delegate do
       delegates { [FactoryBot.create(:delegate), FactoryBot.create(:trainee_delegate), FactoryBot.create(:delegate)] }
-      after(:create) do |competition|
-        competition.delegates.each do |delegate|
-          FactoryBot.create(:senior_delegate, region_id: delegate.region_id)
-        end
-      end
     end
 
     trait :with_organizer do
@@ -329,6 +314,12 @@ FactoryBot.define do
             current_activity_id += 1
           end
         end
+      end
+    end
+
+    after(:create) do |competition|
+      competition.delegates.each do |delegate|
+        FactoryBot.create(:senior_delegate, region_id: delegate.region_id)
       end
     end
   end
