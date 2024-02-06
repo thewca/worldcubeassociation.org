@@ -93,7 +93,7 @@ namespace :db do
             scopes: Doorkeeper.configuration.scopes.to_s,
             owner_id: User.find_by_wca_id!("2005FLEI01").id,
             owner_type: "User",
-            )
+          )
         end
       end
     end
