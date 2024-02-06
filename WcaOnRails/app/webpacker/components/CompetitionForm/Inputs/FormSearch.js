@@ -32,7 +32,9 @@ export function UserSearch({
 
   const preSelected = useMemo(
     // the users API actually returns users in the format { "user": stuff_you_are_interested_in }
-    () => Object.values(initialData).map((item) => itemToOption(item.user)),
+    () => Object.values(initialData)
+      .filter((item) => item !== null)
+      .map((item) => itemToOption(item.user)),
     [initialData],
   );
 
@@ -63,7 +65,9 @@ export function CompetitionSearch({
   } = useManyLoadedData(competitionIds, competitionApiUrl);
 
   const preSelected = useMemo(
-    () => Object.values(initialData).map(itemToOption),
+    () => Object.values(initialData)
+      .filter((item) => item !== null)
+      .map(itemToOption),
     [initialData],
   );
 
