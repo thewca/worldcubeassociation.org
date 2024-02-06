@@ -117,6 +117,16 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "competition_payment_integrations" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          connected_account_type
+          competition_id
+          connected_account_id
+        ),
+      ),
+    }.freeze,
     "CompetitionsMedia" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
@@ -169,6 +179,19 @@ module DatabaseDumper
           valueAndId
           year
         ),
+      ),
+    }.freeze,
+    "connected_paypal_accounts" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          account_status
+          consent_status
+          permissions_granted
+        ),
+        fake_values: {
+          "paypal_merchant_id" => "abcdefgh",
+        },
       ),
     }.freeze,
     "Continents" => {
