@@ -97,6 +97,7 @@ function AnnouncementMessage() {
 function BottomConfirmationPanel({
   createComp,
   updateComp,
+  onError,
   unsavedChanges,
 }) {
   const { isPersisted } = useStore();
@@ -106,6 +107,7 @@ function BottomConfirmationPanel({
       <ConfirmationActions
         createComp={createComp}
         updateComp={updateComp}
+        onError={onError}
       />
     );
   }
@@ -286,6 +288,7 @@ function CompetitionForm() {
       <BottomConfirmationPanel
         createComp={createComp}
         updateComp={updateComp}
+        onError={onError}
         unsavedChanges={unsavedChanges}
       />
     </div>
