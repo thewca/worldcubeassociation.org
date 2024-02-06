@@ -319,7 +319,9 @@ FactoryBot.define do
 
     after(:create) do |competition|
       competition.delegates.each do |delegate|
-        FactoryBot.create(:senior_delegate, region_id: delegate.region_id)
+        unless delegate.region_id.nil? # There can be cases where the competition delegate is actually not a delegate (temporary delegate)
+          FactoryBot.create(:senior_delegate, region_id: delegate.region_id)
+        end
       end
     end
   end
