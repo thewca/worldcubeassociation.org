@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Container,
   Dropdown,
   Grid, Header, Icon, Menu, Segment,
 } from 'semantic-ui-react';
@@ -23,11 +24,11 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
   }, [sections, hash, setHash]);
 
   return (
-    <div className="container">
+    <Container fluid>
       <Header as="h1">{heading}</Header>
-      <Grid container>
+      <Grid>
         <Grid.Column only="computer" computer={4}>
-          <Menu vertical>
+          <Menu vertical fluid>
             {sections.map((section) => (
               <Menu.Item
                 key={section.id}
@@ -67,6 +68,6 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
           </Segment>
         </Grid.Column>
       </Grid>
-    </div>
+    </Container>
   );
 }
