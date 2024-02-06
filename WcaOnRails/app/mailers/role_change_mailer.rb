@@ -35,8 +35,8 @@ class RoleChangeMailer < ApplicationMailer
 
     # Send email.
     mail(
-      to: to_list,
-      reply_to: reply_to_list,
+      to: to_list.compact.uniq,
+      reply_to: reply_to_list.compact.uniq,
       subject: "New role added for #{role.user.name} in #{@group_type_name}",
     )
   end
@@ -61,8 +61,8 @@ class RoleChangeMailer < ApplicationMailer
 
     # Send email.
     mail(
-      to: to_list,
-      reply_to: reply_to_list,
+      to: to_list.compact.uniq,
+      reply_to: reply_to_list.compact.uniq,
       subject: "Role removed for #{role.user.name} in #{@group_type_name}",
     )
   end
@@ -72,8 +72,8 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
 
     mail(
-      to: [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten,
-      reply_to: [user_who_made_the_change.email],
+      to: [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten.compact.uniq,
+      reply_to: [user_who_made_the_change.email].compact.uniq,
       subject: "Delegate Probation end date changed for #{role.user.name}",
     )
   end

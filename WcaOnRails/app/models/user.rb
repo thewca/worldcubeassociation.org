@@ -56,7 +56,7 @@ class User < ApplicationRecord
 
   def self.leader_senior_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
-    senior_delegates = UserGroup.delegate_region_groups.where(parent_group_id: nil).map(&:lead_user)
+    senior_delegates = UserGroup.delegate_region_groups_senior_delegates
     (team_leaders + senior_delegates).uniq
   end
 
@@ -626,7 +626,7 @@ class User < ApplicationRecord
 
     senior_delegate_roles.map do |role|
       region = UserRole.group(role)
-      groups += [region.id, region.all_child_groups.map(&:id)].flatten
+      groups += [region.id, region.all_child_groups.map(&:id)].flatten.uniq
     end
 
     # FIXME: Consider groups of other groupTypes as well.
@@ -1298,7 +1298,7 @@ class User < ApplicationRecord
       is_active: true,
       group: self.region,
       user: self,
-      is_lead: delegate_status == "senior_delegate",
+      is_lead: delegate_status == RolesMetadataDelegateRegions.statuses[:senior_delegate],
       metadata: {
         status: self.delegate_status,
         location: self.location,
