@@ -124,6 +124,8 @@ module DatabaseDumper
           connected_account_type
           competition_id
           connected_account_id
+          created_at
+          updated_at
         ),
       ),
     }.freeze,
