@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  Container,
   Dropdown,
   Grid, Header, Icon, Menu, Segment,
 } from 'semantic-ui-react';
@@ -23,7 +24,7 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
   }, [sections, hash, setHash]);
 
   return (
-    <div style={{ margin: '16px' }}>
+    <Container fluid>
       <Header as="h1">{heading}</Header>
       <Grid>
         <Grid.Column only="computer" computer={4}>
@@ -67,6 +68,6 @@ export default function PanelTemplate({ heading, sections, loggedInUserId }) {
           </Segment>
         </Grid.Column>
       </Grid>
-    </div>
+    </Container>
   );
 }

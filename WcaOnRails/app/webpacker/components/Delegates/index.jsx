@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import {
   Checkbox,
+  Container,
   Dropdown,
   Grid,
   Header,
@@ -82,7 +83,7 @@ export default function Delegates() {
   }
 
   return (
-    <div style={{ margin: '16px' }}>
+    <Container fluid>
       <Header as="h1">{I18n.t('delegates_page.title')}</Header>
       <p>
         <I18nHTMLTranslate
@@ -151,6 +152,6 @@ export default function Delegates() {
           </Segment>
         </Grid.Column>
       </Grid>
-    </div>
+    </Container>
   );
 }
