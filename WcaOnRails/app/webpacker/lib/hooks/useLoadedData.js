@@ -14,20 +14,23 @@ import { fetchJsonOrError } from '../requests/fetchWithAuthenticityToken';
 const useLoadedData = (url) => {
   const [data, setData] = useState(null);
   const [headers, setHeaders] = useState(new Headers());
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   const sync = useCallback(() => {
     setLoading(true);
-    setData(null);
+
+    setHeaders(new Headers());
     setError(null);
+
     fetchJsonOrError(url).then((response) => {
       setData(response.data);
       setHeaders(response.headers);
     }).catch((err) => {
       setError(err.message);
     }).finally(() => setLoading(false));
-  }, [url, setData, setHeaders, setError]);
+  }, [url, setLoading, setData, setHeaders, setError]);
 
   useEffect(sync, [sync]);
 
@@ -41,9 +44,14 @@ const useLoadedData = (url) => {
 };
 
 export const useManyLoadedData = (ids, urlFn) => {
-  const [data, setData] = useState({});
-  const [headers, setHeaders] = useState({});
-  const [error, setError] = useState({});
+  const defaultData = useCallback(
+    (defaultValue) => Object.fromEntries(ids.map((id) => [id, defaultValue])),
+    [ids],
+  );
+
+  const [data, setData] = useState(defaultData(null));
+  const [headers, setHeaders] = useState(defaultData(new Headers()));
+  const [error, setError] = useState(defaultData(null));
 
   const [anyLoading, setAnyLoading] = useState(true);
 
@@ -71,10 +79,12 @@ export const useManyLoadedData = (ids, urlFn) => {
 
   const syncAll = useCallback(() => {
     setAnyLoading(true);
-    setData({});
-    setError({});
+
+    setHeaders(defaultData(new Headers()));
+    setError(defaultData(null));
+
     Promise.all(promises).finally(() => setAnyLoading(false));
-  }, [promises]);
+  }, [promises, defaultData, setAnyLoading]);
 
   useEffect(syncAll, [syncAll]);
 
