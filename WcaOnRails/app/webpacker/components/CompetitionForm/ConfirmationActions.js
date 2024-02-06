@@ -38,6 +38,7 @@ function ConfirmButton({
   competitionId,
   data,
   sync,
+  onError,
 }) {
   const { canConfirm } = data;
 
@@ -60,7 +61,7 @@ function ConfirmButton({
       }, {
         body: null,
         method: 'PUT',
-      });
+      }, onError);
     });
   };
 
@@ -113,6 +114,7 @@ function DeleteButton({
 export default function ConfirmationActions({
   createComp,
   updateComp,
+  onError,
 }) {
   const {
     isAdminView,
@@ -138,7 +140,7 @@ export default function ConfirmationActions({
       <Button.Group>
         <CreateOrUpdateButton createComp={createComp} updateComp={updateComp} />
         {isPersisted && !isAdminView && !isConfirmed && (
-          <ConfirmButton competitionId={competitionId} data={data} sync={sync} />
+          <ConfirmButton competitionId={competitionId} data={data} sync={sync} onError={onError} />
         )}
         {isPersisted && !isConfirmed && (
           <DeleteButton competitionId={competitionId} data={data} />
