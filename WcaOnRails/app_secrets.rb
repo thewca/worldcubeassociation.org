@@ -72,6 +72,7 @@ AppSecrets = SuperConfig.new do
     vault :SMTP_PASSWORD
     vault :JWT_KEY
     vault :OIDC_SECRET_KEY
+    vault :SLACK_WST_BOT_TOKEN
     vault_file :GOOGLE_APPLICATION_CREDENTIALS, "../secrets/application_default_credentials.json"
   else
     mandatory :DATABASE_PASSWORD, :string
@@ -103,5 +104,6 @@ AppSecrets = SuperConfig.new do
     optional :SMTP_USERNAME, :string, ''
     optional :SMTP_PASSWORD, :string, ''
     optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
+    optional :SLACK_WST_BOT_TOKEN, :string, ''
   end
 end
