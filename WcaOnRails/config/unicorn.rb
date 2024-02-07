@@ -15,7 +15,7 @@ end
 if rack_env == "development"
   worker_processes 1
 else
-  stderr_path $stdout
+  stderr_path $stderr
   stdout_path $stdout
 
   worker_processes((Etc.nprocessors * 2).ceil)
