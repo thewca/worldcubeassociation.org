@@ -1,5 +1,5 @@
 FROM ruby:3.3.0
-ARG BUILD_TAG=local
+
 WORKDIR /rails
 
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,7 +10,7 @@ ENV RAILS_LOG_TO_STDOUT="1" \
     RAILS_ENV="production" \
     BUNDLE_WITHOUT="development:test" \
     BUNDLE_DEPLOYMENT="1" \
-    BUILD_TAG=$BUILD_TAG
+    BUNDLE_PATH="/usr/local/bundle"
 
 # Add dependencies necessary to install nodejs.
 # From: https://github.com/nodesource/distributions#debian-and-ubuntu-based-distributions
@@ -32,16 +32,19 @@ RUN apt-get update -qq && \
       build-essential \
       git \
       pkg-config \
+      zip \
+      python-is-python3 \
       mariadb-client \
       libvips \
-      libssl-dev \
-      libyaml-dev \
-      tzdata && \
+      libssl-dev && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
 COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
+# Workaround for mailcatcher not supporting Ruby 3.3 https://github.com/sj26/mailcatcher/issues/553
+#RUN gem install mailcatcher
+RUN gem install specific_install && gem specific_install -l https://github.com/thewca/mailcatcher.git -b feature/ruby3.3
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
@@ -49,17 +52,13 @@ RUN bundle install && \
 COPY package.json yarn.lock .yarnrc.yml ./
 RUN yarn install --immutable
 
-# Copy built artifacts: gems, application
 COPY . .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log tmp public app pids .yarn
+    chown -R rails:rails db log tmp public app .yarn
 USER rails:rails
 
-# Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
-# but can also take a rails command, like "console" or "runner" to start instead.
-ENTRYPOINT ["/rails/bin/docker-entrypoint"]
+ENTRYPOINT ["/rails/bin/docker-entrypoint-sidekiq"]
 
 EXPOSE 3000
-CMD ["./bin/bundle", "exec", "unicorn", "-c", "/rails/config/unicorn.rb"]

@@ -8,7 +8,7 @@ module DocumentsHelper
   private def archive_metadata
     bucket = Aws::S3::Resource.new(
       region: EnvConfig.STORAGE_AWS_REGION,
-      credentials: Aws::InstanceProfileCredentials.new,
+      credentials: Aws::ECSCredentials.new,
     ).bucket(BUCKET_NAME)
 
     prefix = "documents/"

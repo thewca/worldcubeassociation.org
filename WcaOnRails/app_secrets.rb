@@ -66,10 +66,10 @@ AppSecrets = SuperConfig.new do
     vault :NEW_RELIC_LICENSE_KEY
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
+    vault_file :GOOGLE_APPLICATION_CREDENTIALS, "./tmp/application_default_credentials.json"
     vault :JWT_KEY
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
-    vault_file :GOOGLE_APPLICATION_CREDENTIALS, "../secrets/application_default_credentials.json"
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string

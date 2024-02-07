@@ -13,10 +13,12 @@ class Regulation < SimpleDelegator
     @regulations_load_error = e
   end
 
-  reload_regulations(Aws::S3::Resource.new(
-                       region: EnvConfig.STORAGE_AWS_REGION,
-                       credentials: Aws::InstanceProfileCredentials.new,
-                     ))
+  if Rails.env.production?
+    reload_regulations(Aws::S3::Resource.new(
+                         region: EnvConfig.STORAGE_AWS_REGION,
+                         credentials: Aws::ECSCredentials.new,
+                       ))
+  end
 
   class << self
     attr_accessor :regulations_load_error

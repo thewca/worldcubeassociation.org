@@ -39,15 +39,15 @@ pids/*.pid
 # Coveralls stuff
 /coverage/
 
-/public/packs
-/public/packs-test
-/node_modules
 /yarn-error.log
 yarn-debug.log*
 .yarn-integrity
 
 # Healthcheck flag for our Rails docker container
 .db-inited
+
+# GCE secrets file
+**/application_default_credentials.json
 
 # Per https://yarnpkg.com/getting-started/qa#which-files-should-be-gitignored
 .yarn/*

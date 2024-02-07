@@ -21,7 +21,7 @@ EnvConfig = SuperConfig.new do
     mandatory :VAULT_ADDR, :string
     mandatory :VAULT_APPLICATION, :string
     mandatory :VAULT_AWS_REGION, :string
-    mandatory :INSTANCE_ROLE, :string
+    mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
     mandatory :WCA_REGISTRATIONS_CDN_URL, :string
   else
@@ -67,4 +67,7 @@ EnvConfig = SuperConfig.new do
   end
 
   optional :ROOT_URL, :string, default_root_url
+
+  # For server status
+  optional :BUILD_TAG, :string, "local"
 end

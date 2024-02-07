@@ -1,0 +1,4 @@
+#!/bin/bash -e
+mailcatcher --http-ip=0.0.0.0 --no-quit
+./bin/bundle exec rake assets:precompile
+./bin/bundle exec sidekiq
