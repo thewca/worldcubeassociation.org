@@ -246,37 +246,38 @@ function EditActivities({
     }
   };
 
-  const onActivityModalClose = (ok, modalData) => {
+  const closeActivityModalAndCleanUp = () => {
+    // close
     setActivityModalOpen(false);
 
-    const { activityCode, activityName } = modalData;
-
-    if (ok) {
-      if (modalActivity) {
-        dispatch(editActivity(modalActivity.id, 'activityCode', activityCode, shouldUpdateMatches));
-        dispatch(editActivity(modalActivity.id, 'name', activityName, shouldUpdateMatches));
-      } else {
-        const utcStartIso = luxonToWcifIso(modalLuxonStart);
-        const utcEndIso = luxonToWcifIso(modalLuxonEnd);
-
-        const activity = {
-          name: activityName,
-          activityCode,
-          startTime: utcStartIso,
-          endTime: utcEndIso,
-          childActivities: [],
-        };
-
-        dispatch(addActivity(activity, wcifRoom.id));
-      }
-    }
-
-    // cleanup.
+    // cleanup
     setModalActivity(null);
 
     setModalLuxonStart(null);
     setModalLuxonEnd(null);
   };
+
+  const dispatchActivityModalUpdates = (modalData) => {
+    const { activityCode, activityName } = modalData;
+
+    if (modalActivity) {
+      dispatch(editActivity(modalActivity.id, 'activityCode', activityCode, shouldUpdateMatches));
+      dispatch(editActivity(modalActivity.id, 'name', activityName, shouldUpdateMatches));
+    } else {
+      const utcStartIso = luxonToWcifIso(modalLuxonStart);
+      const utcEndIso = luxonToWcifIso(modalLuxonEnd);
+
+      const activity = {
+        name: activityName,
+        activityCode,
+        startTime: utcStartIso,
+        endTime: utcEndIso,
+        childActivities: [],
+      };
+
+      dispatch(addActivity(activity, wcifRoom.id));
+    }
+  }
 
   return (
     <div id="schedules-edit-panel-body">
@@ -315,7 +316,8 @@ function EditActivities({
             startLuxon={modalLuxonStart}
             endLuxon={modalLuxonEnd}
             dateLocale={calendarLocale}
-            onModalClose={onActivityModalClose}
+            onModalClose={closeActivityModalAndCleanUp}
+            onModalSave={dispatchActivityModalUpdates}
           />
           <ActionsHeader
             selectedRoomId={selectedRoomId}

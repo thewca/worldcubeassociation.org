@@ -32,8 +32,9 @@ function EditActivityModal({
   activity,
   startLuxon,
   endLuxon,
-  onModalClose,
   dateLocale,
+  onModalClose,
+  onModalSave,
 }) {
   const [activityCode, setActivityCode] = useInputState();
   const [activityName, setActivityName] = useInputState();
@@ -95,13 +96,16 @@ function EditActivityModal({
           icon="save"
           content="Save"
           positive
-          onClick={() => onModalClose(true, { activityCode, activityName })}
+          onClick={() => {
+            onModalSave({ activityCode, activityName });
+            onModalClose();
+          }}
         />
         <Button
           icon="cancel"
           content="Cancel"
           negative
-          onClick={() => onModalClose(false, { activityCode, activityName })}
+          onClick={onModalClose}
         />
       </Modal.Actions>
     </Modal>
