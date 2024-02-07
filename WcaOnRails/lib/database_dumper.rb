@@ -121,6 +121,7 @@ module DatabaseDumper
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
+          id
           connected_account_type
           competition_id
           connected_account_id
@@ -187,9 +188,12 @@ module DatabaseDumper
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
+          id
           account_status
           consent_status
           permissions_granted
+          created_at
+          updated_at
         ),
         fake_values: {
           "paypal_merchant_id" => "'abcdefgh'",
