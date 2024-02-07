@@ -3,7 +3,7 @@
 class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
   # We are using our own authentication method with vault
   protect_from_forgery except: [:init]
-  def init
+  def init_stripe
     attendee_id = params.require(:attendee_id)
     registration_service_user = params.require(:current_user)
     iso_amount = params.require(:amount)
@@ -15,7 +15,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     user = holder.user
     payee = User.find(registration_service_user)
     render json: { error: "Registration not found" }, status: :not_found unless competition.present? && user.present? && payee.present?
-    account_id = competition.connected_stripe_account_id
+    account_id = CompetitionPaymentIntegration.account_for(competition, 'stripe').account_id
 
     registration_metadata = {
       competition: competition.name,
