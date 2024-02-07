@@ -13,15 +13,15 @@ resource "aws_ecs_task_definition" "auxiliary" {
   execution_role_arn = aws_iam_role.task_execution_role.arn
   task_role_arn      = aws_iam_role.task_role.arn
 
-  cpu = "1024"
-  memory = "1548"
+  cpu = "2048"
+  memory = "7861"
 
   container_definitions = jsonencode([
     {
       name              = "sidekiq-main"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-production"
-      cpu    = 512
-      memory = 1024
+      cpu    = 1024
+      memory = 6837
       portMappings = []
       logConfiguration = {
         logDriver = "awslogs"
@@ -43,7 +43,7 @@ resource "aws_ecs_task_definition" "auxiliary" {
     {
       name              = "pma-production"
       image             = "${var.shared.ecr_repository.repository_url}:pma"
-      cpu    = 256
+      cpu    = 512
       memory = 512
       portMappings = [{
         # The hostPort is automatically set for awsvpc network mode,
