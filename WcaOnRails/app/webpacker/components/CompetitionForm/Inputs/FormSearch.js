@@ -1,12 +1,13 @@
 import React, { useCallback, useMemo } from 'react';
+import { useQueries } from '@tanstack/react-query';
 import {
   userApiUrl,
   competitionApiUrl,
 } from '../../../lib/requests/routes.js.erb';
 import Loading from '../../Requests/Loading';
 import { itemToOption } from '../../SearchWidget/MultiSearchInput';
-import { useManyLoadedData } from '../../../lib/hooks/useLoadedData';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 
 const useWrapIdOnly = (originalCallback) => useCallback((evt, data) => {
   const { value: values } = data;
@@ -25,18 +26,20 @@ export function UserSearch({
 }) {
   const userIds = useMemo(() => (value || []), [value]);
 
-  const {
-    data: initialData,
-    anyLoading,
-  } = useManyLoadedData(userIds, userApiUrl);
-
-  const preSelected = useMemo(
-    // the users API actually returns users in the format { "user": stuff_you_are_interested_in }
-    () => Object.values(initialData)
-      .filter((item) => item !== null)
-      .map((item) => itemToOption(item.user)),
-    [initialData],
-  );
+  const { data: userOptions, isPending: anyLoading } = useQueries({
+    queries: userIds.map((id) => (
+      {
+        queryKey: ['user', id],
+        queryFn: () => fetchJsonOrError(userApiUrl(id)),
+        // the users API actually returns users in the format { "user": interesting_stuff }
+        select: (result) => itemToOption(result.data.user),
+      }
+    )),
+    combine: (results) => ({
+      data: results.map((result) => result.data),
+      isPending: results.some((result) => result.isPending),
+    }),
+  });
 
   const onChangeIdOnly = useWrapIdOnly(onChange);
 
@@ -44,7 +47,7 @@ export function UserSearch({
 
   return (
     <WcaSearch
-      value={preSelected}
+      value={userOptions}
       onChange={onChangeIdOnly}
       model="user"
       params={{ only_staff_delegates: delegateOnly, only_trainee_delegates: traineeOnly }}
@@ -59,17 +62,19 @@ export function CompetitionSearch({
 }) {
   const competitionIds = useMemo(() => (value || []), [value]);
 
-  const {
-    data: initialData,
-    anyLoading,
-  } = useManyLoadedData(competitionIds, competitionApiUrl);
-
-  const preSelected = useMemo(
-    () => Object.values(initialData)
-      .filter((item) => item !== null)
-      .map(itemToOption),
-    [initialData],
-  );
+  const { data: compOptions, isPending: anyLoading } = useQueries({
+    queries: competitionIds.map((id) => (
+      {
+        queryKey: ['competition', id],
+        queryFn: () => fetchJsonOrError(competitionApiUrl(id)),
+        select: (result) => itemToOption(result.data),
+      }
+    )),
+    combine: (results) => ({
+      data: results.map((result) => result.data),
+      isPending: results.some((result) => result.isPending),
+    }),
+  });
 
   const onChangeIdOnly = useWrapIdOnly(onChange);
 
@@ -77,7 +82,7 @@ export function CompetitionSearch({
 
   return (
     <WcaSearch
-      value={preSelected}
+      value={compOptions}
       onChange={onChangeIdOnly}
       disabled={disabled}
     />

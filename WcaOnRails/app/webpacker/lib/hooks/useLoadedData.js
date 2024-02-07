@@ -2,7 +2,6 @@ import {
   useState,
   useEffect,
   useCallback,
-  useMemo,
 } from 'react';
 
 import { fetchJsonOrError } from '../requests/fetchWithAuthenticityToken';
@@ -40,60 +39,6 @@ const useLoadedData = (url) => {
     loading,
     error,
     sync,
-  };
-};
-
-export const useManyLoadedData = (ids, urlFn) => {
-  const defaultData = useCallback(
-    (defaultValue) => Object.fromEntries(ids.map((id) => [id, defaultValue])),
-    [ids],
-  );
-
-  const [data, setData] = useState(defaultData(null));
-  const [headers, setHeaders] = useState(defaultData(new Headers()));
-  const [error, setError] = useState(defaultData(null));
-
-  const [anyLoading, setAnyLoading] = useState(true);
-
-  const promises = useMemo(() => ids.map(async (id) => {
-    const url = urlFn(id);
-
-    return fetchJsonOrError(url)
-      .then((response) => {
-        setData((prevData) => ({
-          ...prevData,
-          [id]: response.data,
-        }));
-        setHeaders((prevHeaders) => ({
-          ...prevHeaders,
-          [id]: response.headers,
-        }));
-      })
-      .catch((err) => {
-        setError((prevError) => ({
-          ...prevError,
-          [id]: err.message,
-        }));
-      });
-  }), [ids, urlFn, setData, setHeaders, setError]);
-
-  const syncAll = useCallback(() => {
-    setAnyLoading(true);
-
-    setHeaders(defaultData(new Headers()));
-    setError(defaultData(null));
-
-    Promise.all(promises).finally(() => setAnyLoading(false));
-  }, [promises, defaultData, setAnyLoading]);
-
-  useEffect(syncAll, [syncAll]);
-
-  return {
-    data,
-    headers,
-    anyLoading,
-    error,
-    syncAll,
   };
 };
 
