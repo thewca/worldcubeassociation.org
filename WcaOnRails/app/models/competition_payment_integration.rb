@@ -6,10 +6,6 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
   belongs_to :competition
 
-  # enum available_integrations: {
-  #   paypal: 'ConnectedPaypalAccount',
-  # }
-
   AVAILABLE_INTEGRATIONS = {
     'paypal' => 'ConnectedPaypalAccount',
   }.freeze

@@ -111,22 +111,18 @@ module PaypalInterface
     end
   end
 
-  class << self
-    def generate_access_token
-      options = {
-        site: EnvConfig.PAYPAL_BASE_URL,
-        token_url: '/v1/oauth2/token',
-      }
+  private_class_method def self.generate_access_token
+    options = {
+      site: EnvConfig.PAYPAL_BASE_URL,
+      token_url: '/v1/oauth2/token',
+    }
 
-      client = OAuth2::Client.new(AppSecrets.PAYPAL_CLIENT_ID, AppSecrets.PAYPAL_CLIENT_SECRET, options)
-      client.client_credentials.get_token.token
-    end
+    client = OAuth2::Client.new(AppSecrets.PAYPAL_CLIENT_ID, AppSecrets.PAYPAL_CLIENT_SECRET, options)
+    client.client_credentials.get_token.token
   end
 
-  class << self
-    def get_paypal_auth_assertion(competition)
-      payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => competition.connected_stripe_account_id }
-      JWT.encode payload, nil, 'none'
-    end
+  private_class_method def self.get_paypal_auth_assertion(competition)
+    payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => competition.connected_stripe_account_id }
+    JWT.encode payload, nil, 'none'
   end
 end

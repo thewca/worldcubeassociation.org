@@ -820,7 +820,8 @@ class RegistrationsController < ApplicationController
   end
 
   private def registration_from_params
-    Registration.find(params[:id])
+    id = params.require(:id)
+    Registration.find(id)
   end
 
   def create_paypal_order
