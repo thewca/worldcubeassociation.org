@@ -825,19 +825,19 @@ class RegistrationsController < ApplicationController
   end
 
   def create_paypal_order
-    unless Rails.env.production?
-      @registration = registration_from_params
-      render json: PaypalInterface.create_order(@registration)
-    end
+    return head :forbidden if Rails.env.production?
+
+    @registration = registration_from_params
+    render json: PaypalInterface.create_order(@registration)
   end
 
   def capture_paypal_payment
-    unless Rails.env.production?
-      @registration = registration_from_params
-      @competition = @registration.competition
-      order_id = params[:order_id]
+    return head :forbidden if Rails.env.production?
 
-      render json: PaypalInterface.capture_payment(@competition, order_id)
-    end
+    @registration = registration_from_params
+    @competition = @registration.competition
+    order_id = params[:order_id]
+
+    render json: PaypalInterface.capture_payment(@competition, order_id)
   end
 end

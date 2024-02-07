@@ -10,7 +10,7 @@ class CompetitionPaymentIntegration < ApplicationRecord
     'paypal' => 'ConnectedPaypalAccount',
   }.freeze
 
-  scope :paypal, -> { where(connected_account_type: 'ConnectedPaypalAccount') }
+  scope :paypal, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS['paypal']) }
 
   def self.paypal_connected?(competition)
     competition.competition_payment_integrations.paypal.exists?
