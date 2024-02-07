@@ -44,7 +44,7 @@ COPY Gemfile Gemfile.lock ./
 RUN gem update --system && gem install bundler
 # Workaround for mailcatcher not supporting Ruby 3.3 https://github.com/sj26/mailcatcher/issues/553
 #RUN gem install mailcatcher
-RUN gem install specific_install && gem specific_install -l https://github.com/tagliala/mailcatcher.git -b feature/drop-legacy-ruby-versions
+RUN gem install specific_install && gem specific_install -l https://github.com/thewca/mailcatcher.git -b feature/ruby3.3
 RUN bundle install && \
     rm -rf ~/.bundle/ "${BUNDLE_PATH}"/ruby/*/cache "${BUNDLE_PATH}"/ruby/*/bundler/gems/*/.git
 
