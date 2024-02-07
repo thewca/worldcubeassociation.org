@@ -277,7 +277,7 @@ function EditActivities({
 
       dispatch(addActivity(activity, wcifRoom.id));
     }
-  }
+  };
 
   return (
     <div id="schedules-edit-panel-body">
