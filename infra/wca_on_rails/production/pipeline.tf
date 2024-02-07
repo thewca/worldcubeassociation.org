@@ -113,7 +113,7 @@ resource "aws_codebuild_project" "build" {
   source {
     type = "CODEPIPELINE"
     buildspec = templatefile("../templates/buildspec_build.yml.tftpl", {
-      container_name         = "rails-main"
+      container_name         = "rails-production"
       container_port         = 3000
       task_definition        = aws_ecs_task_definition.this.arn
       capacity_provider_name = var.shared.m6i_capacity_provider.name
