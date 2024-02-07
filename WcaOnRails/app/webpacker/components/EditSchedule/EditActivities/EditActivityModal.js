@@ -57,6 +57,12 @@ function EditActivityModal({
     setActivityName(activity?.name);
   }, [activity, setActivityCode, setActivityName]);
 
+  const closeModalAndCleanUp = () => {
+    onModalClose();
+    setActivityCode(undefined);
+    setActivityName(undefined);
+  };
+
   return (
     <Modal
       open={isModalOpen}
@@ -98,14 +104,14 @@ function EditActivityModal({
           positive
           onClick={() => {
             onModalSave({ activityCode, activityName });
-            onModalClose();
+            closeModalAndCleanUp();
           }}
         />
         <Button
           icon="cancel"
           content="Cancel"
           negative
-          onClick={onModalClose}
+          onClick={closeModalAndCleanUp}
         />
       </Modal.Actions>
     </Modal>
