@@ -8,16 +8,15 @@ allowed_environments = {
   'staging' => true,
   'production' => true,
 }
-rack_env = ENV.fetch('RACK_ENV', nil)
-if !allowed_environments[rack_env]
-  raise "Unrecognized RACK_ENV: #{rack_env}, must be one of #{allowed_environments.keys.join ', '}"
+rails_env = ENV.fetch('RAILS_ENV', nil)
+unless allowed_environments[rails_env]
+  raise "Unrecognized RACK_ENV: #{rails_env}, must be one of #{allowed_environments.keys.join ', '}"
 end
-if rack_env == "development"
+if rails_env == "development"
+  puts "Starting Unicorn in Development"
   worker_processes 1
 else
-  stderr_path $stderr
-  stdout_path $stdout
-
+  puts "Starting Unicorn in production mode"
   worker_processes((Etc.nprocessors * 2).ceil)
 end
 
