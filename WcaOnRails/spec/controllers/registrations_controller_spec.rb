@@ -839,8 +839,8 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
                           organizers: [organizer],
                           events: Event.where(id: %w(222 333)),
                           use_wca_registration: true,
-                          starts: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 1).days.ago,
-                          registration_close: (ClearConnectedStripeAccount::DELAY_IN_DAYS + 3).days.ago)
+                          starts: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 1).days.ago,
+                          registration_close: (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS + 3).days.ago)
       }
       let!(:registration) { FactoryBot.create(:registration, competition: competition, user: organizer) }
 
@@ -911,7 +911,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
         end
 
         it "disallows a refund after clearing the Stripe account id" do
-          ClearConnectedStripeAccount.perform_now
+          ClearConnectedPaymentIntegrations.perform_now
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
           expect(flash[:danger]).to eq "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
