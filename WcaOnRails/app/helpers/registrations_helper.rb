@@ -34,7 +34,7 @@ module RegistrationsHelper
   end
 
   def registration_date_and_tooltip(competition, registration)
-    if @competition.using_stripe_payments?
+    if @competition.using_payment_integrations?
       [registration.last_payment_date&.to_date || I18n.t('registrations.list.not_paid'),
        registration.last_payment_date ? I18n.t('registrations.list.payment_completed_on', date: registration.last_payment_date) : I18n.t('registrations.list.payment_requested_on', date: registration.created_at)]
     else

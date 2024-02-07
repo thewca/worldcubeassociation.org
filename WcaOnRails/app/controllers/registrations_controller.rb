@@ -715,7 +715,7 @@ class RegistrationsController < ApplicationController
   def refund_payment
     registration = Registration.find(params[:id])
 
-    unless registration.competition.using_stripe_payments?
+    unless registration.competition.using_payment_integrations?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end

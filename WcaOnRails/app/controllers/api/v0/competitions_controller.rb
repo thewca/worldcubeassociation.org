@@ -30,7 +30,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
                  force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
                  information events_per_registration_limit],
         methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
-                    main_event_id number_of_bookmarks using_stripe_payments? uses_qualification? uses_cutoff? competition_series_ids],
+                    main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids],
         include: %w[delegates organizers tabs],
       }
       render json: competition.as_json(options)

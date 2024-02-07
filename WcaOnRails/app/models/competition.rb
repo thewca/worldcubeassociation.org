@@ -902,8 +902,8 @@ class Competition < ApplicationRecord
     end
   end
 
-  def using_stripe_payments?
-    connected_stripe_account_id && has_fees?
+  def using_payment_integrations?
+    competition_payment_integrations.exists? && has_fees?
   end
 
   def can_edit_registration_fees?

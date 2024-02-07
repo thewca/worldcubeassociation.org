@@ -6,10 +6,6 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
   belongs_to :competition
 
-  # enum available_integrations: {
-  #   paypal: 'ConnectedPaypalAccount',
-  # }
-
   AVAILABLE_INTEGRATIONS = {
     'paypal' => 'ConnectedPaypalAccount',
     'stripe' => 'ConnectedStripeAccount',
@@ -23,6 +19,7 @@ class CompetitionPaymentIntegration < ApplicationRecord
   end
 
   def self.account_for(competition, integration_name)
+    validate_integration_name!(integration_name)
     competition.competition_payment_integrations.where(connected_account_type: AVAILABLE_INTEGRATIONS[integration_name])
   end
 
@@ -36,9 +33,7 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
   # TODO: Add tests for case where integration isn't found
   def self.disconnect(competition, integration_name)
-    raise ArgumentError.new("Invalid status. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
-      AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
-
+    validate_integration_name!(integration_name)
     competition.competition_payment_integrations.destroy_by(connected_account_type: AVAILABLE_INTEGRATIONS[integration_name])
   end
 
@@ -46,4 +41,11 @@ class CompetitionPaymentIntegration < ApplicationRecord
     self.integration_active = false
     save
   end
+
+  private
+
+    def validate_integration_name!(integration_name)
+      raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
+        AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
+    end
 end

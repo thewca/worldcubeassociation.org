@@ -103,7 +103,7 @@
 
       const stripe = Stripe('<%= AppSecrets.STRIPE_PUBLISHABLE_KEY %>', {
         locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
-        stripeAccount: '<%= @competition.connected_stripe_account_id %>',
+        stripeAccount: '<%= CompetitionPaymentIntegration.account_for(@competition, 'stripe').account_id %>',
       });
 
       // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)

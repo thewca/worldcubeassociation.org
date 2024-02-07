@@ -54,7 +54,6 @@ module PaypalInterface
       purchase_units: [
         {
           amount: { currency_code: fee_currency.to_s, value: outstanding_fees.to_s },
-          # amount: { currency_code: "EUR", value: outstanding_fees.to_s },
         },
       ],
     }

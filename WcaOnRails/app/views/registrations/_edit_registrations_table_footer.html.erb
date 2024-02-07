@@ -32,7 +32,7 @@
     </td>
     <%# comments %>
     <td></td>
-    <% if @competition.using_stripe_payments? %>
+    <% if @competition.using_payment_integrations? %>
       <td>
         <span data-toggle="tooltip" data-placement="bottom" data-container="body" title="Amount does not reflect Stripe fees">
           <%= format_money registrations.to_a.sum(Money.new(0, @competition.currency_code), &:paid_entry_fees) %>*
