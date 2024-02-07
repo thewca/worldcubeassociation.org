@@ -52,6 +52,13 @@ class WcaCronjob < ApplicationJob
       # Inform WST about the error so we can investigate and take action if required
       JobFailureMailer.notify_admin_of_job_failure(job, e).deliver_now
 
+      # We don't have clever mechanisms like Mailcatcher for mocking emails in non-prod
+      # environments, so for Slack we just do a hard production check instead. Shout if you have better ideas!
+      if Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+        failure_message = "Job #{job.class} (Sidekiq ID #{job.provider_job_id}) failed"
+        SlackBot.send_error_report(failure_message, e)
+      end
+
       # Propagate the error so that our job adapter can do retry-handling
       raise e
     ensure

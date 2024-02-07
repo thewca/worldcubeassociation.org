@@ -12,13 +12,13 @@ module NotificationsHelper
       Competition.confirmed.not_visible.each do |competition|
         notifications << {
           text: "#{competition.name} is pending announcement. The competition is happening in #{competition.days_until} days.",
-          url: admin_edit_competition_path(competition),
+          url: competition_admin_edit_path(competition),
         }
       end
       Competition.not_confirmed.visible.each do |competition|
         notifications << {
           text: "#{competition.name} is visible, but unlocked",
-          url: admin_edit_competition_path(competition),
+          url: competition_admin_edit_path(competition),
         }
       end
     end

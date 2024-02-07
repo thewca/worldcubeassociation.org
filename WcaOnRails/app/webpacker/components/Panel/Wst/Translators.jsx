@@ -36,7 +36,7 @@ export default function Translators() {
         <Table.Body>
           {data.map((translator) => (
             <Table.Row>
-              <Table.Cell>{translator.metadata.locale}</Table.Cell>
+              <Table.Cell>{translator.group.metadata.locale}</Table.Cell>
               <Table.Cell>{translator.user.name}</Table.Cell>
               <Table.Cell>
                 <Button onClick={() => handleEndRole(translator)}>End Role</Button>

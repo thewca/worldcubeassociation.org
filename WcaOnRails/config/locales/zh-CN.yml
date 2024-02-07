@@ -531,6 +531,32 @@ zh-CN:
         delegate: 代表
         #original_hash: d463c23
         senior_delegate: 高级代表
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: 实习代表
+          #original_hash: 9b97968
+          candidate_delegate: 初级代表
+          #original_hash: 12ab214
+          delegate: 代表
+          #original_hash: 45c2317
+          regional_delegate: 区域代表
+          #original_hash: d463c23
+          senior_delegate: 高级代表
+        teams_committees:
+          #original_hash: 6853c98
+          member: 成员
+          #original_hash: c366473
+          senior_member: 高级成员
+          #original_hash: e26c936
+          leader: 组长
+        councils:
+          #original_hash: 6853c98
+          member: 成员
+          #original_hash: c366473
+          senior_member: 高级成员
+          #original_hash: e26c936
+          leader: 组长
     person:
       gender:
         #original_hash: 3f3a489
@@ -1170,6 +1196,8 @@ zh-CN:
     about_us:
       #original_hash: 3ffb811
       title: 关于我们
+      #original_hash: ed77e4c
+      text: 世界魔方协会负责管理魔方的比赛，这些魔方是通过转动魔方的一部分来操作，通常称为“魔方”（twisty puzzles)。
     competitions:
       #original_hash: db98a68
       title: 比赛
@@ -1429,8 +1457,6 @@ zh-CN:
       dob_past: 必须是过去的时间
       #original_hash: b320913
       dob_recent: 必须至少满两岁
-      #original_hash: 012f032
-      must_be_senior: 必须是一个高级代表
       #original_hash: 2e582eb
       must_not_be_present: 不能是当前时间
       #original_hash: 5b4eac9
@@ -2009,6 +2035,174 @@ zh-CN:
         world: 世界锦标赛
         #original_hash: e045169
         greater_china: 中国锦标赛
+      labels:
+        admin:
+          is_confirmed: 不要让组织者编辑这个比赛
+          is_visible: 公开比赛
+        competition_id: ID
+        name: 名字
+        short_name: 比赛昵称
+        name_reason: 命名的原因
+        venue:
+          country_id: 国家/地区
+          city_name: 城市
+          name: 地点
+          details: 地点详情
+          address: 地址
+          coordinates:
+        start_date: 开始日期
+        end_date: 结束日期
+        information: 基本信息
+        competitor_limit:
+          enabled: 我想指定本次比赛的日人数限制。
+          count: 最大人数
+          reason: 人数限制原因
+        staff:
+          staff_delegate_ids: WCA 代表
+          trainee_delegate_ids:
+          organizer_ids: 主办方
+          contact: 联系方式
+        championships:
+        website:
+          generate_website: 我想使用 WCA 网站来显示更多信息。
+          external_website: 比赛官网
+          external_registration_page:
+          uses_wca_registration: 我想使用 WCA 报名系统
+          uses_wca_live:
+        user_settings:
+          receive_registration_emails: 当有人报名本次比赛时发邮件通知我
+        entry_fees:
+          currency_code: 货币代码
+          base_entry_fee: 基础报名费
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: 除了报名费之外，我想要开启捐赠功能
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: 报名开放时间
+          closing_date_time: 报名结束时间
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot:
+          allow_self_delete_after_acceptance:
+          allow_self_edits:
+          guests_enabled: 随行人员
+          guest_entry_status:
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled:
+            reason:
+          qualification_results:
+            enabled:
+            reason:
+            allow_registration_without:
+          event_limitation:
+            enabled:
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: 备注
+        clone_tabs: 我想复制所有 tab，连同额外信息
+      hints:
+        admin:
+          is_confirmed: ''
+          is_visible: ''
+        competition_id: ''
+        name: 比赛全名需在结尾包含年份（例：Danish Open 2016）。注意大小写。名字只能包含字母、数字、标点（-&.:'）和空格。
+        short_name: 用于显示的短名。如果比赛名字已经很短了，你可以重复使用（例：Europe 2006）。
+        name_reason_html:
+        venue:
+          country_id: ''
+          city_name: 比赛举办地的城市名和省份名（如果有的话）。不要包括国家/地区（例：Paris OR San Francisco, California）。
+          name_html: 比赛举办的地点。%{md}。比如[Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)
+          details_html: 详细地点（例：教学楼一楼）。%{md}
+          address: ''
+          coordinates:
+        start_date: ''
+        end_date: ''
+        information: 关于比赛人数限制、报名费、观众及其他相关细节的信息。
+        competitor_limit:
+          enabled: 目前这个数字只是纯展示，不会限制选手报名。我们在努力为注册流程添加人数限制的功能。
+          count: 该比赛的人数限制。
+          reason: 为啥限制比赛人数？请使用英文填写！
+        staff:
+          staff_delegate_ids: 比赛的WCA代表们。
+          trainee_delegate_ids:
+          organizer_ids: 主办方（需要提前注册帐号）
+          contact_html: 可选的联系信息。如果你不填写此项，将会显示主办方的邮件。%{md}。例：[Text to display](mailto:some@email.com)
+        championships:
+        website:
+          generate_website: ''
+          external_website: 比赛官网。必须是一个合法的http(s)地址。
+          external_registration_page:
+          uses_wca_registration: ''
+          uses_wca_live: ''
+        user_settings:
+          receive_registration_emails: ''
+        entry_fees:
+          currency_code: 报名费的货币代码。
+          base_entry_fee: 比赛的基础报名费。如果填写报名费，将在比赛信息页和报名页显示。如果设置为 0，将显示一句话，表示将免费接受报名。<br><br><b>免责声明：以下
+            WCA 费用估算仅是基于当前汇率的近似值，费用没有任何法律约束力。</b>
+          on_the_spot_entry_fee:
+          guest_entry_fee:
+          donations_enabled: ''
+          refund_policy_percent:
+          refund_policy_limit_date:
+        registration:
+          opening_date_time: 注意：报名开放和结束是UTC时间
+          closing_date_time: ''
+          waiting_list_deadline_date:
+          event_change_deadline_date:
+          allow_on_the_spot: ''
+          allow_self_delete_after_acceptance: ''
+          allow_self_edits: ''
+          guests_enabled: ''
+          guest_entry_status: ''
+          guests_per_registration:
+          extra_requirements:
+          force_comment:
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ''
+            reason:
+          qualification_results:
+            enabled: ''
+            reason:
+            allow_registration_without: ''
+          event_limitation:
+            enabled: ''
+            reason:
+            per_registration_limit:
+          main_event_id:
+        remarks: 一些你想和董事会说的额外信息。比如为啥这个比赛没有提前一个月申请之类的。请使用英文填写！
+        clone_tabs: ''
+      choices:
+        competitor_limit:
+          enabled:
+            'true':
+            'false':
+        registration:
+          allow_on_the_spot:
+            'true':
+            'false':
+          allow_self_delete_after_acceptance:
+            'true':
+            'false':
+          allow_self_edits:
+            'true':
+            'false':
+          guests_enabled:
+            'true': 询问随行人员
+            'false': 不询问随行人员
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              'true':
+              'false':
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: '必须以年份结尾，并且只能包含数字、字母、标点（-&.:''）和空格'
@@ -2507,15 +2701,87 @@ zh-CN:
   about:
     #original_hash: 9ac918a
     title: 关于WCA
+    #original_hash: af00571
+    mission_statement: 我们的使命是：在公平、平等的条件下，在更多国家举办更多更有趣的比赛，并让更多人参与。
+    #original_hash: e627278
+    mission_footer: WCA的使命
+    #original_hash: cdab446
+    who_we_are_title: 我们是谁
+    #original_hash: c0d9a3e
+    who_we_are_content_html: >-
+      <p>世界魔方协会负责管理魔方的比赛，这些魔方是通过转动魔方的一部分来操作，通常称为“魔方”（twisty puzzles)。这些魔方中最著名的是三阶魔方，由匈牙利的鲁比克教授发明。这些魔方中的一部分被选为WCA的官方赛事项目。</p>
+      <p>随着WCA在过去十年的发展，已有超过200,000人参加了我们的比赛。尽管有这样的增长，我们仍然是一个几乎完全由志愿者运营的组织，从当地组织者到WCA代表，甚至WCA董事会。我们非常感谢所有抽出时间为WCA做出贡献的人。有了更多的财政支持后，我们希望在认可全球各地比赛的同时，能够为我们的比赛提升到更高水平的层次。</p>
+    #original_hash: bccd8c5
+    spirit: 我们的精神是：来自世界各地的人们在友好的气氛中一起玩的开心，互相帮助，并表现出运动员的精神。
+    #original_hash: 69131cc
+    spirit_footer: WCA的精神
+    #original_hash: c1781ee
+    our_goals_title: 我们的目标
+    #original_hash: 743ca74
+    our_goals_content_html: >-
+      <p>世界魔方协会希望通过增加魔方比赛，为世界各地的年轻人带来参与社群和领导社群的机会。我们相信，比赛和社群内的经历为参与其中的年轻人创造了成长机会，让更多人群接触到魔方，让魔友群体茁壮成长。关于董事会对于WCA愿景与策略的文件可以在<a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">这里</a>查阅。</p>
+    #original_hash: dc71704
+    world_championship_title: 世界锦标赛
+    #original_hash: 57cf7f7
+    world_championship_content_html: '<p>每两年，我们都会批准最终决定世界冠军的比赛。这些活动需要大量志愿者进行极其仔细的规划，并需要投入大量资金来预订场地并进行必要的准备。</p>'
+    #original_hash: 1aa5344
+    contributing_title: 对我们进行赞助
+    #original_hash: 538a82f
+    contributing_content_html: '您可以使用信用卡在Guidestar %{here_credit}或是Paypal %{here_paypal}平台捐款。如果您希望使用支票，请寄到：'
+    #original_hash: 2af9b71
+    tax_deductible_note: 在美国，捐款可以抵税。
+    #original_hash: 6026d35
+    other_help_title: 其他方式的协助
+    #original_hash: cb228f6
+    other_help_content_html: >-
+      <p>如果您希望为WCA提供帮助，我们会感到很高兴！欢迎发送邮件至<a href="mailto:communication@worldcubeassociation.org">communication@worldcubeassociation.org</a>与我们联系。</p>
+    donation_banner:
+      #original_hash: 1aaf818
+      content: >-
+        世界魔方协会是一个 501(c)(3) 免税组织。 作为一个 100% 由志愿者主导的非营利组织，我们欢迎您的捐赠，以帮助我们进一步实现在世界各地举办更有趣的比赛的愿景。
+      #original_hash: 24c87db
+      donate_credit: 用信用卡捐款
+      #original_hash: 0e5a9c3
+      donate_paypal: 用Paypal捐款
+      #original_hash: 96d77f3
+      donate_other: 其他方式的协助
     structure:
+      #original_hash: 0d62207
+      teams_committees_councils: WCA团队、委员会和理事会
       #original_hash: 9482c5d
       title: 组织架构
+      board:
+        #original_hash: abd2828
+        name: WCA董事会
+        #original_hash: e0d37a2
+        description: WCA董事会负责领导整个组织，并履行其他团队、委员会和理事会未履行的任何职责
       #original_hash: d54d953
       committees: WCA的各项活动由以下委员会负责：
       #original_hash: e26c936
       leader: 组长
       #original_hash: c366473
       senior_member: 高级成员
+      officers:
+        #original_hash: d79bd00
+        name: WCA董事
+        #original_hash: 312e799
+        description: >-
+          WCA董事负责负责处理与WCA非营利地位相关的任务。这些董事由WCA董事会选举产生。执行董事是WCA的首席执行官，主席主持所有董事会会议，秘书负责维护组织的文件，财务主管管理WCA的财务事务。
+      chair:
+        #original_hash: de34439
+        name: WCA董事长
+      executive_director:
+        #original_hash: 7d405ff
+        name: WCA执行董事
+      secretary:
+        #original_hash: 1dd4a07
+        name: WCA秘书
+      vice_chair:
+        #original_hash: 0388b19
+        name: WCA副董事长
+      treasurer:
+        #original_hash: 75e65d9
+        name: WCA财务主管
       wdc:
         #original_hash: c97077a
         name: WCA纪律委员会
@@ -2562,6 +2828,11 @@ zh-CN:
         name: WCA比赛公示组
         #original_hash: f511502
         description: 该组负责审核和公示WCA比赛，并确保此类比赛符合WCA标准。
+      wmt:
+        #original_hash: 2035811
+        name: WCA市场营销组
+        #original_hash: f2a0140
+        description: 该团队负责开发和管理WCA品牌、寻求赞助、支持WCA竞赛装备的分销以及营销WCA商品。
       weat:
         #original_hash: d1dbb86
         name: WCA董事会助理团队
@@ -2573,11 +2844,15 @@ zh-CN:
         #original_hash: 8f888d6
         description: 该团队负责监督和协助WCA成为一个国际认可的竞技组织。
       wat:
+        #original_hash: 90a1280
+        name: WCA资料整理组
         #original_hash: fae6850
-        info_html: WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
+        description: WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
       wac:
+        #original_hash: 1ce7604
+        name: WCA顾问委员会
         #original_hash: fb6cd86
-        info_html: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。
+        description: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。
       #original_hash: 7e849d2
       delegates_html: >-
         <strong>WCA代表</strong>作为WCA成员，负责确保所有WCA比赛在WCA宗旨、规则和精神下进行。由<strong>WCA高级代表</strong>、<strong>WCA代表</strong>、<strong>WCA初级代表</strong>和<strong>WCA实习代表</strong>组成%{see_link}。WCA高级代表的额外职责是管理他负责区域的所有代表，同时也可以处理当地社群问题。新上任的代表需要经历实习期直到他们展示出应有的能力来成为一个正式WCA代表。
@@ -2590,6 +2865,16 @@ zh-CN:
     title: 文档
     #original_hash: 1b537dc
     determination_letter: 国税局的裁定书
+    #original_hash: 9855f80
+    bylaws: 内部章程
+    #original_hash: fdceb44
+    motions: 议案
+    #original_hash: 092f99e
+    minutes: 会议记录
+    #original_hash: 6db524a
+    policies: WCA政策
+    #original_hash: 91ac873
+    codeofethics: 道德规范
     #original_hash: 2643980
     codeofconduct: 行为准则
     #original_hash: 4f05e8f
@@ -2930,7 +3215,7 @@ zh-CN:
       title: 临近政策
       #original_hash: 79ed06e
       content1: >-
-        WCA比赛如果距离其他比赛至少100公里或时间间隔超过19天，它将被接受。如果有另外一场比赛的距离小于100公里，且他们之间的时间间隔少于19天，则WCA董事会应特别审查拟议的比赛。要求批准这样比赛的代表必须提供进一步的信息为什么仍然需要办这个比赛。支持此类比赛的可能的论据包括：
+        WCA比赛如果距离其他比赛至少10公里或时间间隔超过5天，它将被接受。如果有另外一场比赛的距离小于10公里，且他们之间的时间间隔少于5天，则WCA董事会应特别审查拟议的比赛。要求批准这样比赛的代表必须提供进一步的信息为什么仍然需要办这个比赛。支持此类比赛的可能的论据包括：
       olist1:
         #original_hash: de00462
         '1': 这两场比赛没有共同的项目

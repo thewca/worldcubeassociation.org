@@ -44,7 +44,7 @@ function ListViewSection({
             </span>
             <span className="competition-info">
               <div className="competition-link">
-                <span className={` fi fi-${comp.country?.iso2?.toLowerCase()}`} />
+                <span className={` fi fi-${comp.country_iso2?.toLowerCase()}`} />
                 &nbsp;
                 <a href={comp.url}>{comp.short_display_name}</a>
               </div>

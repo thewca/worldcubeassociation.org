@@ -48,7 +48,8 @@ function extendContinents(continent){
   currencies_info_hash = Hash[selected_currencies.map do |_,v|
     [v[:iso_code], {:symbol => v[:symbol],
                     :symbol_first => v[:symbol_first],
-                    :subunit_to_unit => v[:subunit_to_unit]}]
+                    :subunit_to_unit => v[:subunit_to_unit],
+                    :name => v[:name]}]
   end]
 %>
 
@@ -144,6 +145,24 @@ export const competitionConstants = {
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';
+
+// ----- COMP RULES -----
+
+export const nearbyCompetitionDistanceWarning = <%= Competition::NEARBY_DISTANCE_KM_WARNING.to_json.html_safe %>
+
+export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_KM_DANGER.to_json.html_safe %>
+
+export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENGTH.to_json.html_safe %>
+
+// ----- CHAMPIONSHIPS -----
+
+export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>
+
+// ----- TEAMS -----
+
+export const teams = {
+  byId: <%= Team.official.index_by(&:friendly_id).to_json.html_safe %>
+}
 
 // ----- ROLES & GROUPS -----
 

@@ -43,6 +43,33 @@ FactoryBot.define do
         is_hidden { false }
         metadata { FactoryBot.create(:delegate_region_usa_metadata) }
       end
+
+      factory :delegate_region_california do
+        name { "California" }
+        group_type { :delegate_regions }
+        parent_group_id { FactoryBot.create(:delegate_region_usa).id }
+        is_active { true }
+        is_hidden { false }
+        metadata { FactoryBot.create(:delegate_region_california_metadata) }
+      end
+
+      factory :delegate_region_texas do
+        name { "Texas" }
+        group_type { :delegate_regions }
+        parent_group_id { FactoryBot.create(:delegate_region_usa).id }
+        is_active { true }
+        is_hidden { false }
+        metadata { FactoryBot.create(:delegate_region_texas_metadata) }
+      end
+
+      factory :delegate_region_florida do
+        name { "Florida" }
+        group_type { :delegate_regions }
+        parent_group_id { FactoryBot.create(:delegate_region_usa).id }
+        is_active { true }
+        is_hidden { false }
+        metadata { FactoryBot.create(:delegate_region_florida_metadata) }
+      end
     end
 
     factory :africa_region do

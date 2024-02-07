@@ -96,5 +96,6 @@ AppSecrets = SuperConfig.new do
     optional :SMTP_USERNAME, :string, ''
     optional :SMTP_PASSWORD, :string, ''
     optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
+    optional :SLACK_WST_BOT_TOKEN, :string, ''
   end
 end
