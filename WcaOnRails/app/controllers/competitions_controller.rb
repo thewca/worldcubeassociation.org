@@ -378,7 +378,7 @@ class CompetitionsController < ApplicationController
     end
 
     @competition = competition_from_params
-    CompetitionPaymentIntegration.disconnect(@competition, 'paypal')
+    CompetitionPaymentIntegration.disconnect(@competition, :paypal)
 
     if CompetitionPaymentIntegration.paypal_connected?(@competition)
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
