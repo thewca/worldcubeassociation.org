@@ -13,7 +13,6 @@ class Api::V0::ApiController < ApplicationController
   end
 
   DEFAULT_API_RESULT_LIMIT = 20
-  TNOODLE_PUBLIC_KEY_PATH = "#{Rails.root}/app/views/regulations/scrambles/tnoodle/TNoodle-WCA.pem".freeze
 
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
@@ -32,16 +31,15 @@ class Api::V0::ApiController < ApplicationController
 
   def scramble_program
     begin
-      raw = File.read(TNOODLE_PUBLIC_KEY_PATH)
-    rescue Errno::ENOENT
-      public_key = false
-    else
-      rsa_key = OpenSSL::PKey::RSA.new(raw)
+      rsa_key = OpenSSL::PKey::RSA.new(AppSecrets.TNOODLE_PUBLIC_KEY)
       raw_bytes = rsa_key.public_key.to_der
 
       public_key_base = Base64.encode64(raw_bytes)
+
       # DER format export from Ruby contains newlines which we don't want
       public_key = public_key_base.gsub(/\s+/, "")
+    rescue OpenSSL::PKey::PKeyError
+      public_key = false
     end
 
     render json: {

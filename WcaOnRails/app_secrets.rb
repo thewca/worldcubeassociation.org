@@ -74,6 +74,7 @@ AppSecrets = SuperConfig.new do
     vault :JWT_KEY
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
+    vault :TNOODLE_PUBLIC_KEY
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
@@ -105,5 +106,6 @@ AppSecrets = SuperConfig.new do
     optional :SMTP_PASSWORD, :string, ''
     optional :GOOGLE_APPLICATION_CREDENTIALS, :string, ''
     optional :SLACK_WST_BOT_TOKEN, :string, ''
+    optional :TNOODLE_PUBLIC_KEY, :string, ''
   end
 end
