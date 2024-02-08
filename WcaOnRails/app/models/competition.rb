@@ -2411,8 +2411,8 @@ class Competition < ApplicationRecord
         # but when opening the page **and never touching it** it stays NULL
         { "type" => "null" },
         # and when opening and touching **but later deleting** a date it becomes an empty string instead of NULL
-        { "type" => "string", "maxLength" => 0 }
-      ]
+        { "type" => "string", "maxLength" => 0 },
+      ],
     }
   end
 
