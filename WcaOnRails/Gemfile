@@ -28,7 +28,6 @@ gem 'recaptcha', require: 'recaptcha/rails'
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'devise'
-gem 'wkhtmltopdf-binary'
 # NOTE: we put devise-18n before devise-bootstrap-views intentionally.
 # See https://github.com/hisea/devise-bootstrap-views/issues/55 for more details.
 gem 'devise-i18n'
@@ -153,4 +152,5 @@ end
 group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
+  gem 'wkhtmltopdf-binary-ng'
 end
