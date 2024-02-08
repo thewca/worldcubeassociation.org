@@ -49,6 +49,10 @@ AppSecrets = SuperConfig.new do
     vault :STRIPE_API_KEY
     vault :OTP_ENCRYPTION_KEY
     vault :STRIPE_CLIENT_ID
+    # TODO: Uncomment paypal items when launching in production
+    # vault :PAYPAL_CLIENT_ID, :string
+    # vault :PAYPAL_CLIENT_SECRET, :string
+    # vault :PAYPAL_ATTRIBUTION_CODE, :string
     vault :DISCOURSE_SECRET
     vault :SURVEY_SECRET
     vault :ACTIVERECORD_PRIMARY_KEY
@@ -77,6 +81,9 @@ AppSecrets = SuperConfig.new do
     mandatory :STRIPE_API_KEY, :string
     mandatory :OTP_ENCRYPTION_KEY, :string
     mandatory :STRIPE_CLIENT_ID, :string
+    mandatory :PAYPAL_CLIENT_ID, :string
+    mandatory :PAYPAL_CLIENT_SECRET, :string
+    mandatory :PAYPAL_ATTRIBUTION_CODE, :string
     mandatory :DISCOURSE_SECRET, :string
     mandatory :SURVEY_SECRET, :string
     mandatory :ACTIVERECORD_PRIMARY_KEY, :string

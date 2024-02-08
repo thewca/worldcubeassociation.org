@@ -34,6 +34,7 @@ class Competition < ApplicationRecord
   has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
   belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
   belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
+  has_many :competition_payment_integrations
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
   accepts_nested_attributes_for :championships, allow_destroy: true
@@ -614,7 +615,8 @@ class Competition < ApplicationRecord
              'inbox_results',
              'inbox_persons',
              'announced_by_user',
-             'cancelled_by_user'
+             'cancelled_by_user',
+             'competition_payment_integrations'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers

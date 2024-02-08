@@ -1245,10 +1245,6 @@ en:
       confirmed_not_visible: "This competition is confirmed but not visible."
       not_confirmed_visible: "This competition is not confirmed but visible."
       not_confirmed_not_visible: "This competition is not confirmed and not visible."
-      stripe_connected: "You have now successfully connected your Stripe account and can now receive registration payments for this competition."
-      stripe_disconnected_success: "Sucessfully disconnected the Stripe account."
-      stripe_disconnected_failure: "There was an error with disconnecting the Stripe account."
-      stripe_not_connected: "There was a problem and we could not connect your Stripe account."
       championship_exists: "There is already a %{championship_type} in %{year}."
       orga_closed_reg_success: "Sucessfully closed registration."
       orga_closed_reg_failure: "Cannot close registration."
@@ -1728,8 +1724,6 @@ en:
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
     user_preferences: "User Preferences"
     receive_registration_emails: "Notify me by email when someone registers for this competition"
-    stripe_disconnect: "Disconnect Stripe account"
-    stripe_disconnect_confirm: "Are you sure you want to disconnect the Stripe account? This action cannot be undone."
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
       general_info: "General info"
@@ -1908,6 +1902,33 @@ en:
   #context: User notifications
   notifications:
     connect_wca_id: "Connect your WCA ID to your account!"
+  payments:
+    #context: localized names of payment providers
+    payment_providers:
+      paypal: 'PayPal'
+      stripe: 'Stripe'
+    #context: Setting up and making payments
+    payment_setup:
+      stripe_dashboard: 'Stripe Dashboard'
+      account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
+      account_disconnected_success: "Sucessfully disconnected your %{provider} account."
+      account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
+      account_not_connected: "There was a problem and we could not connect your %{provider} account."
+      disconnect_account: "Disconnect %{provider} Account"
+      confirm_account_disconnect: "Are you sure you want to disconnect the %{provider} account? This action cannot be undone."
+      supported_currency_warning: "Please make sure the currency you have selected is supported by your chosen payment integration! The supported currencies will depend on the country where the account account is based, you can check them below:"
+      supported_currencies: "%{provider} Supported Currencies"
+      provider_heading: "%{provider} Payments"
+      accept_payments_header: "Accept Registration Payments"
+      connect_button: "Connect with %{provider}"
+      stripe_payment_info: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
+      stripe_connect_warning: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
+      stripe_disconnect_info: "This competition is set up to accept payments through Stripe. If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard (link below). Please note it will revoke access for all competitions using the account. Before a new Stripe account can be connected, the competition's Delegate must reach out to WCAT to clear the entry."
+      stripe_disconnect_warning: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
+      paypal_payment_info: "A PayPal business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+      paypal_connect_warning: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly from your PayPal account."
+      paypal_disconnect_info: "This competition is set up to accept payments through Paypal. Note that clicking disconnecting here will not revoke the permissions you have granted to the WCA - this must be done from your PayPal account."
+      paypal_disconnect_warning: "Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments."
   persons:
     #context: Person search page
     index:

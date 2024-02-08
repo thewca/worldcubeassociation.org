@@ -18,6 +18,14 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  # Don't expose Paypal routes in production until we're reading to launch
+  unless Rails.env.production?
+    post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
+    post 'registration/:id/capture-paypal-payment/:order_id' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
+    get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
+    post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
+  end
+
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
