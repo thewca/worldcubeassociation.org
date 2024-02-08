@@ -165,6 +165,7 @@ FactoryBot.define do
       # for testing Stripe payments, and is connected
       # to the WCA Stripe account. For more information, see
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
+      connected_stripe_account = FactoryBot.create(:connected_stripe_account)
       connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
     end
 
