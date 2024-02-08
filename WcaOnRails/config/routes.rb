@@ -162,6 +162,7 @@ Rails.application.routes.draw do
   get 'export/results/WCA_export.sql' => 'database#sql_permalink', as: :sql_permalink
   get 'export/results/WCA_export.tsv' => 'database#tsv_permalink', as: :tsv_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
+  get 'export/developer/wca-developer-database-dump', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
   # redirect from the old path that used to be linked on GitHub
   get 'wst/wca-developer-database-dump.zip', to: redirect('/export/developer/wca-developer-database-dump.zip')
 
