@@ -2294,6 +2294,9 @@ class Competition < ApplicationRecord
         "fromId" => errors[:being_cloned_from_id],
         "cloneTabs" => errors[:clone_tabs],
       },
+      "other" => {
+        "competitionEvents" => errors[:competition_events],
+      },
     }
   end
 
