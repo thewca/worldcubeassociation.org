@@ -20,16 +20,16 @@ namespace :db do
       ActiveRecord::Base.subclasses
                         .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
                         .each do |type|
-                          type.find_each do |record|
-                            unless record.valid?
-                              puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
-                              error_count += 1
-                            end
-                          end
-                        rescue StandardError => e
-                          puts "An exception occurred: #{e.message}"
-                          error_count += 1
-                        end
+        type.find_each do |record|
+          unless record.valid?
+            puts "#<#{type} id: #{record.id}, errors: #{record.errors.full_messages}>"
+            error_count += 1
+          end
+        end
+      rescue StandardError => e
+        puts "An exception occurred: #{e.message}"
+        error_count += 1
+      end
       ActiveRecord::Base.logger.level = original_log_level
 
       exit error_count > 0 ? 1 : 0
@@ -56,17 +56,17 @@ namespace :db do
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
-          dev_db_dump_url = "https://www.worldcubeassociation.org/export/developer/#{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}"
-
+          dev_db_dump_url = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
+          local_file = "./dump.zip"
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
-            system("curl -o #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK} #{dev_db_dump_url}") || raise("Error while running `curl`")
+            system("curl -o #{local_file} #{dev_db_dump_url}") || raise("Error while running `curl`")
           end
-          LogTask.log_task("Unzipping #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}") do
-            system("unzip #{DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK}") || raise("Error while running `unzip`")
+          LogTask.log_task("Unzipping dump.zip") do
+            system("unzip #{local_file} ") || raise("Error while running `unzip`")
           end
 
           config = ActiveRecord::Base.connection_db_config
-          LogTask.log_task "Clobbering contents of '#{config.database}' with #{DbDumpHelper::DEVELOPER_EXPORT_SQL}" do
+          LogTask.log_task "Clobbering contents of '#{config.database}' with #{local_file} " do
             ActiveRecord::Tasks::DatabaseTasks.drop config
             ActiveRecord::Tasks::DatabaseTasks.create config
 
