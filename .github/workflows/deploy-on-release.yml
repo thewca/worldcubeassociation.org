@@ -47,7 +47,7 @@ jobs:
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |
-          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-auxiliary-services --force-new-deployment
+          aws ecs update-service --cluster wca-on-rails --service wca-on-rails-prod-auxiliary-services --force-new-deployment
         # There is no pipeline for staging so we manually force to update the image
       - name: Deploy staging
         run: |
