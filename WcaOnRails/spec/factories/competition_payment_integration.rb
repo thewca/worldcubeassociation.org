@@ -2,16 +2,17 @@
 
 FactoryBot.define do
   factory :competition_payment_integration do
-    trait {
+    transient do
+      account { nil }
+    end
 
-    }
     connected_account_type { nil }
     connected_account_id { nil }
     competition_id { nil }
   end
 
-  trait :paypal do
-
+  trait :stripe do
+    connected_account_type { connected_account.class }
+    connected_account_id { connected_account.id }
   end
-
 end

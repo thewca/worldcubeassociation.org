@@ -166,7 +166,9 @@ FactoryBot.define do
       # to the WCA Stripe account. For more information, see
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
       connected_stripe_account = FactoryBot.create(:connected_stripe_account)
-      connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
+      FactoryBot.create(:competition_payment_integration, :stripe, account: connected_stripe_account, competition_id: competition.id)
+
+      # connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
     end
 
     trait :accepts_donations do
