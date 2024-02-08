@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Regulation < SimpleDelegator
-  REGULATIONS_JSON_PATH = "/regulations/wca-regulations.json"
+  REGULATIONS_JSON_PATH = "regulations/wca-regulations.json"
 
   def self.reload_regulations(s3)
     @regulations = JSON.parse(s3.bucket(RegulationTranslationsHelper::BUCKET_NAME).object(REGULATIONS_JSON_PATH).get.body.read).freeze
