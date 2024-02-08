@@ -2402,6 +2402,20 @@ class Competition < ApplicationRecord
     self.competition_series = competition_series
   end
 
+  # Our React date picker unfortunately behaves weirdly in terms of backend data
+  def self.date_json_schema(string_format)
+    {
+      "anyOf" => [
+        # It can (and should) mostly be a "date" or "date-time" string
+        { "type" => "string", "format" => string_format },
+        # but when opening the page **and never touching it** it stays NULL
+        { "type" => "null" },
+        # and when opening and touching **but later deleting** a date it becomes an empty string instead of NULL
+        { "type" => "string", "maxLength" => 0 }
+      ]
+    }
+  end
+
   def self.form_data_json_schema
     {
       "type" => "object",
@@ -2429,8 +2443,8 @@ class Competition < ApplicationRecord
             },
           },
         },
-        "startDate" => { "anyOf" => [{ "type" => "string", "format" => "date" }, { "type" => "null" }] },
-        "endDate" => { "anyOf" => [{ "type" => "string", "format" => "date" }, { "type" => "null" }] },
+        "startDate" => date_json_schema("date"),
+        "endDate" => date_json_schema("date"),
         "series" => CompetitionSeries.form_data_json_schema,
         "information" => { "type" => ["string", "null"] },
         "competitorLimit" => {
@@ -2492,16 +2506,16 @@ class Competition < ApplicationRecord
             "guestEntryFee" => { "type" => ["integer", "null"] },
             "donationsEnabled" => { "type" => ["boolean", "null"] },
             "refundPolicyPercent" => { "type" => ["integer", "null"] },
-            "refundPolicyLimitDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
+            "refundPolicyLimitDate" => date_json_schema("date-time"),
           },
         },
         "registration" => {
           "type" => "object",
           "properties" => {
-            "openingDateTime" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
-            "closingDateTime" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
-            "waitingListDeadlineDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
-            "eventChangeDeadlineDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
+            "openingDateTime" => date_json_schema("date-time"),
+            "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
             "allowOnTheSpot" => { "type" => ["boolean", "null"] },
             "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
             "allowSelfEdits" => { "type" => "boolean" },
