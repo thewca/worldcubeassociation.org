@@ -43,7 +43,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=$GITHUB_SHA
+            BUILD_TAG=${{ github.sha }}
         # Replace the old sidekiq image with the new one
       - name: Deploy Sidekiq
         run: |
