@@ -54,7 +54,7 @@ COPY . .
 
 # Run and own only the runtime files as a non-root user for security
 RUN useradd rails --create-home --shell /bin/bash && \
-    chown -R rails:rails db log tmp public app pids .yarn
+    chown -R rails:rails vendor db log tmp public app pids .yarn
 USER rails:rails
 
 # Entrypoint prepares database and starts app on 0.0.0.0:3000 by default,
