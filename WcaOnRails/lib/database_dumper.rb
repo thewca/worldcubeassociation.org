@@ -1208,15 +1208,15 @@ module DatabaseDumper
   end
 
   def self.mysql(command, database = nil)
-    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}")
+    system_pipefail!("mariadb #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}")
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+    system_pipefail!("mariadb #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)
-    system_pipefail!("mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
+    system_pipefail!("mariadb-dump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
     system_pipefail!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
   end
 

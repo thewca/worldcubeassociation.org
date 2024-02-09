@@ -30,13 +30,20 @@ RUN corepack enable
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
+      software-properties-common \
       git \
       pkg-config \
-      mariadb-client \
       libvips \
       libssl-dev \
       libyaml-dev \
-      tzdata && \
+      tzdata
+
+# Use the MariaDB package sources via https://mariadb.com/kb/en/mariadb-package-repository-setup-and-usage/
+# because the Ruby base image runs on Debian 12, which provides an older MariaDB version that suffers from a
+# mysqldump bug in conjunction with MySQL 8.0 servers: https://jira.mariadb.org/browse/MDEV-31836
+# (the issue was fixed in 10.11.5 but Debian only provides 10.11.4 so we need to override)
+RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash && \
+    apt-get install -y mariadb-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
 # Install application gems
