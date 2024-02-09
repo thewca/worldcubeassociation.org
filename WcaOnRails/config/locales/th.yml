@@ -2250,16 +2250,6 @@ th:
       not_confirmed_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน แต่ปรากฎต่อสาธารณะแล้ว
       #original_hash: b299b27
       not_confirmed_not_visible: การแข่งขันนี้ยังไม่ได้รับการยืนยัน และยังไม่ปรากฎต่อสาธารณะ
-      #original_hash: a821396
-      stripe_connected: >-
-        คุณได้เชื่อมต่อ Stripe สำเร็จแล้ว
-        และคุณสามารถรับการชำระค่าสมัครสำหรับการแข่งขันครั้งนี้ได้
-      #original_hash: b8fc60f
-      stripe_disconnected_success: ตัดการเชื่อมต่อบัญชี Stripe สำเร็จแล้ว
-      #original_hash: e1a250c
-      stripe_disconnected_failure: เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี Stripe
-      #original_hash: 0a4bb53
-      stripe_not_connected: มีปัญหาบางอย่าง เราไม่สามารถเชื่อมต่อ Stripe ของคุณได้
       #original_hash: 1b92d16
       championship_exists: 'ได้มีการแข่งขัน %{championship_type} ในปี %{year} ไปแล้ว'
       #original_hash: 0644bdc
@@ -2536,6 +2526,10 @@ th:
       past_all: อดีตทุกปี
       #original_hash: 6eef664
       no_delegates: None
+      #original_hash: ef0c8bc
+      delegates_loading: กำลังรอโหลด Delegate ทั้งหมดให้เสร็จสิ้น...
+      #original_hash: 7045db2
+      no_delegates_found: ไม่พบ Delegate
       #original_hash: 819fe62
       show_cancelled: แสดงการแข่งขันที่ถูกยกเลิก
       #original_hash: 0eda967
@@ -3249,12 +3243,6 @@ th:
     user_preferences: การตั้งค่าผู้ใช้
     #original_hash: 089cbfd
     receive_registration_emails: แจ้งให้ฉันทราบทางอีเมลเมื่อมีคนสมัครการแข่งขันนี้
-    #original_hash: 1ae594d
-    stripe_disconnect: ยกเลิกการเชื่อมต่อบัญชี Stripe
-    #original_hash: 9ca8e2c
-    stripe_disconnect_confirm: >-
-      คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี Stripe?
-      การดำเนินการนี้ไม่สามารถยกเลิกได้
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
@@ -3564,6 +3552,85 @@ th:
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: เชื่อมต่อ WCA ID กับ account ของคุณ
+  payments:
+    payment_providers:
+      #original_hash: 559ef55
+      paypal: PayPal
+      #original_hash: 4d08ec5
+      stripe: Stripe
+    payment_setup:
+      #original_hash: 69b243c
+      stripe_dashboard: Stripe Dashboard
+      #original_hash: e621d96
+      account_connected: >-
+        คุณได้เชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว
+        และตอนนี้สามารถรับการชำระเงินการลงทะเบียนสำหรับการแข่งขันครั้งนี้ได้แล้ว
+      #original_hash: 18d1326
+      account_disconnected_success: 'ยกเลิกการเชื่อมต่อบัญชี %{provider} ของคุณสำเร็จแล้ว'
+      #original_hash: 6b934e2
+      account_disconnected_failure: 'เกิดข้อผิดพลาดในการยกเลิกการเชื่อมต่อบัญชี %{provider}'
+      #original_hash: 340bba4
+      account_not_connected: 'เกิดปัญหาและเราไม่สามารถเชื่อมต่อบัญชี %{provider} ของคุณได้'
+      #original_hash: 4218676
+      disconnect_account: 'ยกเลิกการเชื่อมต่อบัญชี %{provider}'
+      #original_hash: 59c9c9c
+      confirm_account_disconnect: >-
+        คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี %{provider}
+        การดำเนินการนี้ไม่สามารถยกเลิกได้
+      #original_hash: 0be9f82
+      supported_currency_warning: >-
+        โปรดตรวจสอบให้แน่ใจว่าสกุลเงินที่คุณเลือกรองรับโดยการรวมการชำระเงินที่คุณเลือก!
+        สกุลเงินที่รองรับจะขึ้นอยู่กับประเทศที่บัญชีตั้งอยู่
+        คุณสามารถตรวจสอบได้ด้านล่าง:
+      #original_hash: 9711365
+      supported_currencies: '%{provider} สกุลเงินที่รองรับ'
+      #original_hash: 1e6571f
+      provider_heading: 'การชำระเงิน %{provider}'
+      #original_hash: 40a098a
+      accept_payments_header: Accept Registration Payments
+      #original_hash: 7ebe178
+      connect_button: 'เชื่อมต่อกับ %{provider}'
+      #original_hash: f3fdb64
+      stripe_payment_info: >-
+        เพื่อที่จะยอมรับการชำระเงินสำหรับการแข่งขันนี้ คุณต้องเชื่อมต่อบัญชี
+        Stripe ของคุณกับบัญชี WCA Stripe โดยคลิกที่ปุ่มด้านล่าง
+        หากคุณยังไม่มีบัญชี Stripe ของคุณเอง
+        คุณยังคงสามารถคลิกที่ปุ่มด้านล่างได้ และมันจะแนะนำคุณตลอดกระบวนการ
+      #original_hash: 53adda3
+      stripe_connect_warning: >-
+        การเชื่อมต่อบัญชี Stripe ของคุณทำให้เว็บไซต์ WCA
+        สามารถสร้างการเรียกเก็บเงินและออกเงินคืนได้โดยตรงในบัญชี Stripe ของคุณ
+      #original_hash: 9ea95c2
+      stripe_disconnect_info: >-
+        การแข่งขันครั้งนี้จัดขึ้นเพื่อให้รับการชำระเงินผ่าน Stripe ได้
+        หากคุณต้องการยกเลิกการเชื่อมต่อบัญชี Stripe ของคุณ
+        คุณควรดำเนินการดังกล่าวจากแดชบอร์ด Stripe ของคุณก่อน (ลิงก์ด้านล่าง)
+        โปรดทราบว่ามันจะเพิกถอนการเข้าถึงสำหรับการแข่งขันทั้งหมดโดยใช้บัญชี
+        ก่อนที่จะสามารถเชื่อมต่อบัญชี Stripe ใหม่ได้ Delegate
+        ของการแข่งขันจะต้องติดต่อ WCAT เพื่อเคลียร์รายการ
+      #original_hash: d4a360b
+      stripe_disconnect_warning: >-
+        โปรดทราบว่าการยกเลิกการเชื่อมต่อบัญชีควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
+        เช่น บัญชีกระแสรายวันไม่สามารถรับการชำระเงินได้
+      #original_hash: 0af9795
+      paypal_payment_info: >-
+        บัญชีธุรกิจของ PayPal จะต้องยอมรับการชำระเงินผ่าน PayPal
+        ผ่านหน้าการแข่งขัน หากคุณยังไม่มีบัญชีธุรกิจ PayPal
+        คุณยังคงคลิกปุ่มด้านล่างได้ ระบบจะแนะนำคุณตลอดขั้นตอน
+      #original_hash: d327396
+      paypal_connect_warning: >-
+        การเชื่อมต่อบัญชี PayPal ของคุณทำให้เว็บไซต์ WCA
+        สามารถกำหนดเส้นทางการชำระเงินให้กับคุณ และออกเงินคืนได้โดยตรงจากบัญชี
+        PayPal ของคุณ
+      #original_hash: eb05726
+      paypal_disconnect_info: >-
+        การแข่งขันครั้งนี้จัดขึ้นเพื่อให้รับการชำระเงินผ่าน Paypal ได้
+        โปรดทราบว่าการคลิกยกเลิกการเชื่อมต่อที่นี่จะไม่เพิกถอนสิทธิ์ที่คุณให้กับ
+        WCA - จะต้องดำเนินการจากบัญชี PayPal ของคุณ
+      #original_hash: c186753
+      paypal_disconnect_warning: >-
+        โปรดทราบว่าการเปลี่ยนแปลงบัญชีเหล่านี้ควรทำเฉพาะในสถานการณ์พิเศษเท่านั้น
+        เช่น บัญชีกระแสรายวันไม่สามารถรับการชำระเงินได้
   persons:
     index:
       #original_hash: 5934b4c
