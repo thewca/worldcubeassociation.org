@@ -39,7 +39,7 @@ RUN apt-get update -qq && \
       libssl-dev
 
 # See the comment in Prod Dockerfile for an explanation why the separate MariaDB source is necessary.
-RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash && \
+RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --mariadb-server-version="mariadb-10.11" && \
     apt-get install -y mariadb-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 

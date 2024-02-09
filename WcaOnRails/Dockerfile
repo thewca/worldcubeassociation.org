@@ -42,7 +42,7 @@ RUN apt-get update -qq && \
 # because the Ruby base image runs on Debian 12, which provides an older MariaDB version that suffers from a
 # mysqldump bug in conjunction with MySQL 8.0 servers: https://jira.mariadb.org/browse/MDEV-31836
 # (the issue was fixed in 10.11.5 but Debian only provides 10.11.4 so we need to override)
-RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash && \
+RUN curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup | bash -s -- --mariadb-server-version="mariadb-10.11" && \
     apt-get install -y mariadb-client && \
     rm -rf /var/lib/apt/lists /var/cache/apt/archives
 
