@@ -2355,16 +2355,6 @@ sv:
       not_confirmed_visible: Tävlingen är inte bekräftad men den är synlig.
       #original_hash: b299b27
       not_confirmed_not_visible: Tävlingen är inte bekräftad och inte synlig.
-      #original_hash: a821396
-      stripe_connected: >-
-        Du har nu lyckats ansluta ditt Stripe-konto och kan nu ta emot
-        betalningar med anmälningsavgifter för den här tävlingen.
-      #original_hash: b8fc60f
-      stripe_disconnected_success: Stripe-kontot har kopplats bort.
-      #original_hash: e1a250c
-      stripe_disconnected_failure: Det uppstod ett fel när Stripe-kontot skulle kopplas bort.
-      #original_hash: 0a4bb53
-      stripe_not_connected: Det uppstod ett problem och vi kunde inte ansluta ditt Stripe-konto.
       #original_hash: 1b92d16
       championship_exists: 'Det finns redan ett %{championship_type} för %{year}.'
       #original_hash: 0644bdc
@@ -3390,12 +3380,6 @@ sv:
     user_preferences: Användarinställningar
     #original_hash: 089cbfd
     receive_registration_emails: Meddela mig via mejl när någon anmäler sig till den här tävlingen
-    #original_hash: 1ae594d
-    stripe_disconnect: Koppla bort Stripe-konto
-    #original_hash: 9ca8e2c
-    stripe_disconnect_confirm: >-
-      Är du säker på att du vill koppla bort Stripe-kontot? Detta kan inte
-      ångras.
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Notera: anmälan är redan stängd.'
     show:
@@ -3710,6 +3694,90 @@ sv:
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Anslut ditt WCA-ID till ditt konto!
+  payments:
+    payment_providers:
+      #original_hash: 559ef55
+      paypal: PayPal
+      #original_hash: 4d08ec5
+      stripe: Stripe
+    payment_setup:
+      #original_hash: 69b243c
+      stripe_dashboard: Stripe Dashboard
+      #original_hash: e621d96
+      account_connected: >-
+        Du har anslutit ditt %{provider}-konto och kan nu ta emot
+        anmälningsavgifter för den här tävlingen.
+      #original_hash: 18d1326
+      account_disconnected_success: '%{provider}-konto bortkopplat.'
+      #original_hash: 6b934e2
+      account_disconnected_failure: 'Det uppstod ett fel vid frånkopplingen av %{provider}-kontot.'
+      #original_hash: 340bba4
+      account_not_connected: >-
+        Det uppstod ett problem och vi kunde inte ansluta ditt
+        %{provider}-konto.
+      #original_hash: 4218676
+      disconnect_account: 'Koppla bort %{provider}-konto'
+      #original_hash: 59c9c9c
+      confirm_account_disconnect: >-
+        Är du säker på att du vill koppla bort %{provider}-kontot? Detta kan
+        inte ångras.
+      #original_hash: 0be9f82
+      supported_currency_warning: >-
+        Kontrollera att den valuta du har valt stöds av din valda
+        betalningsintegration! Vilka valutor som stöds beror på vilket land
+        kontot är baserat i, du kan se dem nedan:
+      #original_hash: 9711365
+      supported_currencies: 'Valutor som stöds av %{provider}'
+      #original_hash: 1e6571f
+      provider_heading: '%{provider}-betalningar'
+      #original_hash: 40a098a
+      accept_payments_header: Anmälningsavgifter för godkända anmälningar
+      #original_hash: 7ebe178
+      connect_button: 'Anslut till %{provider}'
+      #original_hash: f3fdb64
+      stripe_payment_info: >-
+        För att kunna ta emot betalningar för denna tävling måste du ansluta
+        ditt eget Stripe-konto till WCA:s Stripe-konto genom att klicka på
+        knappen nedan. Om du inte redan har ett eget Stripe-konto kan du ändå
+        klicka på knappen nedan så kommer den att guida dig genom processen.
+      #original_hash: 53adda3
+      stripe_connect_warning: >-
+        Genom att ansluta ditt Stripe-konto får WCA:s webbplats möjlighet att
+        skapa debiteringar och utfärda återbetalningar direkt på ditt
+        Stripe-konto.
+      #original_hash: 9ea95c2
+      stripe_disconnect_info: >-
+        Denna tävling är konfigurerad för att ta emot betalningar via Stripe. Om
+        du vill koppla bort ditt Stripe-konto ska du först göra det från din
+        Stripe dashboard (länk nedan). Observera att det kommer att återkalla
+        åtkomsten för alla tävlingar som använder kontot. Innan ett nytt
+        Stripe-konto kan anslutas måste tävlingens delegat kontakta WCAT för att
+        ta bort anslutningen.
+      #original_hash: d4a360b
+      stripe_disconnect_warning: >-
+        Tänk på att frånkoppling av ett konto endast bör göras i undantagsfall,
+        t.ex. om det aktuella kontot inte kan ta emot betalningar.
+      #original_hash: 0af9795
+      paypal_payment_info: >-
+        Ett PayPal-företagskonto krävs för att ta emot PayPal-betalningar via
+        tävlingssidan. Om du inte redan har ett PayPal-företagskonto kan du
+        fortfarande klicka på knappen nedan så kommer den att vägleda dig genom
+        processen.
+      #original_hash: d327396
+      paypal_connect_warning: >-
+        Genom att ansluta ditt PayPal-konto får WCA:s webbplats möjlighet att
+        vidarebefordra betalningar till dig och utfärda återbetalningar direkt
+        från ditt PayPal-konto.
+      #original_hash: eb05726
+      paypal_disconnect_info: >-
+        Denna tävling är konfigurerad för att ta emot betalningar via PayPal.
+        Observera att du inte kan återkalla de behörigheter du har gett till WCA
+        genom att klicka på "koppla från" här - detta måste göras från ditt
+        PayPal-konto.
+      #original_hash: c186753
+      paypal_disconnect_warning: >-
+        Tänk på att dessa kontoändringar endast bör göras i undantagsfall, t.ex.
+        om det aktuella kontot inte kan ta emot betalningar.
   persons:
     index:
       #original_hash: 5934b4c
