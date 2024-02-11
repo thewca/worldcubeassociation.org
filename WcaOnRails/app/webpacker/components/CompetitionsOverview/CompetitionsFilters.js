@@ -40,16 +40,16 @@ function CompetitionsFilters({
 
       <Form.Group>
         <Form.Field width={6}>
-          <RegionSelector dispatchFilter={dispatchFilter} />
+          <RegionSelector region={filterState.region} dispatchFilter={dispatchFilter} />
         </Form.Field>
         <Form.Field width={6}>
-          <SearchBar dispatchFilter={dispatchFilter} />
+          <SearchBar text={filterState.search} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
       <Form.Group>
         <Form.Field width={8}>
-          <DelegateSelector dispatchFilter={dispatchFilter} />
+          <DelegateSelector delegate={filterState.delegate} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
@@ -115,7 +115,7 @@ function EventSelector({ selectedEvents, dispatchFilter }) {
   );
 }
 
-function RegionSelector({ dispatchFilter }) {
+function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
     { key: 'all', text: I18n.t('common.all_regions'), value: 'all_regions' },
     {
@@ -138,7 +138,7 @@ function RegionSelector({ dispatchFilter }) {
       <Dropdown
         search
         selection
-        defaultValue="all"
+        value={region}
         options={regionsOptions}
         onChange={(_, data) => dispatchFilter({ region: data.value })}
       />
@@ -146,7 +146,7 @@ function RegionSelector({ dispatchFilter }) {
   );
 }
 
-function SearchBar({ dispatchFilter }) {
+function SearchBar({ text, dispatchFilter }) {
   return (
     <>
       <label htmlFor="search">{I18n.t('competitions.index.search')}</label>
@@ -155,13 +155,14 @@ function SearchBar({ dispatchFilter }) {
         id="search"
         icon="search"
         placeholder={I18n.t('competitions.index.tooltips.search')}
+        value={text}
         onChange={(_, data) => dispatchFilter({ search: data.value })}
       />
     </>
   );
 }
 
-function DelegateSelector({ dispatchFilter }) {
+function DelegateSelector({ delegate, dispatchFilter }) {
   const { delegatesLoading, delegatesData } = useDelegatesData();
 
   return (
@@ -177,7 +178,6 @@ function DelegateSelector({ dispatchFilter }) {
         search
         deburr
         selection
-        defaultValue="None"
         style={{ textAlign: 'center' }}
         options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesData?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
           {
@@ -187,6 +187,7 @@ function DelegateSelector({ dispatchFilter }) {
             image: { avatar: true, src: delegate.avatar?.thumb_url, style: { width: '28px', height: '28px' } },
           }
         )) || [])]}
+        value={delegate}
         onChange={(_, data) => dispatchFilter({ delegate: data.value })}
         noResultsMessage={delegatesLoading ? I18n.t('competitions.index.delegates_loading') : I18n.t('competitions.index.no_delegates_found')}
       />
