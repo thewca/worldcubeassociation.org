@@ -117,7 +117,7 @@ function EventSelector({ selectedEvents, dispatchFilter }) {
 
 function RegionSelector({ region, dispatchFilter }) {
   const regionsOptions = [
-    { key: 'all', text: I18n.t('common.all_regions'), value: 'all_regions' },
+    { key: 'all', text: I18n.t('common.all_regions'), value: 'all' },
     {
       key: 'continents_header', value: '', disabled: true, content: <Header content={I18n.t('common.continent')} size="small" style={{ textAlign: 'center' }} />,
     },

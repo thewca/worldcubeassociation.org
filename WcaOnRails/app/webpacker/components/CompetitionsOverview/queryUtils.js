@@ -29,7 +29,7 @@ export function createSearchParams(filterState, pageParam) {
   const dateNow = DateTime.now();
   const searchParams = new URLSearchParams({});
 
-  if (region && region !== 'all_regions') {
+  if (region && region !== 'all') {
     const regionParam = isContinent(region) ? 'continent' : 'country_iso2';
     searchParams.append(regionParam, region);
   }
