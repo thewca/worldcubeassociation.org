@@ -1162,8 +1162,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_03_180115) do
     t.bigint "region_id"
     t.string "location", limit: 255
     t.string "wca_id"
+    t.string "avatar", limit: 255
     t.bigint "current_avatar_id"
     t.bigint "pending_avatar_id"
+    t.string "pending_avatar", limit: 255
+    t.integer "saved_avatar_crop_x"
+    t.integer "saved_avatar_crop_y"
+    t.integer "saved_avatar_crop_w"
+    t.integer "saved_avatar_crop_h"
+    t.integer "saved_pending_avatar_crop_x"
+    t.integer "saved_pending_avatar_crop_y"
+    t.integer "saved_pending_avatar_crop_w"
+    t.integer "saved_pending_avatar_crop_h"
     t.string "unconfirmed_wca_id", limit: 255
     t.integer "delegate_id_to_handle_wca_id_claim"
     t.date "dob"

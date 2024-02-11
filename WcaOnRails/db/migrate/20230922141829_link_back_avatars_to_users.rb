@@ -10,7 +10,7 @@ class LinkBackAvatarsToUsers < ActiveRecord::Migration[7.0]
     end
 
     UserAvatar.pending.find_each do |avatar|
-      avatar.user.update_attribute :current_avatar, avatar
+      avatar.user.update_attribute :pending_avatar, avatar
     end
   end
 end
