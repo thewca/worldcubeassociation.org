@@ -359,6 +359,7 @@ function CompDisplayCheckboxes({
           label={I18n.t('competitions.index.show_cancelled')}
           name="show_cancelled"
           id="show_cancelled"
+          checked={shouldIncludeCancelled}
           onChange={() => dispatchFilter(
             { shouldIncludeCancelled: !shouldIncludeCancelled },
           )}
