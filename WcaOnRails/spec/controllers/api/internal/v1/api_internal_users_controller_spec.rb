@@ -10,7 +10,7 @@ RSpec.describe Api::Internal::V1::UsersController do
       # Stub vault validation
       allow(controller).to receive(:validate_token).and_return(true)
     end
-    context 'returns the correct pii' do
+    it 'returns the correct pii' do
       get :competitor_info, params: { ids: [user1.id, user2.id] }
 
       expect(response.body).to eq([{
