@@ -345,7 +345,7 @@ class User < ApplicationRecord
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
-    if avatar.present? && wca_id.blank?
+    if current_avatar.present? && wca_id.blank?
       errors.add(:avatar, I18n.t('users.errors.avatar_requires_wca_id'))
     end
   end
