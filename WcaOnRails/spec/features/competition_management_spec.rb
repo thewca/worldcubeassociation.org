@@ -2,7 +2,28 @@
 
 require "rails_helper"
 
-RSpec.feature "Competition management" do
+def find_modal(&)
+  all(:css, '.modal.visible', &).last
+end
+
+def within_modal(&)
+  within(find_modal(&))
+end
+
+# HTML 'select' dropdowns in SemUI are not actual <select> fields.
+# They are patched together as a combination of <div>s, so we have to write our custom find method.
+def region_input
+  all(:css, 'div#venue-countryId>input.search').last
+end
+
+# HTML 'checkbox' elements in SemUI are not actual <checkbox> fields.
+# They are a label with a rectangle and a tick mark injected via CSS, so we have to write our custom find method.
+def wca_registration_checkbox
+  # WARNING: Do not use Capybara "unckeck" on this, because it technically (in the HTML sense) isn't even a checkbox.
+  all(:css, "label[for='website-usesWcaRegistration']").last
+end
+
+RSpec.feature "Competition management", js: true do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
     before :each do
@@ -11,20 +32,25 @@ RSpec.feature "Competition management" do
 
     feature "create a competition" do
       scenario "with valid data" do
-        visit "/competitions/new"
+        visit new_competition_path
         fill_in "Name", with: "My Competition 2015"
-        select "United States", from: "Region"
-        uncheck "I would like to use the WCA website for registration"
+        region_input.fill_in with: "United States"
+        fill_in "Start date", with: '08/11/2015'
+        fill_in "End date", with: '08/11/2015'
+        wca_registration_checkbox.click
+        fill_in "Maximum number of competitors", with: '123'
+        fill_in "The reason for the competitor limit", with: 'Because it is required'
+
         click_button "Create Competition"
 
-        expect(page).to have_text("Successfully created new competition!")
+        expect(page).to have_current_path(edit_competition_path("MyCompetition2015"))
       end
 
       scenario "with validation errors" do
-        visit "/competitions/new"
+        visit new_competition_path
         click_button "Create Competition"
 
-        expect(page).to have_text("Name must end with a year")
+        expect(page).to have_text("must end with a year")
       end
     end
 
@@ -37,7 +63,7 @@ RSpec.feature "Competition management" do
         fill_in "Start date", with: "2016-11-30"
         fill_in "End date", with: "2016-11-30"
         click_button "Create Competition"
-        expect(page).to have_text("Successfully created new competition!")
+        expect(page).to have_current_path edit_competition_path("Pedro2016")
       end
 
       scenario "with validation errors" do
@@ -48,7 +74,7 @@ RSpec.feature "Competition management" do
         fill_in "Start date", with: "2016-11-30"
         fill_in "End date", with: "2016-11-30"
         click_button "Create Competition"
-        expect(page).to have_text("Name must end with a year")
+        expect(page).to have_text("must end with a year")
       end
     end
 
@@ -57,16 +83,24 @@ RSpec.feature "Competition management" do
       visit edit_competition_path(competition)
       click_button "Confirm"
 
-      expect(page).to have_text("Successfully confirmed competition.")
+      within_modal do
+        click_button "Yes"
+      end
+
+      expect(page).to have_text("You've confirmed this competition")
     end
 
-    scenario "change competition id of long name" do
+    scenario "change competition id of long name", retry: 3 do
       competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify long 2016")
       visit edit_competition_path(competition)
+
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
 
-      expect(page).to have_text("Successfully saved competition.")
+      expect(page).to have_current_path(edit_competition_path("NewId2016"))
+      expect(page).to have_text("This competition is not visible to the public.")
+
+      expect(page).not_to have_text("You have unsaved changes")
       expect(Competition.find("NewId2016")).not_to be_nil
     end
 
@@ -78,26 +112,31 @@ RSpec.feature "Competition management" do
 
       # When an invalid ID is specified, we silently ignore it. This behavior will
       # get nicer once we have proper immutable ids for competitions.
-      expect(page).to have_text("Successfully saved competition.")
+      expect(page).to have_current_path edit_competition_path("OldId2016")
+
       expect(Competition.find("OldId2016")).not_to be_nil
       expect(Competition.find_by_id("NewId With Spaces")).to be_nil
     end
 
-    scenario "change competition id with validation error" do
+    scenario "change competition id with validation error", retry: 3 do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
       fill_in "Name", with: "Name that does not end in a year but is long"
       click_button "Update Competition"
 
-      expect(page).to have_text("Name must end with a year")
-      expect(page).to have_selector("input#competition_id[value='OldId2016']")
+      # double-saving to make sure the error _really_ appears (GitHub CI needs this)
+      expect(page).to have_button("save your changes!")
+      click_button "save your changes!"
+
+      expect(page).to have_button("save your changes!")
+      expect(page).to have_text("must end with a year")
 
       fill_in "Name", with: "Name that is long and does end in year 2016"
-      fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
 
-      expect(page).to have_text("Successfully saved competition.")
+      expect(page).to have_current_path edit_competition_path("NewId2016")
+
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
       expect(c.name).to eq "Name that is long and does end in year 2016"
@@ -108,15 +147,21 @@ RSpec.feature "Competition management" do
       visit edit_competition_path(competition)
       click_button "Update Competition"
 
+      # Force Capybara to wait until the page finishes updating
+      expect(page).to have_current_path edit_competition_path("OldId2016")
+
       c = Competition.find("OldId2016")
       expect(c).not_to be_nil
     end
 
     scenario "can change id of short name from admin view" do
-      competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
-      visit admin_edit_competition_path(competition)
+      competition = FactoryBot.create(:competition, :with_delegate, :with_competitor_limit, id: "OldId2016", name: "competition name short 2016")
+      visit competition_admin_edit_path(competition)
       fill_in "ID", with: "NewId2016"
       click_button "Update Competition"
+
+      # Force Capybara to wait until the page finishes updating
+      expect(page).to have_current_path competition_admin_edit_path("NewId2016")
 
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
@@ -125,6 +170,7 @@ RSpec.feature "Competition management" do
     scenario "cannot change id of short name from organizer view" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
+
       expect { fill_in "ID", with: "NewId2016" }.to raise_error(Capybara::ElementNotFound)
     end
 
@@ -172,13 +218,18 @@ RSpec.feature "Competition management" do
     end
 
     scenario 'create competition', js: true, retry: 3 do
-      visit "/competitions/new"
+      visit new_competition_path
 
       fill_in "Name", with: "New Comp 2015"
-      select "United States", from: "Region"
-      uncheck "I would like to use the WCA website for registration"
+      region_input.fill_in with: "United States"
+      fill_in "Start date", with: '08/11/2015'
+      fill_in "End date", with: '08/11/2015'
+      wca_registration_checkbox.click
+      fill_in "Maximum number of competitors", with: '123'
+      fill_in "The reason for the competitor limit", with: 'Because it is required'
       click_button "Create Competition"
-      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
+
+      expect(page).to have_current_path(edit_competition_path("NewComp2015")) # wait for request to complete
 
       expect(Competition.all.length).to eq 1
       new_competition = Competition.find("NewComp2015")
@@ -186,12 +237,15 @@ RSpec.feature "Competition management" do
       expect(new_competition.delegates).to eq [delegate]
     end
 
-    scenario "id and cellName changes for short comp name" do
+    scenario "id and cellName changes for short comp name", js: true do
       competition = FactoryBot.create(:competition, delegates: [delegate], id: "competitionnameshort2016", name: "competition name short 2016")
       visit edit_competition_path(competition)
       fill_in "Name", with: "New Id 2016"
 
       click_button "Update Competition"
+
+      # Force Capybara to wait until the page finishes updating
+      expect(page).to have_current_path edit_competition_path("NewId2016")
 
       c = Competition.find("NewId2016")
       expect(c).not_to be_nil
@@ -213,7 +267,9 @@ RSpec.feature "Competition management" do
 
       expect(page).to have_button('Create Competition')
       click_button "Create Competition"
-      expect(page).to have_content "Successfully created new competition!" # wait for request to complete
+
+      # wait for request to complete
+      expect(page).to have_current_path edit_competition_path("NewComp2015")
 
       expect(Competition.all.length).to eq 2
       new_competition = Competition.find("NewComp2015")
@@ -230,13 +286,14 @@ RSpec.feature "Competition management" do
 
       scenario 'can edit registration open datetime', js: true, retry: 3 do
         visit edit_competition_path(comp_with_fours)
-        check "competition_use_wca_registration"
 
-        expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .datepicker")
-        expect(page).not_to have_selector(".bootstrap-datetimepicker-widget .timepicker")
-        find('#competition_registration_open').click
-        expect(page).to have_selector(".bootstrap-datetimepicker-widget .datepicker")
-        expect(page).to have_selector(".bootstrap-datetimepicker-widget .timepicker")
+        expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)
+        expect(page).to have_field("registration-closingDateTime", type: 'datetime-local', disabled: false)
+
+        wca_registration_checkbox.click
+
+        expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)
+        expect(page).to have_field("registration-closingDateTime", type: 'datetime-local', disabled: false)
       end
     end
   end

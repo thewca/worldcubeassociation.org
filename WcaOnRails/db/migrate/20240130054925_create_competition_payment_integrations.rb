@@ -6,8 +6,6 @@ class CreateCompetitionPaymentIntegrations < ActiveRecord::Migration[7.1]
       t.references :connected_account, polymorphic: true, null: false
       t.references :competition, null: false, type: :string
 
-      t.bool :integration_active, default: true
-
       t.timestamps
     end
   end

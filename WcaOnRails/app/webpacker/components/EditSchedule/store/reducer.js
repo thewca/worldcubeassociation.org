@@ -3,6 +3,9 @@ import {
   AddRoom,
   AddVenue,
   ChangesSaved,
+  CopyRoom,
+  CopyRoomActivities,
+  CopyVenue,
   EditActivity,
   EditRoom,
   EditVenue,
@@ -13,11 +16,18 @@ import {
   ScaleActivity,
 } from './actions';
 import {
-  nextActivityId, nextRoomId, nextVenueId,
+  copyActivity, copyRoom, copyVenue, nextActivityId, nextRoomId, nextVenueId,
 } from '../../../lib/utils/edit-schedule';
 import {
   changeActivityTimezone, moveActivityByDuration, scaleActivitiesByDuration,
 } from '../utils';
+import {
+  activityWcifFromId,
+  doActivitiesMatch,
+  roomWcifFromId,
+  venueWcifFromRoomId,
+} from '../../../lib/utils/wcif';
+import { defaultRoomColor } from '../../../lib/wca-data.js.erb';
 
 const reducers = {
   [ChangesSaved]: (state) => ({
@@ -45,73 +55,99 @@ const reducers = {
     },
   }),
 
-  [EditActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.map((activity) => (
-            activity.id === payload.activityId
-              ? { ...activity, [payload.key]: payload.value }
-              : activity
-          )),
-        })),
-      })),
-    },
-  }),
+  [EditActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
 
-  [RemoveActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.filter((activity) => activity.id !== payload.activityId),
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              (activity.id === selectedActivity.id || (
+                payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
+              ))
+                ? { ...activity, [payload.key]: payload.value }
+                : activity
+            )),
+          })),
         })),
-      })),
-    },
-  }),
+      },
+    };
+  },
 
-  [MoveActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.map((activity) => (
-            activity.id === payload.activityId
-              ? moveActivityByDuration(activity, payload.isoDuration)
-              : activity
-          )),
-        })),
-      })),
-    },
-  }),
+  [RemoveActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
 
-  [ScaleActivity]: (state, { payload }) => ({
-    ...state,
-    wcifSchedule: {
-      ...state.wcifSchedule,
-      venues: state.wcifSchedule.venues.map((venue) => ({
-        ...venue,
-        rooms: venue.rooms.map((room) => ({
-          ...room,
-          activities: room.activities.map((activity) => (
-            activity.id === payload.activityId
-              ? scaleActivitiesByDuration(activity, payload.isoDeltaStart, payload.isoDeltaEnd)
-              : activity
-          )),
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.filter((activity) => (
+              activity.id !== payload.activityId && (
+                !payload.updateMatches || !doActivitiesMatch(activity, selectedActivity)
+              )
+            )),
+          })),
         })),
-      })),
-    },
-  }),
+      },
+    };
+  },
+
+  [MoveActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              (activity.id === selectedActivity.id || (
+                payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
+              ))
+                ? moveActivityByDuration(activity, payload.isoDuration)
+                : activity
+            )),
+          })),
+        })),
+      },
+    };
+  },
+
+  [ScaleActivity]: (state, { payload }) => {
+    const selectedActivity = activityWcifFromId(state.wcifSchedule, payload.activityId);
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => ({
+          ...venue,
+          rooms: venue.rooms.map((room) => ({
+            ...room,
+            activities: room.activities.map((activity) => (
+              (activity.id === selectedActivity.id || (
+                payload.updateMatches && doActivitiesMatch(activity, selectedActivity)
+              ))
+                ? scaleActivitiesByDuration(activity, payload.isoDeltaStart, payload.isoDeltaEnd)
+                : activity
+            )),
+          })),
+        })),
+      },
+    };
+  },
 
   [EditVenue]: (state, { payload }) => ({
     ...state,
@@ -196,6 +232,7 @@ const reducers = {
           ...venue.rooms,
           {
             id: nextRoomId(state.wcifSchedule),
+            color: defaultRoomColor,
             activities: [],
             extensions: [],
           },
@@ -203,6 +240,73 @@ const reducers = {
       } : venue)),
     },
   }),
+
+  [CopyVenue]: (state, { payload }) => {
+    const venue = state.wcifSchedule.venues.find(({ id }) => id === payload.venueId);
+    if (!venue) return state;
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: [
+          ...state.wcifSchedule.venues,
+          {
+            ...copyVenue(state.wcifSchedule, venue),
+            name: `Copy of ${venue.name}`,
+          },
+        ],
+      },
+    };
+  },
+
+  [CopyRoom]: (state, { payload }) => {
+    const targetVenue = venueWcifFromRoomId(state.wcifSchedule, payload.roomId);
+    if (!targetVenue) return state;
+    const room = targetVenue.rooms.find(({ id }) => id === payload.roomId);
+    if (!room) return state;
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => (venue.id === targetVenue.id ? {
+          ...venue,
+          rooms: [
+            ...venue.rooms,
+            {
+              ...copyRoom(state.wcifSchedule, room),
+              name: `Copy of ${room.name}`,
+            },
+          ],
+        } : venue)),
+      },
+    };
+  },
+
+  [CopyRoomActivities]: (state, { payload }) => {
+    const { sourceRoomId, targetRoomId } = payload;
+    const sourceRoomActivities = roomWcifFromId(state.wcifSchedule, sourceRoomId).activities;
+    if (sourceRoomActivities.length === 0) return state;
+    const copiedActivities = sourceRoomActivities.map(
+      (activity) => copyActivity(state.wcifSchedule, activity),
+    );
+    const targetRoomVenueId = venueWcifFromRoomId(state.wcifSchedule, targetRoomId).id;
+
+    return {
+      ...state,
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((venue) => (venue.id === targetRoomVenueId ? {
+          ...venue,
+          rooms: venue.rooms.map((room) => (room.id === targetRoomId ? {
+            ...room,
+            activities: [...room.activities, ...copiedActivities],
+          } : room)),
+        } : venue)),
+      },
+    };
+  },
 };
 
 export default function rootReducer(state, action) {

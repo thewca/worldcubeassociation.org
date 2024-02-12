@@ -37,11 +37,10 @@
   <% end %>
 
   <%= alert :info do
-    sha1 = `git rev-parse HEAD`
     {
         "PID": Process.pid,
         "Uptime": duration_to_s(Time.now - WcaOnRails::BOOTED_AT),
-        "Git commit": link_to(sha1.first(7), "https://github.com/thewca/worldcubeassociation.org/commit/#{sha1}"),
+        "Git commit": link_to(EnvConfig.BUILD_TAG, "https://github.com/thewca/worldcubeassociation.org/commit/#{EnvConfig.BUILD_TAG}"),
         "IP Addresses": Socket.ip_address_list.select(&:ipv4_private?).map(&:ip_address).join(","),
     }.map { |key, value| "#{key}: #{value}" }.join(" #{ui_icon("circle")} ").html_safe
   end %>

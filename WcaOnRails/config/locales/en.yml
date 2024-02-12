@@ -292,73 +292,6 @@ en:
         receive_delegate_reports: "I would like to receive Delegate Reports of WCA Competitions by email"
         user_preferred_events: "Preferred events"
         otp_attempt: "Enter your two-factor authentication code:"
-      #context: a competition
-      competition:
-        id: "ID"
-        confirmed: "Do not let organizers edit this competition"
-        showAtAll: "Make competition visible to the public"
-        name: "Name"
-        name_reason: "The reason for the name"
-        cellName: "Competition short name"
-        countryId: "Region"
-        cityName: "City name"
-        venue: "Venue"
-        venueAddress: "Venue address"
-        venueDetails: "Venue details"
-        start_date: "Start date"
-        end_date: "End date"
-        external_website: "Website"
-        generate_website: "I would like to use WCA website instead of an external one for additional information."
-        base_entry_fee_lowest_denomination: "Base registration fee"
-        currency_code: "Currency code"
-        staff_delegate_ids: "WCA Delegate(s)"
-        trainee_delegate_ids: "WCA Trainee Delegate(s)"
-        organizer_ids: "Organizer(s)"
-        contact: "Contact"
-        information: "Information"
-        use_wca_registration: "I would like to use the WCA website for registration"
-        use_wca_live_for_scoretaking: "I will be using WCA Live for scoretaking"
-        external_registration_page: "Registration page"
-        competitor_limit_enabled: "Competitor limit"
-        competitor_limit: "Maximum number of competitors"
-        competitor_limit_reason: "The reason for the competitor limit"
-        guests_enabled: "Guests"
-        guests_per_registration_limit: "Maximum number of guests per registration"
-        events_per_registration_limit: "Events per registration limit"
-        receive_registration_emails: "Notify me by email when someone registers for this competition"
-        registration_open: "Registration open"
-        registration_close: "Registration close"
-        remarks: "Remarks"
-        clone_tabs: "I would like to clone all tabs with additional information as well"
-        competition_events: "Events"
-        enable_donations: "I want to enable donations additionally to collecting the registration fees"
-        extra_registration_requirements: "Extra registration requirements"
-        force_comment_in_registration: "Force competitors to make a comment when registering"
-        on_the_spot_registration: "On the spot registrations"
-        on_the_spot_entry_fee_lowest_denomination: "On the spot base registration fee"
-        allow_registration_edits: "Registration edits"
-        allow_registration_self_delete_after_acceptance: "Registration cancellations"
-        refund_policy_percent: "Percent to be refunded"
-        refund_policy_limit_date: "Limit date for refunds"
-        waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
-        event_change_deadline_date: "Deadline for competitors to update their registered events"
-        guests_entry_fee_lowest_denomination: "Entry fee for guests"
-        guest_entry_status: "Display message for free guest entry"
-        early_puzzle_submission: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
-        early_puzzle_submission_reason: "Reason and details for submitting puzzles early"
-        qualification_results: "I would like to use qualification results to limit who can compete in certain events"
-        qualification_results_reason: "Reason and details for qualification results"
-        event_restrictions: "I would like to restrict competitors from registering for specific combinations of events"
-        event_restrictions_reason: "Reason and details for event restrictions"
-        main_event_id: "Main event"
-        allow_registration_without_qualification: "Events with Qualification"
-      championship:
-        championship_type: "Championship type"
-      competition_series:
-        wcif_id: "Series ID"
-        name: "Series name"
-        short_name: "Series nickname"
-        competition_ids: "All competitions"
       #context: a registration to a competition
       registration:
         guests: "Guests"
@@ -483,11 +416,6 @@ en:
         report: "Report"
         article: "Article"
         multimedia: "Multimedia"
-    competition:
-      guest_entry_status:
-        unclear: "Do not display anything (and perhaps elaborate in the \"Extra registration requirements\" section)"
-        free: "\"Any spectator can attend for free\""
-        restricted: "\"Spectators are only permitted as companions of competitors\""
   #context: This key is an element of a form on the website
   simple_form:
     "yes": "Yes"
@@ -530,70 +458,6 @@ en:
         wca_id: ""
         receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
-      #context: for a competition
-      competition:
-        name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
-        cellName: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
-        cityName: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
-        information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
-        staff_delegate_ids: "WCA Delegates for the competition."
-        trainee_delegate_ids: "WCA Trainee Delegates for the competition."
-        organizer_ids: "Competition organizers (they need an account to be listed here)."
-        external_website: "The website of the competition. Must be a valid http(s) url."
-        registration_open: "Note: Registration open and close are in UTC time"
-        remarks: "Some additional information you want to pass on to the WCAT. For example, if there is something you are uncertain about, or if there are any special requests for the WCAT. Please fill this out in English!"
-        clone_tabs: ""
-        countryId: ""
-        end_date: ""
-        generate_website: ""
-        external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
-        base_entry_fee_lowest_denomination: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
-        currency_code: "The currency code for fees."
-        guests_enabled: ""
-        enable_donations: ""
-        id: ""
-        confirmed: ""
-        receive_registration_emails: ""
-        registration_close: ""
-        showAtAll: ""
-        start_date: ""
-        use_wca_registration: ""
-        use_wca_live_for_scoretaking: ""
-        competitor_limit_enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
-        competitor_limit: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
-        competitor_limit_reason: "What is the reason for the limit on competitors? Please fill this out in English!"
-        guests_per_registration_limit: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
-        events_per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
-        venueAddress: ""
-        extra_registration_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
-        on_the_spot_registration: ""
-        on_the_spot_entry_fee_lowest_denomination: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
-        allow_registration_edits: ""
-        allow_registration_self_delete_after_acceptance: ""
-        refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
-        refund_policy_limit_date: "Date after which no more refunds will be issued."
-        waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
-        event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
-        guests_entry_fee_lowest_denomination: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
-        guest_entry_status: ""
-        early_puzzle_submission: ""
-        early_puzzle_submission_reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
-        qualification_results: ""
-        qualification_results_reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
-        event_restrictions: ""
-        event_restrictions_reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
-        force_comment_in_registration: ""
-        main_event_id: "The winner of this event will be the winner of the competition."
-        allow_registration_without_qualification: ""
-        #context: when marked as championship
-        championships:
-          championship_type: ""
-        #context: when part of a Competition Series
-        competition_series:
-          wcif_id: ""
-          name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
-          short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
-          competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
       website_contact:
         inquiry: ""
         competition_id: ""
@@ -686,26 +550,6 @@ en:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
-      competition:
-        #context: about guests
-        guests_enabled:
-          "true": "Ask about guests"
-          "false": "Do NOT ask about guests"
-        competitor_limit_enabled:
-          "true": "I want to specify a competitor limit"
-          "false": "I DON'T WANT to specify a competitor limit"
-        on_the_spot_registration:
-          "true": "On the spot registrations will be accepted"
-          "false": "On the spot registrations WILL NOT be accepted"
-        allow_registration_without_qualification:
-          "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
-          "false": "Competitors MUST be qualified to register for an event"
-        allow_registration_edits:
-          "true": "Competitors may edit their registration until the deadline for updating events"
-          "false": "Competitors may NOT edit their registration once it has been accepted"
-        allow_registration_self_delete_after_acceptance:
-          "true": "Competitors may delete their own registration even after it has been accepted"
-          "false": "Competitors may NOT delete their own registration once it has been accepted"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
@@ -837,7 +681,7 @@ en:
       no_account: "No account?"
       have_competed: "I have competed in a WCA competition."
       have_never_competed: "I have never competed in a WCA competition."
-      let_us_know: "Please let us know if you have competed in a WCA competition before."
+      let_us_know: "Please let us know if you have competed in a WCA competition before:"
       welcome_back: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
       welcome_html: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/><br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
   layouts:
@@ -1101,7 +945,6 @@ en:
       dob_recent: "must be at least two years old"
       already_represented_country: "Cannot change the region to a region the person has already represented in the past."
       must_have_a_change: "The name or the region must be different to update the person."
-      must_be_senior: "must be a Senior Delegate"
       already_have_id: "cannot claim a WCA ID because you already have WCA ID %{wca_id}"
       wca_id_no_birthdate_html: "We do not have a birthdate recorded for this WCA ID. Please contact the WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
@@ -1121,6 +964,12 @@ en:
       already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
+  user_roles:
+    email:
+      role_metadata:
+        region_name: "Region Name"
+        status: "Status"
+        locale: "Locale"
   user_groups:
     group_types:
       board: "WCA Board of Directors"
@@ -1371,7 +1220,7 @@ en:
       create_success: "Successfully created new competition!"
       registration_payment_info: "This competition has registration fees but no Stripe account is linked. If you are using Stripe through the WCA website, please remember to link your Stripe account. If you are using an external payment system, please remember to add all the relevant details in the registration requirements."
       not_announced: "This competition is visible to the public but hasn't been announced yet."
-      announced: "Successfully announced competition!"
+      announced_success: "Successfully announced competition!"
       cancelled: "This competition has been cancelled. Please check the information section for more details."
       cancel_success: "Successfully cancelled competition!"
       cancel_failure: "Cannot cancel the competition."
@@ -1533,6 +1382,8 @@ en:
       past_from: "Past from %{year}"
       past_all: "Past from all years"
       no_delegates: "None"
+      delegates_loading: "Waiting to finish loading all Delegates..."
+      no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
       #context: titles for the competitions list
@@ -1585,10 +1436,6 @@ en:
     competition_form:
       wcat: "WCA Competition Announcement Team"
       supports_md_html: "Supports <a href='https://daringfireball.net/projects/markdown/basics' target='_blank'>Markdown</a>"
-      name_reason_html: "A brief explanation of the competition name. The name must comply with the <a href='/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition Requirements Policy</a>."
-      venue_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
-      venue_details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
-      contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
       series_save_first_hint: "Note: You have to save the competition first before you can add a new Series."
       events: "Events"
       public_and_locked_html: "This competition is publicly visible and locked for editing. If you need to make a change, please reply to the email thread where the competition was confirmed."
@@ -1613,6 +1460,189 @@ en:
         calculated: "The estimated WCA Dues for %{limit} competitors are %{estimate}"
         per_competitor: "The estimated WCA Dues per competitor are %{estimate}"
         ajax_error: "There is an error with Dues estimation, possibly because there are no available exchange rates for the selected currency."
+      labels:
+        admin:
+          is_confirmed: "Do not let organizers edit this competition"
+          is_visible: "Make competition visible to the public"
+        competition_id: "ID"
+        name: "Name"
+        short_name: "Competition short name"
+        name_reason: "The reason for the name"
+        venue:
+          country_id: "Region"
+          city_name: "City name"
+          name: "Venue"
+          details: "Venue details"
+          address: "Venue address"
+          coordinates: "Coordinates"
+        start_date: "Start date"
+        end_date: "End date"
+        series:
+          series_id: "Series ID"
+          name: "Series name"
+          short_name: "Series nickname"
+          competition_ids: "All competitions"
+        information: "Information"
+        competitor_limit:
+          enabled: "Competitor limit"
+          count: "Maximum number of competitors"
+          reason: "The reason for the competitor limit"
+        staff:
+          staff_delegate_ids: "WCA Delegate(s)"
+          trainee_delegate_ids: "WCA Trainee Delegate(s)"
+          organizer_ids: "Organizer(s)"
+          contact: "Contact"
+        championships: "Championships"
+        website:
+          generate_website: "I would like to use WCA website instead of an external one for additional information."
+          external_website: "Website"
+          external_registration_page: "Registration page"
+          uses_wca_registration: "I would like to use the WCA website for registration"
+          uses_wca_live: "I will be using WCA Live for scoretaking"
+        entry_fees:
+          currency_code: "Currency code"
+          base_entry_fee: "Base registration fee"
+          on_the_spot_entry_fee: "On the spot base registration fee"
+          guest_entry_fee: "Entry fee for guests"
+          donations_enabled: "I want to enable donations additionally to collecting the registration fees"
+          refund_policy_percent: "Percent to be refunded"
+          refund_policy_limit_date: "Limit date for refunds"
+        registration:
+          opening_date_time: "Registration open"
+          closing_date_time: "Registration close"
+          waiting_list_deadline_date: "Deadline for accepting competitors from the waiting list"
+          event_change_deadline_date: "Deadline for competitors to update their registered events"
+          allow_on_the_spot: "On the spot registrations"
+          allow_self_delete_after_acceptance: "Registration cancellations"
+          allow_self_edits: "Registration edits"
+          guests_enabled: "Guests"
+          guest_entry_status: "Display message for free guest entry"
+          guests_per_registration: "Maximum number of guests per registration"
+          extra_requirements: "Extra registration requirements"
+          force_comment: "Force competitors to make a comment when registering"
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: "I would like to require competitors to submit puzzles at a specific time before an event is scheduled to begin"
+            reason: "Reason and details for submitting puzzles early"
+          qualification_results:
+            enabled: "I would like to use qualification results to limit who can compete in certain events"
+            reason: "Reason and details for qualification results"
+            allow_registration_without: "Events with Qualification"
+          event_limitation:
+            enabled: "I would like to restrict competitors from registering for specific combinations of events"
+            reason: "Reason and details for event restrictions"
+            per_registration_limit: "Events per registration limit"
+          main_event_id: "Main event"
+        remarks: "Remarks"
+        clone_tabs: "I would like to clone all tabs with additional information as well"
+      #context: for a competition
+      hints:
+        admin:
+          is_confirmed: ""
+          is_visible: ""
+        competition_id: ""
+        name: "The full name of the competition including the year at the end (e.g., Danish Open 2016). Be sure to capitalize. The name must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )."
+        short_name: "A short name for displaying. If the name of the competition is below %{short_name_limit} characters this should not be edited and should be the same as the normal name."
+        name_reason_html: "A brief explanation of the competition name. The name must comply with the <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>WCA Competition Requirements Policy</a>."
+        venue:
+          country_id: ""
+          city_name: "Name of the city and state (if applicable) where the competition takes place. Do not include country (e.g., Paris OR San Francisco, California)."
+          name_html: "The venue where the competition takes place. %{md}. For example: [Cité des Sciences et de l'Industrie](http://www.cite-sciences.fr)"
+          details_html: "Details about the venue (e.g., On the first floor far in the back, follow the signs). %{md}"
+          address: ""
+          coordinates:
+            lat: ""
+            long: ""
+        start_date: ""
+        end_date: ""
+        #context: when part of a Competition Series
+        series:
+          series_id: ""
+          name: "The full name of the Competition Series including the year at the end (e.g., Southern Australia 2022). Be sure to capitalize. The same rules as for the name of the individual competition apply."
+          short_name: "A short name for displaying. The same rules as for the name of the individual competition apply.."
+          competition_ids: "<b>This field cannot be edited!</b><br/>To add competitions to this Series, you have to go to the individual 'Edit' pages of the competitions that you want to add."
+        information: "Important information that competitors should know. It will be displayed on the competition main page. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak."
+        competitor_limit:
+          enabled: "Although it is not required by the Regulations to provide a competitor limit, it's highly recommended to do so."
+          count: "The number of competitors allowed in this competition. For now this number is informational only, and does not yet prevent more people from registering. We are working on adding explicit support for this to the registration flow, but it requires some other work first."
+          reason: "What is the reason for the limit on competitors? Please fill this out in English!"
+        staff:
+          staff_delegate_ids: "WCA Delegates for the competition."
+          trainee_delegate_ids: "WCA Trainee Delegates for the competition."
+          organizer_ids: "Competition organizers (they need an account to be listed here)."
+          contact_html: "Optional contact information. If you do not fill this in, contact inquiries will be submitted through a form without revealing organizers' emails. %{md}. Example: [Text to display](mailto:some@email.com)"
+        website:
+          generate_website: ""
+          external_website: "The website of the competition. Must be a valid http(s) url."
+          external_registration_page: "The page where the competitors have to register for the competition. Must be a valid http(s) url."
+          uses_wca_registration: ""
+          uses_wca_live: ""
+        user_settings:
+          receive_registration_emails: ""
+        entry_fees:
+          currency_code: "The currency code for fees."
+          base_entry_fee: 'The base registration fee for the competition. It will be displayed on the competition information page and the registration page if used. If this is set to 0, a sentence will be displayed saying that registrations will be accepted for free. <br><br><b>DISCLAIMER: The following WCA Dues estimate is solely an approximation based on current exchange rates and is in no way legally binding for the Dues payment.</b>'
+          on_the_spot_entry_fee: "If this is set to 0, a sentence will be displayed saying that on the spot registrations will be accepted for free."
+          guest_entry_fee: "For now this number is informational only, guest fees cannot be managed through this website. If this is set to 0, a sentence of your choice will be displayed about the spectator policy."
+          donations_enabled: ""
+          refund_policy_percent: "For now this number is informational only, refunds will have to be issued manually. If this is set to 0, a sentence will be displayed saying that registration fees won't be refunded under any circumstance."
+          refund_policy_limit_date: "Date after which no more refunds will be issued."
+        registration:
+          opening_date_time: "Note: Registration open and close are in UTC time"
+          closing_date_time: ""
+          waiting_list_deadline_date: "The date when waitlisted registrants will no longer be accepted. If you have a deadline for refunds, the deadline for being accepted should not be before the deadline for refunds."
+          event_change_deadline_date: "Registered competitors have the right to update their registered events until this time by contacting the organization team. This deadline must not be set to a time before registration is set to close. Leaving this field blank means that competitors may add an event to their registered events up until that event is held. If you have on the spot registration, this must be set to the same day as the competition."
+          allow_on_the_spot: ""
+          allow_self_delete_after_acceptance: ""
+          allow_self_edits: ""
+          guests_enabled: ""
+          guest_entry_status: ""
+          guests_per_registration: "The number of guests per registration allowed at this competition. Registration with too many guests will be blocked. Leave blank if there is no limit."
+          extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
+          force_comment: ""
+        event_restrictions:
+          early_puzzle_submission:
+            enabled: ""
+            reason: "Please elaborate here why you would like to require competitors to submit puzzles early. Please fill this out in English!"
+          qualification_results:
+            enabled: ""
+            reason: "Please elaborate here why you would like to use qualification times. Please fill this out in English!"
+            allow_registration_without: ""
+          event_limitation:
+            enabled: ""
+            reason: "Please elaborate here why you would like to restrict certain event combinations. Please fill this out in English!"
+            per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
+          main_event_id: "The winner of this event will be the winner of the competition."
+        remarks: "Some additional information you want to pass on to the WCAT. For example, if there is something you are uncertain about, or if there are any special requests for the WCAT. Please fill this out in English!"
+        clone_tabs: ""
+      choices:
+        #context: about guests
+        guests_enabled:
+          "true": "Ask about guests"
+          "false": "Do NOT ask about guests"
+        competitor_limit:
+          enabled:
+            "true": "I want to specify a competitor limit"
+            "false": "I DON'T WANT to specify a competitor limit"
+        registration:
+          allow_on_the_spot:
+            "true": "On the spot registrations will be accepted"
+            "false": "On the spot registrations WILL NOT be accepted"
+          allow_self_edits:
+            "true": "Competitors may edit their registration until the deadline for updating events"
+            "false": "Competitors may NOT edit their registration once it has been accepted"
+          allow_self_delete_after_acceptance:
+            "true": "Competitors may delete their own registration even after it has been accepted"
+            "false": "Competitors may NOT delete their own registration once it has been accepted"
+          guest_entry_status:
+            unclear: 'Do not display anything (and perhaps elaborate in the "Extra registration requirements" section)'
+            free: '"Any spectator can attend for free"'
+            restricted: '"Spectators are only permitted as companions of competitors"'
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
+              "false": "Competitors MUST be qualified to register for an event"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
@@ -1651,17 +1681,6 @@ en:
     time_until_competition:
       competition_in: "Competition is in %{n_days}."
       competition_was: "Competition was %{n_days} ago."
-    #context: in the Proximity Policy "nearby competitions" list
-    nearby_competitions:
-      #context: pluralization of "x competition(s)" in the sentence "x competition(s) within n km and m days."
-      competitions:
-        zero: "No competitions"
-        one: "1 competition"
-        other: "%{count} competitions"
-      label_admin: "Last %{days} days"
-      nearby_admin: "%{x_competitions} within %{kms} km and %{days} days."
-      within: "Within %{days} days"
-      show: "Show"
     #context: in any general "nearby competitions" list
     adjacent_competitions:
       label: "Nearby competitions (within %{days} days and %{kms} km)"
@@ -1691,6 +1710,7 @@ en:
     announcements: "Announcements"
     post_announcement: "Announce the competition"
     announced_by_html: "Announced by %{announcer_name} on %{date_time}"
+    announce_confirm: "Are you sure you want to announce this competition?"
     cancel: "Cancel the competition"
     uncancel: "Uncancel the competition"
     cancelled_by_html: "Cancelled by %{name} on %{date_time}"
@@ -1702,6 +1722,8 @@ en:
     orga_close_reg: "Close registration"
     orga_close_reg_confirm: "Are you sure you want to close registration? You cannot undo this."
     note_reg_not_full_orga_close_reg: "Note: you can only close registration once the competitor limit has been reached."
+    user_preferences: "User Preferences"
+    receive_registration_emails: "Notify me by email when someone registers for this competition"
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
       general_info: "General info"
@@ -1887,6 +1909,7 @@ en:
       stripe: 'Stripe'
     #context: Setting up and making payments
     payment_setup:
+      stripe_dashboard: 'Stripe Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
       account_disconnected_success: "Sucessfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
@@ -2073,7 +2096,7 @@ en:
     spirit: Our spirit is that people from all over the world have fun together in a friendly atmosphere, help each other and behave sportsmanlike.
     spirit_footer: WCA Spirit
     our_goals_title: Our goals
-    our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://www.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
+    our_goals_content_html: <p>The World Cube Association wants to bring opportunities for community membership and leadership to young people around the world through increasing the accessibility of our 'twisty puzzle' competitions. We believe that experiences at competitions and within our community create growth opportunities for the young people involved and that introducing puzzle events to new groups of people allows for our overall community to strengthen. A document containing the Board's Vision and Strategy for the WCA can be found <a href="https://documents.worldcubeassociation.org/documents/WCA_Vision_and_Strategy.pdf">here</a>.</p>
     whats_next_title: What's next for the WCA?
     whats_next_content_html: <p>The World Cube Association has had over 200,000 unique competitors across 158 different regions and we are not planning on slowing down anytime soon! The cubing community has been growing steadily since our founding in 2004 and we want to encourage this to continue into the future by increasing the accessibility of competitions to new areas. In the future, we hope to support our community even more through collaborations and outreach to those who care about puzzles.</p>
     world_championship_title: World Championship
@@ -2485,7 +2508,7 @@ en:
       it is highly recommended to search for sponsors. Although WCA Delegates are volunteers and do not receive a salary for their work, organizers should consider paying compensation for their travel expenses."
     paragraph3:
       title: "Deadlines for the announcement of the competition"
-      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
+      content_html: "The competition must be announced at least 28 days before the start of the competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). However, this is rarely enough time. You should consider everything that will go into organizing your competition, and give yourself enough time to prepare. Also, the WCAT will need time to review your competition before it is announced. Consult with your delegate if you are unsure about how much time will be needed."
     paragraph4:
       title: "Proximity policy"
       content1: "WCA competitions will be accepted if they are at least 10 km or 5 days away from any other competition. The WCAT should particularly review a proposed competition if there is another competition for which the distance between them is less than 10 km and the time between them is less than 5 days. A Delegate requesting approval for such a competition must provide further information on why the competition should still be accepted. Possible arguments that support such a competition being accepted include:"
@@ -2508,7 +2531,7 @@ en:
       content: 'All events that are going to be held at the competition must be specified by the Delegate when requesting the competition approval. Further additions must be approved by the WCAT.'
     paragraph5:
       title: "Competitor limits"
-      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://www.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). The Delegate of the competition must get an approval of the competitor limit by the WCAT. Competitor limits should be
+      content_html: "The number of competitors may be limited per event or per competition (see <a href='https://documents.worldcubeassociation.org/documents/policies/external/Competition%20Requirements.pdf'>Competition Requirements</a>). The Delegate of the competition must get an approval of the competitor limit by the WCAT. Competitor limits should be
         chosen wisely and in accordance with the expected competitor interest. The limit should not set to a lower number for minor reasons. The intended limit should already be taken into consideration when searching for a suitable venue. The competitors
         limit must be clearly stated on the competition page on the WCA website."
     paragraph6:

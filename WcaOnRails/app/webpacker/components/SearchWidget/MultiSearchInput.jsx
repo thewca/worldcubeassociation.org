@@ -60,9 +60,9 @@ export default function MultiSearchInput({
   url,
   // If multiple is true, selectedValue is an array of items, otherwise it's a single item.
   selectedValue,
-  // If multiple is true, setSelectedValue is a function that takes an array of items, otherwise
-  // it's a function that takes a single item.
-  setSelectedValue,
+  // onChange should have the same signature as other SemUI form elements: (event, data) => void.
+  // If multiple is true, data.value is an array of items, otherwise it's a single item.
+  onChange,
   showOptionToGoToSearchPage = false,
   goToItemUrlOnClick = false,
   placeholder,
@@ -107,25 +107,28 @@ export default function MultiSearchInput({
     text: <ItemFor item={option.item} />,
   }));
 
-  const onChangeInternal = (_, { value, options }) => {
+  const onChangeInternal = (evt, data) => {
+    const { value, options } = data;
+
     const map = Object.fromEntries(
       options.map((option) => [option.value, option]),
     );
 
     if (multiple) {
-      setSelectedValue(value.map((id) => itemToOption(map[id].item)));
+      const valueOptions = value.map((id) => itemToOption(map[id].item));
+      const changePayload = { ...data, value: valueOptions };
+
+      onChange(evt, changePayload);
     } else {
       const newSelectedValue = map[value] ? itemToOption(map[value].item) : null;
 
-      setSelectedValue((oldSelectedValue) => {
-        // Redirect user to actual page if needed, and do not change the state.
-        if (goToItemUrlOnClick && newSelectedValue?.item?.url !== null) {
-          window.location.href = newSelectedValue.item.url;
-          return oldSelectedValue;
-        }
+      // Redirect user to actual page if needed, and do not change the state.
+      if (goToItemUrlOnClick && newSelectedValue?.item?.url !== null) {
+        window.location.href = newSelectedValue.item.url;
+      }
 
-        return newSelectedValue;
-      });
+      const changePayload = { ...data, value: newSelectedValue };
+      onChange(evt, changePayload);
     }
   };
 

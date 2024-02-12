@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::UserRolesController < Api::V0::ApiController
+  include SortHelper
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
@@ -31,54 +32,35 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     STATUS_SORTING_ORDER[group_type.to_sym].find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym].length
   end
 
-  SORT_PARAMS = {
-    startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
-    lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
-    eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
-    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
-    status: lambda { |role| status_sort_rank(role) },
-    name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
-    groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
-    location: lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
+  SORT_WEIGHT_LAMBDAS = {
+    startDate:
+      lambda { |role| role[:start_date].to_time.to_i },
+    lead:
+      lambda { |role| UserRole.is_lead?(role) ? 0 : 1 },
+    eligibleVoter:
+      lambda { |role| UserRole.is_eligible_voter?(role) ? 0 : 1 },
+    groupTypeRank:
+      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
+    status:
+      lambda { |role| status_sort_rank(role) },
+    name:
+      lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName:
+      lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location:
+      lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
   private def sorted_roles(roles, sort_param)
-    # The value of sort_param is inspired from https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html.
     sort_param ||= ''
-    sort_keys_and_directions = sort_param.split(',')
-    roles.stable_sort_by { |role|
-      sort_keys_and_directions.map { |sort_key_and_direction|
-        sort_key = sort_key_and_direction.split(':').first
-        sort_direction = sort_key_and_direction.split(':').second || 'asc'
-        # FIXME: The following line throws error for desc direction if SORT_PARAMS[sort_key.to_sym] is non-numeric.
-        SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
-      }
-    }
+    sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
-      is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system,
-      # till then some roles will actually be hashes.
-      group = is_actual_role ? role.group : role[:group] # In future this will be group = role.group
-      group_type = is_actual_role ? group.group_type : group[:group_type] # In future this will be group_type = group.group_type
-      is_group_hidden = is_actual_role ? group.is_hidden : group[:is_hidden] # In future this will be is_group_hidden = group.is_hidden
-      # hence, to reduce the number of lines to be edited in future, will be using ternary operator
-      # to access the parameters of group.
-      if is_group_hidden
-        case group_type
-        when UserGroup.group_types[:delegate_probation]
-          current_user&.can_manage_delegate_probation?
-        when UserGroup.group_types[:translators]
-          current_user&.software_team?
-        else
-          false # Don't accept any other hidden groups.
-        end
-      else
-        true # Accept all non-hidden groups.
-      end
+      UserRole.is_visible_to_user?(role, current_user)
     end
   end
 
@@ -100,85 +82,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
       )
     end
-  end
-
-  # Returns a list of roles by user which are not yet migrated to the new system.
-  private def user_roles_not_yet_in_new_system(user_id)
-    user = User.find(user_id)
-    roles = []
-
-    if user.delegate_status.present?
-      roles << user.delegate_role
-    end
-
-    roles.concat(user.team_roles)
-
-    if user.board_member?
-      roles << {
-        group: {
-          id: 'board',
-          name: 'WCA Board of Directors',
-          group_type: UserGroup.group_types[:board],
-          is_hidden: false,
-          is_active: true,
-          metadata: {
-            friendly_id: 'board',
-          },
-        },
-        is_active: true,
-        user: user,
-        metadata: {
-          status: 'member',
-        },
-      }
-    end
-
-    Team.all_officers.each do |officer_team|
-      if officer_team == Team.chair
-        status = 'chair'
-      elsif officer_team == Team.executive_director
-        status = 'executive_director'
-      elsif officer_team == Team.secretary
-        status = 'secretary'
-      elsif officer_team == Team.vice_chair
-        status = 'vice_chair'
-      end
-      if user.team_member?(officer_team)
-        roles << {
-          group: {
-            id: 'officers',
-            name: 'WCA Officers',
-            group_type: UserGroup.group_types[:officers],
-            is_hidden: false,
-            is_active: true,
-          },
-          is_active: true,
-          user: user,
-          metadata: {
-            status: status,
-          },
-        }
-      end
-    end
-
-    if Team.wfc.current_members.select(&:team_leader).map(&:user).include?(user)
-      roles << {
-        group: {
-          id: 'officers',
-          name: 'WCA Officers',
-          group_type: UserGroup.group_types[:officers],
-          is_hidden: false,
-          is_active: true,
-        },
-        is_active: true,
-        user: user,
-        metadata: {
-          status: 'treasurer',
-        },
-      }
-    end
-
-    roles
   end
 
   private def group_id_of_old_system_to_group_type(group_id)
@@ -227,12 +130,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on userId.
   def index_for_user
     user_id = params.require(:user_id)
-    roles = UserRole.where(user_id: user_id).to_a # to_a is to convert the ActiveRecord::Relation to an
-    # array, so that we can append roles which are not yet migrated to the new system. This can be
-    # removed once all roles are migrated to the new system.
-
-    # Appends roles which are not yet migrated to the new system.
-    roles.concat(user_roles_not_yet_in_new_system(user_id))
+    user = User.find(user_id)
+    roles = user.roles
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)

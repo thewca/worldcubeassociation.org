@@ -1,7 +1,7 @@
 inherit_from: .rubocop_todo.yml
 
 AllCops:
-  TargetRubyVersion: 3.1
+  TargetRubyVersion: 3.3
   DisplayCopNames: true
   NewCops: enable
   Exclude:
@@ -229,3 +229,6 @@ Style/HashSyntax:
 
 Naming/BlockForwarding:
   Enabled: false
+
+Style/ArgumentsForwarding:
+  RedundantBlockArgumentNames: []

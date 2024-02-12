@@ -37,7 +37,7 @@
     <% days_sentence = days_difference > 0 ? "#{days_difference} days before" : "#{-days_difference} days after" %>
     <p class="alert">
       This competition has a potential proximity conflict with
-      <%= link_to c.name, admin_edit_competition_url(c) %>
+      <%= link_to c.name, competition_admin_edit_url(c) %>
       which is <%= days_sentence %> and <%= @competition.kilometers_to(c).round(2) %> km away.
     </p>
   <% end %>
@@ -82,7 +82,7 @@
 </p>
 
 <p>
-  @WCAT: You can manage this competition <%= link_to "here", admin_edit_competition_url(@competition) %>. For a complete list of confirmed but unannounced competitions see your <%= link_to "notifications", notifications_url %>.
+  @WCAT: You can manage this competition <%= link_to "here", competition_admin_edit_url(@competition) %>. For a complete list of confirmed but unannounced competitions see your <%= link_to "notifications", notifications_url %>.
 </p>
 
 <p>

@@ -26,8 +26,9 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
-import { roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
+import { getMatchingActivities, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 import {
   addActivity,
@@ -44,6 +45,7 @@ import {
   luxonToWcifIso,
 } from '../../../lib/utils/edit-schedule';
 import EditActivityModal from './EditActivityModal';
+import ActionsHeader from './ActionsHeader';
 
 function EditActivities({
   wcifEvents,
@@ -55,6 +57,8 @@ function EditActivities({
   const confirm = useConfirm();
 
   const [selectedRoomId, setSelectedRoomId] = useInputState();
+
+  const [shouldUpdateMatches, setShouldUpdateMatches] = useCheckboxState(false);
 
   const [minutesPerRow, setMinutesPerRow] = useInputState(15);
   const [calendarStart, setCalendarStart] = useInputState(8);
@@ -93,17 +97,24 @@ function EditActivities({
   );
 
   const fcActivities = useMemo(() => (
-    wcifRoom?.activities.map((activity) => ({
-      title: activity.name,
-      start: activity.startTime,
-      end: activity.endTime,
-      extendedProps: {
-        activityId: activity.id,
-        activityCode: activity.activityCode,
-        childActivities: activity.childActivities,
-      },
-    }))
-  ), [wcifRoom?.activities]);
+    wcifRoom?.activities.map((activity) => {
+      const matchCount = getMatchingActivities(wcifSchedule, activity).length - 1;
+      const matchesText = ` (${matchCount} matching activit${matchCount === 1 ? 'y' : 'ies'})`;
+
+      return {
+        title: activity.name + (shouldUpdateMatches && matchCount > 0 ? matchesText : ''),
+        start: activity.startTime,
+        end: activity.endTime,
+        extendedProps: {
+          activityId: activity.id,
+          activityCode: activity.activityCode,
+          activityName: activity.name,
+          childActivities: activity.childActivities,
+          matchCount,
+        },
+      };
+    })
+  ), [wcifRoom?.activities, wcifSchedule, shouldUpdateMatches]);
 
   // we 'fake' our own ref due to quirks in useRef + useEffect combinations.
   // See https://medium.com/@teh_builder/ref-objects-inside-useeffect-hooks-eb7c15198780
@@ -115,13 +126,15 @@ function EditActivities({
       itemSelector: '.fc-draggable',
       eventData: (eventEl) => {
         const activityCode = eventEl.getAttribute('wcif-ac');
+        const activityName = eventEl.getAttribute('wcif-title');
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
         return {
-          title: eventEl.getAttribute('wcif-title'),
+          title: activityName,
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
             activityCode,
+            activityName,
           },
         };
       },
@@ -147,11 +160,12 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
+      const { activityId, activityName, matchCount } = fcEvent.extendedProps;
+      const matchText = `all ${matchCount + 1} copies of `;
       confirm({
-        content: `Are you sure you want to delete the event ${fcEvent.title}? THIS ACTION CANNOT BE UNDONE!`,
+        content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
       }).then(() => {
-        const { activityId } = fcEvent.extendedProps;
-        dispatch(removeActivity(activityId));
+        dispatch(removeActivity(activityId, shouldUpdateMatches));
       });
     }
   };
@@ -172,7 +186,7 @@ function EditActivities({
     const duration = toLuxonDuration(delta, calendar);
     const deltaIso = duration.toISO();
 
-    dispatch(moveActivity(activityId, deltaIso));
+    dispatch(moveActivity(activityId, deltaIso, shouldUpdateMatches));
   };
 
   const resizeActivity = ({
@@ -189,7 +203,7 @@ function EditActivities({
     const endScaleDuration = toLuxonDuration(endDelta, calendar);
     const endScaleIso = endScaleDuration.toISO();
 
-    dispatch(scaleActivity(activityId, startScaleIso, endScaleIso));
+    dispatch(scaleActivity(activityId, startScaleIso, endScaleIso, shouldUpdateMatches));
   };
 
   const addActivityFromCalendar = (startLuxon, endLuxon) => {
@@ -232,36 +246,37 @@ function EditActivities({
     }
   };
 
-  const onActivityModalClose = (ok, modalData) => {
+  const closeActivityModalAndCleanUp = () => {
+    // close
     setActivityModalOpen(false);
 
-    const { activityCode, activityName } = modalData;
-
-    if (ok) {
-      if (modalActivity) {
-        dispatch(editActivity(modalActivity.id, 'activityCode', activityCode));
-        dispatch(editActivity(modalActivity.id, 'name', activityName));
-      } else {
-        const utcStartIso = luxonToWcifIso(modalLuxonStart);
-        const utcEndIso = luxonToWcifIso(modalLuxonEnd);
-
-        const activity = {
-          name: activityName,
-          activityCode,
-          startTime: utcStartIso,
-          endTime: utcEndIso,
-          childActivities: [],
-        };
-
-        dispatch(addActivity(activity, wcifRoom.id));
-      }
-    }
-
-    // cleanup.
+    // cleanup
     setModalActivity(null);
 
     setModalLuxonStart(null);
     setModalLuxonEnd(null);
+  };
+
+  const dispatchActivityModalUpdates = (modalData) => {
+    const { activityCode, activityName } = modalData;
+
+    if (modalActivity) {
+      dispatch(editActivity(modalActivity.id, 'activityCode', activityCode, shouldUpdateMatches));
+      dispatch(editActivity(modalActivity.id, 'name', activityName, shouldUpdateMatches));
+    } else {
+      const utcStartIso = luxonToWcifIso(modalLuxonStart);
+      const utcEndIso = luxonToWcifIso(modalLuxonEnd);
+
+      const activity = {
+        name: activityName,
+        activityCode,
+        startTime: utcStartIso,
+        endTime: utcEndIso,
+        childActivities: [],
+      };
+
+      dispatch(addActivity(activity, wcifRoom.id));
+    }
   };
 
   return (
@@ -301,7 +316,13 @@ function EditActivities({
             startLuxon={modalLuxonStart}
             endLuxon={modalLuxonEnd}
             dateLocale={calendarLocale}
-            onModalClose={onActivityModalClose}
+            onModalClose={closeActivityModalAndCleanUp}
+            onModalSave={dispatchActivityModalUpdates}
+          />
+          <ActionsHeader
+            selectedRoomId={selectedRoomId}
+            shouldUpdateMatches={shouldUpdateMatches}
+            setShouldUpdateMatches={setShouldUpdateMatches}
           />
           <Grid>
             <Grid.Row>

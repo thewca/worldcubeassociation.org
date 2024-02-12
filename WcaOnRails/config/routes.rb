@@ -18,6 +18,14 @@ Rails.application.routes.draw do
     mount Sidekiq::Web => '/sidekiq'
   end
 
+  # Don't expose Paypal routes in production until we're reading to launch
+  unless Rails.env.production?
+    post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
+    post 'registration/:id/capture-paypal-payment/:order_id' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
+    get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
+    post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
+  end
+
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
   devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
@@ -67,7 +75,20 @@ Rails.application.routes.draw do
   get 'competitions/v2/:id' => 'competitions_v2#show', as: :competitions_v2
   get 'competitions/v2/:id/*all' => 'competitions_v2#show'
 
-  resources :competitions, only: [:index, :show, :edit, :update, :new, :create] do
+  resources :competitions do
+    get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
+
+    get 'announcement_data' => 'competitions#announcement_data', as: :announcement_data
+    get 'user_preferences' => 'competitions#user_preferences', as: :user_preferences
+    get 'confirmation_data' => 'competitions#confirmation_data', as: :confirmation_data
+
+    put 'confirm' => 'competitions#confirm', as: :confirm
+    put 'announce' => 'competitions#announce', as: :announce
+    put 'cancel' => 'competitions#cancel_or_uncancel', as: :cancel
+    put 'close_full_registration' => 'competitions#close_full_registration', as: :close_full_registration
+
+    patch 'user_preference/notifications' => 'competitions#update_user_notifications', as: :update_user_notifications
+
     get 'results/podiums' => 'competitions#show_podiums'
     get 'results/all' => 'competitions#show_all_results'
     get 'results/by_person' => 'competitions#show_results_by_person'
@@ -117,7 +138,6 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
 
-  get 'competitions/:id/edit/admin' => 'competitions#admin_edit', as: :admin_edit_competition
   get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
@@ -126,9 +146,12 @@ Rails.application.routes.draw do
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
   get 'competitions/edit/series_eligible_competitions' => 'competitions#series_eligible_competitions', as: :series_eligible_competitions
   get 'competitions/edit/colliding_registration_start_competitions' => 'competitions#colliding_registration_start_competitions', as: :colliding_registration_start_competitions
-  get 'competitions/edit/time_until_competition' => 'competitions#time_until_competition', as: :time_until_competition
   get 'competitions/:id/edit/clone_competition' => 'competitions#clone_competition', as: :clone_competition
   get 'competitions/edit/calculate_dues' => 'competitions#calculate_dues', as: :calculate_dues
+
+  get 'competitions/edit/nearby-competitions-json' => 'competitions#nearby_competitions_json', as: :nearby_competitions_json
+  get 'competitions/edit/registration-collisions-json' => 'competitions#registration_collisions_json', as: :registration_collisions_json
+  get 'competitions/edit/series-eligible-competitions-json' => 'competitions#series_eligible_competitions_json', as: :series_eligible_competitions_json
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
@@ -147,9 +170,12 @@ Rails.application.routes.draw do
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
 
   get 'export/results' => 'database#results_export', as: :db_results_export
+  get 'export/results/WCA_export.sql' => 'database#sql_permalink', as: :sql_permalink
+  get 'export/results/WCA_export.tsv' => 'database#tsv_permalink', as: :tsv_permalink
   get 'export/developer' => 'database#developer_export', as: :db_dev_export
+  get 'export/developer/wca-developer-database-dump', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
   # redirect from the old path that used to be linked on GitHub
-  get 'wst/wca-developer-database-dump.zip', to: redirect('/export/developer/wca-developer-database-dump.zip')
+  get 'wst/wca-developer-database-dump.zip', to: redirect(DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK))
 
   get 'persons/new_id' => 'admin/persons#generate_ids'
   resources :persons, only: [:index, :show]
@@ -163,15 +189,12 @@ Rails.application.routes.draw do
 
   resources :votes, only: [:create, :update]
 
-  post 'competitions/:id/post_announcement' => 'competitions#post_announcement', as: :competition_post_announcement
-  post 'competitions/:id/cancel' => 'competitions#cancel_competition', as: :competition_cancel
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
-  post 'competitions/:id/orga_close_reg_when_full_limit' => 'competitions#orga_close_reg_when_full_limit', as: :competition_orga_close_reg_when_full_limit
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
   post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
 
   get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course', to: redirect('/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
+  get 'panel/delegate-crash-course', to: redirect('https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
     get 'wfc' => 'panel#wfc', as: :panel_wfc
@@ -229,7 +252,18 @@ Rails.application.routes.draw do
   post 'contact/dob' => 'contacts#dob_create'
 
   get '/regulations' => 'regulations#show', id: 'index'
-  get '/regulations/*id' => 'regulations#show'
+  get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
+  get '/regulations/about' => 'regulations#about'
+  get '/regulations/scrambles' => 'regulations#scrambles'
+  get '/regulations/guidelines' => 'regulations#guidelines'
+  get '/regulations/translations' => 'regulations#translations'
+  get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
+  get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
+  get '/regulations/translations/:language/:pdf' => "regulations_translations#translated_pdfs"
+  get '/regulations/history' => 'regulations#history'
+  get '/regulations/history/official/:id' => 'regulations#historical_regulations'
+  get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
+  get '/regulations/history/official/:id/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/history/official/%{id}/wca-regulations-and-guidelines.pdf', status: 302)
 
   get '/admin' => 'admin#index'
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters

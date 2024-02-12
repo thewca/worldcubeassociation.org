@@ -1,3 +1,5 @@
+import FetchJsonError from './FetchJsonError';
+
 export function fetchWithAuthenticityToken(url, fetchOptions) {
   const options = fetchOptions || {};
   if (!options.headers) {
@@ -15,7 +17,7 @@ export function fetchJsonOrError(url, fetchOptions = {}) {
     .then((response) => response.json()
       .then((json) => {
         if (!response.ok) {
-          throw new Error(`${response.status}: ${response.statusText}\n${json.error}`);
+          throw new FetchJsonError(`${response.status}: ${response.statusText}\n${json.error}`, response, json);
         }
         return { data: json, headers: response.headers };
       }));

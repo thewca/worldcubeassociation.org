@@ -8,6 +8,7 @@ import { groupTypes } from '../../lib/wca-data.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import WcaSearch from '../SearchWidget/WcaSearch';
 import Errored from '../Requests/Errored';
+import useInputState from '../../lib/hooks/useInputState';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -80,7 +81,8 @@ function ProbationListTable({
 }
 
 export default function DelegateProbations() {
-  const [user, setUser] = React.useState();
+  const [user, setUser] = useInputState();
+
   const {
     data: probationRoles, loading, error, sync,
   } = useLoadedData(apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_probation));
@@ -95,7 +97,7 @@ export default function DelegateProbations() {
       <WcaSearch
         name="user"
         value={user}
-        onChange={(_, { value }) => setUser(value)}
+        onChange={setUser}
         multiple={false}
         model="user"
         params={{ only_staff_delegates: true }}

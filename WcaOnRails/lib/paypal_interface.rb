@@ -79,45 +79,39 @@ module PaypalInterface
     response.body
   end
 
-  class << self
-    def paypal_connection(url)
-      Faraday.new(
-        url: url,
-        headers: {
-          'Authorization' => "Bearer #{generate_access_token}",
-          'Content-Type' => 'application/json',
-        },
-      ) do |builder|
-        # Sets headers and parses jsons automatically
-        builder.request :json
-        builder.response :json
+  private_class_method def self.paypal_connection(url)
+    Faraday.new(
+      url: url,
+      headers: {
+        'Authorization' => "Bearer #{generate_access_token}",
+        'Content-Type' => 'application/json',
+      },
+    ) do |builder|
+      # Sets headers and parses jsons automatically
+      builder.request :json
+      builder.response :json
 
-        # Raises an error on 4xx and 5xx responses.
-        builder.response :raise_error
+      # Raises an error on 4xx and 5xx responses.
+      builder.response :raise_error
 
-        # Logs requests and responses.
-        # By default, it only logs the request method and URL, and the request/response headers.
-        builder.response :logger
-      end
+      # Logs requests and responses.
+      # By default, it only logs the request method and URL, and the request/response headers.
+      builder.response :logger
     end
   end
 
-  class << self
-    def generate_access_token
-      options = {
-        site: EnvConfig.PAYPAL_BASE_URL,
-        token_url: '/v1/oauth2/token',
-      }
+  private_class_method def self.generate_access_token
+    options = {
+      site: EnvConfig.PAYPAL_BASE_URL,
+      token_url: '/v1/oauth2/token',
+    }
 
-      client = OAuth2::Client.new(AppSecrets.PAYPAL_CLIENT_ID, AppSecrets.PAYPAL_CLIENT_SECRET, options)
-      client.client_credentials.get_token.token
-    end
+    client = OAuth2::Client.new(AppSecrets.PAYPAL_CLIENT_ID, AppSecrets.PAYPAL_CLIENT_SECRET, options)
+    client.client_credentials.get_token.token
   end
 
-  class << self
-    def get_paypal_auth_assertion(competition)
-      payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => CompetitionPaymentIntegration.account_for(competition, 'paypal').paypal_merchant_id }
-      JWT.encode payload, nil, 'none'
-    end
+  private_class_method def self.get_paypal_auth_assertion(competition)
+    payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => competition.connected_stripe_account_id }
+    JWT.encode payload, nil, 'none'
   end
 end

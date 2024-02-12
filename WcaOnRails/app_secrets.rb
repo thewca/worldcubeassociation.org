@@ -49,9 +49,10 @@ AppSecrets = SuperConfig.new do
     vault :STRIPE_API_KEY
     vault :OTP_ENCRYPTION_KEY
     vault :STRIPE_CLIENT_ID
-    vault :PAYPAL_CLIENT_ID, :string
-    vault :PAYPAL_CLIENT_SECRET, :string
-    vault :PAYPAL_ATTRIBUTION_CODE, :string
+    # TODO: Uncomment paypal items when launching in production
+    # vault :PAYPAL_CLIENT_ID, :string
+    # vault :PAYPAL_CLIENT_SECRET, :string
+    # vault :PAYPAL_ATTRIBUTION_CODE, :string
     vault :DISCOURSE_SECRET
     vault :SURVEY_SECRET
     vault :ACTIVERECORD_PRIMARY_KEY
@@ -69,9 +70,11 @@ AppSecrets = SuperConfig.new do
     vault :NEW_RELIC_LICENSE_KEY
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
+    vault_file :GOOGLE_APPLICATION_CREDENTIALS, "./tmp/application_default_credentials.json"
     vault :JWT_KEY
     vault :OIDC_SECRET_KEY
-    vault_file :GOOGLE_APPLICATION_CREDENTIALS, "../secrets/application_default_credentials.json"
+    vault :SLACK_WST_BOT_TOKEN
+    vault :TNOODLE_PUBLIC_KEY
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
@@ -79,6 +82,9 @@ AppSecrets = SuperConfig.new do
     mandatory :STRIPE_API_KEY, :string
     mandatory :OTP_ENCRYPTION_KEY, :string
     mandatory :STRIPE_CLIENT_ID, :string
+    mandatory :PAYPAL_CLIENT_ID, :string
+    mandatory :PAYPAL_CLIENT_SECRET, :string
+    mandatory :PAYPAL_ATTRIBUTION_CODE, :string
     mandatory :DISCOURSE_SECRET, :string
     mandatory :SURVEY_SECRET, :string
     mandatory :ACTIVERECORD_PRIMARY_KEY, :string
@@ -102,5 +108,7 @@ AppSecrets = SuperConfig.new do
     optional :PAYPAL_CLIENT_ID, :string
     optional :PAYPAL_CLIENT_SECRET, :string
     optional :PAYPAL_ATTRIBUTION_CODE, :string
+    optional :SLACK_WST_BOT_TOKEN, :string, ''
+    optional :TNOODLE_PUBLIC_KEY, :string, ''
   end
 end

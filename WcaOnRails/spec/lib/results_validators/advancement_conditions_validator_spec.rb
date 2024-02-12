@@ -195,6 +195,22 @@ RSpec.describe ResultsValidators::AdvancementConditionsValidator do
         expect(acv.errors).to match_array(expected_errors)
       end
     end
+
+    it "does not explode when there are results for non-existent rounds" do
+      FactoryBot.create(:round, competition: competition1, event_id: "333bf", format_id: "3", total_number_of_rounds: 1, number: 1)
+
+      fake_person = build_person(Result, competition1)
+
+      existent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "f", person: fake_person)
+      nonexistent_result = FactoryBot.build(:result, competition: competition1, eventId: "333bf", format_id: "3", roundTypeId: "1", person: fake_person, skip_round_creation: true)
+
+      Result.import([existent_result, nonexistent_result], validate: false)
+
+      acv = ACV.new.validate(competition_ids: [competition1], model: Result)
+      expect(acv.errors).to include(RV::ValidationError.new(:rounds, competition1.id,
+                                                            ACV::ROUND_NOT_FOUND_ERROR,
+                                                            round_id: "333bf-1"))
+    end
   end
 
   private

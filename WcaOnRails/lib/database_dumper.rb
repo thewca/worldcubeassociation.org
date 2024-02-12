@@ -117,6 +117,19 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "competition_payment_integrations" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          connected_account_type
+          competition_id
+          connected_account_id
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "CompetitionsMedia" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
@@ -169,6 +182,22 @@ module DatabaseDumper
           valueAndId
           year
         ),
+      ),
+    }.freeze,
+    "connected_paypal_accounts" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          account_status
+          consent_status
+          permissions_granted
+          created_at
+          updated_at
+        ),
+        fake_values: {
+          "paypal_merchant_id" => "'abcdefgh'",
+        },
       ),
     }.freeze,
     "Continents" => {
@@ -1179,19 +1208,16 @@ module DatabaseDumper
   end
 
   def self.mysql(command, database = nil)
-    bash!("mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}")
+    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} -e '#{command}' #{filter_out_mysql_warning}")
   end
 
   def self.mysqldump_tsv(database, command, dest_filename)
-    bash!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
+    system_pipefail!("mysql #{self.mysql_cli_creds} #{database} --batch -e \"#{command}\" #{filter_out_mysql_warning dest_filename}")
   end
 
   def self.mysqldump(db_name, dest_filename)
-    # Use --set-gtid-purged=OFF to avoid having `SET @@GLOBAL.gtid_purged` and `SET @@SESSION.SQL_LOG_BIN`
-    # in the resulting dump file, as setting these require additional parmissions
-    # making it troublesome to import the dump into a managed databases like the staging one.
-    bash!("mysqldump #{"--set-gtid-purged=OFF " if Rails.env.production?}#{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
-    bash!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
+    system_pipefail!("mysqldump #{self.mysql_cli_creds} #{db_name} -r #{dest_filename} #{filter_out_mysql_warning}")
+    system_pipefail!("sed -i 's_^/\\*!50013 DEFINER.*__' #{dest_filename}")
   end
 
   def self.filter_out_mysql_warning(dest_filename = nil)
@@ -1200,7 +1226,7 @@ module DatabaseDumper
 end
 
 # See https://julialang.org/blog/2012/03/shelling-out-sucks
-def bash!(cmd)
+def system_pipefail!(cmd)
   cmd = "set -o pipefail && #{cmd}"
-  system("bash -c #{cmd.shellescape}") || raise("Error while running '#{cmd}' (#{$CHILD_STATUS})")
+  system("bash -c #{cmd.shellescape}", exception: true)
 end

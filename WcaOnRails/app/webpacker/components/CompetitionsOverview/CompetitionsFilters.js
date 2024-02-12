@@ -3,6 +3,7 @@ import {
   Button, Icon, Form, Dropdown, Popup, List, Input, Header,
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
+import PulseLoader from 'react-spinners/PulseLoader';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
@@ -161,11 +162,14 @@ function SearchBar({ dispatchFilter }) {
 }
 
 function DelegateSelector({ dispatchFilter }) {
-  const delegatesData = useDelegatesData();
+  const { delegatesLoading, delegatesData } = useDelegatesData();
 
   return (
     <>
-      <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
+      <div style={{ display: 'inline-block' }}>
+        <label htmlFor="delegate">{I18n.t('layouts.navigation.delegate')}</label>
+        {delegatesLoading && <PulseLoader size="10" cssOverride={{ marginLeft: '5px' }} />}
+      </div>
       <Dropdown
         name="delegate"
         id="delegate"
@@ -184,6 +188,7 @@ function DelegateSelector({ dispatchFilter }) {
           }
         )) || [])]}
         onChange={(_, data) => dispatchFilter({ delegate: data.value })}
+        noResultsMessage={delegatesLoading ? I18n.t('competitions.index.delegates_loading') : I18n.t('competitions.index.no_delegates_found')}
       />
     </>
   );
@@ -369,6 +374,7 @@ function CompDisplayCheckboxes({
               id="show_registration_status"
               checked={shouldShowRegStatus}
               onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
+              disabled // FIXME Pending because of too expensive queries
             />
           </div>
         )
