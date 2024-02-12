@@ -44,20 +44,20 @@ function EditAvatar({
     [data, pendingAvatar, isEditingPending],
   );
 
-  const [uploadedImage, setUploadedImage] = useState();
+  const [userUploadedImage, setUserUploadedImage] = useState();
 
   const imageURL = useMemo(() => {
-    if (uploadedImage) {
-      return URL.createObjectURL(uploadedImage);
+    if (userUploadedImage) {
+      return URL.createObjectURL(userUploadedImage);
     }
 
     return workingAvatar?.url;
-  }, [workingAvatar, uploadedImage]);
+  }, [workingAvatar, userUploadedImage]);
 
   const [userCropAbs, setUserCropAbs] = useState();
 
   const cropAbs = useMemo(() => {
-    if (userCropAbs) {
+    if (userCropAbs || userUploadedImage) {
       return userCropAbs;
     }
 
@@ -68,26 +68,38 @@ function EditAvatar({
       height: workingAvatar?.thumbnail_crop_h,
       unit: 'px',
     };
-  }, [workingAvatar, userCropAbs]);
+  }, [workingAvatar, userCropAbs, userUploadedImage]);
+
+  const uploadUserImage = (img) => {
+    // It is important to reset the crop first, so that
+    // upon image load a default one can be computed.
+    setUserCropAbs(undefined);
+
+    setUserUploadedImage(img);
+  };
 
   const { save, saving } = useSaveAction();
 
-  const confirmAvatarThumbnail = () => {
-    if (!uploadedImage) {
+  const saveAvatarThumbnail = (newCropAbs) => {
+    setUserCropAbs(newCropAbs);
+
+    // If this state has a defined value, it means that the user is in the process of uploading
+    // a new avatar and the thumbnail data will be submitted along with the picture later
+    if (!userUploadedImage) {
       const thumbnailRaw = {
-        x: cropAbs.x,
-        y: cropAbs.y,
-        w: cropAbs.width,
-        h: cropAbs.height,
+        x: newCropAbs.x,
+        y: newCropAbs.y,
+        w: newCropAbs.width,
+        h: newCropAbs.height,
       };
 
       save(avatarDataUrl, { avatarId: workingAvatar?.id, thumbnail: thumbnailRaw }, sync);
     }
   };
 
-  const confirmAvatarUpload = () => {
+  const saveAvatar = () => {
     const formData = new FormData();
-    formData.append('file', uploadedImage);
+    formData.append('file', userUploadedImage);
 
     const thumbnailRaw = {
       x: cropAbs.x,
@@ -99,7 +111,7 @@ function EditAvatar({
     formData.append('thumbnail', JSON.stringify(thumbnailRaw));
 
     save(avatarDataUrl, formData, () => {
-      setUploadedImage(undefined);
+      setUserUploadedImage(undefined);
       sync();
     }, {
       method: 'POST',
@@ -111,7 +123,7 @@ function EditAvatar({
     });
   };
 
-  const confirmAvatarDeletion = (reasonForDeletion) => {
+  const deleteAvatar = (reasonForDeletion) => {
     save(avatarDataUrl, { avatarId: workingAvatar?.id, reason: reasonForDeletion }, sync);
   };
 
@@ -169,18 +181,17 @@ function EditAvatar({
             <ImageUpload
               uploadDisabled={uploadDisabled || isEditingPending}
               removalEnabled={canRemoveAvatar && !isEditingPending}
-              onImageSelected={setUploadedImage}
-              onImageSubmitted={confirmAvatarUpload}
-              onImageDeleted={confirmAvatarDeletion}
+              onImageUploaded={uploadUserImage}
+              onAvatarSaved={saveAvatar}
+              onAvatarDeleted={deleteAvatar}
             />
           </Grid.Column>
           <Grid.Column>
             <ThumbnailEditor
               imageSrc={imageURL}
-              initialCrop={uploadedImage ? null : cropAbs}
-              editsDisabled={!uploadedImage && data?.userData?.isDefaultAvatar}
-              onThumbnailChanged={setUserCropAbs}
-              onThumbnailSaved={confirmAvatarThumbnail}
+              storedCropAbs={cropAbs}
+              editsDisabled={!userUploadedImage && data?.userData?.isDefaultAvatar}
+              onThumbnailSaved={saveAvatarThumbnail}
             />
           </Grid.Column>
         </Grid.Row>

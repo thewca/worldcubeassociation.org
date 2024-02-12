@@ -21,57 +21,50 @@ const SUGGESTED_IMG_RATIO = 33;
 
 function ThumbnailEditor({
   imageSrc,
-  initialCrop,
+  storedCropAbs,
   editsDisabled,
-  onThumbnailChanged,
   onThumbnailSaved,
 }) {
-  const [cropRel, setCropRel] = useState();
+  const [pendingCropRel, setPendingCropRel] = useState();
   const [uiCropRel, setUiCropRel] = useState();
 
-  const [naturalWidth, setNaturalWidth] = useState();
-  const [naturalHeight, setNaturalHeight] = useState();
+  const [naturalWidth, setNaturalWidth] = useState(1);
+  const [naturalHeight, setNaturalHeight] = useState(1);
+
+  const storedCropRel = useMemo(() => {
+    if (storedCropAbs) {
+      return convertToPercentCrop(storedCropAbs, naturalWidth, naturalHeight);
+    }
+
+    return undefined;
+  }, [storedCropAbs, naturalWidth, naturalHeight]);
+
+  const workingCropRel = useMemo(
+    () => pendingCropRel || storedCropRel,
+    [pendingCropRel, storedCropRel],
+  );
+
+  const enableThumbnailCrop = () => setUiCropRel(workingCropRel);
+  const disableThumbnailCrop = () => setUiCropRel(undefined);
 
   const isEditingThumbnail = useMemo(() => uiCropRel !== undefined, [uiCropRel]);
-
-  const enableThumbnailCrop = () => {
-    setUiCropRel(cropRel);
-  };
-
-  const disableThumbnailCrop = () => {
-    setUiCropRel(undefined);
-  };
 
   const saveThumbnail = (evt) => {
     evt.preventDefault();
 
-    setCropRel(uiCropRel);
     disableThumbnailCrop();
 
-    onThumbnailSaved();
+    if (naturalWidth && naturalHeight) {
+      const cropAbs = convertToPixelCrop(pendingCropRel, naturalWidth, naturalHeight);
+      onThumbnailSaved(cropAbs);
+    }
   };
 
-  const calculateNewCrop = (width, height) => {
-    if (initialCrop) {
-      return convertToPercentCrop(initialCrop, width, height);
-    }
+  const resetThumbnail = (evt) => {
+    evt.preventDefault();
 
-    const aspectCrop = makeAspectCrop(
-      {
-        unit: '%',
-        width: SUGGESTED_IMG_RATIO,
-        height: SUGGESTED_IMG_RATIO,
-      },
-      1,
-      width,
-      height,
-    );
-
-    return centerCrop(
-      aspectCrop,
-      width,
-      height,
-    );
+    disableThumbnailCrop();
+    setPendingCropRel(storedCropRel);
   };
 
   const onImageLoad = (evt) => {
@@ -80,22 +73,30 @@ function ThumbnailEditor({
     setNaturalWidth(width);
     setNaturalHeight(height);
 
-    const newCropRel = calculateNewCrop(width, height);
-    setCropRel(newCropRel);
-
-    const convertedCropAbs = convertToPixelCrop(newCropRel, width, height);
-    onThumbnailChanged(convertedCropAbs);
-
     disableThumbnailCrop();
+
+    if (!storedCropAbs) {
+      const aspectCrop = makeAspectCrop(
+        {
+          unit: '%',
+          width: SUGGESTED_IMG_RATIO,
+          height: SUGGESTED_IMG_RATIO,
+        },
+        1,
+        width,
+        height,
+      );
+
+      const defaultCropRel = centerCrop(aspectCrop, width, height);
+      const defaultCropAbs = convertToPixelCrop(defaultCropRel, width, height);
+
+      onThumbnailSaved(defaultCropAbs);
+    }
   };
 
   const onThumbnailChange = (abs, rel) => {
     setUiCropRel(rel);
-
-    if (naturalWidth && naturalHeight) {
-      const cropAbs = convertToPixelCrop(rel, naturalWidth, naturalHeight);
-      onThumbnailChanged(cropAbs);
-    }
+    setPendingCropRel(rel);
   };
 
   return (
@@ -126,7 +127,7 @@ function ThumbnailEditor({
             </Form.Button>
             <Form.Button
               negative
-              onClick={disableThumbnailCrop}
+              onClick={resetThumbnail}
               disabled={!uiCropRel}
             >
               <Icon name="cancel" />
@@ -142,7 +143,7 @@ function ThumbnailEditor({
             trigger={(
               <div className="user-avatar-image-large">
                 <CroppedImage
-                  crop={cropRel}
+                  crop={workingCropRel}
                   src={imageSrc}
                   onClick={enableThumbnailCrop}
                 />

@@ -13,9 +13,9 @@ import useToggleButtonState from '../../lib/hooks/useToggleButtonState';
 function ImageUpload({
   uploadDisabled,
   removalEnabled,
-  onImageSelected,
-  onImageSubmitted,
-  onImageDeleted,
+  onImageUploaded,
+  onAvatarSaved,
+  onAvatarDeleted,
 }) {
   const [isRemoving, setIsRemoving] = useToggleButtonState(false);
   const [isConsenting, setIsConsenting] = useCheckboxState(false);
@@ -38,14 +38,14 @@ function ImageUpload({
       // browser file choosers specifically need the empty string to clear the input
       setSelectedFile('');
 
-      onImageSubmitted();
+      onAvatarSaved();
     }
   };
 
   const removeAvatar = (evt) => {
     evt.preventDefault();
 
-    onImageDeleted(reasonForDeletion);
+    onAvatarDeleted(reasonForDeletion);
   };
 
   const handleSelectedImage = (evt, { value }) => {
@@ -53,7 +53,7 @@ function ImageUpload({
     setSelectedFile(value);
 
     const selectedImage = evt.target.files[0];
-    onImageSelected(selectedImage);
+    onImageUploaded(selectedImage);
   };
 
   useEffect(() => {
