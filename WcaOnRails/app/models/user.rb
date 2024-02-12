@@ -326,7 +326,7 @@ class User < ApplicationRecord
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
         dummy_user.user_avatars.each do |avatar|
-          avatar.user = self # TODO: does this need an explicit save?
+          avatar.update_attribute :user, self
         end
         dummy_user.destroy!
       end
