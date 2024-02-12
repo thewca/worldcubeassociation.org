@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Api::Internal::V1::UsersController do
   describe 'GET #competitor_info' do
     let!(:user1) { FactoryBot.create(:user, email: "user1@example.com", dob: Date.new(2000, 1, 1)) }
-    let!(:user2) { FactoryBot.create(email: "user2@example.com", dob: Date.new(2001, 1, 1)) }
+    let!(:user2) { FactoryBot.create(:user, email: "user2@example.com", dob: Date.new(2001, 1, 1)) }
     before :each do
       # Stub vault validation
       allow(controller).to receive(:validate_token).and_return(true)
