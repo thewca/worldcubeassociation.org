@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Checkbox,
   Container,
@@ -37,47 +37,42 @@ function EditAvatar({
   } = useLoadedData(avatarDataUrl);
 
   const [isEditingPending, setIsEditingPending] = useCheckboxState(false);
+  const pendingAvatar = useMemo(() => data?.pendingAvatar, [data]);
 
   const workingAvatar = useMemo(
-    () => (isEditingPending ? data?.pendingAvatar : data?.avatar),
-    [data, isEditingPending],
+    () => (isEditingPending ? pendingAvatar : data?.avatar),
+    [data, pendingAvatar, isEditingPending],
   );
 
   const [uploadedImage, setUploadedImage] = useState();
-  const [imageURL, setImageURL] = useState();
 
-  useEffect(() => {
-    setImageURL(workingAvatar?.url);
-  }, [workingAvatar]);
+  const imageURL = useMemo(() => {
+    if (uploadedImage) {
+      return URL.createObjectURL(uploadedImage);
+    }
 
-  const [cropAbs, setCropAbs] = useState();
+    return workingAvatar?.url;
+  }, [workingAvatar, uploadedImage]);
 
-  useEffect(() => {
-    setCropAbs({
+  const [userCropAbs, setUserCropAbs] = useState();
+
+  const cropAbs = useMemo(() => {
+    if (userCropAbs) {
+      return userCropAbs;
+    }
+
+    return {
       x: workingAvatar?.thumbnail_crop_x,
       y: workingAvatar?.thumbnail_crop_y,
       width: workingAvatar?.thumbnail_crop_w,
       height: workingAvatar?.thumbnail_crop_h,
       unit: 'px',
-    });
-  }, [workingAvatar]);
-
-  const [pendingAvatar, setPendingAvatar] = useState();
-
-  useEffect(() => {
-    setPendingAvatar(data?.pendingAvatar);
-  }, [data]);
-
-  useEffect(() => {
-    if (!uploadedImage) return;
-
-    const newImageURL = URL.createObjectURL(uploadedImage);
-    setImageURL(newImageURL);
-  }, [uploadedImage]);
+    };
+  }, [workingAvatar, userCropAbs]);
 
   const { save, saving } = useSaveAction();
 
-  const onThumbnailConfirmed = () => {
+  const confirmAvatarThumbnail = () => {
     if (!uploadedImage) {
       const thumbnailRaw = {
         x: cropAbs.x,
@@ -132,7 +127,11 @@ function EditAvatar({
             size="medium"
           />
           Click here if you want to edit its thumbnail instead:
-          <Checkbox toggle checked={isEditingPending} onChange={setIsEditingPending} />
+          <Checkbox
+            toggle
+            checked={isEditingPending}
+            onChange={setIsEditingPending}
+          />
           {isEditingPending && <b>Editing pending avatar!</b>}
           {/* TODO: Path to admin if permission */}
         </Message>
@@ -180,8 +179,8 @@ function EditAvatar({
               imageSrc={imageURL}
               initialCrop={uploadedImage ? null : cropAbs}
               editsDisabled={!uploadedImage && data?.userData?.isDefaultAvatar}
-              onThumbnailChanged={setCropAbs}
-              onThumbnailSaved={onThumbnailConfirmed}
+              onThumbnailChanged={setUserCropAbs}
+              onThumbnailSaved={confirmAvatarThumbnail}
             />
           </Grid.Column>
         </Grid.Row>

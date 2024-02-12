@@ -42,7 +42,7 @@ function ThumbnailEditor({
     setUiCropRel(undefined);
   };
 
-  const handleSaveThumbnail = (evt) => {
+  const saveThumbnail = (evt) => {
     evt.preventDefault();
 
     setCropRel(uiCropRel);
@@ -115,7 +115,7 @@ function ThumbnailEditor({
           style={{ width: '100%', height: 'auto' }}
         />
       </ReactCrop>
-      <Form onSubmit={handleSaveThumbnail}>
+      <Form onSubmit={saveThumbnail}>
         {isEditingThumbnail && (
           <Button.Group icon floated="right">
             <Form.Button

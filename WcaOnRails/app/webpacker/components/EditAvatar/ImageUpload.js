@@ -8,6 +8,7 @@ import {
 import I18n from '../../lib/i18n';
 import useCheckboxState from '../../lib/hooks/useCheckboxState';
 import useInputState from '../../lib/hooks/useInputState';
+import useToggleButtonState from '../../lib/hooks/useToggleButtonState';
 
 function ImageUpload({
   uploadDisabled,
@@ -16,7 +17,7 @@ function ImageUpload({
   onImageSubmitted,
   onImageDeleted,
 }) {
-  const [isRemoving, setIsRemoving] = useState(false);
+  const [isRemoving, setIsRemoving] = useToggleButtonState(false);
   const [isConsenting, setIsConsenting] = useCheckboxState(false);
 
   const [selectedFile, setSelectedFile] = useState();
@@ -27,7 +28,7 @@ function ImageUpload({
 
   const [reasonForDeletion, setReasonForDeletion] = useInputState();
 
-  const handleSaveAvatar = (evt) => {
+  const submitAvatar = (evt) => {
     evt.preventDefault();
 
     if (!isConsenting) {
@@ -41,13 +42,11 @@ function ImageUpload({
     }
   };
 
-  const handleRemoveAvatar = (evt) => {
+  const removeAvatar = (evt) => {
     evt.preventDefault();
 
     onImageDeleted(reasonForDeletion);
   };
-
-  const clearFormErrors = () => setCheckboxError(false);
 
   const handleSelectedImage = (evt, { value }) => {
     setIsConsenting(false);
@@ -59,24 +58,47 @@ function ImageUpload({
 
   useEffect(() => {
     if (isConsenting) {
-      clearFormErrors();
+      setCheckboxError(false);
     }
   }, [isConsenting]);
 
   return (
     <>
       <Container>
-        <Form onSubmit={handleSaveAvatar}>
-          <Form.Input required label={I18n.t('activerecord.attributes.user.pending_avatar')} disabled={uploadDisabled} type="file" accept="image/*" value={selectedFile} onChange={handleSelectedImage} />
+        <Form onSubmit={submitAvatar}>
+          <Form.Input
+            required
+            label={I18n.t('activerecord.attributes.user.pending_avatar')}
+            disabled={uploadDisabled}
+            type="file"
+            accept="image/*"
+            value={selectedFile}
+            onChange={handleSelectedImage}
+          />
           <p>{I18n.t('simple_form.hints.user.pending_avatar')}</p>
-          <Form.Checkbox required label={I18n.t('users.edit.guidelines_confirmation')} disabled={uploadDisabled} checked={isConsenting} onChange={setIsConsenting} error={checkboxError} />
-          <Form.Button floated="left" primary disabled={uploadDisabled}>{I18n.t('users.edit.save')}</Form.Button>
+          <Form.Checkbox
+            required
+            label={I18n.t('users.edit.guidelines_confirmation')}
+            disabled={uploadDisabled}
+            checked={isConsenting}
+            onChange={setIsConsenting}
+            error={checkboxError}
+          />
+          <Form.Button
+            floated="left"
+            primary
+            type="submit"
+            disabled={uploadDisabled}
+          >
+            {I18n.t('users.edit.save')}
+          </Form.Button>
         </Form>
         {removalEnabled && (
           <Button
             floated="right"
             negative
-            onClick={() => setIsRemoving((old) => !old)}
+            active={isRemoving}
+            onClick={setIsRemoving}
           >
             {I18n.t('users.edit.remove_avatar')}
           </Button>
@@ -84,8 +106,13 @@ function ImageUpload({
       </Container>
       {isRemoving && (
         <Container>
-          <Form onSubmit={handleRemoveAvatar}>
-            <Form.TextArea required placeholder={I18n.t('users.edit.remove_avatar_reason')} value={reasonForDeletion} onChange={setReasonForDeletion} />
+          <Form onSubmit={removeAvatar}>
+            <Form.TextArea
+              required
+              placeholder={I18n.t('users.edit.remove_avatar_reason')}
+              value={reasonForDeletion}
+              onChange={setReasonForDeletion}
+            />
             <Form.Button negative icon>
               <Icon name="trash" />
               {I18n.t('users.edit.remove_avatar_confirm_button')}

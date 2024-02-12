@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Image } from 'semantic-ui-react';
 import { convertToPercentCrop } from 'react-image-crop';
 
@@ -9,8 +9,6 @@ function CroppedImage({
   const [naturalWidth, setNaturalWidth] = useState();
   const [naturalHeight, setNaturalHeight] = useState();
 
-  const [relCrop, setRelCrop] = useState();
-
   const onImageLoad = (evt) => {
     const { naturalWidth: width, naturalHeight: height } = evt.currentTarget;
 
@@ -18,50 +16,49 @@ function CroppedImage({
     setNaturalHeight(height);
   };
 
-  useEffect(() => {
-    if (!crop) return;
+  const relCrop = useMemo(() => {
+    if (!crop) return undefined;
 
-    if (!naturalWidth || !naturalHeight) return;
+    if (!naturalWidth || !naturalHeight) return undefined;
 
-    const calculatedRelCrop = convertToPercentCrop(crop, naturalWidth, naturalHeight);
-    setRelCrop(calculatedRelCrop);
-  }, [crop, naturalWidth, naturalHeight]);
+    return convertToPercentCrop(crop, naturalWidth, naturalHeight);
+  }, [crop, naturalHeight, naturalWidth]);
 
-  const getRelWidth = () => {
+  const relWidth = useMemo(() => {
     if (!relCrop) return 'inherit';
 
     return `${(100 / relCrop.width) * 100}%`;
-  };
+  }, [relCrop]);
 
-  const getRelHeight = () => {
+  const relHeight = useMemo(() => {
     if (!relCrop) return 'inherit';
 
     return `${(100 / relCrop.height) * 100}%`;
-  };
+  }, [relCrop]);
 
-  const getMarginTop = () => {
+  const marginTop = useMemo(() => {
     if (!relCrop) return '0px';
 
     return `-${(100 / relCrop.height) * relCrop.y}%`;
-  };
+  }, [relCrop]);
 
-  const getMarginLeft = () => {
+  const marginLeft = useMemo(() => {
     if (!relCrop) return '0px';
 
     return `-${(100 / relCrop.width) * relCrop.x}%`;
-  };
+  }, [relCrop]);
 
   /* eslint-disable react/jsx-props-no-spreading */
   return (
     <Image
       {...imgProps}
       style={{
-        width: getRelWidth(),
-        height: getRelHeight(),
+        width: relWidth,
+        height: relHeight,
         maxWidth: 'initial',
         objectFit: 'cover',
-        marginTop: getMarginTop(),
-        marginLeft: getMarginLeft(),
+        marginTop,
+        marginLeft,
       }}
       onLoad={onImageLoad}
     />
