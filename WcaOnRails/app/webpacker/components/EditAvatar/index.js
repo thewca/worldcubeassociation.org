@@ -62,10 +62,7 @@ function EditAvatar({
     }
 
     return {
-      x: workingAvatar?.thumbnail_crop_x,
-      y: workingAvatar?.thumbnail_crop_y,
-      width: workingAvatar?.thumbnail_crop_w,
-      height: workingAvatar?.thumbnail_crop_h,
+      ...workingAvatar?.thumbnail,
       unit: 'px',
     };
   }, [workingAvatar, userCropAbs, userUploadedImage]);
@@ -86,29 +83,15 @@ function EditAvatar({
     // If this state has a defined value, it means that the user is in the process of uploading
     // a new avatar and the thumbnail data will be submitted along with the picture later
     if (!userUploadedImage) {
-      const thumbnailRaw = {
-        x: newCropAbs.x,
-        y: newCropAbs.y,
-        w: newCropAbs.width,
-        h: newCropAbs.height,
-      };
-
-      save(avatarDataUrl, { avatarId: workingAvatar?.id, thumbnail: thumbnailRaw }, sync);
+      save(avatarDataUrl, { avatarId: workingAvatar?.id, thumbnail: newCropAbs }, sync);
     }
   };
 
   const saveAvatar = () => {
     const formData = new FormData();
+
     formData.append('file', userUploadedImage);
-
-    const thumbnailRaw = {
-      x: cropAbs.x,
-      y: cropAbs.y,
-      w: cropAbs.width,
-      h: cropAbs.height,
-    };
-
-    formData.append('thumbnail', JSON.stringify(thumbnailRaw));
+    formData.append('thumbnail', JSON.stringify(cropAbs));
 
     save(avatarDataUrl, formData, () => {
       setUserUploadedImage(undefined);

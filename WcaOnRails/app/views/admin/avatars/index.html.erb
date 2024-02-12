@@ -59,7 +59,7 @@
                   <div id="carousel-<%= user.id %>-old-avatars" class="carousel slide old-avatars" data-ride="carousel" data-interval="false">
                     <!-- Indicators -->
                     <ol class="carousel-indicators">
-                      <% (0...carousel_avatars.length).each do |i| %>
+                      <% carousel_avatars.each_with_index do |_, i| %>
                         <li data-target="#carousel-<%= user.id %>-old-avatars" data-slide-to="<%= i %>" class="<%= i == 0 ? "active" : "" %>"></li>
                       <% end %>
                     </ol>

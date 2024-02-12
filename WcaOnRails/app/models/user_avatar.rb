@@ -110,8 +110,8 @@ class UserAvatar < ApplicationRecord
       "thumbnail" => {
         "x" => self.thumbnail_crop_x,
         "y" => self.thumbnail_crop_y,
-        "w" => self.thumbnail_crop_w,
-        "h" => self.thumbnail_crop_h,
+        "width" => self.thumbnail_crop_w,
+        "height" => self.thumbnail_crop_h,
       },
     }
   end
@@ -124,10 +124,10 @@ class UserAvatar < ApplicationRecord
         "thumbnail" => {
           "type" => "object",
           "properties" => {
-            "x" => "integer",
-            "y" => "integer",
-            "w" => "integer",
-            "h" => "integer",
+            "x" => { "type" => "integer" },
+            "y" => { "type" => "integer" },
+            "width" => { "type" => "integer" },
+            "height" => { "type" => "integer" },
           },
         },
       },

@@ -151,27 +151,20 @@ class UsersController < ApplicationController
   end
 
   def avatar_data
-    @user = user_to_edit
+    user = user_to_edit
 
-    respond_to do |format|
-      format.json do
-        user_data = {
-          showStaffGuidelines: @user.staff_or_any_delegate?,
-          isDefaultAvatar: !@user.current_avatar.present?,
-        }
+    user_data = {
+      showStaffGuidelines: user.staff_or_any_delegate?,
+      isDefaultAvatar: !user.current_avatar.present?,
+    }
 
-        avatar_data = {
-          avatar: @user.avatar,
-          userData: user_data,
-        }
+    avatar_data = {
+      avatar: user.avatar.to_wcif,
+      pendingAvatar: user.pending_avatar&.to_wcif,
+      userData: user_data,
+    }
 
-        if @user.pending_avatar.present?
-          avatar_data[:pendingAvatar] = @user.pending_avatar
-        end
-
-        render json: avatar_data
-      end
-    end
+    render json: avatar_data
   end
 
   def upload_avatar
@@ -184,8 +177,8 @@ class UsersController < ApplicationController
       user: user_to_edit,
       thumbnail_crop_x: thumbnail[:x],
       thumbnail_crop_y: thumbnail[:y],
-      thumbnail_crop_w: thumbnail[:w],
-      thumbnail_crop_h: thumbnail[:h],
+      thumbnail_crop_w: thumbnail[:width],
+      thumbnail_crop_h: thumbnail[:height],
     )
 
     user_avatar.attach_image(upload_file)
@@ -204,8 +197,8 @@ class UsersController < ApplicationController
     user_avatar.update!(
       thumbnail_crop_x: thumbnail[:x],
       thumbnail_crop_y: thumbnail[:y],
-      thumbnail_crop_w: thumbnail[:w],
-      thumbnail_crop_h: thumbnail[:h],
+      thumbnail_crop_w: thumbnail[:width],
+      thumbnail_crop_h: thumbnail[:height],
     )
 
     render json: { ok: true }
