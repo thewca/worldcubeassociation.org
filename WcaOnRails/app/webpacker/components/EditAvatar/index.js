@@ -155,7 +155,7 @@ function EditAvatar({
                   <Message.Item key={idx}>{guideline}</Message.Item>
                 ))}
               </Message.List>
-              {data?.userData?.isStaff && (
+              {data?.userData?.showStaffGuidelines && (
                 <>
                   <Divider />
                   <Message.Header>{I18n.t('users.edit.staff_avatar_guidelines.title')}</Message.Header>

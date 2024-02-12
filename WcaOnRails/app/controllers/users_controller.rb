@@ -156,17 +156,17 @@ class UsersController < ApplicationController
     respond_to do |format|
       format.json do
         user_data = {
-          isStaff: @user.staff?,
+          showStaffGuidelines: @user.staff_or_any_delegate?,
           isDefaultAvatar: !@user.current_avatar.present?,
         }
 
         avatar_data = {
-          avatar: @user.avatar.serializable_hash,
+          avatar: @user.avatar,
           userData: user_data,
         }
 
         if @user.pending_avatar.present?
-          avatar_data[:pendingAvatar] = @user.pending_avatar.serializable_hash
+          avatar_data[:pendingAvatar] = @user.pending_avatar
         end
 
         render json: avatar_data
