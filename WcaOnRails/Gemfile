@@ -137,8 +137,6 @@ end
 group :test do
   gem 'rake' # As per http://docs.travis-ci.com/user/languages/ruby/
   gem 'rspec-retry'
-  gem 'vcr'
-  gem 'webmock'
   gem 'guard-rspec'
   gem 'launchy'
   gem 'capybara'
