@@ -46,10 +46,6 @@
 
     const pendingAmountRuby = parseInt('<%= @registration.outstanding_entry_fees.cents %>');
     const currencyIsoCode = '<%= @registration.outstanding_entry_fees.currency.iso_code %>';
-  </script>
-
-
-  <script>
 
     // ----------
     // Init Stripe PaymentElement
@@ -59,6 +55,7 @@
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
       stripeAccount: '<%= CompetitionPaymentIntegration.account_for(@competition, :stripe).account_id %>',
     });
+    console.log('<%= CompetitionPaymentIntegration.account_for(@competition, :stripe).account_id %>')
 
     // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)
     // as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment
@@ -72,7 +69,7 @@
     });
 
     const paymentElement = elements.create("payment");
-    // paymentElement.mount("#payment-element");
+    paymentElement.mount("#payment-element");
 
     const $paymentButton = $('#payment-button');
     $paymentButton.on('click', function(e) {
