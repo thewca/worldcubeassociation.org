@@ -3,7 +3,7 @@
 class MigrateSeniorsToRoles < ActiveRecord::Migration[7.1]
   def change
     ActiveRecord::Base.transaction do
-      User.where(delegate_status: 'senior_delegate').each do |senior_delegate|
+      User.where(delegate_status: 'senior_delegate').find_each do |senior_delegate|
         region = UserGroup.find(senior_delegate.region_id)
         raise "Region not found for senior_delegate: #{senior_delegate.name}" unless region
 
@@ -11,7 +11,7 @@ class MigrateSeniorsToRoles < ActiveRecord::Migration[7.1]
         UserRole.create!(
           user_id: senior_delegate.id,
           group_id: senior_delegate.region_id,
-          start_date: Date.today - 10.years, # For now, making the start date as 10 years before for everyone. Jacob will update the correct start date for each senior delegate after migration.
+          start_date: '2004-08-01',
           metadata: metadata,
         )
         senior_delegate.update!(delegate_status: 'delegate')

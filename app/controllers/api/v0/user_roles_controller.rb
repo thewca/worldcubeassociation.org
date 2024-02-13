@@ -246,6 +246,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
+  # Whether the delegate status is already migrated to roles.
+  private def is_delegate_status_migrated?(status)
+    [RolesMetadataDelegateRegions.statuses[:regional_delegate], RolesMetadataDelegateRegions.statuses[:senior_delegate]].include?(status)
+  end
+
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
