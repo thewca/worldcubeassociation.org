@@ -288,7 +288,7 @@ class UsersController < ApplicationController
     sso.external_id = current_user.id
     sso.name = current_user.name
     sso.email = current_user.email
-    sso.avatar_url = current_user.avatar_url
+    sso.avatar_url = current_user.avatar.url
     sso.moderator = current_user.wac_team?
     sso.locale = current_user.locale
     sso.locale_force_update = true
