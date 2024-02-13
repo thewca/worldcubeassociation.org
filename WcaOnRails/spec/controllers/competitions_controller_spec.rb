@@ -1247,7 +1247,7 @@ RSpec.describe CompetitionsController do
     context 'when signed in as an admin' do
       sign_in { FactoryBot.create :admin }
 
-      it 'displays payment setup status', :vcr do
+      it 'displays payment setup status' do
         get :payment_setup, params: { id: competition }
         expect(response.status).to eq 200
         expect(assigns(:competition)).to eq competition

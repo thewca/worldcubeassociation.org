@@ -60,13 +60,6 @@ RSpec.configure do |config|
   # See https://github.com/DatabaseCleaner/database_cleaner
   config.use_transactional_fixtures = false
 
-  # Enable VCR for HTTP mocking using :vcr tags in spec definitions
-  config.around(:each, :vcr) do |example|
-    VCR.use_cassette(example.metadata[:full_description]) do
-      example.run
-    end
-  end
-
   # RSpec Rails can automatically mix in different behaviours to your tests
   # based on their file location, for example enabling you to call `get` and
   # `post` in specs under `spec/controllers`.
