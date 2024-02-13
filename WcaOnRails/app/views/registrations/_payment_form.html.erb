@@ -33,6 +33,8 @@
     <%= f.button :button, t('registrations.payment_form.button_text'), id: 'payment-button', class: 'btn btn-primary' %>
   <% end %>
 
+  <script src="https://js.stripe.com/v3/"></script>
+
   <script>
     // ----------
     // I18N and currency code data
@@ -46,284 +48,235 @@
     const currencyIsoCode = '<%= @registration.outstanding_entry_fees.currency.iso_code %>';
   </script>
 
-  <#% if CompetitionPaymentIntegration.paypal_connected?(@competition) %>
-    <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=95XC2UKUP2CFW&currency=<%= @registration.outstanding_entry_fees.currency.iso_code %>"></script>
-    <script>
-      // ----------
-      // Init PayPal PaymentElement
-      // ----------
 
-      paypal.Buttons({
-          // Order is created on the server and the order id is returned
-          createOrder: (data, actions) => {
-            return fetch("/registration/<%= @registration.id %>/create-paypal-order/", {
-              method: "post",
-              body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
-              headers: {
-                'Content-Type': 'application/json' // Set the content type to JSON
-              }
-          })
-          .then((response) => response.json())
-          .then((order) => order.id);
-          },
+  <script>
 
-          // Finalize the transaction on the server after payer approval
-          onApprove: (data, actions) => {
-            return fetch(`/registration/<%= @registration.id %>/capture-paypal-payment/${data.orderID}`, {
-              method: "post",
-              body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
-              headers: {
-                'Content-Type': 'application/json' // Set the content type to JSON
-              }
-          })
-          .then((response) => response.json())
-          .then((orderData) => {
-              // Successful capture! For dev/demo purposes:
-              console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-              const transaction = orderData.purchase_units[0].payments.captures[0];
-              alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+    // ----------
+    // Init Stripe PaymentElement
+    // ----------
 
-              // When ready to go live, remove the alert and show a success message within this page. For example:
-              // const element = document.getElementById('paypal-button-container');
-              // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-              // Or go to another URL:  actions.redirect('thank_you.html');
-          });
-          }
-      }).render('#payment-element');
-    </script>
+    const stripe = Stripe('<%= AppSecrets.STRIPE_PUBLISHABLE_KEY %>', {
+      locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
+      stripeAccount: '<%= CompetitionPaymentIntegration.account_for(@competition, :stripe).account_id %>',
+    });
 
+    // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)
+    // as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment
+    const elements = stripe.elements({
+      mode: 'payment',
+      // Stripe _has_ to receive a non-zero amount, so we convert the outstanding fee before AJAX'ing the subtotal below
+      amount: <%= StripeTransaction.amount_to_stripe(@registration.outstanding_entry_fees.cents, @competition.currency_code) %>,
+      // Stripe doesn't initialize the element if we submit USD in upper case…
+      currency: currencyIsoCode.toLowerCase(),
+      appearance: { theme: 'flat' }
+    });
 
-  <#% else %>
-    <script src="https://js.stripe.com/v3/"></script>
-    <script>
+    const paymentElement = elements.create("payment");
+    // paymentElement.mount("#payment-element");
 
-      // ----------
-      // Init Stripe PaymentElement
-      // ----------
+    const $paymentButton = $('#payment-button');
+    $paymentButton.on('click', function(e) {
+      e.preventDefault();
 
-      const stripe = Stripe('<%= AppSecrets.STRIPE_PUBLISHABLE_KEY %>', {
-        locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
-        stripeAccount: '<%= CompetitionPaymentIntegration.account_for(@competition, :stripe).account_id %>',
-      });
+      toggleSaving(true);
+      processPayment();
+    });
 
-      // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)
-      // as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment
-      const elements = stripe.elements({
-        mode: 'payment',
-        // Stripe _has_ to receive a non-zero amount, so we convert the outstanding fee before AJAX'ing the subtotal below
-        amount: <%= StripeTransaction.amount_to_stripe(@registration.outstanding_entry_fees.cents, @competition.currency_code) %>,
-        // Stripe doesn't initialize the element if we submit USD in upper case…
-        currency: currencyIsoCode.toLowerCase(),
-        appearance: { theme: 'flat' }
-      });
+    // ----------
+    // Init jQuery variables and reset their state
+    // ----------
 
-      const paymentElement = elements.create("payment");
-      // paymentElement.mount("#payment-element");
+    const $ajaxErrorRow = $('#wca-error-wrapper');
+    $ajaxErrorRow.hide();
 
-      const $paymentButton = $('#payment-button');
-      $paymentButton.on('click', function(e) {
-        e.preventDefault();
+    const $stripeErrorRow = $('#stripe-error-wrapper');
+    $stripeErrorRow.hide();
 
-        toggleSaving(true);
-        processPayment();
-      });
+    const $paymentElementRow = $('#payment-element-wrapper');
+    $paymentElementRow.removeClass("has-error");
 
-      // ----------
-      // Init jQuery variables and reset their state
-      // ----------
+    const $donationFormRow = $('#donation-amount-wrapper');
+    $donationFormRow.hide();
 
-      const $ajaxErrorRow = $('#wca-error-wrapper');
-      $ajaxErrorRow.hide();
+    // we use a custom RubyMoney input that works with JS auto_numeric
+    // unfortunately, it doesn't support simple_form's usual input_html options
+    // and I am too afraid to change it (at the risk of breaking other parts of the website)
+    // so we resort to manually fetching the input and its backing money field
+    const $donationAmountField = $('input[name="payment[donation]"]');
+    const $donationInputField = $(`input[data-target="#${$donationAmountField.attr('id')}"]`);
 
-      const $stripeErrorRow = $('#stripe-error-wrapper');
-      $stripeErrorRow.hide();
+    // ----------
+    // Toggles upon submitting/loading a payment
+    // ----------
 
-      const $paymentElementRow = $('#payment-element-wrapper');
-      $paymentElementRow.removeClass("has-error");
+    function toggleSaving(saving) {
+      $paymentButton.prop("disabled", saving);
+      $paymentButton.toggleClass("saving", saving);
 
-      const $donationFormRow = $('#donation-amount-wrapper');
-      $donationFormRow.hide();
+      $donationInputField.prop("disabled", saving);
+      $donationInputField.toggleClass("saving", saving);
 
-      // we use a custom RubyMoney input that works with JS auto_numeric
-      // unfortunately, it doesn't support simple_form's usual input_html options
-      // and I am too afraid to change it (at the risk of breaking other parts of the website)
-      // so we resort to manually fetching the input and its backing money field
-      const $donationAmountField = $('input[name="payment[donation]"]');
-      const $donationInputField = $(`input[data-target="#${$donationAmountField.attr('id')}"]`);
-
-      // ----------
-      // Toggles upon submitting/loading a payment
-      // ----------
-
-      function toggleSaving(saving) {
-        $paymentButton.prop("disabled", saving);
-        $paymentButton.toggleClass("saving", saving);
-
-        $donationInputField.prop("disabled", saving);
-        $donationInputField.toggleClass("saving", saving);
-
-        if (saving) {
-          $ajaxErrorRow.hide();
-          $stripeErrorRow.hide();
-
-          $paymentElementRow.removeClass("has-error");
-        }
-      }
-
-      paymentElement.on('change', function(e) {
+      if (saving) {
         $ajaxErrorRow.hide();
         $stripeErrorRow.hide();
 
-        if (e.complete) {
-          $paymentElementRow.removeClass("has-error");
-        }
+        $paymentElementRow.removeClass("has-error");
+      }
+    }
 
-        $paymentButton.prop("disabled", !e.complete);
-      });
+    paymentElement.on('change', function(e) {
+      $ajaxErrorRow.hide();
+      $stripeErrorRow.hide();
 
-      // ----------
-      // Two-step workflow to handle payments
-      //   1. Do simple frontend validations - catches cases like bad checksums (aka typos) before they reach our backend
-      //   2. Create a PI and submit it to Stripe for handling
-      // ----------
+      if (e.complete) {
+        $paymentElementRow.removeClass("has-error");
+      }
 
-      async function processPayment() {
-        const amount = getCurrentRubyAmount();
+      $paymentButton.prop("disabled", !e.complete);
+    });
 
-        if (isNaN(amount)) {
-          alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
+    // ----------
+    // Two-step workflow to handle payments
+    //   1. Do simple frontend validations - catches cases like bad checksums (aka typos) before they reach our backend
+    //   2. Create a PI and submit it to Stripe for handling
+    // ----------
+
+    async function processPayment() {
+      const amount = getCurrentRubyAmount();
+
+      if (isNaN(amount)) {
+        alert('<%= t("registrations.payment_form.alerts.not_a_number") %>');
+      } else {
+        // Trigger form validation and wallet collection
+        const { error: userInputError } = await elements.submit();
+
+        if (userInputError) {
+          handleStripeError(userInputError);
         } else {
-          // Trigger form validation and wallet collection
-          const { error: userInputError } = await elements.submit();
+          // NOTE: The factor two is tied to the string literal of the confirm message ("You're about to pay more than double")
+          // If you change this threshold, please remember to change the translation string in en.yml!
+          const amountOverThreshold = amount >= (2 * pendingAmountRuby);
+          const confirmedAmount = !amountOverThreshold || confirm('<%= t("registrations.payment_form.alerts.amount_rather_high") %>')
 
-          if (userInputError) {
-            handleStripeError(userInputError);
+          if (confirmedAmount) {
+            // Fetches a payment intent and captures the client secret
+            window.wca.cancelPendingAjaxAndAjax('load-payment-intent', {
+              url: '<%= registration_payment_intent_path(@registration) %>',
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              data: JSON.stringify({ amount: amount }),
+              success: submitPaymentIntent,
+              error: handleAjaxError,
+            });
           } else {
-            // NOTE: The factor two is tied to the string literal of the confirm message ("You're about to pay more than double")
-            // If you change this threshold, please remember to change the translation string in en.yml!
-            const amountOverThreshold = amount >= (2 * pendingAmountRuby);
-            const confirmedAmount = !amountOverThreshold || confirm('<%= t("registrations.payment_form.alerts.amount_rather_high") %>')
-
-            if (confirmedAmount) {
-              // Fetches a payment intent and captures the client secret
-              window.wca.cancelPendingAjaxAndAjax('load-payment-intent', {
-                url: '<%= registration_payment_intent_path(@registration) %>',
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                data: JSON.stringify({ amount: amount }),
-                success: submitPaymentIntent,
-                error: handleAjaxError,
-              });
-            } else {
-              toggleSaving(false);
-            }
+            toggleSaving(false);
           }
         }
       }
+    }
 
-      async function submitPaymentIntent(data) {
-        const { client_secret: clientSecret } = data;
+    async function submitPaymentIntent(data) {
+      const { client_secret: clientSecret } = data;
 
-        const { error: stripeBackendError } = await stripe.confirmPayment({
-          elements,
-          clientSecret,
-          confirmParams: {
-            return_url: '<%= registration_payment_completion_url(@registration, host: EnvConfig.ROOT_URL) %>',
+      const { error: stripeBackendError } = await stripe.confirmPayment({
+        elements,
+        clientSecret,
+        confirmParams: {
+          return_url: '<%= registration_payment_completion_url(@registration, host: EnvConfig.ROOT_URL) %>',
+        }
+      });
+
+      if (stripeBackendError) {
+        handleStripeError(stripeBackendError);
+      }
+    }
+
+    // ----------
+    // Error handling
+    // ----------
+
+    async function handleAjaxError(errorData) {
+      toggleSaving(false);
+
+      const $ajaxErrorDiv = $('#wca-ajax-error');
+
+      const requestId = errorData.getResponseHeader('X-Request-Id');
+      $ajaxErrorDiv.text(`${errorData.statusText}: ${requestId}`);
+
+      $ajaxErrorRow.show();
+    }
+
+    function handleStripeError(error) {
+      toggleSaving(false);
+
+      const $stripeErrorDiv = $('#stripe-sdk-error');
+
+      if (error.type === 'card_error' || error.type === 'validation_error') {
+        $stripeErrorDiv.text(error.message);
+      } else {
+        $stripeErrorDiv.text('<%= t("registrations.payment_form.errors.stripe_failed") %>');
+      }
+
+      $paymentElementRow.addClass("has-error");
+      $stripeErrorRow.show();
+    }
+
+    // ----------
+    // Subtotal text and Stripe PaymentElement internal amount
+    // ----------
+
+    const $donationToggle = $('#toggle-show-donation');
+    const $subtotalText = $('#money-subtotal');
+
+    // PI is pre-loaded with the correct amount, no need to update it straight away
+    updateSubtotal(false);
+
+    function getCurrentRubyAmount() {
+      if ($donationToggle.is(':checked')) {
+        const donation = parseInt($donationAmountField.val() || 0);
+
+        return pendingAmountRuby + donation;
+      }
+
+      return pendingAmountRuby;
+    }
+
+    function updateSubtotal(refreshStripe = true) {
+      const amount = getCurrentRubyAmount();
+
+      const buttonDisabled = $paymentButton.prop("disabled");
+      const buttonToggled = $paymentButton.hasClass("saving");
+
+      // disable the payment button as long as we're relaying new payment information to Stripe
+      $paymentButton.prop("disabled", true);
+      $paymentButton.toggleClass("saving", true);
+
+      window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
+        url: '<%= registration_stripe_denomination_path %>',
+        data: { amount: amount, currency_iso: currencyIsoCode },
+        success: function (data) {
+          const { stripe_amount: stripeAmount, human_amount: humanAmount } = data;
+
+          if (refreshStripe) {
+            elements.update({ amount: stripeAmount });
           }
-        });
 
-        if (stripeBackendError) {
-          handleStripeError(stripeBackendError);
-        }
-      }
+          $subtotalText.text(humanAmount);
 
-      // ----------
-      // Error handling
-      // ----------
-
-      async function handleAjaxError(errorData) {
-        toggleSaving(false);
-
-        const $ajaxErrorDiv = $('#wca-ajax-error');
-
-        const requestId = errorData.getResponseHeader('X-Request-Id');
-        $ajaxErrorDiv.text(`${errorData.statusText}: ${requestId}`);
-
-        $ajaxErrorRow.show();
-      }
-
-      function handleStripeError(error) {
-        toggleSaving(false);
-
-        const $stripeErrorDiv = $('#stripe-sdk-error');
-
-        if (error.type === 'card_error' || error.type === 'validation_error') {
-          $stripeErrorDiv.text(error.message);
-        } else {
-          $stripeErrorDiv.text('<%= t("registrations.payment_form.errors.stripe_failed") %>');
-        }
-
-        $paymentElementRow.addClass("has-error");
-        $stripeErrorRow.show();
-      }
-
-      // ----------
-      // Subtotal text and Stripe PaymentElement internal amount
-      // ----------
-
-      const $donationToggle = $('#toggle-show-donation');
-      const $subtotalText = $('#money-subtotal');
-
-      // PI is pre-loaded with the correct amount, no need to update it straight away
-      updateSubtotal(false);
-
-      function getCurrentRubyAmount() {
-        if ($donationToggle.is(':checked')) {
-          const donation = parseInt($donationAmountField.val() || 0);
-
-          return pendingAmountRuby + donation;
-        }
-
-        return pendingAmountRuby;
-      }
-
-      function updateSubtotal(refreshStripe = true) {
-        const amount = getCurrentRubyAmount();
-
-        const buttonDisabled = $paymentButton.prop("disabled");
-        const buttonToggled = $paymentButton.hasClass("saving");
-
-        // disable the payment button as long as we're relaying new payment information to Stripe
-        $paymentButton.prop("disabled", true);
-        $paymentButton.toggleClass("saving", true);
-
-        window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
-          url: '<%= registration_stripe_denomination_path %>',
-          data: { amount: amount, currency_iso: currencyIsoCode },
-          success: function (data) {
-            const { stripe_amount: stripeAmount, human_amount: humanAmount } = data;
-
-            if (refreshStripe) {
-              elements.update({ amount: stripeAmount });
-            }
-
-            $subtotalText.text(humanAmount);
-
-            $paymentButton.prop("disabled", buttonDisabled);
-            $paymentButton.toggleClass("saving", buttonToggled);
-          },
-          error: handleAjaxError,
-        });
-      }
-
-      $donationToggle.on('change', function() {
-        $donationFormRow.slideToggle(this.checked);
-        updateSubtotal();
+          $paymentButton.prop("disabled", buttonDisabled);
+          $paymentButton.toggleClass("saving", buttonToggled);
+        },
+        error: handleAjaxError,
       });
+    }
 
-      $donationAmountField.on('change', function() {
-        updateSubtotal();
-      });
-    </script>
-  <#% end %>
+    $donationToggle.on('change', function() {
+      $donationFormRow.slideToggle(this.checked);
+      updateSubtotal();
+    });
+
+    $donationAmountField.on('change', function() {
+      updateSubtotal();
+    });
+  </script>
 <% end %>
