@@ -25,11 +25,10 @@ function ThumbnailEditor({
   editsDisabled,
   onThumbnailSaved,
 }) {
-  const [pendingCropRel, setPendingCropRel] = useState();
   const [uiCropRel, setUiCropRel] = useState();
 
-  const [naturalWidth, setNaturalWidth] = useState(1);
-  const [naturalHeight, setNaturalHeight] = useState(1);
+  const [naturalWidth, setNaturalWidth] = useState();
+  const [naturalHeight, setNaturalHeight] = useState();
 
   const storedCropRel = useMemo(() => {
     if (storedCropAbs) {
@@ -39,12 +38,7 @@ function ThumbnailEditor({
     return undefined;
   }, [storedCropAbs, naturalWidth, naturalHeight]);
 
-  const workingCropRel = useMemo(
-    () => pendingCropRel || storedCropRel,
-    [pendingCropRel, storedCropRel],
-  );
-
-  const enableThumbnailCrop = () => setUiCropRel(workingCropRel);
+  const enableThumbnailCrop = () => setUiCropRel(storedCropRel);
   const disableThumbnailCrop = () => setUiCropRel(undefined);
 
   const isEditingThumbnail = useMemo(() => uiCropRel !== undefined, [uiCropRel]);
@@ -52,19 +46,18 @@ function ThumbnailEditor({
   const saveThumbnail = (evt) => {
     evt.preventDefault();
 
-    disableThumbnailCrop();
-
     if (naturalWidth && naturalHeight) {
-      const cropAbs = convertToPixelCrop(pendingCropRel, naturalWidth, naturalHeight);
+      const cropAbs = convertToPixelCrop(uiCropRel, naturalWidth, naturalHeight);
       onThumbnailSaved(cropAbs);
     }
+
+    disableThumbnailCrop();
   };
 
   const resetThumbnail = (evt) => {
     evt.preventDefault();
 
     disableThumbnailCrop();
-    setPendingCropRel(storedCropRel);
   };
 
   const onImageLoad = (evt) => {
@@ -94,10 +87,7 @@ function ThumbnailEditor({
     }
   };
 
-  const onThumbnailChange = (abs, rel) => {
-    setUiCropRel(rel);
-    setPendingCropRel(rel);
-  };
+  const onThumbnailChange = (abs, rel) => setUiCropRel(rel);
 
   return (
     <>
@@ -143,7 +133,7 @@ function ThumbnailEditor({
             trigger={(
               <div className="user-avatar-image-large">
                 <CroppedImage
-                  crop={workingCropRel}
+                  crop={storedCropRel}
                   src={imageSrc}
                   onClick={enableThumbnailCrop}
                 />
