@@ -57,6 +57,10 @@ class UserAvatar < ApplicationRecord
     self.image.attach(file)
   end
 
+  def is_default?
+    self.filename == DEFAULT_AVATAR_FILE && self.backend == UserAvatar.backends[:local]
+  end
+
   after_save :move_image_if_approved, if: :active_storage?
   def move_image_if_approved
     # ActiveStorage takes care of purging attachments from destroyed records
@@ -153,7 +157,7 @@ class UserAvatar < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "status", "thumbnail_crop_x", "thumbnail_crop_y", "thumbnail_crop_w", "thumbnail_crop_h"],
-    methods: ["url"],
+    methods: ["url", "is_default?"],
   }.freeze
 
   def serializable_hash(options = nil)
