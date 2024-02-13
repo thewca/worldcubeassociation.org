@@ -719,7 +719,7 @@ module DatabaseDumper
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
-          avatar
+          current_avatar_id
           competition_notifications_enabled
           confirmed_at
           country_iso2
@@ -733,14 +733,6 @@ module DatabaseDumper
           location
           registration_notifications_enabled
           results_notifications_enabled
-          saved_avatar_crop_h
-          saved_avatar_crop_w
-          saved_avatar_crop_x
-          saved_avatar_crop_y
-          saved_pending_avatar_crop_h
-          saved_pending_avatar_crop_w
-          saved_pending_avatar_crop_x
-          saved_pending_avatar_crop_y
           unconfirmed_wca_id
           region_id
           updated_at
@@ -758,7 +750,7 @@ module DatabaseDumper
           last_sign_in_ip
           otp_backup_codes
           otp_required_for_login
-          pending_avatar
+          pending_avatar_id
           preferred_locale
           remember_created_at
           reset_password_sent_at
@@ -774,6 +766,31 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "user_avatars" => {
+      where_clause: "WHERE status = 'approved'",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          user_id
+          filename
+          status
+          thumbnail_crop_x
+          thumbnail_crop_y
+          thumbnail_crop_w
+          thumbnail_crop_h
+          backend
+          approved_at
+          revoked_at
+          created_at
+          updated_at
+        ),
+        db_default: %w(
+          approved_by
+          revoked_by
+          revocation_reason
+        ),
+      ),
+    },
     "locations" => :skip_all_rows,
     "incidents" => {
       where_clause: "",
