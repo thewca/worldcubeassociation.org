@@ -11,7 +11,6 @@ import {
   Message, Sticky,
 } from 'semantic-ui-react';
 import _ from 'lodash';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import VenueInfo from './FormSections/VenueInfo';
 import {
   InputBoolean,
@@ -312,9 +311,7 @@ export default function Wrapper({
       }}
     >
       <SectionProvider>
-        <QueryClientProvider client={new QueryClient()}>
-          <CompetitionForm />
-        </QueryClientProvider>
+        <CompetitionForm />
       </SectionProvider>
     </StoreProvider>
   );
