@@ -6,12 +6,10 @@ class Api::Internal::V1::UsersController < Api::Internal::V1::ApiController
   def competitor_info
     competitors = params.require(:ids)
     users = User.find(competitors)
-    data = users.map { |u|
-      u.serializable_hash({
-                            only: %w[id wca_id name gender country_iso2 email dob],
-                          },
-                          overwrite_default: true)
-    }
-    render json: data
+    render json: users.to_json({
+                                 only: %w[id wca_id name gender country_iso2 email dob],
+                                 methods: [],
+                                 include: [],
+                               })
   end
 end
