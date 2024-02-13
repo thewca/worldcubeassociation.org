@@ -13,26 +13,28 @@ RSpec.describe Api::Internal::V1::UsersController do
     it 'returns the correct pii' do
       get :competitor_info, params: { ids: [user1.id, user2.id] }
 
-      expect(response.body).to eq([{
+      parsed_body = JSON.parse(response.body)
+
+      expect(parsed_body).to eq([{
         id: user1.id,
         wca_id: user1.wca_id,
         name: user1.name,
         gender: user1.gender,
         country_iso2: user1.country_iso2,
         email: "user1@example.com",
-        dob: "1-1-2000",
+        dob: "2000-01-01",
         class: "user",
-      },
-                                   {
-                                     id: user2.id,
-                                     wca_id: user2.wca_id,
-                                     name: user2.name,
-                                     gender: user2.gender,
-                                     country_iso2: user2.country_iso2,
-                                     email: "user2@example.com",
-                                     dob: "1-1-2001",
-                                     class: "user",
-                                   }].to_json)
+      }.stringify_keys,
+                                 {
+                                   id: user2.id,
+                                   wca_id: user2.wca_id,
+                                   name: user2.name,
+                                   gender: user2.gender,
+                                   country_iso2: user2.country_iso2,
+                                   email: "user2@example.com",
+                                   dob: "2001-01-01",
+                                   class: "user",
+                                 }.stringify_keys])
     end
   end
 end
