@@ -133,7 +133,7 @@ function ThumbnailEditor({
             trigger={(
               <div className="user-avatar-image-large">
                 <CroppedImage
-                  crop={storedCropRel}
+                  crop={uiCropRel || storedCropRel}
                   src={imageSrc}
                   onClick={enableThumbnailCrop}
                 />
