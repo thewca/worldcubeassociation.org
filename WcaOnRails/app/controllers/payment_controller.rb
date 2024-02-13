@@ -12,7 +12,7 @@ class PaymentController < ApplicationController
       stripe_transaction = StripeTransaction.find(payment_id)
       secret = stripe_transaction.stripe_payment_intent.client_secret
       render json: { stripe_publishable_key: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                     connected_account_id: CompetitionPaymentIntegration.account_for(competition, 'stripe').account_id,
+                     connected_account_id: CompetitionPaymentIntegration.account_for(competition, :stripe).account_id,
                      client_secret: secret }
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
@@ -110,7 +110,7 @@ class PaymentController < ApplicationController
       amount: stripe_amount,
     }
 
-    account_id = CompetitionPaymentIntegration.account_for(competition, 'stripe').account_id
+    account_id = CompetitionPaymentIntegration.account_for(competition, :stripe).account_id
 
     refund = Stripe::Refund.create(
       refund_args,

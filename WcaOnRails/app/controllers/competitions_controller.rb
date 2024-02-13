@@ -391,7 +391,7 @@ class CompetitionsController < ApplicationController
 
   def disconnect_stripe
     @competition = competition_from_params
-    CompetitionPaymentIntegration.disconnect(@competition, 'stripe')
+    CompetitionPaymentIntegration.disconnect(@competition, :stripe)
 
     if CompetitionPaymentIntegration.stripe_connected?(@competition)
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))

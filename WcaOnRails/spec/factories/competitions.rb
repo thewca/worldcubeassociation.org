@@ -166,7 +166,9 @@ FactoryBot.define do
       # to the WCA Stripe account. For more information, see
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
 
-      stripe_account_id { "acct_19ZQVmE2qoiROdto" }
+      transient do
+        stripe_account_id { "acct_19ZQVmE2qoiROdto" }
+      end
     end
 
     trait :accepts_donations do
