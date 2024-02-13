@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Image } from 'semantic-ui-react';
+import UserAvatar from '../UserAvatar';
 import '../../stylesheets/search_widget/UserItem.scss';
 
 function UserItem({
@@ -8,7 +8,7 @@ function UserItem({
 }) {
   return (
     <div className="multisearch-item-user">
-      <Image src={item.avatar.thumb_url} />
+      <UserAvatar avatar={item.avatar} avatarClass="avatar-image" size="tiny" disableHover />
       <div className="details">
         <span>{item.name}</span>
         {item.wca_id && (

@@ -11,7 +11,7 @@ function SearchWidget() {
   return (
     <MultiSearchInput
       selectedValue={selectedValue}
-      setSelectedValue={setSelectedValue}
+      onChange={setSelectedValue}
       removeNoResultsMessage
       showOptionToGoToSearchPage
       goToItemUrlOnClick

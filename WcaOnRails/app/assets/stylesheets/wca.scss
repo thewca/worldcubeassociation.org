@@ -48,6 +48,7 @@ table.table {
 
 .avatar-thumbnail {
   display: inline-block;
+  overflow: hidden;
   vertical-align: middle;
 
   background-size: cover;

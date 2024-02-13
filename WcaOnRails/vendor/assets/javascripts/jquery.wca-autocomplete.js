@@ -54,9 +54,25 @@
         var toHtmlByClass = {
           user: function(user) {
             // Copied from app/views/shared/user.html.erb
-            var $div = $('<div class="wca-user"> <div class="avatar-thumbnail"></div> <div class="info"><div class="name"></div><div class="wca-id"></div></div> </div>');
+            var $div = $('<div class="wca-user"> <div class="avatar-thumbnail"><img /></div> <div class="info"><div class="name"></div><div class="wca-id"></div></div> </div>');
             $div.find(".name").text(user.name);
-            $div.find(".avatar-thumbnail").css('background-image', 'url("' + user.avatar.thumb_url + '")');
+            var image = $div.find('.avatar-thumbnail>img')
+              .attr('src', user.avatar.url);
+
+            var imgWidth = image.prop('naturalWidth');
+            var imgHeight = image.prop('naturalHeight');
+
+            var cropXRel = (user.avatar.thumbnail_crop_x / imgWidth) * 100;
+            var cropYRel = (user.avatar.thumbnail_crop_y / imgHeight) * 100;
+            var cropWidthRel = (user.avatar.thumbnail_crop_w / imgWidth) * 100;
+            var cropHeightRel = (user.avatar.thumbnail_crop_h / imgHeight) * 100;
+
+            image
+              .css('width', ((100 / cropWidthRel) * 100) + '%')
+              .css('height', ((100 / cropHeightRel) * 100) + '%')
+              .css('margin-top', '-' + (100 / cropHeightRel) * cropYRel + '%')
+              .css('margin-left', '-' + (100 / cropWidthRel) * cropXRel + '%');
+
             if(user.wca_id) {
               $div.find(".wca-id").text(user.wca_id);
             } else {
