@@ -611,7 +611,7 @@ class User < ApplicationRecord
   end
 
   def can_change_users_avatar?(user)
-    user.wca_id.present? && self.editable_fields_of_user(user).include?(:remove_avatar)
+    user.wca_id.present? && self.editable_fields_of_user(user).include?(:current_avatar)
   end
 
   def organizer_for?(user)
@@ -916,15 +916,10 @@ class User < ApplicationRecord
   private def editable_avatar_fields(user)
     fields = Set.new
     if admin? || results_team?
-      fields += %i(avatar avatar_cache)
+      fields += %i(current_avatar)
     end
     if user == self || admin? || results_team? || is_senior_delegate_for?(user)
-      fields += %i(
-        pending_avatar pending_avatar_cache remove_pending_avatar
-        avatar_crop_x avatar_crop_y avatar_crop_w avatar_crop_h
-        pending_avatar_crop_x pending_avatar_crop_y pending_avatar_crop_w pending_avatar_crop_h
-        remove_avatar
-      )
+      fields += %i(pending_avatar)
     end
     fields
   end

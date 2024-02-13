@@ -175,7 +175,7 @@
         <%= react_component("EditAvatar", {
           userId: @user.id,
           uploadDisabled: !editable_fields.include?(:pending_avatar),
-          canRemoveAvatar: @user.current_avatar.present? && editable_fields.include?(:remove_avatar),
+          canRemoveAvatar: @user.current_avatar.present? && editable_fields.include?(:current_avatar),
         }) %>
       </div>
     <% end %>

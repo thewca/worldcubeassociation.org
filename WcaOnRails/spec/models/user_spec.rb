@@ -258,11 +258,6 @@ RSpec.describe User, type: :model do
       pending_avatar_crop_w: 40,
       pending_avatar_crop_h: 40,
     )
-    # Get rid of cached carrierwave-crop stuff by relooking up user
-    user = User.find(user.id)
-    user.remove_avatar = true
-    user.remove_pending_avatar = true
-    user.save!
     expect(user.read_attribute(:avatar)).to be_nil
     expect(user.read_attribute(:pending_avatar)).to be_nil
     expect(user.saved_avatar_crop_x).to be_nil
