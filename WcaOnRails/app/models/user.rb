@@ -1116,7 +1116,7 @@ class User < ApplicationRecord
     include: ["avatar", "teams"],
   }.freeze
 
-  def serializable_hash(options = nil)
+  def serializable_hash(options = nil, overwrite_default: false)
     # NOTE: doing deep_dup is necessary here to avoid changing the inner values
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
@@ -1125,7 +1125,7 @@ class User < ApplicationRecord
       default_options[:methods].push("email", "location", "region_id")
     end
 
-    options = default_options.merge(options || {})
+    options = default_options.merge(options || {}) unless overwrite_default
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
     include_teams = options[:include]&.delete("teams")

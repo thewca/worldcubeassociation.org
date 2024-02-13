@@ -21,6 +21,7 @@ RSpec.describe Api::Internal::V1::UsersController do
         country_iso2: user1.country_iso2,
         email: "user1@example.com",
         dob: "1-1-2000",
+        class: "user",
       },
                                    {
                                      id: user2.id,
@@ -30,6 +31,7 @@ RSpec.describe Api::Internal::V1::UsersController do
                                      country_iso2: user2.country_iso2,
                                      email: "user2@example.com",
                                      dob: "1-1-2001",
+                                     class: "user",
                                    }].to_json)
     end
   end
