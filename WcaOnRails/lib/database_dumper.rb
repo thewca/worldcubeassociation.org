@@ -209,7 +209,7 @@ module DatabaseDumper
           updated_at
         ),
         fake_values: {
-          "account" => "'fake_stripe_account'",
+          "account_id" => "'fake_stripe_account'",
         },
       ),
     }.freeze,
