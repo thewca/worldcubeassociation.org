@@ -20,7 +20,8 @@ class CompetitionPaymentIntegration < ApplicationRecord
 
   def self.account_for(competition, integration_name)
     validate_integration_name!(integration_name)
-    competition.competition_payment_integrations.where(connected_account_type: AVAILABLE_INTEGRATIONS[integration_name])
+    # Take the first result as where always returns an array
+    competition.competition_payment_integrations.where(connected_account_type: AVAILABLE_INTEGRATIONS[integration_name]).first
   end
 
   def self.paypal_connected?(competition)
