@@ -47,8 +47,6 @@ Rails.application.routes.draw do
   get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/stripe-denomination' => 'registrations#stripe_denomination', as: :registration_stripe_denomination
-  post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
-  post 'registration/:id/capture-paypal-payment/:order_id' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
   resources :users, only: [:index, :edit, :update]
   get 'profile/edit' => 'users#edit'
   post 'profile/enable-2fa' => 'users#enable_2fa'
@@ -140,7 +138,6 @@ Rails.application.routes.draw do
 
   get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
-  get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions
@@ -191,7 +188,6 @@ Rails.application.routes.draw do
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
-  post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
 
   get 'panel' => 'panel#index'
   get 'panel/delegate-crash-course', to: redirect('https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
