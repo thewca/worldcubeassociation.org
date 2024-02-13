@@ -20,6 +20,7 @@ export default function EventRestrictions() {
         eventLimitation,
       },
     },
+    isCloning,
     storedEvents,
   } = useStore();
 
@@ -63,9 +64,13 @@ export default function EventRestrictions() {
           <InputNumber id="perRegistrationLimit" />
         </ConditionalSection>
       </SubSection>
-      <Divider />
 
-      <InputSelect id="mainEventId" options={mainEventOptions} />
+      {!isCloning && (
+        <>
+          <Divider />
+          <InputSelect id="mainEventId" options={mainEventOptions} />
+        </>
+      )}
     </SubSection>
   );
 }
