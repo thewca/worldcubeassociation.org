@@ -1916,7 +1916,7 @@ en:
       account_not_connected: "There was a problem and we could not connect your %{provider} account."
       disconnect_account: "Disconnect %{provider} Account"
       confirm_account_disconnect: "Are you sure you want to disconnect the %{provider} account? This action cannot be undone."
-      supported_currency_warning: "Please make sure the currency you have selected is supported by your chosen payment integration! The supported currencies will depend on the country where the account account is based, you can check them below:"
+      supported_currency_warning: "Please make sure the currency you have selected is supported by your chosen payment integration! The supported currencies will depend on the country where the account is based, you can check them below:"
       supported_currencies: "%{provider} Supported Currencies"
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
