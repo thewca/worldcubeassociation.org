@@ -8,9 +8,14 @@ class Regulation < SimpleDelegator
     @regulations_by_id = @regulations.index_by { |r| r["id"] }
     @regulations_load_error = nil
   rescue StandardError => e
+    reset_regulations
+    @regulations_load_error = e
+  end
+
+  def self.reset_regulations
     @regulations = []
     @regulations_by_id = {}
-    @regulations_load_error = e
+    @regulations_load_error = nil
   end
 
   if Rails.env.production?
@@ -18,6 +23,8 @@ class Regulation < SimpleDelegator
                          region: EnvConfig.STORAGE_AWS_REGION,
                          credentials: Aws::ECSCredentials.new,
                        ))
+  else
+    reset_regulations
   end
 
   class << self
