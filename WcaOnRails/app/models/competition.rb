@@ -2135,9 +2135,9 @@ class Competition < ApplicationRecord
         "reason" => competitor_limit_reason,
       },
       "staff" => {
-        "staffDelegateIds" => staff_delegates.pluck(:id),
-        "traineeDelegateIds" => trainee_delegates.pluck(:id),
-        "organizerIds" => organizers.pluck(:id),
+        "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
+        "traineeDelegateIds" => trainee_delegates.to_a.pluck(:id),
+        "organizerIds" => organizers.to_a.pluck(:id),
         "contact" => contact,
       },
       "championships" => championships.map(&:championship_type),
