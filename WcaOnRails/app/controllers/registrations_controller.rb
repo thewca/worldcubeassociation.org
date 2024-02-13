@@ -748,7 +748,7 @@ class RegistrationsController < ApplicationController
       amount: stripe_amount,
     }
 
-    account_id = CompetitionPaymentIntegration.account_for(competition, :stripe).account_id
+    account_id = CompetitionPaymentIntegration.account_for(registration.competition, :stripe).account_id
 
     refund = Stripe::Refund.create(
       refund_args,
