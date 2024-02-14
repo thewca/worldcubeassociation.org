@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class UserAvatar < ApplicationRecord
-  belongs_to :user
+  belongs_to :user, touch: true
 
   has_one :current_user, class_name: "User", foreign_key: :current_avatar_id, dependent: :nullify
   has_one :pending_user, class_name: "User", foreign_key: :pending_avatar_id, dependent: :nullify
@@ -61,50 +61,54 @@ class UserAvatar < ApplicationRecord
     self.filename == DEFAULT_AVATAR_FILE && self.backend == UserAvatar.backends[:local]
   end
 
-  after_save :move_image_if_approved, if: :active_storage?
-  def move_image_if_approved
-    # ActiveStorage takes care of purging attachments from destroyed records
-    return if self.destroyed?
+  after_save :move_image_if_approved,
+             if: [:active_storage?, :status_previously_changed?],
+             # ActiveStorage takes care of purging attachments from destroyed records
+             unless: :destroyed?
 
+  private def move_image_if_approved
     old_status, new_status = self.status_previous_change
 
-    # NOTE: Yes, this could be realised through status_changed?, but then we'd need to query the changes later anyways…
-    if old_status != new_status
-      if new_status == UserAvatar.statuses[:approved]
-        # We approved a new avatar! Take the previously private file and upload it to public storage.
-        self.public_image.attach(self.private_image.blob)
-        self.private_image.purge_later
-      elsif old_status == UserAvatar.statuses[:approved]
-        # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
-        self.private_image.attach(self.public_image.blob)
-        self.public_image.purge_later
-      end
+    if new_status == UserAvatar.statuses[:approved]
+      # We approved a new avatar! Take the previously private file and upload it to public storage.
+      self.public_image.attach(self.private_image.blob)
+      self.private_image.purge_later
+    elsif old_status == UserAvatar.statuses[:approved]
+      # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
+      self.private_image.attach(self.public_image.blob)
+      self.public_image.purge_later
     end
   end
 
-  after_save :move_user_associations, unless: :destroyed?
+  after_save :move_user_associations,
+             if: :status_previously_changed?,
+             unless: :destroyed?
+
   def move_user_associations
-    if self.status_previously_changed?
-      if self.status == UserAvatar.statuses[:pending]
-        user.update_attribute(:pending_avatar, self)
-      else
-        user.update_attribute(:pending_avatar, nil)
+    if self.status == UserAvatar.statuses[:pending]
+      user.update_attribute(:pending_avatar, self)
+    elsif user.pending_avatar_id == self.id
+      # Only delete the user's pending avatar if `self` was indeed the pending avatar before saving.
+      # Otherwise, changing a confirmed_avatar to `deleted` or `rejected` would touch the pending_avatar_id on the user.
+      user.update_attribute(:pending_avatar, nil)
+    end
 
-        if self.status == UserAvatar.statuses[:approved]
-          user.update_attribute(:current_avatar, self)
-        end
-      end
+    if self.status == UserAvatar.statuses[:approved]
+      user.update_attribute(:current_avatar, self)
+    elsif user.current_avatar_id == self.id
+      user.update_attribute(:current_avatar, nil)
     end
   end
 
-  after_save :register_status_timestamps
+  after_save :register_status_timestamps,
+             if: :status_previously_changed?,
+             unless: :destroyed?
+
   def register_status_timestamps
-    if !self.destroyed? && self.status_previously_changed?
-      if self.status == UserAvatar.statuses[:approved]
-        self.touch :approved_at
-      elsif self.status == UserAvatar.statuses[:rejected] || self.status == UserAvatar.statuses[:deleted]
-        self.touch :revoked_at
-      end
+    if self.status == UserAvatar.statuses[:approved]
+      self.touch :approved_at
+    elsif self.status == UserAvatar.statuses[:rejected] || self.status == UserAvatar.statuses[:deleted]
+      self.touch :revoked_at
     end
   end
 
