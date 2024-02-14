@@ -2405,6 +2405,10 @@ class Competition < ApplicationRecord
     self.competition_series = competition_series
   end
 
+  def payments_enabled?
+    competition_payment_integrations.exists?
+  end
+
   def payment_account_for(integration_name)
     validate_integration_name!(integration_name)
 

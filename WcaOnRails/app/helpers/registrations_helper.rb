@@ -2,7 +2,7 @@
 
 module RegistrationsHelper
   def fees_hint_and_context(registration)
-    if CompetitionPaymentIntegration.payments_enabled?(registration.competition)
+    if registration.competition.payments_enabled?
       if registration.outstanding_entry_fees <= 0
         [t('registrations.entry_fees_fully_paid', paid: format_money(registration.paid_entry_fees)), "success"]
       else

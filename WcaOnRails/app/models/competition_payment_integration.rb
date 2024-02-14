@@ -14,18 +14,6 @@ class CompetitionPaymentIntegration < ApplicationRecord
   scope :paypal, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:paypal]) }
   scope :stripe, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:stripe]) }
 
-  def self.payments_enabled?(competition)
-    competition.competition_payment_integrations.exists?
-  end
-
-  # def self.account_for(competition, integration_name)
-  #   validate_integration_name!(integration_name)
-  #   # Take the first result as `where` always returns an array
-  #   competition.competition_payment_integrations.where(
-  #     connected_account_type: AVAILABLE_INTEGRATIONS[integration_name],
-  #   ).first.connected_account
-  # end
-
   def self.paypal_connected?(competition)
     competition.competition_payment_integrations.paypal.exists?
   end

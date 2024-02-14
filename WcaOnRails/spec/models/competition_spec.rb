@@ -1427,8 +1427,8 @@ RSpec.describe Competition do
     end
   end
 
-  context "payment integration methods" do
-    describe "#payment_integration_for" do
+  context 'payment integration methods' do
+    describe '#payment_integration_for' do
       it 'returns the connected stripe account' do
         competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')
@@ -1442,6 +1442,28 @@ RSpec.describe Competition do
       it 'returns nil if no matching account is found' do
         competition = FactoryBot.create(:competition)
         expect(competition.payment_account_for(:paypal)).to eq(nil)
+      end
+    end
+
+    describe '#payments_enabled?' do
+      it 'returns true when stripe is connected' do
+        competition = FactoryBot.create(:competition, :stripe_connected)
+        expect(competition.payments_enabled?).to eq(true)
+      end
+
+      it 'returns true when paypal is connected' do
+        competition = FactoryBot.create(:competition, :paypal_connected)
+        expect(competition.payments_enabled?).to eq(true)
+      end
+
+      it 'returns true when multiple integrations are connected' do
+        competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
+        expect(competition.payments_enabled?).to eq(true)
+      end
+
+      it 'returns false when no integrations are connected' do
+        competition = FactoryBot.create(:competition)
+        expect(competition.payments_enabled?).to eq(false)
       end
     end
   end
