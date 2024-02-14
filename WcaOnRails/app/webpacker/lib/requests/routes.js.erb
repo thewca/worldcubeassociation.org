@@ -35,6 +35,9 @@ export const incidentsUrl = (perPage, page, tags = undefined, searchString = und
 export const newIncidentUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.new_incident_path)%>`;
 export const incidentUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.incident_path("${id}"))%>`;
 
+export const homepageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.root_path)%>`
+
+export const createCompetitionUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_path)%>`;
 export const competitionUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_path("${id}"))%>`;
 
 export const competitionReportUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_report_path("${id}"))%>`;
@@ -81,11 +84,33 @@ export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_h
 
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;
 
+export const userApiUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_path("${id}"))%>`;
+
 export const personSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_persons_path %>?q=${query}`;
 
 export const userSearchApiUrl = (query) => `<%= Rails.application.routes.url_helpers.api_v0_search_users_path %>?q=${query}`;
 
 export const geocodingApiUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_geocoding_search_path) %>`;
+
+export const competitionAnnouncementDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announcement_data_path("${competitionId}")) %>`
+export const competitionUserPreferencesUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_user_preferences_path("${competitionId}")) %>`
+export const competitionConfirmationDataUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_confirmation_data_path("${competitionId}")) %>`
+
+export const announceCompetitionUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_announce_path("${competitionId}")) %>`
+export const cancelCompetitionUrl = (competitionId, undo = false) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_cancel_path("${competitionId}")) %>?undo=${undo}`
+export const closeRegistrationWhenFullUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_close_full_registration_path("${competitionId}")) %>`
+
+export const updateUserNotificationsUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_update_user_notifications_path("${competitionId}")) %>`
+
+export const confirmCompetitionUrl = (competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_confirm_path("${competitionId}")) %>`
+
+export const competitionNearbyJsonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.nearby_competitions_json_path)%>`;
+
+export const seriesEligibleCompetitionsJsonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.series_eligible_competitions_json_path)%>`;
+
+export const registrationCollisionsJsonUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.registration_collisions_json_path)%>`;
+
+export const calculateDuesUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.calculate_dues_path)%>`;
 
 export const adminPostingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.results_posting_dashboard_path(format: "json")) %>`;
 
@@ -97,17 +122,13 @@ export const adminCheckUploadedResults = (competitionId) => `<%= CGI.unescape(Ra
 
 export const fetchUserGroupsUrl = (groupType) => {
   const searchParams = new URLSearchParams();
-  searchParams.append('group_type', groupType);
+  searchParams.append('groupType', groupType);
   return `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>?${searchParams.toString()}`;
 };
 
 export const addUserGroupsUrl = `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>`;
 
 export const userGroupsUpdateUrl = (userGroupId) => `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>/${userGroupId}`;
-
-export const rolesOfUser = (userId, {isActive, isGroupHidden} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ isActive, isGroupHidden })}`;
-
-export const rolesOfGroup = (groupId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>`;
 
 // dummyRoleId is used temporarily because delegates is yet to get a role id
 export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_user_role_path('dummyRoleId') %>?userId=${userId}&isActiveRole=${isActiveRole}`;
@@ -132,6 +153,9 @@ export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.appl
 
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
 
+// Max number of objects fetched per query
+export const WCA_API_PAGINATION = 25;
+
 export const delegatesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.delegates_path)%>`;
 
 export const teamsCommitteesPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.teams_committees_path)%>`;
@@ -148,14 +172,29 @@ export const apiV0Urls = {
     resetClaimCount: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_reset_claim_count_path("${wcaId}"))%>`,
   },
   userRoles: {
-    listOfUser: (userId, sort, {isActive, isGroupHidden, status}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, status })}`,
-    listOfGroup: (groupId, sort, {isActive, isGroupHidden, status}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, status })}`,
-    listOfGroupType: (groupType, {status, isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ status, isActive })}`,
+    listOfUser: (userId, sort, {isActive, isGroupHidden, status} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_user_path('${userId}')) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, status })}`,
+    listOfGroup: (groupId, sort, {isActive, isGroupHidden, status} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_path('${groupId}')) %>?${jsonToQueryString({ sort, isActive, isGroupHidden, status })}`,
+    listOfGroupType: (groupType, sort, {status, isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_index_for_group_type_path('${groupType}')) %>?${jsonToQueryString({ sort, status, isActive })}`,
     create: () => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_roles_path) %>`,
     update: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
     delete: (roleId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_role_path("${roleId}")) %>`,
   },
   userGroups: {
-    list: (groupType) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ group_type: groupType })}`,
+    list: (groupType, sort, {isActive} = {}) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_user_groups_path) %>?${jsonToQueryString({ groupType, sort, isActive })}`,
+  },
+  competitions: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
+  },
+  delegates: {
+    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
+  },
+}
+
+export const panelUrls = {
+  board: {
+    regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_board_path(anchor: PanelController.panel_list['board']['regionsManager'])) %>`,
+  },
+  wst: {
+    translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wst_path(anchor: PanelController.panel_list['wst']['translators'])) %>`,
   }
 }

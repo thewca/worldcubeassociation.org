@@ -8,21 +8,19 @@ allowed_environments = {
   'staging' => true,
   'production' => true,
 }
-rack_env = ENV.fetch('RACK_ENV', nil)
-if !allowed_environments[rack_env]
-  raise "Unrecognized RACK_ENV: #{rack_env}, must be one of #{allowed_environments.keys.join ', '}"
+rails_env = ENV.fetch('RAILS_ENV', nil)
+unless allowed_environments[rails_env]
+  raise "Unrecognized RACK_ENV: #{rails_env}, must be one of #{allowed_environments.keys.join ', '}"
 end
-if rack_env == "development"
-  listen 3000
+if rails_env == "development"
+  puts "Starting Unicorn in Development"
   worker_processes 1
 else
-  stderr_path "#{dir}/log/unicorn-#{rack_env}.log"
-  stdout_path "#{dir}/log/unicorn-#{rack_env}.log"
-
+  puts "Starting Unicorn in production mode"
   worker_processes((Etc.nprocessors * 2).ceil)
 end
 
-listen "/tmp/unicorn.wca.sock"
+listen 3000
 pid "#{dir}/pids/unicorn.pid"
 
 timeout 60

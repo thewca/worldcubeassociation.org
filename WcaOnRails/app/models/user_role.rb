@@ -9,6 +9,45 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
+  def self.is_visible_to_user?(role, user)
+    is_actual_role = role.is_a?(UserRole)
+    group = is_actual_role ? role.group : role[:group]
+    return true unless group[:is_hidden]
+    case group[:group_type]
+    when UserGroup.group_types[:delegate_probation]
+      user&.can_manage_delegate_probation?
+    when UserGroup.group_types[:translators]
+      user&.software_team?
+    else
+      false # Don't allow to view any other hidden groups.
+    end
+  end
+
+  def self.is_group_type?(role, group_type)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.group.group_type == group_type : role[:group][:group_type] == group_type
+  end
+
+  def self.group(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.group : role[:group]
+  end
+
+  def self.user(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.user : role[:user]
+  end
+
+  def self.is_active?(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.is_active? : role[:is_active]
+  end
+
+  def self.status(role)
+    is_actual_role = role.is_a?(UserRole)
+    is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+  end
+
   def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end
@@ -16,7 +55,7 @@ class UserRole < ApplicationRecord
   # In future, we will remove the 'self.' and make this a class method.
   def self.is_lead?(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
-    group_type = is_actual_role ? role.group_type : role[:group_type]
+    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
     status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
     case group_type
     when UserGroup.group_types[:delegate_regions]
@@ -28,6 +67,26 @@ class UserRole < ApplicationRecord
     else
       false
     end
+  end
+
+  def is_lead?
+    status = metadata[:status]
+    case group_type
+    when UserGroup.group_types[:delegate_regions]
+      ["senior_delegate", "regional_delegate"].include?(status)
+    when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
+      ["leader"].include?(status)
+    when UserGroup.group_types[:board], UserGroup.group_types[:officers]
+      true # All board members & officers are considered as leads.
+    else
+      false
+    end
+  end
+
+  # In future, we will remove the 'self.' and make this a class method.
+  def self.group_type(role)
+    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
+    is_actual_role ? role.group[:group_type] : role[:group][:group_type]
   end
 
   # In future, we will remove the 'self.' and make this a class method.

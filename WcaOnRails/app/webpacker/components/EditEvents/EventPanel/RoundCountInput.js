@@ -25,15 +25,13 @@ export default function RoundCountInput({ roundCount, onChange, disabled }) {
 
   return (
     <Dropdown
+      compact
       selection
       name="selectRoundCount"
       value={roundCount}
       onChange={handleChange}
       disabled={disabled}
       options={RoundCountOptions}
-      style={{
-        fontSize: '.75em',
-      }}
     />
   );
 }

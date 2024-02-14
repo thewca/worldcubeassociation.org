@@ -25,6 +25,19 @@ function extendCountries(country) {
   };
 }
 
+// ----- CONTINENTS -----
+
+export const continents = {
+  real: _.map(<%= Continent.real.to_json.html_safe %>, extendContinents),
+};
+
+function extendContinents(continent){
+  return {
+    ...continent,
+    name: I18n.t(`continents.${continent.name}`),
+  };
+}
+
 // ----- CURRENCIES -----
 
 <%
@@ -35,7 +48,8 @@ function extendCountries(country) {
   currencies_info_hash = Hash[selected_currencies.map do |_,v|
     [v[:iso_code], {:symbol => v[:symbol],
                     :symbol_first => v[:symbol_first],
-                    :subunit_to_unit => v[:subunit_to_unit]}]
+                    :subunit_to_unit => v[:subunit_to_unit],
+                    :name => v[:name]}]
   end]
 %>
 
@@ -122,9 +136,33 @@ export const regionalMarkers = <%= Result::MARKERS.to_json.html_safe %>;
 
 export const defaultRoomColor = "<%= VenueRoom::DEFAULT_ROOM_COLOR %>";
 
+// ----- COMPETITION DATA -----
+
+export const competitionConstants = {
+  competitionRecentDays: <%= Competition::RECENT_DAYS %>,
+};
+
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';
+
+// ----- COMP RULES -----
+
+export const nearbyCompetitionDistanceWarning = <%= Competition::NEARBY_DISTANCE_KM_WARNING.to_json.html_safe %>
+
+export const nearbyCompetitionDistanceDanger = <%= Competition::NEARBY_DISTANCE_KM_DANGER.to_json.html_safe %>
+
+export const competitionMaxShortNameLength = <%= Competition::MAX_CELL_NAME_LENGTH.to_json.html_safe %>
+
+// ----- CHAMPIONSHIPS -----
+
+export const groupedChampionshipTypes = <%= Championship.grouped_championship_types.to_json.html_safe %>
+
+// ----- TEAMS -----
+
+export const teams = {
+  byId: <%= Team.official.index_by(&:friendly_id).to_json.html_safe %>
+}
 
 // ----- ROLES & GROUPS -----
 
@@ -139,12 +177,7 @@ export const councilsStatus = {
   leader: 'leader',
 };
 
-export const delegateRegionsStatus = {
-  trainee_delegate: 'trainee_delegate',
-  junior_delegate: 'candidate_delegate',
-  delegate: 'delegate',
-  senior_delegate: 'senior_delegate',
-};
+export const delegateRegionsStatus = <%= RolesMetadataDelegateRegions.statuses.to_json %>;
 
 // ----- PANEL LIST -----
 

@@ -23,7 +23,7 @@ after :teams do
     senior_delegate = FactoryBot.create(:senior_delegate)
     rand(10).times do
       FactoryBot.create([:delegate, :candidate_delegate].sample,
-                        senior_delegate: senior_delegate)
+                        region_id: senior_delegate.region_id)
     end
   end
 

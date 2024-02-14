@@ -23,39 +23,69 @@ class CompetitionsController < ApplicationController
     :show_scrambles,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
-    :post_announcement,
-    :cancel_competition,
     :admin_edit,
+    :disconnect_stripe,
+    :disconnect_paypal,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
   ]
+  before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [
+    :new,
+  ]
+  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [
+    :for_senior,
+  ]
+  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [
+    :edit,
+    :edit_events,
+    :edit_schedule,
+    :payment_setup,
+  ]
+
+  rescue_from WcaExceptions::ApiException do |e|
+    render status: e.status, json: { error: e.to_s }
+  end
+
+  rescue_from JSON::Schema::ValidationError do |e|
+    render status: :unprocessable_entity, json: {
+      error: e.to_s,
+      jsonProperty: e.fragments.join('.'),
+      schema: e.schema.schema, # yes, unfortunately the double invocation is necessary.
+    }
+  end
+
+  private def require_user_permission(action, *args, is_message: false)
+    permission_result = current_user&.send(action, *args)
+
+    if is_message && permission_result
+      return render status: :forbidden, json: { error: permission_result }
+    elsif !is_message && !permission_result
+      return render status: :forbidden, json: { error: "Missing permission #{action}" }
+    end
+
+    # return: when is_message is true, the permission_result message should be empty, i.e. false-y,
+    #   and the negation of an empty message is also true.
+    #   When is_message is false, the permission_result should be true, i.e. the negation should be false.
+    is_message == !permission_result
+  end
 
   private def competition_from_params(includes: nil)
     Competition.includes(includes).find(params[:competition_id] || params[:id]).tap do |competition|
       unless competition.user_can_view?(current_user)
         raise ActionController::RoutingError.new('Not Found')
       end
+
+      assign_editing_user(competition)
     end
   end
-
-  before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) }, only: [:edit, :update, :edit_events, :edit_schedule, :payment_setup, :orga_close_reg_when_full_limit]
-
-  before_action -> { redirect_to_root_unless_user(:can_confirm_competition?, competition_from_params) }, only: [:update], if: :confirming?
-
-  before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [:disconnect_stripe]
-
-  before_action -> { redirect_to_root_unless_user(:can_create_competitions?) }, only: [:new, :create]
-
-  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:for_senior]
 
   private def assign_delegate(competition)
     competition.delegates |= [current_user] if current_user.any_kind_of_delegate?
   end
 
-  def new
-    @competition = Competition.new
-    assign_delegate(@competition)
+  private def assign_editing_user(competition)
+    competition.editing_user_id = current_user&.id
   end
 
   # Normalizes the params that old links to index still work.
@@ -166,6 +196,8 @@ class CompetitionsController < ApplicationController
       @competitions = @competitions.select { |competition| competition.pending_results_or_report(days) }
     end
 
+    @enable_react = params[:beta]&.to_s == '0xDbOverload'
+
     respond_to do |format|
       format.html {}
       format.js do
@@ -177,59 +209,6 @@ class CompetitionsController < ApplicationController
         render 'index', locals: { current_path: request.original_fullpath }
       end
     end
-  end
-
-  def create
-    @competition = Competition.new(competition_params)
-
-    if @competition.save
-      flash[:success] = t('competitions.messages.create_success')
-      @competition.organizers.each do |organizer|
-        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, organizer).deliver_later
-      end
-      redirect_to edit_competition_path(@competition)
-    else
-      # Show id errors under name, since we don't actually show an
-      # id field to the user, so they wouldn't see any id errors.
-      @competition.errors[:id].each { |error| @competition.errors.add(:name, message: error) }
-      render :new
-    end
-  end
-
-  def post_announcement
-    comp = competition_from_params
-    unless comp.announced?
-      ActiveRecord::Base.transaction do
-        comp.update!(announced_at: Time.now, announced_by: current_user.id)
-        comp.organizers.each do |organizer|
-          CompetitionsMailer.notify_organizer_of_announced_competition(comp, organizer).deliver_later
-        end
-      end
-    end
-
-    flash[:success] = t('competitions.messages.announced')
-    redirect_to admin_edit_competition_path(comp)
-  end
-
-  def cancel_competition
-    comp = competition_from_params
-    undo = params[:undo].present?
-    if undo
-      if comp.cancelled?
-        comp.update!(cancelled_at: nil, cancelled_by: nil)
-        flash[:success] = t('competitions.messages.uncancel_success')
-      else
-        flash[:danger] = t('competitions.messages.uncancel_failure')
-      end
-    else
-      if comp.can_be_cancelled?
-        comp.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
-        flash[:success] = t('competitions.messages.cancel_success')
-      else
-        flash[:danger] = t('competitions.messages.cancel_failure')
-      end
-    end
-    redirect_to admin_edit_competition_path(comp)
   end
 
   def post_results
@@ -266,17 +245,6 @@ class CompetitionsController < ApplicationController
     redirect_to competition_admin_import_results_path(comp)
   end
 
-  def orga_close_reg_when_full_limit
-    comp = competition_from_params
-    if comp.orga_can_close_reg_full_limit?
-      comp.update!(registration_close: Time.now)
-      flash[:success] = t('competitions.messages.orga_closed_reg_success')
-    else
-      flash[:danger] = t('competitions.messages.orga_closed_reg_failure')
-    end
-    redirect_to edit_competition_path(comp)
-  end
-
   def edit_events
     associations = CHECK_SCHEDULE_ASSOCIATIONS.merge(
       competition_events: {
@@ -308,23 +276,34 @@ class CompetitionsController < ApplicationController
     colliding_registration_start_competitions
   end
 
+  def new
+    @competition = Competition.new(
+      competitor_limit_enabled: true,
+    )
+
+    assign_editing_user(@competition)
+    assign_delegate(@competition)
+  end
+
   def admin_edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = true
-    @competition_organizer_view = false
+
     render :edit
   end
 
   def edit
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
     @competition_admin_view = false
-    @competition_organizer_view = true
+
     render :edit
   end
 
+  # TODO: Refactor for cleaner integration of Stripe and Paypal (and other payment services)
   def payment_setup
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
+    # Stripe setup URL
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
@@ -332,6 +311,36 @@ class CompetitionsController < ApplicationController
       state: @competition.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
+
+    # Paypal setup URL
+    # TODO: Don't generate this URL if there is already a connected paypal account?
+    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless Rails.env.production?
+  end
+
+  def paypal_return
+    if Rails.env.production?
+      flash[:error] = 'PayPal is not yet available in production environments'
+      return redirect_to competitions_payment_setup_path(@competition)
+    end
+
+    @competition = competition_from_params
+
+    account_reference = ConnectedPaypalAccount.new(
+      paypal_merchant_id: params[:merchantIdInPayPal],
+      permissions_granted: params[:permissionsGranted],
+      account_status: params[:accountStatus],
+      consent_status: params[:consentStatus],
+    )
+
+    @competition.competition_payment_integrations.new(connected_account: account_reference)
+
+    if @competition.save
+      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
+    else
+      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
+    end
+
+    redirect_to competitions_payment_setup_path(@competition)
   end
 
   def stripe_connect
@@ -344,9 +353,9 @@ class CompetitionsController < ApplicationController
     resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
     competition.connected_stripe_account_id = resp.params['stripe_user_id']
     if competition.save
-      flash[:success] = t('competitions.messages.stripe_connected')
+      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.stripe'))
     else
-      flash[:danger] = t('competitions.messages.stripe_not_connected')
+      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.stripe'))
     end
     redirect_to competitions_payment_setup_path(competition)
   end
@@ -362,13 +371,30 @@ class CompetitionsController < ApplicationController
     OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 
+  def disconnect_paypal
+    if Rails.env.production?
+      flash[:error] = 'PayPal is not yet available in production environments'
+      return redirect_to root_url
+    end
+
+    @competition = competition_from_params
+    CompetitionPaymentIntegration.disconnect(@competition, :paypal)
+
+    if CompetitionPaymentIntegration.paypal_connected?(@competition)
+      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
+    else
+      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
+    end
+    redirect_to competitions_payment_setup_path(@competition)
+  end
+
   def disconnect_stripe
     comp = competition_from_params
     if comp.connected_stripe_account_id
       comp.update!(connected_stripe_account_id: nil)
-      flash[:success] = t('competitions.messages.stripe_disconnected_success')
+      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
     else
-      flash[:danger] = t('competitions.messages.stripe_disconnected_failure')
+      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
     end
     redirect_to competitions_payment_setup_path(comp)
   end
@@ -380,36 +406,100 @@ class CompetitionsController < ApplicationController
     render :new
   end
 
-  def nearby_competitions
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
-    @nearby_competitions = get_nearby_competitions(@competition)
-    render partial: 'nearby_competitions'
-  end
+  def competition_form_nearby_json(competition, other_comp)
+    if current_user.can_admin_results?
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+    else
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
+    end
 
-  def series_eligible_competitions
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @series_eligible_competitions = get_series_eligible_competitions(@competition)
-    render partial: 'series_eligible_competitions'
-  end
+    days_until = competition.days_until_competition?(other_comp)
 
-  def colliding_registration_start_competitions
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @colliding_registration_start_competitions = get_colliding_registration_start_competitions(@competition)
-    render partial: 'colliding_registration_start_competitions'
-  end
-
-  def time_until_competition
-    @competition = Competition.new(competition_params)
-    @competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
-    render json: {
-      has_date_errors: @competition.has_date_errors?,
-      html: render_to_string(partial: 'time_until_competition'),
+    {
+      danger: competition.dangerously_close_to?(other_comp),
+      id: other_comp.id,
+      name: other_comp.name,
+      nameLink: comp_link,
+      confirmed: other_comp.confirmed?,
+      delegates: users_to_sentence(other_comp.delegates),
+      daysUntil: days_until,
+      startDate: other_comp.start_date,
+      endDate: other_comp.end_date,
+      location: "#{other_comp.cityName}, #{other_comp.countryId}",
+      distance: {
+        km: competition.kilometers_to(other_comp).round(2),
+        from: {
+          lat: other_comp.latitude_degrees,
+          long: other_comp.longitude_degrees,
+        },
+        to: {
+          lat: competition.latitude_degrees,
+          long: competition.longitude_degrees,
+        },
+      },
+      limit: other_comp.competitor_limit_enabled ? other_comp.competitor_limit : "",
+      competitors: other_comp.is_probably_over? ? other_comp.results.select('DISTINCT personId').count : "",
+      events: other_comp.events.map { |event|
+        event.id
+      },
+      coordinates: {
+        lat: other_comp.latitude_degrees,
+        long: other_comp.longitude_degrees,
+      },
+      series: other_comp.competition_series&.to_form_data,
     }
+  end
+
+  def nearby_competitions_json
+    permitted_params = params.permit(:id, :start_date, :end_date, :latitude_degrees, :longitude_degrees)
+    competition = Competition.new(permitted_params)
+
+    competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    nearby_competitions = get_nearby_competitions(competition)
+
+    render json: nearby_competitions.map { |c| competition_form_nearby_json(competition, c) }
+  end
+
+  def series_eligible_competitions_json
+    permitted_params = params.permit(:id, :start_date, :end_date, :latitude_degrees, :longitude_degrees)
+    competition = Competition.new(permitted_params)
+
+    competition.valid? # We only unpack dates _just before_ validation, so we need to call validation here
+    series_eligible_competitions = get_series_eligible_competitions(competition)
+    render json: series_eligible_competitions.map { |c| competition_form_nearby_json(competition, c) }
+  end
+
+  def competition_form_registration_collision_json(competition, other_comp)
+    if current_user.can_admin_results?
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_admin_edit_path(other_comp.id), target: "_blank")
+    else
+      comp_link = ActionController::Base.helpers.link_to(other_comp.name, competition_path(other_comp.id))
+    end
+
+    {
+      id: other_comp.id,
+      name: other_comp.name,
+      nameLink: comp_link,
+      confirmed: other_comp.confirmed?,
+      delegates: users_to_sentence(other_comp.delegates),
+      registrationOpen: other_comp.registration_open,
+      minutesUntil: competition.minutes_until_other_registration_starts(other_comp),
+      cityName: other_comp.cityName,
+      countryId: other_comp.countryId,
+      events: other_comp.events.map { |event|
+        event.id
+      },
+    }
+  end
+
+  def registration_collisions_json
+    permitted_params = params.permit(:id, :registration_open)
+    competition = Competition.new(permitted_params)
+
+    competition.valid? # unwrap data hidden behind validations
+    collisions = get_colliding_registration_start_competitions(competition)
+
+    render json: collisions.map { |c| competition_form_registration_collision_json(competition, c) }
   end
 
   def calculate_dues
@@ -525,77 +615,247 @@ class CompetitionsController < ApplicationController
     redirect_to competitions_v2_path(@competition)
   end
 
-  def update
-    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
-    @competition_admin_view = params.key?(:competition_admin_view) && current_user.can_admin_competitions?
-    @competition_organizer_view = !@competition_admin_view
+  before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]
 
-    comp_params_minus_id = competition_params
-    new_id = comp_params_minus_id.delete(:id)
+  def create
+    competition = Competition.new
 
-    old_organizers = @competition.organizers.to_a
+    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
+    form_data = params.permit!.to_h
+    competition.set_form_data(form_data, current_user)
 
-    if params[:commit] == "Delete"
-      cannot_delete_competition_reason = current_user.get_cannot_delete_competition_reason(@competition)
-      if cannot_delete_competition_reason
-        flash.now[:danger] = cannot_delete_competition_reason
-        render :edit
-      else
-        @competition.destroy
-        flash[:success] = t('.delete_success', id: @competition.id)
-        redirect_to root_url
+    if competition.save
+      competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, organizer).deliver_later
       end
-    elsif @competition.update(comp_params_minus_id)
+
+      render json: { status: "ok", message: t('competitions.messages.create_success'), redirect: edit_competition_path(competition) }
+    else
+      render status: :bad_request, json: competition.form_errors
+    end
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:update]
+
+  def update
+    competition = competition_from_params
+
+    admin_view_param = params.delete(:adminView)
+
+    competition_admin_view = ActiveRecord::Type::Boolean.new.cast(admin_view_param) && current_user.can_admin_competitions?
+    competition_organizer_view = !competition_admin_view
+
+    old_organizers = competition.organizers.to_a
+
+    # we're quite lax about reading params, because set_form_data! below does a comprehensive JSON-Schema check.
+    form_data = params.permit!.to_h
+
+    #####
+    # HACK BECAUSE WE DON'T HAVE PERSISTENT COMPETITION IDS
+    #####
+
+    # Need to delete the ID in this first update pass because it's our primary key (yay legacy code!)
+    persisted_id = competition.id
+    new_id = nil # Initialize under the assumption that nothing changed.
+
+    form_id = form_data[:competitionId]
+    new_id = form_id unless form_id == persisted_id
+
+    # In the first update pass, we need to pretend like the ID never changed.
+    # Changing ID needs a special hack which we handle below.
+    form_data[:competitionId] = persisted_id
+
+    #####
+    # HACK END
+    #####
+
+    competition.set_form_data(form_data, current_user)
+
+    if competition.save
       # Automatically compute the cellName and ID for competitions with a short name.
-      if !@competition.confirmed? && @competition_organizer_view && @competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
-        old_competition_id = @competition.id
-        @competition.create_id_and_cell_name(force_override: true)
+      if !competition.confirmed? && competition_organizer_view && competition.name.length <= Competition::MAX_CELL_NAME_LENGTH
+        competition.create_id_and_cell_name(force_override: true)
 
         # Save the newly computed cellName without breaking the ID associations
         # (which in turn is handled by a hack in the next if-block below)
-        @competition.with_old_id { @competition.save! }
+        competition.with_old_id { competition.save! }
 
         # Try to update the ID only if it _actually_ changed
-        new_id = @competition.id unless @competition.id == old_competition_id
+        new_id = competition.id unless competition.id == persisted_id
       end
 
-      if new_id && !@competition.update(id: new_id)
+      if new_id && !competition.update(id: new_id)
         # Changing the competition id breaks all our associations, and our view
         # code was not written to handle this. Rather than trying to update our view
         # code, just revert the attempted id change. The user will have to deal with
         # editing the ID text box manually. This will go away once we have proper
         # immutable ids for competitions.
-        @competition = Competition.find(params[:id])
+        return render json: {
+          status: "ok",
+          redirect: competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition),
+        }
       end
 
-      new_organizers = @competition.organizers - old_organizers
-      removed_organizers = old_organizers - @competition.organizers
+      new_organizers = competition.organizers - old_organizers
+      removed_organizers = old_organizers - competition.organizers
 
       new_organizers.each do |new_organizer|
-        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, @competition, new_organizer).deliver_later
+        CompetitionsMailer.notify_organizer_of_addition_to_competition(current_user, competition, new_organizer).deliver_later
       end
 
       removed_organizers.each do |removed_organizer|
-        CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, @competition, removed_organizer).deliver_later
+        CompetitionsMailer.notify_organizer_of_removal_from_competition(current_user, competition, removed_organizer).deliver_later
       end
 
-      if confirming?
-        CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, @competition).deliver_later
-        @competition.organizers.each do |organizer|
-          CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, @competition, organizer).deliver_later
-        end
-        flash[:success] = t('.confirm_success')
-      else
-        flash[:success] = t('.save_success')
+      response_data = { status: "ok", message: t('competitions.update.save_success') }
+
+      if persisted_id != competition.id
+        response_data[:redirect] = competition_admin_view ? competition_admin_edit_path(competition) : edit_competition_path(competition)
       end
-      if @competition_admin_view
-        redirect_to admin_edit_competition_path(@competition)
+
+      render json: response_data
+    else
+      render status: :bad_request, json: competition.form_errors
+    end
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
+
+  def announcement_data
+    competition = competition_from_params
+
+    render json: {
+      isAnnounced: competition.announced?,
+      announcedBy: competition.announced_by_user&.name,
+      announcedAt: competition.announced_at&.iso8601,
+      isCancelled: competition.cancelled?,
+      canBeCancelled: competition.can_be_cancelled?,
+      cancelledBy: competition.cancelled_by_user&.name,
+      cancelledAt: competition.cancelled_at&.iso8601,
+      isRegistrationPast: competition.registration_past?,
+      isRegistrationFull: competition.registration_full?,
+      canCloseFullRegistration: competition.orga_can_close_reg_full_limit?,
+    }
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:user_preferences]
+
+  def user_preferences
+    competition = competition_from_params
+
+    render json: {
+      isReceivingNotifications: competition.receiving_registration_emails?(current_user.id),
+    }
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:announcement_data]
+
+  def confirmation_data
+    competition = competition_from_params
+
+    render json: {
+      canConfirm: current_user.can_confirm_competition?(competition),
+      cannotDeleteReason: current_user.get_cannot_delete_competition_reason(competition),
+    }
+  end
+
+  before_action -> { require_user_permission(:get_cannot_delete_competition_reason, competition_from_params, is_message: true) }, only: [:destroy]
+
+  def destroy
+    competition = competition_from_params
+    competition.destroy
+
+    render json: { status: "ok", message: t('competitions.update.delete_success') }
+  end
+
+  before_action -> { require_user_permission(:can_confirm_competition?, competition_from_params) }, only: [:confirm]
+
+  def confirm
+    competition = competition_from_params
+
+    competition.confirmed = true
+
+    if competition.save
+      CompetitionsMailer.notify_wcat_of_confirmed_competition(current_user, competition).deliver_later
+
+      competition.organizers.each do |organizer|
+        CompetitionsMailer.notify_organizer_of_confirmed_competition(current_user, competition, organizer).deliver_later
+      end
+
+      render json: { status: "ok", message: t('competitions.update.confirm_success') }
+    else
+      render status: :bad_request, json: competition.form_errors
+    end
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:announce]
+
+  def announce
+    competition = competition_from_params
+
+    if competition.announced?
+      return render json: { error: "Already announced" }
+    end
+
+    competition.update!(announced_at: Time.now, announced_by: current_user.id)
+
+    competition.organizers.each do |organizer|
+      CompetitionsMailer.notify_organizer_of_announced_competition(competition, organizer).deliver_later
+    end
+
+    render json: { status: "ok", message: t('competitions.messages.announced_success') }
+  end
+
+  before_action -> { require_user_permission(:can_admin_competitions?) }, only: [:cancel_or_uncancel]
+
+  def cancel_or_uncancel
+    competition = competition_from_params
+
+    undo = params[:undo]
+    undo = ActiveRecord::Type::Boolean.new.cast(undo) if undo.present?
+
+    if undo
+      if competition.cancelled?
+        competition.update!(cancelled_at: nil, cancelled_by: nil)
+        render json: { status: "ok", message: t('competitions.messages.uncancel_success') }
       else
-        redirect_to edit_competition_path(@competition)
+        render json: { error: t('competitions.messages.uncancel_failure') }, status: :bad_request
       end
     else
-      render :edit
+      if competition.can_be_cancelled?
+        competition.update!(cancelled_at: Time.now, cancelled_by: current_user.id)
+        render json: { status: "ok", message: t('competitions.messages.cancel_success') }
+      else
+        render json: { error: t('competitions.messages.cancel_failure') }, status: :bad_request
+      end
     end
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:close_full_registration]
+
+  def close_full_registration
+    competition = competition_from_params
+
+    if competition.orga_can_close_reg_full_limit?
+      competition.update!(registration_close: Time.now)
+      render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
+    else
+      render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request
+    end
+  end
+
+  before_action -> { require_user_permission(:can_manage_competition?, competition_from_params) }, only: [:close_full_registration]
+
+  def update_user_notifications
+    competition = competition_from_params
+
+    receive_emails_flag = params.require(:receive_registration_emails)
+    receive_registration_emails = ActiveModel::Type::Boolean.new.cast(receive_emails_flag)
+
+    competition.receive_registration_emails = receive_registration_emails
+    competition.save!
+
+    render json: { status: "ok" }
   end
 
   def my_competitions
@@ -630,121 +890,5 @@ class CompetitionsController < ApplicationController
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
     @competitions = @user.subordinate_delegates.map(&:delegated_competitions).flatten.uniq.reject(&:is_probably_over?).sort_by { |c| c.start_date || (Date.today + 20.year) }.reverse
-  end
-
-  private def confirming?
-    params[:commit] == "Confirm"
-  end
-
-  private def competition_params
-    permitted_competition_params = [
-      :receive_registration_emails,
-      :being_cloned_from_id,
-      :clone_tabs,
-    ]
-
-    if @competition.nil? || @competition.can_edit_registration_fees?
-      permitted_competition_params += [
-        :base_entry_fee_lowest_denomination,
-        :currency_code,
-      ]
-    end
-
-    if @competition&.confirmed? && !current_user.can_admin_competitions?
-      # If the competition is confirmed, non admins are not allowed to change anything.
-    else
-      permitted_competition_params += [
-        :id,
-        :name,
-        :name_reason,
-        :cellName,
-        :countryId,
-        :cityName,
-        :venue,
-        :venueAddress,
-        :latitude_degrees,
-        :longitude_degrees,
-        :venueDetails,
-        :start_date,
-        :end_date,
-        :information,
-        :staff_delegate_ids,
-        :trainee_delegate_ids,
-        :organizer_ids,
-        :contact,
-        :generate_website,
-        :external_website,
-        :use_wca_registration,
-        :external_registration_page,
-        :use_wca_live_for_scoretaking,
-        :enable_donations,
-        :guests_enabled,
-        :guests_per_registration_limit,
-        :events_per_registration_limit,
-        :registration_open,
-        :registration_close,
-        :competitor_limit_enabled,
-        :competitor_limit,
-        :competitor_limit_reason,
-        :remarks,
-        :force_comment_in_registration,
-        :extra_registration_requirements,
-        :on_the_spot_registration,
-        :on_the_spot_entry_fee_lowest_denomination,
-        :allow_registration_without_qualification,
-        :allow_registration_edits,
-        :allow_registration_self_delete_after_acceptance,
-        :refund_policy_percent,
-        :refund_policy_limit_date,
-        :early_puzzle_submission,
-        :early_puzzle_submission_reason,
-        :qualification_results,
-        :qualification_results_reason,
-        :event_restrictions,
-        :event_restrictions_reason,
-        :guests_entry_fee_lowest_denomination,
-        :guest_entry_status,
-        :main_event_id,
-        :waiting_list_deadline_date,
-        :event_change_deadline_date,
-        { competition_events_attributes: [:id, :event_id, :_destroy],
-          championships_attributes: [:id, :championship_type, :_destroy],
-          competition_series_attributes: [:id, :wcif_id, :name, :short_name, :competition_ids, :_destroy] },
-      ]
-      if current_user.can_admin_competitions?
-        permitted_competition_params += [
-          :confirmed,
-          :showAtAll,
-        ]
-      end
-    end
-
-    params.require(:competition).permit(*permitted_competition_params).tap do |competition_params|
-      if confirming? && current_user.can_confirm_competition?(@competition)
-        competition_params[:confirmed] = true
-      end
-      competition_params[:editing_user_id] = current_user.id
-
-      # Quirk: When adding a new competition to an already existing (i.e. already persisted) Series,
-      # Rails will throw an error like "cannot find Series with ID 123 for NewCompetition"
-      # despite we're sending the update to change Series 123 to include NewCompetition.
-      # To mitigate this error, we must deliberately write to series_id first.
-      if (persisted_series_id = competition_params.try(:[], :competition_series_attributes)&.try(:[], :id))
-        competition_params[:competition_series_id] = persisted_series_id
-      end
-
-      # Quirk: We don't want to actually destroy CompetitionSeries directly,
-      # because that could badly affect other competitions that are still attached to that series.
-      # If the frontend sends a _destroy, we only unlink the *current* competition and let validations take care of the rest.
-      if (series_destroy_flag = competition_params.try(:[], :competition_series_attributes)&.try(:[], :_destroy))
-        # Yes, this is ugly but it's the way simple_form_for does things.
-        should_delete = ActiveModel::Type::Boolean.new.cast(series_destroy_flag)
-
-        if should_delete
-          competition_params[:competition_series_id] = nil
-          competition_params.delete :competition_series_attributes
-        end
-      end
-    end
   end
 end

@@ -4,38 +4,41 @@ class DatabaseController < ApplicationController
   RESULTS_README_TEMPLATE = 'database/public_results_readme'
 
   def results_export
-    @sql_filename, @sql_filesize = _link_info DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK
-    @tsv_filename, @tsv_filesize = _link_info DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK
-
-    @sql_rel_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, @sql_filename
-    @tsv_rel_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, @tsv_filename
-
-    @sql_perma_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, DbDumpHelper::RESULTS_EXPORT_SQL_PERMALINK
-    @tsv_perma_path = DatabaseController.rel_download_path DbDumpHelper::RESULTS_EXPORT_FOLDER, DbDumpHelper::RESULTS_EXPORT_TSV_PERMALINK
+    @sql_path, @sql_filesize = current_results_export("sql")
+    @tsv_path, @tsv_filesize = current_results_export("tsv")
+    @sql_filename = File.basename(@sql_path)
+    @tsv_filename = File.basename(@tsv_path)
   end
 
-  def _link_info(permalink)
-    full_permalink = DbDumpHelper::RESULTS_EXPORT_FOLDER.join(permalink)
+  def sql_permalink
+    url, = current_results_export("sql")
+    redirect_to url, status: 301, allow_other_host: true
+  end
 
-    actual_filename = File.basename File.readlink(full_permalink)
-    # Manually resolve the relative link to be independent of runtime environments
-    actual_file = DbDumpHelper::RESULTS_EXPORT_FOLDER.join(actual_filename)
+  def tsv_permalink
+    url, = current_results_export("tsv")
+    redirect_to url, status: 301, allow_other_host: true
+  end
 
-    filesize_bytes = File.size? actual_file
+  def current_results_export(file_type)
+    export_timestamp = DumpPublicResultsDatabase.start_date
 
-    [actual_filename, filesize_bytes]
+    Rails.cache.fetch("database-export-#{export_timestamp}-#{file_type}", expires_in: 1.days) do
+      base_name = DbDumpHelper.result_export_file_name(file_type, export_timestamp)
+      file_name = "#{DbDumpHelper::RESULTS_EXPORT_FOLDER}/#{base_name}"
+
+      bucket = Aws::S3::Resource.new(
+        region: EnvConfig.STORAGE_AWS_REGION,
+        credentials: Aws::ECSCredentials.new,
+      ).bucket(DbDumpHelper::BUCKET_NAME)
+
+      filesize_bytes = bucket.object(file_name).content_length
+      [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
+    end
   end
 
   def developer_export
-    @rel_download_path = DatabaseController.rel_download_path DbDumpHelper::DEVELOPER_EXPORT_FOLDER, DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK
-  end
-
-  def self.rel_download_path(base_folder, file_name)
-    file_path = base_folder.join file_name
-    relative_path = file_path.relative_path_from DbDumpHelper::EXPORT_PUBLIC_FOLDER.parent
-
-    # has to start with / or otherwise Rails resolves the controller action into the path
-    "/#{relative_path}"
+    @rel_download_path = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
   end
 
   def self.render_readme(rendering_engine, export_timestamp)

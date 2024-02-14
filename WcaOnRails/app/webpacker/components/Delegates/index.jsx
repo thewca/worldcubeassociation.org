@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import {
   Checkbox,
+  Container,
   Dropdown,
   Grid,
   Header,
@@ -10,7 +11,7 @@ import {
 } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 
-import { fetchUserGroupsUrl } from '../../lib/requests/routes.js.erb';
+import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import '../../stylesheets/delegates/style.scss';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -30,9 +31,26 @@ export default function Delegates() {
     data: delegateGroups,
     loading: delegateGroupsLoading,
     error: delegateGroupsError,
-  } = useLoadedData(fetchUserGroupsUrl(groupTypes.delegate_regions));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.delegate_regions, 'name', { isActive: true }));
   const delegateRegions = React.useMemo(
     () => delegateGroups?.filter((group) => group.parent_group_id === null) || [],
+    [delegateGroups],
+  );
+  const delegateSubregions = React.useMemo(
+    () => delegateGroups?.reduce((_delegateSubregions, group) => {
+      if (group.parent_group_id) {
+        const parentGroup = delegateGroups.find(
+          (parent) => parent.id === group.parent_group_id,
+        );
+        if (parentGroup) {
+          const updatedSubregions = { ..._delegateSubregions };
+          updatedSubregions[parentGroup.id] = updatedSubregions[parentGroup.id] || [];
+          updatedSubregions[parentGroup.id].push(group);
+          return updatedSubregions;
+        }
+      }
+      return _delegateSubregions;
+    }, {}),
     [delegateGroups],
   );
 
@@ -65,7 +83,7 @@ export default function Delegates() {
   }
 
   return (
-    <div className="container">
+    <Container fluid>
       <Header as="h1">{I18n.t('delegates_page.title')}</Header>
       <p>
         <I18nHTMLTranslate
@@ -84,10 +102,10 @@ export default function Delegates() {
           onChange={(__, { checked }) => setToggleAdmin(checked)}
         />
       )}
-      <Grid container>
+      <Grid>
         <Grid.Column only="computer" computer={4}>
           <Header>{I18n.t('delegates_page.regions')}</Header>
-          <Menu vertical>
+          <Menu vertical fluid>
             {delegateRegions.map((region) => (
               <Menu.Item
                 key={region.id}
@@ -127,12 +145,13 @@ export default function Delegates() {
               </Grid.Row>
               <DelegatesOfRegion
                 activeRegion={activeRegion}
+                delegateSubregions={delegateSubregions[activeRegion.id] || []}
                 isAdminMode={isAdminMode}
               />
             </Grid>
           </Segment>
         </Grid.Column>
       </Grid>
-    </div>
+    </Container>
   );
 }

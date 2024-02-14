@@ -35,6 +35,7 @@ gem 'devise-bootstrap-views'
 gem 'devise-two-factor'
 gem 'rqrcode'
 gem 'doorkeeper'
+gem 'doorkeeper-openid_connect'
 gem 'doorkeeper-i18n'
 gem 'strip_attributes'
 gem 'time_will_tell', github: 'thewca/time_will_tell'
@@ -51,12 +52,12 @@ gem 'cookies_eu'
 gem 'superconfig'
 gem 'eu_central_bank'
 gem 'devise-jwt'
+gem 'jwt'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
 gem 'selectize-rails', github: 'jfly/selectize-rails'
 
-gem 'high_voltage'
 gem 'carrierwave'
 gem 'carrierwave-aws'
 gem 'aws-sdk-s3'
@@ -86,7 +87,7 @@ gem 'i18n-country-translations', github: 'thewca/i18n-country-translations'
 gem 'http_accept_language'
 gem 'twitter_cldr'
 # version explicitly specified because Shakapacker wants to keep Gemfile and package.json in sync
-gem 'shakapacker', '7.2.1'
+gem 'shakapacker', '7.2.2'
 gem 'json-schema'
 gem 'translighterate'
 gem 'enum_help'
@@ -104,6 +105,7 @@ gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
+gem 'slack-ruby-client'
 
 group :development, :test do
   gem 'spring'
@@ -114,7 +116,7 @@ group :development, :test do
   gem 'capybara-screenshot'
 
   gem 'byebug'
-  gem 'i18n-tasks'
+  gem 'i18n-tasks', github: 'glebm/i18n-tasks'
   gem 'i18n-spec'
 
   # We may be able to remove this when a future version of bundler comes out.
@@ -150,4 +152,5 @@ end
 group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
+  gem 'wkhtmltopdf-binary-ng'
 end

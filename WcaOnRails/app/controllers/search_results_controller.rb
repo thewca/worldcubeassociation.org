@@ -6,6 +6,10 @@ class SearchResultsController < ApplicationController
 
   def index
     @omni_query = params[:q]&.slice(0...SEARCH_QUERY_LIMIT)
+
+    # strict sanitization to prevent injecting any HTML tags at all
+    @omni_query = sanitize(@omni_query, tags: [], attributes: [])
+
     if @omni_query.present?
       @competitions = Competition.search(@omni_query).page(params[:competitions_page]).per(SEARCH_RESULT_LIMIT)
       @persons = User.search(@omni_query, params: { persons_table: true }).page(params[:people_page]).per(SEARCH_RESULT_LIMIT)

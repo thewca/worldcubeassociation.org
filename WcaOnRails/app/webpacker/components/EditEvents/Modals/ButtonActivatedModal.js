@@ -73,8 +73,7 @@ export default function ButtonActivatedModal({
         disabled={disabled}
         {...triggerButtonProps}
         size="small"
-        className="editable-text-button"
-        >
+      >
         {trigger}
       </Button>
     </span>
@@ -94,8 +93,10 @@ export default function ButtonActivatedModal({
       {...props}
     >
       <Modal.Header>{title}</Modal.Header>
-      <Modal.Content>
-        {children}
+      <Modal.Content scrolling>
+        <Modal.Description>
+          {children}
+        </Modal.Description>
       </Modal.Content>
       <Modal.Actions>
         <Button color="orange" type="button" onClick={onClose}>Close</Button>

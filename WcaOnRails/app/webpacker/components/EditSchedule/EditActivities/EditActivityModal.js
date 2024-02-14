@@ -32,8 +32,9 @@ function EditActivityModal({
   activity,
   startLuxon,
   endLuxon,
-  onModalClose,
   dateLocale,
+  onModalClose,
+  onModalSave,
 }) {
   const [activityCode, setActivityCode] = useInputState();
   const [activityName, setActivityName] = useInputState();
@@ -55,6 +56,12 @@ function EditActivityModal({
     setActivityCode(activity?.activityCode);
     setActivityName(activity?.name);
   }, [activity, setActivityCode, setActivityName]);
+
+  const closeModalAndCleanUp = () => {
+    onModalClose();
+    setActivityCode(undefined);
+    setActivityName(undefined);
+  };
 
   return (
     <Modal
@@ -95,13 +102,16 @@ function EditActivityModal({
           icon="save"
           content="Save"
           positive
-          onClick={() => onModalClose(true, { activityCode, activityName })}
+          onClick={() => {
+            onModalSave({ activityCode, activityName });
+            closeModalAndCleanUp();
+          }}
         />
         <Button
           icon="cancel"
           content="Cancel"
           negative
-          onClick={() => onModalClose(false, { activityCode, activityName })}
+          onClick={closeModalAndCleanUp}
         />
       </Modal.Actions>
     </Modal>

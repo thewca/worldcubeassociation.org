@@ -66,11 +66,7 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
   return (
     <ButtonActivatedModal
       trigger={Trigger}
-      triggerButtonProps={{
-        style: {
-          padding: '0.5em 1em',
-        },
-      }}
+      triggerButtonProps={{ name: 'cutoff' }}
       title={Title}
       reset={reset}
       onOk={handleOk}

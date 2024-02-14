@@ -33,6 +33,17 @@
 
     <% if competition.results_posted? %>
       <%= competition.competitors.count %>
+    <% elsif competition.results_submitted? %>
+      <% inbox_count = competition.inbox_persons.count %>
+      <% wca_live_count = competition.rounds.flat_map(&:round_results).map(&:person_id).uniq.count %>
+
+      <% if inbox_count > 0 %>
+        <%= inbox_count %> (tentative)
+      <% elsif wca_live_count > 0 %>
+        <%= wca_live_count %> (tentative)
+      <% else %>
+        Unknown.
+      <% end %>
     <% else %>
       Unknown, results are not posted yet.
     <% end %>

@@ -3,6 +3,7 @@ version: "3.8"
 x-app: &app
   build:
     context: WcaOnRails
+    dockerfile: Dockerfile.dev
   working_dir: /app/WcaOnRails
   volumes:
     - .:/app

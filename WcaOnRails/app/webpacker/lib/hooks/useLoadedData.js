@@ -1,4 +1,9 @@
-import { useState, useEffect, useCallback } from 'react';
+import {
+  useState,
+  useEffect,
+  useCallback,
+} from 'react';
+
 import { fetchJsonOrError } from '../requests/fetchWithAuthenticityToken';
 
 // This is a hook that can be used to get a data from the website (as json)
@@ -8,19 +13,23 @@ import { fetchJsonOrError } from '../requests/fetchWithAuthenticityToken';
 const useLoadedData = (url) => {
   const [data, setData] = useState(null);
   const [headers, setHeaders] = useState(new Headers());
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const [loading, setLoading] = useState(true);
 
   const sync = useCallback(() => {
     setLoading(true);
+
+    setHeaders(new Headers());
     setError(null);
+
     fetchJsonOrError(url).then((response) => {
       setData(response.data);
       setHeaders(response.headers);
     }).catch((err) => {
       setError(err.message);
     }).finally(() => setLoading(false));
-  }, [url, setData, setError]);
+  }, [url, setLoading, setData, setHeaders, setError]);
 
   useEffect(sync, [sync]);
 

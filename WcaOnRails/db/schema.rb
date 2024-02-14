@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_01_12_161627) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_03_180115) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -613,6 +613,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_12_161627) do
     t.index ["organizer_id"], name: "index_competition_organizers_on_organizer_id"
   end
 
+  create_table "competition_payment_integrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "connected_account_type", null: false
+    t.bigint "connected_account_id", null: false
+    t.string "competition_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["competition_id"], name: "index_competition_payment_integrations_on_competition_id"
+    t.index ["connected_account_type", "connected_account_id"], name: "index_competition_payment_integrations_on_connected_account"
+  end
+
   create_table "competition_series", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "wcif_id", null: false
     t.string "name"
@@ -641,6 +651,15 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_12_161627) do
     t.string "country_iso2", null: false
     t.index ["competition_id", "wcif_id"], name: "index_competition_venues_on_competition_id_and_wcif_id", unique: true
     t.index ["competition_id"], name: "index_competition_venues_on_competition_id"
+  end
+
+  create_table "connected_paypal_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "paypal_merchant_id"
+    t.string "permissions_granted"
+    t.string "account_status"
+    t.string "consent_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "country_bands", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -790,6 +809,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_12_161627) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
+  create_table "oauth_openid_requests", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "access_grant_id", null: false
+    t.string "nonce", null: false
+    t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
+  end
+
   create_table "poll_options", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "description", limit: 200, null: false
     t.integer "poll_id", null: false
@@ -896,6 +921,16 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_12_161627) do
     t.boolean "is_competing", default: true
     t.text "administrative_notes"
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
+  end
+
+  create_table "roles_metadata_delegate_regions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status"
+    t.string "location"
+    t.date "first_delegated"
+    t.date "last_delegated"
+    t.integer "total_delegated"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "rounds", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1193,6 +1228,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_01_12_161627) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"

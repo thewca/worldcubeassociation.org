@@ -11,7 +11,7 @@ export default function CouncilLeaders() {
   const [editCouncil, setEditCouncil] = useState();
   const councilsFetch = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils));
   const councilLeadersFetch = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.councils, {
+    apiV0Urls.userRoles.listOfGroupType(groupTypes.councils, 'groupName', {
       status: councilsStatus.leader,
       isActive: true,
     }),
