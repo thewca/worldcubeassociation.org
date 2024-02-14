@@ -18,14 +18,13 @@ jobs:
           reaction: rocket
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Get ref from pr
-        id: comment-branch
-        uses: xt0rted/pull-request-comment-branch@v2
-        if: steps.trigger-deployment.outputs.triggered == 'true'
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        with:
-          ref: ${{ steps.comment-branch.outputs.head_ref }}
+      - name: Checkout `master` branch
+        uses: actions/checkout@v4
+      - name: Switch to PR branch
+        run: gh pr checkout $PR_NUMBER
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_NUMBER: ${{ github.event.issue.number }}
         if: steps.trigger-deployment.outputs.triggered == 'true'
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v2
