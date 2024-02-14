@@ -1467,6 +1467,41 @@ RSpec.describe Competition do
       end
     end
 
+    describe '#stripe_connected?' do
+      it 'returns true when stripe is connected' do
+        competition = FactoryBot.create(:competition, :stripe_connected)
+        expect(competition.stripe_connected?).to eq(true)
+      end
+
+      it 'returns false when paypal is connected' do
+        competition = FactoryBot.create(:competition, :paypal_connected)
+        expect(competition.stripe_connected?).to eq(false)
+      end
+
+      it 'returns false when no integrations are connected' do
+        competition = FactoryBot.create(:competition)
+        expect(competition.stripe_connected?).to eq(false)
+      end
+    end
+
+    describe '#paypal_connected?' do
+      it 'returns false when stripe is connected' do
+        competition = FactoryBot.create(:competition, :stripe_connected)
+        expect(competition.paypal_connected?).to eq(false)
+      end
+
+      it 'returns true when paypal is connected' do
+        competition = FactoryBot.create(:competition, :paypal_connected)
+        expect(competition.paypal_connected?).to eq(true)
+      end
+
+      it 'returns false when no integrations are connected' do
+        competition = FactoryBot.create(:competition)
+        expect(competition.paypal_connected?).to eq(false)
+      end
+
+    end
+
     describe '#disconnect' do
       it 'disconnects a stripe payment integration' do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected)
@@ -1486,16 +1521,16 @@ RSpec.describe Competition do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
 
         competition.disconnect_payment_integration(:paypal)
-        expect(CompetitionPaymentIntegration.paypal_connected?(competition)).to eq(false)
-        expect(CompetitionPaymentIntegration.stripe_connected?(competition)).to eq(true)
+        expect(competition.paypal_connected?).to eq(false)
+        expect(competition.stripe_connected?).to eq(true)
       end
 
       it 'disconnecting stripe leaves paypal connected' do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, :stripe_connected)
 
         competition.disconnect_payment_integration(:stripe)
-        expect(CompetitionPaymentIntegration.paypal_connected?(competition)).to eq(true)
-        expect(CompetitionPaymentIntegration.stripe_connected?(competition)).to eq(false)
+        expect(competition.paypal_connected?).to eq(true)
+        expect(competition.stripe_connected?).to eq(false)
       end
 
       it 'fails silently on a competition with no payment integrations' do
@@ -1508,8 +1543,8 @@ RSpec.describe Competition do
     describe '#disconnect_all' do
       it 'disconnects both integrations on a comp with two integrations' do
         competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
-        expect(CompetitionPaymentIntegration.paypal_connected?(competition)).to eq(true)
-        expect(CompetitionPaymentIntegration.stripe_connected?(competition)).to eq(true)
+        expect(competition.paypal_connected?).to eq(true)
+        expect(competition.stripe_connected?).to eq(true)
 
         competition.disconnect_all_payment_integrations
         expect(competition.competition_payment_integrations).to eq([])

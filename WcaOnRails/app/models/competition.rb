@@ -2409,6 +2409,14 @@ class Competition < ApplicationRecord
     competition_payment_integrations.exists?
   end
 
+  def stripe_connected?
+    competition_payment_integrations.stripe.exists?
+  end
+
+  def paypal_connected?
+    competition_payment_integrations.paypal.exists?
+  end
+
   def payment_account_for(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 

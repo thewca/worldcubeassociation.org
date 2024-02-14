@@ -14,14 +14,6 @@ class CompetitionPaymentIntegration < ApplicationRecord
   scope :paypal, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:paypal]) }
   scope :stripe, -> { where(connected_account_type: AVAILABLE_INTEGRATIONS[:stripe]) }
 
-  def self.paypal_connected?(competition)
-    competition.competition_payment_integrations.paypal.exists?
-  end
-
-  def self.stripe_connected?(competition)
-    competition.competition_payment_integrations.stripe.exists?
-  end
-
   def self.validate_integration_name!(integration_name)
     raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
       AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
