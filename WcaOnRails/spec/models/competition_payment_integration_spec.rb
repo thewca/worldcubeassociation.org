@@ -2,6 +2,7 @@
 
 require 'rails_helper'
 
+# TODO: Add tests for other competition_payment_integration functions
 RSpec.describe Competition do
   describe '#disconnect' do
     it 'disconnects a stripe payment integration' do
@@ -37,7 +38,7 @@ RSpec.describe Competition do
     it 'fails silently on a competition with no payment integrations' do
       competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed)
 
-      expect{ CompetitionPaymentIntegration.disconnect(competition, :stripe) }.not_to raise_error
+      expect { CompetitionPaymentIntegration.disconnect(competition, :stripe) }.not_to raise_error
     end
   end
 
@@ -49,6 +50,12 @@ RSpec.describe Competition do
 
       CompetitionPaymentIntegration.disconnect_all(competition)
       expect(competition.competition_payment_integrations).to eq([])
+    end
+
+    it 'fails silently on a competition with no payment integrations' do
+      competition = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed)
+
+      expect { CompetitionPaymentIntegration.disconnect_all(competition) }.not_to raise_error
     end
   end
 end
