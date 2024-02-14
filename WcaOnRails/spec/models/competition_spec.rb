@@ -1426,4 +1426,23 @@ RSpec.describe Competition do
       end
     end
   end
+
+  context "payment integration methods" do
+    describe "#payment_integration_for" do
+      it 'returns the connected stripe account' do
+        competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
+        expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')
+      end
+
+      it 'returns the connected paypal account' do
+        competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
+        expect(competition.payment_account_for(:paypal).paypal_merchant_id).to eq('95XC2UKUP2CFW')
+      end
+
+      it 'returns nil if no matching account is found' do
+        competition = FactoryBot.create(:competition)
+        expect(competition.payment_account_for(:paypal)).to eq(nil)
+      end
+    end
+  end
 end

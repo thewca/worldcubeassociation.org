@@ -507,7 +507,7 @@ class Competition < ApplicationRecord
         warnings = championship_warnings.merge(warnings)
       end
 
-      if has_fees? && !CompetitionPaymentIntegration.stripe_connected?(self) && !CompetitionPaymentIntegration.paypal_connected?(self)
+      if has_fees? && !competition_payment_integrations.exists?
         warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info')
       end
     end
@@ -2403,6 +2403,25 @@ class Competition < ApplicationRecord
     competition_series.set_form_data(form_data_series)
 
     self.competition_series = competition_series
+  end
+
+  def payment_account_for(integration_name)
+    validate_integration_name!(integration_name)
+
+    payment_integrations = competition_payment_integrations.where(
+      connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
+    )
+
+    return nil unless payment_integrations.count > 0
+
+    # Take the first result as `where` always returns an array
+    payment_integrations.first.connected_account
+  end
+
+  private def validate_integration_name!(integration_name)
+    unless CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
+      raise ArgumentError.new( "Invalid integration name. Allowed values are: #{CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys.join(', ')}")
+    end
   end
 
   def self.form_data_json_schema

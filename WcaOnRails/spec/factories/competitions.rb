@@ -177,13 +177,13 @@ FactoryBot.define do
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
 
       transient do
-        stripe_account_id { "acct_19ZQVmE2qoiROdto" }
+        stripe_account_id { 'acct_19ZQVmE2qoiROdto' }
       end
     end
 
     trait :paypal_connected do
       transient do
-        paypal_merchant_id { "95XC2UKUP2CFW" }
+        paypal_merchant_id { '95XC2UKUP2CFW' }
       end
     end
 

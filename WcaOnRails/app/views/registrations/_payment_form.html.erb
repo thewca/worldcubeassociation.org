@@ -53,9 +53,8 @@
 
     const stripe = Stripe('<%= AppSecrets.STRIPE_PUBLISHABLE_KEY %>', {
       locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
-      stripeAccount: '<%= CompetitionPaymentIntegration.account_for(@competition, :stripe).account_id %>',
+      stripeAccount: '<%= competition.payment_account_for(:stripe).account_id %>',
     });
-    console.log('<%= CompetitionPaymentIntegration.account_for(@competition, :stripe).account_id %>')
 
     // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)
     // as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment
