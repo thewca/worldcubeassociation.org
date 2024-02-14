@@ -22,22 +22,7 @@ class CompetitionPaymentIntegration < ApplicationRecord
     competition.competition_payment_integrations.stripe.exists?
   end
 
-  # TODO: Add tests for case where integration isn't found
-  def self.disconnect(competition, integration_name)
-    validate_integration_name!(integration_name)
-    competition.competition_payment_integrations.destroy_by(connected_account_type: AVAILABLE_INTEGRATIONS[integration_name])
-  end
-
-  def self.disconnect_all(competition)
-    competition.competition_payment_integrations.destroy_all
-  end
-
-  def set_as_inactive
-    self.integration_active = false
-    save
-  end
-
-  private_class_method def self.validate_integration_name!(integration_name)
+  def self.validate_integration_name!(integration_name)
     raise ArgumentError.new("Invalid integration name. Allowed values are: #{AVAILABLE_INTEGRATIONS.keys.join(', ')}") unless
       AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
   end

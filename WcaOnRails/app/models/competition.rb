@@ -2410,7 +2410,7 @@ class Competition < ApplicationRecord
   end
 
   def payment_account_for(integration_name)
-    validate_integration_name!(integration_name)
+    CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
     payment_integrations = competition_payment_integrations.where(
       connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
@@ -2422,10 +2422,14 @@ class Competition < ApplicationRecord
     payment_integrations.first.connected_account
   end
 
-  private def validate_integration_name!(integration_name)
-    unless CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
-      raise ArgumentError.new( "Invalid integration name. Allowed values are: #{CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys.join(', ')}")
-    end
+  def disconnect_payment_integration(integration_name)
+    CompetitionPaymentIntegration.validate_integration_name!(integration_name)
+    competition_payment_integrations.destroy_by(connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name])
+  end
+
+  def disconnect_all_payment_integrations
+    competition_payment_integrations.destroy_all
+  end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
   def self.date_json_schema(string_format)
@@ -2439,7 +2443,6 @@ class Competition < ApplicationRecord
         { "type" => "string", "maxLength" => 0 },
       ],
     }
-
   end
 
   def self.form_data_json_schema
