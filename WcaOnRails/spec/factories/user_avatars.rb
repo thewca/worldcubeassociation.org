@@ -10,9 +10,7 @@ FactoryBot.define do
     thumbnail_crop_h { 100 }
     backend { 'local' }
 
-    transient do
-      user { FactoryBot.create(:user) }
-    end
+    user { FactoryBot.create(:user) }
 
     trait :pending do
       status { 'pending' }
