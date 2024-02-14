@@ -341,6 +341,11 @@ class User < ApplicationRecord
     user_avatars.not_pending.order(created_at: :desc)
   end
 
+  # Convenience method for Discord SSO, because we need to maintain backwards compatibility
+  def avatar_url
+    avatar.url
+  end
+
   validates :region_id, presence: true, if: -> { delegate_status.present? }
 
   # This method was copied and overridden from https://github.com/plataformatec/devise/blob/master/lib/devise/models/confirmable.rb#L182
