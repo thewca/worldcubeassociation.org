@@ -200,6 +200,18 @@ FactoryBot.define do
       otp_secret { User.generate_otp_secret }
     end
 
+    trait :with_avatar do
+      after(:create) do |user|
+        current_avatar { FactoryBot.create(:user_avatar, user: user) }
+      end
+    end
+
+    trait :with_pending_avatar do
+      after(:create) do |user|
+        current_avatar { FactoryBot.create(:user_avatar, :pending, user: user) }
+      end
+    end
+
     wca_id { person&.wca_id }
 
     after(:build) do |user|
