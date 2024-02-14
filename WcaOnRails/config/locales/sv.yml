@@ -2929,8 +2929,9 @@ sv:
           main_event_id: Huvudgren
         #original_hash: d7020f4
         remarks: Kommentarer
-        #original_hash: c305010
-        clone_tabs: Jag vill även klona alla flikar med ytterligare information
+        cloning:
+          #original_hash: c305010
+          clone_tabs: Jag vill även klona alla flikar med ytterligare information
       hints:
         admin:
           #original_hash: da39a3e
@@ -3161,8 +3162,9 @@ sv:
           Ytterligare information du vill skicka med till WCAT. Till exempel om
           det är något du är osäker på , eller om det finns speciella önskemål
           till WCAT. Vänligen fyll i detta på engelska!
-        #original_hash: da39a3e
-        clone_tabs: ''
+        cloning:
+          #original_hash: da39a3e
+          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
