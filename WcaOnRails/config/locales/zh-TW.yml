@@ -2011,14 +2011,6 @@ zh-TW:
       not_confirmed_visible: 這場比賽尚未確認但已經公開了。
       #original_hash: b299b27
       not_confirmed_not_visible: 這場比賽尚未確認且尚未公開。
-      #original_hash: a821396
-      stripe_connected: 您已經成功將您的Stripe帳號綁定，您現在可以收取這場比賽的報名費了。
-      #original_hash: b8fc60f
-      stripe_disconnected_success: 已成功解除Stripe帳號的連結
-      #original_hash: e1a250c
-      stripe_disconnected_failure: 在移除Stripe帳戶連結時出現了錯誤。
-      #original_hash: 0a4bb53
-      stripe_not_connected: 發生了一些問題，我們無法將您的Stripe帳號綁定。
       #original_hash: 1b92d16
       championship_exists: '%{year}已經有%{championship_type}了'
       #original_hash: 0644bdc
@@ -2871,10 +2863,6 @@ zh-TW:
     user_preferences: 使用者偏好
     #original_hash: 089cbfd
     receive_registration_emails: 當有人報名比賽時，用電子郵件通知我
-    #original_hash: 1ae594d
-    stripe_disconnect: 解除Stripe帳號連結
-    #original_hash: 9ca8e2c
-    stripe_disconnect_confirm: 您確定要解除Stripe帳號的連結嗎？此動作無法復原。
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 注意：報名已經結束。
     show:
@@ -3168,6 +3156,55 @@ zh-TW:
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: 將WCA帳號與WCA ID綁定！
+  payments:
+    payment_providers:
+      #original_hash: 559ef55
+      paypal: PayPal
+      #original_hash: 4d08ec5
+      stripe: Stripe
+    payment_setup:
+      #original_hash: 69b243c
+      stripe_dashboard: Stripe儀表板
+      #original_hash: e621d96
+      account_connected: '您已經成功連結您的 %{provider} 帳號，現在開始可以開始接受這場比賽的報名費用。'
+      #original_hash: 18d1326
+      account_disconnected_success: '成功解除 %{provider} 帳號的連結。'
+      #original_hash: 6b934e2
+      account_disconnected_failure: '在解除 %{provider} 帳號時發生錯誤。'
+      #original_hash: 340bba4
+      account_not_connected: '發生了問題，我們無法連結您的 %{provider} 帳戶。'
+      #original_hash: 4218676
+      disconnect_account: '解除 %{provider} 帳號連結'
+      #original_hash: 59c9c9c
+      confirm_account_disconnect: '您確定要解除 %{provider} 帳號的連結嗎? 解除後就無法回復。'
+      #original_hash: 0be9f82
+      supported_currency_warning: 請確認您選的付款方式可以使用您選的貨幣。可選的貨幣是根據您帳號所在的國家，您可以在這邊確認：
+      #original_hash: 9711365
+      supported_currencies: '%{provider} 支援的貨幣'
+      #original_hash: 1e6571f
+      provider_heading: '%{provider} 付款方式'
+      #original_hash: 40a098a
+      accept_payments_header: 接受報名付款
+      #original_hash: 7ebe178
+      connect_button: '和 %{provider} 連結'
+      #original_hash: f3fdb64
+      stripe_payment_info: >-
+        您需要按下面的按鈕來讓您的Stripe帳號跟WCA的Stripe帳號連結，以此來接收這個比賽的付款。如果您沒有Stripe的帳號，您仍然可以按下這個按鈕，它會告訴您接下來怎麼做。
+      #original_hash: 53adda3
+      stripe_connect_warning: 連結Stripe帳號到WCA網站能讓您作變更以及直接退款到您的Stripe帳號。
+      #original_hash: 9ea95c2
+      stripe_disconnect_info: >-
+        這場比賽設定成使用Stripe接受款項。如果您想要解除Stripe帳號的連結，您應該從您的Strip控制中心解除（連結在底下）。請注意這將會讓所有比賽都跟您的帳號解除連結。在新的Stripe帳號能連結以前，比賽的代表必須跟WCAT聯絡來清除帳號資訊。
+      #original_hash: d4a360b
+      stripe_disconnect_warning: 請記得應該只有在特別的情形下才解除帳號連結，例如現在的帳號無法接收款項。
+      #original_hash: 0af9795
+      paypal_payment_info: 需要一個PayPal商業帳號才能從比賽頁面中接受PayPal款項。如果您還沒有PayPal商業帳號，您可以按下面的按鈕，它會告訴您接下來怎麼做。
+      #original_hash: d327396
+      paypal_connect_warning: 連結PayPal帳號能讓WCA網站引導付款內容給您，也能直接從PayPal帳號處理退款。
+      #original_hash: eb05726
+      paypal_disconnect_info: 這場比賽設定成使用PayPal接受款項。請注意在這邊解除連結不會取消您給予WCA的使用授權，取消使用授權必須要從您的PayPal帳戶中執行。
+      #original_hash: c186753
+      paypal_disconnect_warning: 請記得應該只有在特別的情形下才做這些帳號變更，例如現在的帳號無法接收款項。
   persons:
     index:
       #original_hash: 5934b4c
@@ -3482,7 +3519,7 @@ zh-TW:
       #original_hash: 24c87db
       donate_credit: 用信用卡捐款
       #original_hash: 0e5a9c3
-      donate_paypal: 用Paypal捐款
+      donate_paypal: 用PayPal捐款
       #original_hash: 96d77f3
       donate_other: 其他方式的協助
     structure:

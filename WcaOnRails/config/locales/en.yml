@@ -1534,7 +1534,8 @@ en:
             per_registration_limit: "Events per registration limit"
           main_event_id: "Main event"
         remarks: "Remarks"
-        clone_tabs: "I would like to clone all tabs with additional information as well"
+        cloning:
+          clone_tabs: "I would like to clone all tabs with additional information as well"
       #context: for a competition
       hints:
         admin:
@@ -1614,7 +1615,8 @@ en:
             per_registration_limit: "Optionally enforce the total number of events a competitor can register for (commonly used for \"Favorites\" competitions). You should add events before using this field. Registrations with too many events will be blocked. Leave blank if there is no limit."
           main_event_id: "The winner of this event will be the winner of the competition."
         remarks: "Some additional information you want to pass on to the WCAT. For example, if there is something you are uncertain about, or if there are any special requests for the WCAT. Please fill this out in English!"
-        clone_tabs: ""
+        cloning:
+          clone_tabs: ""
       choices:
         #context: about guests
         guests_enabled:
