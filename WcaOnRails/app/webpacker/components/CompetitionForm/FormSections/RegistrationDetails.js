@@ -42,7 +42,7 @@ export default function RegistrationDetails() {
       <ConditionalSection showIf={guestsRestricted}>
         <InputNumber id="guestsPerRegistration" required={guestsRestricted} />
       </ConditionalSection>
-      <InputMarkdown id="extraRequirements" required />
+      <InputMarkdown id="extraRequirements" />
       <InputBoolean id="forceComment" />
     </SubSection>
   );

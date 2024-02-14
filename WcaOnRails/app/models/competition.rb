@@ -2135,9 +2135,9 @@ class Competition < ApplicationRecord
         "reason" => competitor_limit_reason,
       },
       "staff" => {
-        "staffDelegateIds" => staff_delegates.pluck(:id),
-        "traineeDelegateIds" => trainee_delegates.pluck(:id),
-        "organizerIds" => organizers.pluck(:id),
+        "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
+        "traineeDelegateIds" => trainee_delegates.to_a.pluck(:id),
+        "organizerIds" => organizers.to_a.pluck(:id),
         "contact" => contact,
       },
       "championships" => championships.map(&:championship_type),
@@ -2345,15 +2345,15 @@ class Competition < ApplicationRecord
       organizer_ids: form_data.dig('staff', 'organizerIds')&.join(','),
       contact: form_data.dig('staff', 'contact'),
       remarks: form_data['remarks'],
-      registration_open: form_data.dig('registration', 'openingDateTime'),
-      registration_close: form_data.dig('registration', 'closingDateTime'),
+      registration_open: form_data.dig('registration', 'openingDateTime')&.presence,
+      registration_close: form_data.dig('registration', 'closingDateTime')&.presence,
       use_wca_registration: form_data.dig('website', 'usesWcaRegistration'),
       guests_enabled: form_data.dig('registration', 'guestsEnabled'),
       generate_website: form_data.dig('website', 'generateWebsite'),
       base_entry_fee_lowest_denomination: form_data.dig('entryFees', 'baseEntryFee'),
       currency_code: form_data.dig('entryFees', 'currencyCode'),
-      start_date: form_data['startDate'],
-      end_date: form_data['endDate'],
+      start_date: form_data['startDate']&.presence,
+      end_date: form_data['endDate']&.presence,
       enable_donations: form_data.dig('entryFees', 'donationsEnabled'),
       competitor_limit_enabled: form_data.dig('competitorLimit', 'enabled'),
       competitor_limit: form_data.dig('competitorLimit', 'count'),
@@ -2362,7 +2362,7 @@ class Competition < ApplicationRecord
       on_the_spot_registration: form_data.dig('registration', 'allowOnTheSpot'),
       on_the_spot_entry_fee_lowest_denomination: form_data.dig('entryFees', 'onTheSpotEntryFee'),
       refund_policy_percent: form_data.dig('entryFees', 'refundPolicyPercent'),
-      refund_policy_limit_date: form_data.dig('entryFees', 'refundPolicyLimitDate'),
+      refund_policy_limit_date: form_data.dig('entryFees', 'refundPolicyLimitDate')&.presence,
       guests_entry_fee_lowest_denomination: form_data.dig('entryFees', 'guestEntryFee'),
       early_puzzle_submission: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'enabled'),
       early_puzzle_submission_reason: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'reason'),
@@ -2373,8 +2373,8 @@ class Competition < ApplicationRecord
       event_restrictions: form_data.dig('eventRestrictions', 'eventLimitation', 'enabled'),
       event_restrictions_reason: form_data.dig('eventRestrictions', 'eventLimitation', 'reason'),
       main_event_id: form_data.dig('eventRestrictions', 'mainEventId'),
-      waiting_list_deadline_date: form_data.dig('registration', 'waitingListDeadlineDate'),
-      event_change_deadline_date: form_data.dig('registration', 'eventChangeDeadlineDate'),
+      waiting_list_deadline_date: form_data.dig('registration', 'waitingListDeadlineDate')&.presence,
+      event_change_deadline_date: form_data.dig('registration', 'eventChangeDeadlineDate')&.presence,
       guest_entry_status: form_data.dig('registration', 'guestEntryStatus'),
       allow_registration_edits: form_data.dig('registration', 'allowSelfEdits'),
       allow_registration_self_delete_after_acceptance: form_data.dig('registration', 'allowSelfDeleteAfterAcceptance'),
@@ -2422,6 +2422,20 @@ class Competition < ApplicationRecord
     unless CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys.include?(integration_name)
       raise ArgumentError.new( "Invalid integration name. Allowed values are: #{CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys.join(', ')}")
     end
+
+  # Our React date picker unfortunately behaves weirdly in terms of backend data
+  def self.date_json_schema(string_format)
+    {
+      "anyOf" => [
+        # It can (and should) mostly be a "date" or "date-time" string
+        { "type" => "string", "format" => string_format },
+        # but when opening the page **and never touching it** it stays NULL
+        { "type" => "null" },
+        # and when opening and touching **but later deleting** a date it becomes an empty string instead of NULL
+        { "type" => "string", "maxLength" => 0 },
+      ],
+    }
+
   end
 
   def self.form_data_json_schema
@@ -2451,8 +2465,8 @@ class Competition < ApplicationRecord
             },
           },
         },
-        "startDate" => { "anyOf" => [{ "type" => "string", "format" => "date" }, { "type" => "null" }] },
-        "endDate" => { "anyOf" => [{ "type" => "string", "format" => "date" }, { "type" => "null" }] },
+        "startDate" => date_json_schema("date"),
+        "endDate" => date_json_schema("date"),
         "series" => CompetitionSeries.form_data_json_schema,
         "information" => { "type" => ["string", "null"] },
         "competitorLimit" => {
@@ -2514,16 +2528,16 @@ class Competition < ApplicationRecord
             "guestEntryFee" => { "type" => ["integer", "null"] },
             "donationsEnabled" => { "type" => ["boolean", "null"] },
             "refundPolicyPercent" => { "type" => ["integer", "null"] },
-            "refundPolicyLimitDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
+            "refundPolicyLimitDate" => date_json_schema("date-time"),
           },
         },
         "registration" => {
           "type" => "object",
           "properties" => {
-            "openingDateTime" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
-            "closingDateTime" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
-            "waitingListDeadlineDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
-            "eventChangeDeadlineDate" => { "anyOf" => [{ "type" => "string", "format" => "date-time" }, { "type" => "null" }] },
+            "openingDateTime" => date_json_schema("date-time"),
+            "closingDateTime" => date_json_schema("date-time"),
+            "waitingListDeadlineDate" => date_json_schema("date-time"),
+            "eventChangeDeadlineDate" => date_json_schema("date-time"),
             "allowOnTheSpot" => { "type" => ["boolean", "null"] },
             "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
             "allowSelfEdits" => { "type" => "boolean" },

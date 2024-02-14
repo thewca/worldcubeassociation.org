@@ -6,4 +6,5 @@
   isAdminView: @competition_admin_view,
   isPersisted: @competition.persisted?,
   isSeriesPersisted: @competition.competition_series&.persisted? || false,
+  isCloning: @competition.being_cloned_from.present?,
 }) %>
