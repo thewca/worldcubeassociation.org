@@ -38,7 +38,7 @@ class User < ApplicationRecord
   has_one :wfc_dues_redirect, as: :redirect_source
   belongs_to :current_avatar, class_name: "UserAvatar", inverse_of: :current_user, optional: true
   belongs_to :pending_avatar, class_name: "UserAvatar", inverse_of: :pending_user, optional: true
-  has_many :user_avatars, dependent: :destroy
+  has_many :user_avatars, dependent: :destroy, inverse_of: :user
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
 
@@ -325,9 +325,10 @@ class User < ApplicationRecord
     if wca_id_change && wca_id.present?
       dummy_user = User.find_by(wca_id: wca_id, dummy_account: true)
       if dummy_user
-        dummy_user.user_avatars.each do |avatar|
-          avatar.update_attribute :user, self
-        end
+        self.user_avatars = dummy_user.user_avatars
+        # The `reload` is necessary because otherwise, the old pre-reload `user_avatars`
+        # association on `dummy_user` would pull the avatars to the grave.
+        dummy_user.user_avatars.reload
         dummy_user.destroy!
       end
     end

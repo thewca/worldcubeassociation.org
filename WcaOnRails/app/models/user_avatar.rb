@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class UserAvatar < ApplicationRecord
-  belongs_to :user, touch: true
+  belongs_to :user, touch: true, inverse_of: :user_avatars
 
-  has_one :current_user, class_name: "User", foreign_key: :current_avatar_id, dependent: :nullify
-  has_one :pending_user, class_name: "User", foreign_key: :pending_avatar_id, dependent: :nullify
+  has_one :current_user, class_name: "User", foreign_key: :current_avatar_id, inverse_of: :current_avatar, dependent: :nullify
+  has_one :pending_user, class_name: "User", foreign_key: :pending_avatar_id, inverse_of: :pending_avatar, dependent: :nullify
 
   belongs_to :approved_by_user, class_name: "User", foreign_key: :approved_by, optional: true
   belongs_to :revoked_by_user, class_name: "User", foreign_key: :revoked_by, optional: true
@@ -77,6 +77,18 @@ class UserAvatar < ApplicationRecord
       # We un-approved (deleted OR rejected) an old avatar. Take the previously public file and make it private.
       self.private_image.attach(self.public_image.blob)
       self.public_image.purge_later
+    end
+  end
+
+  after_save :add_user_associations,
+             if: :user_previously_changed?,
+             unless: :destroyed?
+
+  def add_user_associations
+    if self.status == UserAvatar.statuses[:pending]
+      user.update_attribute(:pending_avatar, self)
+    elsif self.status == UserAvatar.statuses[:approved]
+      user.update_attribute(:current_avatar, self)
     end
   end
 

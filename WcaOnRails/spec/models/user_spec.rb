@@ -170,15 +170,10 @@ RSpec.describe User, type: :model do
       dummy_avatar = FactoryBot.create(
         :user_avatar,
         user: dummy_user,
-        thumbnail_crop_x: 40,
-        thumbnail_crop_y: 40,
-        thumbnail_crop_w: 40,
-        thumbnail_crop_h: 40
       )
       expect(dummy_avatar).to be_valid
       dummy_user.update!(current_avatar: dummy_avatar)
       expect(dummy_user.avatar.filename).to eq(dummy_avatar.filename)
-      expect(dummy_user.avatar.url).to eq(dummy_avatar.url)
 
       # Assigning a WCA ID to user should copy over the name from the Persons table.
       expect(user.name).to eq user.person.name
@@ -188,8 +183,7 @@ RSpec.describe User, type: :model do
 
       # Check that the dummy account was deleted, and we inherited its avatar.
       expect(User.find_by_id(dummy_user.id)).to be_nil
-      expect(user.reload.read_attribute(:avatar)).to eq avatar
-      expect(dummy_user.avatar.file.path).to eq("uploads/user/avatar/#{dummy_user.wca_id}/#{avatar}")
+      expect(user.reload.avatar).to eq dummy_avatar
     end
 
     it "does not allow duplicate WCA IDs" do
@@ -224,8 +218,10 @@ RSpec.describe User, type: :model do
 
   it "clearing avatar backfills nil on both fields" do
     user = FactoryBot.create :user_with_wca_id, :with_avatar, :with_pending_avatar
+    expect(user.current_avatar).not_to be_nil
     user.current_avatar.update!(status: 'deleted')
     expect(user.current_avatar).to be_nil
+    expect(user.pending_avatar).not_to be_nil
     user.pending_avatar.update!(status: 'deleted')
     expect(user.pending_avatar).to be_nil
   end

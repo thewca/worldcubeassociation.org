@@ -202,13 +202,13 @@ FactoryBot.define do
 
     trait :with_avatar do
       after(:create) do |user|
-        user.current_avatar = FactoryBot.create(:user_avatar, :pending, user: user)
+        FactoryBot.create(:user_avatar, user: user)
       end
     end
 
     trait :with_pending_avatar do
       after(:create) do |user|
-        user.pending_avatar = FactoryBot.create(:user_avatar, :pending, user: user)
+        FactoryBot.create(:user_avatar, :pending, user: user)
       end
     end
 
