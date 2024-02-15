@@ -2,7 +2,7 @@
 
 class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
   # We are using our own authentication method with vault
-  protect_from_forgery except: [:init]
+  protect_from_forgery except: [:init_stripe]
   def init_stripe
     attendee_id = params.require(:attendee_id)
     registration_service_user = params.require(:current_user)
