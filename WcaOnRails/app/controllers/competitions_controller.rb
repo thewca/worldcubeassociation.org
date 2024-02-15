@@ -323,7 +323,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competitions_payment_setup_path(@competition)
     end
 
-    @competition = competition_from_params
+    competition = competition_from_params
 
     account_reference = ConnectedPaypalAccount.new(
       paypal_merchant_id: params[:merchantIdInPayPal],
@@ -332,9 +332,9 @@ class CompetitionsController < ApplicationController
       consent_status: params[:consentStatus],
     )
 
-    @competition.competition_payment_integrations.new(connected_account: account_reference)
+    competition.competition_payment_integrations.new(connected_account: account_reference)
 
-    if @competition.save
+    if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
     else
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
@@ -345,20 +345,20 @@ class CompetitionsController < ApplicationController
 
   def stripe_connect
     code = params[:code]
-    @competition = Competition.find(params[:state])
-    unless current_user&.can_manage_competition?(@competition)
+    competition = Competition.find(params[:state])
+    unless current_user&.can_manage_competition?(competition)
       raise ActionController::RoutingError.new('Not Found')
     end
     client = create_stripe_oauth_client
     resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
     stripe_account = ConnectedStripeAccount.new(account_id: resp.params['stripe_user_id'])
-    @competition.competition_payment_integrations.new(connected_account: stripe_account)
-    if @competition.save
+    competition.competition_payment_integrations.new(connected_account: stripe_account)
+    if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.stripe'))
     else
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.stripe'))
     end
-    redirect_to competitions_payment_setup_path(@competition)
+    redirect_to competitions_payment_setup_path(competition)
   end
 
   private def create_stripe_oauth_client
@@ -398,7 +398,7 @@ class CompetitionsController < ApplicationController
     else
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
     end
-    redirect_to competitions_payment_setup_path(@competition)
+    redirect_to competitions_payment_setup_path(competition)
   end
 
   def clone_competition
