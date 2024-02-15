@@ -378,10 +378,10 @@ class CompetitionsController < ApplicationController
       return redirect_to root_url
     end
 
-    @competition = competition_from_params
-    CompetitionPaymentIntegration.disconnect(@competition, :paypal)
+    competition = competition_from_params
+    competition.disconnect_payment_integration(:paypal)
 
-    if CompetitionPaymentIntegration.paypal_connected?(@competition)
+    if competition.paypal_connected?
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
     else
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
@@ -390,10 +390,10 @@ class CompetitionsController < ApplicationController
   end
 
   def disconnect_stripe
-    @competition = competition_from_params
-    CompetitionPaymentIntegration.disconnect(@competition, :stripe)
+    competition = competition_from_params
+    competition.disconnect_payment_integration(:stripe)
 
-    if CompetitionPaymentIntegration.stripe_connected?(@competition)
+    competition.stripe_connected?
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
     else
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
