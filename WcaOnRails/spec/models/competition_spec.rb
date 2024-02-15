@@ -1499,7 +1499,6 @@ RSpec.describe Competition do
         competition = FactoryBot.create(:competition)
         expect(competition.paypal_connected?).to eq(false)
       end
-
     end
 
     describe '#disconnect' do
