@@ -60,7 +60,7 @@
   <br>
 <% end %>
 
-<% if @competition.using_payment_integrations?%>
+<% if @competition.using_payment_integrations? %>
   <% if show_links_to_register_page %>
     <%= t('competitions.competition_info.use_stripe_link_html', here: link_to(t('common.here'), competition_register_path(@competition))) %>
     <br>
