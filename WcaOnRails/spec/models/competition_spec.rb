@@ -1428,7 +1428,7 @@ RSpec.describe Competition do
   end
 
   context "payment integration methods" do
-    describe "#payment_integration_for" do
+    describe "#payment_account_for" do
       it 'returns the connected stripe account' do
         competition = FactoryBot.create(:competition, :stripe_connected, :paypal_connected)
         expect(competition.payment_account_for(:stripe).account_id).to eq('acct_19ZQVmE2qoiROdto')

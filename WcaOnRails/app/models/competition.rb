@@ -2420,18 +2420,9 @@ class Competition < ApplicationRecord
   def payment_account_for(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
-    competition_payment_integrations.first(
+    competition_payment_integrations.find_by(
       connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
     )&.connected_account
-
-    # payment_integrations = competition_payment_integrations.where(
-    #   connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
-    # )
-
-    # return nil unless payment_integrations.count > 0
-
-    # # Take the first result as `where` always returns an array
-    # payment_integrations.first.connected_account
   end
 
   def disconnect_payment_integration(integration_name)
