@@ -1163,7 +1163,7 @@ en:
         payment_information: "Payment information"
         payment_button: "Pay your fees with Stripe"
         ajax_error: "WCA server error"
-        stripe_error: "Stripe error"
+        payment_service_error: "Payment service error"
         subtotal: "Subtotal"
       alerts:
         not_a_number: "Please enter a valid amount."

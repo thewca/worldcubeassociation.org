@@ -318,12 +318,12 @@ class CompetitionsController < ApplicationController
   end
 
   def paypal_return
+    competition = competition_from_params
+
     if Rails.env.production?
       flash[:error] = 'PayPal is not yet available in production environments'
-      return redirect_to competitions_payment_setup_path(@competition)
+      return redirect_to competitions_payment_setup_path(competition)
     end
-
-    competition = competition_from_params
 
     account_reference = ConnectedPaypalAccount.new(
       paypal_merchant_id: params[:merchantIdInPayPal],
@@ -340,7 +340,7 @@ class CompetitionsController < ApplicationController
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
     end
 
-    redirect_to competitions_payment_setup_path(@competition)
+    redirect_to competitions_payment_setup_path(competition)
   end
 
   def stripe_connect
