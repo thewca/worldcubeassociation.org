@@ -1,6 +1,12 @@
 import { DateTime } from 'luxon';
 import { events } from '../../lib/wca-data.js.erb';
 
+// note: inconsistencies with previous search params
+// - year value was 'all+years', is now 'all_years'
+// - region value was the name, is now the 2-char code (for non-continents)
+// - delegate value was user id, is now the WCA id
+// - selected events key was 'event_ids' and they were not a list
+
 const DISPLAY_MODE = 'display';
 const TIME_ORDER = 'state';
 const YEAR = 'year';
