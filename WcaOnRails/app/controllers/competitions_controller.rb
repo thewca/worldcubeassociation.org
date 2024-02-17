@@ -859,15 +859,24 @@ class CompetitionsController < ApplicationController
   end
 
   def my_competitions
+    if Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?
+      registrations_v2 = Microservices::Registrations.registrations_by_user(current_user.id)
+    else
+      registrations_v2 = []
+    end
+
     ActiveRecord::Base.connected_to(role: :read_replica) do
       competition_ids = current_user.organized_competitions.pluck(:competition_id)
       competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
       registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
+      # Convert Registrations V2 to a format that the frontend can understand
+      registrations.concat(registrations_v2.map { |r| Microservices::Registrations.convert_registration(r) })
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
         [r.competition.id, r]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
+      competition_ids.concat(registrations_v2.pluck("competition_id"))
       if current_user.person
         competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
       end

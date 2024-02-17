@@ -15,6 +15,10 @@ module Microservices
       "/api/internal/v1/update_payment"
     end
 
+    def self.registrations_by_user_path(id)
+      "/api/internal/v1/users/#{id}/registrations"
+    end
+
     def self.registration_connection
       Faraday.new(
         url: EnvConfig.WCA_REGISTRATIONS_URL,
@@ -29,6 +33,15 @@ module Microservices
         # By default, it only logs the request method and URL, and the request/response headers.
         builder.response :logger
       end
+    end
+
+    def self.convert_registration(r)
+      OpenStruct.new(accepted?: r["status"] == "accepted", competition: OpenStruct.new(id: r["competition_id"]))
+    end
+
+    def self.registrations_by_user(user_id)
+      response = self.registration_connection.get(self.registrations_by_user_path(user_id))
+      response.body
     end
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
