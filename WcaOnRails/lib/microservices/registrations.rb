@@ -36,7 +36,7 @@ module Microservices
     end
 
     def self.convert_registration(r)
-      OpenStruct.new(accepted?: r["status"] == "accepted", competition: OpenStruct.new(id: r["competition_id"]))
+      OpenStruct.new(accepted?: r["status"] == "accepted", deleted?: r["status"] == "cancelled", competition: OpenStruct.new(id: r["competition_id"]))
     end
 
     def self.registrations_by_user(user_id)
