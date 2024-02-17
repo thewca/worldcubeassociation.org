@@ -7,8 +7,6 @@ class Format < ApplicationRecord
   has_many :preferred_formats
   has_many :events, through: :preferred_formats
 
-  scope :recommended, -> { where("ranking = 1") }
-
   def name
     I18n.t("formats.#{id}", default: self[:name])
   end
