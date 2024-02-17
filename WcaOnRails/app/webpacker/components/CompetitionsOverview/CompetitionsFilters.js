@@ -49,7 +49,7 @@ function CompetitionsFilters({
 
       <Form.Group>
         <Form.Field width={8}>
-          <DelegateSelector delegate={filterState.delegate} dispatchFilter={dispatchFilter} />
+          <DelegateSelector delegateId={filterState.delegate} dispatchFilter={dispatchFilter} />
         </Form.Field>
       </Form.Group>
 
@@ -162,7 +162,7 @@ function SearchBar({ text, dispatchFilter }) {
   );
 }
 
-function DelegateSelector({ delegate, dispatchFilter }) {
+function DelegateSelector({ delegateId, dispatchFilter }) {
   const { delegatesLoading, delegatesData } = useDelegatesData();
 
   return (
@@ -187,7 +187,7 @@ function DelegateSelector({ delegate, dispatchFilter }) {
             image: { avatar: true, src: delegate.avatar?.thumb_url, style: { width: '28px', height: '28px' } },
           }
         )) || [])]}
-        value={delegate}
+        value={delegateId}
         onChange={(_, data) => dispatchFilter({ delegate: data.value })}
         noResultsMessage={delegatesLoading ? I18n.t('competitions.index.delegates_loading') : I18n.t('competitions.index.no_delegates_found')}
       />

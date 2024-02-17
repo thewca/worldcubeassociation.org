@@ -4,7 +4,7 @@ import { events } from '../../lib/wca-data.js.erb';
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
 // - region value was the name, is now the 2-char code (for non-continents)
-// - delegate value was user id, is now the WCA id
+// - delegate value was user id, is now the WCA ID
 // - selected events key was 'event_ids' and they were not a list
 
 const DISPLAY_MODE = 'display';
@@ -16,7 +16,7 @@ const REGION = 'region';
 const DELEGATE = 'delegate';
 const SEARCH = 'search';
 const SELECTED_EVENTS = 'events';
-const INCLUDE_CANCELLED = 'show_cancelled'
+const INCLUDE_CANCELLED = 'show_cancelled';
 
 const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
@@ -29,11 +29,12 @@ const DEFAULT_EVENTS = [];
 const INCLUDE_CANCELLED_TRUE = 'on';
 
 // without time string, date will be interpreted in user's time zone
-const parseDate = (dateString) => new Date(dateString + "T00:00:00.000");
+const parseDate = (dateString) => new Date(`${dateString}T00:00:00.000`);
 const formatDate = (date) => DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
 
-export const getDisplayMode =
-  (searchParams) => searchParams.get(DISPLAY_MODE) || DEFAULT_DISPLAY_MODE;
+export const getDisplayMode = (searchParams) => (
+  searchParams.get(DISPLAY_MODE) || DEFAULT_DISPLAY_MODE
+);
 
 export const createFilterState = (searchParams) => ({
   timeOrder: searchParams.get(TIME_ORDER) || DEFAULT_TIME_ORDER,
@@ -60,7 +61,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     delegate,
     search,
     selectedEvents,
-    shouldIncludeCancelled
+    shouldIncludeCancelled,
   } = filterState;
 
   searchParams.set(DISPLAY_MODE, displayMode);
@@ -70,23 +71,29 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   searchParams.delete(TIME_ORDER, DEFAULT_TIME_ORDER);
   searchParams.set(YEAR, selectedYear);
   searchParams.delete(YEAR, DEFAULT_YEAR);
-  customStartDate
-    ? searchParams.set(START_DATE, formatDate(customStartDate))
-    : searchParams.delete(START_DATE);
-  customEndDate
-    ? searchParams.set(END_DATE, formatDate(customEndDate))
-    : searchParams.delete(END_DATE);
+  if (customStartDate) {
+    searchParams.set(START_DATE, formatDate(customStartDate));
+  } else {
+    searchParams.delete(START_DATE);
+  }
+  if (customEndDate) {
+    searchParams.set(END_DATE, formatDate(customEndDate));
+  } else {
+    searchParams.delete(END_DATE);
+  }
   searchParams.set(REGION, region);
   searchParams.delete(REGION, DEFAULT_REGION);
   searchParams.set(DELEGATE, delegate);
   searchParams.delete(DELEGATE, DEFAULT_DELEGATE);
   searchParams.set(SEARCH, search);
   searchParams.delete(SEARCH, DEFAULT_SEARCH);
-  searchParams.set(SELECTED_EVENTS, selectedEvents.join(","));
-  searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(","));
-  shouldIncludeCancelled
-    ? searchParams.set(INCLUDE_CANCELLED, INCLUDE_CANCELLED_TRUE)
-    : searchParams.delete(INCLUDE_CANCELLED);
+  searchParams.set(SELECTED_EVENTS, selectedEvents.join(','));
+  searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(','));
+  if (shouldIncludeCancelled) {
+    searchParams.set(INCLUDE_CANCELLED, INCLUDE_CANCELLED_TRUE);
+  } else {
+    searchParams.delete(INCLUDE_CANCELLED);
+  }
 
   window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
 };
