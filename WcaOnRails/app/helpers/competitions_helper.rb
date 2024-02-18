@@ -12,7 +12,7 @@ module CompetitionsHelper
       return t('competitions.messages.cancelled')
     end
 
-    messages_to_join << get_registration_status_message_if_registered(competition, user)
+    messages_to_join << get_registration_status_message_if_registered(competition, user, registration)
     messages_to_join << get_competition_status_message(competition)
 
     messages_to_join.join(' ')
