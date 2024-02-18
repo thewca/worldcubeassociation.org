@@ -64,31 +64,43 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     shouldIncludeCancelled,
   } = filterState;
 
+  // update every string value; and then remove that value if it's redundant (ie is the default)
   searchParams.set(DISPLAY_MODE, displayMode);
   searchParams.delete(DISPLAY_MODE, DEFAULT_DISPLAY_MODE);
 
   searchParams.set(TIME_ORDER, timeOrder);
   searchParams.delete(TIME_ORDER, DEFAULT_TIME_ORDER);
+
   searchParams.set(YEAR, selectedYear);
   searchParams.delete(YEAR, DEFAULT_YEAR);
+
+  searchParams.set(REGION, region);
+  searchParams.delete(REGION, DEFAULT_REGION);
+
+  searchParams.set(DELEGATE, delegate);
+  searchParams.delete(DELEGATE, DEFAULT_DELEGATE);
+
+  searchParams.set(SEARCH, search);
+  searchParams.delete(SEARCH, DEFAULT_SEARCH);
+
+  // similarly for array-of-string values
+  searchParams.set(SELECTED_EVENTS, selectedEvents.join(','));
+  searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(','));
+
+  // for date values, format and add them if applicable, otherwise omit them
   if (customStartDate) {
     searchParams.set(START_DATE, formatDate(customStartDate));
   } else {
     searchParams.delete(START_DATE);
   }
+
   if (customEndDate) {
     searchParams.set(END_DATE, formatDate(customEndDate));
   } else {
     searchParams.delete(END_DATE);
   }
-  searchParams.set(REGION, region);
-  searchParams.delete(REGION, DEFAULT_REGION);
-  searchParams.set(DELEGATE, delegate);
-  searchParams.delete(DELEGATE, DEFAULT_DELEGATE);
-  searchParams.set(SEARCH, search);
-  searchParams.delete(SEARCH, DEFAULT_SEARCH);
-  searchParams.set(SELECTED_EVENTS, selectedEvents.join(','));
-  searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(','));
+
+  // boolean values are only present when true, otherwise omit them
   if (shouldIncludeCancelled) {
     searchParams.set(INCLUDE_CANCELLED, INCLUDE_CANCELLED_TRUE);
   } else {
