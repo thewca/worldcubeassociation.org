@@ -27,6 +27,11 @@ RUN curl -fsSL https://deb.nodesource.com/setup_${NODE_MAJOR}.x | bash && \
 # Enable 'corepack' feature that lets NPM download the package manager on-the-fly as required.
 RUN corepack enable
 
+# Install native dependencies for Ruby:
+# libvips = image processing for Rails ActiveStorage attachments
+# libssl-dev = bindings for the native extensions of Ruby SSL gem
+# libyaml-dev = bindings for the native extensions of Ruby psych gem
+# tzdata = Timezone information for Rails ActiveSupport
 RUN apt-get update -qq && \
     apt-get install --no-install-recommends -y \
       build-essential \
@@ -37,6 +42,24 @@ RUN apt-get update -qq && \
       libssl-dev \
       libyaml-dev \
       tzdata
+
+# Install fonts for rendering PDFs (mostly competition summary PDFs)
+# dejavu = Hebrew, Arabic, Greek
+# unfonts-core = Korean
+# wqy-modern = Chinese
+# ipafont = Japanese
+# lmodern = Random accents and special symbols for Latin script
+RUN apt-get update -qq && \
+    apt-get install --no-install-recommends -y \
+      fonts-dejavu \
+      fonts-unfonts-core \
+      fonts-wqy-microhei \
+      fonts-ipafont \
+      fonts-lmodern
+
+# Regenerate the font cache so WkHtmltopdf can find them
+# per https://dalibornasevic.com/posts/76-figuring-out-missing-fonts-for-wkhtmltopdf
+RUN fc-cache -f -v
 
 # Use the MariaDB package sources via https://mariadb.com/kb/en/mariadb-package-repository-setup-and-usage/
 # because the Ruby base image runs on Debian 12, which provides an older MariaDB version that suffers from a
