@@ -404,9 +404,9 @@ function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
   );
 }
 
-function ResetFilters({dispatchFilter}) {
+function ResetFilters({ dispatchFilter }) {
   return (
-    <Button type="reset" size="mini" id="reset" onClick={() => dispatchFilter({ type: "reset" })}>
+    <Button type="reset" size="mini" id="reset" onClick={() => dispatchFilter({ type: 'reset' })}>
       {I18n.t('competitions.index.reset_filters')}
     </Button>
   );
