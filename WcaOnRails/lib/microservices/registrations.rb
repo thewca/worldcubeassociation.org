@@ -17,6 +17,9 @@ module Microservices
 
     def self.registrations_by_user_path(id)
       "/api/internal/v1/users/#{id}/registrations"
+      
+    def self.get_registrations_path(competition_id)
+      "/api/internal/v1/#{competition_id}/registrations"
     end
 
     def self.registration_connection
@@ -49,6 +52,20 @@ module Microservices
         req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
       end
       # If we ever need the response body
+      response.body
+    end
+
+    def self.get_registrations(competition_id, status = nil, event_id = nil)
+      response = self.registration_connection.get(self.get_registrations_path(competition_id)) do |req|
+        if status.present?
+          req.params[:status] = status
+        end
+
+        if event_id.present?
+          req.params[:event_id] = event_id
+        end
+      end
+
       response.body
     end
   end

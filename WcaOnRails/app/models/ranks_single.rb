@@ -4,6 +4,8 @@ class RanksSingle < ApplicationRecord
   include PersonalBest
   self.table_name = "RanksSingle"
 
+  belongs_to :event, foreign_key: "eventId"
+
   def to_wcif
     rank_to_wcif("single")
   end
