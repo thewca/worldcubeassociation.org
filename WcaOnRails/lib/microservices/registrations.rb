@@ -17,7 +17,8 @@ module Microservices
 
     def self.registrations_by_user_path(id)
       "/api/internal/v1/users/#{id}/registrations"
-      
+    end
+
     def self.get_registrations_path(competition_id)
       "/api/internal/v1/#{competition_id}/registrations"
     end
