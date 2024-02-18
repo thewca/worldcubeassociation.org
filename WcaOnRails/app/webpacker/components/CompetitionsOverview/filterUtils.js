@@ -98,7 +98,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
 };
 
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+const WCA_EVENT_IDS = Object.keys(events.byId);
 
 export const filterReducer = (state, action) => {
   switch (action.type) {
