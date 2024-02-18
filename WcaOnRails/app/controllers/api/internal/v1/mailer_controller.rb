@@ -1,0 +1,39 @@
+# frozen_string_literal: true
+
+class Api::Internal::V1::MailerController < Api::Internal::V1::ApiController
+  # We are using our own authentication method with vault
+  protect_from_forgery except: [:competitor_info]
+  def registration
+    registration_status = params.require(:status)
+    # Either create or update, we need this to send the correct emails if organizers move
+    # a competitor back to pending
+    registration_action = params.require(:action)
+    registration_user = params.require(:user_id)
+    registration_competition = params.require(:competition_id)
+    competition = Competition.find(registration_competition)
+    user = User.find(registration_user)
+    # TODO, use the Convert method from the other PR
+    converted_registration = OpenStruct.new(competition: competition,
+                                            user: user,
+                                            name: user.person.name,
+                                            email: user.email)
+
+    if registration_status == 'pending' && registration_action == 'create'
+      RegistrationsMailer.notify_organizers_of_new_registration(converted_registration).deliver_later
+      RegistrationsMailer.notify_registrant_of_new_registration(converted_registration).deliver_later
+    end
+
+    if registration_status == 'pending' && registration_action == 'update'
+      RegistrationsMailer.notify_registrant_of_pending_registration(converted_registration).deliver_later
+    end
+
+    if registration_status == 'accepted' && registration_action == 'update'
+      RegistrationsMailer.notify_registrant_of_accepted_registration(converted_registration).deliver_later
+    end
+
+    if registration_status == 'cancelled' && registration_action == 'update'
+      RegistrationsMailer.notify_organizers_of_deleted_registration(converted_registration).deliver_later
+      RegistrationsMailer.notify_registrant_of_deleted_registration(converted_registration).deliver_later
+    end
+  end
+end
