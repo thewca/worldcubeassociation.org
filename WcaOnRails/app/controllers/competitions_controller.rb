@@ -871,7 +871,7 @@ class CompetitionsController < ApplicationController
       registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
       # Convert Registrations V2 to a format that the frontend can understand
-      registrations.concat(registrations_v2.map { |r| Microservices::Registrations.convert_registration(r) })
+      registrations.concat(registrations_v2.map { |r| Microservices::Registrations.convert_registration(r['competition_id'], current_user.id, r['status']) })
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
         [r.competition.id, r]
       end
