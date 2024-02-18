@@ -1378,6 +1378,7 @@ en:
       sort_by_announcement: "Sort by announcement"
       from_date: "From"
       to_date: "To"
+      reset_filters: "Reset Filters"
       #context: selecting a specific year ('year' is a number)
       past_from: "Past from %{year}"
       past_all: "Past from all years"
