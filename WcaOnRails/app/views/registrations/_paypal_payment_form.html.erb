@@ -16,6 +16,10 @@
     <p class="form-control-static" id="wca-ajax-error"></p>
   <% end %>
 
+  <hr/>
+  <%= f.input :subtotal, label: t('registrations.payment_form.labels.subtotal'), hint: false do %>
+    <p class="form-control-static" id="money-subtotal"><%= format_money(@registration.outstanding_entry_fees) %></p>
+  <% end %>
   <div id="stripe-elements">
     <%= f.input :payment_information, label: t("registrations.payment_form.labels.payment_information"), hint: false, wrapper_html: { id: 'payment-element-wrapper' } do %>
       <div id="payment-element"></div>
@@ -25,17 +29,9 @@
     <% end %>
   </div>
 
-  <hr/>
-  <%= f.input :subtotal, label: t('registrations.payment_form.labels.subtotal'), hint: false do %>
-    <p class="form-control-static" id="money-subtotal"></p>
-  <% end %>
-  <%= f.input :payment_button, label: t('registrations.payment_form.labels.payment_button'), hint: t("registrations.payment_form.hints.payment_button") do %>
-    <%= f.button :button, t('registrations.payment_form.button_text'), id: 'payment-button', class: 'btn btn-primary' %>
-  <% end %>
 
 
   <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=95XC2UKUP2CFW&currency=<%= @registration.outstanding_entry_fees.currency.iso_code %>"></script>
-  <script src="https://js.stripe.com/v3/"></script>
 
   <script>
 
@@ -149,8 +145,6 @@
         });
         }
     }).render('#payment-element');
-
-
 
     // ----------
     // Two-step workflow to handle payments
@@ -292,9 +286,4 @@
       updateSubtotal();
     });
   </script>
-
-
-
-
-
 <% end %>
