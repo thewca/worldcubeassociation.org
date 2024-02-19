@@ -1165,7 +1165,7 @@ zh-TW:
       #original_hash: 61074f1
       results_database: 資料庫
       #original_hash: 54e0548
-      results_sidekiq: Sidekiq儀表板
+      results_sidekiq: Sidekiq控制中心
       #original_hash: aee74b8
       new_post: 新文章
       #original_hash: 0d67445
@@ -2513,8 +2513,9 @@ zh-TW:
           main_event_id: 主要項目
         #original_hash: d7020f4
         remarks: 備註
-        #original_hash: c305010
-        clone_tabs: 我想要複製所有標籤以及其資訊
+        cloning:
+          #original_hash: c305010
+          clone_tabs: 我想要複製所有索引標籤以及當中的附加訊息
       hints:
         admin:
           #original_hash: da39a3e
@@ -2667,8 +2668,9 @@ zh-TW:
           main_event_id: 這個項目的優勝參賽者將會是這場比賽的優勝參賽者
         #original_hash: 9ea6021
         remarks: 任何您想跟WCAT說明的事。例如，有疑問的事項，或是您想向WCAT請求特別事項。請用英文填寫！
-        #original_hash: da39a3e
-        clone_tabs: ''
+        cloning:
+          #original_hash: da39a3e
+          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3164,7 +3166,7 @@ zh-TW:
       stripe: Stripe
     payment_setup:
       #original_hash: 69b243c
-      stripe_dashboard: Stripe儀表板
+      stripe_dashboard: Stripe控制中心
       #original_hash: e621d96
       account_connected: '您已經成功連結您的 %{provider} 帳號，現在開始可以開始接受這場比賽的報名費用。'
       #original_hash: 18d1326
@@ -3194,7 +3196,7 @@ zh-TW:
       stripe_connect_warning: 連結Stripe帳號到WCA網站能讓您作變更以及直接退款到您的Stripe帳號。
       #original_hash: 9ea95c2
       stripe_disconnect_info: >-
-        這場比賽設定成使用Stripe接受款項。如果您想要解除Stripe帳號的連結，您應該從您的Strip控制中心解除（連結在底下）。請注意這將會讓所有比賽都跟您的帳號解除連結。在新的Stripe帳號能連結以前，比賽的代表必須跟WCAT聯絡來清除帳號資訊。
+        這場比賽設定成使用Stripe接受款項。如果您想要解除Stripe帳號的連結，您應該從您的Stripe控制中心解除（連結在底下）。請注意這將會讓所有比賽都跟您的帳號解除連結。在新的Stripe帳號能連結以前，比賽的代表必須跟WCAT聯絡來清除帳號資訊。
       #original_hash: d4a360b
       stripe_disconnect_warning: 請記得應該只有在特別的情形下才解除帳號連結，例如現在的帳號無法接收款項。
       #original_hash: 0af9795
