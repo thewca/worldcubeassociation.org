@@ -2,10 +2,10 @@
 
 class Api::Internal::V1::MailerController < Api::Internal::V1::ApiController
   # We are using our own authentication method with vault
-  protect_from_forgery except: [:competitor_info]
+  protect_from_forgery except: [:registration]
   def registration
     registration_status = params.require(:status)
-    # Either create or update, we need this to send the correct emails if organizers move
+    # Either "create" or "update", we need this to send the correct emails if organizers move
     # a competitor back to pending
     registration_action = params.require(:action)
     registration_user = params.require(:user_id)
