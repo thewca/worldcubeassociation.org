@@ -114,6 +114,8 @@ const WCA_EVENT_IDS = Object.keys(events.byId);
 
 export const filterReducer = (state, action) => {
   switch (action.type) {
+    case 'reset':
+      return createFilterState(new URLSearchParams());
     case 'toggle_event':
       return {
         ...state,

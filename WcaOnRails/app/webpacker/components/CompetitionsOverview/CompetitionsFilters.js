@@ -70,6 +70,10 @@ function CompetitionsFilters({
       </Form.Group>
 
       <Form.Group>
+        <ResetFilters dispatchFilter={dispatchFilter} />
+      </Form.Group>
+
+      <Form.Group>
         <ToggleListOrMapDisplay
           displayMode={displayMode}
           setDisplayMode={setDisplayMode}
@@ -397,6 +401,14 @@ function ToggleListOrMapDisplay({ displayMode, setDisplayMode }) {
         {` ${I18n.t('competitions.index.map')} `}
       </Button>
     </Button.Group>
+  );
+}
+
+function ResetFilters({ dispatchFilter }) {
+  return (
+    <Button type="reset" size="mini" id="reset" onClick={() => dispatchFilter({ type: 'reset' })}>
+      {I18n.t('competitions.index.reset_filters')}
+    </Button>
   );
 }
 
