@@ -6,17 +6,19 @@ class PopulateExistingStripeConnections < ActiveRecord::Migration[7.1]
     Competition.where.not(connected_stripe_account_id: nil).find_each do |comp|
       account = ConnectedStripeAccount.create(account_id: comp.connected_stripe_account_id)
       comp.competition_payment_integrations.new(connected_account: account)
-      comp.save
+      comp.save!
     end
   end
 
   def down
-    # Remove all created records - including the ConnectedStripeAccount, as we are rolling back, not just disconnecting
-    Competition.where.not(connected_stripe_account_id: nil).find_each do |comp|
-      competition.competition_payment_integrations.find_each do |integration|
-        integration.connected_account.destroy
-      end
-      competition.competition_payment_integrations.destroy_all
+    # Write all Stripe account id's back to Competiiton.connected_stripe_account_id column
+    CompetitionPaymentIntegration.all.find_each do |integration|
+      next unless integration.connected_account_type == 'ConnectedStripeAccount'
+      competition = integration.competition
+      competition.connected_stripe_account_id = integration.connected_account.account_id
+      competition.save
     end
+    CompetitionPaymentIntegration.destroy_all
+    ConnectedStripeAccount.destroy_all
   end
 end
