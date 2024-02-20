@@ -233,7 +233,7 @@ function CompetitionForm() {
         </Sticky>
       )}
 
-      {isPersisted && <AnnouncementActions disabled={unsavedChanges} />}
+      {isPersisted && <AnnouncementActions disabled={unsavedChanges} onError={onError} />}
       {isPersisted && <UserPreferences disabled={unsavedChanges} />}
       <AnnouncementMessage />
       <FormErrors />
