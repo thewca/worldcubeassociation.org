@@ -5,7 +5,7 @@
     </div>
     <div class="panel-body">
       <%= simple_form_for :translation, url: translations_update_path, method: :patch do |f| %>
-        <%= f.input :locale, collection: Locales::AVAILABLE.keys %>
+        <%= f.input :locale, collection: UserGroup.translator_groups.map(&:metadata).map(&:locale) %>
         <%= f.input :content, as: :text, input_html: { class: "no-autosize" } %>
         <%= f.submit "Create Pull Request", class: "btn btn-primary" %>
       <% end %>

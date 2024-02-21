@@ -164,16 +164,17 @@
       </li>
       <li class="dropdown">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
-          <% active_locale_info = Locales::AVAILABLE[I18n.locale] %>
+          <% group_metadata = GroupsMetadataTranslators.find_by(locale: I18n.locale) %>
+          <% group = UserGroup.find_by(metadata_id: group_metadata.id) %>
           <%= ui_icon('language') %>
-          <span class="visible-lg-inline visible-xs-inline"><%= active_locale_info[:name] %></span>
+          <span class="visible-lg-inline visible-xs-inline"><%= group[:name] %></span>
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu" id="locale-selector" role="menu">
-          <% Locales::AVAILABLE.each do |l, data| %>
-            <li class="<%= l == I18n.locale ? "active" : "" %>">
-              <%= link_to update_locale_path(l) do %>
-                <%= data[:name] %>
+          <% UserGroup.translator_groups.each do |group| %>
+            <li class="<%= group.metadata.locale == I18n.locale ? "active" : "" %>">
+              <%= link_to update_locale_path(group.metadata.locale) do %>
+                <%= group[:name] %>
               <% end %>
             </li>
           <% end %>
