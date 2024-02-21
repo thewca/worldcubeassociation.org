@@ -10,7 +10,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
         if group.group_type == UserGroup.group_types[:delegate_probation]
           current_user.can_manage_delegate_probation?
         else
-          false # Don't accept any other hidden groups.
+          current_user.has_permission?(:can_edit_groups, group.id)
         end
       else
         true # Accept all non-hidden groups and old-system groups.
