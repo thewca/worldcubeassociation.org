@@ -692,6 +692,7 @@ en:
       documents: "WCA Documents"
       delegates: "WCA Delegates"
       organizations: "Regional Organizations"
+      translators: "Translators"
       faq: "Frequently Asked Questions"
       forum: "Forum"
       teams: "Teams, Committees, and Councils"
@@ -747,6 +748,9 @@ en:
       privacy: "Privacy"
       disclaimer: "Disclaimer"
       find_us: "Find us"
+  page:
+    translators:
+      title: "Translators"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
