@@ -127,6 +127,7 @@ function CloseRegistrationAction({
   competitionId,
   data,
   sync,
+  onError,
 }) {
   const {
     isRegistrationPast,
@@ -144,7 +145,7 @@ function CloseRegistrationAction({
       save(closeRegistrationWhenFullUrl(competitionId), null, sync, {
         body: null,
         method: 'PUT',
-      });
+      }, onError);
     });
   };
 
@@ -173,7 +174,10 @@ function CloseRegistrationAction({
   );
 }
 
-export default function AnnouncementActions({ disabled = false }) {
+export default function AnnouncementActions({
+  onError,
+  disabled = false,
+}) {
   const { isAdminView, initialCompetition: { competitionId } } = useStore();
 
   const dataUrl = useMemo(() => competitionAnnouncementDataUrl(competitionId), [competitionId]);
@@ -197,7 +201,12 @@ export default function AnnouncementActions({ disabled = false }) {
         <List bulleted verticalAlign="middle">
           {isAdminView && <AnnounceAction competitionId={competitionId} data={data} sync={sync} />}
           {isAdminView && <CancelAction competitionId={competitionId} data={data} sync={sync} />}
-          <CloseRegistrationAction competitionId={competitionId} data={data} sync={sync} />
+          <CloseRegistrationAction
+            competitionId={competitionId}
+            data={data}
+            sync={sync}
+            onError={onError}
+          />
         </List>
       </Dimmer.Dimmable>
     </ConfirmProvider>

@@ -325,6 +325,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competitions_payment_setup_path(competition)
     end
 
+    competition = competition_from_params
     account_reference = ConnectedPaypalAccount.new(
       paypal_merchant_id: params[:merchantIdInPayPal],
       permissions_granted: params[:permissionsGranted],
