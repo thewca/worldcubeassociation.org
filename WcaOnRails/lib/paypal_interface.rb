@@ -1,6 +1,38 @@
 # frozen_string_literal: true
 
 module PaypalInterface
+  # Defined in: https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
+  PAYPAL_CURRENCY_CATEGORIES = {
+    decimal: [ # Currencies that should be passed to paypal as decimal amounts (ie, cents/100)
+      "AUD",
+      "BRL",
+      "CAD",
+      "CNY",
+      "CZK",
+      "DKK",
+      "EUR",
+      "HKD",
+      "ILS",
+      "MYR",
+      "MXN",
+      "NZD",
+      "NOK",
+      "PHP",
+      "PLN",
+      "GBP",
+      "SGD",
+      "SEK",
+      "CHF",
+      "THB",
+      "USD",
+    ],
+    cents_only: [ # Currencies that do not support decimals - should be passed as cents
+      "JPY",
+      "HUF",
+      "TWD",
+    ],
+  }.freeze
+
   def self.generate_paypal_onboarding_link(competition_id)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/customer/partner-referrals"
 
@@ -43,17 +75,16 @@ module PaypalInterface
     end
   end
 
-  def self.create_order(registration)
+  def self.create_order(registration, outstanding_fees, fee_currency)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
 
-    outstanding_fees = registration.outstanding_entry_fees
-    fee_currency = outstanding_fees.currency.iso_code
+    amount = paypal_amount(outstanding_fees, fee_currency)
 
     payload = {
       intent: 'CAPTURE',
       purchase_units: [
         {
-          amount: { currency_code: fee_currency.to_s, value: outstanding_fees.to_s },
+          amount: { currency_code: fee_currency, value: amount },
         },
       ],
     }
@@ -78,6 +109,14 @@ module PaypalInterface
     response.body
   end
 
+  def self.paypal_amount(amount_in_cents, currency_code)
+    if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
+      format("%.2f", amount_in_cents.to_i / 100.0)
+    else
+      amount_in_cents
+    end
+  end
+
   private_class_method def self.paypal_connection(url)
     Faraday.new(
       url: url,
@@ -95,7 +134,7 @@ module PaypalInterface
 
       # Logs requests and responses.
       # By default, it only logs the request method and URL, and the request/response headers.
-      builder.response :logger
+      builder.response :logger, ::Logger.new($stdout), bodies: true
     end
   end
 

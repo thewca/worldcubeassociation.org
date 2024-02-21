@@ -113,7 +113,7 @@
         createOrder: (data, actions) => {
           return fetch("/registration/<%= @registration.id %>/create-paypal-order/", {
             method: "post",
-            body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
+            body: JSON.stringify({ total_charge: getCurrentRubyAmount(), currency_code: currencyIsoCode }),
             headers: {
               'Content-Type': 'application/json' // Set the content type to JSON
             }

@@ -828,7 +828,7 @@ class RegistrationsController < ApplicationController
     return head :forbidden if Rails.env.production?
 
     @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration)
+    render json: PaypalInterface.create_order(@registration, params[:total_charge], params[:currency_code])
   end
 
   def capture_paypal_payment
