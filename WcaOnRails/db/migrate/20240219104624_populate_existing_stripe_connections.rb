@@ -6,7 +6,7 @@ class PopulateExistingStripeConnections < ActiveRecord::Migration[7.1]
     Competition.where.not(connected_stripe_account_id: nil).find_each do |comp|
       account = ConnectedStripeAccount.create(account_id: comp.connected_stripe_account_id)
       comp.competition_payment_integrations.new(connected_account: account)
-      comp.save!
+      comp.save
     end
   end
 
