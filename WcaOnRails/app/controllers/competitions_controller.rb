@@ -323,7 +323,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competitions_payment_setup_path(@competition)
     end
 
-    @competition = competition_from_params
+    competition = competition_from_params
 
     account_reference = ConnectedPaypalAccount.new(
       paypal_merchant_id: params[:merchantIdInPayPal],
@@ -332,9 +332,9 @@ class CompetitionsController < ApplicationController
       consent_status: params[:consentStatus],
     )
 
-    @competition.competition_payment_integrations.new(connected_account: account_reference)
+    competition.competition_payment_integrations.new(connected_account: account_reference)
 
-    if @competition.save
+    if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
     else
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
@@ -351,7 +351,8 @@ class CompetitionsController < ApplicationController
     end
     client = create_stripe_oauth_client
     resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
-    competition.connected_stripe_account_id = resp.params['stripe_user_id']
+    stripe_account = ConnectedStripeAccount.new(account_id: resp.params['stripe_user_id'])
+    competition.competition_payment_integrations.new(connected_account: stripe_account)
     if competition.save
       flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.stripe'))
     else
@@ -377,10 +378,10 @@ class CompetitionsController < ApplicationController
       return redirect_to root_url
     end
 
-    @competition = competition_from_params
-    CompetitionPaymentIntegration.disconnect(@competition, :paypal)
+    competition = competition_from_params
+    competition.disconnect_payment_integration(:paypal)
 
-    if CompetitionPaymentIntegration.paypal_connected?(@competition)
+    if competition.paypal_connected?
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
     else
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
@@ -389,14 +390,15 @@ class CompetitionsController < ApplicationController
   end
 
   def disconnect_stripe
-    comp = competition_from_params
-    if comp.connected_stripe_account_id
-      comp.update!(connected_stripe_account_id: nil)
-      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
-    else
+    competition = competition_from_params
+    competition.disconnect_payment_integration(:stripe)
+
+    if competition.stripe_connected?
       flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
+    else
+      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
     end
-    redirect_to competitions_payment_setup_path(comp)
+    redirect_to competitions_payment_setup_path(competition)
   end
 
   def clone_competition

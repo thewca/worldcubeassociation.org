@@ -2,7 +2,7 @@
 
 module RegistrationsHelper
   def fees_hint_and_context(registration)
-    if registration.competition.using_stripe_payments?
+    if registration.competition.payments_enabled?
       if registration.outstanding_entry_fees <= 0
         [t('registrations.entry_fees_fully_paid', paid: format_money(registration.paid_entry_fees)), "success"]
       else
@@ -34,7 +34,7 @@ module RegistrationsHelper
   end
 
   def registration_date_and_tooltip(competition, registration)
-    if @competition.using_stripe_payments?
+    if @competition.using_payment_integrations?
       [registration.last_payment_date&.to_date || I18n.t('registrations.list.not_paid'),
        registration.last_payment_date ? I18n.t('registrations.list.payment_completed_on', date: registration.last_payment_date) : I18n.t('registrations.list.payment_requested_on', date: registration.created_at)]
     else

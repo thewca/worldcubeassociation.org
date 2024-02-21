@@ -140,7 +140,7 @@ class Registration < ApplicationRecord
   end
 
   def to_be_paid_through_wca?
-    !new_record? && (pending? || accepted?) && competition.using_stripe_payments? && outstanding_entry_fees > 0
+    !new_record? && (pending? || accepted?) && competition.using_payment_integrations? && outstanding_entry_fees > 0
   end
 
   def show_payment_form?

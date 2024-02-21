@@ -26,6 +26,16 @@ FactoryBot.define do
       starts { 2.weeks.from_now }
     end
 
+    trait :payment_disconnect_delay_not_elapsed do
+      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS).days.ago }
+      ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS-1).days.ago }
+    end
+
+    trait :payment_disconnect_delay_elapsed do
+      starts { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS+2).days.ago }
+      ends { (ClearConnectedPaymentIntegrations::DELAY_IN_DAYS+1).days.ago }
+    end
+
     trait :ongoing do
       starts { Time.now }
     end
@@ -165,7 +175,16 @@ FactoryBot.define do
       # for testing Stripe payments, and is connected
       # to the WCA Stripe account. For more information, see
       # https://github.com/thewca/worldcubeassociation.org/wiki/Payments-with-Stripe
-      connected_stripe_account_id { "acct_19ZQVmE2qoiROdto" }
+
+      transient do
+        stripe_account_id { 'acct_19ZQVmE2qoiROdto' }
+      end
+    end
+
+    trait :paypal_connected do
+      transient do
+        paypal_merchant_id { '95XC2UKUP2CFW' }
+      end
     end
 
     trait :accepts_donations do
@@ -314,6 +333,22 @@ FactoryBot.define do
             current_activity_id += 1
           end
         end
+      end
+
+      if defined?(evaluator.stripe_account_id)
+        stripe_account = ConnectedStripeAccount.new(account_id: evaluator.stripe_account_id)
+        competition.competition_payment_integrations.new(connected_account: stripe_account)
+        competition.save
+      end
+      if defined?(evaluator.paypal_merchant_id)
+        paypal_account = ConnectedPaypalAccount.new(
+          paypal_merchant_id: evaluator.paypal_merchant_id,
+          permissions_granted: "PPCP",
+          account_status: "test",
+          consent_status: "test",
+        )
+        competition.competition_payment_integrations.new(connected_account: paypal_account)
+        competition.save
       end
     end
 

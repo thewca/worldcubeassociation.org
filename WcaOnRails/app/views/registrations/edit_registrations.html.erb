@@ -76,7 +76,7 @@
               <% end %>
             <% end %>
             <th class="registration-date" data-sortable="true" data-sorter="comparePaymentDate" data-field="registration-date">
-              <%= @competition.using_stripe_payments? ? t('registrations.list.registered.with_stripe') : t('registrations.list.registered.without_stripe') %>
+              <%= @competition.using_payment_integrations? ? t('registrations.list.registered.with_stripe') : t('registrations.list.registered.without_stripe') %>
             </th>
             <% if @competition.part_of_competition_series? %>
               <th class="series"><%= t 'registrations.list.series_registrations' %></th>
@@ -87,7 +87,7 @@
             <% if @competition.has_administrative_notes? %>
               <th class="administrative-notes"><%= t 'activerecord.attributes.registration.administrative_notes' %></th>
             <% end %>
-            <% if @competition.using_stripe_payments? %>
+            <% if @competition.using_payment_integrations? %>
               <th class="paid"><%= t 'activerecord.attributes.registration.paid_entry_fees' %></th>
             <% end %>
             <th class="email"><%= t 'activerecord.attributes.registration.email' %></th>
@@ -155,7 +155,7 @@
                   </span>
                 </td>
               <% end %>
-              <% if @competition.using_stripe_payments? %>
+              <% if @competition.using_payment_integrations? %>
                 <td class="entry_fee">
                   <span data-toggle="tooltip" data-placement="left" data-container="body" title="<%= registration.last_payment_date %>">
                     <%= format_money registration.paid_entry_fees %>

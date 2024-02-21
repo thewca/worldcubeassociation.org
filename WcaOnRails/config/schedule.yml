@@ -1,5 +1,5 @@
 clear_stripe:
-  class: "ClearConnectedStripeAccount"
+  class: "ClearConnectedPaymentIntegrations"
   cron: "0 0 * * *"
   queue: wca_jobs
 

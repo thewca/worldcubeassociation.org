@@ -636,7 +636,7 @@ class RegistrationsController < ApplicationController
     end
 
     competition = registration.competition
-    account_id = competition.connected_stripe_account_id
+    account_id = competition.payment_account_for(:stripe).account_id
 
     registration_metadata = {
       competition: competition.name,
@@ -715,7 +715,7 @@ class RegistrationsController < ApplicationController
   def refund_payment
     registration = Registration.find(params[:id])
 
-    unless registration.competition.using_stripe_payments?
+    unless registration.competition.using_payment_integrations?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end
@@ -748,7 +748,7 @@ class RegistrationsController < ApplicationController
       amount: stripe_amount,
     }
 
-    account_id = registration.competition.connected_stripe_account_id
+    account_id = registration.competition.payment_account_for(:stripe).account_id
 
     refund = Stripe::Refund.create(
       refund_args,

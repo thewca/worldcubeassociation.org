@@ -507,7 +507,7 @@ class Competition < ApplicationRecord
         warnings = championship_warnings.merge(warnings)
       end
 
-      if has_fees? && !connected_stripe_account_id
+      if has_fees? && !competition_payment_integrations.exists?
         warnings[:registration_payment_info] = I18n.t('competitions.messages.registration_payment_info')
       end
     end
@@ -907,8 +907,8 @@ class Competition < ApplicationRecord
     end
   end
 
-  def using_stripe_payments?
-    connected_stripe_account_id && has_fees?
+  def using_payment_integrations?
+    competition_payment_integrations.exists? && has_fees?
   end
 
   def can_edit_registration_fees?
@@ -2463,6 +2463,35 @@ class Competition < ApplicationRecord
     competition_series.set_form_data(form_data_series)
 
     self.competition_series = competition_series
+  end
+
+  def payments_enabled?
+    competition_payment_integrations.exists?
+  end
+
+  def stripe_connected?
+    competition_payment_integrations.stripe.exists?
+  end
+
+  def paypal_connected?
+    competition_payment_integrations.paypal.exists?
+  end
+
+  def payment_account_for(integration_name)
+    CompetitionPaymentIntegration.validate_integration_name!(integration_name)
+
+    competition_payment_integrations.find_by(
+      connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
+    )&.connected_account
+  end
+
+  def disconnect_payment_integration(integration_name)
+    CompetitionPaymentIntegration.validate_integration_name!(integration_name)
+    competition_payment_integrations.destroy_by(connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name])
+  end
+
+  def disconnect_all_payment_integrations
+    competition_payment_integrations.destroy_all
   end
 
   # Our React date picker unfortunately behaves weirdly in terms of backend data
