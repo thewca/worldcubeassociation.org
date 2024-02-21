@@ -2,7 +2,7 @@ import I18n from '../i18n';
 
 export function getRoleDescription(role) {
   let roleDescription = '';
-  if (role.metadata.status) {
+  if (role.metadata?.status) {
     roleDescription += `${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, `;
   }
   roleDescription += role.group.name;
