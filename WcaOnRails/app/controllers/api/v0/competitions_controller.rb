@@ -37,6 +37,15 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     end
   end
 
+  def qualifications
+    competition = competition_from_params
+    qualifications = competition.competition_events.each_with_object({}) do |event, hash|
+      next if event.qualification.nil?
+      hash[event.event_id] = event.qualification.to_wcif
+    end
+    render json: qualifications
+  end
+
   def schedule
     competition = competition_from_params
     render json: competition.schedule_wcif
