@@ -353,6 +353,7 @@ Rails.application.routes.draw do
       get '/users/me/personal_records' => 'users#personal_records'
       get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
+      get '/users/me/competitions' => 'users#my_competitions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
       get '/users/me/token' => 'users#token'
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }

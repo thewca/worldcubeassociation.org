@@ -47,6 +47,7 @@ translations:
       - "*.qualification.*"
       - "*.regional_organizations.*"
       - "*.round.*"
+      - "*.layouts.navigation.*"
       - "*.search_results.*"
       - "*.continents.*"
       - "*.layouts.*"
