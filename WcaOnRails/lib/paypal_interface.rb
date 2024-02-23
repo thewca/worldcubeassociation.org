@@ -78,7 +78,7 @@ module PaypalInterface
   def self.create_order(registration, outstanding_fees, fee_currency)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
 
-    amount = paypal_amount(outstanding_fees, fee_currency)
+    amount = PaypalTransaction.get_paypal_amount(outstanding_fees, fee_currency)
 
     payload = {
       intent: 'CAPTURE',
@@ -95,9 +95,21 @@ module PaypalInterface
 
       req.body = payload
     end
-    response.body
+
+    body = response.body
+
+    PaypalTransaction.create(
+      order_id: body["id"],
+      status: body["status"],
+      payload: payload,
+      amount_in_cents: outstanding_fees,
+      currency_code: fee_currency,
+    )
+
+    body
   end
 
+  # TODO: Update the status of the PaypalTransaction object?
   def self.capture_payment(competition, order_id)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
 
@@ -109,13 +121,13 @@ module PaypalInterface
     response.body
   end
 
-  def self.paypal_amount(amount_in_cents, currency_code)
-    if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
-      format("%.2f", amount_in_cents.to_i / 100.0)
-    else
-      amount_in_cents
-    end
-  end
+  # def self.paypal_amount(amount_in_cents, currency_code)
+  #   if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
+  #     format("%.2f", amount_in_cents.to_i / 100.0)
+  #   else
+  #     amount_in_cents
+  #   end
+  # end
 
   private_class_method def self.paypal_connection(url)
     Faraday.new(

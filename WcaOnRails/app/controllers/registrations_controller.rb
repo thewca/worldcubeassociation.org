@@ -838,6 +838,26 @@ class RegistrationsController < ApplicationController
     @competition = @registration.competition
     order_id = params[:order_id]
 
-    render json: PaypalInterface.capture_payment(@competition, order_id)
+    response = PaypalInterface.capture_payment(@competition, order_id)
+    if response["status"] == "COMPLETED"
+
+      # TODO: Handle the case where there are multiple captures for a payment
+      # 1) Multiple installments
+      # 2) Some failed, some succeeded
+
+      amount_details = response["purchase_units"][0]["payments"]["captures"][0]["amount"]
+      currency_code = amount_details["currency_code"]
+      amount = PaypalTransaction.get_amount_in_cents(amount_details["value"], currency_code)
+
+
+      @registration.record_payment(
+        amount,
+        currency_code,
+        PaypalTransaction.find_by(order_id: response["id"]), # TODO: Add error handling for the PaypalTransaction not being found
+        @registration.user.id,
+      )
+    end
+
+    render json: response
   end
 end
