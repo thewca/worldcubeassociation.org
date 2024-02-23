@@ -58,18 +58,16 @@ export default function OfficersAndBoard({ boardEmail }) {
       <Header as="h2">{I18n.t('page.officers_and_board.title')}</Header>
       <Header as="h3">{I18n.t('user_groups.group_types.officers')}</Header>
       <p>{I18n.t('page.officers_and_board.officers_description')}</p>
-      <>
-        {officerUsers.map((officerUser) => (
-          <UserBadge
-            key={officerUser.userData.id}
-            user={officerUser.userData}
-            size="large"
-            subtexts={officerUser.status.map(
-              (status) => I18n.t(`user_roles.status.officers.${status}`),
-            )}
-          />
-        ))}
-      </>
+      {officerUsers.map((officerUser) => (
+        <UserBadge
+          key={officerUser.userData.id}
+          user={officerUser.userData}
+          size="large"
+          subtexts={officerUser.status.map(
+            (status) => I18n.t(`user_roles.status.officers.${status}`),
+          )}
+        />
+      ))}
       <Header as="h3">
         <span>{I18n.t('user_groups.group_types.board')}</span>
         <Popup
@@ -86,22 +84,20 @@ export default function OfficersAndBoard({ boardEmail }) {
             >
               <Icon name={hoveringEmail ? 'copy' : 'mail'} />
               {hoveringEmail && (
-              <span>{boardEmail}</span>
+                <span>{boardEmail}</span>
               )}
             </Button>
           )}
         />
       </Header>
       <p>{I18n.t('page.officers_and_board.board_description')}</p>
-      <>
-        {board.map((boardRole) => (
-          <UserBadge
-            key={boardRole.user.id}
-            user={boardRole.user}
-            size="large"
-          />
-        ))}
-      </>
+      {board.map((boardRole) => (
+        <UserBadge
+          key={boardRole.user.id}
+          user={boardRole.user}
+          size="large"
+        />
+      ))}
     </Container>
   );
 }
