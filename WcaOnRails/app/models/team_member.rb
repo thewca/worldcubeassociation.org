@@ -67,6 +67,7 @@ class TeamMember < ApplicationRecord
 
   def role
     {
+      id: team.group_type + "_" + self.id.to_s,
       start_date: start_date,
       is_active: current_member?,
       group: {
