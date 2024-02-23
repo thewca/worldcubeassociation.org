@@ -848,16 +848,25 @@ class RegistrationsController < ApplicationController
       amount_details = response["purchase_units"][0]["payments"]["captures"][0]["amount"]
       currency_code = amount_details["currency_code"]
       amount = PaypalTransaction.get_amount_in_cents(amount_details["value"], currency_code)
+      transaction = PaypalTransaction.find_by(order_id: response["id"])
 
+      # Create a Capture object and link it to the PaypalTransaction
+      PaypalCapture.create(capture_id: response["purchase_units"][0]["payments"]["captures"][0]["id"], paypal_transaction: transaction)
 
+      # Record the payment
       @registration.record_payment(
         amount,
         currency_code,
-        PaypalTransaction.find_by(order_id: response["id"]), # TODO: Add error handling for the PaypalTransaction not being found
+        transaction, # TODO: Add error handling for the PaypalTransaction not being found
         @registration.user.id,
       )
     end
 
     render json: response
+  end
+
+  def refund_paypal_payment
+    registration = Registration.find(params[:id])
+    PaypalInterface.issue_refund(registration, registration.get_capture_id)
   end
 end

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class PaypalTransaction < ApplicationRecord
+  has_many :paypal_captures
+
   # Defined in: https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
   PAYPAL_CURRENCY_CATEGORIES = {
     decimal: [ # Currencies that should be passed to paypal as decimal amounts (ie, cents/100)

@@ -335,6 +335,17 @@ class Registration < ApplicationRecord
                                    .join(" + ")
   end
 
+  # NOTE: This is really bad, only for a proof of concept. It assumes that there is only ONE PaypalTransaction and ONE PaypalCapture - not safe assumptions.
+  def get_capture_id
+    registration_payment = registration_payments.first
+    puts registration_payment.inspect
+    receipt = registration_payment.receipt
+    puts receipt.inspect
+    capture = receipt.paypal_captures.first
+    puts capture.inspect
+    capture.capture_id
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "competition_id", "user_id"],
     methods: ["event_ids"],

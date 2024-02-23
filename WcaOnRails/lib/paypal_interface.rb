@@ -121,13 +121,20 @@ module PaypalInterface
     response.body
   end
 
-  # def self.paypal_amount(amount_in_cents, currency_code)
-  #   if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
-  #     format("%.2f", amount_in_cents.to_i / 100.0)
-  #   else
-  #     amount_in_cents
-  #   end
-  # end
+  def self.issue_refund(registration, capture_id)
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/payments/captures/#{capture_id}/refund"
+
+    payload = {}
+
+    response = paypal_connection(url).post do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(registration.competition)
+
+      req.body = payload
+    end
+
+    response.body
+  end
 
   private_class_method def self.paypal_connection(url)
     Faraday.new(

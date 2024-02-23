@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_22_134242) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_23_032610) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -821,6 +821,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_22_134242) do
     t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
   end
 
+  create_table "paypal_captures", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "capture_id"
+    t.bigint "paypal_transaction_id"
+    t.index ["paypal_transaction_id"], name: "index_paypal_captures_on_paypal_transaction_id"
+  end
+
   create_table "paypal_transactions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "order_id"
     t.string "status"
@@ -1245,6 +1251,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_22_134242) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
+  add_foreign_key "paypal_captures", "paypal_transactions"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"
