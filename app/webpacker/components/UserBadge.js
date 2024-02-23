@@ -23,31 +23,12 @@ export function subtextForMember(user) {
   return [];
 }
 
-/**
- * @param {{ teams: { friendly_id: string, leader: boolean }[]}} user
- * @param {{ friendly_id: string, name: string }[]} officerTitles
- * @returns {string[]}
- */
-export function subtextForOfficer(user, officerTitles) {
-  const positions = user.teams
-    .map((team) => {
-      const title = officerTitles.find((t) => t.friendly_id === team.friendly_id);
-      return title ? title.name : '';
-    })
-    .filter(Boolean);
-
-  if (user.teams.filter((team) => team.friendly_id === 'wfc' && team.leader).length > 0) {
-    positions.push(I18n.t('about.structure.treasurer.name'));
-  }
-
-  return positions;
-}
-
 function UserBadge({
   user,
   subtexts = [],
   background = '',
   badgeClasses = '',
+  size = 'medium',
   senior = false,
   leader = false,
   hideBorder = false,
@@ -69,6 +50,7 @@ function UserBadge({
         <UserAvatar
           avatar={user.avatar}
           avatarClass="user-avatar-rounded-left"
+          size={size}
         />
       </Label>
       {user.wca_id ? (

@@ -235,6 +235,7 @@ Rails.application.routes.draw do
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
   get 'translators' => 'static_pages#translators'
+  get 'officers-and-board' => 'static_pages#officers_and_board'
 
   resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'
