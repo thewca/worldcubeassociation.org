@@ -870,13 +870,12 @@ class CompetitionsController < ApplicationController
       competition_ids.concat(current_user.delegated_competitions.pluck(:competition_id))
       registrations = current_user.registrations.includes(:competition).accepted.reject { |r| r.competition.results_posted? }
       registrations.concat(current_user.registrations.includes(:competition).pending.select { |r| r.competition.upcoming? })
-      # Convert Registrations V2 to a format that the frontend can understand
-      registrations.concat(registrations_v2.map { |r| Microservices::Registrations.convert_registration(r['competition_id'], current_user.id, r['status']) })
+      # Convert Registrations V2 to a format that the frontend can understand, for Competition, we only need the id.
+      registrations.concat(registrations_v2.map { |r| Microservices::Registrations.convert_registration(Struct.new(:id, keyword_init: true).new(id: r['competition_id']), current_user, r['status']) })
       @registered_for_by_competition_id = registrations.uniq.to_h do |r|
         [r.competition.id, r]
       end
       competition_ids.concat(@registered_for_by_competition_id.keys)
-      competition_ids.concat(registrations_v2.pluck("competition_id"))
       if current_user.person
         competition_ids.concat(current_user.person.competitions.pluck(:competitionId))
       end

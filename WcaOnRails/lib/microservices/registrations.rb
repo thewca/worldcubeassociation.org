@@ -57,8 +57,8 @@ module Microservices
       end
     end
 
-    def self.convert_registration(competition_id, user_id, registration_status)
-      RegistrationConverter.new(competition: Competition.find(competition_id), user: User.find(user_id), status: registration_status)
+    def self.convert_registration(competition, user, registration_status)
+      RegistrationConverter.new(competition: competition, user: user, status: registration_status)
     end
 
     def self.registrations_by_user(user_id)
