@@ -200,6 +200,20 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "connected_stripe_accounts" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          created_at
+          updated_at
+        ),
+        fake_values: {
+          "account_id" => "'fake_stripe_account'",
+        },
+      ),
+    }.freeze,
+
     "Continents" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(

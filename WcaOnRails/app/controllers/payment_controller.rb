@@ -12,7 +12,7 @@ class PaymentController < ApplicationController
       stripe_transaction = StripeTransaction.find(payment_id)
       secret = stripe_transaction.stripe_payment_intent.client_secret
       render json: { stripe_publishable_key: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                     connected_account_id: competition.connected_stripe_account_id,
+                     connected_account_id: competition.payment_account_for(:stripe).account_id,
                      client_secret: secret }
     else
       render status: :unauthorized, json: { error: I18n.t('api.login_message') }
@@ -88,7 +88,7 @@ class PaymentController < ApplicationController
     return render status: :bad_request, json: { error: "Registration not found" } unless payment_request.present?
 
     competition = payment_request.competition
-    return render json: { error: "no_stripe" } unless competition.using_stripe_payments?
+    return render json: { error: "no_stripe" } unless competition.using_payment_integrations?
     return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
     charge = StripeTransaction.find(payment_id)
@@ -110,7 +110,7 @@ class PaymentController < ApplicationController
       amount: stripe_amount,
     }
 
-    account_id = competition.connected_stripe_account_id
+    account_id = competition.payment_account_for(:stripe).account_id
 
     refund = Stripe::Refund.create(
       refund_args,

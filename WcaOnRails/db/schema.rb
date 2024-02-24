@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_02_03_180115) do
+ActiveRecord::Schema[7.1].define(version: 2024_02_19_104624) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -658,6 +658,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_03_180115) do
     t.string "permissions_granted"
     t.string "account_status"
     t.string "consent_status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "connected_stripe_accounts", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "account_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

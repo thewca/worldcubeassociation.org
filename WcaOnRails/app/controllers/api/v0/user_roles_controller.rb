@@ -257,6 +257,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
+    group = UserGroup.find(group_id)
 
     if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
@@ -275,44 +276,47 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       else
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
-    else
-      group = UserGroup.find(group_id)
+    elsif group.group_type == UserGroup.group_types[:delegate_regions] && status != RolesMetadataDelegateRegions.statuses[:regional_delegate]
+      # Creates deprecated role.
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
         end_role_for_user_in_group_with_status(group, status)
       end
-      if group.group_type == UserGroup.group_types[:delegate_regions]
-        if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
-          metadata = RolesMetadataDelegateRegions.create!(status: status)
-          role = UserRole.create!(
-            user_id: user_id,
-            group_id: group_id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
-          RoleChangeMailer.notify_role_start(role, current_user).deliver_later
-        else
-          user = User.find(user_id)
-          user.update!(delegate_status: status, region_id: group.id, location: location)
-          send_role_change_notification(user)
-        end
-        render json: {
-          success: true,
-        }
-      elsif group.group_type == UserGroup.group_types[:delegate_probation]
-        role = UserRole.create!(
-          user_id: user_id,
-          group_id: group_id,
-          start_date: Date.today,
-        )
-        RoleChangeMailer.notify_role_start(role, current_user).deliver_later
-        render json: {
-          success: true,
-        }
-      else
+      user = User.find(user_id)
+      user.update!(delegate_status: status, region_id: group.id, location: location)
+      send_role_change_notification(user)
+      render json: {
+        success: true,
+      }
+    else
+      create_supported_groups = [
+        UserGroup.group_types[:delegate_regions],
+        UserGroup.group_types[:delegate_probation],
+        UserGroup.group_types[:translators],
+      ]
+      unless create_supported_groups.include?(group.group_type)
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        return
       end
+      status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
+      if status.present? && group.unique_status?(status)
+        end_role_for_user_in_group_with_status(group, status)
+      end
+      if group.group_type == UserGroup.group_types[:delegate_regions]
+        location = params[:location]
+        metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+      end
+      role = UserRole.create!(
+        user_id: user_id,
+        group_id: group_id,
+        start_date: Date.today,
+        metadata: metadata,
+      )
+      RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+      render json: {
+        success: true,
+      }
     end
   end
 

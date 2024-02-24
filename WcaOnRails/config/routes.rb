@@ -333,7 +333,7 @@ Rails.application.routes.draw do
         get '/users/:id/permissions' => 'permissions#index'
         post '/users/competitor-info' => 'users#competitor_info'
         post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init' => 'payment#init'
+        post '/payment/init_stripe' => 'payment#init'
       end
     end
     namespace :v0 do

@@ -45,7 +45,10 @@ export default function ActiveRoles({ activeRoles, setOpen }) {
       <Header>Active Roles</Header>
       <List divided relaxed>
         {activeRoles?.map((role) => (
-          <List.Item key={role.id}>
+          <List.Item
+            key={role.id}
+            disabled={!loggedInUserPermissions.canEditRole(role)}
+          >
             <List.Content
               floated="left"
               href={hyperlink(role)}
@@ -54,8 +57,8 @@ export default function ActiveRoles({ activeRoles, setOpen }) {
                 name="edit"
                 size="large"
                 link
-                disabled={!loggedInUserPermissions.canEditRole(role)}
                 onClick={isHyperlinkableRole(role) ? null : () => setOpen(true)}
+                disabled={!loggedInUserPermissions.canEditRole(role)}
               />
             </List.Content>
             <List.Content>
