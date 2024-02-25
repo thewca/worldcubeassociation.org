@@ -2242,6 +2242,8 @@ zh-TW:
       from_date: 從
       #original_hash: ae79ea1
       to_date: 到
+      #original_hash: 5be6985
+      reset_filters: 重置篩選
       #original_hash: 52c30f8
       past_from: '只顯示%{year}'
       #original_hash: 7cff459
@@ -3179,7 +3181,7 @@ zh-TW:
       disconnect_account: '解除 %{provider} 帳號連結'
       #original_hash: 59c9c9c
       confirm_account_disconnect: '您確定要解除 %{provider} 帳號的連結嗎? 解除後就無法回復。'
-      #original_hash: 0be9f82
+      #original_hash: ddea6cf
       supported_currency_warning: 請確認您選的付款方式可以使用您選的貨幣。可選的貨幣是根據您帳號所在的國家，您可以在這邊確認：
       #original_hash: 9711365
       supported_currencies: '%{provider} 支援的貨幣'
