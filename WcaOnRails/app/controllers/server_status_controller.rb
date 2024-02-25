@@ -15,7 +15,6 @@ class ServerStatusController < ApplicationController
     [
       JobsCheck.new,
       RegulationsCheck.new,
-      StripeChargesCheck.new,
       MysqlSettingsCheck.new,
     ]
   end
@@ -85,22 +84,6 @@ class RegulationsCheck < StatusCheck
       [:success, nil]
     else
       [:danger, "Error while loading regulations: #{Regulation.regulations_load_error} from #{Regulation.regulations_load_error.class}"]
-    end
-  end
-end
-
-class StripeChargesCheck < StatusCheck
-  def label
-    "Stripe Charges"
-  end
-
-  protected def _status_description
-    unknown_stripe_charges_count = StripeTransaction.where(status: "unknown").count
-
-    if unknown_stripe_charges_count == 0
-      [:success, nil]
-    else
-      [:danger, "#{pluralize(unknown_stripe_charges_count, "Stripe charge")} with status 'unknown'."]
     end
   end
 end
