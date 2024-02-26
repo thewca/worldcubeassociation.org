@@ -87,6 +87,9 @@ RSpec.configure do |config|
   config.include ApplicationHelper
 
   config.include ActiveJob::TestHelper
+
+  # Uncomment to disable HTTP connections, to identify which endpoints needs to be mocked in test
+  # WebMock.disable_net_connect!(allow_localhost: true)
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
