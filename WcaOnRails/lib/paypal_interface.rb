@@ -99,6 +99,7 @@ module PaypalInterface
     body = response.body
 
     PaypalTransaction.create(
+      transaction_type: :payment,
       order_id: body["id"],
       status: body["status"],
       payload: payload,
@@ -133,7 +134,25 @@ module PaypalInterface
       req.body = payload
     end
 
-    response.body
+    body = response.body
+
+    refunded_order = PaypalCapture.find_by(capture_id: capture_id).paypal_transaction
+
+    if body["status"] == "COMPLETED"
+      # TODO: The refund should be linked to a charge and/or an order
+      refund = PaypalTransaction.create(
+        transaction_type: :refund,
+        order_id: body["id"],
+        status: body["status"],
+        payload: payload,
+        amount_in_cents: refunded_order.amount_in_cents,
+        currency_code: refunded_order.currency_code,
+      )
+
+    end
+
+    # TODO: Add error handling for if we don't get a COMPLETED status, because then this will be undefined
+    refund
   end
 
   private_class_method def self.paypal_connection(url)

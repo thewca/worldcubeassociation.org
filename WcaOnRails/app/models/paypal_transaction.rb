@@ -3,6 +3,11 @@
 class PaypalTransaction < ApplicationRecord
   has_many :paypal_captures
 
+  TRANSACTION_TYPES = [
+    :payment,
+    :refund,
+  ].freeze
+
   # Defined in: https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
   PAYPAL_CURRENCY_CATEGORIES = {
     decimal: [ # Currencies that should be passed to paypal as decimal amounts (ie, cents/100)
