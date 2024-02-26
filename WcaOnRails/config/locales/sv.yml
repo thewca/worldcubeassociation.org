@@ -2629,6 +2629,8 @@ sv:
       from_date: Från
       #original_hash: ae79ea1
       to_date: Till
+      #original_hash: 5be6985
+      reset_filters: Nollställ filter
       #original_hash: 52c30f8
       past_from: 'Tidigare tävlingar från %{year}'
       #original_hash: 7cff459
@@ -3347,7 +3349,7 @@ sv:
       #original_hash: c38824e
       opens_registration_at: öppnar anmälan klockan
     #original_hash: 06b01c4
-    announcements: Publiceringar
+    announcements: Meddelanden
     #original_hash: a2b80b0
     post_announcement: Publicera tävlingen
     #original_hash: b462eac
@@ -3723,7 +3725,7 @@ sv:
       confirm_account_disconnect: >-
         Är du säker på att du vill koppla bort %{provider}-kontot? Detta kan
         inte ångras.
-      #original_hash: 0be9f82
+      #original_hash: ddea6cf
       supported_currency_warning: >-
         Kontrollera att den valuta du har valt stöds av din valda
         betalningsintegration! Vilka valutor som stöds beror på vilket land

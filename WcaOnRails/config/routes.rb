@@ -251,6 +251,7 @@ Rails.application.routes.draw do
   get '/regulations' => 'regulations#show', id: 'index'
   get '/regulations/wca-regulations-and-guidelines', to: redirect('https://regulations.worldcubeassociation.org/wca-regulations-and-guidelines.pdf', status: 302)
   get '/regulations/about' => 'regulations#about'
+  get '/regulations/countries' => 'regulations#countries'
   get '/regulations/scrambles' => 'regulations#scrambles'
   get '/regulations/guidelines' => 'regulations#guidelines'
   get '/regulations/translations' => 'regulations#translations'
