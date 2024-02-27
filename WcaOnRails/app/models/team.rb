@@ -202,6 +202,14 @@ class Team < ApplicationRecord
     I18n.t("about.structure.#{friendly_id}.name")
   end
 
+  def group_type
+    if official?
+      UserGroup.group_types[:teams_committees]
+    elsif council?
+      UserGroup.group_types[:councils]
+    end
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: %w[id friendly_id name email],
     methods: %w[name acronym current_members],
