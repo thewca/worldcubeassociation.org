@@ -1032,6 +1032,54 @@ RSpec.describe "registrations" do
       end
     end
   end
+
+  # NOTE: This test group targets a number of endpoints in the Paypal payment process, instead of one in isolation. There may be better
+  # testing practice for this
+  describe "POST #make_paypal_payment" do
+    context "when signed in" do
+      let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+      let!(:user) { FactoryBot.create(:user, :wca_id) }
+      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
+      before :each do
+        sign_in user
+
+        stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders").to_return(status: 200, body: get_create_order_payload)
+      end
+
+      it 'successfully creates an order' do
+        payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+
+        post registration_create_paypal_order_path(registration.id), params: payload
+
+        body = JSON.parse(response.body)
+        expect(body["status"]).to eq("CREATED")
+      end
+
+      it 'captures a payment based on an existing order' do
+        amount = competition.base_entry_fee_lowest_denomination
+        currency_code = competition.currency_code
+        # First create the order
+        payload = { total_charge: amount, currency_code: currency_code }
+
+        post registration_create_paypal_order_path(registration.id), params: payload
+
+        order_id = JSON.parse(response.body)["id"]
+
+        # Stub the create order response
+        url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
+        stub_request(:post, url).to_return(status: 200, body: get_capture_order_response(order_id, amount, currency_code))
+
+        # Make the API call to capture the order
+        post registration_capture_paypal_payment_path(registration.id, order_id), params: payload
+
+        # Capture the payment post registration_capture_paypal_payment_path(registration.id, order_id)
+        expect(JSON.parse(response.body)["status"]).to eq("COMPLETED")
+
+        # TODO: Assert some actually useful shit around the db constructs that we expect
+      end
+    end
+  end
 end
 
 def csv_file(lines)
@@ -1045,4 +1093,129 @@ end
 def expect_error_to_be(response, message)
   as_json = JSON.parse(response.body)
   expect(as_json["error"]["message"]).to eq message
+end
+
+def get_capture_order_response(order_id, amount, currency)
+  {
+    "id" => order_id,
+    "status" => "COMPLETED",
+    "payment_source" => {
+      "paypal" => {
+        "email_address" => "sb-f843db29377618@personal.example.com",
+        "account_id" => "ZL2MQFQK9Z82Q",
+        "account_status" => "VERIFIED",
+        "name" => {
+          "given_name" => "TestUser",
+          "surname" => "One",
+        },
+        "address" => {
+          "country_code" => "US",
+        },
+      },
+    },
+    "purchase_units" => [
+      {
+        "reference_id" => "default",
+        "shipping" => {
+          "name" => {
+            "full_name" => "TestUser One",
+          },
+          "address" => {
+            "address_line_1" => "1 Main St",
+            "admin_area_2" => "San Jose",
+            "admin_area_1" => "CA",
+            "postal_code" => "95131",
+            "country_code" => "US",
+          },
+        },
+        "payments" => {
+          "captures" => [
+            {
+              "id" => "7WA034444N6390300",
+              "status" => "COMPLETED",
+              "amount" => {
+                "currency_code" => currency,
+                "value" => amount,
+              },
+              "final_capture" => true,
+              "disbursement_mode" => "INSTANT",
+              "seller_protection" => {
+                "status" => "ELIGIBLE",
+                "dispute_categories" => [
+                  "ITEM_NOT_RECEIVED",
+                  "UNAUTHORIZED_TRANSACTION",
+                ],
+              },
+              "links" => [
+                {
+                  "href" => "https://api.sandbox.paypal.com/v2/payments/captures/7WA034444N6390300",
+                  "rel" => "self",
+                  "method" => "GET",
+                },
+                {
+                  "href" => "https://api.sandbox.paypal.com/v2/payments/captures/7WA034444N6390300/refund",
+                  "rel" => "refund",
+                  "method" => "POST",
+                },
+                {
+                  "href" => "https://api.sandbox.paypal.com/v2/checkout/orders/3R2327881A3748640",
+                  "rel" => "up",
+                  "method" => "GET",
+                },
+              ],
+              "create_time" => "2024-02-26T14:13:47Z",
+              "update_time" => "2024-02-26T14:13:47Z",
+            },
+          ],
+        },
+      },
+    ],
+    "payer" => {
+      "name" => {
+        "given_name" => "TestUser",
+        "surname" => "One",
+      },
+      "email_address" => "sb-f843db29377618@personal.example.com",
+      "payer_id" => "ZL2MQFQK9Z82Q",
+      "address" => {
+        "country_code" => "US",
+      },
+    },
+    "links" => [
+      {
+        "href" => "https://api.sandbox.paypal.com/v2/checkout/orders/3R2327881A3748640",
+        "rel" => "self",
+        "method" => "GET",
+      },
+    ],
+  }.to_json
+end
+
+def get_create_order_payload
+  {
+    id: "3R2327881A3748640",
+    status: "CREATED",
+    links: [
+      {
+        href: "https://api.sandbox.paypal.com/v2/checkout/orders/3R2327881A3748640",
+        rel: "self",
+        method: "GET",
+      },
+      {
+        href: "https://www.sandbox.paypal.com/checkoutnow?token=3R2327881A3748640",
+        rel: "approve",
+        method: "GET",
+      },
+      {
+        href: "https://api.sandbox.paypal.com/v2/checkout/orders/3R2327881A3748640",
+        rel: "update",
+        method: "PATCH",
+      },
+      {
+        href: "https://api.sandbox.paypal.com/v2/checkout/orders/3R2327881A3748640/capture",
+        rel: "capture",
+        method: "POST",
+      },
+    ],
+  }.to_json
 end

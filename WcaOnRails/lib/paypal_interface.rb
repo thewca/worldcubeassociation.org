@@ -172,11 +172,13 @@ module PaypalInterface
 
       # Logs requests and responses.
       # By default, it only logs the request method and URL, and the request/response headers.
-      builder.response :logger, ::Logger.new($stdout), bodies: true
+      builder.response :logger, ::Logger.new($stdout), bodies: true if Rails.env.development?
     end
   end
 
   private_class_method def self.generate_access_token
+    return "test token" if Rails.env.test?
+
     options = {
       site: EnvConfig.PAYPAL_BASE_URL,
       token_url: '/v1/oauth2/token',
