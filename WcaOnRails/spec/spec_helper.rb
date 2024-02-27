@@ -3,6 +3,7 @@
 # Enable SimpleCov as per https://github.com/fortissimo1997/simplecov-lcov#output-report-as-single-file
 require 'simplecov'
 require 'simplecov-lcov'
+require 'webmock/rspec'
 SimpleCov::Formatter::LcovFormatter.config.report_with_single_file = true
 SimpleCov.formatter = SimpleCov::Formatter::LcovFormatter
 SimpleCov.start
