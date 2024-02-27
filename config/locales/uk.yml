@@ -1353,7 +1353,7 @@ uk:
           scopes_html: >-
             Розділіть межі пробілами. Залиште пустими, щоб використовувати межі
             за замовчанням. Перегляньте <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">тут</a> список меж, що підтримуються.
       scopes:
         #original_hash: 1920e95

@@ -1531,7 +1531,7 @@ pt:
           scopes_html: >-
             Separe os âmbitos com espaços. Deixe em branco para usar o(s)
             âmbito(s) padrão. Veja a lista de âmbitos suportados <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">aqui</a>.
       scopes:
         #original_hash: 1920e95

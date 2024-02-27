@@ -1187,7 +1187,7 @@ vi:
           scopes_html: >-
             Phân chia phạm vi bằng dấu cách. Để trống để sử dụng những phạm vi
             mặc định. Xem <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tại đây</a> để đọc danh sách của những phạm vi được
             hỗ trợ.
       scopes:

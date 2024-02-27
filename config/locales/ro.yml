@@ -1551,7 +1551,7 @@ ro:
           scopes_html: >-
             Separă domeniile prin spații. Lasă necompletat pentru a folosii
             domeniul fundamental/domeniile fundamentale. Vezi <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank"> aici </a> o listă de domenii suportate.
       scopes:
         #original_hash: 1920e95

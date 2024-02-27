@@ -1164,7 +1164,7 @@ sv:
           scopes_html: >-
             Separera scopes med mellanslag. Lämna tomt för att använda
             standardscope(s). Se <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">här</a> för en lista över stödda scopes.
       scopes:
         #original_hash: 1920e95

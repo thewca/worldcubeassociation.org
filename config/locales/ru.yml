@@ -1538,7 +1538,7 @@ ru:
           scopes_html: >-
             Scopes разделяются пробелами. Оставьте пустым, чтобы использовать
             scope по умолчанию. Смотрите <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">здесь</a> список поддерживаемых scopes.
       scopes:
         #original_hash: 1920e95

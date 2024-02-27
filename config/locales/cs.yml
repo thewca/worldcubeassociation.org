@@ -1473,7 +1473,7 @@ cs:
           #original_hash: 62a0113
           scopes_html: >-
             Oddělte scopy mezerami. Podívejte se <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">zde</a> na seznam podporovaných scopů.
       scopes:
         #original_hash: 1920e95

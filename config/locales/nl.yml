@@ -1407,7 +1407,7 @@ nl:
           scopes_html: >-
             Verschillende scopes met spaties scheiden. Laat leeg om de default
             scope te gebruiken. Zie <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">hier</a> voor een lijst met mogelijke scopes.
       scopes:
         #original_hash: 1920e95

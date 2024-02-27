@@ -1446,7 +1446,7 @@ ca:
           scopes_html: >-
             Separa els àmbits amb espais. Deixa-ho en blanc per utilitzar
             l'àmbit(s) per defecte. Visita <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">aquí</a> per obtenir una llista amb els àmbits
             permesos.
       scopes:

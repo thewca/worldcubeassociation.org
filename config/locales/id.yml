@@ -1174,7 +1174,7 @@ id:
           scopes_html: >-
             Pisahkan Scope dengan spasi. Kosongkan untuk menggunakan Scope
             default. Lihat <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tautan ini</a> untuk melihat daftar Scope yang
             didukung.
       scopes:

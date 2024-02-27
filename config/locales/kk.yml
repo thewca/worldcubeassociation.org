@@ -1355,7 +1355,7 @@ kk:
           scopes_html: >-
             Scopes бос орындармен бөлінеді. Әдепкі scope пайдалану үшін бос
             қалдырыңыз. Қараңыз <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">здесь</a> қолдау көрсетілетін scopes тізімі.
       scopes:
         #original_hash: 1920e95

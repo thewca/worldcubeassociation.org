@@ -1056,7 +1056,7 @@ zh-CN:
           #original_hash: 62a0113
           scopes_html: >-
             将权限用空格分开。留空将使用默认权限。 <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">点击这里</a>查看支持的权限列表。
       scopes:
         #original_hash: 1920e95

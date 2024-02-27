@@ -38,7 +38,7 @@ class TranslationsController < ApplicationController
     user_login = Octokit.user.login
     origin_repo = "#{user_login}/worldcubeassociation.org"
     upstream_repo = "thewca/worldcubeassociation.org"
-    file_path = "WcaOnRails/config/locales/#{locale}.yml"
+    file_path = "config/locales/#{locale}.yml"
     message = "Update #{locale} translation."
     content_digest = Digest::SHA1.hexdigest(content)
     branch_name = "translation-#{locale}-#{content_digest}"

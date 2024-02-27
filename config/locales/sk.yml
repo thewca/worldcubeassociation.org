@@ -865,7 +865,7 @@ sk:
           scopes_html: >-
             Oddeľte polia s medzerami. Nechajte prázdne miesto pre použitie
             základného poľa (polí). Pozrite sa na <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">here</a> pre list podporovaných polí.
       scopes:
         #original_hash: 1920e95

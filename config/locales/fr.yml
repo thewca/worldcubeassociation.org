@@ -1586,7 +1586,7 @@ fr:
           scopes_html: >-
             Scopes séparés avec des espaces. Laisser vide pour utiliser le(s)
             scope(s) par défaut. Voir <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/WcaOnRails/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">ici</a> pour une liste des scopes supportés.
       scopes:
         #original_hash: 1920e95
