@@ -9,6 +9,8 @@ class Api::Internal::V1::MailerController < Api::Internal::V1::ApiController
     # a competitor back to pending
     registration_action = params.require(:action)
     registration_user = params.require(:user_id)
+    # So we know who to email on delete
+    requesting_user = params.require(:current_user)
     registration_competition = params.require(:competition_id)
     competition = Competition.find(registration_competition)
     user = User.find(registration_user)
@@ -32,8 +34,12 @@ class Api::Internal::V1::MailerController < Api::Internal::V1::ApiController
     end
 
     if registration_status == 'cancelled' && registration_action == 'update'
-      RegistrationsMailer.notify_organizers_of_deleted_registration(converted_registration).deliver_later
-      RegistrationsMailer.notify_registrant_of_deleted_registration(converted_registration).deliver_later
+      # Only email the organizers if the user deletes themself
+      if requesting_user == registration_user
+        RegistrationsMailer.notify_organizers_of_deleted_registration(converted_registration).deliver_later
+      else
+        RegistrationsMailer.notify_registrant_of_deleted_registration(converted_registration).deliver_later
+      end
     end
   end
 end
