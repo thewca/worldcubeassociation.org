@@ -24,11 +24,11 @@ export default function Translators() {
   return (
     <Container fluid>
       <Header as="h2">{I18n.t('page.translators.title')}</Header>
-      {Object.keys(groupedTranslators).map((groupId) => (
+      {Object.entries(groupedTranslators).map(([groupId, translatorsList]) => (
         <Fragment key={groupId}>
-          <Header as="h3">{groupedTranslators[groupId][0].group.name}</Header>
+          <Header as="h3">{translatorsList[0].group.name}</Header>
           <Grid padded>
-            {groupedTranslators[groupId].map((role) => (
+            {translatorsList.map((role) => (
               <Grid.Column
                 key={role.id}
                 style={{ width: 'fit-content' }}
