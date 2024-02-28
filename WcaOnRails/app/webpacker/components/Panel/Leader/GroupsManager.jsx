@@ -11,6 +11,27 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { groupTypes, teamsCommitteesStatus, councilsStatus } from '../../../lib/wca-data.js.erb';
 
+const statusObjectOfGroupType = (groupType) => {
+  switch (groupType) {
+    case groupTypes.teams_committees:
+      return teamsCommitteesStatus;
+    case groupTypes.councils:
+      return councilsStatus;
+    default:
+      return null;
+  }
+};
+
+const isLead = (role) => role.metadata.status === 'leader';
+
+const canPromote = (role) => (
+  role.metadata.status === statusObjectOfGroupType(role.group.group_type).member
+);
+
+const canDemote = (role) => (
+  role.metadata.status === statusObjectOfGroupType(role.group.group_type).senior_member
+);
+
 function GroupTable({ groupId }) {
   const {
     data: roles, loading, error, sync,
@@ -21,27 +42,6 @@ function GroupTable({ groupId }) {
   ));
   const confirm = useConfirm();
   const { save, saving } = useSaveAction();
-
-  const statusObjectOfGroupType = (groupType) => {
-    switch (groupType) {
-      case groupTypes.teams_committees:
-        return teamsCommitteesStatus;
-      case groupTypes.councils:
-        return councilsStatus;
-      default:
-        return null;
-    }
-  };
-
-  const isLead = (role) => role.metadata.status === 'leader';
-
-  const canPromote = (role) => (
-    role.metadata.status === statusObjectOfGroupType(role.group.group_type).member
-  );
-
-  const canDemote = (role) => (
-    role.metadata.status === statusObjectOfGroupType(role.group.group_type).senior_member
-  );
 
   const promoteRoleHandler = (role) => {
     confirm().then(() => {
