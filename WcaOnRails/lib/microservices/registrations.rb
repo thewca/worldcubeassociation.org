@@ -19,6 +19,10 @@ module Microservices
       "/api/internal/v1/update_payment"
     end
 
+    def self.registrations_by_user_path(id)
+      "/api/internal/v1/users/#{id}/registrations"
+    end
+
     def self.get_registrations_path(competition_id)
       "/api/internal/v1/#{competition_id}/registrations"
     end
@@ -37,6 +41,33 @@ module Microservices
         # By default, it only logs the request method and URL, and the request/response headers.
         builder.response :logger
       end
+    end
+
+    RegistrationConverter = Struct.new(:competition, :user, :status) do
+      def accepted?
+        status == "accepted"
+      end
+
+      def deleted?
+        status == "deleted"
+      end
+
+      def name
+        user.name
+      end
+
+      def email
+        user.email
+      end
+    end
+
+    def self.convert_registration(competition, user, registration_status)
+      RegistrationConverter.new(competition: competition, user: user, status: registration_status)
+    end
+
+    def self.registrations_by_user(user_id)
+      response = self.registration_connection.get(self.registrations_by_user_path(user_id))
+      response.body
     end
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
