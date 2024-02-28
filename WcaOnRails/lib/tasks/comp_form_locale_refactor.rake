@@ -3,8 +3,7 @@
 namespace :comp_form_locales do
   desc "Read values from the old simple_form parts of the YAML and squeeze them into the new format"
   task :refactor do
-    UserGroup.translator_groups.each do |translator_group|
-      l = translator_group.metadata.locale
+    Locales::AVAILABLE.each_key do |l|
       trans = YAML.load_file("config/locales/#{l}.yml").deep_symbolize_keys
 
       hints = labels = choices = nil

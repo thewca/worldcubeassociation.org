@@ -6,9 +6,8 @@
   <ol>
     <% @locale_stats.each do |locale, count| %>
       <li>
-        <% group_metadata = GroupsMetadataTranslators.find_by(locale: locale) %>
-        <% group = UserGroup.find_by(metadata_id: group_metadata.id) %>
-        <%= group[:name] %>
+        <% data = Locales::AVAILABLE[locale] %>
+        <%= data[:name] %>
         <%= count %> views
       </li>
     <% end %>
