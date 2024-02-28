@@ -49,7 +49,7 @@ module Microservices
       end
 
       def name
-        user.person.name
+        user.name
       end
 
       def email
