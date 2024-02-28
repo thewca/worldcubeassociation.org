@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  Input, Form, Message, FormGroup, FormField,
+  Form, Message, FormGroup, FormField,
 } from 'semantic-ui-react';
 import DatePicker from 'react-datepicker';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
@@ -76,8 +76,7 @@ function ClaimWcaId() {
         onChange={(_, { value }) => setUnconfirmedPerson(value)}
         value={unconfirmedPerson}
       />
-      <Form.Field
-        control={Input}
+      <Form.Input
         name="user[unconfirmed_wca_id]"
         style={{ display: 'none' }}
         value={unconfirmedWcaId}
@@ -146,8 +145,7 @@ function ClaimWcaId() {
           )}
         </>
       )}
-      <Form.Field
-        control={Input}
+      <Form.Input
         name="user[delegate_id_to_handle_wca_id_claim]"
         style={{ display: 'none' }}
         value={delegateToVerify?.id}
