@@ -360,23 +360,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
-      group_id = params.require(:groupId)
-      status = params.require(:status)
       group_type = group_id_of_old_system_to_group_type(id)
-      original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:councils]
-        user_id = params.require(:userId)
-        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
-        if already_existing_member.present?
-          already_existing_member.update!(end_date: Time.now)
-        end
-        TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-        render json: {
-          success: true,
-        }
-      else
+      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        return
       end
+      team_member_id = id.split("_").last
+      team_member = TeamMember.find_by!(id: team_member_id)
+      team = team_member.team
+      status = params.require(:status)
+      team_member.update!(end_date: Time.now)
+      TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+      render json: {
+        success: true,
+      }
     else
       role = UserRole.find(id)
       group_type = role.group.group_type

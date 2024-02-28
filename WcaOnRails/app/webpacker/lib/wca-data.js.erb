@@ -171,6 +171,12 @@ export const groupTypes = JSON.parse('<%= UserGroup.group_types.to_json.html_saf
 // This hard-coding is temporary. Once we have `roles_metadata_councils` table, we will have a model
 // `roles_metadata_councils` and we will be able to fetch this data from there.
 
+export const teamsCommitteesStatus = {
+  member: 'member',
+  senior_member: 'senior_member',
+  leader: 'leader',
+};
+
 export const councilsStatus = {
   member: 'member',
   senior_member: 'senior_member',
