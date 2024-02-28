@@ -1,5 +1,6 @@
-import React, { useMemo } from 'react';
+import React, { Fragment, useMemo } from 'react';
 import { Container, Grid, Header } from 'semantic-ui-react';
+import _ from 'lodash';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
@@ -13,12 +14,8 @@ export default function Translators() {
     data: translators, loading, error,
   } = useLoadedData(apiV0Urls.userRoles.listOfGroupType(groupTypes.translators));
   const groupedTranslators = useMemo(
-    () => Object.groupBy(translators || [], (role) => role.group.id),
+    () => _.groupBy((translators || []), (role) => role.group.id),
     [translators],
-  );
-  const translatorGroups = useMemo(
-    () => Object.keys(groupedTranslators).map((key) => groupedTranslators[key][0].group),
-    [groupedTranslators],
   );
 
   if (loading) return <Loading />;
@@ -27,17 +24,20 @@ export default function Translators() {
   return (
     <Container fluid>
       <Header as="h2">{I18n.t('page.translators.title')}</Header>
-      {translatorGroups.map((group) => (
-        <>
-          <Header as="h3" key={group.id}>{group.name}</Header>
+      {Object.keys(groupedTranslators).map((groupId) => (
+        <Fragment key={groupId}>
+          <Header as="h3">{groupedTranslators[groupId][0].group.name}</Header>
           <Grid padded>
-            {groupedTranslators[group.id].map((role) => (
-              <Grid.Column key={role.id} width={4}>
+            {groupedTranslators[groupId].map((role) => (
+              <Grid.Column
+                key={role.id}
+                style={{ width: 'fit-content' }}
+              >
                 <UserBadge user={role.user} />
               </Grid.Column>
             ))}
           </Grid>
-        </>
+        </Fragment>
       ))}
     </Container>
   );
