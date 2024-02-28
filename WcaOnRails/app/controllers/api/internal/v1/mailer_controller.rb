@@ -14,18 +14,14 @@ class Api::Internal::V1::MailerController < Api::Internal::V1::ApiController
     registration_competition = params.require(:competition_id)
     competition = Competition.find(registration_competition)
     user = User.find(registration_user)
-    # TODO, use the Convert method from the other PR
-    converted_registration = OpenStruct.new(competition: competition,
-                                            user: user,
-                                            name: user.person.name,
-                                            email: user.email)
+    converted_registration = convert_registration(competition, user, registration_status)
 
     if registration_status == 'pending' && registration_action == 'create'
       RegistrationsMailer.notify_organizers_of_new_registration(converted_registration).deliver_later
       RegistrationsMailer.notify_registrant_of_new_registration(converted_registration).deliver_later
     end
 
-    if registration_status == 'pending' && registration_action == 'update'
+    if registration_status == 'pending' && registration_actions == 'update'
       RegistrationsMailer.notify_registrant_of_pending_registration(converted_registration).deliver_later
     end
 
