@@ -9,6 +9,7 @@ import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
+import { groupTypes, teamsCommitteesStatus, councilsStatus } from '../../../lib/wca-data.js.erb';
 
 function GroupTable({ groupId }) {
   const {
@@ -21,7 +22,42 @@ function GroupTable({ groupId }) {
   const confirm = useConfirm();
   const { save, saving } = useSaveAction();
 
+  const statusObjectOfGroupType = (groupType) => {
+    switch (groupType) {
+      case groupTypes.teams_committees:
+        return teamsCommitteesStatus;
+      case groupTypes.councils:
+        return councilsStatus;
+      default:
+        return null;
+    }
+  };
+
   const isLead = (role) => role.metadata.status === 'leader';
+
+  const canPromote = (role) => (
+    role.metadata.status === statusObjectOfGroupType(role.group.group_type).member
+  );
+
+  const canDemote = (role) => (
+    role.metadata.status === statusObjectOfGroupType(role.group.group_type).senior_member
+  );
+
+  const promoteRoleHandler = (role) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.update(role.id), {
+        status: statusObjectOfGroupType(role.group.group_type).senior_member,
+      }, sync, { method: 'PATCH' });
+    });
+  };
+
+  const demoteRoleHandler = (role) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.update(role.id), {
+        status: statusObjectOfGroupType(role.group.group_type).member,
+      }, sync, { method: 'PATCH' });
+    });
+  };
 
   const endRoleHandler = (role) => {
     confirm().then(() => {
@@ -51,6 +87,10 @@ function GroupTable({ groupId }) {
                 {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`}
               </Table.Cell>
               <Table.Cell>
+                {canPromote(role)
+                  && <Button onClick={() => promoteRoleHandler(role)}>Promote</Button>}
+                {canDemote(role)
+                  && <Button onClick={() => demoteRoleHandler(role)}>Demote</Button>}
                 {!isLead(role)
                   && <Button onClick={() => endRoleHandler(role)}>End Role</Button>}
               </Table.Cell>
