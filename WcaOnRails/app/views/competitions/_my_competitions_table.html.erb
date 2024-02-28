@@ -38,7 +38,7 @@
                           past ? "past" : "not-past" ].join(' ') %>
           <tr class="<%= tr_classes %>"
               data-toggle="tooltip" data-placement="bottom" data-container="body"
-              title="<%= competition_message_for_user(competition, current_user) unless past %>">
+              title="<%= competition_message_for_user(competition, current_user, registration) unless past %>">
             <% if @show_registration_status && bookmarked %>
               <td><%= registration_status_icon(competition) %></td>
             <% end %>

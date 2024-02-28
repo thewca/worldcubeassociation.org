@@ -405,20 +405,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
-      group_id = params.require(:groupId)
+      team_member_id = id.split("_").last
       group_type = group_id_of_old_system_to_group_type(id)
-      original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:councils]
-        user_id = params.require(:userId)
-        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
-        if already_existing_member.present?
-          already_existing_member.update!(end_date: Date.today)
-        end
+      team_member = TeamMember.find_by(id: team_member_id)
+      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        return
+      end
+      if team_member.present?
+        team_member.update!(end_date: Date.today)
         render json: {
           success: true,
         }
       else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        render status: :unprocessable_entity, json: { error: "Invalid member" }
       end
     else
       role = UserRole.find(id)

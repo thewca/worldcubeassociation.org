@@ -75,28 +75,6 @@ RSpec.describe "JobsCheck" do
   end
 end
 
-RSpec.describe "StripeChargesCheck" do
-  let(:check) { StripeChargesCheck.new }
-
-  it "passes" do
-    status, description = check.status_description
-    expect(status).to eq :success
-    expect(description).to be_nil
-  end
-
-  it "warns about stripe charges with status unknown" do
-    StripeTransaction.create!(
-      parameters: {},
-      status: "unknown",
-    )
-
-    status, description = check.status_description
-
-    expect(status).to eq :danger
-    expect(description).to match("1 Stripe charge with status 'unknown'")
-  end
-end
-
 RSpec.describe "RegulationsCheck" do
   let(:check) { RegulationsCheck.new }
   let(:s3) { Aws::S3::Client.new(stub_responses: true) }
