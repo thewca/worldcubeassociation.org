@@ -2,6 +2,7 @@ import React, { useMemo, useState } from 'react';
 import {
   Button, Container, Header, Icon, Popup,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import I18n from '../../lib/i18n';
@@ -17,6 +18,10 @@ import UserBadge from '../UserBadge';
 // i18n-tasks-use t('user_roles.status.officers.vice_chair')
 // i18n-tasks-use t('user_roles.status.officers.treasurer')
 
+function arrayAfterRemovingDuplicates(array) {
+  return array?.filter((item, index) => array.indexOf(item) === index);
+}
+
 export default function OfficersAndBoard({ boardEmail }) {
   const { data: officers, loading: officersLoading, error: officersError } = useLoadedData(
     apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status', {
@@ -31,24 +36,11 @@ export default function OfficersAndBoard({ boardEmail }) {
   const [hoveringEmail, setHoveringEmail] = useState(false);
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
-  // multiple times. Hence, the following function will filter out the duplicates and add the status
-  // in an array for each user.
-  const officerUsers = useMemo(() => {
-    const userIndex = {};
-    return officers?.reduce((accumulator, currentValue) => {
-      const userId = currentValue.user.id;
-      if (userIndex[userId] !== undefined) {
-        accumulator[userIndex[userId]].status.push(currentValue.metadata.status);
-      } else {
-        userIndex[userId] = accumulator.length;
-        accumulator.push({
-          userData: currentValue.user,
-          status: [currentValue.metadata.status],
-        });
-      }
-      return accumulator;
-    }, []);
-  }, [officers]);
+  // multiple times.
+  const officerRoles = useMemo(() => _.groupBy(officers, (officer) => officer.user.id), [officers]);
+  const officerUserIds = useMemo(() => arrayAfterRemovingDuplicates(
+    officers?.map((officer) => officer.user.id),
+  ), [officers]);
 
   if (boardLoading || officersLoading) return <Loading />;
   if (boardError || officersError) return <Errored />;
@@ -58,13 +50,13 @@ export default function OfficersAndBoard({ boardEmail }) {
       <Header as="h2">{I18n.t('page.officers_and_board.title')}</Header>
       <Header as="h3">{I18n.t('user_groups.group_types.officers')}</Header>
       <p>{I18n.t('page.officers_and_board.officers_description')}</p>
-      {officerUsers.map((officerUser) => (
+      {officerUserIds.map((officerUserId) => (
         <UserBadge
-          key={officerUser.userData.id}
-          user={officerUser.userData}
+          key={officerUserId}
+          user={officerRoles[officerUserId][0].user}
           size="large"
-          subtexts={officerUser.status.map(
-            (status) => I18n.t(`user_roles.status.officers.${status}`),
+          subtexts={officerRoles[officerUserId].map(
+            (officerRole) => I18n.t(`user_roles.status.officers.${officerRole.metadata.status}`),
           )}
         />
       ))}
