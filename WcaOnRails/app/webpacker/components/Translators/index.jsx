@@ -29,12 +29,7 @@ export default function Translators() {
           <Header as="h3">{translatorsList[0].group.name}</Header>
           <Grid padded>
             {translatorsList.map((role) => (
-              <Grid.Column
-                key={role.id}
-                style={{ width: 'fit-content' }}
-              >
-                <UserBadge user={role.user} />
-              </Grid.Column>
+              <UserBadge key={role.id} user={role.user} />
             ))}
           </Grid>
         </Fragment>
