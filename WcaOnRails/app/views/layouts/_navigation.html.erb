@@ -184,7 +184,7 @@
           <% if current_user %>
             <% notification_count = notifications_for_user(current_user).length %>
             <%= react_component("UserAvatar", {
-              avatar: (current_user || User.new).avatar,
+              avatar: current_user.avatar,
               size: "tiny",
               disableHover: true,
             }, class: 'avatar-thumbnail') %>

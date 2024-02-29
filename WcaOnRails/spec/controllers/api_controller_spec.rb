@@ -107,9 +107,8 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json["result"].length).to eq 1
         expect(json["result"][0]["id"]).to eq userless_person.wca_id
         expect(json["result"][0]["wca_id"]).to eq userless_person.wca_id
-        expect(json['result'][0]['avatar']['url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
-        expect(json['result'][0]['avatar']['thumb_url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
-        expect(json['result'][0]['avatar']['is_default']).to eq true
+        expect(json['result'][0]['avatar']['url']).to eq UserAvatar::DEFAULT_AVATAR_FILE
+        expect(json['result'][0]['avatar']['is_default?']).to eq true
       end
 
       it "can find by name" do
@@ -274,7 +273,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     context 'signed in as a member of some teams and a leader of others' do
       before :each do
-        user = FactoryBot.create :user
+        user = FactoryBot.create :user, :with_avatar
 
         wrc_team = Team.wrc
         FactoryBot.create(:team_member, team_id: wrc_team.id, user_id: user.id)
@@ -295,7 +294,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         team = json['me']['teams'].find { |t| t['friendly_id'] == 'wrc' }
         expect(team['leader']).to eq false
         expect(team['friendly_id']).to eq 'wrc'
-        expect(team['avatar']['thumb']['url']).to be_a String
+        expect(team['avatar']['url']).to be_a String
         expect(team['id']).to be_a Numeric
         expect(team['name']).to be_a String
         expect(team['senior_member']).to be false
@@ -314,7 +313,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       let(:user) do
         FactoryBot.create(
           :user,
-          avatar: File.open(Rails.root.join("spec/support/logo.jpg")),
+          :with_avatar,
           wca_id: person.wca_id,
         )
       end
@@ -394,9 +393,8 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
         expect(json['me']['email']).to eq(user.email)
-        expect(json['me']['avatar']['url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
-        expect(json['me']['avatar']['thumb_url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
-        expect(json['me']['avatar']['is_default']).to eq true
+        expect(json['me']['avatar']['url']).to eq UserAvatar::DEFAULT_AVATAR_FILE
+        expect(json['me']['avatar']['is_default?']).to eq true
 
         expect(json['me']['country_iso2']).to eq "US"
         expect(json['me']['gender']).to eq "m"
@@ -421,9 +419,8 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(json['me']['wca_id']).to eq(user.wca_id)
         expect(json['me']['name']).to eq(user.name)
         expect(json['me']['email']).to eq(user.email)
-        expect(json['me']['avatar']['url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
-        expect(json['me']['avatar']['thumb_url']).to eq AvatarUploaderBase.missing_avatar_thumb_url
-        expect(json['me']['avatar']['is_default']).to eq true
+        expect(json['me']['avatar']['url']).to eq UserAvatar::DEFAULT_AVATAR_FILE
+        expect(json['me']['avatar']['is_default?']).to eq true
 
         expect(json['me']['country_iso2']).to eq "US"
         expect(json['me']['gender']).to eq "m"

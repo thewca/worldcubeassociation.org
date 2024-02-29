@@ -950,7 +950,6 @@ en:
       wca_id_no_gender_html: "We do not have a gender recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_citizenship_html: "We do not have a citizenship recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
       wca_id_no_name_html: "We do not have a name recorded for this WCA ID. Please email the <a href='mailto:results@worldcubeassociation.org' target='_blank'>WCA Results Team</a> to resolve this."
-      avatar_requires_wca_id: "requires a WCA ID to be assigned"
       email_used_by_locked_account_html: "is already used by another account. It's been created automatically as a result of you registering for a competition via an external service. If you are the owner of this email, you can use the account after resetting your password <a href='/users/password/new'>here</a>."
       must_match_person: "must match person details corresponding to the WCA ID"
     #context: when an action was successful

@@ -1094,6 +1094,26 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_033850) do
     t.index ["competition_id"], name: "index_uploaded_jsons_on_competition_id"
   end
 
+  create_table "user_avatars", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "user_id"
+    t.string "filename"
+    t.string "status"
+    t.integer "thumbnail_crop_x"
+    t.integer "thumbnail_crop_y"
+    t.integer "thumbnail_crop_w"
+    t.integer "thumbnail_crop_h"
+    t.string "backend"
+    t.integer "approved_by"
+    t.datetime "approved_at", precision: nil
+    t.integer "revoked_by"
+    t.datetime "revoked_at", precision: nil
+    t.text "revocation_reason"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["status"], name: "index_user_avatars_on_status"
+    t.index ["user_id"], name: "index_user_avatars_on_user_id"
+  end
+
   create_table "user_groups", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", null: false
     t.string "group_type", null: false
@@ -1148,16 +1168,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_033850) do
     t.bigint "region_id"
     t.string "location", limit: 255
     t.string "wca_id"
-    t.string "avatar", limit: 255
-    t.string "pending_avatar", limit: 255
-    t.integer "saved_avatar_crop_x"
-    t.integer "saved_avatar_crop_y"
-    t.integer "saved_avatar_crop_w"
-    t.integer "saved_avatar_crop_h"
-    t.integer "saved_pending_avatar_crop_x"
-    t.integer "saved_pending_avatar_crop_y"
-    t.integer "saved_pending_avatar_crop_w"
-    t.integer "saved_pending_avatar_crop_h"
+    t.bigint "current_avatar_id"
+    t.bigint "pending_avatar_id"
     t.string "unconfirmed_wca_id", limit: 255
     t.integer "delegate_id_to_handle_wca_id_claim"
     t.date "dob"
@@ -1241,6 +1253,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_21_033850) do
   add_foreign_key "stripe_payment_intents", "users"
   add_foreign_key "stripe_transactions", "stripe_transactions", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_transactions"
+  add_foreign_key "user_avatars", "users"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"
   add_foreign_key "user_roles", "users"

@@ -153,6 +153,8 @@ export const competitionsForSeniorUrl = (userId) => `<%= CGI.unescape(Rails.appl
 
 export const adminCheckRecordsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_check_regional_records_path)%>`;
 
+export const userAvatarDataUrl = (userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.users_avatar_data_path("${userId}")) %>`;
+
 // Max number of objects fetched per query
 export const WCA_API_PAGINATION = 25;
 

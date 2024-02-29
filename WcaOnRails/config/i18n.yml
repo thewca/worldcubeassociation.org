@@ -58,3 +58,5 @@ translations:
       - "*.activerecord.attributes.championship.*"
       - "*.datetime.*"
       - "*.wca.errors.messages.form_error"
+      - "*.users.edit.*"
+      - "*.users.edit_avatar_thumbnail.*"
