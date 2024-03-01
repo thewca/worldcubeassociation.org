@@ -14,7 +14,7 @@ class Api::Internal::V1::MailerController < Api::Internal::V1::ApiController
     registration_competition = params.require(:competition_id)
     competition = Competition.find(registration_competition)
     user = User.find(registration_user)
-    converted_registration = convert_registration(competition, user, registration_status)
+    converted_registration = Microservices::Registration.convert_registration(competition, user, registration_status)
 
     if registration_status == 'pending' && registration_action == 'create'
       RegistrationsMailer.notify_organizers_of_new_registration(converted_registration).deliver_later
