@@ -2264,13 +2264,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/luxon3@npm:^6.1.10":
-  version: 6.1.10
-  resolution: "@fullcalendar/luxon3@npm:6.1.10"
+"@fullcalendar/luxon3@npm:^6.1.11":
+  version: 6.1.11
+  resolution: "@fullcalendar/luxon3@npm:6.1.11"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.10
+    "@fullcalendar/core": ~6.1.11
     luxon: ^3.0.0
-  checksum: 8b0a436bd329d3b3cf169238c102ac71c82daf078e7996ac9f1a117d71438e712ba11a9944b47c699cd06023f182e03ad81a6ac516791a86fb8f72207f80f6ed
+  checksum: d3e032943bf5982e0b4613c7c9c164e0409b0b184ccb446513d98c474cfd1e34f47c2be8230171794c0c5c624ea26600fd2fa19c10756ed081445ae2bbd94742
   languageName: node
   linkType: hard
 
@@ -9393,7 +9393,7 @@ __metadata:
     "@cubing/icons": "npm:^1.1.2"
     "@fullcalendar/core": "npm:^6.1.11"
     "@fullcalendar/interaction": "npm:^6.1.10"
-    "@fullcalendar/luxon3": "npm:^6.1.10"
+    "@fullcalendar/luxon3": "npm:^6.1.11"
     "@fullcalendar/react": "npm:^6.1.10"
     "@fullcalendar/timegrid": "npm:^6.1.10"
     "@rails/ujs": "npm:^6.1.7"
