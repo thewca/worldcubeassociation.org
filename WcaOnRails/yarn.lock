@@ -6020,14 +6020,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18n-js@npm:^4.3.2":
-  version: 4.3.2
-  resolution: "i18n-js@npm:4.3.2"
+"i18n-js@npm:^4.4.3":
+  version: 4.4.3
+  resolution: "i18n-js@npm:4.4.3"
   dependencies:
     bignumber.js: "npm:*"
     lodash: "npm:*"
     make-plural: "npm:*"
-  checksum: ccdfa7417f29cf1bf1e68d2146a3b3a1366392a2a2a07df23336fbffb9a8918dcc9c3bdfed20decf311a69d58c85c0160149a27752280dae14b521ec8bc3ab92
+  checksum: 545ce16b5fe9323d1a92637c91c6cd503c1065577fcbe96dabb34cae822a9da6642e2953eeb0e9e610a912b92f98c885c4c9717163e351593aaf0c2e5695442d
   languageName: node
   linkType: hard
 
@@ -9336,7 +9336,7 @@ __metadata:
     file-loader: "npm:^6.2.0"
     flag-icons: "npm:^7.1.0"
     glob: "npm:^10.3.10"
-    i18n-js: "npm:^4.3.2"
+    i18n-js: "npm:^4.4.3"
     jquery: "npm:3.4.1"
     js-yaml: "npm:^4.1.0"
     jshint: "npm:^2.13.6"
