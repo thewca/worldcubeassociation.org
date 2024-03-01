@@ -20,7 +20,7 @@
     "@babel/preset-react": "^7.23.3",
     "@babel/runtime": "^7.23.9",
     "@cubing/icons": "^1.1.2",
-    "@fullcalendar/core": "^6.1.10",
+    "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/interaction": "^6.1.10",
     "@fullcalendar/luxon3": "^6.1.10",
     "@fullcalendar/react": "^6.1.10",
