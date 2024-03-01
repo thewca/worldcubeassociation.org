@@ -1,12 +1,7 @@
 import { useEffect, useState } from 'react';
 
 function getQueryParamsFromBrowserUrl() {
-  const entries = (new URLSearchParams(window.location.search)).entries();
-  return entries.reduce((accumulator, currentValue) => {
-    const [key, value] = currentValue;
-    accumulator[key] = value;
-    return accumulator;
-  }, {});
+  return Object.fromEntries(new URLSearchParams(window.location.search));
 }
 
 export default function useQueryParams() {
@@ -14,7 +9,10 @@ export default function useQueryParams() {
 
   useEffect(() => {
     const searchParams = new URLSearchParams(queryParams).toString();
-    if (window.location.search !== searchParams) {
+    const currentSearchParams = window.location.search.startsWith('?')
+      ? window.location.search.split('?')[1]
+      : window.location.search;
+    if (currentSearchParams !== searchParams) {
       window.location.search = searchParams;
     }
   }, [queryParams]);
