@@ -2259,14 +2259,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@fullcalendar/react@npm:^6.1.10":
-  version: 6.1.10
-  resolution: "@fullcalendar/react@npm:6.1.10"
+"@fullcalendar/react@npm:^6.1.11":
+  version: 6.1.11
+  resolution: "@fullcalendar/react@npm:6.1.11"
   peerDependencies:
-    "@fullcalendar/core": ~6.1.10
+    "@fullcalendar/core": ~6.1.11
     react: ^16.7.0 || ^17 || ^18
     react-dom: ^16.7.0 || ^17 || ^18
-  checksum: 0b287e39875b69e99c49a409e3a4b44501329e2ffd0d0f6b6a63ad8f7226f67c8ae5f81e608cf2b0aee3be8c6c0b46de46889890e293b2da44994550cdc8622d
+  checksum: a5f5b393525b76ba53152f4ec3733ddaddd7bb0e5a00e3ef4c3203646df15335e144db4a8e6f29361a0dc15a3cbb407c51abdf89ba75eaa19e65b3437f4124ea
   languageName: node
   linkType: hard
 
@@ -9408,7 +9408,7 @@ __metadata:
     "@fullcalendar/core": "npm:^6.1.11"
     "@fullcalendar/interaction": "npm:^6.1.11"
     "@fullcalendar/luxon3": "npm:^6.1.11"
-    "@fullcalendar/react": "npm:^6.1.10"
+    "@fullcalendar/react": "npm:^6.1.11"
     "@fullcalendar/timegrid": "npm:^6.1.11"
     "@rails/ujs": "npm:^6.1.7"
     "@tanstack/react-query": "npm:^5.24.1"

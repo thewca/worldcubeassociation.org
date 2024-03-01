@@ -23,7 +23,7 @@
     "@fullcalendar/core": "^6.1.11",
     "@fullcalendar/interaction": "^6.1.11",
     "@fullcalendar/luxon3": "^6.1.11",
-    "@fullcalendar/react": "^6.1.10",
+    "@fullcalendar/react": "^6.1.11",
     "@fullcalendar/timegrid": "^6.1.11",
     "@rails/ujs": "^6.1.7",
     "@tanstack/react-query": "^5.24.1",
