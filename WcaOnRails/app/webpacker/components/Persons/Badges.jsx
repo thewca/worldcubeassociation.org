@@ -2,7 +2,9 @@ import React from 'react';
 import { Popup } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import I18n from '../../lib/i18n';
-import { apiV0Urls, delegatesPageUrl, teamsCommitteesPageUrl } from '../../lib/requests/routes.js.erb';
+import {
+  apiV0Urls, delegatesPageUrl, teamsCommitteesPageUrl, translatorsPageUrl,
+} from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 
 // let i18n-tasks know the key is used
@@ -40,6 +42,14 @@ function badgeParams(role) {
       groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: 'officer-badge',
       url: teamsCommitteesPageUrl,
+    };
+  }
+  if (role.group.group_type === groupTypes.translators) {
+    return {
+      roleTitle: I18n.t('user_groups.group_types.translators'),
+      groupTitle: role.group.name,
+      badgeClass: 'team-member-badge',
+      url: translatorsPageUrl,
     };
   }
   return {};
