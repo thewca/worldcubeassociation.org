@@ -27,7 +27,7 @@
     "@fullcalendar/timegrid": "^6.1.10",
     "@rails/ujs": "^6.1.7",
     "@tanstack/react-query": "^5.24.1",
-    "autonumeric": "^4.10.4",
+    "autonumeric": "^4.10.5",
     "autoprefixer": "^10.4.17",
     "autosize": "^6.0.1",
     "babel-loader": "^9.1.3",

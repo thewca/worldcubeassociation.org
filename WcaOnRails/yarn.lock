@@ -3383,10 +3383,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"autonumeric@npm:^4.10.4":
-  version: 4.10.4
-  resolution: "autonumeric@npm:4.10.4"
-  checksum: 8ba9cd337dbb246f3056cce3ddf5340e948bf0e1abd5bef369c4d2b6cd9813e91d4c6a2e3fd8782d2a3134deee5aafbe03794408deef6ecacbca28ad3338f026
+"autonumeric@npm:^4.10.5":
+  version: 4.10.5
+  resolution: "autonumeric@npm:4.10.5"
+  checksum: 0eb176c9be239b9fdabac27bdcf6886f1772c7eaed4c41196605025b9f7ea09d78f3b6151ddeba725596f7f141e518194f1af5092fd9512c62f2f9e8432c0e3f
   languageName: node
   linkType: hard
 
@@ -9398,7 +9398,7 @@ __metadata:
     "@fullcalendar/timegrid": "npm:^6.1.10"
     "@rails/ujs": "npm:^6.1.7"
     "@tanstack/react-query": "npm:^5.24.1"
-    autonumeric: "npm:^4.10.4"
+    autonumeric: "npm:^4.10.5"
     autoprefixer: "npm:^10.4.17"
     autosize: "npm:^6.0.1"
     babel-loader: "npm:^9.1.3"
