@@ -28,8 +28,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def self.status_sort_rank(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
     group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
-    status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
-    STATUS_SORTING_ORDER[group_type.to_sym].find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym].length
+    status = UserRole.status(role) || ''
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
   end
 
   SORT_WEIGHT_LAMBDAS = {

@@ -978,6 +978,7 @@ en:
     group_types:
       board: "WCA Board of Directors"
       officers: "WCA Officers"
+      translators: "Translators"
   registrations:
     #context: and when an error is found
     errors:
