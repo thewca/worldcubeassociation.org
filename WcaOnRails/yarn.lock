@@ -3825,15 +3825,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"compression-webpack-plugin@npm:^11.0.0":
-  version: 11.0.0
-  resolution: "compression-webpack-plugin@npm:11.0.0"
+"compression-webpack-plugin@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "compression-webpack-plugin@npm:11.1.0"
   dependencies:
     schema-utils: "npm:^4.2.0"
     serialize-javascript: "npm:^6.0.2"
   peerDependencies:
     webpack: ^5.1.0
-  checksum: 02a9b286daae9e050ef20612f7fed10e3353f612fb6b13c3d287b5fe22000c9fb3154cf4988547354e9d5788a6a30f00d61c39e339a3907506e3d14ea2da1026
+  checksum: 387043d1e7dd776768bbc92071953ae0459891337f1ca908c0b4c9fe98322caf19847fae3713876e3976d894599712f784ccf13baa6d1c64ecb915786a54f2ec
   languageName: node
   linkType: hard
 
@@ -9235,7 +9235,7 @@ __metadata:
     babel-plugin-transform-react-remove-prop-types: "npm:^0.4.24"
     blueimp-load-image: "npm:^5.16.0"
     classnames: "npm:^2.5.1"
-    compression-webpack-plugin: "npm:^11.0.0"
+    compression-webpack-plugin: "npm:^11.1.0"
     core-js: "npm:^3.35.1"
     css-loader: "npm:^6.10.0"
     css-minimizer-webpack-plugin: "npm:^6.0.0"
