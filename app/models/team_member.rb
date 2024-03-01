@@ -94,13 +94,10 @@ class TeamMember < ApplicationRecord
 
   def role
     if Team.all_officers.include?(team)
-      group_type = UserGroup.group_types[:officers]
       group_name = 'Officers'
     elsif team == Team.board
-      group_type = UserGroup.group_types[:board]
       group_name = 'Board'
     else
-      group_type = UserGroup.group_types[:teams_committees]
       group_name = team.name
     end
     {
@@ -108,9 +105,9 @@ class TeamMember < ApplicationRecord
       start_date: start_date,
       is_active: current_member?,
       group: {
-        id: group_type + "_" + team.id.to_s,
+        id: team.group_type + "_" + team.id.to_s,
         name: group_name,
-        group_type: group_type,
+        group_type: team.group_type,
         is_hidden: team[:hidden],
         is_active: true,
         metadata: {

@@ -18,10 +18,6 @@ import UserBadge from '../UserBadge';
 // i18n-tasks-use t('user_roles.status.officers.vice_chair')
 // i18n-tasks-use t('user_roles.status.officers.treasurer')
 
-function arrayAfterRemovingDuplicates(array) {
-  return array?.filter((item, index) => array.indexOf(item) === index);
-}
-
 export default function OfficersAndBoard({ boardEmail }) {
   const { data: officers, loading: officersLoading, error: officersError } = useLoadedData(
     apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status', {
@@ -38,7 +34,7 @@ export default function OfficersAndBoard({ boardEmail }) {
   // The same user can hold multiple officer positions, and it won't be good to show same user
   // multiple times.
   const officerRoles = useMemo(() => _.groupBy(officers, (officer) => officer.user.id), [officers]);
-  const officerUserIds = useMemo(() => arrayAfterRemovingDuplicates(
+  const officerUserIds = useMemo(() => _.uniq(
     officers?.map((officer) => officer.user.id),
   ), [officers]);
 
