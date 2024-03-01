@@ -10,7 +10,12 @@ Devise.setup do |config|
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
   # confirmation, reset password and unlock tokens in the database.
-  # config.secret_key = '0d6561d9be4e102bfbed461d523b94b70c4bebe0fdb3fcb60b61437a0f8d60e6988168085dfadcabbb3b3b56ead695621caae23e6be52db01acbc5c6e52775ff'
+
+  # This is an obvious default that Devise would normally find on its own.
+  # However, the default finding mechanism tries an old, deprecated way first
+  # before finding this "good" way to access the sane default key.
+  # cf. https://github.com/heartcombo/devise/issues/5644
+  config.secret_key = Rails.application.secret_key_base
 
   config.parent_controller = 'ApplicationController'
 
