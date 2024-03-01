@@ -172,7 +172,7 @@ module PaypalInterface
 
       # Logs requests and responses.
       # By default, it only logs the request method and URL, and the request/response headers.
-      builder.response :logger, ::Logger.new($stdout), bodies: true if Rails.env.development?
+      builder.response :logger, ::Logger.new($stdout), bodies: true #if Rails.env.development?
     end
   end
 

@@ -1035,50 +1035,131 @@ RSpec.describe "registrations" do
 
   # NOTE: This test group targets a number of endpoints in the Paypal payment process, instead of one in isolation. There may be better
   # testing practice for this
-  describe "POST #make_paypal_payment" do
-    context "when signed in" do
-      let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
-      let!(:user) { FactoryBot.create(:user, :wca_id) }
-      let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+  describe "POST #create_paypal_order" do
+    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { FactoryBot.create(:user, :wca_id) }
+    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
-      before :each do
-        sign_in user
+    before :each do
+      sign_in user # TODO: Why do we need to sign in here?
 
-        stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders").to_return(status: 200, body: get_create_order_payload)
-      end
+      stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
+        .to_return(status: 200, body: get_create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
-      it 'successfully creates an order' do
-        payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
-
-        post registration_create_paypal_order_path(registration.id), params: payload
-
-        body = JSON.parse(response.body)
-        expect(body["status"]).to eq("CREATED")
-      end
-
-      it 'captures a payment based on an existing order' do
-        amount = competition.base_entry_fee_lowest_denomination
-        currency_code = competition.currency_code
-        # First create the order
-        payload = { total_charge: amount, currency_code: currency_code }
-
-        post registration_create_paypal_order_path(registration.id), params: payload
-
-        order_id = JSON.parse(response.body)["id"]
-
-        # Stub the create order response
-        url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
-        stub_request(:post, url).to_return(status: 200, body: get_capture_order_response(order_id, amount, currency_code))
-
-        # Make the API call to capture the order
-        post registration_capture_paypal_payment_path(registration.id, order_id), params: payload
-
-        # Capture the payment post registration_capture_paypal_payment_path(registration.id, order_id)
-        expect(JSON.parse(response.body)["status"]).to eq("COMPLETED")
-
-        # TODO: Assert some actually useful shit around the db constructs that we expect
-      end
+      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      post registration_create_paypal_order_path(registration.id), params: payload
     end
+
+    it 'creates a PaypalTransaction' do
+      expect(PaypalTransaction.all.count).to eq(1)
+    end
+
+    it 'PaypalTransaction amount matches registration cost' do
+      expect(PaypalTransaction.all.first.amount_in_cents.to_i).to eq(registration.competition.base_entry_fee_lowest_denomination)
+    end
+  end
+
+  describe "POST #capture_paypal_payment" do
+    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { FactoryBot.create(:user, :wca_id) }
+    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
+    before :each do
+      sign_in user # TODO: Why do we need to sign in here?
+
+      stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
+        .to_return(status: 200, body: get_create_order_payload, headers: { 'Content-Type' => 'application/json' })
+
+      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalTransaction object?
+      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      post registration_create_paypal_order_path(registration.id), params: payload
+
+      # Stub the create order response
+      @order_id = JSON.parse(get_create_order_payload)['id']
+      @currency_code = competition.currency_code
+      @amount = PaypalTransaction.get_paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+
+      url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@order_id}/capture"
+      stub_request(:post, url)
+        .to_return(status: 200, body: get_capture_order_response(@order_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+
+      # Make the API call to capture the order
+      post registration_capture_paypal_payment_path(registration.id, @order_id), params: {}
+    end
+
+    it 'creates a PaypalCapture object' do
+      capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
+      expect(PaypalCapture.find_by(capture_id: capture_id)).not_to be_nil
+    end
+
+    it 'associates PaypalCapture to the PaypalTransaction' do
+      paypal_transaction = PaypalTransaction.find_by(order_id: JSON.parse(response.body)['id'])
+      expect(paypal_transaction.paypal_captures.count).to eq(1)
+    end
+
+    it 'creates a RegistrationPayment object' do
+      expect(registration.registration_payments.count).to eq(1)
+    end
+
+    it 'RegistrationPayment has an associated PaypalTransaction' do
+      expect(registration.registration_payments.first.receipt_type).to eq("PaypalTransaction")
+    end
+
+    it 'registration fees reflect as paid on successful capture' do
+      expect(registration.paid_entry_fees.cents).to eq(registration.competition.base_entry_fee_lowest_denomination)
+    end
+  end
+
+  # TODO: Add cases for partial refunds
+  describe "POST #issue_paypal_refund" do
+    let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
+    let!(:user) { FactoryBot.create(:user, :wca_id) }
+    let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
+
+    before :each do
+      sign_in user # TODO: Why do we need to sign in here?
+
+      stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
+        .to_return(status: 200, body: get_create_order_payload, headers: { 'Content-Type' => 'application/json' })
+
+      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalTransaction object?
+      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      post registration_create_paypal_order_path(registration.id), params: payload
+
+      # Stub the create order response
+      @order_id = JSON.parse(get_create_order_payload)['id']
+      @currency_code = competition.currency_code
+      @amount = PaypalTransaction.get_paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+
+      capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@order_id}/capture"
+      stub_request(:post, capture_url)
+        .to_return(status: 200, body: get_capture_order_response(@order_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+
+      # Make the API call to capture the order
+      post registration_capture_paypal_payment_path(registration.id, @order_id), params: {}
+
+      # Mock the refunds endpoint
+      puts "stubbing refund"
+      capture_id = '7WA034444N6390300' # Defined in the `get_capture_order_response` payload
+      refund_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/payments/captures/#{capture_id}/refund"
+      stub_request(:post, refund_url)
+        .to_return(status: 200, body: get_refund_response(capture_id), headers: { 'Content-Type' => 'application/json' })
+
+      # Make the API call to issue the refund
+      post paypal_payment_refund_path(registration.id, @order_id), params: {}
+    end
+
+    it 'creates a RegistrationPayment with a negative value' do
+      expect(registration.registration_payments[1].amount_lowest_denomination).to be < 0
+    end
+
+    # it 'creates a PaypalTransaction of type `refund`' do
+    #   expect()
+
+    # end
+
+    # it 'records the registration total paid as zero' do
+    # end
   end
 end
 
@@ -1216,6 +1297,18 @@ def get_create_order_payload
         rel: "capture",
         method: "POST",
       },
+    ],
+  }.to_json
+end
+
+# /registration/1/paypal_refund/3R2327881A3748640
+def get_refund_response(capture_id)
+  {
+    id: "942276552E022623T",
+    status: "COMPLETED",
+    links: [
+      { href: "https://api.sandbox.paypal.com/v2/payments/refunds/942276552E022623T", rel: "self", method: "GET" },
+      { href: "https://api.sandbox.paypal.com/v2/payments/captures/#{capture_id}", rel: "up", method: "GET" },
     ],
   }.to_json
 end

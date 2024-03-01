@@ -3,6 +3,7 @@
 class PaypalTransaction < ApplicationRecord
   has_many :paypal_captures
 
+  # NOTE: Is this even necessary? We could just use positive/negative amounts to differentiate them?
   TRANSACTION_TYPES = [
     :payment,
     :refund,
