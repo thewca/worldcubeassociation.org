@@ -38,7 +38,7 @@
     "babel-plugin-transform-react-remove-prop-types": "^0.4.24",
     "blueimp-load-image": "^5.16.0",
     "classnames": "^2.5.1",
-    "compression-webpack-plugin": "^11.0.0",
+    "compression-webpack-plugin": "^11.1.0",
     "core-js": "^3.35.1",
     "css-loader": "^6.10.0",
     "css-minimizer-webpack-plugin": "^6.0.0",
