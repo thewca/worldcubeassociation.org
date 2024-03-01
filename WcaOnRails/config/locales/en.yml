@@ -1690,6 +1690,7 @@ en:
       no_comp_nearby: "No nearby competitions!"
       no_date_yet: "You have not assigned a date for this competition yet."
       no_location_yet: "You have not assigned a location for this competition yet."
+      save_first: "Please save this competition before adding it to a Series."
       name: "Name"
       delegates: "Delegate(s)"
       date: "Date"

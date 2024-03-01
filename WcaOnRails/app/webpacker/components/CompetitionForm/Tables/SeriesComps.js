@@ -31,6 +31,7 @@ export default function SeriesComps() {
       endDate,
       series,
     },
+    isPersisted,
   } = useStore();
 
   const dispatch = useDispatch();
@@ -103,6 +104,16 @@ export default function SeriesComps() {
     return (
       <TableWrapper label={label}>
         <MissingInfo missingDate={missingDate} missingLocation={missingLocation} />
+      </TableWrapper>
+    );
+  }
+
+  if (!isPersisted) {
+    return (
+      <TableWrapper label={label}>
+        <Message info visible>
+          <p>{I18n.t('competitions.adjacent_competitions.save_first')}</p>
+        </Message>
       </TableWrapper>
     );
   }
