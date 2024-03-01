@@ -23,10 +23,10 @@ const guestMessageOptions = ['unclear', 'free', 'restricted'].map((status) => ({
 }));
 
 export default function RegistrationDetails() {
-  const { competition: { entryFees } } = useStore();
+  const { competition: { entryFees, registration } } = useStore();
 
-  const guestsGoFree = entryFees && entryFees.guestEntryFee === 0;
-  const guestsRestricted = entryFees && guestsGoFree && entryFees.guestEntryStatus === 'restricted';
+  const guestsGoFree = entryFees?.guestEntryFee === 0;
+  const guestsRestricted = guestsGoFree && registration?.guestEntryStatus === 'restricted';
 
   return (
     <SubSection section="registration">
