@@ -8129,16 +8129,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-import@npm:^16.0.0":
-  version: 16.0.0
-  resolution: "postcss-import@npm:16.0.0"
+"postcss-import@npm:^16.0.1":
+  version: 16.0.1
+  resolution: "postcss-import@npm:16.0.1"
   dependencies:
     postcss-value-parser: "npm:^4.0.0"
     read-cache: "npm:^1.0.0"
     resolve: "npm:^1.1.7"
   peerDependencies:
     postcss: ^8.0.0
-  checksum: 7e9eccc2744dabdd542ba467b2df562c254d3b9e96b277752dbe525e3a8c47741cbbe802b40f64cbe92bc839244c2645cd0284ddb2938f8f38f2271fa427c932
+  checksum: 6bfc7b68106df6148fb60be51c1974b1fb7524f08df77c00c8efe01a29e4f037d797a942194bd060f801cb74ad2f62b64f88d0e2ffe65b5d813a65c1fde02052
   languageName: node
   linkType: hard
 
@@ -9349,7 +9349,7 @@ __metadata:
     pnp-webpack-plugin: "npm:^1.7.0"
     postcss: "npm:^8.4.33"
     postcss-flexbugs-fixes: "npm:^5.0.2"
-    postcss-import: "npm:^16.0.0"
+    postcss-import: "npm:^16.0.1"
     postcss-loader: "npm:^8.1.1"
     postcss-preset-env: "npm:^9.3.0"
     prop-types: "npm:^15.8.1"
