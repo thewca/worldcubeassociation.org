@@ -83,7 +83,7 @@
     "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.10",
     "webpack": "^5.90.3",
-    "webpack-assets-manifest": "^5.1.0",
+    "webpack-assets-manifest": "^5.2.1",
     "webpack-cli": "^5.1.4",
     "webpack-manifest-plugin": "^5.0.0",
     "webpack-merge": "^5.10.0",

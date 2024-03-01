@@ -3765,7 +3765,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"chalk@npm:^4.0, chalk@npm:^4.0.0":
+"chalk@npm:^4.0.0, chalk@npm:^4.1.2":
   version: 4.1.2
   resolution: "chalk@npm:4.1.2"
   dependencies:
@@ -4444,10 +4444,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"deepmerge@npm:^4.0":
-  version: 4.2.2
-  resolution: "deepmerge@npm:4.2.2"
-  checksum: d6136eee869057fea7a829aa2d10073ed49db5216e42a77cc737dd385334aab9b68dae22020a00c24c073d5f79cbbdd3f11b8d4fc87700d112ddaa0e1f968ef2
+"deepmerge@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "deepmerge@npm:4.3.1"
+  checksum: e53481aaf1aa2c4082b5342be6b6d8ad9dfe387bc92ce197a66dea08bd4265904a087e75e464f14d1347cf2ac8afe1e4c16b266e0561cc5df29382d3c5f80044
   languageName: node
   linkType: hard
 
@@ -6945,7 +6945,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lockfile@npm:^1.0":
+"lockfile@npm:^1.0.4":
   version: 1.0.4
   resolution: "lockfile@npm:1.0.4"
   dependencies:
@@ -6975,14 +6975,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lodash.get@npm:^4.0":
+"lodash.get@npm:^4.4.2":
   version: 4.4.2
   resolution: "lodash.get@npm:4.4.2"
   checksum: 48f40d471a1654397ed41685495acb31498d5ed696185ac8973daef424a749ca0c7871bf7b665d5c14f5cc479394479e0307e781f61d5573831769593411be6e
   languageName: node
   linkType: hard
 
-"lodash.has@npm:^4.0":
+"lodash.has@npm:^4.5.2":
   version: 4.5.2
   resolution: "lodash.has@npm:4.5.2"
   checksum: 3ffa9e549f321996a5fdf6204494c035ff550b2df703f936a448c553131bbb55492b4e7995bb13500648b50b268ed8afc974a7a0c0a43744d28d61cc95cb1ffe
@@ -9461,7 +9461,7 @@ __metadata:
     stylelint-scss: "npm:^6.1.0"
     terser-webpack-plugin: "npm:^5.3.10"
     webpack: "npm:^5.90.3"
-    webpack-assets-manifest: "npm:^5.1.0"
+    webpack-assets-manifest: "npm:^5.2.1"
     webpack-bundle-analyzer: "npm:^4.10.1"
     webpack-cli: "npm:^5.1.4"
     webpack-dev-server: "npm:^4.15.1"
@@ -9572,7 +9572,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"schema-utils@npm:^3.0, schema-utils@npm:^3.0.0, schema-utils@npm:^3.1.1, schema-utils@npm:^3.2.0":
+"schema-utils@npm:^3.0.0, schema-utils@npm:^3.1.1, schema-utils@npm:^3.2.0, schema-utils@npm:^3.3.0":
   version: 3.3.0
   resolution: "schema-utils@npm:3.3.0"
   dependencies:
@@ -10335,7 +10335,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tapable@npm:^2.0, tapable@npm:^2.0.0, tapable@npm:^2.1.1, tapable@npm:^2.2.0, tapable@npm:^2.2.1":
+"tapable@npm:^2.0.0, tapable@npm:^2.1.1, tapable@npm:^2.2.0, tapable@npm:^2.2.1":
   version: 2.2.1
   resolution: "tapable@npm:2.2.1"
   checksum: bc40e6efe1e554d075469cedaba69a30eeb373552aaf41caeaaa45bf56ffacc2674261b106245bd566b35d8f3329b52d838e851ee0a852120acae26e622925c9
@@ -10722,20 +10722,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-assets-manifest@npm:^5.1.0":
-  version: 5.1.0
-  resolution: "webpack-assets-manifest@npm:5.1.0"
+"webpack-assets-manifest@npm:^5.2.1":
+  version: 5.2.1
+  resolution: "webpack-assets-manifest@npm:5.2.1"
   dependencies:
-    chalk: "npm:^4.0"
-    deepmerge: "npm:^4.0"
-    lockfile: "npm:^1.0"
-    lodash.get: "npm:^4.0"
-    lodash.has: "npm:^4.0"
-    schema-utils: "npm:^3.0"
-    tapable: "npm:^2.0"
+    chalk: "npm:^4.1.2"
+    deepmerge: "npm:^4.3.1"
+    lockfile: "npm:^1.0.4"
+    lodash.get: "npm:^4.4.2"
+    lodash.has: "npm:^4.5.2"
+    schema-utils: "npm:^3.3.0"
+    tapable: "npm:^2.2.1"
   peerDependencies:
     webpack: ^5.2.0
-  checksum: 24e00420b7e56363dd73064b8a9701995b61f2ff1d02fa1c7cd4eb1b00be006710e329e9756b5ea71bd6a911d53cdeb7c7c9fa416bce706b0cc7dff91b820833
+  checksum: 3ee9380d5d5efca3c3a3dd8c98dc06eeddddfb797d3e6714e1cef1bbdf4db10191ec9c6c6cca96ff698851336d5f64aa83a4fd64bc6530afc38fc27cf166cbdc
   languageName: node
   linkType: hard
 
