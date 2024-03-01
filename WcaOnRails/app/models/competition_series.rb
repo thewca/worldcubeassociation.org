@@ -14,17 +14,18 @@ class CompetitionSeries < ApplicationRecord
   VALID_NAME_RE = Competition::VALID_NAME_RE
   VALID_ID_RE = Competition::VALID_ID_RE
 
+  validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_NAME_LENGTH },
+                   format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
+
   validates :wcif_id, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_ID_LENGTH },
                       format: { with: VALID_ID_RE }, if: :name_valid_or_updating?
 
-  validates :name, presence: true, uniqueness: { case_sensitive: false }, length: { maximum: MAX_NAME_LENGTH },
-                   format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } }
   validates :short_name, length: { maximum: MAX_SHORT_NAME_LENGTH },
                          format: { with: VALID_NAME_RE, message: proc { I18n.t('competitions.errors.invalid_name_message') } },
                          if: :name_valid_or_updating?
 
   private def name_valid_or_updating?
-    self.persisted? || (name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
+    self.persisted? || (name.present? && name.length <= MAX_NAME_LENGTH && name =~ VALID_NAME_RE)
   end
 
   before_validation :create_id_and_cell_name
