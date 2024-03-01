@@ -26,5 +26,5 @@
     </tr>
   </body>
 </table>
-<p>You can edit this person <%= link_to "here", admin_edit_person_url(person: { wca_id: @resource.wca_id }) %>.</p>
+<p>You can edit this person <%= link_to "here", panel_wrt_url(wcaId: '2012JAME04', anchor: PanelController.panel_list['wrt']['editPerson']) %>.</p>
 <p>A proof of identity is attached.</p>
