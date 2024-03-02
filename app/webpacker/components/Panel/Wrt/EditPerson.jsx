@@ -128,6 +128,7 @@ function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
           options={countryOptions}
           label={I18n.t('activerecord.attributes.user.country_iso2')}
           name="representing"
+          search
           disabled={!editedUserDetails}
           value={editedUserDetails?.representing || ''}
           onChange={handleFormChange}
