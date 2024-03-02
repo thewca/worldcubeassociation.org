@@ -1299,7 +1299,6 @@ def get_create_order_payload
   }.to_json
 end
 
-# /registration/1/paypal_refund/3R2327881A3748640
 def get_refund_response(capture_id)
   {
     id: "942276552E022623T",
