@@ -338,11 +338,8 @@ class Registration < ApplicationRecord
   # NOTE: This is really bad, only for a proof of concept. It assumes that there is only ONE PaypalTransaction and ONE PaypalCapture - not safe assumptions.
   def get_capture_id
     registration_payment = registration_payments.first
-    puts registration_payment.inspect
     receipt = registration_payment.receipt
-    puts receipt.inspect
     capture = receipt.paypal_captures.first
-    puts capture.inspect
     capture.capture_id
   end
 

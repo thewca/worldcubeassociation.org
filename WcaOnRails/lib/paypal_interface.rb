@@ -1,38 +1,6 @@
 # frozen_string_literal: true
 
 module PaypalInterface
-  # Defined in: https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
-  PAYPAL_CURRENCY_CATEGORIES = {
-    decimal: [ # Currencies that should be passed to paypal as decimal amounts (ie, cents/100)
-      "AUD",
-      "BRL",
-      "CAD",
-      "CNY",
-      "CZK",
-      "DKK",
-      "EUR",
-      "HKD",
-      "ILS",
-      "MYR",
-      "MXN",
-      "NZD",
-      "NOK",
-      "PHP",
-      "PLN",
-      "GBP",
-      "SGD",
-      "SEK",
-      "CHF",
-      "THB",
-      "USD",
-    ],
-    cents_only: [ # Currencies that do not support decimals - should be passed as cents
-      "JPY",
-      "HUF",
-      "TWD",
-    ],
-  }.freeze
-
   def self.generate_paypal_onboarding_link(competition_id)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/customer/partner-referrals"
 
@@ -172,7 +140,7 @@ module PaypalInterface
 
       # Logs requests and responses.
       # By default, it only logs the request method and URL, and the request/response headers.
-      builder.response :logger, ::Logger.new($stdout), bodies: true #if Rails.env.development?
+      builder.response :logger, ::Logger.new($stdout), bodies: true if Rails.env.development?
     end
   end
 

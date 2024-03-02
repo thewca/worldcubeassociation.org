@@ -870,7 +870,6 @@ class RegistrationsController < ApplicationController
 
   def refund_paypal_payment
     registration = Registration.find(params[:id])
-    puts registration.get_capture_id
     refund = PaypalInterface.issue_refund(registration, registration.get_capture_id)
 
     registration.record_refund(

@@ -8,6 +8,7 @@ class PaypalTransaction < ActiveRecord::Migration[7.1]
       t.string :payload
       t.string :amount_in_cents
       t.string :currency_code
+      t.string :transaction_type
 
       t.timestamps
     end

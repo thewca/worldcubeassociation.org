@@ -1137,7 +1137,6 @@ RSpec.describe "registrations" do
       post registration_capture_paypal_payment_path(registration.id, @order_id), params: {}
 
       # Mock the refunds endpoint
-      puts "stubbing refund"
       capture_id = '7WA034444N6390300' # Defined in the `get_capture_order_response` payload
       refund_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/payments/captures/#{capture_id}/refund"
       stub_request(:post, refund_url)
