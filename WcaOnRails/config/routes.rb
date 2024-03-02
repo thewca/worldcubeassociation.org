@@ -236,6 +236,7 @@ Rails.application.routes.draw do
   get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
+  get 'translators' => 'static_pages#translators'
 
   resources :regional_organizations, only: [:new, :create, :update, :edit, :destroy], path: '/regional-organizations'
   get 'organizations' => 'regional_organizations#index'

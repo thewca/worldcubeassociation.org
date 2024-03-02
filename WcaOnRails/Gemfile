@@ -17,7 +17,7 @@ gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
 gem 'sdoc', group: :doc
-gem 'dotenv-rails', require: 'dotenv/rails-now'
+gem 'dotenv-rails', require: 'dotenv/load'
 gem 'seedbank'
 gem 'jbuilder'
 gem 'bootstrap-sass'
