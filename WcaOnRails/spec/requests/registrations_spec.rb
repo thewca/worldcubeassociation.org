@@ -1033,8 +1033,6 @@ RSpec.describe "registrations" do
     end
   end
 
-  # NOTE: This test group targets a number of endpoints in the Paypal payment process, instead of one in isolation. There may be better
-  # testing practice for this
   describe "POST #create_paypal_order" do
     let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { FactoryBot.create(:user, :wca_id) }
@@ -1153,13 +1151,13 @@ RSpec.describe "registrations" do
       expect(registration.registration_payments[1].amount_lowest_denomination).to be < 0
     end
 
-    # it 'creates a PaypalTransaction of type `refund`' do
-    #   expect()
+    it 'creates a PaypalTransaction of type `refund`' do
+      expect(registration.registration_payments[1].receipt.transaction_type).to eq('refund')
+    end
 
-    # end
-
-    # it 'records the registration total paid as zero' do
-    # end
+    it 'records the registration total paid as zero' do
+      expect(registration.paid_entry_fees.cents).to eq(0)
+    end
   end
 end
 
