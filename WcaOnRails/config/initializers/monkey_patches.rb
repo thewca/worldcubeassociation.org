@@ -77,8 +77,15 @@ Rails.configuration.to_prepare do
   end
 
   Enumerable.class_eval do
-    def stable_sort_by
+    def stable_sort_by_asc
       sort_by.with_index { |x, idx| [yield(x), idx] }
+    end
+
+    # "sort and then reverse" is the usual Ruby hack for achieving DESC sort.
+    # But this kills stability when applying to "stable sort and then reverse"
+    # so because of the reversing we need to reverse the tie-breaker as well
+    def stable_sort_by_desc
+      sort_by.with_index { |x, idx| [yield(x), -idx] }.reverse
     end
   end
 end

@@ -236,6 +236,7 @@ FactoryBot.define do
 
     factory :senior_delegate, traits: [:wca_id] do
       delegate_status { "senior_delegate" }
+      email { Faker::Internet.email }
       region_id { FactoryBot.create(:africa_region).id }
     end
 

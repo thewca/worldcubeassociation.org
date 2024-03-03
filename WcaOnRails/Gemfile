@@ -17,7 +17,7 @@ gem 'terser'
 gem 'faraday'
 gem 'faraday-retry'
 gem 'sdoc', group: :doc
-gem 'dotenv-rails', require: 'dotenv/rails-now'
+gem 'dotenv-rails', require: 'dotenv/load'
 gem 'seedbank'
 gem 'jbuilder'
 gem 'bootstrap-sass'
@@ -52,6 +52,7 @@ gem 'cookies_eu'
 gem 'superconfig'
 gem 'eu_central_bank'
 gem 'devise-jwt'
+gem 'jwt'
 
 # Pointing to jfly/selectize-rails which has a workaround for
 #  https://github.com/selectize/selectize.js/issues/953
@@ -104,6 +105,7 @@ gem 'fuzzy-string-match'
 gem 'sidekiq'
 gem 'sidekiq-cron'
 gem 'after_commit_everywhere'
+gem 'slack-ruby-client'
 
 group :development, :test do
   gem 'spring'
@@ -114,7 +116,7 @@ group :development, :test do
   gem 'capybara-screenshot'
 
   gem 'byebug'
-  gem 'i18n-tasks'
+  gem 'i18n-tasks', github: 'glebm/i18n-tasks'
   gem 'i18n-spec'
 
   # We may be able to remove this when a future version of bundler comes out.
@@ -150,4 +152,5 @@ end
 group :production do
   gem 'unicorn'
   gem 'newrelic_rpm'
+  gem 'wkhtmltopdf-binary-ng'
 end

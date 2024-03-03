@@ -1,5 +1,5 @@
 import React, {
-  useReducer, useMemo, useState,
+  useEffect, useMemo, useReducer, useState,
 } from 'react';
 import { useInfiniteQuery } from '@tanstack/react-query';
 import { Container } from 'semantic-ui-react';
@@ -11,7 +11,12 @@ import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken'
 import CompetitionsFilters from './CompetitionsFilters';
 import ListView from './ListView';
 import MapView from './MapView';
-import { filterReducer, filterInitialState } from './filterUtils';
+import {
+  createFilterState,
+  filterReducer,
+  getDisplayMode,
+  updateSearchParams,
+} from './filterUtils';
 import { calculateQueryKey, createSearchParams } from './queryUtils';
 import useDebounce from '../../lib/hooks/useDebounce';
 import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/competition-table';
@@ -19,13 +24,27 @@ import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/compe
 const DEBOUNCE_MS = 600;
 
 function CompetitionsView() {
-  const [filterState, dispatchFilter] = useReducer(filterReducer, filterInitialState);
+  const searchParams = useMemo(
+    () => new URLSearchParams(window.location.search),
+    [],
+  );
+
+  const [filterState, dispatchFilter] = useReducer(
+    filterReducer,
+    searchParams,
+    createFilterState,
+  );
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
-  const [displayMode, setDisplayMode] = useState('list');
+  const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const competitionQueryKey = useMemo(
     () => calculateQueryKey(debouncedFilterState),
     [debouncedFilterState],
+  );
+
+  useEffect(
+    () => updateSearchParams(searchParams, filterState, displayMode),
+    [searchParams, filterState, displayMode],
   );
 
   const {
@@ -36,8 +55,8 @@ function CompetitionsView() {
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
-      const searchParams = createSearchParams(debouncedFilterState, pageParam);
-      return fetchJsonOrError(`${apiV0Urls.competitions.list}?${searchParams}`);
+      const querySearchParams = createSearchParams(debouncedFilterState, pageParam);
+      return fetchJsonOrError(`${apiV0Urls.competitions.list}?${querySearchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {
       // Continue until less than a full page of data is fetched,

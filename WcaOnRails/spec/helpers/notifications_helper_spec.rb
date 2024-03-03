@@ -71,11 +71,11 @@ RSpec.describe NotificationsHelper do
         expect(notifications).to eq [
           {
             text: "#{confirmed_competition.name} is pending announcement. The competition is happening in #{confirmed_competition.days_until} days.",
-            url: admin_edit_competition_path(confirmed_competition),
+            url: competition_admin_edit_path(confirmed_competition),
           },
           {
             text: "#{visible_unconfirmed_competition.name} is visible, but unlocked",
-            url: admin_edit_competition_path(visible_unconfirmed_competition),
+            url: competition_admin_edit_path(visible_unconfirmed_competition),
           },
         ]
       end

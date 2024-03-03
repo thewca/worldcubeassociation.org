@@ -33,6 +33,7 @@ RSpec.describe Api::V0::UserRolesController do
           is_active: true,
           group: africa_region,
           user: user_whose_delegate_status_changes,
+          is_lead: false,
           metadata: {
             status: "candidate_delegate",
             location: "Australia",

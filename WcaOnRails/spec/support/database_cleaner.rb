@@ -1,11 +1,9 @@
 # frozen_string_literal: true
 
 RSpec.configure do |config|
-  unless EnvConfig.SKIP_PRETEST_SETUP?
-    config.before(:suite) do
-      DatabaseCleaner.clean_with :truncation
-      TestDbManager.fill_tables
-    end
+  config.before(:suite) do
+    DatabaseCleaner.clean_with :truncation
+    TestDbManager.fill_tables unless EnvConfig.SKIP_PRETEST_SETUP?
   end
 
   config.before(:each) do
@@ -28,7 +26,9 @@ RSpec.configure do |config|
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  # Using append_after to allow our E2E tests to finish all requests first and THEN clean the database
+  # as per https://github.com/DatabaseCleaner/database_cleaner#rspec-with-capybara-example
+  config.append_after(:each) do
     DatabaseCleaner.clean
   end
 end

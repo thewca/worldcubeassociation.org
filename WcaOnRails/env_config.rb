@@ -16,12 +16,13 @@ EnvConfig = SuperConfig.new do
     mandatory :CDN_AVATARS_DISTRIBUTION_ID, :string
     mandatory :DATABASE_AWS_REGION, :string
     mandatory :DATABASE_WRT_USER, :string
+    optional :PAYPAL_BASE_URL, :string ## TODO: Change to mandatory when launching paypal
 
     # Production-specific stuff
     mandatory :VAULT_ADDR, :string
     mandatory :VAULT_APPLICATION, :string
     mandatory :VAULT_AWS_REGION, :string
-    mandatory :INSTANCE_ROLE, :string
+    mandatory :TASK_ROLE, :string
     mandatory :WCA_REGISTRATIONS_URL, :string
     mandatory :WCA_REGISTRATIONS_CDN_URL, :string
   else
@@ -39,6 +40,7 @@ EnvConfig = SuperConfig.new do
     optional :DATABASE_WRT_USER, :string, ''
     optional :WCA_REGISTRATIONS_URL, :string, ''
     optional :WCA_REGISTRATIONS_CDN_URL, :string, ''
+    optional :PAYPAL_BASE_URL, :string, ''
 
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false
@@ -67,4 +69,7 @@ EnvConfig = SuperConfig.new do
   end
 
   optional :ROOT_URL, :string, default_root_url
+
+  # For server status
+  optional :BUILD_TAG, :string, "local"
 end

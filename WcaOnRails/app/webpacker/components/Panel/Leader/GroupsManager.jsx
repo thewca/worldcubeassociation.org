@@ -1,19 +1,71 @@
 import React, { useEffect, useState } from 'react';
-import { Dropdown, Header, Table } from 'semantic-ui-react';
+import {
+  Button, Dropdown, Header, Table,
+} from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
+import useSaveAction from '../../../lib/hooks/useSaveAction';
+import { groupTypes, teamsCommitteesStatus, councilsStatus } from '../../../lib/wca-data.js.erb';
+
+const statusObjectOfGroupType = (groupType) => {
+  switch (groupType) {
+    case groupTypes.teams_committees:
+      return teamsCommitteesStatus;
+    case groupTypes.councils:
+      return councilsStatus;
+    default:
+      return null;
+  }
+};
+
+const isLead = (role) => role.metadata.status === 'leader';
+
+const canPromote = (role) => (
+  role.metadata.status === statusObjectOfGroupType(role.group.group_type).member
+);
+
+const canDemote = (role) => (
+  role.metadata.status === statusObjectOfGroupType(role.group.group_type).senior_member
+);
 
 function GroupTable({ groupId }) {
-  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
+  const {
+    data: roles, loading, error, sync,
+  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
     groupId,
     'status,startDate,name', // Sort params
     { isActive: true },
   ));
+  const confirm = useConfirm();
+  const { save, saving } = useSaveAction();
 
-  if (loading) return <Loading />;
+  const promoteRoleHandler = (role) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.update(role.id), {
+        status: statusObjectOfGroupType(role.group.group_type).senior_member,
+      }, sync, { method: 'PATCH' });
+    });
+  };
+
+  const demoteRoleHandler = (role) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.update(role.id), {
+        status: statusObjectOfGroupType(role.group.group_type).member,
+      }, sync, { method: 'PATCH' });
+    });
+  };
+
+  const endRoleHandler = (role) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.delete(role.id), null, sync, { method: 'DELETE' });
+    });
+  };
+
+  if (loading || saving) return <Loading />;
   if (error) return <Errored />;
 
   return (
@@ -24,6 +76,7 @@ function GroupTable({ groupId }) {
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -32,6 +85,14 @@ function GroupTable({ groupId }) {
               <Table.Cell>{role.user.name}</Table.Cell>
               <Table.Cell>
                 {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`}
+              </Table.Cell>
+              <Table.Cell>
+                {canPromote(role)
+                  && <Button onClick={() => promoteRoleHandler(role)}>Promote</Button>}
+                {canDemote(role)
+                  && <Button onClick={() => demoteRoleHandler(role)}>Demote</Button>}
+                {!isLead(role)
+                  && <Button onClick={() => endRoleHandler(role)}>End Role</Button>}
               </Table.Cell>
             </Table.Row>
           ))}

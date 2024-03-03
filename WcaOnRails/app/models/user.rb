@@ -35,6 +35,8 @@ class User < ApplicationRecord
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
   has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
   has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
+  has_many :ranksSingle, through: :person
+  has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source
 
   scope :confirmed_email, -> { where.not(confirmed_at: nil) }
@@ -56,7 +58,7 @@ class User < ApplicationRecord
 
   def self.leader_senior_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
-    senior_delegates = User.where(delegate_status: "senior_delegate")
+    senior_delegates = UserGroup.delegate_region_groups_senior_delegates
     (team_leaders + senior_delegates).uniq
   end
 
@@ -408,13 +410,6 @@ class User < ApplicationRecord
     end
   end
 
-  validate :senior_delegate_must_be_senior_delegate
-  def senior_delegate_must_be_senior_delegate
-    if senior_delegate && !senior_delegate.senior_delegate?
-      errors.add(:senior_delegate, I18n.t('users.errors.must_be_senior'))
-    end
-  end
-
   validates :region_id, presence: true, if: -> { delegate_status.present? }
 
   validate :avatar_requires_wca_id
@@ -579,7 +574,7 @@ class User < ApplicationRecord
   end
 
   def senior_delegate?
-    delegate_status == "senior_delegate"
+    senior_delegate_roles.any?
   end
 
   def staff_or_any_delegate?
@@ -587,7 +582,7 @@ class User < ApplicationRecord
   end
 
   def is_senior_delegate_for?(user)
-    user.senior_delegate == self
+    user.senior_delegates.include?(self)
   end
 
   def banned?
@@ -619,14 +614,26 @@ class User < ApplicationRecord
     can_edit_any_groups? ? [UserGroup.group_types[:delegate_regions]] : []
   end
 
+  private def senior_delegate_roles
+    active_roles.select do |role|
+      UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) &&
+        UserRole.is_lead?(role) &&
+        UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+    end
+  end
+
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
-    if senior_delegate?
-      region = UserGroup.find(self.region_id)
-      [region.id] + region.all_child_groups.pluck(:id)
-    else
-      [] # FIXME: Consider groups of other groupTypes as well.
+    groups = []
+
+    senior_delegate_roles.map do |role|
+      region = UserRole.group(role)
+      groups += [region.id, region.all_child_groups.map(&:id)].flatten.uniq
     end
+
+    # FIXME: Consider groups of other groupTypes as well.
+
+    groups
   end
 
   def permissions
@@ -745,7 +752,7 @@ class User < ApplicationRecord
       competition.organizers.include?(self) ||
       competition.delegates.include?(self) ||
       wrc_team? ||
-      competition.delegates.map(&:senior_delegate).compact.include?(self) ||
+      competition.delegates.flat_map(&:senior_delegates).compact.include?(self) ||
       ethics_committee?
     )
   end
@@ -819,7 +826,7 @@ class User < ApplicationRecord
   end
 
   def can_view_delegate_matters?
-    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || ethics_committee?
+    any_kind_of_delegate? || can_admin_results? || wrc_team? || wdc_team? || quality_assurance_committee? || competition_announcement_team? || weat_team? || communication_team? || ethics_committee? || financial_committee?
   end
 
   def can_manage_incidents?
@@ -1277,8 +1284,10 @@ class User < ApplicationRecord
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
   end
 
-  def senior_delegate
-    region&.senior_delegate
+  def senior_delegates
+    active_roles
+      .select { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+      .map { |role| UserRole.group(role).senior_delegate }
   end
 
   def active_roles
@@ -1291,6 +1300,7 @@ class User < ApplicationRecord
       is_active: true,
       group: self.region,
       user: self,
+      is_lead: delegate_status == RolesMetadataDelegateRegions.statuses[:senior_delegate],
       metadata: {
         status: self.delegate_status,
         location: self.location,
@@ -1304,7 +1314,7 @@ class User < ApplicationRecord
   def team_roles
     roles = []
     self.current_teams
-        .reject { |team| team == Team.board || Team.all_officers.include?(team) }
+        .select { |team| team.official? || team.council? }
         .each do |team|
           team_membership_details = self.team_membership_details(team)
           roles << team_membership_details.role

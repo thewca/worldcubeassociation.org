@@ -433,6 +433,10 @@ pt-BR:
         delegate_status: Status de delegado
         #original_hash: d219c68
         location: Locação
+        #original_hash: 0f21717
+        region: Região
+        #original_hash: e3fc6e9
+        subRegion: Subregião
         #original_hash: 730db33
         receive_delegate_reports: >-
           Eu quero receber os Relatórios do Delegado das competições da WCA por
@@ -441,143 +445,6 @@ pt-BR:
         user_preferred_events: Eventos favoritos
         #original_hash: e632fbf
         otp_attempt: 'Informe seu código de autenticação de dois fatores:'
-      competition:
-        #original_hash: 89f89c0
-        id: ID
-        #original_hash: 7f3d889
-        confirmed: Não permitir que os organizadores alterem esta competição
-        #original_hash: d493e6a
-        showAtAll: Tornar competição visível ao público
-        #original_hash: 709a232
-        name: Nome
-        #original_hash: f91b080
-        name_reason: Razão para o nome
-        #original_hash: fdba578
-        cellName: Nome reduzido
-        #original_hash: 0f21717
-        countryId: Região
-        #original_hash: 25b7b06
-        cityName: Cidade
-        #original_hash: 67cd406
-        venue: Local
-        #original_hash: 486f8fb
-        venueAddress: Endereço
-        #original_hash: 08767af
-        venueDetails: Detalhes do local
-        #original_hash: ff99f5b
-        start_date: Data de início
-        #original_hash: 89d10cd
-        end_date: Data de término
-        #original_hash: 2e8a57c
-        external_website: Website
-        #original_hash: 692e1f9
-        generate_website: >-
-          Eu quero usar o site da WCA ao invés de um site externo para mais
-          informações.
-        #original_hash: 6cf623b
-        base_entry_fee_lowest_denomination: Taxa base de inscrição
-        #original_hash: 28a6fbb
-        currency_code: Código da moeda do país
-        #original_hash: 2e3ed8b
-        staff_delegate_ids: Delegado(s) da WCA
-        #original_hash: c0ddcd6
-        trainee_delegate_ids: Delegado Trainee da WCA
-        #original_hash: 958562e
-        organizer_ids: Organizador(es)
-        #original_hash: b37456c
-        contact: Contato
-        #original_hash: 0eb5ed5
-        information: Informação
-        #original_hash: 87b7d5f
-        use_wca_registration: Eu quero usar o site da WCA para as inscrições
-        #original_hash: ebe8c47
-        use_wca_live_for_scoretaking: Vou usar o WCA Live para registrar os resultados
-        #original_hash: 8020e88
-        external_registration_page: Página de inscrição
-        #original_hash: 9bb1965
-        competitor_limit_enabled: Limite de competidores
-        #original_hash: 749f4c9
-        competitor_limit: Número máximo de competidores
-        #original_hash: 4a8b6f1
-        competitor_limit_reason: Razão(ões) para o limite de competidores
-        #original_hash: 3c23a67
-        guests_enabled: Acompanhantes
-        #original_hash: 7d78478
-        guests_per_registration_limit: Número máximo de convidados por inscrição
-        #original_hash: 22516e1
-        events_per_registration_limit: Limite de eventos por inscrição
-        #original_hash: 089cbfd
-        receive_registration_emails: Enviar uma notificação por email quando alguém se inscrever
-        #original_hash: d4aeed9
-        registration_open: Início das inscrições
-        #original_hash: f8153a2
-        registration_close: Término das inscrições
-        #original_hash: d7020f4
-        remarks: Observações
-        #original_hash: c305010
-        clone_tabs: Eu quero copiar todas as abas também
-        #original_hash: c5497bc
-        competition_events: Eventos
-        #original_hash: 71c8461
-        enable_donations: Quero habilitar doações além de coletar as taxas de inscrição
-        #original_hash: 556fda0
-        extra_registration_requirements: Requisitos adicionais de inscrição
-        #original_hash: 6c8e5bf
-        force_comment_in_registration: Exigir que os competidores façam um comentário ao se inscreverem
-        #original_hash: 2529d04
-        on_the_spot_registration: Inscrições na hora do evento
-        #original_hash: 69780b5
-        on_the_spot_entry_fee_lowest_denomination: Taxa de inscrição no local
-        #original_hash: 7e53b96
-        allow_registration_edits: Editar inscrição
-        #original_hash: 3d47eca
-        allow_registration_self_delete_after_acceptance: Cancelamentos de inscrições
-        #original_hash: efbdbab
-        refund_policy_percent: Percentual a ser devolvido
-        #original_hash: b332299
-        refund_policy_limit_date: Data limite para devoluções
-        #original_hash: 16cf9a4
-        waiting_list_deadline_date: Prazo limite para aceitar competidores da lista de espera
-        #original_hash: 99a9169
-        event_change_deadline_date: Prazo limite para os competidores atualizarem seus eventos
-        #original_hash: 3542671
-        guests_entry_fee_lowest_denomination: Taxa de entrada para espectadores/convidados
-        #original_hash: bb16247
-        guest_entry_status: Mensagem sobre entrada gratuita de convidados
-        #original_hash: 723cad9
-        early_puzzle_submission: >-
-          Eu gostaria de exigir que os competidores entreguem os quebra-cabeças
-          em algum momento específico antes do horário de início do evento
-        #original_hash: 78308cc
-        early_puzzle_submission_reason: Razões e detalhes para a entrega antecipada dos quebra-cabeças
-        #original_hash: 88da0ef
-        qualification_results: >-
-          Eu gostaria de usar resultados de qualificação para limitar quem pode
-          competir em certos eventos
-        #original_hash: 1ec6dd4
-        qualification_results_reason: Razões e detalhes para uso de resultados de qualificação
-        #original_hash: ac30de9
-        event_restrictions: >-
-          Eu gostaria de restringir as combinações de eventos nas quais os
-          competidores podem se inscrever
-        #original_hash: 4bf194c
-        event_restrictions_reason: Razões e detalhes para restrição de eventos
-        #original_hash: 3c24bd2
-        main_event_id: Evento principal
-        #original_hash: a541bfa
-        allow_registration_without_qualification: Eventos com Qualificação
-      championship:
-        #original_hash: 4baf44b
-        championship_type: Tipo de Campeonato
-      competition_series:
-        #original_hash: e2b4898
-        wcif_id: ID da Série
-        #original_hash: 75ceb67
-        name: Nome da Série
-        #original_hash: 8a6bee1
-        short_name: Apelido da série
-        #original_hash: af3d38e
-        competition_ids: Todas as competições
       registration:
         #original_hash: 3c23a67
         guests: Acompanhantes
@@ -747,14 +614,32 @@ pt-BR:
         delegate: Delegado
         #original_hash: d463c23
         senior_delegate: Delegado Senior
-    person:
-      gender:
-        #original_hash: 3f3a489
-        m: Masculino
-        #original_hash: b7c17e9
-        f: Feminino
-        #original_hash: 6e6a6f2
-        o: Outro
+      role_status:
+        delegate_regions:
+          #original_hash: 621101a
+          trainee_delegate: Delegado Trainee
+          #original_hash: 9b97968
+          candidate_delegate: Delegado Júnior
+          #original_hash: 12ab214
+          delegate: Delegado
+          #original_hash: 45c2317
+          regional_delegate: Delegado Regional
+          #original_hash: d463c23
+          senior_delegate: Delegado Sênior
+        teams_committees:
+          #original_hash: 6853c98
+          member: Membro
+          #original_hash: c366473
+          senior_member: Membro Sênior
+          #original_hash: e26c936
+          leader: Líder
+        councils:
+          #original_hash: 6853c98
+          member: Membro
+          #original_hash: c366473
+          senior_member: Membro Sênior
+          #original_hash: e26c936
+          leader: Líder
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -768,16 +653,6 @@ pt-BR:
         article: Artigo
         #original_hash: 82dabd0
         multimedia: Multimídia
-    competition:
-      guest_entry_status:
-        #original_hash: 7e54323
-        unclear: >-
-          Não mostrar nada (e talvez detalhar na seção "Requerimentos adicionais
-          de inscrição")
-        #original_hash: 694bce4
-        free: Não há taxa para espectadores
-        #original_hash: 762c509
-        restricted: Espectadores somente são permitidos como acompanhantes de competidores
   simple_form:
     #original_hash: 5397e05
     'yes': Sim
@@ -834,8 +709,6 @@ pt-BR:
         #original_hash: da39a3e
         country_iso2: ''
         #original_hash: da39a3e
-        delegate_status: ''
-        #original_hash: da39a3e
         dob_verification: ''
         #original_hash: da39a3e
         gender: ''
@@ -845,8 +718,6 @@ pt-BR:
         password: ''
         #original_hash: da39a3e
         password_confirmation: ''
-        #original_hash: da39a3e
-        location: ''
         #original_hash: da39a3e
         remember_me: ''
         #original_hash: da39a3e
@@ -868,204 +739,6 @@ pt-BR:
         otp_attempt: >-
           Verifique seu aplicativo móvel para uma senha única, ou informe um de
           seus códigos de recuperação.
-      competition:
-        #original_hash: 2c812a0
-        name: >-
-          O nome completo da competição, incluindo o ano no final (p. ex.
-          Campeonato Brasileiro 2016). Use corretamente letras maiúsculas. O
-          nome deve ter somente caracteres alfanuméricos, traços (-), "e
-          comercial" (&), pontos (.), dois-pontos (:), apóstrofos (') e espaços.
-        #original_hash: fbcda66
-        cellName: >-
-          Um nome curto para a lista. Se o nome da competição já tiver menos que
-          %{short_name_limit} caracteres, esse campo não deve ser editado e deve
-          ser igual ao nome normal.
-        #original_hash: bce4589
-        cityName: >-
-          Nome da cidade e estado onde a competição acontecerá. Não inclua o
-          país (exemplos: São Paulo, São Paulo ou Uberlândia, Minas Gerais).
-        #original_hash: bb470cc
-        information: >-
-          Informações importantes que os competidores devem saber. Estas serão
-          mostradas na página principal da competição. <br/>Por favor preencha
-          <b>em Inglês</b> e quaisquer outras línguas que os competidores falam.
-        #original_hash: b4d020f
-        staff_delegate_ids: Delegado(s) da WCA da competição.
-        #original_hash: cb9882c
-        trainee_delegate_ids: Delegados Trainees da WCA para a competição.
-        #original_hash: 517d376
-        organizer_ids: >-
-          Organizador(es) da competição (é necessário que possuam uma conta no
-          site da WCA para aparecer aqui).
-        #original_hash: cabe7fb
-        external_website: Website da competição. Deve ser uma URL http(s) válida.
-        #original_hash: 9965635
-        registration_open: 'Nota: início e término das inscrições no fuso horário UTC.'
-        #original_hash: 9ea6021
-        remarks: >-
-          Alguma informação adicional que você queira passar para o WCAT. Por
-          exemplo, se há algo sobre o qual você não tem certeza, ou algum pedido
-          especial. Por favor preencha em Inglês!
-        #original_hash: da39a3e
-        clone_tabs: ''
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        end_date: ''
-        #original_hash: da39a3e
-        generate_website: ''
-        #original_hash: b2af5f5
-        external_registration_page: >-
-          A página na qual os competidores se inscrevem. Deve ser uma URL
-          http(s) válida.
-        #original_hash: 82ea18a
-        base_entry_fee_lowest_denomination: >-
-          A taxa base de inscrição para a competição. Ela será mostrada nas
-          informações da competição e na página de inscrição, caso exista. Se
-          for configurada como 0, uma frase será mostrada dizendo que as
-          inscrições serão gratuitas. <br><br><b>AVISO: A estimativa das Taxas
-          da WCA é apenas uma aproximação baseada nas taxas de câmbio atuais e
-          não é legalmente vinculante para o pagamento das Taxas.</b>
-        #original_hash: 9735ddf
-        currency_code: O código da moeda da taxa de inscrição.
-        #original_hash: da39a3e
-        guests_enabled: ''
-        #original_hash: da39a3e
-        enable_donations: ''
-        #original_hash: da39a3e
-        id: ''
-        #original_hash: da39a3e
-        confirmed: ''
-        #original_hash: da39a3e
-        receive_registration_emails: ''
-        #original_hash: da39a3e
-        registration_close: ''
-        #original_hash: da39a3e
-        showAtAll: ''
-        #original_hash: da39a3e
-        start_date: ''
-        #original_hash: da39a3e
-        use_wca_registration: ''
-        #original_hash: da39a3e
-        use_wca_live_for_scoretaking: ''
-        #original_hash: dc47c39
-        competitor_limit_enabled: >-
-          Ainda que não seja obrigatório segundo o Regulamento informar um
-          limite de competidores, é altamente recomendável fazê-lo.
-        #original_hash: b7b599b
-        competitor_limit: >-
-          O número de competidores permitido nesta competição. Por enquanto este
-          número é apenas a título de informação, e não impede mais pessoas de
-          se inscreverem. Estamos trabalhando para ter suporte específico para
-          isso no fluxo da inscrição, mas isto requer outras melhorias primeiro.
-        #original_hash: 4bd7102
-        competitor_limit_reason: >-
-          Qual a razão para o limite de competidores? Por favor preencha em
-          inglês!
-        #original_hash: 4b51faa
-        guests_per_registration_limit: >-
-          O número máximo de convidados por competidor permitido nessa
-          competição. Inscrições com convidados além desse número serão
-          bloqueadas. Deixe em branco se não houver um limite.
-        #original_hash: d09af8f
-        events_per_registration_limit: >-
-          Você pode optar por restringir o número total de eventos em que cada
-          competidor pode se inscrever (geralmente usado para competições
-          "Favoritas"). Você deve adicionar os eventos antes de usar este campo.
-          Inscrições com eventos além do limite serão bloqueadas. Deixe em
-          branco se não houver um limite.
-        #original_hash: da39a3e
-        venueAddress: ''
-        #original_hash: 3de153b
-        extra_registration_requirements: >-
-          Por favor indique aqui qualquer requisito adicional não previsto
-          acima, como por exemplo instruções de como pagar. <br/>Por favor
-          preencha <b>em Inglês</b> e quaisquer outras línguas que os
-          competidores falem; estes serão mostrados na página de informações da
-          competição, e também na página de inscrições se você estiver usando a
-          inscrição pelo website da WCA.
-        #original_hash: da39a3e
-        on_the_spot_registration: ''
-        #original_hash: 8c4fdf8
-        on_the_spot_entry_fee_lowest_denomination: >-
-          Se for configurada como 0, uma frase será mostrada dizendo que
-          inscrições no local serão aceitas de graça.
-        #original_hash: da39a3e
-        allow_registration_edits: ''
-        #original_hash: da39a3e
-        allow_registration_self_delete_after_acceptance: ''
-        #original_hash: 180b7b3
-        refund_policy_percent: >-
-          Por enquanto este número é apenas informacional; devoluções terão que
-          ser feitas manualmente. Se for configurado como 0, uma frase será
-          mostrada dizendo que a taxa de inscrição não será devolvida em nenhuma
-          circustância.
-        #original_hash: f64d853
-        refund_policy_limit_date: Data após a qual não serão feitas mais devoluções.
-        #original_hash: 664db64
-        waiting_list_deadline_date: >-
-          A data em que os inscritos na lista de espera não serão mais aceitos.
-          Se você tem uma data limite para devoluções, a data limite para ser
-          aceito não deve ser anterior à data limite para devoluções.
-        #original_hash: 75e6c1f
-        event_change_deadline_date: >-
-          Competidores inscritos poderão atualizar seus eventos até esta data,
-          contatando a equipe de organização. Esta data não deve ser definida
-          para um momento anterior ao término das inscrições. Deixar este campo
-          em branco significa que competidores podem adicionar eventos até que o
-          evento aconteça. Se você terá inscrições no local, esta data deve ser
-          a mesma da competição.
-        #original_hash: 0419547
-        guests_entry_fee_lowest_denomination: >-
-          Por enquanto este número é apenas informacional; taxas para convidados
-          não são gerenciadas por este website. Se for configurado como 0, uma
-          frase a sua escolha será mostrada acerca da política de espectadores.
-        #original_hash: da39a3e
-        guest_entry_status: ''
-        #original_hash: da39a3e
-        early_puzzle_submission: ''
-        #original_hash: 4e8488b
-        early_puzzle_submission_reason: >-
-          Por favor detalhe aqui os motivos para exigir a entrega antecipada dos
-          quebra-cabeças. Por favor preencha em Inglês!
-        #original_hash: da39a3e
-        qualification_results: ''
-        #original_hash: f859883
-        qualification_results_reason: >-
-          Por favor detalhe aqui os motivos para o uso de resultados de
-          qualificação. Por favor preencha em Inglês!
-        #original_hash: da39a3e
-        event_restrictions: ''
-        #original_hash: d3329d7
-        event_restrictions_reason: >-
-          Por favor detalhe aqui os motivos para restrição de combinações de
-          eventos. Por favor preencha em Inglês!
-        #original_hash: da39a3e
-        force_comment_in_registration: ''
-        #original_hash: 1067798
-        main_event_id: O vencedor deste evento será o vencedor da competição.
-        #original_hash: da39a3e
-        allow_registration_without_qualification: ''
-        championships:
-          #original_hash: da39a3e
-          championship_type: ''
-        competition_series:
-          #original_hash: da39a3e
-          wcif_id: ''
-          #original_hash: 77811b5
-          name: >-
-            O nome completo da Série de Competições, incluindo o ano no final
-            (p.ex. Southern Australia 2022). Verifique as maiúsculas. As mesmas
-            regras de nome para competições individuais se aplicam.
-          #original_hash: 778c20c
-          short_name: >-
-            Um nome reduzido para exibição. As mesmas regras de nome para
-            competições individuais se aplicam.
-          #original_hash: 3e27501
-          competition_ids: >-
-            <b>Este campo não pode ser editado!</b><br/>Para adicionar
-            competições a esta Série, você deve ir à pagina "Editar" de cada
-            competição que deseja adicionar.
       website_contact:
         #original_hash: da39a3e
         inquiry: ''
@@ -1168,22 +841,10 @@ pt-BR:
         #original_hash: da39a3e
         content: ''
       person:
-        #original_hash: 498f4c5
-        dob: Data de nascimento deve estar no formato AAAA-MM-DD.
-        #original_hash: da39a3e
-        countryId: ''
-        #original_hash: da39a3e
-        gender: ''
-        #original_hash: da39a3e
-        name: ''
         #original_hash: da39a3e
         person1_wca_id: ''
         #original_hash: da39a3e
         person2_wca_id: ''
-        #original_hash: da39a3e
-        wca_id: ''
-        #original_hash: da39a3e
-        incorrect_wca_id_claim_count: ''
         #original_hash: da39a3e
         person_wca_id: ''
       poll:
@@ -1266,11 +927,6 @@ pt-BR:
         start_date: ''
         #original_hash: da39a3e
         end_date: ''
-      wfc:
-        #original_hash: da39a3e
-        from_date: ''
-        #original_hash: da39a3e
-        to_date: ''
     options:
       registration:
         status:
@@ -1280,49 +936,6 @@ pt-BR:
           pending: Na espera
           #original_hash: 441bda6
           deleted: Excluída
-      competition:
-        guests_enabled:
-          #original_hash: cb8809d
-          'true': Perguntar sobre acompanhantes
-          #original_hash: f8c2332
-          'false': NÃO perguntar sobre acompanhantes
-        competitor_limit_enabled:
-          #original_hash: d9c05cc
-          'true': Quero especificar um limite de competidores
-          #original_hash: 5b581b5
-          'false': NÃO QUERO especificar um limite de competidores
-        on_the_spot_registration:
-          #original_hash: 0c521ca
-          'true': Inscrições no local serão aceitas
-          #original_hash: 0f236df
-          'false': Inscrições no local NÃO serão aceitas
-        allow_registration_without_qualification:
-          #original_hash: 9697d98
-          'true': >-
-            Os competidores poderão se inscrever em eventos para os quais não
-            estão qualificados (vou removê-los depois)
-          #original_hash: 6509041
-          'false': >-
-            Os competidores PRECISAM estar qualificados para se inscrevem em um
-            evento
-        allow_registration_edits:
-          #original_hash: 52a2f4a
-          'true': >-
-            Competidores podem editar sua inscrição até a data limite para
-            atualizar eventos
-          #original_hash: 2cbb80e
-          'false': >-
-            Competidores NÃO podem editar sua inscrição depois que tenha sido
-            aceita
-        allow_registration_self_delete_after_acceptance:
-          #original_hash: 5c2e8c1
-          'true': >-
-            Os competidores podem excluir sua própria inscrição mesmo depois que
-            ela tenha sido aceita
-          #original_hash: 3b77604
-          'false': >-
-            Os competidores NÃO podem excluir sua inscrição após ela ter sido
-            aceita
   mail_form:
     attributes:
       contact_form:
@@ -1575,8 +1188,8 @@ pt-BR:
       have_competed: Eu já participei de uma competição da WCA.
       #original_hash: dcd1d70
       have_never_competed: Eu nunca participei de uma competição da WCA.
-      #original_hash: 86a60c9
-      let_us_know: Por favor informe se você já participou de uma competição da WCA ou não.
+      #original_hash: 3511bc5
+      let_us_know: 'Por favor informe se você já participou de uma competição da WCA antes:'
       #original_hash: f9f512b
       welcome_back: >-
         Bem-vindo de volta! Para criar sua conta no site da WCA, precisamos do
@@ -1959,8 +1572,6 @@ pt-BR:
       preferences: Preferências
       #original_hash: 8be3c94
       password: Senha
-      #original_hash: 3fc6dbe
-      member_of: Membro de
       #original_hash: 42619dd
       preferred_events_desc: >-
         Selecionar seus eventos favoritos agiliza o processo de inscrição em
@@ -2061,8 +1672,8 @@ pt-BR:
         #original_hash: 1a18831
         '7': Sua foto não pode conter conteúdo ofensivo (p. ex. gestos ofensivos).
       staff_avatar_guidelines:
-        #original_hash: da9e6df
-        title: 'Orientações adicionais para Staff Members:'
+        #original_hash: 5d5a47a
+        title: 'Orientações adicionais para Staff Members e Delegatos Trainee:'
         paragraphs:
           #original_hash: ff6d2e8
           '1': >-
@@ -2119,12 +1730,6 @@ pt-BR:
         representado no passado.
       #original_hash: 5fe15d4
       must_have_a_change: O nome ou região precisam ser diferentes para atualizar a pessoa.
-      #original_hash: 012f032
-      must_be_senior: deve ser um Delegado Senior
-      #original_hash: 2e582eb
-      must_not_be_present: não pode ser presente
-      #original_hash: 5b4eac9
-      senior_has_delegate: não pode rebaixar um Delegado Senior que tenha delegados subordinados
       #original_hash: 48653a9
       already_have_id: 'não pode solicitar uma ID da WCA porque você já tem a ID %{wca_id}'
       #original_hash: ec5db95
@@ -2188,6 +1793,21 @@ pt-BR:
         href="%{dob_form_path}">este formulário</a>.
       #original_hash: 92aa857
       unknown_wca_id_html: 'ID da WCA %{link_id} não existe.'
+  user_roles:
+    email:
+      role_metadata:
+        #original_hash: bfc2c7c
+        region_name: Nome da Região
+        #original_hash: bae7d5b
+        status: Situação
+        #original_hash: 8970f0e
+        locale: Linguagem
+  user_groups:
+    group_types:
+      #original_hash: abd2828
+      board: Conselho da WCA
+      #original_hash: d79bd00
+      officers: Oficiais da WCA
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2689,7 +2309,7 @@ pt-BR:
       #original_hash: ba067f0
       not_announced: Essa competição está visível para o público mas ainda não foi anunciada.
       #original_hash: ab61991
-      announced: Competição anunciada com sucesso!
+      announced_success: Competição anunciada com sucesso!
       #original_hash: cbff8ce
       cancelled: >-
         Esta competição foi cancelada. Por favor verifique a seção de
@@ -2734,6 +2354,10 @@ pt-BR:
       reg_opens_too_early: >-
         As inscrições estão previstas para começar em menos do que as 48 horas
         necessárias.
+      #original_hash: a25e7a2
+      registration_already_closed: >-
+        O prazo limite para inscrição já passou. Por favor ajuste-o para uma
+        data futura.
       #original_hash: 3322400
       tooltip_registered: Você está inscrito.
       #original_hash: f2d092f
@@ -2750,22 +2374,14 @@ pt-BR:
       not_confirmed_visible: Esta competição não está confirmada mas está visível
       #original_hash: b299b27
       not_confirmed_not_visible: Esta competição não está confirmada nem visível
-      #original_hash: a821396
-      stripe_connected: >-
-        Você conectou sua conta do Stripe e já pode receber pagamentos para esta
-        competição.
-      #original_hash: b8fc60f
-      stripe_disconnected_success: Conta do Stripe desconectada com sucesso.
-      #original_hash: e1a250c
-      stripe_disconnected_failure: Houve um erro ao tentar desconectar a conta do Stripe.
-      #original_hash: 0a4bb53
-      stripe_not_connected: Houve um problema e não foi possível conectar sua conta do Stripe.
       #original_hash: 1b92d16
       championship_exists: 'Já existe um %{championship_type} em %{year}'
       #original_hash: 0644bdc
       orga_closed_reg_success: Inscrições encerradas com sucesso.
       #original_hash: 7f197a0
       orga_closed_reg_failure: Não foi possível encerrar as inscrições.
+      #original_hash: b16bd13
+      cannot_activate_v2: Você não pode ativar o novo sistema se as inscrições estiverem abertas.
       #original_hash: 74caf1a
       no_waiting_list_specified: >-
         Essa competição não tem uma data limite para aceitar competidores da
@@ -3039,6 +2655,12 @@ pt-BR:
       past_from: 'Passadas - %{year}'
       #original_hash: 7cff459
       past_all: Passadas - todos os anos
+      #original_hash: 6eef664
+      no_delegates: Nenhum
+      #original_hash: ef0c8bc
+      delegates_loading: Aguardando carregar todos os Delegados...
+      #original_hash: 7045db2
+      no_delegates_found: Nenhum Delegado encontrado.
       #original_hash: 819fe62
       show_cancelled: Mostrar competições canceladas
       #original_hash: 0eda967
@@ -3087,6 +2709,8 @@ pt-BR:
           full: >-
             O limite de competidores foi atingido. Novas inscrições irão para a
             lista de espera
+      #original_hash: 28531af
+      no_more_comps: Não há mais competições.
       #original_hash: 8b09d74
       no_comp_found: Nenhuma competição encontrada.
       #original_hash: 7008166
@@ -3124,26 +2748,6 @@ pt-BR:
         Você pode usar <a
         href='https://daringfireball.net/projects/markdown/basics'
         target='_blank'>Markdown</a>
-      #original_hash: e5cbb13
-      name_reason_html: >-
-        Uma explicação breve sobre o nome da competição. O nome deve estar de
-        acordo com a <a
-        href='https://documents.worldcubeassociation.org/documents/policies/Competition%20Requirements.pdf'>WCA
-        Competition Requirements Policy</a>.
-      #original_hash: 9d9126e
-      venue_html: >-
-        O local onde a competição vai acontecer. %{md}. Por exemplo [Cité des
-        Sciences et de l'Industrie](http://www.cite-sciences.fr)
-      #original_hash: 2651d1a
-      venue_details_html: >-
-        Detalhes do local (p. ex. No primeiro andar, ao fundo. Siga as placas).
-        %{md}
-      #original_hash: 447814d
-      contact_html: >-
-        Informação de contato opcional. Se você não preencher este campo,
-        pedidos de contato serão enviados por um formulário sem revelar os
-        emails dos organizadores. %{md}. Exemplo: [Texto
-        mostrado](mailto:alguem@email.com)
       #original_hash: 05c66b5
       series_save_first_hint: >-
         Nota: Você precisa salvar a competição antes de adicionar uma nova
@@ -3210,6 +2814,447 @@ pt-BR:
         ajax_error: >-
           Houve um erro com a estimativa das Taxas, possivelmente porque não
           havia uma taxa de câmbio para a moeda selecionada.
+      labels:
+        admin:
+          #original_hash: 7f3d889
+          is_confirmed: Não permitir que os organizadores alterem esta competição
+          #original_hash: d493e6a
+          is_visible: Tornar competição visível ao público
+        #original_hash: 89f89c0
+        competition_id: ID
+        #original_hash: 709a232
+        name: Nome
+        #original_hash: fdba578
+        short_name: Apelido
+        #original_hash: f91b080
+        name_reason: Razão para o nome
+        venue:
+          #original_hash: 0f21717
+          country_id: País
+          #original_hash: 25b7b06
+          city_name: Cidade
+          #original_hash: 67cd406
+          name: Local
+          #original_hash: 08767af
+          details: Detalhes do local
+          #original_hash: 486f8fb
+          address: Endereço
+          #original_hash: 8ebebca
+          coordinates: Coordenadas
+        #original_hash: ff99f5b
+        start_date: Data de início
+        #original_hash: 89d10cd
+        end_date: Data de término
+        series:
+          #original_hash: e2b4898
+          series_id: ID da Série
+          #original_hash: 75ceb67
+          name: Nome da Série
+          #original_hash: 8a6bee1
+          short_name: Apelido da série
+          #original_hash: af3d38e
+          competition_ids: Todas as competições
+        #original_hash: 0eb5ed5
+        information: Informação
+        competitor_limit:
+          #original_hash: 9bb1965
+          enabled: Limite de competidores
+          #original_hash: 749f4c9
+          count: Número máximo de competidores
+          #original_hash: 4a8b6f1
+          reason: Razão(ões) para o limite de competidores
+        staff:
+          #original_hash: 2e3ed8b
+          staff_delegate_ids: Delegado(s) da WCA
+          #original_hash: c0ddcd6
+          trainee_delegate_ids: Delegado Trainee da WCA
+          #original_hash: 958562e
+          organizer_ids: Organizador(es)
+          #original_hash: b37456c
+          contact: Contato
+        #original_hash: 991f419
+        championships: Campeonatos
+        website:
+          #original_hash: 692e1f9
+          generate_website: >-
+            Eu quero usar o site da WCA ao invés de um site externo para mais
+            informações.
+          #original_hash: 2e8a57c
+          external_website: Website
+          #original_hash: 8020e88
+          external_registration_page: Página de inscrição
+          #original_hash: 87b7d5f
+          uses_wca_registration: Eu quero usar o site da WCA para as inscrições
+          #original_hash: ebe8c47
+          uses_wca_live: Vou usar o WCA Live para registrar os resultados
+        entry_fees:
+          #original_hash: 28a6fbb
+          currency_code: Código da moeda do país
+          #original_hash: 6cf623b
+          base_entry_fee: Taxa base de inscrição
+          #original_hash: 69780b5
+          on_the_spot_entry_fee: Taxa de inscrição no local
+          #original_hash: 3542671
+          guest_entry_fee: Taxa de entrada para espectadores/convidados
+          #original_hash: 71c8461
+          donations_enabled: Quero habilitar doações além de coletar as taxas de inscrição
+          #original_hash: efbdbab
+          refund_policy_percent: Percentual a ser devolvido
+          #original_hash: b332299
+          refund_policy_limit_date: Data limite para devoluções
+        registration:
+          #original_hash: d4aeed9
+          opening_date_time: Início das inscrições
+          #original_hash: f8153a2
+          closing_date_time: Término das inscrições
+          #original_hash: 16cf9a4
+          waiting_list_deadline_date: Prazo limite para aceitar competidores da lista de espera
+          #original_hash: 99a9169
+          event_change_deadline_date: Prazo limite para os competidores atualizarem seus eventos
+          #original_hash: 2529d04
+          allow_on_the_spot: Inscrições na hora do evento
+          #original_hash: 3d47eca
+          allow_self_delete_after_acceptance: Cancelamentos de inscrições
+          #original_hash: 7e53b96
+          allow_self_edits: Editar inscrição
+          #original_hash: 3c23a67
+          guests_enabled: Acompanhantes
+          #original_hash: bb16247
+          guest_entry_status: Mensagem sobre entrada gratuita de convidados
+          #original_hash: 7d78478
+          guests_per_registration: Número máximo de convidados por inscrição
+          #original_hash: 556fda0
+          extra_requirements: Requisitos adicionais de inscrição
+          #original_hash: 6c8e5bf
+          force_comment: Exigir que os competidores façam um comentário ao se inscreverem
+        event_restrictions:
+          early_puzzle_submission:
+            #original_hash: 723cad9
+            enabled: >-
+              Eu gostaria de exigir que os competidores entreguem os
+              quebra-cabeças em algum momento específico antes do horário de
+              início do evento
+            #original_hash: 78308cc
+            reason: Razões e detalhes para a entrega antecipada dos quebra-cabeças
+          qualification_results:
+            #original_hash: 88da0ef
+            enabled: >-
+              Eu gostaria de usar resultados de qualificação para limitar quem
+              pode competir em certos eventos
+            #original_hash: 1ec6dd4
+            reason: Razões e detalhes para uso de resultados de qualificação
+            #original_hash: a541bfa
+            allow_registration_without: Eventos com Qualificação
+          event_limitation:
+            #original_hash: ac30de9
+            enabled: >-
+              Eu gostaria de restringir as combinações de eventos nas quais os
+              competidores podem se inscrever
+            #original_hash: 4bf194c
+            reason: Razões e detalhes para restrição de eventos
+            #original_hash: 22516e1
+            per_registration_limit: Limite de eventos por inscrição
+          #original_hash: 3c24bd2
+          main_event_id: Evento principal
+        #original_hash: d7020f4
+        remarks: Observações
+        cloning:
+          #original_hash: c305010
+          clone_tabs: >-
+            Eu gostaria de clonar todas as abas com informações adicionais
+            também
+      hints:
+        admin:
+          #original_hash: da39a3e
+          is_confirmed: ''
+          #original_hash: da39a3e
+          is_visible: ''
+        #original_hash: da39a3e
+        competition_id: ''
+        #original_hash: 2c812a0
+        name: >-
+          O nome completo da competição, incluindo o ano no final (p. ex.
+          Campeonato Brasileiro 2016). Use corretamente letras maiúsculas. O
+          nome deve ter somente caracteres alfanuméricos, traços (-), "e
+          comercial" (&), pontos (.), dois-pontos (:), apóstrofos (') e espaços.
+        #original_hash: fbcda66
+        short_name: >-
+          Um nome curto para a lista completa. Se o nome da competição já for
+          curto, você pode usá-lo novamente (p. ex. Europeu 2006).
+        #original_hash: 8ea1fac
+        name_reason_html: >-
+          Uma explicação breve sobre o nome da competição. O nome deve estar de
+          acordo com a <a
+          href='/documents/policies/Competition%20Requirements.pdf'>WCA
+          Competition Requirements Policy</a>.
+        venue:
+          #original_hash: da39a3e
+          country_id: ''
+          #original_hash: bce4589
+          city_name: >-
+            Nome da cidade e estado onde a competição acontecerá. Não inclua o
+            país (exemplos: São Paulo, São Paulo ou Uberlândia, Minas Gerais).
+          #original_hash: 9d9126e
+          name_html: >-
+            O local onde a competição vai acontecer. %{md}. Por exemplo [Cité
+            des Sciences et de l'Industrie](http://www.cite-sciences.fr)
+          #original_hash: 2651d1a
+          details_html: >-
+            Detalhes do local (p. ex. No primeiro andar, ao fundo. Siga as
+            placas). %{md}
+          #original_hash: da39a3e
+          address: ''
+          coordinates:
+            #original_hash: da39a3e
+            lat: ''
+            #original_hash: da39a3e
+            long: ''
+        #original_hash: da39a3e
+        start_date: ''
+        #original_hash: da39a3e
+        end_date: ''
+        series:
+          #original_hash: da39a3e
+          series_id: ''
+          #original_hash: 77811b5
+          name: >-
+            O nome completo da Série de Competições, incluindo o ano no final
+            (p.ex. Southern Australia 2022). Verifique as maiúsculas. As mesmas
+            regras de nome para competições individuais se aplicam.
+          #original_hash: 778c20c
+          short_name: >-
+            Um nome reduzido para exibição. As mesmas regras de nome para
+            competições individuais se aplicam.
+          #original_hash: 3e27501
+          competition_ids: >-
+            <b>Este campo não pode ser editado!</b><br/>Para adicionar
+            competições a esta Série, você deve ir à pagina "Editar" de cada
+            competição que deseja adicionar.
+        #original_hash: bb470cc
+        information: >-
+          Informações importantes que os competidores devem saber. Estas serão
+          mostradas na página principal da competição. <br/>Por favor preencha
+          <b>em Inglês</b> e quaisquer outras línguas que os competidores falam.
+        competitor_limit:
+          #original_hash: dc47c39
+          enabled: >-
+            Ainda que não seja obrigatório segundo o Regulamento informar um
+            limite de competidores, é altamente recomendável fazê-lo.
+          #original_hash: b7b599b
+          count: >-
+            O número de competidores permitido nesta competição. Por enquanto
+            este número é apenas a título de informação, e não impede mais
+            pessoas de se inscreverem. Estamos trabalhando para ter suporte
+            específico para isso no fluxo da inscrição, mas isto requer outras
+            melhorias primeiro.
+          #original_hash: 4bd7102
+          reason: >-
+            Qual a razão para o limite de competidores? Por favor preencha em
+            inglês!
+        staff:
+          #original_hash: b4d020f
+          staff_delegate_ids: Delegado(s) da WCA da competição.
+          #original_hash: cb9882c
+          trainee_delegate_ids: Delegados Trainees da WCA para a competição.
+          #original_hash: 517d376
+          organizer_ids: >-
+            Organizador(es) da competição (é necessário que possuam uma conta no
+            site da WCA para aparecer aqui).
+          #original_hash: 447814d
+          contact_html: >-
+            Informação de contato opcional. Se você não preencher este campo,
+            pedidos de contato serão enviados por um formulário sem revelar os
+            emails dos organizadores. %{md}. Exemplo: [Texto
+            mostrado](mailto:alguem@email.com)
+        website:
+          #original_hash: da39a3e
+          generate_website: ''
+          #original_hash: cabe7fb
+          external_website: Website da competição. Deve ser uma URL http(s) válida.
+          #original_hash: b2af5f5
+          external_registration_page: >-
+            A página na qual os competidores se inscrevem. Deve ser uma URL
+            http(s) válida.
+          #original_hash: da39a3e
+          uses_wca_registration: ''
+          #original_hash: da39a3e
+          uses_wca_live: ''
+        user_settings:
+          #original_hash: da39a3e
+          receive_registration_emails: ''
+        entry_fees:
+          #original_hash: 9735ddf
+          currency_code: O código da moeda da taxa de inscrição.
+          #original_hash: 82ea18a
+          base_entry_fee: >-
+            A taxa base de inscrição para a competição. Ela será mostrada nas
+            informações da competição e na página de inscrição, caso exista. Se
+            for configurada como 0, uma frase será mostrada dizendo que as
+            inscrições serão gratuitas. <br><br><b>AVISO: A estimativa das Taxas
+            da WCA é apenas uma aproximação baseada nas taxas de câmbio atuais e
+            não é legalmente vinculante para o pagamento das Taxas.</b>
+          #original_hash: 8c4fdf8
+          on_the_spot_entry_fee: >-
+            Se for configurada como 0, uma frase será mostrada dizendo que
+            inscrições no local serão aceitas de graça.
+          #original_hash: 0419547
+          guest_entry_fee: >-
+            Por enquanto este número é apenas informacional; taxas para
+            convidados não são gerenciadas por este website. Se for configurado
+            como 0, uma frase a sua escolha será mostrada acerca da política de
+            espectadores.
+          #original_hash: da39a3e
+          donations_enabled: ''
+          #original_hash: 180b7b3
+          refund_policy_percent: >-
+            Por enquanto este número é apenas informacional; devoluções terão
+            que ser feitas manualmente. Se for configurado como 0, uma frase
+            será mostrada dizendo que a taxa de inscrição não será devolvida em
+            nenhuma circustância.
+          #original_hash: f64d853
+          refund_policy_limit_date: Data após a qual não serão feitas mais devoluções.
+        registration:
+          #original_hash: 9965635
+          opening_date_time: 'Nota: início e término das inscrições no fuso horário UTC.'
+          #original_hash: da39a3e
+          closing_date_time: ''
+          #original_hash: 664db64
+          waiting_list_deadline_date: >-
+            A data em que os inscritos na lista de espera não serão mais
+            aceitos. Se você tem uma data limite para devoluções, a data limite
+            para ser aceito não deve ser anterior à data limite para devoluções.
+          #original_hash: 75e6c1f
+          event_change_deadline_date: >-
+            Competidores inscritos poderão atualizar seus eventos até esta data,
+            contatando a equipe de organização. Esta data não deve ser definida
+            para um momento anterior ao término das inscrições. Deixar este
+            campo em branco significa que competidores podem adicionar eventos
+            até que o evento aconteça. Se você terá inscrições no local, esta
+            data deve ser a mesma da competição.
+          #original_hash: da39a3e
+          allow_on_the_spot: ''
+          #original_hash: da39a3e
+          allow_self_delete_after_acceptance: ''
+          #original_hash: da39a3e
+          allow_self_edits: ''
+          #original_hash: da39a3e
+          guests_enabled: ''
+          #original_hash: da39a3e
+          guest_entry_status: ''
+          #original_hash: 4b51faa
+          guests_per_registration: >-
+            O número máximo de convidados por competidor permitido nessa
+            competição. Inscrições com convidados além desse número serão
+            bloqueadas. Deixe em branco se não houver um limite.
+          #original_hash: 3de153b
+          extra_requirements: >-
+            Por favor indique aqui qualquer requisito adicional não previsto
+            acima, como por exemplo instruções de como pagar. <br/>Por favor
+            preencha <b>em Inglês</b> e quaisquer outras línguas que os
+            competidores falem; estes serão mostrados na página de informações
+            da competição, e também na página de inscrições se você estiver
+            usando a inscrição pelo website da WCA.
+          #original_hash: da39a3e
+          force_comment: ''
+        event_restrictions:
+          early_puzzle_submission:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: 4e8488b
+            reason: >-
+              Por favor detalhe aqui os motivos para exigir a entrega antecipada
+              dos quebra-cabeças. Por favor preencha em Inglês!
+          qualification_results:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: f859883
+            reason: >-
+              Por favor detalhe aqui os motivos para o uso de resultados de
+              qualificação. Por favor preencha em Inglês!
+            #original_hash: da39a3e
+            allow_registration_without: ''
+          event_limitation:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d3329d7
+            reason: >-
+              Por favor detalhe aqui os motivos para restrição de combinações de
+              eventos. Por favor preencha em Inglês!
+            #original_hash: d09af8f
+            per_registration_limit: >-
+              Você pode optar por restringir o número total de eventos em que
+              cada competidor pode se inscrever (geralmente usado para
+              competições "Favoritas"). Você deve adicionar os eventos antes de
+              usar este campo. Inscrições com eventos além do limite serão
+              bloqueadas. Deixe em branco se não houver um limite.
+          #original_hash: 1067798
+          main_event_id: O vencedor deste evento será o vencedor da competição.
+        #original_hash: 9ea6021
+        remarks: >-
+          Alguma informação adicional que você queira passar para o WCAT. Por
+          exemplo, se há algo sobre o qual você não tem certeza, ou algum pedido
+          especial. Por favor preencha em Inglês!
+        cloning:
+          #original_hash: da39a3e
+          clone_tabs: ''
+      choices:
+        guests_enabled:
+          #original_hash: cb8809d
+          'true': Perguntar sobre espectadores/convidados
+          #original_hash: f8c2332
+          'false': NÃO perguntar sobre espectadores/convidados
+        competitor_limit:
+          enabled:
+            #original_hash: d9c05cc
+            'true': Quero especificar um limite de competidores
+            #original_hash: 5b581b5
+            'false': NÃO QUERO especificar um limite de competidores
+        registration:
+          allow_on_the_spot:
+            #original_hash: 0c521ca
+            'true': Inscrições no local serão aceitas
+            #original_hash: 0f236df
+            'false': Inscrições no local NÃO serão aceitas
+          allow_self_edits:
+            #original_hash: 52a2f4a
+            'true': >-
+              Competidores podem editar sua inscrição até a data limite para
+              atualizar eventos
+            #original_hash: 2cbb80e
+            'false': >-
+              Competidores NÃO podem editar sua inscrição depois que tenha sido
+              aceita
+          allow_self_delete_after_acceptance:
+            #original_hash: 5c2e8c1
+            'true': >-
+              Os competidores podem excluir sua própria inscrição mesmo depois
+              que ela tenha sido aceita
+            #original_hash: 3b77604
+            'false': >-
+              Os competidores NÃO podem excluir sua inscrição após ela ter sido
+              aceita
+          guest_entry_status:
+            #original_hash: 7e54323
+            unclear: >-
+              Não mostrar nada (e talvez detalhar na seção "Requerimentos
+              adicionais de inscrição")
+            #original_hash: 694bce4
+            free: Não há taxa para espectadores
+            #original_hash: 762c509
+            restricted: >-
+              Espectadores somente são permitidos como acompanhantes de
+              competidores
+        event_restrictions:
+          qualification_results:
+            allow_registration_without:
+              #original_hash: 9697d98
+              'true': >-
+                Os competidores poderão se inscrever em eventos para os quais
+                não estão qualificados (vou removê-los depois)
+              #original_hash: 6509041
+              'false': >-
+                Os competidores PRECISAM estar qualificados para se inscrevem em
+                um evento
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3234,6 +3279,8 @@ pt-BR:
       not_all_delegates: não são todos Delegados da WCA
       #original_hash: 43a23c2
       registration_close_after_open: o término das inscrições deve ser posterior ao início
+      #original_hash: 2f8765e
+      registration_already_closed: a inscrição não pode estar fechada.
       #original_hash: 8a3a4f6
       start_date_must_be_28_days_in_advance: Data de início deve ser pelo menos 28 dias no futuro.
       #original_hash: 43a83a9
@@ -3258,8 +3305,8 @@ pt-BR:
       waiting_list_deadline_before_refund_date: >-
         Data limite da lista de espera não pode ser antes da data limite para
         devoluções.
-      #original_hash: 44d9902
-      waiting_list_deadline_after_start: Data limite da lista de espera deve ser antes da data de início.
+      #original_hash: 7324d19
+      waiting_list_deadline_after_end: Prazo final da lista de espera deve ser antes do fim da competição.
       #original_hash: c3eb1be
       event_change_deadline_before_registration_close: >-
         Data limite para atualizar eventos não pode ser antes do término da
@@ -3299,20 +3346,6 @@ pt-BR:
       competition_in: 'A competição começa em %{n_days}.'
       #original_hash: e6e096a
       competition_was: 'A competição aconteceu %{n_days} atrás.'
-    nearby_competitions:
-      #original_hash: 241801a
-      competitions:
-        zero: Nenhuma competição
-        one: 1 competição
-        other: '%{count} competições'
-      #original_hash: 3446062
-      label_admin: 'Últimos %{days} dias'
-      #original_hash: 07a1cf0
-      nearby_admin: '%{x_competitions} num intervalo de %{kms} km e %{days} dias.'
-      #original_hash: 9eb8f46
-      within: 'Num intervalo de %{days} dias'
-      #original_hash: d97d1ee
-      show: Mostrar
     adjacent_competitions:
       #original_hash: e3528ec
       label: 'Competições próximas (num intervalo de %{days} dias e %{kms} km)'
@@ -3367,6 +3400,8 @@ pt-BR:
     post_announcement: Anunciar a competição
     #original_hash: b462eac
     announced_by_html: 'Anunciada por %{announcer_name} em %{date_time}'
+    #original_hash: 63ba8b0
+    announce_confirm: Tem certeza que deseja anunciar esta competição?
     #original_hash: 375e17f
     cancel: Cancelar a competição
     #original_hash: 7628a51
@@ -3393,12 +3428,12 @@ pt-BR:
     note_reg_not_full_orga_close_reg: >-
       Nota: você só pode encerrar as inscrições quando o limite de competidores
       tiver sido atingido.
-    #original_hash: 1ae594d
-    stripe_disconnect: Desconectar conta do Stripe
-    #original_hash: 9ca8e2c
-    stripe_disconnect_confirm: >-
-      Tem certeza que deseja desconectar a conta do Stripe? Isso não poderá ser
-      desfeito.
+    #original_hash: c66488a
+    user_preferences: Preferências de Usuário
+    #original_hash: 089cbfd
+    receive_registration_emails: >-
+      Enviar notificação por e-mail quando alguém se inscrever para esta
+      competição
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Nota: as inscrições já estão encerradas.'
     show:
@@ -3536,6 +3571,8 @@ pt-BR:
         competitors: Competidores
         #original_hash: c4622c3
         scrambles: Embaralhamentos
+        #original_hash: f632da3
+        enable_v2: Habilitar novo Serviço de Inscrição
     results_table:
       #original_hash: 3e9a6b5
       wca_profile: Perfil da WCA
@@ -3713,6 +3750,87 @@ pt-BR:
   notifications:
     #original_hash: 10bcdbd
     connect_wca_id: Vincular sua ID da WCA à sua conta!
+  payments:
+    payment_providers:
+      #original_hash: 559ef55
+      paypal: PayPal
+      #original_hash: 4d08ec5
+      stripe: Stripe
+    payment_setup:
+      #original_hash: 69b243c
+      stripe_dashboard: Painel do Stripe
+      #original_hash: e621d96
+      account_connected: >-
+        Você conectou com sucesso sua conta %{provider} e já pode receber
+        pagamentos de inscrições para esta competição.
+      #original_hash: 18d1326
+      account_disconnected_success: 'Sua conta %{provider} foi desconectada com sucesso.'
+      #original_hash: 6b934e2
+      account_disconnected_failure: 'Houve um erro ao tentar desconectar a conta %{provider} account.'
+      #original_hash: 340bba4
+      account_not_connected: 'Houve um problema e não conseguimos conectar sua conta %{provider}.'
+      #original_hash: 4218676
+      disconnect_account: 'Desconectar conta %{provider}'
+      #original_hash: 59c9c9c
+      confirm_account_disconnect: >-
+        Tem certeza que deseja desconectar a conta %{provider}? Essa ação não
+        pode ser desfeita.
+      #original_hash: 0be9f82
+      supported_currency_warning: >-
+        Por favor certifique-se de que a moeda que você escolheu é compatível
+        com o sistema de pagamento escolhido! As moedas disponíveis vão depender
+        do país em que a conta está baseada. Você pode vê-las abaixo:
+      #original_hash: 9711365
+      supported_currencies: 'Moedas Disponíveis no %{provider}'
+      #original_hash: 1e6571f
+      provider_heading: 'Pagamentos do %{provider}'
+      #original_hash: 40a098a
+      accept_payments_header: Aceitar Pagamentos de Inscrição
+      #original_hash: 7ebe178
+      connect_button: 'Conectar com %{provider}'
+      #original_hash: f3fdb64
+      stripe_payment_info: >-
+        Para poder aceitar pagamentos para esta competição, você precisa
+        conectar sua própria conta Stripe com a conta Stripe da WCA clicando no
+        botão abaixo. Se você ainda não tem sua conta Stripe, você pode clicar
+        no botão e será guiado pelo processo para criar uma.
+      #original_hash: 53adda3
+      stripe_connect_warning: >-
+        Conectar sua conta Stripe permite que o site da WCA gere cobranças e
+        devoluções diretamente na sua conta.
+      #original_hash: 9ea95c2
+      stripe_disconnect_info: >-
+        Esta competição está configurada para aceitar pagamentos pelo Stripe. Se
+        você quiser desconectar sua conta Stripe, você deve primeiro fazer isso
+        no painel Stripe (link abaixo). Observe que isso irá revogar o acesso de
+        todas as competições usando a conta. Antes que uma nova conta Stripe
+        possa ser conectada, o Delegado da competição deve solicitar à WCAT para
+        limpar o campo.
+      #original_hash: d4a360b
+      stripe_disconnect_warning: >-
+        Tenha em mente que desconectar uma conta deve ser feito somente em
+        situações excepcionais, como a conta atual não conseguir receber
+        pagamentos.
+      #original_hash: 0af9795
+      paypal_payment_info: >-
+        Uma conta "businesse" do PayPal é necessária para aceitar pagamentos
+        pela página da competição. Se você ainda não tem uma conta "business",
+        você ainda pode clicar no botão abaixo e será guiado pelo processo para
+        criar uma.
+      #original_hash: d327396
+      paypal_connect_warning: >-
+        Conectar sua conta PayPal permite que o site da WCA direcione pagamentos
+        para você e faça reembolsos diretamente da sua conta.
+      #original_hash: eb05726
+      paypal_disconnect_info: >-
+        Esta competição está configurada para aceitar pagamentos pelo PayPal.
+        Observe que clicar em "desconectar" aqui não irá revogar as permissões
+        que você deu para a WCA - isso deve ser feito diretamente na sua conta
+        do PayPal.
+      #original_hash: c186753
+      paypal_disconnect_warning: >-
+        Tenha em mente que mudanças de conta devem ser feitas apenas em
+        situações excepcionais, como a conta atual não poder receber pagamentos.
   persons:
     index:
       #original_hash: 5934b4c
@@ -3785,12 +3903,12 @@ pt-BR:
       unstick_at_future: deve estar no futuro
   contacts:
     website:
-      #original_hash: 35c333c
+      #original_hash: d7707e7
       faq_note_html: >-
         Antes de fazer uma pergunta, você pode dar uma olhada em nossas <a
         href="/faq">Perguntas Frequentes</a>! Se você quer contatar uma equipe
-        ou comitê específico, as informações de contato estão <a
-        href="/teams-committees">nesta página</a>.
+        ou comitê específico não listado aqui, as informações de contato estão
+        <a href="/teams-committees">nesta página</a>.
       #original_hash: 4ef2aad
       title: Formulário de Contato da WCA
       inquiries:
@@ -4076,7 +4194,7 @@ pt-BR:
     spirit_footer: Espírito da WCA
     #original_hash: c1781ee
     our_goals_title: Nossos objetivos
-    #original_hash: 743ca74
+    #original_hash: 375db0f
     our_goals_content_html: >-
       <p>A World Cube Association quer trazer oportunidades de participação e
       liderança para jovens em todo o mundo, aumentando a acessibilidade de
@@ -4393,6 +4511,10 @@ pt-BR:
     title: Delegados da WCA
     #original_hash: 77b819c
     acknowledges: 'A WCA reconhece os seguintes Delegados:'
+    #original_hash: 0397112
+    regions: Regiões
+    #original_hash: 0e57333
+    all_regions: Todas as Regiões
     table:
       #original_hash: 709a232
       name: Nome
@@ -4400,6 +4522,14 @@ pt-BR:
       role: Posição
       #original_hash: 0f21717
       region: Região
+      #original_hash: fee4fb7
+      first_delegated: Primeira Competição como Delegado
+      #original_hash: e2232e5
+      last_delegated: Última Competição como Delegado
+      #original_hash: 5ab4a17
+      total_delegated: Total de competições como Delegado
+      #original_hash: 90ccd64
+      history: Histórico
   regional_organizations:
     #original_hash: 37b8fdc
     title: Organizações Regionais
@@ -5059,7 +5189,7 @@ pt-BR:
     paragraph3:
       #original_hash: 00d3bf8
       title: Prazos para anunciar a competição
-      #original_hash: 66bf437
+      #original_hash: 477a672
       content_html: >-
         A competição precisa ser anunciada pelo menos 28 dias antes de seu
         início (veja <a
@@ -5123,7 +5253,7 @@ pt-BR:
     paragraph5:
       #original_hash: 17d01de
       title: Limites de competidores
-      #original_hash: bd8e6ee
+      #original_hash: 6bfef2c
       content_html: >-
         o número de competidores pode ser limitado por evento ou por competição
         (veja <a
@@ -5380,6 +5510,8 @@ pt-BR:
       sua conta:
     #original_hash: 040b3da
     legal_tnoodle_api_header: Versão Legal do TNoodle
+    #original_hash: 32295ee
+    login_message: Por favor faça login
   merch:
     #original_hash: 96a95a1
     title: Produtos da WCA

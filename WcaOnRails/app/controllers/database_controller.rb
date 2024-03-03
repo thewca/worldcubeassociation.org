@@ -29,20 +29,16 @@ class DatabaseController < ApplicationController
 
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
-        credentials: Aws::InstanceProfileCredentials.new,
+        credentials: Aws::ECSCredentials.new,
       ).bucket(DbDumpHelper::BUCKET_NAME)
 
       filesize_bytes = bucket.object(file_name).content_length
-      [public_s3_path(file_name), filesize_bytes]
+      [DbDumpHelper.public_s3_path(file_name), filesize_bytes]
     end
   end
 
   def developer_export
-    @rel_download_path = public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
-  end
-
-  def public_s3_path(file_name)
-    "https://s3.#{EnvConfig.STORAGE_AWS_REGION}.amazonaws.com/#{DbDumpHelper::BUCKET_NAME}/#{file_name}"
+    @rel_download_path = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
   end
 
   def self.render_readme(rendering_engine, export_timestamp)

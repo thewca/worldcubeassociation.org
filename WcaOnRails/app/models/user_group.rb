@@ -96,6 +96,10 @@ class UserGroup < ApplicationRecord
     UserGroup.where(group_type: UserGroup.group_types[:delegate_regions])
   end
 
+  def self.delegate_region_groups_senior_delegates
+    UserGroup.delegate_region_groups.where(parent_group_id: nil).map(&:lead_user)
+  end
+
   def self.delegate_probation_groups
     UserGroup.where(group_type: UserGroup.group_types[:delegate_probation])
   end

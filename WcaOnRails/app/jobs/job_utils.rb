@@ -7,7 +7,7 @@ module JobUtils
   #   Rails uses lazy loading for non-production environments, including dev and test)
   WCA_CRONJOBS = [
     CleanupPdfs,
-    ClearConnectedStripeAccount,
+    ClearConnectedPaymentIntegrations,
     ComputeAuxiliaryData,
     DumpDeveloperDatabase,
     DumpPublicResultsDatabase,

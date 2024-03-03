@@ -1,7 +1,0 @@
-package 'git'
-package 'vim'
-package 'curl'
-package 'htop'
-package 'tmux'
-package 'tree'
-package 'ntp'

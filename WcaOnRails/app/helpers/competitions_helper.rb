@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module CompetitionsHelper
-  def competition_message_for_user(competition, user)
+  def competition_message_for_user(competition, user, registration = nil)
     # Generates a list of messages, which will be combined and displayed in a tooltip to the user in their bookmarked
     # competitions list when they hover over a competition.
     # Message indicates the state of the competition, and the state of the user's registration.
@@ -12,7 +12,7 @@ module CompetitionsHelper
       return t('competitions.messages.cancelled')
     end
 
-    messages_to_join << get_registration_status_message_if_registered(competition, user)
+    messages_to_join << get_registration_status_message_if_registered(competition, user, registration)
     messages_to_join << get_competition_status_message(competition)
 
     messages_to_join.join(' ')
@@ -205,16 +205,6 @@ module CompetitionsHelper
     end.to_json.html_safe
   end
 
-  def championship_option_tags(selected: nil)
-    grouped_championship_types = {
-      "Planetary Championship" => [["World", "world"]],
-      "Continental Championship" => Continent.all_sorted_by(I18n.locale, real: true).map { |continent| [continent.name, continent.id] },
-      "Multi-country Championship" => EligibleCountryIso2ForChampionship.championship_types.map { |championship_type| [championship_type.titleize, championship_type] },
-      "National Championship" => Country.all_sorted_by(I18n.locale, real: true).map { |country| [country.name, country.iso2] },
-    }
-    grouped_options_for_select(grouped_championship_types, selected)
-  end
-
   def first_and_last_time_from_activities(activities, timezone)
     # The goal of this function is to determine what should be the starting and ending points in the time axis of the calendar.
     # Which means we need to find the earliest start_time (and latest end_time) for any activity occuring on all days, expressed in the local timezone.
@@ -326,18 +316,18 @@ module CompetitionsHelper
 
   private
 
-    def get_registration_status_message_if_registered(competition, user)
+    def get_registration_status_message_if_registered(competition, user, registration = nil)
       # Helper function for `competition_message_for_user`
       # Determines what message to display to the user based on the state of their registration.
 
-      registration_status = competition.registrations.find_by_user_id(user.id)
+      registration_status = registration || competition.registrations.find_by_user_id(user.id)
       return unless registration_status.present?
 
       if registration_status.accepted?
         t('competitions.messages.tooltip_registered')
       elsif registration_status.deleted?
         t('competitions.messages.tooltip_deleted')
-      else # If not delted or accepted, assume user is on the waiting list
+      else # If not deleted or accepted, assume user is on the waiting list
         t('competitions.messages.tooltip_waiting_list')
       end
     end

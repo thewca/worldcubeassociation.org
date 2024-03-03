@@ -45,6 +45,10 @@ module DbDumpHelper
     end
   end
 
+  def self.public_s3_path(file_name)
+    "https://s3.#{EnvConfig.STORAGE_AWS_REGION}.amazonaws.com/#{BUCKET_NAME}/#{file_name}"
+  end
+
   def self.dump_results_db(export_timestamp = DateTime.now)
     Dir.mktmpdir do |dir|
       FileUtils.cd dir do
@@ -93,7 +97,7 @@ module DbDumpHelper
     LogTask.log_task "Moving zipped file to 's3://#{s3_path}'" do
       bucket = Aws::S3::Resource.new(
         region: EnvConfig.STORAGE_AWS_REGION,
-        credentials: Aws::InstanceProfileCredentials.new,
+        credentials: Aws::ECSCredentials.new,
       ).bucket(BUCKET_NAME)
       bucket.object(s3_path).upload_file(zip_filename, { acl: "public-read" })
 

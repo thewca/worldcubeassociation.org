@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::UserRolesController < Api::V0::ApiController
+  include SortHelper
   before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
@@ -27,34 +28,33 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def self.status_sort_rank(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
     group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
-    status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
-    STATUS_SORTING_ORDER[group_type.to_sym].find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym].length
+    status = UserRole.status(role) || ''
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
   end
 
-  SORT_PARAMS = {
-    startDate: lambda { |role| role[:start_date].to_time.to_i }, # Can be changed to `role.start_date` once all roles are migrated to the new system.
-    lead: lambda { |role| UserRole.is_lead?(role) ? 1 : 0 },
-    eligibleVoter: lambda { |role| UserRole.is_eligible_voter?(role) ? 1 : 0 },
-    groupTypeRank: lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
-    status: lambda { |role| status_sort_rank(role) },
-    name: lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
-    groupName: lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
-    location: lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
+  SORT_WEIGHT_LAMBDAS = {
+    startDate:
+      lambda { |role| role[:start_date].to_time.to_i },
+    lead:
+      lambda { |role| UserRole.is_lead?(role) ? 0 : 1 },
+    eligibleVoter:
+      lambda { |role| UserRole.is_eligible_voter?(role) ? 0 : 1 },
+    groupTypeRank:
+      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
+    status:
+      lambda { |role| status_sort_rank(role) },
+    name:
+      lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+    groupName:
+      lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+    location:
+      lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
   private def sorted_roles(roles, sort_param)
-    # The value of sort_param is inspired from https://specs.openstack.org/openstack/api-wg/guidelines/pagination_filter_sort.html.
     sort_param ||= ''
-    sort_keys_and_directions = sort_param.split(',')
-    roles.stable_sort_by { |role|
-      sort_keys_and_directions.map { |sort_key_and_direction|
-        sort_key = sort_key_and_direction.split(':').first
-        sort_direction = sort_key_and_direction.split(':').second || 'asc'
-        # FIXME: The following line throws error for desc direction if SORT_PARAMS[sort_key.to_sym] is non-numeric.
-        SORT_PARAMS[sort_key.to_sym].call(role) * (sort_direction == 'asc' ? 1 : -1)
-      }
-    }
+    sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
   # Filters the list of roles based on the permissions of the current user.
@@ -257,6 +257,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
+    group = UserGroup.find(group_id)
 
     if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
@@ -275,44 +276,47 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       else
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
-    else
-      group = UserGroup.find(group_id)
+    elsif group.group_type == UserGroup.group_types[:delegate_regions] && status != RolesMetadataDelegateRegions.statuses[:regional_delegate]
+      # Creates deprecated role.
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
         end_role_for_user_in_group_with_status(group, status)
       end
-      if group.group_type == UserGroup.group_types[:delegate_regions]
-        if status == RolesMetadataDelegateRegions.statuses[:regional_delegate]
-          metadata = RolesMetadataDelegateRegions.create!(status: status)
-          role = UserRole.create!(
-            user_id: user_id,
-            group_id: group_id,
-            start_date: Date.today,
-            metadata: metadata,
-          )
-          RoleChangeMailer.notify_role_start(role, current_user).deliver_later
-        else
-          user = User.find(user_id)
-          user.update!(delegate_status: status, region_id: group.id, location: location)
-          send_role_change_notification(user)
-        end
-        render json: {
-          success: true,
-        }
-      elsif group.group_type == UserGroup.group_types[:delegate_probation]
-        role = UserRole.create!(
-          user_id: user_id,
-          group_id: group_id,
-          start_date: Date.today,
-        )
-        RoleChangeMailer.notify_role_start(role, current_user).deliver_later
-        render json: {
-          success: true,
-        }
-      else
+      user = User.find(user_id)
+      user.update!(delegate_status: status, region_id: group.id, location: location)
+      send_role_change_notification(user)
+      render json: {
+        success: true,
+      }
+    else
+      create_supported_groups = [
+        UserGroup.group_types[:delegate_regions],
+        UserGroup.group_types[:delegate_probation],
+        UserGroup.group_types[:translators],
+      ]
+      unless create_supported_groups.include?(group.group_type)
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        return
       end
+      status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
+      if status.present? && group.unique_status?(status)
+        end_role_for_user_in_group_with_status(group, status)
+      end
+      if group.group_type == UserGroup.group_types[:delegate_regions]
+        location = params[:location]
+        metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+      end
+      role = UserRole.create!(
+        user_id: user_id,
+        group_id: group_id,
+        start_date: Date.today,
+        metadata: metadata,
+      )
+      RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+      render json: {
+        success: true,
+      }
     end
   end
 
@@ -356,23 +360,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
-      group_id = params.require(:groupId)
-      status = params.require(:status)
       group_type = group_id_of_old_system_to_group_type(id)
-      original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:councils]
-        user_id = params.require(:userId)
-        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
-        if already_existing_member.present?
-          already_existing_member.update!(end_date: Time.now)
-        end
-        TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-        render json: {
-          success: true,
-        }
-      else
+      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        return
       end
+      team_member_id = id.split("_").last
+      team_member = TeamMember.find_by!(id: team_member_id)
+      team = team_member.team
+      status = params.require(:status)
+      team_member.update!(end_date: Time.now)
+      TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+      render json: {
+        success: true,
+      }
     else
       role = UserRole.find(id)
       group_type = role.group.group_type
@@ -401,20 +402,20 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
-      group_id = params.require(:groupId)
+      team_member_id = id.split("_").last
       group_type = group_id_of_old_system_to_group_type(id)
-      original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:councils]
-        user_id = params.require(:userId)
-        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
-        if already_existing_member.present?
-          already_existing_member.update!(end_date: Date.today)
-        end
+      team_member = TeamMember.find_by(id: team_member_id)
+      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
+        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        return
+      end
+      if team_member.present?
+        team_member.update!(end_date: Date.today)
         render json: {
           success: true,
         }
       else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        render status: :unprocessable_entity, json: { error: "Invalid member" }
       end
     else
       role = UserRole.find(id)

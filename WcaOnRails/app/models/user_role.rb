@@ -43,6 +43,12 @@ class UserRole < ApplicationRecord
     is_actual_role ? role.is_active? : role[:is_active]
   end
 
+  def self.status(role)
+    is_actual_role = role.is_a?(UserRole)
+    return nil if is_actual_role && role.metadata.nil?
+    is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+  end
+
   def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end
@@ -51,7 +57,7 @@ class UserRole < ApplicationRecord
   def self.is_lead?(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
     group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
-    status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+    status = UserRole.status(role)
     case group_type
     when UserGroup.group_types[:delegate_regions]
       ["senior_delegate", "regional_delegate"].include?(status)
@@ -88,7 +94,7 @@ class UserRole < ApplicationRecord
   def self.is_eligible_voter?(role)
     is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
     group_type = is_actual_role ? role.group_type : role[:group_type]
-    status = is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+    status = UserRole.status(role)
     case group_type
     when UserGroup.group_types[:delegate_regions]
       ["senior_delegate", "regional_delegate", "delegate"].include?(status)

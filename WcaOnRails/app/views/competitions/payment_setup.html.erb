@@ -1,46 +1,86 @@
 <% provide(:title, @competition.name) %>
 
 <%= render layout: 'nav' do %>
-  <h1>Accept Registration Payments</h1>
+  <h1><%= t('payments.payment_setup.accept_payments_header') %></h1>
 
+  <%# Currency Warning %>
   <%= alert :warning do %>
-    Please make sure the currency you have selected is supported by your Stripe
-    account! The supported currencies depends on the country where the Stripe
-    account is based, you can check them <%= link_to "here", "https://support.stripe.com/questions/which-currencies-does-stripe-support#supportedcurrencies", target: '_blank' %>.
+    <%= t('payments.payment_setup.supported_currency_warning') %>
+    <ul>
+      <li><%= link_to(
+        t('payments.payment_setup.supported_currencies', provider: t('payments.payment_providers.stripe')),
+        "https://support.stripe.com/questions/which-currencies-does-stripe-support#supportedcurrencies",
+        target: '_blank'
+      ) %></li>
+      <% unless Rails.env.production? %>
+        <li><%= link_to(
+          t('payments.payment_setup.supported_currencies', provider: t('payments.payment_providers.paypal')),
+          "https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/",
+          target: '_blank'
+        ) %></li>
+      <% end %>
+    </ul>
   <% end %>
 
-  <% if @competition.connected_stripe_account_id.nil? %>
-    <p>
-      In order to accept payments for this competition, you need to connect
-      your own Stripe account with the WCA Stripe account by clicking the
-      button below. If you don't already have your own Stripe account you can
-      still click on the button below and it will guide you through the
-      process.
-    </p>
-    <p>
-      Connecting your Stripe account gives the WCA website the ability to
-      create charges, and issue refunds directly on your Stripe account.
-    </p>
+  <%# Stripe Payments %>
+  <h2><%= t('payments.payment_setup.provider_heading', provider: t('payments.payment_providers.stripe')) %></h2>
+
+  <%# Stripe not connected %>
+  <% if !@competition.stripe_connected? %>
+    <p><b><%= t('payments.payment_setup.stripe_connect_warning') %></b></p>
+    <p><%= t('payments.payment_setup.stripe_payment_info') %></p>
     <%= link_to @authorize_url, class: "btn btn-primary" do %>
-      <%= ui_icon("cc stripe") %> Connect with Stripe
+      <%= ui_icon("cc stripe") %><%= t('payments.payment_setup.connect_button', provider: t('payments.payment_providers.stripe')) %>
     <% end %>
 
+  <%# Stripe connected %>
   <% else %>
+    <p><b><%= t('payments.payment_setup.stripe_disconnect_warning') %></b></p>
     <p>
-      This competition is set up to accept payments through Stripe.
-      If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard
-      <%= link_to "here", "https://dashboard.stripe.com/account/applications" %> (please note it will revoke access for all competitions using the account).
-      Before a new Stripe account can be connected, please request your Delegate to reach out to WCAT to clear the entry.
+      <%= t('payments.payment_setup.stripe_disconnect_info') %>
+      <ul><li><%= link_to(t('payments.payment_setup.stripe_dashboard'), "https://dashboard.stripe.com/account/applications") %></li></ul>
     </p>
-    <p>
-      Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments.
-    </p>
+
+    <% if current_user&.can_admin_competitions? %>
+      <%= button_to(
+        competition_disconnect_stripe_path,
+        class: 'btn btn-danger',
+        disabled: !@competition.stripe_connected?,
+        method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.stripe')) }
+      ) do %>
+        <%= t('payments.payment_setup.disconnect_account', provider: t('payments.payment_providers.stripe')) %>
+      <% end %>
+    <% end %>
 
   <% end %>
 
-  <% if current_user&.can_admin_competitions? %>
-    <%= button_to competition_disconnect_stripe_path, class: 'btn btn-danger', disabled: @competition.connected_stripe_account_id.nil?, method: :post, data: { confirm: t('competitions.stripe_disconnect_confirm') } do %>
-      <%= t 'competitions.stripe_disconnect' %>
+  <% unless Rails.env.production? %>
+    <%# PayPal Payments %>
+    <h2><%= t('payments.payment_setup.provider_heading', provider: t('payments.payment_providers.paypal')) %></h2>
+
+    <%# PayPal not connected %>
+    <% if !@competition.paypal_connected? %>
+      <p><b><%= t('payments.payment_setup.paypal_connect_warning') %></b></p>
+      <p><%= t('payments.payment_setup.paypal_payment_info') %></p>
+      <%= link_to @paypal_onboarding_url, class: "btn btn-primary" do %>
+        <%= ui_icon("cc stripe") %><%= t('payments.payment_setup.connect_button', provider: t('payments.payment_providers.paypal')) %>
+      <% end %>
+
+    <%# PayPal is connected %>
+    <% else %>
+      <p><b><%= t('payments.payment_setup.paypal_disconnect_warning') %></b></p>
+      <p><%= t('payments.payment_setup.paypal_disconnect_info') %></p>
+
+      <% if current_user&.can_admin_competitions? %>
+        <%= button_to(
+          competition_disconnect_paypal_path,
+          class: 'btn btn-danger',
+          disabled: !@competition.paypal_connected?,
+          method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.paypal')) }
+         ) do %>
+          <%= t('payments.payment_setup.disconnect_account', provider: t('payments.payment_providers.paypal')) %>
+        <% end %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
