@@ -828,14 +828,14 @@ class RegistrationsController < ApplicationController
   end
 
   def create_paypal_order
-    return head :forbidden if Rails.env.production?
+    return head :forbidden if EnvConfig.WCA_LIVE_SITE?
 
     @registration = registration_from_params
     render json: PaypalInterface.create_order(@registration, params[:total_charge], params[:currency_code])
   end
 
   def capture_paypal_payment
-    return head :forbidden if Rails.env.production?
+    return head :forbidden if EnvConfig.WCA_LIVE_SITE?
 
     @registration = registration_from_params
     @competition = @registration.competition
