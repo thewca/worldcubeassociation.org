@@ -833,6 +833,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_23_032610) do
     t.string "payload"
     t.string "amount_in_cents"
     t.string "currency_code"
+    t.string "transaction_type"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
