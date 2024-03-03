@@ -9,7 +9,7 @@ import { Confirm } from 'semantic-ui-react';
 const ConfirmationContext = createContext();
 
 const DefaultOptions = {
-  content: 'This action cannot be undone.',
+  content: 'Are you sure? This action cannot be undone.',
   confirmButton: 'Yes',
   cancelButton: 'No',
 };

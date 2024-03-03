@@ -22,7 +22,7 @@ import PastRoles from './PastRoles';
 // i18n-tasks-use t('enums.user.role_status.councils.senior_member')
 // i18n-tasks-use t('enums.user.role_status.councils.leader')
 
-const sortParams = 'status';
+const sortParams = 'groupTypeRank,status';
 
 export default function RolesTab({ userId }) {
   const {
