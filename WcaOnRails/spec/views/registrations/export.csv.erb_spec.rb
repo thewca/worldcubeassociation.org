@@ -17,6 +17,7 @@ RSpec.describe "registrations/export.csv.erb" do
         :registration,
         competition: competition,
         accepted_at: Time.now,
+        created_at: Time.utc(2014, 3, 14, 15, 16, 17)
         user: user,
         competition_events: [competition.competition_events.find_by!(event_id: "333")],
         guests: 1,
@@ -29,7 +30,7 @@ RSpec.describe "registrations/export.csv.erb" do
     assign(:registrations, competition.registrations)
     render
 
-    expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP\na,Bob,USA,,1990-01-01,m,1,0,bob@bob.com,1,\"\"\n"
+    expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP,Registration Date Time (UTC)\na,Bob,USA,,1990-01-01,m,1,0,bob@bob.com,1,\"\",2014-03-14 15:16:17 UTC\n"
   end
 
   it "renders null (missing) gender as empty string" do
@@ -39,6 +40,6 @@ RSpec.describe "registrations/export.csv.erb" do
     assign(:registrations, competition.registrations)
     render
 
-    expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP\na,Bob,USA,,1990-01-01,,1,0,bob@bob.com,1,\"\"\n"
+    expect(rendered).to eq "Status,Name,Country,WCA ID,Birth Date,Gender,333,333oh,Email,Guests,IP,Registration Date Time (UTC)\na,Bob,USA,,1990-01-01,,1,0,bob@bob.com,1,\"\",2014-03-14 15:16:17 UTC\n"
   end
 end
