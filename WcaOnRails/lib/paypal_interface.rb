@@ -145,7 +145,7 @@ module PaypalInterface
   end
 
   private_class_method def self.generate_access_token
-    return "test token" if Rails.env.test?
+    return '' if EnvConfig.SKIP_PAYPAL_AUTH?
 
     options = {
       site: EnvConfig.PAYPAL_BASE_URL,
