@@ -9,6 +9,7 @@ import Loading from '../../Requests/Loading';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import CountrySelector from '../../CountrySelector/CountrySelector';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import { SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
 
 export default function DuesRedirect() {
   const {
@@ -96,7 +97,7 @@ export default function DuesRedirect() {
                 value={formData.redirectFromOrganizer}
                 onChange={handleFormChange}
                 multiple={false}
-                model="user"
+                models={[SEARCH_MODELS.user]}
               />
             )}
             <Form.Select

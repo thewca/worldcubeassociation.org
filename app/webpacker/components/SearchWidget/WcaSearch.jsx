@@ -1,10 +1,6 @@
 import React, { useCallback } from 'react';
 
-import {
-  userSearchApiUrl,
-  personSearchApiUrl,
-  competitionSearchApiUrl,
-} from '../../lib/requests/routes.js.erb';
+import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import MultiSearchInput from './MultiSearchInput';
 
 export default function WcaSearch({
@@ -13,24 +9,13 @@ export default function WcaSearch({
   onChange,
   multiple = true,
   disabled = false,
-  model,
+  models,
   params,
+  removeNoResultsMessage,
+  showOptionToGoToSearchPage = false,
+  goToItemUrlOnClick = false,
 }) {
-  const urlFn = useCallback((query) => {
-    if (model === 'user') {
-      return `${userSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
-    }
-
-    if (model === 'person') {
-      return `${personSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
-    }
-
-    if (model === 'competition') {
-      return `${competitionSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
-    }
-
-    throw new Error(`Invalid search type in WcaSearch component: ${model}`);
-  }, [params, model]);
+  const urlFn = useCallback((query) => apiV0Urls.search(query, models, params), [models, params]);
 
   const onChangeInternal = useCallback((evt, data) => {
     onChange(evt, { ...data, name });
@@ -43,6 +28,9 @@ export default function WcaSearch({
       onChange={onChangeInternal}
       multiple={multiple}
       disabled={disabled}
+      removeNoResultsMessage={removeNoResultsMessage}
+      showOptionToGoToSearchPage={showOptionToGoToSearchPage}
+      goToItemUrlOnClick={goToItemUrlOnClick}
     />
   );
 }

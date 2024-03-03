@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../lib/wca-data.js.erb';
+import { groupTypes, SEARCH_MODELS } from '../../lib/wca-data.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import WcaSearch from '../SearchWidget/WcaSearch';
 import Errored from '../Requests/Errored';
@@ -99,7 +99,7 @@ export default function DelegateProbations() {
         value={user}
         onChange={setUser}
         multiple={false}
-        model="user"
+        models={[SEARCH_MODELS.user]}
         params={{ only_staff_delegates: true }}
       />
       <Button

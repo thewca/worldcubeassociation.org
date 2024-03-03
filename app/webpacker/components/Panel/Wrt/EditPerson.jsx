@@ -9,7 +9,7 @@ import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
-import { genders, countries } from '../../../lib/wca-data.js.erb';
+import { genders, countries, SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
 import 'react-datepicker/dist/react-datepicker.css';
 import useQueryParams from '../../../lib/hooks/useQueryParams';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
@@ -241,7 +241,7 @@ function EditPerson() {
               updateQueryParam('wcaId', value.id);
             }}
             multiple={false}
-            model="person"
+            models={[SEARCH_MODELS.person]}
           />
         )}
     </>

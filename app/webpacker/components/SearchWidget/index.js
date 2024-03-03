@@ -1,22 +1,27 @@
 import React from 'react';
 
-import { omnisearchApiUrl } from '../../lib/requests/routes.js.erb';
-import MultiSearchInput from './MultiSearchInput';
 import useInputState from '../../lib/hooks/useInputState';
+import WcaSearch from './WcaSearch';
+import { SEARCH_MODELS } from '../../lib/wca-data.js.erb';
 
 function SearchWidget() {
   // purely a dummy for now...
   const [selectedValue, setSelectedValue] = useInputState([]);
 
   return (
-    <MultiSearchInput
-      selectedValue={selectedValue}
-      setSelectedValue={setSelectedValue}
+    <WcaSearch
+      value={selectedValue}
+      onChange={(_, { value }) => setSelectedValue(value)}
+      multiple={false}
       removeNoResultsMessage
       showOptionToGoToSearchPage
       goToItemUrlOnClick
-      url={omnisearchApiUrl}
-      multiple={false}
+      models={[
+        SEARCH_MODELS.competition,
+        SEARCH_MODELS.person,
+        SEARCH_MODELS.regulation,
+        SEARCH_MODELS.incident,
+      ]}
     />
   );
 }

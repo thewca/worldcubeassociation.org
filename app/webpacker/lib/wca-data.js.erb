@@ -188,3 +188,5 @@ export const delegateRegionsStatus = <%= RolesMetadataDelegateRegions.statuses.t
 // ----- PANEL LIST -----
 
 export const PANEL_LIST = <%= PanelController.panel_list.to_json.html_safe %>;
+
+export const SEARCH_MODELS = <%= Hash[Api::V0::ApiController.search_models.map { |key, value| [key.to_s, key.to_s] }].to_json.html_safe %>;

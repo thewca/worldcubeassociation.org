@@ -6,7 +6,7 @@ import useLoadedData from '../../../lib/hooks/useLoadedData';
 import {
   fetchUserGroupsUrl, addUserGroupsUrl, userGroupsUpdateUrl, apiV0Urls,
 } from '../../../lib/requests/routes.js.erb';
-import { delegateRegionsStatus } from '../../../lib/wca-data.js.erb';
+import { delegateRegionsStatus, SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
 import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
@@ -247,7 +247,7 @@ export default function RegionManager() {
               control={WcaSearch}
               value={newLeadDelegate}
               onChange={(e, { value }) => setNewLeadDelegate(value)}
-              model="user"
+              models={[SEARCH_MODELS.user]}
               multiple={false}
             />
             <Form.Button onClick={() => {

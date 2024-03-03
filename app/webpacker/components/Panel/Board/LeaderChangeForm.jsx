@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import Loading from '../../Requests/Loading';
-import { councilsStatus } from '../../../lib/wca-data.js.erb';
+import { councilsStatus, SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 
@@ -93,7 +93,7 @@ export default function LeaderChangeForm({
         name="newLeader"
         value={formValues?.newLeader}
         onChange={handleFormChange}
-        model="user"
+        models={[SEARCH_MODELS.user]}
         multiple={false}
       />
       {oldLeader && (
