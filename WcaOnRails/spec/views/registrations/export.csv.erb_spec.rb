@@ -17,7 +17,7 @@ RSpec.describe "registrations/export.csv.erb" do
         :registration,
         competition: competition,
         accepted_at: Time.now,
-        created_at: Time.utc(2014, 3, 14, 15, 16, 17)
+        created_at: Time.utc(2014, 3, 14, 15, 16, 17),
         user: user,
         competition_events: [competition.competition_events.find_by!(event_id: "333")],
         guests: 1,
