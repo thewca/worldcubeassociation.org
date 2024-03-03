@@ -23,5 +23,3 @@ RSpec.describe PaypalTransaction do
     end
   end
 end
-
-
