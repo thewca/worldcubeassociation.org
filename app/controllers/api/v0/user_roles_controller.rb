@@ -262,9 +262,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
-      unless current_user.can_edit_team?(original_group_id)
-        return head :unauthorized
-      end
+      return head :unauthorized unless current_user.can_edit_team?(original_group_id)
       if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         status = params.require(:status)
         already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
@@ -281,9 +279,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     elsif group.group_type == UserGroup.group_types[:delegate_regions] && status != RolesMetadataDelegateRegions.statuses[:regional_delegate]
       # Creates deprecated role.
       group = UserGroup.find(group_id)
-      unless current_user.has_permission?(:can_edit_groups, group_id)
-        return head :unauthorized
-      end
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
@@ -297,9 +293,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     else
       group = UserGroup.find(group_id)
-      unless current_user.has_permission?(:can_edit_groups, group_id)
-        return head :unauthorized
-      end
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
       create_supported_groups = [
         UserGroup.group_types[:delegate_regions],
         UserGroup.group_types[:delegate_probation],
