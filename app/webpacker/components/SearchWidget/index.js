@@ -11,7 +11,7 @@ function SearchWidget() {
   return (
     <WcaSearch
       value={selectedValue}
-      onChange={(_, { value }) => setSelectedValue(value)}
+      onChange={setSelectedValue}
       multiple={false}
       removeNoResultsMessage
       showOptionToGoToSearchPage

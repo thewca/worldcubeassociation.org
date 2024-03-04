@@ -85,7 +85,7 @@ export function CompetitionSearch({
     <WcaSearch
       value={compOptions}
       onChange={onChangeIdOnly}
-      models={[SEARCH_MODELS.competition]} // TODO: Need to check if this is needed.
+      models={[SEARCH_MODELS.competition]}
       disabled={disabled}
     />
   );

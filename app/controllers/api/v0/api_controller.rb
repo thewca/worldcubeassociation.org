@@ -159,10 +159,11 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def omni_search
-    models = params[:models]
-    if models.present?
-      model_list = models.split(",")
-      search(*model_list.map { |model| Api::V0::ApiController.search_models[model] })
+    model_names = params[:models]
+    if model_names.present?
+      model_list = model_names.split(",")
+      models = model_list.map { |model_name| Api::V0::ApiController.search_models[model_name] }
+      search(*models)
     else
       # We intentionally exclude Post, as our autocomplete ui isn't very useful with
       # them yet.
