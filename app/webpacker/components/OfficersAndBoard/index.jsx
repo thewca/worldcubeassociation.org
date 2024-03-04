@@ -10,6 +10,7 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import UserBadge from '../UserBadge';
+import EmailButton from '../EmailButton';
 
 // let i18n-tasks know the key is used
 // i18n-tasks-use t('user_roles.status.officers.chair')
@@ -58,6 +59,7 @@ export default function OfficersAndBoard({ boardEmail }) {
       ))}
       <Header as="h3">
         <span>{I18n.t('user_groups.group_types.board')}</span>
+        <EmailButton email={boardEmail} />
         <Popup
           content="Copy to Clipboard"
           trigger={(
