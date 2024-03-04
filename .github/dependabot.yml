@@ -1,12 +1,12 @@
 version: 2
 updates:
 - package-ecosystem: bundler
-  directory: "/WcaOnRails"
+  directory: "/"
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
 - package-ecosystem: npm
-  directory: "/WcaOnRails"
+  directory: "/"
   schedule:
     interval: monthly
   open-pull-requests-limit: 10
