@@ -263,8 +263,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
       unless current_user.can_edit_team?(original_group_id)
-        render json: {}, status: 401
-        return
+        return head :unauthorized
       end
       if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         status = params.require(:status)
@@ -283,8 +282,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # Creates deprecated role.
       group = UserGroup.find(group_id)
       unless current_user.has_permission?(:can_edit_groups, group_id)
-        render json: {}, status: 401
-        return
+        return head :unauthorized
       end
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
@@ -300,8 +298,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       group = UserGroup.find(group_id)
       unless current_user.has_permission?(:can_edit_groups, group_id)
-        render json: {}, status: 401
-        return
+        return head :unauthorized
       end
       create_supported_groups = [
         UserGroup.group_types[:delegate_regions],

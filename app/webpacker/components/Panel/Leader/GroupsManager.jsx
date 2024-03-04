@@ -11,6 +11,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { groupTypes, teamsCommitteesStatus, councilsStatus } from '../../../lib/wca-data.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import useInputState from '../../../lib/hooks/useInputState';
 
 const statusObjectOfGroupType = (groupType) => {
   switch (groupType) {
@@ -44,7 +45,7 @@ function GroupTable({ group }) {
   const confirm = useConfirm();
   const { save, saving } = useSaveAction();
   const [modalOpen, setModelOpen] = useState(false);
-  const [newMemberUser, setNewMemberUser] = useState(null);
+  const [newMemberUser, setNewMemberUser] = useInputState(null);
 
   const promoteRoleHandler = (role) => {
     confirm().then(() => {
@@ -115,7 +116,7 @@ function GroupTable({ group }) {
               label="New Member"
               control={WcaSearch}
               value={newMemberUser}
-              onChange={(_, { value }) => setNewMemberUser(value)}
+              onChange={setNewMemberUser}
               model="user"
               multiple={false}
             />
@@ -128,7 +129,7 @@ function GroupTable({ group }) {
                   userId: newMemberUser.id,
                   groupId: group.id,
                   status: statusObjectOfGroupType(group.group_type).member,
-                }, () => sync(), { method: 'POST' });
+                }, sync, { method: 'POST' });
               }}
             >
               Save
@@ -146,11 +147,11 @@ export default function GroupsManager({ loggedInUserId }) {
     'groupName', // Sort params
     { isActive: true, isGroupHidden: false, status: 'leader' },
   ));
-  const [selectedGroupIndex, setSelectedGroupIndex] = useState();
+  const [selectedGroupIndex, setSelectedGroupIndex] = useInputState();
 
   useEffect(() => {
     if (roles?.length > 0) setSelectedGroupIndex(0);
-  }, [roles]);
+  }, [roles, setSelectedGroupIndex]);
 
   if (!loading && roles.length === 0) return <p>You are not a leader of any groups.</p>;
   if (loading || selectedGroupIndex === undefined) return <Loading />;
@@ -166,7 +167,7 @@ export default function GroupsManager({ loggedInUserId }) {
             value: index,
           }))}
           value={selectedGroupIndex}
-          onChange={(_, { value }) => setSelectedGroupIndex(value)}
+          onChange={setSelectedGroupIndex}
         />
       </div>
       <GroupTable group={roles[selectedGroupIndex].group} />
