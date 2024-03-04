@@ -50,10 +50,11 @@ class User < ApplicationRecord
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
-    eligible_delegates = User.where(delegate_status: %w(delegate senior_delegate))
+    eligible_delegates = User.where(delegate_status: %w(delegate))
+    eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
     officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
-    (team_leaders + team_senior_members + eligible_delegates + board_members + officers).uniq
+    (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
   end
 
   def self.leader_senior_voters
@@ -129,7 +130,6 @@ class User < ApplicationRecord
     trainee_delegate: "trainee_delegate",
     candidate_delegate: "candidate_delegate",
     delegate: "delegate",
-    senior_delegate: "senior_delegate",
   }
 
   validate :wca_id_is_unique_or_for_dummy_account
@@ -1084,7 +1084,7 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = users.where(delegate_status: ["candidate_delegate", "delegate", "senior_delegate"])
+        users = users.staff_delegates
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
@@ -1300,7 +1300,7 @@ class User < ApplicationRecord
       is_active: true,
       group: self.region,
       user: self,
-      is_lead: delegate_status == RolesMetadataDelegateRegions.statuses[:senior_delegate],
+      is_lead: false,
       metadata: {
         status: self.delegate_status,
         location: self.location,

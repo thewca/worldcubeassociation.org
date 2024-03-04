@@ -19,10 +19,10 @@ RSpec.feature "Eligible voters csv" do
   let!(:wac_leader) { FactoryBot.create(:user, :wac_member, team_leader: true) }
   let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
-  let!(:senior_delegate) { FactoryBot.create(:senior_delegate) }
-  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, region_id: senior_delegate.region_id) }
-  let!(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate.region_id) }
-  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true, region_id: senior_delegate.region_id) }
+  let!(:senior_delegate_role) { FactoryBot.create(:senior_delegate_role) }
+  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, region_id: senior_delegate_role.group.id) }
+  let!(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate_role.group.id) }
+  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true, region_id: senior_delegate_role.group.id) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
   let!(:officer) { FactoryBot.create(:user, :secretary) }
 
@@ -43,7 +43,7 @@ RSpec.feature "Eligible voters csv" do
         ["password", team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
         ["password", delegate.id.to_s, delegate.email, delegate.name],
         ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
-        ["password", senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
+        ["password", senior_delegate_role.user.id.to_s, senior_delegate_role.user.email, senior_delegate_role.user.name],
         ["password", board_member.id.to_s, board_member.email, board_member.name],
         ["password", officer.id.to_s, officer.email, officer.name],
       ]
@@ -58,7 +58,7 @@ RSpec.feature "Eligible voters csv" do
       expect(CSV.parse(page.body)).to match_array [
         ["password", team_leader.id.to_s, team_leader.email, team_leader.name],
         ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
-        ["password", senior_delegate.id.to_s, senior_delegate.email, senior_delegate.name],
+        ["password", senior_delegate_role.user.id.to_s, senior_delegate_role.user.email, senior_delegate_role.user.name],
       ]
       # "password" does not refer to actual passwords. They are related to a voter type that must be specified
     end

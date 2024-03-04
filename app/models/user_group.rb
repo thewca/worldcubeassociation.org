@@ -110,7 +110,7 @@ class UserGroup < ApplicationRecord
 
   def senior_delegate
     if parent_group_id.nil?
-      User.find_by(region_id: self.id, delegate_status: "senior_delegate")
+      self.lead_user
     else
       parent_group.senior_delegate
     end
@@ -122,14 +122,7 @@ class UserGroup < ApplicationRecord
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
-    if self.group_type == UserGroup.group_types[:delegate_regions]
-      if self.parent_group_id.nil?
-        self.senior_delegate
-      else
-        lead_role = self.lead_role
-        lead_role ? lead_role.user : nil
-      end
-    end
+    self.lead_role&.user
   end
 
   # Unique status means that there can only be one active user with this status in the group.

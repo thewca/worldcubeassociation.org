@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { Grid, Label, Segment } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
@@ -58,6 +58,11 @@ export default function DelegatesOfRegion({ activeRegion, delegateSubregions, is
     [delegates],
   );
 
+  const nonSeniorDelegates = useMemo(
+    () => delegates?.filter((delegate) => delegate.metadata.status !== 'senior_delegate'),
+    [delegates],
+  );
+
   if (loading) return <Loading />;
   if (error) return <Errored />;
 
@@ -66,7 +71,7 @@ export default function DelegatesOfRegion({ activeRegion, delegateSubregions, is
       {!isAllRegions && <SeniorDelegate seniorDelegate={getSeniorDelegate()} />}
       <Grid.Row style={{ overflowX: 'scroll' }}>
         <DelegatesTable
-          delegates={delegates}
+          delegates={nonSeniorDelegates}
           isAdminMode={isAdminMode}
           isAllRegions={isAllRegions}
         />

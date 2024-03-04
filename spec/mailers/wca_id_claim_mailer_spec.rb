@@ -21,7 +21,7 @@ RSpec.describe WcaIdClaimMailer, type: :mailer do
   end
 
   describe "notify_user_of_delegate_demotion" do
-    let(:senior_delegate) { FactoryBot.create :senior_delegate }
+    let(:senior_delegate) { (FactoryBot.create :senior_delegate_role).user }
     let(:demoted_delegate) { FactoryBot.create :user, name: "Sherlock Holmes" }
     let(:user_claiming_wca_id) { FactoryBot.create :user, name: "Bilbo Baggins" }
     let(:mail) { WcaIdClaimMailer.notify_user_of_delegate_demotion(user_claiming_wca_id, demoted_delegate) }

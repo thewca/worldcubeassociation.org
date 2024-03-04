@@ -20,10 +20,10 @@ after :teams do
 
   # Create senior delegates and their subordinate delegates
   5.times do
-    senior_delegate = FactoryBot.create(:senior_delegate)
+    senior_delegate = FactoryBot.create(:senior_delegate_role)
     rand(10).times do
       FactoryBot.create([:delegate, :candidate_delegate].sample,
-                        region_id: senior_delegate.region_id)
+                        region_id: senior_delegate.group.id)
     end
   end
 

@@ -182,7 +182,7 @@ RSpec.describe CompetitionsController do
     end
 
     context 'when signed in as a senior Delegate' do
-      sign_in { FactoryBot.create :senior_delegate }
+      sign_in { (FactoryBot.create :senior_delegate_role).user }
 
       it 'renders the for_senior page' do
         get :for_senior

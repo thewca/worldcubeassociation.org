@@ -234,12 +234,6 @@ FactoryBot.define do
       region_id { FactoryBot.create(:africa_region).id }
     end
 
-    factory :senior_delegate, traits: [:wca_id] do
-      delegate_status { "senior_delegate" }
-      email { Faker::Internet.email }
-      region_id { FactoryBot.create(:africa_region).id }
-    end
-
     factory :dummy_user, traits: [:wca_id] do
       encrypted_password { "" }
       dummy_account { true }

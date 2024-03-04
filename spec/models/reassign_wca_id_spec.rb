@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe ReassignWcaId do
   let(:region) { FactoryBot.create(:africa_region) }
-  let(:account1) { FactoryBot.create(:user_with_wca_id, :senior_delegate, region_id: region.id, country_iso2: "US") }
+  let(:account1) { FactoryBot.create(:user_with_wca_id, country_iso2: "US") }
   let(:shared_attributes) { account1.attributes.symbolize_keys.slice(:name, :country_iso2, :gender, :dob) }
   let(:account2) { FactoryBot.create(:user, shared_attributes) }
   let(:reassign_wca_id) { ReassignWcaId.new(account1: account1, account2: account2) }

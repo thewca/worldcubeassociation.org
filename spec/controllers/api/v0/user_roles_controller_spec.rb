@@ -5,10 +5,10 @@ require 'rails_helper'
 RSpec.describe Api::V0::UserRolesController do
   describe 'GET #list' do
     let!(:africa_region) { FactoryBot.create(:africa_region) }
-    let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate) }
-    let!(:user_senior_delegate) { FactoryBot.create(:senior_delegate) }
+    let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate_role).user }
+    let!(:user_senior_delegate_role) { FactoryBot.create(:senior_delegate_role) }
     let!(:user_whose_delegate_status_changes) { FactoryBot.create(:candidate_delegate, region_id: africa_region.id, location: 'Australia') }
-    let!(:delegate) { FactoryBot.create :delegate, region_id: user_senior_delegate.region_id }
+    let!(:delegate) { FactoryBot.create :delegate, region_id: user_senior_delegate_role.group.id }
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
     let!(:user_who_claims_wca_id) do
       FactoryBot.create(
@@ -56,12 +56,12 @@ RSpec.describe Api::V0::UserRolesController do
         expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(
           user_whose_delegate_status_changes,
           user_who_makes_the_change,
-          user_senior_delegate,
+          user_senior_delegate_role.user,
           "candidate_delegate",
           "delegate",
         ).and_call_original
         expect do
-          patch :update, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate.region_id, location: "location" }
+          patch :update, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate_role.group.id, location: "location" }
         end.to change { enqueued_jobs.size }.by(1)
 
         parsed_body = JSON.parse(response.body)
@@ -69,7 +69,7 @@ RSpec.describe Api::V0::UserRolesController do
 
         expect(parsed_body["success"]).to eq true
         expect(user_whose_delegate_status_changes.delegate_status).to eq "delegate"
-        expect(user_whose_delegate_status_changes.region_id).to eq user_senior_delegate.region_id
+        expect(user_whose_delegate_status_changes.region_id).to eq user_senior_delegate_role.group.id
         expect(user_whose_delegate_status_changes.location).to eq "location"
       end
 

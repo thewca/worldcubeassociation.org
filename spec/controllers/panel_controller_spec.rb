@@ -4,9 +4,9 @@ require 'rails_helper'
 
 RSpec.describe PanelController do
   describe "signed in as senior delegate" do
-    let!(:senior_delegate) { FactoryBot.create :senior_delegate }
+    let!(:senior_delegate_role) { FactoryBot.create :senior_delegate_role }
     before :each do
-      sign_in senior_delegate
+      sign_in senior_delegate_role.user
     end
 
     it "can view the pending claims for subordinate delegates" do
