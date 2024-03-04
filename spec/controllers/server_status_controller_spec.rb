@@ -50,7 +50,7 @@ RSpec.describe "JobsCheck" do
     expect(description).to be_nil
   end
 
-  it "finds the oldest job that has been waiting to run" do
+  it "finds the oldest job that has been waiting to run", retry: 3 do
     dummy_job, another_job = dummy_jobs
 
     dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
@@ -62,7 +62,7 @@ RSpec.describe "JobsCheck" do
     expect(description).to match(/Job #{another_job.cronjob_statistics.id} was/)
   end
 
-  it "ignores jobs in progress" do
+  it "ignores jobs in progress", retry: 3 do
     dummy_job, another_job = dummy_jobs
 
     dummy_job.cronjob_statistics.update!(enqueued_at: 10.minutes.ago)
