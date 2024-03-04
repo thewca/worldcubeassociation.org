@@ -7,6 +7,7 @@ import {
   Icon,
   Segment,
 } from 'semantic-ui-react';
+import cn from 'classnames';
 import i18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import { pluralize } from '../../../lib/utils/edit-events';
@@ -18,7 +19,6 @@ import {
   addEvent, addRounds, removeEvent, removeRounds,
 } from '../store/actions';
 import { EditQualificationModal } from '../Modals';
-import cn from 'classnames';
 
 export default function EventPanel({
   wcifEvent,
@@ -147,8 +147,8 @@ export default function EventPanel({
             {i18n.t('competitions.events.qualification')}
             :
             {' '}
-            {/* Qualifications cannot be edited after the competition has been announced. */}
-            {/* Qualifications cannot be added if the box from the competition form is unchecked. */}
+            {/* Qualifications cannot be edited after the competition has been announced, */}
+            {/*   or if the box from the competition form is unchecked. */}
             <EditQualificationModal
               wcifEvent={wcifEvent}
               disabled={

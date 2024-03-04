@@ -45,8 +45,6 @@ PreCommit:
     include:
       - 'WcaOnRails/app/webpacker/**/*.js'
     exclude:
-      # FIXME: we could fix it, but it's long and it's legacy code anyway...
-      - 'WcaOnRails/app/webpacker/components/EditEvents/**/*'
       # Semantic UI stuff, we need to re-exclude that here.
       - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
     command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']

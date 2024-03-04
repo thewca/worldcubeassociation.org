@@ -52,13 +52,15 @@ const advanceReqToExplanationText = (wcifEvent, roundNumber, { type, level }) =>
       return `The top ${level}% competitors from round ${roundNumber} will advance to round ${roundNumber + 1}.`;
     case 'attemptResult':
       return `Everyone in round ${roundNumber} with a result ${matchResult(level, wcifEvent.id)
-        } will advance to round ${roundNumber + 1}.`;
+      } will advance to round ${roundNumber + 1}.`;
     default:
       return '';
   }
 };
 
-function AdvancementInput({ eventId, type, level, onChange }) {
+function AdvancementInput({
+  eventId, type, level, onChange,
+}) {
   switch (type) {
     case 'ranking':
       return (
@@ -90,20 +92,24 @@ function AdvancementInput({ eventId, type, level, onChange }) {
     case 'attemptResult':
       return (
         eventId === '333mbf'
-            ? <MbldPointsField
-                label={<Label>Result</Label>}
-                eventId={eventId}
-                value={level}
-                onChange={onChange}
-                resultType="single"
-              />
-            : <AttemptResultField
-                label={<Label>Result</Label>}
-                eventId={eventId}
-                value={level}
-                onChange={onChange}
-                resultType="single"
-              />
+          ? (
+            <MbldPointsField
+              label={<Label>Result</Label>}
+              eventId={eventId}
+              value={level}
+              onChange={onChange}
+              resultType="single"
+            />
+          )
+          : (
+            <AttemptResultField
+              label={<Label>Result</Label>}
+              eventId={eventId}
+              value={level}
+              onChange={onChange}
+              resultType="single"
+            />
+          )
       );
     default:
       return null;
