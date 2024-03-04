@@ -21,6 +21,7 @@ export default function EventRestrictions() {
       },
     },
     isCloning,
+    isPersisted,
     storedEvents,
   } = useStore();
 
@@ -65,7 +66,7 @@ export default function EventRestrictions() {
         </ConditionalSection>
       </SubSection>
 
-      {!isCloning && (
+      {!isCloning && isPersisted && (
         <>
           <Divider />
           <InputSelect id="mainEventId" options={mainEventOptions} />
