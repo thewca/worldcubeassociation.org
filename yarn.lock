@@ -6975,10 +6975,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jquery@npm:3.4.1":
-  version: 3.4.1
-  resolution: "jquery@npm:3.4.1"
-  checksum: bddcd4ab536e4b00fb6aa6526594e4c2cf5f8e94bcc77e371af14c698e2a46dbde144eebdd49c8ebc1e23fee0e222421b41e0af7fbea645b4f14ad76ddf8b779
+"jquery@npm:3.7.1":
+  version: 3.7.1
+  resolution: "jquery@npm:3.7.1"
+  checksum: 808cfbfb758438560224bf26e17fcd5afc7419170230c810dd11f5c1792e2263e2970cca8d659eb84fcd9acc301edb6d310096e450277d54be4f57071b0c82d9
   languageName: node
   linkType: hard
 
@@ -9779,7 +9779,7 @@ __metadata:
     flag-icons: "npm:^7.1.0"
     glob: "npm:^10.3.10"
     i18n-js: "npm:^4.4.3"
-    jquery: "npm:3.4.1"
+    jquery: "npm:3.7.1"
     js-yaml: "npm:^4.1.0"
     jshint: "npm:^2.13.6"
     leaflet: "npm:^1.9.4"
