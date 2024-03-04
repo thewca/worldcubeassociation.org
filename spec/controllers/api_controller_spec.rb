@@ -131,7 +131,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
     end
 
     it 'can only find delegates' do
-      delegate = FactoryBot.create(:senior_delegate_role, user: FactoryBot.create(:user, name: "Jeremy")).user
+      delegate = FactoryBot.create(:delegate, name: "Jeremy")
       get :users_search, params: { q: "erem", only_staff_delegates: true }
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -183,7 +183,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       get :delegates
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json.length).to eq 2
+      expect(json.length).to eq 1
 
       delegate_json = json.find { |user| user["id"] == delegate.id }
       expect(delegate_json["email"]).to eq delegate.email
