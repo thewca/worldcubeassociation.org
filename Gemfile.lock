@@ -207,7 +207,7 @@ GEM
     bootstrap-sass (3.4.1)
       autoprefixer-rails (>= 5.2.1)
       sassc (>= 2.0.0)
-    bootstrap-table-rails (1.11.1.1)
+    bootstrap-table-rails (1.20.2)
     builder (3.2.4)
     bullet (7.1.6)
       activesupport (>= 3.0.0)
