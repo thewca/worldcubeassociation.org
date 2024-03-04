@@ -265,15 +265,7 @@ class User < ApplicationRecord
   scope :delegates, -> { where.not(delegate_status: nil) }
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
-  scope :staff_delegates, -> {
-    left_outer_joins(:roles)
-      .where(roles: { end_date: nil })
-      .or(where(roles: { end_date: Date.current.. }))
-      .left_outer_joins(:roles_metadata_delegate_regions)
-      .where(roles_metadata_delegate_regions: { status: 'senior_delegate' })
-      .or(where.not(delegate_status: [nil, "trainee_delegate"]))
-      .distinct
-  }
+  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
