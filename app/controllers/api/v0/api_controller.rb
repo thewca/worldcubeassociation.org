@@ -156,7 +156,7 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    paginate json: User.staff_delegates
+    paginate json: UserGroup.delegate_region_groups.flat_map(&:active_users)
   end
 
   def records

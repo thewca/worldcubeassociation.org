@@ -97,7 +97,7 @@ class UserGroup < ApplicationRecord
   end
 
   def self.delegate_region_groups_senior_delegates
-    UserGroup.delegate_region_groups.where(parent_group_id: nil).map(&:lead_user)
+    UserGroup.delegate_region_groups.where(parent_group_id: nil).map(&:lead_user).compact
   end
 
   def self.delegate_probation_groups
