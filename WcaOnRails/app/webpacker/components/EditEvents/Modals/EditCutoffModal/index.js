@@ -13,8 +13,8 @@ import AttemptResultField from '../../../Results/WCALive/AttemptResultField/Atte
 import MbldPointsField from '../../../Results/WCALive/AttemptResultField/MbldPointsField';
 
 /**
- * Developer notes: "cutoffFormat" and "NumberOfAttempts" is used interchangeably for written clarity
- * A cutoff is made up of a number of attempts and a format.
+ * Developer notes: "cutoffFormat" and "NumberOfAttempts" is used interchangeably
+ * for written clarity. A cutoff is made up of a number of attempts and a format.
  * This format is essentially a "number of attempts"
  * The cutoff format is stored as "cutoff.numberOfAttempts" in the round object in the wcif.
  */
@@ -82,19 +82,23 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
       {
         numberOfAttempts > 0 && (
           wcifEvent.id === '333mbf'
-            ? <MbldPointsField
+            ? (
+              <MbldPointsField
                 label={<Label>Cutoff Result</Label>}
                 eventId={wcifEvent.id}
                 value={attemptResult}
                 onChange={setAttemptResult}
               />
-            : <AttemptResultField
+            )
+            : (
+              <AttemptResultField
                 label={<Label>Cutoff Result</Label>}
                 eventId={wcifEvent.id}
                 value={attemptResult}
                 onChange={setAttemptResult}
                 resultType="single"
-            />
+              />
+            )
         )
       }
 

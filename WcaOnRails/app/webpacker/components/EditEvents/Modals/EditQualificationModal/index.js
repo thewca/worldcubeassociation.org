@@ -31,23 +31,24 @@ function QualificationInput({
   switch (type) {
     case 'attemptResult':
       return (
-        <>
-          {eventId === '333mbf'
-            ? <MbldPointsField
-                eventId={eventId}
-                value={level}
-                onChange={(level) => onChange(level)}
-                label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
-              />
-            : <AttemptResultField
-                eventId={eventId}
-                value={level}
-                onChange={(value) => onChange(value)}
-                label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
-                resultType={resultType}
-              />
-          }
-        </>
+        eventId === '333mbf'
+          ? (
+            <MbldPointsField
+              eventId={eventId}
+              value={level}
+              onChange={(newLevel) => onChange(newLevel)}
+              label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+            />
+          )
+          : (
+            <AttemptResultField
+              eventId={eventId}
+              value={level}
+              onChange={(value) => onChange(value)}
+              label={<Label>{i18n.t(`common.${resultType}`)}</Label>}
+              resultType={resultType}
+            />
+          )
       );
     case 'ranking':
       return (
