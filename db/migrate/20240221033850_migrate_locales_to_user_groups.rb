@@ -7,7 +7,7 @@ class MigrateLocalesToUserGroups < ActiveRecord::Migration[7.1]
     Locales::AVAILABLE.each_key do |locale_key|
       locale = Locales::AVAILABLE[locale_key.to_sym]
       group_metadata = GroupsMetadataTranslators.find_by(locale: locale_key)
-      group = UserGroup.find_by(metadata_id: group_metadata.id)
+      group = UserGroup.find_by(metadata_id: group_metadata.id, metadata_type: 'GroupsMetadataTranslators')
       group.update(name: locale[:name]) if group.present?
     end
   end
