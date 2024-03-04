@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 function getQueryParamsFromBrowserUrl() {
   return Object.fromEntries(new URLSearchParams(window.location.search));
@@ -17,12 +17,12 @@ export default function useQueryParams() {
     }
   }, [queryParams]);
 
-  function updateQueryParam(key, value) {
+  const updateQueryParam = useCallback((key, value) => {
     setQueryParams({
       ...queryParams,
       [key]: value,
     });
-  }
+  }, [queryParams]);
 
   return [queryParams, updateQueryParam];
 }
