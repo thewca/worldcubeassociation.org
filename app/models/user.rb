@@ -264,6 +264,7 @@ class User < ApplicationRecord
   scope :delegates, -> { where.not(delegate_status: nil) }
   scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
   scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
+  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
