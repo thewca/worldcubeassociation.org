@@ -2,7 +2,7 @@
 
 class Api::V0::UserRolesController < Api::V0::ApiController
   include SortHelper
-  before_action :current_user_is_authorized_for_action!, only: [:create, :update, :destroy]
+  before_action :current_user_is_authorized_for_action!, only: [:update, :destroy]
   private def current_user_is_authorized_for_action!
     unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
       render json: {}, status: 401
@@ -257,13 +257,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
-    group = UserGroup.find(group_id)
 
     if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:councils]
+      return head :unauthorized unless current_user.can_edit_team?(original_group_id)
+      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         status = params.require(:status)
         already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
         if already_existing_member.present?
@@ -278,6 +278,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     elsif group.group_type == UserGroup.group_types[:delegate_regions] && status != RolesMetadataDelegateRegions.statuses[:regional_delegate]
       # Creates deprecated role.
+      group = UserGroup.find(group_id)
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
       if status.present? && group.unique_status?(status)
@@ -290,6 +292,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         success: true,
       }
     else
+      group = UserGroup.find(group_id)
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
       create_supported_groups = [
         UserGroup.group_types[:delegate_regions],
         UserGroup.group_types[:delegate_probation],
