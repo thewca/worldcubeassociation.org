@@ -43,6 +43,13 @@ GIT
       railties (>= 5.0)
 
 GIT
+  remote: https://github.com/thewca/ruby-iso.git
+  revision: 3782e23f5c913434e71120cfc358d5539a70265e
+  specs:
+    iso (0.4.0)
+      i18n
+
+GIT
   remote: https://github.com/thewca/starburst.git
   revision: 2b3bcfb56a1b552a68c95b19569a1b481989be4f
   specs:
@@ -399,8 +406,6 @@ GEM
     irb (1.11.2)
       rdoc
       reline (>= 0.4.2)
-    iso (0.2.2)
-      i18n
     jbuilder (2.11.5)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
@@ -860,6 +865,7 @@ DEPENDENCIES
   icalendar
   image_processing
   irb
+  iso!
   jbuilder
   json-schema
   jwt
