@@ -1,7 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import {
-  Button, Form, Icon, Message,
+  Button, Form, Icon, Item, Message,
 } from 'semantic-ui-react';
 import _ from 'lodash';
 import { adminCheckRecordsUrl, apiV0Urls } from '../../../lib/requests/routes.js.erb';
@@ -11,6 +11,9 @@ import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
 import { genders, countries } from '../../../lib/wca-data.js.erb';
 import 'react-datepicker/dist/react-datepicker.css';
+import useQueryParams from '../../../lib/hooks/useQueryParams';
+import useLoadedData from '../../../lib/hooks/useLoadedData';
+import Errored from '../../Requests/Errored';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -26,34 +29,37 @@ const countryOptions = _.map(countries.byIso2, (country) => ({
   value: country.iso2,
 }));
 
-function EditPerson() {
-  const [person, setPerson] = useState();
+function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
+  const {
+    data: personFetchData, loading, error: personError,
+  } = useLoadedData(
+    apiV0Urls.persons.show(wcaId),
+  );
+  const { person } = personFetchData || {};
   const [editedUserDetails, setEditedUserDetails] = useState();
   const [originalUserDetails, setOriginalUserDetails] = useState();
   const [incorrectClaimCount, setIncorrectClaimCount] = useState(0);
   const { save, saving } = useSaveAction();
-  const [response, setResponse] = useState();
-  const wcaId = useMemo(() => person?.item?.wca_id, [person]);
 
   useEffect(() => {
     if (person) {
       const userDetails = {
-        wcaId: person.item.wca_id,
-        name: person.item.name,
-        representing: person.item.country_iso2,
-        gender: person.item.gender,
-        dob: person.item.dob,
+        wcaId: person.wca_id,
+        name: person.name,
+        representing: person.country_iso2,
+        gender: person.gender,
+        dob: person.dob,
       };
       setOriginalUserDetails(userDetails);
       setEditedUserDetails(userDetails);
-      setIncorrectClaimCount(person.item.incorrect_wca_id_claim_count);
+      setIncorrectClaimCount(person.incorrect_wca_id_claim_count);
       setResponse(null);
     } else {
       setOriginalUserDetails(null);
       setEditedUserDetails(null);
       setIncorrectClaimCount(0);
     }
-  }, [person]);
+  }, [person, setResponse]);
 
   const handleFormChange = (e, { name: formName, value }) => {
     setEditedUserDetails((prev) => ({ ...prev, [formName]: value }));
@@ -69,7 +75,6 @@ function EditPerson() {
         showCountryChangeWarning:
           originalUserDetails.representing !== editedUserDetails.representing,
       });
-      setPerson(null);
     }, {
       method: 'PATCH',
     }, (error) => {
@@ -83,57 +88,34 @@ function EditPerson() {
   const handleDestroy = () => {
     save(apiV0Urls.wrt.destroy(wcaId), {}, () => {
       setResponse({ success: true });
-      setPerson(null);
     }, { method: 'DELETE' }, (error) => setResponse({ success: false, message: `${error}` }));
   };
 
   const handleResetClaimCount = () => {
     save(apiV0Urls.wrt.resetClaimCount(wcaId), {}, () => {
       setResponse({ success: true, message: 'Success' });
-      setPerson(null);
     }, { method: 'PUT' }, (error) => setResponse({ success: false, message: `${error}` }));
   };
 
-  if (saving) return <Loading />;
+  if (loading || saving) return <Loading />;
+  if (personError) return <Errored />;
 
   return (
     <>
-      <div>
-        To know the difference between fix and update, refer delegate crash course&apos;s
-        &#34;Requesting changes to person data&#34; section.
-      </div>
-      {response != null && (
-        <Message
-          success={response.success}
-          error={!response.success}
-          content={response.message}
-        >
-          <Message.Content>
-            {response.success && (
-              <>
-                Success!
-                <br />
-              </>
-            )}
-            {response.showCountryChangeWarning && (
-              <>
-                The change you made may have affected national and continental records, be sure to
-                run
-                {' '}
-                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
-                .
-              </>
-            )}
-            {!response.success && response.message}
-          </Message.Content>
-        </Message>
-      )}
-      <WcaSearch
-        value={person}
-        onChange={(e, { value }) => setPerson(value)}
-        multiple={false}
-        model="person"
-      />
+      <Item>
+        <Item.Content>
+          <Item.Header>
+            WCA ID:
+            {' '}
+            {person.wca_id}
+          </Item.Header>
+          <Item.Description>
+            <Button onClick={() => clearWcaId()}>
+              Clear
+            </Button>
+          </Item.Description>
+        </Item.Content>
+      </Item>
       <Form>
         <Form.Input
           label={I18n.t('activerecord.attributes.user.name')}
@@ -146,6 +128,7 @@ function EditPerson() {
           options={countryOptions}
           label={I18n.t('activerecord.attributes.user.country_iso2')}
           name="representing"
+          search
           disabled={!editedUserDetails}
           value={editedUserDetails?.representing || ''}
           onChange={handleFormChange}
@@ -196,6 +179,71 @@ function EditPerson() {
           </Button>
         )}
       </Form>
+    </>
+  );
+}
+
+function EditPerson() {
+  const [response, setResponse] = useState();
+  const [queryParams, updateQueryParam] = useQueryParams();
+  const [loading, setLoading] = useState(false);
+  const { wcaId } = queryParams;
+
+  if (loading) return <Loading />;
+
+  return (
+    <>
+      <div>
+        To know the difference between fix and update, refer delegate crash course&apos;s
+        &#34;Requesting changes to person data&#34; section.
+      </div>
+      {response != null && (
+        <Message
+          success={response.success}
+          error={!response.success}
+          content={response.message}
+        >
+          <Message.Content>
+            {response.success && (
+              <>
+                Success!
+                <br />
+              </>
+            )}
+            {response.showCountryChangeWarning && (
+              <>
+                The change you made may have affected national and continental records, be sure to
+                run
+                {' '}
+                <a href={adminCheckRecordsUrl}>check_regional_record_markers</a>
+                .
+              </>
+            )}
+            {!response.success && response.message}
+          </Message.Content>
+        </Message>
+      )}
+      {wcaId
+        ? (
+          <EditPersonForm
+            wcaId={wcaId}
+            clearWcaId={() => {
+              setLoading(true);
+              updateQueryParam('wcaId', '');
+            }}
+            setResponse={setResponse}
+          />
+        )
+        : (
+          <WcaSearch
+            onChange={(e, { value }) => {
+              setLoading(true);
+              updateQueryParam('wcaId', value.id);
+            }}
+            multiple={false}
+            model="person"
+          />
+        )}
     </>
   );
 }
