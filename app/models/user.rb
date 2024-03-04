@@ -20,7 +20,6 @@ class User < ApplicationRecord
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   has_many :roles, class_name: "UserRole"
-  has_many :roles_metadata_delegate_regions, through: :roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -1085,7 +1084,7 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = User.staff_delegates
+        users = users.staff_delegates
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])

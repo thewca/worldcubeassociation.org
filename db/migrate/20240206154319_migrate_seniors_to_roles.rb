@@ -5,7 +5,7 @@ class MigrateSeniorsToRoles < ActiveRecord::Migration[7.1]
     ActiveRecord::Base.transaction do
       User.where(delegate_status: 'senior_delegate').find_each do |senior_delegate|
         region = UserGroup.find(senior_delegate.region_id)
-        raise "Region not found for senior_delegate: #{senior_delegate.name}" unless region
+        raise "Region not found for senior_delegate: #{senior_delegate.name}" unless region.present?
 
         metadata = RolesMetadataDelegateRegions.create!(status: RolesMetadataDelegateRegions.statuses[:senior_delegate])
         UserRole.create!(

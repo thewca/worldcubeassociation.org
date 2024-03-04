@@ -247,7 +247,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   # Whether the delegate status is already migrated to roles.
-  private def is_delegate_status_migrated?(status)
+  private def delegate_status_migrated?(status)
     [RolesMetadataDelegateRegions.statuses[:regional_delegate], RolesMetadataDelegateRegions.statuses[:senior_delegate]].include?(status)
   end
 
@@ -273,7 +273,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       else
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
       end
-    elsif group.group_type == UserGroup.group_types[:delegate_regions] && !is_delegate_status_migrated?(status)
+    elsif group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
       # Creates deprecated role.
       status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
       location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]

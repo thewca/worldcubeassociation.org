@@ -356,8 +356,7 @@ FactoryBot.define do
       competition.delegates.each do |delegate|
         unless delegate.region_id.nil? # There can be cases where the competition delegate is actually not a delegate (temporary delegate)
           if UserGroup.find(delegate.region_id).lead_user.nil? # Allowing to manually create senior delegate for the delegate if needed.
-            senior_delegate_role = FactoryBot.create(:senior_delegate_role)
-            delegate.update!(region_id: senior_delegate_role.group.id)
+            senior_delegate_role = FactoryBot.create(:senior_delegate_role, group_id: delegate.region_id)
           end
         end
       end
