@@ -183,7 +183,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       get :delegates
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
-      expect(json.length).to eq 1
+      expect(json.length).to eq 2
 
       delegate_json = json.find { |user| user["id"] == delegate.id }
       expect(delegate_json["email"]).to eq delegate.email
