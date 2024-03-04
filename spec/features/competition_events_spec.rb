@@ -51,7 +51,7 @@ RSpec.feature "Competition events management" do
       let(:comp_event_333) { competition.competition_events.find_by_event_id("333") }
       let(:round_333_1) { comp_event_333.rounds.first }
 
-      scenario "close with unsaved changes prompts user before discarding changes", js: true, retry: 3 do
+      scenario "close with unsaved changes prompts user before discarding changes", js: true do
         find_round("333", 1).click_button("timeLimit")
 
         modal = find_modal
@@ -71,13 +71,13 @@ RSpec.feature "Competition events management" do
         end
       end
 
-      scenario "change scramble group count to 42", js: true, retry: 3 do
+      scenario "change scramble group count to 42", js: true do
         within_round("333", 1) { fill_in "scrambleSetCount", with: "42" }
         save_events_react
         expect(round_333_1.reload.scramble_set_count).to eq 42
       end
 
-      scenario "change time limit to 5 minutes", js: true, retry: 3 do
+      scenario "change time limit to 5 minutes", js: true do
         find_round("333", 1).click_button("timeLimit")
 
         modal = find_modal
@@ -89,7 +89,7 @@ RSpec.feature "Competition events management" do
         expect(round_333_1.reload.time_limit_to_s).to eq "5:00.00"
       end
 
-      scenario "change cutoff to best of 2 in 2 minutes", js: true, retry: 3 do
+      scenario "change cutoff to best of 2 in 2 minutes", js: true do
         find_round("333", 1).click_button("cutoff")
 
         modal = find_modal
@@ -102,7 +102,7 @@ RSpec.feature "Competition events management" do
         expect(round_333_1.reload.cutoff_to_s).to eq "2 attempts to get < 2:00.00"
       end
 
-      scenario "change advancement condition to top 12 people", js: true, retry: 3 do
+      scenario "change advancement condition to top 12 people", js: true do
         # Add a second round of 333 so we can set an advancement condition on round 1.
         event_panel = find_event_panel("333")
         select_from_ui(event_panel, "selectRoundCount", "2 rounds")
@@ -119,7 +119,7 @@ RSpec.feature "Competition events management" do
         expect(round_333_1.reload.advancement_condition_to_s).to eq "Top 12 advance to next round"
       end
 
-      scenario "change qualification time to any result", js: true, retry: 3 do
+      scenario "change qualification time to any result", js: true do
         find_event_panel("333").find("[name='qualification']").click
 
         qualification_date = 7.days.from_now.to_date
@@ -227,7 +227,7 @@ RSpec.feature "Competition events management" do
     let!(:competition) { FactoryBot.create :competition, :confirmed, :visible, :past, :results_posted, event_ids: Event.where(id: '333') }
     let(:competition_event) { competition.competition_events.find_by_event_id("333") }
 
-    scenario "delegate cannot update events", js: true, retry: 3 do
+    scenario "delegate cannot update events", js: true do
       FactoryBot.create :round, number: 2, format_id: 'a', competition_event: competition_event, total_number_of_rounds: 2
       sign_in competition.delegates.first
       visit "/competitions/#{competition.id}/events/edit"

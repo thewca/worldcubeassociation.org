@@ -90,7 +90,7 @@ RSpec.feature "Competition management", js: true do
       expect(page).to have_text("You've confirmed this competition")
     end
 
-    scenario "change competition id of long name", retry: 3 do
+    scenario "change competition id of long name" do
       competition = FactoryBot.create(:competition, :with_delegate, name: "competition name id modify long 2016")
       visit edit_competition_path(competition)
 
@@ -118,7 +118,7 @@ RSpec.feature "Competition management", js: true do
       expect(Competition.find_by_id("NewId With Spaces")).to be_nil
     end
 
-    scenario "change competition id with validation error", retry: 3 do
+    scenario "change competition id with validation error" do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", name: "competition name id modify as admin 2016")
       visit edit_competition_path(competition)
       fill_in "ID", with: "NewId2016"
@@ -181,7 +181,7 @@ RSpec.feature "Competition management", js: true do
       expect(page).to have_text("Display message for free guest entry")
     end
 
-    scenario "change guest entry fee to non-zero", js: true, retry: 3 do
+    scenario "change guest entry fee to non-zero", js: true do
       competition = FactoryBot.create(:competition, :with_delegate, id: "OldId2016", guests_entry_fee_lowest_denomination: 666)
       visit edit_competition_path(competition)
 
@@ -217,7 +217,7 @@ RSpec.feature "Competition management", js: true do
       sign_in delegate
     end
 
-    scenario 'create competition', js: true, retry: 3 do
+    scenario 'create competition', js: true do
       visit new_competition_path
 
       fill_in "Name", with: "New Comp 2015"
@@ -260,7 +260,7 @@ RSpec.feature "Competition management", js: true do
       expect(comp.reload.confirmed?).to eq false
     end
 
-    scenario 'clone competition', js: true, retry: 3 do
+    scenario 'clone competition', js: true do
       visit clone_competition_path(competition_to_clone)
 
       fill_in "Name", with: "New Comp 2015"
@@ -284,7 +284,7 @@ RSpec.feature "Competition management", js: true do
     feature "edit" do
       let(:comp_with_fours) { FactoryBot.create :competition, events: [fours], delegates: [delegate] }
 
-      scenario 'can edit registration open datetime', js: true, retry: 3 do
+      scenario 'can edit registration open datetime', js: true do
         visit edit_competition_path(comp_with_fours)
 
         expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)

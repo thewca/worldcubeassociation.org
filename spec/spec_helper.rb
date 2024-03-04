@@ -96,4 +96,14 @@ RSpec.configure do |config|
   # Rspec-retry configuration
   config.verbose_retry = true
   config.display_try_failure_messages = true
+
+  # run retry on features that have JS enabled
+  config.around :each, :js do |ex|
+    ex.run_with_retry retry: 3
+  end
+
+  # clean up the Capybara cache between reruns
+  config.retry_callback = proc do |ex|
+    Capybara.reset! if ex.metadata[:js]
+  end
 end
