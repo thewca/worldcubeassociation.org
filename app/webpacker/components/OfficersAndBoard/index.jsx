@@ -1,7 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import {
-  Button, Container, Header, Icon, Popup,
-} from 'semantic-ui-react';
+import React, { useMemo } from 'react';
+import { Container, Header } from 'semantic-ui-react';
 import _ from 'lodash';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
@@ -30,7 +28,6 @@ export default function OfficersAndBoard({ boardEmail }) {
       isActive: true,
     }),
   );
-  const [hoveringEmail, setHoveringEmail] = useState(false);
 
   // The same user can hold multiple officer positions, and it won't be good to show same user
   // multiple times.
@@ -59,26 +56,8 @@ export default function OfficersAndBoard({ boardEmail }) {
       ))}
       <Header as="h3">
         <span>{I18n.t('user_groups.group_types.board')}</span>
+        {' '}
         <EmailButton email={boardEmail} />
-        <Popup
-          content="Copy to Clipboard"
-          trigger={(
-            <Button
-              onClick={() => navigator.clipboard.writeText(boardEmail)}
-              icon
-              style={{
-                margin: '8px',
-              }}
-              onMouseEnter={() => setHoveringEmail(true)}
-              onMouseLeave={() => setHoveringEmail(false)}
-            >
-              <Icon name={hoveringEmail ? 'copy' : 'mail'} />
-              {hoveringEmail && (
-                <span>{boardEmail}</span>
-              )}
-            </Button>
-          )}
-        />
       </Header>
       <p>{I18n.t('page.officers_and_board.board_description')}</p>
       {board.map((boardRole) => (
