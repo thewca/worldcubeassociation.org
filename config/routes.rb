@@ -103,7 +103,6 @@ Rails.application.routes.draw do
     resources :registrations, only: [:index, :update, :create, :edit, :destroy], shallow: true
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
-    get 'register-require-sign-in' => 'registrations#register_require_sign_in'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
     get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
     # Delegate views and action

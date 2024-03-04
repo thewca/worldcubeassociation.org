@@ -4,8 +4,11 @@ require "newrelic_rpm"
 
 class ApplicationController < ActionController::Base
   include TimeWillTell::Helpers::DateRangeHelper
+  include Devise::Controllers::StoreLocation
+
   protect_from_forgery with: :exception
 
+  before_action :store_user_location!, if: :storable_location?
   before_action :add_new_relic_headers, :set_locale
   protected def add_new_relic_headers
     ::NewRelic::Agent.add_custom_attributes(user_id: current_user ? current_user.id : nil)
@@ -66,23 +69,36 @@ class ApplicationController < ActionController::Base
 
   # This method is called by devise after a successful login to know the redirect path
   # We override it to do some action after signing in, but we want to use the original path
-  protected def after_sign_in_path_for(resource)
+  protected def after_sign_in_path_for(resource_or_scope)
     # When the user signs in, 'session[:locale]' is not cleared, so we need to clear it
     # and compute again the user's preferred_locale
     session[:locale] = nil
     set_locale
-    super
-  end
 
-  private def redirect_to_root_unless_user(action, *args)
-    redirecting = !current_user&.send(action, *args)
-    if redirecting
-      flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
-      redirect_to root_url
-    end
-    redirecting
+    super
   end
 
   # Starburst announcements, see https://github.com/starburstgem/starburst#installation
   helper Starburst::AnnouncementsHelper
+
+  private
+
+    def redirect_to_root_unless_user(action, *args)
+      redirecting = !current_user&.send(action, *args)
+      if redirecting
+        flash[:danger] = "You are not allowed to #{action.to_s.sub(/^can_/, '').chomp('?').humanize.downcase}"
+        redirect_to root_url
+      end
+      redirecting
+    end
+
+    # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
+    def storable_location?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+    end
+
+    def store_user_location!
+      # :user is the scope we are authenticating
+      store_location_for(:user, request.fullpath)
+    end
 end
