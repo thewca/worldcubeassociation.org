@@ -14,14 +14,15 @@ import Loading from '../../Requests/Loading';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import UserBadge from '../../UserBadge';
+import useInputState from '../../../lib/hooks/useInputState';
 
 const dateFormat = 'YYYY-MM-DD';
 const queryClient = new QueryClient();
 
 function ClaimWcaId() {
-  const [unconfirmedPerson, setUnconfirmedPerson] = useState();
+  const [unconfirmedPerson, setUnconfirmedPerson] = useInputState();
   const [dobVerification, setDobVerification] = useState();
-  const [delegateToVerify, setDelegateToVerify] = useState();
+  const [delegateToVerify, setDelegateToVerify] = useInputState();
   const [manualDelegateSelection, setManualDelegateSelection] = useState(false);
   const unconfirmedWcaId = unconfirmedPerson?.item?.wca_id || '';
   const {
@@ -73,7 +74,7 @@ function ClaimWcaId() {
         label={I18n.t('common.user.wca_id')}
         model="person"
         multiple={false}
-        onChange={(_, { value }) => setUnconfirmedPerson(value)}
+        onChange={setUnconfirmedPerson}
         value={unconfirmedPerson}
       />
       <Form.Input
@@ -118,7 +119,7 @@ function ClaimWcaId() {
                 )}
                   value={likelyDelegate.id}
                   checked={delegateToVerify === likelyDelegate}
-                  onChange={() => setDelegateToVerify(likelyDelegate)}
+                  onChange={setDelegateToVerify}
                   control="input"
                   type="radio"
                 />
