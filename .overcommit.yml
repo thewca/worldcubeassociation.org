@@ -15,20 +15,16 @@
 #
 # Uncomment the following lines to make the configuration take effect.
 
-gemfile: 'WcaOnRails/Gemfile'
+gemfile: 'Gemfile'
 
 PreCommit:
   ALL:
     exclude:
-      - 'regulations/**/*'
-      - 'webroot/**/*'
-      - 'WcaOnRails/vendor/**/*'
-      - 'WcaOnRails/tmp/**/*'
-      - 'WcaOnRails/db/structure.sql'
-      - 'WcaOnRails/node_modules/**/*'
-      - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
-      - 'WcaOnRails/config/locales/*.yml'
-      - 'chef/**/*'
+      - 'vendor/**/*'
+      - 'tmp/**/*'
+      - 'node_modules/**/*'
+      - 'app/webpacker/stylesheets/semantic/**/*'
+      - 'config/locales/*.yml'
       - '.gitmodules'
       - '**/*.pdf'
       - '**/*.jpg'
@@ -40,20 +36,18 @@ PreCommit:
       - '**/*.svg'
 
   EsLint:
-    required_executable: 'WcaOnRails/bin/yarn'
+    required_executable: 'bin/yarn'
     enabled: true
     include:
-      - 'WcaOnRails/app/webpacker/**/*.js'
+      - 'app/webpacker/**/*.js'
     exclude:
-      # FIXME: we could fix it, but it's long and it's legacy code anyway...
-      - 'WcaOnRails/app/webpacker/components/EditEvents/**/*'
       # Semantic UI stuff, we need to re-exclude that here.
-      - 'WcaOnRails/app/webpacker/stylesheets/semantic/**/*'
-    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
+      - 'app/webpacker/stylesheets/semantic/**/*'
+    command: ['bin/yarn', '--silent', 'run', 'eslint', '-c', '.eslintrc.json', '-f', 'compact']
 
   RuboCop:
     enabled: true
-    command: ['bundle', 'exec', 'rubocop', '--config', './WcaOnRails/.rubocop.yml']
+    command: ['bundle', 'exec', 'rubocop', '--config', './.rubocop.yml']
     on_warn: fail # Treat all warnings as failures
 
   IllegalStrings:
@@ -63,14 +57,14 @@ PreCommit:
     enabled: true
     include:
       # Others are handled by EsLint
-      'WcaOnRails/app/assets'
-    required_executable: 'WcaOnRails/bin/yarn'
-    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'jshint', '--verbose']
+      'app/assets'
+    required_executable: 'bin/yarn'
+    command: ['bin/yarn', '--silent', 'run', 'jshint', '--verbose']
 
   Stylelint:
     enabled: true
-    required_executable: 'WcaOnRails/bin/yarn'
-    command: ['WcaOnRails/bin/yarn', '--silent', 'run', 'stylelint', '-f', 'compact']
+    required_executable: 'bin/yarn'
+    command: ['bin/yarn', '--silent', 'run', 'stylelint', '-f', 'compact']
 
   TrailingWhitespace:
     enabled: true
