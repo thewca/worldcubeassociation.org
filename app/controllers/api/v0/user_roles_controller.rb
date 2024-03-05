@@ -306,8 +306,18 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:translators],
     ]
     group = UserGroup.find(group_id)
-    status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-    location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
+
+    if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
+      status = params.require(:status)
+    else
+      status = nil
+    end
+
+    if group.group_type == UserGroup.group_types[:delegate_regions]
+      location = params[:location]
+    else
+      location = nil
+    end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
@@ -328,6 +338,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if group.group_type == UserGroup.group_types[:delegate_regions]
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+    else
+      metadata = nil
     end
 
     role = UserRole.create!(
