@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Icon, Popup } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
-import UserBadge, { subtextForMember, subtextForOfficer } from '../UserBadge';
+import UserBadge, { subtextForMember } from '../UserBadge';
 import '../../stylesheets/static_pages/teams_committees.scss';
 
 function Team({ team }) {
@@ -58,28 +58,13 @@ function Team({ team }) {
   );
 }
 
-function TeamsCommittees({ officers = [], teams = [], officerTitles = [] }) {
+function TeamsCommittees({ teams = [] }) {
   return (
     <div className="teams-committees">
       <h1>{I18n.t('about.structure.teams_committees_councils')}</h1>
       <p>
         {I18n.t('about.structure.committees')}
       </p>
-
-      <h3>{I18n.t('about.structure.officers.name')}</h3>
-      <p>{I18n.t('about.structure.officers.description')}</p>
-
-      <div className="team-members" id="officers">
-        {officers.map((user) => (
-          <div key={(user.wca_id || 'user') + user.id}>
-            <UserBadge
-              user={user}
-              badgeClasses="board"
-              subtexts={subtextForOfficer(user, officerTitles)}
-            />
-          </div>
-        ))}
-      </div>
 
       {teams.map((team) => <Team team={team} key={team.id} />)}
     </div>

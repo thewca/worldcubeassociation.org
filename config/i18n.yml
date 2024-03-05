@@ -50,6 +50,7 @@ translations:
       - "*.search_results.*"
       - "*.continents.*"
       - "*.layouts.*"
+      - "*.user_roles.*"
       - "*.user_groups.*"
       - "*.simple_form.hints.competition.*"
       - "*.simple_form.options.competition.*"

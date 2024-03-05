@@ -1,9 +1,7 @@
 <% provide(:title, t("about.structure.teams_committees_councils")) %>
 
 <%= react_component('StaticPages/TeamsCommittees', {
-  officers: @officers,
-  teams: [Team.board] + Team.all_official + Team.all_councils,
-  officerTitles: Team.all_officers
+  teams: Team.all_official + Team.all_councils,
 }, {
   class: 'container'
 }) %>

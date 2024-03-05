@@ -690,6 +690,7 @@ en:
       information: "Information"
       about: "About the WCA"
       documents: "WCA Documents"
+      officers_and_board: "WCA Officers & Board"
       delegates: "WCA Delegates"
       organizations: "Regional Organizations"
       translators: "Translators"
@@ -751,6 +752,10 @@ en:
   page:
     translators:
       title: "Translators"
+    officers_and_board:
+      title: "WCA Officers & Board"
+      officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
+      board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -969,6 +974,13 @@ en:
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   user_roles:
+    status:
+      officers:
+        chair: "WCA Chair"
+        executive_director: "WCA Executive Director"
+        secretary: "WCA Secretary"
+        vice_chair: "WCA Vice-Chair"
+        treasurer: "WCA Treasurer"
     email:
       role_metadata:
         region_name: "Region Name"

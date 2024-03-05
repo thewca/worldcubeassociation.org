@@ -19,6 +19,11 @@ class TeamMember < ApplicationRecord
   alias_attribute :leader, :team_leader
   alias_attribute :senior_member, :team_senior_member
 
+  BOARD_STATUS = "member"
+  OFFICER_STATUS_EXECUTIVE_DIRECTOR = "executive_director"
+  OFFICER_STATUS_CHAIR = "chair"
+  OFFICER_STATUS_VICE_CHAIR = "vice_chair"
+  OFFICER_STATUS_SECRETARY = "secretary"
   TEAM_STATUS_LEADER = "leader"
   TEAM_STATUS_SENIOR_MEMBER = "senior_member"
   TEAM_STATUS_MEMBER = "member"
@@ -55,7 +60,19 @@ class TeamMember < ApplicationRecord
     end
   end
 
-  def status
+  def officer_status
+    if team == Team.executive_director
+      OFFICER_STATUS_EXECUTIVE_DIRECTOR
+    elsif team == Team.chair
+      OFFICER_STATUS_CHAIR
+    elsif team == Team.vice_chair
+      OFFICER_STATUS_VICE_CHAIR
+    elsif team == Team.secretary
+      OFFICER_STATUS_SECRETARY
+    end
+  end
+
+  def team_status
     if leader?
       TEAM_STATUS_LEADER
     elsif senior_member?
@@ -65,15 +82,32 @@ class TeamMember < ApplicationRecord
     end
   end
 
+  def status
+    if Team.all_officers.include?(team)
+      officer_status
+    elsif team == Team.board
+      BOARD_STATUS
+    else
+      team_status
+    end
+  end
+
   def role
+    if Team.all_officers.include?(team)
+      group_name = 'Officers'
+    elsif team == Team.board
+      group_name = 'Board'
+    else
+      group_name = team.name
+    end
     {
       id: team.group_type + "_" + self.id.to_s,
       start_date: start_date,
       is_active: current_member?,
       group: {
-        id: UserGroup.group_types[:teams_committees] + "_" + team.id.to_s,
-        name: team.name,
-        group_type: UserGroup.group_types[:teams_committees],
+        id: team.group_type + "_" + team.id.to_s,
+        name: group_name,
+        group_type: team.group_type,
         is_hidden: team[:hidden],
         is_active: true,
         metadata: {

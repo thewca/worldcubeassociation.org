@@ -207,6 +207,10 @@ class Team < ApplicationRecord
       UserGroup.group_types[:teams_committees]
     elsif council?
       UserGroup.group_types[:councils]
+    elsif self == Team.board
+      UserGroup.group_types[:board]
+    elsif Team.all_officers.include?(self)
+      UserGroup.group_types[:officers]
     end
   end
 
