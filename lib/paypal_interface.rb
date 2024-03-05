@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 
 module PaypalInterface
+  def self.paypal_disabled?
+    Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
+  end
+
   def self.generate_paypal_onboarding_link(competition_id)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/customer/partner-referrals"
 

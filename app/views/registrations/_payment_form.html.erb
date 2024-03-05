@@ -1,3 +1,4 @@
-<%= render "stripe_payment_form" if @competition.stripe_connected? %>
-<%= render "paypal_payment_form" if @competition.paypal_connected? && !EnvConfig.WCA_LIVE_SITE? && !@competition.stripe_connected? %>
-
+<% if @competition.stripe_connected? %>
+  <%= render "stripe_payment_form" %>
+<% elsif @competition.paypal_connected? && !PaypalInterface.paypal_disabled? %>
+  <%= render "paypal_payment_form" %>

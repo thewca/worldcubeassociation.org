@@ -316,18 +316,17 @@ class CompetitionsController < ApplicationController
 
     # Paypal setup URL
     # TODO: Don't generate this URL if there is already a connected paypal account?
-    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless EnvConfig.WCA_LIVE_SITE?
+    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled?
   end
 
   def paypal_return
-    competition = competition_from_params
-
-    if EnvConfig.WCA_LIVE_SITE?
+    if PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to competitions_payment_setup_path(competition)
     end
 
     competition = competition_from_params
+
     account_reference = ConnectedPaypalAccount.new(
       paypal_merchant_id: params[:merchantIdInPayPal],
       permissions_granted: params[:permissionsGranted],
@@ -376,7 +375,7 @@ class CompetitionsController < ApplicationController
   end
 
   def disconnect_paypal
-    if EnvConfig.WCA_LIVE_SITE?
+    if PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to root_url
     end

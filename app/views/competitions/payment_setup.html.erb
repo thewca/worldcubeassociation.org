@@ -12,7 +12,7 @@
         "https://support.stripe.com/questions/which-currencies-does-stripe-support#supportedcurrencies",
         target: '_blank'
       ) %></li>
-      <% unless EnvConfig.WCA_LIVE_SITE? %>
+      <% unless PaypalInterface.paypal_disabled? %>
         <li><%= link_to(
           t('payments.payment_setup.supported_currencies', provider: t('payments.payment_providers.paypal')),
           "https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/",
@@ -54,7 +54,7 @@
 
   <% end %>
 
-  <% unless EnvConfig.WCA_LIVE_SITE? %>
+  <% unless PaypalInterface.paypal_disabled? %>
     <%# PayPal Payments %>
     <h2><%= t('payments.payment_setup.provider_heading', provider: t('payments.payment_providers.paypal')) %></h2>
 
