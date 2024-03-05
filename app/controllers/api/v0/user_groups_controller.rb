@@ -19,10 +19,11 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
   end
 
   # Filters the list of groups based on given parameters.
-  private def filter_groups_for_parameters(groups: [], is_active: nil)
+  private def filter_groups_for_parameters(groups: [], is_active: nil, parent_group_id: nil)
     groups.reject do |group|
       (
-        !is_active.nil? && is_active != group.is_active
+        (!is_active.nil? && is_active != group.is_active) ||
+        (parent_group_id.present? && group.parent_group_id != parent_group_id)
       )
     end
   end
@@ -53,6 +54,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     groups = filter_groups_for_parameters(
       groups: groups,
       is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
+      parent_group_id: params.key?(:parentGroupId) ? params.require(:parentGroupId).to_i : nil,
     )
 
     # Sorts the list of groups by name.

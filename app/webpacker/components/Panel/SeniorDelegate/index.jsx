@@ -7,12 +7,18 @@ import DelegateProbations from '../../DelegateProbations';
 import PanelTemplate from '../PanelTemplate';
 import DelegateForms from './DelegateForms';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
+import Regions from './Regions';
 
 const sections = [
   {
     id: PANEL_LIST.seniorDelegate.delegateForms,
     name: 'Delegate Forms',
     component: DelegateForms,
+  },
+  {
+    id: PANEL_LIST.seniorDelegate.regions,
+    name: 'Regions',
+    component: Regions,
   },
   {
     id: PANEL_LIST.seniorDelegate.delegateProbations,
@@ -31,8 +37,12 @@ const sections = [
   },
 ];
 
-export default function SeniorDelegate() {
+export default function SeniorDelegate({ loggedInUserId }) {
   return (
-    <PanelTemplate heading="Senior Delegate Panel" sections={sections} />
+    <PanelTemplate
+      heading="Senior Delegate Panel"
+      sections={sections}
+      loggedInUserId={loggedInUserId}
+    />
   );
 }
