@@ -1519,7 +1519,7 @@ de:
           scopes_html: >-
             Trenne Scopes mit Leerzeichen. Lasse den Standard Scope leer. Siehe
             <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">hier</a> für eine Liste unterstützter Scopes.
       scopes:
         #original_hash: 1920e95

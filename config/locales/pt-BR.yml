@@ -1168,7 +1168,7 @@ pt-BR:
           scopes_html: >-
             Separe os escopos com espaços. Deixe em branco para usar o escopo
             padrão. Veja a lista de escopos suportados em <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">here</a>.
       scopes:
         #original_hash: 1920e95

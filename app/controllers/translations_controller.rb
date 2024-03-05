@@ -42,15 +42,15 @@ class TranslationsController < ApplicationController
     message = "Update #{locale} translation."
     content_digest = Digest::SHA1.hexdigest(content)
     branch_name = "translation-#{locale}-#{content_digest}"
-    # We create a branch pointing to upstream master SHA. This stopped working
+    # We create a branch pointing to upstream main SHA. This stopped working
     # unless the commit exists in the fork repository, so we always sync first.
     # Octokit doesn't expose a direct method for this, so we make a custom request.
-    Octokit.client.post("#{Octokit::Repository.path(origin_repo)}/merge-upstream", { branch: "master" })
-    upstream_sha = Octokit.ref(upstream_repo, "heads/master")[:object][:sha]
+    Octokit.client.post("#{Octokit::Repository.path(origin_repo)}/merge-upstream", { branch: "main" })
+    upstream_sha = Octokit.ref(upstream_repo, "heads/main")[:object][:sha]
     Octokit.create_ref(origin_repo, "heads/#{branch_name}", upstream_sha)
     current_content_sha = Octokit.content(origin_repo, path: file_path, ref: branch_name)[:sha]
     Octokit.update_content(origin_repo, file_path, message, current_content_sha, content, branch: branch_name)
-    @pr_url = Octokit.create_pull_request(upstream_repo, "master", "#{user_login}:#{branch_name}", message, pr_description_for(current_user, locale))[:html_url]
+    @pr_url = Octokit.create_pull_request(upstream_repo, "main", "#{user_login}:#{branch_name}", message, pr_description_for(current_user, locale))[:html_url]
   end
 
   private def pr_description_for(user, locale)

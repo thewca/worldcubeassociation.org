@@ -1126,7 +1126,7 @@ th:
           #original_hash: 62a0113
           scopes_html: >-
             คั่นแต่ละขอบเขตด้วยช่องว่าง เว้นว่างไว้เพื่อใช้ขอบเขตเริ่มต้น ดู<a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">ที่นี่</a>สำหรับขอบเขตที่รองรับ
       scopes:
         #original_hash: 1920e95

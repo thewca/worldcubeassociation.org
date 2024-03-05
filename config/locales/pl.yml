@@ -1441,7 +1441,7 @@ pl:
           scopes_html: >-
             Oddziel zakresy spacjami. Pozostaw puste w celu użycia domyślnego
             zakresu/zakresów. Spójrz <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tutaj</a>, aby zobaczyć listę wspieranych zakresów.
       scopes:
         #original_hash: 1920e95
