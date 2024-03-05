@@ -80,7 +80,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
         (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
         (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden])) ||
-        (group_type.present? && group_type != UserRole.group_type(role)) ||
+        (!group_type.nil? && group_type != UserRole.group_type(role)) ||
         (!is_lead.nil? && is_lead != UserRole.is_lead?(role))
       )
     end
@@ -334,7 +334,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
       # Creates deprecated role.
       user = User.find(user_id)
-      return render status: :unprocessable_entity, json: { error: "Already a delegate" } if user.any_kind_of_delegate?
+      return render status: :unprocessable_entity, json: { error: "Already a Delegate" } if user.any_kind_of_delegate?
       user.update!(delegate_status: status, region_id: group.id, location: location)
       send_role_change_notification(user)
       return render json: {

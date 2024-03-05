@@ -11,6 +11,10 @@ import I18n from '../../../../lib/i18n';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
+const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
+  text: I18n.t(`enums.user.role_status.delegate_regions.${option}`),
+  value: option,
+}));
 const initialValue = {
   newDelegate: null,
   status: delegateStatusOptions[0],
@@ -111,10 +115,7 @@ export default function Subregion({ title, groupId }) {
               selection
               name="status"
               value={formValues.status}
-              options={delegateStatusOptions.map((option) => ({
-                text: I18n.t(`enums.user.role_status.delegate_regions.${option}`),
-                value: option,
-              }))}
+              options={delegateStatusOptionsList}
               onChange={handleFormChange}
             />
             <Form.Input

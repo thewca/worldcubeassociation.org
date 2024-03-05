@@ -23,7 +23,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     groups.reject do |group|
       (
         (!is_active.nil? && is_active != group.is_active) ||
-        (parent_group_id.present? && group.parent_group_id != parent_group_id)
+        (!parent_group_id.nil? && group.parent_group_id != parent_group_id)
       )
     end
   end

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import { Dropdown, Header } from 'semantic-ui-react';
 
@@ -30,6 +30,12 @@ export default function Regions({ loggedInUserId }) {
     if (seniorDelegateRoles?.length > 0) setSelectedGroupIndex(0);
   }, [seniorDelegateRoles, setSelectedGroupIndex]);
 
+  const groupOptions = useMemo(() => seniorDelegateRoles.map((role, index) => ({
+    key: role.id,
+    text: role.group.name,
+    value: index,
+  })), [seniorDelegateRoles]);
+
   if (!loading && seniorDelegateRoles.length === 0) return <p>You cannot manage any regions..</p>;
   if (loading || selectedGroupIndex === undefined) return <Loading />;
   if (error) return <Errored />;
@@ -39,11 +45,7 @@ export default function Regions({ loggedInUserId }) {
       <Header>Regions</Header>
       <div>
         <Dropdown
-          options={seniorDelegateRoles.map((role, index) => ({
-            key: role.id,
-            text: role.group.name,
-            value: index,
-          }))}
+          options={groupOptions}
           value={selectedGroupIndex}
           onChange={setSelectedGroupIndex}
         />
