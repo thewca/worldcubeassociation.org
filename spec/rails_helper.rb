@@ -88,7 +88,7 @@ RSpec.configure do |config|
 
   config.include ActiveJob::TestHelper
 
-  WebMock.allow_net_connect! # Comment out to disable HTTP connections, to identify which endpoints needs to be mocked in test
+  WebMock.allow_net_connect! if EnvConfig.ENABLE_HTTP_REQUESTS_IN_TEST?
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
