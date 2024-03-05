@@ -241,7 +241,7 @@ function EditPerson() {
               updateQueryParam('wcaId', value.id);
             }}
             multiple={false}
-            models={[SEARCH_MODELS.person]}
+            model={SEARCH_MODELS.person}
           />
         )}
     </>

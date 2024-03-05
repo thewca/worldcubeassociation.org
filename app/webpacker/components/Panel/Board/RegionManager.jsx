@@ -247,7 +247,7 @@ export default function RegionManager() {
               control={WcaSearch}
               value={newLeadDelegate}
               onChange={(e, { value }) => setNewLeadDelegate(value)}
-              models={[SEARCH_MODELS.user]}
+              model={SEARCH_MODELS.user}
               multiple={false}
             />
             <Form.Button onClick={() => {

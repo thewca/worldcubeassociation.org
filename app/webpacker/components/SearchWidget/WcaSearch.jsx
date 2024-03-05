@@ -9,13 +9,10 @@ export default function WcaSearch({
   onChange,
   multiple = true,
   disabled = false,
-  models,
+  model,
   params,
-  removeNoResultsMessage,
-  showOptionToGoToSearchPage = false,
-  goToItemUrlOnClick = false,
 }) {
-  const urlFn = useCallback((query) => apiV0Urls.search(query, models, params), [models, params]);
+  const urlFn = useCallback((query) => apiV0Urls.search(query, [model], params), [model, params]);
 
   const onChangeInternal = useCallback((evt, data) => {
     onChange(evt, { ...data, name });
@@ -28,9 +25,6 @@ export default function WcaSearch({
       onChange={onChangeInternal}
       multiple={multiple}
       disabled={disabled}
-      removeNoResultsMessage={removeNoResultsMessage}
-      showOptionToGoToSearchPage={showOptionToGoToSearchPage}
-      goToItemUrlOnClick={goToItemUrlOnClick}
     />
   );
 }

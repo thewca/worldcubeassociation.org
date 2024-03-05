@@ -99,7 +99,7 @@ export default function DelegateProbations() {
         value={user}
         onChange={setUser}
         multiple={false}
-        models={[SEARCH_MODELS.user]}
+        model={SEARCH_MODELS.user}
         params={{ only_staff_delegates: true }}
       />
       <Button

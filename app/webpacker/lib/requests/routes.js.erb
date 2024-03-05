@@ -185,7 +185,7 @@ export const apiV0Urls = {
   delegates: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
   },
-  search: (q, models, params) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?${jsonToQueryString({ q, models, ...params })}`,
+  search: (q, models, params = {}) => `<%= Rails.application.routes.url_helpers.api_v0_search_path %>?${jsonToQueryString({ q, models, ...params })}`,
 }
 
 export const panelUrls = {

@@ -97,7 +97,7 @@ export default function DuesRedirect() {
                 value={formData.redirectFromOrganizer}
                 onChange={handleFormChange}
                 multiple={false}
-                models={[SEARCH_MODELS.user]}
+                model={SEARCH_MODELS.user}
               />
             )}
             <Form.Select

@@ -50,7 +50,7 @@ export function UserSearch({
     <WcaSearch
       value={userOptions}
       onChange={onChangeIdOnly}
-      models={[SEARCH_MODELS.user]}
+      model={SEARCH_MODELS.user}
       params={{ only_staff_delegates: delegateOnly, only_trainee_delegates: traineeOnly }}
     />
   );
@@ -85,7 +85,7 @@ export function CompetitionSearch({
     <WcaSearch
       value={compOptions}
       onChange={onChangeIdOnly}
-      models={[SEARCH_MODELS.competition]}
+      model={SEARCH_MODELS.competition}
       disabled={disabled}
     />
   );

@@ -93,7 +93,7 @@ export default function LeaderChangeForm({
         name="newLeader"
         value={formValues?.newLeader}
         onChange={handleFormChange}
-        models={[SEARCH_MODELS.user]}
+        model={SEARCH_MODELS.user}
         multiple={false}
       />
       {oldLeader && (

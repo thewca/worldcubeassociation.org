@@ -105,7 +105,7 @@ export default function Translators() {
                 name="user"
                 value={newTranslator.user}
                 onChange={handleFormChange}
-                models={[SEARCH_MODELS.user]}
+                model={SEARCH_MODELS.user}
                 multiple={false}
               />
               <Button type="submit">Submit</Button>
