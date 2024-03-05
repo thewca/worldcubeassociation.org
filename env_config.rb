@@ -48,8 +48,8 @@ EnvConfig = SuperConfig.new do
   end
 
   if Rails.env.test?
-    optional :ENABLE_WEBMOCK, :bool, false
-    optional :ENABLE_HTTP_REQUESTS_IN_TEST, :bool, true
+    optional :DISABLE_WEBMOCK, :bool, false
+    optional :ENABLE_NET_CONNECT_IN_TESTS, :bool, true
     optional :SKIP_PRETEST_SETUP, :bool, false
   end
 
