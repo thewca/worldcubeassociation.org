@@ -43,28 +43,6 @@ module Microservices
       end
     end
 
-    RegistrationConverter = Struct.new(:competition, :user, :status) do
-      def accepted?
-        status == "accepted"
-      end
-
-      def deleted?
-        status == "deleted"
-      end
-
-      def name
-        user.name
-      end
-
-      def email
-        user.email
-      end
-    end
-
-    def self.convert_registration(competition, user, registration_status)
-      RegistrationConverter.new(competition: competition, user: user, status: registration_status)
-    end
-
     def self.registrations_by_user(user_id)
       response = self.registration_connection.get(self.registrations_by_user_path(user_id))
 
