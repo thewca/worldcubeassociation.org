@@ -2,3 +2,4 @@
   <%= render "stripe_payment_form" %>
 <% elsif @competition.paypal_connected? && !PaypalInterface.paypal_disabled? %>
   <%= render "paypal_payment_form" %>
+<% end %>
