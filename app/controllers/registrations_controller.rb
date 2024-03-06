@@ -826,7 +826,7 @@ class RegistrationsController < ApplicationController
     return head :forbidden if PaypalInterface.paypal_disabled?
 
     @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration, params[:total_charge], params[:currency_code])
+    render json: PaypalInterface.create_order(@registration, params[:total_charge])
   end
 
   def capture_paypal_payment
@@ -845,7 +845,7 @@ class RegistrationsController < ApplicationController
 
       amount_details = response["purchase_units"][0]["payments"]["captures"][0]["amount"]
       currency_code = amount_details["currency_code"]
-      amount = PaypalTransaction.get_amount_in_cents(amount_details["value"], currency_code)
+      amount = PaypalTransaction.amount_in_cents(amount_details["value"], currency_code)
       transaction = PaypalTransaction.find_by(order_id: response["id"])
 
       # Create a Capture object and link it to the PaypalTransaction
@@ -865,13 +865,15 @@ class RegistrationsController < ApplicationController
 
   def refund_paypal_payment
     registration = Registration.find(params[:id])
-    refund = PaypalInterface.issue_refund(registration, registration.get_capture_id)
+    paypal_payment = registration.registration_payments.first.receipt # NOTE: This assumes there is only one RegistrationPayment - only for proof of concept
+    payment_capture_id = paypal_payment.get_capture_id
+    refund = PaypalInterface.issue_refund(registration, payment_capture_id)
 
     registration.record_refund(
       refund.amount_in_cents.to_i,
       refund.currency_code,
       refund,
-      registration.get_capture_id,
+      payment_capture_id,
       registration.user.id,
     )
   end

@@ -41,7 +41,7 @@ class PaypalTransaction < ApplicationRecord
     ],
   }.freeze
 
-  def self.get_paypal_amount(amount_in_cents, currency_code)
+  def self.paypal_amount(amount_in_cents, currency_code)
     if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
       format("%.2f", amount_in_cents.to_i / 100.0)
     else
@@ -49,11 +49,17 @@ class PaypalTransaction < ApplicationRecord
     end
   end
 
-  def self.get_amount_in_cents(paypal_amount, currency_code)
+  def self.amount_in_cents(paypal_amount, currency_code)
     if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
       (paypal_amount.to_f * 100).to_i.to_s
     else
       paypal_amount
     end
+  end
+
+  # NOTE: This is really bad, only for a proof of concept. It assumes that there is only ONE PaypalCapture - not a safe assumption.
+  def capture_id
+    capture = paypal_captures.first
+    capture.capture_id
   end
 end

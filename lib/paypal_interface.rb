@@ -47,10 +47,11 @@ module PaypalInterface
     end
   end
 
-  def self.create_order(registration, outstanding_fees, fee_currency)
+  def self.create_order(registration, outstanding_fees)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
 
-    amount = PaypalTransaction.get_paypal_amount(outstanding_fees, fee_currency)
+    fee_currency = registration.competition.currency_code
+    amount = PaypalTransaction.paypal_amount(outstanding_fees, fee_currency)
 
     payload = {
       intent: 'CAPTURE',
@@ -63,7 +64,7 @@ module PaypalInterface
 
     response = paypal_connection(url).post do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
-      req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(registration.competition)
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(registration.competition)
 
       req.body = payload
     end
@@ -88,7 +89,7 @@ module PaypalInterface
 
     response = paypal_connection(url).post do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
-      req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(competition)
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(competition)
     end
 
     response.body
@@ -101,7 +102,7 @@ module PaypalInterface
 
     response = paypal_connection(url).post do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
-      req.headers['PayPal-Auth-Assertion'] = get_paypal_auth_assertion(registration.competition)
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(registration.competition)
 
       req.body = payload
     end
@@ -160,7 +161,7 @@ module PaypalInterface
     client.client_credentials.get_token.token
   end
 
-  private_class_method def self.get_paypal_auth_assertion(competition)
+  private_class_method def self.paypal_auth_assertion(competition)
     payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => competition.payment_account_for(:paypal).paypal_merchant_id }
     JWT.encode payload, nil, 'none'
   end
