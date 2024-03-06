@@ -21,6 +21,8 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
   # Filters the list of groups based on given parameters.
   private def filter_groups_for_parameters(groups: [], is_active: nil, parent_group_id: nil)
     groups.reject do |group|
+      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
+      # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
         (!is_active.nil? && is_active != group.is_active) ||
         (!parent_group_id.nil? && group.parent_group_id != parent_group_id)
