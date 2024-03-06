@@ -87,6 +87,12 @@ RSpec.configure do |config|
   config.include ApplicationHelper
 
   config.include ActiveJob::TestHelper
+
+  if EnvConfig.DISABLE_WEBMOCK?
+    WebMock.disable!
+  else
+    WebMock.allow_net_connect! unless EnvConfig.DISABLE_NET_CONNECT_IN_TESTS?
+  end
 end
 
 # See: https://github.com/rspec/rspec-expectations/issues/664#issuecomment-58134735
