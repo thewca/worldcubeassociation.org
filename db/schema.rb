@@ -778,6 +778,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["competition_id", "user_id"], name: "index_microservice_registrations_on_competition_id_and_user_id", unique: true
   end
 
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

@@ -74,7 +74,7 @@ module Microservices
 
     def self.cache_and_return(ms_registrations)
       ms_registrations.tap do |registrations|
-        MicroserviceRegistration.upsert_all(registrations, unique_by: [:competition_id, :user_id])
+        MicroserviceRegistration.upsert_all(registrations)
       end
     end
   end
