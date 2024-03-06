@@ -1528,7 +1528,7 @@ class Competition < ApplicationRecord
       end
 
       if self.uses_new_registration_service?
-        accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', event.id)
+        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
         registered_user_ids = self.registrations

@@ -78,7 +78,7 @@ module Microservices
       response.body
     end
 
-    def self.get_registrations(competition_id, status = nil, event_id = nil)
+    def self.registrations_by_competition(competition_id, status = nil, event_id = nil)
       response = self.registration_connection.get(self.get_registrations_path(competition_id)) do |req|
         if status.present?
           req.params[:status] = status
