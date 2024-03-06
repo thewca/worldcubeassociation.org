@@ -9,7 +9,7 @@ import Loading from '../../Requests/Loading';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import CountrySelector from '../../CountrySelector/CountrySelector';
 import WcaSearch from '../../SearchWidget/WcaSearch';
-import { SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 export default function DuesRedirect() {
   const {

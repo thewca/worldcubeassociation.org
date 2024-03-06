@@ -1,19 +1,12 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 
-import useInputState from '../../lib/hooks/useInputState';
-import { SEARCH_MODELS } from '../../lib/wca-data.js.erb';
-import { apiV0Urls } from '../../lib/requests/routes.js.erb';
+import { omnisearchApiUrl } from '../../lib/requests/routes.js.erb';
 import MultiSearchInput from './MultiSearchInput';
+import useInputState from '../../lib/hooks/useInputState';
 
 function SearchWidget() {
   // purely a dummy for now...
   const [selectedValue, setSelectedValue] = useInputState([]);
-  const urlFn = useCallback((query) => apiV0Urls.search(query, [
-    SEARCH_MODELS.competition,
-    SEARCH_MODELS.person,
-    SEARCH_MODELS.regulation,
-    SEARCH_MODELS.incident,
-  ]), []);
 
   return (
     <MultiSearchInput
@@ -22,7 +15,7 @@ function SearchWidget() {
       removeNoResultsMessage
       showOptionToGoToSearchPage
       goToItemUrlOnClick
-      url={urlFn}
+      url={omnisearchApiUrl}
       multiple={false}
     />
   );

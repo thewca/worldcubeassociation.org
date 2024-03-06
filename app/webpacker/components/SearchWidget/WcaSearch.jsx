@@ -1,7 +1,12 @@
 import React, { useCallback } from 'react';
 
-import { apiV0Urls } from '../../lib/requests/routes.js.erb';
+import {
+  userSearchApiUrl,
+  personSearchApiUrl,
+  competitionSearchApiUrl,
+} from '../../lib/requests/routes.js.erb';
 import MultiSearchInput from './MultiSearchInput';
+import SEARCH_MODELS from './SearchModel';
 
 export default function WcaSearch({
   name,
@@ -12,7 +17,18 @@ export default function WcaSearch({
   model,
   params,
 }) {
-  const urlFn = useCallback((query) => apiV0Urls.search(query, [model], params), [model, params]);
+  const urlFn = useCallback((query) => {
+    switch (model) {
+      case SEARCH_MODELS.user:
+        return `${userSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      case SEARCH_MODELS.person:
+        return `${personSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      case SEARCH_MODELS.competition:
+        return `${competitionSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      default:
+        throw new Error(`Invalid search type in WcaSearch component: ${model}`);
+    }
+  }, [model, params]);
 
   const onChangeInternal = useCallback((evt, data) => {
     onChange(evt, { ...data, name });

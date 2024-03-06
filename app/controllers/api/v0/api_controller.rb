@@ -14,16 +14,6 @@ class Api::V0::ApiController < ApplicationController
 
   DEFAULT_API_RESULT_LIMIT = 20
 
-  def self.search_models
-    {
-      "user" => User,
-      "person" => Person,
-      "competition" => Competition,
-      "regulation" => Regulation,
-      "incident" => Incident,
-    }
-  end
-
   def me
     render json: { me: current_api_user }, private_attributes: doorkeeper_token.scopes
   end
@@ -159,17 +149,10 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def omni_search
-    model_names = params[:models]
-    if model_names.present?
-      model_list = model_names.split(",")
-      models = model_list.map { |model_name| Api::V0::ApiController.search_models[model_name] }
-      search(*models)
-    else
-      # We intentionally exclude Post, as our autocomplete ui isn't very useful with
-      # them yet.
-      params[:persons_table] = true
-      search(Competition, User, Regulation, Incident)
-    end
+    # We intentionally exclude Post, as our autocomplete ui isn't very useful with
+    # them yet.
+    params[:persons_table] = true
+    search(Competition, User, Regulation, Incident)
   end
 
   def delegates

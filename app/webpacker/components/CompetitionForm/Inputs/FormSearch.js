@@ -7,8 +7,8 @@ import {
 import Loading from '../../Requests/Loading';
 import { itemToOption } from '../../SearchWidget/MultiSearchInput';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
-import { SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
 
 const useWrapIdOnly = (originalCallback) => useCallback((evt, data) => {
   const { value: values } = data;

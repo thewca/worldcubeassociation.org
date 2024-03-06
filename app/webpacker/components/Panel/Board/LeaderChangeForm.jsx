@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { Form } from 'semantic-ui-react';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import Loading from '../../Requests/Loading';
-import { councilsStatus, SEARCH_MODELS } from '../../../lib/wca-data.js.erb';
+import { councilsStatus } from '../../../lib/wca-data.js.erb';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 const OLD_LEADER_STATUS = {
   SENIOR_MEMBER: 'senior_member',
