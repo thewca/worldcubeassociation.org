@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
+  include MicroserviceRegistrationHolder
+
   self.table_name = "Competitions"
 
   # We need this default order, tests rely on it.
@@ -8,7 +10,6 @@ class Competition < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
-  has_many :microservice_registrations
   has_many :results, foreign_key: "competitionId"
   has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
   has_many :uploaded_jsons, dependent: :destroy
@@ -1510,14 +1511,6 @@ class Competition < ApplicationRecord
     :sort_by_second,
     keyword_init: true,
   )
-
-  def microservice_registrations
-    # Query most recent registrations, which triggers caching of the `microservice_registration` AR model
-    Microservices::Registrations.registrations_by_competition(self.id)
-
-    # Let Rails do its thing via the `has_many` association defined at the top of the file
-    super
-  end
 
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do
