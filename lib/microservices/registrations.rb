@@ -74,7 +74,8 @@ module Microservices
 
     def self.cache_and_return(ms_registrations)
       ms_registrations.tap do |registrations|
-        MicroserviceRegistration.upsert_all(registrations)
+        db_registrations = registrations.map { |reg| reg.slice('competition_id', 'user_id') }
+        MicroserviceRegistration.upsert_all(db_registrations)
       end
     end
   end
