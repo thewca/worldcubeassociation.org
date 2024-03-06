@@ -67,7 +67,10 @@ module Microservices
 
     def self.registrations_by_user(user_id)
       response = self.registration_connection.get(self.registrations_by_user_path(user_id))
-      response.body
+
+      response.body.tap do |registrations_v2|
+        MicroserviceRegistration.upsert_all(registrations_v2, unique_by: [:competition_id, :user_id])
+      end
     end
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
@@ -89,7 +92,9 @@ module Microservices
         end
       end
 
-      response.body
+      response.body.tap do |registrations_v2|
+        MicroserviceRegistration.upsert_all(registrations_v2, unique_by: [:competition_id, :user_id])
+      end
     end
   end
 end

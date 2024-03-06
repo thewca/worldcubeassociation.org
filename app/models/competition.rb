@@ -1511,6 +1511,14 @@ class Competition < ApplicationRecord
     keyword_init: true,
   )
 
+  def microservice_registrations
+    # Query most recent registrations, which triggers caching of the `microservice_registration` AR model
+    Microservices::Registrations.registrations_by_competition(self.id)
+
+    # Let Rails do its thing via the `has_many` association defined at the top of the file
+    super
+  end
+
   def psych_sheet_event(event, sort_by)
     ActiveRecord::Base.connected_to(role: :read_replica) do
       competition_event = competition_events.find_by!(event: event)
@@ -1528,6 +1536,9 @@ class Competition < ApplicationRecord
       end
 
       if self.uses_new_registration_service?
+        # We deliberately don't go through the cached `microservice_registrations` table here, because then we
+        # would need to separately check which of the cached registrations are accepted
+        # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
         accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else

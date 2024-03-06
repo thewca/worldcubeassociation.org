@@ -15,6 +15,7 @@ class User < ApplicationRecord
   has_many :organized_competitions, through: :competition_organizers, source: "competition"
   has_many :votes
   has_many :registrations
+  has_many :microservice_registrations
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
@@ -1107,6 +1108,14 @@ class User < ApplicationRecord
     else
       ""
     end
+  end
+
+  def microservice_registrations
+    # Query most recent registrations, which triggers caching of the `microservice_registration` AR model
+    Microservices::Registrations.registrations_by_user(self.id)
+
+    # Let Rails do its thing via the `has_many` association defined at the top of the file
+    super
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
