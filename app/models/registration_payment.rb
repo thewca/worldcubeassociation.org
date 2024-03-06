@@ -14,6 +14,4 @@ class RegistrationPayment < ApplicationRecord
   def amount_available_for_refund
     amount_lowest_denomination + RegistrationPayment.where(refunded_registration_payment_id: id).sum(:amount_lowest_denomination)
   end
-
-
 end
