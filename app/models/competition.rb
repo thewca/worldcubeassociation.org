@@ -1934,11 +1934,13 @@ class Competition < ApplicationRecord
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
-    registrations = self.registrations.includes [
+    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
+    registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
-      :registration_competition_events,
     ]
+    registration_includes << :registration_competition_events unless self.uses_new_registration_service?
+    registrations = registrations_relation.includes(registration_includes)
     competition_activities = all_activities
     new_assignments = []
     removed_assignments = []
@@ -1948,13 +1950,7 @@ class Competition < ApplicationRecord
       # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
       adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
       if adding_non_competing
-        registration ||= registrations.create(
-          competition: self,
-          user_id: wcif_person["wcaUserId"],
-          created_at: DateTime.now,
-          updated_at: DateTime.now,
-          is_competing: false,
-        )
+        registration ||= registrations.create_non_competing(self, wcif_person["wcaUserId"])
       end
       next unless registration.present?
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
@@ -1963,7 +1959,7 @@ class Competition < ApplicationRecord
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
         # The additional roles are only for WCIF purposes and we don't validate them,
         # so we can safely skip validations by using update_attribute
-        registration.update_attribute(:roles, roles)
+        registration.update_roles(roles)
       end
       if wcif_person["assignments"]
         wcif_person["assignments"].each do |assignment_wcif|

@@ -88,4 +88,12 @@ class MicroserviceRegistration < ApplicationRecord
       "isCompeting" => is_competing?,
     }.merge(authorized ? authorized_fields : {})
   end
+
+  def self.create_non_competing(competition, user_id)
+    nil # TODO: stub
+  end
+
+  def update_roles(new_roles)
+    nil # TODO: stub
+  end
 end
