@@ -108,9 +108,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       group = UserGroup.find(group_id)
 
       if group.group_type == UserGroup.group_types[:delegate_regions]
-        User.where(region_id: group.id).map do |delegate_user|
-          roles << delegate_user.delegate_role
-        end
+        roles.concat(group.delegate_users.map(&:delegate_role))
       end
     end
 

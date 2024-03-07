@@ -15,16 +15,18 @@ class UserGroup < ApplicationRecord
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
+  has_many :delegate_users, -> { delegates.includes(:actually_delegated_competitions) }, class_name: "User", foreign_key: "region_id"
+
+  scope :root_groups, -> { where(parent_group: nil) }
+
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
 
   def roles
     role_list = UserRole.where(group_id: self.id).to_a
-    if self.group_type == "delegate_regions"
-      role_list += User.where(region_id: self.id).where.not(delegate_status: nil).map do |delegate_user|
-        delegate_user.delegate_role
-      end
+    if self.delegate_regions?
+      role_list += self.delegate_users.map(&:delegate_role)
     end
     role_list
   end
@@ -97,7 +99,7 @@ class UserGroup < ApplicationRecord
   end
 
   def self.delegate_region_groups_senior_delegates
-    UserGroup.delegate_region_groups.where(parent_group_id: nil).map(&:lead_user).compact
+    UserGroup.delegate_region_groups.root_groups.map(&:lead_user).compact
   end
 
   def self.delegate_probation_groups
