@@ -1950,7 +1950,11 @@ class Competition < ApplicationRecord
       # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
       adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
       if adding_non_competing
-        registration ||= registrations.create_non_competing(self, wcif_person["wcaUserId"])
+        registration ||= registrations.create(
+          competition: self,
+          user_id: wcif_person["wcaUserId"],
+          is_competing: false,
+        )
       end
       next unless registration.present?
       WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
@@ -1959,7 +1963,7 @@ class Competition < ApplicationRecord
         roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
         # The additional roles are only for WCIF purposes and we don't validate them,
         # so we can safely skip validations by using update_attribute
-        registration.update_roles(roles)
+        registration.update_attribute(:roles, roles)
       end
       if wcif_person["assignments"]
         wcif_person["assignments"].each do |assignment_wcif|

@@ -777,7 +777,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
   create_table "microservice_registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.integer "user_id"
-    t.boolean "non_competing_dummy", default: false
+    t.text "roles"
+    t.boolean "is_competing", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["competition_id", "user_id"], name: "index_microservice_registrations_on_competition_id_and_user_id", unique: true

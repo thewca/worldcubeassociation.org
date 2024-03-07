@@ -235,20 +235,6 @@ class Registration < ApplicationRecord
     }
   end
 
-  def self.create_non_competing(competition, user_id)
-    self.create(
-      competition: competition,
-      user_id: user_id,
-      is_competing: false,
-    )
-  end
-
-  def update_roles(new_roles)
-    # The additional roles are only for WCIF purposes and we don't validate them,
-    # so we can safely skip validations by using update_attribute
-    self.update_attribute(:roles, new_roles)
-  end
-
   def self.accepted_and_paid_pending_count
     accepted.count + pending.with_payments.count
   end
