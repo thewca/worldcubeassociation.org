@@ -19,12 +19,16 @@ module MicroserviceRegistrationHolder
     end
 
     # Let Rails do its thing via the `has_many` association defined at the top of the file
-    super.tap do |ar_models|
-      ar_models.each do |ar_model|
-        matching_ms_model = ms_models.find { |ms_model| ms_model['competition_id'] == ar_model.competition_id && ms_model['user_id'] == ar_model.user_id }
-        raise "No matching Microservice registration found. This should not happen!" unless matching_ms_model.present?
+    super.all.extending do
+      define_method :records do
+        super().tap do |ar_models|
+          ar_models.each do |ar_model|
+            matching_ms_model = ms_models.find { |ms_model| ms_model['competition_id'] == ar_model.competition_id && ms_model['user_id'] == ar_model.user_id }
+            raise "No matching Microservice registration found. This should not happen!" unless matching_ms_model.present?
 
-        ar_model.load_ms_model(matching_ms_model)
+            ar_model.load_ms_model(matching_ms_model)
+          end
+        end
       end
     end
   end
