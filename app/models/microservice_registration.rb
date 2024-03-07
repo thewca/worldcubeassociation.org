@@ -66,14 +66,14 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def comments
-    # TODO: Better return nil here? -> Check WCIF spec!
+    # nil is not allowed here, see WCIF spec!
     return '' unless self.is_competing?
 
     self.read_ms_data :comments
   end
 
   def administrative_notes
-    # TODO: Better return nil here? -> Check WCIF spec!
+    # nil is not allowed here, see WCIF spec!
     return '' unless self.is_competing?
 
     self.read_ms_data :administrative_notes
