@@ -269,74 +269,89 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     [RolesMetadataDelegateRegions.statuses[:regional_delegate], RolesMetadataDelegateRegions.statuses[:senior_delegate]].include?(status)
   end
 
-  def create
-    user_id = params.require(:userId)
-    group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
+  private def team_role?(group_id)
+    group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are migrated to the new system.
+  end
 
-    if group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
-      # migrated to the new system.
-      group_type = group_id_of_old_system_to_group_type(group_id)
-      original_group_id = group_id.split("_").last
-      return head :unauthorized unless current_user.can_edit_team?(original_group_id)
-      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        status = params.require(:status)
-        already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
-        if already_existing_member.present?
-          already_existing_member.update!(end_date: Date.today)
-        end
-        TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-        render json: {
-          success: true,
-        }
-      else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+  private def create_team_role(group_id, user_id)
+    group_type = group_id_of_old_system_to_group_type(group_id)
+    original_group_id = group_id.split("_").last
+    return head :unauthorized unless current_user.can_edit_team?(original_group_id)
+    if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
+      status = params.require(:status)
+      already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
+      if already_existing_member.present?
+        already_existing_member.update!(end_date: Date.today)
       end
-    elsif group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
-      # Creates deprecated role.
-      group = UserGroup.find(group_id)
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
-      status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      location = params[:location] if group.group_type == UserGroup.group_types[:delegate_regions]
-      if status.present? && group.unique_status?(status)
-        end_role_for_user_in_group_with_status(group, status)
-      end
-      user = User.find(user_id)
-      user.update!(delegate_status: status, region_id: group.id, location: location)
-      send_role_change_notification(user)
+      TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
       render json: {
         success: true,
       }
     else
-      group = UserGroup.find(group_id)
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
-      create_supported_groups = [
-        UserGroup.group_types[:delegate_regions],
-        UserGroup.group_types[:delegate_probation],
-        UserGroup.group_types[:translators],
-      ]
-      unless create_supported_groups.include?(group.group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-        return
-      end
-      status = params.require(:status) if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
-      if status.present? && group.unique_status?(status)
-        end_role_for_user_in_group_with_status(group, status)
-      end
-      if group.group_type == UserGroup.group_types[:delegate_regions]
-        location = params[:location]
-        metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
-      end
-      role = UserRole.create!(
-        user_id: user_id,
-        group_id: group_id,
-        start_date: Date.today,
-        metadata: metadata,
-      )
-      RoleChangeMailer.notify_role_start(role, current_user).deliver_later
-      render json: {
+      render status: :unprocessable_entity, json: { error: "Invalid group type" }
+    end
+  end
+
+  def create
+    user_id = params.require(:userId)
+    group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
+
+    if team_role?(group_id)
+      return create_team_role(group_id, user_id)
+    end
+
+    create_supported_groups = [
+      UserGroup.group_types[:delegate_regions],
+      UserGroup.group_types[:delegate_probation],
+      UserGroup.group_types[:translators],
+    ]
+    group = UserGroup.find(group_id)
+
+    if UserGroup.group_types_containing_status_metadata.include?(group.group_type)
+      status = params.require(:status)
+    else
+      status = nil
+    end
+
+    if group.group_type == UserGroup.group_types[:delegate_regions]
+      location = params[:location]
+    else
+      location = nil
+    end
+
+    return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
+    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
+
+    if status.present? && group.unique_status?(status)
+      end_role_for_user_in_group_with_status(group, status)
+    end
+
+    if group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
+      # Creates deprecated role.
+      user = User.find(user_id)
+      user.update!(delegate_status: status, region_id: group.id, location: location)
+      send_role_change_notification(user)
+      return render json: {
         success: true,
       }
     end
+
+    if group.group_type == UserGroup.group_types[:delegate_regions]
+      metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+    else
+      metadata = nil
+    end
+
+    role = UserRole.create!(
+      user_id: user_id,
+      group_id: group_id,
+      start_date: Date.today,
+      metadata: metadata,
+    )
+    RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+    render json: {
+      success: true,
+    }
   end
 
   def show

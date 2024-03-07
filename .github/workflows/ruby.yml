@@ -2,9 +2,9 @@ name: Ruby tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -52,7 +52,7 @@ jobs:
         id: rspec
         run: bundle exec rake
       - name: Push coverage data to Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: 'coverage/lcov/worldcubeassociation.org.lcov'

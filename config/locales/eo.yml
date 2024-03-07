@@ -1516,7 +1516,7 @@ eo:
           scopes_html: >-
             Apartigu ampleksojn per spacetoj. Lasu tion malplena por uzi la
             defaŭlta(j)n aplikaĵa(j)n regiono(j)n. Rigardu <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">tie</a> por trovi liston de subtenataj ampleksoj.
       scopes:
         #original_hash: 1920e95
