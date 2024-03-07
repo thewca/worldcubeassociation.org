@@ -1048,12 +1048,12 @@ RSpec.describe "registrations" do
       post registration_create_paypal_order_path(registration.id), params: payload
     end
 
-    it 'creates a PaypalTransaction' do
-      expect(PaypalTransaction.all.count).to eq(1)
+    it 'creates a PaypalRecord' do
+      expect(PaypalRecord.all.count).to eq(1)
     end
 
-    it 'PaypalTransaction amount matches registration cost' do
-      expect(PaypalTransaction.all.first.amount_in_cents.to_i).to eq(registration.competition.base_entry_fee_lowest_denomination)
+    it 'PaypalRecord amount matches registration cost' do
+      expect(PaypalRecord.all.first.amount_in_cents.to_i).to eq(registration.competition.base_entry_fee_lowest_denomination)
     end
   end
 
@@ -1068,39 +1068,39 @@ RSpec.describe "registrations" do
       stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
-      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalTransaction object?
+      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
       payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
-      @order_id = JSON.parse(create_order_payload)['id']
+      @record_id = JSON.parse(create_order_payload)['id']
       @currency_code = competition.currency_code
-      @amount = PaypalTransaction.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+      @amount = PaypalRecord.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
 
-      url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@order_id}/capture"
+      url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, url)
-        .to_return(status: 200, body: capture_order_response(@order_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+        .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id, @order_id), params: {}
+      post registration_capture_paypal_payment_path(registration.id, @record_id), params: {}
     end
 
-    it 'creates a PaypalCapture object' do
+    it 'creates a PaypalRecord of type :capture' do
       capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
-      expect(PaypalCapture.find_by(capture_id: capture_id)).not_to be_nil
+      expect(PaypalRecord.find_by(record_id: capture_id).record_type).to eq('capture')
     end
 
-    it 'associates PaypalCapture to the PaypalTransaction' do
-      paypal_transaction = PaypalTransaction.find_by(order_id: JSON.parse(response.body)['id'])
-      expect(paypal_transaction.paypal_captures.count).to eq(1)
+    it 'associates PaypalCapture to the PaypalRecord' do
+      paypal_record = PaypalRecord.find_by(record_id: JSON.parse(response.body)['id'])
+      expect(paypal_record.child_records.count).to eq(1)
     end
 
     it 'creates a RegistrationPayment object' do
       expect(registration.registration_payments.count).to eq(1)
     end
 
-    it 'RegistrationPayment has an associated PaypalTransaction' do
-      expect(registration.registration_payments.first.receipt_type).to eq("PaypalTransaction")
+    it 'RegistrationPayment has an associated PaypalRecord' do
+      expect(registration.registration_payments.first.receipt_type).to eq("PaypalRecord")
     end
 
     it 'registration fees reflect as paid on successful capture' do
@@ -1120,21 +1120,21 @@ RSpec.describe "registrations" do
       stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
-      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalTransaction object?
+      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
       payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
-      @order_id = JSON.parse(create_order_payload)['id']
+      @record_id = JSON.parse(create_order_payload)['id']
       @currency_code = competition.currency_code
-      @amount = PaypalTransaction.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+      @amount = PaypalRecord.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
 
-      capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@order_id}/capture"
+      capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, capture_url)
-        .to_return(status: 200, body: capture_order_response(@order_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+        .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id, @order_id), params: {}
+      post registration_capture_paypal_payment_path(registration.id, @record_id), params: {}
 
       # Mock the refunds endpoint
       capture_id = '7WA034444N6390300' # Defined in the `capture_order_response` payload
@@ -1143,15 +1143,15 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: refund_response(capture_id), headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to issue the refund
-      post paypal_payment_refund_path(registration.id, @order_id), params: {}
+      post paypal_payment_refund_path(registration.id, registration.registration_payments.first), params: {}
     end
 
     it 'creates a RegistrationPayment with a negative value' do
       expect(registration.registration_payments[1].amount_lowest_denomination).to be < 0
     end
 
-    it 'creates a PaypalTransaction of type `refund`' do
-      expect(registration.registration_payments[1].receipt.transaction_type).to eq('refund')
+    it 'creates a PaypalRecord of type `refund`' do
+      expect(registration.registration_payments[1].receipt.record_type).to eq('refund')
     end
 
     it 'records the registration total paid as zero' do
@@ -1173,9 +1173,9 @@ def expect_error_to_be(response, message)
   expect(as_json["error"]["message"]).to eq message
 end
 
-def capture_order_response(order_id, amount, currency)
+def capture_order_response(record_id, amount, currency)
   {
-    "id" => order_id,
+    "id" => record_id,
     "status" => "COMPLETED",
     "payment_source" => {
       "paypal" => {

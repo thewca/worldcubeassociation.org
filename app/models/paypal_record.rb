@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
-class PaypalTransaction < ApplicationRecord
-  has_many :paypal_captures
+class PaypalRecord < ApplicationRecord
+  belongs_to :parent_record, class_name: "PaypalRecord", optional: true
+  has_many :child_records, class_name: "PaypalRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
 
-  # NOTE: Is this even necessary? We could just use positive/negative amounts to differentiate them?
-  TRANSACTION_TYPES = [
+  RECORD_TYPES = [
     :payment,
     :refund,
+    :capture,
   ].freeze
 
   # Defined in: https://developer.paypal.com/docs/reports/reference/paypal-supported-currencies/
@@ -57,9 +58,9 @@ class PaypalTransaction < ApplicationRecord
     end
   end
 
-  # NOTE: This is really bad, only for a proof of concept. It assumes that there is only ONE PaypalCapture - not a safe assumption.
   def capture_id
-    capture = paypal_captures.first
-    capture.capture_id
+    # NOTE: This only ever returns the id of the first capture associated with a record
+    # TODO: Add error so that this method can only be called for an order or receipt, not for a capture
+    child_records.first.record_id
   end
 end

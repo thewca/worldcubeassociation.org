@@ -51,7 +51,7 @@ module PaypalInterface
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
 
     fee_currency = registration.competition.currency_code
-    amount = PaypalTransaction.paypal_amount(outstanding_fees, fee_currency)
+    amount = PaypalRecord.paypal_amount(outstanding_fees, fee_currency)
 
     payload = {
       intent: 'CAPTURE',
@@ -71,9 +71,9 @@ module PaypalInterface
 
     body = response.body
 
-    PaypalTransaction.create(
-      transaction_type: :payment,
-      order_id: body["id"],
+    PaypalRecord.create(
+      record_type: :payment,
+      record_id: body["id"],
       status: body["status"],
       payload: payload,
       amount_in_cents: outstanding_fees,
@@ -83,7 +83,7 @@ module PaypalInterface
     body
   end
 
-  # TODO: Update the status of the PaypalTransaction object?
+  # TODO: Update the status of the PaypalRecord object?
   def self.capture_payment(competition, order_id)
     url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
 
@@ -109,13 +109,13 @@ module PaypalInterface
 
     body = response.body
 
-    refunded_order = PaypalCapture.find_by(capture_id: capture_id).paypal_transaction
+    refunded_order = PaypalRecord.find_by(record_id: capture_id).parent_record
 
     if body["status"] == "COMPLETED"
       # TODO: The refund should be linked to a charge and/or an order
-      refund = PaypalTransaction.create(
-        transaction_type: :refund,
-        order_id: body["id"],
+      refund = PaypalRecord.create(
+        record_type: :refund,
+        record_id: body["id"],
         status: body["status"],
         payload: payload,
         amount_in_cents: refunded_order.amount_in_cents,
