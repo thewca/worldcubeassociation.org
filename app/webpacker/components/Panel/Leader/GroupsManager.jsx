@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button, Dropdown, Form, Header, Modal, Table,
 } from 'semantic-ui-react';
@@ -141,36 +141,36 @@ function GroupTable({ group }) {
   );
 }
 
-export default function GroupsManager({ loggedInUserId }) {
-  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    loggedInUserId,
-    'groupName', // Sort params
-    { isActive: true, isGroupHidden: false, status: 'leader' },
-  ));
-  const [selectedGroupIndex, setSelectedGroupIndex] = useInputState();
-
-  useEffect(() => {
-    if (roles?.length > 0) setSelectedGroupIndex(0);
-  }, [roles, setSelectedGroupIndex]);
-
-  if (!loading && roles.length === 0) return <p>You are not a leader of any groups.</p>;
-  if (loading || selectedGroupIndex === undefined) return <Loading />;
-  if (error) return <Errored />;
+export function GroupsManagerForGroups({ groups }) {
+  const [selectedGroupIndex, setSelectedGroupIndex] = useInputState(0);
 
   return (
     <>
       <div>
         <Dropdown
-          options={roles.map((role, index) => ({
-            key: role.id,
-            text: role.group.name,
+          options={groups.map((group, index) => ({
+            key: group.id,
+            text: group.name,
             value: index,
           }))}
           value={selectedGroupIndex}
           onChange={setSelectedGroupIndex}
         />
       </div>
-      <GroupTable group={roles[selectedGroupIndex].group} />
+      <GroupTable group={groups[selectedGroupIndex]} />
     </>
   );
+}
+
+export default function GroupsManager({ loggedInUserId }) {
+  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
+    loggedInUserId,
+    'groupName', // Sort params
+    { isActive: true, isGroupHidden: false, status: 'leader' },
+  ));
+
+  if (!loading && roles.length === 0) return <p>You are not a leader of any groups.</p>;
+  if (loading) return <Loading />;
+  if (error) return <Errored />;
+  return <GroupsManagerForGroups groups={roles.map((role) => role.group)} />;
 }
