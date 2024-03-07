@@ -316,7 +316,7 @@ class CompetitionsController < ApplicationController
 
     # Paypal setup URL
     # TODO: Don't generate this URL if there is already a connected paypal account?
-    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled?
+    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
   end
 
   def paypal_return
