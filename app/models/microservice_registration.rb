@@ -4,6 +4,9 @@ class MicroserviceRegistration < ApplicationRecord
   belongs_to :competition, inverse_of: :microservice_registrations
   belongs_to :user, inverse_of: :microservice_registrations
 
+  has_many :assignments, as: :registration
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+
   delegate :name, :email, to: :user
 
   attr_accessor :ms_registration

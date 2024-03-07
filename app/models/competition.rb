@@ -1773,13 +1773,15 @@ class Competition < ApplicationRecord
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
-      :events,
       { assignments: [:schedule_activity] },
       { user: {
         person: [:ranksSingle, :ranksAverage],
       } },
       :wcif_extensions,
     ]
+    # V2 registrations store the event IDs in the microservice data, not in the monolith
+    includes_associations << :events unless self.uses_new_registration_service?
+
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
     # should appear in the WCIF.
