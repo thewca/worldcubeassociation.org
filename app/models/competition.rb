@@ -1517,7 +1517,7 @@ class Competition < ApplicationRecord
       if sort_by == recommended_format.sort_by
         sort_by_second = recommended_format.sort_by_second
       elsif sort_by == recommended_format.sort_by_second
-        sort_by_second = event.recommended_format.sort_by
+        sort_by_second = recommended_format.sort_by
       else
         raise "Unknown 'sort_by' in psych sheet computation: #{sort_by}"
       end
