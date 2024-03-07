@@ -185,7 +185,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     # Temporary hack to support the old system roles, will be removed once all roles are
     # migrated to the new system.
     if group_type == UserGroup.group_types[:delegate_regions]
-      roles.concat(User.delegates.includes(:actually_delegated_competitions).map(&:delegate_role))
+      roles.concat(User.delegates.with_delegate_data.map(&:delegate_role))
     elsif group_type == UserGroup.group_types[:councils]
       Team.all_councils.each do |council|
         leader = council.leader

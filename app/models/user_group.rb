@@ -15,7 +15,7 @@ class UserGroup < ApplicationRecord
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
-  has_many :delegate_users, -> { delegates.includes(:actually_delegated_competitions) }, class_name: "User", foreign_key: "region_id"
+  has_many :delegate_users, -> { delegates.with_delegate_data }, class_name: "User", foreign_key: "region_id"
 
   scope :root_groups, -> { where(parent_group: nil) }
 
