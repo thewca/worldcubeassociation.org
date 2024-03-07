@@ -124,7 +124,13 @@ class UserGroup < ApplicationRecord
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
-    self.lead_role&.user
+    if self.group_type == UserGroup.group_types[:delegate_regions]
+      if self.parent_group_id.nil?
+        UserRole.where(group_id: self.id).select { |role| role.is_active? }.find { |role| role.is_lead? }&.user
+      else
+        self.lead_role&.user
+      end
+    end
   end
 
   # Unique status means that there can only be one active user with this status in the group.
