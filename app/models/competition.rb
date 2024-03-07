@@ -311,8 +311,9 @@ class Competition < ApplicationRecord
     end
   end
 
+  attr_accessor :closing_full_registration
   private def should_validate_registration_closing?
-    confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?)
+    confirmed_or_visible? && (will_save_change_to_registration_close? || will_save_change_to_confirmed_at?) && !closing_full_registration
   end
 
   # Same comment as for start_date_must_be_28_days_in_advance

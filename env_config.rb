@@ -44,9 +44,14 @@ EnvConfig = SuperConfig.new do
 
     # Local-specific stuff
     optional :ENABLE_BULLET, :bool, false
-    optional :SKIP_PRETEST_SETUP, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
     optional :SKIP_PAYPAL_AUTH, :bool, false
+  end
+
+  if Rails.env.test?
+    optional :DISABLE_WEBMOCK, :bool, false
+    optional :DISABLE_NET_CONNECT_IN_TESTS, :bool, false
+    optional :SKIP_PRETEST_SETUP, :bool, false
   end
 
   # Set WCA_LIVE_SITE to enable Google Analytics

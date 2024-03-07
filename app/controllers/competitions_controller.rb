@@ -841,7 +841,12 @@ class CompetitionsController < ApplicationController
     competition = competition_from_params
 
     if competition.orga_can_close_reg_full_limit?
-      competition.update!(registration_close: Time.now)
+      competition.update!(
+        # kill switch to stop a validation that disallows "now or past" closing dates
+        closing_full_registration: true,
+        registration_close: Time.now,
+      )
+
       render json: { status: "ok", message: t('competitions.messages.orga_closed_reg_success') }
     else
       render json: { error: t('competitions.messages.orga_closed_reg_failure') }, status: :bad_request

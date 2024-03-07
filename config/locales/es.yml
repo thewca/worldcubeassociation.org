@@ -1555,7 +1555,7 @@ es:
           scopes_html: >-
             Separa los ámbitos con espacios. Deja en blanco para usar los
             ámbitos por omisión. Consulta <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L2-L9"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L2-L9"
             target="_blank">here</a> la lista de ámbitos soportados.
       scopes:
         #original_hash: 1920e95

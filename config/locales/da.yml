@@ -1371,7 +1371,7 @@ da:
           scopes_html: >-
             Opdel scopes med mellemrum. Lad den være tom for at bruge standard
             scopes. Se <a
-            href="https://github.com/thewca/worldcubeassociation.org/blob/master/config/initializers/doorkeeper.rb#L4-L10"
+            href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
             target="_blank">her</a> for en liste af brugte scopes.
       scopes:
         #original_hash: 1920e95
