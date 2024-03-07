@@ -36,6 +36,9 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def competing_status
+    # Treat non-competing registrations as accepted, see also `registration.rb`
+    return "accepted" if self.non_competing_dummy?
+
     self.read_ms_data :competing_status
   end
 
@@ -43,22 +46,34 @@ class MicroserviceRegistration < ApplicationRecord
   alias :wcif_status :competing_status
 
   def event_ids
+    return [] if self.non_competing_dummy?
+
     self.read_ms_data :event_ids
   end
 
   def roles
+    return [] if self.non_competing_dummy?
+
     self.read_ms_data :roles
   end
 
   def guests
+    return 0 if self.non_competing_dummy?
+
     self.read_ms_data :guests
   end
 
   def comments
+    # TODO: Better return nil here? -> Check WCIF spec!
+    return '' if self.non_competing_dummy?
+
     self.read_ms_data :comments
   end
 
   def administrative_notes
+    # TODO: Better return nil here? -> Check WCIF spec!
+    return '' if self.non_competing_dummy?
+
     self.read_ms_data :administrative_notes
   end
 
@@ -71,8 +86,7 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def is_competing?
-    # TODO: Is there a better way to determine this?
-    !self.event_ids.empty?
+    !self.non_competing_dummy?
   end
 
   def to_wcif(authorized: false)
@@ -90,7 +104,11 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def self.create_non_competing(competition, user_id)
-    nil # TODO: stub
+    self.create(
+      competition: competition,
+      user_id: user_id,
+      non_competing_dummy: true,
+    )
   end
 
   def update_roles(new_roles)

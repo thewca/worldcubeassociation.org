@@ -239,8 +239,6 @@ class Registration < ApplicationRecord
     self.create(
       competition: competition,
       user_id: user_id,
-      created_at: DateTime.now,
-      updated_at: DateTime.now,
       is_competing: false,
     )
   end
