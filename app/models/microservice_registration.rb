@@ -10,16 +10,19 @@ class MicroserviceRegistration < ApplicationRecord
   delegate :name, :email, to: :user
 
   attr_accessor :ms_registration
-  attr_writer :competing_status, :event_ids
+  attr_writer :competing_status, :event_ids, :guests, :comments, :administrative_notes
 
   def load_ms_model(ms_model)
     self.ms_registration = ms_model
 
     self.competing_status = ms_model['competing_status']
+    self.guests = ms_model['guests']
 
-    self.event_ids = ms_model['lanes']&.find do |lane|
-      lane['lane_name'] == 'competing'
-    end&.dig('lane_details', 'event_details')&.pluck('event_id')
+    competing_lane = ms_model['lanes']&.find { |lane| lane['lane_name'] == 'competing' }
+
+    self.event_ids = competing_lane&.dig('lane_details', 'event_details')&.pluck('event_id')
+    self.comments = competing_lane&.dig('lane_details', 'comment')
+    self.administrative_notes = competing_lane&.dig('lane_details', 'admin_comment')
   end
 
   def ms_loaded?
@@ -37,9 +40,26 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   alias :status :competing_status
+  alias :wcif_status :competing_status
 
   def event_ids
     self.read_ms_data :event_ids
+  end
+
+  def roles
+    self.read_ms_data :roles
+  end
+
+  def guests
+    self.read_ms_data :guests
+  end
+
+  def comments
+    self.read_ms_data :comments
+  end
+
+  def administrative_notes
+    self.read_ms_data :administrative_notes
   end
 
   def accepted?
@@ -48,5 +68,24 @@ class MicroserviceRegistration < ApplicationRecord
 
   def deleted?
     self.status == "cancelled"
+  end
+
+  def is_competing?
+    # TODO: Is there a better way to determine this?
+    !self.event_ids.empty?
+  end
+
+  def to_wcif(authorized: false)
+    authorized_fields = {
+      "guests" => guests,
+      "comments" => comments || '',
+      "administrativeNotes" => administrative_notes || '',
+    }
+    {
+      "wcaRegistrationId" => id,
+      "eventIds" => event_ids.sort,
+      "status" => wcif_status,
+      "isCompeting" => is_competing?,
+    }.merge(authorized ? authorized_fields : {})
   end
 end
