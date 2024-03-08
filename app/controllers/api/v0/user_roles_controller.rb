@@ -2,12 +2,6 @@
 
 class Api::V0::UserRolesController < Api::V0::ApiController
   include SortHelper
-  before_action :current_user_is_authorized_for_action!, only: [:update, :destroy]
-  private def current_user_is_authorized_for_action!
-    unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
-      render json: {}, status: 401
-    end
-  end
 
   STATUS_SORTING_ORDER = {
     UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
@@ -383,14 +377,18 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       region_id = params.require(:regionId)
       location = params.require(:location)
 
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, region_id)
+
       user = User.find(user_id)
       user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
       send_role_change_notification(user)
 
-      render json: {
+      return render json: {
         success: true,
       }
-    elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
+    end
+
+    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(id)
       unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
@@ -401,22 +399,27 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       team_member = TeamMember.find_by!(id: team_member_id)
       team = team_member.team
       status = params.require(:status)
+
+      return head :unauthorized unless current_user.can_edit_team?(team.id)
+
       team_member.update!(end_date: Time.now)
       TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-      render json: {
+      return render json: {
         success: true,
       }
+    end
+
+    role = UserRole.find(id)
+    group_type = role.group.group_type
+
+    if group_type == UserGroup.group_types[:delegate_probation]
+      return head :unauthorized unless current_user.can_manage_delegate_probation?
+      end_date = params.require(:endDate)
+      role.update!(end_date: Date.safe_parse(end_date))
+      RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
+      render json: { success: true }
     else
-      role = UserRole.find(id)
-      group_type = role.group.group_type
-      if group_type == UserGroup.group_types[:delegate_probation]
-        end_date = params.require(:endDate)
-        role.update!(end_date: Date.safe_parse(end_date))
-        RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
-        render json: { success: true }
-      else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-      end
+      render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
   end
 
@@ -425,38 +428,46 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if id == UserRole::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
-
       user = User.find(user_id)
-      end_delegate_role_for_user(user)
 
-      render json: {
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+
+      end_delegate_role_for_user(user)
+      return render json: {
         success: true,
       }
-    elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
+    end
+
+    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       team_member_id = id.split("_").last
       group_type = group_id_of_old_system_to_group_type(id)
       team_member = TeamMember.find_by(id: team_member_id)
+
       unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
         return
       end
+      return head :unauthorized unless current_user.can_edit_team?(team_member.team.id)
+
       if team_member.present?
         team_member.update!(end_date: Date.today)
-        render json: {
+        return render json: {
           success: true,
         }
       else
-        render status: :unprocessable_entity, json: { error: "Invalid member" }
+        return render status: :unprocessable_entity, json: { error: "Invalid member" }
       end
-    else
-      role = UserRole.find(id)
-      role.update!(end_date: Date.today)
-      RoleChangeMailer.notify_role_end(role, current_user).deliver_later
-      render json: {
-        success: true,
-      }
     end
+
+    role = UserRole.find(id)
+
+    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+    role.update!(end_date: Date.today)
+    RoleChangeMailer.notify_role_end(role, current_user).deliver_later
+    render json: {
+      success: true,
+    }
   end
 
   private def send_role_change_notification(user)

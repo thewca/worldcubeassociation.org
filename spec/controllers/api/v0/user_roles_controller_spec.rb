@@ -4,10 +4,8 @@ require 'rails_helper'
 
 RSpec.describe Api::V0::UserRolesController do
   describe 'GET #list' do
-    let!(:africa_region) { FactoryBot.create(:africa_region) }
-    let!(:user_who_makes_the_change) { FactoryBot.create(:senior_delegate_role).user }
     let!(:user_senior_delegate_role) { FactoryBot.create(:senior_delegate_role) }
-    let!(:user_whose_delegate_status_changes) { FactoryBot.create(:candidate_delegate, region_id: africa_region.id, location: 'Australia') }
+    let!(:user_whose_delegate_status_changes) { FactoryBot.create(:candidate_delegate, region_id: user_senior_delegate_role.group.id, location: 'Australia') }
     let!(:delegate) { FactoryBot.create :delegate, region_id: user_senior_delegate_role.group.id }
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
     let!(:user_who_claims_wca_id) do
@@ -22,7 +20,7 @@ RSpec.describe Api::V0::UserRolesController do
 
     context 'when user is logged in and changing role data' do
       before do
-        allow(controller).to receive(:current_user) { user_who_makes_the_change }
+        allow(controller).to receive(:current_user) { user_senior_delegate_role.user }
       end
 
       it 'fetches list of roles of a user' do
@@ -31,7 +29,7 @@ RSpec.describe Api::V0::UserRolesController do
         expect(response.body).to eq([{
           end_date: nil,
           is_active: true,
-          group: africa_region,
+          group: user_senior_delegate_role.group,
           user: user_whose_delegate_status_changes,
           is_lead: false,
           metadata: {
@@ -49,19 +47,19 @@ RSpec.describe Api::V0::UserRolesController do
         parsed_body = JSON.parse(response.body)
 
         expect(parsed_body["roleData"]["delegateStatus"]).to eq "candidate_delegate"
-        expect(parsed_body["roleData"]["regionId"]).to eq africa_region.id
+        expect(parsed_body["roleData"]["regionId"]).to eq user_senior_delegate_role.group.id
       end
 
       it 'update delegate status' do
         expect(DelegateStatusChangeMailer).to receive(:notify_board_and_assistants_of_delegate_status_change).with(
           user_whose_delegate_status_changes,
-          user_who_makes_the_change,
+          user_senior_delegate_role.user,
           user_senior_delegate_role.user,
           "candidate_delegate",
           "delegate",
         ).and_call_original
         expect do
-          patch :update, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate_role.group.id, location: "location" }
+          patch :update, params: { id: UserRole::DELEGATE_ROLE_ID, userId: user_whose_delegate_status_changes.id, delegateStatus: "delegate", regionId: user_senior_delegate_role.group.id, location: "location" }, as: :json
         end.to change { enqueued_jobs.size }.by(1)
 
         parsed_body = JSON.parse(response.body)
