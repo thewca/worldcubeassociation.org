@@ -1741,6 +1741,14 @@ class Competition < ApplicationRecord
       "schedule" => schedule_wcif,
       "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
       "extensions" => wcif_extensions.map(&:to_wcif),
+      "registrationInfo" => {
+        "openTime" => registration_open&.iso8601,
+        "closeTime" => registration_close&.iso8601,
+        "baseEntryFee" => base_entry_fee_lowest_denomination,
+        "currencyCode" => currency_code,
+        "onTheSpotRegistration" => on_the_spot_registration,
+        "useWcaRegistration" => use_wca_registration,
+      },
     }
   end
 
@@ -2025,6 +2033,17 @@ class Competition < ApplicationRecord
         },
         "competitorLimit" => { "type" => ["integer", "null"] },
         "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        "registrationInfo" => {
+          "type" => "object",
+          "properties" => {
+            "openTime" => { "type" => "string" },
+            "closeTime" => { "type" => "string" },
+            "baseEntryFee" => { "type" => "integer" },
+            "currencyCode" => { "type" => "string" },
+            "onTheSpotRegistration" => { "type" => "boolean" },
+            "useWcaRegistration" => { "type" => "boolean" },
+          },
+        },
       },
     }
   end

@@ -262,6 +262,14 @@ RSpec.describe "Competition WCIF" do
         },
         "competitorLimit" => 50,
         "extensions" => [],
+        "registrationInfo" => {
+          "openTime" => "2013-12-01T00:00:00Z",
+          "closeTime" => "2013-12-31T00:00:00Z",
+          "baseEntryFee" => 1000,
+          "currencyCode" => "USD",
+          "onTheSpotRegistration" => false,
+          "useWcaRegistration" => false,
+        },
       )
     end
 
