@@ -19,7 +19,7 @@ RSpec.describe PaypalRecord do
     it 'returns JPY unchanged' do
       ruby_amount = "3000"
       currency_code = "JPY"
-      expect(PaypalRecord.paypal_amount(ruby_amount, currency_code)).to eq("3000")
+      expect(PaypalRecord.paypal_amount(ruby_amount, currency_code)).to eq(3000)
     end
   end
 end

@@ -42,11 +42,12 @@ class PaypalRecord < ApplicationRecord
     ],
   }.freeze
 
+  # Paypal expects a decimal value in the format of a string, so we return a string from this function
   def self.paypal_amount(amount, currency_code)
     if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
-      format("%.2f", amount.to_i / 100.0)
+      format("%.2f", amount.to_i / 100.0).to_s
     else
-      amount.to_i
+      amount.to_s
     end
   end
 
