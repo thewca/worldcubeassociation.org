@@ -169,8 +169,8 @@ export default function GroupsManager({ loggedInUserId }) {
     { isActive: true, isGroupHidden: false, status: 'leader' },
   ));
 
-  if (!loading && roles.length === 0) return <p>You are not a leader of any groups.</p>;
   if (loading) return <Loading />;
   if (error) return <Errored />;
+  if (roles.length === 0) return <p>You are not a leader of any groups.</p>;
   return <GroupsManagerForGroups groups={roles.map((role) => role.group)} />;
 }

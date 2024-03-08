@@ -47,7 +47,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     end
 
     # Temporary hack to support old system teams/committees.
-    if group_type == "teams_committees"
+    if group_type == UserGroup.group_types[:teams_committees]
       Team.all_official.each do |team_committee|
         groups << {
           id: group_type + "_" + team_committee.id.to_s,
