@@ -17,9 +17,9 @@ export const ALL_REGIONS = {
 
 function SeniorDelegate({ seniorDelegate }) {
   return (
-    <>
-      <Grid.Row only="computer">
-        <Segment raised>
+    <Grid padded centered>
+      <Grid.Row>
+        <Segment raised compact textAlign="center">
           <Label ribbon>
             {I18n.t('enums.user.delegate_status.senior_delegate')}
           </Label>
@@ -34,9 +34,7 @@ function SeniorDelegate({ seniorDelegate }) {
           )}
         </Segment>
       </Grid.Row>
-      { /* TODO: Fix Senior Delegate ribbon CSS for tablet and mobile view,
-           and enable the 'senior delegate' component for all devices */ }
-    </>
+    </Grid>
 
   );
 }
@@ -69,16 +67,14 @@ export default function DelegatesOfRegion({ activeRegion, delegateSubregions, is
   return (
     <>
       {!isAllRegions && <SeniorDelegate seniorDelegate={getSeniorDelegate()} />}
-      <Grid.Row style={{ overflowX: 'scroll' }}>
-        <DelegatesTable
-          delegates={nonSeniorDelegates}
-          isAdminMode={isAdminMode}
-          isAllRegions={isAllRegions}
-        />
-        {delegateSubregions.map((subregion) => (
-          <DelegatesOfSubregion subregion={subregion} isAdminMode={isAdminMode} />
-        ))}
-      </Grid.Row>
+      <DelegatesTable
+        delegates={nonSeniorDelegates}
+        isAdminMode={isAdminMode}
+        isAllRegions={isAllRegions}
+      />
+      {delegateSubregions.map((subregion) => (
+        <DelegatesOfSubregion subregion={subregion} isAdminMode={isAdminMode} />
+      ))}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Button, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import cn from 'classnames';
@@ -20,45 +20,48 @@ const dateSince = (date) => {
 };
 
 export default function DelegatesTable({ delegates, isAdminMode, isAllRegions }) {
-  return (
-    <Table className="delegates-table" unstackable>
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell collapsing />
-          <Table.HeaderCell>
-            {I18n.t('delegates_page.table.name')}
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            {I18n.t('delegates_page.table.role')}
-          </Table.HeaderCell>
-          <Table.HeaderCell>
-            {I18n.t('delegates_page.table.region')}
-          </Table.HeaderCell>
-          {isAllRegions && (
-            <>
-              <Table.HeaderCell>
-                {I18n.t('delegates_page.table.first_delegated')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {I18n.t('delegates_page.table.last_delegated')}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                Date Since Last Delegated
-                {/* No i18n because this is only visible to admins */}
-              </Table.HeaderCell>
-              <Table.HeaderCell>
-                {I18n.t('delegates_page.table.total_delegated')}
-              </Table.HeaderCell>
-              <Table.HeaderCell />
-            </>
-          )}
-        </Table.Row>
-      </Table.Header>
+  const tableData = useMemo(() => delegates.filter(
+    (delegate) => delegate.metadata.status !== 'trainee_delegate' || isAdminMode,
+  ), [delegates, isAdminMode]);
 
-      <Table.Body>
-        {delegates
-          .filter((delegate) => delegate.metadata.status !== 'trainee_delegate' || isAdminMode)
-          .map((delegate) => (
+  return (
+    <div style={{ overflowX: 'scroll' }}>
+      <Table unstackable>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell collapsing />
+            <Table.HeaderCell>
+              {I18n.t('delegates_page.table.name')}
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              {I18n.t('delegates_page.table.role')}
+            </Table.HeaderCell>
+            <Table.HeaderCell>
+              {I18n.t('delegates_page.table.region')}
+            </Table.HeaderCell>
+            {isAllRegions && (
+              <>
+                <Table.HeaderCell>
+                  {I18n.t('delegates_page.table.first_delegated')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {I18n.t('delegates_page.table.last_delegated')}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  Date Since Last Delegated
+                  {/* No i18n because this is only visible to admins */}
+                </Table.HeaderCell>
+                <Table.HeaderCell>
+                  {I18n.t('delegates_page.table.total_delegated')}
+                </Table.HeaderCell>
+                <Table.HeaderCell />
+              </>
+            )}
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {tableData.map((delegate) => (
             <Table.Row
               className={cn(`${dasherize(delegate.metadata.status)}`)}
               key={delegate.user.id}
@@ -101,7 +104,8 @@ export default function DelegatesTable({ delegates, isAdminMode, isAllRegions })
               )}
             </Table.Row>
           ))}
-      </Table.Body>
-    </Table>
+        </Table.Body>
+      </Table>
+    </div>
   );
 }

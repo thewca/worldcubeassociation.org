@@ -102,55 +102,61 @@ export default function Delegates() {
           onChange={(__, { checked }) => setToggleAdmin(checked)}
         />
       )}
-      <Grid>
-        <Grid.Column only="computer" computer={4}>
-          <Header>{I18n.t('delegates_page.regions')}</Header>
-          <Menu vertical fluid>
-            {delegateRegions.map((region) => (
-              <Menu.Item
-                key={region.id}
-                name={region.name}
-                active={region.metadata.friendly_id === hash}
-                onClick={() => setHash(region.metadata.friendly_id)}
-              />
-            ))}
-            {isAdminMode && (
-              <Menu.Item
-                key={ALL_REGIONS.id}
-                name={ALL_REGIONS.name}
-                active={activeRegion === ALL_REGIONS}
-                onClick={() => setHash(ALL_REGIONS.id)}
-              />
-            )}
-          </Menu>
-        </Grid.Column>
-
-        <Grid.Column stretched computer={12} mobile={16} tablet={16}>
-          <Segment>
-            <Grid container centered>
-              <Grid.Row only="computer">
-                <Header>{activeRegion.name}</Header>
-              </Grid.Row>
-              <Grid.Row only="tablet mobile">
-                <Dropdown
-                  inline
-                  options={delegateRegions.map((region) => ({
-                    key: region.id,
-                    text: region.name,
-                    value: region.metadata.friendly_id,
-                  }))}
-                  value={hash}
-                  onChange={(__, { value }) => setHash(value)}
+      <Grid centered>
+        <Grid.Row>
+          <Grid.Column only="computer" computer={4}>
+            <Header>{I18n.t('delegates_page.regions')}</Header>
+            <Menu vertical fluid>
+              {delegateRegions.map((region) => (
+                <Menu.Item
+                  key={region.id}
+                  name={region.name}
+                  active={region.metadata.friendly_id === hash}
+                  onClick={() => setHash(region.metadata.friendly_id)}
                 />
-              </Grid.Row>
-              <DelegatesOfRegion
-                activeRegion={activeRegion}
-                delegateSubregions={delegateSubregions[activeRegion.id] || []}
-                isAdminMode={isAdminMode}
-              />
-            </Grid>
-          </Segment>
-        </Grid.Column>
+              ))}
+              {isAdminMode && (
+                <Menu.Item
+                  key={ALL_REGIONS.id}
+                  name={ALL_REGIONS.name}
+                  active={activeRegion === ALL_REGIONS}
+                  onClick={() => setHash(ALL_REGIONS.id)}
+                />
+              )}
+            </Menu>
+          </Grid.Column>
+
+          <Grid.Column computer={12} mobile={16} tablet={16}>
+            <Segment>
+              <Grid centered>
+                <Grid.Row only="computer">
+                  <Header>{activeRegion.name}</Header>
+                </Grid.Row>
+                <Grid.Row only="tablet mobile">
+                  <Dropdown
+                    inline
+                    options={delegateRegions.map((region) => ({
+                      key: region.id,
+                      text: region.name,
+                      value: region.metadata.friendly_id,
+                    }))}
+                    value={hash}
+                    onChange={(__, { value }) => setHash(value)}
+                  />
+                </Grid.Row>
+                <Grid.Row>
+                  <Grid.Column>
+                    <DelegatesOfRegion
+                      activeRegion={activeRegion}
+                      delegateSubregions={delegateSubregions[activeRegion.id] || []}
+                      isAdminMode={isAdminMode}
+                    />
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+            </Segment>
+          </Grid.Column>
+        </Grid.Row>
       </Grid>
     </Container>
   );
