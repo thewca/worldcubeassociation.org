@@ -7,12 +7,12 @@ class MicroserviceRegistration < ApplicationRecord
   delegate :name, :email, to: :user
 
   attr_accessor :ms_registration
-  attr_writer :status, :event_ids
+  attr_writer :competing_status, :event_ids
 
   def load_ms_model(ms_model)
     self.ms_registration = ms_model
 
-    self.status = ms_model['status']
+    self.competing_status = ms_model['competing_status']
 
     self.event_ids = ms_model['lanes']&.find do |lane|
       lane['lane_name'] == 'competing'
@@ -29,9 +29,11 @@ class MicroserviceRegistration < ApplicationRecord
     end
   end
 
-  def status
-    self.read_ms_data :status
+  def competing_status
+    self.read_ms_data :competing_status
   end
+
+  alias :status :competing_status
 
   def event_ids
     self.read_ms_data :event_ids
@@ -42,6 +44,6 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def deleted?
-    self.status == "deleted"
+    self.status == "cancelled"
   end
 end
