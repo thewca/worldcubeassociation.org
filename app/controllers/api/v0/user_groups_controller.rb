@@ -46,6 +46,19 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
       end
     end
 
+    # Temporary hack to support old system teams/committees.
+    if group_type == UserGroup.group_types[:teams_committees]
+      Team.all_official.each do |team_committee|
+        groups << {
+          id: group_type + "_" + team_committee.id.to_s,
+          name: team_committee.name,
+          group_type: UserGroup.group_types[:team_committee],
+          is_hidden: false,
+          is_active: true,
+        }
+      end
+    end
+
     # Filters the list of groups based on the permissions of the current user.
     groups = filter_groups_for_logged_in_user(groups)
 
