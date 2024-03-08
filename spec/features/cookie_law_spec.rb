@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.feature "cookie law" do
-  context "not signed in" do
-    scenario "remembers acknowledgement", js: true do
+RSpec.feature 'cookie law' do
+  context 'not signed in' do
+    scenario 'remembers acknowledgement', js: true do
       # Visit the homepage and accept the cookie warning.
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
@@ -22,13 +22,13 @@ RSpec.feature "cookie law" do
     end
   end
 
-  context "signed in" do
+  context 'signed in' do
     let!(:admin) { FactoryBot.create(:admin, cookies_acknowledged: false) }
     background do
       sign_in admin
     end
 
-    scenario "remembers acknowledgement without cookies", js: true do
+    scenario 'remembers acknowledgement without cookies', js: true do
       visit_homepage_and_wait_for_load
       acknowledge_cookie_banner
 
@@ -49,6 +49,6 @@ end
 
 def visit_homepage_and_wait_for_load
   # Go to the homepage and wait for something to show up.
-  visit "/"
-  expect(page).to have_selector("footer")
+  visit '/'
+  expect(page).to have_selector('footer')
 end

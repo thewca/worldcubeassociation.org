@@ -18,7 +18,7 @@ namespace :db do
       # There is a bug in RuboCop which wants to move the "rescue" to align with "ActiveRecord" at the beginning of the line
       # Haven't found a workaround yet other than upgrading, which we cannot do because of our old infrastructure
       ActiveRecord::Base.subclasses
-                        .reject { |type| type.to_s.include?('::') || type.to_s == "WiceGridSerializedQuery" }
+                        .reject { |type| type.to_s.include?('::') || type.to_s == 'WiceGridSerializedQuery' }
                         .each do |type|
         type.find_each do |record|
           unless record.valid?
@@ -51,18 +51,18 @@ namespace :db do
     desc 'Download and import the publicly accessible database dump from the production server'
     task development: :environment do
       if EnvConfig.WCA_LIVE_SITE?
-        abort "This actions is disabled for the production server!"
+        abort 'This actions is disabled for the production server!'
       end
 
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
           dev_db_dump_url = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
-          local_file = "./dump.zip"
+          local_file = './dump.zip'
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
-            system("curl -o #{local_file} #{dev_db_dump_url}") || raise("Error while running `curl`")
+            system("curl -o #{local_file} #{dev_db_dump_url}") || raise('Error while running `curl`')
           end
-          LogTask.log_task("Unzipping dump.zip") do
-            system("unzip #{local_file} ") || raise("Error while running `unzip`")
+          LogTask.log_task('Unzipping dump.zip') do
+            system("unzip #{local_file} ") || raise('Error while running `unzip`')
           end
 
           config = ActiveRecord::Base.connection_db_config
@@ -85,14 +85,14 @@ namespace :db do
 
           # Create an OAuth application so people can easily play around with OAuth on staging.
           Doorkeeper::Application.create!(
-            name: "Example Application for staging",
-            uid: "example-application-id",
-            secret: "example-secret",
-            redirect_uri: "urn:ietf:wg:oauth:2.0:oob",
+            name: 'Example Application for staging',
+            uid: 'example-application-id',
+            secret: 'example-secret',
+            redirect_uri: 'urn:ietf:wg:oauth:2.0:oob',
             dangerously_allow_any_redirect_uri: true,
             scopes: Doorkeeper.configuration.scopes.to_s,
-            owner_id: User.find_by_wca_id!("2005FLEI01").id,
-            owner_type: "User",
+            owner_id: User.find_by_wca_id!('2005FLEI01').id,
+            owner_type: 'User',
           )
         end
       end

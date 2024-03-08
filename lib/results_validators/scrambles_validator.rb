@@ -2,17 +2,17 @@
 
 module ResultsValidators
   class ScramblesValidator < GenericValidator
-    MISSING_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Missing scrambles. Use Scrambles Matcher to add the correct scrambles to the round."
-    MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = "Missing scrambles for the competition. Use Scrambles Matcher to add scrambles."
-    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = "[%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the unused scrambles."
-    MISSING_SCRAMBLES_FOR_GROUP_ERROR = "[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}."
-    MISSING_SCRAMBLES_FOR_MULTI_ERROR = "[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts."
-    MULTIPLE_FMC_GROUPS_WARNING = "[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused " \
-                                  "scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used."
-    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = "[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. " \
-                                          "Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used."
+    MISSING_SCRAMBLES_FOR_ROUND_ERROR = '[%{round_id}] Missing scrambles. Use Scrambles Matcher to add the correct scrambles to the round.'
+    MISSING_SCRAMBLES_FOR_COMPETITION_ERROR = 'Missing scrambles for the competition. Use Scrambles Matcher to add scrambles.'
+    UNEXPECTED_SCRAMBLES_FOR_ROUND_ERROR = '[%{round_id}] Too many scrambles. Use Scrambles Matcher to uncheck the unused scrambles.'
+    MISSING_SCRAMBLES_FOR_GROUP_ERROR = '[%{round_id}] Group %{group_id}: missing scrambles, detected only %{actual} instead of %{expected}.'
+    MISSING_SCRAMBLES_FOR_MULTI_ERROR = '[%{round_id}] While you may have multiple groups in 3x3x3 Multi-Blind, at least one of the groups must contain scrambles for all attempts.'
+    MULTIPLE_FMC_GROUPS_WARNING = '[%{round_id}] There are multiple groups of FMC used. If one group of FMC was used, please use the Scrambles Matcher to uncheck the unused ' \
+                                  'scrambles. Otherwise, please include a comment to WRT explaining why multiple groups of FMC were used.'
+    WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR = '[%{round_id}] This round has a different number of scramble sets than specified on the Manage Events tab. ' \
+                                          'Please adjust the number of scramble sets in the Manage Events tab to the number of sets that were used.'
 
-    @desc = "This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format."
+    @desc = 'This validator checks that all results have matching scrambles, and if possible, checks that the scrambles have the correct number of attempts compared to the expected round format.'
 
     def self.has_automated_fix?
       false
@@ -86,12 +86,12 @@ module ResultsValidators
                                                     WRONG_NUMBER_OF_SCRAMBLE_SETS_ERROR,
                                                     round_id: round_id)
           end
-          if round_id.start_with?("333fm") && scrambles_by_group_id.size > 1
+          if round_id.start_with?('333fm') && scrambles_by_group_id.size > 1
             @warnings << ValidationWarning.new(:scrambles, competition.id,
                                                MULTIPLE_FMC_GROUPS_WARNING,
                                                round_id: round_id)
           end
-          if round_id.start_with?("333mbf")
+          if round_id.start_with?('333mbf')
             unless errors_for_round.size < scrambles_by_group_id.keys.size
               @errors << ValidationError.new(:scrambles, competition.id,
                                              MISSING_SCRAMBLES_FOR_MULTI_ERROR,

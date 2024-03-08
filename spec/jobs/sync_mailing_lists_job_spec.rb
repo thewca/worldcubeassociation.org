@@ -3,16 +3,16 @@
 require 'rails_helper'
 
 RSpec.describe SyncMailingListsJob, type: :job do
-  it "syncs mailing lists" do
+  it 'syncs mailing lists' do
     # Regions
     africa_region = FactoryBot.create :africa_region
-    africa_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.africa@worldcubeassociation.org"))
+    africa_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: 'delegates.africa@worldcubeassociation.org'))
     asia_region = FactoryBot.create :asia_region
-    asia_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.asia@worldcubeassociation.org"))
+    asia_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: 'delegates.asia@worldcubeassociation.org'))
     europe_region = FactoryBot.create :europe_region
-    europe_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.europe@worldcubeassociation.org"))
+    europe_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: 'delegates.europe@worldcubeassociation.org'))
     north_america_region = FactoryBot.create :north_america_region
-    north_america_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: "delegates.north-america@worldcubeassociation.org"))
+    north_america_region.update!(metadata: FactoryBot.create(:groups_metadata_delegate_regions, email: 'delegates.north-america@worldcubeassociation.org'))
 
     # Senior delegates
     africa_senior_delegate = FactoryBot.create :senior_delegate_role, group: africa_region
@@ -51,7 +51,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates@worldcubeassociation.org",
+      'delegates@worldcubeassociation.org',
       a_collection_containing_exactly(
         africa_senior_delegate.user.email, africa_delegate_1.email, africa_delegate_2.email, africa_delegate_3.email,
         asia_senior_delegate.user.email, asia_delegate_1.email, asia_delegate_2.email, asia_delegate_3.email,
@@ -61,7 +61,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     )
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "trainees@worldcubeassociation.org",
+      'trainees@worldcubeassociation.org',
       a_collection_containing_exactly(
         africa_delegate_4.email, asia_delegate_4.email, europe_delegate_4.email, north_america_delegate_4.email
       ),
@@ -69,7 +69,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
     # seniors@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "seniors@worldcubeassociation.org",
+      'seniors@worldcubeassociation.org',
       a_collection_containing_exactly(
         africa_senior_delegate.user.email, asia_senior_delegate.user.email, europe_senior_delegate.user.email, north_america_senior_delegate.user.email
       ),
@@ -100,110 +100,110 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wat_member = FactoryBot.create :user, :wat_member, team_leader: false
     wat_leader = FactoryBot.create :user, :wat_member, team_leader: true
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "leaders@worldcubeassociation.org",
+      'leaders@worldcubeassociation.org',
       a_collection_containing_exactly(wrt_leader.email, wdc_leader.email, wfc_leader.email, wsot_leader.email, wat_leader.email),
     )
 
     # board@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "board@worldcubeassociation.org",
+      'board@worldcubeassociation.org',
       a_collection_containing_exactly(board_member.email),
     )
 
     # communication@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "communication@worldcubeassociation.org",
+      'communication@worldcubeassociation.org',
       a_collection_containing_exactly(wct_member.email),
     )
 
     # communication-china@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "communication-china@worldcubeassociation.org",
+      'communication-china@worldcubeassociation.org',
       a_collection_containing_exactly(wct_china_member.email),
     )
 
     # competitions@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "competitions@worldcubeassociation.org",
+      'competitions@worldcubeassociation.org',
       a_collection_containing_exactly(wcat_member.email),
     )
 
     # disciplinary@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "disciplinary@worldcubeassociation.org",
+      'disciplinary@worldcubeassociation.org',
       a_collection_containing_exactly(wdc_leader.email, wdc_member.email),
     )
 
     # ethics@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "ethics@worldcubeassociation.org",
+      'ethics@worldcubeassociation.org',
       a_collection_containing_exactly(wec_member.email),
     )
 
     # assistants@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "assistants@worldcubeassociation.org",
+      'assistants@worldcubeassociation.org',
       a_collection_containing_exactly(weat_member.email),
     )
 
     # finance@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "finance@worldcubeassociation.org",
+      'finance@worldcubeassociation.org',
       a_collection_containing_exactly(wfc_member.email, wfc_leader.email),
     )
 
     # treasurer@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "treasurer@worldcubeassociation.org",
+      'treasurer@worldcubeassociation.org',
       a_collection_containing_exactly(wfc_leader.email),
     )
 
     # marketing@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "marketing@worldcubeassociation.org",
+      'marketing@worldcubeassociation.org',
       a_collection_containing_exactly(wmt_member.email),
     )
 
     # quality@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "quality@worldcubeassociation.org",
+      'quality@worldcubeassociation.org',
       a_collection_containing_exactly(wqac_member.email),
     )
 
     # regulations@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "regulations@worldcubeassociation.org",
+      'regulations@worldcubeassociation.org',
       a_collection_containing_exactly(wrc_member.email),
     )
 
     # results@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "results@worldcubeassociation.org",
+      'results@worldcubeassociation.org',
       a_collection_containing_exactly(wrt_leader.email, wrt_member.email),
     )
 
     # software@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "software@worldcubeassociation.org",
+      'software@worldcubeassociation.org',
       a_collection_containing_exactly(wst_member.email),
     )
 
     # software-admin@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "software-admin@worldcubeassociation.org",
+      'software-admin@worldcubeassociation.org',
       a_collection_containing_exactly(wst_admin_member.email),
     )
 
     # translators@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "translators@worldcubeassociation.org",
+      'translators@worldcubeassociation.org',
       a_collection_containing_exactly(translator_1.user.email, translator_2.user.email, translator_3.user.email),
     )
 
     # reports@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "reports@worldcubeassociation.org",
-      a_collection_containing_exactly("seniors@worldcubeassociation.org", "quality@worldcubeassociation.org", "regulations@worldcubeassociation.org",
+      'reports@worldcubeassociation.org',
+      a_collection_containing_exactly('seniors@worldcubeassociation.org', 'quality@worldcubeassociation.org', 'regulations@worldcubeassociation.org',
                                       africa_delegate_3.email, africa_delegate_4.email,
                                       asia_delegate_3.email, asia_delegate_4.email,
                                       europe_delegate_3.email, europe_delegate_4.email,
@@ -213,43 +213,43 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
     # advisory@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "advisory@worldcubeassociation.org",
+      'advisory@worldcubeassociation.org',
       a_collection_containing_exactly(wac_leader.email, wac_member.email),
     )
 
     # sports@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "sports@worldcubeassociation.org",
+      'sports@worldcubeassociation.org',
       a_collection_containing_exactly(wsot_leader.email, wsot_member.email),
     )
 
     # archive@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "archive@worldcubeassociation.org",
+      'archive@worldcubeassociation.org',
       a_collection_containing_exactly(wat_leader.email, wat_member.email),
     )
 
     # delegates.africa@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.africa@worldcubeassociation.org",
+      'delegates.africa@worldcubeassociation.org',
       a_collection_containing_exactly(africa_senior_delegate.user.email, africa_delegate_1.email, africa_delegate_2.email, africa_delegate_3.email, africa_delegate_4.email),
     )
 
     # delegates.asia@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.asia@worldcubeassociation.org",
+      'delegates.asia@worldcubeassociation.org',
       a_collection_containing_exactly(asia_senior_delegate.user.email, asia_delegate_1.email, asia_delegate_2.email, asia_delegate_3.email, asia_delegate_4.email),
     )
 
     # delegates.europe@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.europe@worldcubeassociation.org",
+      'delegates.europe@worldcubeassociation.org',
       a_collection_containing_exactly(europe_senior_delegate.user.email, europe_delegate_1.email, europe_delegate_2.email, europe_delegate_3.email, europe_delegate_4.email),
     )
 
     # delegates.north-america@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "delegates.north-america@worldcubeassociation.org",
+      'delegates.north-america@worldcubeassociation.org',
       a_collection_containing_exactly(north_america_senior_delegate.user.email, north_america_delegate_1.email, north_america_delegate_2.email, north_america_delegate_3.email, north_america_delegate_4.email),
     )
 
@@ -259,8 +259,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
     previously_acknowledged_regional_organization.update(start_date: 2.days.ago, end_date: 1.days.ago)
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
-      "organizations@worldcubeassociation.org",
-      a_collection_containing_exactly("board@worldcubeassociation.org", regional_organization.email),
+      'organizations@worldcubeassociation.org',
+      a_collection_containing_exactly('board@worldcubeassociation.org', regional_organization.email),
     )
 
     SyncMailingListsJob.perform_now

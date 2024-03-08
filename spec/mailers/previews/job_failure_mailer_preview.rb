@@ -5,7 +5,7 @@ class JobFailureMailerPreview < ActionMailer::Preview
   def notify_admin_of_job_failure
     job = JobUtils::WCA_CRONJOBS.sample.new
     begin
-      raise "This is an error!"
+      raise 'This is an error!'
     rescue StandardError => e
       exception = e
     end

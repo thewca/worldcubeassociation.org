@@ -5,7 +5,7 @@ module AdvancementConditions
     alias_method :ranking, :level
 
     def self.wcif_type
-      "ranking"
+      'ranking'
     end
 
     def to_s(round, short: false)

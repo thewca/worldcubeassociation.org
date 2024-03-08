@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-after "development:users" do
+after 'development:users' do
   class << self
     def random_events
       official = Event.official
@@ -29,7 +29,7 @@ after "development:users" do
 
   countries = Country.all
 
-  delegate = User.find_by(delegate_status: "delegate")
+  delegate = User.find_by(delegate_status: 'delegate')
 
   users = User.where.not(wca_id: nil).sample(93)
 
@@ -44,12 +44,12 @@ after "development:users" do
       cellName: "My #{i} Comp With Results #{day.year}",
       cityName: random_city(country),
       countryId: country.id,
-      information: "Information!",
-      start_date: day.strftime("%F"),
-      end_date: day.strftime("%F"),
+      information: 'Information!',
+      start_date: day.strftime('%F'),
+      end_date: day.strftime('%F'),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
-      external_website: "https://www.worldcubeassociation.org",
+      venueAddress: Faker::Address.street_address + ', ' + Faker::Address.city + ' ' + Faker::Address.postcode,
+      external_website: 'https://www.worldcubeassociation.org',
       showAtAll: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
@@ -93,8 +93,8 @@ after "development:users" do
             eventId: event.id,
             roundTypeId: roundTypeId,
             formatId: round_format.id,
-            regionalSingleRecord: k == 0 ? "WR" : nil,
-            regionalAverageRecord: k == 0 ? "WR" : nil,
+            regionalSingleRecord: k == 0 ? 'WR' : nil,
+            regionalAverageRecord: k == 0 ? 'WR' : nil,
           )
           round_format.expected_solve_count.times do |v|
             result.send("value#{v+1}=", random_wca_value)
@@ -122,12 +122,12 @@ after "development:users" do
       cellName: "My #{i} Comp #{day.year}",
       cityName: random_city(country),
       countryId: country.id,
-      information: "Information!",
-      start_date: day.strftime("%F"),
-      end_date: day.strftime("%F"),
+      information: 'Information!',
+      start_date: day.strftime('%F'),
+      end_date: day.strftime('%F'),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
-      external_website: "https://www.worldcubeassociation.org",
+      venueAddress: Faker::Address.street_address + ', ' + Faker::Address.city + ' ' + Faker::Address.postcode,
+      external_website: 'https://www.worldcubeassociation.org',
       showAtAll: true,
       delegates: [delegate],
       organizers: User.all.sample(2),
@@ -145,8 +145,8 @@ after "development:users" do
   users.each_with_index do |user, i|
     RanksAverage.create!(
       personId: user.wca_id,
-      eventId: "333",
-      best: "4242",
+      eventId: '333',
+      best: '4242',
       worldRank: i,
       continentRank: i,
       countryRank: i,
@@ -154,8 +154,8 @@ after "development:users" do
 
     RanksSingle.create!(
       personId: user.wca_id,
-      eventId: "333",
-      best: "2000",
+      eventId: '333',
+      best: '2000',
       worldRank: i,
       continentRank: i,
       countryRank: i,
@@ -175,12 +175,12 @@ after "development:users" do
       cellName: "My #{i+1} Comp #{start_day.year}",
       cityName: random_city(country),
       countryId: country.id,
-      information: "Information!",
-      start_date: start_day.strftime("%F"),
-      end_date: end_day.strftime("%F"),
+      information: 'Information!',
+      start_date: start_day.strftime('%F'),
+      end_date: end_day.strftime('%F'),
       venue: Faker::Address.street_name,
-      venueAddress: Faker::Address.street_address + ", " + Faker::Address.city + " " + Faker::Address.postcode,
-      external_website: "https://www.worldcubeassociation.org",
+      venueAddress: Faker::Address.street_address + ', ' + Faker::Address.city + ' ' + Faker::Address.postcode,
+      external_website: 'https://www.worldcubeassociation.org',
       showAtAll: true,
       delegates: [delegate],
       organizers: User.all.sample(2),

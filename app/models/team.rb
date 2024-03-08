@@ -2,8 +2,8 @@
 
 class Team < ApplicationRecord
   has_many :team_members, dependent: :destroy
-  has_many :current_members, -> { current }, class_name: "TeamMember"
-  has_one :leader, -> { current_leader }, class_name: "TeamMember"
+  has_many :current_members, -> { current }, class_name: 'TeamMember'
+  has_one :leader, -> { current_leader }, class_name: 'TeamMember'
 
   default_scope -> { where(hidden: false) }
   scope :with_hidden, -> { unscope(where: :hidden) }
@@ -238,9 +238,9 @@ class Team < ApplicationRecord
       end
     end
     if team_changes.empty?
-      team_changes.push("There are no changes to show.")
+      team_changes.push('There are no changes to show.')
     end
-    team_changes.join("<br>")
+    team_changes.join('<br>')
   end
 
   # rubocop:disable Metrics/CyclomaticComplexity
@@ -350,12 +350,12 @@ class Team < ApplicationRecord
     if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
       changes_of_last_month.push("<b>Changes in #{self.name}</b>")
       if leader_appointments.count + no_more_leaders.count > 0
-        changes_of_last_month.push("<br><b>Leaders</b>")
+        changes_of_last_month.push('<br><b>Leaders</b>')
         if leader_appointments.count > 0
-          changes_of_last_month.push(leader_appointments.join("<br>"))
+          changes_of_last_month.push(leader_appointments.join('<br>'))
         end
         if no_more_leaders.count > 0
-          changes_of_last_month.push(no_more_leaders.join("<br>"))
+          changes_of_last_month.push(no_more_leaders.join('<br>'))
         end
       end
       if promoted_senior_members.count > 0
@@ -377,7 +377,7 @@ class Team < ApplicationRecord
         changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}")
       end
     end
-    changes_of_last_month.join("<br>")
+    changes_of_last_month.join('<br>')
   end
   # rubocop:enable Metrics/CyclomaticComplexity
   # rubocop:enable Metrics/PerceivedComplexity

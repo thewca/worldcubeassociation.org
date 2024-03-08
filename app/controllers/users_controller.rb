@@ -12,10 +12,10 @@ class UsersController < ApplicationController
   end
 
   def index
-    params[:order] = params[:order] == "asc" ? "asc" : "desc"
+    params[:order] = params[:order] == 'asc' ? 'asc' : 'desc'
 
     unless current_user&.can_view_all_users?
-      flash[:danger] = "You cannot view users"
+      flash[:danger] = 'You cannot view users'
       redirect_to root_url
     end
 
@@ -25,11 +25,11 @@ class UsersController < ApplicationController
         @users = User.in_region(params[:region])
         params[:search]&.split&.each do |part|
           like_query = %w(users.name wca_id email).map do |column|
-            column + " LIKE :part"
-          end.join(" OR ")
+            column + ' LIKE :part'
+          end.join(' OR ')
           @users = @users.where(like_query, part: "%#{part}%")
         end
-        params[:sort] = params[:sort] == "country" ? :country_iso2 : params[:sort]
+        params[:sort] = params[:sort] == 'country' ? :country_iso2 : params[:sort]
         if params[:sort]
           @users = @users.order(params[:sort] => params[:order])
         end
@@ -37,12 +37,12 @@ class UsersController < ApplicationController
           total: @users.size,
           rows: @users.limit(params[:limit]).offset(params[:offset]).map do |user|
             {
-              wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : "",
+              wca_id: user.wca_id ? view_context.link_to(user.wca_id, person_path(user.wca_id)) : '',
               name: ERB::Util.html_escape(user.name),
               # Users don't have to provide a country upon registration
               country: user.country&.id,
               email: ERB::Util.html_escape(user.email),
-              edit: view_context.link_to("Edit", edit_user_path(user)),
+              edit: view_context.link_to('Edit', edit_user_path(user)),
             }
           end,
         }
@@ -56,15 +56,15 @@ class UsersController < ApplicationController
 
   def enable_2fa
     # NOTE: current_user is not nil as authenticate_user! is called first
-    params[:section] = "2fa"
+    params[:section] = '2fa'
     was_enabled = current_user.otp_required_for_login
     current_user.otp_required_for_login = true
     current_user.otp_secret = User.generate_otp_secret
     current_user.save!
     if was_enabled
-      flash[:success] = I18n.t("devise.sessions.new.2fa.regenerated_secret")
+      flash[:success] = I18n.t('devise.sessions.new.2fa.regenerated_secret')
     else
-      flash[:success] = I18n.t("devise.sessions.new.2fa.enabled_success")
+      flash[:success] = I18n.t('devise.sessions.new.2fa.enabled_success')
     end
     @user = current_user
     render :edit
@@ -77,15 +77,15 @@ class UsersController < ApplicationController
       otp_secret: nil,
     }
     if current_user.update(disable_params)
-      flash[:success] = I18n.t("devise.sessions.new.2fa.disabled_success")
-      params[:section] = "2fa"
+      flash[:success] = I18n.t('devise.sessions.new.2fa.disabled_success')
+      params[:section] = '2fa'
     else
       # Hopefully at some point we'll make it mandatory for admin-like
       # accounts to have 2FA (like on github).
       # NOTE: we reload the user to revert the assignment of disable_params above.
       current_user.reload
-      flash[:danger] = I18n.t("devise.sessions.new.2fa.disabled_failed")
-      params[:section] = "general"
+      flash[:danger] = I18n.t('devise.sessions.new.2fa.disabled_failed')
+      params[:section] = 'general'
     end
     @user = current_user
     render :edit
@@ -93,7 +93,7 @@ class UsersController < ApplicationController
 
   def regenerate_2fa_backup_codes
     unless current_user.otp_required_for_login
-      return render json: { error: { message: I18n.t("devise.sessions.new.2fa.errors.not_enabled") } }
+      return render json: { error: { message: I18n.t('devise.sessions.new.2fa.errors.not_enabled') } }
     end
     codes = current_user.generate_otp_backup_codes!
     current_user.save!
@@ -105,11 +105,11 @@ class UsersController < ApplicationController
     # This methods store the current time in the "last_authenticated_at" session
     # variable, if password matches, or if 2FA check matches.
     on_success = -> do
-      flash[:success] = I18n.t("users.edit.sensitive.success")
+      flash[:success] = I18n.t('users.edit.sensitive.success')
       session[:last_authenticated_at] = Time.now
     end
     on_failure = -> do
-      flash[:danger] = I18n.t("users.edit.sensitive.failure")
+      flash[:danger] = I18n.t('users.edit.sensitive.failure')
     end
     if current_user.two_factor_enabled?
       if current_user.validate_and_consume_otp!(action_params[:otp_attempt]) ||
@@ -127,7 +127,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    params[:section] ||= "general"
+    params[:section] ||= 'general'
 
     @user = user_to_edit
     nil if redirect_if_cannot_edit_user(@user)
@@ -198,7 +198,7 @@ class UsersController < ApplicationController
         AvatarsMailer.notify_user_of_avatar_removal(@user.current_user, @user, params[:user][:removal_reason]).deliver_later
       end
       # Clear preferred Events cache
-      Rails.cache.delete("#{current_user.id}-preferred-events") if user_params.key? "user_preferred_events_attributes"
+      Rails.cache.delete("#{current_user.id}-preferred-events") if user_params.key? 'user_preferred_events_attributes'
     elsif @user.claiming_wca_id
       render :claim_wca_id
     else
@@ -234,9 +234,9 @@ class UsersController < ApplicationController
     sso.moderator = current_user.wac_team?
     sso.locale = current_user.locale
     sso.locale_force_update = true
-    sso.add_groups = user_groups.join(",")
-    sso.remove_groups = (all_groups - user_groups).join(",")
-    sso.custom_fields["wca_id"] = current_user.wca_id || ""
+    sso.add_groups = user_groups.join(',')
+    sso.remove_groups = (all_groups - user_groups).join(',')
+    sso.custom_fields['wca_id'] = current_user.wca_id || ''
 
     redirect_to sso.to_url, allow_other_host: true
   end
@@ -256,7 +256,7 @@ class UsersController < ApplicationController
     # WAC does not know the contents of SURVEY_SECRET, so they cannot (reasonably) brute-force any hashes.
     # But once the survey is over, they can give us a list of tokens and we can easily verify whether they are legit.
     token_payload = current_user.id.to_s
-    wca_token = OpenSSL::HMAC.hexdigest("sha256", AppSecrets.SURVEY_SECRET, token_payload)
+    wca_token = OpenSSL::HMAC.hexdigest('sha256', AppSecrets.SURVEY_SECRET, token_payload)
 
     survey_url = "#{survey_base_url}?wca_token=#{wca_token}"
 
@@ -272,7 +272,7 @@ class UsersController < ApplicationController
 
   private def redirect_if_cannot_edit_user(user)
     unless current_user&.can_edit_user?(user)
-      flash[:danger] = "You cannot edit this user"
+      flash[:danger] = 'You cannot edit this user'
       redirect_to root_url
       return true
     end
@@ -297,8 +297,8 @@ class UsersController < ApplicationController
 
   private def check_recent_authentication!
     unless has_recent_authentication?
-      flash[:danger] = I18n.t("users.edit.sensitive.identity_error")
-      redirect_to profile_edit_path(section: "2fa-check")
+      flash[:danger] = I18n.t('users.edit.sensitive.identity_error')
+      redirect_to profile_edit_path(section: '2fa-check')
       return false
     end
     true

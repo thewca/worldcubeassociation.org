@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "superconfig"
+require 'superconfig'
 
-require_relative "env_config"
+require_relative 'env_config'
 
 SuperConfig::Base.class_eval do
   # The skeleton is stolen from the source code of the `superconfig` gem, file lib/superconfig.rb:104
@@ -41,7 +41,7 @@ end
 
 AppSecrets = SuperConfig.new do
   if Rails.env.production?
-    require_relative "vault_config"
+    require_relative 'vault_config'
 
     vault :DATABASE_PASSWORD
     vault :GOOGLE_MAPS_API_KEY
@@ -70,7 +70,7 @@ AppSecrets = SuperConfig.new do
     vault :NEW_RELIC_LICENSE_KEY
     vault :SMTP_USERNAME
     vault :SMTP_PASSWORD
-    vault_file :GOOGLE_APPLICATION_CREDENTIALS, "./tmp/application_default_credentials.json"
+    vault_file :GOOGLE_APPLICATION_CREDENTIALS, './tmp/application_default_credentials.json'
     vault :JWT_KEY
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN

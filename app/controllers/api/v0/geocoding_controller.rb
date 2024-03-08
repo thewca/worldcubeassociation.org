@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::V0::GeocodingController < Api::V0::ApiController
-  GMAPS_GEOCODING_URL = "https://maps.googleapis.com/maps/api/geocode/json"
+  GMAPS_GEOCODING_URL = 'https://maps.googleapis.com/maps/api/geocode/json'
   # Enable CSRF protection on our GET action, to restrict usage of our API key to legit queries.
   before_action :raise_if_invalid
 

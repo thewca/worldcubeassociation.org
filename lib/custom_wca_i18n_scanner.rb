@@ -18,17 +18,17 @@ unless Rails.env.production?
       # as the controller, however for some of them they modified a single different
       # model (eg: the `admin` forms modify `person`s, and only that model).
       case model_key
-      when "devise" then "user"
-      when "admin" then "person"
-      when "oauth" then "doorkeeper/application"
-      when "medium" then "competition_medium"
-      when "contact"
+      when 'devise' then 'user'
+      when 'admin' then 'person'
+      when 'oauth' then 'doorkeeper/application'
+      when 'medium' then 'competition_medium'
+      when 'contact'
         # ContactsController uses WebsiteContact or DobContact (which are much like extended models).
         # We need to determine which one does the key refer to.
-        if key.start_with?("contacts.website")
-          "website_contact"
-        elsif key.start_with?("contacts.dob")
-          "dob_contact"
+        if key.start_with?('contacts.website')
+          'website_contact'
+        elsif key.start_with?('contacts.dob')
+          'dob_contact'
         else
           throw "Unrecognized contact model. Key: #{key}"
         end
@@ -55,12 +55,12 @@ unless Rails.env.production?
         ar_class = to_active_record_class(model)
 
         # Mark the hint as used if we don't use custom hint
-        if !input_params.include?("hint:")
+        if !input_params.include?('hint:')
           retval << ["simple_form.hints.#{model}.#{attribute}", occurrence]
         end
 
         # Mark the label as used if we don't use custom hint.
-        if !input_params.include?("label:")
+        if !input_params.include?('label:')
           # Simple form can fetch its labels from activerecord.attributes,
           # Mark it as used ... Except if the model is not an ActiveRecord ;)
           if ar_class

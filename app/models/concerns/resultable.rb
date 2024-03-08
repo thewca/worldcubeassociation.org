@@ -21,7 +21,7 @@ module Resultable
     # Forgetting to synchronize the results in WCA Live is a very common mistake,
     # so this error message is hinting the user to check that, even if it's
     # outside the scope of the WCA website.
-    validates_numericality_of :pos, message: "The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?"
+    validates_numericality_of :pos, message: 'The position is not a valid number. Did you clear all the empty rows and synchronized WCA Live?'
 
     # Define cached stuff with the same name as the associations for validation
     def round_type
@@ -54,7 +54,7 @@ module Resultable
     def belongs_to_a_round
       if round.blank?
         errors.add(:round_type,
-                   "Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.")
+                   'Result must belong to a valid round. Please check that the tuple (competitionId, eventId, roundTypeId, formatId) matches an existing round.')
       end
     end
 
@@ -62,7 +62,7 @@ module Resultable
     def validate_each_solve
       solve_times.each_with_index do |solve_time, i|
         unless solve_time.valid?
-          errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(" "))
+          errors.add(:"value#{i + 1}", solve_time.errors.full_messages.join(' '))
         end
       end
     end
@@ -88,12 +88,12 @@ module Resultable
   end
 
   def invalid_solve_count_reason
-    return "Invalid format" unless format
-    return "Invalid round_type" unless round_type
-    return "All solves cannot be DNS/skipped." if solve_times.all? { |s| s.dns? || s.skipped? }
+    return 'Invalid format' unless format
+    return 'Invalid round_type' unless round_type
+    return 'All solves cannot be DNS/skipped.' if solve_times.all? { |s| s.dns? || s.skipped? }
 
     unless solve_times.drop_while(&:unskipped?).all?(&:skipped?)
-      return "Skipped solves must all come at the end."
+      return 'Skipped solves must all come at the end.'
     end
 
     unskipped_count = solve_times.count(&:unskipped?)
@@ -112,7 +112,7 @@ module Resultable
     # To compute the average, we need to have a valid number of solves,
     # and we need to know what event we are dealing with (because
     # 333fm is computed differently than other events).
-    event ? invalid_solve_count_reason : "Event needed to compute average"
+    event ? invalid_solve_count_reason : 'Event needed to compute average'
   end
 
   def should_compute_average?
@@ -143,7 +143,7 @@ module Resultable
     #    - All events that allow "mean of 3" no longer allow "best of 3".
     #  - May 1, 2019
     #    - 444bf and 555bf mean are officially recognized
-    formatId == "a" || formatId == "m" || (formatId == "3" && %(333ft 333fm 333bf 444bf 555bf).include?(eventId))
+    formatId == 'a' || formatId == 'm' || (formatId == '3' && %(333ft 333fm 333bf 444bf 555bf).include?(eventId))
   end
 
   def compute_correct_best
@@ -157,7 +157,7 @@ module Resultable
     else
       if counting_solve_times.any?(&:incomplete?)
         SolveTime::DNF_VALUE
-      elsif eventId == "333fm"
+      elsif eventId == '333fm'
         sum_moves = counting_solve_times.sum(&:move_count).to_f
         (100 * sum_moves / counting_solve_times.length).round
       else

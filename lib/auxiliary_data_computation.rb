@@ -68,7 +68,7 @@ module AuxiliaryDataComputation
           personal_records.each do |_, person_id, country_id, continent_id, value|
             # Update the region states (unless we have ranked this person already,
             # e.g. 2008SEAR01 twice in North America and World because of his two countries).
-            ["World", continent_id, country_id].each do |region|
+            ['World', continent_id, country_id].each do |region|
               next if ranked[region][person_id]
               counter[region] += 1
               # As we ordered by value it can either be greater or tie the previous one.
@@ -83,7 +83,7 @@ module AuxiliaryDataComputation
             next if cached_country.nil?
             # Set the person's data (first time the current location is matched).
             personal_rank[person_id][:best] ||= value
-            personal_rank[person_id][:world_rank] ||= current_rank["World"]
+            personal_rank[person_id][:world_rank] ||= current_rank['World']
             if continent_id == cached_country.continentId
               personal_rank[person_id][:continent_rank] ||= current_rank[continent_id]
             end

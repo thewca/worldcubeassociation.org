@@ -3,7 +3,7 @@
 class RegulationsTranslationsController < ApplicationController
   before_action :ensure_trailing_slash
 
-  REGULATIONS_TRANSLATIONS_VERSION_FILE = "translations/version"
+  REGULATIONS_TRANSLATIONS_VERSION_FILE = 'translations/version'
 
   # We need this so the links for the translated guidelines work
   private def trailing_slash?(url)
@@ -22,15 +22,15 @@ class RegulationsTranslationsController < ApplicationController
 
   def render_translated_regulations(route, language)
     erb_file = RegulationsS3Helper.fetch_regulations_from_s3("translations/#{language}/#{route}", REGULATIONS_TRANSLATIONS_VERSION_FILE)
-    render inline: erb_file, layout: "application"
+    render inline: erb_file, layout: 'application'
   end
 
   def translated_regulation
-    render_translated_regulations("index.html.erb", params[:language])
+    render_translated_regulations('index.html.erb', params[:language])
   end
 
   def translated_guidelines
-    render_translated_regulations("guidelines.html.erb", params[:language])
+    render_translated_regulations('guidelines.html.erb', params[:language])
   end
 
   def translated_pdfs

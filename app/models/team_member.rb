@@ -4,7 +4,7 @@ class TeamMember < ApplicationRecord
   belongs_to :team, -> { with_hidden }
   belongs_to :user
 
-  scope :current, -> { where("end_date IS NULL OR end_date > ?", Date.today) }
+  scope :current, -> { where('end_date IS NULL OR end_date > ?', Date.today) }
   scope :in_official_team, -> { where(team_id: Team.all_official.map(&:id)) }
   scope :leader, -> { where(team_leader: true) }
   scope :senior_member, -> { where(team_senior_member: true) }
@@ -19,14 +19,14 @@ class TeamMember < ApplicationRecord
   alias_attribute :leader, :team_leader
   alias_attribute :senior_member, :team_senior_member
 
-  BOARD_STATUS = "member"
-  OFFICER_STATUS_EXECUTIVE_DIRECTOR = "executive_director"
-  OFFICER_STATUS_CHAIR = "chair"
-  OFFICER_STATUS_VICE_CHAIR = "vice_chair"
-  OFFICER_STATUS_SECRETARY = "secretary"
-  TEAM_STATUS_LEADER = "leader"
-  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
-  TEAM_STATUS_MEMBER = "member"
+  BOARD_STATUS = 'member'
+  OFFICER_STATUS_EXECUTIVE_DIRECTOR = 'executive_director'
+  OFFICER_STATUS_CHAIR = 'chair'
+  OFFICER_STATUS_VICE_CHAIR = 'vice_chair'
+  OFFICER_STATUS_SECRETARY = 'secretary'
+  TEAM_STATUS_LEADER = 'leader'
+  TEAM_STATUS_SENIOR_MEMBER = 'senior_member'
+  TEAM_STATUS_MEMBER = 'member'
 
   def current_member?
     end_date.nil? || end_date > Date.today
@@ -39,14 +39,14 @@ class TeamMember < ApplicationRecord
   validate :start_date_must_be_earlier_than_or_same_as_end_date
   def start_date_must_be_earlier_than_or_same_as_end_date
     if start_date && end_date && start_date > end_date
-      errors.add(:start_date, "must be earlier than end_date")
+      errors.add(:start_date, 'must be earlier than end_date')
     end
   end
 
   validate :cannot_demote_oneself
   def cannot_demote_oneself
     if current_user == self.user_id && !current_member?
-      errors.add(:user_id, "You cannot demote yourself")
+      errors.add(:user_id, 'You cannot demote yourself')
     end
   end
 
@@ -101,11 +101,11 @@ class TeamMember < ApplicationRecord
       group_name = team.name
     end
     {
-      id: team.group_type + "_" + self.id.to_s,
+      id: team.group_type + '_' + self.id.to_s,
       start_date: start_date,
       is_active: current_member?,
       group: {
-        id: team.group_type + "_" + team.id.to_s,
+        id: team.group_type + '_' + team.id.to_s,
         name: group_name,
         group_type: team.group_type,
         is_hidden: team[:hidden],

@@ -7,7 +7,7 @@ class UpdateWcaStates < ActiveRecord::Migration[5.2]
     # Extra changes due to some changes in country names
     models=[Person, Result, Competition]
     models.each do |m|
-      m.where(countryId: "Macedonia").update_all(countryId: "North Macedonia")
+      m.where(countryId: 'Macedonia').update_all(countryId: 'North Macedonia')
     end
     ActiveRecord::Base.connection.execute("update `archive_registrations` set `countryId` = 'North Macedonia' WHERE `archive_registrations`.`countryId` = 'Macedonia'")
   end
@@ -17,7 +17,7 @@ class UpdateWcaStates < ActiveRecord::Migration[5.2]
     Country::ALL_STATES.each(&:save!)
     models=[Person, Result, Competition]
     models.each do |m|
-      m.where(countryId: "North Macedonia").update_all(countryId: "Macedonia")
+      m.where(countryId: 'North Macedonia').update_all(countryId: 'Macedonia')
     end
     ActiveRecord::Base.connection.execute("update `archive_registrations` set `countryId` = 'Macedonia' WHERE `archive_registrations`.`countryId` = 'North Macedonia'")
   end

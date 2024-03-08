@@ -5,12 +5,12 @@ class SolveTime
   include Comparable
 
   EMPTY_STRING = ''
-  CLOCK_FORMAT = "%d:%02d:%02d.%02d"
-  DOT_STRING = "."
-  ZERO_STRING = "0"
-  DNF_STRING = "DNF"
-  DNS_STRING = "DNS"
-  QUESTION_STRING = "?:??:??"
+  CLOCK_FORMAT = '%d:%02d:%02d.%02d'
+  DOT_STRING = '.'
+  ZERO_STRING = '0'
+  DNF_STRING = 'DNF'
+  DNS_STRING = 'DNS'
+  QUESTION_STRING = '?:??:??'
 
   def initialize(event_id, field, wca_value)
     @event = Event.c_find!(event_id)
@@ -65,10 +65,10 @@ class SolveTime
       ttttt = time_centiseconds / 100
 
       case @event.id
-      when "333mbf"
+      when '333mbf'
         mm = missed
         @wca_value = ((dd * 1e7) + (ttttt * 1e2) + mm).to_i
-      when "333mbo"
+      when '333mbo'
         ss = @solved
         aa = @attempted
         @wca_value = ((1 * 1e8) + (ss * 1e7) + (aa * 1e5) + ttttt).to_i
@@ -81,7 +81,7 @@ class SolveTime
   end
 
   def time_centiseconds=(time_centiseconds)
-    raise "time out of range" unless 0 <= time_centiseconds && time_centiseconds <= 99_999 * 100
+    raise 'time out of range' unless 0 <= time_centiseconds && time_centiseconds <= 99_999 * 100
     @time_centiseconds = time_centiseconds
     recompute_wca_value
   end
@@ -97,13 +97,13 @@ class SolveTime
   end
 
   def solved=(solved)
-    raise "solved out of range" unless (0...100).cover?(solved)
+    raise 'solved out of range' unless (0...100).cover?(solved)
     @solved = solved
     recompute_wca_value
   end
 
   def attempted=(attempted)
-    raise "attempted out of range" unless (0...100).cover?(attempted)
+    raise 'attempted out of range' unless (0...100).cover?(attempted)
     @attempted = attempted
     recompute_wca_value
   end
@@ -158,11 +158,11 @@ class SolveTime
   end
 
   def self.multibld_attempt_to_points(attempt_result)
-    SolveTime.new("333mbf", :best, attempt_result).points
+    SolveTime.new('333mbf', :best, attempt_result).points
   end
 
   def self.points_to_multibld_attempt(points)
-    SolveTime.new("333mbf", :best, 0).tap do |solve_time|
+    SolveTime.new('333mbf', :best, 0).tap do |solve_time|
       solve_time.attempted = points
       solve_time.solved = points
       solve_time.time_centiseconds = 0
@@ -192,7 +192,7 @@ class SolveTime
     end
 
     if @event.fewest_moves?
-      format_str = (@field == :average ? "%.2f" : "%.0f")
+      format_str = (@field == :average ? '%.2f' : '%.0f')
       format_str % @move_count
     elsif @event.multiple_blindfolded?
       # Build time string.
@@ -221,13 +221,13 @@ class SolveTime
 
   private def units
     if incomplete?
-      ""
+      ''
     elsif @event.timed_event?
-      time_minutes >= 1 ? "" : " #{I18n.t("common.solve_time.unit_seconds")}"
+      time_minutes >= 1 ? '' : " #{I18n.t("common.solve_time.unit_seconds")}"
     elsif @event.fewest_moves?
       " #{I18n.t("common.solve_time.unit_moves")}"
     elsif @event.multiple_blindfolded? # rubocop:disable Lint/DuplicateBranch
-      ""
+      ''
     else
       raise "Unrecognized event type #{@event.id}"
     end
@@ -240,14 +240,14 @@ class SolveTime
   validate :wca_value_valid
   def wca_value_valid
     unless wca_value >= -2
-      errors.add(:base, "invalid")
+      errors.add(:base, 'invalid')
     end
   end
 
   # Enforce https://www.worldcubeassociation.org/regulations/#H1b.
   validate :multiblind_time_limit
   def multiblind_time_limit
-    return unless @event.id == "333mbf" && complete?
+    return unless @event.id == '333mbf' && complete?
 
     time_limit_minutes = [60, @attempted * 10].min
     time_limit_seconds = time_limit_minutes * 60
@@ -262,8 +262,8 @@ class SolveTime
   def time_centiseconds_must_not_be_nil
     return if incomplete? || (!@event.timed_event? && !@event.multiple_blindfolded?)
     # For 333mbo only, time_centiseconds may be nil to indicate an unknown time.
-    unless time_centiseconds || @event.id == "333mbo"
-      errors.add(:base, "time_centiseconds must not be nil")
+    unless time_centiseconds || @event.id == '333mbo'
+      errors.add(:base, 'time_centiseconds must not be nil')
     end
   end
 
@@ -272,7 +272,7 @@ class SolveTime
     # See validation for nil time_centiseconds above
     return if incomplete? || time_centiseconds.nil?
     if (@event.timed_event? || @event.multiple_blindfolded?) && time_minutes > 10 && time_centiseconds % 100 > 0
-      errors.add(:base, "times over 10 minutes should be rounded")
+      errors.add(:base, 'times over 10 minutes should be rounded')
     end
   end
 

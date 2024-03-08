@@ -69,11 +69,11 @@ RSpec.describe UserGroup, type: :model do
     end
   end
 
-  it "direct_child_groups has the direct child groups of the user group" do
+  it 'direct_child_groups has the direct child groups of the user group' do
     expect(delegate_region_americas.direct_child_groups).to eq([delegate_region_usa])
   end
 
-  it "child_groups has the child groups of the user group" do
+  it 'child_groups has the child groups of the user group' do
     expect(delegate_region_americas.all_child_groups).to eq(
       [
         delegate_region_usa,
@@ -84,27 +84,27 @@ RSpec.describe UserGroup, type: :model do
     )
   end
 
-  it "roles has the roles of the user group" do
+  it 'roles has the roles of the user group' do
     expect(delegate_region_americas.roles).to eq(delegate_roles[0..4])
   end
 
-  it "active_roles has the active roles of the user group" do
+  it 'active_roles has the active roles of the user group' do
     expect(delegate_region_americas.active_roles).to eq(delegate_roles[0..2])
   end
 
-  it "roles_of_direct_child_groups has the roles of the direct child groups of the user group" do
+  it 'roles_of_direct_child_groups has the roles of the direct child groups of the user group' do
     expect(delegate_region_americas.roles_of_direct_child_groups).to eq(delegate_roles[20..24])
   end
 
-  it "roles_of_all_child_groups has the roles of the child groups of the user group" do
+  it 'roles_of_all_child_groups has the roles of the child groups of the user group' do
     expect(delegate_region_americas.roles_of_all_child_groups).to eq(delegate_roles[20..39])
   end
 
-  it "active_roles_of_direct_child_groups has the active roles of the direct child groups of the user group" do
+  it 'active_roles_of_direct_child_groups has the active roles of the direct child groups of the user group' do
     expect(delegate_region_americas.active_roles_of_direct_child_groups).to eq(delegate_roles[20..22])
   end
 
-  it "active_roles_of_all_child_groups has the active roles of the child groups of the user group" do
+  it 'active_roles_of_all_child_groups has the active roles of the child groups of the user group' do
     expect(delegate_region_americas.active_roles_of_all_child_groups).to eq([
       delegate_roles[20..22],
       delegate_roles[25..27],
@@ -113,27 +113,27 @@ RSpec.describe UserGroup, type: :model do
     ].flatten)
   end
 
-  it "users has the users of the user group" do
+  it 'users has the users of the user group' do
     expect(delegate_region_americas.users).to eq(delegate_users[0..4])
   end
 
-  it "active_users has the active users of the user group" do
+  it 'active_users has the active users of the user group' do
     expect(delegate_region_americas.active_users).to eq(delegate_users[0..2])
   end
 
-  it "users_of_direct_child_groups has the users of the direct child groups of the user group" do
+  it 'users_of_direct_child_groups has the users of the direct child groups of the user group' do
     expect(delegate_region_americas.users_of_direct_child_groups).to eq(delegate_users[20..24])
   end
 
-  it "users_of_all_child_groups has the users of the child groups of the user group" do
+  it 'users_of_all_child_groups has the users of the child groups of the user group' do
     expect(delegate_region_americas.users_of_all_child_groups).to eq(delegate_users[20..39])
   end
 
-  it "active_users_of_direct_child_groups has the active users of the direct child groups of the user group" do
+  it 'active_users_of_direct_child_groups has the active users of the direct child groups of the user group' do
     expect(delegate_region_americas.active_users_of_direct_child_groups).to eq(delegate_users[20..22])
   end
 
-  it "active_users_of_all_child_groups has the active users of the child groups of the user group" do
+  it 'active_users_of_all_child_groups has the active users of the child groups of the user group' do
     expect(delegate_region_americas.active_users_of_all_child_groups).to eq([
       delegate_users[20..22],
       delegate_users[25..27],

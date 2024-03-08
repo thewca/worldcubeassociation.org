@@ -40,7 +40,7 @@ class Round < ApplicationRecord
 
   # Qualification rounds/b-final are handled weirdly, they have round number 0
   # and do not count towards the total amount of rounds.
-  OLD_TYPES=["0", "b"].freeze
+  OLD_TYPES=['0', 'b'].freeze
   validates_inclusion_of :old_type, in: OLD_TYPES, allow_nil: true
   after_validation(if: :old_type) do
     self.number = 0
@@ -54,7 +54,7 @@ class Round < ApplicationRecord
 
   validate do
     if final_round? && advancement_condition
-      errors.add(:advancement_condition, "cannot be set on a final round")
+      errors.add(:advancement_condition, 'cannot be set on a final round')
     end
   end
 
@@ -73,18 +73,18 @@ class Round < ApplicationRecord
   # Compute a round type id from round information
   def round_type_id
     if number == total_number_of_rounds
-      cutoff ? "c" : "f"
+      cutoff ? 'c' : 'f'
     elsif number == 1
-      cutoff ? "d" : "1"
+      cutoff ? 'd' : '1'
     elsif number == 2
-      cutoff ? "e" : "2"
-    elsif old_type == "0"
-      cutoff ? "h" : "0"
-    elsif old_type == "b"
-      "b"
+      cutoff ? 'e' : '2'
+    elsif old_type == '0'
+      cutoff ? 'h' : '0'
+    elsif old_type == 'b'
+      'b'
     else
       # Cutoff third round/Semi Final
-      cutoff ? "g" : "3"
+      cutoff ? 'g' : '3'
     end
   end
 
@@ -99,14 +99,14 @@ class Round < ApplicationRecord
     phase_formats = formats_used
     phase_formats.map! do |f|
       if with_tooltips
-        content_tag(:span, f.short_name, data: { toggle: "tooltip" }, title: f.name)
+        content_tag(:span, f.short_name, data: { toggle: 'tooltip' }, title: f.name)
       elsif with_short_names
         f.short_name
       else
         f.name
       end
     end
-    safe_join(phase_formats, " / ")
+    safe_join(phase_formats, ' / ')
   end
 
   def round_type
@@ -126,11 +126,11 @@ class Round < ApplicationRecord
   end
 
   def cutoff_to_s(short: false)
-    cutoff ? cutoff.to_s(self, short: short) : ""
+    cutoff ? cutoff.to_s(self, short: short) : ''
   end
 
   def advancement_condition_to_s(short: false)
-    advancement_condition ? advancement_condition.to_s(self, short: short) : ""
+    advancement_condition ? advancement_condition.to_s(self, short: short) : ''
   end
 
   def has_undef_tl?
@@ -175,12 +175,12 @@ class Round < ApplicationRecord
     {
       number: round_number,
       total_number_of_rounds: total_rounds,
-      format_id: wcif["format"],
-      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif["timeLimit"]) : nil,
-      cutoff: Cutoff.load(wcif["cutoff"]),
-      advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif["advancementCondition"]),
-      scramble_set_count: wcif["scrambleSetCount"],
-      round_results: RoundResults.load(wcif["results"]),
+      format_id: wcif['format'],
+      time_limit: event.can_change_time_limit? ? TimeLimit.load(wcif['timeLimit']) : nil,
+      cutoff: Cutoff.load(wcif['cutoff']),
+      advancement_condition: AdvancementConditions::AdvancementCondition.load(wcif['advancementCondition']),
+      scramble_set_count: wcif['scrambleSetCount'],
+      round_results: RoundResults.load(wcif['results']),
     }
   end
 
@@ -203,30 +203,30 @@ class Round < ApplicationRecord
 
   def to_wcif
     {
-      "id" => wcif_id,
-      "format" => self.format_id,
-      "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
-      "cutoff" => cutoff&.to_wcif,
-      "advancementCondition" => advancement_condition&.to_wcif,
-      "scrambleSetCount" => self.scramble_set_count,
-      "results" => round_results.map(&:to_wcif),
-      "extensions" => wcif_extensions.map(&:to_wcif),
+      'id' => wcif_id,
+      'format' => self.format_id,
+      'timeLimit' => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
+      'cutoff' => cutoff&.to_wcif,
+      'advancementCondition' => advancement_condition&.to_wcif,
+      'scrambleSetCount' => self.scramble_set_count,
+      'results' => round_results.map(&:to_wcif),
+      'extensions' => wcif_extensions.map(&:to_wcif),
     }
   end
 
   def self.wcif_json_schema
     {
-      "type" => "object",
-      "properties" => {
-        "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.pluck(:id) },
-        "timeLimit" => TimeLimit.wcif_json_schema,
-        "cutoff" => Cutoff.wcif_json_schema,
-        "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,
-        "results" => { "type" => "array", "items" => RoundResult.wcif_json_schema },
-        "scrambleSets" => { "type" => "array" }, # TODO: expand on this
-        "scrambleSetCount" => { "type" => "integer" },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+      'type' => 'object',
+      'properties' => {
+        'id' => { 'type' => 'string' },
+        'format' => { 'type' => 'string', 'enum' => Format.pluck(:id) },
+        'timeLimit' => TimeLimit.wcif_json_schema,
+        'cutoff' => Cutoff.wcif_json_schema,
+        'advancementCondition' => AdvancementConditions::AdvancementCondition.wcif_json_schema,
+        'results' => { 'type' => 'array', 'items' => RoundResult.wcif_json_schema },
+        'scrambleSets' => { 'type' => 'array' }, # TODO: expand on this
+        'scrambleSetCount' => { 'type' => 'integer' },
+        'extensions' => { 'type' => 'array', 'items' => WcifExtension.wcif_json_schema },
       },
     }
   end
@@ -236,6 +236,6 @@ class Round < ApplicationRecord
   end
 
   def self.name_from_attributes(event, round_type)
-    I18n.t("round.name", event_name: event.name, round_name: round_type.name)
+    I18n.t('round.name', event_name: event.name, round_name: round_type.name)
   end
 end

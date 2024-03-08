@@ -42,7 +42,7 @@ class CompetitionSeries < ApplicationRecord
         self.wcif_id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if short_name.blank?
-        year = " " + year
+        year = ' ' + year
         self.short_name = name_without_year.truncate(MAX_SHORT_NAME_LENGTH - year.length) + year
       end
     end
@@ -62,13 +62,13 @@ class CompetitionSeries < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["name", "short_name"],
-    include: ["competitions"],
+    only: ['name', 'short_name'],
+    include: ['competitions'],
   }.freeze
 
   def serializable_hash(options = nil)
     options = DEFAULT_SERIALIZE_OPTIONS.merge(options || {})
-    include_competitions = options[:include]&.delete("competitions")
+    include_competitions = options[:include]&.delete('competitions')
     json = super(options)
     json.merge!(id: wcif_id)
     if include_competitions
@@ -79,11 +79,11 @@ class CompetitionSeries < ApplicationRecord
 
   def to_form_data
     {
-      "id" => id,
-      "seriesId" => wcif_id,
-      "name" => name,
-      "shortName" => short_name,
-      "competitionIds" => competitions.pluck(:id),
+      'id' => id,
+      'seriesId' => wcif_id,
+      'name' => name,
+      'shortName' => short_name,
+      'competitionIds' => competitions.pluck(:id),
     }
   end
 
@@ -92,43 +92,43 @@ class CompetitionSeries < ApplicationRecord
     return nil if self.valid?
 
     {
-      "id" => errors[:id],
-      "seriesId" => errors[:wcif_id],
-      "name" => errors[:name],
-      "shortName" => errors[:short_name],
-      "competitionIds" => errors[:competitions],
+      'id' => errors[:id],
+      'seriesId' => errors[:wcif_id],
+      'name' => errors[:name],
+      'shortName' => errors[:short_name],
+      'competitionIds' => errors[:competitions],
     }
   end
 
   def set_form_data(form_data_series)
-    if form_data_series["competitionIds"].count <= 1
-      raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
+    if form_data_series['competitionIds'].count <= 1
+      raise WcaExceptions::BadApiParameter.new('A Series must include at least two competitions.')
     end
 
-    self.competition_ids = form_data_series["competitionIds"].join(",")
+    self.competition_ids = form_data_series['competitionIds'].join(',')
     assign_attributes(CompetitionSeries.form_data_to_attributes(form_data_series))
   end
 
   def self.form_data_to_attributes(form_data)
     {
-      wcif_id: form_data["seriesId"],
-      name: form_data["name"],
-      short_name: form_data["shortName"],
+      wcif_id: form_data['seriesId'],
+      name: form_data['name'],
+      short_name: form_data['shortName'],
     }
   end
 
   def self.form_data_json_schema
     {
-      "type" => ["object", "null"],
-      "properties" => {
-        "id" => { "type" => ["integer", "null"] },
-        "seriesId" => { "type" => "string" },
-        "name" => { "type" => "string" },
-        "shortName" => { "type" => "string" },
-        "competitionIds" => {
-          "type" => "array",
-          "items" => { "type" => "string" },
-          "uniqueItems" => true,
+      'type' => ['object', 'null'],
+      'properties' => {
+        'id' => { 'type' => ['integer', 'null'] },
+        'seriesId' => { 'type' => 'string' },
+        'name' => { 'type' => 'string' },
+        'shortName' => { 'type' => 'string' },
+        'competitionIds' => {
+          'type' => 'array',
+          'items' => { 'type' => 'string' },
+          'uniqueItems' => true,
         },
       },
     }
@@ -136,21 +136,21 @@ class CompetitionSeries < ApplicationRecord
 
   def to_wcif(authorized: false)
     {
-      "id" => wcif_id,
-      "name" => name,
-      "shortName" => short_name,
-      "competitionIds" => (authorized ? competitions : public_competitions).map(&:id),
+      'id' => wcif_id,
+      'name' => name,
+      'shortName' => short_name,
+      'competitionIds' => (authorized ? competitions : public_competitions).map(&:id),
     }
   end
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
-      "properties" => {
-        "id" => { "type" => "string" },
-        "name" => { "type" => "string" },
-        "shortName" => { "type" => "string" },
-        "competitionIds" => { "type" => "array", "items" => { "type" => "string" } },
+      'type' => ['object', 'null'],
+      'properties' => {
+        'id' => { 'type' => 'string' },
+        'name' => { 'type' => 'string' },
+        'shortName' => { 'type' => 'string' },
+        'competitionIds' => { 'type' => 'array', 'items' => { 'type' => 'string' } },
       },
     }
   end
@@ -158,11 +158,11 @@ class CompetitionSeries < ApplicationRecord
   def set_wcif!(wcif_series)
     JSON::Validator.validate!(CompetitionSeries.wcif_json_schema, wcif_series)
 
-    if wcif_series["competitionIds"].count <= 1
-      raise WcaExceptions::BadApiParameter.new("A Series must include at least two competitions.")
+    if wcif_series['competitionIds'].count <= 1
+      raise WcaExceptions::BadApiParameter.new('A Series must include at least two competitions.')
     end
 
-    self.competition_ids = wcif_series["competitionIds"].join(",")
+    self.competition_ids = wcif_series['competitionIds'].join(',')
     update!(CompetitionSeries.wcif_to_attributes(wcif_series))
 
     self
@@ -170,9 +170,9 @@ class CompetitionSeries < ApplicationRecord
 
   def self.wcif_to_attributes(wcif)
     {
-      wcif_id: wcif["id"],
-      name: wcif["name"],
-      short_name: wcif["shortName"],
+      wcif_id: wcif['id'],
+      name: wcif['name'],
+      short_name: wcif['shortName'],
     }
   end
 

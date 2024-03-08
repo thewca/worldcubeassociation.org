@@ -4,7 +4,7 @@ FactoryBot.define do
   factory :user_group do
     factory :delegate_regions_group do
       factory :delegate_region_americas do
-        name { "Americas" }
+        name { 'Americas' }
         group_type { :delegate_regions }
         is_active { true }
         is_hidden { false }
@@ -12,7 +12,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_asia_pacific do
-        name { "Asia Pacific" }
+        name { 'Asia Pacific' }
         group_type { :delegate_regions }
         is_active { true }
         is_hidden { false }
@@ -20,7 +20,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_europe do
-        name { "Europe" }
+        name { 'Europe' }
         group_type { :delegate_regions }
         is_active { true }
         is_hidden { false }
@@ -28,7 +28,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_middle_east_africa do
-        name { "Middle East & Africa" }
+        name { 'Middle East & Africa' }
         group_type { :delegate_regions }
         is_active { true }
         is_hidden { false }
@@ -36,7 +36,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_usa do
-        name { "USA" }
+        name { 'USA' }
         group_type { :delegate_regions }
         parent_group_id { FactoryBot.create(:delegate_region_americas).id }
         is_active { true }
@@ -45,7 +45,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_california do
-        name { "California" }
+        name { 'California' }
         group_type { :delegate_regions }
         parent_group_id { FactoryBot.create(:delegate_region_usa).id }
         is_active { true }
@@ -54,7 +54,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_texas do
-        name { "Texas" }
+        name { 'Texas' }
         group_type { :delegate_regions }
         parent_group_id { FactoryBot.create(:delegate_region_usa).id }
         is_active { true }
@@ -63,7 +63,7 @@ FactoryBot.define do
       end
 
       factory :delegate_region_florida do
-        name { "Florida" }
+        name { 'Florida' }
         group_type { :delegate_regions }
         parent_group_id { FactoryBot.create(:delegate_region_usa).id }
         is_active { true }
@@ -73,56 +73,56 @@ FactoryBot.define do
     end
 
     factory :africa_region do
-      name { "Africa" }
+      name { 'Africa' }
       group_type { :delegate_regions }
       is_active { true }
       is_hidden { false }
     end
 
     factory :asia_region do
-      name { "Asia" }
+      name { 'Asia' }
       group_type { :delegate_regions }
       is_active { true }
       is_hidden { false }
     end
 
     factory :europe_region do
-      name { "Europe" }
+      name { 'Europe' }
       group_type { :delegate_regions }
       is_active { true }
       is_hidden { false }
     end
 
     factory :north_america_region do
-      name { "North America" }
+      name { 'North America' }
       group_type { :delegate_regions }
       is_active { true }
       is_hidden { false }
     end
 
     factory :oceania_region do
-      name { "Oceania" }
+      name { 'Oceania' }
       group_type { :delegate_regions }
       is_active { true }
       is_hidden { false }
     end
 
     factory :south_america_region do
-      name { "South America" }
+      name { 'South America' }
       group_type { :delegate_regions }
       is_active { true }
       is_hidden { false }
     end
 
     factory :delegate_probations_user_group do
-      name { "Delegate Probation" }
+      name { 'Delegate Probation' }
       group_type { :delegate_probation }
       is_active { true }
       is_hidden { true }
     end
 
     factory :translators_user_group do
-      name { "Translators" }
+      name { 'Translators' }
       group_type { :translators }
       is_active { true }
       is_hidden { true }

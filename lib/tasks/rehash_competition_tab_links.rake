@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 namespace :competition_tabs do
-  desc "Rehash links in tabs with SHA256 digest"
+  desc 'Rehash links in tabs with SHA256 digest'
   task rehash_active_record_links: [:environment] do
     key_generator = ActiveSupport::CachingKeyGenerator.new(
       ActiveSupport::KeyGenerator.new(Rails.application.secret_key_base,

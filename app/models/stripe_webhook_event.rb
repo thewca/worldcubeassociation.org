@@ -15,8 +15,8 @@ class StripeWebhookEvent < ApplicationRecord
 
   belongs_to :stripe_transaction, optional: true
 
-  has_one :confirmed_intent, class_name: "StripePaymentIntent", as: :confirmed_by
-  has_one :canceled_intent, class_name: "StripePaymentIntent", as: :canceled_by
+  has_one :confirmed_intent, class_name: 'StripePaymentIntent', as: :confirmed_by
+  has_one :canceled_intent, class_name: 'StripePaymentIntent', as: :canceled_by
 
   def retrieve_event
     Stripe::Event.retrieve(self.stripe_id, stripe_account: self.account_id)

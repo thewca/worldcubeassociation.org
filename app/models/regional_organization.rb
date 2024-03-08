@@ -5,9 +5,9 @@ class RegionalOrganization < ApplicationRecord
   has_one_attached :bylaws
   has_one_attached :extra_file
 
-  scope :currently_acknowledged, -> { where("start_date IS NOT NULL AND (end_date IS NULL OR end_date > ?)", Date.today) }
-  scope :pending_approval, -> { where("start_date IS NULL") }
-  scope :previously_acknowledged, -> { where("start_date IS NOT NULL AND end_date IS NOT NULL AND end_date < ?", Date.today) }
+  scope :currently_acknowledged, -> { where('start_date IS NOT NULL AND (end_date IS NULL OR end_date > ?)', Date.today) }
+  scope :pending_approval, -> { where('start_date IS NULL') }
+  scope :previously_acknowledged, -> { where('start_date IS NOT NULL AND end_date IS NOT NULL AND end_date < ?', Date.today) }
 
   validates_presence_of :name, :country, :email, :address, :directors_and_officers, :area_description, :past_and_current_activities, :future_plans
   validates :website, presence: true, format: { with: %r{\Ahttps?://.*\z} }
@@ -32,12 +32,12 @@ class RegionalOrganization < ApplicationRecord
   end
 
   def logo_url
-    Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize: "500x300").processed) if logo.attached?
+    Rails.application.routes.url_helpers.rails_representation_url(logo.variant(resize: '500x300').processed) if logo.attached?
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["name", "website", "country"],
-    methods: ["logo_url"],
+    only: ['name', 'website', 'country'],
+    methods: ['logo_url'],
   }.freeze
 
   def serializable_hash(options = nil)

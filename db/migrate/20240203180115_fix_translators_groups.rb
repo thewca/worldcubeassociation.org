@@ -4,7 +4,7 @@ class FixTranslatorsGroups < ActiveRecord::Migration[7.1]
   def change
     existing_translators_group = UserGroup.find_by(group_type: UserGroup.group_types[:translators])
     translators = UserRole.where(group_id: existing_translators_group.id)
-    group_name_suffix = " Translators"
+    group_name_suffix = ' Translators'
     translators.each do |translator|
       locale = translator.metadata[:locale]
       if UserGroup.find_by(name: locale + group_name_suffix).nil?

@@ -20,27 +20,27 @@ class WebsiteContact < ContactForm
   end
 
   def to_email
-    if inquiry == "competition"
+    if inquiry == 'competition'
       competition = Competition.find_by_id(competition_id)
       if competition.present?
         return ValidateEmail.valid?(competition.contact) ? competition.contact : competition.managers.map(&:email)
       end
-    elsif inquiry == "results_team"
+    elsif inquiry == 'results_team'
       return Team.wrt.email
     end
 
-    "contact@worldcubeassociation.org"
+    'contact@worldcubeassociation.org'
   end
 
   def subject
     topic = case inquiry
-            when "competition" then "Comment for #{Competition.find_by_id(competition_id)&.name}"
-            when "competitions_in_general" then "General Competition Comment"
-            when "results_team" then "Results Team Comment"
-            when "wca_id_or_profile" then "WCA ID or WCA Profile Comment"
-            when "media" then "Media Comment"
-            when "software" then "Software Comment"
-            when "different" then "Other Comment"
+            when 'competition' then "Comment for #{Competition.find_by_id(competition_id)&.name}"
+            when 'competitions_in_general' then 'General Competition Comment'
+            when 'results_team' then 'Results Team Comment'
+            when 'wca_id_or_profile' then 'WCA ID or WCA Profile Comment'
+            when 'media' then 'Media Comment'
+            when 'software' then 'Software Comment'
+            when 'different' then 'Other Comment'
             else
               raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
             end

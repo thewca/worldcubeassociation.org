@@ -57,7 +57,7 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   def token
     require_user!
-    render json: { status: "ok" }
+    render json: { status: 'ok' }
   end
 
   private

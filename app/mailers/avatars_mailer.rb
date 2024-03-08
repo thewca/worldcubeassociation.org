@@ -8,8 +8,8 @@ class AvatarsMailer < ApplicationMailer
     mail(
       from: Team.wrt.email,
       to: user.email,
-      reply_to: "results@worldcubeassociation.org",
-      subject: "Your avatar has been rejected",
+      reply_to: 'results@worldcubeassociation.org',
+      subject: 'Your avatar has been rejected',
     )
   end
 

@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "API misc" do
-  describe "GET #records" do
-    let!(:wr333) { FactoryBot.create :result, eventId: "333", best: 444, countryId: "Australia" }
-    let!(:nr333) { FactoryBot.create :result, eventId: "333", best: 555, countryId: "USA" }
-    let!(:dnf444) { FactoryBot.create :result, eventId: "444", best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE, countryId: "USA" }
+RSpec.describe 'API misc' do
+  describe 'GET #records' do
+    let!(:wr333) { FactoryBot.create :result, eventId: '333', best: 444, countryId: 'Australia' }
+    let!(:nr333) { FactoryBot.create :result, eventId: '333', best: 555, countryId: 'USA' }
+    let!(:dnf444) { FactoryBot.create :result, eventId: '444', best: SolveTime::DNF_VALUE, average: SolveTime::DNF_VALUE, countryId: 'USA' }
 
-    it "renders current records", clean_db_with_truncation: true do
+    it 'renders current records', clean_db_with_truncation: true do
       # Compute necessary data.
       AuxiliaryDataComputation.compute_concise_results
 

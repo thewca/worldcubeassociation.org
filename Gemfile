@@ -4,7 +4,7 @@ source 'https://rubygems.org'
 
 # From https://github.com/bundler/bundler/issues/4978#issuecomment-272248627
 git_source(:github) do |repo_name|
-  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?('/')
   "https://github.com/#{repo_name}.git"
 end
 
@@ -46,7 +46,7 @@ gem 'octokit'
 gem 'stripe'
 gem 'oauth2'
 gem 'openssl'
-gem "vault"
+gem 'vault'
 gem 'wca_i18n'
 gem 'cookies_eu'
 gem 'superconfig'

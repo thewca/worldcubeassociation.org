@@ -2,12 +2,12 @@
 
 class RanksSingle < ApplicationRecord
   include PersonalBest
-  self.table_name = "RanksSingle"
+  self.table_name = 'RanksSingle'
 
-  belongs_to :event, foreign_key: "eventId"
+  belongs_to :event, foreign_key: 'eventId'
 
   def to_wcif
-    rank_to_wcif("single")
+    rank_to_wcif('single')
   end
 
   def to_s

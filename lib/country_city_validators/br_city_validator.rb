@@ -33,11 +33,11 @@ module CountryCityValidators
 
   class BrCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "state", valid_regions: BR_STATES)
+      super(type_of_region: 'state', valid_regions: BR_STATES)
     end
 
     def self.country_iso_2
-      "BR"
+      'BR'
     end
   end
 end

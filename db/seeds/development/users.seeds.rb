@@ -4,12 +4,12 @@ after :teams do
   def self.random_user
     {
       name: Faker::Name.name,
-      country_iso2: "US",
-      gender: "m",
+      country_iso2: 'US',
+      gender: 'm',
       dob: Date.new(1980, 1, 1),
       email: Faker::Internet.email,
-      password: "wca",
-      password_confirmation: "wca",
+      password: 'wca',
+      password_confirmation: 'wca',
     }
   end
 

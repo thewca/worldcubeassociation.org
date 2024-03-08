@@ -30,39 +30,39 @@ class PanelController < ApplicationController
 
   def self.panel_list
     {
-      "board" => {
-        "seniorDelegatesList" => "senior-delegates-list",
-        "councilLeaders" => "council-leaders",
-        "regionsManager" => "regions-manager",
-        "delegateProbations" => "delegate-probations",
-        "groupsManagerAdmin" => "groups-manager-admin",
-        "officersEditor" => "officers-editor",
+      'board' => {
+        'seniorDelegatesList' => 'senior-delegates-list',
+        'councilLeaders' => 'council-leaders',
+        'regionsManager' => 'regions-manager',
+        'delegateProbations' => 'delegate-probations',
+        'groupsManagerAdmin' => 'groups-manager-admin',
+        'officersEditor' => 'officers-editor',
       },
-      "seniorDelegate" => {
-        "delegateForms" => "delegate-forms",
-        "regions" => "regions",
-        "delegateProbations" => "delegate-probations",
-        "subordinateDelegateClaims" => "subordinate-delegate-claims",
-        "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",
+      'seniorDelegate' => {
+        'delegateForms' => 'delegate-forms',
+        'regions' => 'regions',
+        'delegateProbations' => 'delegate-probations',
+        'subordinateDelegateClaims' => 'subordinate-delegate-claims',
+        'subordinateUpcomingCompetitions' => 'subordinate-upcoming-competitions',
       },
-      "leader" => {
-        "leaderForms" => "leader-forms",
-        "groupsManager" => "groups-manager",
+      'leader' => {
+        'leaderForms' => 'leader-forms',
+        'groupsManager' => 'groups-manager',
       },
-      "wfc" => {
-        "duesExport" => "dues-export",
-        "countryBands" => "country-bands",
-        "delegateProbations" => "delegate-probations",
-        "xeroUsers" => "xero-users",
-        "duesRedirect" => "dues-redirect",
+      'wfc' => {
+        'duesExport' => 'dues-export',
+        'countryBands' => 'country-bands',
+        'delegateProbations' => 'delegate-probations',
+        'xeroUsers' => 'xero-users',
+        'duesRedirect' => 'dues-redirect',
       },
-      "wrt" => {
-        "postingDashboard" => "posting-dashboard",
-        "editPerson" => "edit-person",
-        "regionsManager" => "regions-manager",
+      'wrt' => {
+        'postingDashboard' => 'posting-dashboard',
+        'editPerson' => 'edit-person',
+        'regionsManager' => 'regions-manager',
       },
-      "wst" => {
-        "translators" => "translators",
+      'wst' => {
+        'translators' => 'translators',
       },
     }
   end

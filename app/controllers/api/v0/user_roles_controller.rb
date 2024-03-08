@@ -4,11 +4,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   include SortHelper
 
   STATUS_SORTING_ORDER = {
-    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
-    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:board].to_sym => ["member"],
-    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+    UserGroup.group_types[:delegate_regions].to_sym => ['senior_delegate', 'regional_delegate', 'delegate', 'candidate_delegate', 'trainee_delegate'],
+    UserGroup.group_types[:teams_committees].to_sym => ['leader', 'senior_member', 'member'],
+    UserGroup.group_types[:councils].to_sym => ['leader', 'senior_member', 'member'],
+    UserGroup.group_types[:board].to_sym => ['member'],
+    UserGroup.group_types[:officers].to_sym => ['chair', 'executive_director', 'secretary', 'vice_chair', 'treasurer'],
   }.freeze
 
   GROUP_TYPE_RANK_ORDER = [
@@ -85,22 +85,22 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   private def group_id_of_old_system_to_group_type(group_id)
     # group_id can be something like "teams_committees_1" or "delegate_regions_1", where 1 is the
     # id of the group. This method will return "teams_committees" or "delegate_regions" respectively.
-    group_id.split("_").reverse.drop(1).reverse.join("_")
+    group_id.split('_').reverse.drop(1).reverse.join('_')
   end
 
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def group_roles_not_yet_in_new_system(group_id)
     roles = []
-    if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
+    if group_id.include?('_') # Temporary hack to support some old system roles, will be removed once all roles are
       # migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(group_id)
-      original_group_id = group_id.split("_").last
+      original_group_id = group_id.split('_').last
       if group_type == UserGroup.group_types[:teams_committees]
         TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
           roles << team_member.role
         end
       else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        render status: :unprocessable_entity, json: { error: 'Invalid group type' }
       end
     else
       group = UserGroup.find(group_id)
@@ -192,9 +192,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         leader = council.leader
         if leader.present?
           roles << {
-            id: group_type + "_" + leader.id.to_s,
+            id: group_type + '_' + leader.id.to_s,
             group: {
-              id: group_type + "_" + council.id.to_s,
+              id: group_type + '_' + council.id.to_s,
               name: council.name,
               group_type: UserGroup.group_types[:councils],
               is_hidden: false,
@@ -269,12 +269,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   private def team_role?(group_id)
-    group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are migrated to the new system.
+    group_id.is_a?(String) && group_id.include?('_') # Temporary hack to support some old system roles, will be removed once all roles are migrated to the new system.
   end
 
   private def create_team_role(group_id, user_id)
     group_type = group_id_of_old_system_to_group_type(group_id)
-    original_group_id = group_id.split("_").last
+    original_group_id = group_id.split('_').last
     return head :unauthorized unless current_user.can_edit_team?(original_group_id)
     if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
       status = params.require(:status)
@@ -282,12 +282,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       if already_existing_member.present?
         already_existing_member.update!(end_date: Date.today)
       end
-      TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+      TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == 'leader', team_senior_member: status == 'senior_member')
       render json: {
         success: true,
       }
     else
-      render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      render status: :unprocessable_entity, json: { error: 'Invalid group type' }
     end
   end
 
@@ -303,7 +303,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     when 'vice_chair'
       team = Team.vice_chair
     else
-      return render status: :unprocessable_entity, json: { error: "Invalid status" }
+      return render status: :unprocessable_entity, json: { error: 'Invalid status' }
     end
     TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: false, team_senior_member: false)
     # When a new team member is created, it's not getting fetched from current_members, hence doing a reload so that it get fetched.
@@ -346,7 +346,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = nil
     end
 
-    return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
+    return render status: :unprocessable_entity, json: { error: 'Invalid group type' } unless create_supported_groups.include?(group.group_type)
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
 
     if status.present? && group.unique_status?(status)
@@ -356,7 +356,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
       # Creates deprecated role.
       user = User.find(user_id)
-      return render status: :unprocessable_entity, json: { error: "Already a Delegate" } if user.any_kind_of_delegate?
+      return render status: :unprocessable_entity, json: { error: 'Already a Delegate' } if user.any_kind_of_delegate?
       user.update!(delegate_status: status, region_id: group.id, location: location)
       send_role_change_notification(user)
       return render json: {
@@ -416,14 +416,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     end
 
-    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
+    if id.include?('_') # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(id)
       unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        render status: :unprocessable_entity, json: { error: 'Invalid group type' }
         return
       end
-      team_member_id = id.split("_").last
+      team_member_id = id.split('_').last
       team_member = TeamMember.find_by!(id: team_member_id)
       team = team_member.team
       status = params.require(:status)
@@ -431,7 +431,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       return head :unauthorized unless current_user.can_edit_team?(team.id)
 
       team_member.update!(end_date: Time.now)
-      TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+      TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == 'leader', team_senior_member: status == 'senior_member')
       return render json: {
         success: true,
       }
@@ -447,7 +447,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
       render json: { success: true }
     else
-      render status: :unprocessable_entity, json: { error: "Invalid group type" }
+      render status: :unprocessable_entity, json: { error: 'Invalid group type' }
     end
   end
 
@@ -466,14 +466,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     end
 
-    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
+    if id.include?('_') # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
-      team_member_id = id.split("_").last
+      team_member_id = id.split('_').last
       group_type = group_id_of_old_system_to_group_type(id)
       team_member = TeamMember.find_by(id: team_member_id)
 
       unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+        render status: :unprocessable_entity, json: { error: 'Invalid group type' }
         return
       end
       return head :unauthorized unless current_user.can_edit_team?(team_member.team.id)
@@ -484,7 +484,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           success: true,
         }
       else
-        return render status: :unprocessable_entity, json: { error: "Invalid member" }
+        return render status: :unprocessable_entity, json: { error: 'Invalid member' }
       end
     end
 

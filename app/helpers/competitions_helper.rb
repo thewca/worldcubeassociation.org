@@ -25,24 +25,24 @@ module CompetitionsHelper
     # If the format for this round was to sort by average, but this particular
     # result did not achieve an average, then switch to "best", and do not allow
     # a short format (to make it clear what happened).
-    if sort_by == "average" && result.to_solve_time(:average).incomplete?
-      sort_by = "single"
+    if sort_by == 'average' && result.to_solve_time(:average).incomplete?
+      sort_by = 'single'
       short = false
     end
 
     solve_time = nil
     a_win_by_word = nil
     case sort_by
-    when "single"
+    when 'single'
       solve_time = result.to_solve_time(:best)
       a_win_by_word = if event.multiple_blindfolded?
                         t('competitions.competition_info.result')
                       else
                         t('competitions.competition_info.single')
                       end
-    when "average"
+    when 'average'
       solve_time = result.to_solve_time(:average)
-      a_win_by_word = result.format.id == "a" ? t('competitions.competition_info.average') : t('competitions.competition_info.mean')
+      a_win_by_word = result.format.id == 'a' ? t('competitions.competition_info.average') : t('competitions.competition_info.mean')
     end
 
     if short
@@ -68,19 +68,19 @@ module CompetitionsHelper
                                                      result_sentence: pretty_print_result(winners.first),
                                                      event_name: main_event.name)
     if results_by_place[2]
-      text += " " + t('competitions.competition_info.first_runner_up',
+      text += ' ' + t('competitions.competition_info.first_runner_up',
                       first_runner_up: people_to_sentence(results_by_place[2]),
                       first_runner_up_result: pretty_print_result(top_three.second, short: true))
       if results_by_place[3]
-        text += " " + t('competitions.competition_info.and')
-        text += " " + t('competitions.competition_info.second_runner_up',
+        text += ' ' + t('competitions.competition_info.and')
+        text += ' ' + t('competitions.competition_info.second_runner_up',
                         second_runner_up: people_to_sentence(results_by_place[3]),
                         second_runner_up_result: pretty_print_result(top_three.third, short: true))
       else
-        text += "."
+        text += '.'
       end
     elsif results_by_place[3]
-      text += " " + t('competitions.competition_info.second_runner_up',
+      text += ' ' + t('competitions.competition_info.second_runner_up',
                       second_runner_up: people_to_sentence(results_by_place[3]),
                       second_runner_up_result: pretty_print_result(top_three.third, short: true))
     end
@@ -89,13 +89,13 @@ module CompetitionsHelper
   end
 
   def records(competition)
-    text = ""
-    codes = ["WR", "AfR", "AsR", "OcR", "ER", "NAR", "SAR"]
+    text = ''
+    codes = ['WR', 'AfR', 'AsR', 'OcR', 'ER', 'NAR', 'SAR']
     codes.each do |code|
       comp_records = competition.results.where('regionalSingleRecord=:code OR regionalAverageRecord=:code', code: code)
       unless comp_records.empty?
         text += t("competitions.competition_info.records.#{code.downcase}")
-        text += ": "
+        text += ': '
         record_strs = comp_records.group_by(&:personName).sort.map do |personName, results_for_name|
           results_by_personId = results_for_name.group_by(&:personId).sort
           results_by_personId.map do |personId, results|
@@ -131,30 +131,30 @@ module CompetitionsHelper
   end
 
   def announced_content(competition)
-    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), "day")} before" : ""
+    competition.announced_at ? "#{pluralize(days_announced_before_competition(competition), "day")} before" : ''
   end
 
   def announced_class(competition)
     if competition.announced_at
       level = [Competition::ANNOUNCED_DAYS_WARNING, Competition::ANNOUNCED_DAYS_DANGER].select { |d| days_announced_before_competition(competition) > d }.count
-      ["alert-danger", "alert-orange", "alert-green"][level]
+      ['alert-danger', 'alert-orange', 'alert-green'][level]
     else
-      ""
+      ''
     end
   end
 
   private def report_and_results_days_to_class(days)
     level = [Competition::REPORT_AND_RESULTS_DAYS_OK, Competition::REPORT_AND_RESULTS_DAYS_WARNING, Competition::REPORT_AND_RESULTS_DAYS_DANGER].select { |d| days > d }.count
-    ["alert-green", "alert-success", "alert-orange", "alert-danger"][level]
+    ['alert-green', 'alert-success', 'alert-orange', 'alert-danger'][level]
   end
 
   def report_content(competition)
     days_report = days_after_competition(competition.delegate_report.posted_at, competition)
     if days_report
       submitted_by_competition_delegate = competition.delegates.include?(competition.delegate_report.posted_by_user)
-      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : "submitted by other"
+      submitted_by_competition_delegate ? "#{pluralize(days_report, "day")} after" : 'submitted by other'
     else
-      competition.is_probably_over? ? "pending" : ""
+      competition.is_probably_over? ? 'pending' : ''
     end
   end
 
@@ -166,7 +166,7 @@ module CompetitionsHelper
       days_report = days_after_competition(Date.today, competition)
       report_and_results_days_to_class(days_report)
     else
-      ""
+      ''
     end
   end
 
@@ -175,15 +175,15 @@ module CompetitionsHelper
     if days_results
       "#{pluralize(days_results, "day")} after"
     else
-      competition.is_probably_over? ? "pending" : ""
+      competition.is_probably_over? ? 'pending' : ''
     end
   end
 
   def results_class(competition)
-    return "" unless competition.is_probably_over?
+    return '' unless competition.is_probably_over?
 
     days_results = days_after_competition(competition.results_posted_at, competition)
-    days_results ? report_and_results_days_to_class(days_results) : ""
+    days_results ? report_and_results_days_to_class(days_results) : ''
   end
 
   def year_is_a_number?(year)
@@ -210,23 +210,23 @@ module CompetitionsHelper
     # Which means we need to find the earliest start_time (and latest end_time) for any activity occuring on all days, expressed in the local timezone.
     # To do that we first convert the start_time to the local timezone, and keep only the "time of the day" component of the datetime.
     # We can sort the activities based on this value to compute the extremum of the time axis.
-    sorted_activities = activities.sort_by { |a| a.start_time.in_time_zone(timezone).strftime("%H:%M") }
+    sorted_activities = activities.sort_by { |a| a.start_time.in_time_zone(timezone).strftime('%H:%M') }
     first_activity = sorted_activities.first
     first_time = if first_activity
-                   first_activity.start_time.in_time_zone(timezone).strftime("%H:00:00")
+                   first_activity.start_time.in_time_zone(timezone).strftime('%H:00:00')
                  else
-                   "08:00:00"
+                   '08:00:00'
                  end
     last_activity = sorted_activities.last
     last_time = if last_activity
                   last_timestamp = last_activity.end_time.in_time_zone(timezone)
                   if last_timestamp.hour == 0 && last_timestamp.min == 0
-                    "23:59:59"
+                    '23:59:59'
                   else
-                    last_timestamp.strftime("%H:59:59")
+                    last_timestamp.strftime('%H:59:59')
                   end
                 else
-                  "20:00:00"
+                  '20:00:00'
                 end
     [first_time, last_time]
   end
@@ -248,37 +248,37 @@ module CompetitionsHelper
   end
 
   def registration_status_icon(competition)
-    icon = ""
-    title = ""
-    icon_class = ""
+    icon = ''
+    title = ''
+    icon_class = ''
 
     if competition.registration_not_yet_opened?
-      icon = "clock"
+      icon = 'clock'
       title = I18n.t('competitions.index.tooltips.registration.opens_in', duration: distance_of_time_in_words_to_now(competition.registration_open))
-      icon_class = "blue"
+      icon_class = 'blue'
     elsif competition.registration_past?
-      icon = "user times"
+      icon = 'user times'
       title = I18n.t('competitions.index.tooltips.registration.closed', days: t('common.days', count: (competition.start_date - Date.today).to_i))
-      icon_class = "red"
+      icon_class = 'red'
     elsif competition.registration_full?
-      icon = "user clock"
+      icon = 'user clock'
       title = I18n.t('competitions.index.tooltips.registration.full')
-      icon_class = "orange"
+      icon_class = 'orange'
     else
-      icon = "user plus"
+      icon = 'user plus'
       title = I18n.t('competitions.index.tooltips.registration.open')
-      icon_class = "green"
+      icon_class = 'green'
     end
 
     ui_icon(icon,
             title: title,
             class: icon_class,
-            data: { toggle: "tooltip" })
+            data: { toggle: 'tooltip' })
   end
 
   def link_to_add_series_association(competition)
-    button = button_tag(t('competitions.competition_series_fields.add_series'), type: "button", class: "btn btn-default")
-    form = send(:instantiate_builder, "competition", competition, {
+    button = button_tag(t('competitions.competition_series_fields.add_series'), type: 'button', class: 'btn btn-default')
+    form = send(:instantiate_builder, 'competition', competition, {
                   builder: SimpleForm::FormBuilder,
                   wrapper: :horizontal_form,
                 })

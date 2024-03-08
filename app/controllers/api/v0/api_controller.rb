@@ -20,13 +20,13 @@ class Api::V0::ApiController < ApplicationController
 
   def auth_results
     if !current_user
-      return render status: :unauthorized, json: { error: "Please log in" }
+      return render status: :unauthorized, json: { error: 'Please log in' }
     end
     if !current_user.can_admin_results?
-      return render status: :forbidden, json: { error: "Cannot adminster results" }
+      return render status: :forbidden, json: { error: 'Cannot adminster results' }
     end
 
-    render json: { status: "ok" }
+    render json: { status: 'ok' }
   end
 
   def scramble_program
@@ -37,55 +37,55 @@ class Api::V0::ApiController < ApplicationController
       public_key_base = Base64.encode64(raw_bytes)
 
       # DER format export from Ruby contains newlines which we don't want
-      public_key = public_key_base.gsub(/\s+/, "")
+      public_key = public_key_base.gsub(/\s+/, '')
     rescue OpenSSL::PKey::PKeyError
       public_key = false
     end
 
     render json: {
-      "current" => {
-        "name" => "TNoodle-WCA-1.2.2",
-        "information" => "#{root_url}regulations/scrambles/",
-        "download" => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.2.2.jar",
+      'current' => {
+        'name' => 'TNoodle-WCA-1.2.2',
+        'information' => "#{root_url}regulations/scrambles/",
+        'download' => "#{root_url}regulations/scrambles/tnoodle/TNoodle-WCA-1.2.2.jar",
       },
-      "allowed" => [
-        "TNoodle-WCA-1.1.3.1",
-        "TNoodle-WCA-1.2.0",
-        "TNoodle-WCA-1.2.1",
-        "TNoodle-WCA-1.2.2",
+      'allowed' => [
+        'TNoodle-WCA-1.1.3.1',
+        'TNoodle-WCA-1.2.0',
+        'TNoodle-WCA-1.2.1',
+        'TNoodle-WCA-1.2.2',
       ],
-      "publicKeyBytes" => public_key,
-      "history" => [
-        "TNoodle-0.7.4",
-        "TNoodle-0.7.5",
-        "TNoodle-0.7.8",
-        "TNoodle-0.7.12",
-        "TNoodle-WCA-0.8.0",
-        "TNoodle-WCA-0.8.1",
-        "TNoodle-WCA-0.8.2",
-        "TNoodle-WCA-0.8.4",
-        "TNoodle-WCA-0.9.0",
-        "TNoodle-WCA-0.10.0",
-        "TNoodle-WCA-0.11.1",
-        "TNoodle-WCA-0.11.3",
-        "TNoodle-WCA-0.11.5",
-        "TNoodle-WCA-0.12.0",
-        "TNoodle-WCA-0.13.1",
-        "TNoodle-WCA-0.13.2",
-        "TNoodle-WCA-0.13.3",
-        "TNoodle-WCA-0.13.4",
-        "TNoodle-WCA-0.13.5",
-        "TNoodle-WCA-0.14.0",
-        "TNoodle-WCA-0.15.0",
-        "TNoodle-WCA-0.15.1",
-        "TNoodle-WCA-1.0.1",
-        "TNoodle-WCA-1.1.0",
-        "TNoodle-WCA-1.1.1",
-        "TNoodle-WCA-1.1.2",
-        "TNoodle-WCA-1.1.3.1",
-        "TNoodle-WCA-1.2.0",
-        "TNoodle-WCA-1.2.1",
-        "TNoodle-WCA-1.2.2",
+      'publicKeyBytes' => public_key,
+      'history' => [
+        'TNoodle-0.7.4',
+        'TNoodle-0.7.5',
+        'TNoodle-0.7.8',
+        'TNoodle-0.7.12',
+        'TNoodle-WCA-0.8.0',
+        'TNoodle-WCA-0.8.1',
+        'TNoodle-WCA-0.8.2',
+        'TNoodle-WCA-0.8.4',
+        'TNoodle-WCA-0.9.0',
+        'TNoodle-WCA-0.10.0',
+        'TNoodle-WCA-0.11.1',
+        'TNoodle-WCA-0.11.3',
+        'TNoodle-WCA-0.11.5',
+        'TNoodle-WCA-0.12.0',
+        'TNoodle-WCA-0.13.1',
+        'TNoodle-WCA-0.13.2',
+        'TNoodle-WCA-0.13.3',
+        'TNoodle-WCA-0.13.4',
+        'TNoodle-WCA-0.13.5',
+        'TNoodle-WCA-0.14.0',
+        'TNoodle-WCA-0.15.0',
+        'TNoodle-WCA-0.15.1',
+        'TNoodle-WCA-1.0.1',
+        'TNoodle-WCA-1.1.0',
+        'TNoodle-WCA-1.1.1',
+        'TNoodle-WCA-1.1.2',
+        'TNoodle-WCA-1.1.3.1',
+        'TNoodle-WCA-1.2.0',
+        'TNoodle-WCA-1.2.1',
+        'TNoodle-WCA-1.2.2',
       ],
     }
   end
@@ -97,12 +97,12 @@ class Api::V0::ApiController < ApplicationController
     query = params[:q]&.slice(0...SearchResultsController::SEARCH_QUERY_LIMIT)
 
     unless query
-      render status: :bad_request, json: { error: "No query specified" }
+      render status: :bad_request, json: { error: 'No query specified' }
       return
     end
 
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-    cache_key = ["search", *models, concise_results_date.iso8601, query]
+    cache_key = ['search', *models, concise_results_date.iso8601, query]
 
     # Temporary fix to skip cache if this is requested from Edit Person script. Long term fix would
     # be to have an API which gives an option to force cache miss, but this API cannot be public,
@@ -161,7 +161,7 @@ class Api::V0::ApiController < ApplicationController
 
   def records
     concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-    cache_key = ["records", concise_results_date.iso8601]
+    cache_key = ['records', concise_results_date.iso8601]
     json = Rails.cache.fetch(cache_key) do
       records = ActiveRecord::Base.connection.exec_query <<-SQL
         SELECT 'single' type, MIN(best) value, countryId country_id, eventId event_id
@@ -175,8 +175,8 @@ class Api::V0::ApiController < ApplicationController
       records = records.to_a
       {
         world_records: records_by_event(records),
-        continental_records: records.group_by { |record| Country.c_find(record["country_id"]).continentId }.transform_values!(&method(:records_by_event)),
-        national_records: records.group_by { |record| record["country_id"] }.transform_values!(&method(:records_by_event)),
+        continental_records: records.group_by { |record| Country.c_find(record['country_id']).continentId }.transform_values!(&method(:records_by_event)),
+        national_records: records.group_by { |record| record['country_id'] }.transform_values!(&method(:records_by_event)),
       }
     end
     render json: json
@@ -193,9 +193,9 @@ class Api::V0::ApiController < ApplicationController
   end
 
   private def records_by_event(records)
-    records.group_by { |record| record["event_id"] }.transform_values! do |event_records|
-      event_records.group_by { |record| record["type"] }.transform_values! do |type_records|
-        type_records.map { |record| record["value"] }.min
+    records.group_by { |record| record['event_id'] }.transform_values! do |event_records|
+      event_records.group_by { |record| record['type'] }.transform_values! do |type_records|
+        type_records.map { |record| record['value'] }.min
       end
     end
   end

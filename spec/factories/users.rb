@@ -5,10 +5,10 @@ FactoryBot.define do
     name { Faker::Name.name }
     email { Faker::Internet.email }
     country_iso2 { Country.real.sample.iso2 }
-    gender { "m" }
+    gender { 'm' }
     dob { Date.new(1980, 1, 1) }
-    password { "wca" }
-    password_confirmation { "wca" }
+    password { 'wca' }
+    password_confirmation { 'wca' }
     cookies_acknowledged { true }
 
     transient do
@@ -29,8 +29,8 @@ FactoryBot.define do
     end
 
     factory :admin do
-      name { "Mr. Admin" }
-      email { "admin@worldcubeassociation.org" }
+      name { 'Mr. Admin' }
+      email { 'admin@worldcubeassociation.org' }
       after(:create) do |user|
         software_admin_team = Rails.env.production? ? Team.wst_admin : Team.wst
         FactoryBot.create(:team_member, team_id: software_admin_team.id, user_id: user.id, team_leader: true)
@@ -191,7 +191,7 @@ FactoryBot.define do
 
     trait :wca_id do
       transient do
-        person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime("%F")) }
+        person { FactoryBot.create(:person, name: name, countryId: Country.find_by_iso2(country_iso2).id, gender: gender, dob: dob.strftime('%F')) }
       end
     end
 
@@ -220,22 +220,22 @@ FactoryBot.define do
     factory :user_with_wca_id, traits: [:wca_id]
 
     factory :delegate, traits: [:wca_id] do
-      delegate_status { "delegate" }
+      delegate_status { 'delegate' }
       region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
-      delegate_status { "candidate_delegate" }
+      delegate_status { 'candidate_delegate' }
       region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :trainee_delegate, traits: [:wca_id] do
-      delegate_status { "trainee_delegate" }
+      delegate_status { 'trainee_delegate' }
       region_id { FactoryBot.create(:africa_region).id }
     end
 
     factory :dummy_user, traits: [:wca_id] do
-      encrypted_password { "" }
+      encrypted_password { '' }
       dummy_account { true }
     end
   end

@@ -13,8 +13,8 @@ RSpec.describe ClearConnectedPaymentIntegrations, type: :job do
 
     it 'disconnects all integrations  older than disonnect_delay' do
       competition1 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
-      competition2 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected, id: "TestComp1")
-      competition3 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, id: "TestComp2")
+      competition2 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected, id: 'TestComp1')
+      competition3 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, id: 'TestComp2')
 
       described_class.perform_now
       expect(competition1.competition_payment_integrations).to eq([])
@@ -24,9 +24,9 @@ RSpec.describe ClearConnectedPaymentIntegrations, type: :job do
 
     it 'in a mix of comps, only disconnected those older than disconnect_delay' do
       competition1 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected)
-      competition2 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected, id: "TestComp1")
-      competition3 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, id: "TestComp2")
-      competition4 = FactoryBot.create(:competition, :payment_disconnect_delay_not_elapsed, :paypal_connected, :stripe_connected, id: "TestComp3")
+      competition2 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :stripe_connected, :paypal_connected, id: 'TestComp1')
+      competition3 = FactoryBot.create(:competition, :payment_disconnect_delay_elapsed, :paypal_connected, id: 'TestComp2')
+      competition4 = FactoryBot.create(:competition, :payment_disconnect_delay_not_elapsed, :paypal_connected, :stripe_connected, id: 'TestComp3')
 
       described_class.perform_now
       expect(competition1.competition_payment_integrations).to eq([])

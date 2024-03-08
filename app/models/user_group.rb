@@ -2,20 +2,20 @@
 
 class UserGroup < ApplicationRecord
   enum :group_type, {
-    delegate_probation: "delegate_probation",
-    delegate_regions: "delegate_regions",
-    teams_committees: "teams_committees",
-    councils: "councils",
-    translators: "translators",
-    board: "board",
-    officers: "officers",
+    delegate_probation: 'delegate_probation',
+    delegate_regions: 'delegate_regions',
+    teams_committees: 'teams_committees',
+    councils: 'councils',
+    translators: 'translators',
+    board: 'board',
+    officers: 'officers',
   }
 
-  has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
+  has_many :direct_child_groups, class_name: 'UserGroup', inverse_of: :parent_group, foreign_key: 'parent_group_id'
   belongs_to :metadata, polymorphic: true, optional: true
-  belongs_to :parent_group, class_name: "UserGroup", optional: true
+  belongs_to :parent_group, class_name: 'UserGroup', optional: true
 
-  has_many :delegate_users, -> { delegates.with_delegate_data }, class_name: "User", foreign_key: "region_id"
+  has_many :delegate_users, -> { delegates.with_delegate_data }, class_name: 'User', foreign_key: 'region_id'
 
   scope :root_groups, -> { where(parent_group: nil) }
 
@@ -86,11 +86,11 @@ class UserGroup < ApplicationRecord
   # Returns human readable name of group type
   def self.group_type_name
     {
-      delegate_probation: "Delegate Probation",
-      delegate_regions: "Delegate Regions",
-      teams_committees: "Teams & Committees",
-      councils: "Councils",
-      translators: "Translators",
+      delegate_probation: 'Delegate Probation',
+      delegate_regions: 'Delegate Regions',
+      teams_committees: 'Teams & Committees',
+      councils: 'Councils',
+      translators: 'Translators',
     }
   end
 
@@ -138,9 +138,9 @@ class UserGroup < ApplicationRecord
   # Unique status means that there can only be one active user with this status in the group.
   def unique_status?(status)
     if self.group_type == UserGroup.group_types[:delegate_regions]
-      ["senior_delegate", "regional_delegate"].include?(status)
+      ['senior_delegate', 'regional_delegate'].include?(status)
     elsif self.group_type == UserGroup.group_types[:teams_committees]
-      status == "leader"
+      status == 'leader'
     else
       false
     end

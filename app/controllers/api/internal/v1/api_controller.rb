@@ -5,7 +5,7 @@ class Api::Internal::V1::ApiController < ApplicationController
 
   def validate_token
     service_token = request.headers[Microservices::Auth::MICROSERVICE_AUTH_HEADER]
-    return render json: { error: "Missing Authentication" }, status: :forbidden unless service_token.present?
+    return render json: { error: 'Missing Authentication' }, status: :forbidden unless service_token.present?
     # The Vault CLI can't parse the response from identity/oidc/introspect so
     # we need to request it instead see https://github.com/hashicorp/vault/issues/9080
 
@@ -23,7 +23,7 @@ class Api::Internal::V1::ApiController < ApplicationController
     end
     if response.success?
       result = JSON.parse(response.body)
-      render json: { error: "Authentication Expired or Token Invalid" }, status: :forbidden unless result["active"]
+      render json: { error: 'Authentication Expired or Token Invalid' }, status: :forbidden unless result['active']
     else
       raise "Introspection failed with the following error: #{response.status}, #{response.body}"
     end

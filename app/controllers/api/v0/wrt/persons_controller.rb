@@ -36,13 +36,13 @@ class Api::V0::Wrt::PersonsController < Api::V0::ApiController
 
     edit_params = edit_params_from_person_params(person_params)
 
-    if params[:method] == "fix"
+    if params[:method] == 'fix'
       if person.update(edit_params)
         render status: :ok, json: { success: "Successfully fixed #{person.name}." }
       else
         render status: :unprocessable_entity, json: { error: "Error while fixing #{person.name}." }
       end
-    elsif params[:method] == "update"
+    elsif params[:method] == 'update'
       if person.update_using_sub_id(edit_params)
         render status: :ok, json: { success: "Successfully updated #{person.name}." }
       else

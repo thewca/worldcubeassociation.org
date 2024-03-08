@@ -23,8 +23,8 @@ class PaymentController < ApplicationController
     if current_user
       attendee_id = params.require(:attendee_id)
       payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-      return redirect_to Microservices::Registrations.competition_register_path(competition, "payment_not_found") unless payment_request.present?
-      return redirect_to Microservices::Registrations.competition_register_path(competition, "not_authorized") unless payment_request.user.id == current_user.id
+      return redirect_to Microservices::Registrations.competition_register_path(competition, 'payment_not_found') unless payment_request.present?
+      return redirect_to Microservices::Registrations.competition_register_path(competition, 'not_authorized') unless payment_request.user.id == current_user.id
 
       competition = payment_request.competition
 
@@ -35,19 +35,19 @@ class PaymentController < ApplicationController
       stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
       stored_intent = stored_transaction.stripe_payment_intent
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition.id, "secret_invalid") unless stored_intent.client_secret == intent_secret
+      return redirect_to Microservices::Registrations.competition_register_path(competition.id, 'secret_invalid') unless stored_intent.client_secret == intent_secret
 
       # No need to create a new intent here. We can just query the stored intent from Stripe directly.
       stripe_intent = stored_intent.retrieve_intent
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition.id, "intent_not_found") unless stripe_intent.present?
+      return redirect_to Microservices::Registrations.competition_register_path(competition.id, 'intent_not_found') unless stripe_intent.present?
 
       stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
         ruby_money = charge.money_amount
         begin
           Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
         rescue Faraday::Error
-          return redirect_to Microservices::Registrations.competition_register_path(competition.id, "registration_unreachable")
+          return redirect_to Microservices::Registrations.competition_register_path(competition.id, 'registration_unreachable')
         end
       end
 
@@ -61,7 +61,7 @@ class PaymentController < ApplicationController
     if current_user
       attendee_id = params.require(:attendee_id)
       payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-      return render status: :bad_request, json: { error: "Registration not found" } unless payment_request.present?
+      return render status: :bad_request, json: { error: 'Registration not found' } unless payment_request.present?
 
       competition = payment_request.competition
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
@@ -85,22 +85,22 @@ class PaymentController < ApplicationController
     attendee_id = params.require(:attendee_id)
 
     payment_request = AttendeePaymentRequest.find_by(attendee_id: attendee_id)
-    return render status: :bad_request, json: { error: "Registration not found" } unless payment_request.present?
+    return render status: :bad_request, json: { error: 'Registration not found' } unless payment_request.present?
 
     competition = payment_request.competition
-    return render json: { error: "no_stripe" } unless competition.using_payment_integrations?
+    return render json: { error: 'no_stripe' } unless competition.using_payment_integrations?
     return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
     charge = StripeTransaction.find(payment_id)
 
-    return render json: { error: "invalid_transaction" } unless charge.present?
+    return render json: { error: 'invalid_transaction' } unless charge.present?
 
-    return render json: { error: "non_refundable" } unless charge.charge?
+    return render json: { error: 'non_refundable' } unless charge.charge?
 
     refund_amount_param = params.require(:refund_amount)
     refund_amount = refund_amount_param.to_i
 
-    return render json: { error: "refund_zero" } if refund_amount < 0
+    return render json: { error: 'refund_zero' } if refund_amount < 0
 
     currency_iso = competition.currency_code
     stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
@@ -121,11 +121,11 @@ class PaymentController < ApplicationController
     refund_receipt.update!(parent_transaction: charge)
 
     begin
-      Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+      Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, 'refund')
     rescue Faraday::Error
-      return render json: { error: "registration_unreachable" }
+      return render json: { error: 'registration_unreachable' }
     end
 
-    render json: { status: "ok" }
+    render json: { status: 'ok' }
   end
 end

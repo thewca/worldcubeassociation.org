@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "csv"
+require 'csv'
 
 class RegistrationsController < ApplicationController
   before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination, :create_paypal_order]
@@ -38,10 +38,10 @@ class RegistrationsController < ApplicationController
   end
 
   def edit_registrations
-    @show_events = params[:show_events] == "true"
-    @show_full_emails = params[:show_full_emails] == "true"
-    @show_birthdays = params[:show_birthdays] == "true"
-    @run_validations = params[:run_validations] == "true"
+    @show_events = params[:show_events] == 'true'
+    @show_full_emails = params[:show_full_emails] == 'true'
+    @show_birthdays = params[:show_birthdays] == 'true'
+    @run_validations = params[:run_validations] == 'true'
 
     @competition = competition_from_params
     @registrations = @competition.registrations.includes(:user, :registration_payments, :events)
@@ -66,7 +66,7 @@ class RegistrationsController < ApplicationController
 
   def index
     @competition = competition_from_params
-    @registrations = @competition.registrations.accepted.includes(:user, :events).order("users.name")
+    @registrations = @competition.registrations.accepted.includes(:user, :events).order('users.name')
     @count_by_event = Hash.new(0)
     @newcomers = @returners = 0
   end
@@ -92,7 +92,7 @@ class RegistrationsController < ApplicationController
       @registration.update!(deleted_at: Time.now, deleted_by: current_user.id)
       mailer = RegistrationsMailer.notify_registrant_of_deleted_registration(@registration)
       mailer.deliver_later
-      flash[:success] = I18n.t('registrations.flash.single_deletion_and_mail', mail: mailer.to.join(" "))
+      flash[:success] = I18n.t('registrations.flash.single_deletion_and_mail', mail: mailer.to.join(' '))
       redirect_to competition_edit_registrations_path(@registration.competition)
     end
   end
@@ -123,30 +123,30 @@ class RegistrationsController < ApplicationController
   def do_import
     competition = competition_from_params
     file = params[:registrations_import][:registrations_file]
-    required_columns = ["status", "name", "country", "wca id", "birth date", "gender", "email"] + competition.events.map(&:id)
+    required_columns = ['status', 'name', 'country', 'wca id', 'birth date', 'gender', 'email'] + competition.events.map(&:id)
     # Ensure the CSV file includes all required columns.
     headers = CSV.read(file.path).first.compact.map(&:downcase)
     missing_headers = required_columns - headers
     if missing_headers.any?
-      raise I18n.t("registrations.import.errors.missing_columns", columns: missing_headers.join(", "))
+      raise I18n.t('registrations.import.errors.missing_columns', columns: missing_headers.join(', '))
     end
     registration_rows = CSV.read(file.path, headers: true, header_converters: :symbol, skip_blanks: true, converters: ->(string) { string&.strip })
                            .map(&:to_hash)
-                           .select { |registration_row| registration_row[:status] == "a" }
+                           .select { |registration_row| registration_row[:status] == 'a' }
     if competition.competitor_limit_enabled? && registration_rows.length > competition.competitor_limit
-      raise I18n.t("registrations.import.errors.over_competitor_limit",
+      raise I18n.t('registrations.import.errors.over_competitor_limit',
                    accepted_count: registration_rows.length,
                    limit: competition.competitor_limit)
     end
     emails = registration_rows.map { |registration_row| registration_row[:email] }
     email_duplicates = emails.select { |email| emails.count(email) > 1 }.uniq
     if email_duplicates.any?
-      raise I18n.t("registrations.import.errors.email_duplicates", emails: email_duplicates.join(", "))
+      raise I18n.t('registrations.import.errors.email_duplicates', emails: email_duplicates.join(', '))
     end
     wca_ids = registration_rows.map { |registration_row| registration_row[:wca_id] }
     wca_id_duplicates = wca_ids.select { |wca_id| wca_ids.count(wca_id) > 1 }.uniq
     if wca_id_duplicates.any?
-      raise I18n.t("registrations.import.errors.wca_id_duplicates", wca_ids: wca_id_duplicates.join(", "))
+      raise I18n.t('registrations.import.errors.wca_id_duplicates', wca_ids: wca_id_duplicates.join(', '))
     end
     new_locked_users = []
     ActiveRecord::Base.transaction do
@@ -165,21 +165,21 @@ class RegistrationsController < ApplicationController
         registration.registration_competition_events = []
         competition.competition_events.map do |competition_event|
           value = registration_row[competition_event.event_id.to_sym]
-          if value == "1"
+          if value == '1'
             registration.registration_competition_events.build(competition_event_id: competition_event.id)
-          elsif value != "0"
-            raise I18n.t("registrations.import.errors.invalid_event_column", value: value, column: competition_event.event_id)
+          elsif value != '0'
+            raise I18n.t('registrations.import.errors.invalid_event_column', value: value, column: competition_event.event_id)
           end
         end
         registration.save!
       rescue StandardError => e
-        raise e.exception(I18n.t("registrations.import.errors.error", registration: registration_row[:name], error: e))
+        raise e.exception(I18n.t('registrations.import.errors.error', registration: registration_row[:name], error: e))
       end
     end
     new_locked_users.each do |user|
       RegistrationsMailer.notify_registrant_of_locked_account_creation(user, competition).deliver_later
     end
-    flash[:success] = I18n.t("registrations.flash.imported")
+    flash[:success] = I18n.t('registrations.flash.imported')
     redirect_to competition_registrations_import_url(competition)
   rescue StandardError => e
     flash[:danger] = e.to_s
@@ -193,14 +193,14 @@ class RegistrationsController < ApplicationController
   def do_add
     @competition = competition_from_params
     if @competition.registration_full?
-      flash[:danger] = I18n.t("registrations.mailer.deleted.causes.registrations_full")
+      flash[:danger] = I18n.t('registrations.mailer.deleted.causes.registrations_full')
       redirect_to competition_path(@competition)
       return
     end
     ActiveRecord::Base.transaction do
       user, locked_account_created = user_for_registration!(params[:registration_data])
       registration = @competition.registrations.find_or_initialize_by(user_id: user.id)
-      raise I18n.t("registrations.add.errors.already_registered") unless registration.new_record?
+      raise I18n.t('registrations.add.errors.already_registered') unless registration.new_record?
       registration_comment = params.dig(:registration_data, :comments)
       registration.assign_attributes(comments: registration_comment) if registration_comment.present?
       registration.assign_attributes(accepted_at: Time.now, accepted_by: current_user.id)
@@ -213,7 +213,7 @@ class RegistrationsController < ApplicationController
         RegistrationsMailer.notify_registrant_of_locked_account_creation(user, @competition).deliver_later
       end
     end
-    flash[:success] = I18n.t("registrations.flash.added")
+    flash[:success] = I18n.t('registrations.flash.added')
     redirect_to competition_registrations_add_url(@competition)
   rescue StandardError => e
     flash.now[:danger] = e.to_s
@@ -231,7 +231,7 @@ class RegistrationsController < ApplicationController
     }
     if registration_row[:wca_id].present?
       unless Person.exists?(wca_id: registration_row[:wca_id])
-        raise I18n.t("registrations.import.errors.non_existent_wca_id", wca_id: registration_row[:wca_id])
+        raise I18n.t('registrations.import.errors.non_existent_wca_id', wca_id: registration_row[:wca_id])
       end
       user = User.find_by(wca_id: registration_row[:wca_id])
       if user
@@ -239,7 +239,7 @@ class RegistrationsController < ApplicationController
           email_user = User.find_by(email: registration_row[:email])
           if email_user
             if email_user.wca_id.present?
-              raise I18n.t("registrations.import.errors.email_user_with_different_wca_id",
+              raise I18n.t('registrations.import.errors.email_user_with_different_wca_id',
                            email: registration_row[:email], user_wca_id: email_user.wca_id,
                            registration_wca_id: registration_row[:wca_id])
             else
@@ -259,7 +259,7 @@ class RegistrationsController < ApplicationController
         email_user = User.find_by(email: registration_row[:email])
         if email_user
           if email_user.unconfirmed_wca_id.present? && email_user.unconfirmed_wca_id != registration_row[:wca_id]
-            raise I18n.t("registrations.import.errors.email_user_with_different_unconfirmed_wca_id",
+            raise I18n.t('registrations.import.errors.email_user_with_different_unconfirmed_wca_id',
                          email: registration_row[:email], unconfirmed_wca_id: email_user.unconfirmed_wca_id,
                          registration_wca_id: registration_row[:wca_id])
           else
@@ -299,9 +299,9 @@ class RegistrationsController < ApplicationController
   end
 
   def do_actions_for_selected
-    @show_events = params[:show_events] == "true"
-    @show_full_emails = params[:show_full_emails] == "true"
-    @show_birthdays = params[:show_birthdays] == "true"
+    @show_events = params[:show_events] == 'true'
+    @show_full_emails = params[:show_full_emails] == 'true'
+    @show_birthdays = params[:show_birthdays] == 'true'
     @competition = competition_from_params
     registrations = @competition.registrations.find(selected_registrations_ids)
     count_success = 0
@@ -309,7 +309,7 @@ class RegistrationsController < ApplicationController
     @registration_error_ids = []
 
     case params[:registrations_action]
-    when "accept-selected"
+    when 'accept-selected'
       registrations.each do |registration|
         if !registration.accepted?
           if registration.update(accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil)
@@ -324,7 +324,7 @@ class RegistrationsController < ApplicationController
       if count_success > 0
         flash.now[:success] = I18n.t('registrations.flash.accepted_and_mailed', count: count_success)
       end
-    when "reject-selected"
+    when 'reject-selected'
       registrations.each do |registration|
         if !registration.pending?
           if registration.update(accepted_at: nil, deleted_at: nil)
@@ -339,7 +339,7 @@ class RegistrationsController < ApplicationController
       if count_success > 0
         flash.now[:warning] = I18n.t('registrations.flash.rejected_and_mailed', count: count_success)
       end
-    when "delete-selected"
+    when 'delete-selected'
       registrations.each do |registration|
         if !registration.deleted?
           if registration.update(deleted_at: Time.now, deleted_by: current_user.id)
@@ -354,7 +354,7 @@ class RegistrationsController < ApplicationController
       if count_success > 0
         flash.now[:warning] = I18n.t('registrations.flash.deleted_and_mailed', count: count_success)
       end
-    when "export-selected"
+    when 'export-selected'
     else
       raise "Unrecognized action #{params[:registrations_action]}"
     end
@@ -364,7 +364,7 @@ class RegistrationsController < ApplicationController
     end
 
     respond_to do |format|
-      if params[:registrations_action] == "export-selected"
+      if params[:registrations_action] == 'export-selected'
         format.js { render :redirect_to_export }
       else
         format.js { render :do_actions_for_selected }
@@ -376,7 +376,7 @@ class RegistrationsController < ApplicationController
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
     if params[:from_admin_view] && @registration.updated_at.to_time != params[:registration][:updated_at].to_time
-      flash.now[:danger] = "Did not update registration because competitor updated registration since the page was loaded."
+      flash.now[:danger] = 'Did not update registration because competitor updated registration since the page was loaded.'
       render :edit
       return
     end
@@ -480,7 +480,7 @@ class RegistrationsController < ApplicationController
         return head :bad_request
       end
     elsif Rails.env.production? && EnvConfig.WCA_LIVE_SITE?
-      logger.error "No Stripe webhook secret defined in Production."
+      logger.error 'No Stripe webhook secret defined in Production.'
       return head :bad_request
     end
 
@@ -556,7 +556,7 @@ class RegistrationsController < ApplicationController
     stored_intent = stored_transaction.stripe_payment_intent
 
     unless stored_intent.client_secret == intent_secret
-      flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
+      flash[:error] = t('registrations.payment_form.errors.stripe_secret_invalid')
       return redirect_to competition_register_path(@competition)
     end
 
@@ -564,7 +564,7 @@ class RegistrationsController < ApplicationController
     stripe_intent = stored_intent.retrieve_intent
 
     unless stripe_intent.present?
-      flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
+      flash[:error] = t('registrations.payment_form.errors.stripe_not_found')
       return redirect_to competition_register_path(@competition)
     end
 
@@ -586,21 +586,21 @@ class RegistrationsController < ApplicationController
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
     case stored_transaction.status
     when 'succeeded'
-      flash[:success] = t("registrations.payment_form.payment_successful")
+      flash[:success] = t('registrations.payment_form.payment_successful')
     when 'requires_action'
       # Customer did not complete the payment
       # For example, 3DSecure could still be pending.
-      flash[:warning] = t("registrations.payment_form.errors.payment_pending")
+      flash[:warning] = t('registrations.payment_form.errors.payment_pending')
     when 'requires_payment_method'
       # Payment failed. If a payment fails, it is "reset" by Stripe,
       # so from our end it looks like it never even started (i.e. the customer didn't choose a payment method yet)
-      flash[:error] = t("registrations.payment_form.errors.payment_reset")
+      flash[:error] = t('registrations.payment_form.errors.payment_reset')
     when 'processing'
       # The payment can be pending, for example bank transfers can take multiple days to be fulfilled.
-      flash[:warning] = t("registrations.payment_form.payment_processing")
+      flash[:warning] = t('registrations.payment_form.payment_processing')
     else
       # Invalid status
-      flash[:error] = "Invalid PaymentIntent status"
+      flash[:error] = 'Invalid PaymentIntent status'
     end
 
     redirect_to competition_register_path(@competition)
@@ -619,17 +619,17 @@ class RegistrationsController < ApplicationController
     user = registration.user
 
     unless user == current_user
-      return render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
+      return render status: 403, json: { error: { message: t('registrations.payment_form.errors.not_allowed') } }
     end
 
     amount = params[:amount].to_i
 
     if registration.outstanding_entry_fees.cents <= 0
-      return render json: { error: { message: t("registrations.payment_form.errors.already_paid") } }
+      return render json: { error: { message: t('registrations.payment_form.errors.already_paid') } }
     end
 
     if amount < registration.outstanding_entry_fees.cents
-      return render json: { error: { message: t("registrations.payment_form.alerts.amount_too_low") } }
+      return render json: { error: { message: t('registrations.payment_form.alerts.amount_too_low') } }
     end
 
     competition = registration.competition
@@ -713,7 +713,7 @@ class RegistrationsController < ApplicationController
     registration = Registration.find(params[:id])
 
     unless registration.competition.using_payment_integrations?
-      flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
+      flash[:danger] = 'You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so.'
       return redirect_to edit_registration_path(registration)
     end
 
@@ -723,12 +723,12 @@ class RegistrationsController < ApplicationController
     refund_amount = refund_amount_param.to_i
 
     if refund_amount > payment.amount_available_for_refund
-      flash[:danger] = "You are not allowed to refund more than the competitor has paid."
+      flash[:danger] = 'You are not allowed to refund more than the competitor has paid.'
       return redirect_to edit_registration_path(registration)
     end
 
     if refund_amount < 0
-      flash[:danger] = "The refund amount must be greater than zero."
+      flash[:danger] = 'The refund amount must be greater than zero.'
       return redirect_to edit_registration_path(registration)
     end
 
@@ -774,7 +774,7 @@ class RegistrationsController < ApplicationController
   def create
     @competition = competition_from_params
     unless @competition.registration_opened? || @competition.user_can_pre_register?(current_user)
-      flash[:danger] = "You cannot register for this competition, registration is closed"
+      flash[:danger] = 'You cannot register for this competition, registration is closed'
       redirect_to competition_path(@competition)
       return
     end
@@ -805,9 +805,9 @@ class RegistrationsController < ApplicationController
         :administrative_notes,
       ]
       params[:registration].merge! case params[:registration][:status]
-                                   when "accepted"
+                                   when 'accepted'
                                      { accepted_at: Time.now, accepted_by: current_user.id, deleted_at: nil }
-                                   when "deleted"
+                                   when 'deleted'
                                      { deleted_at: Time.now, deleted_by: current_user.id }
                                    else
                                      { accepted_at: nil, deleted_at: nil }

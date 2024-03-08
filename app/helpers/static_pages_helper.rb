@@ -2,36 +2,36 @@
 
 module StaticPagesHelper
   def format_team_members(team)
-    team.current_members.includes(:user).order(team_leader: :desc).order("users.name asc").map do |u|
-      u.user.name + (u.team_leader ? " (leader)" : "")
+    team.current_members.includes(:user).order(team_leader: :desc).order('users.name asc').map do |u|
+      u.user.name + (u.team_leader ? ' (leader)' : '')
     end.to_sentence
   end
 
   def badge_for_member(tm)
     if tm.team_leader
-      "team-leader-badge"
+      'team-leader-badge'
     elsif tm.team_senior_member
-      "team-senior-member-badge"
+      'team-senior-member-badge'
     end
   end
 
   def subtext_for_member(tm)
     if tm.team_leader
-      t("about.structure.leader")
+      t('about.structure.leader')
     elsif tm.team_senior_member
-      t("about.structure.senior_member")
+      t('about.structure.senior_member')
     end
   end
 
   def team_member_name(name, &block)
-    content_tag(:div, class: "team-member-name") do
-      name.html_safe + tag.br + content_tag(:span, class: "team-subtext", &block)
+    content_tag(:div, class: 'team-member-name') do
+      name.html_safe + tag.br + content_tag(:span, class: 'team-subtext', &block)
     end
   end
 
   def format_team_member_content(user, &)
     name = if user.wca_id
-             link_to(user.name, person_path(user.wca_id), title: t("about.structure.users.profile", user_name: user.name), data: { toggle: "tooltip", placement: "bottom" })
+             link_to(user.name, person_path(user.wca_id), title: t('about.structure.users.profile', user_name: user.name), data: { toggle: 'tooltip', placement: 'bottom' })
            else
              user.name
            end
@@ -39,10 +39,10 @@ module StaticPagesHelper
   end
 
   def wca_icon
-    image_tag "wca_logo.svg", class: "wca-tool-icon", data: {
-      toggle: "tooltip",
-      placement: "right",
-      title: t("score_tools.wca_icon_text"),
+    image_tag 'wca_logo.svg', class: 'wca-tool-icon', data: {
+      toggle: 'tooltip',
+      placement: 'right',
+      title: t('score_tools.wca_icon_text'),
     }
   end
 end

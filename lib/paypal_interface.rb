@@ -22,7 +22,7 @@ module PaypalInterface
       products: ['PPCP'], # TODO: Experiment with other payment types
       partner_config_override: {
         return_url: EnvConfig.ROOT_URL + Rails.application.routes.url_helpers.competitions_paypal_return_path(competition_id),
-        return_url_description: "the url to return the WCA after the paypal onboarding process.",
+        return_url_description: 'the url to return the WCA after the paypal onboarding process.',
       },
       legal_consents: [
         {
@@ -37,7 +37,7 @@ module PaypalInterface
     end
 
     response.body['links'].each do |link|
-      if link['rel'] == "action_url"
+      if link['rel'] == 'action_url'
         return link['href']
       end
     end
@@ -111,7 +111,7 @@ module PaypalInterface
   end
 
   private_class_method def self.get_paypal_auth_assertion(competition)
-    payload = { "iss" => AppSecrets.PAYPAL_CLIENT_ID, "payer_id" => competition.connected_stripe_account_id }
+    payload = { 'iss' => AppSecrets.PAYPAL_CLIENT_ID, 'payer_id' => competition.connected_stripe_account_id }
     JWT.encode payload, nil, 'none'
   end
 end

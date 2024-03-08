@@ -22,17 +22,17 @@ class ReassignWcaId
   validate :require_valid_accounts
   def require_valid_accounts
     if !@account1_user
-      errors.add(:account1, "Not found")
+      errors.add(:account1, 'Not found')
     end
     if !@account2_user
-      errors.add(:account2, "Not found")
+      errors.add(:account2, 'Not found')
     end
   end
 
   validate :require_different_people
   def require_different_people
     if account1_user && account2_user && account1 == account2
-      errors.add(:account2, "Cannot transfer a WCA ID of an account with itself!")
+      errors.add(:account2, 'Cannot transfer a WCA ID of an account with itself!')
     end
   end
 
@@ -41,10 +41,10 @@ class ReassignWcaId
     account1_wca_id = @account1_user&.wca_id
     account2_wca_id = @account2_user&.wca_id
     unless account1_wca_id
-      errors.add(:account1, "Account 1 must have a WCA ID assigned")
+      errors.add(:account1, 'Account 1 must have a WCA ID assigned')
     end
     if account2_wca_id
-      errors.add(:account2, "Account 2 must not have a WCA ID assigned")
+      errors.add(:account2, 'Account 2 must not have a WCA ID assigned')
     end
   end
 

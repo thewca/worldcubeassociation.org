@@ -29,11 +29,11 @@ module CountryCityValidators
 
   class ArCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "province", valid_regions: AR_PROVINCES)
+      super(type_of_region: 'province', valid_regions: AR_PROVINCES)
     end
 
     def self.country_iso_2
-      "AR"
+      'AR'
     end
   end
 end

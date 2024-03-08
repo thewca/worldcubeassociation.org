@@ -17,8 +17,8 @@ class DelegateStatusChangeMailer < ApplicationMailer
       @new_delegate_status = new_delegate_status
 
       @is_changed_by_senior_of_user = user_who_made_the_change.id == user_senior_delegate.id
-      to = ["board@worldcubeassociation.org"]
-      cc = ["assistants@worldcubeassociation.org", "finance@worldcubeassociation.org", user_who_made_the_change.email, @user_senior_delegate.email]
+      to = ['board@worldcubeassociation.org']
+      cc = ['assistants@worldcubeassociation.org', 'finance@worldcubeassociation.org', user_who_made_the_change.email, @user_senior_delegate.email]
       mail(
         to: to,
         cc: cc,

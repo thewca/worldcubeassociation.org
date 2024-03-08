@@ -10,14 +10,14 @@ class MediaController < ApplicationController
 
   def create
     params = medium_params.merge(
-      "status" => "pending",
-      "submitterName" => current_user.name,
-      "submitterEmail" => current_user.email,
+      'status' => 'pending',
+      'submitterName' => current_user.name,
+      'submitterEmail' => current_user.email,
     )
     @medium = CompetitionMedium.new(params)
 
     if @medium.save
-      flash[:success] = "Thanks for sending us new media!"
+      flash[:success] = 'Thanks for sending us new media!'
       redirect_to new_medium_path
     else
       render :new
@@ -25,25 +25,25 @@ class MediaController < ApplicationController
   end
 
   private def get_media
-    params[:year] ||= "all years"
-    params[:region] ||= "all"
+    params[:year] ||= 'all years'
+    params[:region] ||= 'all'
 
     media = CompetitionMedium.includes(:competition).where(status: params[:status]).order(timestampSubmitted: :desc)
-    media = media.joins(:competition).where("YEAR(Competitions.start_date) = :media_start", media_start: params[:year]) unless params[:year] == "all years"
-    media = media.belongs_to_region(params[:region]) unless params[:region] == "all"
+    media = media.joins(:competition).where('YEAR(Competitions.start_date) = :media_start', media_start: params[:year]) unless params[:year] == 'all years'
+    media = media.belongs_to_region(params[:region]) unless params[:region] == 'all'
 
     media
   end
 
   def index
-    params[:status] = "accepted"
+    params[:status] = 'accepted'
     params[:year] ||= Date.today.year
     @media = get_media
     render :index
   end
 
   def validate
-    params[:status] ||= "pending"
+    params[:status] ||= 'pending'
     @media = get_media
     I18n.with_locale(:en) { render :validate }
   end
@@ -56,7 +56,7 @@ class MediaController < ApplicationController
   def update
     @medium = find_medium
     if @medium.update(medium_params)
-      flash[:success] = "Updated medium"
+      flash[:success] = 'Updated medium'
       redirect_to edit_medium_path(@medium)
     else
       I18n.with_locale(:en) { render :edit }
@@ -66,7 +66,7 @@ class MediaController < ApplicationController
   def destroy
     @medium = find_medium
     if @medium.destroy
-      flash[:success] = "Deleted medium"
+      flash[:success] = 'Deleted medium'
       redirect_to validate_media_path
     else
       I18n.with_locale(:en) { render :edit }

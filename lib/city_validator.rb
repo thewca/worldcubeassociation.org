@@ -4,7 +4,7 @@ class CityValidator < ActiveModel::EachValidator
   def validate_each(record, attribute, value)
     return if record.country.nil? || value.blank?
 
-    if value == "Multiple cities"
+    if value == 'Multiple cities'
       # This is a very special city name used for simultaneous FMC competitions
       # such as FMC USA. See https://github.com/thewca/worldcubeassociation.org/issues/3355.
       return

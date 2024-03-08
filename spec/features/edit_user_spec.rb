@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.feature "Edit user" do
+RSpec.feature 'Edit user' do
   let!(:admin) { FactoryBot.create(:admin) }
   let(:existing_user) { FactoryBot.create(:user_with_wca_id) }
   let(:new_person) { FactoryBot.create(:person) }
@@ -19,20 +19,20 @@ RSpec.feature "Edit user" do
     find('input[type="submit"]').click
   end
 
-  scenario "entering wca id", js: true do
+  scenario 'entering wca id', js: true do
     sign_in admin
     navigate_to_form(new_user)
 
     # Entering an existing wca id
-    fill_in "WCA ID", with: existing_user.wca_id
+    fill_in 'WCA ID', with: existing_user.wca_id
     submit_form
 
     expect(page).to have_text "WCA ID is already used by #{existing_user.name}"
 
     # Entering a valid wca id
-    fill_in "WCA ID", with: new_person.wca_id
+    fill_in 'WCA ID', with: new_person.wca_id
     submit_form
 
-    expect(page).to have_text "Account updated"
+    expect(page).to have_text 'Account updated'
   end
 end

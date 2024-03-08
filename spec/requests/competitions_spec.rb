@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-require "rails_helper"
+require 'rails_helper'
 
-RSpec.describe "competitions" do
+RSpec.describe 'competitions' do
   let!(:competition) { FactoryBot.create(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
 
-  describe "PATCH #update_competition" do
-    context "when signed in as admin" do
+  describe 'PATCH #update_competition' do
+    context 'when signed in as admin' do
       sign_in { FactoryBot.create :admin }
 
       it 'can confirm competition' do
@@ -16,25 +16,25 @@ RSpec.describe "competitions" do
         expect(competition.reload.confirmed?).to eq true
       end
 
-      context "when handling unconfirmed competitions" do
+      context 'when handling unconfirmed competitions' do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = competition.to_form_data.merge({ championships: ["world", "_Europe"] })
+          update_params = competition.to_form_data.merge({ championships: ['world', '_Europe'] })
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
           expect(competition.reload.championships.count).to eq 2
         end
 
-        context "when handling Series competitions" do
+        context 'when handling Series competitions' do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
                               competition_series: series, series_base: competition)
           }
 
-          it "can add competition to an existing Series" do
+          it 'can add competition to an existing Series' do
             expect(competition.confirmed?).to be false
 
             series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
@@ -56,9 +56,9 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
+                                                             wcifId: 'SomeNewSeries2015',
+                                                             name: 'Some New Series 2015',
+                                                             shortName: 'Some New Series 2015',
                                                              competitionIds: [partner_competition.id, competition.id],
                                                            } })
 
@@ -99,7 +99,7 @@ RSpec.describe "competitions" do
               expect(series.competitions).to include(partner_competition, other_partner_competition)
             end
 
-            it "and Series is so small that it gets deleted" do
+            it 'and Series is so small that it gets deleted' do
               expect(competition.confirmed?).to be false
 
               update_params = competition.to_form_data.merge({ series: nil })
@@ -118,13 +118,13 @@ RSpec.describe "competitions" do
         end
       end
 
-      context "when handling confirmed competitions" do
+      context 'when handling confirmed competitions' do
         before { competition.update!(confirmed: true) }
 
         it 'can set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = competition.to_form_data.merge({ championships: ["world", "_Europe"] })
+          update_params = competition.to_form_data.merge({ championships: ['world', '_Europe'] })
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
@@ -132,14 +132,14 @@ RSpec.describe "competitions" do
           expect(competition.reload.championships.count).to eq 2
         end
 
-        context "when handling Series competitions" do
+        context 'when handling Series competitions' do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
                               competition_series: series, series_base: competition)
           }
 
-          it "can add competition to an existing Series" do
+          it 'can add competition to an existing Series' do
             expect(competition.confirmed?).to be true
 
             series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
@@ -158,9 +158,9 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
+                                                             wcifId: 'SomeNewSeries2015',
+                                                             name: 'Some New Series 2015',
+                                                             shortName: 'Some New Series 2015',
                                                              competitionIds: [partner_competition.id, competition.id],
                                                            } })
 
@@ -177,7 +177,7 @@ RSpec.describe "competitions" do
           context 'can remove competition from an existing Series' do
             before { competition.update!(competition_series: series) }
 
-            it "and Series has other competitions so it persists" do
+            it 'and Series has other competitions so it persists' do
               expect(competition.confirmed?).to be true
 
               other_partner_competition = FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
@@ -201,7 +201,7 @@ RSpec.describe "competitions" do
               expect(series.competitions).to include(partner_competition, other_partner_competition)
             end
 
-            it "and Series is so small that it gets deleted" do
+            it 'and Series is so small that it gets deleted' do
               expect(competition.confirmed?).to be true
 
               update_params = competition.to_form_data.merge({ series: nil })
@@ -231,21 +231,21 @@ RSpec.describe "competitions" do
         it 'can set championship types' do
           expect(competition.confirmed?).to be false
 
-          update_params = competition.to_form_data.merge({ championships: ["world", "_Europe"] })
+          update_params = competition.to_form_data.merge({ championships: ['world', '_Europe'] })
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to be_successful
           expect(competition.reload.championships.count).to eq 2
         end
 
-        context "when handling Series competitions" do
+        context 'when handling Series competitions' do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
                               competition_series: series, series_base: competition)
           }
 
-          it "can add competition to an existing Series" do
+          it 'can add competition to an existing Series' do
             expect(competition.confirmed?).to be false
 
             series_update_params = series.to_form_data.merge({ competitionIds: [competition.id, partner_competition.id] })
@@ -267,9 +267,9 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
+                                                             wcifId: 'SomeNewSeries2015',
+                                                             name: 'Some New Series 2015',
+                                                             shortName: 'Some New Series 2015',
                                                              competitionIds: [partner_competition.id, competition.id],
                                                            } })
 
@@ -310,7 +310,7 @@ RSpec.describe "competitions" do
               expect(series.competitions).to include(partner_competition, other_partner_competition)
             end
 
-            it "and Series is so small that it gets deleted" do
+            it 'and Series is so small that it gets deleted' do
               expect(competition.confirmed?).to be false
 
               update_params = competition.to_form_data.merge({ series: nil })
@@ -335,7 +335,7 @@ RSpec.describe "competitions" do
         it 'cannot set championship types' do
           expect(competition.confirmed?).to be true
 
-          update_params = competition.to_form_data.merge({ championships: ["world", "_Europe"] })
+          update_params = competition.to_form_data.merge({ championships: ['world', '_Europe'] })
           patch competition_path(competition), params: update_params, as: :json
 
           expect(response).to have_http_status(:unprocessable_entity)
@@ -343,7 +343,7 @@ RSpec.describe "competitions" do
           expect(competition.reload.championships.count).to eq 0
         end
 
-        context "when handling Series competitions" do
+        context 'when handling Series competitions' do
           let!(:series) { FactoryBot.create(:competition_series) }
           let!(:partner_competition) {
             FactoryBot.create(:competition, :with_delegate, :visible, :with_valid_schedule,
@@ -370,9 +370,9 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
+                                                             wcifId: 'SomeNewSeries2015',
+                                                             name: 'Some New Series 2015',
+                                                             shortName: 'Some New Series 2015',
                                                              competitionIds: [partner_competition.id, competition.id],
                                                            } })
 

@@ -6,6 +6,6 @@ class AddAllowRegistrationWithoutQualificationToCompetitions < ActiveRecord::Mig
     add_column :Competitions, :allow_registration_without_qualification, :boolean, default: false
 
     # For already-announced competitions, default to the previous behavior.
-    Competition.where("registration_close >= :close", close: DateTime.now).update_all(allow_registration_without_qualification: true)
+    Competition.where('registration_close >= :close', close: DateTime.now).update_all(allow_registration_without_qualification: true)
   end
 end

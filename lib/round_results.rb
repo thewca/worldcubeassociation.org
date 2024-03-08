@@ -19,7 +19,7 @@ class RoundResult
   attr_accessor :person_id, :ranking, :attempts, :best, :average
   validates :person_id, numericality: { only_integer: true }
   validates :ranking, numericality: { only_integer: true }, allow_nil: true
-  validates :attempts, length: { maximum: 5, message: "must have at most 5 attempts" }
+  validates :attempts, length: { maximum: 5, message: 'must have at most 5 attempts' }
   validates :best, numericality: { only_integer: true }
   validates :average, numericality: { only_integer: true }
 
@@ -33,11 +33,11 @@ class RoundResult
 
   def to_wcif
     {
-      "personId" => self.person_id,
-      "ranking" => self.ranking,
-      "attempts" => self.attempts.map(&:to_wcif),
-      "best" => self.best,
-      "average" => self.average,
+      'personId' => self.person_id,
+      'ranking' => self.ranking,
+      'attempts' => self.attempts.map(&:to_wcif),
+      'best' => self.best,
+      'average' => self.average,
     }
   end
 
@@ -61,13 +61,13 @@ class RoundResult
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
-      "properties" => {
-        "personId" => { "type" => "integer" },
-        "ranking" => { "type" => ["integer", "null"] },
-        "attempts" => { "type" => "array", "items" => Attempt.wcif_json_schema },
-        "best" => { "type" => "integer" },
-        "average" => { "type" => "integer" },
+      'type' => ['object', 'null'],
+      'properties' => {
+        'personId' => { 'type' => 'integer' },
+        'ranking' => { 'type' => ['integer', 'null'] },
+        'attempts' => { 'type' => 'array', 'items' => Attempt.wcif_json_schema },
+        'best' => { 'type' => 'integer' },
+        'average' => { 'type' => 'integer' },
       },
     }
   end
@@ -85,7 +85,7 @@ class Attempt
   end
 
   def to_wcif
-    { "result" => self.result, "reconstruction" => self.reconstruction }
+    { 'result' => self.result, 'reconstruction' => self.reconstruction }
   end
 
   def self.load(json_obj)
@@ -94,10 +94,10 @@ class Attempt
 
   def self.wcif_json_schema
     {
-      "type" => ["object", "null"],
-      "properties" => {
-        "result" => { "type" => "integer" },
-        "reconstruction" => { "type" => ["string", "null"] },
+      'type' => ['object', 'null'],
+      'properties' => {
+        'result' => { 'type' => 'integer' },
+        'reconstruction' => { 'type' => ['string', 'null'] },
       },
     }
   end

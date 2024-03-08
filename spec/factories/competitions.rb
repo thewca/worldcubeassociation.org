@@ -4,12 +4,12 @@ FactoryBot.define do
   factory :competition do
     sequence(:name) { |n| "Foo Comp #{n} 2015" }
 
-    cityName { "San Francisco, California" }
-    name_reason { "Foo sounds cool, right?" }
-    countryId { "USA" }
-    currency_code { "USD" }
+    cityName { 'San Francisco, California' }
+    name_reason { 'Foo sounds cool, right?' }
+    countryId { 'USA' }
+    currency_code { 'USD' }
     base_entry_fee_lowest_denomination { 1000 }
-    information { "Information!" }
+    information { 'Information!' }
     latitude { rand(-90_000_000..90_000_000) }
     longitude { rand(-180_000_000..180_000_000) }
 
@@ -19,8 +19,8 @@ FactoryBot.define do
       event_ids { %w(333 333oh) }
     end
 
-    start_date { starts.nil? ? nil : starts.strftime("%F") }
-    end_date { ends.nil? ? nil : ends.strftime("%F") }
+    start_date { starts.nil? ? nil : starts.strftime('%F') }
+    end_date { ends.nil? ? nil : ends.strftime('%F') }
 
     trait :future do
       starts { 2.weeks.from_now }
@@ -53,19 +53,19 @@ FactoryBot.define do
     trait :with_competitor_limit do
       competitor_limit_enabled { true }
       competitor_limit { 100 }
-      competitor_limit_reason { "The hall only fits 100 competitors." }
+      competitor_limit_reason { 'The hall only fits 100 competitors.' }
     end
 
     events { Event.where(id: event_ids) }
     main_event_id { events.first.id if events.any? }
 
-    venue { "My backyard" }
-    venueAddress { "My backyard street" }
-    external_website { "https://www.worldcubeassociation.org" }
+    venue { 'My backyard' }
+    venueAddress { 'My backyard street' }
+    external_website { 'https://www.worldcubeassociation.org' }
     showAtAll { false }
     confirmed_at { nil }
 
-    external_registration_page { "https://www.worldcubeassociation.org" }
+    external_registration_page { 'https://www.worldcubeassociation.org' }
     competitor_limit_enabled { false }
     guests_enabled { true }
     on_the_spot_registration { false }
@@ -102,7 +102,7 @@ FactoryBot.define do
 
     trait :with_event_limit do
       event_restrictions { true }
-      event_restrictions_reason { "this is a favourites competition" }
+      event_restrictions_reason { 'this is a favourites competition' }
       events_per_registration_limit { events.length }
     end
 
@@ -197,7 +197,7 @@ FactoryBot.define do
     end
 
     trait :world_championship do
-      championship_types { ["world"] }
+      championship_types { ['world'] }
     end
 
     transient do
@@ -259,7 +259,7 @@ FactoryBot.define do
             country_iso2: competition.country.iso2,
             latitude_microdegrees: 123_456,
             longitude_microdegrees: 123_456,
-            timezone_id: "Europe/Paris",
+            timezone_id: 'Europe/Paris',
           }
           venue = competition.competition_venues.create!(venue_attributes)
           (i+1).times do |j|
@@ -277,8 +277,8 @@ FactoryBot.define do
             first_room = venue.venue_rooms.first
             first_room.schedule_activities.create!(
               wcif_id: 1,
-              name: "Some name",
-              activity_code: "other-lunch",
+              name: 'Some name',
+              activity_code: 'other-lunch',
               start_time: start_time.change(hour: 12, min: 0, sec: 0).iso8601,
               end_time: end_time.change(hour: 13, min: 0, sec: 0).iso8601,
             )
@@ -288,29 +288,29 @@ FactoryBot.define do
             end_time = start_time
             activity = first_room.schedule_activities.create!(
               wcif_id: 2,
-              name: "another activity",
-              activity_code: "333fm-r1",
+              name: 'another activity',
+              activity_code: '333fm-r1',
               start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
               end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
             )
             activity.child_activities.create!(
               wcif_id: 3,
-              name: "first group",
-              activity_code: "333fm-r1-g1",
+              name: 'first group',
+              activity_code: '333fm-r1-g1',
               start_time: start_time.change(hour: 10, min: 0, sec: 0).iso8601,
               end_time: end_time.change(hour: 10, min: 30, sec: 0).iso8601,
             )
             nested_activity = activity.child_activities.create!(
               wcif_id: 4,
-              name: "second group",
-              activity_code: "333fm-r1-g2",
+              name: 'second group',
+              activity_code: '333fm-r1-g2',
               start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
               end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
             )
             nested_activity.child_activities.create!(
               wcif_id: 5,
-              name: "some nested thing",
-              activity_code: "333fm-r1-g2-a1",
+              name: 'some nested thing',
+              activity_code: '333fm-r1-g2-a1',
               start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
               end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
             )
@@ -325,7 +325,7 @@ FactoryBot.define do
           ce.rounds.each do |r|
             room.schedule_activities.create!(
               wcif_id: current_activity_id,
-              name: "Great round",
+              name: 'Great round',
               activity_code: r.wcif_id,
               start_time: start_time.change(hour: 10, min: 30, sec: 0).iso8601,
               end_time: end_time.change(hour: 11, min: 0, sec: 0).iso8601,
@@ -343,9 +343,9 @@ FactoryBot.define do
       if defined?(evaluator.paypal_merchant_id)
         paypal_account = ConnectedPaypalAccount.new(
           paypal_merchant_id: evaluator.paypal_merchant_id,
-          permissions_granted: "PPCP",
-          account_status: "test",
-          consent_status: "test",
+          permissions_granted: 'PPCP',
+          account_status: 'test',
+          consent_status: 'test',
         )
         competition.competition_payment_integrations.new(connected_account: paypal_account)
         competition.save

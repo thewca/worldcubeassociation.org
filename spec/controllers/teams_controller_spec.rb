@@ -5,8 +5,8 @@ require 'rails_helper'
 RSpec.describe TeamsController do
   let(:team) { FactoryBot.create :team }
 
-  describe "GET #index" do
-    context "when not signed in" do
+  describe 'GET #index' do
+    context 'when not signed in' do
       sign_out
 
       it 'redirects to the sign in page' do
@@ -15,7 +15,7 @@ RSpec.describe TeamsController do
       end
     end
 
-    context "when signed in as admin" do
+    context 'when signed in as admin' do
       sign_in { FactoryBot.create :admin }
 
       it 'shows the teams index page' do
@@ -60,7 +60,7 @@ RSpec.describe TeamsController do
       end
     end
 
-    it "leader of WDC can manage the banned team, despite not being a member of the banned team" do
+    it 'leader of WDC can manage the banned team, despite not being a member of the banned team' do
       sign_in FactoryBot.create :user, :wdc_leader
 
       get :edit, params: { id: Team.banned.id }
@@ -76,14 +76,14 @@ RSpec.describe TeamsController do
       end
 
       it 'cannot change friendly ID' do
-        patch :update, params: { id: team, team: { friendly_id: "bestteam" } }
+        patch :update, params: { id: team, team: { friendly_id: 'bestteam' } }
         expect(response).to redirect_to edit_team_path(team)
-        expect(team.reload.friendly_id).to_not eq "bestteam"
+        expect(team.reload.friendly_id).to_not eq 'bestteam'
       end
 
       it 'can add a member' do
         member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
         expect(team.team_members.first.user.id).to eq member.id
@@ -91,25 +91,25 @@ RSpec.describe TeamsController do
 
       it 'can deactivate a member' do
         other_member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: other_member.id, start_date: Date.today-2, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: other_member.id, start_date: Date.today-2, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
         new_member = team.team_members.first
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } } }
         team.reload
         expect(team.team_members.first.current_member?).to be false
       end
 
       it 'cannot demote oneself' do
         admin_team = admin.teams.first
-        patch :update, params: { id: admin_team.id, team: { team_members_attributes: { "0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } } }
+        patch :update, params: { id: admin_team.id, team: { team_members_attributes: { '0' => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } } }
         admin_team.reload
         expect(admin_team.team_members.first.end_date).to eq nil
       end
 
       it 'cannot set start_date < end_date' do
         member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } } }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end
@@ -119,7 +119,7 @@ RSpec.describe TeamsController do
         member = FactoryBot.create :user
         competition = FactoryBot.create :competition, :future
         FactoryBot.create :registration, user_id: member.id, competition_id: competition.id
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
         invalid_team = assigns(:team)
         expect(invalid_team).to be_invalid
       end
@@ -129,7 +129,7 @@ RSpec.describe TeamsController do
         member = FactoryBot.create :user
         competition = FactoryBot.create :competition, :future
         FactoryBot.create :registration, :deleted, user_id: member.id, competition_id: competition.id
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)
         team.reload
         expect(team.team_members.first.user.id).to eq member.id
@@ -141,8 +141,8 @@ RSpec.describe TeamsController do
           id: team,
           team: {
             team_members_attributes: {
-              "0" => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
-              "1" => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false },
+              '0' => { user_id: member.id, start_date: Date.today, end_date: Date.today+10, team_leader: false },
+              '1' => { user_id: member.id, start_date: Date.today+9, end_date: Date.today+20, team_leader: false },
             },
           },
         }
@@ -156,8 +156,8 @@ RSpec.describe TeamsController do
           id: team,
           team: {
             team_members_attributes: {
-              "0" => { user_id: member.id, start_date: Date.today+10, end_date: Date.today+5 },
-              "1" => { user_id: member.id, start_date: nil, end_date: Date.today+10 },
+              '0' => { user_id: member.id, start_date: Date.today+10, end_date: Date.today+5 },
+              '1' => { user_id: member.id, start_date: nil, end_date: Date.today+10 },
             },
           },
         }
@@ -166,18 +166,18 @@ RSpec.describe TeamsController do
 
       it 'cannot add a membership with end_date but without start_date' do
         member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: nil, end_date: Date.today+5 } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: member.id, start_date: nil, end_date: Date.today+5 } } } }
         expect(team.reload.team_members.count).to eq 0
       end
     end
 
-    context "leader of WDC managing the banned team, despite not being a member of the banned team" do
+    context 'leader of WDC managing the banned team, despite not being a member of the banned team' do
       sign_in { FactoryBot.create :user, :wdc_leader }
 
       it 'can add a member' do
         team = Team.banned
         member = FactoryBot.create :user
-        patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
+        patch :update, params: { id: team, team: { team_members_attributes: { '0' => { user_id: member.id, start_date: Date.today, team_leader: false } } } }
         expect(response).to redirect_to edit_team_path(team)
         expect(team.reload.team_members.first.user.id).to eq member.id
       end

@@ -13,11 +13,11 @@ class ConvertEventIdToCompetitionEventId < ActiveRecord::Migration
     remove_column :registration_events, :event_id
 
     rename_table :registration_events, :registration_competition_events
-    add_index :registration_competition_events, [:registration_id, :competition_event_id], name: "index_reg_events_reg_id_comp_event_id"
+    add_index :registration_competition_events, [:registration_id, :competition_event_id], name: 'index_reg_events_reg_id_comp_event_id'
   end
 
   def down
-    remove_index :registration_competition_events, [:registration_id, :competition_event_id], name: "index_reg_events_reg_id_comp_event_id"
+    remove_index :registration_competition_events, [:registration_id, :competition_event_id], name: 'index_reg_events_reg_id_comp_event_id'
     rename_table :registration_competition_events, :registration_events
 
     add_column :registration_events, :event_id, :string

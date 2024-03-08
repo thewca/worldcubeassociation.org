@@ -5,9 +5,9 @@ FactoryBot.define do
     association :competition, factory: [:competition, :registration_open]
     association :user, factory: [:user, :wca_id]
     guests { 10 }
-    comments { "" }
+    comments { '' }
     created_at { Time.now }
-    administrative_notes { "" }
+    administrative_notes { '' }
     transient do
       events { competition.events }
     end

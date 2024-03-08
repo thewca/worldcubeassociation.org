@@ -16,7 +16,7 @@ module Microservices
     end
 
     def self.update_payment_status_path
-      "/api/internal/v1/update_payment"
+      '/api/internal/v1/update_payment'
     end
 
     def self.registrations_by_user_path(id)
@@ -45,11 +45,11 @@ module Microservices
 
     RegistrationConverter = Struct.new(:competition, :user, :status) do
       def accepted?
-        status == "accepted"
+        status == 'accepted'
       end
 
       def deleted?
-        status == "deleted"
+        status == 'deleted'
       end
 
       def name

@@ -28,7 +28,7 @@ Rails.application.routes.draw do
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
   #  https://github.com/plataformatec/devise/wiki/How-To:-Disable-user-from-destroying-their-account
-  devise_for :users, skip: :registrations, controllers: { sessions: "sessions" }
+  devise_for :users, skip: :registrations, controllers: { sessions: 'sessions' }
   devise_scope :user do
     resource :registration,
              only: [:new, :create],
@@ -66,7 +66,7 @@ Rails.application.routes.draw do
 
   get 'competitions/mine' => 'competitions#my_competitions', as: :my_comps
   get 'competitions/for_senior(/:user_id)' => 'competitions#for_senior', as: :competitions_for_senior
-  get 'competitions/:id/enable_v2' => "competitions#enable_v2", as: :enable_v2
+  get 'competitions/:id/enable_v2' => 'competitions#enable_v2', as: :enable_v2
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
@@ -104,17 +104,17 @@ Rails.application.routes.draw do
     get 'edit/registrations' => 'registrations#edit_registrations'
     get 'register' => 'registrations#register'
     resources :competition_tabs, except: [:show], as: :tabs, path: :tabs
-    get 'tabs/:id/reorder' => "competition_tabs#reorder", as: :tab_reorder
+    get 'tabs/:id/reorder' => 'competition_tabs#reorder', as: :tab_reorder
     # Delegate views and action
     get 'submit-results' => 'results_submission#new', as: :submit_results_edit
     post 'submit-results' => 'results_submission#create', as: :submit_results
     post 'upload-json' => 'results_submission#upload_json', as: :upload_results_json
     # WRT views and action
-    get '/admin/upload-results' => "admin#new_results", as: :admin_upload_results_edit
-    get '/admin/check-existing-results' => "admin#check_competition_results", as: :admin_check_existing_results
-    post '/admin/check-existing-results' => "admin#do_check_competition_results", as: :admin_run_validators
-    post '/admin/upload-json' => "admin#create_results", as: :admin_upload_results
-    post '/admin/clear-submission' => "admin#clear_results_submission", as: :clear_results_submission
+    get '/admin/upload-results' => 'admin#new_results', as: :admin_upload_results_edit
+    get '/admin/check-existing-results' => 'admin#check_competition_results', as: :admin_check_existing_results
+    post '/admin/check-existing-results' => 'admin#do_check_competition_results', as: :admin_run_validators
+    post '/admin/upload-json' => 'admin#create_results', as: :admin_upload_results
+    post '/admin/clear-submission' => 'admin#clear_results_submission', as: :clear_results_submission
     get '/admin/import-results' => 'admin#import_results', as: :admin_import_results
     get '/admin/result-inbox-steps' => 'admin#result_inbox_steps', as: :admin_result_inbox_steps
     post '/admin/import-inbox-results' => 'admin#import_inbox_results', as: :admin_import_inbox_results
@@ -151,7 +151,7 @@ Rails.application.routes.draw do
 
   get 'results/rankings', to: redirect('results/rankings/333/single', status: 302)
   get 'results/rankings/333mbf/average',
-      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : "results/rankings/333mbf/single" }
+      to: redirect(status: 302) { |params, request| URI.parse(request.original_url).query ? "results/rankings/333mbf/single?#{URI.parse(request.original_url).query}" : 'results/rankings/333mbf/single' }
   get 'results/rankings/:event_id', to: redirect('results/rankings/%{event_id}/single', status: 302)
   get 'results/rankings/:event_id/:type' => 'results#rankings', as: :rankings
   get 'results/records' => 'results#records', as: :records
@@ -162,7 +162,7 @@ Rails.application.routes.draw do
     get 'events_data/:competition_id' => 'admin/results#show_events_data', as: :competition_events_data
   end
 
-  get "media/validate" => 'media#validate', as: :validate_media
+  get 'media/validate' => 'media#validate', as: :validate_media
   resources :media, only: [:index, :new, :create, :edit, :update, :destroy]
 
   get 'export/results' => 'database#results_export', as: :db_results_export
@@ -257,7 +257,7 @@ Rails.application.routes.draw do
   get '/regulations/translations' => 'regulations#translations'
   get '/regulations/translations/:language' => 'regulations_translations#translated_regulation'
   get '/regulations/translations/:language/guidelines' => 'regulations_translations#translated_guidelines'
-  get '/regulations/translations/:language/:pdf' => "regulations_translations#translated_pdfs"
+  get '/regulations/translations/:language/:pdf' => 'regulations_translations#translated_pdfs'
   get '/regulations/history' => 'regulations#history'
   get '/regulations/history/official/:id' => 'regulations#historical_regulations'
   get '/regulations/history/official/:id/guidelines' => 'regulations#historical_guidelines'
@@ -267,7 +267,7 @@ Rails.application.routes.draw do
   get '/admin/all-voters' => 'admin#all_voters', as: :eligible_voters
   get '/admin/leader-senior-voters' => 'admin#leader_senior_voters', as: :leader_senior_voters
   get '/admin/check_results' => 'admin#check_results'
-  get '/admin/validation_competitions' => "admin#compute_validation_competitions"
+  get '/admin/validation_competitions' => 'admin#compute_validation_competitions'
   post '/admin/check_results' => 'admin#do_check_results'
   get '/admin/merge_people' => 'admin#merge_people'
   post '/admin/merge_people' => 'admin#do_merge_people'
@@ -360,10 +360,10 @@ Rails.application.routes.draw do
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
-      get '/persons' => "persons#index"
-      get '/persons/:wca_id' => "persons#show", as: :person
-      get '/persons/:wca_id/results' => "persons#results", as: :person_results
-      get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
+      get '/persons' => 'persons#index'
+      get '/persons/:wca_id' => 'persons#show', as: :person
+      get '/persons/:wca_id/results' => 'persons#results', as: :person_results
+      get '/persons/:wca_id/competitions' => 'persons#competitions', as: :person_competitions
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
       get '/competition_series/:id' => 'api#competition_series'
@@ -380,7 +380,7 @@ Rails.application.routes.draw do
         get '/psych-sheet/:event_id' => 'competitions#event_psych_sheet', as: :event_psych_sheet
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
-      get '/records' => "api#records"
+      get '/records' => 'api#records'
 
       resources :user_roles, only: [:create, :show, :update, :destroy]
       scope 'user_roles' do

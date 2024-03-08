@@ -5,7 +5,7 @@ FactoryBot.define do
     competition { FactoryBot.create :competition }
 
     trait :posted do
-      schedule_url { "http://example.com" }
+      schedule_url { 'http://example.com' }
       posted_at { Time.now }
       posted_by_user { FactoryBot.create(:user) }
     end

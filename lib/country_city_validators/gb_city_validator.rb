@@ -111,11 +111,11 @@ module CountryCityValidators
 
   class GbCityValidator < CityCommaRegionValidator
     def initialize
-      super(type_of_region: "county", valid_regions: GB_REGIONS)
+      super(type_of_region: 'county', valid_regions: GB_REGIONS)
     end
 
     def self.country_iso_2
-      "GB"
+      'GB'
     end
   end
 end

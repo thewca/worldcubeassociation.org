@@ -16,34 +16,34 @@ RSpec.describe Team do
     wrt_team.reload
   end
 
-  it "Added 2 new members" do
+  it 'Added 2 new members' do
     FactoryBot.create :team_member, user_id: users[6].id, team_id: wrt_team.id, start_date: Time.now - 4.days
     FactoryBot.create :team_member, user_id: users[7].id, team_id: wrt_team.id, start_date: Time.now - 4.days
 
     expected_output = [
-      "<b>Changes in WCA Results Team</b>",
-      "",
-      "<b>New Members</b>",
+      '<b>Changes in WCA Results Team</b>',
+      '',
+      '<b>New Members</b>',
       *[users[6].name, users[7].name].sort,
-    ].join("<br>")
+    ].join('<br>')
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 
-  it "Promoted 1 member" do
+  it 'Promoted 1 member' do
     team_member = wrt_team.team_members[3]
     team_member.update_columns(end_date: Time.now - 5.days, updated_at: Time.now - 5.days)
     FactoryBot.create :team_member, user_id: team_member.user.id, team_id: wrt_team.id, start_date: Time.now - 5.days, team_senior_member: true
 
     expected_output = [
-      "<b>Changes in WCA Results Team</b>",
-      "",
-      "<b>Promoted Senior Members</b>",
+      '<b>Changes in WCA Results Team</b>',
+      '',
+      '<b>Promoted Senior Members</b>',
       team_member.name,
-    ].join("<br>")
+    ].join('<br>')
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 
-  it "Leader resigned and another person became leader" do
+  it 'Leader resigned and another person became leader' do
     cur_leader = wrt_team.team_members[0]
     new_leader = wrt_team.team_members[1]
     cur_leader.update_columns(end_date: Time.now - 10.days, updated_at: Time.now - 10.days)
@@ -52,12 +52,12 @@ RSpec.describe Team do
     FactoryBot.create :team_member, user_id: new_leader.user.id, team_id: wrt_team.id, start_date: Time.now - 10.days, team_leader: true
 
     expected_output = [
-      "<b>Changes in WCA Results Team</b>",
-      "",
-      "<b>Leaders</b>",
+      '<b>Changes in WCA Results Team</b>',
+      '',
+      '<b>Leaders</b>',
       "#{new_leader.name} has been appointed as the new Leader.",
       "#{cur_leader.name} is no longer the Leader, but will continue as Senior member.",
-    ].join("<br>")
+    ].join('<br>')
     expect(wrt_team.reload.changes_in_team).to eq expected_output
   end
 end

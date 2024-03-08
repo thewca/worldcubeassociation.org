@@ -7,7 +7,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   def index
     managed_by_user = nil
     if params[:managed_by_me].present?
-      require_scope!("manage_competitions")
+      require_scope!('manage_competitions')
       managed_by_user = current_api_user || current_user
     end
 
@@ -146,19 +146,19 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     competition = competition_from_params
     require_can_manage!(competition)
     wcif = params.permit!.to_h
-    wcif = wcif["_json"] || wcif
+    wcif = wcif['_json'] || wcif
     competition.set_wcif!(wcif, require_user!)
     render json: {
-      status: "Successfully saved WCIF",
+      status: 'Successfully saved WCIF',
     }
   rescue ActiveRecord::RecordInvalid => e
     render status: 400, json: {
-      status: "Error while saving WCIF",
+      status: 'Error while saving WCIF',
       error: e,
     }
   rescue JSON::Schema::ValidationError => e
     render status: 400, json: {
-      status: "Error while saving WCIF",
+      status: 'Error while saving WCIF',
       error: e.message,
     }
   end
@@ -178,7 +178,7 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
   end
 
   private def can_manage?(competition)
-    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?("manage_competitions")
+    api_user_can_manage = current_api_user&.can_manage_competition?(competition) && doorkeeper_token.scopes.exists?('manage_competitions')
     api_user_can_manage || current_user&.can_manage_competition?(competition)
   end
 
@@ -191,6 +191,6 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
 
   def require_can_manage!(competition)
     require_user!
-    raise WcaExceptions::NotPermitted.new("Not authorized to manage competition") unless can_manage?(competition)
+    raise WcaExceptions::NotPermitted.new('Not authorized to manage competition') unless can_manage?(competition)
   end
 end

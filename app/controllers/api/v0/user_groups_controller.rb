@@ -37,10 +37,10 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     # removed once all roles are migrated to the new system.
 
     # Temporary hack to support old system councils.
-    if group_type == "councils"
+    if group_type == 'councils'
       Team.all_councils.each do |council|
         groups << {
-          id: group_type + "_" + council.id.to_s,
+          id: group_type + '_' + council.id.to_s,
           name: council.name,
           group_type: UserGroup.group_types[:councils],
           is_hidden: false,
@@ -53,7 +53,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     if group_type == UserGroup.group_types[:teams_committees]
       Team.all_official.each do |team_committee|
         groups << {
-          id: group_type + "_" + team_committee.id.to_s,
+          id: group_type + '_' + team_committee.id.to_s,
           name: team_committee.name,
           group_type: UserGroup.group_types[:team_committee],
           is_hidden: false,

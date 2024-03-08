@@ -78,16 +78,16 @@ module CheckRegionalRecords
 
     minimum_result_candidates = results_scope.select("eventId, competitionId, roundTypeId, countryId, MIN(#{value_column}) AS `value`")
                                              .where.not(value_column => ..0)
-                                             .group("eventId, competitionId, roundTypeId, countryId")
+                                             .group('eventId, competitionId, roundTypeId, countryId')
 
     # Deliberately NOT using `results_scope` here, because the necessary event/competition filtering is
     # implicitly included via the `minimum_result_candidate` view (and doubling up would make the query much slower!)
     minimum_results = Result.includes(:competition)
                             .from("Results, (#{minimum_result_candidates.to_sql}) AS `helper`")
-                            .where("Results.eventId = helper.eventId")
-                            .where("Results.competitionId = helper.competitionId")
-                            .where("Results.roundTypeId = helper.roundTypeId")
-                            .where("Results.countryId = helper.countryId")
+                            .where('Results.eventId = helper.eventId')
+                            .where('Results.competitionId = helper.competitionId')
+                            .where('Results.roundTypeId = helper.roundTypeId')
+                            .where('Results.countryId = helper.countryId')
                             .where("Results.#{value_column} = helper.`value`")
 
     (marked_records + minimum_results).uniq(&:id)
@@ -134,7 +134,7 @@ module CheckRegionalRecords
         previous_min_results = Result.select("r.eventId, r.countryId, MIN(r.#{value_column}) AS `value`")
                                      .from("(#{non_zero_results.to_sql}) AS r")
                                      .joins("INNER JOIN (#{earlier_competitions.to_sql}) c ON c.id = r.competitionId")
-                                     .group("r.eventId, r.countryId")
+                                     .group('r.eventId, r.countryId')
 
         unless event_id.present?
           competition_events = CompetitionEvent.select(:event_id)

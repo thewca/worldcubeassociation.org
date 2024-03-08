@@ -14,7 +14,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     competition = holder.competition
     user = holder.user
     payee = User.find(registration_service_user)
-    render json: { error: "Registration not found" }, status: :not_found unless competition.present? && user.present? && payee.present?
+    render json: { error: 'Registration not found' }, status: :not_found unless competition.present? && user.present? && payee.present?
     account_id = competition.payment_account_for(:stripe).account_id
 
     registration_metadata = {

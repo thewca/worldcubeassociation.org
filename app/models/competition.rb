@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
-  self.table_name = "Competitions"
+  self.table_name = 'Competitions'
 
   # We need this default order, tests rely on it.
   has_many :competition_events, -> { order(:event_id) }, dependent: :destroy
   has_many :events, through: :competition_events
   has_many :rounds, through: :competition_events
   has_many :registrations, dependent: :destroy
-  has_many :results, foreign_key: "competitionId"
-  has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: "competitionId"
+  has_many :results, foreign_key: 'competitionId'
+  has_many :scrambles, -> { order(:groupId, :isExtra, :scrambleNum) }, foreign_key: 'competitionId'
   has_many :uploaded_jsons, dependent: :destroy
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
@@ -17,8 +17,8 @@ class Competition < ApplicationRecord
   has_many :delegates, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
-  has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
-  has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: "CompetitionTab"
+  has_many :media, class_name: 'CompetitionMedium', foreign_key: 'competitionId', dependent: :delete_all
+  has_many :tabs, -> { order(:display_order) }, dependent: :delete_all, class_name: 'CompetitionTab'
   has_one :delegate_report, dependent: :destroy
   has_many :competition_venues, dependent: :destroy
   belongs_to :country, foreign_key: :countryId
@@ -29,11 +29,11 @@ class Competition < ApplicationRecord
   has_many :bookmarked_users, through: :bookmarked_competitions, source: :user
   belongs_to :competition_series, optional: true
   has_many :series_competitions, -> { readonly }, through: :competition_series, source: :competitions
-  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: "User"
-  has_many :inbox_results, foreign_key: "competitionId", dependent: :delete_all
-  has_many :inbox_persons, foreign_key: "competitionId", dependent: :delete_all
-  belongs_to :announced_by_user, optional: true, foreign_key: "announced_by", class_name: "User"
-  belongs_to :cancelled_by_user, optional: true, foreign_key: "cancelled_by", class_name: "User"
+  belongs_to :posting_user, optional: true, foreign_key: 'posting_by', class_name: 'User'
+  has_many :inbox_results, foreign_key: 'competitionId', dependent: :delete_all
+  has_many :inbox_persons, foreign_key: 'competitionId', dependent: :delete_all
+  belongs_to :announced_by_user, optional: true, foreign_key: 'announced_by', class_name: 'User'
+  belongs_to :cancelled_by_user, optional: true, foreign_key: 'cancelled_by', class_name: 'User'
   has_many :competition_payment_integrations
 
   accepts_nested_attributes_for :competition_events, allow_destroy: true
@@ -42,18 +42,18 @@ class Competition < ApplicationRecord
 
   validates_numericality_of :base_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :entry_fee_required?
   monetize :base_entry_fee_lowest_denomination,
-           as: "base_entry_fee",
+           as: 'base_entry_fee',
            allow_nil: true,
            with_model_currency: :currency_code
 
   scope :not_cancelled, -> { where(cancelled_at: nil) }
   scope :visible, -> { where(showAtAll: true) }
   scope :not_visible, -> { where(showAtAll: false) }
-  scope :over, -> { where("results_posted_at IS NOT NULL OR end_date < ?", Date.today) }
-  scope :not_over, -> { where("results_posted_at IS NULL AND end_date >= ?", Date.today) }
+  scope :over, -> { where('results_posted_at IS NOT NULL OR end_date < ?', Date.today) }
+  scope :not_over, -> { where('results_posted_at IS NULL AND end_date >= ?', Date.today) }
   scope :belongs_to_region, lambda { |region_id|
     joins(:country).where(
-      "countryId = :region_id OR Countries.continentId = :region_id", region_id: region_id
+      'countryId = :region_id OR Countries.continentId = :region_id', region_id: region_id
     )
   }
   scope :contains, lambda { |search_term|
@@ -70,10 +70,10 @@ class Competition < ApplicationRecord
     ).where("e#{event_id}.id = :event_id", event_id: event_id)
   }
   scope :managed_by, lambda { |user_id|
-    joins("LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id")
-      .joins("LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id")
+    joins('LEFT JOIN competition_organizers ON competition_organizers.competition_id = Competitions.id')
+      .joins('LEFT JOIN competition_delegates ON competition_delegates.competition_id = Competitions.id')
       .where(
-        "delegate_id = :user_id OR organizer_id = :user_id",
+        'delegate_id = :user_id OR organizer_id = :user_id',
         user_id: user_id,
       ).group(:id)
   }
@@ -201,12 +201,12 @@ class Competition < ApplicationRecord
   validates_inclusion_of :allow_registration_edits, in: [true, false]
   validates_inclusion_of :allow_registration_self_delete_after_acceptance, in: [true, false]
   monetize :on_the_spot_entry_fee_lowest_denomination,
-           as: "on_the_spot_base_entry_fee",
+           as: 'on_the_spot_base_entry_fee',
            allow_nil: true,
            with_model_currency: :currency_code
   validates_numericality_of :guests_entry_fee_lowest_denomination, greater_than_or_equal_to: 0, if: :guests_entry_fee_required?
   monetize :guests_entry_fee_lowest_denomination,
-           as: "guests_base_fee",
+           as: 'guests_base_fee',
            allow_nil: true,
            with_model_currency: :currency_code
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
@@ -337,7 +337,7 @@ class Competition < ApplicationRecord
     expected_activity_codes = rounds.flat_map do |r|
       # Logic similar to "ActivitiesForRound"
       # from app/javascript/edit-schedule/SchedulesEditor/ActivityPicker.jsx
-      if ["333mbf", "333fm"].include?(r.event.id)
+      if ['333mbf', '333fm'].include?(r.event.id)
         (1..r.format.expected_solve_count).map do |i|
           "#{r.wcif_id}-a#{i}"
         end
@@ -359,12 +359,12 @@ class Competition < ApplicationRecord
 
   def start_time
     # Take the easternmost offset
-    start_date.to_time.change(offset: "+14:00")
+    start_date.to_time.change(offset: '+14:00')
   end
 
   def end_time
     # Take the westernmost offset
-    (end_date + 1).to_time.change(offset: "-12:00")
+    (end_date + 1).to_time.change(offset: '-12:00')
   end
 
   def main_event
@@ -670,7 +670,7 @@ class Competition < ApplicationRecord
         self.id = safe_name_without_year[0...(MAX_ID_LENGTH - year.length)] + year
       end
       if cellName.blank? || force_override
-        year = " " + year
+        year = ' ' + year
         self.cellName = name_without_year.truncate(MAX_CELL_NAME_LENGTH - year.length) + year
       end
     end
@@ -678,15 +678,15 @@ class Competition < ApplicationRecord
 
   attr_writer :staff_delegate_ids, :organizer_ids, :trainee_delegate_ids
   def staff_delegate_ids
-    @staff_delegate_ids || staff_delegates.pluck(:id).join(",")
+    @staff_delegate_ids || staff_delegates.pluck(:id).join(',')
   end
 
   def organizer_ids
-    @organizer_ids || organizers.pluck(:id).join(",")
+    @organizer_ids || organizers.pluck(:id).join(',')
   end
 
   def trainee_delegate_ids
-    @trainee_delegate_ids || trainee_delegates.pluck(:id).join(",")
+    @trainee_delegate_ids || trainee_delegates.pluck(:id).join(',')
   end
 
   def enable_v2_registrations!
@@ -710,20 +710,20 @@ class Competition < ApplicationRecord
         self.delegates ||= []
 
         if @staff_delegate_ids
-          unpacked_staff_delegates = @staff_delegate_ids.split(",").map { |id| User.find(id) }
+          unpacked_staff_delegates = @staff_delegate_ids.split(',').map { |id| User.find(id) }
 
           # we overwrite staff_delegates, which means that we _keep_ existing trainee_delegates.
           self.delegates = self.trainee_delegates | unpacked_staff_delegates
         end
         if @trainee_delegate_ids
-          unpacked_trainee_delegates = @trainee_delegate_ids.split(",").map { |id| User.find(id) }
+          unpacked_trainee_delegates = @trainee_delegate_ids.split(',').map { |id| User.find(id) }
 
           # we overwrite trainee_delegates, which means that we _keep_ existing staff_delegates.
           self.delegates = self.staff_delegates | unpacked_trainee_delegates
         end
       end
       if @organizer_ids
-        self.organizers = @organizer_ids.split(",").map { |id| User.find(id) }
+        self.organizers = @organizer_ids.split(',').map { |id| User.find(id) }
       end
     end
   end
@@ -777,7 +777,7 @@ class Competition < ApplicationRecord
   def update_foreign_keys
     Competition.reflect_on_all_associations.uniq(&:klass).each do |association_reflection|
       foreign_key = association_reflection.foreign_key
-      if ["competition_id", "competitionId"].include?(foreign_key)
+      if ['competition_id', 'competitionId'].include?(foreign_key)
         association_reflection.klass.where(foreign_key => id_before_last_save).update_all(foreign_key => id)
       end
     end
@@ -789,8 +789,8 @@ class Competition < ApplicationRecord
 
   after_save :move_schedule, if: :any_date_has_changed?
   def move_schedule
-    old_end_date = saved_changes["end_date"]&.first || end_date
-    old_start_date = saved_changes["start_date"]&.first || start_date
+    old_end_date = saved_changes['end_date']&.first || end_date
+    old_start_date = saved_changes['start_date']&.first || start_date
     old_number_of_days = (old_end_date - old_start_date).to_i + 1
 
     competition_activities = top_level_activities
@@ -821,9 +821,9 @@ class Competition < ApplicationRecord
     if editing_user_id
       editing_user = User.find(editing_user_id)
       unless editing_user.can_manage_competition?(self)
-        errors.add(:staff_delegate_ids, "You cannot demote yourself")
-        errors.add(:trainee_delegate_ids, "You cannot demote yourself")
-        errors.add(:organizer_ids, "You cannot demote yourself")
+        errors.add(:staff_delegate_ids, 'You cannot demote yourself')
+        errors.add(:trainee_delegate_ids, 'You cannot demote yourself')
+        errors.add(:organizer_ids, 'You cannot demote yourself')
       end
     end
   end
@@ -964,7 +964,7 @@ class Competition < ApplicationRecord
     # This can occur for non real country *and* XK!
     # FIXME what to provide for XA, XE, XM, XS?
     {
-      "London" => "Europe/London",
+      'London' => 'Europe/London',
     }
   end
 
@@ -1169,7 +1169,7 @@ class Competition < ApplicationRecord
   end
 
   def adjacent_competitions(days, distance)
-    Competition.where("ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?", start_date, days, id)
+    Competition.where('ABS(DATEDIFF(?, start_date)) <= ? AND id <> ?', start_date, days, id)
                .select { |c| kilometers_to(c) <= distance }
                .sort_by { |c| kilometers_to(c) }
   end
@@ -1187,7 +1187,7 @@ class Competition < ApplicationRecord
   end
 
   def colliding_registration_start_competitions
-    Competition.where("ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND id <> ?", registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, id)
+    Competition.where('ABS(TIMESTAMPDIFF(MINUTE, ?, registration_open)) <= ? AND id <> ?', registration_open, REGISTRATION_COLLISION_MINUTES_WARNING, id)
                .order(:registration_open)
   end
 
@@ -1319,7 +1319,7 @@ class Competition < ApplicationRecord
   def display_name(short: false)
     data = short ? cellName : name
     if cancelled?
-      I18n.t("competitions.competition_info.display_name", name: data)
+      I18n.t('competitions.competition_info.display_name', name: data)
     else
       data
     end
@@ -1534,7 +1534,7 @@ class Competition < ApplicationRecord
       end
 
       concise_results_date = ComputeAuxiliaryData.end_date || Date.current
-      results_cache_key = ["psych-sheet", self.id, *registered_user_ids, concise_results_date]
+      results_cache_key = ['psych-sheet', self.id, *registered_user_ids, concise_results_date]
 
       users_with_rankings = Rails.cache.fetch(results_cache_key) do
         # .includes doesn't work well here because under the hood, Rails will fire several calls:
@@ -1672,7 +1672,7 @@ class Competition < ApplicationRecord
       if !start_date
         raise WcaExceptions::BadApiParameter.new("Invalid start: '#{params[:start]}'")
       end
-      competitions = competitions.where("start_date >= ?", start_date)
+      competitions = competitions.where('start_date >= ?', start_date)
     end
 
     if params[:end].present?
@@ -1680,7 +1680,7 @@ class Competition < ApplicationRecord
       if !end_date
         raise WcaExceptions::BadApiParameter.new("Invalid end: '#{params[:end]}'")
       end
-      competitions = competitions.where("end_date <= ?", end_date)
+      competitions = competitions.where('end_date <= ?', end_date)
     end
 
     if params[:ongoing_and_future].present?
@@ -1688,7 +1688,7 @@ class Competition < ApplicationRecord
       if !target_date
         raise WcaExceptions::BadApiParameter.new("Invalid ongoing_and_future: '#{params[:ongoing_and_future]}'")
       end
-      competitions = competitions.where("end_date >= ?", target_date)
+      competitions = competitions.where('end_date >= ?', target_date)
     end
 
     if params[:announced_after].present?
@@ -1696,11 +1696,11 @@ class Competition < ApplicationRecord
       if !announced_date
         raise WcaExceptions::BadApiParameter.new("Invalid announced date: '#{params[:announced_after]}'")
       end
-      competitions = competitions.where("announced_at > ?", announced_date)
+      competitions = competitions.where('announced_at > ?', announced_date)
     end
 
     query&.split&.each do |part|
-      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(" OR ")
+      like_query = %w(id name cellName cityName countryId).map { |column| "Competitions.#{column} LIKE :part" }.join(' OR ')
       competitions = competitions.where(like_query, part: "%#{part}%")
     end
 
@@ -1731,16 +1731,16 @@ class Competition < ApplicationRecord
   # See https://github.com/thewca/worldcubeassociation.org/wiki/wcif
   def to_wcif(authorized: false)
     {
-      "formatVersion" => "1.0",
-      "id" => id,
-      "name" => name,
-      "shortName" => cellName,
-      "series" => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
-      "persons" => persons_wcif(authorized: authorized),
-      "events" => events_wcif,
-      "schedule" => schedule_wcif,
-      "competitorLimit" => competitor_limit_enabled? ? competitor_limit : nil,
-      "extensions" => wcif_extensions.map(&:to_wcif),
+      'formatVersion' => '1.0',
+      'id' => id,
+      'name' => name,
+      'shortName' => cellName,
+      'series' => part_of_competition_series? ? competition_series_wcif(authorized: authorized) : nil,
+      'persons' => persons_wcif(authorized: authorized),
+      'events' => events_wcif,
+      'schedule' => schedule_wcif,
+      'competitorLimit' => competitor_limit_enabled? ? competitor_limit : nil,
+      'extensions' => wcif_extensions.map(&:to_wcif),
     }
   end
 
@@ -1769,7 +1769,7 @@ class Competition < ApplicationRecord
                                 .includes(includes_associations)
                                 .to_enum
                                 .with_index(1)
-                                .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
+                                .select { |r, registrant_id| authorized || r.wcif_status == 'accepted' }
                                 .map do |r, registrant_id|
                                   managers.delete(r.user)
                                   r.user.to_wcif(self, r, registrant_id, authorized: authorized)
@@ -1801,9 +1801,9 @@ class Competition < ApplicationRecord
       :wcif_extensions,
     ]
     {
-      "startDate" => start_date.to_s,
-      "numberOfDays" => number_of_days,
-      "venues" => competition_venues.includes(competition_venues_includes_associations).map(&:to_wcif),
+      'startDate' => start_date.to_s,
+      'numberOfDays' => number_of_days,
+      'venues' => competition_venues.includes(competition_venues_includes_associations).map(&:to_wcif),
     }
   end
 
@@ -1811,12 +1811,12 @@ class Competition < ApplicationRecord
     JSON::Validator.validate!(Competition.wcif_json_schema, wcif)
 
     ActiveRecord::Base.transaction do
-      set_wcif_series!(wcif["series"], current_user) if wcif["series"]
-      set_wcif_events!(wcif["events"], current_user) if wcif["events"]
-      set_wcif_schedule!(wcif["schedule"], current_user) if wcif["schedule"]
-      update_persons_wcif!(wcif["persons"], current_user) if wcif["persons"]
-      WcifExtension.update_wcif_extensions!(self, wcif["extensions"]) if wcif["extensions"]
-      set_wcif_competitor_limit!(wcif["competitorLimit"], current_user) if wcif["competitorLimit"]
+      set_wcif_series!(wcif['series'], current_user) if wcif['series']
+      set_wcif_events!(wcif['events'], current_user) if wcif['events']
+      set_wcif_schedule!(wcif['schedule'], current_user) if wcif['schedule']
+      update_persons_wcif!(wcif['persons'], current_user) if wcif['persons']
+      WcifExtension.update_wcif_extensions!(self, wcif['extensions']) if wcif['extensions']
+      set_wcif_competitor_limit!(wcif['competitorLimit'], current_user) if wcif['competitorLimit']
 
       # Trigger validations on the competition itself, and throw an error to rollback if necessary.
       # Context: It is possible to patch a WCIF containing events/schedule/persons that are valid by themselves,
@@ -1838,15 +1838,15 @@ class Competition < ApplicationRecord
     return if wcif_competitor_limit == self.competitor_limit
 
     if confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot edit the competitor limit because the competition has been confirmed by WCAT")
+      raise WcaExceptions::BadApiParameter.new('Cannot edit the competitor limit because the competition has been confirmed by WCAT')
     end
 
     unless competitor_limit_enabled?
-      raise WcaExceptions::BadApiParameter.new("Cannot update the competitor limit because competitor limits are not enabled for this competition")
+      raise WcaExceptions::BadApiParameter.new('Cannot update the competitor limit because competitor limits are not enabled for this competition')
     end
 
     unless wcif_competitor_limit.present?
-      raise WcaExceptions::BadApiParameter.new("Cannot remove competitor limit")
+      raise WcaExceptions::BadApiParameter.new('Cannot remove competitor limit')
     end
 
     self.competitor_limit = wcif_competitor_limit
@@ -1854,14 +1854,14 @@ class Competition < ApplicationRecord
 
   def set_wcif_series!(wcif_series, current_user)
     unless current_user.can_update_competition_series?(self)
-      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
+      raise WcaExceptions::BadApiParameter.new('Cannot change Competition Series')
     end
 
-    unless wcif_series["competitionIds"].include?(self.id)
+    unless wcif_series['competitionIds'].include?(self.id)
       raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
     end
 
-    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series["id"]) || CompetitionSeries.new
+    competition_series = CompetitionSeries.find_by_wcif_id(wcif_series['id']) || CompetitionSeries.new
     competition_series.set_wcif!(wcif_series)
 
     self.competition_series = competition_series
@@ -1874,11 +1874,11 @@ class Competition < ApplicationRecord
       :wcif_extensions,
     ]
     self.competition_events.includes(competition_events_includes_assotiations).each do |competition_event|
-      wcif_event = wcif_events.find { |e| e["id"] == competition_event.event.id }
-      event_to_be_removed = !wcif_event || !wcif_event["rounds"]
+      wcif_event = wcif_events.find { |e| e['id'] == competition_event.event.id }
+      event_to_be_removed = !wcif_event || !wcif_event['rounds']
       if event_to_be_removed
         unless current_user.can_add_and_remove_events?(self)
-          raise WcaExceptions::BadApiParameter.new("Cannot remove events")
+          raise WcaExceptions::BadApiParameter.new('Cannot remove events')
         end
         competition_event.destroy!
       end
@@ -1886,24 +1886,24 @@ class Competition < ApplicationRecord
 
     # Create missing events.
     wcif_events.each do |wcif_event|
-      event_found = competition_events.find { |ce| ce.event_id == wcif_event["id"] }
-      event_to_be_added = wcif_event["rounds"]
+      event_found = competition_events.find { |ce| ce.event_id == wcif_event['id'] }
+      event_to_be_added = wcif_event['rounds']
       if !event_found && event_to_be_added
         unless current_user.can_add_and_remove_events?(self)
-          raise WcaExceptions::BadApiParameter.new("Cannot add events")
+          raise WcaExceptions::BadApiParameter.new('Cannot add events')
         end
-        competition_events.create!(event_id: wcif_event["id"])
+        competition_events.create!(event_id: wcif_event['id'])
       end
     end
 
     # Update all events.
     wcif_events.each do |wcif_event| # rubocop:disable Style/CombinableLoops
-      event_to_be_updated = wcif_event["rounds"]
+      event_to_be_updated = wcif_event['rounds']
       if event_to_be_updated
         unless current_user.can_update_events?(self)
-          raise WcaExceptions::BadApiParameter.new("Cannot update events")
+          raise WcaExceptions::BadApiParameter.new('Cannot update events')
         end
-        competition_events.find { |ce| ce.event_id == wcif_event["id"] }.load_wcif!(wcif_event)
+        competition_events.find { |ce| ce.event_id == wcif_event['id'] }.load_wcif!(wcif_event)
       end
     end
 
@@ -1922,31 +1922,31 @@ class Competition < ApplicationRecord
     removed_assignments = []
     wcif_persons.each do |wcif_person|
       local_assignments = []
-      registration = registrations.find { |reg| reg.user_id == wcif_person["wcaUserId"] }
+      registration = registrations.find { |reg| reg.user_id == wcif_person['wcaUserId'] }
       # If no registration is found, and the Registration is marked as non-competing, add this person as a non-competing staff member.
-      adding_non_competing = wcif_person["registration"].present? && wcif_person["registration"]["isCompeting"] == false
+      adding_non_competing = wcif_person['registration'].present? && wcif_person['registration']['isCompeting'] == false
       if adding_non_competing
         registration ||= registrations.create(
           competition: self,
-          user_id: wcif_person["wcaUserId"],
+          user_id: wcif_person['wcaUserId'],
           created_at: DateTime.now,
           updated_at: DateTime.now,
           is_competing: false,
         )
       end
       next unless registration.present?
-      WcifExtension.update_wcif_extensions!(registration, wcif_person["extensions"]) if wcif_person["extensions"]
+      WcifExtension.update_wcif_extensions!(registration, wcif_person['extensions']) if wcif_person['extensions']
       # NOTE: person doesn't necessarily have corresponding registration (e.g. registratinless organizer/delegate).
-      if wcif_person["roles"]
-        roles = wcif_person["roles"] - ["delegate", "trainee-delegate", "organizer"] # These three are added on the fly.
+      if wcif_person['roles']
+        roles = wcif_person['roles'] - ['delegate', 'trainee-delegate', 'organizer'] # These three are added on the fly.
         # The additional roles are only for WCIF purposes and we don't validate them,
         # so we can safely skip validations by using update_attribute
         registration.update_attribute(:roles, roles)
       end
-      if wcif_person["assignments"]
-        wcif_person["assignments"].each do |assignment_wcif|
+      if wcif_person['assignments']
+        wcif_person['assignments'].each do |assignment_wcif|
           schedule_activity = competition_activities.find do |competition_activity|
-            competition_activity.wcif_id == assignment_wcif["activityId"]
+            competition_activity.wcif_id == assignment_wcif['activityId']
           end
           unless schedule_activity
             raise WcaExceptions::BadApiParameter.new("Cannot create assignment for non-existent activity with id #{assignment_wcif["activityId"]}")
@@ -1961,8 +1961,8 @@ class Competition < ApplicationRecord
             schedule_activity: schedule_activity,
           )
           assignment.assign_attributes(
-            station_number: assignment_wcif["stationNumber"],
-            assignment_code: assignment_wcif["assignmentCode"],
+            station_number: assignment_wcif['stationNumber'],
+            assignment_code: assignment_wcif['assignmentCode'],
           )
           if assignment.valid?
             local_assignments << assignment
@@ -1979,10 +1979,10 @@ class Competition < ApplicationRecord
   end
 
   def set_wcif_schedule!(wcif_schedule, current_user)
-    if wcif_schedule["startDate"] != start_date.strftime("%F")
-      raise WcaExceptions::BadApiParameter.new("Wrong start date for competition")
-    elsif wcif_schedule["numberOfDays"] != number_of_days
-      raise WcaExceptions::BadApiParameter.new("Wrong number of days for competition")
+    if wcif_schedule['startDate'] != start_date.strftime('%F')
+      raise WcaExceptions::BadApiParameter.new('Wrong start date for competition')
+    elsif wcif_schedule['numberOfDays'] != number_of_days
+      raise WcaExceptions::BadApiParameter.new('Wrong number of days for competition')
     end
     competition_venues = self.competition_venues.includes [
       {
@@ -1993,10 +1993,10 @@ class Competition < ApplicationRecord
       },
       :wcif_extensions,
     ]
-    new_venues = wcif_schedule["venues"].map do |venue_wcif|
+    new_venues = wcif_schedule['venues'].map do |venue_wcif|
       # using this find instead of ActiveRecord's find_or_create_by avoid several queries
       # (despite having the association included :()
-      venue = competition_venues.find { |v| v.wcif_id == venue_wcif["id"] } || competition_venues.build
+      venue = competition_venues.find { |v| v.wcif_id == venue_wcif['id'] } || competition_venues.build
       venue.load_wcif!(venue_wcif)
     end
     self.competition_venues = new_venues
@@ -2006,25 +2006,25 @@ class Competition < ApplicationRecord
 
   def self.wcif_json_schema
     {
-      "type" => "object",
-      "properties" => {
-        "formatVersion" => { "type" => "string" },
-        "id" => { "type" => "string" },
-        "name" => { "type" => "string" },
-        "shortName" => { "type" => "string" },
-        "series" => CompetitionSeries.wcif_json_schema,
-        "persons" => { "type" => "array", "items" => User.wcif_json_schema },
-        "events" => { "type" => "array", "items" => CompetitionEvent.wcif_json_schema },
-        "schedule" => {
-          "type" => "object",
-          "properties" => {
-            "venues" => { "type" => "array", "items" => CompetitionVenue.wcif_json_schema },
-            "startDate" => { "type" => "string" },
-            "numberOfDays" => { "type" => "integer" },
+      'type' => 'object',
+      'properties' => {
+        'formatVersion' => { 'type' => 'string' },
+        'id' => { 'type' => 'string' },
+        'name' => { 'type' => 'string' },
+        'shortName' => { 'type' => 'string' },
+        'series' => CompetitionSeries.wcif_json_schema,
+        'persons' => { 'type' => 'array', 'items' => User.wcif_json_schema },
+        'events' => { 'type' => 'array', 'items' => CompetitionEvent.wcif_json_schema },
+        'schedule' => {
+          'type' => 'object',
+          'properties' => {
+            'venues' => { 'type' => 'array', 'items' => CompetitionVenue.wcif_json_schema },
+            'startDate' => { 'type' => 'string' },
+            'numberOfDays' => { 'type' => 'integer' },
           },
         },
-        "competitorLimit" => { "type" => ["integer", "null"] },
-        "extensions" => { "type" => "array", "items" => WcifExtension.wcif_json_schema },
+        'competitorLimit' => { 'type' => ['integer', 'null'] },
+        'extensions' => { 'type' => 'array', 'items' => WcifExtension.wcif_json_schema },
       },
     }
   end
@@ -2043,13 +2043,13 @@ class Competition < ApplicationRecord
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
-    only: ["id", "name", "website", "start_date", "end_date",
-           "registration_open", "registration_close", "announced_at",
-           "cancelled_at", "results_posted_at", "competitor_limit", "venue"],
-    methods: ["url", "website", "short_name", "short_display_name", "city",
-              "venue_address", "venue_details", "latitude_degrees", "longitude_degrees",
-              "country_iso2", "event_ids", "time_until_registration", "date_range"],
-    include: ["delegates", "organizers"],
+    only: ['id', 'name', 'website', 'start_date', 'end_date',
+           'registration_open', 'registration_close', 'announced_at',
+           'cancelled_at', 'results_posted_at', 'competitor_limit', 'venue'],
+    methods: ['url', 'website', 'short_name', 'short_display_name', 'city',
+              'venue_address', 'venue_details', 'latitude_degrees', 'longitude_degrees',
+              'country_iso2', 'event_ids', 'time_until_registration', 'date_range'],
+    include: ['delegates', 'organizers'],
   }.freeze
 
   def serializable_hash(options = nil)
@@ -2074,8 +2074,8 @@ class Competition < ApplicationRecord
     wcif_ids = rounds.to_h { |r| [r.wcif_id, r.to_string_map] }
     all_activities.each do |activity|
       event = Icalendar::Event.new
-      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, "TZID" => "Etc/UTC")
-      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, "TZID" => "Etc/UTC")
+      event.dtstart = Icalendar::Values::DateTime.new(activity.start_time, 'TZID' => 'Etc/UTC')
+      event.dtend = Icalendar::Values::DateTime.new(activity.end_time, 'TZID' => 'Etc/UTC')
       event.summary = activity.localized_name(wcif_ids)
       cal.add_event(event)
     end
@@ -2171,92 +2171,92 @@ class Competition < ApplicationRecord
     {
       # TODO: enable this once we have persistent IDs
       # "id" => id,
-      "competitionId" => id,
-      "name" => name,
-      "shortName" => cellName,
-      "nameReason" => name_reason,
-      "venue" => {
-        "countryId" => countryId,
-        "cityName" => cityName,
-        "name" => venue,
-        "details" => venueDetails,
-        "address" => venueAddress,
-        "coordinates" => {
-          "lat" => latitude_degrees || 0,
-          "long" => longitude_degrees || 0,
+      'competitionId' => id,
+      'name' => name,
+      'shortName' => cellName,
+      'nameReason' => name_reason,
+      'venue' => {
+        'countryId' => countryId,
+        'cityName' => cityName,
+        'name' => venue,
+        'details' => venueDetails,
+        'address' => venueAddress,
+        'coordinates' => {
+          'lat' => latitude_degrees || 0,
+          'long' => longitude_degrees || 0,
         },
       },
-      "startDate" => start_date&.iso8601,
-      "endDate" => end_date&.iso8601,
-      "series" => competition_series&.to_form_data,
-      "information" => information,
-      "competitorLimit" => {
-        "enabled" => competitor_limit_enabled,
-        "count" => competitor_limit,
-        "reason" => competitor_limit_reason,
+      'startDate' => start_date&.iso8601,
+      'endDate' => end_date&.iso8601,
+      'series' => competition_series&.to_form_data,
+      'information' => information,
+      'competitorLimit' => {
+        'enabled' => competitor_limit_enabled,
+        'count' => competitor_limit,
+        'reason' => competitor_limit_reason,
       },
-      "staff" => {
-        "staffDelegateIds" => staff_delegates.to_a.pluck(:id),
-        "traineeDelegateIds" => trainee_delegates.to_a.pluck(:id),
-        "organizerIds" => organizers.to_a.pluck(:id),
-        "contact" => contact,
+      'staff' => {
+        'staffDelegateIds' => staff_delegates.to_a.pluck(:id),
+        'traineeDelegateIds' => trainee_delegates.to_a.pluck(:id),
+        'organizerIds' => organizers.to_a.pluck(:id),
+        'contact' => contact,
       },
-      "championships" => championships.map(&:championship_type),
-      "website" => {
-        "generateWebsite" => generate_website,
-        "externalWebsite" => external_website,
-        "externalRegistrationPage" => external_registration_page,
-        "usesWcaRegistration" => use_wca_registration,
-        "usesWcaLive" => use_wca_live_for_scoretaking,
+      'championships' => championships.map(&:championship_type),
+      'website' => {
+        'generateWebsite' => generate_website,
+        'externalWebsite' => external_website,
+        'externalRegistrationPage' => external_registration_page,
+        'usesWcaRegistration' => use_wca_registration,
+        'usesWcaLive' => use_wca_live_for_scoretaking,
       },
-      "entryFees" => {
-        "currencyCode" => currency_code,
-        "baseEntryFee" => base_entry_fee_lowest_denomination,
-        "onTheSpotEntryFee" => on_the_spot_entry_fee_lowest_denomination,
-        "guestEntryFee" => guests_entry_fee_lowest_denomination,
-        "donationsEnabled" => enable_donations,
-        "refundPolicyPercent" => refund_policy_percent,
-        "refundPolicyLimitDate" => refund_policy_limit_date&.iso8601,
+      'entryFees' => {
+        'currencyCode' => currency_code,
+        'baseEntryFee' => base_entry_fee_lowest_denomination,
+        'onTheSpotEntryFee' => on_the_spot_entry_fee_lowest_denomination,
+        'guestEntryFee' => guests_entry_fee_lowest_denomination,
+        'donationsEnabled' => enable_donations,
+        'refundPolicyPercent' => refund_policy_percent,
+        'refundPolicyLimitDate' => refund_policy_limit_date&.iso8601,
       },
-      "registration" => {
-        "openingDateTime" => registration_open&.iso8601,
-        "closingDateTime" => registration_close&.iso8601,
-        "waitingListDeadlineDate" => waiting_list_deadline_date&.iso8601,
-        "eventChangeDeadlineDate" => event_change_deadline_date&.iso8601,
-        "allowOnTheSpot" => on_the_spot_registration,
-        "allowSelfDeleteAfterAcceptance" => allow_registration_self_delete_after_acceptance,
-        "allowSelfEdits" => allow_registration_edits,
-        "guestsEnabled" => guests_enabled,
-        "guestEntryStatus" => guest_entry_status,
-        "guestsPerRegistration" => guests_per_registration_limit,
-        "extraRequirements" => extra_registration_requirements,
-        "forceComment" => force_comment_in_registration,
+      'registration' => {
+        'openingDateTime' => registration_open&.iso8601,
+        'closingDateTime' => registration_close&.iso8601,
+        'waitingListDeadlineDate' => waiting_list_deadline_date&.iso8601,
+        'eventChangeDeadlineDate' => event_change_deadline_date&.iso8601,
+        'allowOnTheSpot' => on_the_spot_registration,
+        'allowSelfDeleteAfterAcceptance' => allow_registration_self_delete_after_acceptance,
+        'allowSelfEdits' => allow_registration_edits,
+        'guestsEnabled' => guests_enabled,
+        'guestEntryStatus' => guest_entry_status,
+        'guestsPerRegistration' => guests_per_registration_limit,
+        'extraRequirements' => extra_registration_requirements,
+        'forceComment' => force_comment_in_registration,
       },
-      "eventRestrictions" => {
-        "earlyPuzzleSubmission" => {
-          "enabled" => early_puzzle_submission?,
-          "reason" => early_puzzle_submission_reason,
+      'eventRestrictions' => {
+        'earlyPuzzleSubmission' => {
+          'enabled' => early_puzzle_submission?,
+          'reason' => early_puzzle_submission_reason,
         },
-        "qualificationResults" => {
-          "enabled" => qualification_results?,
-          "reason" => qualification_results_reason,
-          "allowRegistrationWithout" => allow_registration_without_qualification,
+        'qualificationResults' => {
+          'enabled' => qualification_results?,
+          'reason' => qualification_results_reason,
+          'allowRegistrationWithout' => allow_registration_without_qualification,
         },
-        "eventLimitation" => {
-          "enabled" => event_restrictions?,
-          "reason" => event_restrictions_reason,
-          "perRegistrationLimit" => events_per_registration_limit,
+        'eventLimitation' => {
+          'enabled' => event_restrictions?,
+          'reason' => event_restrictions_reason,
+          'perRegistrationLimit' => events_per_registration_limit,
         },
-        "mainEventId" => main_event_id,
+        'mainEventId' => main_event_id,
       },
-      "remarks" => remarks,
-      "admin" => {
-        "isConfirmed" => confirmed?,
-        "isVisible" => showAtAll?,
+      'remarks' => remarks,
+      'admin' => {
+        'isConfirmed' => confirmed?,
+        'isVisible' => showAtAll?,
       },
-      "cloning" => {
-        "fromId" => being_cloned_from_id,
-        "cloneTabs" => clone_tabs || false,
+      'cloning' => {
+        'fromId' => being_cloned_from_id,
+        'cloneTabs' => clone_tabs || false,
       },
     }
   end
@@ -2268,95 +2268,95 @@ class Competition < ApplicationRecord
 
     {
       # for historic reasons, we keep 'name' errors listed under ID. Don't ask.
-      "competitionId" => self.persisted? ? (errors[:id] + errors[:name]) : [],
-      "name" => self.persisted? ? [] : (errors[:id] + errors[:name]),
-      "shortName" => errors[:cellName],
-      "nameReason" => errors[:name_reason],
-      "venue" => {
-        "countryId" => errors[:countryId],
-        "cityName" => errors[:cityName],
-        "name" => errors[:venue],
-        "details" => errors[:venueDetails],
-        "address" => errors[:venueAddress],
-        "coordinates" => {
-          "lat" => errors[:latitude],
-          "long" => errors[:longitude],
+      'competitionId' => self.persisted? ? (errors[:id] + errors[:name]) : [],
+      'name' => self.persisted? ? [] : (errors[:id] + errors[:name]),
+      'shortName' => errors[:cellName],
+      'nameReason' => errors[:name_reason],
+      'venue' => {
+        'countryId' => errors[:countryId],
+        'cityName' => errors[:cityName],
+        'name' => errors[:venue],
+        'details' => errors[:venueDetails],
+        'address' => errors[:venueAddress],
+        'coordinates' => {
+          'lat' => errors[:latitude],
+          'long' => errors[:longitude],
         },
       },
-      "startDate" => errors[:start_date],
-      "endDate" => errors[:end_date],
-      "series" => competition_series&.valid? ? [] : competition_series&.form_errors,
-      "information" => errors[:information],
-      "competitorLimit" => {
-        "enabled" => errors[:competitor_limit_enabled],
-        "count" => errors[:competitor_limit],
-        "reason" => errors[:competitor_limit_reason],
+      'startDate' => errors[:start_date],
+      'endDate' => errors[:end_date],
+      'series' => competition_series&.valid? ? [] : competition_series&.form_errors,
+      'information' => errors[:information],
+      'competitorLimit' => {
+        'enabled' => errors[:competitor_limit_enabled],
+        'count' => errors[:competitor_limit],
+        'reason' => errors[:competitor_limit_reason],
       },
-      "staff" => {
-        "staffDelegateIds" => errors[:staff_delegate_ids],
-        "traineeDelegateIds" => errors[:trainee_delegate_ids],
-        "organizerIds" => errors[:organizer_ids],
-        "contact" => errors[:contact],
+      'staff' => {
+        'staffDelegateIds' => errors[:staff_delegate_ids],
+        'traineeDelegateIds' => errors[:trainee_delegate_ids],
+        'organizerIds' => errors[:organizer_ids],
+        'contact' => errors[:contact],
       },
-      "championships" => errors[:championships],
-      "website" => {
-        "generateWebsite" => errors[:generate_website],
-        "externalWebsite" => errors[:external_website],
-        "externalRegistrationPage" => errors[:external_registration_page],
-        "usesWcaRegistration" => errors[:use_wca_registration],
-        "usesWcaLive" => errors[:use_wca_live_for_scoretaking],
+      'championships' => errors[:championships],
+      'website' => {
+        'generateWebsite' => errors[:generate_website],
+        'externalWebsite' => errors[:external_website],
+        'externalRegistrationPage' => errors[:external_registration_page],
+        'usesWcaRegistration' => errors[:use_wca_registration],
+        'usesWcaLive' => errors[:use_wca_live_for_scoretaking],
       },
-      "entryFees" => {
-        "currencyCode" => errors[:currency_code],
-        "baseEntryFee" => errors[:base_entry_fee_lowest_denomination],
-        "onTheSpotEntryFee" => errors[:on_the_spot_entry_fee_lowest_denomination],
-        "guestEntryFee" => errors[:guests_entry_fee_lowest_denomination],
-        "donationsEnabled" => errors[:enable_donations],
-        "refundPolicyPercent" => errors[:refund_policy_percent],
-        "refundPolicyLimitDate" => errors[:refund_policy_limit_date],
+      'entryFees' => {
+        'currencyCode' => errors[:currency_code],
+        'baseEntryFee' => errors[:base_entry_fee_lowest_denomination],
+        'onTheSpotEntryFee' => errors[:on_the_spot_entry_fee_lowest_denomination],
+        'guestEntryFee' => errors[:guests_entry_fee_lowest_denomination],
+        'donationsEnabled' => errors[:enable_donations],
+        'refundPolicyPercent' => errors[:refund_policy_percent],
+        'refundPolicyLimitDate' => errors[:refund_policy_limit_date],
       },
-      "registration" => {
-        "openingDateTime" => errors[:registration_open],
-        "closingDateTime" => errors[:registration_close],
-        "waitingListDeadlineDate" => errors[:waiting_list_deadline_date],
-        "eventChangeDeadlineDate" => errors[:event_change_deadline_date],
-        "allowOnTheSpot" => errors[:on_the_spot_registration],
-        "allowSelfDeleteAfterAcceptance" => errors[:allow_registration_self_delete_after_acceptance],
-        "allowSelfEdits" => errors[:allow_registration_edits],
-        "guestsEnabled" => errors[:guests_enabled],
-        "guestEntryStatus" => errors[:guest_entry_status],
-        "guestsPerRegistration" => errors[:guests_per_registration_limit],
-        "extraRequirements" => errors[:extra_registration_requirements],
-        "forceComment" => errors[:force_comment_in_registration],
+      'registration' => {
+        'openingDateTime' => errors[:registration_open],
+        'closingDateTime' => errors[:registration_close],
+        'waitingListDeadlineDate' => errors[:waiting_list_deadline_date],
+        'eventChangeDeadlineDate' => errors[:event_change_deadline_date],
+        'allowOnTheSpot' => errors[:on_the_spot_registration],
+        'allowSelfDeleteAfterAcceptance' => errors[:allow_registration_self_delete_after_acceptance],
+        'allowSelfEdits' => errors[:allow_registration_edits],
+        'guestsEnabled' => errors[:guests_enabled],
+        'guestEntryStatus' => errors[:guest_entry_status],
+        'guestsPerRegistration' => errors[:guests_per_registration_limit],
+        'extraRequirements' => errors[:extra_registration_requirements],
+        'forceComment' => errors[:force_comment_in_registration],
       },
-      "eventRestrictions" => {
-        "earlyPuzzleSubmission" => {
-          "enabled" => errors[:early_puzzle_submission],
-          "reason" => errors[:early_puzzle_submission_reason],
+      'eventRestrictions' => {
+        'earlyPuzzleSubmission' => {
+          'enabled' => errors[:early_puzzle_submission],
+          'reason' => errors[:early_puzzle_submission_reason],
         },
-        "qualificationResults" => {
-          "enabled" => errors[:qualification_results],
-          "reason" => errors[:qualification_results_reason],
-          "allowRegistrationWithout" => errors[:allow_registration_without_qualification],
+        'qualificationResults' => {
+          'enabled' => errors[:qualification_results],
+          'reason' => errors[:qualification_results_reason],
+          'allowRegistrationWithout' => errors[:allow_registration_without_qualification],
         },
-        "eventLimitation" => {
-          "enabled" => errors[:event_restrictions],
-          "reason" => errors[:event_restrictions_reason],
-          "perRegistrationLimit" => errors[:events_per_registration_limit],
+        'eventLimitation' => {
+          'enabled' => errors[:event_restrictions],
+          'reason' => errors[:event_restrictions_reason],
+          'perRegistrationLimit' => errors[:events_per_registration_limit],
         },
-        "mainEventId" => errors[:main_event_id],
+        'mainEventId' => errors[:main_event_id],
       },
-      "remarks" => errors[:remarks],
-      "admin" => {
-        "isConfirmed" => errors[:confirmed_at],
-        "isVisible" => errors[:showAtAll],
+      'remarks' => errors[:remarks],
+      'admin' => {
+        'isConfirmed' => errors[:confirmed_at],
+        'isVisible' => errors[:showAtAll],
       },
-      "cloning" => {
-        "fromId" => errors[:being_cloned_from_id],
-        "cloneTabs" => errors[:clone_tabs],
+      'cloning' => {
+        'fromId' => errors[:being_cloned_from_id],
+        'cloneTabs' => errors[:clone_tabs],
       },
-      "other" => {
-        "competitionEvents" => errors[:competition_events],
+      'other' => {
+        'competitionEvents' => errors[:competition_events],
       },
     }
   end
@@ -2365,19 +2365,19 @@ class Competition < ApplicationRecord
     JSON::Validator.validate!(Competition.form_data_json_schema, form_data)
 
     if self.confirmed? && !current_user.can_admin_competitions?
-      raise WcaExceptions::BadApiParameter.new("Cannot change announced competition")
+      raise WcaExceptions::BadApiParameter.new('Cannot change announced competition')
     end
 
     ActiveRecord::Base.transaction do
       self.editing_user_id = current_user.id
 
-      if (form_series = form_data["series"]).present?
+      if (form_series = form_data['series']).present?
         set_form_data_series(form_series, current_user)
       else
         self.competition_series = nil
       end
 
-      if (form_championships = form_data["championships"]).present?
+      if (form_championships = form_data['championships']).present?
         self.championships = form_championships.map do |type|
           Championship.new(championship_type: type)
         end
@@ -2453,14 +2453,14 @@ class Competition < ApplicationRecord
 
   def set_form_data_series(form_data_series, current_user)
     unless current_user.can_update_competition_series?(self)
-      raise WcaExceptions::BadApiParameter.new("Cannot change Competition Series")
+      raise WcaExceptions::BadApiParameter.new('Cannot change Competition Series')
     end
 
-    unless form_data_series["competitionIds"].include?(self.id)
+    unless form_data_series['competitionIds'].include?(self.id)
       raise WcaExceptions::BadApiParameter.new("The Series must include the competition you're currently editing.")
     end
 
-    competition_series = form_data_series["id"].present? ? CompetitionSeries.find(form_data_series["id"]) : CompetitionSeries.new
+    competition_series = form_data_series['id'].present? ? CompetitionSeries.find(form_data_series['id']) : CompetitionSeries.new
     competition_series.set_form_data(form_data_series)
 
     self.competition_series = competition_series
@@ -2498,169 +2498,169 @@ class Competition < ApplicationRecord
   # Our React date picker unfortunately behaves weirdly in terms of backend data
   def self.date_json_schema(string_format)
     {
-      "anyOf" => [
+      'anyOf' => [
         # It can (and should) mostly be a "date" or "date-time" string
-        { "type" => "string", "format" => string_format },
+        { 'type' => 'string', 'format' => string_format },
         # but when opening the page **and never touching it** it stays NULL
-        { "type" => "null" },
+        { 'type' => 'null' },
         # and when opening and touching **but later deleting** a date it becomes an empty string instead of NULL
-        { "type" => "string", "maxLength" => 0 },
+        { 'type' => 'string', 'maxLength' => 0 },
       ],
     }
   end
 
   def self.form_data_json_schema
     {
-      "type" => "object",
-      "properties" => {
+      'type' => 'object',
+      'properties' => {
         # TODO: See above in to_form_data
         # "id" => { "type" => "string" },
-        "competitionId" => { "type" => "string" },
-        "name" => { "type" => "string" },
-        "shortName" => { "type" => "string" },
-        "nameReason" => { "type" => ["string", "null"] },
-        "venue" => {
-          "type" => "object",
-          "properties" => {
-            "name" => { "type" => "string" },
-            "cityName" => { "type" => "string" },
-            "countryId" => { "type" => "string" },
-            "details" => { "type" => ["string", "null"] },
-            "address" => { "type" => ["string", "null"] },
-            "coordinates" => {
-              "type" => "object",
-              "properties" => {
-                "lat" => { "type" => ["number", "string"] },
-                "long" => { "type" => ["number", "string"] },
+        'competitionId' => { 'type' => 'string' },
+        'name' => { 'type' => 'string' },
+        'shortName' => { 'type' => 'string' },
+        'nameReason' => { 'type' => ['string', 'null'] },
+        'venue' => {
+          'type' => 'object',
+          'properties' => {
+            'name' => { 'type' => 'string' },
+            'cityName' => { 'type' => 'string' },
+            'countryId' => { 'type' => 'string' },
+            'details' => { 'type' => ['string', 'null'] },
+            'address' => { 'type' => ['string', 'null'] },
+            'coordinates' => {
+              'type' => 'object',
+              'properties' => {
+                'lat' => { 'type' => ['number', 'string'] },
+                'long' => { 'type' => ['number', 'string'] },
               },
             },
           },
         },
-        "startDate" => date_json_schema("date"),
-        "endDate" => date_json_schema("date"),
-        "series" => CompetitionSeries.form_data_json_schema,
-        "information" => { "type" => ["string", "null"] },
-        "competitorLimit" => {
-          "type" => "object",
-          "properties" => {
-            "enabled" => { "type" => ["boolean", "null"] },
-            "count" => { "type" => ["integer", "null"] },
-            "reason" => { "type" => ["string", "null"] },
+        'startDate' => date_json_schema('date'),
+        'endDate' => date_json_schema('date'),
+        'series' => CompetitionSeries.form_data_json_schema,
+        'information' => { 'type' => ['string', 'null'] },
+        'competitorLimit' => {
+          'type' => 'object',
+          'properties' => {
+            'enabled' => { 'type' => ['boolean', 'null'] },
+            'count' => { 'type' => ['integer', 'null'] },
+            'reason' => { 'type' => ['string', 'null'] },
           },
         },
-        "staff" => {
-          "type" => "object",
-          "properties" => {
-            "staffDelegateIds" => {
-              "type" => "array",
-              "items" => { "type" => "integer" },
-              "uniqueItems" => true,
+        'staff' => {
+          'type' => 'object',
+          'properties' => {
+            'staffDelegateIds' => {
+              'type' => 'array',
+              'items' => { 'type' => 'integer' },
+              'uniqueItems' => true,
             },
-            "traineeDelegateIds" => {
-              "type" => "array",
-              "items" => { "type" => "integer" },
-              "uniqueItems" => true,
+            'traineeDelegateIds' => {
+              'type' => 'array',
+              'items' => { 'type' => 'integer' },
+              'uniqueItems' => true,
             },
-            "organizerIds" => {
-              "type" => "array",
-              "items" => { "type" => "integer" },
-              "uniqueItems" => true,
+            'organizerIds' => {
+              'type' => 'array',
+              'items' => { 'type' => 'integer' },
+              'uniqueItems' => true,
             },
-            "contact" => { "type" => ["string", "null"] },
+            'contact' => { 'type' => ['string', 'null'] },
           },
         },
-        "championships" => {
-          "type" => "array",
-          "items" => { "type" => "string" },
-          "uniqueItems" => true,
+        'championships' => {
+          'type' => 'array',
+          'items' => { 'type' => 'string' },
+          'uniqueItems' => true,
         },
-        "website" => {
-          "type" => "object",
-          "properties" => {
-            "generateWebsite" => { "type" => ["boolean", "null"] },
-            "externalWebsite" => { "type" => ["string", "null"] },
-            "externalRegistrationPage" => { "type" => ["string", "null"] },
-            "usesWcaRegistration" => { "type" => "boolean" },
-            "usesWcaLive" => { "type" => "boolean" },
+        'website' => {
+          'type' => 'object',
+          'properties' => {
+            'generateWebsite' => { 'type' => ['boolean', 'null'] },
+            'externalWebsite' => { 'type' => ['string', 'null'] },
+            'externalRegistrationPage' => { 'type' => ['string', 'null'] },
+            'usesWcaRegistration' => { 'type' => 'boolean' },
+            'usesWcaLive' => { 'type' => 'boolean' },
           },
         },
-        "userSettings" => {
-          "type" => "object",
-          "properties" => {
-            "receiveRegistrationEmails" => { "type" => "boolean" },
+        'userSettings' => {
+          'type' => 'object',
+          'properties' => {
+            'receiveRegistrationEmails' => { 'type' => 'boolean' },
           },
         },
-        "entryFees" => {
-          "type" => "object",
-          "properties" => {
-            "currencyCode" => { "type" => "string" },
-            "baseEntryFee" => { "type" => ["integer", "null"] },
-            "onTheSpotEntryFee" => { "type" => ["integer", "null"] },
-            "guestEntryFee" => { "type" => ["integer", "null"] },
-            "donationsEnabled" => { "type" => ["boolean", "null"] },
-            "refundPolicyPercent" => { "type" => ["integer", "null"] },
-            "refundPolicyLimitDate" => date_json_schema("date-time"),
+        'entryFees' => {
+          'type' => 'object',
+          'properties' => {
+            'currencyCode' => { 'type' => 'string' },
+            'baseEntryFee' => { 'type' => ['integer', 'null'] },
+            'onTheSpotEntryFee' => { 'type' => ['integer', 'null'] },
+            'guestEntryFee' => { 'type' => ['integer', 'null'] },
+            'donationsEnabled' => { 'type' => ['boolean', 'null'] },
+            'refundPolicyPercent' => { 'type' => ['integer', 'null'] },
+            'refundPolicyLimitDate' => date_json_schema('date-time'),
           },
         },
-        "registration" => {
-          "type" => "object",
-          "properties" => {
-            "openingDateTime" => date_json_schema("date-time"),
-            "closingDateTime" => date_json_schema("date-time"),
-            "waitingListDeadlineDate" => date_json_schema("date-time"),
-            "eventChangeDeadlineDate" => date_json_schema("date-time"),
-            "allowOnTheSpot" => { "type" => ["boolean", "null"] },
-            "allowSelfDeleteAfterAcceptance" => { "type" => "boolean" },
-            "allowSelfEdits" => { "type" => "boolean" },
-            "guestsEnabled" => { "type" => "boolean" },
-            "guestEntryStatus" => { "type" => "string" },
-            "guestsPerRegistration" => { "type" => ["integer", "null"] },
-            "extraRequirements" => { "type" => ["string", "null"] },
-            "forceComment" => { "type" => ["boolean", "null"] },
+        'registration' => {
+          'type' => 'object',
+          'properties' => {
+            'openingDateTime' => date_json_schema('date-time'),
+            'closingDateTime' => date_json_schema('date-time'),
+            'waitingListDeadlineDate' => date_json_schema('date-time'),
+            'eventChangeDeadlineDate' => date_json_schema('date-time'),
+            'allowOnTheSpot' => { 'type' => ['boolean', 'null'] },
+            'allowSelfDeleteAfterAcceptance' => { 'type' => 'boolean' },
+            'allowSelfEdits' => { 'type' => 'boolean' },
+            'guestsEnabled' => { 'type' => 'boolean' },
+            'guestEntryStatus' => { 'type' => 'string' },
+            'guestsPerRegistration' => { 'type' => ['integer', 'null'] },
+            'extraRequirements' => { 'type' => ['string', 'null'] },
+            'forceComment' => { 'type' => ['boolean', 'null'] },
           },
         },
-        "eventRestrictions" => {
-          "type" => "object",
-          "properties" => {
-            "earlyPuzzleSubmission" => {
-              "type" => "object",
-              "properties" => {
-                "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
+        'eventRestrictions' => {
+          'type' => 'object',
+          'properties' => {
+            'earlyPuzzleSubmission' => {
+              'type' => 'object',
+              'properties' => {
+                'enabled' => { 'type' => 'boolean' },
+                'reason' => { 'type' => ['string', 'null'] },
               },
             },
-            "qualificationResults" => {
-              "type" => "object",
-              "properties" => {
-                "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
-                "allowRegistrationWithout" => { "type" => ["boolean", "null"] },
+            'qualificationResults' => {
+              'type' => 'object',
+              'properties' => {
+                'enabled' => { 'type' => 'boolean' },
+                'reason' => { 'type' => ['string', 'null'] },
+                'allowRegistrationWithout' => { 'type' => ['boolean', 'null'] },
               },
             },
-            "eventLimitation" => {
-              "type" => "object",
-              "properties" => {
-                "enabled" => { "type" => "boolean" },
-                "reason" => { "type" => ["string", "null"] },
-                "perRegistrationLimit" => { "type" => ["integer", "null"] },
+            'eventLimitation' => {
+              'type' => 'object',
+              'properties' => {
+                'enabled' => { 'type' => 'boolean' },
+                'reason' => { 'type' => ['string', 'null'] },
+                'perRegistrationLimit' => { 'type' => ['integer', 'null'] },
               },
             },
-            "mainEventId" => { "type" => ["string", "null"] },
+            'mainEventId' => { 'type' => ['string', 'null'] },
           },
         },
-        "remarks" => { "type" => ["string", "null"] },
-        "admin" => {
-          "type" => "object",
-          "properties" => {
-            "isConfirmed" => { "type" => "boolean" },
-            "isVisible" => { "type" => "boolean" },
+        'remarks' => { 'type' => ['string', 'null'] },
+        'admin' => {
+          'type' => 'object',
+          'properties' => {
+            'isConfirmed' => { 'type' => 'boolean' },
+            'isVisible' => { 'type' => 'boolean' },
           },
         },
-        "cloning" => {
-          "type" => "object",
-          "properties" => {
-            "fromId" => { "type" => ["string", "null"] },
-            "cloneTabs" => { "type" => "boolean" },
+        'cloning' => {
+          'type' => 'object',
+          'properties' => {
+            'fromId' => { 'type' => ['string', 'null'] },
+            'cloneTabs' => { 'type' => 'boolean' },
           },
         },
       },

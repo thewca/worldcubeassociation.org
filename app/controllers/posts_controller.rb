@@ -65,7 +65,7 @@ class PostsController < ApplicationController
     @post = Post.new(post_params)
     @post.author = current_user
     if @post.save
-      flash[:success] = "Created new post"
+      flash[:success] = 'Created new post'
       redirect_to post_path(@post.slug)
     else
       render 'new'
@@ -79,7 +79,7 @@ class PostsController < ApplicationController
   def update
     @post = find_post
     if @post.update(post_params)
-      flash[:success] = "Updated post"
+      flash[:success] = 'Updated post'
       redirect_to post_path(@post.slug)
     else
       render 'edit'
@@ -89,7 +89,7 @@ class PostsController < ApplicationController
   def destroy
     @post = find_post
     @post.destroy
-    flash[:success] = "Deleted post"
+    flash[:success] = 'Deleted post'
     redirect_to root_url
   end
 

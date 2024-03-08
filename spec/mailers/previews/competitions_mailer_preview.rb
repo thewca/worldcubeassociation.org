@@ -14,7 +14,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
 
   def notify_organizer_of_announced_competition
     c = CompetitionDelegate.last.competition
-    p = "dummy_link"
+    p = 'dummy_link'
     CompetitionsMailer.notify_organizer_of_announced_competition(c, p)
   end
 
@@ -29,7 +29,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
   end
 
   def notify_board_of_confirmed_championship_competition
-    c = Competition.find("WC2013")
+    c = Competition.find('WC2013')
     CompetitionsMailer.notify_wcat_of_confirmed_competition(c.delegates[0], c)
   end
 
@@ -40,18 +40,18 @@ class CompetitionsMailerPreview < ActionMailer::Preview
   end
 
   def submit_results_nag
-    CompetitionsMailer.submit_results_nag(Competition.find("Euro2018"))
+    CompetitionsMailer.submit_results_nag(Competition.find('Euro2018'))
   end
 
   def submit_report_nag
-    CompetitionsMailer.submit_report_nag(Competition.find("Euro2018"))
+    CompetitionsMailer.submit_report_nag(Competition.find('Euro2018'))
   end
 
   def notify_of_delegate_report_submission
     report = DelegateReport.where.not(posted_at: nil).first
     if !report
       report = Competition.first.delegate_report
-      report.update!(schedule_url: "http://example.com", posted_by_user_id: User.last.id, posted_at: Time.now)
+      report.update!(schedule_url: 'http://example.com', posted_by_user_id: User.last.id, posted_at: Time.now)
     end
     competition = report.competition
     CompetitionsMailer.notify_of_delegate_report_submission(competition)
@@ -68,7 +68,7 @@ class CompetitionsMailerPreview < ActionMailer::Preview
 
     if !report
       report = Competition.first.delegate_report
-      report.update!(schedule_url: "http://example.com", posted_by_user_id: User.last.id, posted_at: Time.now)
+      report.update!(schedule_url: 'http://example.com', posted_by_user_id: User.last.id, posted_at: Time.now)
     end
     competition = report.competition
     CompetitionsMailer.wrc_delegate_report_followup(competition)

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "superconfig"
+require 'superconfig'
 
 EnvConfig = SuperConfig.new do
   if Rails.env.production?
@@ -62,7 +62,7 @@ EnvConfig = SuperConfig.new do
   # Trick to discover the port we're set to run on from
   # https://stackoverflow.com/a/48069920/1739415.
   if Rails.env.test?
-    default_root_url = "http://test.host"
+    default_root_url = 'http://test.host'
   elsif defined? Rails::Server
     # We have to check if Rails::Server is defined, because when running the
     # rails console under spring, Rails::Server is not defined, nor is it
@@ -70,11 +70,11 @@ EnvConfig = SuperConfig.new do
     port = Rails::Server::Options.new.parse!(ARGV)[:Port]
     default_root_url = "http://localhost:#{port}"
   else
-    default_root_url = "http://default.host"
+    default_root_url = 'http://default.host'
   end
 
   optional :ROOT_URL, :string, default_root_url
 
   # For server status
-  optional :BUILD_TAG, :string, "local"
+  optional :BUILD_TAG, :string, 'local'
 end
