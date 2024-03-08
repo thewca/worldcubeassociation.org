@@ -32,9 +32,9 @@ export default function Regions({ loggedInUserId }) {
     value: index,
   })), [seniorDelegateRoles]);
 
-  if (!loading && seniorDelegateRoles.length === 0) return <p>You cannot manage any regions.</p>;
   if (loading) return <Loading />;
   if (error) return <Errored />;
+  if (seniorDelegateRoles.length === 0) return <p>You cannot manage any regions.</p>;
 
   return (
     <>
