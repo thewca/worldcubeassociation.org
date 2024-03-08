@@ -35,7 +35,10 @@
             <div><b>WCA ID:</b> <%= @reassign_wca_id.account1_user.wca_id.to_s %></div>
             <div>
               <% if @reassign_wca_id.account1_user.any_kind_of_delegate? %>
-                <b>Delegate:</b> <%= @reassign_wca_id.account1_user.delegate_status %>
+                <b>Delegate Roles:</b>
+                <% @reassign_wca_id.account1_user.delegate_roles.each do |delegate_role| %>
+                  <div><%= UserRole.status(delegate_role) + ", " + UserRole.group(delegate_role)[:name] %></div>
+                <% end %>
               <% end %>
             </div>
             <div>
@@ -78,7 +81,10 @@
             <div><b>WCA ID:</b> <%= @reassign_wca_id.account2_user.wca_id.to_s %></div>
             <div>
               <% if @reassign_wca_id.account2_user.any_kind_of_delegate? %>
-                <b>Delegate:</b> <%= @reassign_wca_id.account2_user.delegate_status %>
+                <b>Delegate Roles:</b>
+                <% @reassign_wca_id.account2_user.delegate_roles.each do |delegate_role| %>
+                  <div><%= UserRole.status(delegate_role) + ", " + UserRole.group(delegate_role)[:name] %></div>
+                <% end %>
               <% end %>
             </div>
             <div>
