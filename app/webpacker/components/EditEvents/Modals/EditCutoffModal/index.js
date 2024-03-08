@@ -33,6 +33,11 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
   const [attemptResult, setAttemptResult] = useState(cutoff?.attemptResult ?? 0);
 
   const cutoffFormats = formats.byId[format].allowedFirstPhaseFormats;
+  // temporary fix until the backend properly tells us the valid formats; see issue 7555
+  const is666or777 = wcifEvent.id === '666' || wcifEvent.id === '777';
+  const sanitizedCutoffFormats = is666or777
+    ? cutoffFormats.filter((cutoffFormat) => cutoffFormat !== '2')
+    : cutoffFormats;
 
   const explanationText = (
     numberOfAttempts > 0 ? roundCutoffToString({
@@ -74,7 +79,7 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
       disabled={disabled}
     >
       <CutoffFormatField
-        cutoffFormats={cutoffFormats}
+        cutoffFormats={sanitizedCutoffFormats}
         cutoffFormat={numberOfAttempts}
         wcifRound={wcifRound}
         onChange={setNumberOfAttempts}
