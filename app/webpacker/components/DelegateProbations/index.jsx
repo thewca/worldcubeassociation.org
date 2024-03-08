@@ -82,7 +82,7 @@ function ProbationListTable({
 }
 
 export default function DelegateProbations() {
-  const [user, setUser] = useInputState();
+  const [role, setRole] = useInputState();
 
   const {
     data: probationRoles, loading, error, sync,
@@ -97,21 +97,21 @@ export default function DelegateProbations() {
       <h1>Delegate Probations</h1>
       <WcaSearch
         name="user"
-        value={user}
-        onChange={setUser}
+        value={role}
+        onChange={setRole}
         multiple={false}
-        model={SEARCH_MODELS.user}
-        params={{ only_staff_delegates: true }}
+        model={SEARCH_MODELS.userRole}
+        params={{ groupType: groupTypes.delegate_regions }}
       />
       <Button
         onClick={() => save(apiV0Urls.userRoles.create(), {
-          userId: user.id,
+          userId: role.user.id,
           groupType: groupTypes.delegate_probation,
         }, () => {
           sync();
-          setUser(null);
+          setRole(null);
         }, { method: 'POST' })}
-        disabled={!user}
+        disabled={!role}
       >
         Start Probation
       </Button>

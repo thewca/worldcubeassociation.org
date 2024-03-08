@@ -10,6 +10,7 @@ import useDebounce from '../../lib/hooks/useDebounce';
 import I18n from '../../lib/i18n';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import '../../stylesheets/search_widget/MultisearchInput.scss';
+import SEARCH_MODELS from './SearchModel';
 
 const classToComponent = {
   user: UserItem,
@@ -20,23 +21,37 @@ const classToComponent = {
   incident: IncidentItem,
 };
 
-function ItemFor({ item }) {
-  const Component = classToComponent[item.class];
-  return (
-    <div className="selected-item">
-      <Component item={item} />
-    </div>
-  );
+function ItemFor({ item, model }) {
+  switch (model || '') {
+    case SEARCH_MODELS.userRole: {
+      return (
+        <div className="selected-item">
+          <UserItem
+            item={item.user}
+            description={`${I18n.t(`enums.user.role_status.delegate_regions.${item.metadata.status}`)}, ${item.group.name}`}
+          />
+        </div>
+      );
+    }
+    default: {
+      const Component = classToComponent[item.class];
+      return (
+        <div className="selected-item">
+          <Component item={item} />
+        </div>
+      );
+    }
+  }
 }
 
-const renderLabel = ({ item }) => ({
+const renderLabel = ({ item, model }) => ({
   color: 'blue',
-  content: <ItemFor item={item} />,
+  content: <ItemFor item={item} model={model} />,
   className: 'multisearch-item',
   as: 'div',
 });
 
-export const itemToOption = (item) => ({
+export const itemToOption = (item, model) => ({
   item,
   id: item.id,
   key: item.id,
@@ -44,7 +59,7 @@ export const itemToOption = (item) => ({
   // 'text' is used by the search method from the component, we need to put
   // the text with a potential match here!
   text: [item.id, item.name, item.title, item.content_html, item.search, item.public_summary].join(' '),
-  content: <ItemFor item={item} />,
+  content: <ItemFor item={item} model={model} />,
 });
 
 const createSearchItem = (search) => itemToOption({
@@ -67,6 +82,7 @@ export default function MultiSearchInput({
   goToItemUrlOnClick = false,
   placeholder,
   removeNoResultsMessage,
+  model,
   disabled = false,
   multiple = true,
 }) {
@@ -93,10 +109,19 @@ export default function MultiSearchInput({
       // FUI's dropdown will automatically remove selected items from the
       // options left for selection.
       fetchJsonOrError(url(debouncedSearch))
-        .then(({ data }) => setResults(data.result.map(itemToOption)))
+        .then(({ data }) => {
+          switch (model || '') {
+            case SEARCH_MODELS.userRole:
+              setResults(data.map((item) => itemToOption(item, model)));
+              break;
+            default:
+              setResults(data.result.map(itemToOption));
+              break;
+          }
+        })
         .finally(() => setLoading(false));
     }
-  }, [debouncedSearch, url]);
+  }, [debouncedSearch, model, url]);
 
   const dropDownOptions = [
     ...(showOptionToGoToSearchPage && search.length > 0 ? [createSearchItem(search)] : []),
@@ -104,7 +129,7 @@ export default function MultiSearchInput({
     ...results,
   ].map((option) => ({
     ...option,
-    text: <ItemFor item={option.item} />,
+    text: <ItemFor item={option.item} model={model} />,
   }));
 
   const onChangeInternal = (evt, data) => {
@@ -150,7 +175,7 @@ export default function MultiSearchInput({
       loading={loading}
       noResultsMessage={removeNoResultsMessage ? null : I18n.t('search_results.index.not_found.generic')}
       placeholder={placeholder || I18n.t('common.search_site')}
-      renderLabel={renderLabel}
+      renderLabel={(item) => renderLabel({ item, model })}
     />
   );
 }

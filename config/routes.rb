@@ -382,12 +382,13 @@ Rails.application.routes.draw do
       end
       get '/records' => "api#records"
 
-      resources :user_roles, only: [:create, :show, :update, :destroy]
       scope 'user_roles' do
         get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
         get '/group/:group_id' => 'user_roles#index_for_group', as: :index_for_group
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
+        get '/search' => 'user_roles#search', as: :user_roles_search
       end
+      resources :user_roles, only: [:create, :show, :update, :destroy]
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
         resources :persons, only: [:update, :destroy] do

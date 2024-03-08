@@ -1295,6 +1295,7 @@ class User < ApplicationRecord
 
   def delegate_role
     {
+      id: "delegate-" + self.id.to_s,
       end_date: nil,
       is_active: true,
       group: self.region,

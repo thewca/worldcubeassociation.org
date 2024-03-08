@@ -4,6 +4,7 @@ import {
   userSearchApiUrl,
   personSearchApiUrl,
   competitionSearchApiUrl,
+  apiV0Urls,
 } from '../../lib/requests/routes.js.erb';
 import MultiSearchInput from './MultiSearchInput';
 import SEARCH_MODELS from './SearchModel';
@@ -25,6 +26,8 @@ export default function WcaSearch({
         return `${personSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
       case SEARCH_MODELS.competition:
         return `${competitionSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      case SEARCH_MODELS.userRole:
+        return apiV0Urls.userRoles.search(query, params.groupType);
       default:
         throw new Error(`Invalid search type in WcaSearch component: ${model}`);
     }
@@ -41,6 +44,7 @@ export default function WcaSearch({
       onChange={onChangeInternal}
       multiple={multiple}
       disabled={disabled}
+      model={model}
     />
   );
 }
