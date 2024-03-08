@@ -30,7 +30,8 @@
 
 
 
-  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=95XC2UKUP2CFW&currency=<%= @registration.outstanding_entry_fees.currency.iso_code %>"></script>
+  <% merchant_id = @competition.payment_account_for(:paypal).paypal_merchant_id %>
+  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=<%= merchant_id %>&currency=<%= @registration.outstanding_entry_fees.currency.iso_code %>"></script>
 
   <script>
 
@@ -112,7 +113,7 @@
         createOrder: (data, actions) => {
           return fetch("/registration/<%= @registration.id %>/create-paypal-order/", {
             method: "post",
-            body: JSON.stringify({ total_charge: getCurrentRubyAmount()),
+            body: JSON.stringify({ total_charge: getCurrentRubyAmount() }),
             headers: {
               'Content-Type': 'application/json' // Set the content type to JSON
             }
