@@ -10,6 +10,8 @@ import WcaSearch from '../../../SearchWidget/WcaSearch';
 import I18n from '../../../../lib/i18n';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
+import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupType } from '../../../../lib/helpers/status-objects';
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
@@ -20,6 +22,22 @@ const initialValue = {
   newDelegate: null,
   status: delegateStatusOptions[0],
 };
+
+const isLead = (role) => role.metadata.status === 'leader';
+
+const canPromote = (role) => (
+  [
+    statusObjectOfGroupType(role.group.group_type).trainee_delegate,
+    statusObjectOfGroupType(role.group.group_type).junior_delegate,
+  ].includes(role.metadata.status)
+);
+
+const canDemote = (role) => (
+  [
+    statusObjectOfGroupType(role.group.group_type).junior_delegate,
+    statusObjectOfGroupType(role.group.group_type).delegate,
+  ].includes(role.metadata.status)
+);
 
 export default function Subregion({ title, groupId }) {
   const {
@@ -37,6 +55,7 @@ export default function Subregion({ title, groupId }) {
   const [newDelegateUser, setNewDelegateUser] = useState(null);
   const [formError, setFormError] = useState(null);
   const { save, saving } = useSaveAction();
+  const confirm = useConfirm();
   const error = delegatesFetchError || formError;
 
   const handleFormChange = (_, { name, value }) => setFormValues({ ...formValues, [name]: value });
@@ -61,6 +80,36 @@ export default function Subregion({ title, groupId }) {
     );
   };
 
+  const promoteDelegateAction = (delegate) => {
+    confirm().then(() => {
+      save(
+        apiV0Urls.userRoles.update(delegate.id),
+        { status: nextStatusOfGroupType(delegate.metadata.status, delegate.group.group_type) },
+        sync,
+        { method: 'PATCH' },
+        (err) => setFormError(err),
+      );
+    });
+  };
+
+  const demoteDelegateAction = (delegate) => {
+    confirm().then(() => {
+      save(
+        apiV0Urls.userRoles.update(delegate.id),
+        { status: previousStatusOfGroupType(delegate.metadata.status, delegate.group.group_type) },
+        sync,
+        { method: 'PATCH' },
+        (err) => setFormError(err),
+      );
+    });
+  };
+
+  const endDelegateRoleAction = (delegate) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.delete(delegate.id), {}, sync, { method: 'DELETE' });
+    });
+  };
+
   if (loading || saving) return <Loading />;
   if (error) return <Errored />;
 
@@ -82,6 +131,7 @@ export default function Subregion({ title, groupId }) {
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -89,6 +139,14 @@ export default function Subregion({ title, groupId }) {
             <Table.Row key={delegate.id}>
               <Table.Cell>{delegate.user.name}</Table.Cell>
               <Table.Cell>{I18n.t(`enums.user.role_status.delegate_regions.${delegate.metadata.status}`)}</Table.Cell>
+              <Table.Cell>
+                {canPromote(delegate)
+                  && <Button onClick={() => promoteDelegateAction(delegate)}>Promote</Button>}
+                {canDemote(delegate)
+                  && <Button onClick={() => demoteDelegateAction(delegate)}>Demote</Button>}
+                {!isLead(delegate)
+                  && <Button onClick={() => endDelegateRoleAction(delegate)}>End Role</Button>}
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
