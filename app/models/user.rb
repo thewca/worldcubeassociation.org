@@ -19,6 +19,7 @@ class User < ApplicationRecord
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
+  belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
@@ -46,6 +47,8 @@ class User < ApplicationRecord
       where(country_iso2: (Continent.country_iso2s(region_id) || Country.c_find(region_id)&.iso2))
     end
   }
+
+  scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
 
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
@@ -1276,10 +1279,6 @@ class User < ApplicationRecord
     UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
   end
 
-  def region
-    UserGroup.find_by_id(self.region_id)
-  end
-
   def can_manage_delegate_probation?
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
   end
@@ -1304,9 +1303,9 @@ class User < ApplicationRecord
       metadata: {
         status: self.delegate_status,
         location: self.location,
-        first_delegated: self.actually_delegated_competitions.minimum(:start_date),
-        last_delegated: self.actually_delegated_competitions.maximum(:start_date),
-        total_delegated: self.actually_delegated_competitions.count,
+        first_delegated: self.actually_delegated_competitions.to_a.minimum(:start_date),
+        last_delegated: self.actually_delegated_competitions.to_a.maximum(:start_date),
+        total_delegated: self.actually_delegated_competitions.to_a.length,
       },
     }
   end
