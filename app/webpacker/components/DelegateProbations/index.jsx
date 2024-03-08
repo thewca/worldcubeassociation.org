@@ -7,6 +7,7 @@ import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import WcaSearch from '../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../SearchWidget/SearchModel';
 import Errored from '../Requests/Errored';
 import useInputState from '../../lib/hooks/useInputState';
 
@@ -99,7 +100,7 @@ export default function DelegateProbations() {
         value={user}
         onChange={setUser}
         multiple={false}
-        model="user"
+        model={SEARCH_MODELS.user}
         params={{ only_staff_delegates: true }}
       />
       <Button

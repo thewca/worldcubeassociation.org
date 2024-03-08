@@ -9,6 +9,7 @@ import Loading from '../../Requests/Loading';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import CountrySelector from '../../CountrySelector/CountrySelector';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 export default function DuesRedirect() {
   const {
@@ -96,7 +97,7 @@ export default function DuesRedirect() {
                 value={formData.redirectFromOrganizer}
                 onChange={handleFormChange}
                 multiple={false}
-                model="user"
+                model={SEARCH_MODELS.user}
               />
             )}
             <Form.Select

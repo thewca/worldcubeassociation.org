@@ -6,6 +6,7 @@ import {
   competitionSearchApiUrl,
 } from '../../lib/requests/routes.js.erb';
 import MultiSearchInput from './MultiSearchInput';
+import SEARCH_MODELS from './SearchModel';
 
 export default function WcaSearch({
   name,
@@ -17,20 +18,17 @@ export default function WcaSearch({
   params,
 }) {
   const urlFn = useCallback((query) => {
-    if (model === 'user') {
-      return `${userSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+    switch (model) {
+      case SEARCH_MODELS.user:
+        return `${userSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      case SEARCH_MODELS.person:
+        return `${personSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      case SEARCH_MODELS.competition:
+        return `${competitionSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
+      default:
+        throw new Error(`Invalid search type in WcaSearch component: ${model}`);
     }
-
-    if (model === 'person') {
-      return `${personSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
-    }
-
-    if (model === 'competition') {
-      return `${competitionSearchApiUrl(query)}&${new URLSearchParams(params).toString()}`;
-    }
-
-    throw new Error(`Invalid search type in WcaSearch component: ${model}`);
-  }, [params, model]);
+  }, [model, params]);
 
   const onChangeInternal = useCallback((evt, data) => {
     onChange(evt, { ...data, name });
