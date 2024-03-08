@@ -265,7 +265,7 @@ RSpec.describe "Competition WCIF" do
         "registrationInfo" => {
           "openTime" => "2013-12-01T00:00:00Z",
           "closeTime" => "2013-12-31T00:00:00Z",
-          "baseEntryFeeLowestDenomination" => 1000,
+          "baseEntryFee" => 1000,
           "currencyCode" => "USD",
           "onTheSpotRegistration" => false,
           "useWcaRegistration" => false,

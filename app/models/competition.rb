@@ -1744,7 +1744,7 @@ class Competition < ApplicationRecord
       "registrationInfo" => {
         "openTime" => registration_open&.iso8601,
         "closeTime" => registration_close&.iso8601,
-        "baseEntryFeeLowestDenomination" => base_entry_fee_lowest_denomination,
+        "baseEntryFee" => base_entry_fee_lowest_denomination,
         "currencyCode" => currency_code,
         "onTheSpotRegistration" => on_the_spot_registration,
         "useWcaRegistration" => use_wca_registration,
@@ -2038,7 +2038,7 @@ class Competition < ApplicationRecord
           "properties" => {
             "openTime" => { "type" => "string" },
             "closeTime" => { "type" => "string" },
-            "baseEntryFeeLowestDenomination" => { "type" => "integer" },
+            "baseEntryFee" => { "type" => "integer" },
             "currencyCode" => { "type" => "string" },
             "onTheSpotRegistration" => { "type" => "boolean" },
             "useWcaRegistration" => { "type" => "boolean" },
