@@ -845,7 +845,7 @@ class RegistrationsController < ApplicationController
 
       amount_details = response['purchase_units'][0]['payments']['captures'][0]['amount']
       currency_code = amount_details['currency_code']
-      amount = PaypalRecord.amount_in_cents(amount_details["value"], currency_code)
+      amount = PaypalRecord.ruby_amount(amount_details["value"], currency_code)
       record = PaypalRecord.find_by(record_id: response["id"])
 
       # Create a Capture object and link it to the PaypalRecord
@@ -881,7 +881,7 @@ class RegistrationsController < ApplicationController
     refund = PaypalInterface.issue_refund(registration, payment_capture_id)
 
     registration.record_refund(
-      refund.amount_in_cents.to_i,
+      refund.amount_in_cents,
       refund.currency_code,
       refund,
       payment_capture_id,

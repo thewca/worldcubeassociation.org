@@ -825,7 +825,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_02_22_134242) do
     t.string "record_id"
     t.string "status"
     t.string "payload"
-    t.string "amount_in_cents"
+    t.integer "amount_in_cents"
     t.string "currency_code"
     t.string "record_type"
     t.bigint "parent_record_id"

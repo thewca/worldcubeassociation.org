@@ -42,19 +42,19 @@ class PaypalRecord < ApplicationRecord
     ],
   }.freeze
 
-  def self.paypal_amount(amount_in_cents, currency_code)
+  def self.paypal_amount(amount, currency_code)
     if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
-      format("%.2f", amount_in_cents.to_i / 100.0)
+      format("%.2f", amount.to_i / 100.0)
     else
-      amount_in_cents
+      amount.to_i
     end
   end
 
-  def self.amount_in_cents(paypal_amount, currency_code)
+  def self.ruby_amount(amount, currency_code)
     if PAYPAL_CURRENCY_CATEGORIES[:decimal].include?(currency_code)
-      (paypal_amount.to_f * 100).to_i.to_s
+      (amount.to_i * 100)
     else
-      paypal_amount
+      amount.to_i
     end
   end
 
