@@ -9,6 +9,8 @@ import {
 import TextareaAutosize from 'react-textarea-autosize';
 import { Circle } from 'react-leaflet';
 import _ from 'lodash';
+import DatePicker from 'react-datepicker';
+import { UTCDate } from "@date-fns/utc";
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './FormSearch';
@@ -22,6 +24,7 @@ import {
 } from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
+import 'react-datepicker/dist/react-datepicker.css';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -219,30 +222,26 @@ export const InputNumber = wrapInput((props) => {
 }, ['attachedLabel', 'min', 'max', 'step']);
 
 export const InputDate = wrapInput((props) => {
-  const date = props.value && new Date(props.value);
+  const date = props.value && new UTCDate(props.value);
 
-  const onChange = useCallback((e, { value: newValue }) => {
-    if (!newValue || !props.dateTime) {
-      props.onChange(e, { value: newValue });
-      return;
-    }
-
-    const newDate = new Date(newValue);
-    newDate.getTimezoneOffset();
-    newDate.setMinutes(newDate.getMinutes() - newDate.getTimezoneOffset());
-    props.onChange(e, { value: newDate.toISOString() });
+  const onChangeInternal = useCallback((newDate) => {
+    props.onChange(null, { value: newDate.toISOString() });
   }, [props]);
 
   return (
     <Input
       id={props.htmlId}
       name={props.htmlName}
-      type={props.dateTime ? 'datetime-local' : 'date'}
-      value={date && date.toISOString().slice(0, props.dateTime ? 16 : 10)}
-      onChange={onChange}
       style={{ width: 'full' }}
-      label={props.dateTime ? 'UTC' : null}
-    />
+    >
+      <DatePicker
+        selected={date}
+        onChange={onChangeInternal}
+        showTimeSelect={props.dateTime}
+        dateFormat="Pp"
+        timeFormat="p"
+      />
+    </Input>
   );
 }, ['dateTime'], '');
 
