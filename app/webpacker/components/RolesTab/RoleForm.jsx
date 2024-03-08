@@ -23,8 +23,8 @@ const groups = [{
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 
-export default function RoleForm({ userId, isActiveRole }) {
-  const { data, loading, error } = useLoadedData(roleDataUrl(userId, isActiveRole));
+export default function RoleForm({ userId }) {
+  const { data, loading, error } = useLoadedData(roleDataUrl(userId));
   const { data: delegateRegions, loading: regionsLoading, error: regionsError } = useLoadedData(
     apiV0Urls.userGroups.list(groupTypes.delegate_regions),
   );
@@ -103,13 +103,12 @@ export default function RoleForm({ userId, isActiveRole }) {
           type="submit"
           disabled={(_.isEqual(formValues, data?.roleData))}
         >
-          {isActiveRole ? 'Update Role' : 'Create Role'}
+          Update Role
         </Form.Button>
         <Form.Button
           secondary
           type="button"
           onClick={endRole}
-          disabled={!isActiveRole}
         >
           End Role
         </Form.Button>

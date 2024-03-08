@@ -59,7 +59,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil)
+  private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil, group_type: nil, is_lead: nil)
     roles.reject do |role|
       is_actual_role = role.is_a?(UserRole) # See previous is_actual_role comment.
       # In future, the following lines will be replaced by the following:
@@ -70,10 +70,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # )
       # Till then, we need to support both the old and new systems. So, we will be using ternary
       # operator to access the parameters.
+      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
+      # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
-        (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
+        (!status.nil? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
         (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
-        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
+        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden])) ||
+        (!group_type.nil? && group_type != UserRole.group_type(role)) ||
+        (!is_lead.nil? && is_lead != UserRole.is_lead?(role))
       )
     end
   end
@@ -134,6 +138,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
       is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
       status: params[:status],
+      group_type: params[:groupType],
     )
 
     # Sort the roles.
@@ -157,11 +162,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     status = params[:status]
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
+    is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
     roles = filter_roles_for_parameters(
       roles: roles,
       status: status,
       is_active: is_active,
       is_group_hidden: is_group_hidden,
+      is_lead: is_lead,
     )
 
     # Sort the roles.
@@ -321,6 +328,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
       # Creates deprecated role.
       user = User.find(user_id)
+      return render status: :unprocessable_entity, json: { error: "Already a Delegate" } if user.any_kind_of_delegate?
       user.update!(delegate_status: status, region_id: group.id, location: location)
       send_role_change_notification(user)
       return render json: {
@@ -348,24 +356,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def show
     user_id = params.require(:userId)
-    is_active_role = ActiveRecord::Type::Boolean.new.cast(params.require(:isActiveRole))
 
-    if is_active_role
-      user = User.find(user_id)
-      render json: {
-        roleData: {
-          delegateStatus: user.delegate_status,
-          regionId: user.region_id,
-          location: user.location,
-        },
-        regions: UserGroup.delegate_region_groups,
-      }
-    else
-      render json: {
-        roleData: {},
-        regions: UserGroup.delegate_region_groups,
-      }
-    end
+    user = User.find(user_id)
+    render json: {
+      roleData: {
+        delegateStatus: user.delegate_status,
+        regionId: user.region_id,
+        location: user.location,
+      },
+      regions: UserGroup.delegate_region_groups,
+    }
   end
 
   def update

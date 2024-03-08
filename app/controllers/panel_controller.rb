@@ -39,6 +39,7 @@ class PanelController < ApplicationController
       },
       "seniorDelegate" => {
         "delegateForms" => "delegate-forms",
+        "regions" => "regions",
         "delegateProbations" => "delegate-probations",
         "subordinateDelegateClaims" => "subordinate-delegate-claims",
         "subordinateUpcomingCompetitions" => "subordinate-upcoming-competitions",

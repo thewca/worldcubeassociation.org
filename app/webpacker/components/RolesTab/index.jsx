@@ -1,11 +1,10 @@
 import React from 'react';
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
-import { groupTypes } from '../../lib/wca-data.js.erb';
 import ActiveRoles from './ActiveRoles';
 import PastRoles from './PastRoles';
 
@@ -48,10 +47,6 @@ export default function RolesTab({ userId }) {
 
   const [open, setOpen] = React.useState(false);
 
-  const isDelegate = activeRoles?.some(
-    (role) => role.group.group_type === groupTypes.delegate_regions,
-  );
-
   const hasNoRoles = activeRoles?.length === 0 && pastRoles?.length === 0;
 
   if (activeRolesLoading || pastRolesLoading) return <Loading />;
@@ -62,7 +57,6 @@ export default function RolesTab({ userId }) {
       {activeRoles?.length > 0 && (<ActiveRoles activeRoles={activeRoles} setOpen={setOpen} />)}
       {pastRoles?.length > 0 && (<PastRoles pastRoles={pastRoles} />)}
       {hasNoRoles && <p>No Roles...</p>}
-      <Button onClick={() => setOpen(true)} disabled={isDelegate}>New Role</Button>
 
       <Modal
         size="fullscreen"
@@ -79,7 +73,7 @@ export default function RolesTab({ userId }) {
         open={open}
       >
         <Modal.Content>
-          <RoleForm userId={userId} isActiveRole={isDelegate} />
+          <RoleForm userId={userId} />
         </Modal.Content>
       </Modal>
     </>
