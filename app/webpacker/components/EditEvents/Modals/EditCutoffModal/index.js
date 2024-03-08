@@ -34,10 +34,10 @@ export default function EditCutoffModal({ wcifEvent, wcifRound, disabled }) {
 
   const cutoffFormats = formats.byId[format].allowedFirstPhaseFormats;
   // temporary fix until the backend properly tells us the valid formats; see issue 7555
-  const is666or777 = wcifEvent.id === "666" || wcifEvent.id === "777"
+  const is666or777 = wcifEvent.id === '666' || wcifEvent.id === '777';
   const sanitizedCutoffFormats = is666or777
-    ? cutoffFormats.filter((format) => format !== "2")
-    : cutoffFormats
+    ? cutoffFormats.filter((cutoffFormat) => cutoffFormat !== '2')
+    : cutoffFormats;
 
   const explanationText = (
     numberOfAttempts > 0 ? roundCutoffToString({
