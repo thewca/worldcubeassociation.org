@@ -3,14 +3,15 @@
 class RoleChangeMailer < ApplicationMailer
   private def role_metadata(role)
     metadata = {}
+    group = UserRole.group(role)
 
     # Populate the metadata list.
-    case UserRole.group(role).group_type
+    case group.group_type
     when UserGroup.group_types[:delegate_regions]
-      metadata[:region_name] = UserRole.group(role).name
+      metadata[:region_name] = group.name
       metadata[:status] = I18n.t("enums.user.role_status.delegate_regions.#{UserRole.status(role)}")
     when UserGroup.group_types[:translators]
-      metadata[:locale] = UserRole.group(role).metadata.locale
+      metadata[:locale] = group.metadata.locale
     end
     metadata
   end
