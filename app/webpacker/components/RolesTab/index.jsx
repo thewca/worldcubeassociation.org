@@ -8,19 +8,6 @@ import RoleForm from './RoleForm';
 import ActiveRoles from './ActiveRoles';
 import PastRoles from './PastRoles';
 
-// let i18n-tasks know the key is used
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.candidate_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.regional_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.senior_delegate')
-// i18n-tasks-use t('enums.user.role_status.teams_committees.member')
-// i18n-tasks-use t('enums.user.role_status.teams_committees.senior_member')
-// i18n-tasks-use t('enums.user.role_status.teams_committees.leader')
-// i18n-tasks-use t('enums.user.role_status.councils.member')
-// i18n-tasks-use t('enums.user.role_status.councils.senior_member')
-// i18n-tasks-use t('enums.user.role_status.councils.leader')
-
 const sortParams = 'groupTypeRank,status';
 
 export default function RolesTab({ userId }) {

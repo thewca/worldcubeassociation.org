@@ -48,7 +48,7 @@ export default function DelegateForm({
         name="delegateStatus"
         value={formValues.delegateStatus}
         options={delegateStatusOptions.map((option) => ({
-          text: I18n.t(`enums.user.role_status.delegate_regions.${option}`),
+          text: I18n.t(`enums.user_roles.status.delegate_regions.${option}`),
           value: option,
         }))}
         onChange={handleFormChange}

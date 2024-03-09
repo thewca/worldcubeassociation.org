@@ -10,7 +10,7 @@ export default function UserRoleItem({
   return (
     <UserItem
       item={item.user}
-      description={`${I18n.t(`enums.user.role_status.delegate_regions.${item.metadata.status}`)}, ${item.group.name}`}
+      description={`${I18n.t(`enums.user_roles.status.delegate_regions.${item.metadata.status}`)}, ${item.group.name}`}
     />
   );
 }

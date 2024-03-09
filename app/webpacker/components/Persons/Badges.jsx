@@ -7,22 +7,18 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import { groupTypes } from '../../lib/wca-data.js.erb';
 
-// let i18n-tasks know the key is used
-// i18n-tasks-use t('user_groups.group_types.board')
-// i18n-tasks-use t('user_groups.group_types.officers')
-
 function badgeParams(role) {
   if (role.group.group_type === groupTypes.delegate_regions) {
     return {
-      roleTitle: I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`),
-      groupTitle: I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`),
+      roleTitle: I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`),
+      groupTitle: I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`),
       badgeClass: 'delegate-badge',
       url: delegatesPageUrl,
     };
   }
   if ([groupTypes.teams_committees, groupTypes.councils].includes(role.group.group_type)) {
     return {
-      roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`,
+      roleTitle: `${role.group.metadata.friendly_id.toUpperCase()} ${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
       groupTitle: role.group.name,
       badgeClass: `team-${role.metadata.status.replace('_', '-')}-badge`,
       url: teamsCommitteesPageUrl,
@@ -38,7 +34,7 @@ function badgeParams(role) {
   }
   if (role.group.group_type === groupTypes.officers) {
     return {
-      roleTitle: `${I18n.t(`about.structure.${role.metadata.status}.name`)}`,
+      roleTitle: `${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`,
       groupTitle: I18n.t(`user_groups.group_types.${role.group.group_type}`),
       badgeClass: 'officer-badge',
       url: teamsCommitteesPageUrl,
