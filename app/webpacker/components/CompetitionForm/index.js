@@ -16,7 +16,6 @@ import VenueInfo from './FormSections/VenueInfo';
 import {
   InputBoolean,
   InputChampionships,
-  InputDate,
   InputMarkdown,
   InputTextArea,
 } from './Inputs/FormInputs';
@@ -29,7 +28,6 @@ import EventRestrictions from './FormSections/EventRestrictions';
 import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
-import RegistrationCollisions from './Tables/RegistrationCollisions';
 import FormErrors from './FormErrors';
 import Series from './FormSections/Series';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
@@ -40,12 +38,12 @@ import SectionProvider from './store/sections';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
+import RegistrationDates from './FormSections/RegistrationDates';
 import AnnouncementActions from './AnnouncementActions';
 import { teams } from '../../lib/wca-data.js.erb';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 import UserPreferences from './UserPreferences';
-import RegistrationDates from "./FormSections/RegistrationDates";
 
 function AnnouncementMessage() {
   const {

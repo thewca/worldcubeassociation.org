@@ -223,6 +223,7 @@ export const InputNumber = wrapInput((props) => {
 
 const loadAsPseudoLocal = (isoString) =>
   // all of our WCIF-contained dates are defined to be UTC
+  // eslint-disable-next-line implicit-arrow-linebreak
   DateTime.fromISO(isoString, { zone: 'UTC' })
     // but the react-datepicker uses local TZ,
     // so we have to make the date _think_ it's local without actually converting the time
