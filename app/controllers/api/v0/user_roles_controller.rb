@@ -213,7 +213,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         end
       end
     elsif group_type == UserGroup.group_types[:officers]
-      roles.concat(Team.all_officers.flat_map(&:current_members).map(&:role))
       roles << {
         group: {
           id: 'officers',
@@ -304,36 +303,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
-  private def create_officer_role(user_id, status)
-    return head :unauthorized unless current_user.can_manage_teams?
-    case status
-    when 'chair'
-      team = Team.chair
-    when 'executive_director'
-      team = Team.executive_director
-    when 'secretary'
-      team = Team.secretary
-    when 'vice_chair'
-      team = Team.vice_chair
-    else
-      return render status: :unprocessable_entity, json: { error: "Invalid status" }
-    end
-    TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: false, team_senior_member: false)
-    # When a new team member is created, it's not getting fetched from current_members, hence doing a reload so that it get fetched.
-    team.reload
-    render json: {
-      success: true,
-    }
-  end
-
   def create
     user_id = params.require(:userId)
-
-    if params[:groupType].present? && params[:groupType] == UserGroup.group_types[:officers]
-      status = params.require(:status)
-      return create_officer_role(user_id, status)
-    end
-
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
 
     if team_role?(group_id)
@@ -344,6 +315,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:delegate_regions],
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
+      UserGroup.group_types[:officers],
     ]
     group = UserGroup.find(group_id)
 
@@ -379,6 +351,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if group.group_type == UserGroup.group_types[:delegate_regions]
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+    elsif group.group_type == UserGroup.group_types[:officers]
+      metadata = RolesMetadataOfficers.create!(status: status)
     else
       metadata = nil
     end

@@ -20,10 +20,6 @@ class TeamMember < ApplicationRecord
   alias_attribute :senior_member, :team_senior_member
 
   BOARD_STATUS = "member"
-  OFFICER_STATUS_EXECUTIVE_DIRECTOR = "executive_director"
-  OFFICER_STATUS_CHAIR = "chair"
-  OFFICER_STATUS_VICE_CHAIR = "vice_chair"
-  OFFICER_STATUS_SECRETARY = "secretary"
   TEAM_STATUS_LEADER = "leader"
   TEAM_STATUS_SENIOR_MEMBER = "senior_member"
   TEAM_STATUS_MEMBER = "member"
@@ -60,18 +56,6 @@ class TeamMember < ApplicationRecord
     end
   end
 
-  def officer_status
-    if team == Team.executive_director
-      OFFICER_STATUS_EXECUTIVE_DIRECTOR
-    elsif team == Team.chair
-      OFFICER_STATUS_CHAIR
-    elsif team == Team.vice_chair
-      OFFICER_STATUS_VICE_CHAIR
-    elsif team == Team.secretary
-      OFFICER_STATUS_SECRETARY
-    end
-  end
-
   def team_status
     if leader?
       TEAM_STATUS_LEADER
@@ -83,9 +67,7 @@ class TeamMember < ApplicationRecord
   end
 
   def status
-    if Team.all_officers.include?(team)
-      officer_status
-    elsif team == Team.board
+    if team == Team.board
       BOARD_STATUS
     else
       team_status
@@ -93,9 +75,7 @@ class TeamMember < ApplicationRecord
   end
 
   def role
-    if Team.all_officers.include?(team)
-      group_name = 'Officers'
-    elsif team == Team.board
+    if team == Team.board
       group_name = 'Board'
     else
       group_name = team.name

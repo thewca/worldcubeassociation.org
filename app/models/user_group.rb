@@ -80,6 +80,7 @@ class UserGroup < ApplicationRecord
       UserGroup.group_types[:delegate_regions],
       UserGroup.group_types[:teams_committees],
       UserGroup.group_types[:councils],
+      UserGroup.group_types[:officers],
     ]
   end
 

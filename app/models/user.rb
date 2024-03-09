@@ -56,7 +56,7 @@ class User < ApplicationRecord
     eligible_delegates = User.where(delegate_status: %w(delegate))
     eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
-    officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
+    officers = UserGroup.officers.flat_map(&:active_users)
     (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
   end
 
@@ -1414,34 +1414,6 @@ class User < ApplicationRecord
 
     if board_member?
       roles << board_role
-    end
-
-    Team.all_officers.each do |officer_team|
-      if officer_team == Team.chair
-        status = 'chair'
-      elsif officer_team == Team.executive_director
-        status = 'executive_director'
-      elsif officer_team == Team.secretary
-        status = 'secretary'
-      elsif officer_team == Team.vice_chair
-        status = 'vice_chair'
-      end
-      if team_member?(officer_team)
-        roles << {
-          group: {
-            id: 'officers',
-            name: 'WCA Officers',
-            group_type: UserGroup.group_types[:officers],
-            is_hidden: false,
-            is_active: true,
-          },
-          is_active: true,
-          user: self,
-          metadata: {
-            status: status,
-          },
-        }
-      end
     end
 
     if Team.wfc.leader&.id == self.id
