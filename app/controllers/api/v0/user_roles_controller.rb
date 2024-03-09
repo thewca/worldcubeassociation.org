@@ -429,6 +429,23 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       }
     end
 
+    if id.starts_with?('delegate-')
+      user_id = id.split('delegate-').last
+      status = params[:status]
+      user = User.find(user_id)
+      previous_value = user.delegate_status
+      new_value = status
+
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+
+      user.update!(delegate_status: status)
+      RoleChangeMailer.notify_role_change(user.delegate_role, current_user, 'Status', previous_value, new_value).deliver_later
+
+      return render json: {
+        success: true,
+      }
+    end
+
     if id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(id)
@@ -474,6 +491,25 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
 
       end_delegate_role_for_user(user)
+      return render json: {
+        success: true,
+      }
+    end
+
+    if id.starts_with?('delegate-')
+      user_id = id.split('delegate-').last
+      user = User.find(user_id)
+
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+
+      if user.delegate_status.present?
+        delegate_role = user.delegate_role
+        delegate_role[:end_date] = Date.today
+        remove_pending_wca_id_claims(user)
+        user.update!(delegate_status: '', region_id: '', location: '')
+        RoleChangeMailer.notify_role_end(delegate_role, current_user).deliver_later
+      end
+
       return render json: {
         success: true,
       }

@@ -3,14 +3,15 @@
 class RoleChangeMailer < ApplicationMailer
   private def role_metadata(role)
     metadata = {}
+    group = UserRole.group(role)
 
     # Populate the metadata list.
-    case role.group.group_type
+    case group.group_type
     when UserGroup.group_types[:delegate_regions]
-      metadata[:region_name] = role.group.name
-      metadata[:status] = I18n.t("enums.user.role_status.delegate_regions.#{role.metadata.status}")
+      metadata[:region_name] = group.name
+      metadata[:status] = I18n.t("enums.user.role_status.delegate_regions.#{UserRole.status(role)}")
     when UserGroup.group_types[:translators]
-      metadata[:locale] = role.group.metadata.locale
+      metadata[:locale] = group.metadata.locale
     end
     metadata
   end
@@ -41,14 +42,40 @@ class RoleChangeMailer < ApplicationMailer
     )
   end
 
+  def notify_role_change(role, user_who_made_the_change, changed_parameter, previous_value, new_value)
+    @role = role
+    @user_who_made_the_change = user_who_made_the_change
+    @changed_parameter = changed_parameter
+    @previous_value = previous_value
+    @new_value = new_value
+    @group_type_name = UserGroup.group_type_name[UserRole.group(role).group_type.to_sym]
+    @today_date = Date.today
+
+    # Populate the recepient list.
+    case UserRole.group(role).group_type
+    when UserGroup.group_types[:delegate_regions]
+      to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      reply_to_list = [user_who_made_the_change.email]
+    else
+      raise "Unknown/Unhandled group type: #{UserRole.group(role).group_type}"
+    end
+
+    # Send email.
+    mail(
+      to: to_list.compact.uniq,
+      reply_to: reply_to_list.compact.uniq,
+      subject: "Role changed for #{UserRole.user(role).name} in #{@group_type_name}",
+    )
+  end
+
   def notify_role_end(role, user_who_made_the_change)
     @role = role
     @user_who_made_the_change = user_who_made_the_change
-    @group_type_name = UserGroup.group_type_name[@role.group.group_type.to_sym]
+    @group_type_name = UserGroup.group_type_name[UserRole.group(role).group_type.to_sym]
     @metadata = role_metadata(role)
 
     # Populate the recepient list.
-    case role.group.group_type
+    case UserRole.group(role).group_type
     when UserGroup.group_types[:delegate_regions]
       to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
       reply_to_list = [user_who_made_the_change.email]
@@ -63,7 +90,7 @@ class RoleChangeMailer < ApplicationMailer
     mail(
       to: to_list.compact.uniq,
       reply_to: reply_to_list.compact.uniq,
-      subject: "Role removed for #{role.user.name} in #{@group_type_name}",
+      subject: "Role removed for #{UserRole.user(role).name} in #{@group_type_name}",
     )
   end
 
