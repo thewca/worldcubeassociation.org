@@ -35,9 +35,6 @@ RSpec.describe Api::V0::UserRolesController do
           metadata: {
             status: "candidate_delegate",
             location: "Australia",
-            first_delegated: nil,
-            last_delegated: nil,
-            total_delegated: 0,
           },
         }].to_json)
       end
