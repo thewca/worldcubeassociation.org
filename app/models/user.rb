@@ -455,11 +455,6 @@ class User < ApplicationRecord
     team_member?(Team.board)
   end
 
-  # Officers are defined in our Bylaws. Every Officer has a team on the website except for the WCA Treasurer, as it is the WFC Leader.
-  def officer?
-    team_member?(Team.chair) || team_member?(Team.executive_director) || team_member?(Team.secretary) || team_member?(Team.vice_chair) || team_leader?(Team.wfc)
-  end
-
   def communication_team?
     team_member?(Team.wct)
   end
@@ -517,7 +512,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    staff_delegate? || member_of_any_official_team? || board_member? || officer?
+    active_roles.any? { |role| UserRole.is_staff?(role) }
   end
 
   def team_member?(team)
