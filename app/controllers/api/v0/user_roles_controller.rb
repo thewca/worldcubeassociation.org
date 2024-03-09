@@ -526,10 +526,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     query = params.require(:query)
     group_type = params.require(:groupType)
     roles = roles_of_group_type(group_type)
-    roles = roles.select { |role| UserRole.is_active?(role) }
+    active_roles = roles.select { |role| UserRole.is_active?(role) }
 
     query.split.each do |part|
-      roles = roles.select do |role|
+      active_roles = active_roles.select do |role|
         user = UserRole.user(role)
         name = user[:name] || ''
         wca_id = user[:wca_id] || ''
@@ -538,6 +538,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     end
 
-    render json: roles
+    render json: { result: active_roles }
   end
 end

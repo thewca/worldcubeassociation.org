@@ -44,7 +44,6 @@ export default function WcaSearch({
       onChange={onChangeInternal}
       multiple={multiple}
       disabled={disabled}
-      model={model}
     />
   );
 }

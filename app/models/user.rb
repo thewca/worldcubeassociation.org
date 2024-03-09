@@ -1308,6 +1308,7 @@ class User < ApplicationRecord
         last_delegated: self.actually_delegated_competitions.to_a.maximum(:start_date),
         total_delegated: self.actually_delegated_competitions.to_a.length,
       },
+      class: 'userrole',
     }
   end
 
