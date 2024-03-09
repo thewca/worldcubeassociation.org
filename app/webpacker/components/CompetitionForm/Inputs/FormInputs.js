@@ -10,7 +10,7 @@ import TextareaAutosize from 'react-textarea-autosize';
 import { Circle } from 'react-leaflet';
 import _ from 'lodash';
 import DatePicker from 'react-datepicker';
-import { UTCDate } from "@date-fns/utc";
+import { DateTime } from 'luxon';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './FormSearch';
@@ -222,10 +222,24 @@ export const InputNumber = wrapInput((props) => {
 }, ['attachedLabel', 'min', 'max', 'step']);
 
 export const InputDate = wrapInput((props) => {
-  const date = props.value && new UTCDate(props.value);
+  // all of our WCIF-contained dates are defined to be UTC
+  const date = props.value && DateTime.fromISO(props.value, { zone: 'UTC' })
+    // but the react-datepicker uses local TZ,
+    // so we have to make the date _think_ it's local without actually converting the time
+    .setZone('local', { keepLocalTime: true })
+    // and finally output as JS-compatible object
+    .toJSDate();
 
   const onChangeInternal = useCallback((newDate) => {
-    props.onChange(null, { value: newDate.toISOString() });
+    const luxon = DateTime.fromJSDate(newDate)
+      // convert to UTC while still maintaining the exact time that the user put in
+      .setZone('UTC', { keepLocalTime: true });
+
+    const stringValue = props.dateTime
+      ? luxon.toISO({ suppressMilliseconds: true })
+      : luxon.toISODate();
+
+    props.onChange(null, { value: stringValue });
   }, [props]);
 
   return (
@@ -238,7 +252,7 @@ export const InputDate = wrapInput((props) => {
         selected={date}
         onChange={onChangeInternal}
         showTimeSelect={props.dateTime}
-        dateFormat="Pp"
+        dateFormat={props.dateTime ? 'Pp' : 'P'}
         timeFormat="p"
       />
     </Input>
