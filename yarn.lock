@@ -2105,13 +2105,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@date-fns/utc@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@date-fns/utc@npm:1.1.1"
-  checksum: 10c0/ee2dbff5596928406e9bce4b07b41a9e232c2e4529feeb481adc944eb9afc748ed757bd90e71ce530d8d4c89f2814696082be212a2e7bffdceae70e7435724fd
-  languageName: node
-  linkType: hard
-
 "@discoveryjs/json-ext@npm:0.5.7, @discoveryjs/json-ext@npm:^0.5.0":
   version: 0.5.7
   resolution: "@discoveryjs/json-ext@npm:0.5.7"
@@ -9867,7 +9860,6 @@ __metadata:
     "@babel/preset-react": "npm:^7.23.3"
     "@babel/runtime": "npm:^7.24.0"
     "@cubing/icons": "npm:^1.1.2"
-    "@date-fns/utc": "npm:^1.1.1"
     "@fullcalendar/core": "npm:^6.1.11"
     "@fullcalendar/interaction": "npm:^6.1.11"
     "@fullcalendar/luxon3": "npm:^6.1.11"
