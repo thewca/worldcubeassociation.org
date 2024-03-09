@@ -9,6 +9,7 @@ import Errored from '../../../Requests/Errored';
 import WcaSearch from '../../../SearchWidget/WcaSearch';
 import I18n from '../../../../lib/i18n';
 import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
@@ -106,7 +107,7 @@ export default function Subregion({ title, groupId }) {
               name="newDelegate"
               value={formValues?.newDelegate}
               onChange={handleFormChange}
-              model="user"
+              model={SEARCH_MODELS.user}
               multiple={false}
             />
             <Form.Dropdown
