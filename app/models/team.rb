@@ -84,22 +84,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('board')
   end
 
-  def self.chair
-    Team.c_find_by_friendly_id!('chair')
-  end
-
-  def self.executive_director
-    Team.c_find_by_friendly_id!('executive_director')
-  end
-
-  def self.secretary
-    Team.c_find_by_friendly_id!('secretary')
-  end
-
-  def self.vice_chair
-    Team.c_find_by_friendly_id!('vice_chair')
-  end
-
   def self.wct
     Team.c_find_by_friendly_id!('wct')
   end

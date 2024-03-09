@@ -17,5 +17,9 @@ FactoryBot.define do
     factory :secretary_role_metadata do
       status { RolesMetadataOfficers.statuses[:secretary] }
     end
+
+    factory :treasurer_role_metadata do
+      status { RolesMetadataOfficers.statuses[:treasurer] }
+    end
   end
 end

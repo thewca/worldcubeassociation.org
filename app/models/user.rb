@@ -1416,23 +1416,6 @@ class User < ApplicationRecord
       roles << board_role
     end
 
-    if Team.wfc.leader&.id == self.id
-      roles << {
-        group: {
-          id: 'officers',
-          name: 'WCA Officers',
-          group_type: UserGroup.group_types[:officers],
-          is_hidden: false,
-          is_active: true,
-        },
-        is_active: true,
-        user: self,
-        metadata: {
-          status: 'treasurer',
-        },
-      }
-    end
-
     roles
   end
 end

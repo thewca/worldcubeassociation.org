@@ -212,21 +212,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           }
         end
       end
-    elsif group_type == UserGroup.group_types[:officers]
-      roles << {
-        group: {
-          id: 'officers',
-          name: 'WCA Officers',
-          group_type: UserGroup.group_types[:officers],
-          is_hidden: false,
-          is_active: true,
-        },
-        is_active: true,
-        user: Team.wfc.leader.user,
-        metadata: {
-          status: 'treasurer',
-        },
-      }
     elsif group_type == UserGroup.group_types[:board]
       roles.concat(Team.board.current_members.map(&:role))
     end
