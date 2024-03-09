@@ -246,14 +246,15 @@ export const InputDate = wrapInput((props) => {
     <Input
       id={props.htmlId}
       name={props.htmlName}
-      style={{ width: 'full' }}
     >
       <DatePicker
         selected={date}
         onChange={onChangeInternal}
-        showTimeSelect={props.dateTime}
+        showTimeInput={props.dateTime}
+        timeInputLabel="UTC"
         dateFormat={props.dateTime ? 'Pp' : 'P'}
         timeFormat="p"
+        style={{ width: 'inherit' }}
       />
     </Input>
   );
