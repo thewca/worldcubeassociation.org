@@ -734,6 +734,52 @@ RSpec.describe User, type: :model do
     end
   end
 
+  describe "staff? method" do
+    it "returns false for non-staff user" do
+      user = FactoryBot.create(:user)
+      expect(user.staff?).to be false
+    end
+
+    it "returns false for trainee delegate" do
+      user = FactoryBot.create(:trainee_delegate)
+      expect(user.staff?).to be false
+    end
+
+    it "returns true for non-trainee Delegate roles" do
+      junior_delegate_user = FactoryBot.create(:candidate_delegate)
+      full_delegate_user = FactoryBot.create(:delegate)
+      regional_delegate = FactoryBot.create(:regional_delegate_role)
+      senior_delegate = FactoryBot.create(:senior_delegate_role)
+
+      expect(junior_delegate_user.staff?).to be true
+      expect(full_delegate_user.staff?).to be true
+      expect(regional_delegate.user.staff?).to be true
+      expect(senior_delegate.user.staff?).to be true
+    end
+
+    it "returns true for WST member" do
+      user = FactoryBot.create(:user, :wst_member)
+      expect(user.staff?).to be true
+    end
+
+    it "returns true for Board roles" do
+      user = FactoryBot.create(:user, :board_member)
+      expect(user.staff?).to be true
+    end
+
+    it "returns true for Officer roles" do
+      executive_director = FactoryBot.create(:user, :executive_director)
+      chair = FactoryBot.create(:user, :chair)
+      vice_chair = FactoryBot.create(:user, :vice_chair)
+      secretary = FactoryBot.create(:user, :secretary)
+
+      expect(executive_director.staff?).to be true
+      expect(chair.staff?).to be true
+      expect(vice_chair.staff?).to be true
+      expect(secretary.staff?).to be true
+    end
+  end
+
   describe "has_permission? method" do
     it "returns false for any permissions that are not defined" do
       user = FactoryBot.create(:user)
