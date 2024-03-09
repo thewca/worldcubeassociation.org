@@ -11,6 +11,7 @@ import I18n from '../../../lib/i18n';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
 const officersStatus = ['chair', 'executive_director', 'secretary', 'vice_chair'];
 const officersStatusOptions = officersStatus.map((option) => ({
@@ -35,11 +36,18 @@ export default function OfficersEditor() {
   const [newOfficer, setNewOfficer] = useState(initialOfficerValue);
   const [formError, setFormError] = useState(null);
   const { save, saving } = useSaveAction();
+  const confirm = useConfirm();
   const error = officersError || formError;
 
   const handleFormChange = (_, { name, value }) => setNewOfficer(
     { ...newOfficer, [name]: value },
   );
+
+  const endRole = (officer) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.delete(officer.id), {}, sync, { method: 'DELETE' });
+    });
+  };
 
   if (officersLoading || saving) return <Loading />;
   if (error) return <Errored />;
@@ -53,6 +61,7 @@ export default function OfficersEditor() {
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
         <Table.Body>
@@ -60,6 +69,9 @@ export default function OfficersEditor() {
             <Table.Row key={officer.id}>
               <Table.Cell>{officer.user.name}</Table.Cell>
               <Table.Cell>{I18n.t(`user_roles.status.officers.${officer.metadata.status}`)}</Table.Cell>
+              <Table.Cell>
+                <Button onClick={() => endRole(officer)}>End Role</Button>
+              </Table.Cell>
             </Table.Row>
           ))}
         </Table.Body>
