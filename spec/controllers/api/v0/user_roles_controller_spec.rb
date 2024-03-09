@@ -27,6 +27,7 @@ RSpec.describe Api::V0::UserRolesController do
         get :index_for_user, params: { user_id: user_whose_delegate_status_changes.id }
 
         expect(response.body).to eq([{
+          id: 'delegate-' + user_whose_delegate_status_changes.id.to_s,
           end_date: nil,
           is_active: true,
           group: user_senior_delegate_role.group,
@@ -39,6 +40,7 @@ RSpec.describe Api::V0::UserRolesController do
             last_delegated: nil,
             total_delegated: 0,
           },
+          class: 'userrole',
         }].to_json)
       end
 

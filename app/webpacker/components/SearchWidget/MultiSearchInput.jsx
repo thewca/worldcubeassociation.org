@@ -10,6 +10,7 @@ import useDebounce from '../../lib/hooks/useDebounce';
 import I18n from '../../lib/i18n';
 import { fetchJsonOrError } from '../../lib/requests/fetchWithAuthenticityToken';
 import '../../stylesheets/search_widget/MultisearchInput.scss';
+import UserRoleItem from './UserRoleItem';
 
 const classToComponent = {
   user: UserItem,
@@ -18,6 +19,7 @@ const classToComponent = {
   regulation: RegulationItem,
   text: TextItem,
   incident: IncidentItem,
+  userrole: UserRoleItem,
 };
 
 function ItemFor({ item }) {

@@ -177,9 +177,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  # Returns a list of roles primarily based on groupType.
-  def index_for_group_type
-    group_type = params.require(:group_type)
+  private def roles_of_group_type(group_type)
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
     roles = UserRole.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
 
@@ -226,6 +224,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     elsif group_type == UserGroup.group_types[:board]
       roles.concat(Team.board.current_members.map(&:role))
     end
+
+    roles
+  end
+
+  # Returns a list of roles primarily based on groupType.
+  def index_for_group_type
+    group_type = params.require(:group_type)
+    roles = roles_of_group_type(group_type)
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
@@ -514,5 +520,24 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         user.delegate_status,
       ).deliver_later
     end
+  end
+
+  def search
+    query = params.require(:query)
+    group_type = params.require(:groupType)
+    roles = roles_of_group_type(group_type)
+    active_roles = roles.select { |role| UserRole.is_active?(role) }
+
+    query.split.each do |part|
+      active_roles = active_roles.select do |role|
+        user = UserRole.user(role)
+        name = user[:name] || ''
+        wca_id = user[:wca_id] || ''
+        email = user[:email] || ''
+        name.downcase.include?(part.downcase) || wca_id.downcase.include?(part.downcase) || email.downcase.include?(part.downcase)
+      end
+    end
+
+    render json: { result: active_roles }
   end
 end

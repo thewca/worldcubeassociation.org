@@ -114,6 +114,8 @@ class UserRole < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
-    super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
+    json[:class] = self.class.to_s.downcase
+    json
   end
 end

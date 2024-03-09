@@ -1295,6 +1295,7 @@ class User < ApplicationRecord
 
   def delegate_role
     {
+      id: "delegate-" + self.id.to_s,
       end_date: nil,
       is_active: true,
       group: self.region,
@@ -1307,6 +1308,7 @@ class User < ApplicationRecord
         last_delegated: self.actually_delegated_competitions.to_a.maximum(:start_date),
         total_delegated: self.actually_delegated_competitions.to_a.length,
       },
+      class: 'userrole',
     }
   end
 
