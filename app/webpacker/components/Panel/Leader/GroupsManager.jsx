@@ -12,6 +12,7 @@ import useSaveAction from '../../../lib/hooks/useSaveAction';
 import { groupTypes, teamsCommitteesStatus, councilsStatus } from '../../../lib/wca-data.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import useInputState from '../../../lib/hooks/useInputState';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 const statusObjectOfGroupType = (groupType) => {
   switch (groupType) {
@@ -117,7 +118,7 @@ function GroupTable({ group }) {
               control={WcaSearch}
               value={newMemberUser}
               onChange={setNewMemberUser}
-              model="user"
+              model={SEARCH_MODELS.user}
               multiple={false}
             />
             <Form.Button onClick={() => setModelOpen(false)}>Cancel</Form.Button>

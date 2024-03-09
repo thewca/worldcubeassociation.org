@@ -10,6 +10,7 @@ import Errored from '../../Requests/Errored';
 import I18n from '../../../lib/i18n';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 const officersStatus = ['chair', 'executive_director', 'secretary', 'vice_chair'];
 const officersStatusOptions = officersStatus.map((option) => ({
@@ -96,7 +97,7 @@ export default function OfficersEditor() {
                 name="user"
                 value={newOfficer.user}
                 onChange={handleFormChange}
-                model="user"
+                model={SEARCH_MODELS.user}
                 multiple={false}
               />
               <Form.Dropdown
