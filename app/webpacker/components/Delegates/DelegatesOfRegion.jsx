@@ -45,6 +45,7 @@ export default function DelegatesOfRegion({ activeRegion, delegateSubregions, is
     isAllRegions
       ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, 'name', {
         isActive: true,
+        extraMetadata: true,
       })
       : apiV0Urls.userRoles.listOfGroup(activeRegion.id, 'location,name', {
         isActive: true,

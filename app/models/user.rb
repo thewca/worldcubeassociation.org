@@ -1293,6 +1293,16 @@ class User < ApplicationRecord
     roles.select { |role| UserRole.is_active?(role) }
   end
 
+  def delegate_role_with_extra_metadata
+    delegate_role_hash = delegate_role
+    delegate_role_metadata = delegate_role_hash[:metadata]
+    delegate_role_metadata[:first_delegated] = self.actually_delegated_competitions.to_a.minimum(:start_date)
+    delegate_role_metadata[:last_delegated] = self.actually_delegated_competitions.to_a.maximum(:start_date)
+    delegate_role_metadata[:total_delegated] = self.actually_delegated_competitions.to_a.length
+    delegate_role_hash[:metadata] = delegate_role_metadata
+    delegate_role_hash
+  end
+
   def delegate_role
     {
       id: "delegate-" + self.id.to_s,
@@ -1304,9 +1314,6 @@ class User < ApplicationRecord
       metadata: {
         status: self.delegate_status,
         location: self.location,
-        first_delegated: self.actually_delegated_competitions.to_a.minimum(:start_date),
-        last_delegated: self.actually_delegated_competitions.to_a.maximum(:start_date),
-        total_delegated: self.actually_delegated_competitions.to_a.length,
       },
       class: 'userrole',
     }

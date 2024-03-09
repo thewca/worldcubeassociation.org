@@ -6,7 +6,7 @@ const promotionForm = 'https://docs.google.com/forms/d/e/1FAIpQLSf3079GXcGUYDmJI
 export default function LeaderForms() {
   return (
     <>
-      <Header as="h2">Delegate Forms</Header>
+      <Header as="h2">Leader Forms</Header>
       <List>
         <List.Item>
           <a href={promotionForm} target="_blank" rel="noreferrer">Member Promotion Form</a>
