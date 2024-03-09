@@ -51,30 +51,6 @@ FactoryBot.define do
       end
     end
 
-    trait :chair do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.chair.id, user_id: user.id)
-      end
-    end
-
-    trait :executive_director do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.executive_director.id, user_id: user.id)
-      end
-    end
-
-    trait :secretary do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.secretary.id, user_id: user.id)
-      end
-    end
-
-    trait :vice_chair do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.vice_chair.id, user_id: user.id)
-      end
-    end
-
     trait :wrt_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
