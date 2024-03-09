@@ -768,15 +768,15 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for Officer roles" do
-      executive_director = FactoryBot.create(:user, :executive_director)
-      chair = FactoryBot.create(:user, :chair)
-      vice_chair = FactoryBot.create(:user, :vice_chair)
-      secretary = FactoryBot.create(:user, :secretary)
+      executive_director = FactoryBot.create(:executive_director_role)
+      chair = FactoryBot.create(:chair_role)
+      vice_chair = FactoryBot.create(:vice_chair_role)
+      secretary = FactoryBot.create(:secretary_role)
 
-      expect(executive_director.staff?).to be true
-      expect(chair.staff?).to be true
-      expect(vice_chair.staff?).to be true
-      expect(secretary.staff?).to be true
+      expect(executive_director.user.staff?).to be true
+      expect(chair.user.staff?).to be true
+      expect(vice_chair.user.staff?).to be true
+      expect(secretary.user.staff?).to be true
     end
   end
 
