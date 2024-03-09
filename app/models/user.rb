@@ -67,7 +67,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official_and_councils.map(&:friendly_id) + User.delegate_statuses.keys + [Team.board.friendly_id]
+    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [Team.board.friendly_id]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -560,8 +560,12 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
+  def delegate_roles
+    active_roles.filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+  end
+
   def any_kind_of_delegate?
-    delegate_status.present? || active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
   end
 
   def trainee_delegate?
@@ -947,10 +951,6 @@ class User < ApplicationRecord
     fields += editable_personal_preference_fields(user)
     fields += editable_competitor_info_fields(user)
     fields += editable_avatar_fields(user)
-    # Delegate Status Fields
-    if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status region_id location)
-    end
     fields
   end
 
