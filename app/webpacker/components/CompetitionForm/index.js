@@ -45,6 +45,7 @@ import { teams } from '../../lib/wca-data.js.erb';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 import UserPreferences from './UserPreferences';
+import RegistrationDates from "./FormSections/RegistrationDates";
 
 function AnnouncementMessage() {
   const {
@@ -249,13 +250,7 @@ function CompetitionForm() {
         <Series />
         <Divider />
 
-        <SubSection section="registration">
-          <Form.Group widths="equal">
-            <InputDate id="openingDateTime" dateTime required />
-            <InputDate id="closingDateTime" dateTime required />
-          </Form.Group>
-          <RegistrationCollisions />
-        </SubSection>
+        <RegistrationDates />
 
         <InputMarkdown id="information" required />
 

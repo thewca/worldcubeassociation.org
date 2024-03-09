@@ -221,14 +221,17 @@ export const InputNumber = wrapInput((props) => {
   );
 }, ['attachedLabel', 'min', 'max', 'step']);
 
-export const InputDate = wrapInput((props) => {
+const loadAsPseudoLocal = (isoString) =>
   // all of our WCIF-contained dates are defined to be UTC
-  const date = props.value && DateTime.fromISO(props.value, { zone: 'UTC' })
+  DateTime.fromISO(isoString, { zone: 'UTC' })
     // but the react-datepicker uses local TZ,
     // so we have to make the date _think_ it's local without actually converting the time
     .setZone('local', { keepLocalTime: true })
     // and finally output as JS-compatible object
     .toJSDate();
+
+export const InputDate = wrapInput((props) => {
+  const date = props.value && loadAsPseudoLocal(props.value);
 
   const onChangeInternal = useCallback((newDate) => {
     const luxon = DateTime.fromJSDate(newDate)
@@ -242,6 +245,12 @@ export const InputDate = wrapInput((props) => {
     props.onChange(null, { value: stringValue });
   }, [props]);
 
+  const startDate = props.startDate && loadAsPseudoLocal(props.startDate);
+  const endDate = props.endDate && loadAsPseudoLocal(props.endDate);
+
+  const minDate = props.minDate && loadAsPseudoLocal(props.minDate);
+  const maxDate = props.maxDate && loadAsPseudoLocal(props.maxDate);
+
   return (
     <Input
       id={props.htmlId}
@@ -250,15 +259,22 @@ export const InputDate = wrapInput((props) => {
       <DatePicker
         selected={date}
         onChange={onChangeInternal}
+        shouldCloseOnSelect={false}
         showTimeInput={props.dateTime}
         timeInputLabel="UTC"
         dateFormat={props.dateTime ? 'Pp' : 'P'}
         timeFormat="p"
         style={{ width: 'inherit' }}
+        selectsStart={props.selectsStart}
+        selectsEnd={props.selectsEnd}
+        startDate={startDate}
+        endDate={endDate}
+        minDate={minDate}
+        maxDate={maxDate}
       />
     </Input>
   );
-}, ['dateTime'], '');
+}, ['dateTime', 'selectsStart', 'selectsEnd', 'startDate', 'endDate', 'minDate', 'maxDate'], '');
 
 export const InputSelect = wrapInput((props) => (
   <Select
