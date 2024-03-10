@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  def website
+  def index
     @contact = WebsiteContact.new(your_email: current_user&.email, name: current_user&.name,
                                   competition_id: params[:competitionId],
                                   inquiry: params[:competitionId] ? "competition" : nil)
@@ -12,7 +12,7 @@ class ContactsController < ApplicationController
     website_contact_params[:logged_in_email] = current_user&.email || 'None'
     @contact = WebsiteContact.new(website_contact_params)
     @contact.request = request
-    maybe_send_email success_url: contact_website_url, fail_view: :website
+    maybe_send_email success_url: contact_url, fail_view: :index
   end
 
   def dob
