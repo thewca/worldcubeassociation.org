@@ -7,6 +7,7 @@ import CouncilLeaders from './CouncilLeaders';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 import GroupsManagerAdmin from './GroupsManagerAdmin';
 import OfficersEditor from './OfficersEditor';
+import RegionsAdmin from './RegionsAdmin';
 
 const sections = [
   {
@@ -38,6 +39,11 @@ const sections = [
     id: PANEL_LIST.board.officersEditor,
     name: 'Officers Editor',
     component: OfficersEditor,
+  },
+  {
+    id: PANEL_LIST.board.regionsAdmin,
+    name: 'Regions Admin',
+    component: RegionsAdmin,
   },
 ];
 

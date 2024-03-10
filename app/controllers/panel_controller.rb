@@ -32,6 +32,7 @@ class PanelController < ApplicationController
         "delegateProbations" => "delegate-probations",
         "groupsManagerAdmin" => "groups-manager-admin",
         "officersEditor" => "officers-editor",
+        "regionsAdmin" => "regions-admin",
       },
       "seniorDelegate" => {
         "delegateForms" => "delegate-forms",
