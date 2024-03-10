@@ -19,7 +19,9 @@ const dateSince = (date) => {
   return Math.floor(diff.as('days'));
 };
 
-export default function DelegatesTable({ delegates, isAdminMode, isAllRegions }) {
+export default function DelegatesTable({
+  delegates, isAdminMode, isAllLeadDelegates, isAllNonLeadDelegates,
+}) {
   const tableData = useMemo(() => delegates.filter(
     (delegate) => delegate.metadata.status !== 'trainee_delegate' || isAdminMode,
   ), [delegates, isAdminMode]);
@@ -36,10 +38,12 @@ export default function DelegatesTable({ delegates, isAdminMode, isAllRegions })
             <Table.HeaderCell>
               {I18n.t('delegates_page.table.role')}
             </Table.HeaderCell>
-            <Table.HeaderCell>
-              {I18n.t('delegates_page.table.region')}
-            </Table.HeaderCell>
-            {isAllRegions && (
+            {!isAllLeadDelegates && (
+              <Table.HeaderCell>
+                {I18n.t('delegates_page.table.region')}
+              </Table.HeaderCell>
+            )}
+            {isAllNonLeadDelegates && (
               <>
                 <Table.HeaderCell>
                   {I18n.t('delegates_page.table.first_delegated')}
@@ -85,8 +89,8 @@ export default function DelegatesTable({ delegates, isAdminMode, isAllRegions })
               <Table.Cell>
                 {I18n.t(`enums.user.role_status.delegate_regions.${delegate.metadata.status}`)}
               </Table.Cell>
-              <Table.Cell>{delegate.metadata.location}</Table.Cell>
-              {isAllRegions && (
+              {!isAllLeadDelegates && (<Table.Cell>{delegate.metadata.location}</Table.Cell>)}
+              {isAllNonLeadDelegates && (
                 <>
                   <Table.Cell>{delegate.metadata.first_delegated}</Table.Cell>
                   <Table.Cell>{delegate.metadata.last_delegated}</Table.Cell>
