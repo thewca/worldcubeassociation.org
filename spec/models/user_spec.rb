@@ -772,11 +772,13 @@ RSpec.describe User, type: :model do
       chair = FactoryBot.create(:chair_role)
       vice_chair = FactoryBot.create(:vice_chair_role)
       secretary = FactoryBot.create(:secretary_role)
+      treasurer = FactoryBot.create(:treasurer_role)
 
       expect(executive_director.user.staff?).to be true
       expect(chair.user.staff?).to be true
       expect(vice_chair.user.staff?).to be true
       expect(secretary.user.staff?).to be true
+      expect(treasurer.user.staff?).to be true
     end
   end
 

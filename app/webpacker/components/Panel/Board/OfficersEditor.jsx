@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../../lib/wca-data.js.erb';
+import { groupTypes, officersStatus } from '../../../lib/wca-data.js.erb';
 import Loading from '../../Requests/Loading';
 import Errored from '../../Requests/Errored';
 import I18n from '../../../lib/i18n';
@@ -13,15 +13,14 @@ import WcaSearch from '../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 
-const officersStatus = ['chair', 'executive_director', 'secretary', 'vice_chair'];
-const officersStatusOptions = officersStatus.map((option) => ({
+const officersStatusOptions = Object.keys(officersStatus).map((option) => ({
   key: option,
   text: I18n.t(`enums.user_roles.status.officers.${option}`),
   value: option,
 }));
 
 const initialOfficerValue = {
-  status: officersStatus[0],
+  status: officersStatusOptions[0].value,
 };
 
 export default function OfficersEditor() {
