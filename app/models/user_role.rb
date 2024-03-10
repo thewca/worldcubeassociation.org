@@ -46,7 +46,7 @@ class UserRole < ApplicationRecord
 
   def self.status(role)
     is_actual_role = role.is_a?(UserRole)
-    return nil if is_actual_role && role.metadata.nil?
+    return nil if (is_actual_role && role.metadata.nil?) || (!is_actual_role && role[:metadata].nil?)
     is_actual_role ? role.metadata[:status] : role[:metadata][:status]
   end
 

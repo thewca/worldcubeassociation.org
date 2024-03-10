@@ -181,8 +181,6 @@ class Team < ApplicationRecord
       UserGroup.group_types[:teams_committees]
     elsif council?
       UserGroup.group_types[:councils]
-    elsif self == Team.board
-      UserGroup.group_types[:board]
     end
   end
 

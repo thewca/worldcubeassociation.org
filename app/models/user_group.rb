@@ -29,6 +29,9 @@ class UserGroup < ApplicationRecord
     if self.delegate_regions?
       role_list += self.delegate_users.map(&:delegate_role)
     end
+    if self.board?
+      role_list.concat(Team.board.reload.current_members.map(&:board_role))
+    end
     role_list
   end
 

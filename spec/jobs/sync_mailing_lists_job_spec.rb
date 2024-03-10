@@ -261,7 +261,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
 
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "organizations@worldcubeassociation.org",
-      a_collection_containing_exactly("board@worldcubeassociation.org", regional_organization.email),
+      a_collection_containing_exactly(GroupsMetadataBoard.email, regional_organization.email),
     )
 
     SyncMailingListsJob.perform_now

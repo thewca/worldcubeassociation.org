@@ -134,5 +134,13 @@ FactoryBot.define do
       is_active { true }
       is_hidden { false }
     end
+
+    factory :board_user_group do
+      name { "WCA Board of Directors" }
+      group_type { :board }
+      is_active { true }
+      is_hidden { false }
+      metadata { FactoryBot.create(:board_user_group_metadata) }
+    end
   end
 end

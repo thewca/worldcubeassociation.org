@@ -47,6 +47,7 @@ FactoryBot.define do
 
     trait :board_member do
       after(:create) do |user, options|
+        FactoryBot.create :board_user_group
         FactoryBot.create(:team_member, team_id: Team.board.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
       end
     end
