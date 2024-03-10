@@ -15,7 +15,8 @@ class UserGroup < ApplicationRecord
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
-  has_many :delegate_users, -> { delegates.with_delegate_data }, class_name: "User", foreign_key: "region_id"
+  has_many :user_roles, foreign_key: "group_id"
+  has_many :delegate_users, -> { delegates.includes(:region) }, class_name: "User", foreign_key: "region_id"
 
   scope :root_groups, -> { where(parent_group: nil) }
 
@@ -24,7 +25,7 @@ class UserGroup < ApplicationRecord
   end
 
   def roles
-    role_list = UserRole.where(group_id: self.id).to_a
+    role_list = self.user_roles.to_a
     if self.delegate_regions?
       role_list += self.delegate_users.map(&:delegate_role)
     end
@@ -127,7 +128,7 @@ class UserGroup < ApplicationRecord
   def lead_user
     if self.delegate_regions?
       if self.parent_group_id.nil?
-        UserRole.where(group_id: self.id).select { |role| role.is_active? }.find { |role| role.is_lead? }&.user
+        user_roles.select { |role| role.is_active? }.find { |role| role.is_lead? }&.user
       else
         self.parent_group.senior_delegate
       end
