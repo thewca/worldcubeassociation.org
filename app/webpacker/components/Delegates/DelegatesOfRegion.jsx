@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { Grid, Label, Segment } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../lib/wca-data.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -40,17 +39,11 @@ function SeniorDelegate({ seniorDelegate }) {
 }
 
 export default function DelegatesOfRegion({ activeRegion, delegateSubregions, isAdminMode }) {
-  const isAllRegions = activeRegion.id === ALL_REGIONS.id;
-  const { data: delegates, loading, error } = useLoadedData(
-    isAllRegions
-      ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, 'name', {
-        isActive: true,
-        extraMetadata: true,
-      })
-      : apiV0Urls.userRoles.listOfGroup(activeRegion.id, 'location,name', {
-        isActive: true,
-      }),
-  );
+  const { data: delegates, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
+    activeRegion.id,
+    'location,name',
+    { isActive: true },
+  ));
 
   const getSeniorDelegate = useCallback(
     () => delegates?.find((delegate) => delegate.metadata.status === 'senior_delegate'),
@@ -67,12 +60,13 @@ export default function DelegatesOfRegion({ activeRegion, delegateSubregions, is
 
   return (
     <>
-      {!isAllRegions && <SeniorDelegate seniorDelegate={getSeniorDelegate()} />}
-      <DelegatesTable
-        delegates={nonSeniorDelegates}
-        isAdminMode={isAdminMode}
-        isAllRegions={isAllRegions}
-      />
+      <SeniorDelegate seniorDelegate={getSeniorDelegate()} />
+      {nonSeniorDelegates.length > 0 && (
+        <DelegatesTable
+          delegates={nonSeniorDelegates}
+          isAdminMode={isAdminMode}
+        />
+      )}
       {delegateSubregions.map((subregion) => (
         <DelegatesOfSubregion subregion={subregion} isAdminMode={isAdminMode} />
       ))}
