@@ -25,7 +25,7 @@ unless Rails.env.production?
       when "contact"
         # ContactsController uses WebsiteContact or DobContact (which are much like extended models).
         # We need to determine which one does the key refer to.
-        if key.start_with?("contacts.website")
+        if key.start_with?("contacts.index")
           "website_contact"
         elsif key.start_with?("contacts.dob")
           "dob_contact"

@@ -217,7 +217,6 @@ Rails.application.routes.draw do
   patch 'translations/update' => 'translations#update'
 
   get 'about' => 'static_pages#about'
-  get 'contact' => 'static_pages#contact'
   get 'documents' => 'static_pages#documents'
   get 'education' => 'static_pages#education'
   get 'delegates' => 'static_pages#delegates'
@@ -243,8 +242,8 @@ Rails.application.routes.draw do
 
   get 'disciplinary' => 'wdc#root'
 
-  get 'contact/website' => 'contacts#website'
-  post 'contact/website' => 'contacts#website_create'
+  get 'contact' => 'contacts#index'
+  post 'contact' => 'contacts#website_create'
   get 'contact/dob' => 'contacts#dob'
   post 'contact/dob' => 'contacts#dob_create'
 
