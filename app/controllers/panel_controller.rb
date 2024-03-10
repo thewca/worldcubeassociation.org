@@ -6,8 +6,12 @@ class PanelController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:staff_or_any_delegate?) }
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
-  before_action -> { redirect_to_root_unless_user(:can_admin_finances?) }, only: [:wfc]
   before_action -> { redirect_to_root_unless_user(:can_access_board_panel?) }, only: [:board]
+  before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:senior_delegate]
+  before_action -> { redirect_to_root_unless_user(:can_access_leader_panel?) }, only: [:leader]
+  before_action -> { redirect_to_root_unless_user(:can_access_wfc_panel?) }, only: [:wfc]
+  before_action -> { redirect_to_root_unless_user(:can_access_wrt_panel?) }, only: [:wrt]
+  before_action -> { redirect_to_root_unless_user(:can_access_wst_panel?) }, only: [:wst]
 
   def index
   end
@@ -17,15 +21,6 @@ class PanelController < ApplicationController
     user_id = params[:user_id] || current_user.id
     @user = User.find(user_id)
     @subordinate_delegates = @user.subordinate_delegates.to_a.push(@user)
-  end
-
-  private def editable_post_fields
-    [:body]
-  end
-  helper_method :editable_post_fields
-
-  private def post_params
-    params.require(:post).permit(*editable_post_fields)
   end
 
   def self.panel_list
