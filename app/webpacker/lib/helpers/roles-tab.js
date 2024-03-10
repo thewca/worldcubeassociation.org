@@ -4,7 +4,7 @@ import { groupTypes } from '../wca-data.js.erb';
 export function getRoleDescription(role) {
   let roleDescription = '';
   if (role.metadata?.status) {
-    roleDescription += `${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}, `;
+    roleDescription += `${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}, `;
   } else if (role.group.group_type === groupTypes.translators) {
     roleDescription += 'Translator, ';
   }

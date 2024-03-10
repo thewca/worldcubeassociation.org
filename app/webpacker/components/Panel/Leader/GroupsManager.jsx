@@ -79,7 +79,7 @@ function GroupTable({ group }) {
             <Table.Row key={role.id}>
               <Table.Cell>{role.user.name}</Table.Cell>
               <Table.Cell>
-                {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`}
+                {`${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`}
               </Table.Cell>
               <Table.Cell>
                 {canPromote(role)

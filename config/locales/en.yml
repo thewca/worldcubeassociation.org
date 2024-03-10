@@ -388,12 +388,8 @@ en:
         m: "Male"
         f: "Female"
         o: "Other"
-      delegate_status:
-        trainee_delegate: "Trainee Delegate"
-        candidate_delegate: "Junior Delegate"
-        delegate: "Delegate"
-        senior_delegate: "Senior Delegate"
-      role_status:
+    user_roles:
+      status:
         delegate_regions:
           trainee_delegate: "Trainee Delegate"
           candidate_delegate: "Junior Delegate"
@@ -408,6 +404,12 @@ en:
           member: "Member"
           senior_member: "Senior Member"
           leader: "Leader"
+        officers:
+          chair: "WCA Chair"
+          executive_director: "WCA Executive Director"
+          secretary: "WCA Secretary"
+          vice_chair: "WCA Vice-Chair"
+          treasurer: "WCA Treasurer"
     competition_medium:
       status:
         accepted: "Accepted"
@@ -974,13 +976,6 @@ en:
       missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
       unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   user_roles:
-    status:
-      officers:
-        chair: "WCA Chair"
-        executive_director: "WCA Executive Director"
-        secretary: "WCA Secretary"
-        vice_chair: "WCA Vice-Chair"
-        treasurer: "WCA Treasurer"
     email:
       role_metadata:
         region_name: "Region Name"
@@ -2141,19 +2136,6 @@ en:
       committees: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
       senior_member: "Senior Member"
       leader: "Leader"
-      officers:
-        name: "WCA Officers"
-        description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
-      chair:
-        name: "WCA Chair"
-      executive_director:
-        name: "WCA Executive Director"
-      secretary:
-        name: "WCA Secretary"
-      vice_chair:
-        name: "WCA Vice-Chair"
-      treasurer:
-        name: "WCA Treasurer"
       users:
         profile: "%{user_name}'s profile"
       #context: WDC
@@ -2224,9 +2206,6 @@ en:
         name: "WCT China"
       operations_html: "The day to day operations are run by the WCA's %{committees_and_teams}."
       teams_committees: "Teams and Committees"
-      #context: Hidden team for list of Delegates on Probation
-      probation:
-        name: "Delegates on Probation"
       #context: Hidden team for Software administrators
       wst_admin:
         name: "Software admins"

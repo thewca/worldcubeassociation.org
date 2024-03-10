@@ -10,13 +10,6 @@ import Errored from '../Requests/Errored';
 import UserBadge from '../UserBadge';
 import EmailButton from '../EmailButton';
 
-// let i18n-tasks know the key is used
-// i18n-tasks-use t('user_roles.status.officers.chair')
-// i18n-tasks-use t('user_roles.status.officers.executive_director')
-// i18n-tasks-use t('user_roles.status.officers.secretary')
-// i18n-tasks-use t('user_roles.status.officers.vice_chair')
-// i18n-tasks-use t('user_roles.status.officers.treasurer')
-
 export default function OfficersAndBoard({ boardEmail }) {
   const { data: officers, loading: officersLoading, error: officersError } = useLoadedData(
     apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status', {
@@ -50,7 +43,7 @@ export default function OfficersAndBoard({ boardEmail }) {
           user={officerRoles[officerUserId][0].user}
           size="large"
           subtexts={officerRoles[officerUserId].map(
-            (officerRole) => I18n.t(`user_roles.status.officers.${officerRole.metadata.status}`),
+            (officerRole) => I18n.t(`enums.user_roles.status.officers.${officerRole.metadata.status}`),
           )}
         />
       ))}

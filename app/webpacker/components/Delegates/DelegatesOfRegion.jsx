@@ -20,7 +20,7 @@ function SeniorDelegate({ seniorDelegate }) {
       <Grid.Row>
         <Segment raised compact textAlign="center">
           <Label ribbon>
-            {I18n.t('enums.user.delegate_status.senior_delegate')}
+            {I18n.t('enums.user_roles.status.delegate_regions.senior_delegate')}
           </Label>
 
           {seniorDelegate && (

@@ -16,7 +16,7 @@ import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 const officersStatus = ['chair', 'executive_director', 'secretary', 'vice_chair'];
 const officersStatusOptions = officersStatus.map((option) => ({
   key: option,
-  text: I18n.t(`user_roles.status.officers.${option}`),
+  text: I18n.t(`enums.user_roles.status.officers.${option}`),
   value: option,
 }));
 
@@ -68,7 +68,7 @@ export default function OfficersEditor() {
           {officers.map((officer) => (
             <Table.Row key={officer.id}>
               <Table.Cell>{officer.user.name}</Table.Cell>
-              <Table.Cell>{I18n.t(`user_roles.status.officers.${officer.metadata.status}`)}</Table.Cell>
+              <Table.Cell>{I18n.t(`enums.user_roles.status.officers.${officer.metadata.status}`)}</Table.Cell>
               <Table.Cell>
                 <Button onClick={() => endRole(officer)}>End Role</Button>
               </Table.Cell>

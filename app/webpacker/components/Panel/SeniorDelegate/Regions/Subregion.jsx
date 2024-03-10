@@ -15,7 +15,7 @@ import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupTy
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
-  text: I18n.t(`enums.user.role_status.delegate_regions.${option}`),
+  text: I18n.t(`enums.user_roles.status.delegate_regions.${option}`),
   value: option,
 }));
 const initialValue = {
@@ -138,7 +138,7 @@ export default function Subregion({ title, groupId }) {
           {delegates.map((delegate) => (
             <Table.Row key={delegate.id}>
               <Table.Cell>{delegate.user.name}</Table.Cell>
-              <Table.Cell>{I18n.t(`enums.user.role_status.delegate_regions.${delegate.metadata.status}`)}</Table.Cell>
+              <Table.Cell>{I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)}</Table.Cell>
               <Table.Cell>
                 {canPromote(delegate)
                   && <Button onClick={() => promoteDelegateAction(delegate)}>Promote</Button>}
