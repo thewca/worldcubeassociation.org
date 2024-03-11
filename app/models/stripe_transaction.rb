@@ -88,7 +88,7 @@ class StripeTransaction < ApplicationRecord
     # that need to be submitted as multiples of 100 even though they technically have subunits.
     # The details are documented at https://stripe.com/docs/currencies#special-cases
     if ZERO_DECIMAL_CURRENCIES.include?(iso_currency.upcase)
-      amount_times_hundred = amount_lowest_denomination.to_f * 100
+      amount_times_hundred = (amount_lowest_denomination.to_f * 100).to_i
 
       # Stripe API rejects payments that are below the hundreds sub-unit.
       # In practice this should never happen because the inflation on those currencies
