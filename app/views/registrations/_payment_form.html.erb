@@ -61,7 +61,7 @@
     const elements = stripe.elements({
       mode: 'payment',
       // Stripe _has_ to receive a non-zero amount, so we convert the outstanding fee before AJAX'ing the subtotal below
-      amount: <%= StripeTransaction.amount_to_stripe(@registration.outstanding_entry_fees.cents, @competition.currency_code) %>,
+      amount: <%= StripeRecord.amount_to_stripe(@registration.outstanding_entry_fees.cents, @competition.currency_code) %>,
       // Stripe doesn't initialize the element if we submit USD in upper case…
       currency: currencyIsoCode.toLowerCase(),
       appearance: { theme: 'flat' }

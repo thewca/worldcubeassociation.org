@@ -611,7 +611,7 @@ RSpec.describe "registrations" do
         end
 
         it "insert a success in the stripe journal" do
-          expect(StripeTransaction.count).to eq 0
+          expect(StripeRecord.count).to eq 0
           expect(StripePaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
@@ -634,12 +634,12 @@ RSpec.describe "registrations" do
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
-          stripe_transaction = payment_intent.reload.stripe_transaction
+          stripe_record = payment_intent.reload.stripe_record
           # Now we should have a confirmation after calling the return_url hook :)
           expect(payment_intent.confirmed_at).to_not be_nil
-          expect(stripe_transaction).to_not be_nil
-          expect(stripe_transaction.status).to eq "succeeded"
-          metadata = stripe_transaction.parameters["metadata"]
+          expect(stripe_record).to_not be_nil
+          expect(stripe_record.status).to eq "succeeded"
+          metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
       end
@@ -670,13 +670,13 @@ RSpec.describe "registrations" do
           }.to_not change { registration.reload.outstanding_entry_fees }
 
           expect(registration.paid_entry_fees).to eq 0
-          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_action')
+          expect(payment_intent.stripe_record.reload.status).to eq('requires_action')
           # That's as far as we can go, testing the authentication success/failure
           # must be done by clicking on a modal.
         end
 
         it "inserts a 'confirmation pending' event in the stripe journal" do
-          expect(StripeTransaction.count).to eq 0
+          expect(StripeRecord.count).to eq 0
           expect(StripePaymentIntent.count).to eq 0
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
@@ -698,12 +698,12 @@ RSpec.describe "registrations" do
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
-          stripe_transaction = payment_intent.reload.stripe_transaction
+          stripe_record = payment_intent.reload.stripe_record
           # Now we should still wait for the confirmation because SCA hasn't been completed yet
           expect(payment_intent.confirmed_at).to be_nil
-          expect(stripe_transaction).to_not be_nil
-          expect(stripe_transaction.status).to eq 'requires_action'
-          metadata = stripe_transaction.parameters["metadata"]
+          expect(stripe_record).to_not be_nil
+          expect(stripe_record.status).to eq 'requires_action'
+          metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
       end
@@ -736,8 +736,8 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
-          expect(payment_intent.stripe_transaction.error).to eq('card_declined')
+          expect(payment_intent.stripe_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_record.error).to eq('card_declined')
         end
 
         it "rejects payment with expired credit card" do
@@ -765,8 +765,8 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
-          expect(payment_intent.stripe_transaction.error).to eq('expired_card')
+          expect(payment_intent.stripe_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_record.error).to eq('expired_card')
         end
 
         it "rejects payment with incorrect cvc" do
@@ -794,8 +794,8 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
-          expect(payment_intent.stripe_transaction.error).to eq('incorrect_cvc')
+          expect(payment_intent.stripe_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_record.error).to eq('incorrect_cvc')
         end
 
         it "rejects payment due to fraud protection" do
@@ -823,8 +823,8 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_payment_method')
-          expect(payment_intent.stripe_transaction.error).to eq('card_declined')
+          expect(payment_intent.stripe_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.stripe_record.error).to eq('card_declined')
         end
 
         it "rejects payment despite successful 3DSecure" do
@@ -849,12 +849,12 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.stripe_transaction.reload.status).to eq('requires_action')
-          expect(payment_intent.stripe_transaction.error).to be_nil
+          expect(payment_intent.stripe_record.reload.status).to eq('requires_action')
+          expect(payment_intent.stripe_record.error).to be_nil
         end
 
         it "records a failure in the stripe journal" do
-          expect(StripeTransaction.count).to eq 0
+          expect(StripeRecord.count).to eq 0
           expect(StripePaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
@@ -880,18 +880,18 @@ RSpec.describe "registrations" do
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
-          stripe_transaction = payment_intent.reload.stripe_transaction
+          stripe_record = payment_intent.reload.stripe_record
           # Now we should still wait for the confirmation because the card has been declined
           expect(payment_intent.confirmed_at).to be_nil
-          expect(stripe_transaction).to_not be_nil
-          expect(stripe_transaction.status).to eq "requires_payment_method"
-          expect(stripe_transaction.error).to_not be_nil
-          metadata = stripe_transaction.parameters["metadata"]
+          expect(stripe_record).to_not be_nil
+          expect(stripe_record.status).to eq "requires_payment_method"
+          expect(stripe_record.error).to_not be_nil
+          metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
 
         it "recycles a PI when the previous payment was unsuccessful" do
-          expect(StripeTransaction.count).to eq 0
+          expect(StripeRecord.count).to eq 0
           expect(StripePaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
@@ -935,7 +935,7 @@ RSpec.describe "registrations" do
         end
 
         it "recycles a PI even when the amount was updated" do
-          expect(StripeTransaction.count).to eq 0
+          expect(StripeRecord.count).to eq 0
           expect(StripePaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
@@ -981,7 +981,7 @@ RSpec.describe "registrations" do
         end
 
         it "does NOT recycle a PI when the payment is successful" do
-          expect(StripeTransaction.count).to eq 0
+          expect(StripeRecord.count).to eq 0
           expect(StripePaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
