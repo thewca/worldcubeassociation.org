@@ -1182,6 +1182,10 @@ class Competition < ApplicationRecord
     adjacent_competitions(NEARBY_DAYS_WARNING, NEARBY_DISTANCE_KM_WARNING)
   end
 
+  def nearby_competitions_danger
+    adjacent_competitions(NEARBY_DAYS_DANGER, NEARBY_DISTANCE_KM_DANGER)
+  end
+
   def series_eligible_competitions
     adjacent_competitions(CompetitionSeries::MAX_SERIES_DISTANCE_DAYS, CompetitionSeries::MAX_SERIES_DISTANCE_KM)
   end
