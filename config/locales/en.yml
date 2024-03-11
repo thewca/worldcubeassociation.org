@@ -1658,6 +1658,79 @@ en:
             allow_registration_without:
               "true": "Competitors will be allowed to register for events they're not qualified for (I'll remove them later)"
               "false": "Competitors MUST be qualified to register for an event"
+        #context: new registration system
+    registration_v2:
+      pdf:
+        #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
+        link: "As a <0>%{pdfLink}</0>"
+        download: "Download all of the competitions details."
+      list:
+        empty: "No matching Records found"
+        spots_remaining: "; %{spots} spot(s) remaining"
+        waitlisted: "Waitlisted registrations"
+        comment: "Comment"
+        admin_note: "Admin Note"
+      tabs:
+        payment: "Payment"
+        more: "More"
+      fees:
+        none: "No Entry Fee"
+        guest_none: "Guests attend for free"
+      bookmark:
+        unbookmark: "You have removed your bookmark"
+      requirements:
+        title: "Requirements"
+        acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees and refund policies"
+        acknowledgment_extra: "I have read and understood all information listed above"
+        next_step: "Continue to next Step"
+      update:
+        no_changes: "There are no changes"
+        email_send: "Send Email"
+        email_copy: "Copy Email"
+        move_pending: "Move to Pending"
+        move_waiting: "Move to Waiting List"
+        cancel: "Cancel Registration"
+        too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
+      register:
+        error: "Registration failed with error %{error}"
+        early_registration: "Registration is not open yet, but you can still register as a competition organizer or delegate."
+        comment: "Additional comments to the organizers"
+        until: "You can update your registration until %{date}"
+        passed: "You can no longer update your registration"
+        editing_disabled: "Registration editing is disabled for this competition"
+        registration_status:
+          header: "Your Registration Status:"
+          accepted: "accepted"
+          pending: "pending"
+          waiting: "Waiting List"
+          cancelled: "cancelled"
+        disclaimer: "Submission of Registration does not mean approval to compete"
+        processing: "Your registration is processing..."
+        processing_longer: "Processing is taking longer than usual, don't go away!"
+        processing_queue: "Lots of Registrations being processed, %{queueCount} in the queue."
+      errors:
+        events: "Loading Events failed, please try again"
+        #context: These are error codes coming from the registration service
+        -1: "You have sent an invalid token, please refresh the page. If this issue persists contact WST"
+        -2: "Authentication Expired, please refresh the page"
+        -3: "Missing Authentication, please log in"
+        -1000: "Competition does not exist"
+        -1001: "Error fetching Competition details, please try again later"
+        -2001: "You are banned from competing at WCA Competitions"
+        -2002: "Your profile is incomplete"
+        -2003: "You don't have the permissions to complete this action"
+        -3000: "Registration does not exist"
+        -3001: "WCA Payment is not enabled for this competition"
+        -3002: "You need to finish your registration before you can pay"
+        -4000: "The Request contains invalid data"
+        -4001: "The event edit deadline has passed"
+        -4002: "The number of guests are over the allowed limit"
+        -4003: "The comment provided is too long"
+        -4004: "Invalid event selection submitted"
+        -4005: "This competition requires a comment"
+        -4006: "Competitor limit has been reached"
+        -4007: "Invalid registration status provided"
+        -4008: "Registration has closed"
     #context: and when an error occured
     errors:
       invalid_name_message: "must end with a year and must contain only alphanumeric characters, dashes(-), ampersands(&), periods(.), colons(:), apostrophes('), and spaces( )"
