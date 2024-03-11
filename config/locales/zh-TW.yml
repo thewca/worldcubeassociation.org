@@ -361,15 +361,15 @@ zh-TW:
   oauth:
     applications:
       #original_hash: 0c4ea38
-      your_apps: Your OAuth Applications
+      your_apps: 您的OAuth應用程式
       #original_hash: 6403f2b
-      new: New
+      new: 新
       #original_hash: 709a232
-      name: Name
+      name: 名稱
       #original_hash: f6f1389
       callback_url: Callback Url
       #original_hash: 89ff312
-      owner: Owner
+      owner: 擁有者
       #original_hash: 557031c
       application_id: Application ID
       #original_hash: c3cd636
@@ -594,16 +594,8 @@ zh-TW:
         f: 女性
         #original_hash: 6e6a6f2
         o: 其他
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: 實習代表
-        #original_hash: 9b97968
-        candidate_delegate: 初級代表
-        #original_hash: 12ab214
-        delegate: 代表
-        #original_hash: d463c23
-        senior_delegate: 高級代表
-      role_status:
+    user_roles:
+      status:
         delegate_regions:
           #original_hash: 621101a
           trainee_delegate: 實習代表
@@ -629,6 +621,17 @@ zh-TW:
           senior_member: 資深成員
           #original_hash: e26c936
           leader: 領導者
+        officers:
+          #original_hash: de34439
+          chair: WCA董事長
+          #original_hash: 7d405ff
+          executive_director: WCA執行董事
+          #original_hash: 1dd4a07
+          secretary: WCA秘書
+          #original_hash: 0388b19
+          vice_chair: WCA副董事長
+          #original_hash: 75e65d9
+          treasurer: WCA財務長
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1047,7 +1050,7 @@ zh-TW:
         help:
           #original_hash: 95c10ec
           https_info: 除非是"localhost"、否則必須是HTTPS。
-          #original_hash: 62a0113
+          #original_hash: 40b9d10
           scopes_html: >-
             Separate scopes with spaces. Leave blank to use the default
             scope(s). See <a
@@ -1084,10 +1087,14 @@ zh-TW:
       about: 關於WCA
       #original_hash: ed97787
       documents: WCA文件
+      #original_hash: c9bae18
+      officers_and_board: WCA幹事與董事會
       #original_hash: d8fd3e4
       delegates: WCA代表
       #original_hash: 37b8fdc
       organizations: 區域組織
+      #original_hash: 959d354
+      translators: 網站翻譯團隊
       #original_hash: d790b40
       faq: 常見問題
       #original_hash: cf1d2c9
@@ -1098,8 +1105,8 @@ zh-TW:
       education: 學習資源
       #original_hash: c66444f
       wca_live: WCA Live
-      #original_hash: a34b69f
-      contact: 聯絡資訊
+      #original_hash: b37456c
+      contact: 聯絡
       #original_hash: 8e12c09
       speedcubing_history: 方塊速解歷史
       #original_hash: 4fa8cc8
@@ -1145,9 +1152,9 @@ zh-TW:
       #original_hash: 8ad8302
       translations: 翻譯版
       #original_hash: c420cb4
-      disciplinary: 倫理事件日誌
+      disciplinary: 紀律事件紀錄
       #original_hash: ecba5f4
-      incidents: 意外事件日誌
+      incidents: 意外事件紀錄
       #original_hash: b8be3d1
       administration: 管理
       #original_hash: b7ee3c4
@@ -1196,6 +1203,18 @@ zh-TW:
       disclaimer: 免責聲明
       #original_hash: d561f1a
       find_us: 其他平台
+  page:
+    translators:
+      #original_hash: 959d354
+      title: 翻譯團隊
+    officers_and_board:
+      #original_hash: c9bae18
+      title: WCA幹事與董事會
+      #original_hash: 312e799
+      officers_description: >-
+        WCA的幹事負責跟WCA非營利狀態有關的事務。這些幹事是由WCA董事會所選出的。執行董事就是WCA的執行長，董事長主持所有的董事會議，秘書負責維護組織的文件，財務長負責WCA的財務相關事務。
+      #original_hash: e0d37a2
+      board_description: WCA董事會負責帶領全體組織，並負責一些其他團隊、 委員會和理事會沒有負責的事務。
   homepage:
     #original_hash: 824d76b
     learn_more: 了解更多
@@ -1577,7 +1596,9 @@ zh-TW:
       #original_hash: abd2828
       board: WCA董事會
       #original_hash: d79bd00
-      officers: WCA 幹事
+      officers: WCA幹事
+      #original_hash: 959d354
+      translators: 翻譯團隊
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2794,6 +2815,8 @@ zh-TW:
       no_date_yet: 您尚未輸入這場比賽的日期。
       #original_hash: 82a95d2
       no_location_yet: 您尚未輸入這場比賽的位置。
+      #original_hash: 6def491
+      save_first: 加入系列賽以前，請先處存這個比賽。
       #original_hash: 709a232
       name: 比賽名稱
       #original_hash: adc24b7
@@ -3543,27 +3566,6 @@ zh-TW:
       senior_member: 資深成員
       #original_hash: e26c936
       leader: 領導者
-      officers:
-        #original_hash: d79bd00
-        name: WCA 幹事
-        #original_hash: 312e799
-        description: >-
-          WCA的幹事負責跟WCA非營利狀態有關的事務。這些幹事是由WCA董事會所選出的。執行董事就是WCA的執行長，董事長主持所有的董事會議，秘書負責維護組織的文件，財務長負責WCA的財務相關事務。
-      chair:
-        #original_hash: de34439
-        name: WCA董事長
-      executive_director:
-        #original_hash: 7d405ff
-        name: WCA執行董事
-      secretary:
-        #original_hash: 1dd4a07
-        name: WCA秘書
-      vice_chair:
-        #original_hash: 0388b19
-        name: WCA副董事長
-      treasurer:
-        #original_hash: 75e65d9
-        name: WCA財務長
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}的個人頁面。'
@@ -3655,9 +3657,6 @@ zh-TW:
       operations_html: 'WCA的日常事務由 %{committees_and_teams}來處理。'
       #original_hash: 0e7a036
       teams_committees: 團隊與委員會
-      probation:
-        #original_hash: 1dd6e3b
-        name: 觀察名單中的WCA代表
       wst_admin:
         #original_hash: d4112d2
         name: 軟體管理員
@@ -3785,84 +3784,6 @@ zh-TW:
     delete:
       #original_hash: 6588652
       confirm_delete: 您確定要刪除這個區域組織請求嗎？
-  contact:
-    #original_hash: a34b69f
-    title: 聯絡資訊
-    #original_hash: b5c2eaa
-    info_alert_html: '在聯絡這頁的任何團隊之前，請先看過我們的%{link}！'
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      任何關於網站的問題、意見或是建議，請使用<a
-      href='/contact/website'>聯絡表單</a>。若是詢問關於特定地區或是比賽的問題，請聯絡您當地的%{link}。
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>委員會和團隊<u>
-    #original_hash: 1cb449c
-    members: 成員
-    board:
-      #original_hash: f3cbb35
-      info_html: 世界方塊協會由WCA董事會領導。他們負責回答一些基本問題並代表整個WCA組織。
-    wct:
-      #original_hash: 846684d
-      info_html: WCA傳播組負責監督和協助WCA與社群和一般大眾溝通。如果您有任何問題關於WCA或是他們在社群媒體的表現，請聯絡此團隊。
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WCA紀律委員會負責調查各種狀況並提出解決方案，包括必要的處罰。 除此之外，這些情況可能會嚴重違反WCA規則或社群紀律。
-        如果您遇到過類似情況，請隨時與本委員會聯絡。
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WCA資料保護委員會有責任和義務研究、建立、實施、管理和執行所有WCA資料保護政策，與外部處理WCA資料的單位協議合約，以及管理其他與資料保護相關的事務。
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WCA規則委員會處理所有關於WCA規則的應用、改進和發展。
-        他們協助WCA代表處理在比賽中發生的任何程序問題，並幫忙裁決一些尚未解決或被發現的事件。
-        WRC定期發布WCA內部報告，幫助所有WCA代表提高對規則的認識。 如果您想參與規則發展或者提出修改建議，您可以透過郵件與WRC聯絡或是在<a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>提出討論。
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WCA成績組負責管理WCA資料庫中的所有資料，尤其是最重要的比賽成績和參賽者資料。
-        在WCA代表寄出WCA比賽成績以後，WRT會將比賽成績發佈到WCA網站上。除了發佈比賽成績之外，WCA成績組還負責在必要時對比賽成績進行更正，並負責管理所有WCA個人資料頁面。
-        這包括更改個人資料，例如生日、管理個人頭像等請求。
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WCA軟體組負責維護和管理所有WCA軟體。 他們還會在需要時為WCA的各種事務開發新軟體。
-        如果您對網站開發有進一步的建議和想法，或者您有發現問題和錯誤，請隨時與他們聯絡！ WCA網站在<a
-        href='https://github.com/thewca/worldcubeassociation.org'> GitHub
-        </a>上是一個巨大的開源專案，所以如果您有興趣幫忙開發WCA， 去那裡看看吧。
-    wfc:
-      #original_hash: 3ec8256
-      info_html: WCA財政委員會負責WCA內不的所有財政事務。 他們按照獲批准的年度預算提案來管理WCA的財務和帳目，年度預算提案也是他們定期工作之一。
-    wec:
-      #original_hash: ec2b9c3
-      info_html: 該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範。
-    weat:
-      #original_hash: 889dd90
-      info_html: 該團隊是負責執行處理WCA董事會的行政事務。
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        該委員會的職責是支持並促進WCA內部持續的品質改善，以及確保應用於全球的標準為一致並保有高品質的程序、WCA員工、區域組織、比賽主辦團隊和工作人員。
-    wcat:
-      #original_hash: 61a471f
-      info_html: 該團隊負責審核和公告WCA比賽，並確保此類公告符合WCA品質標準。
-    wmt:
-      #original_hash: f2a0140
-      info_html: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
-    wsot:
-      #original_hash: 8f888d6
-      info_html: 負責並協助WCA成為國際競技組織是這個團隊的任務
-    wat:
-      #original_hash: fae6850
-      info_html: WCA資料整理組是一個WCA的諮詢委員會。這個團隊的任務是協助並負責將WCA過去的資料作整理保存。
-    #original_hash: f97a4f5
-    councils_html: 理事會
-    wac:
-      #original_hash: fb6cd86
-      info_html: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
   score_tools:
     #original_hash: 4fc2133
     title: WCA比賽用軟體工具

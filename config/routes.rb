@@ -19,11 +19,12 @@ Rails.application.routes.draw do
   end
 
   # Don't expose Paypal routes in production until we're reading to launch
-  unless Rails.env.production?
+  unless PaypalInterface.paypal_disabled?
     post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment/:order_id' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
     get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
     post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
+    post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.
