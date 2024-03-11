@@ -11,6 +11,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(six_thousand_huf.cents, six_thousand_huf.currency.iso_code)
     expect(stripe_amount).to eq(600_000)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, six_thousand_huf.currency.iso_code)
     expect(ruby_amount).to eq(six_thousand_huf.cents)
@@ -22,6 +23,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(sixty_thousand_ugx.cents, sixty_thousand_ugx.currency.iso_code)
     expect(stripe_amount).to eq(6_000_000)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, sixty_thousand_ugx.currency.iso_code)
     expect(ruby_amount).to eq(sixty_thousand_ugx.cents)
@@ -33,6 +35,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(two_thousand_isk.cents, two_thousand_isk.currency.iso_code)
     expect(stripe_amount).to eq(200_000)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, two_thousand_isk.currency.iso_code)
     expect(ruby_amount).to eq(two_thousand_isk.cents)
@@ -58,6 +61,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(fifteen_usd.cents, fifteen_usd.currency.iso_code)
     expect(stripe_amount).to eq(1_500)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, fifteen_usd.currency.iso_code)
     expect(ruby_amount).to eq(fifteen_usd.cents)
@@ -69,6 +73,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(fifteen_eur.cents, fifteen_eur.currency.iso_code)
     expect(stripe_amount).to eq(1_500)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, fifteen_eur.currency.iso_code)
     expect(ruby_amount).to eq(fifteen_eur.cents)
@@ -80,6 +85,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(two_thousand_yen.cents, two_thousand_yen.currency.iso_code)
     expect(stripe_amount).to eq(2_000)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, two_thousand_yen.currency.iso_code)
     expect(ruby_amount).to eq(two_thousand_yen.cents)
@@ -93,6 +99,7 @@ RSpec.describe StripeTransaction do
 
     stripe_amount = StripeTransaction.amount_to_stripe(five_hundred_twd.cents, five_hundred_twd.currency.iso_code)
     expect(stripe_amount).to eq(50_000)
+    expect(stripe_amount).to be_an(Integer)
 
     ruby_amount = StripeTransaction.amount_to_ruby(stripe_amount, five_hundred_twd.currency.iso_code)
     expect(ruby_amount).to eq(five_hundred_twd.cents)
