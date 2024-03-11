@@ -204,7 +204,11 @@ RSpec.describe CompetitionsController do
     let(:organizer) { FactoryBot.create(:user) }
     let(:admin) { FactoryBot.create :admin }
     let!(:my_competition) { FactoryBot.create(:competition, :confirmed, latitude: 10.0, longitude: 10.0, organizers: [organizer], starts: 1.week.ago) }
-    let!(:other_competition) { FactoryBot.create(:competition, :with_delegate, :with_valid_schedule, latitude: 11.0, longitude: 11.0, starts: 5.weeks.from_now) }
+    let!(:other_competition) {
+      FactoryBot.create(
+        :competition, :with_delegate, :with_valid_schedule, latitude: 10.005, longitude: 10.005, starts: 4.days.ago, registration_close: 5.days.ago
+      )
+    }
 
     context 'when signed in as an organizer' do
       before :each do
