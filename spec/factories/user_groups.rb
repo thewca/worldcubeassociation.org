@@ -127,5 +127,12 @@ FactoryBot.define do
       is_active { true }
       is_hidden { true }
     end
+
+    factory :officers_user_group do
+      name { "WCA Officers" }
+      group_type { :officers }
+      is_active { true }
+      is_hidden { false }
+    end
   end
 end

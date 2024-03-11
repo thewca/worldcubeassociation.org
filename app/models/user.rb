@@ -19,6 +19,7 @@ class User < ApplicationRecord
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
   belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
+  belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
@@ -47,13 +48,15 @@ class User < ApplicationRecord
     end
   }
 
+  scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
+
   def self.eligible_voters
     team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate))
     eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
     board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
-    officers = TeamMember.current.where(team_id: Team.all_officers.map(&:id)).map(&:user)
+    officers = UserGroup.officers.flat_map(&:active_users)
     (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
   end
 
@@ -64,7 +67,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official_and_councils.map(&:friendly_id) + User.delegate_statuses.keys + [Team.board.friendly_id]
+    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [Team.board.friendly_id]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -452,11 +455,6 @@ class User < ApplicationRecord
     team_member?(Team.board)
   end
 
-  # Officers are defined in our Bylaws. Every Officer has a team on the website except for the WCA Treasurer, as it is the WFC Leader.
-  def officer?
-    team_member?(Team.chair) || team_member?(Team.executive_director) || team_member?(Team.secretary) || team_member?(Team.vice_chair) || team_leader?(Team.wfc)
-  end
-
   def communication_team?
     team_member?(Team.wct)
   end
@@ -514,7 +512,7 @@ class User < ApplicationRecord
   end
 
   def staff?
-    staff_delegate? || member_of_any_official_team? || board_member? || officer?
+    active_roles.any? { |role| UserRole.is_staff?(role) }
   end
 
   def team_member?(team)
@@ -557,8 +555,12 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
+  def delegate_roles
+    active_roles.filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+  end
+
   def any_kind_of_delegate?
-    delegate_status.present? || active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
   end
 
   def trainee_delegate?
@@ -944,10 +946,6 @@ class User < ApplicationRecord
     fields += editable_personal_preference_fields(user)
     fields += editable_competitor_info_fields(user)
     fields += editable_avatar_fields(user)
-    # Delegate Status Fields
-    if admin? || board_member? || senior_delegate?
-      fields += %i(delegate_status region_id location)
-    end
     fields
   end
 
@@ -1276,10 +1274,6 @@ class User < ApplicationRecord
     UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
   end
 
-  def region
-    UserGroup.find_by_id(self.region_id)
-  end
-
   def can_manage_delegate_probation?
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
   end
@@ -1294,8 +1288,19 @@ class User < ApplicationRecord
     roles.select { |role| UserRole.is_active?(role) }
   end
 
+  def delegate_role_with_extra_metadata
+    delegate_role_hash = delegate_role
+    delegate_role_metadata = delegate_role_hash[:metadata]
+    delegate_role_metadata[:first_delegated] = self.actually_delegated_competitions.to_a.minimum(:start_date)
+    delegate_role_metadata[:last_delegated] = self.actually_delegated_competitions.to_a.maximum(:start_date)
+    delegate_role_metadata[:total_delegated] = self.actually_delegated_competitions.to_a.length
+    delegate_role_hash[:metadata] = delegate_role_metadata
+    delegate_role_hash
+  end
+
   def delegate_role
     {
+      id: "delegate-" + self.id.to_s,
       end_date: nil,
       is_active: true,
       group: self.region,
@@ -1304,10 +1309,8 @@ class User < ApplicationRecord
       metadata: {
         status: self.delegate_status,
         location: self.location,
-        first_delegated: self.actually_delegated_competitions.minimum(:start_date),
-        last_delegated: self.actually_delegated_competitions.maximum(:start_date),
-        total_delegated: self.actually_delegated_competitions.count,
       },
+      class: 'userrole',
     }
   end
 
@@ -1411,51 +1414,6 @@ class User < ApplicationRecord
 
     if board_member?
       roles << board_role
-    end
-
-    Team.all_officers.each do |officer_team|
-      if officer_team == Team.chair
-        status = 'chair'
-      elsif officer_team == Team.executive_director
-        status = 'executive_director'
-      elsif officer_team == Team.secretary
-        status = 'secretary'
-      elsif officer_team == Team.vice_chair
-        status = 'vice_chair'
-      end
-      if team_member?(officer_team)
-        roles << {
-          group: {
-            id: 'officers',
-            name: 'WCA Officers',
-            group_type: UserGroup.group_types[:officers],
-            is_hidden: false,
-            is_active: true,
-          },
-          is_active: true,
-          user: self,
-          metadata: {
-            status: status,
-          },
-        }
-      end
-    end
-
-    if Team.wfc.leader&.id == self.id
-      roles << {
-        group: {
-          id: 'officers',
-          name: 'WCA Officers',
-          group_type: UserGroup.group_types[:officers],
-          is_hidden: false,
-          is_active: true,
-        },
-        is_active: true,
-        user: self,
-        metadata: {
-          status: 'treasurer',
-        },
-      }
     end
 
     roles

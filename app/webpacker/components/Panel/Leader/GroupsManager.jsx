@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Button, Dropdown, Form, Header, Modal, Table,
 } from 'semantic-ui-react';
@@ -9,20 +9,10 @@ import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
-import { groupTypes, teamsCommitteesStatus, councilsStatus } from '../../../lib/wca-data.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import useInputState from '../../../lib/hooks/useInputState';
-
-const statusObjectOfGroupType = (groupType) => {
-  switch (groupType) {
-    case groupTypes.teams_committees:
-      return teamsCommitteesStatus;
-    case groupTypes.councils:
-      return councilsStatus;
-    default:
-      return null;
-  }
-};
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import { statusObjectOfGroupType } from '../../../lib/helpers/status-objects';
 
 const isLead = (role) => role.metadata.status === 'leader';
 
@@ -89,7 +79,7 @@ function GroupTable({ group }) {
             <Table.Row key={role.id}>
               <Table.Cell>{role.user.name}</Table.Cell>
               <Table.Cell>
-                {`${I18n.t(`enums.user.role_status.${role.group.group_type}.${role.metadata.status}`)}`}
+                {`${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`}
               </Table.Cell>
               <Table.Cell>
                 {canPromote(role)
@@ -117,7 +107,7 @@ function GroupTable({ group }) {
               control={WcaSearch}
               value={newMemberUser}
               onChange={setNewMemberUser}
-              model="user"
+              model={SEARCH_MODELS.user}
               multiple={false}
             />
             <Form.Button onClick={() => setModelOpen(false)}>Cancel</Form.Button>
@@ -141,36 +131,36 @@ function GroupTable({ group }) {
   );
 }
 
-export default function GroupsManager({ loggedInUserId }) {
-  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
-    loggedInUserId,
-    'groupName', // Sort params
-    { isActive: true, isGroupHidden: false, status: 'leader' },
-  ));
-  const [selectedGroupIndex, setSelectedGroupIndex] = useInputState();
-
-  useEffect(() => {
-    if (roles?.length > 0) setSelectedGroupIndex(0);
-  }, [roles, setSelectedGroupIndex]);
-
-  if (!loading && roles.length === 0) return <p>You are not a leader of any groups.</p>;
-  if (loading || selectedGroupIndex === undefined) return <Loading />;
-  if (error) return <Errored />;
+export function GroupsManagerForGroups({ groups }) {
+  const [selectedGroupIndex, setSelectedGroupIndex] = useInputState(0);
 
   return (
     <>
       <div>
         <Dropdown
-          options={roles.map((role, index) => ({
-            key: role.id,
-            text: role.group.name,
+          options={groups.map((group, index) => ({
+            key: group.id,
+            text: group.name,
             value: index,
           }))}
           value={selectedGroupIndex}
           onChange={setSelectedGroupIndex}
         />
       </div>
-      <GroupTable group={roles[selectedGroupIndex].group} />
+      <GroupTable group={groups[selectedGroupIndex]} />
     </>
   );
+}
+
+export default function GroupsManager({ loggedInUserId }) {
+  const { data: roles, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfUser(
+    loggedInUserId,
+    'groupName', // Sort params
+    { isActive: true, isGroupHidden: false, status: 'leader' },
+  ));
+
+  if (loading) return <Loading />;
+  if (error) return <Errored />;
+  if (roles.length === 0) return <p>You are not a leader of any groups.</p>;
+  return <GroupsManagerForGroups groups={roles.map((role) => role.group)} />;
 }

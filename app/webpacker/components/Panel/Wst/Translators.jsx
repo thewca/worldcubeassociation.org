@@ -9,6 +9,7 @@ import Errored from '../../Requests/Errored';
 import Loading from '../../Requests/Loading';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 export default function Translators() {
   const {
@@ -105,7 +106,7 @@ export default function Translators() {
                 name="user"
                 value={newTranslator.user}
                 onChange={handleFormChange}
-                model="user"
+                model={SEARCH_MODELS.user}
                 multiple={false}
               />
               <Button type="submit">Submit</Button>

@@ -35,6 +35,30 @@ FactoryBot.define do
       metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'regional_delegate') }
     end
 
+    trait :officers do
+      group { FactoryBot.create(:officers_user_group) }
+    end
+
+    trait :officers_executive_director do
+      metadata { FactoryBot.create(:executive_director_role_metadata) }
+    end
+
+    trait :officers_chair do
+      metadata { FactoryBot.create(:chair_role_metadata) }
+    end
+
+    trait :officers_vice_chair do
+      metadata { FactoryBot.create(:vice_chair_role_metadata) }
+    end
+
+    trait :officers_secretary do
+      metadata { FactoryBot.create(:secretary_role_metadata) }
+    end
+
+    trait :officers_treasurer do
+      metadata { FactoryBot.create(:treasurer_role_metadata) }
+    end
+
     factory :delegate_role do
       user { FactoryBot.create(:user) }
       group_id { FactoryBot.create(:delegate_region_americas).id }
@@ -46,5 +70,11 @@ FactoryBot.define do
     factory :translator_role, traits: [:translators, :active]
     factory :senior_delegate_role, traits: [:delegate_regions, :delegate_regions_senior_delegate, :active]
     factory :regional_delegate_role, traits: [:delegate_regions, :delegate_regions_regional_delegate, :active]
+
+    factory :executive_director_role, traits: [:officers, :officers_executive_director, :active]
+    factory :chair_role, traits: [:officers, :officers_chair, :active]
+    factory :vice_chair_role, traits: [:officers, :officers_vice_chair, :active]
+    factory :secretary_role, traits: [:officers, :officers_secretary, :active]
+    factory :treasurer_role, traits: [:officers, :officers_treasurer, :active]
   end
 end

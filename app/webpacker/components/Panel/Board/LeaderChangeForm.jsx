@@ -5,6 +5,7 @@ import Loading from '../../Requests/Loading';
 import { councilsStatus } from '../../../lib/wca-data.js.erb';
 import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 const OLD_LEADER_STATUS = {
   SENIOR_MEMBER: 'senior_member',
@@ -93,7 +94,7 @@ export default function LeaderChangeForm({
         name="newLeader"
         value={formValues?.newLeader}
         onChange={handleFormChange}
-        model="user"
+        model={SEARCH_MODELS.user}
         multiple={false}
       />
       {oldLeader && (

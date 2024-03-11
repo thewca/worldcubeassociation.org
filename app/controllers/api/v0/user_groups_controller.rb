@@ -19,10 +19,13 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
   end
 
   # Filters the list of groups based on given parameters.
-  private def filter_groups_for_parameters(groups: [], is_active: nil)
+  private def filter_groups_for_parameters(groups: [], is_active: nil, parent_group_id: nil)
     groups.reject do |group|
+      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
+      # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
-        !is_active.nil? && is_active != group.is_active
+        (!is_active.nil? && is_active != group.is_active) ||
+        (!parent_group_id.nil? && group.parent_group_id != parent_group_id)
       )
     end
   end
@@ -46,6 +49,19 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
       end
     end
 
+    # Temporary hack to support old system teams/committees.
+    if group_type == UserGroup.group_types[:teams_committees]
+      Team.all_official.each do |team_committee|
+        groups << {
+          id: group_type + "_" + team_committee.id.to_s,
+          name: team_committee.name,
+          group_type: UserGroup.group_types[:team_committee],
+          is_hidden: false,
+          is_active: true,
+        }
+      end
+    end
+
     # Filters the list of groups based on the permissions of the current user.
     groups = filter_groups_for_logged_in_user(groups)
 
@@ -53,6 +69,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     groups = filter_groups_for_parameters(
       groups: groups,
       is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
+      parent_group_id: params.key?(:parentGroupId) ? params.require(:parentGroupId).to_i : nil,
     )
 
     # Sorts the list of groups by name.

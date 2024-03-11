@@ -1,26 +1,12 @@
 import React from 'react';
-import { Modal, Button } from 'semantic-ui-react';
+import { Modal } from 'semantic-ui-react';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import RoleForm from './RoleForm';
-import { groupTypes } from '../../lib/wca-data.js.erb';
 import ActiveRoles from './ActiveRoles';
 import PastRoles from './PastRoles';
-
-// let i18n-tasks know the key is used
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.trainee_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.candidate_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.regional_delegate')
-// i18n-tasks-use t('enums.user.role_status.delegate_regions.senior_delegate')
-// i18n-tasks-use t('enums.user.role_status.teams_committees.member')
-// i18n-tasks-use t('enums.user.role_status.teams_committees.senior_member')
-// i18n-tasks-use t('enums.user.role_status.teams_committees.leader')
-// i18n-tasks-use t('enums.user.role_status.councils.member')
-// i18n-tasks-use t('enums.user.role_status.councils.senior_member')
-// i18n-tasks-use t('enums.user.role_status.councils.leader')
 
 const sortParams = 'groupTypeRank,status';
 
@@ -48,10 +34,6 @@ export default function RolesTab({ userId }) {
 
   const [open, setOpen] = React.useState(false);
 
-  const isDelegate = activeRoles?.some(
-    (role) => role.group.group_type === groupTypes.delegate_regions,
-  );
-
   const hasNoRoles = activeRoles?.length === 0 && pastRoles?.length === 0;
 
   if (activeRolesLoading || pastRolesLoading) return <Loading />;
@@ -62,7 +44,6 @@ export default function RolesTab({ userId }) {
       {activeRoles?.length > 0 && (<ActiveRoles activeRoles={activeRoles} setOpen={setOpen} />)}
       {pastRoles?.length > 0 && (<PastRoles pastRoles={pastRoles} />)}
       {hasNoRoles && <p>No Roles...</p>}
-      <Button onClick={() => setOpen(true)} disabled={isDelegate}>New Role</Button>
 
       <Modal
         size="fullscreen"
@@ -79,7 +60,7 @@ export default function RolesTab({ userId }) {
         open={open}
       >
         <Modal.Content>
-          <RoleForm userId={userId} isActiveRole={isDelegate} />
+          <RoleForm userId={userId} />
         </Modal.Content>
       </Modal>
     </>

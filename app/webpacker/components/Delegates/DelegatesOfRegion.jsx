@@ -2,7 +2,6 @@ import React, { useCallback, useMemo } from 'react';
 import { Grid, Label, Segment } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
-import { groupTypes } from '../../lib/wca-data.js.erb';
 import Errored from '../Requests/Errored';
 import Loading from '../Requests/Loading';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -17,11 +16,11 @@ export const ALL_REGIONS = {
 
 function SeniorDelegate({ seniorDelegate }) {
   return (
-    <>
-      <Grid.Row only="computer">
-        <Segment raised>
+    <Grid padded centered>
+      <Grid.Row>
+        <Segment raised compact textAlign="center">
           <Label ribbon>
-            {I18n.t('enums.user.delegate_status.senior_delegate')}
+            {I18n.t('enums.user_roles.status.delegate_regions.senior_delegate')}
           </Label>
 
           {seniorDelegate && (
@@ -34,24 +33,17 @@ function SeniorDelegate({ seniorDelegate }) {
           )}
         </Segment>
       </Grid.Row>
-      { /* TODO: Fix Senior Delegate ribbon CSS for tablet and mobile view,
-           and enable the 'senior delegate' component for all devices */ }
-    </>
+    </Grid>
 
   );
 }
 
 export default function DelegatesOfRegion({ activeRegion, delegateSubregions, isAdminMode }) {
-  const isAllRegions = activeRegion.id === ALL_REGIONS.id;
-  const { data: delegates, loading, error } = useLoadedData(
-    isAllRegions
-      ? apiV0Urls.userRoles.listOfGroupType(groupTypes.delegate_regions, 'name', {
-        isActive: true,
-      })
-      : apiV0Urls.userRoles.listOfGroup(activeRegion.id, 'location,name', {
-        isActive: true,
-      }),
-  );
+  const { data: delegates, loading, error } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
+    activeRegion.id,
+    'location,name',
+    { isActive: true },
+  ));
 
   const getSeniorDelegate = useCallback(
     () => delegates?.find((delegate) => delegate.metadata.status === 'senior_delegate'),
@@ -68,17 +60,16 @@ export default function DelegatesOfRegion({ activeRegion, delegateSubregions, is
 
   return (
     <>
-      {!isAllRegions && <SeniorDelegate seniorDelegate={getSeniorDelegate()} />}
-      <Grid.Row style={{ overflowX: 'scroll' }}>
+      <SeniorDelegate seniorDelegate={getSeniorDelegate()} />
+      {nonSeniorDelegates.length > 0 && (
         <DelegatesTable
           delegates={nonSeniorDelegates}
           isAdminMode={isAdminMode}
-          isAllRegions={isAllRegions}
         />
-        {delegateSubregions.map((subregion) => (
-          <DelegatesOfSubregion subregion={subregion} isAdminMode={isAdminMode} />
-        ))}
-      </Grid.Row>
+      )}
+      {delegateSubregions.map((subregion) => (
+        <DelegatesOfSubregion subregion={subregion} isAdminMode={isAdminMode} />
+      ))}
     </>
   );
 }

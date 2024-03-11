@@ -2,12 +2,6 @@
 
 class Api::V0::UserRolesController < Api::V0::ApiController
   include SortHelper
-  before_action :current_user_is_authorized_for_action!, only: [:update, :destroy]
-  private def current_user_is_authorized_for_action!
-    unless current_user.board_member? || current_user.senior_delegate? || current_user.can_manage_delegate_probation?
-      render json: {}, status: 401
-    end
-  end
 
   STATUS_SORTING_ORDER = {
     UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
@@ -65,7 +59,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   end
 
   # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil)
+  private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil, group_type: nil, is_lead: nil)
     roles.reject do |role|
       is_actual_role = role.is_a?(UserRole) # See previous is_actual_role comment.
       # In future, the following lines will be replaced by the following:
@@ -76,10 +70,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # )
       # Till then, we need to support both the old and new systems. So, we will be using ternary
       # operator to access the parameters.
+      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
+      # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
-        (status.present? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
+        (!status.nil? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
         (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
-        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden]))
+        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden])) ||
+        (!group_type.nil? && group_type != UserRole.group_type(role)) ||
+        (!is_lead.nil? && is_lead != UserRole.is_lead?(role))
       )
     end
   end
@@ -108,9 +106,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       group = UserGroup.find(group_id)
 
       if group.group_type == UserGroup.group_types[:delegate_regions]
-        User.where(region_id: group.id).map do |delegate_user|
-          roles << delegate_user.delegate_role
-        end
+        roles.concat(group.delegate_users.map(&:delegate_role))
       end
     end
 
@@ -142,6 +138,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
       is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
       status: params[:status],
+      group_type: params[:groupType],
     )
 
     # Sort the roles.
@@ -165,11 +162,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     status = params[:status]
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
     is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
+    is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
     roles = filter_roles_for_parameters(
       roles: roles,
       status: status,
       is_active: is_active,
       is_group_hidden: is_group_hidden,
+      is_lead: is_lead,
     )
 
     # Sort the roles.
@@ -178,16 +177,21 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  # Returns a list of roles primarily based on groupType.
-  def index_for_group_type
-    group_type = params.require(:group_type)
+  private def roles_of_group_type(group_type)
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
     roles = UserRole.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
 
     # Temporary hack to support the old system roles, will be removed once all roles are
     # migrated to the new system.
     if group_type == UserGroup.group_types[:delegate_regions]
-      roles.concat(User.delegates.includes(:actually_delegated_competitions).map(&:delegate_role))
+      # extra_metadata adds some extra metadata to the roles. These metadata computation is bit costly,
+      # so we only compute it when extra_metadata is true.
+      extra_metadata = params.key?(:extraMetadata) ? ActiveRecord::Type::Boolean.new.cast(params.require(:extraMetadata)) : nil
+      if extra_metadata
+        roles.concat(User.delegates.with_delegate_data.map(&:delegate_role_with_extra_metadata))
+      else
+        roles.concat(User.delegates.map(&:delegate_role))
+      end
     elsif group_type == UserGroup.group_types[:councils]
       Team.all_councils.each do |council|
         leader = council.leader
@@ -208,25 +212,17 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           }
         end
       end
-    elsif group_type == UserGroup.group_types[:officers]
-      roles.concat(Team.all_officers.flat_map(&:current_members).map(&:role))
-      roles << {
-        group: {
-          id: 'officers',
-          name: 'WCA Officers',
-          group_type: UserGroup.group_types[:officers],
-          is_hidden: false,
-          is_active: true,
-        },
-        is_active: true,
-        user: Team.wfc.leader.user,
-        metadata: {
-          status: 'treasurer',
-        },
-      }
     elsif group_type == UserGroup.group_types[:board]
       roles.concat(Team.board.current_members.map(&:role))
     end
+
+    roles
+  end
+
+  # Returns a list of roles primarily based on groupType.
+  def index_for_group_type
+    group_type = params.require(:group_type)
+    roles = roles_of_group_type(group_type)
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
@@ -234,10 +230,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     # Filter the list based on the other parameters.
     status = params[:status]
     is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+    is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
     roles = filter_roles_for_parameters(
       roles: roles,
       status: status,
       is_active: is_active,
+      is_lead: is_lead,
     )
 
     # Sort the roles.
@@ -304,6 +302,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:delegate_regions],
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
+      UserGroup.group_types[:officers],
     ]
     group = UserGroup.find(group_id)
 
@@ -329,6 +328,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     if group.group_type == UserGroup.group_types[:delegate_regions] && !delegate_status_migrated?(status)
       # Creates deprecated role.
       user = User.find(user_id)
+      return render status: :unprocessable_entity, json: { error: "Already a Delegate" } if user.any_kind_of_delegate?
       user.update!(delegate_status: status, region_id: group.id, location: location)
       send_role_change_notification(user)
       return render json: {
@@ -338,6 +338,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if group.group_type == UserGroup.group_types[:delegate_regions]
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+    elsif group.group_type == UserGroup.group_types[:officers]
+      metadata = RolesMetadataOfficers.create!(status: status)
     else
       metadata = nil
     end
@@ -356,24 +358,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def show
     user_id = params.require(:userId)
-    is_active_role = ActiveRecord::Type::Boolean.new.cast(params.require(:isActiveRole))
 
-    if is_active_role
-      user = User.find(user_id)
-      render json: {
-        roleData: {
-          delegateStatus: user.delegate_status,
-          regionId: user.region_id,
-          location: user.location,
-        },
-        regions: UserGroup.delegate_region_groups,
-      }
-    else
-      render json: {
-        roleData: {},
-        regions: UserGroup.delegate_region_groups,
-      }
-    end
+    user = User.find(user_id)
+    render json: {
+      roleData: {
+        delegateStatus: user.delegate_status,
+        regionId: user.region_id,
+        location: user.location,
+      },
+      regions: UserGroup.delegate_region_groups,
+    }
   end
 
   def update
@@ -385,14 +379,35 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       region_id = params.require(:regionId)
       location = params.require(:location)
 
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, region_id)
+
       user = User.find(user_id)
       user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
       send_role_change_notification(user)
 
-      render json: {
+      return render json: {
         success: true,
       }
-    elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
+    end
+
+    if id.starts_with?('delegate-')
+      user_id = id.split('delegate-').last
+      status = params[:status]
+      user = User.find(user_id)
+      previous_value = user.delegate_status
+      new_value = status
+
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+
+      user.update!(delegate_status: status)
+      RoleChangeMailer.notify_role_change(user.delegate_role, current_user, 'Status', previous_value, new_value).deliver_later
+
+      return render json: {
+        success: true,
+      }
+    end
+
+    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(id)
       unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
@@ -403,22 +418,27 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       team_member = TeamMember.find_by!(id: team_member_id)
       team = team_member.team
       status = params.require(:status)
+
+      return head :unauthorized unless current_user.can_edit_team?(team.id)
+
       team_member.update!(end_date: Time.now)
       TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-      render json: {
+      return render json: {
         success: true,
       }
+    end
+
+    role = UserRole.find(id)
+    group_type = role.group.group_type
+
+    if group_type == UserGroup.group_types[:delegate_probation]
+      return head :unauthorized unless current_user.can_manage_delegate_probation?
+      end_date = params.require(:endDate)
+      role.update!(end_date: Date.safe_parse(end_date))
+      RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
+      render json: { success: true }
     else
-      role = UserRole.find(id)
-      group_type = role.group.group_type
-      if group_type == UserGroup.group_types[:delegate_probation]
-        end_date = params.require(:endDate)
-        role.update!(end_date: Date.safe_parse(end_date))
-        RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
-        render json: { success: true }
-      else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-      end
+      render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
   end
 
@@ -427,38 +447,65 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     if id == UserRole::DELEGATE_ROLE_ID
       user_id = params.require(:userId)
-
       user = User.find(user_id)
-      end_delegate_role_for_user(user)
 
-      render json: {
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+
+      end_delegate_role_for_user(user)
+      return render json: {
         success: true,
       }
-    elsif id.include?("_") # Temporary hack to support some old system roles, will be removed once
+    end
+
+    if id.starts_with?('delegate-')
+      user_id = id.split('delegate-').last
+      user = User.find(user_id)
+
+      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+
+      if user.delegate_status.present?
+        delegate_role = user.delegate_role
+        delegate_role[:end_date] = Date.today
+        remove_pending_wca_id_claims(user)
+        user.update!(delegate_status: '', region_id: '', location: '')
+        RoleChangeMailer.notify_role_end(delegate_role, current_user).deliver_later
+      end
+
+      return render json: {
+        success: true,
+      }
+    end
+
+    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
       # all roles are migrated to the new system.
       team_member_id = id.split("_").last
       group_type = group_id_of_old_system_to_group_type(id)
       team_member = TeamMember.find_by(id: team_member_id)
+
       unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
         return
       end
+      return head :unauthorized unless current_user.can_edit_team?(team_member.team.id)
+
       if team_member.present?
         team_member.update!(end_date: Date.today)
-        render json: {
+        return render json: {
           success: true,
         }
       else
-        render status: :unprocessable_entity, json: { error: "Invalid member" }
+        return render status: :unprocessable_entity, json: { error: "Invalid member" }
       end
-    else
-      role = UserRole.find(id)
-      role.update!(end_date: Date.today)
-      RoleChangeMailer.notify_role_end(role, current_user).deliver_later
-      render json: {
-        success: true,
-      }
     end
+
+    role = UserRole.find(id)
+
+    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
+    role.update!(end_date: Date.today)
+    RoleChangeMailer.notify_role_end(role, current_user).deliver_later
+    render json: {
+      success: true,
+    }
   end
 
   private def send_role_change_notification(user)
@@ -477,5 +524,24 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         user.delegate_status,
       ).deliver_later
     end
+  end
+
+  def search
+    query = params.require(:query)
+    group_type = params.require(:groupType)
+    roles = roles_of_group_type(group_type)
+    active_roles = roles.select { |role| UserRole.is_active?(role) }
+
+    query.split.each do |part|
+      active_roles = active_roles.select do |role|
+        user = UserRole.user(role)
+        name = user[:name] || ''
+        wca_id = user[:wca_id] || ''
+        email = user[:email] || ''
+        name.downcase.include?(part.downcase) || wca_id.downcase.include?(part.downcase) || email.downcase.include?(part.downcase)
+      end
+    end
+
+    render json: { result: active_roles }
   end
 end

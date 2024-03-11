@@ -7,6 +7,7 @@ import {
 import Loading from '../../Requests/Loading';
 import { itemToOption } from '../../SearchWidget/MultiSearchInput';
 import WcaSearch from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 
 const useWrapIdOnly = (originalCallback) => useCallback((evt, data) => {
@@ -49,7 +50,7 @@ export function UserSearch({
     <WcaSearch
       value={userOptions}
       onChange={onChangeIdOnly}
-      model="user"
+      model={SEARCH_MODELS.user}
       params={{ only_staff_delegates: delegateOnly, only_trainee_delegates: traineeOnly }}
     />
   );
@@ -84,6 +85,7 @@ export function CompetitionSearch({
     <WcaSearch
       value={compOptions}
       onChange={onChangeIdOnly}
+      model={SEARCH_MODELS.competition}
       disabled={disabled}
     />
   );

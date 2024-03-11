@@ -63,16 +63,6 @@ class Team < ApplicationRecord
     self.all_official + self.all_councils
   end
 
-  # Don't forget that the WFC Leader is an officer too, the WCA Treasurer!
-  def self.all_officers
-    [
-      Team.chair,
-      Team.executive_director,
-      Team.secretary,
-      Team.vice_chair,
-    ]
-  end
-
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
   def self.c_all_by_friendly_id
     @@teams_by_friendly_id ||= nil
@@ -92,22 +82,6 @@ class Team < ApplicationRecord
 
   def self.board
     Team.c_find_by_friendly_id!('board')
-  end
-
-  def self.chair
-    Team.c_find_by_friendly_id!('chair')
-  end
-
-  def self.executive_director
-    Team.c_find_by_friendly_id!('executive_director')
-  end
-
-  def self.secretary
-    Team.c_find_by_friendly_id!('secretary')
-  end
-
-  def self.vice_chair
-    Team.c_find_by_friendly_id!('vice_chair')
   end
 
   def self.wct
@@ -209,8 +183,6 @@ class Team < ApplicationRecord
       UserGroup.group_types[:councils]
     elsif self == Team.board
       UserGroup.group_types[:board]
-    elsif Team.all_officers.include?(self)
-      UserGroup.group_types[:officers]
     end
   end
 

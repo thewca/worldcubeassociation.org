@@ -5,6 +5,9 @@ import SeniorDelegatesList from './SeniorDelegatesList';
 import RegionManager from './RegionManager';
 import CouncilLeaders from './CouncilLeaders';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
+import GroupsManagerAdmin from './GroupsManagerAdmin';
+import OfficersEditor from './OfficersEditor';
+import RegionsAdmin from './RegionsAdmin';
 
 const sections = [
   {
@@ -26,6 +29,21 @@ const sections = [
     id: PANEL_LIST.board.delegateProbations,
     name: 'Delegate Probations',
     component: DelegateProbations,
+  },
+  {
+    id: PANEL_LIST.board.groupsManagerAdmin,
+    name: 'Groups Manager Admin',
+    component: GroupsManagerAdmin,
+  },
+  {
+    id: PANEL_LIST.board.officersEditor,
+    name: 'Officers Editor',
+    component: OfficersEditor,
+  },
+  {
+    id: PANEL_LIST.board.regionsAdmin,
+    name: 'Regions Admin',
+    component: RegionsAdmin,
   },
 ];
 

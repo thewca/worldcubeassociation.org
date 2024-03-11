@@ -35,8 +35,8 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to match role.user.name
-      expect(mail.body.encoded).to match senior_delegate.user.name
+      expect(CGI.unescapeHTML(mail.body.encoded)).to match role.user.name
+      expect(CGI.unescapeHTML(mail.body.encoded)).to match senior_delegate.user.name
     end
   end
 

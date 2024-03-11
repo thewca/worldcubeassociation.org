@@ -591,13 +591,6 @@ RSpec.describe User, type: :model do
       expect(organizer.editable_fields_of_user(registration.user).to_a).to eq [:name]
     end
 
-    it "allows senior delegates to assign delegate status" do
-      user = FactoryBot.create :user
-      senior_delegate = (FactoryBot.create :senior_delegate_role).user
-      expect(senior_delegate.can_edit_user?(user)).to eq true
-      expect(senior_delegate.editable_fields_of_user(user).to_a).to include(:delegate_status, :region_id, :location)
-    end
-
     it "disallows delegates to edit WCA IDs of special accounts" do
       board_member = FactoryBot.create :user, :board_member
       delegate = FactoryBot.create :delegate
@@ -738,6 +731,54 @@ RSpec.describe User, type: :model do
       registration.accepted_at = Time.now
       competition.allow_registration_self_delete_after_acceptance = false
       expect(competitor.can_delete_registration?(registration)).to be false
+    end
+  end
+
+  describe "staff? method" do
+    it "returns false for non-staff user" do
+      user = FactoryBot.create(:user)
+      expect(user.staff?).to be false
+    end
+
+    it "returns false for trainee delegate" do
+      user = FactoryBot.create(:trainee_delegate)
+      expect(user.staff?).to be false
+    end
+
+    it "returns true for non-trainee Delegate roles" do
+      junior_delegate_user = FactoryBot.create(:candidate_delegate)
+      full_delegate_user = FactoryBot.create(:delegate)
+      regional_delegate = FactoryBot.create(:regional_delegate_role)
+      senior_delegate = FactoryBot.create(:senior_delegate_role)
+
+      expect(junior_delegate_user.staff?).to be true
+      expect(full_delegate_user.staff?).to be true
+      expect(regional_delegate.user.staff?).to be true
+      expect(senior_delegate.user.staff?).to be true
+    end
+
+    it "returns true for WST member" do
+      user = FactoryBot.create(:user, :wst_member)
+      expect(user.staff?).to be true
+    end
+
+    it "returns true for Board roles" do
+      user = FactoryBot.create(:user, :board_member)
+      expect(user.staff?).to be true
+    end
+
+    it "returns true for Officer roles" do
+      executive_director = FactoryBot.create(:executive_director_role)
+      chair = FactoryBot.create(:chair_role)
+      vice_chair = FactoryBot.create(:vice_chair_role)
+      secretary = FactoryBot.create(:secretary_role)
+      treasurer = FactoryBot.create(:treasurer_role)
+
+      expect(executive_director.user.staff?).to be true
+      expect(chair.user.staff?).to be true
+      expect(vice_chair.user.staff?).to be true
+      expect(secretary.user.staff?).to be true
+      expect(treasurer.user.staff?).to be true
     end
   end
 
