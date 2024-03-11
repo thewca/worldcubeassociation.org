@@ -60,3 +60,5 @@ translations:
       - "*.datetime.*"
       - "*.wca.errors.messages.form_error"
       - "*.page.*"
+      - "*.registrations.*"
+      - "*.api.*"
