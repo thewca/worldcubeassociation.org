@@ -21,7 +21,8 @@ class RegistrationsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy,
-                         :update, :create_paypal_order, :capture_paypal_payment]
+                         :update, :create_paypal_order, :capture_paypal_payment, :refund_paypal_payment]
+
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
@@ -822,19 +823,69 @@ class RegistrationsController < ApplicationController
   end
 
   def create_paypal_order
-    return head :forbidden if Rails.env.production?
+    return head :forbidden if PaypalInterface.paypal_disabled?
 
     @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration)
+    render json: PaypalInterface.create_order(@registration, params[:total_charge])
   end
 
   def capture_paypal_payment
-    return head :forbidden if Rails.env.production?
+    return head :forbidden if PaypalInterface.paypal_disabled?
 
     @registration = registration_from_params
     @competition = @registration.competition
     order_id = params[:order_id]
 
-    render json: PaypalInterface.capture_payment(@competition, order_id)
+    response = PaypalInterface.capture_payment(@competition, order_id)
+    if response['status'] == 'COMPLETED'
+
+      # TODO: Handle the case where there are multiple captures for a payment
+      # 1) Multiple installments
+      # 2) Some failed, some succeeded
+
+      amount_details = response['purchase_units'][0]['payments']['captures'][0]['amount']
+      currency_code = amount_details['currency_code']
+      amount = PaypalRecord.ruby_amount(amount_details["value"], currency_code)
+      record = PaypalRecord.find_by(record_id: response["id"])
+
+      # Create a Capture object and link it to the PaypalRecord
+      # NOTE: This assumes there is only ONE capture per order - not a valid long-term assumption
+      capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
+      PaypalRecord.create(
+        record_id: capture_from_response['id'],
+        status: capture_from_response['status'],
+        payload: {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?
+        amount_in_cents: capture_from_response['amount']['value'],
+        currency_code: capture_from_response['amount']['currency_code'],
+        record_type: :capture,
+        parent_record: record,
+      )
+
+      # Record the payment
+      @registration.record_payment(
+        amount,
+        currency_code,
+        record, # TODO: Add error handling for the PaypalRecord not being found
+        @registration.user.id,
+      )
+    end
+
+    render json: response
+  end
+
+  def refund_paypal_payment
+    registration = Registration.find(params[:id])
+    paypal_order = RegistrationPayment.find(params[:payment_id]).receipt
+    payment_capture_id = paypal_order.capture_id
+
+    refund = PaypalInterface.issue_refund(registration, payment_capture_id)
+
+    registration.record_refund(
+      refund.amount_in_cents,
+      refund.currency_code,
+      refund,
+      payment_capture_id,
+      registration.user.id,
+    )
   end
 end

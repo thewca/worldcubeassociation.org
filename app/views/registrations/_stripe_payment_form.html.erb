@@ -16,25 +16,26 @@
     <p class="form-control-static" id="wca-ajax-error"></p>
   <% end %>
 
-  <hr/>
-  <%= f.input :subtotal, label: t('registrations.payment_form.labels.subtotal'), hint: false do %>
-    <p class="form-control-static" id="money-subtotal"><%= format_money(@registration.outstanding_entry_fees) %></p>
-  <% end %>
   <div id="stripe-elements">
     <%= f.input :payment_information, label: t("registrations.payment_form.labels.payment_information"), hint: false, wrapper_html: { id: 'payment-element-wrapper' } do %>
       <div id="payment-element"></div>
     <% end %>
     <%= f.input :payment_service_error, label: t('registrations.payment_form.labels.payment_service_error'), hint: false, wrapper_html: { id: 'payment-service-error-wrapper', class: 'text-danger' } do %>
+      <p class="form-control-static" id="stripe-sdk-error"></p>
     <% end %>
   </div>
 
+  <hr/>
+  <%= f.input :subtotal, label: t('registrations.payment_form.labels.subtotal'), hint: false do %>
+    <p class="form-control-static" id="money-subtotal"></p>
+  <% end %>
+  <%= f.input :payment_button, label: t('registrations.payment_form.labels.payment_button'), hint: t("registrations.payment_form.hints.payment_button") do %>
+    <%= f.button :button, t('registrations.payment_form.button_text'), id: 'payment-button', class: 'btn btn-primary' %>
+  <% end %>
 
-
-  <% merchant_id = @competition.payment_account_for(:paypal).paypal_merchant_id %>
-  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=<%= merchant_id %>&currency=<%= @registration.outstanding_entry_fees.currency.iso_code %>"></script>
+  <script src="https://js.stripe.com/v3/"></script>
 
   <script>
-
     // ----------
     // I18N and currency code data
     // ----------
@@ -50,9 +51,24 @@
     // Init Stripe PaymentElement
     // ----------
 
+    const stripe = Stripe('<%= AppSecrets.STRIPE_PUBLISHABLE_KEY %>', {
+      locale: supported_locales.includes(wca_locale) ? wca_locale : 'auto',
+      stripeAccount: '<%= @competition.payment_account_for(:stripe).account_id %>',
+    });
 
     // deferred payment (show the PaymentElement without pre-loading a PaymentIntent)
     // as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment
+    const elements = stripe.elements({
+      mode: 'payment',
+      // Stripe _has_ to receive a non-zero amount, so we convert the outstanding fee before AJAX'ing the subtotal below
+      amount: <%= StripeTransaction.amount_to_stripe(@registration.outstanding_entry_fees.cents, @competition.currency_code) %>,
+      // Stripe doesn't initialize the element if we submit USD in upper case…
+      currency: currencyIsoCode.toLowerCase(),
+      appearance: { theme: 'flat' }
+    });
+
+    const paymentElement = elements.create("payment");
+    paymentElement.mount("#payment-element");
 
     const $paymentButton = $('#payment-button');
     $paymentButton.on('click', function(e) {
@@ -104,47 +120,16 @@
       }
     }
 
-    // ----------
-    // Init PayPal PaymentElement
-    // ----------
+    paymentElement.on('change', function(e) {
+      $ajaxErrorRow.hide();
+      $stripeErrorRow.hide();
 
-    paypal.Buttons({
-        // Order is created on the server and the order id is returned
-        createOrder: (data, actions) => {
-          return fetch("/registration/<%= @registration.id %>/create-paypal-order/", {
-            method: "post",
-            body: JSON.stringify({ total_charge: getCurrentRubyAmount() }),
-            headers: {
-              'Content-Type': 'application/json' // Set the content type to JSON
-            }
-        })
-        .then((response) => response.json())
-        .then((order) => order.id);
-        },
+      if (e.complete) {
+        $paymentElementRow.removeClass("has-error");
+      }
 
-        // Finalize the transaction on the server after payer approval
-        onApprove: (data, actions) => {
-          return fetch(`/registration/<%= @registration.id %>/capture-paypal-payment/${data.orderID}`, {
-            method: "post",
-            body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
-            headers: {
-              'Content-Type': 'application/json' // Set the content type to JSON
-            }
-        })
-        .then((response) => response.json())
-        .then((orderData) => {
-            // Successful capture! For dev/demo purposes:
-            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
-            const transaction = orderData.purchase_units[0].payments.captures[0];
-            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
-
-            // When ready to go live, remove the alert and show a success message within this page. For example:
-            // const element = document.getElementById('paypal-button-container');
-            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
-            // Or go to another URL:  actions.redirect('thank_you.html');
-        });
-        }
-    }).render('#payment-element');
+      $paymentButton.prop("disabled", !e.complete);
+    });
 
     // ----------
     // Two-step workflow to handle payments
@@ -240,7 +225,7 @@
     const $subtotalText = $('#money-subtotal');
 
     // PI is pre-loaded with the correct amount, no need to update it straight away
-    updateSubtotal;
+    updateSubtotal(false);
 
     function getCurrentRubyAmount() {
       if ($donationToggle.is(':checked')) {
@@ -252,7 +237,7 @@
       return pendingAmountRuby;
     }
 
-    function updateSubtotal() {
+    function updateSubtotal(refreshStripe = true) {
       const amount = getCurrentRubyAmount();
 
       const buttonDisabled = $paymentButton.prop("disabled");
@@ -267,6 +252,10 @@
         data: { amount: amount, currency_iso: currencyIsoCode },
         success: function (data) {
           const { stripe_amount: stripeAmount, human_amount: humanAmount } = data;
+
+          if (refreshStripe) {
+            elements.update({ amount: stripeAmount });
+          }
 
           $subtotalText.text(humanAmount);
 
@@ -287,4 +276,3 @@
     });
   </script>
 <% end %>
-

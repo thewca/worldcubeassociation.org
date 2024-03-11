@@ -821,6 +821,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_141549) do
     t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
   end
 
+  create_table "paypal_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "record_id"
+    t.string "status"
+    t.string "payload"
+    t.integer "amount_in_cents"
+    t.string "currency_code"
+    t.string "record_type"
+    t.bigint "parent_record_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_record_id"], name: "index_paypal_records_on_parent_record_id"
+  end
+
   create_table "poll_options", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "description", limit: 200, null: false
     t.integer "poll_id", null: false
@@ -1241,6 +1254,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_09_141549) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
+  add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_payment_intents", "stripe_transactions"

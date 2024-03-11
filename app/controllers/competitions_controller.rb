@@ -316,13 +316,13 @@ class CompetitionsController < ApplicationController
 
     # Paypal setup URL
     # TODO: Don't generate this URL if there is already a connected paypal account?
-    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless Rails.env.production?
+    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
   end
 
   def paypal_return
-    if Rails.env.production?
+    if PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
-      return redirect_to competitions_payment_setup_path(@competition)
+      return redirect_to competitions_payment_setup_path(competition)
     end
 
     competition = competition_from_params
@@ -342,7 +342,7 @@ class CompetitionsController < ApplicationController
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
     end
 
-    redirect_to competitions_payment_setup_path(@competition)
+    redirect_to competitions_payment_setup_path(competition)
   end
 
   def stripe_connect
@@ -375,7 +375,7 @@ class CompetitionsController < ApplicationController
   end
 
   def disconnect_paypal
-    if Rails.env.production?
+    if PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to root_url
     end

@@ -340,6 +340,7 @@ FactoryBot.define do
         competition.competition_payment_integrations.new(connected_account: stripe_account)
         competition.save
       end
+
       if defined?(evaluator.paypal_merchant_id)
         paypal_account = ConnectedPaypalAccount.new(
           paypal_merchant_id: evaluator.paypal_merchant_id,
