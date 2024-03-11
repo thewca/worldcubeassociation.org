@@ -857,7 +857,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "paypal_records" => :skip_all_rows,
-    "stripe_transactions" => :skip_all_rows,
+    "stripe_records" => :skip_all_rows,
     "stripe_payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,

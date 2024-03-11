@@ -13,7 +13,7 @@ class StripeWebhookEvent < ApplicationRecord
 
   scope :handled, -> { where(handled: true) }
 
-  belongs_to :stripe_transaction, optional: true
+  belongs_to :stripe_record, optional: true
 
   has_one :confirmed_intent, class_name: "StripePaymentIntent", as: :confirmed_by
   has_one :canceled_intent, class_name: "StripePaymentIntent", as: :canceled_by
