@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# feeling cute might delete later
+
 class StripePaymentIntent < ApplicationRecord
   belongs_to :holder, polymorphic: true
   belongs_to :stripe_record
