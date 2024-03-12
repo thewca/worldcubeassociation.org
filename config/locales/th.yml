@@ -598,16 +598,8 @@ th:
         f: หญิง
         #original_hash: 6e6a6f2
         o: อื่น ๆ
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Trainee Delegate
-        #original_hash: 9b97968
-        candidate_delegate: Junior Delegate
-        #original_hash: 12ab214
-        delegate: Delegate
-        #original_hash: d463c23
-        senior_delegate: Senior Delegate
-      role_status:
+    user_roles:
+      status:
         delegate_regions:
           #original_hash: 621101a
           trainee_delegate: Trainee Delegate
@@ -621,18 +613,29 @@ th:
           senior_delegate: Senior Delegate
         teams_committees:
           #original_hash: 6853c98
-          member: สมาชิก
+          member: Member
           #original_hash: c366473
-          senior_member: สมาชิกอวุโส
+          senior_member: Senior Member
           #original_hash: e26c936
-          leader: หัวหน้าทีม
+          leader: Leader
         councils:
           #original_hash: 6853c98
-          member: สมาชิก
+          member: Member
           #original_hash: c366473
-          senior_member: สมาชิกอวุโส
+          senior_member: Senior Member
           #original_hash: e26c936
-          leader: หัวหน้า
+          leader: Leader
+        officers:
+          #original_hash: de34439
+          chair: WCA Chair
+          #original_hash: 7d405ff
+          executive_director: WCA Executive Director
+          #original_hash: 1dd4a07
+          secretary: WCA Secretary
+          #original_hash: 0388b19
+          vice_chair: WCA Vice-Chair
+          #original_hash: 75e65d9
+          treasurer: WCA Treasurer
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -994,7 +997,7 @@ th:
             #original_hash: f82488f
             2fa_attempt: >-
               คุณกำลังเข้าระบบของ WCA, คุณได้เปิดการใช้งานการยืนยันตัวตน 2
-              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email
+              ขั้นตอน และคุณเพิ่งจะขอให้ส่ง one-time password ด้วย email 
               กรุณาดูด้านล่าง
             #original_hash: e27e540
             disclaimer: >-
@@ -1123,7 +1126,7 @@ th:
         help:
           #original_hash: 95c10ec
           https_info: ต้องการ HTTPS หรือ host เป็น "localhost"
-          #original_hash: 62a0113
+          #original_hash: 40b9d10
           scopes_html: >-
             คั่นแต่ละขอบเขตด้วยช่องว่าง เว้นว่างไว้เพื่อใช้ขอบเขตเริ่มต้น ดู<a
             href="https://github.com/thewca/worldcubeassociation.org/blob/main/config/initializers/doorkeeper.rb#L4-L10"
@@ -1165,10 +1168,14 @@ th:
       about: เกี่ยวกับ WCA
       #original_hash: ed97787
       documents: เอกสาร WCA
+      #original_hash: c9bae18
+      officers_and_board: WCA Officers & Board
       #original_hash: d8fd3e4
       delegates: WCA Delegates
       #original_hash: 37b8fdc
       organizations: องค์กรระดับภูมิภาค
+      #original_hash: 959d354
+      translators: Translators
       #original_hash: d790b40
       faq: คำถามที่พบบ่อย
       #original_hash: cf1d2c9
@@ -1179,7 +1186,7 @@ th:
       education: แหล่งข้อมูลศึกษา
       #original_hash: c66444f
       wca_live: WCA Live
-      #original_hash: a34b69f
+      #original_hash: b37456c
       contact: ข้อมูลติดต่อ
       #original_hash: 8e12c09
       speedcubing_history: ประวัติ Speedcubing
@@ -1277,6 +1284,24 @@ th:
       disclaimer: Disclaimer
       #original_hash: d561f1a
       find_us: Find us
+  page:
+    translators:
+      #original_hash: 959d354
+      title: Translators
+    officers_and_board:
+      #original_hash: c9bae18
+      title: WCA Officers & Board
+      #original_hash: 312e799
+      officers_description: >-
+        เจ้าหน้าที่ของ WCA จัดการงานที่เกี่ยวข้องกับสถานะที่ไม่แสวงหาผลกำไรของ
+        WCA, เจ้าหน้าที่เหล่านี้ได้รับเลือกจาก WCA Board, Executive Director
+        คือประธานเจ้าหน้าที่บริหารของ WCA,
+        ประธานเป็นประธานในการประชุมคณะกรรมการทั้งหมด,
+        เลขานุการดูแลเอกสารขององค์กร และเหรัญญิกจัดการเรื่องทางการเงินของ WCA
+      #original_hash: e0d37a2
+      board_description: >-
+        WCA Board มีหน้าที่รับผิดชอบในการเป็นผู้นำองค์กรโดยรวม
+        และปฏิบัติหน้าที่ใดๆ ที่ทีม คณะกรรมการ และสภาอื่นๆ ไม่ได้ปฏิบัติตาม
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -1554,7 +1579,7 @@ th:
       have_wca_id_html: 'WCA ID ของคุณคือ %{link_id}'
       #original_hash: bf654e1
       account_is_special: >-
-        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น
+        WCA ID และบัญชีผู้ใช้ได้เชื่อมต่อกันแล้วด้วยตำแหน่งพิเศษ (เช่น 
         delegate, ผู้จัดการแข่งขัน, สมาชิกทีม) และไม่สามารถลบได้ กรุณาส่ง email
         มาที่ WCA Result Team เพื่อช่วยเปลี่ยน WCA ID ไปยังบัญชีผู้ใช้อื่น
       cannot_edit:
@@ -1732,6 +1757,8 @@ th:
       board: WCA Board of Directors
       #original_hash: d79bd00
       officers: WCA Officers
+      #original_hash: 959d354
+      translators: Translators
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2053,8 +2080,8 @@ th:
         payment_button: ชำระค่าสมัครของคุณด้วย Stripe
         #original_hash: f94d00f
         ajax_error: WCA server error
-        #original_hash: e62c56c
-        stripe_error: Stripe error
+        #original_hash: d9185e8
+        payment_service_error: ข้อผิดพลาดบริการการชำระเงิน
         #original_hash: 97f7359
         subtotal: Subtotal
       alerts:
@@ -2520,6 +2547,8 @@ th:
       from_date: จาก
       #original_hash: ae79ea1
       to_date: ถึง
+      #original_hash: 5be6985
+      reset_filters: Reset Filters
       #original_hash: 52c30f8
       past_from: 'อดีตตั้งแต่ปี %{year}'
       #original_hash: 7cff459
@@ -2811,8 +2840,9 @@ th:
           main_event_id: ประเภทการแข่งขันหลัก
         #original_hash: d7020f4
         remarks: หมายเหตุ
-        #original_hash: c305010
-        clone_tabs: ฉันต้องการโคลนแท็บข้อมูลเพิ่มเติมทั้งหมดด้วยเช่นกัน
+        cloning:
+          #original_hash: c305010
+          clone_tabs: ฉันต้องการโคลนแท็บทั้งหมดพร้อมข้อมูลเพิ่มเติมเช่นกัน
       hints:
         admin:
           #original_hash: da39a3e
@@ -3025,8 +3055,9 @@ th:
         remarks: >-
           ข้อมูลบางอย่างที่คุณอยากส่งให้ WCAT เช่น บางอย่างที่คุณไม่มั่นใจกับมัน
           หรือคำขอพิเศษที่จะส่งไปให้ WCAT กรุณากรอกเป็นภาษาอังกฤษ!
-        #original_hash: da39a3e
-        clone_tabs: ''
+        cloning:
+          #original_hash: da39a3e
+          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3168,6 +3199,8 @@ th:
       no_date_yet: คุณยังไม่ได้ใส่วันการแข่งขัน
       #original_hash: 82a95d2
       no_location_yet: คุณยังไม่ได้ใส่สถานที่การแข่งขัน
+      #original_hash: 6def491
+      save_first: กรุณาบันทึกการแข่งขันนี้ก่อนเพิ่มลงใน Series
       #original_hash: 709a232
       name: ชื่อ
       #original_hash: adc24b7
@@ -3577,9 +3610,9 @@ th:
       confirm_account_disconnect: >-
         คุณแน่ใจหรือไม่ว่าต้องการยกเลิกการเชื่อมต่อบัญชี %{provider}
         การดำเนินการนี้ไม่สามารถยกเลิกได้
-      #original_hash: 0be9f82
+      #original_hash: ddea6cf
       supported_currency_warning: >-
-        โปรดตรวจสอบให้แน่ใจว่าสกุลเงินที่คุณเลือกรองรับโดยการรวมการชำระเงินที่คุณเลือก!
+        โปรดตรวจสอบให้แน่ใจว่าสกุลเงินที่คุณเลือกรองรับโดยการชำระเงินที่คุณเลือก!
         สกุลเงินที่รองรับจะขึ้นอยู่กับประเทศที่บัญชีตั้งอยู่
         คุณสามารถตรวจสอบได้ด้านล่าง:
       #original_hash: 9711365
@@ -4060,31 +4093,6 @@ th:
       senior_member: สมาชิกอวุโส
       #original_hash: e26c936
       leader: หัวหน้า
-      officers:
-        #original_hash: d79bd00
-        name: เจ้าหน้าที่ WCA
-        #original_hash: 312e799
-        description: >-
-          เจ้าหน้าที่ของ WCA จัดการงานที่เกี่ยวข้องกับสถานะไม่แสวงหาผลกำไรของ
-          WCA เจ้าหน้าที่เหล่านี้ได้รับเลือกจากคณะกรรมการ WCA
-          ผู้อำนวยการบริหารเป็นประธานเจ้าหน้าที่บริหารของ WCA
-          ประธานเป็นประธานในการประชุมคณะกรรมการทั้งหมดเลขานุการดูแลเอกสารขององค์กรและเหรัญญิกจัดการเรื่องการเงินของ
-          WCA
-      chair:
-        #original_hash: de34439
-        name: ประธาน WCA
-      executive_director:
-        #original_hash: 7d405ff
-        name: กรรมการบริหาร WCA
-      secretary:
-        #original_hash: 1dd4a07
-        name: เลขานุการ WCA
-      vice_chair:
-        #original_hash: 0388b19
-        name: รองประธาน WCA
-      treasurer:
-        #original_hash: 75e65d9
-        name: เหรัญญิก WCA
       users:
         #original_hash: 57bbaad
         profile: 'profile ของ %{user_name}'
@@ -4202,9 +4210,6 @@ th:
       operations_html: 'การดำเนินงานแบบวันต่อวันดำเนินการโดย %{committees_and_teams} ของ WCA'
       #original_hash: 0e7a036
       teams_committees: ทีมและคณะกรรมการ
-      probation:
-        #original_hash: 1dd6e3b
-        name: Delegate ที่ถูกคุมประพฤติ
       wst_admin:
         #original_hash: d4112d2
         name: ผู้ดูแลระบบซอฟต์แวร์
@@ -4366,125 +4371,6 @@ th:
     delete:
       #original_hash: 6588652
       confirm_delete: คุณแน่ใจหรือไม่ที่จะทำการลบคำขอขององค์กรระดับภูมิภาคนี้
-  contact:
-    #original_hash: a34b69f
-    title: ข้อมูลติดต่อ
-    #original_hash: b5c2eaa
-    info_alert_html: 'ก่อนที่จะติดต่อทีมใด ๆ ในหน้านี้ โปรดดูที่ %{link}!'
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      สำหรับคำถามเกี่ยวกับเว็บไซต์, ความคิดเห็น, และข้อเสนอแนะ ให้ใช้<a
-      href='/contact/website'>ฟอร์มติดต่อ</a>
-      สำหรับข้อซักถามเกี่ยวกับการแข่งขันที่เฉพาะเจาะจงโปรดติดต่อ %{link}
-      ในพื้นที่ของคุณ
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>คณะกรรมการและทีม</u>
-    #original_hash: 1cb449c
-    members: สมาชิก
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        สมาคมลูกบากศ์โลกนำโดยคณะกรรมการ WCA
-        พวกเขามีหน้าที่รับผิดชอบในการสอบถามข้อมูลทั่วไปและองค์กร WCA โดยรวม
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        WCT มีหน้าที่ดูแลและสนับสนุนการสื่อสารของ WCA กับชุมชนและประชาชนทั่วไป
-        ควรติดต่อพวกเขาหากคุณมีคำถามทั่วไปเกี่ยวกับ WCA หรือโซเชียลมีเดีย
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WDC
-        ตรวจสอบสถานการณ์ที่หลากหลายและเสนอแนวทางแก้ไขรวมถึงการลงโทษเมื่อจำเป็น
-        ท่ามกลางหัวข้ออื่น ๆ สถานการณ์เหล่านี้อาจเป็นการละเมิดกฎ WCA
-        หรือปัญหาชุมชนอย่างร้ายแรง
-        หากคุณเคยประสบกับสิ่งเหล่านี้อย่าลังเลที่จะติดต่อคณะกรรมการนี้
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WDPC
-        มีความรับผิดชอบและหน้าที่ในการค้นคว้าสร้างดำเนินการจัดการและบังคับใช้นโยบายการป้องกันข้อมูล
-        WCA ทั้งหมดทำสัญญากับผู้ประมวลผลข้อมูลภายนอกของข้อมูล WCA
-        และการจัดการงานที่เกี่ยวข้องกับการปกป้องข้อมูล
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WRC
-        จัดการกับปัญหาทั้งหมดที่เกี่ยวข้องกับแอปพลิเคชันการปรับปรุงและการพัฒนากฎ
-        WCA พวกเขาสนับสนุน WCA Delegate เกี่ยวกับขั้นตอนใด ๆ
-        ที่เกิดขึ้นในการแข่งขันและตัดสินใจเกี่ยวกับเหตุการณ์ที่ไม่ได้รับการแก้ไขและเปิดเผย
-        WRC เผยแพร่รายงานภายใน WCA อย่างสม่ำเสมอเพื่อช่วย WCA Delegate
-        และปรับปรุงความรู้เกี่ยวกับกติกา
-        หากคุณต้องการมีส่วนร่วมในการพัฒนากฎระเบียบหรือเสนอการเปลี่ยนแปลงคุณสามารถติดต่อ
-        WRC ได้โดยติดต่อพวกเขาผ่านทางอีเมลหรือการสนทนาใน <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WRT มีหน้าที่ในการจัดการข้อมูลทั้งหมดในฐานข้อมูลของ WCA
-        ที่สำคัญที่สุดคือผลการแข่งขันและข้อมูลบุคคล
-        พวกเขากำลังโพสต์ผลลัพธ์ของการแข่งขัน WCA ไปยังเว็บไซต์ WCA เมื่อ WCA
-        Delegate ของการแข่งขันได้ส่งมาให้พวกเขา
-        นอกเหนือจากการโพสต์ผลการแข่งขันทีมผลการแข่งขัน WCA
-        ยังรับผิดชอบในการแก้ไขผลการแข่งขันหากจำเป็นและพวกเขาอยู่ในความดูแล
-        ของการบริหารหน้าโปรไฟล์ WCA ทั้งหมด
-        ซึ่งรวมถึงตัวอย่างเช่นการเปลี่ยนแปลงข้อมูลผู้ใช้เช่นวันเกิดตามคำขอที่ตรวจสอบแล้วและการจัดการคำขอรูปภาพโปรไฟล์
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WST รับผิดชอบการบำรุงรักษาและการจัดการซอฟต์แวร์ทั้งหมดของ WCA
-        พวกเขายังพัฒนาซอฟต์แวร์ใหม่สำหรับงานต่าง ๆ ภายใน WCA เมื่อต้องการ
-        หากคุณมีข้อเสนอแนะและแนวคิดสำหรับการพัฒนาเว็บไซต์เพิ่มเติมหรือหากคุณต้องการรายงานข้อผิดพลาดและข้อบกพร่องโปรดติดต่อพวกเขา!
-        เว็บไซต์ WCA เป็นโครงการโอเพ่นซอร์สขนาดใหญ่บน <a
-        href='https://github.com/thewca/worldcubeassociation.org'> GitHub </a>
-        ดังนั้นหากคุณสนใจที่จะช่วยพัฒนา WCA ดูที่นั่น
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        WFC รับผิดชอบทุกอย่างที่เกี่ยวกับการเงินภายใน WCA
-        พวกเขาจัดการการเงินและบัญชีของ WCA
-        ตามข้อเสนองบประมาณประจำปีที่ได้รับอนุมัติซึ่งเป็นงานของพวกเขาเพื่อให้เป็นประจำ
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        คณะกรรมการนี้มีบทบาทเพื่อให้แน่ใจว่าทุกขั้นตอนตามด้วยเจ้าหน้าที่ WCA
-        และพนักงานภายนอกปฏิบัติตามหลักจรรยาบรรณของตน
-    weat:
-      #original_hash: 889dd90
-      info_html: ทีมนี้มีหน้าที่รับผิดชอบในการบริหารงานของคณะกรรมการ WCA
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        คณะกรรมการนี้มีบทบาทในการสนับสนุนและส่งเสริมการปรับปรุงคุณภาพอย่างต่อเนื่องภายใน
-        WCA
-        รวมถึงการใช้มาตรฐานคุณภาพทั่วโลกเพื่อให้แน่ใจว่ากระบวนการที่มีคุณภาพสูงอย่างสม่ำเสมอพนักงาน
-        WCA องค์กรระดับภูมิภาคผู้จัดแข่งขันและพนักงานแข่งขัน
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        คณะกรรมการนี้มีบทบาทในการอนุมัติและประกาศการแข่งขัน WCA
-        และทำให้มั่นใจว่าการประกาศดังกล่าวเป็นไปตามมาตรฐานของ WCA
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        ทีมนี้มีหน้าที่รับผิดชอบในการพัฒนาและจัดการแบรนด์ WCA
-        แสวงหาการสนับสนุนสนับสนุนการจัดจำหน่ายอุปกรณ์การแข่งขัน WCA
-        และการตลาดสินค้า WCA
-    wsot:
-      #original_hash: 8f888d6
-      info_html: ทีมนี้มีหน้าที่ดูแลและสนับสนุนให้ WCA เป็นองค์กรกีฬาระดับนานาชาติ
-    wat:
-      #original_hash: fae6850
-      info_html: >-
-        ทีม WCA Archive เป็นคณะกรรมการที่ปรึกษาของ WCA
-        ทีมนี้มีบทบาทในการดูแลและสนับสนุนการพัฒนาเอกสารสำคัญขององค์กร
-    #original_hash: f97a4f5
-    councils_html: สภา
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        สภานี้มีหน้าที่รับผิดชอบในการสร้างและบำรุงรักษาการสื่อสารทวิภาคีระหว่างชุมชน
-        WCA และเจ้าหน้าที่ WCA
   score_tools:
     #original_hash: 4fc2133
     title: Software tools สำหรับการแข่งขัน WCA
