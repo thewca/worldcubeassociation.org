@@ -150,17 +150,17 @@ id:
   rounds:
     '0':
       #original_hash: 4d618bb
-      name: Ronde kualifikasi
+      name: Babak kualifikasi
       #original_hash: 4d618bb
       cellName: Babak kualifikasi
     '1':
       #original_hash: 1e725b6
-      name: Ronde pertama
+      name: Babak pertama
       #original_hash: 1e725b6
       cellName: Babak pertama
     '2':
       #original_hash: 985c8d0
-      name: Ronde kedua
+      name: Babak kedua
       #original_hash: 985c8d0
       cellName: Babak kedua
     '3':
@@ -484,7 +484,9 @@ id:
         #original_hash: 0c7191d
         wrc_incidents: Insiden yang Membutuhkan Saran WRC
         #original_hash: 5a92b25
-        wdc_feedback_requested: Saya ingin mendapatkan saran dari WDC untuk beberapa insiden di atas.
+        wdc_feedback_requested: >-
+          Saya ingin mendapatkan saran dari WDC mengenai beberapa insiden di
+          atas.
         #original_hash: 06a0568
         wdc_incidents: Insiden yang Membutuhkan Saran WDC
         #original_hash: d7020f4
@@ -600,16 +602,8 @@ id:
         f: Perempuan
         #original_hash: 6e6a6f2
         o: Lainnya
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Delegasi Pelatihan
-        #original_hash: 9b97968
-        candidate_delegate: Delegasi Junior
-        #original_hash: 12ab214
-        delegate: Delegasi
-        #original_hash: d463c23
-        senior_delegate: Delegasi Senior
-      role_status:
+    user_roles:
+      status:
         delegate_regions:
           #original_hash: 621101a
           trainee_delegate: Delegasi Pelatihan
@@ -618,7 +612,7 @@ id:
           #original_hash: 12ab214
           delegate: Delegasi
           #original_hash: 45c2317
-          regional_delegate: Delegasi Wilayah
+          regional_delegate: Delegasi Regional
           #original_hash: d463c23
           senior_delegate: Delegasi Senior
         teams_committees:
@@ -635,6 +629,17 @@ id:
           senior_member: Anggota Senior
           #original_hash: e26c936
           leader: Ketua
+        officers:
+          #original_hash: de34439
+          chair: Ketua Umum WCA
+          #original_hash: 7d405ff
+          executive_director: Direktur Eksekutif WCA
+          #original_hash: 1dd4a07
+          secretary: Sekretaris WCA
+          #original_hash: 0388b19
+          vice_chair: Wakil Ketua Umum WCA
+          #original_hash: 75e65d9
+          treasurer: Bendahara WCA
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -1015,8 +1020,8 @@ id:
             not_enabled: Otentikasi dua-faktor belum diaktifkan
             #original_hash: 14d294b
             unknown: >-
-              Galat tidak dikenal terjadi saat mengirim ke email Anda. Harap
-              hubungi WST.
+              Terjadi kesalahan yang tidak diketahui saat mengirim ke email
+              Anda. Harap hubungi WST.
           otp_email:
             #original_hash: a20e037
             subject: One-time password (OTP) Anda untuk WCA
@@ -1122,7 +1127,7 @@ id:
           #original_hash: ab1b77d
           disabled_success: Berhasil menonaktifkan otentikasi dua-faktor.
           #original_hash: c36d556
-          disabled_failed: 'Tidak dapat menonaktifkan 2FA, harap lihat pesan galat di bawah.'
+          disabled_failed: 'Tidak dapat menonaktifkan 2FA, harap lihat pesan kesalahan di bawah.'
       destroy_other:
         #original_hash: a768ea6
         success: Berhasil keluar dari perangkat lain.
@@ -1150,15 +1155,15 @@ id:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 'Formulir mengandung %{count} galat:'
-          other: 'Formulir mengandung %{count} galat:'
+          zero: 'Formulir mengandung %{count} kesalahan:'
+          other: 'Formulir mengandung %{count} kesalahan:'
       error_pages:
         #original_hash: 1042478
         500_error: 'Mohon maaf, ada yang tidak beres.'
         #original_hash: d815249
         500_contact: >-
-          Jika Anda melapor galat ini kepada Tim Perangkat Lunak, harap sebutkan
-          ID Permintaan
+          Jika Anda melapor kesalahan ini kepada Tim Perangkat Lunak, harap
+          sebutkan ID Permintaan
         #original_hash: b61e305
         400_error: Laman yang Anda inginkan tidak tersedia.
         #original_hash: 8b309f5
@@ -1170,7 +1175,7 @@ id:
         help:
           #original_hash: 95c10ec
           https_info: HTTPS diperlukan kecuali yang menjadi host adalah "localhost"
-          #original_hash: 62a0113
+          #original_hash: 40b9d10
           scopes_html: >-
             Pisahkan Scope dengan spasi. Kosongkan untuk menggunakan Scope
             default. Lihat <a
@@ -1216,10 +1221,14 @@ id:
       about: Tentang WCA
       #original_hash: ed97787
       documents: Dokumen WCA
+      #original_hash: c9bae18
+      officers_and_board: Pengurus & Dewan WCA
       #original_hash: d8fd3e4
       delegates: Delegasi WCA
       #original_hash: 37b8fdc
       organizations: Organisasi Regional
+      #original_hash: 959d354
+      translators: Penerjemah
       #original_hash: d790b40
       faq: Pertanyaan yang Sering Diajukan
       #original_hash: cf1d2c9
@@ -1230,8 +1239,8 @@ id:
       education: Sumber daya pendidikan
       #original_hash: c66444f
       wca_live: WCA Live
-      #original_hash: a34b69f
-      contact: Informasi Kontak
+      #original_hash: b37456c
+      contact: Kontak
       #original_hash: 8e12c09
       speedcubing_history: Sejarah Speedcubing
       #original_hash: 4fa8cc8
@@ -1328,6 +1337,25 @@ id:
       disclaimer: Penyangkalan
       #original_hash: d561f1a
       find_us: Temukan kami
+  page:
+    translators:
+      #original_hash: 959d354
+      title: Penerjemah
+    officers_and_board:
+      #original_hash: c9bae18
+      title: Pengurus & Dewan WCA
+      #original_hash: 312e799
+      officers_description: >-
+        Pengurus WCA menangani tugas yang berkaitan dengan status non-profit
+        WCA. Pengurus ini dipilih oleh Dewan WCA. Direktur Eksekutif adalah
+        Direktur Utama WCA, Ketua Umum memimpin semua rapat Dewan, Sekretaris
+        memelihara dokumen organisasi, dan Bendahara mengelola masalah keuangan
+        WCA.
+      #original_hash: e0d37a2
+      board_description: >-
+        Dewan WCA bertanggung jawab dalam memimpin organisasi secara
+        keseluruhan, dan memenuhi segala kewajiban yang tidak dapat dipenuhi
+        oleh Tim, Komite, atau Majelis lain.
   homepage:
     #original_hash: 824d76b
     learn_more: Pelajari lebih lanjut
@@ -1346,7 +1374,7 @@ id:
       text: >-
         World Cube Association mengendalikan kompetisi puzzle mekanik yang
         dilakukan dengan memutar sebagian potongan puzzle, yang umumnya dikenal
-        sebagai 'twisty puzzle/rubik'.
+        sebagai 'twisty puzzle'.
     competitions:
       #original_hash: db98a68
       title: Kompetisi
@@ -1830,6 +1858,8 @@ id:
       board: Dewan Direktur WCA
       #original_hash: d79bd00
       officers: Pengurus WCA
+      #original_hash: 959d354
+      translators: Penerjemah
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2062,13 +2092,11 @@ id:
     #original_hash: cfc4865
     delete_registration: Hapus pendaftaran.
     #original_hash: e9ddc6e
-    will_open_html: 'Pendaftaran akan dibuka dalam <strong>%{days}</strong> pada pukul %{time}.'
+    will_open_html: 'Pendaftaran akan dibuka dalam <strong>%{days}</strong> pada %{time}.'
     #original_hash: 34eb009
-    will_close_html: 'Pendaftaran ditutup dalam <strong>%{days}</strong> pada pukul %{time}.'
+    will_close_html: 'Pendaftaran ditutup dalam <strong>%{days}</strong> pada %{time}.'
     #original_hash: dc8a520
-    closed_html: >-
-      Pendaftaran telah ditutup <strong>%{days}</strong> yang lalu pada pukul
-      %{time}.
+    closed_html: 'Pendaftaran telah ditutup <strong>%{days}</strong> yang lalu pada %{time}.'
     #original_hash: 2e7024d
     please_sign_in_past_html: >-
       %{sign_in} untuk melihat status pendaftaran Anda. Jika Anda belum memiliki
@@ -2173,9 +2201,9 @@ id:
         #original_hash: de0fc95
         payment_button: Lunasi biaya dengan Stripe
         #original_hash: f94d00f
-        ajax_error: Terjadi galat pada server WCA
-        #original_hash: e62c56c
-        stripe_error: Terjadi galat pada Stripe
+        ajax_error: Terjadi kesalahan pada server WCA
+        #original_hash: d9185e8
+        payment_service_error: Terjadi kesalahan pada pelayanan pembayaran
         #original_hash: 97f7359
         subtotal: Subtotal
       alerts:
@@ -2232,7 +2260,7 @@ id:
       import: Impor
       errors:
         #original_hash: 0ef547d
-        error: 'Galat mengimpor %{registration}: %{error}.'
+        error: 'Terjadi kesalahan dalam mengimpor %{registration}: %{error}.'
         #original_hash: 2f0950e
         missing_columns: 'Kolom tidak ditemukan: %{columns}.'
         #original_hash: 2454f20
@@ -2669,6 +2697,8 @@ id:
       from_date: Dari
       #original_hash: ae79ea1
       to_date: Sampai
+      #original_hash: 5be6985
+      reset_filters: Setel Ulang Filter
       #original_hash: 52c30f8
       past_from: 'Lampau dari %{year}'
       #original_hash: 7cff459
@@ -2829,7 +2859,7 @@ id:
         per_competitor: 'Estimasi Iuran WCA per kompetitor adalah %{estimate}'
         #original_hash: 1b67d84
         ajax_error: >-
-          Terjadi galat pada estimasi Iuran, kemungkinan dikarenakan tidak
+          Terjadi kesalahan pada estimasi Iuran, kemungkinan dikarenakan tidak
           adanya nilai tukar untuk mata uang yang dipilih.
       labels:
         admin:
@@ -2976,8 +3006,9 @@ id:
           main_event_id: Cabang utama
         #original_hash: d7020f4
         remarks: Catatan
-        #original_hash: c305010
-        clone_tabs: Saya ingin menduplikasi semua tab serta informasi tambahannya
+        cloning:
+          #original_hash: c305010
+          clone_tabs: Saya ingin menduplikasi semua tab dan juga dengan informasi tambahan
       hints:
         admin:
           #original_hash: da39a3e
@@ -3213,8 +3244,9 @@ id:
           Beberapa informasi tambahan yang ingin Anda sampaikan ke WCAT.
           Contohnya, jika ada hal yang Anda masih ragu, atau jika ada permintaan
           khusus kepada WCAT. Mohon isi dengan Bahasa Inggris!
-        #original_hash: da39a3e
-        clone_tabs: ''
+        cloning:
+          #original_hash: da39a3e
+          clone_tabs: ''
       choices:
         guests_enabled:
           #original_hash: cb8809d
@@ -3368,6 +3400,8 @@ id:
       no_date_yet: Anda belum memasukkan tanggal untuk kompetisi ini.
       #original_hash: 82a95d2
       no_location_yet: Anda belum memasukkan lokasi untuk kompetisi ini.
+      #original_hash: 6def491
+      save_first: Harap simpan kompetisi ini sebelum ditambahkan ke dalam Rangkaian.
       #original_hash: 709a232
       name: Nama
       #original_hash: adc24b7
@@ -3590,7 +3624,7 @@ id:
       #original_hash: ad8919a
       event: Cabang
       #original_hash: ec7b598
-      round: Ronde
+      round: Babak
       #original_hash: 709a232
       name: Nama
       rank:
@@ -3777,7 +3811,7 @@ id:
       #original_hash: 18d1326
       account_disconnected_success: 'Berhasil memutuskan akun %{provider} Anda.'
       #original_hash: 6b934e2
-      account_disconnected_failure: 'Terjadi galat pada saat memutuskan akun %{provider}.'
+      account_disconnected_failure: 'Terjadi kesalahan pada saat memutuskan akun %{provider}.'
       #original_hash: 340bba4
       account_not_connected: >-
         Terjadi masalah dan kami tidak dapat menghubungkan akun %{provider}
@@ -3788,7 +3822,7 @@ id:
       confirm_account_disconnect: >-
         Apakah Anda yakin untuk memutuskan akun %{provider}? Hal ini tidak dapat
         dibatalkan.
-      #original_hash: 0be9f82
+      #original_hash: ddea6cf
       supported_currency_warning: >-
         Pastikan bahwa mata uang yang Anda pilih didukung oleh integrasi
         pembayaran yang Anda pilih! Mata uang yang didukung tergantung negara di
@@ -3966,7 +4000,7 @@ id:
       #original_hash: 41948b9
       success: Terima kasih atas pesan Anda. Kami akan menghubungi Anda segera!
       #original_hash: 8e3a9da
-      delivery_error: Galat saat mengirim pesan.
+      delivery_error: Terjadi kesalahan saat mengirim pesan.
   faq:
     #original_hash: d790b40
     title: Pertanyaan yang Sering Diajukan
@@ -4113,11 +4147,11 @@ id:
           #original_hash: 890d879
           '1': >-
             Setelah kompetisi berakhir, Delegasi WCA harus memeriksa ulang semua
-            kertas hasil dan data orang untuk menghilangkan galat yang mungkin
-            terjadi. Setelah hal ini dilakukan, hasil akan dikirim ke Tim Hasil
-            WCA (WRT) yang berkewajiban untuk mengunggah hasil kompetisi dan
-            merawat basis data WCA. Pada akhirnya, WRT mengunggah hasil ke basis
-            data WCA sesegera mungkin.
+            kertas hasil dan data orang untuk menghilangkan kesalahan yang
+            mungkin terjadi. Setelah hal ini dilakukan, hasil akan dikirim ke
+            Tim Hasil WCA (WRT) yang berkewajiban untuk mengunggah hasil
+            kompetisi dan menjaga basis data WCA. Pada akhirnya, WRT mengunggah
+            hasil ke basis data WCA sesegera mungkin.
           #original_hash: daf1cb1
           '2': >-
             Tergantung besarnya kompetisi dan jadwal pribadi Delegasi, semua hal
@@ -4192,18 +4226,18 @@ id:
     who_we_are_content_html: >-
       <p>World Cube Association mengendalikan kompetisi puzzle mekanik yang
       dilakukan dengan memutar sebagian potongan puzzle, yang umumnya dikenal
-      sebagai 'twisty puzzle/rubik'. Twisty puzzle yang paling terkenal adalah
-      Kubus Rubik yang diciptakan oleh profesor Rubik dari Hungaria. Sebagian
-      twisty puzzle dipilih sebagai cabang resmi WCA.</p> <p>Seiring
-      berkembangnya WCA pada dekade belakangan ini, lebih dari 200 ribu orang
-      telah berkompetisi pada kompetisi kami. Terlepas dari perkembangan ini,
-      kami tetap menjadi organisasi yang hampir sepenuhnya digerakkan oleh
-      sukarelawan, dari organisasi lokal sampai Delegasi WCA bahkan sampai Dewan
-      WCA. Kami sangat berterima kasih kepada semua yang telah meluangkan
-      waktunya agar WCA dapat tetap berjalan. Dengan bantuan finansial lebih,
-      kami berharap agar dapat meningkatkan profesionalisme kami ke tingkat yang
-      jauh lebih baik pada kompetisi kami seiring lebih banyak diadakannya acara
-      di seluruh dunia.</p>
+      sebagai 'twisty puzzle'. Twisty puzzle yang paling terkenal adalah Kubus
+      Rubik yang diciptakan oleh profesor Rubik dari Hungaria. Sebagian twisty
+      puzzle dipilih sebagai cabang resmi WCA.</p> <p>Seiring berkembangnya WCA
+      pada dekade belakangan ini, lebih dari 200 ribu orang telah berkompetisi
+      pada kompetisi kami. Terlepas dari perkembangan ini, kami tetap menjadi
+      organisasi yang hampir sepenuhnya digerakkan oleh sukarelawan, dari
+      organisasi lokal sampai Delegasi WCA bahkan sampai Dewan WCA. Kami sangat
+      berterima kasih kepada semua yang telah meluangkan waktunya agar WCA dapat
+      tetap berjalan. Dengan bantuan finansial lebih, kami berharap agar dapat
+      meningkatkan profesionalisme kami ke tingkat yang jauh lebih baik pada
+      kompetisi kami seiring lebih banyak diadakannya acara di seluruh
+      dunia.</p>
     #original_hash: bccd8c5
     spirit: >-
       Semangat kami adalah bahwa orang-orang dari seluruh dunia bersenang-senang
@@ -4230,7 +4264,7 @@ id:
     whats_next_content_html: >-
       <p>World Cube Association telah memiliki lebih dari 200 ribu kompetitor
       unik dari 158 wilayah yang berbeda dan kami tidak berencana untuk berhenti
-      dalam waktu dekat. Komunitas rubik telah berkembang secara stabil sejak
+      dalam waktu dekat. Komunitas cubing telah berkembang secara stabil sejak
       WCA terbentuk pada 2004 dan kami ingin mendorong hal ini sampai masa
       mendatang dengan memperbanyak jangkauan kompetisi pada wilayah-wilayah
       baru. Di masa mendatang, kami berharap untuk lebih mendukung komunitas
@@ -4249,7 +4283,7 @@ id:
     #original_hash: 538a82f
     contributing_content_html: >-
       Anda dapat berdonasi dengan kartu kredit menggunakan Guidestar
-      %{here_credit},  atau Paypal %{here_paypal}. Jika Anda lebih memilih untuk
+      %{here_credit}, atau Paypal %{here_paypal}. Jika Anda lebih memilih untuk
       menulis cek, Anda dapat menuliskannya kepada:
     #original_hash: 2af9b71
     tax_deductible_note: Donasi merupakan objek pajak di Amerika Serikat.
@@ -4302,31 +4336,6 @@ id:
       senior_member: Anggota Senior
       #original_hash: e26c936
       leader: Pemimpin
-      officers:
-        #original_hash: d79bd00
-        name: Pengurus WCA
-        #original_hash: 312e799
-        description: >-
-          Pengurus WCA menangani tugas yang berkaitan dengan status non-profit
-          WCA. Pengurus-pengurus ini dipilih oleh Dewan WCA. Direktur Eksekutif
-          adalah Pejabat Tertinggi Eksklusif (CEO) WCA, Ketua memimpin semua
-          rapat Dewan, Sekretaris memelihara dokumen-dokumen organisasi, dan
-          Bendahara mengatur perihal keuangan WCA.
-      chair:
-        #original_hash: de34439
-        name: Ketua WCA
-      executive_director:
-        #original_hash: 7d405ff
-        name: Direktur Eksekutif WCA
-      secretary:
-        #original_hash: 1dd4a07
-        name: Sekretaris WCA
-      vice_chair:
-        #original_hash: 0388b19
-        name: Wakil Ketua WCA
-      treasurer:
-        #original_hash: 75e65d9
-        name: Bendahara WCA
       users:
         #original_hash: 57bbaad
         profile: 'Profil %{user_name}'
@@ -4453,9 +4462,6 @@ id:
       operations_html: 'Tugas harian dijalankan oleh %{committees_and_teams} WCA.'
       #original_hash: 0e7a036
       teams_committees: Tim dan Komite
-      probation:
-        #original_hash: 1dd6e3b
-        name: Delegasi dalam Masa Percobaan
       wst_admin:
         #original_hash: d4112d2
         name: Admin perangkat lunak
@@ -4466,7 +4472,7 @@ id:
         memantau kompetisi atas nama WCA. Delegasi WCA bertanggung jawab dalam
         memastikan seluruh kompetisi WCA dijalankan sesuai misi, regulasi, dan
         semangat WCA. WCA membedakan <strong>Delegasi Senior</strong>,
-        <strong>Delegate Regional</strong>, <strong>Delegasi Tetap</strong>,
+        <strong>Delegasi Regional</strong>, <strong>Delegasi Tetap</strong>,
         <strong>Delegasi Junior</strong>, dan <strong>Delegasi
         Pelatihan</strong>%{see_link}.</p> <p>Sebagai tugas tambahan Delegasi
         WCA, Delegasi Senior atau Delegasi Regional bertanggung jawab dalam
@@ -4619,136 +4625,6 @@ id:
     delete:
       #original_hash: 6588652
       confirm_delete: Apakah Anda yakin untuk menghapus permohonan Organisasi Regional ini?
-  contact:
-    #original_hash: a34b69f
-    title: Informasi Kontak
-    #original_hash: b5c2eaa
-    info_alert_html: 'Sebelum menghubungi tim manapun pada halam ini, harap lihat %{link} kami!'
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      Untuk pertanyaan, komentar, dan saran tentang situs web, gunakan <a
-      href='/contact/website'>form kontak</a> ini. Untuk pertanyaan seputar
-      wilayah atau kompetisi secara spesifik, harap hubungi %{link} lokal Anda.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Komite dan Tim</u>
-    #original_hash: 1cb449c
-    members: Anggota
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        World Cube Association dipimpin oleh Dewan WCA. Board bertanggung jawab
-        dalam kepentingan umum dan organisasi WCA secara menyeluruh.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        WCT bertugas untuk memantau dan mendukung komunikasi antara WCA dengan
-        komunitas dan khalayak umum. WCT perlu dihubungi jika Anda punya
-        pertanyaan umum terkait WCA atau media sosial mereka.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WDC menyelidiki berbagai situasi dan mengajukan solusi, termasuk hukuman
-        jika diperlukan. Di antara topik-topik lain, situasi ini mungkin
-        merupakan pelanggaran Regulasi WCA atau isu komunitas yang serius. Jika
-        Anda punya pengalaman terkait, jangan ragu untuk diskusi dengan komite
-        ini.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WDPC bertanggung jawab dan bertugas untuk meriset, menciptakan,
-        mengimplementasi, mengatur, dan melaksanakan seluruh kebijakan dan
-        kontrak Keamanan Data WCA dengan Prosesor Data eksternal dari Data WCA,
-        dan mengatur tugas yang berkaitan dengan Keamanan Data.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WRC memegang semua isu terkait pengajuan, peningkatan, dan pengembangan
-        Regulasi WCA. WRC mendukung Delegasi WCA dalam segala bentuk masalah
-        prosedural yang terjadi pada kompetisi dan memberi tindakan pada insiden
-        yang belum terpecahkan dan belum ditangani. Secara teratur, WRC
-        mempublikasi laporan internal WCA untuk membantu semua Delegasi WCA dan
-        meningkatkan pengetahuan mereka akan Regulasi. Jika Anda ingin menjadi
-        bagian dari pengembangan regulasi atau mengajukan perubahan, Anda dapat
-        menjangkau WRC dengan menghubungi via email atau diskusi di <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WRT bertanggung jawab dalam mengatur seluruh data di dalam basis data
-        WCA, khususnya hasil kompetisi dan data orang. WRT memposting hasil
-        kompetisi WCA ke situs web WCA setelah Delegasi WCA kompetisi tersebut
-        mengirimkannya. Selain memposting hasil kompetisi, Tim Hasil WCA juga
-        bertanggung jawab untuk mengoreksi hasil kompetisi jika diperlukan dan
-        mereka bertugas untuk mengadministrasi seluruh halaman profil WCA. Hal
-        ini termasuk, sebagai contoh, mengubah data pengguna, seperti tanggal
-        lahir, berdasarkan permintaan yang terverifikasi dan mengatur permintaan
-        foto profil.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WST bertanggung jawab dalam merawat dan mengatur semua perangkat lunak
-        dari WCA. WST juga mengembangkan perangkat lunak baru untuk berbagai
-        macam tugas terkait WCA jika dibutuhkan. Jika Anda memiliki saran dan
-        ide untuk pengembangan situs web ke depannya atau jika Anda ingin
-        melaporkan galat atau bug, jangan ragu untuk menghubungi mereka! Situs
-        web WCA merupakan proyek open source di <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        sehingga jika Anda tertarik untuk membantu pengembangan untuk WCA,
-        silakan kunjungi tautan tersebut.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        WFC bertanggung jawab dalam segala hal terkait WCA yang melibatkan
-        keuangan. Mereka mengatur keuangan dan rekening WCA sesuai dengan
-        proposal budget tahunan yang telah disetujui yang juga merupakan tugas
-        mereka untuk menyediakannya secara reguler.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Komite ini memiliki peranan dalam memastikan semua prosedur yang diikuti
-        oleh Staf WCA dan Staf Luar mematuhi Kode Etik.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Tim ini bertanggung jawab untuk membawakan tugas administratif kepada
-        Dewan Direktur WCA.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Komite ini memiliki peranan untuk mendukung dan meningkatkan kualitas
-        secara kontinu di dalam WCA, sama halnya dengan aplikasi standar
-        kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
-        tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
-        dan Staf Kompetisi.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Komite ini mempunyai peran untuk menyetujui dan mengumumkan Kompetisi
-        WCA dan memeriksa pengumuman kompetisi apakah sudah mengikuti standar
-        kualitas WCA.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Tim ini bertanggung jawab untuk mengembangkan dan mengatur Brand WCA,
-        mencari sponsor, membantu penyebaran Kelengkapan Kompetisi WCA, dan
-        memasarkan Merchandise WCA.
-    wsot:
-      #original_hash: 8f888d6
-      info_html: >-
-        Tim ini berperan untuk mengawasi dan mendukung pengakuan WCA sebagai
-        organisasi olahraga internasional.
-    wat:
-      #original_hash: fae6850
-      info_html: >-
-        Tim Arsip WCA adalah Komite Penasihat WCA. Tim ini berperan untuk
-        mengawasi dan mendukung perkembangan arsip organisasi.
-    #original_hash: f97a4f5
-    councils_html: Majelis
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Majelis bertanggung jawab untuk membangun dan menjaga komunikasi dua
-        arah antara Komunitas WCA dan Staf WCA.
   score_tools:
     #original_hash: 4fc2133
     title: Kakas perangkat lunak untuk kompetisi WCA
@@ -4952,16 +4828,17 @@ id:
         babak.
     step4:
       #original_hash: ed940d2
-      title: 'Langkah 4: Perbaiki segala galat yang dilaporkan oleh aplikasi'
+      title: 'Langkah 4: Perbaiki segala kesalahan yang dilaporkan oleh aplikasi'
       #original_hash: df2cf58
       content_html: >-
-        Hasil diperiksa untuk mencari kesalahan masukan data. Ronde yang
+        Hasil diperiksa untuk mencari kesalahan masukan data. Babak yang
         mempunyai kesalahan akan ditandai dengan ikon merah pada panel ikhtisar
         lembar.
       #original_hash: 7fbf6b8
       content2_html: >-
-        Saat memilih lembar dengan galat pada panel ikhtisar lembar, aplikasi
-        akan mengurutkan detail pada panel validasi galat di kiri-bawah.
+        Saat memilih lembar dengan kesalahan pada panel ikhtisar lembar,
+        aplikasi akan mengurutkan detail pada panel validasi kesalahan di
+        kiri-bawah.
       #original_hash: 0600502
       content3_html: >-
         Kesalahan dapat diperbaiki dengan cara membuka buku kerja pada aplikasi
