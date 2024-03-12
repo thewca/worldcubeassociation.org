@@ -40,6 +40,10 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
         if: steps.trigger-deployment.outputs.triggered == 'true'
+      - name: Get the SHA of the current branch/fork
+        shell: bash
+        run: |
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> "$GITHUB_ENV"
       - name: Build Sidekiq if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         uses: docker/build-push-action@v5
@@ -60,7 +64,7 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
           build-args: |
-            BUILD_TAG=${{ github.sha }}
+            BUILD_TAG=${{ env.SHORT_SHA }}
       - name: Deploy staging if triggered
         if: steps.trigger-deployment.outputs.triggered == 'true'
         run: |
