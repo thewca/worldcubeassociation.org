@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
   def change
     change_table :stripe_payment_intents do |t|
