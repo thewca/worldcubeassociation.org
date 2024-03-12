@@ -1,7 +1,7 @@
 <div>
   There are pending payments for this registration. Please wait until they are confirmed before paying again.
 
-  <% @registration.stripe_payment_intents.pending.each do |payment_intent| %>
+  <% @registration.payment_intents.pending.each do |payment_intent| %>
     <% alert_status = payment_intent.pending? ? :warning : :success %>
 
     <%= alert alert_status do %>

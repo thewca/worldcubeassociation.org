@@ -547,7 +547,7 @@ RSpec.describe "registrations" do
           }
           expect_error_to_be(response, I18n.t("registrations.payment_form.alerts.amount_too_low"))
           # Should not have created a payment intent in the first place, so assume `payment_intent` to be nil.
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to be_nil
           expect(registration.reload.outstanding_entry_fees).to eq(outstanding_fees_money)
         end
@@ -558,7 +558,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
@@ -590,7 +590,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: payment_amount,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
@@ -612,12 +612,12 @@ RSpec.describe "registrations" do
 
         it "insert a success in the stripe journal" do
           expect(StripeRecord.count).to eq 0
-          expect(StripePaymentIntent.count).to eq 0
+          expect(PaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -651,7 +651,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           # NOTE: The PI confirmation sends a redirect code where the user would _normally_ proceed with authentication,
           # but we cannot do that programmatically. So we just take the status quo as "stuck in SCA". (See also comment below)
@@ -677,11 +677,11 @@ RSpec.describe "registrations" do
 
         it "inserts a 'confirmation pending' event in the stripe journal" do
           expect(StripeRecord.count).to eq 0
-          expect(StripePaymentIntent.count).to eq 0
+          expect(PaymentIntent.count).to eq 0
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -715,7 +715,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           expect {
             # mimic the user clicking through the interface
@@ -744,7 +744,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           expect {
             # mimic the user clicking through the interface
@@ -773,7 +773,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           expect {
             # mimic the user clicking through the interface
@@ -802,7 +802,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           expect {
             # mimic the user clicking through the interface
@@ -831,7 +831,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
 
           expect {
             # mimic the user clicking through the interface
@@ -855,12 +855,12 @@ RSpec.describe "registrations" do
 
         it "records a failure in the stripe journal" do
           expect(StripeRecord.count).to eq 0
-          expect(StripePaymentIntent.count).to eq 0
+          expect(PaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -892,12 +892,12 @@ RSpec.describe "registrations" do
 
         it "recycles a PI when the previous payment was unsuccessful" do
           expect(StripeRecord.count).to eq 0
-          expect(StripePaymentIntent.count).to eq 0
+          expect(PaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -924,7 +924,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          new_payment_intents = registration.reload.stripe_payment_intents
+          new_payment_intents = registration.reload.payment_intents
           expect(new_payment_intents.size).to eq(1)
 
           # This _should_ be the same intent as the one we previously sent. Check that it really is.
@@ -936,12 +936,12 @@ RSpec.describe "registrations" do
 
         it "recycles a PI even when the amount was updated" do
           expect(StripeRecord.count).to eq 0
-          expect(StripePaymentIntent.count).to eq 0
+          expect(PaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -969,7 +969,7 @@ RSpec.describe "registrations" do
             # Pay some non-zero additional amount / donations.
             amount: registration.outstanding_entry_fees.cents * 2,
           }
-          new_payment_intents = registration.reload.stripe_payment_intents
+          new_payment_intents = registration.reload.payment_intents
           expect(new_payment_intents.size).to eq(1)
 
           # This _should_ be the same intent as the one we previously sent. Check that it really is.
@@ -982,12 +982,12 @@ RSpec.describe "registrations" do
 
         it "does NOT recycle a PI when the payment is successful" do
           expect(StripeRecord.count).to eq 0
-          expect(StripePaymentIntent.count).to eq 0
+          expect(PaymentIntent.count).to eq 0
 
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
@@ -1017,7 +1017,7 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
-          new_payment_intents = registration.reload.stripe_payment_intents
+          new_payment_intents = registration.reload.payment_intents
           expect(new_payment_intents.size).to eq(2)
 
           # This should _not_ be the same intent as the one we previously sent.

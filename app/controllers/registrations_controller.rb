@@ -505,7 +505,7 @@ class RegistrationsController < ApplicationController
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
-      stored_intent = stored_record.stripe_payment_intent
+      stored_intent = stored_record.payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
         if stored_intent.holder.is_a? Registration
@@ -536,7 +536,7 @@ class RegistrationsController < ApplicationController
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
-      stored_intent = stored_record.stripe_payment_intent
+      stored_intent = stored_record.payment_intent
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
@@ -554,7 +554,7 @@ class RegistrationsController < ApplicationController
     intent_secret = params[:payment_intent_client_secret]
 
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
-    stored_intent = stored_record.stripe_payment_intent
+    stored_intent = stored_record.payment_intent
 
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
@@ -652,7 +652,7 @@ class RegistrationsController < ApplicationController
       metadata: registration_metadata,
     }
 
-    registration.stripe_payment_intents
+    registration.payment_intents
                 .pending
                 .each do |intent|
       intent_account_id = intent.stripe_record.account_id
@@ -700,7 +700,7 @@ class RegistrationsController < ApplicationController
 
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
-    StripePaymentIntent.create!(
+    PaymentIntent.create!(
       holder: registration,
       stripe_record: stripe_record,
       client_secret: intent.client_secret,

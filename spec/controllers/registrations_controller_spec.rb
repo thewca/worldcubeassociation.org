@@ -851,7 +851,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
             id: registration.id,
             amount: registration.outstanding_entry_fees.cents,
           }
-          payment_intent = registration.reload.stripe_payment_intents.first
+          payment_intent = registration.reload.payment_intents.first
           Stripe::PaymentIntent.confirm(
             payment_intent.stripe_id,
             { payment_method: 'pm_card_visa' },
