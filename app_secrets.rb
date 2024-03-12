@@ -49,9 +49,9 @@ AppSecrets = SuperConfig.new do
     vault :STRIPE_API_KEY
     vault :OTP_ENCRYPTION_KEY
     vault :STRIPE_CLIENT_ID
-    vault :PAYPAL_CLIENT_ID, :string
-    vault :PAYPAL_CLIENT_SECRET, :string
-    vault :PAYPAL_ATTRIBUTION_CODE, :string
+    vault :PAYPAL_CLIENT_ID
+    vault :PAYPAL_CLIENT_SECRET
+    vault :PAYPAL_ATTRIBUTION_CODE
     vault :DISCOURSE_SECRET
     vault :SURVEY_SECRET
     vault :ACTIVERECORD_PRIMARY_KEY
