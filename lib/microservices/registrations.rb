@@ -43,10 +43,10 @@ module Microservices
       end
     end
 
-    def self.registrations_by_user(user_id)
+    def self.registrations_by_user(user_id, cache: true)
       response = self.registration_connection.get(self.registrations_by_user_path(user_id))
 
-      self.cache_and_return response.body
+      cache ? self.cache_and_return(response.body) : response.body
     end
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
@@ -58,7 +58,7 @@ module Microservices
       response.body
     end
 
-    def self.registrations_by_competition(competition_id, status = nil, event_id = nil)
+    def self.registrations_by_competition(competition_id, status = nil, event_id = nil, cache: true)
       response = self.registration_connection.get(self.get_registrations_path(competition_id)) do |req|
         if status.present?
           req.params[:status] = status
@@ -69,7 +69,7 @@ module Microservices
         end
       end
 
-      self.cache_and_return response.body
+      cache ? self.cache_and_return(response.body) : response.body
     end
 
     def self.cache_and_return(ms_registrations)

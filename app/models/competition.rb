@@ -1533,7 +1533,7 @@ class Competition < ApplicationRecord
         # We deliberately don't go through the cached `microservice_registrations` table here, because then we
         # would need to separately check which of the cached registrations are accepted
         # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
-        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id)
+        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id, cache: false)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
         registered_user_ids = self.registrations
