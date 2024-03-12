@@ -719,7 +719,7 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "groups_metadata_boards" => {
+    "groups_metadata_board" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(

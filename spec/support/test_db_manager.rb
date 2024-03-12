@@ -11,6 +11,8 @@ class TestDbManager
     preferred_formats
     RoundTypes
     teams
+    user_groups
+    groups_metadata_board
   ).freeze
 
   def self.fill_tables

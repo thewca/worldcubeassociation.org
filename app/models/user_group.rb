@@ -115,6 +115,10 @@ class UserGroup < ApplicationRecord
     UserGroup.where(group_type: UserGroup.group_types[:translators])
   end
 
+  def self.board_group
+    UserGroup.board.first
+  end
+
   def senior_delegate
     if parent_group_id.nil?
       self.lead_user

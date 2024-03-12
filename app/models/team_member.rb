@@ -66,7 +66,7 @@ class TeamMember < ApplicationRecord
   end
 
   def board_role
-    board_group = UserGroup.board.first
+    board_group = UserGroup.board_group
     {
       id: board_group.group_type + "_" + self.id.to_s,
       start_date: start_date,
