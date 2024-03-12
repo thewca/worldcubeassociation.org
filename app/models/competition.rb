@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
+  include MicroserviceRegistrationHolder
+
   self.table_name = "Competitions"
 
   # We need this default order, tests rely on it.
@@ -617,7 +619,8 @@ class Competition < ApplicationRecord
              'inbox_persons',
              'announced_by_user',
              'cancelled_by_user',
-             'competition_payment_integrations'
+             'competition_payment_integrations',
+             'microservice_registrations'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1527,7 +1530,10 @@ class Competition < ApplicationRecord
       end
 
       if self.uses_new_registration_service?
-        accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', event.id)
+        # We deliberately don't go through the cached `microservice_registrations` table here, because then we
+        # would need to separately check which of the cached registrations are accepted
+        # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
+        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id, cache: false)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
         registered_user_ids = self.registrations

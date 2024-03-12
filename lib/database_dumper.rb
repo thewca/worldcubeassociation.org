@@ -642,6 +642,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "microservice_registrations" => :skip_all_rows,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,

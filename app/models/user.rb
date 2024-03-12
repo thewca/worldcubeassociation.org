@@ -4,6 +4,8 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
+  include MicroserviceRegistrationHolder
+
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
