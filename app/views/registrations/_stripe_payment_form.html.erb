@@ -20,7 +20,7 @@
     <%= f.input :payment_information, label: t("registrations.payment_form.labels.payment_information"), hint: false, wrapper_html: { id: 'payment-element-wrapper' } do %>
       <div id="payment-element"></div>
     <% end %>
-    <%= f.input :payment_service_error, label: t('registrations.payment_form.labels.payment_service_error'), hint: false, wrapper_html: { id: 'payment-service-error-wrapper', class: 'text-danger' } do %>
+    <%= f.input :payment_service_error, label: t('registrations.payment_form.labels.payment_service_error'), hint: false, wrapper_html: { id: 'stripe-error-wrapper', class: 'text-danger' } do %>
       <p class="form-control-static" id="stripe-sdk-error"></p>
     <% end %>
   </div>
