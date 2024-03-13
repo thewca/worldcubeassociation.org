@@ -5,8 +5,6 @@
 class PaymentIntent < ApplicationRecord
   belongs_to :holder, polymorphic: true
   belongs_to :payment_record, polymorphic: true
-  # belongs_to :stripe_record
-  # belongs_to :user # TODO: Give this an "as" alias - belongs_to :initiated_by
   belongs_to :initiated_by, class_name: 'User'
   belongs_to :confirmed_by, polymorphic: true, optional: true # TODO: Rename this to something like "confirmation_source" || this is about where the confirmation came from
   belongs_to :canceled_by, polymorphic: true, optional: true # TODO: Rename this to something like "confirmation_source" || this is about where the confirmation came from

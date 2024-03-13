@@ -655,7 +655,7 @@ class RegistrationsController < ApplicationController
     registration.payment_intents
                 .pending
                 .each do |intent|
-      intent_account_id = intent.stripe_record.account_id
+      intent_account_id = intent.payment_record.account_id
 
       if intent_account_id == account_id && !intent.started?
         # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
@@ -669,7 +669,7 @@ class RegistrationsController < ApplicationController
         updated_parameters = intent.parameters.deep_merge(payment_intent_args)
 
         # Update our own journals so that we know we changed something
-        intent.stripe_record.update!(
+        intent.payment_record.update!(
           parameters: updated_parameters,
           amount_stripe_denomination: stripe_amount,
           currency_code: currency_iso,
@@ -702,9 +702,9 @@ class RegistrationsController < ApplicationController
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
     PaymentIntent.create!(
       holder: registration,
-      stripe_record: stripe_record,
+      payment_record: stripe_record,
       client_secret: intent.client_secret,
-      user: current_user,
+      initiated_by: current_user,
     )
 
     render json: { client_secret: intent.client_secret }

@@ -1,31 +1,30 @@
 # frozen_string_literal: true
 
-class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
-  def change
-    change_table :stripe_payment_intents do |t|
-      t.rename :user_id, :initiated_by # Make the purpose of the user_id column more clear
+# class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
+#   def change
+#     change_table :stripe_payment_intents do |t|
+#       t.rename :user_id, :initiated_by_id # Make the purpose of the user_id column more clear
+#       t.rename :confirmed_by_id, :confirmation_source_id
+#       t.rename :confirmed_by_type, :confirmation_source_type
+#       t.rename :canceled_by_id, :cancellation_source_id
+#       t.rename :canceled_by_type, :cancellation_source_type
 
-      # Change the name of stripe_record_id to be used as the payment_record polymorphic association id column
-      t.string :payment_record_type # Add a type column for the :payment_record association
-      t.integer :payment_record_id
-    end
+#       t.string :payment_record_type
+#       t.integer :payment_record_id
+#     end
 
-    reversible do |direction|
-      direction.up do
-        StripePaymentIntent.update_all(payment_record_type: 'StripeRecord')
+#     reversible do |direction|
+#       direction.up do
+#         PaymentIntent.update_all(payment_record_type: 'StripeRecord')
 
-        StripePaymentIntent.find_each do |intent|
-          intent.update!(payment_record_id: intent.stripe_record_id)
-        end
-      end
+#         PaymentIntent.find_each do |intent|
+#           intent.update!(payment_record_id: intent.stripe_record_id)
+#         end
+#       end
+#     end
 
-      direction.down do
-        StripePaymentIntent.update_all(payment_record_type: nil, payment_record_id: nil)
-      end
-    end
+#     remove_column :stripe_payment_intents, :stripe_record_id, :integer
 
-    remove_column :stripe_payment_intents, :stripe_record_id
-
-    rename_table :stripe_payment_intents, :payment_intents
-  end
-end
+#     rename_table :stripe_payment_intents, :payment_intents
+#   end
+# end
