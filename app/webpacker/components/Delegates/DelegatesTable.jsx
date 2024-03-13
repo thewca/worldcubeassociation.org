@@ -2,22 +2,11 @@ import React, { useMemo } from 'react';
 import { Button, Table } from 'semantic-ui-react';
 import _ from 'lodash';
 import cn from 'classnames';
-import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { competitionsUrl } from '../../lib/requests/routes.js.erb';
 import UserBadge from '../UserBadge';
 
 const dasherize = (string) => _.kebabCase(string);
-
-const dateSince = (date) => {
-  if (!date) {
-    return null;
-  }
-  const now = DateTime.local();
-  const then = DateTime.fromISO(date);
-  const diff = now.diff(then, ['years', 'months', 'days']);
-  return Math.floor(diff.as('days'));
-};
 
 export default function DelegatesTable({
   delegates, isAdminMode, isAllLeadDelegates, isAllNonLeadDelegates,
@@ -94,7 +83,7 @@ export default function DelegatesTable({
                 <>
                   <Table.Cell>{delegate.metadata.first_delegated}</Table.Cell>
                   <Table.Cell>{delegate.metadata.last_delegated}</Table.Cell>
-                  <Table.Cell>{dateSince(delegate.metadata.last_delegated)}</Table.Cell>
+                  <Table.Cell>{delegate.date_since_last_delegated}</Table.Cell>
                   <Table.Cell>{delegate.metadata.total_delegated}</Table.Cell>
                   <Table.Cell href={competitionsUrl({
                     display: 'admin',
