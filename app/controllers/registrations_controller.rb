@@ -546,6 +546,7 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
+    puts 'in payment completion'
     registration = Registration.includes(:competition).find(params[:id])
     @competition = registration.competition
 

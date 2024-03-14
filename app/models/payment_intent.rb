@@ -38,9 +38,9 @@ class PaymentIntent < ApplicationRecord
     )
   end
 
-  def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
+  def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
     if payment_record_type == 'StripeRecord'
-      update_stripe_status_and_charges(api_intent, action_source, source_datetime)
+      update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
     elsif payment_record_type == 'PaypalRecord'
       raise 'Paypal is not enabled in production' if PaypalInterface.paypal_disabled?
     else
@@ -48,7 +48,7 @@ class PaymentIntent < ApplicationRecord
     end
   end
 
-  def update_stripe_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
+  def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
     ActiveRecord::Base.transaction do
       self.payment_record.update_status(api_intent)
       self.update!(error_details: api_intent.last_payment_error)
@@ -78,6 +78,12 @@ class PaymentIntent < ApplicationRecord
             # Only trigger outer update blocks for charges that are actually successful. This is reasonable
             # because we only ever trigger this block for PIs that are marked "successful" in the first place
             charge_successful = fresh_transaction.status == "succeeded"
+
+            if block_given?
+              puts "block given!"
+            else
+              puts "block not given"
+            end
 
             yield fresh_transaction if block_given? && charge_successful
           end
