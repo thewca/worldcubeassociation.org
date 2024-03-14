@@ -10,7 +10,7 @@ class PaymentIntent < ApplicationRecord
   belongs_to :cancellation_source, polymorphic: true, optional: true # TODO: Rename this to something like "confirmation_source" || this is about where the confirmation came from
 
   scope :pending, -> { where(confirmed_at: nil, canceled_at: nil) }
-  scope :started, -> { joins(:payment_record).where.not(payment_record: { status: 'requires_payment_method' }) }
+  # scope :started, -> { joins(:payment_record).where.not(payment_record: { status: 'requires_payment_method' }) }
   scope :processing, -> { started.merge(pending) }
 
   # TODO: Refactor this or move it into this class
