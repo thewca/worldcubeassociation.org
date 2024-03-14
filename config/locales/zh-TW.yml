@@ -1875,8 +1875,8 @@ zh-TW:
         payment_button: 用Stripe來付款
         #original_hash: f94d00f
         ajax_error: WCA伺服器錯誤
-        #original_hash: e62c56c
-        stripe_error: Stripe錯誤
+        #original_hash: d9185e8
+        payment_service_error: 付款服務出現錯誤
         #original_hash: 97f7359
         subtotal: 小計
       alerts:
