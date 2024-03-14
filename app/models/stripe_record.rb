@@ -25,7 +25,7 @@ class StripeRecord < ApplicationRecord
   }
 
   has_one :registration_payment, as: :receipt
-  has_one :payment_intent
+  has_one :payment_intent, as: :payment_record
 
   belongs_to :parent_transaction, class_name: "StripeRecord", optional: true
   has_many :child_transactions, class_name: "StripeRecord", inverse_of: :parent_transaction, foreign_key: :parent_transaction_id

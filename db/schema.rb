@@ -828,19 +828,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_122903) do
     t.text "error_details"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.integer "initiated_by"
+    t.integer "initiated_by_id"
     t.datetime "confirmed_at", precision: nil
-    t.string "confirmed_by_type"
-    t.bigint "confirmed_by_id"
+    t.string "confirmation_source_type"
+    t.bigint "confirmation_source_id"
     t.datetime "canceled_at", precision: nil
-    t.string "canceled_by_type"
-    t.bigint "canceled_by_id"
+    t.string "cancellation_source_type"
+    t.bigint "cancellation_source_id"
     t.string "payment_record_type"
     t.integer "payment_record_id"
-    t.index ["canceled_by_type", "canceled_by_id"], name: "index_stripe_payment_intents_on_canceled_by"
-    t.index ["confirmed_by_type", "confirmed_by_id"], name: "index_stripe_payment_intents_on_confirmed_by"
+    t.index ["cancellation_source_type", "cancellation_source_id"], name: "index_stripe_payment_intents_on_canceled_by"
+    t.index ["confirmation_source_type", "confirmation_source_id"], name: "index_stripe_payment_intents_on_confirmed_by"
     t.index ["holder_type", "holder_id"], name: "index_stripe_payment_intents_on_holder"
-    t.index ["initiated_by"], name: "fk_rails_2dbc373c0c"
+    t.index ["initiated_by_id"], name: "fk_rails_2dbc373c0c"
   end
 
   create_table "paypal_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1254,7 +1254,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_122903) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
-  add_foreign_key "payment_intents", "users", column: "initiated_by"
+  add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"

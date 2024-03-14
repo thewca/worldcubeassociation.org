@@ -66,12 +66,12 @@ class PaymentController < ApplicationController
       competition = payment_request.competition
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
-      transaction = payment_request.payment_intent
+      intent = payment_request.payment_intent
 
-      charges = transaction.stripe_record.child_transactions.charge.map { |t|
+      charges = intent.payment_record.child_records.charge.map { |t|
         {
           payment_id: t.id,
-          amount: t.amount_stripe_denomination - t.child_transactions.refund.sum(:amount_stripe_denomination),
+          amount: t.amount_stripe_denomination - t.child_records.refund.sum(:amount_stripe_denomination),
         }
       }
       render json: { charges: charges }, status: :ok
