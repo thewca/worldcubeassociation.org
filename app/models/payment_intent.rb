@@ -40,7 +40,7 @@ class PaymentIntent < ApplicationRecord
 
   def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
     if payment_record_type == 'StripeRecord'
-      update_stripe_status_and_charges(api_intent, action_source, source_datetime = DateTime.current)
+      update_stripe_status_and_charges(api_intent, action_source, source_datetime)
     elsif payment_record_type == 'PaypalRecord'
       raise 'Paypal is not enabled in production' if PaypalInterface.paypal_disabled?
     else
