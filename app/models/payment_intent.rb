@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
-# feeling cute might delete later
-
 class PaymentIntent < ApplicationRecord
   belongs_to :holder, polymorphic: true
   belongs_to :payment_record, polymorphic: true
-  belongs_to :initiated_by, class_name: 'User'
-  belongs_to :confirmation_source, polymorphic: true, optional: true # TODO: Rename this to something like "confirmation_source" || this is about where the confirmation came from
-  belongs_to :cancellation_source, polymorphic: true, optional: true # TODO: Rename this to something like "confirmation_source" || this is about where the confirmation came from
+  belongs_to :initiated_by, class_name: 'User' # For now only users can initiate payments - in future, this may become a polymorphic association
+  belongs_to :confirmation_source, polymorphic: true, optional: true
+  belongs_to :cancellation_source, polymorphic: true, optional: true
 
-  scope :pending, -> { where(confirmed_at: nil, canceled_at: nil) }
+  scope :pending_records, -> { where(confirmed_at: nil, canceled_at: nil) }
   # scope :started, -> { joins(:payment_record).where.not(payment_record: { status: 'requires_payment_method' }) }
   scope :processing, -> { started.merge(pending) }
 
@@ -21,6 +19,21 @@ class PaymentIntent < ApplicationRecord
   encrypts :client_secret, downcase: false
 
   serialize :error_details, coder: JSON
+
+  def self.started_records
+    started_stripe_records = StripeRecord.started
+    started_intents = []
+
+    started_stripe_records.find_each do |record|
+      started_intents << record.payment_intent
+    end
+
+    started_intents
+  end
+
+  def self.processing_records
+    # As we add more payment services, we'll need to add multiple statements
+  end
 
   def pending?
     self.confirmed_at.nil? && self.canceled_at.nil?

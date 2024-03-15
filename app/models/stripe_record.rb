@@ -18,6 +18,7 @@ class StripeRecord < ApplicationRecord
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
+  # TODO: Change this to record_types
   enum api_type: {
     payment_intent: "payment_intent",
     charge: "charge",
@@ -35,6 +36,8 @@ class StripeRecord < ApplicationRecord
   # We don't need the native JSON type on DB level, so we serialize in Ruby.
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
   serialize :parameters, coder: JSON
+
+  scope :started, -> { where.not(status: 'requires_payment_method') }
 
   def find_account_id
     self.account_id || parent_transaction&.find_account_id
