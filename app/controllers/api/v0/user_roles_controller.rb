@@ -95,7 +95,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:teams_committees]
+      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
           roles << team_member.role
         end

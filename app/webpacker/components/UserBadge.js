@@ -8,21 +8,6 @@ import I18n from '../lib/i18n';
 
 import '../stylesheets/user_badge.scss';
 
-/**
- * @param {{ leader: boolean, senior_member: boolean}} user
- * @returns {string[]}
- */
-export function subtextForMember(user) {
-  if (user.leader) {
-    return [I18n.t('about.structure.leader')];
-  }
-  if (user.senior_member) {
-    return [I18n.t('about.structure.senior_member')];
-  }
-
-  return [];
-}
-
 function UserBadge({
   user,
   subtexts = [],
