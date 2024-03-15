@@ -2,6 +2,12 @@
 
 require "rails_helper"
 
+# HTML 'select' dropdowns in SemUI are not actual <select> fields.
+# They are patched together as a combination of <div>s, so we have to write our custom find method.
+def previously_participated
+  all(:css, 'div#competitor_state>input.search').last
+end
+
 RSpec.feature "Sign up" do
   let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
   let!(:custom_delegate) { FactoryBot.create(:delegate) }
@@ -37,13 +43,13 @@ RSpec.feature "Sign up" do
       expect(page).to have_button("Sign up", disabled: true)
     end
 
-    it 'finds people by name' do
+    it 'finds people by name', js: true do
       visit "/users/sign_up"
 
       fill_in "Email", with: "jack@example.com"
       fill_in "user[password]", with: "wca"
       fill_in "user[password_confirmation]", with: "wca"
-      click_on "I have competed in a WCA competition."
+      previously_participated.fill_in with: "I have competed in a WCA competition.\n"
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
