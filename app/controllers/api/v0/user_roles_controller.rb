@@ -209,6 +209,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
             metadata: {
               status: 'leader',
             },
+            is_active: true,
           }
         end
       end
@@ -277,6 +278,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     return head :unauthorized unless current_user.can_edit_team?(original_group_id)
     if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
       status = params.require(:status)
+      if status == "leader"
+        old_leader = Team.find_by(id: original_group_id).leader
+        if old_leader.present?
+          old_leader.update!(end_date: Date.today)
+        end
+      end
       already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
       if already_existing_member.present?
         already_existing_member.update!(end_date: Date.today)
