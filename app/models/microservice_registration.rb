@@ -59,12 +59,6 @@ class MicroserviceRegistration < ApplicationRecord
     self.read_ms_data :event_ids
   end
 
-  def roles
-    return [] unless self.is_competing?
-
-    self.read_ms_data :roles
-  end
-
   def guests
     return 0 unless self.is_competing?
 
