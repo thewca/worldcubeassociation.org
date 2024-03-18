@@ -549,10 +549,11 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
 
   create_table "assignments", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "registration_id"
+    t.string "registration_type"
     t.bigint "schedule_activity_id"
     t.integer "station_number"
     t.string "assignment_code", null: false
-    t.index ["registration_id"], name: "index_assignments_on_registration_id"
+    t.index ["registration_id", "registration_type"], name: "index_assignments_on_registration_id_and_registration_type"
     t.index ["schedule_activity_id"], name: "index_assignments_on_schedule_activity_id"
   end
 
@@ -776,6 +777,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
   create_table "microservice_registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "competition_id"
     t.integer "user_id"
+    t.text "roles"
+    t.boolean "is_competing", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["competition_id", "user_id"], name: "index_microservice_registrations_on_competition_id_and_user_id", unique: true

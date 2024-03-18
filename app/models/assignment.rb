@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Assignment < ApplicationRecord
-  belongs_to :registration
+  belongs_to :registration, polymorphic: true
   belongs_to :schedule_activity
 
   validates :station_number, numericality: { only_integer: true }, allow_nil: true

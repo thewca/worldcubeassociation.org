@@ -4,19 +4,27 @@ class MicroserviceRegistration < ApplicationRecord
   belongs_to :competition, inverse_of: :microservice_registrations
   belongs_to :user, inverse_of: :microservice_registrations
 
+  has_many :assignments, as: :registration
+  has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+
+  serialize :roles, coder: YAML
+
   delegate :name, :email, to: :user
 
   attr_accessor :ms_registration
-  attr_writer :competing_status, :event_ids
+  attr_writer :competing_status, :event_ids, :guests, :comments, :administrative_notes
 
   def load_ms_model(ms_model)
     self.ms_registration = ms_model
 
     self.competing_status = ms_model['competing_status']
+    self.guests = ms_model['guests']
 
-    self.event_ids = ms_model['lanes']&.find do |lane|
-      lane['lane_name'] == 'competing'
-    end&.dig('lane_details', 'event_details')&.pluck('event_id')
+    competing_lane = ms_model['lanes']&.find { |lane| lane['lane_name'] == 'competing' }
+
+    self.event_ids = competing_lane&.dig('lane_details', 'event_details')&.pluck('event_id')
+    self.comments = competing_lane&.dig('lane_details', 'comment')
+    self.administrative_notes = competing_lane&.dig('lane_details', 'admin_comment')
   end
 
   def ms_loaded?
@@ -30,13 +38,45 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   def competing_status
+    # Treat non-competing registrations as accepted, see also `registration.rb`
+    return "accepted" unless self.is_competing?
+
     self.read_ms_data :competing_status
   end
 
   alias :status :competing_status
 
+  def wcif_status
+    return "deleted" if self.deleted?
+    return "pending" if self.pending?
+
+    self.competing_status
+  end
+
   def event_ids
+    return [] unless self.is_competing?
+
     self.read_ms_data :event_ids
+  end
+
+  def guests
+    return 0 unless self.is_competing?
+
+    self.read_ms_data :guests
+  end
+
+  def comments
+    # nil is not allowed here, see WCIF spec!
+    return '' unless self.is_competing?
+
+    self.read_ms_data :comments
+  end
+
+  def administrative_notes
+    # nil is not allowed here, see WCIF spec!
+    return '' unless self.is_competing?
+
+    self.read_ms_data :administrative_notes
   end
 
   def accepted?
@@ -45,5 +85,25 @@ class MicroserviceRegistration < ApplicationRecord
 
   def deleted?
     self.status == "cancelled"
+  end
+
+  def pending?
+    # WCIF interprets "pending" as "not approved to compete yet"
+    #   which is why these two statuses collapse into one.
+    self.status == "pending" || self.status == "waiting_list"
+  end
+
+  def to_wcif(authorized: false)
+    authorized_fields = {
+      "guests" => guests,
+      "comments" => comments || '',
+      "administrativeNotes" => administrative_notes || '',
+    }
+    {
+      "wcaRegistrationId" => id,
+      "eventIds" => event_ids.sort,
+      "status" => wcif_status,
+      "isCompeting" => is_competing?,
+    }.merge(authorized ? authorized_fields : {})
   end
 end
