@@ -45,7 +45,13 @@ class MicroserviceRegistration < ApplicationRecord
   end
 
   alias :status :competing_status
-  alias :wcif_status :competing_status
+
+  def wcif_status
+    return "deleted" if self.deleted?
+    return "pending" if self.pending?
+
+    self.competing_status
+  end
 
   def event_ids
     return [] unless self.is_competing?
@@ -85,6 +91,12 @@ class MicroserviceRegistration < ApplicationRecord
 
   def deleted?
     self.status == "cancelled"
+  end
+
+  def pending?
+    # WCIF interprets "pending" as "not approved to compete yet"
+    #   which is why these two statuses collapse into one.
+    self.status == "pending" || self.status == "waiting_list"
   end
 
   def to_wcif(authorized: false)
