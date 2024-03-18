@@ -34,11 +34,11 @@ ActiveRecord::Migration.maintain_test_schema!
 # To debug feature specs using apparition, set `Capybara.javascript_driver = :apparition_debug`
 # and then call `page.driver.debug` in your feature spec.
 Capybara.register_driver :apparition_debug do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: false, inspector: true, debug: true, headless: false)
+  Capybara::Apparition::Driver.new(app, inspector: true, debug: true, headless: false)
 end
 
 Capybara.register_driver :apparition do |app|
-  Capybara::Apparition::Driver.new(app, js_errors: false, headless: true)
+  Capybara::Apparition::Driver.new(app, js_errors: true, headless: true)
 end
 
 Capybara.javascript_driver = :apparition

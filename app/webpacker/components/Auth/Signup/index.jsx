@@ -3,7 +3,7 @@ import {
   Button, Card, CardHeader, Container, Form, FormField, Message,
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
-import { GOOGLE_RECAPTCHA_SITE_KEY } from '../../../lib/wca-data.js.erb';
+import { RECAPTCHA_PUBLIC_KEY } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import WcaSearch from '../../SearchWidget/WcaSearch';
 import { emailRegex } from '../../../lib/helpers/regex';
@@ -193,7 +193,7 @@ export default function Signup() {
             <FormField>
               <ReCAPTCHA
                 ref={recaptchaRef}
-                sitekey={GOOGLE_RECAPTCHA_SITE_KEY}
+                sitekey={RECAPTCHA_PUBLIC_KEY}
                 onChange={() => setCaptchaError(false)}
               />
               {captchaError && (

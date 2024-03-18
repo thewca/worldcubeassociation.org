@@ -57,14 +57,13 @@ AppSecrets = SuperConfig.new do
     vault :ACTIVERECORD_PRIMARY_KEY
     vault :ACTIVERECORD_DETERMINISTIC_KEY
     vault :ACTIVERECORD_KEY_DERIVATION_SALT
+    vault :RECAPTCHA_PUBLIC_KEY
     vault :RECAPTCHA_PRIVATE_KEY
-    vault :GOOGLE_RECAPTCHA_SITE_KEY
     vault :SECRET_KEY_BASE
     vault :STRIPE_PUBLISHABLE_KEY
     vault :AWS_ACCESS_KEY_ID
     vault :AWS_SECRET_ACCESS_KEY
     vault :STRIPE_WEBHOOK_SECRET
-    vault :RECAPTCHA_PUBLIC_KEY
     vault :CDN_AVATARS_DISTRIBUTION_ID
     vault :STAGING_PASSWORD
     vault :NEW_RELIC_LICENSE_KEY
@@ -97,7 +96,6 @@ AppSecrets = SuperConfig.new do
     optional :STRIPE_WEBHOOK_SECRET, :string, ''
     optional :RECAPTCHA_PUBLIC_KEY, :string, ''
     optional :RECAPTCHA_PRIVATE_KEY, :string, ''
-    optional :GOOGLE_RECAPTCHA_SITE_KEY, :string, ''
     optional :CDN_AVATARS_DISTRIBUTION_ID, :string, ''
     optional :STAGING_PASSWORD, :string, ''
     optional :SMTP_USERNAME, :string, ''
