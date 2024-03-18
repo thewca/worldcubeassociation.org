@@ -1663,6 +1663,7 @@ en:
       pdf:
         #context: <0> indicates an html tag for internationalizing in React, see https://docs.worldcubeassociation.org/guides/translating_the_website.html#using-react
         link: "As a <0>%{pdfLink}</0>"
+      info:
         download: "Download all of the competitions details."
       list:
         empty: "No matching Records found"
@@ -1672,10 +1673,6 @@ en:
         admin_note: "Admin Note"
       tabs:
         payment: "Payment"
-        more: "More"
-      fees:
-        none: "No Entry Fee"
-        guest_none: "Guests attend for free"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1693,15 +1690,13 @@ en:
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
       register:
         error: "Registration failed with error %{error}"
-        early_registration: "Registration is not open yet, but you can still register as a competition organizer or delegate."
+        early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           header: "Your Registration Status:"
-          accepted: "accepted"
-          pending: "pending"
           waiting: "Waiting List"
           cancelled: "cancelled"
         disclaimer: "Submission of Registration does not mean approval to compete"
