@@ -360,6 +360,7 @@ Rails.application.routes.draw do
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
+      get '/delegates/search-index' => 'api#delegates_search_index', as: :delegates_search_index
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
