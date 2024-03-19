@@ -8,6 +8,10 @@ def previously_participated
   all(:css, 'div#competitor_state>input.search').last
 end
 
+def delegate_to_handle_wca_id_claim
+  all(:css, 'div.user[delegate_id_to_handle_wca_id_claim]>input').last
+end
+
 RSpec.feature "Sign up" do
   let!(:person) { FactoryBot.create(:person_who_has_competed_once, dob: '1988-02-03') }
   let!(:custom_delegate) { FactoryBot.create(:delegate) }
@@ -53,16 +57,16 @@ RSpec.feature "Sign up" do
 
       # They have not selected a valid WCA ID yet, so don't show the birthdate verification
       # field.
-      expect(page).to have_selector("div.user_dob_verification", visible: :hidden)
+      expect(page).to_not have_selector("div.user_dob_verification")
 
-      fill_in_selectize "WCA ID", with: person.wca_id
+      delegate_to_handle_wca_id_claim.fill_in with: person.wca_id
 
       # Wait for select delegate area to load via ajax.
       expect(page.find("#select-nearby-delegate-area")).to have_content "In order to assign you your WCA ID"
 
       # Now that they've selected a valid WCA ID, make sure the birthdate
       # verification field is visible.
-      expect(page).to have_selector("div.user_dob_verification", visible: :visible)
+      expect(page).to have_selector("div.user_dob_verification")
 
       delegate = person.competitions.first.delegates.first
       choose("user_delegate_id_to_handle_wca_id_claim_#{delegate.id}")

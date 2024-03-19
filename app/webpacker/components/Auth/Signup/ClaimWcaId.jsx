@@ -63,7 +63,7 @@ function ClaimWcaId() {
     if (manualDelegateSelection) {
       setDelegateToVerify(null);
     }
-  }, [manualDelegateSelection]);
+  }, [manualDelegateSelection, setDelegateToVerify]);
 
   return (
     // DatePicker inside semantic FormField works with proper CSS only if it's inside semantic Form.
