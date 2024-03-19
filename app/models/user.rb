@@ -69,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
+    Team.all_official.map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -506,10 +506,6 @@ class User < ApplicationRecord
     team_member?(Team.wst_admin)
   end
 
-  def wac_team?
-    team_member?(Team.wac)
-  end
-
   def staff?
     active_roles.any? { |role| UserRole.is_staff?(role) }
   end
@@ -630,7 +626,11 @@ class User < ApplicationRecord
     active_roles.select do |role|
       group = UserRole.group(role)
       group_type = UserRole.group_type(role)
-      if group_type == UserGroup.group_types[:delegate_regions]
+      if group_type == UserGroup.group_types[:councils]
+        if UserRole.is_lead?(role)
+          groups << group.id
+        end
+      elsif group_type == UserGroup.group_types[:delegate_regions]
         if UserRole.is_lead?(role) && UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
           groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
         end
@@ -1343,7 +1343,8 @@ class User < ApplicationRecord
   def team_roles
     roles = []
     self.current_team_members.each do |team_member|
-      if team_member.team.official_or_council?
+      team_member_group = team_member.team.group
+      if team_member_group.present? || team_member.team.official?
         roles << team_member.role
       end
     end

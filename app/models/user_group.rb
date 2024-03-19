@@ -24,6 +24,12 @@ class UserGroup < ApplicationRecord
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
 
+  # For teams which have groups migrated but not roles, this method will help to get the
+  # corresponding team to fetch the team_members.
+  def team
+    Team.find_by(friendly_id: self.metadata.friendly_id)
+  end
+
   def roles
     role_list = self.user_roles.to_a
     if self.delegate_regions?
@@ -31,6 +37,11 @@ class UserGroup < ApplicationRecord
     end
     if self.board?
       role_list.concat(Team.board.reload.current_members.map(&:board_role))
+    end
+    if self.councils?
+      TeamMember.where(team_id: self.team.id, end_date: nil).each do |team_member|
+        role_list << team_member.role
+      end
     end
     role_list
   end
@@ -117,6 +128,10 @@ class UserGroup < ApplicationRecord
 
   def self.board_group
     UserGroup.board.first
+  end
+
+  def self.council_group_wac
+    UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: 'wac').id, metadata_type: 'GroupsMetadataCouncils')
   end
 
   def senior_delegate

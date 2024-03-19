@@ -49,20 +49,6 @@ class Team < ApplicationRecord
     ]
   end
 
-  # Councils are recognized by Motion "20.2019.0":
-  #  https://documents.worldcubeassociation.org/documents/motions/20.2019.0%20-%20Councils.pdf
-  # Motions starting with "20.YYYY.N" define these councils:
-  #  https://www.worldcubeassociation.org/documents
-  def self.all_councils
-    [
-      Team.wac,
-    ]
-  end
-
-  def self.all_official_and_councils
-    self.all_official + self.all_councils
-  end
-
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
   def self.c_all_by_friendly_id
     @@teams_by_friendly_id ||= nil
@@ -160,14 +146,6 @@ class Team < ApplicationRecord
     Team.all_official.include?(self)
   end
 
-  def council?
-    Team.all_councils.include?(self)
-  end
-
-  def official_or_council?
-    Team.all_official_and_councils.include?(self)
-  end
-
   def acronym
     friendly_id.upcase
   end
@@ -176,11 +154,19 @@ class Team < ApplicationRecord
     I18n.t("about.structure.#{friendly_id}.name")
   end
 
+  private def council_if_any
+    UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: self.friendly_id)&.id, metadata_type: 'GroupsMetadataCouncils')
+  end
+
+  def group
+    council_if_any
+  end
+
   def group_type
-    if official?
-      UserGroup.group_types[:teams_committees]
-    elsif council?
+    if council_if_any.present?
       UserGroup.group_types[:councils]
+    elsif official?
+      UserGroup.group_types[:teams_committees]
     end
   end
 
@@ -200,7 +186,7 @@ class Team < ApplicationRecord
 
   def self.changes_in_all_teams
     team_changes = []
-    all_teams = Team.all_official_and_councils
+    all_teams = Team.all_official + UserGroup.councils.map(&:team)
     all_teams.each do |team|
       current_team_changes = team.changes_in_team
       if !current_team_changes.empty?

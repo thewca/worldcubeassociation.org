@@ -124,6 +124,18 @@ class UserRole < ApplicationRecord
     end
   end
 
+  def self.discourse_user_group(role)
+    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
+    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
+    group = is_actual_role ? role.group : role[:group]
+    case group_type
+    when UserGroup.group_types[:councils]
+      group.metadata.friendly_id
+    else
+      nil
+    end
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     methods: %w[],
     only: %w[id start_date end_date],
