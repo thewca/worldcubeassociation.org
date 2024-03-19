@@ -94,7 +94,11 @@ class ApplicationController < ActionController::Base
 
     # For redirecting user to source after login - https://github.com/heartcombo/devise/wiki/How-To:-Redirect-back-to-current-page-after-sign-in,-sign-out,-sign-up,-update
     def storable_location?
-      request.get? && is_navigational_format? && !devise_controller? && !request.xhr?
+      request.get? && is_navigational_format? && !devise_controller? && !request.xhr? && !is_api_request?
+    end
+
+    def is_api_request?
+      request.fullpath.include?('/api/')
     end
 
     def store_user_location!

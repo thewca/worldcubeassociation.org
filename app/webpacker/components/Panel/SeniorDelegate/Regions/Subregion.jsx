@@ -12,6 +12,7 @@ import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupType } from '../../../../lib/helpers/status-objects';
+import RegionSelector from './RegionSelector';
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
@@ -51,12 +52,18 @@ export default function Subregion({ title, groupId }) {
     },
   ));
   const [openModalType, setOpenModalType] = useState(null);
+  const [delegateToChange, setDelegateToChange] = useState(null);
   const [formValues, setFormValues] = useState(initialValue);
   const [newDelegateUser, setNewDelegateUser] = useState(null);
   const [formError, setFormError] = useState(null);
   const { save, saving } = useSaveAction();
   const confirm = useConfirm();
   const error = delegatesFetchError || formError;
+
+  const setDelegateToChangeAndShowModal = (delegate) => {
+    setDelegateToChange(delegate);
+    setOpenModalType('changeRegion');
+  };
 
   const handleFormChange = (_, { name, value }) => setFormValues({ ...formValues, [name]: value });
 
@@ -110,6 +117,14 @@ export default function Subregion({ title, groupId }) {
     });
   };
 
+  const changeRegionAction = (delegate, newGroupId) => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.update(delegate.id), {
+        groupId: newGroupId,
+      }, sync, { method: 'PATCH' });
+    });
+  };
+
   if (loading || saving) return <Loading />;
   if (error) return <Errored />;
 
@@ -146,6 +161,9 @@ export default function Subregion({ title, groupId }) {
                   && <Button onClick={() => demoteDelegateAction(delegate)}>Demote</Button>}
                 {!isLead(delegate)
                   && <Button onClick={() => endDelegateRoleAction(delegate)}>End Role</Button>}
+                <Button onClick={() => setDelegateToChangeAndShowModal(delegate)}>
+                  Change Region
+                </Button>
               </Table.Cell>
             </Table.Row>
           ))}
@@ -186,6 +204,25 @@ export default function Subregion({ title, groupId }) {
             <Form.Button onClick={() => setOpenModalType(null)}>Cancel</Form.Button>
             <Form.Button type="submit">Save</Form.Button>
           </Form>
+        </Modal.Content>
+      </Modal>
+      <Modal
+        size="fullscreen"
+        onClose={() => setOpenModalType(null)}
+        open={openModalType === 'changeRegion'}
+      >
+        <Modal.Content>
+          <Header>Change Region</Header>
+          <RegionSelector
+            delegate={delegateToChange}
+            onRegionSelect={
+              (selectedRegionId) => {
+                changeRegionAction(delegateToChange, selectedRegionId);
+                setOpenModalType(null);
+              }
+            }
+            onCancel={() => setOpenModalType(null)}
+          />
         </Modal.Content>
       </Modal>
     </>

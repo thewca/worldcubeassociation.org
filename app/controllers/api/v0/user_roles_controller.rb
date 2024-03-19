@@ -95,7 +95,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       # migrated to the new system.
       group_type = group_id_of_old_system_to_group_type(group_id)
       original_group_id = group_id.split("_").last
-      if group_type == UserGroup.group_types[:teams_committees]
+      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
           roles << team_member.role
         end
@@ -209,6 +209,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
             metadata: {
               status: 'leader',
             },
+            is_active: true,
           }
         end
       end
@@ -277,6 +278,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     return head :unauthorized unless current_user.can_edit_team?(original_group_id)
     if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
       status = params.require(:status)
+      if status == "leader"
+        old_leader = Team.find_by(id: original_group_id).leader
+        if old_leader.present?
+          old_leader.update!(end_date: Date.today)
+        end
+      end
       already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
       if already_existing_member.present?
         already_existing_member.update!(end_date: Date.today)
@@ -370,10 +377,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     }
   end
 
+  # update method is written in a way that at a time, only one parameter can be changed. If multiple
+  # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
     id = params.require(:id)
 
     if id == UserRole::DELEGATE_ROLE_ID
+      # This is an exception because we are editing more than a value. But this code is anyway
+      # temporary, once we are done with migration, this code will be removed.
       user_id = params.require(:userId)
       delegate_status = params.require(:delegateStatus)
       region_id = params.require(:regionId)
@@ -391,17 +402,33 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
 
     if id.starts_with?('delegate-')
+      # This tempoarily supports the non-migrated Delegate changes from the new UI.
       user_id = id.split('delegate-').last
-      status = params[:status]
       user = User.find(user_id)
-      previous_value = user.delegate_status
-      new_value = status
 
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
+      if params.key?(:status)
+        status = params.require(:status)
+        changed_parameter = 'Status'
+        previous_value = user.delegate_status
+        new_value = status
 
-      user.update!(delegate_status: status)
-      RoleChangeMailer.notify_role_change(user.delegate_role, current_user, 'Status', previous_value, new_value).deliver_later
+        return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
 
+        user.update!(delegate_status: status)
+      elsif params.key?(:groupId)
+        group_id = params.require(:groupId)
+        changed_parameter = 'Delegate Region'
+        previous_value = UserGroup.find(user.region_id).name
+        new_value = UserGroup.find(group_id).name
+
+        return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id) && current_user.has_permission?(:can_edit_groups, group_id)
+
+        user.update!(region_id: group_id)
+      else
+        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+      end
+
+      RoleChangeMailer.notify_role_change(user.delegate_role, current_user, changed_parameter, previous_value, new_value).deliver_later
       return render json: {
         success: true,
       }

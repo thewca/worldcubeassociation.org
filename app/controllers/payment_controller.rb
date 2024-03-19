@@ -9,8 +9,8 @@ class PaymentController < ApplicationController
       competition = Competition.find(competition_id)
       return render status: :bad_request, json: { error: "Competition doesn't use new Registration Service" } unless competition.uses_new_registration_service?
 
-      stripe_transaction = StripeTransaction.find(payment_id)
-      secret = stripe_transaction.stripe_payment_intent.client_secret
+      stripe_record = StripeRecord.find(payment_id)
+      secret = stripe_record.stripe_payment_intent.client_secret
       render json: { stripe_publishable_key: AppSecrets.STRIPE_PUBLISHABLE_KEY,
                      connected_account_id: competition.payment_account_for(:stripe).account_id,
                      client_secret: secret }
@@ -32,7 +32,7 @@ class PaymentController < ApplicationController
       intent_id = params[:payment_intent]
       intent_secret = params[:payment_intent_client_secret]
 
-      stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
+      stored_transaction = StripeRecord.find_by(stripe_id: intent_id)
       stored_intent = stored_transaction.stripe_payment_intent
 
       return redirect_to Microservices::Registrations.competition_register_path(competition.id, "secret_invalid") unless stored_intent.client_secret == intent_secret
@@ -68,7 +68,7 @@ class PaymentController < ApplicationController
 
       transaction = payment_request.stripe_payment_intent
 
-      charges = transaction.stripe_transaction.child_transactions.charge.map { |t|
+      charges = transaction.stripe_record.child_transactions.charge.map { |t|
         {
           payment_id: t.id,
           amount: t.amount_stripe_denomination - t.child_transactions.refund.sum(:amount_stripe_denomination),
@@ -91,7 +91,7 @@ class PaymentController < ApplicationController
     return render json: { error: "no_stripe" } unless competition.using_payment_integrations?
     return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
-    charge = StripeTransaction.find(payment_id)
+    charge = StripeRecord.find(payment_id)
 
     return render json: { error: "invalid_transaction" } unless charge.present?
 
@@ -103,7 +103,7 @@ class PaymentController < ApplicationController
     return render json: { error: "refund_zero" } if refund_amount < 0
 
     currency_iso = competition.currency_code
-    stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
+    stripe_amount = StripeRecord.amount_to_stripe(refund_amount, currency_iso)
 
     refund_args = {
       charge: charge.stripe_id,
@@ -117,7 +117,7 @@ class PaymentController < ApplicationController
       stripe_account: account_id,
     )
 
-    refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
+    refund_receipt = StripeRecord.create_from_api(refund, refund_args, account_id)
     refund_receipt.update!(parent_transaction: charge)
 
     begin

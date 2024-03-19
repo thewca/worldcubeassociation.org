@@ -4,6 +4,8 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
+  include MicroserviceRegistrationHolder
+
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
@@ -1342,7 +1344,7 @@ class User < ApplicationRecord
   end
 
   def can_access_leader_panel?
-    admin? || leader_of_any_official_team?
+    admin? || active_roles.any? { |role| UserRole.is_lead?(role) }
   end
 
   def can_access_senior_delegate_panel?

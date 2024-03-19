@@ -642,6 +642,20 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "microservice_registrations" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          user_id
+          roles
+          is_competing
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -850,6 +864,7 @@ module DatabaseDumper
         copy: %w(
           id
           registration_id
+          registration_type
           schedule_activity_id
           station_number
           assignment_code
@@ -857,7 +872,7 @@ module DatabaseDumper
       ),
     }.freeze,
     "paypal_records" => :skip_all_rows,
-    "stripe_transactions" => :skip_all_rows,
+    "stripe_records" => :skip_all_rows,
     "stripe_payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,

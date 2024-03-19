@@ -446,7 +446,7 @@ class RegistrationsController < ApplicationController
     ruby_denomination = params.require(:amount)
     currency_iso = params.require(:currency_iso)
 
-    stripe_amount = StripeTransaction.amount_to_stripe(ruby_denomination, currency_iso.downcase)
+    stripe_amount = StripeRecord.amount_to_stripe(ruby_denomination, currency_iso.downcase)
 
     ruby_money = Money.new(ruby_denomination, currency_iso)
     human_amount = helpers.format_money(ruby_money)
@@ -489,14 +489,14 @@ class RegistrationsController < ApplicationController
     audit_event = StripeWebhookEvent.create_from_api(event)
 
     stripe_intent = event.data.object # contains a polymorphic type that depends on the event
-    stored_transaction = StripeTransaction.find_by(stripe_id: stripe_intent.id)
+    stored_record = StripeRecord.find_by(stripe_id: stripe_intent.id)
 
     if StripeWebhookEvent::HANDLED_EVENTS.include?(event.type)
-      if stored_transaction.nil?
+      if stored_record.nil?
         logger.error "Stripe webhook reported event on entity #{stripe_intent.id} but we have no matching transaction."
         return head :not_found
       else
-        audit_event.update!(stripe_transaction: stored_transaction, handled: true)
+        audit_event.update!(stripe_record: stored_record, handled: true)
       end
     end
 
@@ -505,7 +505,7 @@ class RegistrationsController < ApplicationController
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
-      stored_intent = stored_transaction.stripe_payment_intent
+      stored_intent = stored_record.stripe_payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
         if stored_intent.holder.is_a? Registration
@@ -536,7 +536,7 @@ class RegistrationsController < ApplicationController
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
-      stored_intent = stored_transaction.stripe_payment_intent
+      stored_intent = stored_record.stripe_payment_intent
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
@@ -553,8 +553,8 @@ class RegistrationsController < ApplicationController
     intent_id = params[:payment_intent]
     intent_secret = params[:payment_intent_client_secret]
 
-    stored_transaction = StripeTransaction.find_by(stripe_id: intent_id)
-    stored_intent = stored_transaction.stripe_payment_intent
+    stored_record = StripeRecord.find_by(stripe_id: intent_id)
+    stored_intent = stored_record.stripe_payment_intent
 
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
@@ -585,7 +585,7 @@ class RegistrationsController < ApplicationController
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_transaction.status
+    case stored_record.status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
     when 'requires_action'
@@ -642,7 +642,7 @@ class RegistrationsController < ApplicationController
     }
 
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
-    stripe_amount = StripeTransaction.amount_to_stripe(amount, currency_iso)
+    stripe_amount = StripeRecord.amount_to_stripe(amount, currency_iso)
 
     payment_intent_args = {
       amount: stripe_amount,
@@ -655,7 +655,7 @@ class RegistrationsController < ApplicationController
     registration.stripe_payment_intents
                 .pending
                 .each do |intent|
-      intent_account_id = intent.stripe_transaction.account_id
+      intent_account_id = intent.stripe_record.account_id
 
       if intent_account_id == account_id && !intent.started?
         # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
@@ -669,7 +669,7 @@ class RegistrationsController < ApplicationController
         updated_parameters = intent.parameters.deep_merge(payment_intent_args)
 
         # Update our own journals so that we know we changed something
-        intent.stripe_transaction.update!(
+        intent.stripe_record.update!(
           parameters: updated_parameters,
           amount_stripe_denomination: stripe_amount,
           currency_code: currency_iso,
@@ -696,13 +696,13 @@ class RegistrationsController < ApplicationController
     )
 
     # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    stripe_transaction = StripeTransaction.create_from_api(intent, payment_intent_args, account_id)
+    stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, account_id)
 
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
     StripePaymentIntent.create!(
       holder: registration,
-      stripe_transaction: stripe_transaction,
+      stripe_record: stripe_record,
       client_secret: intent.client_secret,
       user: current_user,
     )
@@ -734,7 +734,7 @@ class RegistrationsController < ApplicationController
     end
 
     currency_iso = registration.competition.currency_code
-    stripe_amount = StripeTransaction.amount_to_stripe(refund_amount, currency_iso)
+    stripe_amount = StripeRecord.amount_to_stripe(refund_amount, currency_iso)
 
     # Backwards compatibility: We may at some point try to record a refund for a payment that was
     #   - created before the introduction of receipts
@@ -753,7 +753,7 @@ class RegistrationsController < ApplicationController
       stripe_account: account_id,
     )
 
-    refund_receipt = StripeTransaction.create_from_api(refund, refund_args, account_id)
+    refund_receipt = StripeRecord.create_from_api(refund, refund_args, account_id)
     refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object

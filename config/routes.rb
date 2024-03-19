@@ -230,7 +230,7 @@ Rails.application.routes.draw do
   get 'privacy' => 'static_pages#privacy'
   get 'score-tools' => 'static_pages#score_tools'
   get 'speedcubing-history' => 'static_pages#speedcubing_history'
-  get 'teams-committees' => 'static_pages#teams_committees'
+  get 'teams-committees-councils' => 'static_pages#teams_committees_councils'
   get 'tutorial' => redirect('/education', status: 302)
   get 'wca-workbook-assistant' => 'static_pages#wca_workbook_assistant'
   get 'wca-workbook-assistant-versions' => 'static_pages#wca_workbook_assistant_versions'
@@ -360,6 +360,7 @@ Rails.application.routes.draw do
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
+      get '/delegates/search-index' => 'api#delegates_search_index', as: :delegates_search_index
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
@@ -401,4 +402,7 @@ Rails.application.routes.draw do
       end
     end
   end
+
+  # Deprecated Links
+  get 'teams-committees' => redirect('teams-committees-councils')
 end

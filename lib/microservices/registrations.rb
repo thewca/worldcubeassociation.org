@@ -43,42 +43,22 @@ module Microservices
       end
     end
 
-    RegistrationConverter = Struct.new(:competition, :user, :status) do
-      def accepted?
-        status == "accepted"
-      end
-
-      def deleted?
-        status == "deleted"
-      end
-
-      def name
-        user.name
-      end
-
-      def email
-        user.email
-      end
-    end
-
-    def self.convert_registration(competition, user, registration_status)
-      RegistrationConverter.new(competition: competition, user: user, status: registration_status)
-    end
-
-    def self.registrations_by_user(user_id)
+    def self.registrations_by_user(user_id, cache: true)
       response = self.registration_connection.get(self.registrations_by_user_path(user_id))
-      response.body
+
+      cache ? self.cache_and_return(response.body) : response.body
     end
 
     def self.update_registration_payment(attendee_id, payment_id, iso_amount, currency_iso, status)
       response = self.registration_connection.post(self.update_payment_status_path) do |req|
         req.body = { attendee_id: attendee_id, payment_id: payment_id, iso_amount: iso_amount, currency_iso: currency_iso, payment_status: status }.to_json
       end
+
       # If we ever need the response body
       response.body
     end
 
-    def self.get_registrations(competition_id, status = nil, event_id = nil)
+    def self.registrations_by_competition(competition_id, status = nil, event_id = nil, cache: true)
       response = self.registration_connection.get(self.get_registrations_path(competition_id)) do |req|
         if status.present?
           req.params[:status] = status
@@ -89,7 +69,14 @@ module Microservices
         end
       end
 
-      response.body
+      cache ? self.cache_and_return(response.body) : response.body
+    end
+
+    def self.cache_and_return(ms_registrations)
+      ms_registrations.tap do |registrations|
+        db_registrations = registrations.map { |reg| reg.slice('competition_id', 'user_id') }
+        MicroserviceRegistration.upsert_all(db_registrations)
+      end
     end
   end
 end

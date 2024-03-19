@@ -45,6 +45,10 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
           group_type: UserGroup.group_types[:councils],
           is_hidden: false,
           is_active: true,
+          metadata: {
+            friendly_id: council.friendly_id,
+            email: council.email,
+          },
         }
       end
     end
@@ -58,6 +62,10 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
           group_type: UserGroup.group_types[:team_committee],
           is_hidden: false,
           is_active: true,
+          metadata: {
+            friendly_id: team_committee.friendly_id,
+            email: team_committee.email,
+          },
         }
       end
     end

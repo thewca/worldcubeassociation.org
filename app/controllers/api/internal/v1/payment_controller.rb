@@ -23,7 +23,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     }
 
     currency_iso = params.require(:currency_code)
-    stripe_amount = StripeTransaction.amount_to_stripe(iso_amount, currency_iso)
+    stripe_amount = StripeRecord.amount_to_stripe(iso_amount, currency_iso)
 
     payment_intent_args = {
       amount: stripe_amount,
@@ -50,17 +50,17 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     )
 
     # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    stripe_transaction = StripeTransaction.create_from_api(intent, payment_intent_args, account_id)
+    stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, account_id)
 
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
     StripePaymentIntent.create!(
       holder: holder,
-      stripe_transaction: stripe_transaction,
+      stripe_record: stripe_record,
       client_secret: intent.client_secret,
       user: payee,
     )
 
-    render json: { id: stripe_transaction.id }
+    render json: { id: stripe_record.id }
   end
 end

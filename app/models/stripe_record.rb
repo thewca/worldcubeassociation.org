@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class StripeTransaction < ApplicationRecord
+class StripeRecord < ApplicationRecord
   enum status: {
     requires_payment_method: "requires_payment_method",
     requires_confirmation: "requires_confirmation",
@@ -27,10 +27,10 @@ class StripeTransaction < ApplicationRecord
   has_one :registration_payment, as: :receipt
   has_one :stripe_payment_intent
 
-  belongs_to :parent_transaction, class_name: "StripeTransaction", optional: true
-  has_many :child_transactions, class_name: "StripeTransaction", inverse_of: :parent_transaction, foreign_key: :parent_transaction_id
+  belongs_to :parent_transaction, class_name: "StripeRecord", optional: true
+  has_many :child_transactions, class_name: "StripeRecord", inverse_of: :parent_transaction, foreign_key: :parent_transaction_id
 
-  has_many :stripe_webhook_events, inverse_of: :stripe_transaction, dependent: :nullify
+  has_many :stripe_webhook_events, inverse_of: :stripe_record, dependent: :nullify
 
   # We don't need the native JSON type on DB level, so we serialize in Ruby.
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
@@ -68,7 +68,7 @@ class StripeTransaction < ApplicationRecord
   end
 
   def money_amount
-    ruby_amount = StripeTransaction.amount_to_ruby(
+    ruby_amount = StripeRecord.amount_to_ruby(
       self.amount_stripe_denomination,
       self.currency_code,
     )
@@ -125,7 +125,7 @@ class StripeTransaction < ApplicationRecord
   end
 
   def self.create_from_api(api_transaction, parameters, account_id = nil)
-    StripeTransaction.create!(
+    StripeRecord.create!(
       api_type: api_transaction.object,
       parameters: parameters,
       stripe_id: api_transaction.id,
