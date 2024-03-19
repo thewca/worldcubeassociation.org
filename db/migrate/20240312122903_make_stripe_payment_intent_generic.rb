@@ -9,6 +9,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
       t.rename :canceled_by_id, :cancellation_source_id
       t.rename :canceled_by_type, :cancellation_source_type
 
+      t.string :wca_status
       t.string :payment_record_type
       t.integer :payment_record_id
     end
@@ -26,5 +27,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
     end
 
     remove_column :payment_intents, :stripe_record_id, :integer
+    rename_column :stripe_records, :status, :stripe_status
+    rename_column :paypal_records, :status, :paypal_status
   end
 end

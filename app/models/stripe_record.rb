@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 
 class StripeRecord < ApplicationRecord
-  enum status: {
+  # NOTE: Should the list items be
+  WCA_TO_STRIPE_STATUS_MAP = {
+    created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
+    started: %w[requires_confirmation],
+    pending: %w[pending requires_capture processing],
+    succeeded: %w[legacy_success succeeded],
+    failed: %w[legacy_failure failed canceled],
+  }.freeze
+
+  enum stripe_status: {
     requires_payment_method: "requires_payment_method",
     requires_confirmation: "requires_confirmation",
     requires_action: "requires_action",
@@ -54,7 +63,7 @@ class StripeRecord < ApplicationRecord
     end
 
     self.update!(
-      status: api_transaction.status,
+      stripe_status: api_transaction.status,
       error: stripe_error,
     )
   end
@@ -134,7 +143,7 @@ class StripeRecord < ApplicationRecord
       stripe_id: api_transaction.id,
       amount_stripe_denomination: api_transaction.amount,
       currency_code: api_transaction.currency,
-      status: api_transaction.status,
+      stripe_status: api_transaction.status,
       account_id: account_id,
     )
   end

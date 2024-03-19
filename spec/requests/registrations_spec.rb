@@ -638,7 +638,7 @@ RSpec.describe "registrations" do
           # Now we should have a confirmation after calling the return_url hook :)
           expect(payment_intent.confirmed_at).to_not be_nil
           expect(stripe_record).to_not be_nil
-          expect(stripe_record.status).to eq "succeeded"
+          expect(stripe_record.stripe_status).to eq "succeeded"
           metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
@@ -702,7 +702,7 @@ RSpec.describe "registrations" do
           # Now we should still wait for the confirmation because SCA hasn't been completed yet
           expect(payment_intent.confirmed_at).to be_nil
           expect(stripe_record).to_not be_nil
-          expect(stripe_record.status).to eq 'requires_action'
+          expect(stripe_record.stripe_status).to eq 'requires_action'
           metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name
         end
@@ -884,7 +884,7 @@ RSpec.describe "registrations" do
           # Now we should still wait for the confirmation because the card has been declined
           expect(payment_intent.confirmed_at).to be_nil
           expect(stripe_record).to_not be_nil
-          expect(stripe_record.status).to eq "requires_payment_method"
+          expect(stripe_record.stripe_status).to eq "requires_payment_method"
           expect(stripe_record.error).to_not be_nil
           metadata = stripe_record.parameters["metadata"]
           expect(metadata["competition"]).to eq competition.name

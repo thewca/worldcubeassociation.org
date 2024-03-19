@@ -835,6 +835,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_122903) do
     t.datetime "canceled_at", precision: nil
     t.string "cancellation_source_type"
     t.bigint "cancellation_source_id"
+    t.string "wca_status"
     t.string "payment_record_type"
     t.integer "payment_record_id"
     t.index ["cancellation_source_type", "cancellation_source_id"], name: "index_stripe_payment_intents_on_canceled_by"
@@ -845,7 +846,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_122903) do
 
   create_table "paypal_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "record_id"
-    t.string "status"
+    t.string "paypal_status"
     t.string "payload"
     t.integer "amount_in_cents"
     t.string "currency_code"
@@ -1065,14 +1066,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_122903) do
     t.text "parameters", null: false
     t.integer "amount_stripe_denomination"
     t.string "currency_code"
-    t.string "status", null: false
+    t.string "stripe_status", null: false
     t.text "error"
     t.string "account_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "parent_transaction_id"
     t.index ["parent_transaction_id"], name: "fk_rails_6ad225b020"
-    t.index ["status"], name: "index_stripe_records_on_status"
+    t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
 
   create_table "stripe_webhook_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|

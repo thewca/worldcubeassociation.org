@@ -586,7 +586,7 @@ class RegistrationsController < ApplicationController
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_record.status
+    case stored_record.stripe_status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
     when 'requires_action'

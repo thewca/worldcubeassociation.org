@@ -7,12 +7,11 @@ class PaymentIntent < ApplicationRecord
   belongs_to :confirmation_source, polymorphic: true, optional: true
   belongs_to :cancellation_source, polymorphic: true, optional: true
 
-  scope :pending_records, -> { where(confirmed_at: nil, canceled_at: nil) }
-  # scope :started, -> { joins(:payment_record).where.not(payment_record: { status: 'requires_payment_method' }) }
+  scope :pending, -> { where(wca_status: 'pending') }
   scope :processing, -> { started.merge(pending) }
 
   # TODO: Refactor this or move it into this class
-  delegate :stripe_id, :status, :parameters, :money_amount, :find_account_id, to: :payment_record
+  delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record
 
   # TODO: Should stripe secrets be stored here? Or on the record object?
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
@@ -90,7 +89,7 @@ class PaymentIntent < ApplicationRecord
 
             # Only trigger outer update blocks for charges that are actually successful. This is reasonable
             # because we only ever trigger this block for PIs that are marked "successful" in the first place
-            charge_successful = fresh_transaction.status == "succeeded"
+            charge_successful = fresh_transaction.stripe_status == "succeeded"
 
             if block_given?
               puts "block given!"
