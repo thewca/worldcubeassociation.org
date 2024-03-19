@@ -414,6 +414,8 @@ en:
       status:
         accepted: "Accepted"
         pending: "Pending"
+        cancelled: "Cancelled"
+        waiting_list: "On the Waiting List"
       type:
         report: "Report"
         article: "Article"
@@ -1668,11 +1670,6 @@ en:
       list:
         empty: "No matching Records found"
         spots_remaining: "; %{spots} spot(s) remaining"
-        waitlisted: "Waitlisted registrations"
-        comment: "Comment"
-        admin_note: "Admin Note"
-      tabs:
-        payment: "Payment"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
@@ -1697,8 +1694,6 @@ en:
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           header: "Your Registration Status:"
-          waiting: "Waiting List"
-          cancelled: "cancelled"
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
