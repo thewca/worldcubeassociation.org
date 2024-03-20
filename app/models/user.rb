@@ -630,9 +630,14 @@ class User < ApplicationRecord
     return "*" if can_edit_any_groups?
     groups = []
 
-    senior_delegate_roles.map do |role|
-      region = UserRole.group(role)
-      groups += [region.id, region.all_child_groups.map(&:id)].flatten.uniq
+    active_roles.select do |role|
+      group = UserRole.group(role)
+      group_type = UserRole.group_type(role)
+      if group_type == UserGroup.group_types[:delegate_regions]
+        if UserRole.is_lead?(role) && UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+          groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
+        end
+      end
     end
 
     # FIXME: Consider groups of other groupTypes as well.
@@ -1318,12 +1323,11 @@ class User < ApplicationRecord
 
   def team_roles
     roles = []
-    self.current_teams
-        .select { |team| team.official? || team.council? }
-        .each do |team|
-          team_membership_details = self.team_membership_details(team)
-          roles << team_membership_details.role
-        end
+    self.current_team_members.each do |team_member|
+      if team_member.team.official_or_council?
+        roles << team_member.role
+      end
+    end
     roles
   end
 

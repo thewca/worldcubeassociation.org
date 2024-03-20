@@ -275,7 +275,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   private def create_team_role(group_id, user_id)
     group_type = group_id_of_old_system_to_group_type(group_id)
     original_group_id = group_id.split("_").last
-    return head :unauthorized unless current_user.can_edit_team?(original_group_id)
+    return head :unauthorized unless current_user.can_edit_team?(Team.find_by(id: original_group_id))
     if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
       status = params.require(:status)
       if status == "leader"
@@ -446,7 +446,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       team = team_member.team
       status = params.require(:status)
 
-      return head :unauthorized unless current_user.can_edit_team?(team.id)
+      return head :unauthorized unless current_user.can_edit_team?(team)
 
       team_member.update!(end_date: Time.now)
       TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
@@ -513,7 +513,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         render status: :unprocessable_entity, json: { error: "Invalid group type" }
         return
       end
-      return head :unauthorized unless current_user.can_edit_team?(team_member.team.id)
+      return head :unauthorized unless current_user.can_edit_team?(team_member.team)
 
       if team_member.present?
         team_member.update!(end_date: Date.today)
