@@ -36,7 +36,7 @@ RSpec.describe StripeRecord do
   end
 
   describe 'enforce status consistency' do
-        shared_examples '#update StripeRecord to incompatible status' do |stripe_record_status, intent_status, new_stripe_status|
+    shared_examples '#update StripeRecord to incompatible status' do |stripe_record_status, intent_status, new_stripe_status|
       it 'fails' do
         stripe_record = FactoryBot.create(:stripe_record, stripe_status: stripe_record_status)
         FactoryBot.create(:payment_intent, payment_record: stripe_record, wca_status: intent_status)
