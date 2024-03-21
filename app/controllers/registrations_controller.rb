@@ -705,7 +705,7 @@ class RegistrationsController < ApplicationController
       payment_record: stripe_record,
       client_secret: intent.client_secret,
       initiated_by: current_user,
-      wca_status: stripe_record.determine_wca_status
+      wca_status: stripe_record.determine_wca_status,
     )
 
     render json: { client_secret: intent.client_secret }

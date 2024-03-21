@@ -39,8 +39,7 @@ RSpec.describe StripeRecord do
     shared_examples '#update StripeRecord to incompatible status' do |stripe_record_status, intent_status, new_stripe_status|
       it 'fails' do
         stripe_record = FactoryBot.create(:stripe_record, stripe_status: stripe_record_status)
-        intent = FactoryBot.create(:payment_intent, payment_record: stripe_record, wca_status: intent_status)
-        byebug
+        FactoryBot.create(:payment_intent, payment_record: stripe_record, wca_status: intent_status)
         stripe_record.assign_attributes(stripe_status: new_stripe_status)
         expect(stripe_record).not_to be_valid
       end
