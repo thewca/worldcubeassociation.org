@@ -87,7 +87,6 @@ RSpec.describe StripeRecord do
       it_behaves_like '#update StripeRecord to incompatible status', 'canceled', 'canceled', 'legacy_unknown'
     end
 
-
     # PaymentRecords can exist independent of PaymentIntents
     # PaymentIntents MUST have a PaymentRecord
     # The tests we need to do are:
