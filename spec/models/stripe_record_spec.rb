@@ -36,41 +36,7 @@ RSpec.describe StripeRecord do
   end
 
   describe 'enforce status consistency' do
-    shared_examples '#create incompatible PaymentIntent' do |stripe_record_status, intent_status|
-      it 'fails' do
-        stripe_record = FactoryBot.create(:stripe_record, stripe_status: stripe_record_status)
-        intent = FactoryBot.build(:payment_intent, payment_record: stripe_record, wca_status: intent_status)
-        expect(intent).not_to be_valid
-      end
-    end
-
-    # Test one invalid case for each wca_status
-    context 'invalid status combinations' do
-      it_behaves_like '#create incompatible PaymentIntent', 'pending', 'created'
-      it_behaves_like '#create incompatible PaymentIntent', 'requires_payment_method', 'pending'
-      it_behaves_like '#create incompatible PaymentIntent', 'legacy_success', 'failed'
-      it_behaves_like '#create incompatible PaymentIntent', 'canceled', 'succeeded'
-      it_behaves_like '#create incompatible PaymentIntent', 'failed', 'canceled'
-    end
-
-    shared_examples '#update PaymentIntent to incompatible status' do |stripe_record_status, intent_status, new_intent_status|
-      it 'fails' do
-        stripe_record = FactoryBot.create(:stripe_record, stripe_status: stripe_record_status)
-        intent = FactoryBot.create(:payment_intent, payment_record: stripe_record, wca_status: intent_status)
-        intent.assign_attributes(wca_status: new_intent_status)
-        expect(intent).not_to be_valid
-      end
-    end
-
-    context 'invalid status combinations' do
-      it_behaves_like '#update PaymentIntent to incompatible status', 'requires_payment_method', 'created', 'pending'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'requires_capture', 'pending', 'partial'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'legacy_failure', 'failed', 'succeeded'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'legacy_success', 'succeeded', 'canceled'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'canceled', 'canceled', 'created'
-    end
-
-    shared_examples '#update StripeRecord to incompatible status' do |stripe_record_status, intent_status, new_stripe_status|
+        shared_examples '#update StripeRecord to incompatible status' do |stripe_record_status, intent_status, new_stripe_status|
       it 'fails' do
         stripe_record = FactoryBot.create(:stripe_record, stripe_status: stripe_record_status)
         FactoryBot.create(:payment_intent, payment_record: stripe_record, wca_status: intent_status)

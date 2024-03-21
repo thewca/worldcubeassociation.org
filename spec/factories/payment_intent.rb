@@ -9,12 +9,14 @@ FactoryBot.define do
 
     trait :canceled do
       canceled_at { DateTime.now }
-      wca_status { 'failed' }
+      wca_status { 'canceled' }
+      payment_record { FactoryBot.create(:stripe_record, :payment_intent, stripe_status: 'canceled') }
     end
 
     trait :confirmed do
       confirmed_at { DateTime.now }
       wca_status { 'succeeded' }
+      payment_record { FactoryBot.create(:stripe_record, :payment_intent, stripe_status: 'succeeded') }
     end
 
     trait :not_started do
