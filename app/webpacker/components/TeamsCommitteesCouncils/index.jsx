@@ -49,7 +49,7 @@ export default function TeamsCommitteesCouncils() {
     return groupList[selectedGroupIndex];
   }, [groupList, hash, setHash]);
 
-  if (loading) return <Loading />;
+  if (loading || !activeGroup) return <Loading />;
   if (teamsCommitteesError || councilsError) return <Errored />;
 
   return (
