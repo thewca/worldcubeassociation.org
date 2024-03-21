@@ -59,6 +59,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
       payment_record: stripe_record,
       client_secret: intent.client_secret,
       initiated_by: payee,
+      wca_status: stripe_record.determine_wca_status
     )
 
     render json: { id: stripe_record.id }

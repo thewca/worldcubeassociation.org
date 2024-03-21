@@ -90,12 +90,6 @@ class PaymentIntent < ApplicationRecord
             # because we only ever trigger this block for PIs that are marked "successful" in the first place
             charge_successful = fresh_transaction.stripe_status == "succeeded"
 
-            if block_given?
-              puts "block given!"
-            else
-              puts "block not given"
-            end
-
             yield fresh_transaction if block_given? && charge_successful
           end
         end
@@ -114,6 +108,11 @@ class PaymentIntent < ApplicationRecord
         )
       end
     end
+  end
+
+  # Sets the wca_status field based on the status field of the associated PaymentRecord
+  def set_wca_status
+    self.wca_status = payment_record.determine_wca_status
   end
 
   private

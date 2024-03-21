@@ -546,7 +546,6 @@ class RegistrationsController < ApplicationController
   end
 
   def payment_completion
-    puts 'in payment completion'
     registration = Registration.includes(:competition).find(params[:id])
     @competition = registration.competition
 
@@ -706,6 +705,7 @@ class RegistrationsController < ApplicationController
       payment_record: stripe_record,
       client_secret: intent.client_secret,
       initiated_by: current_user,
+      wca_status: stripe_record.determine_wca_status
     )
 
     render json: { client_secret: intent.client_secret }

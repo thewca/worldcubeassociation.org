@@ -157,7 +157,6 @@ class Registration < ApplicationRecord
     receipt,
     user_id
   )
-    puts 'recording payment'
     registration_payments.create!(
       amount_lowest_denomination: amount_lowest_denomination,
       currency_code: currency_code,

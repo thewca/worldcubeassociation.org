@@ -50,6 +50,14 @@ class StripeRecord < ApplicationRecord
 
   scope :started, -> { where.not(status: 'requires_payment_method') }
 
+  def determine_wca_status
+    WCA_TO_STRIPE_STATUS_MAP.each do |key, values|
+      return key if values.include?(stripe_status)
+    end
+
+    raise Exception("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
+  end
+
   def find_account_id
     self.account_id || parent_transaction&.find_account_id
   end
@@ -64,10 +72,17 @@ class StripeRecord < ApplicationRecord
       stripe_error = api_transaction.failure_message
     end
 
-    self.update!(
+    self.assign_attributes(
       stripe_status: api_transaction.status,
       error: stripe_error,
     )
+
+    unless self.payment_intent.nil?
+      self.payment_intent.set_wca_status
+      self.payment_intent.save
+    end
+
+    self.save
   end
 
   def retrieve_stripe
@@ -154,6 +169,7 @@ class StripeRecord < ApplicationRecord
 
     def valid_status_combination
       # NOTE: Hack to get around payment_intent not returning anything at the moment - idk why??
+      # TODO: Refactor/Fix this
       intent = PaymentIntent.where(payment_record_type: 'StripeRecord', payment_record_id: id).first
       return if intent.nil?
 
