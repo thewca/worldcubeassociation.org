@@ -7,8 +7,10 @@ class PaymentIntent < ApplicationRecord
   belongs_to :confirmation_source, polymorphic: true, optional: true
   belongs_to :cancellation_source, polymorphic: true, optional: true
 
-  scope :pending, -> { where(wca_status: 'pending') }
-  scope :processing, -> { started.merge(pending) }
+  validate :valid_status_combination
+
+  scope :pending, -> { where(wca_status: :pending) }
+  scope :started, -> { where.not(wca_status: [:created]) }
 
   # TODO: Refactor this or move it into this class
   delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record
@@ -19,6 +21,15 @@ class PaymentIntent < ApplicationRecord
 
   serialize :error_details, coder: JSON
 
+  enum wca_status: {
+    created: 'created', # A record has been created on the payment provider's system (no payment action yet initiated by the user)
+    pending: 'pending', # The user is now attempting to pay, but has not reached a completion state yet
+    partial: 'partial', # Some but not all funds have been paid (eg, if the user has selected an instalment-based payment option)
+    failed: 'failed', # The payment did not succeed for any reason (insufficient funds, user error) but the user can still try to pay
+    succeeded: 'succeeded', # Completion state - The full amount due is confirmed as being paid by the payment provider
+    canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
+  }
+
   def self.started_records
     started_stripe_records = StripeRecord.started
     started_intents = []
@@ -28,18 +39,6 @@ class PaymentIntent < ApplicationRecord
     end
 
     started_intents
-  end
-
-  def self.processing_records
-    # As we add more payment services, we'll need to add multiple statements
-  end
-
-  def pending?
-    self.confirmed_at.nil? && self.canceled_at.nil?
-  end
-
-  def started?
-    self.status != "requires_payment_method"
   end
 
   def retrieve_intent
@@ -116,4 +115,17 @@ class PaymentIntent < ApplicationRecord
       end
     end
   end
+
+  private
+
+    def valid_status_combination
+      if payment_record_type == 'StripeRecord'
+        errors.add(:wca_status, "is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
+          StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
+      elsif payment_record_type == 'PaypalRecord'
+        raise 'Paypal is not enabled in production' if PaypalInterface.paypal_disabled?
+      else
+        raise "No status combination validation defined for: #{payment_record_type}"
+      end
+    end
 end

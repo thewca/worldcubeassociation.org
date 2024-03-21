@@ -7,11 +7,11 @@ FactoryBot.define do
     parameters { 'test_parameters' }
     amount_stripe_denomination { 1000 }
     currency_code { 'USD' }
-    status { 'processing' }
+    stripe_status { 'processing' }
     account_id { 'test_account_id' }
 
     trait :not_started do
-      status { 'requires_payment_method' }
+      stripe_status { 'requires_payment_method' }
     end
   end
 end

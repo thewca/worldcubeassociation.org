@@ -854,7 +854,7 @@ class RegistrationsController < ApplicationController
       capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
       PaypalRecord.create(
         record_id: capture_from_response['id'],
-        status: capture_from_response['status'],
+        paypal_status: capture_from_response['status'],
         payload: {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?
         amount_in_cents: capture_from_response['amount']['value'],
         currency_code: capture_from_response['amount']['currency_code'],

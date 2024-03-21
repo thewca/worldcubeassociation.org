@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class StripeRecord < ApplicationRecord
-  # NOTE: Should the list items be
+  validate :valid_status_combination
+  # NOTE: Should the list items be the keys or values of stripe_status? Should stripe_status be an enum or just a list?
   WCA_TO_STRIPE_STATUS_MAP = {
     created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
-    started: %w[requires_confirmation],
-    pending: %w[pending requires_capture processing],
+    pending: %w[pending requires_capture processing requires_confirmation requires_action],
+    partial: %w[],
+    failed: %w[legacy_failure failed],
     succeeded: %w[legacy_success succeeded],
-    failed: %w[legacy_failure failed canceled],
+    canceled: %w[canceled],
   }.freeze
 
   enum stripe_status: {
@@ -147,4 +149,15 @@ class StripeRecord < ApplicationRecord
       account_id: account_id,
     )
   end
+
+  private
+
+    def valid_status_combination
+      # NOTE: Hack to get around payment_intent not returning anything at the moment - idk why??
+      intent = PaymentIntent.where(payment_record_type: 'StripeRecord', payment_record_id: id).first
+      return if intent.nil?
+
+      errors.add(:stripe_status, "is not compatible with PaymentIntent status: #{intent.wca_status}") unless
+        StripeRecord::WCA_TO_STRIPE_STATUS_MAP[intent.wca_status.to_sym].include?(stripe_status)
+    end
 end

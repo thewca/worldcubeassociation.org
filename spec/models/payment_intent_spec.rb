@@ -11,13 +11,13 @@ RSpec.describe PaymentIntent do
     end
 
     it '#pending returns all records not canceled or confirmed' do
-      expect(PaymentIntent.pending_records.length).to eq(5)
+      expect(PaymentIntent.pending.length).to eq(5)
     end
 
     it '#started returns all records where a payment method has been selected' do
       FactoryBot.create_list(:payment_intent, 4, :not_started)
 
-      expect(PaymentIntent.started_records.length).to eq(10)
+      expect(PaymentIntent.started.length).to eq(10)
     end
 
     # it '#processing returns all records which are started and not canceled or confirmed' do
