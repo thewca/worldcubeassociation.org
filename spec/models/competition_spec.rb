@@ -443,7 +443,7 @@ RSpec.describe Competition do
     it "warns if competition name is greater than 32 characters and it's not publicly visible" do
       competition = FactoryBot.build :competition, name: "A really long competition name 2016", showAtAll: false
       expect(competition).to be_valid
-      expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      expect(competition.warnings_for(nil)[:name]).to eq "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
     end
 
     it "does not warn about name greater than 32 when competition is publicly visible" do
