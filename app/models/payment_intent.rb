@@ -9,8 +9,8 @@ class PaymentIntent < ApplicationRecord
 
   validate :valid_status_combination
 
-  scope :pending, -> { where(wca_status: :pending) }
-  scope :started, -> { where.not(wca_status: [:created]) }
+  scope :unpaid, -> { where.not(wca_status: 'succeeded') }
+  scope :started, -> { where.not(wca_status: ['created']) }
 
   # TODO: Refactor this or move it into this class
   delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record
@@ -29,6 +29,14 @@ class PaymentIntent < ApplicationRecord
     succeeded: 'succeeded', # Completion state - The full amount due is confirmed as being paid by the payment provider
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
+
+  def confirmed?
+    !self.confirmed_at.nil?
+  end
+
+  def started?
+    self.wca_status != 'created'
+  end
 
   def self.started_records
     started_stripe_records = StripeRecord.started
@@ -50,6 +58,7 @@ class PaymentIntent < ApplicationRecord
   end
 
   def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
+    puts "updating status and charges, status: #{wca_status}"
     if payment_record_type == 'StripeRecord'
       update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
     elsif payment_record_type == 'PaypalRecord'
@@ -60,6 +69,7 @@ class PaymentIntent < ApplicationRecord
   end
 
   def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
+    puts "updating stripe charges, status: #{wca_status}"
     ActiveRecord::Base.transaction do
       self.payment_record.update_status(api_intent)
       self.update!(error_details: api_intent.last_payment_error)
@@ -70,7 +80,9 @@ class PaymentIntent < ApplicationRecord
         # The payment didn't need any additional actions and is completed!
 
         # Record the success timestamp if not already done
-        self.update!(confirmed_at: source_datetime, confirmation_source: action_source) if self.pending?
+        unless self.confirmed?
+          self.update!(confirmed_at: source_datetime, confirmation_source: action_source)
+        end
 
         intent_charges = Stripe::Charge.list(
           { payment_intent: self.stripe_id },

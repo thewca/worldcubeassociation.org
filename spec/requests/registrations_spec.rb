@@ -621,6 +621,7 @@ RSpec.describe "registrations" do
           expect(payment_intent).to_not be_nil
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
+          expect(payment_intent.wca_status).not_to eq('succeeded')
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
@@ -670,7 +671,7 @@ RSpec.describe "registrations" do
           }.to_not change { registration.reload.outstanding_entry_fees }
 
           expect(registration.paid_entry_fees).to eq 0
-          expect(payment_intent.payment_record.reload.status).to eq('requires_action')
+          expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_action')
           # That's as far as we can go, testing the authentication success/failure
           # must be done by clicking on a modal.
         end
@@ -736,7 +737,7 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.payment_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_payment_method')
           expect(payment_intent.payment_record.error).to eq('card_declined')
         end
 
@@ -765,7 +766,7 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.payment_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_payment_method')
           expect(payment_intent.payment_record.error).to eq('expired_card')
         end
 
@@ -794,7 +795,7 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.payment_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_payment_method')
           expect(payment_intent.payment_record.error).to eq('incorrect_cvc')
         end
 
@@ -823,7 +824,7 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.payment_record.reload.status).to eq('requires_payment_method')
+          expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_payment_method')
           expect(payment_intent.payment_record.error).to eq('card_declined')
         end
 
@@ -849,7 +850,7 @@ RSpec.describe "registrations" do
 
           expect(registration.paid_entry_fees).to eq 0
           expect(payment_intent.confirmed_at).to be_nil
-          expect(payment_intent.payment_record.reload.status).to eq('requires_action')
+          expect(payment_intent.payment_record.reload.stripe_status).to eq('requires_action')
           expect(payment_intent.payment_record.error).to be_nil
         end
 
@@ -943,6 +944,7 @@ RSpec.describe "registrations" do
           }
           payment_intent = registration.reload.payment_intents.first
           expect(payment_intent).to_not be_nil
+
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
