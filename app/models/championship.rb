@@ -62,7 +62,7 @@ class Championship < ApplicationRecord
   def self.grouped_championship_types
     {
       "planetary" => [CHAMPIONSHIP_TYPE_WORLD],
-      "continental" => Continent.all_sorted_by(I18n.locale, real: true).map(&:name),
+      "continental" => Continent.all_sorted_by(I18n.locale, real: true).map(&:id),
       "multi-national" => EligibleCountryIso2ForChampionship.championship_types,
       "national" => Country.all_sorted_by(I18n.locale, real: true).map(&:iso2),
     }
