@@ -91,22 +91,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def group_roles_not_yet_in_new_system(group_id)
     roles = []
-    if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
-      # migrated to the new system.
-      group_type = group_id_of_old_system_to_group_type(group_id)
-      original_group_id = group_id.split("_").last
-      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
-          roles << team_member.role
-        end
-      else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-    # group_type = group_id_of_old_system_to_group_type(group_id)
-    # original_group_id = group_id.split("_").last
-
-    # if group_type == UserGroup.group_types[:teams_committees]
-    #   TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
-    #     roles << team_member.role
+    group_type = group_id_of_old_system_to_group_type(group_id)
+    original_group_id = group_id.split("_").last
+    if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
+      TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
+        roles << team_member.role
       end
     else
       render status: :unprocessable_entity, json: { error: "Invalid group type" }
