@@ -58,7 +58,6 @@ class PaymentIntent < ApplicationRecord
   end
 
   def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
-    puts "updating status and charges, status: #{wca_status}"
     if payment_record_type == 'StripeRecord'
       update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
     elsif payment_record_type == 'PaypalRecord'
@@ -69,7 +68,6 @@ class PaymentIntent < ApplicationRecord
   end
 
   def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
-    puts "updating stripe charges, status: #{wca_status}"
     ActiveRecord::Base.transaction do
       self.payment_record.update_status(api_intent)
       self.update!(error_details: api_intent.last_payment_error)
