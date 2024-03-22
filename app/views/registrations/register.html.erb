@@ -77,7 +77,7 @@
             </h4>
           </div>
           <div class="panel-body">
-            <% if @registration.payment_intents.processing.any? %>
+            <% if @registration.payment_intents.unpaid.any? %>
               <%= render "payment_intents" %>
             <% else %>
               <%= render "payment_form" %>
