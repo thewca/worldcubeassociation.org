@@ -53,13 +53,6 @@ RSpec.describe StripeRecord do
       it_behaves_like '#update StripeRecord to incompatible status', 'canceled', 'canceled', 'legacy_unknown'
     end
 
-    # PaymentRecords can exist independent of PaymentIntents
-    # PaymentIntents MUST have a PaymentRecord
-    # The tests we need to do are:
-    # 1) Creating a PaymentIntent with a given PaymentRecord - check whether the object to be created is valid
-    # 2) Updating a PaymentIntent - ensure that the new status is consistent with the associated PaymentRecord
-    # 3) Updating a StripeRecord - ensure that new status is consistent with associated PaymentIntent
-
     it '#create valid PaymentIntent' do
       stripe_record = FactoryBot.create(:stripe_record, stripe_status: 'processing')
       intent = FactoryBot.build(:payment_intent, payment_record: stripe_record)

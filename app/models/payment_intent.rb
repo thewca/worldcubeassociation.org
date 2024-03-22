@@ -15,7 +15,6 @@ class PaymentIntent < ApplicationRecord
   # TODO: Refactor this or move it into this class
   delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record
 
-  # TODO: Should stripe secrets be stored here? Or on the record object?
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
 
@@ -36,17 +35,6 @@ class PaymentIntent < ApplicationRecord
 
   def started?
     self.wca_status != 'created'
-  end
-
-  def self.started_records
-    started_stripe_records = StripeRecord.started
-    started_intents = []
-
-    started_stripe_records.find_each do |record|
-      started_intents << record.payment_intent
-    end
-
-    started_intents
   end
 
   def retrieve_intent
@@ -105,11 +93,9 @@ class PaymentIntent < ApplicationRecord
         end
       when 'canceled'
         # Canceled by Stripe
-
         self.update!(canceled_at: source_datetime, cancellation_source: action_source)
       when 'requires_payment_method'
         # Reset by Stripe
-
         self.update!(
           confirmed_at: nil,
           confirmation_source: nil,

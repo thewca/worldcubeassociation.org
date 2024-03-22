@@ -48,8 +48,6 @@ class StripeRecord < ApplicationRecord
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
   serialize :parameters, coder: JSON
 
-  scope :started, -> { where.not(status: 'requires_payment_method') }
-
   def determine_wca_status
     WCA_TO_STRIPE_STATUS_MAP.each do |key, values|
       return key if values.include?(stripe_status)
