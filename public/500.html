@@ -51,6 +51,31 @@
       color: #666;
       box-shadow: 0 3px 8px rgba(50, 50, 50, 0.17);
     }
+
+    .home-button {
+        border: 2px solid #2E2F30;
+        padding: 4px;
+        padding-top: 3px;
+        padding-bottom: 3px;
+        border-radius: 3px;
+        background-color: #F7F7F7;
+        text-decoration: none;
+        color: #000;
+        transition: 100ms;
+    }
+
+    .home-button:hover {
+        background-color: #DADADA
+    }
+
+    .home-button:active {
+        background-color: #CCC;
+    }
+
+    .contact-text {
+        text-decoration: none;
+        color: #666;
+    }
   </style>
 </head>
 
@@ -59,6 +84,8 @@
 <div class="dialog">
   <div>
     <h1>We're sorry, but something went wrong.</h1>
+    <p>There has been a server error. Please contact us at our <a href="https://www.worldcubeassociation.org/contact" class="contact-text">Contact</a></p>
+    <p><a href="/" class="home-button">Home</a></p>
   </div>
   <p>If you are the application owner check the logs for more information.</p>
 </div>
