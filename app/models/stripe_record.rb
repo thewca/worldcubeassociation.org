@@ -167,11 +167,10 @@ class StripeRecord < ApplicationRecord
     def valid_status_combination
       # NOTE: Hack to get around payment_intent not returning anything at the moment - idk why??
       # TODO: Refactor/Fix this
+      intent = PaymentIntent.where(payment_record_type: 'StripeRecord', payment_record_id: id).first
+      return if intent.nil?
 
-      # intent = PaymentIntent.where(payment_record_type: 'StripeRecord', payment_record_id: id).first
-      return if payment_intent.nil?
-
-      errors.add(:stripe_status, "is not compatible with PaymentIntent status: #{payment_intent.wca_status}") unless
-        StripeRecord::WCA_TO_STRIPE_STATUS_MAP[payment_intent.wca_status.to_sym].include?(stripe_status)
+      errors.add(:stripe_status, "is not compatible with PaymentIntent status: #{intent.wca_status}") unless
+        StripeRecord::WCA_TO_STRIPE_STATUS_MAP[intent.wca_status.to_sym].include?(stripe_status)
     end
 end
