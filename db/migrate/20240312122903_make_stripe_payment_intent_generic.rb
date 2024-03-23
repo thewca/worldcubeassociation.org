@@ -15,19 +15,22 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
     end
 
     rename_table :stripe_payment_intents, :payment_intents
+    rename_column :stripe_records, :status, :stripe_status
+    rename_column :stripe_records, :api_type, :record_type
+    rename_column :paypal_records, :status, :paypal_status
 
     reversible do |direction|
       direction.up do
         PaymentIntent.update_all(payment_record_type: 'StripeRecord')
 
         PaymentIntent.find_each do |intent|
-          intent.update!(payment_record_id: intent.stripe_record_id)
+          intent.assign_attributes(payment_record_id: intent.stripe_record_id)
+          intent.set_wca_status
+          intent.save
         end
       end
     end
 
     remove_column :payment_intents, :stripe_record_id, :integer
-    rename_column :stripe_records, :status, :stripe_status
-    rename_column :paypal_records, :status, :paypal_status
   end
 end
