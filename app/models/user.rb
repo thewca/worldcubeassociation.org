@@ -1083,22 +1083,20 @@ class User < ApplicationRecord
     )
   end
 
-  def self.staff_delegates
-    groups = UserGroup.delegate_regions
-    roles = groups.flat_map(&:active_roles)
-    roles = roles.select { |role| UserRole.is_staff?(role) }
-    user_ids = roles.map { |role| UserRole.user(role).id }
-    User.where(id: user_ids)
+  def self.staff_delegate_ids
+    UserGroup
+      .delegate_regions
+      .flat_map(&:active_roles)
+      .select { |role| UserRole.is_staff?(role) }
+      .map { |role| UserRole.user(role).id }
   end
 
-  def self.trainee_delegates
-    groups = UserGroup.delegate_regions
-    roles = groups.flat_map(&:active_roles)
-    roles = roles.select do |role|
-      UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate]
-    end
-    user_ids = roles.map { |role| UserRole.user(role).id }
-    User.where(id: user_ids)
+  def self.trainee_delegate_ids
+    UserGroup
+      .delegate_regions
+      .flat_map(&:active_roles)
+      .select { |role| UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+      .map { |role| UserRole.user(role).id }
   end
 
   def self.search(query, params: {})
@@ -1110,11 +1108,11 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = User.staff_delegates
+        users = users.where(id: self.staff_delegate_ids)
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
-        users = User.trainee_delegates
+        users = users.where(id: self.trainee_delegate_ids)
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
