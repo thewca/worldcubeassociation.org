@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+
 import { Form } from 'semantic-ui-react';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import Loading from '../../Requests/Loading';
-import { councilsStatus } from '../../../lib/wca-data.js.erb';
-import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import { councilsStatus } from '../../../../lib/wca-data.js.erb';
+import Loading from '../../../Requests/Loading';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
 
 const OLD_LEADER_STATUS = {
   SENIOR_MEMBER: 'senior_member',
@@ -20,7 +22,7 @@ const oldLeaderStatusOptions = [
 ];
 
 export default function LeaderChangeForm({
-  setEditLeader, syncData, group, oldLeader,
+  closeForm, syncData, group, oldLeader,
 }) {
   const [formValues, setFormValues] = useState({
     newLeader: null,
@@ -33,7 +35,7 @@ export default function LeaderChangeForm({
 
   const endLeaderChangeAction = () => {
     syncData();
-    setEditLeader(null);
+    closeForm();
     setSaving(false);
   };
 
@@ -44,7 +46,7 @@ export default function LeaderChangeForm({
       save(
         apiV0Urls.userRoles.create(),
         {
-          userId: oldLeader.user.id,
+          userId: oldLeader.id,
           groupId: group.id,
           status: formValues.oldLeaderStatus,
         },
@@ -97,7 +99,7 @@ export default function LeaderChangeForm({
           }))}
         />
       )}
-      <Form.Button onClick={() => setEditLeader(null)}>Cancel</Form.Button>
+      <Form.Button onClick={() => closeForm()}>Cancel</Form.Button>
       <Form.Button type="submit">Save</Form.Button>
     </Form>
   );
