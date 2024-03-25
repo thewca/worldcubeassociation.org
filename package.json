@@ -80,7 +80,7 @@
     "sass": "^1.71.1",
     "sass-loader": "^14.1.1",
     "semantic-ui-react": "^2.1.5",
-    "shakapacker": "7.2.2",
+    "shakapacker": "7.2.3",
     "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.10",
     "webpack": "^5.90.3",
