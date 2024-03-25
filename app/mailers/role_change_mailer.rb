@@ -25,10 +25,10 @@ class RoleChangeMailer < ApplicationMailer
     # Populate the recepient list.
     case role.group.group_type
     when UserGroup.group_types[:delegate_probation]
-      to_list = [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, role.user.senior_delegates.map(&:email)].flatten
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
@@ -54,7 +54,7 @@ class RoleChangeMailer < ApplicationMailer
     # Populate the recepient list.
     case UserRole.group(role).group_type
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{UserRole.group(role).group_type}"
@@ -77,7 +77,7 @@ class RoleChangeMailer < ApplicationMailer
     # Populate the recepient list.
     case UserRole.group(role).group_type
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, Team.board.email, Team.weat.email, Team.wfc.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:translators]
       to_list = [user_who_made_the_change.email, Team.wst.email]
@@ -99,7 +99,7 @@ class RoleChangeMailer < ApplicationMailer
     @user_who_made_the_change = user_who_made_the_change
 
     mail(
-      to: [user_who_made_the_change.email, Team.board.email, role.user.senior_delegates.map(&:email)].flatten.compact.uniq,
+      to: [user_who_made_the_change.email, GroupsMetadataBoard.email, role.user.senior_delegates.map(&:email)].flatten.compact.uniq,
       reply_to: [user_who_made_the_change.email].compact.uniq,
       subject: "Delegate Probation end date changed for #{role.user.name}",
     )

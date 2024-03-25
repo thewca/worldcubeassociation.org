@@ -91,23 +91,14 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles by user which are not yet migrated to the new system.
   private def group_roles_not_yet_in_new_system(group_id)
     roles = []
-    if group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are
-      # migrated to the new system.
-      group_type = group_id_of_old_system_to_group_type(group_id)
-      original_group_id = group_id.split("_").last
-      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
-          roles << team_member.role
-        end
-      else
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
+    group_type = group_id_of_old_system_to_group_type(group_id)
+    original_group_id = group_id.split("_").last
+    if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
+      TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
+        roles << team_member.role
       end
     else
-      group = UserGroup.find(group_id)
-
-      if group.group_type == UserGroup.group_types[:delegate_regions]
-        roles.concat(group.delegate_users.map(&:delegate_role))
-      end
+      render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
 
     roles
@@ -150,10 +141,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on groupId.
   def index_for_group
     group_id = params.require(:group_id)
-    roles = UserRole.where(group_id: group_id).to_a # to_a is for the same reason as in index_for_user.
 
-    # Appends roles which are not yet migrated to the new system.
-    roles.concat(group_roles_not_yet_in_new_system(group_id))
+    if team_role?(group_id)
+      roles = group_roles_not_yet_in_new_system(group_id)
+    else
+      group = UserGroup.find(group_id)
+      roles = group.roles
+    end
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
@@ -214,7 +208,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         end
       end
     elsif group_type == UserGroup.group_types[:board]
-      roles.concat(Team.board.current_members.map(&:role))
+      roles.concat(UserGroup.board.flat_map(&:roles))
     end
 
     roles

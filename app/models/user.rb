@@ -57,7 +57,7 @@ class User < ApplicationRecord
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate))
     eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
-    board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
+    board_members = UserGroup.board.flat_map(&:active_users)
     officers = UserGroup.officers.flat_map(&:active_users)
     (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
   end
@@ -69,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [Team.board.friendly_id]
+    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -451,7 +451,7 @@ class User < ApplicationRecord
   end
 
   def board_member?
-    team_member?(Team.board)
+    active_roles.any? { |role| UserRole.group_type(role) == UserGroup.group_types[:board] }
   end
 
   def communication_team?
@@ -1406,26 +1406,6 @@ class User < ApplicationRecord
     can_edit_any_groups? || software_team?
   end
 
-  private def board_role
-    {
-      group: {
-        id: 'board',
-        name: 'WCA Board of Directors',
-        group_type: UserGroup.group_types[:board],
-        is_hidden: false,
-        is_active: true,
-        metadata: {
-          friendly_id: 'board',
-        },
-      },
-      is_active: true,
-      user: self,
-      metadata: {
-        status: 'member',
-      },
-    }
-  end
-
   def roles
     roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
@@ -1437,9 +1417,8 @@ class User < ApplicationRecord
 
     roles.concat(team_roles)
 
-    if board_member?
-      roles << board_role
-    end
+    # Appending Board roles
+    roles.concat(UserGroup.board.flat_map(&:roles).filter { |role| UserRole.user(role).id == self.id })
 
     roles
   end

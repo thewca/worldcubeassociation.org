@@ -29,6 +29,9 @@ class UserGroup < ApplicationRecord
     if self.delegate_regions?
       role_list += self.delegate_users.map(&:delegate_role)
     end
+    if self.board?
+      role_list.concat(Team.board.reload.current_members.map(&:board_role))
+    end
     role_list
   end
 
@@ -110,6 +113,10 @@ class UserGroup < ApplicationRecord
 
   def self.translator_groups
     UserGroup.where(group_type: UserGroup.group_types[:translators])
+  end
+
+  def self.board_group
+    UserGroup.board.first
   end
 
   def senior_delegate
