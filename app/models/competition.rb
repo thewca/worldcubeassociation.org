@@ -1938,6 +1938,7 @@ class Competition < ApplicationRecord
     registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
+      :wcif_extensions,
     ]
     registration_includes << :registration_competition_events unless self.uses_new_registration_service?
     registrations = registrations_relation.includes(registration_includes)
