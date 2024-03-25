@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Competition < ApplicationRecord
+  include MicroserviceRegistrationHolder
+
   self.table_name = "Competitions"
 
   # We need this default order, tests rely on it.
@@ -617,7 +619,8 @@ class Competition < ApplicationRecord
              'inbox_persons',
              'announced_by_user',
              'cancelled_by_user',
-             'competition_payment_integrations'
+             'competition_payment_integrations',
+             'microservice_registrations'
           # Do nothing as they shouldn't be cloned.
         when 'organizers'
           clone.organizers = organizers
@@ -1527,7 +1530,10 @@ class Competition < ApplicationRecord
       end
 
       if self.uses_new_registration_service?
-        accepted_registrations = Microservices::Registrations.get_registrations(self.id, 'accepted', event.id)
+        # We deliberately don't go through the cached `microservice_registrations` table here, because then we
+        # would need to separately check which of the cached registrations are accepted
+        # and which of those are registered for the specified event. Querying the MS directly is much more efficient.
+        accepted_registrations = Microservices::Registrations.registrations_by_competition(self.id, 'accepted', event.id, cache: false)
         registered_user_ids = accepted_registrations.map { |reg| reg['user_id'] }
       else
         registered_user_ids = self.registrations
@@ -1767,25 +1773,29 @@ class Competition < ApplicationRecord
   def persons_wcif(authorized: false)
     managers = self.managers
     includes_associations = [
-      :events,
       { assignments: [:schedule_activity] },
       { user: {
         person: [:ranksSingle, :ranksAverage],
       } },
       :wcif_extensions,
     ]
+    # V2 registrations store the event IDs in the microservice data, not in the monolith
+    includes_associations << :events unless self.uses_new_registration_service?
+
+    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
+
     # NOTE: we're including non-competing registrations so that they can have job
     # assignments as well. These registrations don't have accepted?, but they
     # should appear in the WCIF.
-    persons_wcif = registrations.order(:id)
-                                .includes(includes_associations)
-                                .to_enum
-                                .with_index(1)
-                                .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
-                                .map do |r, registrant_id|
-                                  managers.delete(r.user)
-                                  r.user.to_wcif(self, r, registrant_id, authorized: authorized)
-                                end
+    persons_wcif = registrations_relation.order(:id)
+                                         .includes(includes_associations)
+                                         .to_enum
+                                         .with_index(1)
+                                         .select { |r, registrant_id| authorized || r.wcif_status == "accepted" }
+                                         .map do |r, registrant_id|
+                                           managers.delete(r.user)
+                                           r.user.to_wcif(self, r, registrant_id, authorized: authorized)
+                                         end
     # NOTE: unregistered managers may generate N+1 queries on their personal bests,
     # but that's fine because there are very few of them!
     persons_wcif + managers.map { |m| m.to_wcif(self, authorized: authorized) }
@@ -1924,11 +1934,14 @@ class Competition < ApplicationRecord
 
   # Takes an array of partial Person WCIF and updates the fields that are not immutable.
   def update_persons_wcif!(wcif_persons, current_user)
-    registrations = self.registrations.includes [
+    registrations_relation = self.uses_new_registration_service? ? self.microservice_registrations : self.registrations
+    registration_includes = [
       { assignments: [:schedule_activity] },
       :user,
-      :registration_competition_events,
+      :wcif_extensions,
     ]
+    registration_includes << :registration_competition_events unless self.uses_new_registration_service?
+    registrations = registrations_relation.includes(registration_includes)
     competition_activities = all_activities
     new_assignments = []
     removed_assignments = []
@@ -1941,8 +1954,6 @@ class Competition < ApplicationRecord
         registration ||= registrations.create(
           competition: self,
           user_id: wcif_person["wcaUserId"],
-          created_at: DateTime.now,
-          updated_at: DateTime.now,
           is_competing: false,
         )
       end

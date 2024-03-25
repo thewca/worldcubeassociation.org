@@ -19,7 +19,6 @@ class TeamMember < ApplicationRecord
   alias_attribute :leader, :team_leader
   alias_attribute :senior_member, :team_senior_member
 
-  BOARD_STATUS = "member"
   TEAM_STATUS_LEADER = "leader"
   TEAM_STATUS_SENIOR_MEMBER = "senior_member"
   TEAM_STATUS_MEMBER = "member"
@@ -56,7 +55,7 @@ class TeamMember < ApplicationRecord
     end
   end
 
-  def team_status
+  def status
     if leader?
       TEAM_STATUS_LEADER
     elsif senior_member?
@@ -66,27 +65,25 @@ class TeamMember < ApplicationRecord
     end
   end
 
-  def status
-    if team == Team.board
-      BOARD_STATUS
-    else
-      team_status
-    end
+  def board_role
+    board_group = UserGroup.board_group
+    {
+      id: board_group.group_type + "_" + self.id.to_s,
+      start_date: start_date,
+      is_active: current_member?,
+      group: board_group,
+      user: user,
+    }
   end
 
   def role
-    if team == Team.board
-      group_name = 'Board'
-    else
-      group_name = team.name
-    end
     {
       id: team.group_type + "_" + self.id.to_s,
       start_date: start_date,
       is_active: current_member?,
       group: {
         id: team.group_type + "_" + team.id.to_s,
-        name: group_name,
+        name: team.name,
         group_type: team.group_type,
         is_hidden: team[:hidden],
         is_active: true,

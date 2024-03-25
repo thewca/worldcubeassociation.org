@@ -4,6 +4,8 @@ require "uri"
 require "fileutils"
 
 class User < ApplicationRecord
+  include MicroserviceRegistrationHolder
+
   has_many :competition_delegates, foreign_key: "delegate_id"
   # This gives all the competitions where the user is marked as a Delegate,
   # regardless of the competition's status.
@@ -55,7 +57,7 @@ class User < ApplicationRecord
     team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
     eligible_delegates = User.where(delegate_status: %w(delegate))
     eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
-    board_members = TeamMember.current.where(team_id: Team.board.id).map(&:user)
+    board_members = UserGroup.board.flat_map(&:active_users)
     officers = UserGroup.officers.flat_map(&:active_users)
     (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
   end
@@ -67,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [Team.board.friendly_id]
+    Team.all_official_and_councils.map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -265,9 +267,6 @@ class User < ApplicationRecord
   end
 
   scope :delegates, -> { where.not(delegate_status: nil) }
-  scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
-  scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
-  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
@@ -452,7 +451,7 @@ class User < ApplicationRecord
   end
 
   def board_member?
-    team_member?(Team.board)
+    active_roles.any? { |role| UserRole.group_type(role) == UserGroup.group_types[:board] }
   end
 
   def communication_team?
@@ -628,9 +627,14 @@ class User < ApplicationRecord
     return "*" if can_edit_any_groups?
     groups = []
 
-    senior_delegate_roles.map do |role|
-      region = UserRole.group(role)
-      groups += [region.id, region.all_child_groups.map(&:id)].flatten.uniq
+    active_roles.select do |role|
+      group = UserRole.group(role)
+      group_type = UserRole.group_type(role)
+      if group_type == UserGroup.group_types[:delegate_regions]
+        if UserRole.is_lead?(role) && UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+          groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
+        end
+      end
     end
 
     # FIXME: Consider groups of other groupTypes as well.
@@ -1012,14 +1016,20 @@ class User < ApplicationRecord
   # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers_emails
-    candidate_delegates = User.candidate_delegates
-    trainee_delegates = User.trainee_delegates
+    delegate_groups = UserGroup.delegate_regions
+    roles = delegate_groups.flat_map(&:active_roles).select do |role|
+      [
+        RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+        RolesMetadataDelegateRegions.statuses[:junior_delegate],
+      ].include?(UserRole.status(role))
+    end
+    eligible_delegate_users = roles.map { |role| UserRole.user(role) }
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + candidate_delegates.map(&:email) + trainee_delegates.map(&:email) + other_staff.map(&:email)).uniq
+    ) + eligible_delegate_users.map(&:email) + other_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)
@@ -1073,6 +1083,22 @@ class User < ApplicationRecord
     )
   end
 
+  def self.staff_delegate_ids
+    UserGroup
+      .delegate_regions
+      .flat_map(&:active_roles)
+      .select { |role| UserRole.is_staff?(role) }
+      .map { |role| UserRole.user(role).id }
+  end
+
+  def self.trainee_delegate_ids
+    UserGroup
+      .delegate_regions
+      .flat_map(&:active_roles)
+      .select { |role| UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+      .map { |role| UserRole.user(role).id }
+  end
+
   def self.search(query, params: {})
     users = Person.includes(:user).current
     # We can't search by email on the 'Person' table
@@ -1082,11 +1108,11 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = users.staff_delegates
+        users = users.where(id: self.staff_delegate_ids)
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
-        users = users.where(delegate_status: "trainee_delegate")
+        users = users.where(id: self.trainee_delegate_ids)
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
@@ -1316,12 +1342,11 @@ class User < ApplicationRecord
 
   def team_roles
     roles = []
-    self.current_teams
-        .select { |team| team.official? || team.council? }
-        .each do |team|
-          team_membership_details = self.team_membership_details(team)
-          roles << team_membership_details.role
-        end
+    self.current_team_members.each do |team_member|
+      if team_member.team.official_or_council?
+        roles << team_member.role
+      end
+    end
     roles
   end
 
@@ -1342,7 +1367,7 @@ class User < ApplicationRecord
   end
 
   def can_access_leader_panel?
-    admin? || leader_of_any_official_team?
+    admin? || active_roles.any? { |role| UserRole.is_lead?(role) }
   end
 
   def can_access_senior_delegate_panel?
@@ -1381,26 +1406,6 @@ class User < ApplicationRecord
     can_edit_any_groups? || software_team?
   end
 
-  private def board_role
-    {
-      group: {
-        id: 'board',
-        name: 'WCA Board of Directors',
-        group_type: UserGroup.group_types[:board],
-        is_hidden: false,
-        is_active: true,
-        metadata: {
-          friendly_id: 'board',
-        },
-      },
-      is_active: true,
-      user: self,
-      metadata: {
-        status: 'member',
-      },
-    }
-  end
-
   def roles
     roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
@@ -1412,9 +1417,8 @@ class User < ApplicationRecord
 
     roles.concat(team_roles)
 
-    if board_member?
-      roles << board_role
-    end
+    # Appending Board roles
+    roles.concat(UserGroup.board.flat_map(&:roles).filter { |role| UserRole.user(role).id == self.id })
 
     roles
   end

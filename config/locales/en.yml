@@ -662,9 +662,9 @@ en:
       error_pages:
         #context: The error pages in the case of 500s or 400s
         500_error: "We're sorry, but something went wrong."
-        500_contact: "If you report this error to the Software Team please mention the Request ID"
+        500_contact: "If you report this error to the Software Team please copy the Request ID into the email"
         400_error: "The page you were looking for doesn't exist."
-        400_contact: "If you think this is a mistake please contact the Software Team and include the Request ID"
+        400_contact: "If you think this is a mistake please contact the Software Team and copy the Request ID into the email"
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -758,6 +758,39 @@ en:
       title: "WCA Officers & Board"
       officers_description: "The officers of the WCA handle tasks relating to the non-profit status of the WCA. These officers are elected by the WCA Board. The Executive Director is the Chief Executive Officer of the WCA, the Chair presides over all Board meetings, the Secretary maintains the organization's documents, and the Treasurer manages financial matters of the WCA."
       board_description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
+    teams_committees_councils:
+      title: "WCA Teams, Committees, and Councils"
+      description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      groups_name:
+        wat: "WCA Archive Team"
+        wct: "WCA Communication Team"
+        wcat: "WCA Competition Announcement Team"
+        wdc: "WCA Disciplinary Committee"
+        wec: "WCA Ethics Committee"
+        weat: "WCA Executive Assistants Team"
+        wfc: "WCA Financial Committee"
+        wmt: "WCA Marketing Team"
+        wqac: "WCA Quality Assurance Committee"
+        wrc: "WCA Regulations Committee"
+        wrt: "WCA Results Team"
+        wst: "WCA Software Team"
+        wsot: "WCA Sports Organization Team"
+        wac: "WCA Advisory Council"
+      groups_description:
+        wat: "The WAT is responsible for managing the development and maintenance of the WCA's historical archive. They document key speedcubing events and notable WCA milestones to be presented as part of a broader WCA timeline, to preserve the legacy of the WCA in speedcubing."
+        wct: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
+        wcat: "The WCA Competition Announcement Team (WCAT) has the role to approve and announce WCA Competitions submitted by delegates, and ensure such announcements adhere to WCA quality standards. This team is also responsible for maintaining proper competition submission protocol from documents such as the WCA Competition Requirements Policy. WCAT is NOT responsible for the organization and delegation of individual competitions."
+        wdc: "The WCA Disciplinary Committee (WDC) performs independent investigations regarding Registered Speedcubers and incidents during WCA Competitions or on official, online WCA platforms. These incidents are alleged violations of the Spirit, Code of Conduct, and/or Regulations of the WCA."
+        wec: "This committee's role is to ensure that all the procedures followed by the WCA Staff abide by the Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with the Code. The WEC is a confidant for Registered Speedcubers who may report concerns and request an investigation. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
+        weat: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
+        wfc: "This committee is responsible for managing the overall finances of the WCA, including budgeting, reporting, analysis, bookkeeping, and tax filings. They also manage the WCA's largest source of income, the WCA Dues System, along with various funding programs that provide support to local communities at different stages of development, including Travel Funding, Equipment Funding, and Regional Organization Support."
+        wmt: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
+        wqac: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
+        wrc: "The WRC handles all issues which are related to the application, the improvement and the development of the WCA Regulations. They support WCA Delegates on any kind of procedural matters happening at competitions and decide on unresolved and uncovered incidents."
+        wrt: "The WRT is responsible for managing all data in the databases of the WCA, most importantly competition results and persons data."
+        wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
+        wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
+        wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -1219,7 +1252,7 @@ en:
     #context: generic message
     messages:
       not_visible: "This competition is not visible to the public."
-      name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      name_too_long: "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
       id_starts_with_lowercase: "The competition id starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
@@ -2128,12 +2161,10 @@ en:
       donate_paypal: Donate via Paypal
       donate_other: Other ways to donate
     structure:
-      teams_committees_councils: "WCA Teams, Committees, and Councils"
       title: "Structure"
       board:
         name: "WCA Board of Directors"
         description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
-      committees: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
       senior_member: "Senior Member"
       leader: "Leader"
       users:
@@ -2141,63 +2172,48 @@ en:
       #context: WDC
       wdc:
         name: "WCA Disciplinary Committee"
-        description: "This committee advises the WCA Board in special cases, like alleged violations of WCA Regulations, and may be contacted by WCA members in case of important personal matters regarding WCA competitions."
       #context: WDPC
       wdpc:
         name: "WCA Data Protection Committee"
-        description: "This committee is responsible for all matters relating to Data Protection."
       #context: WRC
       wrc:
         name: "WCA Regulations Committee"
-        description: "This committee is responsible for managing the WCA Regulations."
       #context: WRT
       wrt:
         name: "WCA Results Team"
-        description: "This team is responsible for managing all competition results."
       #context: WST
       wst:
         name: "WCA Software Team"
-        description: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
       #context: WCT
       wct:
         name: "WCA Communication Team"
-        description: "The WCA Communication Team (WCT) has the role to oversee and support communications of the WCA with the Community and the general public. The communication of the WCA should contribute to the Objectives of the WCA and support a general positive culture of friendliness, transparency, inclusiveness, openness, and responsiveness."
       #context: WFC
       wfc:
         name: "WCA Financial Committee"
-        description: "This team is responsible for managing the finances of the WCA."
       #context: WEC
       wec:
         name: "WCA Ethics Committee"
-        description: "This committee's role is to ensure that all the procedures followed by the WCA Staff and External Staff abide by its Code of Ethics, and to perform independent investigations if the conduct of any of these members is not compliant with said Code of Ethics. Such investigations can be requested by any Registered Speedcubers, for whom the WEC is a confidant. This committee also functions as the board of appeal if anyone involved disagrees with a decision made by the WCA Disciplinary Committee."
       #context: WEAT
       weat:
         name: "WCA Executive Assistants Team"
-        description: "This team is responsible for carrying out the administrative tasks of the WCA Board of Directors."
       #context: WQAC
       wqac:
         name: "WCA Quality Assurance Committee"
-        description: "This committee has the role to support and promote continuous quality improvement within the WCA, as well as worldwide application of quality standards to ensure consistent high quality of processes, WCA Staff, Regional Organizations, Competition Organizers, and Competition Staff."
       #context: WCAT
       wcat:
         name: "WCA Competition Announcement Team"
-        description: "This team has the role to approve and announce WCA Competitions and ensure such announcements adhere to WCA quality standards."
       #context: WMT
       wmt:
         name: "WCA Marketing Team"
-        description: "This team is responsible for developing and managing the WCA Brand, seeking sponsorships, supporting the distribution of WCA Competition Gear, and marketing WCA Merchandise."
       #context: WAC
       wac:
         name: "WCA Advisory Council"
-        description: "This council is responsible for building and maintaining bilateral communication between the WCA Community and the WCA Staff."
       #context: WSOT
       wsot:
         name: "WCA Sports Organization Team"
-        description: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
       #context: WAT
       wat:
         name: "WCA Archive Team"
-        description: "The WCA Archive Team is an Advisory Committee of the WCA. This team has the role to oversee and support the development of an archive of the organization."
       #context: Hidden team for list of banned competitors
       banned:
         name: "Banned Competitors"

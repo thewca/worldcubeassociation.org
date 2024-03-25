@@ -66,6 +66,7 @@
     "prop-types": "^15.8.1",
     "rails-erb-loader": "^5.5.2",
     "react": "^18.2.0",
+    "react-csv": "^2.2.2",
     "react-datepicker": "^6.2.0",
     "react-dom": "^18.2.0",
     "react-intersection-observer": "^9.8.1",
@@ -79,7 +80,7 @@
     "sass": "^1.71.1",
     "sass-loader": "^14.1.1",
     "semantic-ui-react": "^2.1.5",
-    "shakapacker": "7.2.2",
+    "shakapacker": "7.2.3",
     "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.10",
     "webpack": "^5.90.3",
@@ -105,7 +106,7 @@
     "stylelint-config-recommended-scss": "^14.0.0",
     "stylelint-scss": "^6.2.0",
     "webpack-bundle-analyzer": "^4.10.1",
-    "webpack-dev-server": "^4.15.1"
+    "webpack-dev-server": "^5.0.4"
   },
   "scripts": {
     "webpack:analyze": "mkdir -p public/packs && RACK_ENV=test NODE_ENV=production webpack --config config/webpack/webpack.config.js --profile --json > public/packs/stats.json && webpack-bundle-analyzer public/packs/stats.json"

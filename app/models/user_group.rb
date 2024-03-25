@@ -15,7 +15,8 @@ class UserGroup < ApplicationRecord
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
-  has_many :delegate_users, -> { delegates.with_delegate_data }, class_name: "User", foreign_key: "region_id"
+  has_many :user_roles, foreign_key: "group_id"
+  has_many :delegate_users, -> { delegates.includes(:region) }, class_name: "User", foreign_key: "region_id"
 
   scope :root_groups, -> { where(parent_group: nil) }
 
@@ -24,9 +25,12 @@ class UserGroup < ApplicationRecord
   end
 
   def roles
-    role_list = UserRole.where(group_id: self.id).to_a
+    role_list = self.user_roles.to_a
     if self.delegate_regions?
       role_list += self.delegate_users.map(&:delegate_role)
+    end
+    if self.board?
+      role_list.concat(Team.board.reload.current_members.map(&:board_role))
     end
     role_list
   end
@@ -111,6 +115,10 @@ class UserGroup < ApplicationRecord
     UserGroup.where(group_type: UserGroup.group_types[:translators])
   end
 
+  def self.board_group
+    UserGroup.board.first
+  end
+
   def senior_delegate
     if parent_group_id.nil?
       self.lead_user
@@ -125,15 +133,7 @@ class UserGroup < ApplicationRecord
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
-    if self.delegate_regions?
-      if self.parent_group_id.nil?
-        UserRole.where(group_id: self.id).select { |role| role.is_active? }.find { |role| role.is_lead? }&.user
-      else
-        self.parent_group.senior_delegate
-      end
-    else
-      self.lead_role&.user
-    end
+    UserRole.user(self.lead_role)
   end
 
   # Unique status means that there can only be one active user with this status in the group.

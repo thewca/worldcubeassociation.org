@@ -27,7 +27,7 @@ class PanelController < ApplicationController
     {
       "board" => {
         "seniorDelegatesList" => "senior-delegates-list",
-        "councilLeaders" => "council-leaders",
+        "leadersAdmin" => "leaders-admin",
         "regionsManager" => "regions-manager",
         "delegateProbations" => "delegate-probations",
         "groupsManagerAdmin" => "groups-manager-admin",

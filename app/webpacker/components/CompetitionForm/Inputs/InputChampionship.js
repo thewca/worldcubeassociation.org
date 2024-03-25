@@ -14,7 +14,7 @@ const generateChampionshipName = (type, championship) => {
     case 'planetary':
       return I18n.t('competitions.competition_form.championship_types.world');
     case 'continental':
-      return I18n.t(`continents.${championship}`);
+      return I18n.t(`continents.${championship.replace(/_/g, '')}`);
     case 'multi-national':
       return I18n.t(`competitions.competition_form.championship_types.${championship}`) || I18n.t('competitions.competition_form.championship_types.generic', { type: championship });
     case 'national':

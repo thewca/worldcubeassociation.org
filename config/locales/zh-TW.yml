@@ -1215,6 +1215,78 @@ zh-TW:
         WCA的幹事負責跟WCA非營利狀態有關的事務。這些幹事是由WCA董事會所選出的。執行董事就是WCA的執行長，董事長主持所有的董事會議，秘書負責維護組織的文件，財務長負責WCA的財務相關事務。
       #original_hash: e0d37a2
       board_description: WCA董事會負責帶領全體組織，並負責一些其他團隊、 委員會和理事會沒有負責的事務。
+    teams_committees_councils:
+      #original_hash: 0d62207
+      title: WCA團隊、委員會和理事會
+      #original_hash: d54d953
+      description: >-
+        WCA的團隊和委員會是整個組織的一部分並負責日常的事務才能讓整個組織運作。這些團隊是由WCA成員包含WCA代表和參賽者所組成的。每一個團隊會都有一個領導者，他們的職務是確保整個團隊的正常運作以及帶領其他團隊成員。理事會是一個特殊的團隊，他們的工作是擔任WCA董事會諮詢的腳色，由社群成員組成而非WCA員工。當有委員會、團隊、理事會的空缺時，如何申請的資訊將會公布在首頁。
+      groups_name:
+        #original_hash: 90a1280
+        wat: WCA資料整理組
+        #original_hash: 63a2388
+        wct: WCA傳播組
+        #original_hash: 2b81984
+        wcat: WCA比賽公告組
+        #original_hash: c97077a
+        wdc: WCA紀律委員會
+        #original_hash: 83bd1d0
+        wec: WCA倫理委員會
+        #original_hash: d1dbb86
+        weat: WCA董事會助理團隊
+        #original_hash: 9cb13de
+        wfc: WCA財政委員會
+        #original_hash: 2035811
+        wmt: WCA行銷組
+        #original_hash: 8f32116
+        wqac: WCA品質保證委員會
+        #original_hash: 3da1e85
+        wrc: WCA規則委員會
+        #original_hash: 67be768
+        wrt: WCA成績組
+        #original_hash: a14bc62
+        wst: WCA軟體組
+        #original_hash: 58765c7
+        wsot: WCA競技組織團隊
+        #original_hash: 1ce7604
+        wac: WCA諮詢理事會
+      groups_description:
+        #original_hash: 5b1aade
+        wat: >-
+          WCA資料整理組的任務是將WCA過去資料做整理和維護保存。他們記錄下重要的方塊速解事件以及值得注意的WCA里程碑，讓這些資料成為WCA整體時間軸的一部分，以此用來傳承WCA在方塊速解上的歷史地位。
+        #original_hash: 50fd091
+        wct: >-
+          該團隊是監督和協助WCA與社群和一般大眾的溝通橋梁。WCA的溝通內容應傳遞其組織目標並支持友善、透明、包容、開放、熱誠、雙向溝通等正面文化價值。
+        #original_hash: 3e5570f
+        wcat: >-
+          WCA比賽公告組負責審核和公告由WCA代表所提出的比賽申請，並確保此類公告符合WCA品質標準。這個團隊也負責維持良好的比賽申請用的協定文件，例如「WCA比賽要求政策」。WCA比賽公告組並不負責組織或是監督各個比賽。
+        #original_hash: 41eb6fd
+        wdc: >-
+          WCA紀律委員會負責組成獨立的調查團隊。調查內容為在WCA比賽中已註冊玩家的意外事件或是官方的WCA網路平台。這些意外事件是被指控違反WCA精神、WCA行為準則或/和WCA競賽規則。
+        #original_hash: 6cdac80
+        wec: >-
+          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，且他們可以信任WEC。如果有人不同意WCA紀律委員會做出的裁決，此委員會也可以成為上訴單位。
+        #original_hash: 889dd90
+        weat: 該團隊是負責執行處理WCA董事會的行政事務。
+        #original_hash: 43e4e33
+        wfc: >-
+          該委員會負責管理WCA的財政，包含編制預算、財務報告、財務分析、記帳及報稅。他們也管理WCA最大的收入來源，WCA稅費系統，以及其他各式各樣用來支持各地團體在不同發展階段時需要的資金系統，包含交通資金、設備資金和用來支持區域組織。
+        #original_hash: f2a0140
+        wmt: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
+        #original_hash: 0171b3b
+        wqac: >-
+          該委員會的職責是支持並促進WCA內部持續的品質改善，以及確保應用於全球的標準為一致並保有高品質的程序、WCA員工、區域組織、比賽主辦團隊和工作人員。
+        #original_hash: a1260bb
+        wrc: >-
+          WCA規則委員會處理所有跟WCA規則有關的應用，規則改進，規則開發。他們支援WCA代表們任何有關比賽中跟程序有關的判決以及未解決或是未發現的比賽意外事故。
+        #original_hash: 7bc588b
+        wrt: WCA成績組負責管理所有WCA資料庫裏面的資料，最重要的就是比賽成績和個人資料。
+        #original_hash: ec961e4
+        wst: 該團隊負責管理WCA的軟體（網站、轉亂程式、作業工具、管理工具）。
+        #original_hash: 8f888d6
+        wsot: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織。
+        #original_hash: 73d8df4
+        wac: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。他們負責維持WCA論壇和總結問卷調查以及試著拓展到更多全球的方塊社群。
   homepage:
     #original_hash: 824d76b
     learn_more: 了解更多
@@ -1875,8 +1947,8 @@ zh-TW:
         payment_button: 用Stripe來付款
         #original_hash: f94d00f
         ajax_error: WCA伺服器錯誤
-        #original_hash: e62c56c
-        stripe_error: Stripe錯誤
+        #original_hash: d9185e8
+        payment_service_error: 付款服務出現錯誤
         #original_hash: 97f7359
         subtotal: 小計
       alerts:
@@ -3550,8 +3622,6 @@ zh-TW:
       #original_hash: 96d77f3
       donate_other: 其他方式的協助
     structure:
-      #original_hash: 0d62207
-      teams_committees_councils: WCA團隊、 委員會和理事會
       #original_hash: 9482c5d
       title: 結構
       board:
@@ -3559,9 +3629,6 @@ zh-TW:
         name: WCA董事會
         #original_hash: e0d37a2
         description: WCA董事會負責帶領全體組織，並負責一些其他團隊、 委員會和理事會沒有負責的事務。
-      #original_hash: d54d953
-      committees: >-
-        WCA的團隊和委員會是整個組織的一部分並負責日常的事務才能讓整個組織運作。這些團隊是由WCA成員包含WCA代表和參賽者所組成的。每一個團隊會都有一個領導者，他們的職務是確保整個團隊的正常運作以及帶領其他團隊成員。理事會是一個特殊的團隊，他們的工作是擔任WCA董事會諮詢的腳色，由社群成員組成而非WCA員工。當有委員會、團隊、理事會的空缺時，如何申請的資訊將會公布在首頁。
       #original_hash: c366473
       senior_member: 資深成員
       #original_hash: e26c936
@@ -3572,81 +3639,48 @@ zh-TW:
       wdc:
         #original_hash: c97077a
         name: WCA紀律委員會
-        #original_hash: 286fdf8
-        description: 該委員會在特殊案件下向WCA董事會提供建議，例如疑似違反WCA規則的嫌疑，若有在比賽當中重大個人事件也有可能會有WCA成員來的聯絡。
       wdpc:
         #original_hash: 70539cd
         name: WCA資料保護委員會
-        #original_hash: 1f69829
-        description: 該委員會負責與資料保護相關的所有事務。
       wrc:
         #original_hash: 3da1e85
         name: WCA規則委員會
-        #original_hash: 13ada5b
-        description: 該委員會負責管理WCA規則。
       wrt:
         #original_hash: 67be768
         name: WCA成績組
-        #original_hash: 439ffae
-        description: 該團隊負責管理所有比賽成績。
       wst:
         #original_hash: a14bc62
         name: WCA軟體組
-        #original_hash: ec961e4
-        description: 該團隊負責管理WCA的軟體（網站、轉亂程式、成績程式、管理工具）。
       wct:
         #original_hash: 63a2388
         name: WCA傳播組
-        #original_hash: 50fd091
-        description: >-
-          該團隊是監督和協助WCA與社群和一般大眾的溝通橋梁。WCA的溝通內容應傳遞其組織目標並支持友善、透明、包容、開放、熱誠、雙向溝通等正面文化價值。
       wfc:
         #original_hash: 9cb13de
         name: WCA財政委員會
-        #original_hash: b4ed44b
-        description: 該委員會負責管理WCA的財政。
       wec:
         #original_hash: 83bd1d0
         name: WCA倫理委員會
-        #original_hash: c304d57
-        description: >-
-          該委員會的職責是確保WCA員工以及外部員工的所有程序皆遵守倫理規範，並且在這些成員的行為不符合該倫理規範的情況下進行獨立調查。這些調查可以由任何已註冊的玩家提出，且他們可以信任WEC。如果有人不同意WCA紀律委員會做出的裁決，此委員會也可以成為上訴單位。
       weat:
         #original_hash: d1dbb86
         name: WCA董事會助理團隊
-        #original_hash: 889dd90
-        description: 該團隊是負責執行處理WCA董事會的行政事務。
       wqac:
         #original_hash: 8f32116
         name: WCA品質保證委員會
-        #original_hash: 0171b3b
-        description: >-
-          該委員會的職責是支持並促進WCA內部持續的品質改善，以及確保應用於全球的標準為一致並保有高品質的程序、WCA員工、區域組織、比賽主辦團隊和工作人員。
       wcat:
         #original_hash: 2b81984
         name: WCA比賽公告組
-        #original_hash: f511502
-        description: 該團隊負責審核和公告WCA比賽，並確保此類公告符合WCA品質標準。
       wmt:
         #original_hash: 2035811
         name: WCA行銷組
-        #original_hash: f2a0140
-        description: 該團隊負責開發和管理WCA品牌、尋求贊助、協助WCA比賽器材的分配以及行銷WCA商品。
       wac:
         #original_hash: 1ce7604
         name: WCA諮詢理事會
-        #original_hash: fb6cd86
-        description: 該理事會負責建立和維護WCA社群與WCA員工之間的雙邊溝通。
       wsot:
         #original_hash: 58765c7
         name: WCA競技組織團隊
-        #original_hash: 8f888d6
-        description: 這個團隊負責監督和協助WCA成為一個國際認可的競技組織
       wat:
         #original_hash: 90a1280
         name: WCA資料整理組
-        #original_hash: fae6850
-        description: WCA資料整理組是一個WCA的諮詢委員會。這個團隊的任務是監督並協助WCA過去資料的整理和保存。
       banned:
         #original_hash: d30e2e5
         name: 禁賽名單

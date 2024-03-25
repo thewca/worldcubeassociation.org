@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
+
 import { Form } from 'semantic-ui-react';
-import useSaveAction from '../../../lib/hooks/useSaveAction';
-import Loading from '../../Requests/Loading';
-import { councilsStatus } from '../../../lib/wca-data.js.erb';
-import { apiV0Urls } from '../../../lib/requests/routes.js.erb';
-import WcaSearch from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+
+import useSaveAction from '../../../../lib/hooks/useSaveAction';
+import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import { councilsStatus } from '../../../../lib/wca-data.js.erb';
+import Loading from '../../../Requests/Loading';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import WcaSearch from '../../../SearchWidget/WcaSearch';
 
 const OLD_LEADER_STATUS = {
   SENIOR_MEMBER: 'senior_member',
@@ -20,7 +22,7 @@ const oldLeaderStatusOptions = [
 ];
 
 export default function LeaderChangeForm({
-  setEditLeader, syncData, group, oldLeader,
+  closeForm, syncData, group, oldLeader,
 }) {
   const [formValues, setFormValues] = useState({
     newLeader: null,
@@ -31,36 +33,31 @@ export default function LeaderChangeForm({
 
   const handleFormChange = (_, { name, value }) => setFormValues({ ...formValues, [name]: value });
 
-  const changeOldLeaderStatus = async () => new Promise((resolve) => {
-    if (!oldLeader) { // No old leader
-      resolve();
-      return;
-    }
+  const endLeaderChangeAction = () => {
+    syncData();
+    closeForm();
+    setSaving(false);
+  };
+
+  const addBackOldLeaderIfNeeded = () => {
     if (formValues.oldLeaderStatus === OLD_LEADER_STATUS.RESIGN) {
-      save(
-        apiV0Urls.userRoles.delete(oldLeader.id),
-        {
-          userId: oldLeader.user.id,
-          groupId: oldLeader.group.id,
-        },
-        resolve,
-        { method: 'DELETE' },
-      );
+      endLeaderChangeAction();
     } else {
       save(
-        apiV0Urls.userRoles.update(oldLeader.id),
+        apiV0Urls.userRoles.create(),
         {
-          userId: oldLeader.user.id,
-          groupId: oldLeader.group.id,
+          userId: oldLeader.id,
+          groupId: group.id,
           status: formValues.oldLeaderStatus,
         },
-        resolve,
-        { method: 'PATCH' },
+        endLeaderChangeAction,
+        { method: 'POST' },
       );
     }
-  });
+  };
 
-  const changeNewLeader = async () => new Promise((resolve) => {
+  const leaderChangeAction = () => {
+    setSaving(true);
     save(
       apiV0Urls.userRoles.create(),
       {
@@ -68,18 +65,9 @@ export default function LeaderChangeForm({
         groupId: group.id,
         status: councilsStatus.leader,
       },
-      resolve,
+      addBackOldLeaderIfNeeded,
       { method: 'POST' },
     );
-  });
-
-  const leaderChangeAction = async () => {
-    setSaving(true);
-    await changeOldLeaderStatus();
-    await changeNewLeader();
-    syncData();
-    setEditLeader(null);
-    setSaving(false);
   };
 
   if (saving) {
@@ -111,7 +99,7 @@ export default function LeaderChangeForm({
           }))}
         />
       )}
-      <Form.Button onClick={() => setEditLeader(null)}>Cancel</Form.Button>
+      <Form.Button onClick={() => closeForm()}>Cancel</Form.Button>
       <Form.Button type="submit">Save</Form.Button>
     </Form>
   );

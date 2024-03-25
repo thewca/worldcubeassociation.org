@@ -642,6 +642,20 @@ module DatabaseDumper
         },
       ),
     }.freeze,
+    "microservice_registrations" => {
+      where_clause: JOIN_WHERE_VISIBLE_COMP,
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          competition_id
+          user_id
+          roles
+          is_competing
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "sanity_checks" => :skip_all_rows,
     "sanity_check_categories" => :skip_all_rows,
     "sanity_check_exclusions" => :skip_all_rows,
@@ -700,6 +714,17 @@ module DatabaseDumper
           is_hidden
           metadata_id
           metadata_type
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "groups_metadata_board" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
           created_at
           updated_at
         ),
@@ -850,6 +875,7 @@ module DatabaseDumper
         copy: %w(
           id
           registration_id
+          registration_type
           schedule_activity_id
           station_number
           assignment_code
