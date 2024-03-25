@@ -1252,7 +1252,7 @@ en:
     #context: generic message
     messages:
       not_visible: "This competition is not visible to the public."
-      name_too_long: "The competition name is longer than 32 characters. We prefer shorter ones and we will be glad if you change it."
+      name_too_long: "The competition name is longer than 32 characters. Please edit the competition ID and short name appropriately."
       id_starts_with_lowercase: "The competition id starts with a lowercase letter. We prefer to have it start with an uppercase."
       must_have_events: "Please add at least one event before confirming the competition."
       schedule_must_match_rounds: "Please make sure the competition has at least one round per event and that the schedule you created includes all the rounds you declared before confirming the competition."
