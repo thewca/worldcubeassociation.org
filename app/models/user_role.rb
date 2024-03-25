@@ -125,9 +125,8 @@ class UserRole < ApplicationRecord
   end
 
   def self.discourse_user_group(role)
-    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
-    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
-    group = is_actual_role ? role.group : role[:group]
+    group_type = UserRole.group_type(role)
+    group = UserRole.group(role)
     case group_type
     when UserGroup.group_types[:councils]
       group.metadata.friendly_id

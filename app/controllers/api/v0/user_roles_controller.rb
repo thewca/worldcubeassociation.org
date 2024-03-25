@@ -276,14 +276,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     team = group.team
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
     if status == "leader"
+      # If the new role to be added is leader, we will be ending the leader role of already existing person.
       old_leader = Team.find_by(id: team.id).leader
       if old_leader.present?
         old_leader.update!(end_date: Date.today)
       end
     end
-    already_existing_member = TeamMember.find_by(team_id: team.id, user_id: user_id, end_date: nil)
-    if already_existing_member.present?
-      already_existing_member.update!(end_date: Date.today)
+    # If the person who is going to get the new role is already having a role, that role will be ended.
+    already_existing_row = TeamMember.find_by(team_id: team.id, user_id: user_id, end_date: nil)
+    if already_existing_row.present?
+      already_existing_row.update!(end_date: Date.today)
     end
     TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
     render json: {
