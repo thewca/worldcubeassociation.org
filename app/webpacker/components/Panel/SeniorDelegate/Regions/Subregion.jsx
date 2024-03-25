@@ -13,6 +13,7 @@ import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupType } from '../../../../lib/helpers/status-objects';
 import RegionSelector from './RegionSelector';
+import useInputState from '../../../../lib/hooks/useInputState';
 
 const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
@@ -55,6 +56,7 @@ export default function Subregion({ title, groupId }) {
   const [delegateToChange, setDelegateToChange] = useState(null);
   const [formValues, setFormValues] = useState(initialValue);
   const [newDelegateUser, setNewDelegateUser] = useState(null);
+  const [newLocation, setNewLocation] = useInputState(null);
   const [formError, setFormError] = useState(null);
   const { save, saving } = useSaveAction();
   const confirm = useConfirm();
@@ -63,6 +65,12 @@ export default function Subregion({ title, groupId }) {
   const setDelegateToChangeAndShowModal = (delegate) => {
     setDelegateToChange(delegate);
     setOpenModalType('changeRegion');
+  };
+
+  const setDelegateToEditLocation = (delegate) => {
+    setDelegateToChange(delegate);
+    setNewLocation(delegate.metadata.location);
+    setOpenModalType('editLocation');
   };
 
   const handleFormChange = (_, { name, value }) => setFormValues({ ...formValues, [name]: value });
@@ -125,6 +133,14 @@ export default function Subregion({ title, groupId }) {
     });
   };
 
+  const editLocationAction = () => {
+    confirm().then(() => {
+      save(apiV0Urls.userRoles.update(delegateToChange.id), {
+        location: newLocation,
+      }, sync, { method: 'PATCH' });
+    });
+  };
+
   if (loading || saving) return <Loading />;
   if (error) return <Errored />;
 
@@ -146,6 +162,7 @@ export default function Subregion({ title, groupId }) {
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
+            <Table.HeaderCell>Location</Table.HeaderCell>
             <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
         </Table.Header>
@@ -154,6 +171,7 @@ export default function Subregion({ title, groupId }) {
             <Table.Row key={delegate.id}>
               <Table.Cell>{delegate.user.name}</Table.Cell>
               <Table.Cell>{I18n.t(`enums.user_roles.status.delegate_regions.${delegate.metadata.status}`)}</Table.Cell>
+              <Table.Cell>{delegate.metadata.location}</Table.Cell>
               <Table.Cell>
                 {canPromote(delegate)
                   && <Button onClick={() => promoteDelegateAction(delegate)}>Promote</Button>}
@@ -163,6 +181,9 @@ export default function Subregion({ title, groupId }) {
                   && <Button onClick={() => endDelegateRoleAction(delegate)}>End Role</Button>}
                 <Button onClick={() => setDelegateToChangeAndShowModal(delegate)}>
                   Change Region
+                </Button>
+                <Button onClick={() => setDelegateToEditLocation(delegate)}>
+                  Edit Location
                 </Button>
               </Table.Cell>
             </Table.Row>
@@ -223,6 +244,25 @@ export default function Subregion({ title, groupId }) {
             }
             onCancel={() => setOpenModalType(null)}
           />
+        </Modal.Content>
+      </Modal>
+      <Modal
+        size="fullscreen"
+        onClose={() => setOpenModalType(null)}
+        open={openModalType === 'editLocation'}
+      >
+        <Modal.Content>
+          <Header>Edit Location</Header>
+          <Form onSubmit={editLocationAction}>
+            <Form.Input
+              label="Location"
+              name="location"
+              value={newLocation}
+              onChange={setNewLocation}
+            />
+            <Form.Button onClick={() => setOpenModalType(null)}>Cancel</Form.Button>
+            <Form.Button type="submit">Save</Form.Button>
+          </Form>
         </Modal.Content>
       </Modal>
     </>

@@ -424,6 +424,15 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id) && current_user.has_permission?(:can_edit_groups, group_id)
 
         user.update!(region_id: group_id)
+      elsif params.key?(:location)
+        location = params.require(:location)
+        changed_parameter = 'Location'
+        previous_value = user.location
+        new_value = location
+
+        return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id) && current_user.has_permission?(:can_edit_groups, group_id)
+
+        user.update!(location: location)
       else
         return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
       end
