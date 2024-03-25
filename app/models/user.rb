@@ -267,9 +267,6 @@ class User < ApplicationRecord
   end
 
   scope :delegates, -> { where.not(delegate_status: nil) }
-  scope :candidate_delegates, -> { where(delegate_status: "candidate_delegate") }
-  scope :trainee_delegates, -> { where(delegate_status: "trainee_delegate") }
-  scope :staff_delegates, -> { where.not(delegate_status: [nil, "trainee_delegate"]) }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
@@ -1019,14 +1016,20 @@ class User < ApplicationRecord
   # The reason why clear_receive_delegate_reports_if_not_eligible is needed is because there's no automatic code that
   # runs once a user is no longer a team member, we just schedule their end date.
   def self.delegate_reports_receivers_emails
-    candidate_delegates = User.candidate_delegates
-    trainee_delegates = User.trainee_delegates
+    delegate_groups = UserGroup.delegate_regions
+    roles = delegate_groups.flat_map(&:active_roles).select do |role|
+      [
+        RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+        RolesMetadataDelegateRegions.statuses[:junior_delegate],
+      ].include?(UserRole.status(role))
+    end
+    eligible_delegate_users = roles.map { |role| UserRole.user(role) }
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
       quality@worldcubeassociation.org
       regulations@worldcubeassociation.org
-    ) + candidate_delegates.map(&:email) + trainee_delegates.map(&:email) + other_staff.map(&:email)).uniq
+    ) + eligible_delegate_users.map(&:email) + other_staff.map(&:email)).uniq
   end
 
   def notify_of_results_posted(competition)
@@ -1080,6 +1083,22 @@ class User < ApplicationRecord
     )
   end
 
+  def self.staff_delegate_ids
+    UserGroup
+      .delegate_regions
+      .flat_map(&:active_roles)
+      .select { |role| UserRole.is_staff?(role) }
+      .map { |role| UserRole.user(role).id }
+  end
+
+  def self.trainee_delegate_ids
+    UserGroup
+      .delegate_regions
+      .flat_map(&:active_roles)
+      .select { |role| UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+      .map { |role| UserRole.user(role).id }
+  end
+
   def self.search(query, params: {})
     users = Person.includes(:user).current
     # We can't search by email on the 'Person' table
@@ -1089,11 +1108,11 @@ class User < ApplicationRecord
       search_by_email = ActiveRecord::Type::Boolean.new.cast(params[:email])
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_staff_delegates])
-        users = users.staff_delegates
+        users = users.where(id: self.staff_delegate_ids)
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_trainee_delegates])
-        users = users.where(delegate_status: "trainee_delegate")
+        users = users.where(id: self.trainee_delegate_ids)
       end
 
       if ActiveRecord::Type::Boolean.new.cast(params[:only_with_wca_ids])
