@@ -9,8 +9,6 @@ import {
 import TextareaAutosize from 'react-textarea-autosize';
 import { Circle } from 'react-leaflet';
 import _ from 'lodash';
-import DatePicker from 'react-datepicker';
-import { DateTime } from 'luxon';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import { CompetitionSearch, UserSearch } from './FormSearch';
@@ -25,6 +23,7 @@ import {
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import 'react-datepicker/dist/react-datepicker.css';
+import UtcDatePicker from '../../wca/UtcDatePicker';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -221,57 +220,28 @@ export const InputNumber = wrapInput((props) => {
   );
 }, ['attachedLabel', 'min', 'max', 'step']);
 
-const loadAsPseudoLocal = (isoString) =>
-  // all of our WCIF-contained dates are defined to be UTC
-  // eslint-disable-next-line implicit-arrow-linebreak
-  DateTime.fromISO(isoString, { zone: 'UTC' })
-    // but the react-datepicker uses local TZ,
-    // so we have to make the date _think_ it's local without actually converting the time
-    .setZone('local', { keepLocalTime: true })
-    // and finally output as JS-compatible object
-    .toJSDate();
-
 export const InputDate = wrapInput((props) => {
-  const date = props.value && loadAsPseudoLocal(props.value);
-
-  const onChangeInternal = useCallback((newDate) => {
-    const luxon = DateTime.fromJSDate(newDate)
-      // convert to UTC while still maintaining the exact time that the user put in
-      .setZone('UTC', { keepLocalTime: true });
-
-    const stringValue = props.dateTime
-      ? luxon.toISO({ suppressMilliseconds: true })
-      : luxon.toISODate();
-
-    props.onChange(null, { value: stringValue });
+  const onChangeInternal = useCallback((isoDate) => {
+    props.onChange(null, { value: isoDate });
   }, [props]);
-
-  const startDate = props.startDate && loadAsPseudoLocal(props.startDate);
-  const endDate = props.endDate && loadAsPseudoLocal(props.endDate);
-
-  const minDate = props.minDate && loadAsPseudoLocal(props.minDate);
-  const maxDate = props.maxDate && loadAsPseudoLocal(props.maxDate);
 
   return (
     <Input
       id={props.htmlId}
       name={props.htmlName}
     >
-      <DatePicker
-        selected={date}
+      <UtcDatePicker
+        isoDate={props.value}
         onChange={onChangeInternal}
         shouldCloseOnSelect={false}
         showTimeInput={props.dateTime}
-        timeInputLabel="UTC"
-        dateFormat={props.dateTime ? 'Pp' : 'P'}
-        timeFormat="p"
         style={{ width: 'inherit' }}
         selectsStart={props.selectsStart}
         selectsEnd={props.selectsEnd}
-        startDate={startDate}
-        endDate={endDate}
-        minDate={minDate}
-        maxDate={maxDate}
+        isoStartDate={props.startDate}
+        isoEndDate={props.endDate}
+        isoMinDate={props.minDate}
+        isoMaxDate={props.maxDate}
       />
     </Input>
   );
