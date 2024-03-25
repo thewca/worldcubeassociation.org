@@ -58,5 +58,6 @@ translations:
       - "*.activerecord.attributes.competition_series.*"
       - "*.activerecord.attributes.championship.*"
       - "*.datetime.*"
+      - "*.wca.devise.*"
       - "*.wca.errors.messages.form_error"
       - "*.page.*"

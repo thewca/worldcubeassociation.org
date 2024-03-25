@@ -791,6 +791,18 @@ en:
         wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
         wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
+    sign_up:
+      title: "Sign up"
+      form:
+        email:
+          validation_error: "Please enter a valid email address."
+        password:
+          validation_error: "Please enter a password with at least 3 characters."
+        confirm_password:
+          validation_error: "Passwords do not match."
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+      button: "Sign up"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
