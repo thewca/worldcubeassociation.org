@@ -21,12 +21,23 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
 
     reversible do |direction|
       direction.up do
+        RegistrationPayment.update_all(receipt_type: 'StripeRecord')
+
         PaymentIntent.update_all(payment_record_type: 'StripeRecord')
 
         PaymentIntent.find_each do |intent|
           intent.assign_attributes(payment_record_id: intent.stripe_record_id)
           intent.set_wca_status
           intent.save
+        end
+      end
+
+      direction.down do
+        RegistrationPayment.update_all(receipt_type: 'StripeTransaction')
+
+        PaymentIntent.find_each do |intent|
+          intent.assign_attributes(stripe_record_id: intent.payment_record_id)
+          intent.save(validate: false)
         end
       end
     end
