@@ -49,6 +49,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
             friendly_id: council.friendly_id,
             email: council.email,
           },
+          lead_user: council.reload.leader,
         }
       end
     end
@@ -59,13 +60,14 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
         groups << {
           id: group_type + "_" + team_committee.id.to_s,
           name: team_committee.name,
-          group_type: UserGroup.group_types[:team_committee],
+          group_type: UserGroup.group_types[:teams_committees],
           is_hidden: false,
           is_active: true,
           metadata: {
             friendly_id: team_committee.friendly_id,
             email: team_committee.email,
           },
+          lead_user: team_committee.reload.leader,
         }
       end
     end

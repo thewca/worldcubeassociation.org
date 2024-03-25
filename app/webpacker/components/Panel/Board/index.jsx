@@ -3,11 +3,11 @@ import DelegateProbations from '../../DelegateProbations';
 import PanelTemplate from '../PanelTemplate';
 import SeniorDelegatesList from './SeniorDelegatesList';
 import RegionManager from './RegionManager';
-import CouncilLeaders from './CouncilLeaders';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
 import GroupsManagerAdmin from './GroupsManagerAdmin';
 import OfficersEditor from './OfficersEditor';
 import RegionsAdmin from './RegionsAdmin';
+import LeadersAdminPage from './LeadersAdminPage';
 
 const sections = [
   {
@@ -16,9 +16,9 @@ const sections = [
     component: SeniorDelegatesList,
   },
   {
-    id: PANEL_LIST.board.councilLeaders,
-    name: 'Council Leaders',
-    component: CouncilLeaders,
+    id: PANEL_LIST.board.leadersAdmin,
+    name: 'Leaders Admin',
+    component: LeadersAdminPage,
   },
   {
     id: PANEL_LIST.board.regionsManager,
