@@ -88,6 +88,7 @@ export default function TeamsCommitteesCouncils() {
                       value: option.friendlyId,
                     }))}
                     value={hash}
+                    scrolling
                     onChange={(__, { value }) => setHash(value)}
                   />
                 </Grid.Row>
