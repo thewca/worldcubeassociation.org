@@ -23,7 +23,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
         PaymentIntent.update_all(payment_record_type: 'StripeRecord')
 
         PaymentIntent.find_each do |intent|
-          intent.assign_attributes(payment_record_id: intent.stripe_record_id)
+          intent.assign_attributes(payment_record_id: intent.payment_record_id)
           intent.assign_wca_status!
           intent.save
         end
