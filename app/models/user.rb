@@ -1297,7 +1297,8 @@ class User < ApplicationRecord
       any_kind_of_delegate? ||
       !delegated_competitions.empty? ||
       !competitions_announced.empty? ||
-      !competitions_results_posted.empty?
+      !competitions_results_posted.empty? ||
+      board_member?
   end
 
   def accepted_registrations
@@ -1431,9 +1432,6 @@ class User < ApplicationRecord
     end
 
     roles.concat(team_roles)
-
-    # Appending Board roles
-    roles.concat(UserGroup.board.flat_map(&:roles).filter { |role| UserRole.user(role).id == self.id })
 
     roles
   end

@@ -8,6 +8,7 @@ import GroupsManagerAdmin from './GroupsManagerAdmin';
 import OfficersEditor from './OfficersEditor';
 import RegionsAdmin from './RegionsAdmin';
 import LeadersAdminPage from './LeadersAdminPage';
+import BoardEditorPage from './BoardEditorPage';
 
 const sections = [
   {
@@ -34,6 +35,11 @@ const sections = [
     id: PANEL_LIST.board.groupsManagerAdmin,
     name: 'Groups Manager Admin',
     component: GroupsManagerAdmin,
+  },
+  {
+    id: PANEL_LIST.board.boardEditor,
+    name: 'Board Editor',
+    component: BoardEditorPage,
   },
   {
     id: PANEL_LIST.board.officersEditor,
