@@ -36,24 +36,6 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     # array, so that we can append groups which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
 
-    # Temporary hack to support old system teams/committees.
-    if group_type == UserGroup.group_types[:teams_committees]
-      Team.all_official.each do |team_committee|
-        groups << {
-          id: group_type + "_" + team_committee.id.to_s,
-          name: team_committee.name,
-          group_type: UserGroup.group_types[:teams_committees],
-          is_hidden: false,
-          is_active: true,
-          metadata: {
-            friendly_id: team_committee.friendly_id,
-            email: team_committee.email,
-          },
-          lead_user: team_committee.reload.leader,
-        }
-      end
-    end
-
     # Filters the list of groups based on the permissions of the current user.
     groups = filter_groups_for_logged_in_user(groups)
 
