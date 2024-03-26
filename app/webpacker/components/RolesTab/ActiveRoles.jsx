@@ -14,7 +14,7 @@ function hyperlink(role) {
     ].includes(role.metadata.status)) {
       return panelUrls.board.regionsManager;
     }
-    return null;
+    return panelUrls.seniorDelegate.regions;
   }
   if (role.group.group_type === groupTypes.teams_committees) {
     return `${teamUrl(role.group.id.split('_').pop())}/edit`;
@@ -25,17 +25,7 @@ function hyperlink(role) {
   return null;
 }
 
-function isHyperlinkableRole(role) {
-  if (role.group.group_type === groupTypes.delegate_regions) {
-    return [
-      delegateRegionsStatus.senior_delegate,
-      delegateRegionsStatus.regional_delegate,
-    ].includes(role.metadata.status);
-  }
-  return [groupTypes.teams_committees, groupTypes.translators].includes(role.group.group_type);
-}
-
-export default function ActiveRoles({ activeRoles, setOpen }) {
+export default function ActiveRoles({ activeRoles }) {
   const { loggedInUserPermissions, loading } = useLoggedInUserPermissions();
   if (loading) {
     return <Loading />;
@@ -57,8 +47,6 @@ export default function ActiveRoles({ activeRoles, setOpen }) {
                 name="edit"
                 size="large"
                 link
-                onClick={isHyperlinkableRole(role) ? null : () => setOpen(true)}
-                disabled={!loggedInUserPermissions.canEditRole(role)}
               />
             </List.Content>
             <List.Content>
