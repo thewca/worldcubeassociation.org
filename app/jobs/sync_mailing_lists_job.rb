@@ -55,6 +55,12 @@ class SyncMailingListsJob < WcaCronjob
       end
       region_email_id = region.metadata&.email
       if region_email_id.present?
+        puts('DJDJDJ')
+        puts(region_emails)
+        puts(region_emails.count)
+        puts(region.active_roles.count)
+        puts(region.active_roles_of_all_child_groups.count)
+        puts('DJDJDJ')
         GsuiteMailingLists.sync_group(region_email_id, region_emails.uniq)
       end
     end
