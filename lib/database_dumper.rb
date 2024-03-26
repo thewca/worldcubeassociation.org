@@ -742,6 +742,18 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "groups_metadata_councils" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          email
+          friendly_id
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "groups_metadata_translators" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(

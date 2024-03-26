@@ -206,6 +206,10 @@ class UsersController < ApplicationController
     end
   end
 
+  private def sso_moderator?(user)
+    UserGroup.council_group_wac.active_users.include?(user)
+  end
+
   def sso_discourse
     # This implements https://meta.discourse.org/t/official-single-sign-on-for-discourse-sso/13045
     # (section "implementing SSO on your site")
@@ -221,8 +225,9 @@ class UsersController < ApplicationController
     all_groups = User.all_discourse_groups
 
     # Get the teams/councils/Delegate status for user
-    user_groups = current_user.current_teams.select(&:official_or_council?).map(&:friendly_id)
-    user_groups.concat(current_user.delegate_roles.map { |delegate_role| UserRole.status(delegate_role) }.uniq)
+    user_groups = current_user.current_teams.select(&:official?).map(&:friendly_id)
+    user_groups += current_user.active_roles.map { |role| UserRole.discourse_user_group(role) }.compact
+    user_groups += current_user.delegate_roles.map { |delegate_role| UserRole.status(delegate_role) }.uniq
     # Board is (expectedly) not included in "current_teams", so we have to add
     # it manually.
     user_groups << UserGroup.group_types[:board] if current_user.board_member?
@@ -231,7 +236,7 @@ class UsersController < ApplicationController
     sso.name = current_user.name
     sso.email = current_user.email
     sso.avatar_url = current_user.avatar_url
-    sso.moderator = current_user.wac_team?
+    sso.moderator = sso_moderator?(current_user)
     sso.locale = current_user.locale
     sso.locale_force_update = true
     sso.add_groups = user_groups.join(",")
