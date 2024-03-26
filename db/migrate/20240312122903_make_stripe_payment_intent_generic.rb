@@ -21,8 +21,6 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
 
     reversible do |direction|
       direction.up do
-        RegistrationPayment.update_all(receipt_type: 'StripeRecord')
-
         PaymentIntent.update_all(payment_record_type: 'StripeRecord')
 
         PaymentIntent.find_each do |intent|
@@ -33,8 +31,6 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
       end
 
       direction.down do
-        RegistrationPayment.update_all(receipt_type: 'StripeTransaction')
-
         PaymentIntent.find_each do |intent|
           intent.assign_attributes(stripe_record_id: intent.payment_record_id)
           intent.save(validate: false)

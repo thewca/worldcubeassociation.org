@@ -38,18 +38,20 @@ class PaymentIntent < ApplicationRecord
   end
 
   def retrieve_intent
-    Stripe::PaymentIntent.retrieve(
-      self.stripe_id,
-      client_secret: client_secret,
-      stripe_account: self.find_account_id,
-    )
+    if payment_record_type == 'StripeRecord'
+      Stripe::PaymentIntent.retrieve(
+        self.stripe_id,
+        client_secret: client_secret,
+        stripe_account: self.find_account_id,
+      )
+    else
+      raise "Trying to call retrieve_intent for a PaymentIntent with unmatched payment_record_type of: #{payment_record_type}"
+    end
   end
 
   def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
     if payment_record_type == 'StripeRecord'
       update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
-    elsif payment_record_type == 'PaypalRecord'
-      raise 'Paypal is not enabled in production' if PaypalInterface.paypal_disabled?
     else
       raise "Trying to update status and charges for a PaymentIntent with unmatched payment_record_type of: #{payment_record_type}"
     end
@@ -117,8 +119,6 @@ class PaymentIntent < ApplicationRecord
       if payment_record_type == 'StripeRecord'
         errors.add(:wca_status, "is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
           StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
-      elsif payment_record_type == 'PaypalRecord'
-        raise 'Paypal is not enabled in production' if PaypalInterface.paypal_disabled?
       else
         raise "No status combination validation defined for: #{payment_record_type}"
       end
