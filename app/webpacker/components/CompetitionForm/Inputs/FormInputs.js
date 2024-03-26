@@ -22,7 +22,6 @@ import {
 } from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
-import 'react-datepicker/dist/react-datepicker.css';
 import UtcDatePicker from '../../wca/UtcDatePicker';
 
 function snakifyId(id, section = []) {
