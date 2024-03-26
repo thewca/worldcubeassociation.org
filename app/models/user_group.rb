@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class UserGroup < ApplicationRecord
+  # Councils are recognized by Motions. The corresponding motions related to councils can be found in the following URL:
+  # https://www.worldcubeassociation.org/documents
   enum :group_type, {
     delegate_probation: "delegate_probation",
     delegate_regions: "delegate_regions",
