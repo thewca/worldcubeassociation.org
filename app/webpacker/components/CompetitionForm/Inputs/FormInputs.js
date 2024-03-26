@@ -231,6 +231,7 @@ export const InputDate = wrapInput((props) => {
       name={props.htmlName}
     >
       <UtcDatePicker
+        id={props.htmlId}
         isoDate={props.value}
         onChange={onChangeInternal}
         shouldCloseOnSelect={false}

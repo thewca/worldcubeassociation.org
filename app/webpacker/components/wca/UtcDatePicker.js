@@ -20,6 +20,7 @@ const loadAsPseudoLocal = (isoString) => {
 const useIsoDate = (isoString) => useMemo(() => loadAsPseudoLocal(isoString), [isoString]);
 
 function UtcDatePicker({
+  id,
   isoDate,
   onChange,
   shouldCloseOnSelect,
@@ -52,6 +53,7 @@ function UtcDatePicker({
 
   return (
     <DatePicker
+      id={id}
       selected={date}
       onChange={onChangeInternal}
       shouldCloseOnSelect={shouldCloseOnSelect}
