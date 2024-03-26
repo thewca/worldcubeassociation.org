@@ -59,6 +59,10 @@ FactoryBot.define do
       metadata { FactoryBot.create(:treasurer_role_metadata) }
     end
 
+    trait :board do
+      group_id { UserGroup.board_group.id }
+    end
+
     factory :delegate_role do
       user { FactoryBot.create(:user) }
       group_id { FactoryBot.create(:delegate_region_americas).id }
@@ -76,5 +80,6 @@ FactoryBot.define do
     factory :vice_chair_role, traits: [:officers, :officers_vice_chair, :active]
     factory :secretary_role, traits: [:officers, :officers_secretary, :active]
     factory :treasurer_role, traits: [:officers, :officers_treasurer, :active]
+    factory :board_role, traits: [:board, :active]
   end
 end

@@ -207,8 +207,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
           }
         end
       end
-    elsif group_type == UserGroup.group_types[:board]
-      roles.concat(UserGroup.board.flat_map(&:roles))
     end
 
     roles
@@ -304,6 +302,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
       UserGroup.group_types[:officers],
+      UserGroup.group_types[:board],
     ]
     group = UserGroup.find(group_id)
 
