@@ -53,13 +53,15 @@ class User < ApplicationRecord
   scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
 
   def self.eligible_voters
-    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
-    team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
-    eligible_delegates = User.where(delegate_status: %w(delegate))
-    eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
-    board_members = UserGroup.board.flat_map(&:active_users)
-    officers = UserGroup.officers.flat_map(&:active_users)
-    (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
+    [
+      UserGroup.delegate_regions,
+      UserGroup.teams_committees,
+      UserGroup.board,
+      UserGroup.officers,
+    ].flatten.flat_map(&:active_roles)
+      .select { |role| UserRole.is_eligible_voter?(role) }
+      .map { |role| UserRole.user(role) }
+      .uniq
   end
 
   def self.leader_senior_voters
