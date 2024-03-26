@@ -252,6 +252,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
       UserGroup.group_types[:officers],
+      UserGroup.group_types[:councils],
     ]
     group = UserGroup.find(group_id)
 
@@ -267,7 +268,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = nil
     end
 
-    if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group.group_type)
+    if group.group_type == UserGroup.group_types[:teams_committees]
       return create_team_committee_council_role(group, user_id, status)
     end
 
@@ -293,6 +294,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
     elsif group.group_type == UserGroup.group_types[:officers]
       metadata = RolesMetadataOfficers.create!(status: status)
+    elsif group.group_type == UserGroup.group_types[:councils]
+      metadata = RolesMetadataCouncils.create!(status: status)
     else
       metadata = nil
     end
