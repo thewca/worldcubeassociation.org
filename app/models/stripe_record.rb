@@ -29,7 +29,7 @@ class StripeRecord < ApplicationRecord
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
-  enum record_type: {
+  enum type: {
     payment_intent: "payment_intent",
     charge: "charge",
     refund: "refund",

@@ -16,7 +16,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
 
     rename_table :stripe_payment_intents, :payment_intents
     rename_column :stripe_records, :status, :stripe_status
-    rename_column :stripe_records, :api_type, :record_type
+    rename_column :stripe_records, :api_type, :type
     rename_column :paypal_records, :status, :paypal_status
 
     reversible do |direction|

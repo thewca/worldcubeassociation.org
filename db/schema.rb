@@ -1079,7 +1079,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_12_122903) do
   end
 
   create_table "stripe_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "record_type"
+    t.string "type"
     t.string "stripe_id"
     t.text "parameters", null: false
     t.integer "amount_stripe_denomination"
