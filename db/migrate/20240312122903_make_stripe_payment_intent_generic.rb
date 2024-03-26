@@ -16,7 +16,6 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
 
     rename_table :stripe_payment_intents, :payment_intents
     rename_column :stripe_records, :status, :stripe_status
-    rename_column :stripe_records, :api_type, :type
     rename_column :paypal_records, :status, :paypal_status
 
     reversible do |direction|
@@ -32,7 +31,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
 
       direction.down do
         PaymentIntent.find_each do |intent|
-          intent.assign_attributes(stripe_record_id: intent.payment_record_id)
+          intent.assign_attributes(payment_record_id: intent.payment_record_id)
           intent.save(validate: false)
         end
       end
