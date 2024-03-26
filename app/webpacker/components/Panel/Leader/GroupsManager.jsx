@@ -70,6 +70,7 @@ function GroupTable({ group }) {
         <Table.Header>
           <Table.Row>
             <Table.HeaderCell>Name</Table.HeaderCell>
+            <Table.HeaderCell>Start Date</Table.HeaderCell>
             <Table.HeaderCell>Status</Table.HeaderCell>
             <Table.HeaderCell>Actions</Table.HeaderCell>
           </Table.Row>
@@ -78,6 +79,7 @@ function GroupTable({ group }) {
           {roles.map((role) => (
             <Table.Row key={role.id}>
               <Table.Cell>{role.user.name}</Table.Cell>
+              <Table.Cell>{role.start_date}</Table.Cell>
               <Table.Cell>
                 {`${I18n.t(`enums.user_roles.status.${role.group.group_type}.${role.metadata.status}`)}`}
               </Table.Cell>
