@@ -414,8 +414,6 @@ en:
       status:
         accepted: "Accepted"
         pending: "Pending"
-        cancelled: "Cancelled"
-        waiting_list: "On the Waiting List"
       type:
         report: "Report"
         article: "Article"
@@ -554,6 +552,8 @@ en:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
+          cancelled: "Cancelled"
+          waiting_list: "On the Waiting List"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
