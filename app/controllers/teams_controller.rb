@@ -6,7 +6,13 @@ class TeamsController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_edit_team?, team_from_params) }, only: [:edit, :update]
 
   def index
-    @teams = Team.unscoped.all
+    @teams = Team.all_official + [
+      Team.board,
+      Team.banned,
+      Team.wst_admin,
+      Team.wct_china,
+      Team.wdpc, # Not an official team anymore. But still adding here so that we don't forget while migrating to roles.
+    ]
   end
 
   def edit
