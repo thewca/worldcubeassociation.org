@@ -80,6 +80,7 @@ class TeamMember < ApplicationRecord
     {
       id: team.group_type + "_" + self.id.to_s,
       start_date: start_date,
+      end_date: end_date,
       is_active: current_member?,
       group: team.group || {
         id: team.group_type + "_" + team.id.to_s,
