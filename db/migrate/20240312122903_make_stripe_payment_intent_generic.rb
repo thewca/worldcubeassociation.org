@@ -11,7 +11,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
       t.rename :stripe_record_id, :payment_record_id
 
       t.string :wca_status
-      t.string :payment_record_type, after: holder_id
+      t.string :payment_record_type, after: :holder_id
     end
 
     rename_table :stripe_payment_intents, :payment_intents
