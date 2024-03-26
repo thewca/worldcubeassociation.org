@@ -74,7 +74,7 @@ class StripeRecord < ApplicationRecord
     )
 
     unless self.payment_intent.nil?
-      self.payment_intent.set_wca_status
+      self.payment_intent.determine_wca_status
       self.payment_intent.save
     end
 
