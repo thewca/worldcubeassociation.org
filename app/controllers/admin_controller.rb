@@ -382,7 +382,7 @@ class AdminController < ApplicationController
   end
 
   def all_voters
-    voters User.eligible_voters, "all-wca-voters"
+    voters Api::V0::UserRolesController.eligible_voters, "all-wca-voters"
   end
 
   def leader_senior_voters

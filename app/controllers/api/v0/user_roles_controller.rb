@@ -580,4 +580,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     render json: { result: active_roles }
   end
+
+  def self.eligible_voters
+    [
+      UserGroup.delegate_regions,
+      UserGroup.teams_committees,
+      UserGroup.board,
+      UserGroup.officers,
+    ].flatten.flat_map(&:active_roles)
+      .select { |role| UserRole.is_eligible_voter?(role) }
+      .map { |role| UserRole.user(role) }
+      .uniq
+  end
 end
