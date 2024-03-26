@@ -1702,7 +1702,7 @@ en:
         download: "Download all of the competitions details."
       list:
         empty: "No matching Records found"
-        spots_remaining: "; %{spots} spot(s) remaining"
+        spots_remaining: "%{spots} spot(s) remaining"
       bookmark:
         unbookmark: "You have removed your bookmark"
       requirements:
