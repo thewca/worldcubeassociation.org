@@ -272,27 +272,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
-  private def create_council_role(group, user_id, status)
-    team = group.team
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
-    if status == "leader"
-      # If the new role to be added is leader, we will be ending the leader role of already existing person.
-      old_leader = Team.find_by(id: team.id).leader
-      if old_leader.present?
-        old_leader.update!(end_date: Date.today)
-      end
-    end
-    # If the person who is going to get the new role is already having a role, that role will be ended.
-    already_existing_row = TeamMember.find_by(team_id: team.id, user_id: user_id, end_date: nil)
-    if already_existing_row.present?
-      already_existing_row.update!(end_date: Date.today)
-    end
-    TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-    render json: {
-      success: true,
-    }
-  end
-
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
@@ -306,6 +285,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
       UserGroup.group_types[:officers],
+      UserGroup.group_types[:councils],
     ]
     group = UserGroup.find(group_id)
 
@@ -319,10 +299,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = params[:location]
     else
       location = nil
-    end
-
-    if group.group_type == UserGroup.group_types[:councils]
-      return create_council_role(group, user_id, status)
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
@@ -347,6 +323,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
     elsif group.group_type == UserGroup.group_types[:officers]
       metadata = RolesMetadataOfficers.create!(status: status)
+    elsif group.group_type == UserGroup.group_types[:councils]
+      metadata = RolesMetadataCouncils.create!(status: status)
     else
       metadata = nil
     end
