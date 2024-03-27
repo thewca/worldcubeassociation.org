@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :stripe_record do
-    type { 'payment_intent' }
+    stripe_record_type { 'payment_intent' }
     stripe_id { 'test_stripe_id' }
     parameters { 'test_parameters' }
     amount_stripe_denomination { 1000 }

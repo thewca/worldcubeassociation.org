@@ -29,7 +29,7 @@ class StripeRecord < ApplicationRecord
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
-  enum type: {
+  enum stripe_record_type: {
     payment_intent: "payment_intent",
     charge: "charge",
     refund: "refund",
@@ -49,13 +49,13 @@ class StripeRecord < ApplicationRecord
 
   def determine_wca_status
     result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(stripe_status) }
-    return result.first unless result.nil?
+    # return result.first unless result.nil?
 
-    raise Exception("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
+    result&.first || raise("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
   end
 
   def find_account_id
-    self.account_id || parent_transaction&.find_account_id
+    self.acount_id || parent_transaction&.find_account_id
   end
 
   def update_status(api_transaction)
