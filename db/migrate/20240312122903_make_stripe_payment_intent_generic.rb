@@ -31,8 +31,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
 
       direction.down do
         PaymentIntent.find_each do |intent|
-          intent.assign_attributes(payment_record_id: intent.payment_record_id)
-          intent.save(validate: false)
+          intent.update_attributes(payment_record_id: intent.payment_record_id)
         end
       end
     end
