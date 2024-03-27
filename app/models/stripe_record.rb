@@ -55,13 +55,13 @@ class StripeRecord < ApplicationRecord
   end
 
   def find_account_id
-    self.acount_id || parent_transaction&.find_account_id
+    self.account_id || parent_transaction&.find_account_id
   end
 
   def update_status(api_transaction)
     stripe_error = nil
 
-    case self.record_type
+    case self.stripe_record_type
     when 'payment_intent'
       stripe_error = api_transaction.last_payment_error&.code
     when 'charge'
@@ -82,7 +82,7 @@ class StripeRecord < ApplicationRecord
   end
 
   def retrieve_stripe
-    case self.record_type
+    case self.stripe_record_type
     when 'payment_intent'
       Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.find_account_id)
     when 'charge'
@@ -151,7 +151,7 @@ class StripeRecord < ApplicationRecord
 
   def self.create_from_api(api_transaction, parameters, account_id = nil)
     StripeRecord.create!(
-      record_type: api_transaction.object,
+      stripe_record_type: api_transaction.object,
       parameters: parameters,
       stripe_id: api_transaction.id,
       amount_stripe_denomination: api_transaction.amount,
