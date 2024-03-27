@@ -13,6 +13,7 @@ class TestDbManager
     teams
     user_groups
     groups_metadata_board
+    groups_metadata_councils
   ).freeze
 
   def self.fill_tables
