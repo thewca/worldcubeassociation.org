@@ -21,12 +21,26 @@ function daysUntil(date) {
 }
 
 export default function CompDates() {
-  const { competition: { startDate } } = useStore();
+  const { competition: { startDate, endDate } } = useStore();
 
   return (
     <Form.Group widths="equal">
-      <InputDate id="startDate" hint={daysUntil(startDate)} required />
-      <InputDate id="endDate" required />
+      <InputDate
+        id="startDate"
+        hint={daysUntil(startDate)}
+        required
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+      />
+      <InputDate
+        id="endDate"
+        required
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        minDate={startDate}
+      />
     </Form.Group>
   );
 }

@@ -72,4 +72,12 @@ body, html {
       background-image: url("../images/ChineseTaipeiSquared.svg");
     }
   }
+
+  .react-datepicker-wrapper {
+    width: inherit;
+
+    & input {
+      width: inherit !important;
+    }
+  }
 }

@@ -287,13 +287,13 @@ RSpec.feature "Competition management", js: true do
       scenario 'can edit registration open datetime', js: true do
         visit edit_competition_path(comp_with_fours)
 
-        expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)
-        expect(page).to have_field("registration-closingDateTime", type: 'datetime-local', disabled: false)
+        expect(page).to have_field("registration-openingDateTime", type: 'text', disabled: false)
+        expect(page).to have_field("registration-closingDateTime", type: 'text', disabled: false)
 
         wca_registration_checkbox.click
 
-        expect(page).to have_field("registration-openingDateTime", type: 'datetime-local', disabled: false)
-        expect(page).to have_field("registration-closingDateTime", type: 'datetime-local', disabled: false)
+        expect(page).to have_field("registration-openingDateTime", type: 'text', disabled: false)
+        expect(page).to have_field("registration-closingDateTime", type: 'text', disabled: false)
       end
     end
   end
