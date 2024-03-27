@@ -93,7 +93,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     roles = []
     group_type = group_id_of_old_system_to_group_type(group_id)
     original_group_id = group_id.split("_").last
-    if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
+    if group_type == UserGroup.group_types[:teams_committees]
       TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
         roles << team_member.role
       end
@@ -187,26 +187,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         roles.concat(User.delegates.map(&:delegate_role))
       end
     elsif group_type == UserGroup.group_types[:councils]
-      Team.all_councils.each do |council|
-        leader = council.leader
-        if leader.present?
-          roles << {
-            id: group_type + "_" + leader.id.to_s,
-            group: {
-              id: group_type + "_" + council.id.to_s,
-              name: council.name,
-              group_type: UserGroup.group_types[:councils],
-              is_hidden: false,
-              is_active: true,
-            },
-            user: leader.user,
-            metadata: {
-              status: 'leader',
-            },
-            is_active: true,
-          }
-        end
-      end
+      roles.concat(UserGroup.councils.flat_map(&:roles))
     elsif group_type == UserGroup.group_types[:board]
       roles.concat(UserGroup.board.flat_map(&:roles))
     end
@@ -291,6 +272,27 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
+  private def create_council_role(group, user_id, status)
+    team = group.team
+    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
+    if status == "leader"
+      # If the new role to be added is leader, we will be ending the leader role of already existing person.
+      old_leader = Team.find_by(id: team.id).leader
+      if old_leader.present?
+        old_leader.update!(end_date: Date.today)
+      end
+    end
+    # If the person who is going to get the new role is already having a role, that role will be ended.
+    already_existing_row = TeamMember.find_by(team_id: team.id, user_id: user_id, end_date: nil)
+    if already_existing_row.present?
+      already_existing_row.update!(end_date: Date.today)
+    end
+    TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
+    render json: {
+      success: true,
+    }
+  end
+
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
@@ -317,6 +319,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = params[:location]
     else
       location = nil
+    end
+
+    if group.group_type == UserGroup.group_types[:councils]
+      return create_council_role(group, user_id, status)
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)

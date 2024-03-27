@@ -2415,6 +2415,11 @@ class Competition < ApplicationRecord
         self.championships = form_championships.map do |type|
           Championship.new(championship_type: type)
         end
+      else
+        # explicitly sending an empty array of championships
+        #   (which prominently happens when removing the only championship there is)
+        #   makes `present?` return `false`, so we explicitly set this default value.
+        self.championships = []
       end
 
       assign_attributes(Competition.form_data_to_attributes(form_data))

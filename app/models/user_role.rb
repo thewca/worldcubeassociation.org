@@ -124,6 +124,17 @@ class UserRole < ApplicationRecord
     end
   end
 
+  def self.discourse_user_group(role)
+    group_type = UserRole.group_type(role)
+    group = UserRole.group(role)
+    case group_type
+    when UserGroup.group_types[:councils]
+      group.metadata.friendly_id
+    else
+      nil
+    end
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     methods: %w[],
     only: %w[id start_date end_date],
