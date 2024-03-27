@@ -919,6 +919,10 @@ th:
           pending: รายชื่อรอ
           #original_hash: 441bda6
           deleted: ถูกลบทิ้ง
+          #original_hash: a1bf92e
+          cancelled: ยกเลิก
+          #original_hash: 8cf6f9c
+          waiting_list: อยู่ใน waiting list
   mail_form:
     attributes:
       contact_form:
@@ -1113,14 +1117,16 @@ th:
       error_pages:
         #original_hash: 1042478
         500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
-        #original_hash: d815249
-        500_contact: หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรดระบุ Request ID
+        #original_hash: d656a11
+        500_contact: >-
+          หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรด copy Request ID ใส่ใน
+          email ด้วย
         #original_hash: b61e305
         400_error: ไม่มีหน้าที่คุณกำลังมองหา
-        #original_hash: 8b309f5
+        #original_hash: c8a7d4e
         400_contact: >-
-          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และระบุ Request
-          ID
+          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และ copy
+          Request ID ใส่ใน email ด้วย
     doorkeeper:
       applications:
         help:
@@ -2298,10 +2304,10 @@ th:
     messages:
       #original_hash: 7b80062
       not_visible: การแข่งขันนี้ไม่ปรากฏแก่สาธารณะ
-      #original_hash: c1d4926
+      #original_hash: 0398a14
       name_too_long: >-
-        ชื่อการแข่งขันยาวเกิน 32 ตัวอักษร เราแนะนำให้ใช้ชื่อที่สั้นกว่านี้
-        และเรายินดีหากคุณเปลี่ยน
+        ชื่อการแข่งขันยาวเกิน 32 ตัวอักษร โปรดแก้ไข competition ID
+        และชื่อย่อให้เหมาะสม
       #original_hash: af27396
       id_starts_with_lowercase: >-
         Competition Id ขึ้นต้นด้วยด้วยตัวอักษรตัวเล็ก
@@ -3236,6 +3242,120 @@ th:
               #original_hash: 6509041
               'false': >-
                 ผู้เข้าแข่งขันจะต้องผ่านการคัดเลือกในประเภทการแข่งขันที่ลงทะเบียน
+    registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: 'เป็น <0>%{pdfLink}</0>'
+      info:
+        #original_hash: eade5c7
+        download: โหลดรายละเอียดการแข่งขันทั้งหมด
+      list:
+        #original_hash: 8fab566
+        empty: ไม่พบรายชื่อที่ตรงกัน
+        #original_hash: 713f805
+        spots_remaining: 'ผู้สมัครเหลืออีก %{spots} คน'
+      bookmark:
+        #original_hash: 7952a5c
+        unbookmark: คุณได้ลบบุ๊กมาร์กของคุณแล้ว
+      requirements:
+        #original_hash: 09a428f
+        title: ความต้องการ
+        #original_hash: 695cf86
+        acknowledgement: >-
+          ฉันได้อ่านและรับทราบข้อมูลทั้งหมดภายใต้แท็บ 'ลงทะเบียน' แล้ว
+          รวมถึงค่าธรรมเนียมการแข่งขันและนโยบายการคืนเงิน
+        #original_hash: 270bd63
+        acknowledgment_extra: ฉันได้อ่านและทำความเข้าใจข้อมูลทั้งหมดที่ระบุไว้ข้างต้นแล้ว
+        #original_hash: 80d2933
+        next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
+      update:
+        #original_hash: 65bbb07
+        no_changes: ไม่มีการเปลี่ยนแปลง
+        #original_hash: be4e8e2
+        email_send: ส่ง email
+        #original_hash: d9def5d
+        email_copy: Copy Email
+        #original_hash: 71327f1
+        move_pending: ย้ายไปรายชื่อรอ
+        #original_hash: 9144dd6
+        move_waiting: ย้ายไป waiting list
+        #original_hash: 284b24f
+        cancel: ยกเลิกการสมัคร
+        #original_hash: 67b3c7d
+        too_many: >-
+          การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
+          %{count} คน
+      register:
+        #original_hash: affea61
+        error: 'การสมัครล้มเหลวโดยมีข้อผิดพลาด %{error}'
+        #original_hash: f5a8630
+        early_registration: >-
+          การรับสมัครยังไม่เปิด
+          แต่คุณยังสามารถลงทะเบียนในฐานะผู้จัดการแข่งขันหรือ Delegate ได้
+        #original_hash: 6b76fab
+        comment: ความเห็นเพิ่มเติมถึงผู้จัดการแข่งขัน
+        #original_hash: 8eae30c
+        until: 'คุณสามารถแก้ไขการสมัครของคุณได้จนถึง %{date}'
+        #original_hash: fc8bc84
+        passed: คุณไม่สามารถอัปเดตการลงสมัครของคุณได้อีกต่อไป
+        #original_hash: 3c8d8b7
+        editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
+        registration_status:
+          #original_hash: f1f32b6
+          header: 'สถานะการสมัครของคุณ:'
+        #original_hash: 2d9f36c
+        disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
+        #original_hash: 8fe68a1
+        processing: การสมัครของคุณอยู่ระหว่างดำเนินการ...
+        #original_hash: 897f272
+        processing_longer: การประมวลผลใช้เวลานานกว่าปกติ อย่าพึ่งปิดหน้าจอ
+        #original_hash: 79ba42a
+        processing_queue: 'การสมัครจำนวนมากกำลังดำเนินการอยู่ ซึ่งมี %{queueCount} อยู่ในคิว'
+      errors:
+        #original_hash: 3890616
+        events: การโหลดประเภทการแข่งขันล้มเหลว โปรดลองอีกครั้ง
+        #original_hash: 7b78793
+        '-1': >-
+          คุณได้ส่ง Token ที่ไม่ถูกต้อง โปรดรีเฟรชหน้านี้ หากปัญหานี้ยังคงอยู่
+          โปรดติดต่อ WST
+        #original_hash: 44cf123
+        '-2': Authentication หมดอายุ โปรดรีเฟรชหน้านี้
+        #original_hash: 2d63156
+        '-3': ไม่มี Authentication กรุณาเข้าสู่ระบบ
+        #original_hash: e0b69a9
+        '-1000': ไม่มีการแข่งขัน
+        #original_hash: 2aa4aa1
+        '-1001': เกิดข้อผิดพลาดในการเรียกรายละเอียดการแข่งขัน โปรดลองอีกครั้งในภายหลัง
+        #original_hash: 25b0063
+        '-2001': คุณถูกแบนจากการแข่งขันในการแข่งขัน WCA
+        #original_hash: 82267b1
+        '-2002': Profile ของคุณไม่สมบูรณ์
+        #original_hash: 4dd79f2
+        '-2003': คุณไม่มีสิทธิ์ดำเนินการนี้ให้เสร็จสิ้น
+        #original_hash: cb4093a
+        '-3000': ไม่มีการสมัคร
+        #original_hash: 0df821f
+        '-3001': WCA Payment ไม่ได้เปิดใช้งานสำหรับการแข่งขันครั้งนี้
+        #original_hash: 092da51
+        '-3002': คุณต้องสมัครการแข่งขันให้เสร็จสิ้นก่อนจึงจะสามารถชำระเงินได้
+        #original_hash: bc53fb6
+        '-4000': คำขอมีข้อมูลที่ไม่ถูกต้อง
+        #original_hash: 35fddf4
+        '-4001': เลยกำหนดเวลาแก้ไขประเภทการแข่งขันแล้ว
+        #original_hash: 097491c
+        '-4002': จำนวนผู้ติดตามเกินจำนวนที่อนุญาต
+        #original_hash: 4a0baa0
+        '-4003': ความคิดเห็นที่ให้ไว้ยาวเกินไป
+        #original_hash: 952daed
+        '-4004': ส่งการเลือกประเภทการแข่งขันไม่ถูกต้อง
+        #original_hash: b8a1526
+        '-4005': การแข่งขันครั้งนี้ต้องการให้ใส่ความคิดเห็น
+        #original_hash: 2087dad
+        '-4006': จำนวนผู้เข้าแข่งขันถึงจำนวนจำกัดแล้ว
+        #original_hash: 6d95124
+        '-4007': สถานะการสมัครการแข่งขันไม่ถูกต้อง
+        #original_hash: 020234c
+        '-4008': การรับสมัครปิดแล้ว
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
