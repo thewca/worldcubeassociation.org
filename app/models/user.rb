@@ -1154,16 +1154,12 @@ class User < ApplicationRecord
     options = default_options.merge(options || {})
     # Preempt the values for avatar and teams, they have a special treatment.
     include_avatar = options[:include]&.delete("avatar")
-    include_teams = options[:include]&.delete("teams")
     json = super(options)
 
     # We override some attributes manually because it's unconvenient to
     # put them in DEFAULT_SERIALIZE_OPTIONS (eg: "teams" doesn't have a default
     # scope at the moment).
     json[:class] = self.class.to_s.downcase
-    if include_teams
-      json[:teams] = current_team_members.includes(:team).reject(&:hidden?)
-    end
     if include_avatar
       json[:avatar] = {
         url: self.avatar.url,

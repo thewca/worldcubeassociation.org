@@ -217,17 +217,6 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
       before :each do
         api_sign_in_as(FactoryBot.create(:user, :board_member))
       end
-
-      it 'has correct team membership' do
-        get :me
-        expect(response.status).to eq 200
-        json = JSON.parse(response.body)
-
-        expect(json['me']['teams'].length).to eq 1
-        team = json['me']['teams'].first
-        expect(team['friendly_id']).to eq 'board'
-        expect(team['leader']).to eq false
-      end
     end
 
     context 'signed in as Junior delegate' do
@@ -277,14 +266,6 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         json = JSON.parse(response.body)
 
         expect(json['me']['delegate_status']).to eq nil
-        expect(json['me']['teams'].length).to eq 2
-        team = json['me']['teams'].find { |t| t['friendly_id'] == 'wrc' }
-        expect(team['leader']).to eq false
-        expect(team['friendly_id']).to eq 'wrc'
-        expect(team['avatar']['thumb']['url']).to be_a String
-        expect(team['id']).to be_a Numeric
-        expect(team['name']).to be_a String
-        expect(team['senior_member']).to be false
       end
     end
 
