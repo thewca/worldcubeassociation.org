@@ -10,7 +10,7 @@ class PaymentController < ApplicationController
       return render status: :bad_request, json: { error: "Competition doesn't use new Registration Service" } unless competition.uses_new_registration_service?
 
       stripe_record = StripeRecord.find(payment_id)
-      secret = stripe_record.stripe_payment_intent.client_secret
+      secret = stripe_record.payment_intent.client_secret
       render json: { stripe_publishable_key: AppSecrets.STRIPE_PUBLISHABLE_KEY,
                      connected_account_id: competition.payment_account_for(:stripe).account_id,
                      client_secret: secret }
@@ -33,7 +33,7 @@ class PaymentController < ApplicationController
       intent_secret = params[:payment_intent_client_secret]
 
       stored_transaction = StripeRecord.find_by(stripe_id: intent_id)
-      stored_intent = stored_transaction.stripe_payment_intent
+      stored_intent = stored_transaction.payment_intent
 
       return redirect_to Microservices::Registrations.competition_register_path(competition.id, "secret_invalid") unless stored_intent.client_secret == intent_secret
 
@@ -66,12 +66,12 @@ class PaymentController < ApplicationController
       competition = payment_request.competition
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
-      transaction = payment_request.stripe_payment_intent
+      intent = payment_request.payment_intent
 
-      charges = transaction.stripe_record.child_transactions.charge.map { |t|
+      charges = intent.payment_record.child_records.charge.map { |t|
         {
           payment_id: t.id,
-          amount: t.amount_stripe_denomination - t.child_transactions.refund.sum(:amount_stripe_denomination),
+          amount: t.amount_stripe_denomination - t.child_records.refund.sum(:amount_stripe_denomination),
         }
       }
       render json: { charges: charges }, status: :ok

@@ -36,8 +36,8 @@ class User < ApplicationRecord
   has_many :competitions_bookmarked, through: :bookmarked_competitions, source: :competition
   has_many :competitions_announced, foreign_key: "announced_by", class_name: "Competition"
   has_many :competitions_results_posted, foreign_key: "results_posted_by", class_name: "Competition"
-  has_many :confirmed_stripe_intents, class_name: "StripePaymentIntent", as: :confirmed_by
-  has_many :canceled_stripe_intents, class_name: "StripePaymentIntent", as: :canceled_by
+  has_many :confirmed_payment_intents, class_name: "PaymentIntent", as: :confirmation_source
+  has_many :canceled_payment_intents, class_name: "PaymentIntent", as: :cancellation_source
   has_many :ranksSingle, through: :person
   has_many :ranksAverage, through: :person
   has_one :wfc_dues_redirect, as: :redirect_source

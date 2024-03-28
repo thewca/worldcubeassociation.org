@@ -18,7 +18,7 @@ class Registration < ApplicationRecord
   has_many :events, through: :competition_events
   has_many :assignments, as: :registration, dependent: :delete_all
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
-  has_many :stripe_payment_intents, as: :holder, dependent: :delete_all
+  has_many :payment_intents, as: :holder, dependent: :delete_all
 
   serialize :roles, coder: YAML
 

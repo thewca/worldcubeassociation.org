@@ -54,11 +54,12 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
 
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
-    StripePaymentIntent.create!(
+    PaymentIntent.create!(
       holder: holder,
-      stripe_record: stripe_record,
+      payment_record: stripe_record,
       client_secret: intent.client_secret,
-      user: payee,
+      initiated_by: payee,
+      wca_status: stripe_record.determine_wca_status,
     )
 
     render json: { id: stripe_record.id }
