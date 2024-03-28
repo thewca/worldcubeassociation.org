@@ -162,11 +162,17 @@ export const teamsCommitteesPageUrl = `<%= CGI.unescape(Rails.application.routes
 
 export const translatorsPageUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.translators_path)%>`;
 
+export const contactDobUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.contact_dob_path)%>`;
+
 export const apiV0Urls = {
   users: {
     me: {
       permissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`,
     },
+  },
+  persons: {
+    canClaim: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_can_claim_path("${wcaId}"))%>`,
+    likelyDelegates: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_likely_delegates_path("${wcaId}"))%>`,
   },
   wrt: {
     edit: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_wrt_person_path("${wcaId}"))%>`,

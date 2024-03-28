@@ -446,7 +446,6 @@ en:
         email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
-        dob_verification: ""
         gender: ""
         login: ""
         password: ""
@@ -749,6 +748,14 @@ en:
       disclaimer: "Disclaimer"
       find_us: "Find us"
   page:
+    sign_up:
+      form:
+        select_delegate: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
+        select_another_delegate: "Select another delegate"
+        can_claim_error: # FIXME: Find a way to open the links in new tab, target='_blank' won't work because sanitize will remove it.
+          wca_id_not_found: "WCA ID <a href='%{wca_id_link}'>%{wca_id}</a> does not exist."
+          wca_id_already_claimed: "WCA ID <a href='%{wca_id_link}'>%{wca_id}</a> is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{delegates_link}'>WCA Delegate</a>."
+          dob_not_found: "WCA ID <a href='%{wca_id_link}'>%{wca_id}</a> does not have a birthdate assigned. Please contact with WCA Results Team using <a href='%{dob_form_path}'>this dedicated form</a>."
     translators:
       title: "Translators"
   #context: Key used on the website homepage
@@ -963,11 +970,6 @@ en:
         account_updated: "Account updated"
         wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
         account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
-    select_nearby_delegate:
-      select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
-      already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
-      missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
-      unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   user_roles:
     email:
       role_metadata:

@@ -362,6 +362,8 @@ Rails.application.routes.draw do
       get '/delegates' => 'api#delegates'
       get '/persons' => "persons#index"
       get '/persons/:wca_id' => "persons#show", as: :person
+      get '/persons/:wca_id/can_claim' => "persons#can_claim", as: :person_can_claim
+      get '/persons/:wca_id/likely_delegates' => "persons#likely_delegates", as: :person_likely_delegates
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
