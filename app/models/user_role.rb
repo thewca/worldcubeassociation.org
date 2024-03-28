@@ -135,6 +135,27 @@ class UserRole < ApplicationRecord
     end
   end
 
+  def self.deprecated_team_role(role)
+    group = UserRole.group(role)
+    group_type = UserRole.group_type(role)
+    user = UserRole.user(role)
+    if group_type == UserGroup.group_types[:board]
+      friendly_id = UserGroup.group_types[:board]
+    else
+      is_actual_group = group.is_a?(UserGroup)
+      friendly_id = is_actual_group ? group.metadata.friendly_id : group[:metadata][:friendly_id]
+    end
+    {
+      id: role[:id],
+      friendly_id: friendly_id,
+      leader: UserRole.status(role) == "leader",
+      senior_member: UserRole.status(role) == "senior_member",
+      name: user.name,
+      wca_id: user.wca_id,
+      avatar: user.avatar,
+    }
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     methods: %w[],
     only: %w[id start_date end_date],

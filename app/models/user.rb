@@ -1135,6 +1135,20 @@ class User < ApplicationRecord
     end
   end
 
+  private def deprecated_team_roles
+    active_roles
+      .select { |role|
+        group_type = UserRole.group_type(role)
+        [
+          UserGroup.group_types[:teams_committees],
+          UserGroup.group_types[:councils],
+          UserGroup.group_types[:board],
+        ].include?(group_type)
+      }
+      .reject { |role| UserRole.group(role).is_hidden }
+      .map { |role| UserRole.deprecated_team_role(role) }
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "wca_id", "name", "gender",
            "country_iso2", "delegate_status", "created_at", "updated_at"],
@@ -1162,7 +1176,7 @@ class User < ApplicationRecord
     # scope at the moment).
     json[:class] = self.class.to_s.downcase
     if include_teams
-      json[:teams] = current_team_members.includes(:team).reject(&:hidden?)
+      json[:teams] = deprecated_team_roles
     end
     if include_avatar
       json[:avatar] = {
