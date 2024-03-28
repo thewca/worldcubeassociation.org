@@ -10,6 +10,7 @@ class PaymentIntent < ApplicationRecord
   validate :wca_status_consistency
 
   scope :started, -> { where.not(wca_status: 'created') }
+  scope :incomplete, -> { where.not(wca_status: ['succeeded', 'canceled']) }
 
   # TODO: Refactor this or move it into this class
   delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record

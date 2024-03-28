@@ -653,7 +653,7 @@ class RegistrationsController < ApplicationController
     }
 
     registration.payment_intents
-                .unpaid
+                .incomplete
                 .each do |intent|
       intent_account_id = intent.payment_record.account_id
 

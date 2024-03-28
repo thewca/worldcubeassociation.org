@@ -7,7 +7,7 @@ FactoryBot.define do
     parameters { 'test_parameters' }
     amount_stripe_denomination { 1000 }
     currency_code { 'USD' }
-    stripe_status { 'processing' }
+    stripe_status { 'pending' }
     account_id { 'test_account_id' }
 
     trait :not_started do
