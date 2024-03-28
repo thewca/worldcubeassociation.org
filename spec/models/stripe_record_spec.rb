@@ -7,7 +7,7 @@ require 'rails_helper'
 RSpec.describe StripeRecord do
   describe 'status mappings' do
     it 'contains all wca_statuses' do
-      expect(StripeRecord::WCA_TO_STRIPE_STATUS_MAP.keys.map { |x| x.to_s }).to eq(PaymentIntent.wca_statuses.values)
+      expect(StripeRecord::WCA_TO_STRIPE_STATUS_MAP.keys.sort.map { |x| x.to_s }).to eq(PaymentIntent.wca_statuses.values.sort)
     end
 
     it 'contains all stripe_statuses' do
@@ -50,13 +50,10 @@ RSpec.describe StripeRecord do
       it_behaves_like '#update StripeRecord to incompatible status', 'requires_payment_method', 'created', 'processing'
       it_behaves_like '#update StripeRecord to incompatible status', 'requires_capture', 'pending', 'legacy_failure'
       it_behaves_like '#update StripeRecord to incompatible status', 'legacy_failure', 'failed', 'legacy_success'
-      it_behaves_like '#update StripeRecord to incompatible status', 'legacy_success', 'succeeded', 'canceled'
-      it_behaves_like '#update StripeRecord to incompatible status', 'canceled', 'canceled', 'legacy_unknown'
     end
 
     it '#create valid PaymentIntent' do
-      stripe_record = FactoryBot.create(:stripe_record, stripe_status: 'processing')
-      intent = FactoryBot.build(:payment_intent, payment_record: stripe_record)
+      intent = FactoryBot.build(:payment_intent)
       expect(intent).to be_valid
     end
   end

@@ -56,8 +56,8 @@ class PaymentIntent < ApplicationRecord
 
   def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
     ActiveRecord::Base.transaction do
-      self.payment_record.update_status(api_intent)
       self.update!(error_details: api_intent.last_payment_error)
+      self.payment_record.assign_status(api_intent) # Will also update the wca_status
 
       # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
       case api_intent.status
@@ -65,8 +65,14 @@ class PaymentIntent < ApplicationRecord
         # The payment didn't need any additional actions and is completed!
 
         # Record the success timestamp if not already done
-        unless self.confirmed?
-          self.update!(confirmed_at: source_datetime, confirmation_source: action_source)
+        unless self.succeeded?
+          self.assign_attributes(
+            confirmed_at: source_datetime,
+            confirmation_source: action_source,
+            wca_status: payment_record.determine_wca_status,
+          )
+          save
+          payment_record.save
         end
 
         intent_charges = Stripe::Charge.list(
@@ -92,7 +98,13 @@ class PaymentIntent < ApplicationRecord
         end
       when 'canceled'
         # Canceled by Stripe
-        self.update!(canceled_at: source_datetime, cancellation_source: action_source)
+        self.update!(
+          canceled_at: source_datetime,
+          cancellation_source: action_source,
+          wca_status: payment_record.determine_wca_status,
+        )
+        save
+        payment_record.save
       when 'requires_payment_method'
         # Reset by Stripe
         self.update!(
@@ -100,7 +112,15 @@ class PaymentIntent < ApplicationRecord
           confirmation_source: nil,
           canceled_at: nil,
           cancellation_source: nil,
+          wca_status: payment_record.determine_wca_status,
         )
+        save
+        payment_record.save
+      else
+        puts "updating with status: #{api_intent.status}"
+        self.update!(wca_status: payment_record.determine_wca_status)
+        save
+        payment_record.save
       end
     end
   end
@@ -115,7 +135,7 @@ class PaymentIntent < ApplicationRecord
     def wca_status_consistency
       # Check that payment_record's status is in sync with wca_status
       if payment_record_type == 'StripeRecord'
-        errors.add(:wca_status, "is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
+        errors.add(:wca_status, "#{wca_status} is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
           StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
       else
         raise "No status combination validation defined for: #{payment_record_type}"
