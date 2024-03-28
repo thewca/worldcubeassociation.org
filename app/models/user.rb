@@ -69,7 +69,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official.map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
+    UserGroup.teams_committees.map(&:metadata).map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -626,7 +626,7 @@ class User < ApplicationRecord
     active_roles.select do |role|
       group = UserRole.group(role)
       group_type = UserRole.group_type(role)
-      if group_type == UserGroup.group_types[:councils]
+      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         if UserRole.is_lead?(role)
           groups << group.id
         end
