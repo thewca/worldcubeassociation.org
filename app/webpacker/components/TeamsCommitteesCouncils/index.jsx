@@ -11,7 +11,7 @@ import Errored from '../Requests/Errored';
 import useHash from '../../lib/hooks/useHash';
 import GroupPage from './GroupPage';
 
-export default function TeamsCommitteesCouncils() {
+export default function TeamsCommitteesCouncils({ canViewPastRoles }) {
   const {
     data: teamsCommittees,
     loading: teamsCommitteesLoading,
@@ -94,7 +94,7 @@ export default function TeamsCommitteesCouncils() {
                 </Grid.Row>
                 <Grid.Row>
                   <Grid.Column>
-                    <GroupPage group={activeGroup} />
+                    <GroupPage group={activeGroup} canViewPastRoles={canViewPastRoles} />
                   </Grid.Column>
                 </Grid.Row>
               </Grid>

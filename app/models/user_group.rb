@@ -41,7 +41,7 @@ class UserGroup < ApplicationRecord
       role_list.concat(Team.board.reload.current_members.map(&:board_role))
     end
     if self.councils?
-      TeamMember.where(team_id: self.team.id, end_date: nil).each do |team_member|
+      TeamMember.where(team_id: self.team.id).each do |team_member|
         role_list << team_member.role
       end
     end
