@@ -448,7 +448,6 @@ en:
         email: ""
         pending_avatar: "After uploading a new avatar, you will have to wait for the WCA Results Team to approve it."
         country_iso2: ""
-        dob_verification: ""
         gender: ""
         login: ""
         password: ""
@@ -816,6 +815,33 @@ en:
         captcha:
           validation_error: "Please verify that you are not a robot."
         submit_button: "Submit"
+    sign_up:
+      title: "Sign up"
+      form:
+        email:
+          validation_error: "Please enter a valid email address."
+        password:
+          validation_error: "Please enter a password with at least 3 characters."
+        confirm_password:
+          validation_error: "Passwords do not match."
+        competitor_state:
+          label: "Please let us know if you have competed in a WCA competition before:"
+          none_option: "Please select..."
+          returner_option: "I have competed in a WCA competition."
+          newcomer_option: "I have never competed in a WCA competition."
+        returner_intro: "Welcome back! To create your WCA website account, we need to know the WCA ID under which you competed."
+        select_delegate: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
+        select_another_delegate: "Select another delegate"
+        can_claim_error: # FIXME: Find a way to open the links in new tab, target='_blank' won't work because sanitize will remove it.
+          wca_id_not_found: "WCA ID <a href='%{wca_id_link}'>%{wca_id}</a> does not exist."
+          wca_id_already_claimed: "WCA ID <a href='%{wca_id_link}'>%{wca_id}</a> is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{delegates_link}'>WCA Delegate</a>."
+          dob_not_found: "WCA ID <a href='%{wca_id_link}'>%{wca_id}</a> does not have a birthdate assigned. Please contact with WCA Results Team using <a href='%{dob_form_path}'>this dedicated form</a>."
+        newcomer_intro: "Welcome! Before you can compete in your first WCA competition, we need some additional information for records keeping purposes. Please note that your birthdate will never be released without your permission.<br/><br/>If you are signing up on someone else's behalf, please provide the details of the <strong>competitor</strong>."
+        name:
+          label: "Full name"
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+      button: "Sign up"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -1028,11 +1054,6 @@ en:
         account_updated: "Account updated"
         wca_id_claimed: "Successfully claimed WCA ID %{wca_id}. Check your email, and wait for %{user} to approve it!"
         account_updated_confirm: "Account updated, emailed %{email} to confirm your new email address."
-    select_nearby_delegate:
-      select_delegate_html: "In order to assign you your WCA ID, we need a <a href='%{link_delegate}' target='_blank'>WCA Delegate</a> to confirm your identify. Please enter your birthdate and select the Delegate you think knows you best."
-      already_assigned_html: "WCA ID %{link_id} is already assigned to a different account. If you believe this was done in error, contact your local <a href='%{link_delegate}' target='_blank'>WCA Delegate</a>."
-      missing_dob_html: "WCA ID %{link_id} does not have a birthdate assigned. Please contact with WCA Results Team using <a href=\"%{dob_form_path}\">this dedicated form</a>."
-      unknown_wca_id_html: "WCA ID %{link_id} does not exist."
   user_roles:
     email:
       role_metadata:
