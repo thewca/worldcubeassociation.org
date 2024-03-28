@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { events } from '../../lib/wca-data.js.erb';
 
 // note: inconsistencies with previous search params
@@ -28,10 +27,6 @@ const DEFAULT_SEARCH = '';
 const DEFAULT_EVENTS = [];
 const INCLUDE_CANCELLED_TRUE = 'on';
 
-// without time string, date will be interpreted in user's time zone
-const parseDate = (dateString) => new Date(`${dateString}T00:00:00.000`);
-const formatDate = (date) => DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
-
 export const getDisplayMode = (searchParams) => (
   searchParams.get(DISPLAY_MODE) || DEFAULT_DISPLAY_MODE
 );
@@ -39,10 +34,8 @@ export const getDisplayMode = (searchParams) => (
 export const createFilterState = (searchParams) => ({
   timeOrder: searchParams.get(TIME_ORDER) || DEFAULT_TIME_ORDER,
   selectedYear: searchParams.get(YEAR) || DEFAULT_YEAR,
-  customStartDate:
-    searchParams.get(START_DATE) ? parseDate(searchParams.get(START_DATE)) : DEFAULT_DATE,
-  customEndDate:
-    searchParams.get(END_DATE) ? parseDate(searchParams.get(END_DATE)) : DEFAULT_DATE,
+  customStartDate: searchParams.get(START_DATE) || DEFAULT_DATE,
+  customEndDate: searchParams.get(END_DATE) || DEFAULT_DATE,
   region: searchParams.get(REGION) || DEFAULT_REGION,
   delegate: searchParams.get(DELEGATE) || DEFAULT_DELEGATE,
   search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
@@ -89,13 +82,13 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
 
   // for date values, format and add them if applicable, otherwise omit them
   if (customStartDate) {
-    searchParams.set(START_DATE, formatDate(customStartDate));
+    searchParams.set(START_DATE, customStartDate);
   } else {
     searchParams.delete(START_DATE);
   }
 
   if (customEndDate) {
-    searchParams.set(END_DATE, formatDate(customEndDate));
+    searchParams.set(END_DATE, customEndDate);
   } else {
     searchParams.delete(END_DATE);
   }

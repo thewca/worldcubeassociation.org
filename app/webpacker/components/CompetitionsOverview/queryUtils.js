@@ -67,8 +67,8 @@ export function createSearchParams(filterState, pageParam) {
     searchParams.append('sort', '-announced_at,name');
     searchParams.append('page', pageParam);
   } else if (timeOrder === 'custom') {
-    const startLuxon = DateTime.fromJSDate(customStartDate);
-    const endLuxon = DateTime.fromJSDate(customEndDate);
+    const startLuxon = DateTime.fromISO(customStartDate, { zone: 'UTC' });
+    const endLuxon = DateTime.fromISO(customEndDate, { zone: 'UTC' });
 
     searchParams.append('sort', 'start_date,end_date,name');
     searchParams.append('start', startLuxon.isValid ? startLuxon.toFormat('yyyy-MM-dd') : '');
