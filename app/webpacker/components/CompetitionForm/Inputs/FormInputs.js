@@ -22,6 +22,7 @@ import {
 } from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
+import UtcDatePicker from '../../wca/UtcDatePicker';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -219,32 +220,32 @@ export const InputNumber = wrapInput((props) => {
 }, ['attachedLabel', 'min', 'max', 'step']);
 
 export const InputDate = wrapInput((props) => {
-  const date = props.value && new Date(props.value);
-
-  const onChange = useCallback((e, { value: newValue }) => {
-    if (!newValue || !props.dateTime) {
-      props.onChange(e, { value: newValue });
-      return;
-    }
-
-    const newDate = new Date(newValue);
-    newDate.getTimezoneOffset();
-    newDate.setMinutes(newDate.getMinutes() - newDate.getTimezoneOffset());
-    props.onChange(e, { value: newDate.toISOString() });
+  const onChangeInternal = useCallback((isoDate) => {
+    props.onChange(null, { value: isoDate });
   }, [props]);
 
   return (
     <Input
       id={props.htmlId}
       name={props.htmlName}
-      type={props.dateTime ? 'datetime-local' : 'date'}
-      value={date && date.toISOString().slice(0, props.dateTime ? 16 : 10)}
-      onChange={onChange}
-      style={{ width: 'full' }}
-      label={props.dateTime ? 'UTC' : null}
-    />
+    >
+      <UtcDatePicker
+        id={props.htmlId}
+        isoDate={props.value}
+        onChange={onChangeInternal}
+        shouldCloseOnSelect={false}
+        showTimeInput={props.dateTime}
+        style={{ width: 'inherit' }}
+        selectsStart={props.selectsStart}
+        selectsEnd={props.selectsEnd}
+        isoStartDate={props.startDate}
+        isoEndDate={props.endDate}
+        isoMinDate={props.minDate}
+        isoMaxDate={props.maxDate}
+      />
+    </Input>
   );
-}, ['dateTime'], '');
+}, ['dateTime', 'selectsStart', 'selectsEnd', 'startDate', 'endDate', 'minDate', 'maxDate'], '');
 
 export const InputSelect = wrapInput((props) => (
   <Select

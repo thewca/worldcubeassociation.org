@@ -1,5 +1,8 @@
 import { I18n } from 'i18n-js';
 
+import * as Locales from 'date-fns/locale';
+import { registerLocale, setDefaultLocale } from 'react-datepicker';
+
 const i18nFileContext = require.context('rails_translations');
 
 const DEFAULT_LOCALE = 'en';
@@ -71,3 +74,8 @@ function loadTranslations(i18n, locale) {
 // store the actual translations.
 loadTranslations(window.I18n, DEFAULT_LOCALE);
 loadTranslations(window.I18n, window.wca.currentLocale);
+
+const dateFnsLocale = Locales[window.wca.currentLocale];
+
+registerLocale(window.wca.currentLocale, dateFnsLocale);
+setDefaultLocale(window.wca.currentLocale);
