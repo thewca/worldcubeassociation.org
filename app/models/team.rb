@@ -159,16 +159,11 @@ class Team < ApplicationRecord
   end
 
   private def team_if_any
-    UserGroup.find_by(metadata_id: GroupsMetadataTeamsCommittees.find_by(friendly_id: self.friendly_id)&.id, metadata_type: 'GroupsMetadataTeamsCommittees')
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: self.friendly_id)&.user_group
   end
 
   def group
-    council = council_if_any
-    if council.present?
-      council
-    else
-      team_if_any
-    end
+    council_if_any || team_if_any
   end
 
   def group_type

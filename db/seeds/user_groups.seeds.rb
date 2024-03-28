@@ -57,4 +57,68 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     is_hidden: false,
     metadata: wfc_metadata,
   )
+  wcat_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wcat')
+  UserGroup.create!(
+    name: 'WCA Competitions Announcement Team',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wcat_metadata,
+  )
+  wdc_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wdc')
+  UserGroup.create!(
+    name: 'WCA Disciplinary Committee',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wdc_metadata,
+  )
+  wec_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wec')
+  UserGroup.create!(
+    name: 'WCA Ethics Committee',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wec_metadata,
+  )
+  wmt_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wmt')
+  UserGroup.create!(
+    name: 'WCA Marketing Team',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wmt_metadata,
+  )
+  wqac_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wqac')
+  UserGroup.create!(
+    name: 'WCA Quality Assurance Committee',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wqac_metadata,
+  )
+  wrc_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wrc')
+  UserGroup.create!(
+    name: 'WCA Regulations Committee',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wrc_metadata,
+  )
+  wsot_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wsot')
+  UserGroup.create!(
+    name: 'WCA Sports Organization Team',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wsot_metadata,
+  )
+  wat_metadata = GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wat')
+  UserGroup.create!(
+    name: 'WCA Archive Team',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: false,
+    metadata: wat_metadata,
+  )
 end
