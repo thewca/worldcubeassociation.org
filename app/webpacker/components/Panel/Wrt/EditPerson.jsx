@@ -10,7 +10,6 @@ import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 import Loading from '../../Requests/Loading';
 import I18n from '../../../lib/i18n';
 import { genders, countries } from '../../../lib/wca-data.js.erb';
-import 'react-datepicker/dist/react-datepicker.css';
 import useQueryParams from '../../../lib/hooks/useQueryParams';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import Errored from '../../Requests/Errored';
