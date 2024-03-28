@@ -87,6 +87,10 @@ locals {
     {
       name = "TASK_ROLE",
       value = aws_iam_role.task_role.name
+    },
+    {
+      name = "PAYPAL_BASE_URL",
+      value = "https://api-m.sandbox.paypal.com"
     }
   ]
   pma_environment = [
