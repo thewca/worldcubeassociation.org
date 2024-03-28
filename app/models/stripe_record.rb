@@ -3,9 +3,11 @@
 class StripeRecord < ApplicationRecord
   validate :valid_status_combination
   # NOTE: Should the list items be the keys or values of stripe_status? Should stripe_status be an enum or just a list?
+  # TODO: Add a link to the Stripe status definitions/documentation
   WCA_TO_STRIPE_STATUS_MAP = {
     created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
-    pending: %w[pending requires_capture processing requires_confirmation requires_action],
+    pending: %w[pending requires_capture requires_confirmation requires_action],
+    processing: %w[processing],
     partial: %w[],
     failed: %w[legacy_failure failed],
     succeeded: %w[legacy_success succeeded],

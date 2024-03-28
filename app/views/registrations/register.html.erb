@@ -77,9 +77,11 @@
             </h4>
           </div>
           <div class="panel-body">
-            <% if @registration.payment_intents.unpaid.any? %>
+            <%# Intention: Display this if there is a payment in a state that is processing on Stripe's side - where the user can't advance the state %>
+            <% if @registration.payment_intents.processing.any? %>
               <%= render "payment_intents" %>
             <% else %>
+              <%# Intention: If the user can do something to advance the payment state, show the payment form. %>
               <%= render "payment_form" %>
             <% end %>
           </div>

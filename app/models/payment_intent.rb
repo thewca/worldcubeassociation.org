@@ -7,9 +7,8 @@ class PaymentIntent < ApplicationRecord
   belongs_to :confirmation_source, polymorphic: true, optional: true
   belongs_to :cancellation_source, polymorphic: true, optional: true
 
-  validate :valid_status_combination
+  validate :wca_status_consistency
 
-  scope :unpaid, -> { where.not(wca_status: 'succeeded') }
   scope :started, -> { where.not(wca_status: 'created') }
 
   # TODO: Refactor this or move it into this class
@@ -24,14 +23,11 @@ class PaymentIntent < ApplicationRecord
     created: 'created', # A record has been created on the payment provider's system (no payment action yet initiated by the user)
     pending: 'pending', # The user is now attempting to pay, but has not reached a completion state yet
     partial: 'partial', # Some but not all funds have been paid (eg, if the user has selected an instalment-based payment option)
+    processing: 'processing', # The payment is in progress, but the user cannot do anything to advance its state (eg, provider waiting for outcome of bank transfer)
     failed: 'failed', # The payment did not succeed for any reason (insufficient funds, user error) but the user can still try to pay
     succeeded: 'succeeded', # Completion state - The full amount due is confirmed as being paid by the payment provider
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
-
-  def confirmed?
-    !self.confirmed_at.nil?
-  end
 
   def started?
     self.wca_status != 'created'
@@ -115,12 +111,23 @@ class PaymentIntent < ApplicationRecord
 
   private
 
-    def valid_status_combination
+    def wca_status_consistency
+      # Check that payment_record's status is in sync with wca_status
       if payment_record_type == 'StripeRecord'
         errors.add(:wca_status, "is not compatible with StripeRecord status: #{payment_record.stripe_status}") unless
           StripeRecord::WCA_TO_STRIPE_STATUS_MAP[wca_status.to_sym].include?(payment_record.stripe_status)
       else
         raise "No status combination validation defined for: #{payment_record_type}"
       end
+
+      # Succeeded/cancelled statuses require timestamps, and vice-versa
+      errors.add(:confirmed_at, "should only be non-nil if wca_status is `succeeded`") if
+        confirmed_at.present? && wca_status != 'succeeded'
+      errors.add(:wca_status, "can only be `succeeded` if confirmed_at is non-nil") if
+        confirmed_at.nil? && wca_status == 'succeeded'
+      errors.add(:canceled_at, "should only be non-nil if wca_status is `canceled`") if
+        canceled_at.present? && wca_status != 'canceled'
+      errors.add(:wca_status, "can only be `canceled` if canceled_at is non-nil") if
+        canceled_at.nil? && wca_status == 'canceled'
     end
 end

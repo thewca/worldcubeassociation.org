@@ -42,16 +42,36 @@ RSpec.describe PaymentIntent do
       it_behaves_like '#create compatible PaymentIntent', 'requires_payment_method', 'created'
       it_behaves_like '#create compatible PaymentIntent', 'requires_confirmation', 'pending'
       it_behaves_like '#create compatible PaymentIntent', 'failed', 'failed'
-      it_behaves_like '#create compatible PaymentIntent', 'legacy_success', 'succeeded'
-      it_behaves_like '#create compatible PaymentIntent', 'canceled', 'canceled'
     end
 
     context 'invalid status combinations' do
       it_behaves_like '#create incompatible PaymentIntent', 'pending', 'created'
       it_behaves_like '#create incompatible PaymentIntent', 'requires_payment_method', 'pending'
       it_behaves_like '#create incompatible PaymentIntent', 'legacy_success', 'failed'
-      it_behaves_like '#create incompatible PaymentIntent', 'canceled', 'succeeded'
-      it_behaves_like '#create incompatible PaymentIntent', 'failed', 'canceled'
+
+      it 'cannot have confirmed_at without the `succeeded` status' do
+        intent = FactoryBot.build(:payment_intent, :canceled)
+        intent.assign_attributes(confirmed_at: DateTime.now)
+        expect(intent).not_to be_valid
+      end
+
+      it 'cannot be `succeeded` with nil confirmed_at' do
+        intent = FactoryBot.build(:payment_intent, :confirmed)
+        intent.assign_attributes(confirmed_at: nil)
+        expect(intent).not_to be_valid
+      end
+
+      it 'cannot have canceled_at without the `canceled` status' do
+        intent = FactoryBot.build(:payment_intent, :confirmed)
+        intent.assign_attributes(canceled_at: DateTime.now)
+        expect(intent).not_to be_valid
+      end
+
+      it 'cannot be `canceled` with nil canceled_at' do
+        intent = FactoryBot.build(:payment_intent, :canceled)
+        intent.assign_attributes(canceled_at: nil)
+        expect(intent).not_to be_valid
+      end
     end
 
     shared_examples '#update PaymentIntent to incompatible status' do |stripe_record_status, intent_status, new_intent_status|
@@ -67,8 +87,6 @@ RSpec.describe PaymentIntent do
       it_behaves_like '#update PaymentIntent to incompatible status', 'requires_payment_method', 'created', 'pending'
       it_behaves_like '#update PaymentIntent to incompatible status', 'requires_capture', 'pending', 'partial'
       it_behaves_like '#update PaymentIntent to incompatible status', 'legacy_failure', 'failed', 'succeeded'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'legacy_success', 'succeeded', 'canceled'
-      it_behaves_like '#update PaymentIntent to incompatible status', 'canceled', 'canceled', 'created'
     end
   end
 end
