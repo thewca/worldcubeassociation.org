@@ -1,13 +1,10 @@
 import React from 'react';
-import DatePicker from 'react-datepicker';
 import {
   Button, Grid, GridColumn, GridRow,
 } from 'semantic-ui-react';
 import { wfcCompetitionsExportUrl } from '../../../lib/requests/routes.js.erb';
 
-import 'react-datepicker/dist/react-datepicker.css';
-
-const dateFormat = 'YYYY-MM-DD';
+import UtcDatePicker from '../../wca/UtcDatePicker';
 
 export default function DuesExport() {
   const [fromDate, setFromDate] = React.useState(null);
@@ -18,7 +15,7 @@ export default function DuesExport() {
       <GridRow>
         <GridColumn width={8}>Start Date</GridColumn>
         <GridColumn width={8}>
-          <DatePicker
+          <UtcDatePicker
             onChange={setFromDate}
             selected={fromDate}
           />
@@ -27,7 +24,7 @@ export default function DuesExport() {
       <GridRow>
         <GridColumn width={8}>End Date</GridColumn>
         <GridColumn width={8}>
-          <DatePicker
+          <UtcDatePicker
             onChange={setToDate}
             selected={toDate}
           />
@@ -38,8 +35,8 @@ export default function DuesExport() {
           <Button
             disabled={!fromDate || !toDate}
             href={`${wfcCompetitionsExportUrl}?${new URLSearchParams({
-              from_date: moment(fromDate).format(dateFormat),
-              to_date: moment(toDate).format(dateFormat),
+              from_date: fromDate,
+              to_date: toDate,
             }).toString()}`}
             target="_blank"
           >

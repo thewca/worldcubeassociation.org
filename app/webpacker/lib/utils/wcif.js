@@ -115,8 +115,11 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
   }
   let dateString = '-';
   if (qualification.whenDate) {
-    const whenDate = window.moment(qualification.whenDate).toDate();
-    dateString = whenDate.toISOString().substring(0, 10);
+    const whenDate = DateTime
+      .fromISO(qualification.whenDate, { zone: 'UTC' })
+      .setZone('local'); // We *want* to show this as a local timestamp if you're living west of Greenwich
+
+    dateString = whenDate.toString().substring(0, 10);
   }
   const deadlineString = I18n.t('qualification.deadline.by_date', { date: dateString });
   const event = events.byId[wcifEvent.id];

@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, Confirm, Table } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
@@ -10,8 +11,6 @@ import SEARCH_MODELS from '../SearchWidget/SearchModel';
 import Errored from '../Requests/Errored';
 import useInputState from '../../lib/hooks/useInputState';
 import UtcDatePicker from '../wca/UtcDatePicker';
-
-const dateFormat = 'YYYY-MM-DD';
 
 function ProbationListTable({
   roleList, isActive, save, sync,
@@ -119,7 +118,7 @@ export default function DelegateProbations() {
       <h2>Active Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null
-           || probationRole.end_date > moment().format(dateFormat))}
+           || probationRole.end_date > DateTime.now().toISODate())}
         isActive
         save={save}
         sync={sync}
@@ -127,7 +126,7 @@ export default function DelegateProbations() {
       <h2>Past Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null
-          && probationRole.end_date <= moment().format(dateFormat))}
+          && probationRole.end_date <= DateTime.now().toISODate())}
         isActive={false}
       />
     </>
