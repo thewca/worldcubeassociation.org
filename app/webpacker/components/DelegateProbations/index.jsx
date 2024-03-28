@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button, Confirm, Table } from 'semantic-ui-react';
-import DatePicker from 'react-datepicker';
 import UserBadge from '../UserBadge';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
@@ -10,6 +9,7 @@ import WcaSearch from '../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../SearchWidget/SearchModel';
 import Errored from '../Requests/Errored';
 import useInputState from '../../lib/hooks/useInputState';
+import UtcDatePicker from '../wca/UtcDatePicker';
 
 const dateFormat = 'YYYY-MM-DD';
 
@@ -23,6 +23,7 @@ function ProbationListTable({
     save(apiV0Urls.userRoles.update(endProbationParams.probationRoleId), {
       endDate: endProbationParams.endDate,
     }, sync, { method: 'PATCH' });
+
     setConfirmOpen(false);
     setEndProbationParams(null);
   };
@@ -54,15 +55,15 @@ function ProbationListTable({
               <Table.Cell>
                 {
                 isActive ? (
-                  <DatePicker
-                    onChange={(date) => {
+                  <UtcDatePicker
+                    isoDate={probationRole.end_date}
+                    onChange={(isoDate) => {
                       setEndProbationParams({
                         probationRoleId: probationRole.id,
-                        endDate: moment(date).format(dateFormat),
+                        endDate: isoDate,
                       });
                       setConfirmOpen(true);
                     }}
-                    selected={probationRole.end_date ? new Date(probationRole.end_date) : null}
                   />
                 ) : probationRole.end_date
               }

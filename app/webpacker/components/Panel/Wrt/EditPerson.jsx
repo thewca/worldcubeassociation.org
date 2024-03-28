@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import DatePicker from 'react-datepicker';
 import {
   Button, Form, Icon, Item, Message,
 } from 'semantic-ui-react';
@@ -15,8 +14,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import useQueryParams from '../../../lib/hooks/useQueryParams';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import Errored from '../../Requests/Errored';
-
-const dateFormat = 'YYYY-MM-DD';
+import UtcDatePicker from '../../wca/UtcDatePicker';
 
 const genderOptions = _.map(genders.byId, (gender) => ({
   key: gender.id,
@@ -145,14 +143,14 @@ function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
         <Form.Field
           label={I18n.t('activerecord.attributes.user.dob')}
           name="dob"
-          control={DatePicker}
+          control={UtcDatePicker}
           showYearDropdown
-          scrollableYearDropdown
+          dropdownMode="select"
           disabled={!editedUserDetails}
-          value={editedUserDetails?.dob || null}
+          selected={editedUserDetails?.dob}
           onChange={(date) => handleFormChange(null, {
             name: 'dob',
-            value: moment(date).format(dateFormat),
+            value: date,
           })}
         />
         <Button

@@ -24,13 +24,16 @@ function UtcDatePicker({
   isoDate,
   onChange,
   shouldCloseOnSelect,
-  showTimeInput,
-  selectsStart,
-  selectsEnd,
-  isoStartDate,
-  isoEndDate,
-  isoMinDate,
-  isoMaxDate,
+  showTimeInput = false,
+  showYearDropdown = false,
+  dropdownMode = null,
+  scrollableYearDropdown = false,
+  selectsStart = false,
+  selectsEnd = false,
+  isoStartDate = null,
+  isoEndDate = null,
+  isoMinDate = null,
+  isoMaxDate = null,
 }) {
   const date = useIsoDate(isoDate);
 
@@ -58,6 +61,9 @@ function UtcDatePicker({
       onChange={onChangeInternal}
       shouldCloseOnSelect={shouldCloseOnSelect}
       showTimeInput={showTimeInput}
+      showYearDropdown={showYearDropdown}
+      dropdownMode={dropdownMode}
+      scrollableYearDropdown={scrollableYearDropdown}
       timeInputLabel="UTC"
       dateFormat={showTimeInput ? 'Pp' : 'P'}
       timeFormat="p"
