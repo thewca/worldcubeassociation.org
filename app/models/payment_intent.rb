@@ -117,7 +117,6 @@ class PaymentIntent < ApplicationRecord
         save
         payment_record.save
       else
-        puts "updating with status: #{api_intent.status}"
         self.update!(wca_status: payment_record.determine_wca_status)
         save
         payment_record.save

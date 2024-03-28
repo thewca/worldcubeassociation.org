@@ -50,7 +50,6 @@ class StripeRecord < ApplicationRecord
   serialize :parameters, coder: JSON
 
   def determine_wca_status
-    puts "determining wca status for stripe status: #{stripe_status}"
     result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(stripe_status) }
     result&.first || raise("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
   end
@@ -60,7 +59,6 @@ class StripeRecord < ApplicationRecord
   end
 
   def assign_status(api_transaction)
-    puts "assigning status: #{api_transaction.status}"
     stripe_error = nil
 
     case self.stripe_record_type
