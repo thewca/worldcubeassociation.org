@@ -24,7 +24,7 @@ FactoryBot.define do
     end
 
     trait :delegate_regions do
-      group { FactoryBot.create(:delegate_region_americas) }
+      group { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group }
     end
 
     trait :delegate_regions_senior_delegate do
@@ -61,7 +61,7 @@ FactoryBot.define do
 
     factory :delegate_role do
       user { FactoryBot.create(:user) }
-      group_id { FactoryBot.create(:delegate_region_americas).id }
+      group_id { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group.id }
       start_date { Date.today - 1.year }
       metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'delegate') }
     end

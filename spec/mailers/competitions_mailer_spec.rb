@@ -6,7 +6,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_wcat_of_confirmed_competition" do
     let(:senior_delegate_role) { FactoryBot.create :senior_delegate_role }
     let(:delegate) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
-    let(:second_senior_delegate_role) { FactoryBot.create :senior_delegate_role }
+    let(:second_senior_delegate_role) { FactoryBot.create :senior_delegate_role, group: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group }
     let(:second_delegate) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
     let(:third_delegate) { FactoryBot.create :trainee_delegate, region_id: second_senior_delegate_role.group.id }
     let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate, second_delegate, third_delegate] }

@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+GroupsMetadataDelegateRegions.create!(friendly_id: 'africa', email: 'delegates.africa@worldcubeassociation.org')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia', email: 'delegates.asia@worldcubeassociation.org')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe', email: 'delegates.europe@worldcubeassociation.org')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'oceania', email: 'delegates.oceania@worldcubeassociation.org')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'americas', email: 'delegates.americas@worldcubeassociation.org')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'north-america')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'south-america')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia-east')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia-west')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'india')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe-north')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe-south')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'australia')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'new-zealand')

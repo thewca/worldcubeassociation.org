@@ -637,6 +637,10 @@ class User < ApplicationRecord
       end
     end
 
+    if can_manage_delegate_probation?
+      groups += UserGroup.delegate_probation.map(&:id)
+    end
+
     # FIXME: Consider groups of other groupTypes as well.
 
     groups
