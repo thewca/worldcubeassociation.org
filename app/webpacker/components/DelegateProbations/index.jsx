@@ -118,7 +118,7 @@ export default function DelegateProbations() {
       <h2>Active Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date === null
-           || probationRole.end_date > DateTime.now().toISODate())}
+           || DateTime.fromISO(probationRole.end_date, { zone: 'UTC' }) > DateTime.now())}
         isActive
         save={save}
         sync={sync}
@@ -126,7 +126,7 @@ export default function DelegateProbations() {
       <h2>Past Probations</h2>
       <ProbationListTable
         roleList={probationRoles.filter((probationRole) => probationRole.end_date !== null
-          && probationRole.end_date <= DateTime.now().toISODate())}
+          && DateTime.fromISO(probationRole.end_date, { zone: 'UTC' }) <= DateTime.now())}
         isActive={false}
       />
     </>

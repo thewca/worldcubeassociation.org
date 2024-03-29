@@ -80,7 +80,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   searchParams.set(SELECTED_EVENTS, selectedEvents.join(','));
   searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(','));
 
-  // for date values, format and add them if applicable, otherwise omit them
+  // for date values, add them if applicable, otherwise omit them
   if (customStartDate) {
     searchParams.set(START_DATE, customStartDate);
   } else {
