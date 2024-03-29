@@ -21,16 +21,22 @@ const useIsoDate = (isoString) => useMemo(() => loadAsPseudoLocal(isoString), [i
 
 function UtcDatePicker({
   id,
+  name,
   isoDate,
   onChange,
   shouldCloseOnSelect,
-  showTimeInput,
-  selectsStart,
-  selectsEnd,
-  isoStartDate,
-  isoEndDate,
-  isoMinDate,
-  isoMaxDate,
+  showTimeInput = false,
+  showYearDropdown = false,
+  dropdownMode = null,
+  scrollableYearDropdown = false,
+  showIcon = false,
+  placeholderText = null,
+  selectsStart = false,
+  selectsEnd = false,
+  isoStartDate = null,
+  isoEndDate = null,
+  isoMinDate = null,
+  isoMaxDate = null,
 }) {
   const date = useIsoDate(isoDate);
 
@@ -54,13 +60,19 @@ function UtcDatePicker({
   return (
     <DatePicker
       id={id}
+      name={name}
       selected={date}
       onChange={onChangeInternal}
       shouldCloseOnSelect={shouldCloseOnSelect}
       showTimeInput={showTimeInput}
+      showYearDropdown={showYearDropdown}
+      dropdownMode={dropdownMode}
+      scrollableYearDropdown={scrollableYearDropdown}
       timeInputLabel="UTC"
       dateFormat={showTimeInput ? 'Pp' : 'P'}
       timeFormat="p"
+      showIcon={showIcon}
+      placeholderText={placeholderText}
       selectsStart={selectsStart}
       selectsEnd={selectsEnd}
       startDate={startDate}
