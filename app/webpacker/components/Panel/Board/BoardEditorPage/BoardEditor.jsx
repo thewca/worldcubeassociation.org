@@ -23,6 +23,11 @@ export default function BoardEditor({ boardRoles, sync }) {
     });
   };
 
+  const closeModal = () => {
+    setNewBoardRole(null);
+    setOpenModal(false);
+  };
+
   if (saving) return <Loading />;
 
   return (
@@ -51,10 +56,7 @@ export default function BoardEditor({ boardRoles, sync }) {
       <Modal
         size="fullscreen"
         open={openModal}
-        onClose={() => {
-          setOpenModal(false);
-          newBoardRole(null);
-        }}
+        onClose={closeModal}
       >
         <Modal.Content>
           <Header>Add Board Role</Header>
@@ -64,8 +66,7 @@ export default function BoardEditor({ boardRoles, sync }) {
               userId: newBoardRole.id,
             }, () => {
               sync();
-              setNewBoardRole(null);
-              setOpenModal(false);
+              closeModal();
             }, { method: 'POST' });
           }}
           >
