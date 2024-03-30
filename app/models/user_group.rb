@@ -40,7 +40,7 @@ class UserGroup < ApplicationRecord
     if self.board?
       role_list.concat(Team.board.reload.current_members.map(&:board_role))
     end
-    if self.councils? || self.teams_committees?
+    if self.teams_committees?
       TeamMember.where(team_id: self.team.id).each do |team_member|
         role_list << team_member.role
       end

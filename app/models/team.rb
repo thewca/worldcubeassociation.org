@@ -130,10 +130,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wdpc')
   end
 
-  def self.wac
-    Team.c_find_by_friendly_id!('wac').reload
-  end
-
   def self.wsot
     Team.c_find_by_friendly_id!('wsot')
   end
@@ -154,22 +150,12 @@ class Team < ApplicationRecord
     I18n.t("about.structure.#{friendly_id}.name")
   end
 
-  private def council_if_any
-    UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: self.friendly_id)&.id, metadata_type: 'GroupsMetadataCouncils')
-  end
-
-  private def team_if_any
+  def group
     GroupsMetadataTeamsCommittees.find_by(friendly_id: self.friendly_id)&.user_group
   end
 
-  def group
-    council_if_any || team_if_any
-  end
-
   def group_type
-    if council_if_any.present?
-      UserGroup.group_types[:councils]
-    elsif official?
+    if official?
       UserGroup.group_types[:teams_committees]
     end
   end
