@@ -1182,6 +1182,90 @@ zh-CN:
       manage_app: 管理你的应用
       #original_hash: 0e8b212
       manage_auth_app: 管理授权的应用
+  page:
+    translators:
+      #original_hash: 959d354
+      title: 翻译者
+    officers_and_board:
+      #original_hash: c9bae18
+      title: WCA干事与董事会
+      #original_hash: 312e799
+      officers_description: >-
+        WCA董事负责负责处理与WCA非营利地位相关的任务。这些董事由WCA董事会选举产生。执行董事是WCA的首席执行官，主席主持所有董事会会议，秘书负责维护组织的文件，财务主管管理WCA的财务事务。
+      #original_hash: e0d37a2
+      board_description: WCA董事会负责领导整个组织，并履行其他团队、委员会和理事会未履行的任何职责。
+    teams_committees_councils:
+      #original_hash: 0d62207
+      title: WCA团队、委员会和理事会
+      #original_hash: d54d953
+      description: >-
+        WCA的团队和委员会是组织不可分割的一部分，执行保持其运作所需的日常任务。这些委员会由WCA社区成员组成，包括WCA代表和竞争对手。每个团队都有一个领导者，其作用是确保团队的正常运作并指导其他团队成员。理事会是一种特殊类型的团队，为WCA董事会发挥咨询作用，由社区成员组成，而不是WCA工作人员。当有委员会、团队或理事会空缺时，有关如何申请的信息会发布在首页上。
+      groups_name:
+        #original_hash: 90a1280
+        wat: WCA资料整理组
+        #original_hash: 63a2388
+        wct: WCA通讯组
+        #original_hash: 2b81984
+        wcat: WCA比赛公示组
+        #original_hash: c97077a
+        wdc: WCA纪律委员会
+        #original_hash: 83bd1d0
+        wec: WCA道德委员会
+        #original_hash: d1dbb86
+        weat: WCA董事会助理团队
+        #original_hash: 9cb13de
+        wfc: WCA财务委员会
+        #original_hash: 2035811
+        wmt: WCA市场营销组
+        #original_hash: 8f32116
+        wqac: WCA质量保证委员会
+        #original_hash: 3da1e85
+        wrc: WCA规则委员会
+        #original_hash: 67be768
+        wrt: WCA成绩组
+        #original_hash: a14bc62
+        wst: WCA软件组
+        #original_hash: 58765c7
+        wsot: WCA竞技组织团队
+        #original_hash: 1ce7604
+        wac: WCA顾问委员会
+      groups_description:groups_description:
+        #original_hash: 5b1aade
+        wat: >-
+          WCA资料整理组是一个WCA的咨询委员会。这个团队的任务是协助并负责将WCA过去的资料作整理保存。
+        #original_hash: 50fd091
+        wct: >-
+          该组负责世界魔方协会与魔友们以及大众之间的联系与沟通。通讯与沟通有助于实现世界魔方协会的目标，并支持友善、透明、包容、开放和响应的魔方文化。
+        #original_hash: 3e5570f
+        wcat: >-
+          该组负责批准和宣布代表提交的WCA比赛，并确保此类公告符合WCA质量标准。该团队还负责维护比赛申请用的政策文件，如：《WCA赛事要求》。WCAT并不负责组织或监督各个比赛。
+        #original_hash: 41eb6fd
+        wdc: >-
+          该委员会对WCA比赛期间或WCA官方线上平台上的选手和事件进行独立调查。这些事件涉嫌可能违反了WCA的精神、行为守则、条例。
+        #original_hash: 6cdac80
+        wec: >-
+          该委员会的作用是确保WCA工作人员遵循的所有程序都遵守道德守则，如果这些成员的行为不符合守则，则进行独立调查。WEC是选手的知己，他们可能会报告担忧并要求调查。如果任何参与者不同意WCA纪律委员会的决定，该委员会也充当上诉委员会。  
+        #original_hash: 889dd90
+        weat: 该团队是负责执行处理WCA董事会的行政事务。
+        #original_hash: 43e4e33
+        wfc: >-
+          该委员会负责管理WCA的财务，包括预算编制、财务报告、财务分析、账单和报税。他们还管理WCA最大的收入来源，WCA会费系统，以及为处于不同发展阶段的当地社区提供支持的各种资助计划，包括交通资金、设备资金和对区域组织的支持。
+        #original_hash: f2a0140
+        wmt: 该团队负责开发和管理WCA品牌、寻求赞助、支持WCA竞赛装备的分销以及营销WCA商品。
+        #original_hash: 0171b3b
+        wqac: >-
+          该委员会负责支持和促进WCA内持续的质量改进，以及在全球范围内应用质量标准，以确保一致的高质量流程，WCA工作人员，区域组织，比赛组织者和工作人员。
+        #original_hash: a1260bb
+        wrc: >-
+          该组负责与WCA规则的应用、改进和发展有关的所有问题。他们支持WCA代表处理比赛中发生的任何类型的程序性问题，并决定未解决和未发现的事件。
+        #original_hash: 7bc588b
+        wrt: 该组负责管理WCA数据库中的所有数据，最重要的是比赛成绩和选手个人数据。
+        #original_hash: ec961e4
+        wst: 该组负责管理WCA软件（官网、打乱程序、管理工具等）。
+        #original_hash: 8f888d6
+        wsot: 该团队负责监督和协助WCA成为一个国际认可的竞技组织。
+        #original_hash: 73d8df4
+        wac: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。他们负责维护WCA论坛和总结问卷调查以及试着拓展到更多全球魔方社群。
   homepage:
     #original_hash: 824d76b
     learn_more: 了解更多
