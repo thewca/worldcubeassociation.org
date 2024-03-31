@@ -69,6 +69,10 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wac_role_metadata, status: RolesMetadataCouncils.statuses[:member]) }
     end
 
+    trait :board do
+      group_id { UserGroup.board_group.id }
+    end
+
     factory :delegate_role do
       user { FactoryBot.create(:user) }
       group_id { FactoryBot.create(:delegate_region_americas).id }
@@ -88,5 +92,6 @@ FactoryBot.define do
     factory :treasurer_role, traits: [:officers, :officers_treasurer, :active]
     factory :wac_role_leader, traits: [:councils_leader, :active]
     factory :wac_role_member, traits: [:councils_member, :active]
+    factory :board_role, traits: [:board, :active]
   end
 end

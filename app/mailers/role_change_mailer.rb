@@ -35,6 +35,9 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:councils]
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
       reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:board]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email]
+      reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
     end
@@ -92,6 +95,9 @@ class RoleChangeMailer < ApplicationMailer
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:councils]
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:board]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
