@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import _ from 'lodash';
 import { Table, Confirm, Modal, Button } from 'semantic-ui-react';
 import { competitionUrl, apiV0Urls } from '../../lib/requests/routes.js.erb';
@@ -7,6 +6,7 @@ import { countries, continents, years } from '../../lib/wca-data.js.erb';
 import { dateRangeBetween } from '../../lib/helpers/media-table';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import { DateTime } from 'luxon';
 import {
   DropdownMenu,
   DropdownItem,
@@ -14,31 +14,40 @@ import {
   DropdownDivider,
   Dropdown,
 } from 'semantic-ui-react'
+const countryOptions = _.map(countries.byIso2, (country) => ({
+  key: country.iso2,
+  text: country.name,
+  value: country.iso2,
+}));
+const continentOptions = continents.map((continent) => ({
+  key: continent.id,
+  text: continent.name,
+  value: continent.name,
+}));
+const yearOptions = [
+  {
+    key: 'all',
+    text: 'All Years',
+    value: 'All Years',
+  },
+  ...years.map((year) => ({
+    key: year,
+    text: year,
+    value: year,
+  })),
+];
+handleSort = (clickedColumn) => () => {
+  if (sortColumn !== clickedColumn) {
+    setSortColumn(clickedColumn);
+    setSortDirection('ascending');
+    setMediaCombined([...mediaCombined].sort((a, b) => a[clickedColumn] - b[clickedColumn]));
+  } else {
+    setMediaCombined([...mediaCombined].reverse());
+    setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
+  }
+};
+
 export default function MediaTable({ isValidate }) {
-  const countryOptions = _.map(countries.byIso2, (country) => ({
-    key: country.iso2,
-    text: country.name,
-    value: country.iso2,
-  }));
-  const continentOptions = continents.map((continent) => ({
-    key: continent.id,
-    text: continent.name,
-    value: continent.name,
-  }));
-  const yearOptions = [
-    {
-      key: 'all',
-      text: 'All Years',
-      value: 'All Years',
-    },
-    ...years.map((year) => ({
-      key: year,
-      text: year,
-      value: year,
-    })),
-  ];
-
-
   const handleUpdateSuccess = () => {
     setModalOpen(true);
   };
@@ -81,7 +90,7 @@ export default function MediaTable({ isValidate }) {
       }))
     }
   }, [data]);
-  const [modalParams, setModalParams] = React.useState({
+  const [modalParams, setModalParams] = useState({
     open: false,
     mediaId: null,
     status: null,
@@ -91,23 +100,11 @@ export default function MediaTable({ isValidate }) {
       sync(); handleUpdateSuccess(); setModalParams({ ...modalParams, open: false })
     }, { method: 'PATCH' });
   };
-  const [sortColumn, setSortColumn] = useState(null);
-  const [sortDirection, setSortDirection] = useState(null);
-  const handleSort = (clickedColumn) => () => {
-    if (sortColumn !== clickedColumn) {
-      setSortColumn(clickedColumn);
-      setSortDirection('ascending');
-      setMediaCombined([...mediaCombined].sort((a, b) => a[clickedColumn] - b[clickedColumn]));
-    } else {
-      setMediaCombined([...mediaCombined].reverse());
-      setSortDirection(sortDirection === 'ascending' ? 'descending' : 'ascending');
-    }
-  };
+  const [{ sortColumn, sortDirection }, handleSort] = useReducer(sortReducer, { sortColumn: null, sortDirection: null })
   const handleSelectYear = (event, data) => {
     setSelectedYear(data.value);
   };
   const handleSelectRegion = (event, data) => {
-    console.log(data)
     setSelectedRegion(data.value);
   };
   return (
@@ -199,7 +196,7 @@ export default function MediaTable({ isValidate }) {
           {mediaCombined?.map((media_row) => (
             <Table.Row>
               <Table.Cell>
-                {moment.utc(media_row.timestampSubmitted).format('MMMM DD, YYYY HH:mm UTC')}
+                {DateTime.fromISO(media_row.timestampSubmitted, { zone: 'utc' }).toFormat('MMMM dd, yyyy HH:mm \'UTC\'')}
               </Table.Cell>
               <Table.Cell>
                 {media_row.competetionDate}
