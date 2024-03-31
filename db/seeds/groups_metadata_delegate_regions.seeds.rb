@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
-GroupsMetadataDelegateRegions.create!(friendly_id: 'africa', email: 'delegates.africa@worldcubeassociation.org')
-GroupsMetadataDelegateRegions.create!(friendly_id: 'asia', email: 'delegates.asia@worldcubeassociation.org')
-GroupsMetadataDelegateRegions.create!(friendly_id: 'europe', email: 'delegates.europe@worldcubeassociation.org')
-GroupsMetadataDelegateRegions.create!(friendly_id: 'oceania', email: 'delegates.oceania@worldcubeassociation.org')
-GroupsMetadataDelegateRegions.create!(friendly_id: 'americas', email: 'delegates.americas@worldcubeassociation.org')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'africa')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'oceania')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'americas')
 GroupsMetadataDelegateRegions.create!(friendly_id: 'north-america')
 GroupsMetadataDelegateRegions.create!(friendly_id: 'south-america')
 GroupsMetadataDelegateRegions.create!(friendly_id: 'asia-east')
