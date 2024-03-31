@@ -9,21 +9,21 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     is_hidden: false,
     metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa'),
   )
-  UserGroup.create!(
+  asia_group = UserGroup.create!(
     name: 'Asia',
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
     metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia'),
   )
-  UserGroup.create!(
+  europe_group = UserGroup.create!(
     name: 'Europe',
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
     metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe'),
   )
-  UserGroup.create!(
+  oceania_group = UserGroup.create!(
     name: 'Oceania',
     group_type: :delegate_regions,
     is_active: true,
@@ -53,15 +53,15 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
   )
   UserGroup.create!(
     name: 'Asia East',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group.id,
+    parent_group: asia_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
     metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-east'),
   )
-  UserGroup.create!(
+  asia_west_group = UserGroup.create!(
     name: 'Asia West',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group.id,
+    parent_group: asia_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
@@ -69,7 +69,7 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
   )
   UserGroup.create!(
     name: 'India',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-west').user_group.id,
+    parent_group: asia_west_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
@@ -77,7 +77,7 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
   )
   UserGroup.create!(
     name: 'Europe North',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe').user_group.id,
+    parent_group: europe_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
@@ -85,7 +85,7 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
   )
   UserGroup.create!(
     name: 'Europe South',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe').user_group.id,
+    parent_group: europe_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
@@ -93,7 +93,7 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
   )
   UserGroup.create!(
     name: 'Australia',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'oceania').user_group.id,
+    parent_group: oceania_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
@@ -101,7 +101,7 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
   )
   UserGroup.create!(
     name: 'New Zealand',
-    parent_group_id: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'oceania').user_group.id,
+    parent_group: oceania_group,
     group_type: :delegate_regions,
     is_active: true,
     is_hidden: false,
