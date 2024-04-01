@@ -11,7 +11,7 @@ import {
   InputSelect,
   InputString,
 } from '../Inputs/FormInputs';
-import SubSection from './SubSection';
+import SubSection from '../../wca/FormProvider/SubSection';
 
 const countriesOptions = Object.values(countries.byIso2).map((country) => ({
   key: country.id,

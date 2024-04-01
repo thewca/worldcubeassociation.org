@@ -6,12 +6,12 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   competitionConfirmationDataUrl,
   competitionUrl,
-  confirmCompetitionUrl, homepageUrl,
+  confirmCompetitionUrl,
+  homepageUrl,
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { changesSaved, updateFormValue } from './store/actions';
 
 export function CreateOrUpdateButton({
   createComp,

@@ -8,7 +8,6 @@ import CompsTable from './CompsTable';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import { updateFormValue } from '../store/actions';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 
 function MissingInfo({ missingDate, missingLocation }) {

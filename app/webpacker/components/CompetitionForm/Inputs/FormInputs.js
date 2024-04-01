@@ -13,12 +13,6 @@ import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import {
-  readValueRecursive,
-  useCompetitionForm,
-  useSections,
-  useUpdateFormAction,
-} from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../wca/UtcDatePicker';

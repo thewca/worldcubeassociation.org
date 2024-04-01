@@ -1,5 +1,4 @@
 import React from 'react';
-import SubSection from './SubSection';
 import {
   InputBoolean,
   InputBooleanSelect,
@@ -10,6 +9,7 @@ import {
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
+import SubSection from '../../wca/FormProvider/SubSection';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,

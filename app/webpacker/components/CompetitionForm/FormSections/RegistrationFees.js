@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import SubSection from './SubSection';
 import {
   InputBoolean,
   InputCurrencyAmount, InputDate, InputNumber,
@@ -11,6 +10,7 @@ import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import ConditionalSection from './ConditionalSection';
+import SubSection from '../../wca/FormProvider/SubSection';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,

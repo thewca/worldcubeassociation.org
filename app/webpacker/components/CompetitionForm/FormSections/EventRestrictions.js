@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { Divider } from 'semantic-ui-react';
-import SubSection from './SubSection';
 import {
   InputBoolean,
   InputBooleanSelect,
@@ -10,6 +9,7 @@ import {
 } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
+import SubSection from '../../wca/FormProvider/SubSection';
 
 export default function EventRestrictions() {
   const {

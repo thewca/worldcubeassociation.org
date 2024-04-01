@@ -23,33 +23,32 @@ import NearbyComps from './Tables/NearbyComps';
 import FormErrors from './FormErrors';
 import Series from './FormSections/Series';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import StoreProvider, { useDispatch, useStore } from '../../lib/providers/StoreProvider';
-import competitionFormReducer from './store/reducer';
-import { changesSaved, setErrors } from './store/actions';
-import SectionProvider from './store/sections';
+import StoreProvider, { useStore } from '../../lib/providers/StoreProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
-import SubSection from './FormSections/SubSection';
 import RegistrationDates from './FormSections/RegistrationDates';
 import AnnouncementActions from './AnnouncementActions';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 import UserPreferences from './UserPreferences';
+import EditForm, { useInitialFormObject } from '../wca/FormProvider/EditForm';
+import SubSection from '../wca/FormProvider/SubSection';
 
 // FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
 const WCAT_FRIENDLY_ID = 'wcat';
 
 function AnnouncementMessage() {
   const {
-    initialCompetition: {
-      admin: {
-        isConfirmed,
-        isVisible,
-      },
-    },
     isPersisted,
     isAdminView,
   } = useStore();
+
+  const {
+    admin: {
+      isConfirmed,
+      isVisible,
+    },
+  } = useInitialFormObject();
 
   if (!isPersisted) return null;
 
@@ -128,54 +127,15 @@ function CompetitionForm() {
     isAdminView,
   } = useStore();
 
-  const dispatch = useDispatch();
-
   const { save, saving } = useSaveAction();
 
-  const onSuccess = useCallback((data) => {
-    const { redirect } = data;
-
-    if (redirect) {
-      window.removeEventListener('beforeunload', onUnload);
-      window.location.replace(redirect);
-    } else {
-      dispatch(changesSaved());
-      dispatch(setErrors(null));
-    }
-  }, [dispatch, onUnload]);
-
-  const onError = useCallback((err) => {
-    // check whether the 'json' and 'response' properties are set,
-    // which means it's (very probably) a FetchJsonError
-    if (err.json !== undefined && err.response !== undefined) {
-      // The 'error' property means we pasted a generic error message in the backend.
-      if (err.json.error !== undefined) {
-        // json schema errors have only one error message, but our frontend supports
-        // an arbitrary number of messages per property. So we wrap it in an array.
-        if (err.response.status === 422 && err.json.schema !== undefined) {
-          const jsonSchemaError = {
-            [err.json.jsonProperty]: [
-              `Did not match the expected format: ${JSON.stringify(err.json.schema)}`,
-            ],
-          };
-
-          dispatch(setErrors(jsonSchemaError));
-        }
-      } else {
-        dispatch(setErrors(err.json));
-      }
-    } else {
-      throw err;
-    }
-  }, [dispatch]);
-
-  const createComp = useCallback(() => {
+  const createComp = useCallback((onSuccess, onError) => {
     save(createCompetitionUrl, competition, onSuccess, { method: 'POST' }, onError);
-  }, [competition, save, onSuccess, onError]);
+  }, [competition, save]);
 
-  const updateComp = useCallback(() => {
+  const updateComp = useCallback((onSuccess, onError) => {
     save(`${competitionUrl(initialCompetition.competitionId)}?adminView=${isAdminView}`, competition, onSuccess, { method: 'PATCH' }, onError);
-  }, [competition, initialCompetition.competitionId, isAdminView, save, onSuccess, onError]);
+  }, [competition, initialCompetition.competitionId, isAdminView, save]);
 
   return (
     <>
@@ -245,14 +205,13 @@ export default function Wrapper({
   isSeriesPersisted = false,
   isCloning = false,
 }) {
+  const dummyReducer = (state, action) => state;
+
   return (
     <StoreProvider
-      reducer={competitionFormReducer}
+      reducer={dummyReducer}
       initialState={{
-        competition,
         usesV2Registrations,
-        initialCompetition: competition,
-        errors: null,
         storedEvents,
         isAdminView,
         isPersisted,
@@ -260,9 +219,9 @@ export default function Wrapper({
         isCloning,
       }}
     >
-      <SectionProvider>
+      <EditForm initialState={competition}>
         <CompetitionForm />
-      </SectionProvider>
+      </EditForm>
     </StoreProvider>
   );
 }

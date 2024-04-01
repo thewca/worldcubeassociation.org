@@ -5,6 +5,7 @@ import _ from 'lodash';
 import { Button, Message, Sticky } from 'semantic-ui-react';
 import SectionProvider from './FormSection';
 import formReducer from './store/reducer';
+import { changesSaved, setErrors } from './store/actions';
 
 const FormContext = createContext();
 
@@ -27,6 +28,43 @@ export default function EditForm({
 
     return null;
   }, [unsavedChanges]);
+
+  const onSuccess = useCallback((data) => {
+    const { redirect } = data;
+
+    if (redirect) {
+      window.removeEventListener('beforeunload', onUnload);
+      window.location.replace(redirect);
+    } else {
+      dispatch(changesSaved());
+      dispatch(setErrors(null));
+    }
+  }, [dispatch, onUnload]);
+
+  const onError = useCallback((err) => {
+    // check whether the 'json' and 'response' properties are set,
+    // which means it's (very probably) a FetchJsonError
+    if (err.json !== undefined && err.response !== undefined) {
+      // The 'error' property means we pasted a generic error message in the backend.
+      if (err.json.error !== undefined) {
+        // json schema errors have only one error message, but our frontend supports
+        // an arbitrary number of messages per property. So we wrap it in an array.
+        if (err.response.status === 422 && err.json.schema !== undefined) {
+          const jsonSchemaError = {
+            [err.json.jsonProperty]: [
+              `Did not match the expected format: ${JSON.stringify(err.json.schema)}`,
+            ],
+          };
+
+          dispatch(setErrors(jsonSchemaError));
+        }
+      } else {
+        dispatch(setErrors(err.json));
+      }
+    } else {
+      throw err;
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     window.addEventListener('beforeunload', onUnload);
@@ -53,11 +91,11 @@ export default function EditForm({
 
   const stickyRef = useRef();
 
-  const formContext = useMemo(() => ([
-    formState,
+  const formContext = useMemo(() => ({
+    state: formState,
     initialState,
     unsavedChanges,
-  ]), [formState, initialState, unsavedChanges]);
+  }), [formState, initialState, unsavedChanges]);
 
   return (
     <FormContext.Provider value={formContext}>
@@ -75,6 +113,7 @@ export default function EditForm({
   );
 }
 
-export const useFormObject = () => useContext(FormContext)[0];
+export const useFormContext = () => useContext(FormContext);
 
-export const useInitialFormObject = () => useContext(FormContext)[1];
+export const useFormObject = () => useFormContext().state;
+export const useInitialFormObject = () => useFormContext().initialState;

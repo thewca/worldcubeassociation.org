@@ -2,8 +2,8 @@ import React from 'react';
 import { Form } from 'semantic-ui-react';
 import { InputDate } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
-import SubSection from './SubSection';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
+import SubSection from '../../wca/FormProvider/SubSection';
 
 export default function RegistrationDates() {
   const {

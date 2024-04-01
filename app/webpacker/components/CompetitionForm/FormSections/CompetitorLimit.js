@@ -1,8 +1,8 @@
 import React from 'react';
-import SubSection from './SubSection';
 import { InputBooleanSelect, InputNumber, InputTextArea } from '../Inputs/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
+import SubSection from '../../wca/FormProvider/SubSection';
 
 export default function CompetitorLimit() {
   const {

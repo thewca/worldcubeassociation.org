@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import SectionProvider, { useSections } from '../store/sections';
+import SectionProvider, { useSections } from './FormSection';
 
 export default function SubSection({ section, children }) {
   const sections = useSections();
