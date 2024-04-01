@@ -197,14 +197,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def end_delegate_role_for_user(user)
-    if user.delegate_status.present?
-      remove_pending_wca_id_claims(user)
-      user.update!(delegate_status: '', region_id: '', location: '')
-      send_role_change_notification(user)
-    end
-  end
-
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
       role_to_end = group.lead_role
@@ -311,43 +303,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     }
   end
 
-  def show
-    user_id = params.require(:userId)
-
-    user = User.find(user_id)
-    render json: {
-      roleData: {
-        delegateStatus: user.delegate_status,
-        regionId: user.region_id,
-        location: user.location,
-      },
-      regions: UserGroup.delegate_region_groups,
-    }
-  end
-
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
   # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
     id = params.require(:id)
-
-    if id == UserRole::DELEGATE_ROLE_ID
-      # This is an exception because we are editing more than a value. But this code is anyway
-      # temporary, once we are done with migration, this code will be removed.
-      user_id = params.require(:userId)
-      delegate_status = params.require(:delegateStatus)
-      region_id = params.require(:regionId)
-      location = params.require(:location)
-
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, region_id)
-
-      user = User.find(user_id)
-      user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
-      send_role_change_notification(user)
-
-      return render json: {
-        success: true,
-      }
-    end
 
     if id.starts_with?('delegate-')
       # This tempoarily supports the non-migrated Delegate changes from the new UI.
@@ -428,18 +387,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def destroy
     id = params.require(:id)
-
-    if id == UserRole::DELEGATE_ROLE_ID
-      user_id = params.require(:userId)
-      user = User.find(user_id)
-
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
-
-      end_delegate_role_for_user(user)
-      return render json: {
-        success: true,
-      }
-    end
 
     if id.starts_with?('delegate-')
       user_id = id.split('delegate-').last
