@@ -4086,7 +4086,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"classnames@npm:^2.2.6, classnames@npm:^2.5.1":
+"classnames@npm:^2.5.1":
   version: 2.5.1
   resolution: "classnames@npm:2.5.1"
   checksum: 10c0/afff4f77e62cea2d79c39962980bf316bacb0d7c49e13a21adaadb9221e1c6b9d3cdb829d8bb1b23c406f4e740507f37e1dcf506f7e3b7113d17c5bab787aa69
@@ -4125,6 +4125,13 @@ __metadata:
   version: 1.1.1
   resolution: "clsx@npm:1.1.1"
   checksum: 10c0/5c34e1d5623e3dce0dbf22eedd4f3cc7cd0dee6b1b1ef3ad49d042c9d86372a1dc7788c2ca3213ec08e65ad0e91572ae7cb77183a478c9977bd5327e8f43ffe5
+  languageName: node
+  linkType: hard
+
+"clsx@npm:^2.1.0":
+  version: 2.1.0
+  resolution: "clsx@npm:2.1.0"
+  checksum: 10c0/c09c00ad14f638366ca814097e6cab533dfa1972a358da5b557be487168acbb25b4c1395e89ffa842a8a61ba87a462d2b4885bc9d4f8410b598f3cb339599cdb
   languageName: node
   linkType: hard
 
@@ -9434,19 +9441,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^6.2.0":
-  version: 6.2.0
-  resolution: "react-datepicker@npm:6.2.0"
+"react-datepicker@npm:^6.6.0":
+  version: 6.6.0
+  resolution: "react-datepicker@npm:6.6.0"
   dependencies:
     "@floating-ui/react": "npm:^0.26.2"
-    classnames: "npm:^2.2.6"
+    clsx: "npm:^2.1.0"
     date-fns: "npm:^3.3.1"
     prop-types: "npm:^15.7.2"
     react-onclickoutside: "npm:^6.13.0"
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
-  checksum: 10c0/b090f4603b401f4386b77187d3b3d0394e95e0ee6e79e14ed5a454b18316d0a7b351cf34da28f714a81b37a4829c6908be711e7d444423ef397e9614b211b52f
+  checksum: 10c0/37928f01a3e9a99c819f39559147c72bed6e844d54b1eb91d954fd61b1ea90a4375b6593412c8dc9019e25a3e814e0f4e1f64f1bc77edcb72b79ecb29b70f880
   languageName: node
   linkType: hard
 
@@ -10007,7 +10014,7 @@ __metadata:
     rails-erb-loader: "npm:^5.5.2"
     react: "npm:^18.2.0"
     react-csv: "npm:^2.2.2"
-    react-datepicker: "npm:^6.2.0"
+    react-datepicker: "npm:^6.6.0"
     react-dom: "npm:^18.2.0"
     react-intersection-observer: "npm:^9.8.1"
     react-leaflet: "npm:^4.2.1"
