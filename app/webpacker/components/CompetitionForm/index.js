@@ -1,8 +1,5 @@
 import React, { useCallback } from 'react';
-import {
-  Divider,
-  Message,
-} from 'semantic-ui-react';
+import { Divider } from 'semantic-ui-react';
 import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
@@ -25,40 +22,13 @@ import StoreProvider, { useStore } from '../../lib/providers/StoreProvider';
 import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
-import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 import EditForm from '../wca/FormBuilder/EditForm';
-import { useFormContext, useFormObject } from '../wca/FormBuilder/provider/FormObjectProvider';
 import SubSection from '../wca/FormBuilder/SubSection';
-import CompFormHeader from './CompFormHeader';
-
-function BottomConfirmationPanel({
-  saveObject,
-}) {
-  const { isPersisted } = useStore();
-  const { unsavedChanges } = useFormContext();
-
-  if (isPersisted && !unsavedChanges) {
-    return (
-      <ConfirmationActions saveObject={saveObject} />
-    );
-  }
-
-  return (
-    <>
-      {unsavedChanges && (
-        <Message info>
-          You have unsaved changes. Please save the competition before taking any other action.
-        </Message>
-      )}
-      <CreateOrUpdateButton saveObject={saveObject} />
-    </>
-  );
-}
+import Header from './Header';
+import Footer from './Footer';
 
 function CompetitionForm() {
   const { isCloning } = useStore();
-
-  const { admin: { isConfirmed } } = useFormObject();
 
   return (
     <>
@@ -92,7 +62,7 @@ function CompetitionForm() {
 
       <EventRestrictions />
 
-      <InputTextArea id="remarks" disabled={isConfirmed} />
+      <InputTextArea id="remarks" />
 
       {isCloning && (
         <SubSection section="cloning">
@@ -144,8 +114,8 @@ export default function Wrapper({
         initialObject={competition}
         backendUrlFn={backendUrlFn}
         backendOptions={backendOptions}
-        CustomHeader={CompFormHeader}
-        CustomFooter={BottomConfirmationPanel}
+        CustomHeader={Header}
+        CustomFooter={Footer}
         disabledOverrideFn={isDisabled}
       >
         <CompetitionForm />

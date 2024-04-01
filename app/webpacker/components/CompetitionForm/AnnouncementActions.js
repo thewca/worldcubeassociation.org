@@ -6,6 +6,7 @@ import {
   Segment,
 } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
+import { DateTime } from 'luxon';
 import I18n from '../../lib/i18n';
 import { useStore } from '../../lib/providers/StoreProvider';
 import useLoadedData from '../../lib/hooks/useLoadedData';
@@ -49,10 +50,15 @@ function AnnounceAction({
     });
   };
 
+  const announcedAtLuxon = DateTime.fromISO(announcedAt);
+
   if (isAnnounced) {
     return (
       <List.Item>
-        {I18n.t('competitions.announced_by_html', { announcer_name: announcedBy, date_time: announcedAt })}
+        {I18n.t('competitions.announced_by_html', {
+          announcer_name: announcedBy,
+          date_time: announcedAtLuxon.toLocaleString(DateTime.DATETIME_FULL),
+        })}
       </List.Item>
     );
   }

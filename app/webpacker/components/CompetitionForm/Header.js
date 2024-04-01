@@ -57,7 +57,7 @@ function AnnouncementMessage() {
   );
 }
 
-export default function CompFormHeader() {
+export default function Header() {
   const { isPersisted } = useStore();
 
   return (
