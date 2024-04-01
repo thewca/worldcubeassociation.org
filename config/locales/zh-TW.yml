@@ -3803,7 +3803,7 @@ zh-TW:
         name: 軟體管理員
       #original_hash: 7e849d2
       delegates_html: >-
-        <p><strong>WCA代表</strong>是WCA動議中定義的角色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>地區代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
+        <p><strong>WCA代表</strong>是WCA動議中定義的腳色，在WCA規則中有所描述。代表的主要職責是代表WCA監督比賽。WCA代表負責確保所有WCA比賽符合WCA的任務、精神和規則。WCA將代表區別成<strong>高級代表</strong>、<strong>地區代表</strong>、<strong>一般代表</strong>、<strong>初級代表</strong>和<strong>實習代表</strong>%{see_link}。</p>
         <p>跟一般代表職責不同的是，高級代表或是地區代表需額外負責管理該地區的代表以及當有社群成員聯絡時處理該地區社群的事務。</p>
         <p>新上任的代表會先列為初級代表，之後他們需要證明自己管理WCA比賽的熟練程度，才能升任為一般代表。</p><p>實習代表是用來訓練成WCA代表的職位，在有其他WCA代表同時在場的時候才能監督一場比賽。</p>
       #original_hash: 27d18ac
@@ -4430,7 +4430,7 @@ zh-TW:
       #original_hash: aca6c32
       paragraph2: 我們的目的是分享一些玩家的個人故事和比賽內容。這不應該是週末的沉重負擔，所以我們希望您要先享受比賽再來分享。
       #original_hash: af023ed
-      paragraph3: 當一位主持的角色總結如下：
+      paragraph3: 當一位主持的腳色總結如下：
       #original_hash: 21efafe
       short_intro: 做個簡短介紹，分享您自己以及比賽。
       #original_hash: a053b5a
