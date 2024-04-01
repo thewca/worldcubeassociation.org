@@ -4713,6 +4713,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"date-fns@npm:^3.6.0":
+  version: 3.6.0
+  resolution: "date-fns@npm:3.6.0"
+  checksum: 10c0/0b5fb981590ef2f8e5a3ba6cd6d77faece0ea7f7158948f2eaae7bbb7c80a8f63ae30b01236c2923cf89bb3719c33aeb150c715ea4fe4e86e37dcf06bed42fb6
+  languageName: node
+  linkType: hard
+
 "date-now@npm:^0.1.4":
   version: 0.1.4
   resolution: "date-now@npm:0.1.4"
@@ -10048,7 +10055,7 @@ __metadata:
     core-js: "npm:^3.36.1"
     css-loader: "npm:^6.10.0"
     css-minimizer-webpack-plugin: "npm:^6.0.0"
-    date-fns: "npm:^3.3.1"
+    date-fns: "npm:^3.6.0"
     dompurify: "npm:^3.0.9"
     easymde: "npm:^2.18.0"
     eslint: "npm:^8.57.0"
