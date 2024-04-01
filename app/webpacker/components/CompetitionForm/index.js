@@ -1,16 +1,9 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-} from 'react';
+import React, { useCallback } from 'react';
 import {
-  Button,
   Divider,
   Form,
-  Message, Sticky,
+  Message,
 } from 'semantic-ui-react';
-import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
   InputBoolean,
@@ -134,24 +127,10 @@ function CompetitionForm() {
     isCloning,
     isAdminView,
   } = useStore();
+
   const dispatch = useDispatch();
 
   const { save, saving } = useSaveAction();
-
-  const unsavedChanges = useMemo(() => (
-    !_.isEqual(competition, initialCompetition)
-  ), [competition, initialCompetition]);
-
-  const onUnload = useCallback((e) => {
-    // Prompt the user before letting them navigate away from this page with unsaved changes.
-    if (unsavedChanges) {
-      const confirmationMessage = 'You have unsaved changes, are you sure you want to leave?';
-      e.returnValue = confirmationMessage;
-      return confirmationMessage;
-    }
-
-    return null;
-  }, [unsavedChanges]);
 
   const onSuccess = useCallback((data) => {
     const { redirect } = data;
@@ -198,39 +177,8 @@ function CompetitionForm() {
     save(`${competitionUrl(initialCompetition.competitionId)}?adminView=${isAdminView}`, competition, onSuccess, { method: 'PATCH' }, onError);
   }, [competition, initialCompetition.competitionId, isAdminView, save, onSuccess, onError]);
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', onUnload);
-    };
-  }, [onUnload]);
-
-  const renderUnsavedChangesAlert = () => (
-    <Message info>
-      You have unsaved changes. Don&apos;t forget to
-      {' '}
-      <Button
-        onClick={isPersisted ? updateComp : createComp}
-        disabled={saving}
-        loading={saving}
-        primary
-      >
-        save your changes!
-      </Button>
-    </Message>
-  );
-
-  const stickyRef = useRef();
-
   return (
-    <div ref={stickyRef}>
-      {unsavedChanges && (
-        <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
-          {renderUnsavedChangesAlert()}
-        </Sticky>
-      )}
-
+    <>
       {isPersisted && <AnnouncementActions disabled={unsavedChanges} onError={onError} />}
       {isPersisted && <UserPreferences disabled={unsavedChanges} />}
       <AnnouncementMessage />
@@ -284,7 +232,7 @@ function CompetitionForm() {
         onError={onError}
         unsavedChanges={unsavedChanges}
       />
-    </div>
+    </>
   );
 }
 
