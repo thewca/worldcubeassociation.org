@@ -1,20 +1,10 @@
 # frozen_string_literal: true
 
 class Api::V0::UserGroupsController < Api::V0::ApiController
-  # Filters the list of groups based on the permissions of the current user.
+  # Don't list hidden groups if the user doesn't have edit permission.
   private def filter_groups_for_logged_in_user(groups)
-    groups.select do |group|
-      is_actual_group = group.is_a?(UserGroup) # Eventually, all groups will be migrated to the new system,
-      # till then some groups will actually be hashes.
-      if is_actual_group && group.is_hidden
-        if group.group_type == UserGroup.group_types[:delegate_probation]
-          current_user.can_manage_delegate_probation?
-        else
-          current_user.has_permission?(:can_edit_groups, group.id)
-        end
-      else
-        true # Accept all non-hidden groups and old-system groups.
-      end
+    groups.reject do |group|
+      group.is_hidden && !current_user&.has_permission?(:can_edit_groups, group.id)
     end
   end
 
@@ -25,16 +15,14 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
       # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
         (!is_active.nil? && is_active != group.is_active) ||
-        (!parent_group_id.nil? && group.parent_group_id != parent_group_id)
+        (!parent_group_id.nil? && parent_group_id != group.parent_group_id)
       )
     end
   end
 
   def index
     group_type = params.require(:groupType)
-    groups = UserGroup.where(group_type: group_type).to_a # to_a is to convert the ActiveRecord::Relation to an
-    # array, so that we can append groups which are not yet migrated to the new system. This can be
-    # removed once all roles are migrated to the new system.
+    groups = UserGroup.where(group_type: group_type)
 
     # Filters the list of groups based on the permissions of the current user.
     groups = filter_groups_for_logged_in_user(groups)
@@ -47,7 +35,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     )
 
     # Sorts the list of groups by name.
-    groups = groups.sort_by { |group| group[:name] } # Can be changed to `groups.sort_by(&:name)` once all groups are migrated to the new system.`
+    groups = groups.sort_by(&:name)
 
     render json: groups
   end
@@ -60,14 +48,13 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     is_hidden = ActiveRecord::Type::Boolean.new.cast(params.require(:is_hidden))
     friendly_id = params[:friendlyId]
 
-    unless current_user.has_permission?(:can_create_groups, group_type)
-      render json: {}, status: 401
-      return
-    end
+    return head :unauthorized unless current_user&.has_permission?(:can_create_groups, group_type)
 
     ActiveRecord::Base.transaction do
       if group_type == UserGroup.group_types[:delegate_regions]
         metadata = GroupsMetadataDelegateRegions.create!(friendly_id: friendly_id)
+      else
+        metadata = nil
       end
       UserGroup.create!(group_type: group_type, name: name, parent_group_id: parent_group_id, is_active: is_active, is_hidden: is_hidden, metadata: metadata)
     end
@@ -81,10 +68,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
     user_group_id = params.require(:id)
     user_group = UserGroup.find(user_group_id)
 
-    unless current_user.has_permission?(:can_edit_groups, user_group_id)
-      render json: {}, status: 401
-      return
-    end
+    return head :unauthorized unless current_user&.has_permission?(:can_edit_groups, user_group_id)
 
     user_group.update!(user_group_params)
 

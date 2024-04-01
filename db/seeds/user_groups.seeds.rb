@@ -1,6 +1,114 @@
 # frozen_string_literal: true
 
-after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_committees do
+after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_committees, :groups_metadata_delegate_regions do
+  # Delegate Regions
+  UserGroup.create!(
+    name: 'Africa',
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa'),
+  )
+  asia_group = UserGroup.create!(
+    name: 'Asia',
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia'),
+  )
+  europe_group = UserGroup.create!(
+    name: 'Europe',
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe'),
+  )
+  oceania_group = UserGroup.create!(
+    name: 'Oceania',
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'oceania'),
+  )
+  UserGroup.create!(
+    name: 'Americas',
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas'),
+  )
+  UserGroup.create!(
+    name: 'North America',
+    group_type: :delegate_regions,
+    is_active: false,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'north-america'),
+  )
+  UserGroup.create!(
+    name: 'South America',
+    group_type: :delegate_regions,
+    is_active: false,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'south-america'),
+  )
+  UserGroup.create!(
+    name: 'Asia East',
+    parent_group: asia_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-east'),
+  )
+  asia_west_group = UserGroup.create!(
+    name: 'Asia West',
+    parent_group: asia_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-west'),
+  )
+  UserGroup.create!(
+    name: 'India',
+    parent_group: asia_west_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'india'),
+  )
+  UserGroup.create!(
+    name: 'Europe North',
+    parent_group: europe_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe-north'),
+  )
+  UserGroup.create!(
+    name: 'Europe South',
+    parent_group: europe_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe-south'),
+  )
+  UserGroup.create!(
+    name: 'Australia',
+    parent_group: oceania_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'australia'),
+  )
+  UserGroup.create!(
+    name: 'New Zealand',
+    parent_group: oceania_group,
+    group_type: :delegate_regions,
+    is_active: true,
+    is_hidden: false,
+    metadata: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'new-zealand'),
+  )
+
+  # Board
   board_metadata = GroupsMetadataBoard.find_by!(email: 'board@worldcubeassociation.org')
   UserGroup.create!(
     name: 'WCA Board of Directors',
