@@ -18,7 +18,7 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormContext, useInitialFormObject } from '../wca/FormProvider/EditForm';
+import { useFormContext, useFormInitialObject } from '../wca/FormProvider/EditForm';
 
 function AnnounceAction({
   competitionId,
@@ -178,7 +178,7 @@ function CloseRegistrationAction({
 export default function AnnouncementActions({ onError }) {
   const { isAdminView } = useStore();
 
-  const { competitionId } = useInitialFormObject();
+  const { competitionId } = useFormInitialObject();
   const { unsavedChanges: disabled } = useFormContext();
 
   const dataUrl = useMemo(() => competitionAnnouncementDataUrl(competitionId), [competitionId]);

@@ -3,7 +3,7 @@ import { Message } from 'semantic-ui-react';
 import { useStore } from '../../lib/providers/StoreProvider';
 import AnnouncementActions from './AnnouncementActions';
 import UserPreferences from './UserPreferences';
-import { useInitialFormObject } from '../wca/FormProvider/EditForm';
+import { useFormInitialObject } from '../wca/FormProvider/EditForm';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 // FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
@@ -20,7 +20,7 @@ function AnnouncementMessage() {
       isConfirmed,
       isVisible,
     },
-  } = useInitialFormObject();
+  } = useFormInitialObject();
 
   if (!isPersisted) return null;
 

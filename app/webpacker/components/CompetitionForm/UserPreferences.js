@@ -14,7 +14,7 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormContext, useInitialFormObject } from '../wca/FormProvider/EditForm';
+import { useFormContext, useFormInitialObject } from '../wca/FormProvider/EditForm';
 
 function NotificationSettingsAction({
   competitionId,
@@ -44,7 +44,7 @@ function NotificationSettingsAction({
 }
 
 export default function UserPreferences() {
-  const { competitionId } = useInitialFormObject();
+  const { competitionId } = useFormInitialObject();
   const { unsavedChanges: disabled } = useFormContext();
 
   const dataUrl = useMemo(() => competitionUserPreferencesUrl(competitionId), [competitionId]);

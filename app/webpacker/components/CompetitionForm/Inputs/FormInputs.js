@@ -20,11 +20,14 @@ import { IdWcaSearch } from '../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 import {
   readValueRecursive,
-  useFormObjectSection,
   useSections,
-  useUpdateFormAction,
 } from '../../wca/FormProvider/FormSection';
-import { useFormContext, useFormObject } from '../../wca/FormProvider/EditForm';
+import {
+  useFormContext,
+  useFormObject,
+  useFormObjectSection,
+  useFormSectionUpdateAction,
+} from '../../wca/FormProvider/EditForm';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -112,12 +115,10 @@ const wrapInput = (
   const { errors } = useFormContext();
   const { admin: { isConfirmed } } = useFormObject();
 
-  const dispatch = useDispatch();
-
   const section = useSections();
 
   const formValues = useFormObjectSection();
-  const updateFormValue = useUpdateFormAction();
+  const updateFormValue = useFormSectionUpdateAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => ({
     ...acc,
@@ -125,8 +126,8 @@ const wrapInput = (
   }), {});
 
   const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
-    dispatch(updateFormValue(props.id, newValue));
-  }, [dispatch, updateFormValue, props.id]);
+    updateFormValue(props.id, newValue);
+  }, [updateFormValue, props.id]);
 
   let value = formValues[props.id];
 

@@ -1,6 +1,4 @@
-import React, { createContext, useCallback, useContext } from 'react';
-import { updateFormValue } from './store/actions';
-import { useFormObject } from './EditForm';
+import React, { createContext, useContext } from 'react';
 
 const SectionContext = createContext();
 
@@ -30,17 +28,4 @@ export const readValueRecursive = (formValues, sectionKeys = []) => {
   const nestedFormValues = formValues?.[nextSection] || {};
 
   return readValueRecursive(nestedFormValues, tail);
-};
-
-export const useFormObjectSection = () => {
-  const formObject = useFormObject();
-  const sections = useSections();
-
-  return readValueRecursive(formObject, sections);
-};
-
-export const useUpdateFormAction = () => {
-  const sections = useSections();
-
-  return useCallback((key, value) => updateFormValue(key, value, sections), [sections]);
 };

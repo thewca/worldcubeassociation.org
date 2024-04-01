@@ -5,9 +5,9 @@ import _ from 'lodash';
 import {
   Button, Divider, Form, Message, Sticky,
 } from 'semantic-ui-react';
-import SectionProvider from './FormSection';
+import SectionProvider, { readValueRecursive, useSections } from './FormSection';
 import formReducer from './store/reducer';
-import { changesSaved, setErrors } from './store/actions';
+import { changesSaved, setErrors, updateFormValue } from './store/actions';
 import FormErrors from './FormErrors';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
 
@@ -118,6 +118,7 @@ export default function EditForm({
   const formContext = useMemo(() => ({
     ...formState,
     unsavedChanges,
+    dispatch,
   }), [formState, unsavedChanges]);
 
   return (
@@ -140,11 +141,7 @@ export default function EditForm({
             <Divider />
             <CustomFooter saveObject={saveObject} onError={onError} />
           </>
-        ) : (
-          <>
-            {unsavedChanges && renderUnsavedChangesAlert()}
-          </>
-        )}
+        ) : (unsavedChanges && renderUnsavedChangesAlert())}
       </SectionProvider>
     </FormContext.Provider>
   );
@@ -152,5 +149,31 @@ export default function EditForm({
 
 export const useFormContext = () => useContext(FormContext);
 
+export const useFormDispatch = () => useFormContext().dispatch;
+
 export const useFormObject = () => useFormContext().object;
-export const useInitialFormObject = () => useFormContext().initialObject;
+export const useFormInitialObject = () => useFormContext().initialObject;
+
+export const useFormObjectSection = () => {
+  const formObject = useFormObject();
+  const sections = useSections();
+
+  return readValueRecursive(formObject, sections);
+};
+
+export const useFormUpdateAction = () => {
+  const dispatch = useFormDispatch();
+
+  return useCallback((key, value) => (
+    dispatch(updateFormValue(key, value))
+  ), [dispatch]);
+};
+
+export const useFormSectionUpdateAction = () => {
+  const sections = useSections();
+  const dispatch = useFormDispatch();
+
+  return useCallback((key, value) => (
+    dispatch(updateFormValue(key, value, sections))
+  ), [dispatch, sections]);
+};

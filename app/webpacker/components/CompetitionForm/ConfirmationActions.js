@@ -12,7 +12,7 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useInitialFormObject } from '../wca/FormProvider/EditForm';
+import { useFormInitialObject } from '../wca/FormProvider/EditForm';
 
 export function CreateOrUpdateButton({
   saveObject,
@@ -119,7 +119,7 @@ export default function ConfirmationActions({
   const {
     competitionId,
     admin: { isConfirmed },
-  } = useInitialFormObject();
+  } = useFormInitialObject();
 
   const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);
 
