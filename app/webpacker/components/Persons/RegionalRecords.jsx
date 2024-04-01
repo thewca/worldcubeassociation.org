@@ -1,8 +1,10 @@
 import React from 'react';
+import {
+  Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
+} from 'semantic-ui-react';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import EventIcon from '../wca/EventIcon';
 import { events } from '../../lib/wca-data.js.erb';
-import {Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow} from "semantic-ui-react";
 
 /* eslint-disable jsx-a11y/control-has-associated-label */
 
