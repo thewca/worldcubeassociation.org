@@ -18,6 +18,13 @@ import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../wca/UtcDatePicker';
 import { IdWcaSearch } from '../../SearchWidget/WcaSearch';
 import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import {
+  readValueRecursive,
+  useFormObjectSection,
+  useSections,
+  useUpdateFormAction,
+} from '../../wca/FormProvider/FormSection';
+import { useFormContext, useFormObject } from '../../wca/FormProvider/EditForm';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -100,12 +107,16 @@ const wrapInput = (
   nullDefault = undefined,
   inputValueKey = 'value',
 ) => function WcaFormInput(props) {
-  const { isAdminView, errors, competition: { admin: { isConfirmed } } } = useStore();
+  const { isAdminView } = useStore();
+
+  const { errors } = useFormContext();
+  const { admin: { isConfirmed } } = useFormObject();
+
   const dispatch = useDispatch();
 
   const section = useSections();
 
-  const formValues = useCompetitionForm();
+  const formValues = useFormObjectSection();
   const updateFormValue = useUpdateFormAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => ({

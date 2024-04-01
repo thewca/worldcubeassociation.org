@@ -3,6 +3,7 @@ import {
   Divider,
   Message,
 } from 'semantic-ui-react';
+import _ from 'lodash';
 import VenueInfo from './FormSections/VenueInfo';
 import {
   InputBoolean,
@@ -137,7 +138,7 @@ export default function Wrapper({
       }}
     >
       <EditForm
-        initialState={competition}
+        initialObject={competition}
         backendUrlFn={backendUrlFn}
         backendOptions={backendOptions}
         CustomHeader={CompFormHeader}

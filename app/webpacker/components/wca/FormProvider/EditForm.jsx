@@ -14,7 +14,12 @@ import useSaveAction from '../../../lib/hooks/useSaveAction';
 const FormContext = createContext();
 
 export default function EditForm({
-  children, initialObject, backendUrlFn, backendOptions, CustomHeader = null, CustomFooter = null,
+  children,
+  initialObject,
+  backendUrlFn,
+  backendOptions,
+  CustomHeader = null,
+  CustomFooter = null,
 }) {
   const initialState = useMemo(() => ({
     object: initialObject,
@@ -130,10 +135,14 @@ export default function EditForm({
             {children}
           </Form>
         </div>
-        {CustomFooter && (
+        {CustomFooter ? (
           <>
             <Divider />
             <CustomFooter saveObject={saveObject} onError={onError} />
+          </>
+        ) : (
+          <>
+            {unsavedChanges && renderUnsavedChangesAlert()}
           </>
         )}
       </SectionProvider>
