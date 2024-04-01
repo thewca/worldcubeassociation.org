@@ -208,4 +208,7 @@ export const panelUrls = {
   wrt: {
     editPerson: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wrt_path(wcaId: '${wcaId}', anchor: PanelController.panel_list['wrt']['editPerson'])) %>`,
   },
+  leader: {
+    groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_leader_path(anchor: PanelController.panel_list['leader']['groupsManager'])) %>`,
+  },
 }
