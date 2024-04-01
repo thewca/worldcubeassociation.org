@@ -177,3 +177,11 @@ export const useFormSectionUpdateAction = () => {
     dispatch(updateFormValue(key, value, sections))
   ), [dispatch, sections]);
 };
+
+export const useFormCommitAction = () => {
+  const dispatch = useFormDispatch();
+
+  return useCallback(() => (
+    dispatch(changesSaved())
+  ), [dispatch]);
+};

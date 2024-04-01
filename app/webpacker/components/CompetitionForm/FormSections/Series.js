@@ -3,10 +3,10 @@ import { Button } from 'semantic-ui-react';
 import { InputCompetitions, InputString } from '../Inputs/FormInputs';
 import SeriesComps from '../Tables/SeriesComps';
 import I18n from '../../../lib/i18n';
-import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { useStore } from '../../../lib/providers/StoreProvider';
 import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject, useFormUpdateAction } from '../../wca/FormProvider/EditForm';
 
 export default function Series() {
   const {
@@ -21,7 +21,7 @@ export default function Series() {
 
   const formDisabled = isConfirmed && !isAdminView;
 
-  const dispatch = useDispatch();
+  const updateFormObject = useFormUpdateAction();
 
   if (!series) return <SeriesComps />;
 
@@ -30,7 +30,7 @@ export default function Series() {
   const nameAlreadyShort = !name || name.length <= competitionMaxShortNameLength;
   const disableIdAndShortName = !isAdminView && nameAlreadyShort;
 
-  const removeFromSeries = () => dispatch(updateFormValue('series', null));
+  const removeFromSeries = () => updateFormObject('series', null);
 
   return (
     <SubSection section="series">

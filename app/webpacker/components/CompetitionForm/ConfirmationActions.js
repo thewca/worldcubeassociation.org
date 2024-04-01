@@ -1,7 +1,7 @@
 import { Button } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
-import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import { useStore } from '../../lib/providers/StoreProvider';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   competitionConfirmationDataUrl,
@@ -12,7 +12,7 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormInitialObject } from '../wca/FormProvider/EditForm';
+import { useFormCommitAction, useFormInitialObject, useFormUpdateAction } from '../wca/FormProvider/EditForm';
 
 export function CreateOrUpdateButton({
   saveObject,
@@ -41,7 +41,8 @@ function ConfirmButton({
   const { save } = useSaveAction();
   const confirm = useConfirm();
 
-  const dispatch = useDispatch();
+  const updateFormObject = useFormUpdateAction();
+  const commitFormObject = useFormCommitAction();
 
   const confirmCompetition = () => {
     confirm({
@@ -52,8 +53,8 @@ function ConfirmButton({
 
         // mark the competition as announced and commit immediately.
         // (we do not want the announce button to trigger the "there are unsaved changes" alert)
-        dispatch(updateFormValue('isConfirmed', true, ['admin']));
-        dispatch(changesSaved());
+        updateFormObject('isConfirmed', true, ['admin']);
+        commitFormObject();
       }, {
         body: null,
         method: 'PUT',

@@ -12,7 +12,7 @@ import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import AutonumericField from './AutonumericField';
-import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { useStore } from '../../../lib/providers/StoreProvider';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../wca/UtcDatePicker';

@@ -7,9 +7,9 @@ import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
-import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
+import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject, useFormUpdateAction } from '../../wca/FormProvider/EditForm';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -32,7 +32,7 @@ export default function SeriesComps() {
     series,
   } = useFormObject();
 
-  const dispatch = useDispatch();
+  const updateFormObject = useFormUpdateAction();
 
   const lat = parseFloat(coordinates.lat);
   const long = parseFloat(coordinates.long);
@@ -83,8 +83,8 @@ export default function SeriesComps() {
 
   const addToSeries = useCallback((selectedComp) => {
     const newSeries = createBaseSeries(selectedComp);
-    dispatch(updateFormValue('series', newSeries));
-  }, [dispatch, createBaseSeries]);
+    updateFormObject('series', newSeries);
+  }, [updateFormObject, createBaseSeries]);
 
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 33, kms: 200 });
 
