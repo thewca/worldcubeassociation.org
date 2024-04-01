@@ -2,11 +2,13 @@ import React from 'react';
 import { InputBooleanSelect, InputNumber, InputTextArea } from '../Inputs/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 export default function CompetitorLimit() {
   const {
-    competitorLimit: { enabled: hasLimit },
+    competitorLimit: {
+      enabled: hasLimit,
+    },
   } = useFormObject();
 
   return (

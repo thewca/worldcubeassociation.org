@@ -3,7 +3,7 @@ import { Message } from 'semantic-ui-react';
 import { useStore } from '../../lib/providers/StoreProvider';
 import AnnouncementActions from './AnnouncementActions';
 import UserPreferences from './UserPreferences';
-import { useFormInitialObject } from '../wca/FormProvider/EditForm';
+import { useFormInitialObject } from '../wca/FormProvider/provider/FormObjectProvider';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 
 // FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
@@ -57,12 +57,12 @@ function AnnouncementMessage() {
   );
 }
 
-export default function CompFormHeader({ onError }) {
+export default function CompFormHeader() {
   const { isPersisted } = useStore();
 
   return (
     <>
-      {isPersisted && <AnnouncementActions onError={onError} />}
+      {isPersisted && <AnnouncementActions />}
       {isPersisted && <UserPreferences />}
       <AnnouncementMessage />
     </>

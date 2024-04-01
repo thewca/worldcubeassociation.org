@@ -11,7 +11,7 @@ import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.e
 import { events } from '../../../lib/wca-data.js.erb';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import useToggleState from '../../../lib/hooks/useToggleState';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 function NotConfirmedIcon() {
   return (

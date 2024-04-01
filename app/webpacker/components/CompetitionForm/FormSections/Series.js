@@ -6,7 +6,8 @@ import I18n from '../../../lib/i18n';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject, useFormUpdateAction } from '../../wca/FormProvider/EditForm';
+import { useFormUpdateAction } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 export default function Series() {
   const {

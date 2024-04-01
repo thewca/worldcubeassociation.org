@@ -10,7 +10,7 @@ import {
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 export default function EventRestrictions() {
   const {

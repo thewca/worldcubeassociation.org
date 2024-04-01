@@ -9,7 +9,8 @@ import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { useFormObject, useFormUpdateAction } from '../../wca/FormProvider/EditForm';
+import { useFormUpdateAction } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (

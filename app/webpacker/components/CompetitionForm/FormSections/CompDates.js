@@ -4,7 +4,7 @@ import {
   InputDate,
 } from '../Inputs/FormInputs';
 import I18n from '../../../lib/i18n';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 function daysUntil(date) {
   if (!date) return null;

@@ -26,23 +26,20 @@ import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
-import EditForm, { useFormContext, useFormObject } from '../wca/FormProvider/EditForm';
+import EditForm from '../wca/FormProvider/EditForm';
+import { useFormContext, useFormObject } from '../wca/FormProvider/provider/FormObjectProvider';
 import SubSection from '../wca/FormProvider/SubSection';
 import CompFormHeader from './CompFormHeader';
 
 function BottomConfirmationPanel({
   saveObject,
-  onError,
 }) {
   const { isPersisted } = useStore();
   const { unsavedChanges } = useFormContext();
 
   if (isPersisted && !unsavedChanges) {
     return (
-      <ConfirmationActions
-        saveObject={saveObject}
-        onError={onError}
-      />
+      <ConfirmationActions saveObject={saveObject} />
     );
   }
 

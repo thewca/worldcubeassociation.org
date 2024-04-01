@@ -12,7 +12,8 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormCommitAction, useFormInitialObject, useFormUpdateAction } from '../wca/FormProvider/EditForm';
+import { useFormCommitAction, useFormUpdateAction } from '../wca/FormProvider/EditForm';
+import { useFormErrorHandler, useFormInitialObject } from '../wca/FormProvider/provider/FormObjectProvider';
 
 export function CreateOrUpdateButton({
   saveObject,
@@ -34,9 +35,10 @@ function ConfirmButton({
   competitionId,
   data,
   sync,
-  onError,
 }) {
   const { canConfirm } = data;
+
+  const onError = useFormErrorHandler();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -110,7 +112,6 @@ function DeleteButton({
 
 export default function ConfirmationActions({
   saveObject,
-  onError,
 }) {
   const {
     isAdminView,
@@ -137,7 +138,7 @@ export default function ConfirmationActions({
       <Button.Group>
         <CreateOrUpdateButton saveObject={saveObject} />
         {isPersisted && !isAdminView && !isConfirmed && (
-          <ConfirmButton competitionId={competitionId} data={data} sync={sync} onError={onError} />
+          <ConfirmButton competitionId={competitionId} data={data} sync={sync} />
         )}
         {isPersisted && !isConfirmed && (
           <DeleteButton competitionId={competitionId} data={data} />

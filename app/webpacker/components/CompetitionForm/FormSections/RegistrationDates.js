@@ -3,7 +3,7 @@ import { Form } from 'semantic-ui-react';
 import { InputDate } from '../Inputs/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
 import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 export default function RegistrationDates() {
   const {

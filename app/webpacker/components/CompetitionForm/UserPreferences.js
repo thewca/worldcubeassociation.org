@@ -14,7 +14,7 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormContext, useFormInitialObject } from '../wca/FormProvider/EditForm';
+import { useFormContext, useFormInitialObject } from '../wca/FormProvider/provider/FormObjectProvider';
 
 function NotificationSettingsAction({
   competitionId,

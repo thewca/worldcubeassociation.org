@@ -18,7 +18,11 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormContext, useFormInitialObject } from '../wca/FormProvider/EditForm';
+import {
+  useFormContext,
+  useFormErrorHandler,
+  useFormInitialObject,
+} from '../wca/FormProvider/provider/FormObjectProvider';
 
 function AnnounceAction({
   competitionId,
@@ -128,13 +132,14 @@ function CloseRegistrationAction({
   competitionId,
   data,
   sync,
-  onError,
 }) {
   const {
     isRegistrationPast,
     isRegistrationFull,
     canCloseFullRegistration,
   } = data;
+
+  const onError = useFormErrorHandler();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
@@ -175,7 +180,7 @@ function CloseRegistrationAction({
   );
 }
 
-export default function AnnouncementActions({ onError }) {
+export default function AnnouncementActions() {
   const { isAdminView } = useStore();
 
   const { competitionId } = useFormInitialObject();
@@ -206,7 +211,6 @@ export default function AnnouncementActions({ onError }) {
             competitionId={competitionId}
             data={data}
             sync={sync}
-            onError={onError}
           />
         </List>
       </Dimmer.Dimmable>

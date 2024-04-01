@@ -2,7 +2,7 @@ import React from 'react';
 import { InputBoolean, InputString } from '../Inputs/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/EditForm';
+import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 export default function Website() {
   const { website: websiteData } = useFormObject();

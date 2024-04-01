@@ -23,11 +23,10 @@ import {
   useSections,
 } from '../../wca/FormProvider/FormSection';
 import {
-  useFormContext,
-  useFormObject,
   useFormObjectSection,
   useFormSectionUpdateAction,
 } from '../../wca/FormProvider/EditForm';
+import { useFormContext, useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
