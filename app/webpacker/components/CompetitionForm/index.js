@@ -10,7 +10,7 @@ import {
   InputChampionships,
   InputMarkdown,
   InputTextArea,
-} from '../wca/FormProvider/input/FormInputs';
+} from '../wca/FormBuilder/input/FormInputs';
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
 import Website from './FormSections/Website';
@@ -26,9 +26,9 @@ import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
-import EditForm from '../wca/FormProvider/EditForm';
-import { useFormContext, useFormObject } from '../wca/FormProvider/provider/FormObjectProvider';
-import SubSection from '../wca/FormProvider/SubSection';
+import EditForm from '../wca/FormBuilder/EditForm';
+import { useFormContext, useFormObject } from '../wca/FormBuilder/provider/FormObjectProvider';
+import SubSection from '../wca/FormBuilder/SubSection';
 import CompFormHeader from './CompFormHeader';
 
 function BottomConfirmationPanel({

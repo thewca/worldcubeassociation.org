@@ -8,7 +8,7 @@ import CompsTable from './CompsTable';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
-import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (

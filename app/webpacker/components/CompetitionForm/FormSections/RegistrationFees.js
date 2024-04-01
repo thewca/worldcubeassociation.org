@@ -5,14 +5,14 @@ import {
   InputDate,
   InputNumber,
   InputSelect,
-} from '../../wca/FormProvider/input/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import ConditionalSection from './ConditionalSection';
-import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 const currenciesOptions = Object.keys(currenciesData.byIso).map((iso) => ({
   key: iso,

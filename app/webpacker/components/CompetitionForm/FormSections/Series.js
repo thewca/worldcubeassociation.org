@@ -1,13 +1,13 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import { InputCompetitions, InputString } from '../../wca/FormProvider/input/FormInputs';
+import { InputCompetitions, InputString } from '../../wca/FormBuilder/input/FormInputs';
 import SeriesComps from '../Tables/SeriesComps';
 import I18n from '../../../lib/i18n';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
-import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormUpdateAction } from '../../wca/FormProvider/EditForm';
-import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormUpdateAction } from '../../wca/FormBuilder/EditForm';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function Series() {
   const {

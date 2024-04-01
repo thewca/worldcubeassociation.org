@@ -12,8 +12,8 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { useFormCommitAction, useFormUpdateAction } from '../wca/FormProvider/EditForm';
-import { useFormErrorHandler, useFormInitialObject } from '../wca/FormProvider/provider/FormObjectProvider';
+import { useFormCommitAction, useFormUpdateAction } from '../wca/FormBuilder/EditForm';
+import { useFormErrorHandler, useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
 
 export function CreateOrUpdateButton({
   saveObject,

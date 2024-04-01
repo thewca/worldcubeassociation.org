@@ -22,7 +22,7 @@ import {
   useFormContext,
   useFormErrorHandler,
   useFormInitialObject,
-} from '../wca/FormProvider/provider/FormObjectProvider';
+} from '../wca/FormBuilder/provider/FormObjectProvider';
 
 function AnnounceAction({
   competitionId,

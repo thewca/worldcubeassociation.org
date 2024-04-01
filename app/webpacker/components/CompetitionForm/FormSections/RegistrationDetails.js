@@ -7,11 +7,11 @@ import {
   InputNumber,
   InputRadio,
   InputSelect,
-} from '../../wca/FormProvider/input/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
-import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 const guestsEnabledOptions = [true, false].map((bool) => ({
   value: bool,

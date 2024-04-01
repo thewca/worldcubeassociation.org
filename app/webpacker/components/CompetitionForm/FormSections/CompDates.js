@@ -1,8 +1,8 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import { InputDate } from '../../wca/FormProvider/input/FormInputs';
+import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import I18n from '../../../lib/i18n';
-import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function daysUntil(date) {
   if (!date) return null;

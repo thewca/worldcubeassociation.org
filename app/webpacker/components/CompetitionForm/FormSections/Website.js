@@ -1,8 +1,8 @@
 import React from 'react';
-import { InputBoolean, InputString } from '../../wca/FormProvider/input/FormInputs';
+import { InputBoolean, InputString } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
-import SubSection from '../../wca/FormProvider/SubSection';
-import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function Website() {
   const { website: websiteData } = useFormObject();
