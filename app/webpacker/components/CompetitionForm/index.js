@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
   Divider,
   Message,
@@ -10,7 +10,7 @@ import {
   InputChampionships,
   InputMarkdown,
   InputTextArea,
-} from './Inputs/FormInputs';
+} from '../wca/FormProvider/input/FormInputs';
 import CompetitorLimit from './FormSections/CompetitorLimit';
 import Staff from './FormSections/Staff';
 import Website from './FormSections/Website';
@@ -122,6 +122,12 @@ export default function Wrapper({
 
   const backendOptions = { method: isPersisted ? 'PATCH' : 'POST' };
 
+  const isDisabled = useCallback((formState) => {
+    const { admin: { isConfirmed } } = formState;
+
+    return isConfirmed && !isAdminView;
+  }, [isAdminView]);
+
   return (
     <StoreProvider
       reducer={_.identity}
@@ -140,6 +146,7 @@ export default function Wrapper({
         backendOptions={backendOptions}
         CustomHeader={CompFormHeader}
         CustomFooter={BottomConfirmationPanel}
+        disabledOverrideFn={isDisabled}
       >
         <CompetitionForm />
       </EditForm>

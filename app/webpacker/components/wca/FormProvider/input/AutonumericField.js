@@ -6,7 +6,7 @@ import React, {
 } from 'react';
 import AutoNumeric from 'autonumeric';
 import { Input } from 'semantic-ui-react';
-import { currenciesData } from '../../../lib/wca-data.js.erb';
+import { currenciesData } from '../../../../lib/wca-data.js.erb';
 
 export default function AutonumericField({
   id,

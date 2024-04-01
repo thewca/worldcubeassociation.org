@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputBooleanSelect, InputNumber, InputTextArea } from '../Inputs/FormInputs';
+import { InputBooleanSelect, InputNumber, InputTextArea } from '../../wca/FormProvider/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormProvider/SubSection';
 import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';

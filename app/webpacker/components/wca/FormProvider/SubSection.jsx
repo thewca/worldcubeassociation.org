@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
-import SectionProvider, { useSections } from './FormSection';
+import SectionProvider, { useSectionDisabled, useSections } from './provider/FormSectionProvider';
 
 export default function SubSection({ section, children }) {
   const sections = useSections();
+  const parentDisabled = useSectionDisabled();
 
   const currentSubSection = useMemo(
     () => sections.concat(section),
@@ -12,6 +13,7 @@ export default function SubSection({ section, children }) {
   return (
     <SectionProvider
       section={currentSubSection}
+      disabled={parentDisabled}
     >
       {children}
     </SectionProvider>

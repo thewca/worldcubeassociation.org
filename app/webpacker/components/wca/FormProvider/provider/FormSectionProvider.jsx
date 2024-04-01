@@ -1,16 +1,26 @@
-import React, { createContext, useContext } from 'react';
+import React, { createContext, useContext, useMemo } from 'react';
 
 const SectionContext = createContext();
 
-export default function SectionProvider({ children, section = [] }) {
+export default function SectionProvider({
+  children,
+  section = [],
+  disabled = false,
+}) {
+  const store = useMemo(() => [
+    section,
+    disabled,
+  ], [section, disabled]);
+
   return (
-    <SectionContext.Provider value={section}>
+    <SectionContext.Provider value={store}>
       {children}
     </SectionContext.Provider>
   );
 }
 
-export const useSections = () => useContext(SectionContext);
+export const useSections = () => useContext(SectionContext)[0];
+export const useSectionDisabled = () => useContext(SectionContext)[1];
 
 const headAndTail = (arr) => {
   const safetyClone = [...arr];

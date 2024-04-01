@@ -4,8 +4,10 @@ import {
   InputBooleanSelect,
   InputDate,
   InputMarkdown,
-  InputNumber, InputRadio, InputSelect,
-} from '../Inputs/FormInputs';
+  InputNumber,
+  InputRadio,
+  InputSelect,
+} from '../../wca/FormProvider/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
 import I18n from '../../../lib/i18n';
 import SubSection from '../../wca/FormProvider/SubSection';

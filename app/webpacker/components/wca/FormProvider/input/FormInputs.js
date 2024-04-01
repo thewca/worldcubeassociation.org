@@ -9,24 +9,17 @@ import {
 import TextareaAutosize from 'react-textarea-autosize';
 import { Circle } from 'react-leaflet';
 import _ from 'lodash';
-import I18n from '../../../lib/i18n';
+import I18n from '../../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import AutonumericField from './AutonumericField';
-import { useStore } from '../../../lib/providers/StoreProvider';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
-import UtcDatePicker from '../../wca/UtcDatePicker';
-import { IdWcaSearch } from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
-import {
-  readValueRecursive,
-  useSections,
-} from '../../wca/FormProvider/FormSection';
-import {
-  useFormObjectSection,
-  useFormSectionUpdateAction,
-} from '../../wca/FormProvider/EditForm';
-import { useFormContext, useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';
+import UtcDatePicker from '../../UtcDatePicker';
+import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import { readValueRecursive, useSectionDisabled, useSections } from '../provider/FormSectionProvider';
+import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
+import { useFormContext } from '../provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -109,12 +102,10 @@ const wrapInput = (
   nullDefault = undefined,
   inputValueKey = 'value',
 ) => function WcaFormInput(props) {
-  const { isAdminView } = useStore();
-
   const { errors } = useFormContext();
-  const { admin: { isConfirmed } } = useFormObject();
 
   const section = useSections();
+  const sectionDisabled = useSectionDisabled();
 
   const formValues = useFormObjectSection();
   const updateFormValue = useFormSectionUpdateAction();
@@ -148,8 +139,7 @@ const wrapInput = (
 
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
-  const defaultDisabled = isConfirmed && !isAdminView;
-  const disabled = defaultDisabled || props.disabled;
+  const disabled = sectionDisabled || props.disabled;
 
   const passDownDisabled = additionalPropNames.includes('disabled');
   if (passDownDisabled) inputProps.disabled = disabled;

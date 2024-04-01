@@ -1,5 +1,5 @@
 import React, {
-  useCallback,
+  useCallback, useMemo,
   useRef,
 } from 'react';
 import {
@@ -9,7 +9,7 @@ import {
   Message,
   Sticky,
 } from 'semantic-ui-react';
-import SectionProvider, { readValueRecursive, useSections } from './FormSection';
+import SectionProvider, { readValueRecursive, useSections } from './provider/FormSectionProvider';
 import { changesSaved, updateFormValue } from './store/actions';
 import FormErrors from './FormErrors';
 import useSaveAction from '../../../lib/hooks/useSaveAction';
@@ -21,6 +21,7 @@ function EditForm({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
+  disabledOverrideFn = null,
 }) {
   const {
     object,
@@ -55,10 +56,14 @@ function EditForm({
     </Message>
   );
 
+  const sectionDisabled = useMemo(() => (
+    !disabledOverrideFn || disabledOverrideFn(object)
+  ), [disabledOverrideFn, object]);
+
   const stickyRef = useRef();
 
   return (
-    <SectionProvider>
+    <SectionProvider disabled={sectionDisabled}>
       <div ref={stickyRef}>
         {unsavedChanges && (
           <Sticky context={stickyRef} offset={20} styleElement={{ zIndex: 2000 }}>
@@ -88,6 +93,7 @@ export default function Wrapper({
   backendOptions,
   CustomHeader = null,
   CustomFooter = null,
+  disabledOverrideFn = null,
 }) {
   return (
     <FormObjectProvider initialObject={initialObject}>
@@ -97,6 +103,7 @@ export default function Wrapper({
           backendOptions={backendOptions}
           CustomHeader={CustomHeader}
           CustomFooter={CustomFooter}
+          disabledOverrideFn={disabledOverrideFn}
         >
           {children}
         </EditForm>

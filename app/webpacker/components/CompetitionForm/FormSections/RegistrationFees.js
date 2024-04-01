@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 import {
   InputBoolean,
-  InputCurrencyAmount, InputDate, InputNumber,
+  InputCurrencyAmount,
+  InputDate,
+  InputNumber,
   InputSelect,
-} from '../Inputs/FormInputs';
+} from '../../wca/FormProvider/input/FormInputs';
 import { currenciesData } from '../../../lib/wca-data.js.erb';
 import I18n from '../../../lib/i18n';
 import { calculateDuesUrl } from '../../../lib/requests/routes.js.erb';

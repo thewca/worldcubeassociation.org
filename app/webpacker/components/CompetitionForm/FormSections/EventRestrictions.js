@@ -6,7 +6,7 @@ import {
   InputNumber,
   InputSelect,
   InputTextArea,
-} from '../Inputs/FormInputs';
+} from '../../wca/FormProvider/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormProvider/SubSection';

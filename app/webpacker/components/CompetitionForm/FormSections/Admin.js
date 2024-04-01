@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputBoolean } from '../Inputs/FormInputs';
+import { InputBoolean } from '../../wca/FormProvider/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import SubSection from '../../wca/FormProvider/SubSection';
 

@@ -9,8 +9,8 @@ import {
   ZoomControl,
   useMap,
 } from 'react-leaflet';
-import { blueMarker } from '../../../lib/leaflet-wca/markers';
-import { userTileProvider } from '../../../lib/leaflet-wca/providers';
+import { blueMarker } from '../../../../lib/leaflet-wca/markers';
+import { userTileProvider } from '../../../../lib/leaflet-wca/providers';
 
 // Copied from lib/leaflet-wca/index.js which had nothing exported.
 function roundToMicrodegrees(toRound) {

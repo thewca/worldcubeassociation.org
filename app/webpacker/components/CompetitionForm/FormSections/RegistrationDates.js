@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import { InputDate } from '../Inputs/FormInputs';
+import { InputDate } from '../../wca/FormProvider/input/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
 import SubSection from '../../wca/FormProvider/SubSection';
 import { useFormObject } from '../../wca/FormProvider/provider/FormObjectProvider';

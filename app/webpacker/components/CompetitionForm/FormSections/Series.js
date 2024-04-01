@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from 'semantic-ui-react';
-import { InputCompetitions, InputString } from '../Inputs/FormInputs';
+import { InputCompetitions, InputString } from '../../wca/FormProvider/input/FormInputs';
 import SeriesComps from '../Tables/SeriesComps';
 import I18n from '../../../lib/i18n';
 import { useStore } from '../../../lib/providers/StoreProvider';
