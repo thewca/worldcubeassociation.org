@@ -42,67 +42,6 @@ function groupByEvent(results) {
  */
 function AttemptItem({ result, attemptNumber }) {
   const attempt = result.attempts[attemptNumber];
-  let componentClass = `solve ${attemptNumber}`;
-
-  const best = result.bestIdx === attemptNumber;
-  const worst = result.worstIdx === attemptNumber;
-
-  if (best || worst) componentClass += ' trimmed';
-  if (best) componentClass += ' best';
-  if (worst) componentClass += ' worst';
-
-  return (<td className={componentClass}>{attempt}</td>);
-}
-
-/**
- *
- * @param eventId {string}
- * @param results {Result[]}
- * @param recordTypes {string[]}
- */
-function DrawEventResults({ eventId, results, recordTypes }) {
-  return (
-    <>
-      <tr>
-        <td colSpan="9" className="event">
-          <EventIcon id={eventId} />
-          <I18nHTMLTranslate i18nKey={`events.${eventId}`} />
-        </td>
-      </tr>
-      {results.map((result) => (
-        <tr className="result" key={result.id}>
-          <td className="single">
-            {recordTypes.includes(result.singleRecord) && result.best}
-          </td>
-          <td className="average">
-            {recordTypes.includes(result.averageRecord) && result.average}
-          </td>
-          <td className="competition">
-            <a href={result.competitionUrl}>
-              {result.competitionName}
-            </a>
-          </td>
-          <td className="round">
-            <I18nHTMLTranslate i18nKey={`rounds.${result.roundTypeId}.cellName`} />
-          </td>
-          {recordTypes.includes(result.averageRecord) ? result.attempts.map((_, i) => (
-            // eslint-disable-next-line react/no-array-index-key
-            <AttemptItem key={i} result={result} attemptNumber={i} />
-          )) : (
-            <td colSpan="5" />
-          )}
-        </tr>
-      ))}
-    </>
-  );
-}
-
-/**
- * @param result {Result}
- * @param attemptNumber {number}
- */
-function AttemptItemSem({ result, attemptNumber }) {
-  const attempt = result.attempts[attemptNumber];
   const best = result.bestIdx === attemptNumber;
   const worst = result.worstIdx === attemptNumber;
 
@@ -116,7 +55,7 @@ function AttemptItemSem({ result, attemptNumber }) {
  * @param results {Result[]}
  * @param recordTypes {string[]}
  */
-function DrawEventResultsSem({ eventId, results, recordTypes }) {
+function DrawEventResults({ eventId, results, recordTypes }) {
   return (
     <>
       <TableRow>
@@ -143,7 +82,7 @@ function DrawEventResultsSem({ eventId, results, recordTypes }) {
           </TableCell>
           {recordTypes.includes(result.averageRecord) ? result.attempts.map((_, i) => (
             // eslint-disable-next-line react/no-array-index-key
-            <AttemptItemSem key={i} result={result} attemptNumber={i} />
+            <AttemptItem key={i} result={result} attemptNumber={i} />
           )) : (
             <TableCell colSpan="5" />
           )}
@@ -198,7 +137,7 @@ export default function RegionalRecords({ results, title, recordTypes }) {
             {allEvents.map((eventId) => {
               if (!groupedResults[eventId]) return null;
               return (
-                <DrawEventResultsSem
+                <DrawEventResults
                   key={eventId}
                   eventId={eventId}
                   results={groupedResults[eventId]}
