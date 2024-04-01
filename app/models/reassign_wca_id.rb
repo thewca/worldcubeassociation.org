@@ -87,6 +87,9 @@ class ReassignWcaId
       # Update Competitions Announced By
       Competition.where(announced_by: account1_user.id).update_all(announced_by: account2_user.id)
 
+      # Update roles
+      UserRole.where(user_id: account1_user.id).update_all(user_id: account2_user.id)
+
       # Update WCA ID and Delegate Status (Users table fields)
       wca_id = account1_user.wca_id
       delegate_status = account1_user.delegate_status

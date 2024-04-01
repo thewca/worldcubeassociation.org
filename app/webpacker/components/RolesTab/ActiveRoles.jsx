@@ -1,6 +1,6 @@
 import React from 'react';
 import { Header, List, Icon } from 'semantic-ui-react';
-import { teamUrl, panelUrls } from '../../lib/requests/routes.js.erb';
+import { panelUrls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useLoggedInUserPermissions from '../../lib/hooks/useLoggedInUserPermissions';
 import { groupTypes, delegateRegionsStatus } from '../../lib/wca-data.js.erb';
@@ -17,7 +17,9 @@ function hyperlink(role) {
     return panelUrls.seniorDelegate.regions;
   }
   if (role.group.group_type === groupTypes.teams_committees) {
-    return `${teamUrl(role.group.id.split('_').pop())}/edit`;
+    // FIXME: Redirect to correct dropdown in groupsManager. Currently it only goes to the
+    // groupsManager page without selecting the group of the user.
+    return panelUrls.leader.groupsManager;
   }
   if (role.group.group_type === groupTypes.translators) {
     return panelUrls.wst.translators;
