@@ -7,7 +7,7 @@ GIT
 
 GIT
   remote: https://github.com/glebm/i18n-tasks.git
-  revision: 56f378ac102b18c7de2cbcb69cdf2483b0d9f48a
+  revision: 3bfe80cec5f8c83fabd3d4932b4eff590f45c6d6
   specs:
     i18n-tasks (1.0.13)
       activesupport (>= 4.0.2)
@@ -205,7 +205,7 @@ GEM
       erubi (>= 1.0.0)
       rack (>= 0.9.0)
       rouge (>= 1.0.0)
-    bigdecimal (3.1.6)
+    bigdecimal (3.1.7)
     bindex (0.8.1)
     binding_of_caller (1.0.0)
       debug_inspector (>= 0.0.1)
@@ -392,7 +392,7 @@ GEM
       domain_name (~> 0.5)
     http_accept_language (2.1.1)
     httpclient (2.8.3)
-    i18n (1.14.1)
+    i18n (1.14.4)
       concurrent-ruby (~> 1.0)
     i18n-js (4.2.3)
       glob (>= 0.4.0)
@@ -465,7 +465,7 @@ GEM
     mini_magick (4.12.0)
     mini_mime (1.1.5)
     mini_portile2 (2.8.5)
-    minitest (5.22.2)
+    minitest (5.22.3)
     monetize (1.11.0)
       money (~> 6.12)
     money (6.16.0)
@@ -544,7 +544,7 @@ GEM
     public_suffix (5.0.4)
     raabro (1.4.0)
     racc (1.7.3)
-    rack (2.2.8.1)
+    rack (2.2.9)
     rack-cors (2.0.2)
       rack (>= 2.0.0)
     rack-proxy (0.7.7)
@@ -613,7 +613,7 @@ GEM
     redis-client (0.20.0)
       connection_pool
     regexp_parser (2.9.0)
-    reline (0.4.3)
+    reline (0.5.0)
       io-console (~> 0.5)
     representable (3.2.0)
       declarative (< 0.1.0)
