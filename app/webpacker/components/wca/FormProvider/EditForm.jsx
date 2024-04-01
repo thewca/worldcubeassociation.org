@@ -6,17 +6,24 @@ import { Button, Message, Sticky } from 'semantic-ui-react';
 import SectionProvider from './FormSection';
 import formReducer from './store/reducer';
 import { changesSaved, setErrors } from './store/actions';
+import FormErrors from './FormErrors';
 
 const FormContext = createContext();
 
 export default function EditForm({
-  children, initialState, saveAction, isSaving,
+  children, initialObject, saveAction, isSaving,
 }) {
+  const initialState = useMemo(() => ({
+    object: initialObject,
+    initialObject,
+    errors: null,
+  }), [initialObject]);
+
   const [formState, dispatch] = useReducer(formReducer, initialState);
 
   const unsavedChanges = useMemo(() => (
-    !_.isEqual(formState, initialState)
-  ), [formState, initialState]);
+    !_.isEqual(formState.object, formState.initialObject)
+  ), [formState.object, formState.initialObject]);
 
   const onUnload = useCallback((e) => {
     // Prompt the user before letting them navigate away from this page with unsaved changes.
@@ -92,10 +99,9 @@ export default function EditForm({
   const stickyRef = useRef();
 
   const formContext = useMemo(() => ({
-    state: formState,
-    initialState,
+    ...formState,
     unsavedChanges,
-  }), [formState, initialState, unsavedChanges]);
+  }), [formState, unsavedChanges]);
 
   return (
     <FormContext.Provider value={formContext}>
@@ -106,6 +112,7 @@ export default function EditForm({
               {renderUnsavedChangesAlert()}
             </Sticky>
           )}
+          <FormErrors errors={formState.errors} />
           {children}
         </div>
       </SectionProvider>
@@ -115,5 +122,5 @@ export default function EditForm({
 
 export const useFormContext = () => useContext(FormContext);
 
-export const useFormObject = () => useFormContext().state;
-export const useInitialFormObject = () => useFormContext().initialState;
+export const useFormObject = () => useFormContext().object;
+export const useInitialFormObject = () => useFormContext().initialObject;

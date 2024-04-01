@@ -1,7 +1,6 @@
 import React from 'react';
 import { List, Message } from 'semantic-ui-react';
-import I18n from '../../lib/i18n';
-import { useStore } from '../../lib/providers/StoreProvider';
+import I18n from '../../../lib/i18n';
 
 // https://stackoverflow.com/questions/28336104/humanize-a-string-in-javascript
 function humanize(str) {
@@ -57,9 +56,7 @@ function NestedErrorList({
   });
 }
 
-export default function FormErrors() {
-  const { errors } = useStore();
-
+export default function FormErrors({ errors }) {
   if (!errors) return null;
 
   return (

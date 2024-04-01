@@ -20,7 +20,6 @@ import EventRestrictions from './FormSections/EventRestrictions';
 import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
-import FormErrors from './FormErrors';
 import Series from './FormSections/Series';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import StoreProvider, { useStore } from '../../lib/providers/StoreProvider';
@@ -142,7 +141,6 @@ function CompetitionForm() {
       {isPersisted && <AnnouncementActions disabled={unsavedChanges} onError={onError} />}
       {isPersisted && <UserPreferences disabled={unsavedChanges} />}
       <AnnouncementMessage />
-      <FormErrors />
 
       <Form>
         <Admin />
@@ -205,11 +203,9 @@ export default function Wrapper({
   isSeriesPersisted = false,
   isCloning = false,
 }) {
-  const dummyReducer = (state, action) => state;
-
   return (
     <StoreProvider
-      reducer={dummyReducer}
+      reducer={_.identity}
       initialState={{
         usesV2Registrations,
         storedEvents,
