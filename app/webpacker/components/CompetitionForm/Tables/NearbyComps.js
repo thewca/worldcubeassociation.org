@@ -7,8 +7,8 @@ import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
-import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
+import { useFormObject } from '../../wca/FormProvider/EditForm';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -21,15 +21,13 @@ function MissingInfo({ missingDate, missingLocation }) {
 
 export default function NearbyComps() {
   const {
-    competition: {
-      competitionId,
-      venue: {
-        coordinates,
-      },
-      startDate,
-      endDate,
+    competitionId,
+    venue: {
+      coordinates,
     },
-  } = useStore();
+    startDate,
+    endDate,
+  } = useFormObject();
 
   const lat = parseFloat(coordinates.lat);
   const long = parseFloat(coordinates.long);

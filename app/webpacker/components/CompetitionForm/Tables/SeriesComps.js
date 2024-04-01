@@ -9,6 +9,7 @@ import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
+import { useFormObject } from '../../wca/FormProvider/EditForm';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -20,18 +21,16 @@ function MissingInfo({ missingDate, missingLocation }) {
 }
 
 export default function SeriesComps() {
+  const { isPersisted } = useStore();
   const {
-    competition: {
-      competitionId,
-      venue: {
-        coordinates,
-      },
-      startDate,
-      endDate,
-      series,
+    competitionId,
+    venue: {
+      coordinates,
     },
-    isPersisted,
-  } = useStore();
+    startDate,
+    endDate,
+    series,
+  } = useFormObject();
 
   const dispatch = useDispatch();
 

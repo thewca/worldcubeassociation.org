@@ -2,16 +2,19 @@ import React, {
   createContext, useCallback, useContext, useEffect, useMemo, useReducer, useRef,
 } from 'react';
 import _ from 'lodash';
-import { Button, Message, Sticky } from 'semantic-ui-react';
+import {
+  Button, Divider, Form, Message, Sticky,
+} from 'semantic-ui-react';
 import SectionProvider from './FormSection';
 import formReducer from './store/reducer';
 import { changesSaved, setErrors } from './store/actions';
 import FormErrors from './FormErrors';
+import useSaveAction from '../../../lib/hooks/useSaveAction';
 
 const FormContext = createContext();
 
 export default function EditForm({
-  children, initialObject, saveAction, isSaving,
+  children, initialObject, backendUrlFn, backendOptions, CustomHeader = null, CustomFooter = null,
 }) {
   const initialState = useMemo(() => ({
     object: initialObject,
@@ -35,6 +38,14 @@ export default function EditForm({
 
     return null;
   }, [unsavedChanges]);
+
+  useEffect(() => {
+    window.addEventListener('beforeunload', onUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', onUnload);
+    };
+  }, [onUnload]);
 
   const onSuccess = useCallback((data) => {
     const { redirect } = data;
@@ -73,22 +84,23 @@ export default function EditForm({
     }
   }, [dispatch]);
 
-  useEffect(() => {
-    window.addEventListener('beforeunload', onUnload);
+  const { save, saving } = useSaveAction();
 
-    return () => {
-      window.removeEventListener('beforeunload', onUnload);
-    };
-  }, [onUnload]);
+  const saveObject = useCallback(() => {
+    const saveUrl = backendUrlFn(formState.object, formState.initialObject);
+    const saveOptions = backendOptions || {};
+
+    save(saveUrl, formState.object, onSuccess, saveOptions, onError);
+  }, [backendUrlFn, backendOptions, formState, save, onError, onSuccess]);
 
   const renderUnsavedChangesAlert = () => (
     <Message info>
       You have unsaved changes. Don&apos;t forget to
       {' '}
       <Button
-        onClick={saveAction}
-        disabled={isSaving}
-        loading={isSaving}
+        onClick={saveObject}
+        disabled={saving}
+        loading={saving}
         primary
       >
         save your changes!
@@ -113,8 +125,17 @@ export default function EditForm({
             </Sticky>
           )}
           <FormErrors errors={formState.errors} />
-          {children}
+          {CustomHeader !== null && <CustomHeader onError={onError} />}
+          <Form>
+            {children}
+          </Form>
         </div>
+        {CustomFooter && (
+          <>
+            <Divider />
+            <CustomFooter saveObject={saveObject} onError={onError} />
+          </>
+        )}
       </SectionProvider>
     </FormContext.Provider>
   );

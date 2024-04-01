@@ -12,24 +12,20 @@ import {
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import { useInitialFormObject } from '../wca/FormProvider/EditForm';
 
 export function CreateOrUpdateButton({
-  createComp,
-  updateComp,
+  saveObject,
 }) {
   const { isPersisted } = useStore();
 
-  if (isPersisted) {
-    return (
-      <Button primary onClick={updateComp}>
-        {I18n.t('competitions.competition_form.submit_update_value')}
-      </Button>
-    );
-  }
-
   return (
-    <Button primary onClick={createComp}>
-      {I18n.t('competitions.competition_form.submit_create_value')}
+    <Button primary onClick={saveObject}>
+      {
+        isPersisted
+          ? I18n.t('competitions.competition_form.submit_update_value')
+          : I18n.t('competitions.competition_form.submit_create_value')
+      }
     </Button>
   );
 }
@@ -112,18 +108,18 @@ function DeleteButton({
 }
 
 export default function ConfirmationActions({
-  createComp,
-  updateComp,
+  saveObject,
   onError,
 }) {
   const {
     isAdminView,
     isPersisted,
-    initialCompetition: {
-      competitionId,
-      admin: { isConfirmed },
-    },
   } = useStore();
+
+  const {
+    competitionId,
+    admin: { isConfirmed },
+  } = useInitialFormObject();
 
   const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);
 
@@ -138,7 +134,7 @@ export default function ConfirmationActions({
   return (
     <ConfirmProvider>
       <Button.Group>
-        <CreateOrUpdateButton createComp={createComp} updateComp={updateComp} />
+        <CreateOrUpdateButton saveObject={saveObject} />
         {isPersisted && !isAdminView && !isConfirmed && (
           <ConfirmButton competitionId={competitionId} data={data} sync={sync} onError={onError} />
         )}

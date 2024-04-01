@@ -6,16 +6,18 @@ import I18n from '../../../lib/i18n';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { competitionMaxShortNameLength } from '../../../lib/wca-data.js.erb';
 import SubSection from '../../wca/FormProvider/SubSection';
+import { useFormObject } from '../../wca/FormProvider/EditForm';
 
 export default function Series() {
   const {
-    competition: {
-      series,
-      admin: { isConfirmed },
-    },
     isAdminView,
     isSeriesPersisted,
   } = useStore();
+
+  const {
+    series,
+    admin: { isConfirmed },
+  } = useFormObject();
 
   const formDisabled = isConfirmed && !isAdminView;
 

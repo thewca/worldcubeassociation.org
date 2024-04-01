@@ -10,22 +10,24 @@ import {
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
 import SubSection from '../../wca/FormProvider/SubSection';
+import { useFormObject } from '../../wca/FormProvider/EditForm';
 
 export default function EventRestrictions() {
   const {
-    competition: {
-      eventRestrictions: {
-        forbidNewcomers,
-        earlyPuzzleSubmission,
-        qualificationResults,
-        eventLimitation,
-      },
-    },
     usesV2Registrations,
     isCloning,
     isPersisted,
     storedEvents,
   } = useStore();
+
+  const {
+    eventRestrictions: {
+      forbidNewcomers,
+      earlyPuzzleSubmission,
+      qualificationResults,
+      eventLimitation,
+    },
+  } = useFormObject();
 
   const mainEventOptions = useMemo(() => {
     const storedEventOptions = storedEvents.map((event) => ({

@@ -9,9 +9,9 @@ import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
 import { registrationCollisionsJsonUrl } from '../../../lib/requests/routes.js.erb';
 import { events } from '../../../lib/wca-data.js.erb';
-import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
 import useToggleState from '../../../lib/hooks/useToggleState';
+import { useFormObject } from '../../wca/FormProvider/EditForm';
 
 function NotConfirmedIcon() {
   return (
@@ -165,11 +165,9 @@ function MissingInfo() {
 
 function RegistrationCollisionsContent() {
   const {
-    competition: {
-      competitionId,
-      registration: { openingDateTime },
-    },
-  } = useStore();
+    competitionId,
+    registration: { openingDateTime },
+  } = useFormObject();
 
   const savedParams = useMemo(() => {
     const params = new URLSearchParams();

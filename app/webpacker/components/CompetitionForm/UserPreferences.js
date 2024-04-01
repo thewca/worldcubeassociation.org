@@ -7,7 +7,6 @@ import {
 } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
-import { useStore } from '../../lib/providers/StoreProvider';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   competitionUserPreferencesUrl,
@@ -15,6 +14,7 @@ import {
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import useSaveAction from '../../lib/hooks/useSaveAction';
+import { useFormContext, useInitialFormObject } from '../wca/FormProvider/EditForm';
 
 function NotificationSettingsAction({
   competitionId,
@@ -43,8 +43,9 @@ function NotificationSettingsAction({
   );
 }
 
-export default function UserPreferences({ disabled = false }) {
-  const { initialCompetition: { competitionId } } = useStore();
+export default function UserPreferences() {
+  const { competitionId } = useInitialFormObject();
+  const { unsavedChanges: disabled } = useFormContext();
 
   const dataUrl = useMemo(() => competitionUserPreferencesUrl(competitionId), [competitionId]);
 

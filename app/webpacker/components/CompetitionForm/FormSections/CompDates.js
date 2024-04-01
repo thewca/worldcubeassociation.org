@@ -3,8 +3,8 @@ import { Form } from 'semantic-ui-react';
 import {
   InputDate,
 } from '../Inputs/FormInputs';
-import { useStore } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
+import { useFormObject } from '../../wca/FormProvider/EditForm';
 
 function daysUntil(date) {
   if (!date) return null;
@@ -21,7 +21,7 @@ function daysUntil(date) {
 }
 
 export default function CompDates() {
-  const { competition: { startDate, endDate } } = useStore();
+  const { startDate, endDate } = useFormObject();
 
   return (
     <Form.Group widths="equal">

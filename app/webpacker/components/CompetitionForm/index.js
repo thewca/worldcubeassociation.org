@@ -1,7 +1,6 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import {
   Divider,
-  Form,
   Message,
 } from 'semantic-ui-react';
 import VenueInfo from './FormSections/VenueInfo';
@@ -21,82 +20,26 @@ import Admin from './FormSections/Admin';
 import NameDetails from './FormSections/NameDetails';
 import NearbyComps from './Tables/NearbyComps';
 import Series from './FormSections/Series';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import StoreProvider, { useStore } from '../../lib/providers/StoreProvider';
-import useSaveAction from '../../lib/hooks/useSaveAction';
 import CompDates from './FormSections/CompDates';
 import RegistrationDates from './FormSections/RegistrationDates';
-import AnnouncementActions from './AnnouncementActions';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
-import UserPreferences from './UserPreferences';
-import EditForm, { useInitialFormObject } from '../wca/FormProvider/EditForm';
+import EditForm, { useFormContext, useFormObject } from '../wca/FormProvider/EditForm';
 import SubSection from '../wca/FormProvider/SubSection';
-
-// FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
-const WCAT_FRIENDLY_ID = 'wcat';
-
-function AnnouncementMessage() {
-  const {
-    isPersisted,
-    isAdminView,
-  } = useStore();
-
-  const {
-    admin: {
-      isConfirmed,
-      isVisible,
-    },
-  } = useInitialFormObject();
-
-  if (!isPersisted) return null;
-
-  let messageStyle = null;
-
-  let i18nKey = null;
-  let i18nReplacements = {};
-
-  if (isConfirmed && isVisible) {
-    if (isAdminView) return null;
-
-    messageStyle = 'success';
-    i18nKey = 'competitions.competition_form.public_and_locked_html';
-  } else if (isConfirmed && !isVisible) {
-    messageStyle = 'warning';
-    i18nKey = 'competitions.competition_form.confirmed_but_not_visible_html';
-    i18nReplacements = { contact: WCAT_FRIENDLY_ID.toLocaleUpperCase() };
-  } else if (!isConfirmed && isVisible) {
-    messageStyle = 'error';
-    i18nKey = 'competitions.competition_form.is_visible';
-  } else if (!isConfirmed && !isVisible) {
-    messageStyle = 'warning';
-    i18nKey = 'competitions.competition_form.pending_confirmation_html';
-    i18nReplacements = { contact: WCAT_FRIENDLY_ID.toLocaleUpperCase() };
-  }
-
-  return (
-    <Message error={messageStyle === 'error'} warning={messageStyle === 'warning'} success={messageStyle === 'success'}>
-      <I18nHTMLTranslate
-        i18nKey={i18nKey}
-        options={i18nReplacements}
-      />
-    </Message>
-  );
-}
+import CompFormHeader from './CompFormHeader';
 
 function BottomConfirmationPanel({
-  createComp,
-  updateComp,
+  saveObject,
   onError,
-  unsavedChanges,
 }) {
   const { isPersisted } = useStore();
+  const { unsavedChanges } = useFormContext();
 
   if (isPersisted && !unsavedChanges) {
     return (
       <ConfirmationActions
-        createComp={createComp}
-        updateComp={updateComp}
+        saveObject={saveObject}
         onError={onError}
       />
     );
@@ -109,87 +52,55 @@ function BottomConfirmationPanel({
           You have unsaved changes. Please save the competition before taking any other action.
         </Message>
       )}
-      <CreateOrUpdateButton
-        createComp={createComp}
-        updateComp={updateComp}
-      />
+      <CreateOrUpdateButton saveObject={saveObject} />
     </>
   );
 }
 
 function CompetitionForm() {
-  const {
-    competition,
-    initialCompetition,
-    isPersisted,
-    isCloning,
-    isAdminView,
-  } = useStore();
+  const { isCloning } = useStore();
 
-  const { save, saving } = useSaveAction();
-
-  const createComp = useCallback((onSuccess, onError) => {
-    save(createCompetitionUrl, competition, onSuccess, { method: 'POST' }, onError);
-  }, [competition, save]);
-
-  const updateComp = useCallback((onSuccess, onError) => {
-    save(`${competitionUrl(initialCompetition.competitionId)}?adminView=${isAdminView}`, competition, onSuccess, { method: 'PATCH' }, onError);
-  }, [competition, initialCompetition.competitionId, isAdminView, save]);
+  const { admin: { isConfirmed } } = useFormObject();
 
   return (
     <>
-      {isPersisted && <AnnouncementActions disabled={unsavedChanges} onError={onError} />}
-      {isPersisted && <UserPreferences disabled={unsavedChanges} />}
-      <AnnouncementMessage />
-
-      <Form>
-        <Admin />
-        <NameDetails />
-        <VenueInfo />
-        <Divider />
-
-        <CompDates />
-        <NearbyComps />
-        <Series />
-        <Divider />
-
-        <RegistrationDates />
-
-        <InputMarkdown id="information" required />
-
-        <CompetitorLimit />
-        <Staff />
-        <Divider />
-
-        <InputChampionships id="championships" noHint="blank" />
-        <Divider />
-
-        <Website />
-        <Divider />
-
-        <RegistrationDetails />
-        <RegistrationFee />
-        <Divider />
-
-        <EventRestrictions />
-
-        <InputTextArea id="remarks" disabled={competition.admin.isConfirmed} />
-
-        {isCloning && (
-          <SubSection section="cloning">
-            <InputBoolean id="cloneTabs" />
-          </SubSection>
-        )}
-      </Form>
-
+      <Admin />
+      <NameDetails />
+      <VenueInfo />
       <Divider />
 
-      <BottomConfirmationPanel
-        createComp={createComp}
-        updateComp={updateComp}
-        onError={onError}
-        unsavedChanges={unsavedChanges}
-      />
+      <CompDates />
+      <NearbyComps />
+      <Series />
+      <Divider />
+
+      <RegistrationDates />
+
+      <InputMarkdown id="information" required />
+
+      <CompetitorLimit />
+      <Staff />
+      <Divider />
+
+      <InputChampionships id="championships" noHint="blank" />
+      <Divider />
+
+      <Website />
+      <Divider />
+
+      <RegistrationDetails />
+      <RegistrationFee />
+      <Divider />
+
+      <EventRestrictions />
+
+      <InputTextArea id="remarks" disabled={isConfirmed} />
+
+      {isCloning && (
+        <SubSection section="cloning">
+          <InputBoolean id="cloneTabs" />
+        </SubSection>
+      )}
     </>
   );
 }
@@ -203,6 +114,16 @@ export default function Wrapper({
   isSeriesPersisted = false,
   isCloning = false,
 }) {
+  const backendUrlFn = (comp, initialComp) => {
+    if (isPersisted) {
+      return `${competitionUrl(initialComp.competitionId)}?adminView=${isAdminView}`;
+    }
+
+    return createCompetitionUrl;
+  };
+
+  const backendOptions = { method: isPersisted ? 'PATCH' : 'POST' };
+
   return (
     <StoreProvider
       reducer={_.identity}
@@ -215,7 +136,13 @@ export default function Wrapper({
         isCloning,
       }}
     >
-      <EditForm initialState={competition}>
+      <EditForm
+        initialState={competition}
+        backendUrlFn={backendUrlFn}
+        backendOptions={backendOptions}
+        CustomHeader={CompFormHeader}
+        CustomFooter={BottomConfirmationPanel}
+      >
         <CompetitionForm />
       </EditForm>
     </StoreProvider>
