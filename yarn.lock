@@ -482,16 +482,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-function-sent@npm:^7.23.3":
-  version: 7.23.3
-  resolution: "@babel/plugin-proposal-function-sent@npm:7.23.3"
+"@babel/plugin-proposal-function-sent@npm:^7.24.1":
+  version: 7.24.1
+  resolution: "@babel/plugin-proposal-function-sent@npm:7.24.1"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.22.5"
+    "@babel/helper-plugin-utils": "npm:^7.24.0"
     "@babel/helper-wrap-function": "npm:^7.22.20"
-    "@babel/plugin-syntax-function-sent": "npm:^7.23.3"
+    "@babel/plugin-syntax-function-sent": "npm:^7.24.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/f2d8bf5fe189aed1b404f0694dea05ca8056984ac5304456d580e6c0b0188d61bc053887f8a5b6827be735e963e0a52a631ba55010062a09b02fcb4b9ef5fd11
+  checksum: 10c0/db6780dd5836a835fe12dda074e3d6c41e5f6ad22af6de3b7393ffe0601773c94c79f383d2afdfed33ae90489166b0da7c28a035f1e0f5e72645b4278970b133
   languageName: node
   linkType: hard
 
@@ -632,14 +632,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-function-sent@npm:^7.23.3":
-  version: 7.23.3
-  resolution: "@babel/plugin-syntax-function-sent@npm:7.23.3"
+"@babel/plugin-syntax-function-sent@npm:^7.24.1":
+  version: 7.24.1
+  resolution: "@babel/plugin-syntax-function-sent@npm:7.24.1"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.22.5"
+    "@babel/helper-plugin-utils": "npm:^7.24.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/763da75640902e92aa2d53f084b7e68149836445d3653c6fc579c4f7a313d2f1e801e8ad595afcfe3bfeb106a69bf42b56a65344633227e6158a292cf91de35e
+  checksum: 10c0/c2dae9667e4264d32abd418e5fc8fceb7349d1c6d8eb29f444af62948987c81942e72c11575caa1cbcefe9afe81f46e2578a18848b73778f074ca4e04691c0fc
   languageName: node
   linkType: hard
 
@@ -9942,7 +9942,7 @@ __metadata:
     "@babel/plugin-proposal-class-properties": "npm:^7.17.12"
     "@babel/plugin-proposal-decorators": "npm:^7.24.0"
     "@babel/plugin-proposal-export-namespace-from": "npm:^7.18.9"
-    "@babel/plugin-proposal-function-sent": "npm:^7.23.3"
+    "@babel/plugin-proposal-function-sent": "npm:^7.24.1"
     "@babel/plugin-proposal-json-strings": "npm:^7.14.5"
     "@babel/plugin-proposal-numeric-separator": "npm:^7.14.5"
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
