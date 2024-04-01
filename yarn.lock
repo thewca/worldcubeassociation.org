@@ -602,15 +602,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-proposal-throw-expressions@npm:^7.23.3":
-  version: 7.23.3
-  resolution: "@babel/plugin-proposal-throw-expressions@npm:7.23.3"
+"@babel/plugin-proposal-throw-expressions@npm:^7.24.1":
+  version: 7.24.1
+  resolution: "@babel/plugin-proposal-throw-expressions@npm:7.24.1"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.22.5"
-    "@babel/plugin-syntax-throw-expressions": "npm:^7.23.3"
+    "@babel/helper-plugin-utils": "npm:^7.24.0"
+    "@babel/plugin-syntax-throw-expressions": "npm:^7.24.1"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/4d9cfef05c69e1f9e8be54fd437aec1c285c457b5c48fd7ccfb4bf070da522e402b30d647f76cd3b6d37b5feed37cf02cd17bca3c99e2153371f06968b8b567f
+  checksum: 10c0/f29eb7d0b29055d5623a5bee6639306bf1f4a8a94fdd60dc795f06cb7266367e2356a1b7522c021d1c07c38ffe866816ef8284df44bf26cd5e8b509357613c71
   languageName: node
   linkType: hard
 
@@ -823,14 +823,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/plugin-syntax-throw-expressions@npm:^7.23.3":
-  version: 7.23.3
-  resolution: "@babel/plugin-syntax-throw-expressions@npm:7.23.3"
+"@babel/plugin-syntax-throw-expressions@npm:^7.24.1":
+  version: 7.24.1
+  resolution: "@babel/plugin-syntax-throw-expressions@npm:7.24.1"
   dependencies:
-    "@babel/helper-plugin-utils": "npm:^7.22.5"
+    "@babel/helper-plugin-utils": "npm:^7.24.0"
   peerDependencies:
     "@babel/core": ^7.0.0-0
-  checksum: 10c0/f18e914e422c30dec3f6a6551636b07da2ec8da534e2cde70bb29b6f66c2edcacb6884025b651fbcbcb332de93034220e375213b7dcae54317fd1850ae57c7f1
+  checksum: 10c0/258f75d20406cbda4615b1aac36877d98b2ba2ba9d27a33b4271ea29def7028ee04f3488a6f799ff5f9201018de615604edf3fb8fc80b60ecb4cecd57109cb15
   languageName: node
   linkType: hard
 
@@ -10030,7 +10030,7 @@ __metadata:
     "@babel/plugin-proposal-numeric-separator": "npm:^7.14.5"
     "@babel/plugin-proposal-private-methods": "npm:^7.18.6"
     "@babel/plugin-proposal-private-property-in-object": "npm:^7.21.11"
-    "@babel/plugin-proposal-throw-expressions": "npm:^7.23.3"
+    "@babel/plugin-proposal-throw-expressions": "npm:^7.24.1"
     "@babel/plugin-syntax-dynamic-import": "npm:^7.8.3"
     "@babel/plugin-syntax-import-meta": "npm:^7.10.4"
     "@babel/plugin-transform-destructuring": "npm:^7.23.3"
