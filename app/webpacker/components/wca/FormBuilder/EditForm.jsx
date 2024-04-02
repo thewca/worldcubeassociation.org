@@ -122,8 +122,8 @@ export const useFormObjectSection = () => {
 export const useFormUpdateAction = () => {
   const dispatch = useFormDispatch();
 
-  return useCallback((key, value) => (
-    dispatch(updateFormValue(key, value))
+  return useCallback((key, value, sections = []) => (
+    dispatch(updateFormValue(key, value, sections))
   ), [dispatch]);
 };
 
