@@ -1071,7 +1071,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
     t.bigint "canceled_by_id"
     t.index ["canceled_by_type", "canceled_by_id"], name: "index_stripe_payment_intents_on_canceled_by"
     t.index ["confirmed_by_type", "confirmed_by_id"], name: "index_stripe_payment_intents_on_confirmed_by"
-    t.index ["holder_type", "holder_id"], name: "index_stripe_payment_intents_on_holder"
+    t.index ["holder_type", "holder_id"], name: "index_payment_intents_on_holder"
     t.index ["stripe_record_id"], name: "index_stripe_payment_intents_on_stripe_record_id"
     t.index ["user_id"], name: "fk_rails_2dbc373c0c"
   end
@@ -1274,7 +1274,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
-  add_foreign_key "stripe_payment_intents", "stripe_records"
   add_foreign_key "stripe_payment_intents", "users"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
