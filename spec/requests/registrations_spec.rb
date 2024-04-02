@@ -194,11 +194,12 @@ RSpec.describe "registrations" do
                 it "renders an error" do
                   person = FactoryBot.create(:person)
                   unconfirmed_person = FactoryBot.create(:person)
+                  delegate = FactoryBot.create(:delegate_role)
                   user = FactoryBot.create(
                     :user,
                     unconfirmed_wca_id: unconfirmed_person.wca_id,
                     dob_verification: unconfirmed_person.dob,
-                    delegate_to_handle_wca_id_claim: User.delegates.first,
+                    delegate_to_handle_wca_id_claim: delegate.user,
                   )
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
@@ -215,11 +216,12 @@ RSpec.describe "registrations" do
               context "the user has unconfirmed WCA ID same as the given WCA ID" do
                 it "claims the WCA ID and registers the user" do
                   person = FactoryBot.create(:person)
+                  delegate = FactoryBot.create(:delegate_role)
                   user = FactoryBot.create(
                     :user,
                     unconfirmed_wca_id: person.wca_id,
                     dob_verification: person.dob,
-                    delegate_to_handle_wca_id_claim: User.delegates.first,
+                    delegate_to_handle_wca_id_claim: delegate.user,
                   )
                   file = csv_file [
                     ["Status", "Name", "Country", "WCA ID", "Birth date", "Gender", "Email", "333", "444"],
