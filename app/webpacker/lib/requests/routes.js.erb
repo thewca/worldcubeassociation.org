@@ -130,10 +130,6 @@ export const addUserGroupsUrl = `<%= Rails.application.routes.url_helpers.api_v0
 
 export const userGroupsUpdateUrl = (userGroupId) => `<%= Rails.application.routes.url_helpers.api_v0_user_groups_path %>/${userGroupId}`;
 
-// dummyRoleId is used temporarily because delegates is yet to get a role id
-export const roleDataUrl = (userId, isActiveRole) => `<%= Rails.application.routes.url_helpers.api_v0_user_role_path('dummyRoleId') %>?userId=${userId}`;
-export const roleUpdateUrl = `<%= Rails.application.routes.url_helpers.api_v0_user_role_path('dummyRoleId') %>`;
-
 export const countryBandsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.country_bands_path) %>`;
 export const subordinateDelegateClaimsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.pending_claims_path) %>`;
 export const subordinateUpcomingCompetitionsUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_for_senior_path) %>`;
@@ -203,10 +199,16 @@ export const panelUrls = {
   board: {
     regionsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_board_path(anchor: PanelController.panel_list['board']['regionsManager'])) %>`,
   },
+  seniorDelegate: {
+    regions: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_senior_delegate_path(anchor: PanelController.panel_list['seniorDelegate']['regions'])) %>`,
+  },
   wst: {
     translators: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wst_path(anchor: PanelController.panel_list['wst']['translators'])) %>`,
   },
   wrt: {
     editPerson: (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_wrt_path(wcaId: '${wcaId}', anchor: PanelController.panel_list['wrt']['editPerson'])) %>`,
+  },
+  leader: {
+    groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_leader_path(anchor: PanelController.panel_list['leader']['groupsManager'])) %>`,
   },
 }

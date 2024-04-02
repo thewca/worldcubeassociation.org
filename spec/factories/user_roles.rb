@@ -24,7 +24,7 @@ FactoryBot.define do
     end
 
     trait :delegate_regions do
-      group { FactoryBot.create(:delegate_region_americas) }
+      group { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group }
     end
 
     trait :delegate_regions_senior_delegate do
@@ -59,9 +59,23 @@ FactoryBot.define do
       metadata { FactoryBot.create(:treasurer_role_metadata) }
     end
 
+    trait :councils_leader do
+      group { UserGroup.council_group_wac }
+      metadata { FactoryBot.create(:wac_role_metadata, status: RolesMetadataCouncils.statuses[:leader]) }
+    end
+
+    trait :councils_member do
+      group { UserGroup.council_group_wac }
+      metadata { FactoryBot.create(:wac_role_metadata, status: RolesMetadataCouncils.statuses[:member]) }
+    end
+
+    trait :board do
+      group_id { UserGroup.board_group.id }
+    end
+
     factory :delegate_role do
       user { FactoryBot.create(:user) }
-      group_id { FactoryBot.create(:delegate_region_americas).id }
+      group_id { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group.id }
       start_date { Date.today - 1.year }
       metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'delegate') }
     end
@@ -76,5 +90,8 @@ FactoryBot.define do
     factory :vice_chair_role, traits: [:officers, :officers_vice_chair, :active]
     factory :secretary_role, traits: [:officers, :officers_secretary, :active]
     factory :treasurer_role, traits: [:officers, :officers_treasurer, :active]
+    factory :wac_role_leader, traits: [:councils_leader, :active]
+    factory :wac_role_member, traits: [:councils_member, :active]
+    factory :board_role, traits: [:board, :active]
   end
 end

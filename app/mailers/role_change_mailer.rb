@@ -12,6 +12,8 @@ class RoleChangeMailer < ApplicationMailer
       metadata[:status] = I18n.t("enums.user_roles.status.delegate_regions.#{UserRole.status(role)}")
     when UserGroup.group_types[:translators]
       metadata[:locale] = group.metadata.locale
+    when UserGroup.group_types[:councils]
+      metadata[:status] = I18n.t("enums.user_roles.status.councils.#{role.metadata.status}")
     end
     metadata
   end
@@ -29,6 +31,12 @@ class RoleChangeMailer < ApplicationMailer
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:delegate_regions]
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:councils]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:board]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
@@ -56,6 +64,9 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:delegate_regions]
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
       reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:councils]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{UserRole.group(role).group_type}"
     end
@@ -81,6 +92,12 @@ class RoleChangeMailer < ApplicationMailer
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:translators]
       to_list = [user_who_made_the_change.email, Team.wst.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:councils]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:board]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"

@@ -282,7 +282,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(team['leader']).to eq false
         expect(team['friendly_id']).to eq 'wrc'
         expect(team['avatar']['thumb']['url']).to be_a String
-        expect(team['id']).to be_a Numeric
+        expect(team['id']).to be_a String
         expect(team['name']).to be_a String
         expect(team['senior_member']).to be false
       end

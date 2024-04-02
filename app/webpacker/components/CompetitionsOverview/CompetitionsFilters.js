@@ -4,8 +4,6 @@ import {
 } from 'semantic-ui-react';
 import { DateTime } from 'luxon';
 import PulseLoader from 'react-spinners/PulseLoader';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
 import I18n from '../../lib/i18n';
 import {
@@ -13,6 +11,7 @@ import {
 } from '../../lib/wca-data.js.erb';
 
 import useDelegatesData from './useDelegatesData';
+import UtcDatePicker from '../wca/UtcDatePicker';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 const PAST_YEARS_WITH_COMPETITIONS = [];
@@ -325,22 +324,27 @@ function CustomDateSelector({ filterState, dispatchFilter }) {
     >
       <List>
         <List.Item>
-          <DatePicker
+          <UtcDatePicker
             name="start-date"
             showIcon
             placeholderText={I18n.t('competitions.index.from_date')}
-            selected={filterState.customStartDate}
+            isoDate={filterState.customStartDate}
             onChange={(date) => dispatchFilter({ customStartDate: date })}
-            maxDate={filterState.customEndDate}
+            selectsStart
+            isoStartDate={filterState.customStartDate}
+            isoEndDate={filterState.customEndDate}
           />
         </List.Item>
         <List.Item>
-          <DatePicker
+          <UtcDatePicker
             name="end-date"
             showIcon
             placeholderText={I18n.t('competitions.index.to_date')}
-            selected={filterState.customEndDate}
+            isoDate={filterState.customEndDate}
             onChange={(date) => dispatchFilter({ customEndDate: date })}
+            selectsEnd
+            isoStartDate={filterState.customStartDate}
+            isoEndDate={filterState.customEndDate}
             minDate={filterState.customStartDate}
           />
         </List.Item>

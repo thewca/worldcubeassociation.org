@@ -161,7 +161,7 @@ RSpec.describe "users" do
     let(:sso) { SingleSignOn.new }
 
     it "authenticates WAC user and validates user attributes" do
-      user = FactoryBot.create(:user, :wac_member, :wca_id)
+      user = FactoryBot.create(:wac_role_member, user: FactoryBot.create(:user_with_wca_id)).user
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"

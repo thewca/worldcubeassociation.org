@@ -53,13 +53,15 @@ class User < ApplicationRecord
   scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
 
   def self.eligible_voters
-    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
-    team_senior_members = TeamMember.current.in_official_team.senior_member.map(&:user)
-    eligible_delegates = User.where(delegate_status: %w(delegate))
-    eligible_senior_delegates = UserGroup.delegate_region_groups_senior_delegates
-    board_members = UserGroup.board.flat_map(&:active_users)
-    officers = UserGroup.officers.flat_map(&:active_users)
-    (team_leaders + team_senior_members + eligible_delegates + eligible_senior_delegates + board_members + officers).uniq
+    [
+      UserGroup.delegate_regions,
+      UserGroup.teams_committees,
+      UserGroup.board,
+      UserGroup.officers,
+    ].flatten.flat_map(&:active_roles)
+      .select { |role| UserRole.is_eligible_voter?(role) }
+      .map { |role| UserRole.user(role) }
+      .uniq
   end
 
   def self.leader_senior_voters
@@ -69,7 +71,7 @@ class User < ApplicationRecord
   end
 
   def self.all_discourse_groups
-    Team.all_official.map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
+    UserGroup.teams_committees.map(&:metadata).map(&:friendly_id) + UserGroup.councils.map(&:metadata).map(&:friendly_id) + RolesMetadataDelegateRegions.statuses.values + [UserGroup.group_types[:board]]
   end
 
   accepts_nested_attributes_for :user_preferred_events, allow_destroy: true
@@ -626,7 +628,7 @@ class User < ApplicationRecord
     active_roles.select do |role|
       group = UserRole.group(role)
       group_type = UserRole.group_type(role)
-      if group_type == UserGroup.group_types[:councils]
+      if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
         if UserRole.is_lead?(role)
           groups << group.id
         end
@@ -635,6 +637,10 @@ class User < ApplicationRecord
           groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
         end
       end
+    end
+
+    if can_manage_delegate_probation?
+      groups += UserGroup.delegate_probation.ids
     end
 
     # FIXME: Consider groups of other groupTypes as well.
@@ -1135,6 +1141,20 @@ class User < ApplicationRecord
     end
   end
 
+  private def deprecated_team_roles
+    active_roles
+      .select { |role|
+        group_type = UserRole.group_type(role)
+        [
+          UserGroup.group_types[:teams_committees],
+          UserGroup.group_types[:councils],
+          UserGroup.group_types[:board],
+        ].include?(group_type)
+      }
+      .reject { |role| UserRole.group(role).is_hidden }
+      .map { |role| UserRole.deprecated_team_role(role) }
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "wca_id", "name", "gender",
            "country_iso2", "delegate_status", "created_at", "updated_at"],
@@ -1162,7 +1182,7 @@ class User < ApplicationRecord
     # scope at the moment).
     json[:class] = self.class.to_s.downcase
     if include_teams
-      json[:teams] = current_team_members.includes(:team).reject(&:hidden?)
+      json[:teams] = deprecated_team_roles
     end
     if include_avatar
       json[:avatar] = {
@@ -1283,7 +1303,8 @@ class User < ApplicationRecord
       any_kind_of_delegate? ||
       !delegated_competitions.empty? ||
       !competitions_announced.empty? ||
-      !competitions_results_posted.empty?
+      !competitions_results_posted.empty? ||
+      board_member?
   end
 
   def accepted_registrations
@@ -1417,9 +1438,6 @@ class User < ApplicationRecord
     end
 
     roles.concat(team_roles)
-
-    # Appending Board roles
-    roles.concat(UserGroup.board.flat_map(&:roles).filter { |role| UserRole.user(role).id == self.id })
 
     roles
   end

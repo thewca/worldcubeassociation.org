@@ -88,22 +88,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     group_id.split("_").reverse.drop(1).reverse.join("_")
   end
 
-  # Returns a list of roles by user which are not yet migrated to the new system.
-  private def group_roles_not_yet_in_new_system(group_id)
-    roles = []
-    group_type = group_id_of_old_system_to_group_type(group_id)
-    original_group_id = group_id.split("_").last
-    if group_type == UserGroup.group_types[:teams_committees]
-      TeamMember.where(team_id: original_group_id, end_date: nil).each do |team_member|
-        roles << team_member.role
-      end
-    else
-      render status: :unprocessable_entity, json: { error: "Invalid group type" }
-    end
-
-    roles
-  end
-
   # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
   private def remove_pending_wca_id_claims(user)
     region_senior_delegate = user.region.senior_delegate
@@ -141,13 +125,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Returns a list of roles primarily based on groupId.
   def index_for_group
     group_id = params.require(:group_id)
-
-    if team_role?(group_id)
-      roles = group_roles_not_yet_in_new_system(group_id)
-    else
-      group = UserGroup.find(group_id)
-      roles = group.roles
-    end
+    group = UserGroup.find(group_id)
+    roles = group.roles
 
     # Filter the list based on the permissions of the logged in user.
     roles = filter_roles_for_logged_in_user(roles)
@@ -188,8 +167,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       end
     elsif group_type == UserGroup.group_types[:councils]
       roles.concat(UserGroup.councils.flat_map(&:roles))
-    elsif group_type == UserGroup.group_types[:board]
-      roles.concat(UserGroup.board.flat_map(&:roles))
     end
 
     roles
@@ -220,14 +197,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def end_delegate_role_for_user(user)
-    if user.delegate_status.present?
-      remove_pending_wca_id_claims(user)
-      user.update!(delegate_status: '', region_id: '', location: '')
-      send_role_change_notification(user)
-    end
-  end
-
   private def end_role_for_user_in_group_with_status(group, status)
     if group.group_type == UserGroup.group_types[:delegate_regions]
       role_to_end = group.lead_role
@@ -243,36 +212,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     [RolesMetadataDelegateRegions.statuses[:regional_delegate], RolesMetadataDelegateRegions.statuses[:senior_delegate]].include?(status)
   end
 
-  private def team_role?(group_id)
-    group_id.is_a?(String) && group_id.include?("_") # Temporary hack to support some old system roles, will be removed once all roles are migrated to the new system.
-  end
-
-  private def create_team_role(group_id, user_id)
-    group_type = group_id_of_old_system_to_group_type(group_id)
-    original_group_id = group_id.split("_").last
-    return head :unauthorized unless current_user.can_edit_team?(Team.find_by(id: original_group_id))
-    if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-      status = params.require(:status)
-      if status == "leader"
-        old_leader = Team.find_by(id: original_group_id).leader
-        if old_leader.present?
-          old_leader.update!(end_date: Date.today)
-        end
-      end
-      already_existing_member = TeamMember.find_by(team_id: original_group_id, user_id: user_id, end_date: nil)
-      if already_existing_member.present?
-        already_existing_member.update!(end_date: Date.today)
-      end
-      TeamMember.create!(team_id: original_group_id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-      render json: {
-        success: true,
-      }
-    else
-      render status: :unprocessable_entity, json: { error: "Invalid group type" }
-    end
-  end
-
-  private def create_council_role(group, user_id, status)
+  private def create_team_committee_council_role(group, user_id, status)
     team = group.team
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
     if status == "leader"
@@ -297,15 +237,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
 
-    if team_role?(group_id)
-      return create_team_role(group_id, user_id)
-    end
-
     create_supported_groups = [
       UserGroup.group_types[:delegate_regions],
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
       UserGroup.group_types[:officers],
+      UserGroup.group_types[:councils],
+      UserGroup.group_types[:board],
     ]
     group = UserGroup.find(group_id)
 
@@ -321,8 +259,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = nil
     end
 
-    if group.group_type == UserGroup.group_types[:councils]
-      return create_council_role(group, user_id, status)
+    if group.group_type == UserGroup.group_types[:teams_committees]
+      return create_team_committee_council_role(group, user_id, status)
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
@@ -347,6 +285,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
     elsif group.group_type == UserGroup.group_types[:officers]
       metadata = RolesMetadataOfficers.create!(status: status)
+    elsif group.group_type == UserGroup.group_types[:councils]
+      metadata = RolesMetadataCouncils.create!(status: status)
     else
       metadata = nil
     end
@@ -363,43 +303,10 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     }
   end
 
-  def show
-    user_id = params.require(:userId)
-
-    user = User.find(user_id)
-    render json: {
-      roleData: {
-        delegateStatus: user.delegate_status,
-        regionId: user.region_id,
-        location: user.location,
-      },
-      regions: UserGroup.delegate_region_groups,
-    }
-  end
-
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
   # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
     id = params.require(:id)
-
-    if id == UserRole::DELEGATE_ROLE_ID
-      # This is an exception because we are editing more than a value. But this code is anyway
-      # temporary, once we are done with migration, this code will be removed.
-      user_id = params.require(:userId)
-      delegate_status = params.require(:delegateStatus)
-      region_id = params.require(:regionId)
-      location = params.require(:location)
-
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, region_id)
-
-      user = User.find(user_id)
-      user.update!(delegate_status: delegate_status, region_id: region_id, location: location)
-      send_role_change_notification(user)
-
-      return render json: {
-        success: true,
-      }
-    end
 
     if id.starts_with?('delegate-')
       # This tempoarily supports the non-migrated Delegate changes from the new UI.
@@ -480,18 +387,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def destroy
     id = params.require(:id)
-
-    if id == UserRole::DELEGATE_ROLE_ID
-      user_id = params.require(:userId)
-      user = User.find(user_id)
-
-      return head :unauthorized unless current_user.has_permission?(:can_edit_groups, user.region_id)
-
-      end_delegate_role_for_user(user)
-      return render json: {
-        success: true,
-      }
-    end
 
     if id.starts_with?('delegate-')
       user_id = id.split('delegate-').last
