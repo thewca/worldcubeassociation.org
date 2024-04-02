@@ -81,6 +81,26 @@ RSpec.describe Api::V0::UserGroupsController do
           GroupsMetadataDelegateRegions.find_by!(friendly_id: 'europe-south').user_group,
         ].to_json)
       end
+
+      it 'returns board group' do
+        get :index, params: {
+          groupType: UserGroup.group_types[:board],
+        }
+
+        expect(response.body).to eq([
+          UserGroup.board_group,
+        ].to_json)
+      end
+
+      it 'returns officer group' do
+        get :index, params: {
+          groupType: UserGroup.group_types[:officers],
+        }
+
+        expect(response.body).to eq([
+          UserGroup.officer_group,
+        ].to_json)
+      end
     end
   end
 end

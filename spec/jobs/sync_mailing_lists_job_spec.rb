@@ -55,7 +55,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
     translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
 
     # leaders@ mailing list
-    board_member = FactoryBot.create :user, :board_member, team_leader: false
     wct_member = FactoryBot.create :user, :wct_member, team_leader: false
     wct_china_member = FactoryBot.create :user, :wct_china_member, team_leader: false
     wcat_member = FactoryBot.create :user, :wcat_member, team_leader: false
@@ -78,7 +77,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wsot_leader = FactoryBot.create :user, :wsot_member, team_leader: true
     wat_member = FactoryBot.create :user, :wat_member, team_leader: false
     wat_leader = FactoryBot.create :user, :wat_member, team_leader: true
-    treasurer_role = FactoryBot.create :treasurer_role
 
     # organizations@ mailing list
     regional_organization = FactoryBot.create :regional_organization
@@ -93,7 +91,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # board@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "board@worldcubeassociation.org",
-      a_collection_containing_exactly(board_member.email),
+      a_collection_containing_exactly(*UserGroup.board.flat_map(&:active_users).map(&:email)),
     )
 
     # communication-china@ mailing list
@@ -213,7 +211,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # treasurer@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "treasurer@worldcubeassociation.org",
-      a_collection_containing_exactly(treasurer_role.user.email),
+      a_collection_containing_exactly(*UserGroup.officer_group_treasurers.map(&:user).map(&:email)),
     )
 
     # delegates.africa@ mailing list

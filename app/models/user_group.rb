@@ -178,6 +178,16 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wrt').user_group
   end
 
+  def self.officer_group
+    UserGroup.officers.first
+  end
+
+  def self.officer_group_treasurers
+    UserGroup.officer_group.active_roles.select do |role|
+      UserRole.status(role) == RolesMetadataOfficers.statuses[:treasurer]
+    end
+  end
+
   def self.council_group_wac
     GroupsMetadataCouncils.find_by(friendly_id: 'wac').user_group
   end

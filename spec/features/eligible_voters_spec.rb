@@ -24,7 +24,6 @@ RSpec.feature "Eligible voters csv" do
   let!(:delegate) { FactoryBot.create(:delegate_role, group_id: senior_delegate_role.group.id).user }
   let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
-  let!(:officer) { FactoryBot.create(:secretary_role) }
 
   before :each do
     sign_in board_member
@@ -38,15 +37,19 @@ RSpec.feature "Eligible voters csv" do
       visit "/admin/all-voters.csv"
 
       expect(page.response_headers['Content-Disposition']).to eq 'attachment; filename="all-wca-voters-2016-05-05T10%3A05%3A03Z.csv"; filename*=UTF-8\'\'all-wca-voters-2016-05-05T10%3A05%3A03Z.csv'
-      expect(CSV.parse(page.body)).to match_array [
-        ["password", team_leader.id.to_s, team_leader.email, team_leader.name],
-        ["password", team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
-        ["password", delegate.id.to_s, delegate.email, delegate.name],
-        ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
-        ["password", senior_delegate_role.user.id.to_s, senior_delegate_role.user.email, senior_delegate_role.user.name],
-        ["password", board_member.id.to_s, board_member.email, board_member.name],
-        ["password", officer.user.id.to_s, officer.user.email, officer.user.name],
-      ]
+      expect(CSV.parse(page.body)).to match_array(
+        (
+          [
+            ["password", team_leader.id.to_s, team_leader.email, team_leader.name],
+            ["password", team_senior_member.id.to_s, team_senior_member.email, team_senior_member.name],
+            ["password", delegate.id.to_s, delegate.email, delegate.name],
+            ["password", delegate_who_is_also_team_leader.id.to_s, delegate_who_is_also_team_leader.email, delegate_who_is_also_team_leader.name],
+            ["password", senior_delegate_role.user.id.to_s, senior_delegate_role.user.email, senior_delegate_role.user.name],
+          ] + [UserGroup.officers, UserGroup.board_group].flatten.flat_map(&:active_users).map do |user|
+            ["password", user.id.to_s, user.email, user.name]
+          end
+        ).uniq,
+      )
     end
   end
 

@@ -12,11 +12,13 @@ class TestDbManager
     RoundTypes
     teams
     user_groups
+    user_roles
     groups_metadata_delegate_regions
     groups_metadata_board
     groups_metadata_councils
     groups_metadata_teams_committees
     groups_metadata_translators
+    roles_metadata_officers
   ).freeze
 
   def self.fill_tables

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'rails_helper'
+require 'json'
 
 RSpec.describe Api::V0::UserRolesController do
   describe 'GET #list' do
@@ -16,6 +17,27 @@ RSpec.describe Api::V0::UserRolesController do
         claiming_wca_id: true,
         dob_verification: "1990-01-2",
       )
+    end
+
+    context 'when user is not logged in' do
+      it 'returns list of all roles of a user' do
+        user = UserRole.where(end_date: nil, group_id: UserGroup.officer_group.id).select { |role| role.metadata.status == RolesMetadataOfficers.statuses[:executive_director] }.first.user
+        get :index_for_user, params: { user_id: user.id }
+        expect(response.body).to eq([
+          user.roles[0],
+          user.roles[1],
+          user.roles[2],
+        ].to_json)
+      end
+
+      it 'returns list of roles of a user with filter group_type officers' do
+        user = UserRole.where(end_date: nil, group_id: UserGroup.officer_group.id).select { |role| role.metadata.status == RolesMetadataOfficers.statuses[:executive_director] }.first.user
+        get :index_for_user, params: { user_id: user.id, groupType: UserGroup.group_types[:officers] }
+        expect(response.body).to eq([
+          user.roles[1],
+          user.roles[2],
+        ].to_json)
+      end
     end
 
     context 'when user is logged in and changing role data' do
