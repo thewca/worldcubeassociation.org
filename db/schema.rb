@@ -864,7 +864,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_171344) do
     t.string "wca_status"
     t.index ["cancellation_source_type", "cancellation_source_id"], name: "index_stripe_payment_intents_on_canceled_by"
     t.index ["confirmation_source_type", "confirmation_source_id"], name: "index_stripe_payment_intents_on_confirmed_by"
-    t.index ["holder_type", "holder_id"], name: "index_stripe_payment_intents_on_holder"
+    t.index ["holder_type", "holder_id"], name: "index_payment_intents_on_holder"
     t.index ["initiated_by_id"], name: "fk_rails_2dbc373c0c"
     t.index ["payment_record_id"], name: "index_payment_intents_on_payment_record_id"
   end
@@ -1280,7 +1280,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_18_171344) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
-  add_foreign_key "payment_intents", "stripe_records", column: "payment_record_id"
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"

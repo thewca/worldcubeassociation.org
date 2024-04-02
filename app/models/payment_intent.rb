@@ -125,7 +125,7 @@ class PaymentIntent < ApplicationRecord
   end
 
   # Sets the wca_status field based on the status field of the associated PaymentRecord
-  def assign_wca_status!
+  def assign_wca_status
     self.wca_status = payment_record.determine_wca_status
   end
 
