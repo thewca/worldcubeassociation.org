@@ -176,7 +176,7 @@ class CompetitionsMailer < ApplicationMailer
   end
 
   private def delegates_to_regional_delegates_email(delegates)
-    delegates.flat_map { |delegate| delegate.region&.lead_user.email }.uniq.compact
+    delegates.flat_map { |delegate| delegate.regional_delegates.map(&:email) }.uniq.compact
   end
 
   private def delegate_report_email_subject(competition)
