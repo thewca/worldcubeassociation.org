@@ -18,5 +18,6 @@ module JobUtils
     SyncMailingListsJob,
     UnstickPosts,
     WeatMonthlyDigestJob,
+    DelegatesMetadataSyncJob,
   ].freeze
 end
