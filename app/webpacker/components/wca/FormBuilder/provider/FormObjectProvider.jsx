@@ -10,19 +10,19 @@ import _ from 'lodash';
 import { changesSaved, setErrors } from '../store/actions';
 import formReducer from '../store/reducer';
 
-const FormContext = createContext();
+const FormContext = createContext(null);
+
+const createState = (initialObject) => ({
+  object: initialObject,
+  initialObject,
+  errors: null,
+});
 
 export default function FormObjectProvider({
   children,
   initialObject,
 }) {
-  const initialState = useMemo(() => ({
-    object: initialObject,
-    initialObject,
-    errors: null,
-  }), [initialObject]);
-
-  const [formState, dispatch] = useReducer(formReducer, initialState);
+  const [formState, dispatch] = useReducer(formReducer, initialObject, createState);
 
   const unsavedChanges = useMemo(() => (
     !_.isEqual(formState.object, formState.initialObject)
