@@ -146,7 +146,7 @@ function EditPersonForm({ wcaId, clearWcaId, setResponse }) {
           showYearDropdown
           dropdownMode="select"
           disabled={!editedUserDetails}
-          selected={editedUserDetails?.dob}
+          isoDate={editedUserDetails?.dob}
           onChange={(date) => handleFormChange(null, {
             name: 'dob',
             value: date,
