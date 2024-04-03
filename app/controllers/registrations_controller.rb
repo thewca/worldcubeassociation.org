@@ -657,7 +657,7 @@ class RegistrationsController < ApplicationController
                 .each do |intent|
       intent_account_id = intent.payment_record.account_id
 
-      if intent_account_id == account_id && !intent.started?
+      if intent_account_id == account_id && intent.created?
         # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
         # so we need to make sure that the correct amount is being used)
         Stripe::PaymentIntent.update(

@@ -30,10 +30,6 @@ class PaymentIntent < ApplicationRecord
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
 
-  def started?
-    self.wca_status != 'created'
-  end
-
   def retrieve_intent
     if payment_record_type == 'StripeRecord'
       Stripe::PaymentIntent.retrieve(
@@ -66,12 +62,11 @@ class PaymentIntent < ApplicationRecord
 
         # Record the success timestamp if not already done
         unless self.succeeded?
-          self.assign_attributes(
+          self.update!(
             confirmed_at: source_datetime,
             confirmation_source: action_source,
             wca_status: payment_record.determine_wca_status,
           )
-          save
           payment_record.save
         end
 
@@ -103,7 +98,6 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: action_source,
           wca_status: payment_record.determine_wca_status,
         )
-        save
         payment_record.save
       when 'requires_payment_method'
         # Reset by Stripe
@@ -114,11 +108,9 @@ class PaymentIntent < ApplicationRecord
           cancellation_source: nil,
           wca_status: payment_record.determine_wca_status,
         )
-        save
         payment_record.save
       else
         self.update!(wca_status: payment_record.determine_wca_status)
-        save
         payment_record.save
       end
     end
