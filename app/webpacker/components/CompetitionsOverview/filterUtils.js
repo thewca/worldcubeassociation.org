@@ -101,7 +101,7 @@ export const createFilterState = (searchParams) => ({
   customStartDate: sanitizeDate(searchParams.get(START_DATE)),
   customEndDate: sanitizeDate(searchParams.get(END_DATE)),
   region: sanitizeRegion(searchParams.get(REGION)),
-  delegate: searchParams.get(DELEGATE) || DEFAULT_DELEGATE,
+  delegate: Number(searchParams.get(DELEGATE)) || DEFAULT_DELEGATE,
   search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
   selectedEvents:
     sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
