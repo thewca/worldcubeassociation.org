@@ -1,7 +1,11 @@
+import { DateTime } from 'luxon';
 import {
   events, continents, countries,
 } from '../../lib/wca-data.js.erb';
-import { DateTime } from 'luxon';
+
+// constants
+
+const WCA_EVENT_IDS = Object.keys(events.byId);
 
 const YEARS_WITH_PAST_COMPETITIONS = [];
 for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
@@ -37,6 +41,56 @@ const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
 const DEFAULT_EVENTS = [];
 const INCLUDE_CANCELLED_TRUE = 'on';
+
+// search param sanitizers
+
+const displayModes = ['list', 'map'];
+const sanitizeMode = (mode) => {
+  if (displayModes.includes(mode)) {
+    return mode;
+  }
+  return DEFAULT_DISPLAY_MODE;
+};
+
+const timeOrders = ['present', 'recent', 'past', 'by_announcement', 'custom'];
+const sanitizeTimeOrder = (order) => {
+  if (timeOrders.includes(order)) {
+    return order;
+  }
+  return DEFAULT_TIME_ORDER;
+};
+
+const sanitizeYear = (year) => {
+  if (YEARS_WITH_PAST_COMPETITIONS.includes(Number(year))) {
+    return Number(year);
+  }
+  return DEFAULT_YEAR;
+};
+
+const dateFormat = 'yyyy-MM-dd';
+const sanitizeDate = (date) => {
+  const luxonDate = DateTime.fromFormat(date || '', dateFormat);
+  if (luxonDate.isValid) {
+    return luxonDate.toFormat(dateFormat);
+  }
+  return DEFAULT_DATE;
+};
+
+const sanitizeRegion = (region) => {
+  if (region === 'all') return region;
+  const continent = continents.real.find(
+    ({ id, name }) => region === id || region === name,
+  );
+  const country = countries.real.find(({ id, iso2 }) => region === id || region === iso2);
+  return continent?.id ?? country?.iso2 ?? DEFAULT_REGION;
+};
+
+// TODO: also check `event_ids` param for backward compatibility
+const sanitizeEvents = (values) => (values || []).filter(
+  (value) => WCA_EVENT_IDS.includes(value),
+);
+
+// filter state
 
 export const getDisplayMode = (searchParams) => (
   sanitizeMode(searchParams.get(DISPLAY_MODE))
@@ -114,8 +168,6 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
 };
 
-const WCA_EVENT_IDS = Object.keys(events.byId);
-
 export const filterReducer = (state, action) => {
   switch (action.type) {
     case 'reset':
@@ -134,56 +186,4 @@ export const filterReducer = (state, action) => {
     default:
       return { ...state, ...action };
   }
-};
-
-// search param sanitizers
-
-const displayModes = ['list', 'map'];
-const sanitizeMode = (mode) => {
-  if (displayModes.includes(mode)) {
-    return mode;
-  } else {
-    return DEFAULT_DISPLAY_MODE;
-  }
-}
-
-const timeOrders = ['present', 'recent', 'past', 'by_announcement', 'custom'];
-const sanitizeTimeOrder = (order) => {
-  if (timeOrders.includes(order)) {
-    return order;
-  } else {
-    return DEFAULT_TIME_ORDER;
-  }
-};
-
-const  sanitizeYear = (year) => {
-  if (YEARS_WITH_PAST_COMPETITIONS.includes(Number(year))) {
-    return Number(year);
-  } else {
-    return DEFAULT_YEAR;
-  }
-};
-
-const dateFormat = 'yyyy-MM-dd';
-const sanitizeDate = (date) => {
-  const luxonDate = DateTime.fromFormat(date || "", dateFormat);
-  if (luxonDate.isValid) {
-    return luxonDate.toFormat(dateFormat);
-  } else {
-    return DEFAULT_DATE;
-  }
-};
-
-const sanitizeRegion = (region) => {
-  if (region === "all") return region;
-  const continent = continents.real.find(
-    ({ id, name }) => region === id || region === name
-  );
-  const country = countries.real.find(({ id, iso2 }) => region === id || region === iso2);
-  return continent?.id ?? country?.iso2 ?? DEFAULT_REGION;
-};
-
-// TODO: also check `event_ids` param for backward compatibility
-const sanitizeEvents = (values) => {
-  return (values || []).filter((value) => WCA_EVENT_IDS.includes(value));
 };
