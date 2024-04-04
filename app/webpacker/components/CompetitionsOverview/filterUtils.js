@@ -17,7 +17,10 @@ export { YEARS_WITH_PAST_COMPETITIONS };
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
+// --> handled by the fact that every non-number is interpreted as "default value" all_years
+//     which means that 'all+years' lands in this "catchall" despite not being explicitly converted
 // - region value was the name, is now the 2-char code (for non-continents)
+// --> handled in sanitizer below that checks for ID or ISO or name for backwards compatibility
 
 const DISPLAY_MODE = 'display';
 const TIME_ORDER = 'state';
