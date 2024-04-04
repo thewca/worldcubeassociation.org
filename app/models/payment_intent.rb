@@ -69,7 +69,6 @@ class PaymentIntent < ApplicationRecord
               confirmation_source: action_source,
               wca_status: payment_record.determine_wca_status,
             )
-            payment_record.save
           end
 
           intent_charges = Stripe::Charge.list(
@@ -100,7 +99,6 @@ class PaymentIntent < ApplicationRecord
             cancellation_source: action_source,
             wca_status: payment_record.determine_wca_status,
           )
-          payment_record.save
         when 'requires_payment_method'
           # Reset by Stripe
           self.update!(
@@ -110,10 +108,8 @@ class PaymentIntent < ApplicationRecord
             cancellation_source: nil,
             wca_status: payment_record.determine_wca_status,
           )
-          payment_record.save
         else
           self.update!(wca_status: payment_record.determine_wca_status)
-          payment_record.save
         end
       end
     end

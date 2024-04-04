@@ -67,7 +67,7 @@ class StripeRecord < ApplicationRecord
       stripe_error = api_transaction.failure_message
     end
 
-    self.update(
+    self.update!(
       stripe_status: api_transaction.status,
       error: stripe_error,
     )
