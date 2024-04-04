@@ -645,8 +645,9 @@ class RegistrationsController < ApplicationController
 
   def refund_payment
     registration = Registration.find(params[:id])
+    stripe_integration = registration.competition.payment_account_for(:stripe)
 
-    unless registration.competition.using_payment_integrations?
+    unless stripe_integration.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end
@@ -666,31 +667,16 @@ class RegistrationsController < ApplicationController
       return redirect_to edit_registration_path(registration)
     end
 
-    currency_iso = registration.competition.currency_code
-    stripe_amount = StripeRecord.amount_to_stripe(refund_amount, currency_iso)
-
     # Backwards compatibility: We may at some point try to record a refund for a payment that was
     #   - created before the introduction of receipts
     #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
     charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
 
-    refund_args = {
-      charge: charge_id,
-      amount: stripe_amount,
-    }
-
-    account_id = registration.competition.payment_account_for(:stripe).account_id
-
-    refund = Stripe::Refund.create(
-      refund_args,
-      stripe_account: account_id,
-    )
-
-    refund_receipt = StripeRecord.create_from_api(refund, refund_args, account_id)
-    refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
+    refund_receipt = stripe_integration.issue_refund(charge_id, refund_amount)
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
+    # FIXME: This method only exists because we silently assume it's Stripe
     ruby_money = refund_receipt.money_amount
 
     registration.record_refund(

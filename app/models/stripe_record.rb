@@ -167,7 +167,7 @@ class StripeRecord < ApplicationRecord
     amount_stripe_denomination.to_i
   end
 
-  def self.create_from_api(api_transaction, parameters, account_id = nil)
+  def self.create_from_api(api_transaction, parameters, account_id, parent_transaction = nil)
     StripeRecord.create!(
       stripe_record_type: api_transaction.object,
       parameters: parameters,
@@ -176,6 +176,7 @@ class StripeRecord < ApplicationRecord
       currency_code: api_transaction.currency,
       stripe_status: api_transaction.status,
       account_id: account_id,
+      parent_transaction: parent_transaction,
     )
   end
 end

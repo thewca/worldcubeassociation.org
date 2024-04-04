@@ -100,8 +100,7 @@ class PaymentIntent < ApplicationRecord
             if recorded_transaction.present?
               recorded_transaction.update_status(charge)
             else
-              fresh_transaction = StripeRecord.create_from_api(charge, {})
-              fresh_transaction.update!(parent_transaction: self.payment_record)
+              fresh_transaction = StripeRecord.create_from_api(charge, {}, self.account_id, self.payment_record)
 
               # Only trigger outer update blocks for charges that are actually successful. This is reasonable
               # because we only ever trigger this block for PIs that are marked "successful" in the first place

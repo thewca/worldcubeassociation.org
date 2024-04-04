@@ -49,4 +49,23 @@ class ConnectedStripeAccount < ApplicationRecord
       wca_status: stripe_record.determine_wca_status,
     )
   end
+
+  def issue_refund(charge_id, amount_iso)
+    charge_record = StripeRecord.charge.find_by!(stripe_id: charge_id)
+
+    currency_iso = charge_record.currency_code
+    stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
+
+    refund_args = {
+      charge: charge_id,
+      amount: stripe_amount,
+    }
+
+    refund = Stripe::Refund.create(
+      refund_args,
+      stripe_account: self.account_id,
+    )
+
+    StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
+  end
 end

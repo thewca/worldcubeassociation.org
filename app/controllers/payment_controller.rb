@@ -121,23 +121,11 @@ class PaymentController < ApplicationController
 
     return render json: { error: "refund_zero" } if refund_amount < 0
 
-    currency_iso = competition.currency_code
-    stripe_amount = StripeRecord.amount_to_stripe(refund_amount, currency_iso)
+    refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
 
-    refund_args = {
-      charge: charge.stripe_id,
-      amount: stripe_amount,
-    }
-
-    account_id = stripe_integration.account_id
-
-    refund = Stripe::Refund.create(
-      refund_args,
-      stripe_account: account_id,
-    )
-
-    refund_receipt = StripeRecord.create_from_api(refund, refund_args, account_id)
-    refund_receipt.update!(parent_transaction: charge)
+    # TODO: I'd rather not send this because it's implicitly clear we only allow refunds in the same currency
+    #   that the original payment was also made in.
+    currency_iso = refund_receipt.currency_code
 
     begin
       Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
