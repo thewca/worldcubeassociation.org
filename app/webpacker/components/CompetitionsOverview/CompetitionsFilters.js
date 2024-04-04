@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Button, Icon, Form, Dropdown, Popup, List, Input, Header,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import PulseLoader from 'react-spinners/PulseLoader';
 
 import I18n from '../../lib/i18n';
@@ -12,13 +11,9 @@ import {
 
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
+import { YEARS_WITH_PAST_COMPETITIONS } from './filterUtils';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
-const PAST_YEARS_WITH_COMPETITIONS = [];
-for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
-  PAST_YEARS_WITH_COMPETITIONS.push(year);
-}
-PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
 function CompetitionsFilters({
   filterState,
@@ -285,7 +280,7 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
           >
             {I18n.t('competitions.index.all_years')}
           </Dropdown.Item>
-          {PAST_YEARS_WITH_COMPETITIONS.map((year) => (
+          {YEARS_WITH_PAST_COMPETITIONS.map((year) => (
             <Dropdown.Item
               key={`past_select_${year}`}
               onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: year })}

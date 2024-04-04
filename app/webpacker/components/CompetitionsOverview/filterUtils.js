@@ -3,6 +3,14 @@ import {
 } from '../../lib/wca-data.js.erb';
 import { DateTime } from 'luxon';
 
+const YEARS_WITH_PAST_COMPETITIONS = [];
+for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
+  YEARS_WITH_PAST_COMPETITIONS.push(year);
+}
+YEARS_WITH_PAST_COMPETITIONS.push(1982);
+
+export { YEARS_WITH_PAST_COMPETITIONS };
+
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
 // - region value was the name, is now the 2-char code (for non-continents)
@@ -149,10 +157,10 @@ const sanitizeTimeOrder = (order) => {
 };
 
 const  sanitizeYear = (year) => {
-  if (Number.isNaN(Number(year)) || Number(year) === 0) {
-    return DEFAULT_YEAR;
-  } else {
+  if (YEARS_WITH_PAST_COMPETITIONS.includes(Number(year))) {
     return Number(year);
+  } else {
+    return DEFAULT_YEAR;
   }
 };
 
