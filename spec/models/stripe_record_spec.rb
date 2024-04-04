@@ -28,33 +28,10 @@ RSpec.describe StripeRecord do
       expect(record).to be_valid
     end
 
-    it 'doesnt allow an invalid status' do
+    it 'does not allow an invalid status' do
       expect {
         StripeRecord.new(stripe_status: 'random_invalid_status')
       }.to raise_error(ArgumentError)
-    end
-  end
-
-  describe 'enforce status consistency' do
-    shared_examples '#update StripeRecord to incompatible status' do |stripe_record_status, intent_status, new_stripe_status|
-      it 'fails' do
-        stripe_record = FactoryBot.create(:stripe_record, stripe_status: stripe_record_status)
-        FactoryBot.create(:payment_intent, payment_record: stripe_record, wca_status: intent_status)
-        stripe_record.reload
-        stripe_record.assign_attributes(stripe_status: new_stripe_status)
-        expect(stripe_record).not_to be_valid
-      end
-    end
-
-    context 'invalid status combinations' do
-      it_behaves_like '#update StripeRecord to incompatible status', 'requires_payment_method', 'created', 'processing'
-      it_behaves_like '#update StripeRecord to incompatible status', 'requires_capture', 'pending', 'legacy_failure'
-      it_behaves_like '#update StripeRecord to incompatible status', 'legacy_failure', 'failed', 'legacy_success'
-    end
-
-    it '#create valid PaymentIntent' do
-      intent = FactoryBot.build(:payment_intent)
-      expect(intent).to be_valid
     end
   end
 

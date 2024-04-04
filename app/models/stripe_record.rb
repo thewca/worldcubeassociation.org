@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class StripeRecord < ApplicationRecord
-  validate :valid_status_combination
   # NOTE: Should the list items be the keys or values of stripe_status? Should stripe_status be an enum or just a list?
   # TODO: Add a link to the Stripe status definitions/documentation
   WCA_TO_STRIPE_STATUS_MAP = {
@@ -58,7 +57,7 @@ class StripeRecord < ApplicationRecord
     self.account_id || parent_transaction&.find_account_id
   end
 
-  def assign_status(api_transaction)
+  def update_status!(api_transaction)
     stripe_error = nil
 
     case self.stripe_record_type
@@ -68,7 +67,7 @@ class StripeRecord < ApplicationRecord
       stripe_error = api_transaction.failure_message
     end
 
-    self.assign_attributes(
+    self.update(
       stripe_status: api_transaction.status,
       error: stripe_error,
     )
@@ -152,6 +151,11 @@ class StripeRecord < ApplicationRecord
       stripe_status: api_transaction.status,
       account_id: account_id,
     )
+  end
+
+  def update_payment_intent_status
+    return if payment_intent.nil?
+    payment_intent.update!(wca_status: determine_wca_status)
   end
 
   private

@@ -53,7 +53,7 @@ class PaymentIntent < ApplicationRecord
   def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
     ActiveRecord::Base.transaction do
       self.update!(error_details: api_intent.last_payment_error)
-      self.payment_record.assign_status(api_intent) # Will also update the wca_status
+      self.payment_record.update_status!(api_intent) # Will also update the wca_status
 
       # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
       case api_intent.status
