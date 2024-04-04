@@ -505,7 +505,7 @@ class RegistrationsController < ApplicationController
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
-      stored_intent = stored_record.stripe_payment_intent
+      stored_intent = stored_record.payment_intent
 
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
         if stored_intent.holder.is_a? Registration
@@ -536,7 +536,7 @@ class RegistrationsController < ApplicationController
     when StripeWebhookEvent::PAYMENT_INTENT_CANCELED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
-      stored_intent = stored_record.stripe_payment_intent
+      stored_intent = stored_record.payment_intent
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
@@ -554,7 +554,7 @@ class RegistrationsController < ApplicationController
     intent_secret = params[:payment_intent_client_secret]
 
     stored_record = StripeRecord.find_by(stripe_id: intent_id)
-    stored_intent = stored_record.stripe_payment_intent
+    stored_intent = stored_record.payment_intent
 
     unless stored_intent.client_secret == intent_secret
       flash[:error] = t("registrations.payment_form.errors.stripe_secret_invalid")
@@ -585,7 +585,7 @@ class RegistrationsController < ApplicationController
     end
 
     # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
-    case stored_record.status
+    case stored_record.stripe_status
     when 'succeeded'
       flash[:success] = t("registrations.payment_form.payment_successful")
     when 'requires_action'
@@ -652,12 +652,12 @@ class RegistrationsController < ApplicationController
       metadata: registration_metadata,
     }
 
-    registration.stripe_payment_intents
-                .pending
+    registration.payment_intents
+                .incomplete
                 .each do |intent|
-      intent_account_id = intent.stripe_record.account_id
+      intent_account_id = intent.payment_record.account_id
 
-      if intent_account_id == account_id && !intent.started?
+      if intent_account_id == account_id && intent.created?
         # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
         # so we need to make sure that the correct amount is being used)
         Stripe::PaymentIntent.update(
@@ -669,7 +669,7 @@ class RegistrationsController < ApplicationController
         updated_parameters = intent.parameters.deep_merge(payment_intent_args)
 
         # Update our own journals so that we know we changed something
-        intent.stripe_record.update!(
+        intent.payment_record.update!(
           parameters: updated_parameters,
           amount_stripe_denomination: stripe_amount,
           currency_code: currency_iso,
@@ -700,11 +700,12 @@ class RegistrationsController < ApplicationController
 
     # memoize the payment intent in our DB because payments are handled asynchronously
     # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
-    StripePaymentIntent.create!(
+    PaymentIntent.create!(
       holder: registration,
-      stripe_record: stripe_record,
+      payment_record: stripe_record,
       client_secret: intent.client_secret,
-      user: current_user,
+      initiated_by: current_user,
+      wca_status: stripe_record.determine_wca_status,
     )
 
     render json: { client_secret: intent.client_secret }
@@ -853,7 +854,7 @@ class RegistrationsController < ApplicationController
       capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
       PaypalRecord.create(
         record_id: capture_from_response['id'],
-        status: capture_from_response['status'],
+        paypal_status: capture_from_response['status'],
         payload: {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?
         amount_in_cents: capture_from_response['amount']['value'],
         currency_code: capture_from_response['amount']['currency_code'],

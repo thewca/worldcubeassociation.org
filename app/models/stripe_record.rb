@@ -1,7 +1,19 @@
 # frozen_string_literal: true
 
 class StripeRecord < ApplicationRecord
-  enum status: {
+  # NOTE: Should the list items be the keys or values of stripe_status? Should stripe_status be an enum or just a list?
+  # TODO: Add a link to the Stripe status definitions/documentation
+  WCA_TO_STRIPE_STATUS_MAP = {
+    created: %w[requires_payment_method legacy_payment_intent_registered legacy_unknown],
+    pending: %w[pending requires_capture requires_confirmation requires_action],
+    processing: %w[processing],
+    partial: %w[],
+    failed: %w[legacy_failure failed],
+    succeeded: %w[legacy_success succeeded],
+    canceled: %w[canceled],
+  }.freeze
+
+  enum stripe_status: {
     requires_payment_method: "requires_payment_method",
     requires_confirmation: "requires_confirmation",
     requires_action: "requires_action",
@@ -18,14 +30,14 @@ class StripeRecord < ApplicationRecord
   }
 
   # Actual values are according to Stripe API documentation as of 2023-03-12.
-  enum api_type: {
+  enum stripe_record_type: {
     payment_intent: "payment_intent",
     charge: "charge",
     refund: "refund",
   }
 
   has_one :registration_payment, as: :receipt
-  has_one :stripe_payment_intent
+  has_one :payment_intent, as: :payment_record
 
   belongs_to :parent_transaction, class_name: "StripeRecord", optional: true
   has_many :child_transactions, class_name: "StripeRecord", inverse_of: :parent_transaction, foreign_key: :parent_transaction_id
@@ -36,6 +48,11 @@ class StripeRecord < ApplicationRecord
   # Also saves us from some pains because JSON columns are highly inconsistent among MySQL and MariaDB.
   serialize :parameters, coder: JSON
 
+  def determine_wca_status
+    result = WCA_TO_STRIPE_STATUS_MAP.find { |key, values| values.include?(stripe_status) }
+    result&.first || raise("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
+  end
+
   def find_account_id
     self.account_id || parent_transaction&.find_account_id
   end
@@ -43,7 +60,7 @@ class StripeRecord < ApplicationRecord
   def update_status(api_transaction)
     stripe_error = nil
 
-    case self.api_type
+    case self.stripe_record_type
     when 'payment_intent'
       stripe_error = api_transaction.last_payment_error&.code
     when 'charge'
@@ -51,13 +68,13 @@ class StripeRecord < ApplicationRecord
     end
 
     self.update!(
-      status: api_transaction.status,
+      stripe_status: api_transaction.status,
       error: stripe_error,
     )
   end
 
   def retrieve_stripe
-    case self.api_type
+    case self.stripe_record_type
     when 'payment_intent'
       Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.find_account_id)
     when 'charge'
@@ -126,12 +143,12 @@ class StripeRecord < ApplicationRecord
 
   def self.create_from_api(api_transaction, parameters, account_id = nil)
     StripeRecord.create!(
-      api_type: api_transaction.object,
+      stripe_record_type: api_transaction.object,
       parameters: parameters,
       stripe_id: api_transaction.id,
       amount_stripe_denomination: api_transaction.amount,
       currency_code: api_transaction.currency,
-      status: api_transaction.status,
+      stripe_status: api_transaction.status,
       account_id: account_id,
     )
   end

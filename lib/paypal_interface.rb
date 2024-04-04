@@ -74,7 +74,7 @@ module PaypalInterface
     PaypalRecord.create(
       record_type: :payment,
       record_id: body["id"],
-      status: body["status"],
+      paypal_status: body["status"],
       payload: payload,
       amount_in_cents: outstanding_fees,
       currency_code: fee_currency,
@@ -116,7 +116,7 @@ module PaypalInterface
       refund = PaypalRecord.create(
         record_type: :refund,
         record_id: body["id"],
-        status: body["status"],
+        paypal_status: body["status"],
         payload: payload,
         amount_in_cents: refunded_order.amount_in_cents,
         currency_code: refunded_order.currency_code,
