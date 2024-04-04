@@ -53,8 +53,8 @@ class StripeRecord < ApplicationRecord
     result&.first || raise("No associated wca_status for stripe_status: #{stripe_status} - our tests should prevent this from happening!")
   end
 
-  def find_account_id
-    self.account_id || parent_transaction&.find_account_id
+  def account_id
+    super || parent_transaction&.account_id
   end
 
   def update_status(api_transaction)
@@ -76,11 +76,37 @@ class StripeRecord < ApplicationRecord
   def retrieve_stripe
     case self.stripe_record_type
     when 'payment_intent'
-      Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.find_account_id)
+      Stripe::PaymentIntent.retrieve(self.stripe_id, stripe_account: self.account_id)
     when 'charge'
-      Stripe::Charge.retrieve(self.stripe_id, stripe_account: self.find_account_id)
+      Stripe::Charge.retrieve(self.stripe_id, stripe_account: self.account_id)
     when 'refund'
-      Stripe::Refund.retrieve(self.stripe_id, stripe_account: self.find_account_id)
+      Stripe::Refund.retrieve(self.stripe_id, stripe_account: self.account_id)
+    end
+  end
+
+  def update_amount_remote(amount_iso, currency_iso)
+    if self.payment_intent?
+      stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
+
+      update_intent_args = {
+        amount: stripe_amount,
+        currency: currency_iso,
+      }
+
+      Stripe::PaymentIntent.update(
+        self.stripe_id,
+        update_intent_args,
+        stripe_account: self.account_id,
+      )
+
+      updated_parameters = self.parameters.deep_merge(update_intent_args)
+
+      # Update our own journals so that we know we changed something
+      self.update!(
+        parameters: updated_parameters,
+        amount_stripe_denomination: stripe_amount,
+        currency_code: currency_iso,
+      )
     end
   end
 

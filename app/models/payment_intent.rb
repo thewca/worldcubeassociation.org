@@ -13,7 +13,7 @@ class PaymentIntent < ApplicationRecord
   scope :incomplete, -> { where.not(wca_status: ['succeeded', 'canceled']) }
 
   # TODO: Refactor this or move it into this class
-  delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record
+  delegate :stripe_id, :stripe_status, :parameters, :money_amount, :account_id, to: :payment_record
 
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
@@ -35,7 +35,7 @@ class PaymentIntent < ApplicationRecord
       Stripe::PaymentIntent.retrieve(
         self.stripe_id,
         client_secret: client_secret,
-        stripe_account: self.find_account_id,
+        stripe_account: self.account_id,
       )
     else
       raise "Trying to call retrieve_intent for a PaymentIntent with unmatched payment_record_type of: #{payment_record_type}"
@@ -48,6 +48,24 @@ class PaymentIntent < ApplicationRecord
     else
       raise "Trying to update status and charges for a PaymentIntent with unmatched payment_record_type of: #{payment_record_type}"
     end
+  end
+
+  def self.prepare_intent_for(payment_account, registration, amount_iso, currency_iso)
+    registration.payment_intents
+                .incomplete
+                .each do |intent|
+      intent_account_id = intent.payment_record.account_id
+
+      if intent_account_id == payment_account.account_id && intent.created?
+        # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
+        # so we need to make sure that the correct amount is being used)
+        intent.payment_record.update_amount_remote(amount_iso, currency_iso)
+
+        return intent
+      end
+    end
+
+    payment_account.create_intent(registration, amount_iso, currency_iso)
   end
 
   private
@@ -73,7 +91,7 @@ class PaymentIntent < ApplicationRecord
 
           intent_charges = Stripe::Charge.list(
             { payment_intent: self.stripe_id },
-            stripe_account: self.find_account_id,
+            stripe_account: self.account_id,
           )
 
           intent_charges.data.each do |charge|

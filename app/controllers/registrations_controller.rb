@@ -634,79 +634,11 @@ class RegistrationsController < ApplicationController
     end
 
     competition = registration.competition
-    account_id = competition.payment_account_for(:stripe).account_id
 
-    registration_metadata = {
-      competition: competition.name,
-      registration_url: edit_registration_url(registration),
-    }
-
+    payment_account = competition.payment_account_for(:stripe)
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
-    stripe_amount = StripeRecord.amount_to_stripe(amount, currency_iso)
 
-    payment_intent_args = {
-      amount: stripe_amount,
-      currency: currency_iso,
-      receipt_email: user.email,
-      description: "Registration payment for #{competition.name}",
-      metadata: registration_metadata,
-    }
-
-    registration.payment_intents
-                .incomplete
-                .each do |intent|
-      intent_account_id = intent.payment_record.account_id
-
-      if intent_account_id == account_id && intent.created?
-        # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
-        # so we need to make sure that the correct amount is being used)
-        Stripe::PaymentIntent.update(
-          intent.stripe_id,
-          payment_intent_args,
-          stripe_account: account_id,
-        )
-
-        updated_parameters = intent.parameters.deep_merge(payment_intent_args)
-
-        # Update our own journals so that we know we changed something
-        intent.payment_record.update!(
-          parameters: updated_parameters,
-          amount_stripe_denomination: stripe_amount,
-          currency_code: currency_iso,
-        )
-
-        return render json: { client_secret: intent.client_secret }
-      end
-    end
-
-    # The Stripe API forces the user to provide a return_url when using automated payment methods.
-    # In our test suite however, we want to be able to confirm specific payment methods without a return URL
-    # because our CI containers are not exposed to the public. So we need this little hack :/
-    enable_automatic_pm = !Rails.env.test?
-
-    # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
-    # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
-    payment_intent_args[:automatic_payment_methods] = { enabled: enable_automatic_pm }
-
-    # Create the PaymentIntent, overriding the stripe_account for the request
-    # by the connected stripe account for the competition.
-    intent = Stripe::PaymentIntent.create(
-      payment_intent_args,
-      stripe_account: account_id,
-    )
-
-    # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, account_id)
-
-    # memoize the payment intent in our DB because payments are handled asynchronously
-    # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
-    PaymentIntent.create!(
-      holder: registration,
-      payment_record: stripe_record,
-      client_secret: intent.client_secret,
-      initiated_by: current_user,
-      wca_status: stripe_record.determine_wca_status,
-    )
+    intent = PaymentIntent.prepare_intent_for(payment_account, registration, amount, currency_iso)
 
     render json: { client_secret: intent.client_secret }
   end
