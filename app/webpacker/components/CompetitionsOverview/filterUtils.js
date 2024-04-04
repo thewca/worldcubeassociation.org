@@ -19,7 +19,6 @@ export { YEARS_WITH_PAST_COMPETITIONS };
 // - year value was 'all+years', is now 'all_years'
 // - region value was the name, is now the 2-char code (for non-continents)
 // - delegate value was user id, is now the WCA ID
-// - selected events key was 'event_ids' and they were not a list
 
 const DISPLAY_MODE = 'display';
 const TIME_ORDER = 'state';
@@ -29,7 +28,7 @@ const END_DATE = 'to_date';
 const REGION = 'region';
 const DELEGATE = 'delegate';
 const SEARCH = 'search';
-const SELECTED_EVENTS = 'events';
+const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
 
 const DEFAULT_DISPLAY_MODE = 'list';
@@ -39,7 +38,6 @@ const DEFAULT_DATE = null;
 const DEFAULT_REGION = 'all';
 const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
-const DEFAULT_EVENTS = [];
 const INCLUDE_CANCELLED_TRUE = 'on';
 
 // search param sanitizers
@@ -85,7 +83,6 @@ const sanitizeRegion = (region) => {
   return continent?.id ?? country?.iso2 ?? DEFAULT_REGION;
 };
 
-// TODO: also check `event_ids` param for backward compatibility
 const sanitizeEvents = (values) => (values || []).filter(
   (value) => WCA_EVENT_IDS.includes(value),
 );
@@ -105,7 +102,7 @@ export const createFilterState = (searchParams) => ({
   delegate: searchParams.get(DELEGATE) || DEFAULT_DELEGATE,
   search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
   selectedEvents:
-    sanitizeEvents(searchParams.get(SELECTED_EVENTS)?.split(',')?.filter(Boolean)),
+    sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
 });
 
@@ -141,9 +138,10 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   searchParams.set(SEARCH, search);
   searchParams.delete(SEARCH, DEFAULT_SEARCH);
 
-  // similarly for array-of-string values
-  searchParams.set(SELECTED_EVENTS, selectedEvents.join(','));
-  searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(','));
+  // first, delete previously selected events, then add new events.
+  // If no custom events are selected, this code does not change the URL, which is what we want.
+  searchParams.delete(SELECTED_EVENTS);
+  selectedEvents.forEach((selectedEvent) => searchParams.append(SELECTED_EVENTS, selectedEvent));
 
   // for date values, add them if applicable, otherwise omit them
   if (customStartDate) {
