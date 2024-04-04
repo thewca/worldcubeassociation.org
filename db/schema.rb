@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_26_194731) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -724,11 +724,25 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "groups_metadata_councils", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "email"
+    t.string "friendly_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "groups_metadata_delegate_regions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "friendly_id"
+  end
+
+  create_table "groups_metadata_teams_committees", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "email"
+    t.string "friendly_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "groups_metadata_translators", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -838,9 +852,33 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
     t.index ["access_grant_id"], name: "index_oauth_openid_requests_on_access_grant_id"
   end
 
+  create_table "payment_intents", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "holder_type"
+    t.bigint "holder_id"
+    t.string "payment_record_type"
+    t.bigint "payment_record_id"
+    t.text "client_secret"
+    t.text "error_details"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.integer "initiated_by_id"
+    t.datetime "confirmed_at", precision: nil
+    t.string "confirmation_source_type"
+    t.bigint "confirmation_source_id"
+    t.datetime "canceled_at", precision: nil
+    t.string "cancellation_source_type"
+    t.bigint "cancellation_source_id"
+    t.string "wca_status"
+    t.index ["cancellation_source_type", "cancellation_source_id"], name: "index_stripe_payment_intents_on_canceled_by"
+    t.index ["confirmation_source_type", "confirmation_source_id"], name: "index_stripe_payment_intents_on_confirmed_by"
+    t.index ["holder_type", "holder_id"], name: "index_payment_intents_on_holder"
+    t.index ["initiated_by_id"], name: "fk_rails_2dbc373c0c"
+    t.index ["payment_record_id"], name: "index_payment_intents_on_payment_record_id"
+  end
+
   create_table "paypal_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "record_id"
-    t.string "status"
+    t.string "paypal_status"
     t.string "payload"
     t.integer "amount_in_cents"
     t.string "currency_code"
@@ -959,6 +997,12 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
     t.index ["competition_id", "user_id"], name: "index_registrations_on_competition_id_and_user_id", unique: true
   end
 
+  create_table "roles_metadata_councils", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "status"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "roles_metadata_delegate_regions", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "status"
     t.string "location"
@@ -1054,42 +1098,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
     t.text "category"
   end
 
-  create_table "stripe_payment_intents", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "holder_type"
-    t.bigint "holder_id"
-    t.bigint "stripe_record_id"
-    t.text "client_secret"
-    t.text "error_details"
-    t.datetime "created_at", precision: nil, null: false
-    t.datetime "updated_at", precision: nil, null: false
-    t.integer "user_id"
-    t.datetime "confirmed_at", precision: nil
-    t.string "confirmed_by_type"
-    t.bigint "confirmed_by_id"
-    t.datetime "canceled_at", precision: nil
-    t.string "canceled_by_type"
-    t.bigint "canceled_by_id"
-    t.index ["canceled_by_type", "canceled_by_id"], name: "index_stripe_payment_intents_on_canceled_by"
-    t.index ["confirmed_by_type", "confirmed_by_id"], name: "index_stripe_payment_intents_on_confirmed_by"
-    t.index ["holder_type", "holder_id"], name: "index_payment_intents_on_holder"
-    t.index ["stripe_record_id"], name: "index_stripe_payment_intents_on_stripe_record_id"
-    t.index ["user_id"], name: "fk_rails_2dbc373c0c"
-  end
-
   create_table "stripe_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "api_type"
+    t.string "stripe_record_type"
     t.string "stripe_id"
     t.text "parameters", null: false
     t.integer "amount_stripe_denomination"
     t.string "currency_code"
-    t.string "status", null: false
+    t.string "stripe_status", null: false
     t.text "error"
     t.string "account_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "parent_transaction_id"
     t.index ["parent_transaction_id"], name: "fk_rails_6ad225b020"
-    t.index ["status"], name: "index_stripe_records_on_status"
+    t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
 
   create_table "stripe_webhook_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1271,10 +1293,10 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_11_053739) do
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
+  add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
-  add_foreign_key "stripe_payment_intents", "users"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_transaction_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
