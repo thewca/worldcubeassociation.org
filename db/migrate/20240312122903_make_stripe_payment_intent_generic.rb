@@ -15,8 +15,8 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
     end
 
     rename_table :stripe_payment_intents, :payment_intents
-    rename_index :payment_intents, 'index_stripe_payment_intents_on_holder', 'index_payment_intents_on_holder'
-    remove_foreign_key :payment_intents, :stripe_records
+    # rename_index :payment_intents, 'index_stripe_payment_intents_on_holder', 'index_payment_intents_on_holder'
+    # remove_foreign_key :payment_intents, :stripe_records
     rename_column :stripe_records, :status, :stripe_status
     rename_column :stripe_records, :api_type, :stripe_record_type
     rename_column :paypal_records, :status, :paypal_status
@@ -26,8 +26,7 @@ class MakeStripePaymentIntentGeneric < ActiveRecord::Migration[7.1]
         PaymentIntent.update_all(payment_record_type: 'StripeRecord')
 
         PaymentIntent.find_each do |intent|
-          intent.assign_wca_status
-          intent.save
+          intent.update(wca_status: intent.payment_record.determine_wca_status)
         end
       end
     end

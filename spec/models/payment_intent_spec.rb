@@ -42,12 +42,16 @@ RSpec.describe PaymentIntent do
       it_behaves_like '#create compatible PaymentIntent', 'requires_payment_method', 'created'
       it_behaves_like '#create compatible PaymentIntent', 'requires_confirmation', 'pending'
       it_behaves_like '#create compatible PaymentIntent', 'failed', 'failed'
+      it_behaves_like '#create compatible PaymentIntent', 'succeeded', 'succeeded'
+      it_behaves_like '#create compatible PaymentIntent', 'canceled', 'canceled'
     end
 
     context 'invalid status combinations' do
       it_behaves_like '#create incompatible PaymentIntent', 'pending', 'created'
       it_behaves_like '#create incompatible PaymentIntent', 'requires_payment_method', 'pending'
       it_behaves_like '#create incompatible PaymentIntent', 'legacy_success', 'failed'
+      it_behaves_like '#create incompatible PaymentIntent', 'failed', 'succeeded'
+      it_behaves_like '#create incompatible PaymentIntent', 'succeeded', 'canceled'
 
       it 'cannot have confirmed_at without the `succeeded` status' do
         intent = FactoryBot.build(:payment_intent, :canceled)

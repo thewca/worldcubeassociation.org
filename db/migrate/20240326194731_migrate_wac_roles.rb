@@ -20,10 +20,10 @@ class MigrateWacRoles < ActiveRecord::Migration[7.1]
   end
 
   def change
-    UserGroup.councils.each do |council|
-      Team.find_by(friendly_id: council.metadata.friendly_id).team_members.each do |member|
-        create_user_role_for_team_member(member, council)
-      end
-    end
+    # UserGroup.councils.each do |council|
+    #   Team.find_by(friendly_id: council.metadata.friendly_id).team_members.each do |member|
+    #     create_user_role_for_team_member(member, council)
+    #   end
+    # end
   end
 end

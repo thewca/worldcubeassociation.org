@@ -57,7 +57,7 @@ class StripeRecord < ApplicationRecord
     self.account_id || parent_transaction&.find_account_id
   end
 
-  def update_status!(api_transaction)
+  def update_status(api_transaction)
     stripe_error = nil
 
     case self.stripe_record_type
@@ -152,18 +152,4 @@ class StripeRecord < ApplicationRecord
       account_id: account_id,
     )
   end
-
-  def update_payment_intent_status
-    return if payment_intent.nil?
-    payment_intent.update!(wca_status: determine_wca_status)
-  end
-
-  private
-
-    def valid_status_combination
-      return if payment_intent.nil?
-
-      errors.add(:stripe_status, "is not compatible with PaymentIntent status: #{payment_intent.wca_status}") unless
-        StripeRecord::WCA_TO_STRIPE_STATUS_MAP[payment_intent.wca_status.to_sym].include?(stripe_status)
-    end
 end
