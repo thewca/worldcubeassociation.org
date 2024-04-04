@@ -181,7 +181,7 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
           {
             key: delegate.id,
             text: `${delegate.name} (${delegate.wca_id})`,
-            value: delegate.wca_id,
+            value: delegate.id,
             image: { avatar: true, src: delegate.thumb_url, style: { width: '28px', height: '28px' } },
           }
         )) || [])]}
