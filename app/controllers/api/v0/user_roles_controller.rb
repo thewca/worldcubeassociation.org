@@ -3,14 +3,6 @@
 class Api::V0::UserRolesController < Api::V0::ApiController
   include SortHelper
 
-  STATUS_SORTING_ORDER = {
-    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
-    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:board].to_sym => ["member"],
-    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
-  }.freeze
-
   GROUP_TYPE_RANK_ORDER = [
     UserGroup.group_types[:board],
     UserGroup.group_types[:officers],
@@ -18,13 +10,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     UserGroup.group_types[:delegate_regions],
     UserGroup.group_types[:councils],
   ].freeze
-
-  def self.status_sort_rank(role)
-    is_actual_role = role.is_a?(UserRole) # Eventually, all roles will be migrated to the new system, till then some roles will actually be hashes.
-    group_type = is_actual_role ? role.group.group_type : role[:group][:group_type]
-    status = UserRole.status(role) || ''
-    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
-  end
 
   SORT_WEIGHT_LAMBDAS = {
     startDate:
@@ -36,7 +21,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     groupTypeRank:
       lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
     status:
-      lambda { |role| status_sort_rank(role) },
+      lambda { |role| UserRole.status_sort_rank(role) },
     name:
       lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
     groupName:

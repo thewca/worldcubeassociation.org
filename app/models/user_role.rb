@@ -48,6 +48,20 @@ class UserRole < ApplicationRecord
     is_actual_role ? role.metadata[:status] : role[:metadata][:status]
   end
 
+  STATUS_SORTING_ORDER = {
+    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
+    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:board].to_sym => ["member"],
+    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+  }.freeze
+
+  def self.status_sort_rank(role)
+    group_type = UserRole.group_type(role)
+    status = UserRole.status(role) || ''
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+  end
+
   def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end

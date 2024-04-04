@@ -1428,7 +1428,7 @@ class User < ApplicationRecord
     highest_status_rank = nil
     highest_role = nil
     delegate_roles.each do |role|
-      status_rank = Api::V0::UserRolesController.status_sort_rank(role)
+      status_rank = UserRole.status_sort_rank(role)
       if highest_status_rank.nil? || status_rank < highest_status_rank
         highest_role = role
         highest_status_rank = status_rank
