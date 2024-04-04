@@ -1331,6 +1331,12 @@ class User < ApplicationRecord
       .map { |role| UserRole.group(role).senior_delegate }
   end
 
+  def regional_delegates
+    active_roles
+      .select { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+      .map { |role| UserRole.group(role).lead_user }
+  end
+
   def active_roles
     roles.select { |role| UserRole.is_active?(role) }
   end
