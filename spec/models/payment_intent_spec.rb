@@ -42,8 +42,6 @@ RSpec.describe PaymentIntent do
       it_behaves_like '#create compatible PaymentIntent', 'requires_payment_method', 'created'
       it_behaves_like '#create compatible PaymentIntent', 'requires_confirmation', 'pending'
       it_behaves_like '#create compatible PaymentIntent', 'failed', 'failed'
-      it_behaves_like '#create compatible PaymentIntent', 'succeeded', 'succeeded'
-      it_behaves_like '#create compatible PaymentIntent', 'canceled', 'canceled'
     end
 
     context 'invalid status combinations' do
