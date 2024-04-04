@@ -1,4 +1,7 @@
-import { events } from '../../lib/wca-data.js.erb';
+import {
+  events, continents, countries,
+} from '../../lib/wca-data.js.erb';
+import { DateTime } from 'luxon';
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
@@ -28,19 +31,19 @@ const DEFAULT_EVENTS = [];
 const INCLUDE_CANCELLED_TRUE = 'on';
 
 export const getDisplayMode = (searchParams) => (
-  searchParams.get(DISPLAY_MODE) || DEFAULT_DISPLAY_MODE
+  sanitizeMode(searchParams.get(DISPLAY_MODE))
 );
 
 export const createFilterState = (searchParams) => ({
-  timeOrder: searchParams.get(TIME_ORDER) || DEFAULT_TIME_ORDER,
-  selectedYear: searchParams.get(YEAR) || DEFAULT_YEAR,
-  customStartDate: searchParams.get(START_DATE) || DEFAULT_DATE,
-  customEndDate: searchParams.get(END_DATE) || DEFAULT_DATE,
-  region: searchParams.get(REGION) || DEFAULT_REGION,
+  timeOrder: sanitizeTimeOrder(searchParams.get(TIME_ORDER)),
+  selectedYear: sanitizeYear(searchParams.get(YEAR)),
+  customStartDate: sanitizeDate(searchParams.get(START_DATE)),
+  customEndDate: sanitizeDate(searchParams.get(END_DATE)),
+  region: sanitizeRegion(searchParams.get(REGION)),
   delegate: searchParams.get(DELEGATE) || DEFAULT_DELEGATE,
   search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
   selectedEvents:
-    searchParams.get(SELECTED_EVENTS)?.split(',')?.filter(Boolean) || DEFAULT_EVENTS,
+    sanitizeEvents(searchParams.get(SELECTED_EVENTS)?.split(',')?.filter(Boolean)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
 });
 
@@ -123,4 +126,56 @@ export const filterReducer = (state, action) => {
     default:
       return { ...state, ...action };
   }
+};
+
+// search param sanitizers
+
+const displayModes = ['list', 'map'];
+const sanitizeMode = (mode) => {
+  if (displayModes.includes(mode)) {
+    return mode;
+  } else {
+    return DEFAULT_DISPLAY_MODE;
+  }
+}
+
+const timeOrders = ['present', 'recent', 'past', 'by_announcement', 'custom'];
+const sanitizeTimeOrder = (order) => {
+  if (timeOrders.includes(order)) {
+    return order;
+  } else {
+    return DEFAULT_TIME_ORDER;
+  }
+};
+
+const  sanitizeYear = (year) => {
+  if (Number.isNaN(Number(year)) || Number(year) === 0) {
+    return DEFAULT_YEAR;
+  } else {
+    return Number(year);
+  }
+};
+
+const dateFormat = 'yyyy-MM-dd';
+const sanitizeDate = (date) => {
+  const luxonDate = DateTime.fromFormat(date || "", dateFormat);
+  if (luxonDate.isValid) {
+    return luxonDate.toFormat(dateFormat);
+  } else {
+    return DEFAULT_DATE;
+  }
+};
+
+const sanitizeRegion = (region) => {
+  if (region === "all") return region;
+  const continent = continents.real.find(
+    ({ id, name }) => region === id || region === name
+  );
+  const country = countries.real.find(({ id, iso2 }) => region === id || region === iso2);
+  return continent?.id ?? country?.iso2 ?? DEFAULT_REGION;
+};
+
+// TODO: also check `event_ids` param for backward compatibility
+const sanitizeEvents = (values) => {
+  return (values || []).filter((value) => WCA_EVENT_IDS.includes(value));
 };
