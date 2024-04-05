@@ -57,6 +57,10 @@ class StripeRecord < ApplicationRecord
     super || parent_transaction&.account_id
   end
 
+  def root_transaction
+    parent_transaction&.root_transaction || self
+  end
+
   def update_status(api_transaction)
     stripe_error = nil
 

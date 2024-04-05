@@ -67,7 +67,6 @@ class PaymentController < ApplicationController
 
   def available_refunds
     if current_user
-      # TODO: Why is this not referenced by our WCA-internal PI number?
       attendee_id = params.require(:attendee_id)
       competition_id, user_id = attendee_id.split("-")
 
@@ -77,14 +76,19 @@ class PaymentController < ApplicationController
       competition = ms_registration.competition
       return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
-      # FIXME: This currently breaks because there is no 1:1 association between MSReg and monolith PI
-      #   To fix this, have the microservice send over the PI number instead
-      intent = ms_registration.payment_intent
+      intents = ms_registration.payment_intents
 
-      charges = intent.payment_record.child_records.charge.map { |t|
-        {
-          payment_id: t.id,
-          amount: t.amount_stripe_denomination - t.child_records.refund.sum(:amount_stripe_denomination),
+      charges = intents.flat_map { |intent|
+        intent.payment_record.child_records.charge.map { |record|
+          paid_amount = record.amount_stripe_denomination
+          already_refunded = record.child_records.refund.sum(:amount_stripe_denomination)
+
+          available_amount = paid_amount - already_refunded
+
+          {
+            payment_id: record.id,
+            amount: StripeRecord.amount_to_ruby(available_amount, record.currency_code),
+          }
         }
       }
 
@@ -97,7 +101,6 @@ class PaymentController < ApplicationController
   def payment_refund
     payment_id = params.require(:payment_id)
 
-    # TODO: Why is this not referenced by our WCA-internal PI number?
     attendee_id = params.require(:attendee_id)
     competition_id, user_id = attendee_id.split("-")
 
@@ -105,16 +108,16 @@ class PaymentController < ApplicationController
     return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
 
     competition = ms_registration.competition
-    stripe_integration = competition.payment_account_for(:stripe)
-
-    return render json: { error: "no_stripe" } unless stripe_integration.present?
     return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
 
-    charge = StripeRecord.find(payment_id)
+    stripe_integration = competition.payment_account_for(:stripe)
+    return render json: { error: "no_stripe" } unless stripe_integration.present?
 
+    charge = StripeRecord.charge.find(payment_id)
     return render json: { error: "invalid_transaction" } unless charge.present?
 
-    return render json: { error: "non_refundable" } unless charge.charge?
+    intent = charge.root_transaction.payment_intent
+    return render json: { error: "invalid_transaction" } unless intent.holder == ms_registration
 
     refund_amount_param = params.require(:refund_amount)
     refund_amount = refund_amount_param.to_i
@@ -123,8 +126,6 @@ class PaymentController < ApplicationController
 
     refund_receipt = stripe_integration.issue_refund(charge.stripe_id, refund_amount)
 
-    # TODO: I'd rather not send this because it's implicitly clear we only allow refunds in the same currency
-    #   that the original payment was also made in.
     currency_iso = refund_receipt.currency_code
 
     begin
