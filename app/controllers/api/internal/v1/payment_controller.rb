@@ -14,7 +14,9 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     competition = Competition.find(competition_id)
     render json: { error: "Competition not found" }, status: :not_found unless competition_id.present?
 
-    ms_registration = competition.microservice_registrations.find_by(user_id: registering_user_id)
+    ms_registration = competition.microservice_registrations
+                                 .includes(:competition, :user)
+                                 .find_by(user_id: registering_user_id)
 
     render json: { error: "Registration not found" }, status: :not_found unless ms_registration.present?
     render json: { error: "Paying user not found" }, status: :not_found unless paying_user.present?

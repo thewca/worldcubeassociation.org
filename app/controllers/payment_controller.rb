@@ -65,7 +65,8 @@ class PaymentController < ApplicationController
       attendee_id = params.require(:attendee_id)
       competition_id, user_id = attendee_id.split("-")
 
-      ms_registration = MicroserviceRegistration.find_by(competition_id: competition_id, user_id: user_id)
+      ms_registration = MicroserviceRegistration.includes(:competition, :payment_intents)
+                                                .find_by(competition_id: competition_id, user_id: user_id)
       return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
 
       competition = ms_registration.competition
@@ -99,7 +100,8 @@ class PaymentController < ApplicationController
     attendee_id = params.require(:attendee_id)
     competition_id, user_id = attendee_id.split("-")
 
-    ms_registration = MicroserviceRegistration.find_by(competition_id: competition_id, user_id: user_id)
+    ms_registration = MicroserviceRegistration.includes(:competition)
+                                              .find_by(competition_id: competition_id, user_id: user_id)
     return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
 
     competition = ms_registration.competition
