@@ -617,9 +617,8 @@ class RegistrationsController < ApplicationController
   # This return URL handles record keeping and stuff at `payment_completion` above.
   def load_payment_intent
     registration = Registration.includes(:user, :competition).find(params[:id])
-    user = registration.user
 
-    unless user == current_user
+    unless registration.user_id == current_user.id
       return render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
     end
 
@@ -638,7 +637,7 @@ class RegistrationsController < ApplicationController
     payment_account = competition.payment_account_for(:stripe)
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
 
-    intent = PaymentIntent.prepare_intent_for(payment_account, registration, amount, currency_iso)
+    intent = PaymentIntent.prepare_intent_for(payment_account, registration, amount, currency_iso, current_user)
 
     render json: { client_secret: intent.client_secret }
   end

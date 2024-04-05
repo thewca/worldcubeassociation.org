@@ -3,7 +3,7 @@
 class ConnectedStripeAccount < ApplicationRecord
   has_one :competition_payment_integration, as: :connected_account
 
-  def create_intent(registration, amount_iso, currency_iso)
+  def create_intent(registration, amount_iso, currency_iso, paying_user)
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
     registration_metadata = {
@@ -45,7 +45,7 @@ class ConnectedStripeAccount < ApplicationRecord
       holder: registration,
       payment_record: stripe_record,
       client_secret: intent.client_secret,
-      initiated_by: current_user,
+      initiated_by: paying_user,
       wca_status: stripe_record.determine_wca_status,
     )
   end

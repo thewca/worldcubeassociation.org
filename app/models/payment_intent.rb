@@ -37,7 +37,7 @@ class PaymentIntent < ApplicationRecord
     end
   end
 
-  def self.prepare_intent_for(payment_account, registration, amount_iso, currency_iso)
+  def self.prepare_intent_for(payment_account, registration, amount_iso, currency_iso, paying_user)
     registration.payment_intents
                 .incomplete
                 .each do |intent|
@@ -50,7 +50,7 @@ class PaymentIntent < ApplicationRecord
       end
     end
 
-    payment_account.create_intent(registration, amount_iso, currency_iso)
+    payment_account.create_intent(registration, amount_iso, currency_iso, paying_user)
   end
 
   private
