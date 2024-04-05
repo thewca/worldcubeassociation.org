@@ -175,6 +175,7 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
         search
         deburr
         selection
+        error={!delegatesLoading && delegateId && delegatesData.every(({ id }) => id !== delegateId)}
         style={{ textAlign: 'center' }}
         options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesData?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
           {
