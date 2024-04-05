@@ -579,8 +579,8 @@ RSpec.describe "registrations" do
           charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
-          expect(charge.metadata.competition).to eq competition.name
-          expect(charge.metadata.registration_url).to eq edit_registration_url(registration)
+          expect(charge.metadata.competition).to eq competition.id
+          expect(charge.metadata.registration_id).to eq registration.id
           # Check that the website actually records who made the charge
           expect(registration.registration_payments.first.user).to eq user
         end
@@ -643,7 +643,7 @@ RSpec.describe "registrations" do
           expect(stripe_record).to_not be_nil
           expect(stripe_record.stripe_status).to eq "succeeded"
           metadata = stripe_record.parameters["metadata"]
-          expect(metadata["competition"]).to eq competition.name
+          expect(metadata["competition"]).to eq competition.id
         end
       end
 
@@ -707,7 +707,7 @@ RSpec.describe "registrations" do
           expect(stripe_record).to_not be_nil
           expect(stripe_record.stripe_status).to eq 'requires_action'
           metadata = stripe_record.parameters["metadata"]
-          expect(metadata["competition"]).to eq competition.name
+          expect(metadata["competition"]).to eq competition.id
         end
       end
 
@@ -890,7 +890,7 @@ RSpec.describe "registrations" do
           expect(stripe_record.stripe_status).to eq "requires_payment_method"
           expect(stripe_record.error).to_not be_nil
           metadata = stripe_record.parameters["metadata"]
-          expect(metadata["competition"]).to eq competition.name
+          expect(metadata["competition"]).to eq competition.id
         end
 
         it "recycles a PI when the previous payment was unsuccessful" do
