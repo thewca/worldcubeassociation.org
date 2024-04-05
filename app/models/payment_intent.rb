@@ -37,22 +37,6 @@ class PaymentIntent < ApplicationRecord
     end
   end
 
-  def self.prepare_intent_for(payment_account, registration, amount_iso, currency_iso, paying_user)
-    registration.payment_intents
-                .incomplete
-                .each do |intent|
-      if intent.account_id == payment_account.account_id && intent.created?
-        # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
-        # so we need to make sure that the correct amount is being used)
-        intent.payment_record.update_amount_remote(amount_iso, currency_iso)
-
-        return intent
-      end
-    end
-
-    payment_account.create_intent(registration, amount_iso, currency_iso, paying_user)
-  end
-
   private
 
     def update_stripe_status_and_charges(api_intent, action_source, source_datetime)

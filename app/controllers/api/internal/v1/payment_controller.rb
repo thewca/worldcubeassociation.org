@@ -26,7 +26,7 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
     amount_iso = params.require(:amount)
     currency_iso = params.require(:currency_code)
 
-    payment_intent = PaymentIntent.prepare_intent_for(payment_account, ms_registration, amount_iso, currency_iso, paying_user)
+    payment_intent = payment_account.prepare_intent(ms_registration, amount_iso, currency_iso, paying_user)
 
     render json: { id: payment_intent.id }
   end

@@ -637,7 +637,7 @@ class RegistrationsController < ApplicationController
     payment_account = competition.payment_account_for(:stripe)
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
 
-    intent = PaymentIntent.prepare_intent_for(payment_account, registration, amount, currency_iso, current_user)
+    intent = payment_account.prepare_intent(registration, amount, currency_iso, current_user)
 
     render json: { client_secret: intent.client_secret }
   end

@@ -3,7 +3,23 @@
 class ConnectedStripeAccount < ApplicationRecord
   has_one :competition_payment_integration, as: :connected_account
 
-  def create_intent(registration, amount_iso, currency_iso, paying_user)
+  def prepare_intent(registration, amount_iso, currency_iso, paying_user)
+    registration.payment_intents
+                .incomplete
+                .each do |intent|
+      if intent.account_id == self.account_id && intent.created?
+        # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
+        # so we need to make sure that the correct amount is being used)
+        intent.payment_record.update_amount_remote(amount_iso, currency_iso)
+
+        return intent
+      end
+    end
+
+    self.create_intent(registration, amount_iso, currency_iso, paying_user)
+  end
+
+  private def create_intent(registration, amount_iso, currency_iso, paying_user)
     stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
 
     registration_metadata = {
