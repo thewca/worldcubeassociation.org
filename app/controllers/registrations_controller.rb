@@ -562,7 +562,7 @@ class RegistrationsController < ApplicationController
     end
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
-    stripe_intent = stored_intent.retrieve_intent
+    stripe_intent = stored_intent.retrieve_remote
 
     unless stripe_intent.present?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_found")

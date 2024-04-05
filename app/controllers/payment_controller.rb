@@ -45,7 +45,7 @@ class PaymentController < ApplicationController
       return redirect_to Microservices::Registrations.competition_register_path(competition.id, "secret_invalid") unless payment_intent.client_secret == intent_secret
 
       # No need to create a new intent here. We can just query the stored intent from Stripe directly.
-      stripe_intent = payment_intent.retrieve_intent
+      stripe_intent = payment_intent.retrieve_remote
 
       return redirect_to Microservices::Registrations.competition_register_path(competition.id, "intent_not_found") unless stripe_intent.present?
 

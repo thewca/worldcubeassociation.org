@@ -84,6 +84,8 @@ class StripeRecord < ApplicationRecord
     end
   end
 
+  alias_method :retrieve_remote, :retrieve_stripe
+
   def update_amount_remote(amount_iso, currency_iso)
     if self.payment_intent?
       stripe_amount = StripeRecord.amount_to_stripe(amount_iso, currency_iso)
