@@ -6,12 +6,11 @@ import PulseLoader from 'react-spinners/PulseLoader';
 
 import I18n from '../../lib/i18n';
 import {
-  events, continents, countries, competitionConstants,
+  events, continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
-import { YEARS_WITH_PAST_COMPETITIONS } from './filterUtils';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
@@ -280,7 +279,7 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
           >
             {I18n.t('competitions.index.all_years')}
           </Dropdown.Item>
-          {YEARS_WITH_PAST_COMPETITIONS.map((year) => (
+          {nonFutureCompetitionYears.map((year) => (
             <Dropdown.Item
               key={`past_select_${year}`}
               onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: year })}

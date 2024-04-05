@@ -142,6 +142,8 @@ export const competitionConstants = {
   competitionRecentDays: <%= Competition::RECENT_DAYS %>,
 };
 
+export const nonFutureCompetitionYears = <%= Competition.non_future_years.to_json %>
+
 // ----- RAILS ENV -----
 
 export const railsEnv = '<%= Rails.env %>';

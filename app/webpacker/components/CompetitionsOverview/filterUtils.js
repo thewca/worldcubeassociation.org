@@ -1,19 +1,11 @@
 import { DateTime } from 'luxon';
 import {
-  events, continents, countries,
+  events, continents, countries, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
 // constants
 
 const WCA_EVENT_IDS = Object.keys(events.byId);
-
-const YEARS_WITH_PAST_COMPETITIONS = [];
-for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
-  YEARS_WITH_PAST_COMPETITIONS.push(year);
-}
-YEARS_WITH_PAST_COMPETITIONS.push(1982);
-
-export { YEARS_WITH_PAST_COMPETITIONS };
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
@@ -61,7 +53,7 @@ const sanitizeTimeOrder = (order) => {
 };
 
 const sanitizeYear = (year) => {
-  if (YEARS_WITH_PAST_COMPETITIONS.includes(Number(year))) {
+  if (nonFutureCompetitionYears.includes(Number(year))) {
     return Number(year);
   }
   return DEFAULT_YEAR;
