@@ -71,7 +71,7 @@ export default function RegionalRecords({ results, title, recordTypes }) {
         {title}
       </h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
-        <Table striped>
+        <Table striped unstackable>
           <TableHeader>
             <TableRow>
               <TableHeaderCell>

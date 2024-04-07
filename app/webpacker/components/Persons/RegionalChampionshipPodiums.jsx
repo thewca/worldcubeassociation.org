@@ -48,7 +48,7 @@ export default function RegionalChampionshipPodiums({
     <div className="wc-podiums">
       <h3 className="text-center">{title}</h3>
       <div style={{ overflowX: 'auto', marginBottom: '0.75rem' }}>
-        <Table striped>
+        <Table striped unstackable>
           <TableHeader>
             <TableRow>
               <TableHeaderCell className="event"><I18nHTMLTranslate i18nKey="competitions.results_table.event" /></TableHeaderCell>
