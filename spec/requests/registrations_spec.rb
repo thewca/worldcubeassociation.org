@@ -579,8 +579,9 @@ RSpec.describe "registrations" do
           charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
+          # Stripe stores everything under "metadata" as string, even if we originally pass in integers
           expect(charge.metadata.competition).to eq competition.id
-          expect(charge.metadata.registration_id).to eq registration.id
+          expect(charge.metadata.registration_id.to_i).to eq registration.id
           # Check that the website actually records who made the charge
           expect(registration.registration_payments.first.user).to eq user
         end
