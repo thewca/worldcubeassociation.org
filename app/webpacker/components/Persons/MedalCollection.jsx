@@ -14,7 +14,7 @@ export default function MedalCollection({
       <h3 className="text-center">
         <I18nHTMLTranslate i18nKey="persons.show.medal_collection" />
       </h3>
-      <Table striped basic="very" textAlign="center" structured>
+      <Table striped basic="very" textAlign="center" structured unstackable>
         <TableHeader fullWidth>
           <TableRow textAlign="center">
             <TableHeaderCell width={3}>
