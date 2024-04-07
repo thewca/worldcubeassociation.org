@@ -17,6 +17,7 @@
       attempts: result.solve_times.map { |time| time.clock_format },
       singleRecord: result.regionalSingleRecord,
       averageRecord: result.regionalAverageRecord,
+      trimmedIdx: result.trimmed_indices,
     }},
     title: title,
     recordTypes: record_types,
