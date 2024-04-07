@@ -101,12 +101,7 @@ class UserRole < ApplicationRecord
     group_type = UserRole.group_type(role)
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      [
-        RolesMetadataDelegateRegions.statuses[:senior_delegate],
-        RolesMetadataDelegateRegions.statuses[:regional_delegate],
-        RolesMetadataDelegateRegions.statuses[:delegate],
-        RolesMetadataDelegateRegions.statuses[:junior_delegate],
-      ].include?(UserRole.status(role))
+      ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(UserRole.status(role))
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true
     else
