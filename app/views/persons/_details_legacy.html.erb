@@ -1,0 +1,44 @@
+<div>
+  <div class="text-center">
+    <h2>
+      <%= @person.name %>
+      <% if @person.user && current_user&.can_edit_user?(@person.user) %>
+        <%= link_to ui_icon("edit"), edit_user_path(@person.user) %>
+      <% end %>
+    </h2>
+    <!-- Handle multiple sub ids. -->
+    <% if @previous_persons.any? %>
+      <h4>
+        (<%= t 'persons.show.previously' %> <%= @previous_persons.map { |person| "#{person.name} - #{person.country.name}" }.join(', ') %>)
+      </h4>
+    <% end %>
+    <% if @person.user %>
+      <%= react_component("Persons/Badges", {
+        userId: @person.user&.id,
+      }) %>
+    <% end %>
+    <% if @person.user&.avatar %>
+      <%= image_tag @person.user.avatar.url, class: "avatar" %>
+    <% end %>
+  </div>
+  <div class="details">
+    <table class="table table-striped" data-toggle="table" data-mobile-responsive="true">
+      <thead>
+        <tr>
+          <th><%= t 'common.country' %></th>
+          <th><%= t 'common.user.wca_id' %></th>
+          <%= content_tag :th, t('activerecord.attributes.person.gender') if @person.gender_visible? %>
+          <th><%= t 'layouts.navigation.competitions' %></th>
+          <th><%= t 'persons.show.completed_solves' %></th>
+        </tr>
+      </thead>
+      <tbody>
+        <td class="country"><%= flag_icon @person.country_iso2 %> <%= @person.country.name %></td>
+        <td><%= @person.wca_id %></td>
+        <%= content_tag :td, User::GENDER_LABEL_METHOD.call(@person.gender.to_sym) if @person.gender_visible? %>
+        <td><%= @person.competitions.count %></td>
+        <td><%= @person.completed_solves_count %></td>
+      </tbody>
+    </table>
+  </div>
+</div>
