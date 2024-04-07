@@ -105,7 +105,7 @@ class UserRole < ApplicationRecord
         RolesMetadataDelegateRegions.statuses[:senior_delegate],
         RolesMetadataDelegateRegions.statuses[:regional_delegate],
         RolesMetadataDelegateRegions.statuses[:delegate],
-        RolesMetadataDelegateRegions.statuses[:candidate_delegate],
+        RolesMetadataDelegateRegions.statuses[:junior_delegate],
       ].include?(UserRole.status(role))
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true

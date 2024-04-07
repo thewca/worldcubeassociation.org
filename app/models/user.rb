@@ -555,7 +555,7 @@ class User < ApplicationRecord
   end
 
   def any_kind_of_delegate?
-    !delegate_roles.empty
+    delegate_roles.any?
   end
 
   def trainee_delegate?
@@ -1012,7 +1012,7 @@ class User < ApplicationRecord
     roles = delegate_groups.flat_map(&:active_roles).select do |role|
       [
         RolesMetadataDelegateRegions.statuses[:trainee_delegate],
-        RolesMetadataDelegateRegions.statuses[:candidate_delegate],
+        RolesMetadataDelegateRegions.statuses[:junior_delegate],
       ].include?(UserRole.status(role))
     end
     eligible_delegate_users = roles.map { |role| UserRole.user(role) }

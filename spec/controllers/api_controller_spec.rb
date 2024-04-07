@@ -240,7 +240,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
         expect(response.status).to eq 200
         json = JSON.parse(response.body)
 
-        expect(json['me']['delegate_status']).to eq 'candidate_delegate'
+        expect(json['me']['delegate_status']).to eq 'junior_delegate'
       end
     end
 

@@ -29,7 +29,7 @@ const isLead = (role) => role.metadata.status === 'leader';
 
 const canPromote = (role) => (
   [
-    statusObjectOfGroupType(role.group.group_type).candidate_delegate,
+    statusObjectOfGroupType(role.group.group_type).trainee_delegate,
     statusObjectOfGroupType(role.group.group_type).junior_delegate,
   ].includes(role.metadata.status)
 );
