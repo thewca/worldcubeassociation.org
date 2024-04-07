@@ -25,10 +25,17 @@ function MarkerForCompetition({ competition }) {
 }
 
 export default function CompetitionsMap({ competitions }) {
+  let sumLat = 0;
+  let sumLon = 0;
+  competitions.forEach((comp) => {
+    sumLat += comp.latitude_degrees;
+    sumLon += comp.longitude_degrees;
+  });
+
   return (
     <MapContainer
       style={{ height: '500px', width: '100%' }}
-      center={[0, 0]}
+      center={[sumLat / competitions.length, sumLon / competitions.length]}
       zoom={2}
     >
       <TileLayer
