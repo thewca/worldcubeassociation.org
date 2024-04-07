@@ -1,0 +1,25 @@
+<div class="col-md-6 medal-collection">
+  <h3 class="text-center"><%= t 'persons.show.medal_collection' %></h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th><%= t 'persons.show.medals.gold' %></th>
+        <th><%= t 'persons.show.medals.silver' %></th>
+        <th><%= t 'persons.show.medals.bronze' %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>
+          <%= link_to @medals[:gold], "#", class: "highlight-medal", data: { place:"gold" } %>
+        </td>
+        <td>
+          <%= link_to @medals[:silver], "#", class: "highlight-medal", data: { place:"silver" } %>
+        </td>
+        <td>
+          <%= link_to @medals[:bronze], "#", class: "highlight-medal", data: { place:"bronze" } %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
