@@ -1,3 +1,9 @@
-<%= render "regional_records", title: t('persons.show.world_records'), record_types: ["WR"] %>
-<%= render "regional_records", title: t('persons.show.continental_records'), record_types: %w(ER NAR SAR AsR OcR AfR) %>
-<%= render "regional_records", title: t('persons.show.national_records'), record_types: ["NR"] %>
+<% if @enable_react %>
+  <%= render "regional_records", title: t('persons.show.world_records'), record_types: ["WR"] %>
+  <%= render "regional_records", title: t('persons.show.continental_records'), record_types: %w(ER NAR SAR AsR OcR AfR) %>
+  <%= render "regional_records", title: t('persons.show.national_records'), record_types: ["NR"] %>
+<% else %>
+  <%= render "regional_records_legacy", title: t('persons.show.world_records'), record_types: ["WR"] %>
+  <%= render "regional_records_legacy", title: t('persons.show.continental_records'), record_types: %w(ER NAR SAR AsR OcR AfR) %>
+  <%= render "regional_records_legacy", title: t('persons.show.national_records'), record_types: ["NR"] %>
+<% end %>

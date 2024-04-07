@@ -3,26 +3,22 @@
    end %>
 
 <% if results.any? %>
-   <% if @enable_react %>
-    <%= react_component("Persons/RegionalRecords", {
-      results: results.map { |result| {
-        id: result.id,
-        eventId: result.event.id,
-        best: result.best_solve.clock_format,
-        average: result.average_solve.clock_format,
-        competitionName: result.competition.name,
-        competitionUrl: result.competition.internal_website,
-        roundTypeId: result.roundTypeId,
-        bestIdx: result.best_index,
-        worstIdx: result.worst_index,
-        attempts: result.solve_times.map { |time| time.clock_format },
-        singleRecord: result.regionalSingleRecord,
-        averageRecord: result.regionalAverageRecord,
-      }},
-      title: title,
-      recordTypes: record_types,
-    }) %>
-  <% else %>
-    <%= render 'regional_records_legacy', title: title, record_types: record_types %>
-  <% end %>
+  <%= react_component("Persons/RegionalRecords", {
+    results: results.map { |result| {
+      id: result.id,
+      eventId: result.event.id,
+      best: result.best_solve.clock_format,
+      average: result.average_solve.clock_format,
+      competitionName: result.competition.name,
+      competitionUrl: result.competition.internal_website,
+      roundTypeId: result.roundTypeId,
+      bestIdx: result.best_index,
+      worstIdx: result.worst_index,
+      attempts: result.solve_times.map { |time| time.clock_format },
+      singleRecord: result.regionalSingleRecord,
+      averageRecord: result.regionalAverageRecord,
+    }},
+    title: title,
+    recordTypes: record_types,
+  }) %>
 <% end %>
