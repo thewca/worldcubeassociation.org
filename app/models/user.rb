@@ -240,7 +240,7 @@ class User < ApplicationRecord
         errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
       end
 
-      if delegate_id_to_handle_wca_id_claim.present? && !User.find_by(id: delegate_id_to_handle_wca_id_claim).any_kind_of_delegate?
+      if delegate_id_to_handle_wca_id_claim.present? && !User.find(delegate_id_to_handle_wca_id_claim).any_kind_of_delegate?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
@@ -1425,16 +1425,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
-    highest_status_rank = nil
-    highest_role = nil
-    delegate_roles.each do |role|
-      status_rank = UserRole.status_sort_rank(role)
-      if highest_status_rank.nil? || status_rank < highest_status_rank
-        highest_role = role
-        highest_status_rank = status_rank
-      end
-    end
-    highest_role
+    delegate_roles.max_by { |role| UserRole.status_sort_rank(role) }
   end
 
   def delegate_status
@@ -1442,7 +1433,7 @@ class User < ApplicationRecord
   end
 
   def region_id
-    highest_delegate_role&.group&.id
+    highest_delegate_role&.group_id
   end
 
   def location

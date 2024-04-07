@@ -25,6 +25,9 @@ FactoryBot.define do
 
     trait :delegate_regions do
       group { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group }
+      after(:create) do |user_role|
+        user_role.metadata.update!(location: 'Zimbabwe')
+      end
     end
 
     trait :delegate_regions_senior_delegate do
