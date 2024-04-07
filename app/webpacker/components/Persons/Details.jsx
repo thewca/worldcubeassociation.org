@@ -2,11 +2,11 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import {
+  Icon,
   Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import Badges from './Badges';
-import UIIcon from '../wca/UIIcon';
 
 function PreviousDetails({ prev }) {
   return (
@@ -43,7 +43,7 @@ export default function Details({
           {canEditUser && (
             <a href={editUrl}>
               {' '}
-              <UIIcon name="edit" />
+              <Icon name="edit" />
             </a>
           )}
         </h2>
@@ -58,7 +58,7 @@ export default function Details({
         )}
       </div>
       <div className="details" style={{ marginBottom: '0.75rem' }}>
-        <Table striped basic="very" textAlign="center" structured>
+        <Table striped basic="very" textAlign="center" structured unstackable>
           <TableHeader fullWidth>
             <TableRow textAlign="center">
               <TableHeaderCell>
