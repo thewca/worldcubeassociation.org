@@ -34,11 +34,6 @@ FactoryBot.define do
       after(:create) do |user|
         software_admin_team = Rails.env.production? ? Team.wst_admin : Team.wst
         FactoryBot.create(:team_member, team_id: software_admin_team.id, user_id: user.id, team_leader: true)
-        user.current_team_members.reload # Without this reload, somehow user.current_team_members is
-        # considering old value, and the team_member created is not considered. This is happening in
-        # many tests like bin/rspec spec/models/user_spec.rb. Surprisingly, this works without
-        # reload if the new delegate_status method is removed. There is some kind of cache happening
-        # when delegate_status method access current_team_members through active_roles method.
       end
     end
 
@@ -59,126 +54,108 @@ FactoryBot.define do
     trait :wrt_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wdc_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wdpc_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wdpc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wdc_leader do
       after(:create) do |user|
         FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_leader: true)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :banned do
       after(:create) do |user|
         FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wrc_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wct_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wct_china_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wct_china.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wqac_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wcat_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wcat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wec_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :weat_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.weat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wfc_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wmt_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wmt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wst_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wst_admin_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wst_admin.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wsot_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wsot.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 
     trait :wat_member do
       after(:create) do |user, options|
         FactoryBot.create(:team_member, team_id: Team.wat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-        user.current_team_members.reload # See comment in factory :admin.
       end
     end
 

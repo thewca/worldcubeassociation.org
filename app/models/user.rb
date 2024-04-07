@@ -551,7 +551,8 @@ class User < ApplicationRecord
   end
 
   def delegate_roles
-    active_roles.filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    active_delegate_roles = UserRole.where(user_id: self.id, end_date: nil)
+    active_delegate_roles.filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
   end
 
   def any_kind_of_delegate?
