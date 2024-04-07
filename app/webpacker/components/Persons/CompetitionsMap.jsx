@@ -33,17 +33,19 @@ export default function CompetitionsMap({ competitions }) {
   });
 
   return (
-    <MapContainer
-      style={{ height: '500px', width: '100%' }}
-      center={[sumLat / competitions.length, sumLon / competitions.length]}
-      zoom={2}
-    >
-      <TileLayer
-        url={userTileProvider.url}
-        attribution={userTileProvider.attribution}
-        maxZoom={19}
-      />
-      {competitions.map((comp) => (<MarkerForCompetition key={comp.id} competition={comp} />))}
-    </MapContainer>
+    <div style={{ height: '500px', width: '100%' }}>
+      <MapContainer
+        style={{ height: '100%' }}
+        center={[sumLat / competitions.length, sumLon / competitions.length]}
+        zoom={2}
+      >
+        <TileLayer
+          url={userTileProvider.url}
+          attribution={userTileProvider.attribution}
+          maxZoom={19}
+        />
+        {competitions.map((comp) => (<MarkerForCompetition key={comp.id} competition={comp} />))}
+      </MapContainer>
+    </div>
   );
 }
