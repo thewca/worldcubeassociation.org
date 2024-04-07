@@ -1,0 +1,19 @@
+<div class="col-md-6 record-collection">
+  <h3 class="text-center"><%= t 'persons.show.record_collection' %></h3>
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>WR</th>
+        <th>CR</th>
+        <th>NR</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><%= @records[:world] if @records[:world] > 0 %></td>
+        <td><%= @records[:continental] if @records[:continental] > 0 %></td>
+        <td><%= @records[:national] if @records[:national] > 0 %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
