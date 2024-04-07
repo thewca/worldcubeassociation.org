@@ -207,6 +207,21 @@ module CompetitionsHelper
     end.to_json.html_safe
   end
 
+  def competitions_for_markers(competitions)
+    competitions.map do |c|
+      {
+        id: c.id,
+        name: c.name,
+        latitude_degrees: c.latitude_degrees,
+        longitude_degrees: c.longitude_degrees,
+        cityName: c.cityName,
+        marker_date: wca_date_range(c.start_date, c.end_date),
+        is_probably_over: c.is_probably_over?,
+        url: competition_path(c),
+      }
+    end
+  end
+
   def first_and_last_time_from_activities(activities, timezone)
     # The goal of this function is to determine what should be the starting and ending points in the time axis of the calendar.
     # Which means we need to find the earliest start_time (and latest end_time) for any activity occuring on all days, expressed in the local timezone.
