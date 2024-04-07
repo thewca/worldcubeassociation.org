@@ -5,28 +5,8 @@ import {
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import EventIcon from '../wca/EventIcon';
 import { events } from '../../lib/wca-data.js.erb';
+import { AttemptItem } from './TableComponents';
 
-/* eslint-disable jsx-a11y/control-has-associated-label */
-
-/**
- * @typedef {Object} Result
- * @property {number} id
- * @property {string} eventId
- * @property {string} best
- * @property {string} average
- * @property {string} competitionName
- * @property {string} competitionUrl
- * @property {string} roundTypeId
- * @property {number} bestIdx
- * @property {number} worstIdx
- * @property {string[]} attempts
- * @property {string} singleRecord
- * @property {string} averageRecord
-* */
-
-/**
- * @param results {Result[]}
- */
 function groupByEvent(results) {
   const grouped = {};
   results.forEach((result) => {
@@ -38,25 +18,6 @@ function groupByEvent(results) {
   return grouped;
 }
 
-/**
- * @param result {Result}
- * @param attemptNumber {number}
- */
-function AttemptItem({ result, attemptNumber }) {
-  const attempt = result.attempts[attemptNumber];
-  const best = result.bestIdx === attemptNumber;
-  const worst = result.worstIdx === attemptNumber;
-
-  const text = best || worst ? `(${attempt})` : attempt;
-  return (<TableCell>{text}</TableCell>);
-}
-
-/**
- *
- * @param eventId {string}
- * @param results {Result[]}
- * @param recordTypes {string[]}
- */
 function DrawEventResults({ eventId, results, recordTypes }) {
   return (
     <>
@@ -100,11 +61,6 @@ Object.entries(events.byId).forEach((entry) => {
   allEvents.push(entry[1].id);
 });
 
-/**
- * @param results {Result[]}
- * @param title {string}
- * @param recordTypes {string[]}
- */
 export default function RegionalRecords({ results, title, recordTypes }) {
   if (results.length === 0) return null;
 
