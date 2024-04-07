@@ -12,7 +12,7 @@ export default function RecordCollection({
       <h3 className="text-center">
         <I18nHTMLTranslate i18nKey="persons.show.record_collection" />
       </h3>
-      <Table striped basic="very" textAlign="center" structured>
+      <Table striped basic="very" textAlign="center" structured unstackable>
         <TableHeader fullWidth>
           <TableRow textAlign="center">
             <TableHeaderCell width={3}>WR</TableHeaderCell>
