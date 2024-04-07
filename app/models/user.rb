@@ -551,16 +551,15 @@ class User < ApplicationRecord
   end
 
   def delegate_roles
-    active_delegate_roles = UserRole.where(user_id: self.id, end_date: nil)
-    active_delegate_roles.filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    active_roles(include_converted: false).filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
   end
 
   def any_kind_of_delegate?
-    active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    !delegate_roles.empty
   end
 
   def trainee_delegate?
-    active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) && UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+    delegate_roles.any? { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
   end
 
   def senior_delegate?
@@ -605,11 +604,7 @@ class User < ApplicationRecord
   end
 
   private def senior_delegate_roles
-    active_roles.select do |role|
-      UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) &&
-        UserRole.is_lead?(role) &&
-        UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
-    end
+    delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
   private def groups_with_edit_access
@@ -1317,19 +1312,15 @@ class User < ApplicationRecord
   end
 
   def senior_delegates
-    active_roles
-      .select { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-      .map { |role| UserRole.group(role).senior_delegate }
+    delegate_roles.map { |role| role.group.senior_delegate }
   end
 
   def regional_delegates
-    active_roles
-      .select { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-      .map { |role| UserRole.group(role).lead_user }
+    delegate_roles.map { |role| UserRole.group(role).lead_user }
   end
 
-  def active_roles
-    roles.select { |role| UserRole.is_active?(role) }
+  def active_roles(include_converted: true)
+    roles(include_converted: include_converted).select { |role| UserRole.is_active?(role) }
   end
 
   def team_roles
@@ -1380,10 +1371,9 @@ class User < ApplicationRecord
   end
 
   def subordinate_delegates
-    roles
-      .filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-      .filter { |role| UserRole.is_lead?(role) }
-      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_users_of_all_child_groups }
+    delegate_roles
+      .filter { |role| role.is_lead? }
+      .flat_map { |role| role.group.active_users + role.group.active_users_of_all_child_groups }
       .uniq
   end
 
@@ -1399,12 +1389,12 @@ class User < ApplicationRecord
     can_edit_any_groups? || software_team?
   end
 
-  def roles
-    roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
+  def roles(include_converted: true)
+    roles = super().to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
 
-    roles.concat(team_roles)
+    roles.concat(team_roles) if include_converted
 
     roles
   end
