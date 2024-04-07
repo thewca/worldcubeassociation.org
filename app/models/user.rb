@@ -240,7 +240,7 @@ class User < ApplicationRecord
         errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
       end
 
-      if delegate_id_to_handle_wca_id_claim.present? && !User.find(delegate_id_to_handle_wca_id_claim).any_kind_of_delegate?
+      if delegate_id_to_handle_wca_id_claim.present? && delegate_to_handle_wca_id_claim.any_kind_of_delegate?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
@@ -1312,7 +1312,7 @@ class User < ApplicationRecord
   end
 
   def senior_delegates
-    delegate_roles.map { |role| role.group.senior_delegate }
+    delegate_roles.map { |role| UserRole.group(role).senior_delegate }
   end
 
   def regional_delegates
@@ -1373,7 +1373,7 @@ class User < ApplicationRecord
   def subordinate_delegates
     delegate_roles
       .filter { |role| role.is_lead? }
-      .flat_map { |role| role.group.active_users + role.group.active_users_of_all_child_groups }
+      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_users_of_all_child_groups }
       .uniq
   end
 
@@ -1390,7 +1390,7 @@ class User < ApplicationRecord
   end
 
   def roles(include_converted: true)
-    roles = super().to_a # to_a is to convert the ActiveRecord::Relation to an
+    roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
 
