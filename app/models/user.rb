@@ -200,7 +200,7 @@ class User < ApplicationRecord
 
   MAX_INCORRECT_WCA_ID_CLAIM_COUNT = 5
   validate :claim_wca_id_validations
-  def claim_wca_id_validations
+  def claim_wca_id_validations # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     self.was_incorrect_wca_id_claim = false
     already_assigned_to_user = false
     if unconfirmed_wca_id.present?
