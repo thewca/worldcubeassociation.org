@@ -240,7 +240,7 @@ class User < ApplicationRecord
         errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
       end
 
-      if delegate_id_to_handle_wca_id_claim.present? && delegate_to_handle_wca_id_claim.any_kind_of_delegate?
+      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim&.any_kind_of_delegate?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
