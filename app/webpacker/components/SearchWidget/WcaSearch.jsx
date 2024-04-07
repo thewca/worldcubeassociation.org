@@ -17,6 +17,7 @@ export default function WcaSearch({
   disabled = false,
   model,
   params,
+  label,
 }) {
   const urlFn = useCallback((query) => {
     switch (model) {
@@ -44,6 +45,7 @@ export default function WcaSearch({
       onChange={onChangeInternal}
       multiple={multiple}
       disabled={disabled}
+      placeholder={label}
     />
   );
 }

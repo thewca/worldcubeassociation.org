@@ -460,12 +460,6 @@ en:
         wca_id: ""
         receive_delegate_reports: "If you are a Trainee Delegate, Junior Delegate, Senior Delegate, or Member of the WRC or the WQAC, you receive Delegate Reports by default. Note: the change may take up to an hour to take effect."
         otp_attempt: "Check your configured mobile application for a one-time password, or input one of your recovery codes."
-      website_contact:
-        inquiry: ""
-        competition_id: ""
-        message: ""
-        name: ""
-        your_email: ""
       dob_contact:
         name: ""
         your_email: ""
@@ -793,6 +787,42 @@ en:
         wst: "This team is responsible for managing the WCA's software (website, scramblers, workbooks, admin tools)."
         wsot: "This team has the role to oversee and support the recognition of the WCA as an international sports organization."
         wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
+    contacts:
+      title: "WCA Contact Form"
+      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees-councils">this page</a>.'
+      form:
+        user_data:
+          name:
+            label: "Name"
+          email:
+            label: "Email"
+        contact_type:
+          label: "Which of the following best describes your inquiry?"
+          competition:
+            label: "Contact the Organizers of a Specific Competition (please select below)"
+          competitions_in_general:
+            label: "Competitions in General (organizing, competition rules, etc.)"
+          results_team:
+            label: "Contact the Results Team"
+          wca_id_or_profile:
+            label: "WCA ID or WCA Profile"
+          media:
+            label: "Media"
+          software:
+            label: "Software"
+          different:
+            label: "Other"
+        competition:
+          competition:
+            label: "Competition"
+          message:
+            label: "Message"
+        wct:
+          message:
+            label: "Message"
+        captcha:
+          validation_error: "Please verify that you are not a robot."
+        submit_button: "Submit"
   #context: Key used on the website homepage
   homepage:
     #context: the "Learn more" button
@@ -2085,18 +2115,6 @@ en:
       unstick_at_future: "must be in the future"
   #context: Contact forms
   contacts:
-    website:
-      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees">this page</a>.'
-      title: "WCA Contact Form"
-      inquiries:
-        competition: "Contact the Organizers of a Specific Competition (please select below)"
-        competitions_in_general: "Competitions in General (organizing, competition rules, etc.)"
-        results_team: "Contact the Results Team"
-        wca_id_or_profile: "WCA ID or WCA Profile"
-        media: "Media"
-        software: "Software"
-        different: "Other"
-      submit: "Send message"
     dob:
       title: "Birthdate Change Request Form"
       description: "Use this form if your birthdate stored in our database is different from the real one."
