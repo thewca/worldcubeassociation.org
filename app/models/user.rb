@@ -1332,22 +1332,6 @@ class User < ApplicationRecord
     roles.select { |role| UserRole.is_active?(role) }
   end
 
-  def delegate_role
-    {
-      id: "delegate-" + self.id.to_s,
-      end_date: nil,
-      is_active: true,
-      group: self.region,
-      user: self,
-      is_lead: false,
-      metadata: {
-        status: self.delegate_status,
-        location: self.location,
-      },
-      class: 'userrole',
-    }
-  end
-
   def team_roles
     roles = []
     self.current_team_members.each do |team_member|
