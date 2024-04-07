@@ -59,6 +59,7 @@ translations:
       - "*.activerecord.attributes.competition_series.*"
       - "*.activerecord.attributes.championship.*"
       - "*.activerecord.attributes.registration.*"
+      - "*.activerecord.attributes.person.*"
       - "*.datetime.*"
       - "*.wca.errors.messages.form_error"
       - "*.page.*"

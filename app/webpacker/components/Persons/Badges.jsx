@@ -71,6 +71,7 @@ export default function Badges({ userId }) {
           } = badgeParams(role);
           return (
             <Popup
+              key={roleTitle}
               content={groupTitle}
               position="bottom center"
               inverted
