@@ -3,72 +3,26 @@
    end %>
 
 <% if results.any? %>
-<%#
-This is not indented so the diff is readable,
-and the old code will will be removed anyway
-%>
-<% if params[:react] %>
-  <%= react_component("Persons/RegionalRecords", {
-    results: results.map { |result| {
-      id: result.id,
-      eventId: result.event.id,
-      best: result.best_solve.clock_format,
-      average: result.average_solve.clock_format,
-      competitionName: result.competition.name,
-      competitionUrl: result.competition.internal_website,
-      roundTypeId: result.roundTypeId,
-      bestIdx: result.best_index,
-      worstIdx: result.worst_index,
-      attempts: result.solve_times.map { |time| time.clock_format },
-      singleRecord: result.regionalSingleRecord,
-      averageRecord: result.regionalAverageRecord,
-    }},
-    title: title,
-    recordTypes: record_types,
-  }) %>
-<% else %>
-  <div class="records">
-    <h3 class="text-center"><%= title %></h3>
-    <div class="table-responsive">
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th class="single"><%= t 'common.single' %></th>
-            <th class="average"><%= t 'common.average' %></th>
-            <th class="competition"><%= t 'persons.show.competition' %></th>
-            <th class="round"><%= t 'competitions.results_table.round' %></th>
-            <th class="solves" colspan="5"><%= t 'common.solves' %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <% results.group_by(&:event).each do |event, results| %>
-              <tr>
-                <td colspan="9" class="event">
-                  <%= cubing_icon event.id %>
-                  <%= t "events.#{event.id}" %>
-                </td>
-              </tr>
-              <% results.each_with_index do |result, index| %>
-                <tr class="result">
-                  <td class="single">
-                    <%= result.best_solve.clock_format if record_types.include? result.regionalSingleRecord %>
-                  </td>
-                  <td class="average">
-                    <%= result.average_solve.clock_format if record_types.include? result.regionalAverageRecord %>
-                  </td>
-                  <td class="competition"><%= link_to result.competition.name, result.competition %></td>
-                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
-                  <% if record_types.include? result.regionalAverageRecord # Show all solves for average only. %>
-                    <%= solve_tds_for_result(result) %>
-                  <% else %>
-                    <td colspan="5"></td>
-                  <% end %>
-                </tr>
-            <% end %>
-          <% end %>
-        </tbody>
-      </table>
-    </div>
-  </div>
-<% end %>
+   <% if @enable_react %>
+    <%= react_component("Persons/RegionalRecords", {
+      results: results.map { |result| {
+        id: result.id,
+        eventId: result.event.id,
+        best: result.best_solve.clock_format,
+        average: result.average_solve.clock_format,
+        competitionName: result.competition.name,
+        competitionUrl: result.competition.internal_website,
+        roundTypeId: result.roundTypeId,
+        bestIdx: result.best_index,
+        worstIdx: result.worst_index,
+        attempts: result.solve_times.map { |time| time.clock_format },
+        singleRecord: result.regionalSingleRecord,
+        averageRecord: result.regionalAverageRecord,
+      }},
+      title: title,
+      recordTypes: record_types,
+    }) %>
+  <% else %>
+    <%= render 'regional_records_legacy', title: title, record_types: record_types %>
+  <% end %>
 <% end %>
