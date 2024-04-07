@@ -27,6 +27,8 @@ class PersonsController < ApplicationController
   end
 
   def show
+    @enable_react = params[:beta]&.to_s == '0xDbOverload'
+
     @person = Person.current.includes(:user, :ranksSingle, :ranksAverage, :competitions).find_by_wca_id!(params[:id])
     @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
     @ranks_single = @person.ranksSingle.select { |r| r.event.official? }
