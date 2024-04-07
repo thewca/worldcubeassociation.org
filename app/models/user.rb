@@ -1010,10 +1010,7 @@ class User < ApplicationRecord
   def self.delegate_reports_receivers_emails
     delegate_groups = UserGroup.delegate_regions
     roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      [
-        RolesMetadataDelegateRegions.statuses[:trainee_delegate],
-        RolesMetadataDelegateRegions.statuses[:junior_delegate],
-      ].include?(UserRole.status(role))
+      ["trainee_delegate", "junior_delegate"].include?(UserRole.status(role))
     end
     eligible_delegate_users = roles.map { |role| UserRole.user(role) }
     other_staff = User.where(receive_delegate_reports: true)
