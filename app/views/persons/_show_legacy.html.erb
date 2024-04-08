@@ -1,0 +1,43 @@
+<% provide(:title, @person.name) %>
+<% add_to_packs("wca_maps") %>
+
+<div class="container" id="person">
+  <%= render "details" %>
+  <%= render "personal_records" %>
+  <div class="row">
+    <%= render "medal_collection" if @medals[:total] > 0 %>
+    <%= render "record_collection" if @records[:total] > 0 %>
+  </div>
+
+  <div>
+    <ul class="nav nav-tabs nav-justified">
+      <li><a href="#results-by-event" data-toggle="tab"><%= t '.results' %></a></li>
+      <% if @records[:total] > 0 %>
+        <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
+      <% end %>
+      <% if @championship_podiums.values.flatten.any? %>
+        <li><a href="#championship-podiums" data-toggle="tab"><%= t '.championship_podiums' %></a></li>
+      <% end %>
+      <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane" id="results-by-event">
+        <%= render "results_by_event" %>
+      </div>
+      <% if @records[:total] > 0 %>
+        <div class="tab-pane" id="records">
+          <%= render "records" %>
+        </div>
+      <% end %>
+      <% if @championship_podiums.values.flatten.any? %>
+        <div class="tab-pane" id="championship-podiums">
+          <%= render "championship_podiums" %>
+        </div>
+      <% end %>
+      <div class="tab-pane" id="map">
+        <%= render "competitions_map" %>
+      </div>
+    </div>
+  </div>
+</div>

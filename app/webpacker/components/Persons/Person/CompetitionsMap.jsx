@@ -2,21 +2,21 @@ import React from 'react';
 import {
   MapContainer, Marker, Popup, TileLayer,
 } from 'react-leaflet';
-import { userTileProvider } from '../../lib/leaflet-wca/providers';
-import { blueMarker, redMarker } from '../../lib/leaflet-wca/markers';
+import { userTileProvider } from '../../../lib/leaflet-wca/providers';
+import { blueMarker, redMarker } from '../../../lib/leaflet-wca/markers';
 
 function MarkerForCompetition({ competition }) {
-  const markerImage = competition.is_probably_over ? blueMarker : redMarker;
+  const markerImage = competition.probablyOver ? blueMarker : redMarker;
   return (
     <Marker
-      position={[competition.latitude_degrees, competition.longitude_degrees]}
+      position={[competition.lat, competition.lng]}
       icon={markerImage}
       title={competition.name}
     >
       <Popup>
         <a href={competition.url}>{competition.name}</a>
         <br />
-        {competition.marker_date}
+        {competition.markerDate}
         {' - '}
         {competition.cityName}
       </Popup>
@@ -24,12 +24,22 @@ function MarkerForCompetition({ competition }) {
   );
 }
 
-export default function CompetitionsMap({ competitions }) {
+export default function CompetitionsMap({ person }) {
+  const competitions = [];
+
+  const compIds = new Set();
+  person.results.forEach((result) => {
+    if (!compIds.has(result.competition.id)) {
+      compIds.add(result.competition.id);
+      competitions.push(result.competition);
+    }
+  });
+
   let sumLat = 0;
   let sumLon = 0;
   competitions.forEach((comp) => {
-    sumLat += comp.latitude_degrees;
-    sumLon += comp.longitude_degrees;
+    sumLat += comp.lat;
+    sumLon += comp.lng;
   });
 
   return (

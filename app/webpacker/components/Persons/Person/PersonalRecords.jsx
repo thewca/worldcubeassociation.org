@@ -3,10 +3,10 @@ import {
   Icon, Popup,
   Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
 } from 'semantic-ui-react';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import I18n from '../../lib/i18n';
-import { events } from '../../lib/wca-data.js.erb';
-import EventIcon from '../wca/EventIcon';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import I18n from '../../../lib/i18n';
+import { events } from '../../../lib/wca-data.js.erb';
+import EventIcon from '../../wca/EventIcon';
 
 function RankHeader({ type, short }) {
   return (
