@@ -348,16 +348,21 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       else
         return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
       end
-
-      RoleChangeMailer.notify_role_change(role, current_user, changed_parameter, previous_value, new_value).deliver_later
     elsif group_type == UserGroup.group_types[:delegate_probation]
-      return head :unauthorized unless current_user.can_manage_delegate_probation?
-      end_date = params.require(:endDate)
-      role.update!(end_date: Date.safe_parse(end_date))
-      RoleChangeMailer.notify_change_probation_end_date(role, current_user).deliver_later
+      if params.key?(:endDate)
+        end_date = params.require(:endDate)
+        changed_parameter = 'End Date'
+        previous_value = role.end_date || 'Empty'
+        new_value = end_date
+
+        role.update!(end_date: Date.safe_parse(end_date))
+      else
+        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+      end
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
+    RoleChangeMailer.notify_role_change(role, current_user, changed_parameter, previous_value, new_value).deliver_later
     render json: { success: true }
   end
 
