@@ -1,6 +1,6 @@
 <% results = @results.select do |result|
-  ([result.regionalSingleRecord, result.regionalAverageRecord] & record_types).any?
-end %>
+     ([result.regionalSingleRecord, result.regionalAverageRecord] & record_types).any?
+   end %>
 
 <% if results.any? %>
   <div class="records">
@@ -8,40 +8,40 @@ end %>
     <div class="table-responsive">
       <table class="table table-striped">
         <thead>
-        <tr>
-          <th class="single"><%= t 'common.single' %></th>
-          <th class="average"><%= t 'common.average' %></th>
-          <th class="competition"><%= t 'persons.show.competition' %></th>
-          <th class="round"><%= t 'competitions.results_table.round' %></th>
-          <th class="solves" colspan="5"><%= t 'common.solves' %></th>
-        </tr>
+          <tr>
+            <th class="single"><%= t 'common.single' %></th>
+            <th class="average"><%= t 'common.average' %></th>
+            <th class="competition"><%= t 'persons.show.competition' %></th>
+            <th class="round"><%= t 'competitions.results_table.round' %></th>
+            <th class="solves" colspan="5"><%= t 'common.solves' %></th>
+          </tr>
         </thead>
         <tbody>
-        <% results.group_by(&:event).each do |event, results| %>
-          <tr>
-            <td colspan="9" class="event">
-              <%= cubing_icon event.id %>
-              <%= t "events.#{event.id}" %>
-            </td>
-          </tr>
-          <% results.each_with_index do |result, index| %>
-            <tr class="result">
-              <td class="single">
-                <%= result.best_solve.clock_format if record_types.include? result.regionalSingleRecord %>
-              </td>
-              <td class="average">
-                <%= result.average_solve.clock_format if record_types.include? result.regionalAverageRecord %>
-              </td>
-              <td class="competition"><%= link_to result.competition.name, result.competition %></td>
-              <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
-              <% if record_types.include? result.regionalAverageRecord # Show all solves for average only. %>
-                <%= solve_tds_for_result(result) %>
-              <% else %>
-                <td colspan="5"></td>
-              <% end %>
-            </tr>
+          <% results.group_by(&:event).each do |event, results| %>
+              <tr>
+                <td colspan="9" class="event">
+                  <%= cubing_icon event.id %>
+                  <%= t "events.#{event.id}" %>
+                </td>
+              </tr>
+              <% results.each_with_index do |result, index| %>
+                <tr class="result">
+                  <td class="single">
+                    <%= result.best_solve.clock_format if record_types.include? result.regionalSingleRecord %>
+                  </td>
+                  <td class="average">
+                    <%= result.average_solve.clock_format if record_types.include? result.regionalAverageRecord %>
+                  </td>
+                  <td class="competition"><%= link_to result.competition.name, result.competition %></td>
+                  <td class="round"><%= t "rounds.#{result.roundTypeId}.cellName" %></td>
+                  <% if record_types.include? result.regionalAverageRecord # Show all solves for average only. %>
+                    <%= solve_tds_for_result(result) %>
+                  <% else %>
+                    <td colspan="5"></td>
+                  <% end %>
+                </tr>
+            <% end %>
           <% end %>
-        <% end %>
         </tbody>
       </table>
     </div>
