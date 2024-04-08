@@ -261,7 +261,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       start_date: Date.today,
       metadata: metadata,
     )
-    RoleChangeMailer.notify_role_start(role, current_user).deliver_now
+    RoleChangeMailer.notify_role_start(role, current_user).deliver_later
     render json: {
       success: true,
     }
