@@ -121,7 +121,8 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns delegate to be able to create competitions' do
-      sign_in FactoryBot.create :user, :delegate, region_id: senior_delegate_role.group.id
+      delegate = FactoryBot.create :delegate_role
+      sign_in delegate.user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)

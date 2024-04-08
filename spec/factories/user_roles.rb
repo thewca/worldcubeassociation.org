@@ -25,6 +25,9 @@ FactoryBot.define do
 
     trait :delegate_regions do
       group { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group }
+      after(:create) do |user_role|
+        user_role.metadata.update!(location: 'Zimbabwe')
+      end
     end
 
     trait :delegate_regions_senior_delegate do
@@ -33,6 +36,18 @@ FactoryBot.define do
 
     trait :delegate_regions_regional_delegate do
       metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'regional_delegate') }
+    end
+
+    trait :delegate_regions_delegate do
+      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'delegate') }
+    end
+
+    trait :delegate_regions_junior_delegate do
+      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'candidate_delegate') }
+    end
+
+    trait :delegate_regions_trainee_delegate do
+      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'trainee_delegate') }
     end
 
     trait :officers do
@@ -73,17 +88,13 @@ FactoryBot.define do
       group_id { UserGroup.board_group.id }
     end
 
-    factory :delegate_role do
-      user { FactoryBot.create(:user) }
-      group_id { GroupsMetadataDelegateRegions.find_by!(friendly_id: 'africa').user_group.id }
-      start_date { Date.today - 1.year }
-      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'delegate') }
-    end
-
     factory :probation_role, traits: [:delegate_probation, :active]
     factory :translator_role, traits: [:translators, :active]
-    factory :senior_delegate_role, traits: [:delegate_regions, :delegate_regions_senior_delegate, :active]
+    factory :trainee_delegate_role, traits: [:delegate_regions, :delegate_regions_trainee_delegate, :active]
+    factory :junior_delegate_role, traits: [:delegate_regions, :delegate_regions_junior_delegate, :active]
+    factory :delegate_role, traits: [:delegate_regions, :delegate_regions_delegate, :active]
     factory :regional_delegate_role, traits: [:delegate_regions, :delegate_regions_regional_delegate, :active]
+    factory :senior_delegate_role, traits: [:delegate_regions, :delegate_regions_senior_delegate, :active]
 
     factory :executive_director_role, traits: [:officers, :officers_executive_director, :active]
     factory :chair_role, traits: [:officers, :officers_chair, :active]

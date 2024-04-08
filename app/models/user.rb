@@ -20,7 +20,7 @@ class User < ApplicationRecord
   has_many :competitions_registered_for, through: :registrations, source: "competition"
   belongs_to :person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "wca_id", optional: true
   belongs_to :unconfirmed_person, -> { where(subId: 1) }, primary_key: "wca_id", foreign_key: "unconfirmed_wca_id", class_name: "Person", optional: true
-  belongs_to :delegate_to_handle_wca_id_claim, -> { where.not(delegate_status: nil) }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
+  belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
@@ -200,7 +200,7 @@ class User < ApplicationRecord
 
   MAX_INCORRECT_WCA_ID_CLAIM_COUNT = 5
   validate :claim_wca_id_validations
-  def claim_wca_id_validations
+  def claim_wca_id_validations # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
     self.was_incorrect_wca_id_claim = false
     already_assigned_to_user = false
     if unconfirmed_wca_id.present?
@@ -240,7 +240,7 @@ class User < ApplicationRecord
         errors.add(:unconfirmed_wca_id, I18n.t('users.errors.already_have_id', wca_id: wca_id))
       end
 
-      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim
+      if delegate_id_to_handle_wca_id_claim.present? && !delegate_to_handle_wca_id_claim&.any_kind_of_delegate?
         errors.add(:delegate_id_to_handle_wca_id_claim, I18n.t('users.errors.not_found'))
       end
     end
@@ -267,8 +267,6 @@ class User < ApplicationRecord
   def locked_account?
     !dummy_account? && encrypted_password == ""
   end
-
-  scope :delegates, -> { where.not(delegate_status: nil) }
 
   before_validation :copy_data_from_persons
   def copy_data_from_persons
@@ -553,23 +551,15 @@ class User < ApplicationRecord
   end
 
   def delegate_roles
-    active_roles.filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    active_roles(include_converted: false).filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
   end
 
   def any_kind_of_delegate?
-    active_roles.any? { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    delegate_roles.any?
   end
 
   def trainee_delegate?
-    delegate_status == "trainee_delegate"
-  end
-
-  def staff_delegate?
-    any_kind_of_delegate? && !trainee_delegate?
-  end
-
-  def full_delegate?
-    delegate_status == "delegate"
+    delegate_roles.any? { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
   end
 
   def senior_delegate?
@@ -614,11 +604,7 @@ class User < ApplicationRecord
   end
 
   private def senior_delegate_roles
-    active_roles.select do |role|
-      UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) &&
-        UserRole.is_lead?(role) &&
-        UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
-    end
+    delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
   private def groups_with_edit_access
@@ -1024,10 +1010,7 @@ class User < ApplicationRecord
   def self.delegate_reports_receivers_emails
     delegate_groups = UserGroup.delegate_regions
     roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      [
-        RolesMetadataDelegateRegions.statuses[:trainee_delegate],
-        RolesMetadataDelegateRegions.statuses[:junior_delegate],
-      ].include?(UserRole.status(role))
+      ["trainee_delegate", "junior_delegate"].include?(UserRole.status(role))
     end
     eligible_delegate_users = roles.map { |role| UserRole.user(role) }
     other_staff = User.where(receive_delegate_reports: true)
@@ -1326,45 +1309,15 @@ class User < ApplicationRecord
   end
 
   def senior_delegates
-    active_roles
-      .select { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-      .map { |role| UserRole.group(role).senior_delegate }
+    delegate_roles.map { |role| UserRole.group(role).senior_delegate }
   end
 
   def regional_delegates
-    active_roles
-      .select { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-      .map { |role| UserRole.group(role).lead_user }
+    delegate_roles.map { |role| UserRole.group(role).lead_user }
   end
 
-  def active_roles
-    roles.select { |role| UserRole.is_active?(role) }
-  end
-
-  def delegate_role_with_extra_metadata
-    delegate_role_hash = delegate_role
-    delegate_role_metadata = delegate_role_hash[:metadata]
-    delegate_role_metadata[:first_delegated] = self.actually_delegated_competitions.to_a.minimum(:start_date)
-    delegate_role_metadata[:last_delegated] = self.actually_delegated_competitions.to_a.maximum(:start_date)
-    delegate_role_metadata[:total_delegated] = self.actually_delegated_competitions.to_a.length
-    delegate_role_hash[:metadata] = delegate_role_metadata
-    delegate_role_hash
-  end
-
-  def delegate_role
-    {
-      id: "delegate-" + self.id.to_s,
-      end_date: nil,
-      is_active: true,
-      group: self.region,
-      user: self,
-      is_lead: false,
-      metadata: {
-        status: self.delegate_status,
-        location: self.location,
-      },
-      class: 'userrole',
-    }
+  def active_roles(include_converted: true)
+    roles(include_converted: include_converted).select { |role| UserRole.is_active?(role) }
   end
 
   def team_roles
@@ -1415,9 +1368,8 @@ class User < ApplicationRecord
   end
 
   def subordinate_delegates
-    roles
-      .filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-      .filter { |role| UserRole.is_lead?(role) }
+    delegate_roles
+      .filter { |role| role.is_lead? }
       .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_users_of_all_child_groups }
       .uniq
   end
@@ -1434,17 +1386,29 @@ class User < ApplicationRecord
     can_edit_any_groups? || software_team?
   end
 
-  def roles
+  def roles(include_converted: true)
     roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
     # removed once all roles are migrated to the new system.
 
-    if delegate_status.present?
-      roles << delegate_role
-    end
-
-    roles.concat(team_roles)
+    roles.concat(team_roles) if include_converted
 
     roles
+  end
+
+  private def highest_delegate_role
+    delegate_roles.max_by { |role| UserRole.status_sort_rank(role) }
+  end
+
+  def delegate_status
+    highest_delegate_role&.metadata&.status
+  end
+
+  def region_id
+    highest_delegate_role&.group_id
+  end
+
+  def location
+    highest_delegate_role&.metadata&.location
   end
 end

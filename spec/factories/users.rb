@@ -190,18 +190,21 @@ FactoryBot.define do
     factory :user_with_wca_id, traits: [:wca_id]
 
     factory :delegate, traits: [:wca_id] do
-      delegate_status { "delegate" }
-      region_id { GroupsMetadataDelegateRegions.find_by(friendly_id: 'africa').user_group.id }
+      after(:create) do |user|
+        FactoryBot.create(:delegate_role, user: user)
+      end
     end
 
     factory :candidate_delegate, traits: [:wca_id] do
-      delegate_status { "candidate_delegate" }
-      region_id { GroupsMetadataDelegateRegions.find_by(friendly_id: 'africa').user_group.id }
+      after(:create) do |user|
+        FactoryBot.create(:junior_delegate_role, user: user)
+      end
     end
 
     factory :trainee_delegate, traits: [:wca_id] do
-      delegate_status { "trainee_delegate" }
-      region_id { GroupsMetadataDelegateRegions.find_by(friendly_id: 'africa').user_group.id }
+      after(:create) do |user|
+        FactoryBot.create(:trainee_delegate_role, user: user)
+      end
     end
 
     factory :dummy_user, traits: [:wca_id] do

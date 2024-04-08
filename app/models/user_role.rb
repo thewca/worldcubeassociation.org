@@ -48,6 +48,20 @@ class UserRole < ApplicationRecord
     is_actual_role ? role.metadata[:status] : role[:metadata][:status]
   end
 
+  STATUS_SORTING_ORDER = {
+    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
+    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:board].to_sym => ["member"],
+    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+  }.freeze
+
+  def self.status_sort_rank(role)
+    group_type = UserRole.group_type(role)
+    status = UserRole.status(role) || ''
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+  end
+
   def is_active?
     self.end_date.nil? || self.end_date > Date.today
   end
@@ -87,12 +101,7 @@ class UserRole < ApplicationRecord
     group_type = UserRole.group_type(role)
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      [
-        RolesMetadataDelegateRegions.statuses[:senior_delegate],
-        RolesMetadataDelegateRegions.statuses[:regional_delegate],
-        RolesMetadataDelegateRegions.statuses[:delegate],
-        RolesMetadataDelegateRegions.statuses[:junior_delegate],
-      ].include?(UserRole.status(role))
+      ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(UserRole.status(role))
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true
     else
@@ -126,6 +135,8 @@ class UserRole < ApplicationRecord
     group_type = UserRole.group_type(role)
     group = UserRole.group(role)
     case group_type
+    when UserGroup.group_types[:delegate_regions]
+      UserRole.status(role)
     when UserGroup.group_types[:councils]
       group.metadata.friendly_id
     else

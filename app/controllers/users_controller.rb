@@ -226,8 +226,7 @@ class UsersController < ApplicationController
 
     # Get the teams/councils/Delegate status for user
     user_groups = current_user.current_teams.select(&:official?).map(&:friendly_id)
-    user_groups += current_user.active_roles.map { |role| UserRole.discourse_user_group(role) }.compact
-    user_groups += current_user.delegate_roles.map { |delegate_role| UserRole.status(delegate_role) }.uniq
+    user_groups += current_user.active_roles.map { |role| UserRole.discourse_user_group(role) }.uniq.compact
     # Board is (expectedly) not included in "current_teams", so we have to add
     # it manually.
     user_groups << UserGroup.group_types[:board] if current_user.board_member?
