@@ -169,7 +169,7 @@ RSpec.describe Api::V0::UsersController do
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
-    let!(:delegate_user) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
+    let!(:delegate_user) { (FactoryBot.create :delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { FactoryBot.create :user }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])

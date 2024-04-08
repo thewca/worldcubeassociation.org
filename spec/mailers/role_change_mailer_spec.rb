@@ -6,8 +6,8 @@ RSpec.describe RoleChangeMailer, type: :mailer do
   describe 'notify_role_start for delegate probation' do
     let(:user_who_made_the_change) { FactoryBot.create(:user) }
     let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate.group.id) }
-    let(:role) { FactoryBot.create(:probation_role, user: delegate) }
+    let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
+    let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
     let(:mail) { described_class.notify_role_start(role, user_who_made_the_change) }
 
     it 'renders the headers' do
@@ -24,8 +24,8 @@ RSpec.describe RoleChangeMailer, type: :mailer do
 
   describe 'notify_role_start where senior_delegate and user_who_made_the_change are same' do
     let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate.group.id) }
-    let(:role) { FactoryBot.create(:probation_role, user: delegate) }
+    let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
+    let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
     let(:mail) { described_class.notify_role_start(role, senior_delegate.user) }
 
     it 'renders the headers' do
@@ -43,8 +43,8 @@ RSpec.describe RoleChangeMailer, type: :mailer do
   describe 'notify_role_change for delegate probation' do
     let(:user_who_made_the_change) { FactoryBot.create(:user) }
     let(:senior_delegate) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate.group.id) }
-    let(:role) { FactoryBot.create(:probation_role, user: delegate) }
+    let(:delegate) { FactoryBot.create(:delegate_role, group: senior_delegate.group) }
+    let(:role) { FactoryBot.create(:probation_role, user: delegate.user) }
     let(:mail) { described_class.notify_role_change(role, user_who_made_the_change, 'End Date', 'Empty', '01-01-2024') }
 
     it 'renders the headers' do

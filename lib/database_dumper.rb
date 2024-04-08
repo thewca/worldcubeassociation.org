@@ -789,11 +789,9 @@ module DatabaseDumper
           created_at
           current_sign_in_at
           delegate_id_to_handle_wca_id_claim
-          delegate_status
           gender
           last_sign_in_at
           name
-          location
           registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
@@ -805,7 +803,6 @@ module DatabaseDumper
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
           unconfirmed_wca_id
-          region_id
           updated_at
           wca_id
           receive_delegate_reports
