@@ -3,46 +3,46 @@
   <div class="table-responsive">
     <table class="table table-striped">
       <thead>
-      <tr>
-        <th class="event"><%= t 'competitions.results_table.event' %></th>
-        <th class="country-rank"><abbr title="<%= t 'competitions.results_table.rank.national' %>">NR</abbr></th>
-        <th class="continent-rank"><abbr title="<%= t 'competitions.results_table.rank.continent' %>">CR</abbr></th>
-        <th class="world-rank"><abbr title="<%= t 'competitions.results_table.rank.world' %>">WR</abbr></th>
-        <th class="single"><%= t 'common.single' %></th>
-        <th class="average"><%= t 'common.average' %></th>
-        <th class="world-rank"><abbr title="<%= t 'competitions.results_table.rank.world' %>">WR</abbr></th>
-        <th class="continent-rank"><abbr title="<%= t 'competitions.results_table.rank.continent' %>">CR</abbr></th>
-        <th class="country-rank"><abbr title="<%= t 'competitions.results_table.rank.national' %>">NR</abbr></th>
-        <th></th><!-- Place for the odd message -->
-      </tr>
+        <tr>
+          <th class="event"><%= t 'competitions.results_table.event' %></th>
+          <th class="country-rank"><abbr title="<%= t 'competitions.results_table.rank.national' %>">NR</abbr></th>
+          <th class="continent-rank"><abbr title="<%= t 'competitions.results_table.rank.continent' %>">CR</abbr></th>
+          <th class="world-rank"><abbr title="<%= t 'competitions.results_table.rank.world' %>">WR</abbr></th>
+          <th class="single"><%= t 'common.single' %></th>
+          <th class="average"><%= t 'common.average' %></th>
+          <th class="world-rank"><abbr title="<%= t 'competitions.results_table.rank.world' %>">WR</abbr></th>
+          <th class="continent-rank"><abbr title="<%= t 'competitions.results_table.rank.continent' %>">CR</abbr></th>
+          <th class="country-rank"><abbr title="<%= t 'competitions.results_table.rank.national' %>">NR</abbr></th>
+          <th></th><!-- Place for the odd message -->
+        </tr>
       </thead>
       <tbody>
-      <% @ranks_single.sort_by { |rank_single| rank_single.event.rank } .each do |rank_single| %>
-        <% rank_average = @ranks_average.find { |rank| rank.event_id == rank_single.event_id } %>
-        <tr>
-          <td class="event" data-event="<%= rank_single.event.id %>">
-            <%= cubing_icon rank_single.event.id %>
-            <%= t "events.#{rank_single.event.id}" %>
-          </td>
-          <%= rank_td rank_single, "country" %>
-          <%= rank_td rank_single, "continent" %>
-          <%= rank_td rank_single, "world" %>
-          <td class="single">
-            <%= link_to rankings_path(rank_single.event_id, "single"), class: "plain" do %>
-              <%= rank_single.solve_time.clock_format %>
-            <% end %>
-          </td>
-          <td class="average">
-            <%= link_to rankings_path(rank_single.event_id, "average"), class: "plain" do %>
-              <%= rank_average&.solve_time&.clock_format %>
-            <% end %>
-          </td>
-          <%= rank_td rank_average, "world" %>
-          <%= rank_td rank_average, "continent" %>
-          <%= rank_td rank_average, "country" %>
-          <td><%= odd_rank_reason if odd_rank_reason_needed?(rank_single, rank_average) %></td>
-        </tr>
-      <% end %>
+        <% @ranks_single.sort_by { |rank_single| rank_single.event.rank } .each do |rank_single| %>
+          <% rank_average = @ranks_average.find { |rank| rank.event_id == rank_single.event_id } %>
+          <tr>
+            <td class="event" data-event="<%= rank_single.event.id %>">
+              <%= cubing_icon rank_single.event.id %>
+              <%= t "events.#{rank_single.event.id}" %>
+            </td>
+            <%= rank_td rank_single, "country" %>
+            <%= rank_td rank_single, "continent" %>
+            <%= rank_td rank_single, "world" %>
+            <td class="single">
+              <%= link_to rankings_path(rank_single.event_id, "single"), class: "plain" do %>
+                <%= rank_single.solve_time.clock_format %>
+              <% end %>
+            </td>
+            <td class="average">
+              <%= link_to rankings_path(rank_single.event_id, "average"), class: "plain" do %>
+                <%= rank_average&.solve_time&.clock_format %>
+              <% end %>
+            </td>
+            <%= rank_td rank_average, "world" %>
+            <%= rank_td rank_average, "continent" %>
+            <%= rank_td rank_average, "country" %>
+            <td><%= odd_rank_reason if odd_rank_reason_needed?(rank_single, rank_average) %></td>
+          </tr>
+        <% end %>
       </tbody>
     </table>
   </div>
