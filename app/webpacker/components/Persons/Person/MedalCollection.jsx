@@ -3,14 +3,15 @@ import React from 'react';
 import {
   Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
 } from 'semantic-ui-react';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 
 // TODO: Make table highlight rows when user clicks on medal count. like old one
 export default function MedalCollection({
-  gold, silver, bronze,
+  person,
 }) {
+  const { gold, silver, bronze } = person.medals;
   return (
-    <div className="col-md-6">
+    <>
       <h3 className="text-center">
         <I18nHTMLTranslate i18nKey="persons.show.medal_collection" />
       </h3>
@@ -44,6 +45,6 @@ export default function MedalCollection({
           </TableRow>
         </TableBody>
       </Table>
-    </div>
+    </>
   );
 }

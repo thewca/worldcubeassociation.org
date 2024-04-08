@@ -1,43 +1,71 @@
-<% provide(:title, @person.name) %>
-<% add_to_packs("wca_maps") %>
+<% if @enable_react %>
+  <% provide(:title, @person.name) %>
 
-<div class="container" id="person">
-  <%= render "details" %>
-  <%= render "personal_records" %>
-  <div class="row">
-    <%= render "medal_collection" if @medals[:total] > 0 %>
-    <%= render "record_collection" if @records[:total] > 0 %>
-  </div>
-
-  <div>
-    <ul class="nav nav-tabs nav-justified">
-      <li><a href="#results-by-event" data-toggle="tab"><%= t '.results' %></a></li>
-      <% if @records[:total] > 0 %>
-        <li><a href="#records" data-toggle="tab"><%= t '.records' %></a></li>
-      <% end %>
-      <% if @championship_podiums.values.flatten.any? %>
-        <li><a href="#championship-podiums" data-toggle="tab"><%= t '.championship_podiums' %></a></li>
-      <% end %>
-      <li><a href="#map" data-toggle="tab"><%= t '.competitions_map' %></a></li>
-    </ul>
-
-    <div class="tab-content">
-      <div class="tab-pane" id="results-by-event">
-        <%= render "results_by_event" %>
-      </div>
-      <% if @records[:total] > 0 %>
-        <div class="tab-pane" id="records">
-          <%= render "records" %>
-        </div>
-      <% end %>
-      <% if @championship_podiums.values.flatten.any? %>
-        <div class="tab-pane" id="championship-podiums">
-          <%= render "championship_podiums" %>
-        </div>
-      <% end %>
-      <div class="tab-pane" id="map">
-        <%= render "competitions_map" %>
-      </div>
-    </div>
-  </div>
-</div>
+  <%= react_component("Persons/Person", {
+    normalPerson: @person,
+    person: {
+      user: @person.user,
+      name: @person.name,
+      wcaId: @person.wca_id,
+      gender: @person.gender_visible? ? @person.gender : nil,
+      country: {
+        name: @person.country.name,
+        iso2: @person.country_iso2,
+      },
+      previousPersons: @previous_persons.map { |person| {
+        name: person.name,
+        country: person.country.name,
+      }},
+      competitionCount: @person.competitions.count,
+      completedSolves: @person.completed_solves_count,
+      averageRanks: @ranks_average.map { |r| {
+        eventId: r.eventId,
+        time: r.solve_time.clock_format,
+        worldRank: r.worldRank,
+        continentRank: r.continentRank,
+        countryRank: r.countryRank,
+        oddRank: odd_rank?(r),
+        rankPath: rankings_path(r.event_id, "average")
+      }},
+      singleRanks: @ranks_single.map { |r| {
+        eventId: r.eventId,
+        time: r.solve_time.clock_format,
+        worldRank: r.worldRank,
+        continentRank: r.continentRank,
+        countryRank: r.countryRank,
+        oddRank: odd_rank?(r),
+        rankPath: rankings_path(r.event_id, "single")
+      }},
+      medals: @medals,
+      records: @records,
+      results: @results.map { |result| {
+        id: result.id,
+        eventId: result.event.id,
+        best: result.best_solve.clock_format,
+        average: result.average_solve.clock_format,
+        competition: {
+          id: result.competition.id,
+          name: result.competition.name,
+          url: result.competition.internal_website,
+          lat: result.competition.latitude_degrees,
+          lng: result.competition.longitude_degrees,
+          probablyOver: result.competition.is_probably_over?,
+          markerDate: wca_date_range(result.competition.start_date, result.competition.end_date),
+          cityName: result.competition.cityName,
+        },
+        roundTypeId: result.roundTypeId,
+        bestIdx: result.best_index,
+        worstIdx: result.worst_index,
+        attempts: result.solve_times.map { |time| time.clock_format },
+        singleRecord: result.regionalSingleRecord,
+        averageRecord: result.regionalAverageRecord,
+        trimmedIdx: result.trimmed_indices,
+      }},
+      championshipPodiums: @championship_podiums,
+    },
+    canEditUser: current_user&.can_edit_user?(@person.user),
+    editUrl: edit_user_path(@person.user),
+  }) %>
+<% else %>
+  <%= render "show_legacy"%>
+<% end %>
