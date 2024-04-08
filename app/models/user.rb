@@ -873,6 +873,13 @@ class User < ApplicationRecord
     can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
   end
 
+  def competition_specific_staff?(competition)
+    (
+      competition.organizers.include?(self) ||
+      competition.delegates.include?(self) ||
+    )
+  end
+
   def can_approve_media?
     admin? || communication_team? || board_member?
   end
