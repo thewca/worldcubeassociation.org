@@ -34,7 +34,7 @@ class UserGroup < ApplicationRecord
   def roles
     role_list = self.user_roles.to_a
     if self.teams_committees?
-      TeamMember.where(team_id: self.team.id).each do |team_member|
+      TeamMember.where(team_id: self.team&.id).each do |team_member|
         role_list << team_member.role
       end
     end
@@ -129,6 +129,10 @@ class UserGroup < ApplicationRecord
 
   def self.council_group_wac
     UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: 'wac').id, metadata_type: 'GroupsMetadataCouncils')
+  end
+
+  def self.teams_committees_group_wst_admin
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wst_admin').user_group
   end
 
   def senior_delegate

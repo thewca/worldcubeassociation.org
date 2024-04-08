@@ -26,6 +26,7 @@ class User < ApplicationRecord
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
+  has_many :official_current_team_members, -> { current && in_official_team }, class_name: "TeamMember"
   has_many :current_teams, -> { distinct }, through: :current_team_members, source: :team
   has_many :confirmed_users_claiming_wca_id, -> { confirmed_email }, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User"
   has_many :oauth_applications, class_name: 'Doorkeeper::Application', as: :owner
@@ -494,8 +495,8 @@ class User < ApplicationRecord
     team_member?(Team.wst)
   end
 
-  def software_team_admin?
-    team_member?(Team.wst_admin)
+  private def software_team_admin?
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wst_admin }
   end
 
   def staff?
@@ -1314,7 +1315,7 @@ class User < ApplicationRecord
 
   def team_roles
     roles = []
-    self.current_team_members.each do |team_member|
+    self.official_current_team_members.each do |team_member|
       team_member_group = team_member.team.group
       if team_member_group.present? || team_member.team.official?
         roles << team_member.role
