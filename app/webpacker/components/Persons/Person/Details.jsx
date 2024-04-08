@@ -2,15 +2,16 @@
 /* eslint-disable jsx-a11y/control-has-associated-label */
 import React from 'react';
 import {
+  Card, Header,
   Icon,
   Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
 } from 'semantic-ui-react';
-import I18nHTMLTranslate from '../I18nHTMLTranslate';
-import Badges from './Badges';
+import I18nHTMLTranslate from '../../I18nHTMLTranslate';
+import Badges from '../Badges';
 
 function PreviousDetails({ prev }) {
   return (
-    <h4>
+    <Header as="h4">
       (
       <I18nHTMLTranslate i18nKey="persons.show.previously" />
       {' '}
@@ -18,7 +19,7 @@ function PreviousDetails({ prev }) {
         .map((previousPerson) => `${previousPerson.name} - ${previousPerson.country}`)
         .join(', ')}
       )
-    </h4>
+    </Header>
   );
 }
 
@@ -37,26 +38,21 @@ export default function Details({
 }) {
   return (
     <>
-      <div className="text-center">
-        <h2>
-          {person.name + (canEditUser ? ' ' : '')}
-          {canEditUser && (
-            <a href={editUrl}>
-              {' '}
-              <Icon name="edit" />
-            </a>
-          )}
-        </h2>
-        {person.previousPersons.length > 0 && <PreviousDetails prev={person.previousPersons} />}
-        {person.user && <Badges userId={person.user.id} />}
-        {person.user?.avatar && (
-          <img
-            className="avatar"
-            src={person.user.avatar.url}
-            alt="User avatar"
-          />
+      <Header as="h2">
+        {person.name + (canEditUser ? ' ' : '')}
+        {canEditUser && (
+          <a href={editUrl}>
+            {' '}
+            <Icon name="edit" />
+          </a>
         )}
-      </div>
+      </Header>
+      {person.previousPersons.length > 0 && <PreviousDetails prev={person.previousPersons} />}
+      {person.user && <Badges userId={person.user.id} />}
+      {person.user?.avatar && (
+        <Card image={person.user.avatar.url} centered />
+      )}
+
       <div className="details" style={{ marginBottom: '0.75rem' }}>
         <Table striped basic="very" textAlign="center" structured unstackable>
           <TableHeader fullWidth>
