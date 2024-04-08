@@ -105,7 +105,7 @@ export default function DelegateProbations() {
       />
       <Button
         onClick={() => save(apiV0Urls.userRoles.create(), {
-          userId: role.user.id,
+          userId: role.item.user.id,
           groupType: groupTypes.delegate_probation,
         }, () => {
           sync();
