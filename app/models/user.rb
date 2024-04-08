@@ -876,7 +876,7 @@ class User < ApplicationRecord
   def competition_specific_staff?(competition)
     (
       competition.organizers.include?(self) ||
-      competition.delegates.include?(self) ||
+      competition.delegates.include?(self)
     )
   end
 
