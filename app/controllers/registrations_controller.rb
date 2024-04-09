@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination, :create_paypal_order]
+  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
-                         :update, :create_paypal_order, :capture_paypal_payment, :refund_paypal_payment]
+                         :update, :capture_paypal_payment, :refund_paypal_payment]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -637,7 +637,17 @@ class RegistrationsController < ApplicationController
 
     competition = registration.competition
 
-    payment_account = competition.payment_account_for(:stripe)
+    payment_integration = params.require(:payment_integration)
+    return head :forbidden if payment_integration == "paypal" && PaypalInterface.paypal_disabled?
+
+    payment_account = competition.payment_account_for(payment_integration.to_sym)
+
+    unless payment_account.present?
+      # TODO: Bit unsure what to do here, this should have been caught _way_ before any user even reaches this point
+      #   (i.e. the JS panels requesting PI data are only rendered when our code already concluded that the CPI is valid)
+      return render json: { error: { message: "CPI not found!" } }
+    end
+
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
 
     intent = payment_account.prepare_intent(registration, amount, currency_iso, current_user)
@@ -741,22 +751,6 @@ class RegistrationsController < ApplicationController
   private def registration_from_params
     id = params.require(:id)
     Registration.find(id)
-  end
-
-  def create_paypal_order
-    return head :forbidden if PaypalInterface.paypal_disabled?
-
-    registration = registration_from_params
-    amount = params.require(:amount)
-
-    competition = registration.competition
-    paypal_integration = competition.payment_account_for(:paypal)
-
-    render json: PaypalInterface.create_order(
-      paypal_integration.paypal_merchant_id,
-      amount,
-      competition.currency_code,
-    )
   end
 
   def capture_paypal_payment

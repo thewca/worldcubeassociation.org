@@ -71,16 +71,7 @@ module PaypalInterface
       req.body = payload
     end
 
-    body = response.body
-
-    PaypalRecord.create_from_api(
-      body,
-      :paypal_order,
-      payload,
-      merchant_id,
-    )
-
-    body
+    [payload, response.body]
   end
 
   # TODO: Update the status of the PaypalRecord object?
