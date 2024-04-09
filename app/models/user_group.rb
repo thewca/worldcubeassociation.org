@@ -102,6 +102,8 @@ class UserGroup < ApplicationRecord
       teams_committees: "Teams & Committees",
       councils: "Councils",
       translators: "Translators",
+      board: "Board",
+      officers: "Officers",
     }
   end
 

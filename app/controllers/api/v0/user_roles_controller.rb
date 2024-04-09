@@ -396,7 +396,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
     role.update!(end_date: Date.today)
     RoleChangeMailer.notify_role_end(role, current_user).deliver_later
-    unless role.user.any_kind_of_delegate?
+    if role.group.delegate_regions? && !role.user.any_kind_of_delegate?
       remove_pending_wca_id_claims(role.user)
     end
     render json: {
