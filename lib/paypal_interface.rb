@@ -143,6 +143,7 @@ module PaypalInterface
       headers: {
         'Authorization' => "Bearer #{generate_access_token}",
         'Content-Type' => 'application/json',
+        'Prefer' => 'return=representation', # forces PayPal to return everything they known on every request
       },
     ) do |builder|
       # Sets headers and parses jsons automatically
