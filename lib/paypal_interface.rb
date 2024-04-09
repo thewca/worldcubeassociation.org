@@ -74,7 +74,17 @@ module PaypalInterface
     [payload, response.body]
   end
 
-  # TODO: Update the status of the PaypalRecord object?
+  def self.retrieve_order(merchant_id, order_id)
+    url = "/v2/checkout/orders/#{order_id}"
+
+    response = paypal_connection.get(url) do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
   def self.capture_payment(merchant_id, order_id)
     url = "/v2/checkout/orders/#{order_id}/capture"
 

@@ -20,8 +20,8 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
-                         :update, :capture_paypal_payment, :refund_paypal_payment]
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
+                         :update, :refund_paypal_payment]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -475,6 +475,7 @@ class RegistrationsController < ApplicationController
     if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
       signature = request.env['HTTP_STRIPE_SIGNATURE']
+
       begin
         event = Stripe::Webhook.construct_event(
           payload, signature, AppSecrets.STRIPE_WEBHOOK_SECRET
@@ -503,14 +504,22 @@ class RegistrationsController < ApplicationController
       end
     end
 
+    connected_account = ConnectedStripeAccount.find_by(account_id: stored_record.account_id)
+
+    unless connected_account.present?
+      logger.error "Stripe webhook reported event for account #{stored_record.account_id} but we are not connected to that account."
+      return head :not_found
+    end
+
     # Handle the event
     case event.type
     when StripeWebhookEvent::PAYMENT_INTENT_SUCCEEDED
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
+      event_datetime = audit_event.created_at_remote
 
-      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote) do |charge_transaction|
+      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, event_datetime) do |charge_transaction|
         if stored_intent.holder.is_a? Registration
           ruby_money = charge_transaction.money_amount
 
@@ -528,6 +537,7 @@ class RegistrationsController < ApplicationController
           stored_payment.update!(created_at: audit_event.created_at_remote)
         elsif stored_intent.holder.is_a? MicroserviceRegistration
           ruby_money = charge_transaction.money_amount
+
           begin
             Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
           rescue Faraday::Error => e
@@ -540,7 +550,9 @@ class RegistrationsController < ApplicationController
       # stripe_intent contains a Stripe::PaymentIntent as per Stripe documentation
 
       stored_intent = stored_record.payment_intent
-      stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
+      event_datetime = audit_event.created_at_remote
+
+      stored_intent.update_status_and_charges(connected_account, stripe_intent, audit_event, event_datetime)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
     end
@@ -548,7 +560,7 @@ class RegistrationsController < ApplicationController
     head :ok
   end
 
-  def payment_completion
+  def payment_completion_stripe
     registration = Registration.includes(:competition).find(params[:id])
     @competition = registration.competition
 
@@ -572,7 +584,9 @@ class RegistrationsController < ApplicationController
       return redirect_to competition_register_path(@competition)
     end
 
-    stored_intent.update_status_and_charges(stripe_intent, current_user) do |charge_transaction|
+    connected_account = @competition.payment_account_for(:stripe)
+
+    stored_intent.update_status_and_charges(connected_account, stripe_intent, current_user) do |charge_transaction|
       ruby_money = charge_transaction.money_amount
 
       registration.record_payment(
@@ -608,6 +622,47 @@ class RegistrationsController < ApplicationController
     end
 
     redirect_to competition_register_path(@competition)
+  end
+
+  def payment_completion_paypal
+    return head :forbidden if PaypalInterface.paypal_disabled?
+
+    registration = Registration.includes(:competition).find(params[:id])
+    competition = registration.competition
+
+    order_id = params.require(:orderID)
+
+    wca_order_record = PaypalRecord.find_by(paypal_id: order_id)
+
+    unless wca_order_record.present?
+      flash[:error] = "PayPal order with ID #{order_id} not found"
+      return redirect_to competition_register_path(@competition)
+    end
+
+    stored_intent = wca_order_record.payment_intent
+
+    unless stored_intent.present?
+      flash[:error] = "We don't have an attempted payment for #{order_id} on file"
+      return redirect_to competition_register_path(@competition)
+    end
+
+    connected_account = competition.payment_account_for(:paypal)
+    remote_order = PaypalInterface.retrieve_order(connected_account, order_id)
+
+    stored_intent.update_status_and_charges(connected_account, remote_order, current_user) do |charge_transaction|
+      ruby_money = charge_transaction.money_amount
+
+      registration.record_payment(
+        ruby_money.cents,
+        ruby_money.currency.iso_code,
+        charge_transaction,
+        current_user.id,
+      )
+
+      # TODO: we _could_ access PayPal's "create_time" here, although that is potentially unfair compared to Stripe?!
+    end
+
+    render json: remote_order
   end
 
   # This method implements the PaymentElements workflow described at:
@@ -746,57 +801,6 @@ class RegistrationsController < ApplicationController
                                    end
     end
     params.require(:registration).permit(*permitted_params)
-  end
-
-  private def registration_from_params
-    id = params.require(:id)
-    Registration.find(id)
-  end
-
-  def capture_paypal_payment
-    return head :forbidden if PaypalInterface.paypal_disabled?
-
-    registration = registration_from_params
-
-    competition = registration.competition
-    paypal_integration = competition.payment_account_for(:paypal)
-
-    order_id = params.require(:orderID)
-
-    response = PaypalInterface.capture_payment(paypal_integration.paypal_merchant_id, order_id)
-    if response['status'] == 'COMPLETED'
-
-      # TODO: Handle the case where there are multiple captures for a payment
-      # 1) Multiple installments
-      # 2) Some failed, some succeeded
-
-      amount_details = response['purchase_units'][0]['payments']['captures'][0]['amount']
-      currency_code = amount_details['currency_code']
-      amount = PaypalRecord.amount_to_ruby(amount_details["value"], currency_code)
-      order_record = PaypalRecord.find_by(paypal_id: response["id"]) # TODO: Add error handling for the PaypalRecord not being found
-
-      # Create a Capture object and link it to the PaypalRecord
-      # NOTE: This assumes there is only ONE capture per order - not a valid long-term assumption
-      capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
-
-      capture_record = PaypalRecord.create_from_api(
-        capture_from_response,
-        :capture,
-        {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?,
-        paypal_integration.paypal_merchant_id,
-        order_record,
-      )
-
-      # Record the payment
-      registration.record_payment(
-        amount,
-        currency_code,
-        capture_record,
-        current_user.id,
-      )
-    end
-
-    render json: response
   end
 
   def refund_paypal_payment

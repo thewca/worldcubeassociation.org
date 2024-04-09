@@ -24,4 +24,29 @@ class ConnectedPaypalAccount < ApplicationRecord
       wca_status: paypal_record.determine_wca_status,
     )
   end
+
+  def capture_charges(payment_intent)
+    captured_order = PaypalInterface.capture_payment(self.paypal_merchant_id, payment_intent.payment_record.paypal_id)
+    raw_captures = captured_order['purchase_units'].first['payments']['captures']
+
+    raw_captures.map do |capture|
+      paypal_record = PaypalRecord.find_by(paypal_id: capture['id'])
+
+      if paypal_record.present?
+        paypal_record.update_status(capture)
+      else
+        paypal_record = PaypalRecord.create_from_api(
+          capture,
+          :capture,
+          {},
+          self.paypal_merchant_id,
+          payment_intent.payment_record,
+        )
+
+        yield paypal_record if block_given?
+      end
+
+      paypal_record
+    end
+  end
 end

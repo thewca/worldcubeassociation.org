@@ -20,7 +20,6 @@ Rails.application.routes.draw do
 
   # Don't expose Paypal routes in production until we're reading to launch
   unless PaypalInterface.paypal_disabled?
-    post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
     get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
     post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
     post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
@@ -44,7 +43,8 @@ Rails.application.routes.draw do
   end
   post 'registration/:id/refund/:payment_id' => 'registrations#refund_payment', as: :registration_payment_refund
   post 'registration/:id/payment-intent/:payment_integration' => 'registrations#load_payment_intent', as: :registration_payment_intent
-  get 'registration/:id/payment-completion' => 'registrations#payment_completion', as: :registration_payment_completion
+  get 'registration/:id/payment-completion/stripe' => 'registrations#payment_completion_stripe', as: :registration_payment_completion_stripe
+  post 'registration/:id/payment-completion/paypal' => 'registrations#payment_completion_paypal', as: :registration_payment_completion_paypal
   post 'registration/stripe-webhook' => 'registrations#stripe_webhook', as: :registration_stripe_webhook
   get 'registration/payment-denomination' => 'registrations#payment_denomination', as: :registration_payment_denomination
   resources :users, only: [:index, :edit, :update]

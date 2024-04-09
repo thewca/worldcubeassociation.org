@@ -66,6 +66,26 @@ class ConnectedStripeAccount < ApplicationRecord
     )
   end
 
+  def capture_charges(payment_intent)
+    intent_charges = Stripe::Charge.list(
+      { payment_intent: payment_intent.payment_record.stripe_id },
+      stripe_account: self.account_id,
+    )
+
+    intent_charges.data.map do |charge|
+      stripe_record = StripeRecord.find_by(stripe_id: charge.id)
+
+      if stripe_record.present?
+        stripe_record.update_status(charge)
+      else
+        stripe_record = StripeRecord.create_from_api(charge, {}, self.account_id, payment_intent.payment_record)
+        yield stripe_record if block_given?
+      end
+
+      stripe_record
+    end
+  end
+
   def issue_refund(charge_id, amount_iso)
     charge_record = StripeRecord.charge.find_by!(stripe_id: charge_id)
 

@@ -115,7 +115,7 @@
         // Finalize the transaction on the server after payer approval
         onApprove: (data, actions) => {
           return wrapAjaxPromise('capture-paypal-order', {
-            url: '<%= registration_capture_paypal_payment_path(@registration) %>',
+            url: '<%= registration_payment_completion_paypal_path(@registration) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify(data),
