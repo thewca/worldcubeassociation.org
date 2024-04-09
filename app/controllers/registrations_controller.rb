@@ -21,7 +21,7 @@ class RegistrationsController < ApplicationController
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
                 except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
-                         :update, :refund_paypal_payment]
+                         :update]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
@@ -712,14 +712,17 @@ class RegistrationsController < ApplicationController
 
   def refund_payment
     registration = Registration.find(params[:id])
-    stripe_integration = registration.competition.payment_account_for(:stripe)
+    payment = RegistrationPayment.find(params[:payment_id])
 
-    unless stripe_integration.present?
-      flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
+    # FIXME: This is a bit of a hack but we're getting rid of legacy registration
+    #   refunds soon anyways, so it's fine to keep this while the old system lurks around.
+    account_type = payment.receipt.is_a?(StripeRecord) ? :stripe : :paypal
+    payment_account = registration.competition.payment_account_for(account_type)
+
+    unless payment_account.present?
+      flash[:danger] = "You cannot emit refund for this competition anymore. Please use the integration's dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end
-
-    payment = RegistrationPayment.find(params[:payment_id])
 
     refund_amount_param = params.require(:payment).require(:refund_amount)
     refund_amount = refund_amount_param.to_i
@@ -734,16 +737,18 @@ class RegistrationsController < ApplicationController
       return redirect_to edit_registration_path(registration)
     end
 
-    # Backwards compatibility: We may at some point try to record a refund for a payment that was
-    #   - created before the introduction of receipts
-    #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
-    charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
+    if payment.receipt.nil?
+      # Backwards "compatibility": Before the introduction of receipts, in an old age when we were
+      #   hard-wired to a much older version of the Stripe SDK, we stored charge IDs directly in a legacy column.
+      #   This was so, so long ago that nobody should try and refund one of these payments anyways.
+      flash[:danger] = "The payment you're trying to refund is too old. Please refund from your Stripe dashboard directly."
+      return redirect_to edit_registration_path(registration)
+    end
 
-    refund_receipt = stripe_integration.issue_refund(charge_id, refund_amount)
+    refund_receipt = payment_account.issue_refund(payment.receipt, refund_amount)
 
-    # Should be the same as `refund_amount`, but by double-converting from the Stripe object
+    # Should be the same as `refund_amount`, but by double-converting from the Payment Gateway object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
-    # FIXME: This method only exists because we silently assume it's Stripe
     ruby_money = refund_receipt.money_amount
 
     registration.record_refund(
@@ -801,28 +806,5 @@ class RegistrationsController < ApplicationController
                                    end
     end
     params.require(:registration).permit(*permitted_params)
-  end
-
-  def refund_paypal_payment
-    registration = registration_from_params
-    paypal_integration = registration.competition.payment_account_for(:paypal)
-
-    registration_payment = RegistrationPayment.find(params[:payment_id])
-    paypal_capture = registration_payment.receipt
-
-    refund = PaypalInterface.issue_refund(
-      paypal_integration.paypal_merchant_id,
-      paypal_capture.paypal_id,
-      registration_payment.amount_lowest_denomination,
-      registration_payment.currency_code,
-    )
-
-    registration.record_refund(
-      registration_payment.amount_lowest_denomination,
-      registration_payment.currency_code,
-      refund,
-      registration_payment.id,
-      current_user.id,
-    )
   end
 end

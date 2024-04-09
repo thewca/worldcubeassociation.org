@@ -22,7 +22,6 @@ Rails.application.routes.draw do
   unless PaypalInterface.paypal_disabled?
     get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
     post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
-    post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
   # Prevent account deletion, and overrides the sessions controller for 2FA.

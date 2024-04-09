@@ -49,4 +49,21 @@ class ConnectedPaypalAccount < ApplicationRecord
       paypal_record
     end
   end
+
+  def issue_refund(capture_record, amount_iso)
+    req_payload, refund = PaypalInterface.issue_refund(
+      self.paypal_merchant_id,
+      capture_record.paypal_id,
+      amount_iso,
+      capture_record.currency_code,
+    )
+
+    PaypalRecord.create_from_api(
+      refund,
+      :refund,
+      req_payload,
+      self.paypal_merchant_id,
+      capture_record,
+    )
+  end
 end
