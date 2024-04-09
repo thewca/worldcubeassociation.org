@@ -36,7 +36,9 @@ function VenuePanel({
   const confirm = useConfirm();
 
   const handleCoordinateChange = (evt, { name, value }) => {
-    dispatch(editVenue(venue.id, name, toMicrodegrees(value)));
+    dispatch(
+      editVenue(venue.id, name, Number.isNaN(toMicrodegrees(value)) ? 0 : toMicrodegrees(value)),
+    );
   };
 
   const handleVenueChange = (evt, { name, value }) => {
