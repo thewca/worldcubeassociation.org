@@ -636,14 +636,14 @@ class RegistrationsController < ApplicationController
 
     unless wca_order_record.present?
       flash[:error] = "PayPal order with ID #{order_id} not found"
-      return redirect_to competition_register_path(@competition)
+      return render json: { redirect: competition_register_url(competition) }
     end
 
     stored_intent = wca_order_record.payment_intent
 
     unless stored_intent.present?
       flash[:error] = "We don't have an attempted payment for #{order_id} on file"
-      return redirect_to competition_register_path(@competition)
+      return render json: { redirect: competition_register_url(competition) }
     end
 
     connected_account = competition.payment_account_for(:paypal)
@@ -662,7 +662,7 @@ class RegistrationsController < ApplicationController
       # TODO: we _could_ access PayPal's "create_time" here, although that is potentially unfair compared to Stripe?!
     end
 
-    render json: remote_order
+    render json: { redirect: competition_register_url(competition) }
   end
 
   # This method implements the PaymentElements workflow described at:
