@@ -12,8 +12,7 @@ class PaymentIntent < ApplicationRecord
   scope :started, -> { where.not(wca_status: 'created') }
   scope :incomplete, -> { where.not(wca_status: ['succeeded', 'canceled']) }
 
-  # TODO: Refactor this or move it into this class
-  delegate :stripe_id, :stripe_status, :parameters, :money_amount, :find_account_id, to: :payment_record
+  delegate :retrieve_remote, :money_amount, :account_id, to: :payment_record
 
   # Stripe secrets are case-sensitive. Make sure that this information is not lost during encryption.
   encrypts :client_secret, downcase: false
@@ -30,18 +29,6 @@ class PaymentIntent < ApplicationRecord
     canceled: 'canceled', # Completion state - the user has indicated that they will no longer attempt to complete payment
   }
 
-  def retrieve_intent
-    if payment_record_type == 'StripeRecord'
-      Stripe::PaymentIntent.retrieve(
-        self.stripe_id,
-        client_secret: client_secret,
-        stripe_account: self.find_account_id,
-      )
-    else
-      raise "Trying to call retrieve_intent for a PaymentIntent with unmatched payment_record_type of: #{payment_record_type}"
-    end
-  end
-
   def update_status_and_charges(api_intent, action_source, source_datetime = DateTime.current, &block)
     if payment_record_type == 'StripeRecord'
       update_stripe_status_and_charges(api_intent, action_source, source_datetime, &block)
@@ -55,7 +42,7 @@ class PaymentIntent < ApplicationRecord
     def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
       ActiveRecord::Base.transaction do
         self.update!(error_details: api_intent.last_payment_error)
-        self.payment_record.update_status(api_intent) # Will also update the wca_status
+        self.payment_record.update_status(api_intent)
 
         # Payment Intent lifecycle as per https://stripe.com/docs/payments/intents#intent-statuses
         case api_intent.status
@@ -72,8 +59,8 @@ class PaymentIntent < ApplicationRecord
           end
 
           intent_charges = Stripe::Charge.list(
-            { payment_intent: self.stripe_id },
-            stripe_account: self.find_account_id,
+            { payment_intent: self.payment_record.stripe_id },
+            stripe_account: self.account_id,
           )
 
           intent_charges.data.each do |charge|
@@ -82,8 +69,7 @@ class PaymentIntent < ApplicationRecord
             if recorded_transaction.present?
               recorded_transaction.update_status(charge)
             else
-              fresh_transaction = StripeRecord.create_from_api(charge, {})
-              fresh_transaction.update!(parent_transaction: self.payment_record)
+              fresh_transaction = StripeRecord.create_from_api(charge, {}, self.account_id, self.payment_record)
 
               # Only trigger outer update blocks for charges that are actually successful. This is reasonable
               # because we only ever trigger this block for PIs that are marked "successful" in the first place

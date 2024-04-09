@@ -564,13 +564,13 @@ RSpec.describe "registrations" do
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
-            payment_intent.stripe_id,
+            payment_intent.payment_record.stripe_id,
             { payment_method: 'pm_card_visa' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -579,8 +579,9 @@ RSpec.describe "registrations" do
           charge = registration.registration_payments.first.receipt.retrieve_stripe
           expect(charge.amount).to eq competition.base_entry_fee.cents
           expect(charge.receipt_email).to eq user.email
-          expect(charge.metadata.competition).to eq competition.name
-          expect(charge.metadata.registration_url).to eq edit_registration_url(registration)
+          # Stripe stores everything under "metadata" as string, even if we originally pass in integers
+          expect(charge.metadata.competition).to eq competition.id
+          expect(charge.metadata.registration_id.to_i).to eq registration.id
           # Check that the website actually records who made the charge
           expect(registration.registration_payments.first.user).to eq user
         end
@@ -596,13 +597,13 @@ RSpec.describe "registrations" do
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
-            payment_intent.stripe_id,
+            payment_intent.payment_record.stripe_id,
             { payment_method: 'pm_card_visa' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -627,13 +628,13 @@ RSpec.describe "registrations" do
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
-            payment_intent.stripe_id,
+            payment_intent.payment_record.stripe_id,
             { payment_method: 'pm_card_visa' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -643,7 +644,7 @@ RSpec.describe "registrations" do
           expect(stripe_record).to_not be_nil
           expect(stripe_record.stripe_status).to eq "succeeded"
           metadata = stripe_record.parameters["metadata"]
-          expect(metadata["competition"]).to eq competition.name
+          expect(metadata["competition"]).to eq competition.id
         end
       end
 
@@ -661,13 +662,13 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_authenticationRequired' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
             # mimic the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(registration.id), params: {
-              payment_intent: payment_intent.stripe_id,
+              payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
@@ -691,13 +692,13 @@ RSpec.describe "registrations" do
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
-            payment_intent.stripe_id,
+            payment_intent.payment_record.stripe_id,
             { payment_method: 'pm_card_authenticationRequired' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
           # mimic the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -707,7 +708,7 @@ RSpec.describe "registrations" do
           expect(stripe_record).to_not be_nil
           expect(stripe_record.stripe_status).to eq 'requires_action'
           metadata = stripe_record.parameters["metadata"]
-          expect(metadata["competition"]).to eq competition.name
+          expect(metadata["competition"]).to eq competition.id
         end
       end
 
@@ -723,7 +724,7 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_visa_chargeDeclined' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -732,7 +733,7 @@ RSpec.describe "registrations" do
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(registration.id), params: {
-              payment_intent: payment_intent.stripe_id,
+              payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
@@ -752,7 +753,7 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_visa_chargeDeclinedExpiredCard' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -761,7 +762,7 @@ RSpec.describe "registrations" do
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(registration.id), params: {
-              payment_intent: payment_intent.stripe_id,
+              payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
@@ -781,7 +782,7 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_visa_chargeDeclinedIncorrectCvc' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -790,7 +791,7 @@ RSpec.describe "registrations" do
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(registration.id), params: {
-              payment_intent: payment_intent.stripe_id,
+              payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
@@ -810,7 +811,7 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_radarBlock' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -819,7 +820,7 @@ RSpec.describe "registrations" do
           expect {
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(registration.id), params: {
-              payment_intent: payment_intent.stripe_id,
+              payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
@@ -839,13 +840,13 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_authenticationRequiredChargeDeclinedInsufficientFunds' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
             # mimick the response that Stripe sends to our return_url after completing the checkout UI
             get registration_payment_completion_path(registration.id), params: {
-              payment_intent: payment_intent.stripe_id,
+              payment_intent: payment_intent.payment_record.stripe_id,
               payment_intent_client_secret: payment_intent.client_secret,
             }
           }.to_not change { registration.reload.outstanding_entry_fees }
@@ -871,7 +872,7 @@ RSpec.describe "registrations" do
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_visa_chargeDeclined' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -879,7 +880,7 @@ RSpec.describe "registrations" do
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -890,7 +891,7 @@ RSpec.describe "registrations" do
           expect(stripe_record.stripe_status).to eq "requires_payment_method"
           expect(stripe_record.error).to_not be_nil
           metadata = stripe_record.parameters["metadata"]
-          expect(metadata["competition"]).to eq competition.name
+          expect(metadata["competition"]).to eq competition.id
         end
 
         it "recycles a PI when the previous payment was unsuccessful" do
@@ -905,13 +906,13 @@ RSpec.describe "registrations" do
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
-          first_pi_stripe_id = payment_intent.stripe_id
-          first_pi_parameters = payment_intent.parameters
+          first_pi_stripe_id = payment_intent.payment_record.stripe_id
+          first_pi_parameters = payment_intent.payment_record.parameters
 
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_visa_chargeDeclined' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -919,7 +920,7 @@ RSpec.describe "registrations" do
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -933,8 +934,8 @@ RSpec.describe "registrations" do
           # This _should_ be the same intent as the one we previously sent. Check that it really is.
           recycled_intent = new_payment_intents.first
 
-          expect(recycled_intent.stripe_id).to eq(first_pi_stripe_id)
-          expect(recycled_intent.parameters).to eq(first_pi_parameters)
+          expect(recycled_intent.payment_record.stripe_id).to eq(first_pi_stripe_id)
+          expect(recycled_intent.payment_record.parameters).to eq(first_pi_parameters)
         end
 
         it "recycles a PI even when the amount was updated" do
@@ -950,13 +951,13 @@ RSpec.describe "registrations" do
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
-          first_pi_stripe_id = payment_intent.stripe_id
-          first_pi_parameters = payment_intent.parameters
+          first_pi_stripe_id = payment_intent.payment_record.stripe_id
+          first_pi_parameters = payment_intent.payment_record.parameters
 
           expect {
             # mimic the user clicking through the interface
             Stripe::PaymentIntent.confirm(
-              payment_intent.stripe_id,
+              payment_intent.payment_record.stripe_id,
               { payment_method: 'pm_card_visa_chargeDeclined' },
               stripe_account: competition.payment_account_for(:stripe).account_id,
             )
@@ -964,7 +965,7 @@ RSpec.describe "registrations" do
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -979,9 +980,9 @@ RSpec.describe "registrations" do
           # This _should_ be the same intent as the one we previously sent. Check that it really is.
           recycled_intent = new_payment_intents.first
 
-          expect(recycled_intent.stripe_id).to eq(first_pi_stripe_id)
+          expect(recycled_intent.payment_record.stripe_id).to eq(first_pi_stripe_id)
           # The amount is supposed to have changed!
-          expect(recycled_intent.parameters).not_to eq(first_pi_parameters)
+          expect(recycled_intent.payment_record.parameters).not_to eq(first_pi_parameters)
         end
 
         it "does NOT recycle a PI when the payment is successful" do
@@ -996,19 +997,19 @@ RSpec.describe "registrations" do
           # Intent should not be confirmed at this stage, because we have never received a receipt charge from Stripe yet
           expect(payment_intent.confirmed_at).to be_nil
 
-          first_pi_stripe_id = payment_intent.stripe_id
-          first_pi_parameters = payment_intent.parameters
+          first_pi_stripe_id = payment_intent.payment_record.stripe_id
+          first_pi_parameters = payment_intent.payment_record.parameters
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
-            payment_intent.stripe_id,
+            payment_intent.payment_record.stripe_id,
             { payment_method: 'pm_card_visa' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
 
           # mimick the response that Stripe sends to our return_url after completing the checkout UI
           get registration_payment_completion_path(registration.id), params: {
-            payment_intent: payment_intent.stripe_id,
+            payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
 
@@ -1027,11 +1028,11 @@ RSpec.describe "registrations" do
           # This should _not_ be the same intent as the one we previously sent.
           recycled_intent = new_payment_intents.last
 
-          expect(recycled_intent.stripe_id).not_to eq(first_pi_stripe_id)
+          expect(recycled_intent.payment_record.stripe_id).not_to eq(first_pi_stripe_id)
           # The parameters should be the same, because
           #   (a) we're working on the same registration, so metadata is equal
           #   (b) the amount has doubled, so we're paying the same amount again that we already paid before
-          expect(recycled_intent.parameters).to eq(first_pi_parameters)
+          expect(recycled_intent.payment_record.parameters).to eq(first_pi_parameters)
         end
       end
     end

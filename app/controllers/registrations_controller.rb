@@ -523,7 +523,7 @@ class RegistrationsController < ApplicationController
           #   and Stripe tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
           #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
           stored_payment.update!(created_at: audit_event.created_at_remote)
-        elsif stored_intent.holder.is_a? AttendeePaymentRequest
+        elsif stored_intent.holder.is_a? MicroserviceRegistration
           ruby_money = charge_transaction.money_amount
           begin
             Microservices::Registrations.update_registration_payment(stripe_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
@@ -562,7 +562,7 @@ class RegistrationsController < ApplicationController
     end
 
     # No need to create a new intent here. We can just query the stored intent from Stripe directly.
-    stripe_intent = stored_intent.retrieve_intent
+    stripe_intent = stored_intent.retrieve_remote
 
     unless stripe_intent.present?
       flash[:error] = t("registrations.payment_form.errors.stripe_not_found")
@@ -617,9 +617,8 @@ class RegistrationsController < ApplicationController
   # This return URL handles record keeping and stuff at `payment_completion` above.
   def load_payment_intent
     registration = Registration.includes(:user, :competition).find(params[:id])
-    user = registration.user
 
-    unless user == current_user
+    unless registration.user_id == current_user.id
       return render status: 403, json: { error: { message: t("registrations.payment_form.errors.not_allowed") } }
     end
 
@@ -634,87 +633,20 @@ class RegistrationsController < ApplicationController
     end
 
     competition = registration.competition
-    account_id = competition.payment_account_for(:stripe).account_id
 
-    registration_metadata = {
-      competition: competition.name,
-      registration_url: edit_registration_url(registration),
-    }
-
+    payment_account = competition.payment_account_for(:stripe)
     currency_iso = registration.outstanding_entry_fees.currency.iso_code
-    stripe_amount = StripeRecord.amount_to_stripe(amount, currency_iso)
 
-    payment_intent_args = {
-      amount: stripe_amount,
-      currency: currency_iso,
-      receipt_email: user.email,
-      description: "Registration payment for #{competition.name}",
-      metadata: registration_metadata,
-    }
-
-    registration.payment_intents
-                .incomplete
-                .each do |intent|
-      intent_account_id = intent.payment_record.account_id
-
-      if intent_account_id == account_id && intent.created?
-        # Send the updated parameters to Stripe (maybe the user decided to donate in the meantime,
-        # so we need to make sure that the correct amount is being used)
-        Stripe::PaymentIntent.update(
-          intent.stripe_id,
-          payment_intent_args,
-          stripe_account: account_id,
-        )
-
-        updated_parameters = intent.parameters.deep_merge(payment_intent_args)
-
-        # Update our own journals so that we know we changed something
-        intent.payment_record.update!(
-          parameters: updated_parameters,
-          amount_stripe_denomination: stripe_amount,
-          currency_code: currency_iso,
-        )
-
-        return render json: { client_secret: intent.client_secret }
-      end
-    end
-
-    # The Stripe API forces the user to provide a return_url when using automated payment methods.
-    # In our test suite however, we want to be able to confirm specific payment methods without a return URL
-    # because our CI containers are not exposed to the public. So we need this little hack :/
-    enable_automatic_pm = !Rails.env.test?
-
-    # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
-    # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
-    payment_intent_args[:automatic_payment_methods] = { enabled: enable_automatic_pm }
-
-    # Create the PaymentIntent, overriding the stripe_account for the request
-    # by the connected stripe account for the competition.
-    intent = Stripe::PaymentIntent.create(
-      payment_intent_args,
-      stripe_account: account_id,
-    )
-
-    # Log the payment attempt. We register the payment intent ID to find it later after checkout completed.
-    stripe_record = StripeRecord.create_from_api(intent, payment_intent_args, account_id)
-
-    # memoize the payment intent in our DB because payments are handled asynchronously
-    # so we need to be able to retrieve this later at any time, even when our server crashes in the meantime…
-    PaymentIntent.create!(
-      holder: registration,
-      payment_record: stripe_record,
-      client_secret: intent.client_secret,
-      initiated_by: current_user,
-      wca_status: stripe_record.determine_wca_status,
-    )
+    intent = payment_account.prepare_intent(registration, amount, currency_iso, current_user)
 
     render json: { client_secret: intent.client_secret }
   end
 
   def refund_payment
     registration = Registration.find(params[:id])
+    stripe_integration = registration.competition.payment_account_for(:stripe)
 
-    unless registration.competition.using_payment_integrations?
+    unless stripe_integration.present?
       flash[:danger] = "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
       return redirect_to edit_registration_path(registration)
     end
@@ -734,31 +666,16 @@ class RegistrationsController < ApplicationController
       return redirect_to edit_registration_path(registration)
     end
 
-    currency_iso = registration.competition.currency_code
-    stripe_amount = StripeRecord.amount_to_stripe(refund_amount, currency_iso)
-
     # Backwards compatibility: We may at some point try to record a refund for a payment that was
     #   - created before the introduction of receipts
     #   - but refunded after the new receipts feature was introduced. Fall back to the old stripe_charge_id if that happens.
     charge_id = payment.receipt&.stripe_id || payment.stripe_charge_id
 
-    refund_args = {
-      charge: charge_id,
-      amount: stripe_amount,
-    }
-
-    account_id = registration.competition.payment_account_for(:stripe).account_id
-
-    refund = Stripe::Refund.create(
-      refund_args,
-      stripe_account: account_id,
-    )
-
-    refund_receipt = StripeRecord.create_from_api(refund, refund_args, account_id)
-    refund_receipt.update!(parent_transaction: payment.receipt) if payment.receipt.present?
+    refund_receipt = stripe_integration.issue_refund(charge_id, refund_amount)
 
     # Should be the same as `refund_amount`, but by double-converting from the Stripe object
     # we can also double-check that they're on the same page as we are (to be _really_ sure!)
+    # FIXME: This method only exists because we silently assume it's Stripe
     ruby_money = refund_receipt.money_amount
 
     registration.record_refund(
