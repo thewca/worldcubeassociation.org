@@ -82,12 +82,12 @@ function VenueLocationMap({
     return null;
   }, [searchResultPopup]);
 
-  const mapPosition = useMemo(() => ({
+  const venuePosition = useMemo(() => ({
     lat: toDegrees(venue.latitudeMicrodegrees),
     lng: toDegrees(venue.longitudeMicrodegrees),
   }), [venue.latitudeMicrodegrees, venue.longitudeMicrodegrees]);
 
-  const setMapPosition = useCallback((evt, { lat, lng }) => {
+  const setVenuePosition = useCallback((evt, { lat, lng }) => {
     dispatch(editVenue(venue.id, 'latitudeMicrodegrees', toMicrodegrees(lat)));
     dispatch(editVenue(venue.id, 'longitudeMicrodegrees', toMicrodegrees(lng)));
   }, [dispatch, venue.id]);
@@ -95,17 +95,18 @@ function VenueLocationMap({
   const provider = userTileProvider;
 
   const onGeoSearchResult = useCallback((evt) => {
-    setMapPosition(evt, {
+    setVenuePosition(evt, {
       lat: evt.location.y,
       lng: evt.location.x,
     });
 
     setSearchResultPopup(evt.location.label);
-  }, [setMapPosition, setSearchResultPopup]);
+  }, [setVenuePosition, setSearchResultPopup]);
 
   return (
     <MapContainer
-      center={mapPosition}
+      // note: `center` only applies to initial render
+      center={venuePosition}
       zoom={16}
       scrollWheelZoom={false}
       style={{ height: '100%' }}
@@ -113,7 +114,11 @@ function VenueLocationMap({
       <ResizeMapIFrame />
       <TileLayer url={provider.url} attribution={provider.attribution} />
       <GeoSearchControl onGeoSearchResult={onGeoSearchResult} />
-      <DraggableMarker markerRef={markerRef} position={mapPosition} setPosition={setMapPosition}>
+      <DraggableMarker
+        markerRef={markerRef}
+        position={venuePosition}
+        setPosition={setVenuePosition}
+      >
         {markerPopup}
       </DraggableMarker>
     </MapContainer>
