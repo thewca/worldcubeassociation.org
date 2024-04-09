@@ -44,7 +44,13 @@ export function DraggableMarker({
   markerRef = null,
   children,
 }) {
+  const map = useMap();
+
   const updatePosition = useCallback((e) => setPosition(e, e.target.getLatLng()), [setPosition]);
+
+  useEffect(() => {
+    map.panTo(position);
+  }, [map, position]);
 
   return (
     <Marker
