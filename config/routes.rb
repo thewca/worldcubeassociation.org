@@ -22,7 +22,6 @@ Rails.application.routes.draw do
   unless PaypalInterface.paypal_disabled?
     post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-    get 'competitions/:id/paypal-connect' => 'competitions#paypal_connect', as: :competitions_paypal_connect
     post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
@@ -120,6 +119,10 @@ Rails.application.routes.draw do
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
+
+    get '/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
+    get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
+    post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
   unless EnvConfig.WCA_LIVE_SITE?
     scope :payment do
@@ -185,7 +188,6 @@ Rails.application.routes.draw do
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
-  post 'competitions/:id/disconnect_payment/:payment_integration' => 'competitions#disconnect_payment_integration', as: :competition_disconnect_payment_integration
 
   get 'panel' => 'panel#index'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'

@@ -300,7 +300,6 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
-  # TODO: Refactor for cleaner integration of Stripe and Paypal (and other payment services)
   def payment_setup
     @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
 
@@ -308,8 +307,8 @@ class CompetitionsController < ApplicationController
     client = create_stripe_oauth_client
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: EnvConfig.ROOT_URL + competitions_stripe_connect_path,
-      state: @competition.id,
+      redirect_uri: competition_connect_payment_integration_url(payment_integration: :stripe),
+      state: current_user.id,
     }
     @authorize_url = client.auth_code.authorize_url(oauth_params)
 
@@ -318,47 +317,47 @@ class CompetitionsController < ApplicationController
     @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
   end
 
-  def paypal_connect
-    if PaypalInterface.paypal_disabled?
-      flash[:error] = 'PayPal is not yet available in production environments'
-      return redirect_to competitions_payment_setup_path(competition)
+  def connect_payment_integration
+    competition = competition_from_params
+    payment_integration = params.require(:payment_integration)
+
+    unless current_user&.can_manage_competition?(competition)
+      raise ActionController::RoutingError.new('Not Found')
     end
 
-    competition = competition_from_params
+    # TODO: Move this bit of code somewhere else?
+    case payment_integration
+    when "paypal"
+      if PaypalInterface.paypal_disabled?
+        flash[:error] = 'PayPal is not yet available in production environments'
+        return redirect_to competitions_payment_setup_path(competition)
+      end
 
-    account_reference = ConnectedPaypalAccount.new(
-      paypal_merchant_id: params[:merchantIdInPayPal],
-      permissions_granted: params[:permissionsGranted],
-      account_status: params[:accountStatus],
-      consent_status: params[:consentStatus],
-    )
+      account_reference = ConnectedPaypalAccount.new(
+        paypal_merchant_id: params[:merchantIdInPayPal],
+        permissions_granted: params[:permissionsGranted],
+        account_status: params[:accountStatus],
+        consent_status: params[:consentStatus],
+      )
+    when "stripe"
+      client = create_stripe_oauth_client
+      resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
+
+      account_reference = ConnectedStripeAccount.new(
+        account_id: resp.params['stripe_user_id'],
+      )
+    else
+      raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
+    end
 
     competition.competition_payment_integrations.new(connected_account: account_reference)
 
     if competition.save
-      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.paypal'))
+      flash[:success] = t('payments.payment_setup.account_connected', provider: t("payments.payment_providers.#{payment_integration}"))
     else
-      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.paypal'))
+      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t("payments.payment_providers.#{payment_integration}"))
     end
 
-    redirect_to competitions_payment_setup_path(competition)
-  end
-
-  def stripe_connect
-    code = params[:code]
-    competition = Competition.find(params[:state])
-    unless current_user&.can_manage_competition?(competition)
-      raise ActionController::RoutingError.new('Not Found')
-    end
-    client = create_stripe_oauth_client
-    resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
-    stripe_account = ConnectedStripeAccount.new(account_id: resp.params['stripe_user_id'])
-    competition.competition_payment_integrations.new(connected_account: stripe_account)
-    if competition.save
-      flash[:success] = t('payments.payment_setup.account_connected', provider: t('payments.payment_providers.stripe'))
-    else
-      flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t('payments.payment_providers.stripe'))
-    end
     redirect_to competitions_payment_setup_path(competition)
   end
 
