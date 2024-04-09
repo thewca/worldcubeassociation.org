@@ -120,7 +120,7 @@ Rails.application.routes.draw do
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
 
-    get '/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
+    get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
     get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
     post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
@@ -137,8 +137,6 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
 
-  get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
-  get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
   get 'competitions/edit/nearby_competitions' => 'competitions#nearby_competitions', as: :nearby_competitions

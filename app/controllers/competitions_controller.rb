@@ -39,7 +39,7 @@ class CompetitionsController < ApplicationController
     :edit,
     :edit_events,
     :edit_schedule,
-    :payment_setup,
+    :payment_integration_setup,
   ]
 
   rescue_from WcaExceptions::ApiException do |e|
@@ -300,21 +300,32 @@ class CompetitionsController < ApplicationController
     render :edit
   end
 
-  def payment_setup
-    @competition = competition_from_params(includes: CHECK_SCHEDULE_ASSOCIATIONS)
+  def payment_integration_setup
+    @competition = competition_from_params
 
-    # Stripe setup URL
-    client = create_stripe_oauth_client
-    oauth_params = {
-      scope: 'read_write',
-      redirect_uri: competition_connect_payment_integration_url(payment_integration: :stripe),
-      state: current_user.id,
-    }
-    @authorize_url = client.auth_code.authorize_url(oauth_params)
+    not_connected_integrations = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys - @competition.connected_payment_integration_types
 
-    # Paypal setup URL
-    # TODO: Don't generate this URL if there is already a connected paypal account?
-    @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
+    @cpi_onboarding_urls = not_connected_integrations.index_with do |cpi_type|
+      # TODO: Move this bit of code somewhere else?
+      case cpi_type
+      when :stripe
+        # Stripe setup URL
+        client = create_stripe_oauth_client
+        oauth_params = {
+          scope: 'read_write',
+          redirect_uri: competition_connect_payment_integration_url(payment_integration: :stripe),
+          state: current_user.id,
+        }
+
+        client.auth_code.authorize_url(oauth_params)
+      when :paypal
+        return nil if PaypalInterface.paypal_disabled?
+
+        PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
+      else
+        nil # TODO: how to react in this case? Shouldn't really happen anyways…
+      end
+    end
   end
 
   def connect_payment_integration
@@ -358,7 +369,7 @@ class CompetitionsController < ApplicationController
       flash[:danger] = t('payments.payment_setup.account_not_connected', provider: t("payments.payment_providers.#{payment_integration}"))
     end
 
-    redirect_to competitions_payment_setup_path(competition)
+    redirect_to competition_payment_integration_setup_path(competition)
   end
 
   private def create_stripe_oauth_client
@@ -389,7 +400,7 @@ class CompetitionsController < ApplicationController
       flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t("payments.payment_providers.#{payment_integration}"))
     end
 
-    redirect_to competitions_payment_setup_path(competition)
+    redirect_to competition_payment_integration_setup_path(competition)
   end
 
   def clone_competition

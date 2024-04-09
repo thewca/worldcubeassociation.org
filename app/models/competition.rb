@@ -2525,6 +2525,11 @@ class Competition < ApplicationRecord
     competition_payment_integrations.exists?
   end
 
+  def connected_payment_integration_types
+    raw_types = self.competition_payment_integrations.pluck(:connected_account_type)
+    raw_types.map { |type| CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.invert[type] }
+  end
+
   def payment_integration_connected?(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
