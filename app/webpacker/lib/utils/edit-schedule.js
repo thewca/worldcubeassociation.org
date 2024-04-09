@@ -4,11 +4,19 @@ import { toLuxonDateTime } from '@fullcalendar/luxon3';
 import { parseActivityCode } from './wcif';
 
 export function toMicrodegrees(coord) {
-  return Math.trunc(parseFloat(coord) * 1e6);
+  const result = Math.trunc(parseFloat(coord) * 1e6);
+  if (Number.isNaN(result)) {
+    return 0;
+  }
+  return result;
 }
 
 export function toDegrees(coord) {
-  return coord / 1e6;
+  const result = coord / 1e6;
+  if (Number.isNaN(result)) {
+    return 0;
+  }
+  return result;
 }
 
 function withNestedActivities(activities) {
