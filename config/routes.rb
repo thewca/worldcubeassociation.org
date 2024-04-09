@@ -22,8 +22,7 @@ Rails.application.routes.draw do
   unless PaypalInterface.paypal_disabled?
     post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-    get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
-    post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
+    get 'competitions/:id/paypal-connect' => 'competitions#paypal_connect', as: :competitions_paypal_connect
     post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
@@ -186,7 +185,7 @@ Rails.application.routes.draw do
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
-  post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
+  post 'competitions/:id/disconnect_payment/:payment_integration' => 'competitions#disconnect_payment_integration', as: :competition_disconnect_payment_integration
 
   get 'panel' => 'panel#index'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'

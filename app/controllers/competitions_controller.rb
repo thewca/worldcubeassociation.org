@@ -24,8 +24,7 @@ class CompetitionsController < ApplicationController
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_competitions?) }, only: [
     :admin_edit,
-    :disconnect_stripe,
-    :disconnect_paypal,
+    :disconnect_payment_integration,
   ]
   before_action -> { redirect_to_root_unless_user(:can_admin_results?) }, only: [
     :post_results,
@@ -319,7 +318,7 @@ class CompetitionsController < ApplicationController
     @paypal_onboarding_url = PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
   end
 
-  def paypal_return
+  def paypal_connect
     if PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to competitions_payment_setup_path(competition)
@@ -374,32 +373,23 @@ class CompetitionsController < ApplicationController
     OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 
-  def disconnect_paypal
-    if PaypalInterface.paypal_disabled?
+  def disconnect_payment_integration
+    competition = competition_from_params
+    payment_integration = params.require(:payment_integration)
+
+    if payment_integration == "paypal" && PaypalInterface.paypal_disabled?
       flash[:error] = 'PayPal is not yet available in production environments'
       return redirect_to root_url
     end
 
-    competition = competition_from_params
-    competition.disconnect_payment_integration(:paypal)
+    competition.disconnect_payment_integration(payment_integration.to_sym)
 
-    if competition.paypal_connected?
-      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.paypal'))
+    if competition.payment_integration_connected?(payment_integration.to_sym)
+      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t("payments.payment_providers.#{payment_integration}"))
     else
-      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.paypal'))
+      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t("payments.payment_providers.#{payment_integration}"))
     end
-    redirect_to competitions_payment_setup_path(@competition)
-  end
 
-  def disconnect_stripe
-    competition = competition_from_params
-    competition.disconnect_payment_integration(:stripe)
-
-    if competition.stripe_connected?
-      flash[:danger] = t('payments.payment_setup.account_disconnected_failure', provider: t('payments.payment_providers.stripe'))
-    else
-      flash[:success] = t('payments.payment_setup.account_disconnected_success', provider: t('payments.payment_providers.stripe'))
-    end
     redirect_to competitions_payment_setup_path(competition)
   end
 

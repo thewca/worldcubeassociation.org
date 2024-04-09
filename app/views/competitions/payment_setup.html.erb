@@ -43,7 +43,7 @@
 
     <% if current_user&.can_admin_competitions? %>
       <%= button_to(
-        competition_disconnect_stripe_path,
+        competition_disconnect_payment_integration_path(payment_integration: :stripe),
         class: 'btn btn-danger',
         disabled: !@competition.stripe_connected?,
         method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.stripe')) }
@@ -73,7 +73,7 @@
 
       <% if current_user&.can_admin_competitions? %>
         <%= button_to(
-          competition_disconnect_paypal_path,
+          competition_disconnect_payment_integration_path(payment_integration: :paypal),
           class: 'btn btn-danger',
           disabled: !@competition.paypal_connected?,
           method: :post, data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t('payments.payment_providers.paypal')) }
