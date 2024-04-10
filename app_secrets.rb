@@ -74,6 +74,7 @@ AppSecrets = SuperConfig.new do
     vault :OIDC_SECRET_KEY
     vault :SLACK_WST_BOT_TOKEN
     vault :TNOODLE_PUBLIC_KEY
+    vault :PAYPAL_WEBHOOK_ID
   else
     mandatory :DATABASE_PASSWORD, :string
     mandatory :GOOGLE_MAPS_API_KEY, :string
@@ -106,5 +107,6 @@ AppSecrets = SuperConfig.new do
     optional :PAYPAL_ATTRIBUTION_CODE, :string
     optional :SLACK_WST_BOT_TOKEN, :string, ''
     optional :TNOODLE_PUBLIC_KEY, :string, ''
+    optional :PAYPAL_WEBHOOK_ID, :string, ''
   end
 end

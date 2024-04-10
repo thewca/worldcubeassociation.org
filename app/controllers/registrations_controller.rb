@@ -3,9 +3,9 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination, :create_paypal_order]
+  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :paypal_webhook, :stripe_denomination, :create_paypal_order]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
-  protect_from_forgery except: [:stripe_webhook]
+  protect_from_forgery except: [:stripe_webhook, :paypal_webhook]
 
   private def competition_from_params
     competition = if params[:competition_id]
@@ -468,6 +468,7 @@ class RegistrationsController < ApplicationController
       logger.warn "Stripe webhook error while parsing basic request. #{e.message}"
       return head :bad_request
     end
+
     # Check if webhook signing is configured.
     if AppSecrets.STRIPE_WEBHOOK_SECRET.present?
       # Retrieve the event by verifying the signature using the raw body and secret.
@@ -540,6 +541,90 @@ class RegistrationsController < ApplicationController
       stored_intent.update_status_and_charges(stripe_intent, audit_event, audit_event.created_at_remote)
     else
       logger.info "Unhandled Stripe event type: #{event.type}"
+    end
+
+    head :ok
+  end
+
+  # Code is self-written according to outline available at https://developer.paypal.com/api/rest/webhooks/rest/
+  def paypal_webhook
+    unless AppSecrets.PAYPAL_WEBHOOK_ID.present?
+      logger.error "No PayPal webhook ID defined to process events."
+      return head :bad_request
+    end
+
+    payload = request.body.read
+    raw_event = JSON.parse(payload)
+
+    paypal_headers = request.headers.to_h.select { |key, _| key.to_s.start_with?('PAYPAL') }
+
+    verification_result = PaypalInterface.verify_webhook(raw_event, AppSecrets.PAYPAL_WEBHOOK_ID, paypal_headers)
+
+    # See https://developer.paypal.com/docs/api/webhooks/v1/#verify-webhook-signature_post!c=200&path=verification_status&t=response
+    unless verification_result['verification_status'] == "SUCCESS"
+      logger.error "PayPal webhook signature verification failed."
+      return head :forbidden
+    end
+
+    # Create a default audit that marks the event as "unhandled".
+    audit_event = PaypalWebhookEvent.create_from_api(raw_event, paypal_headers)
+
+    paypal_resource = raw_event['resource'] # contains a polymorphic type that depends on the event
+    stored_record = PaypalRecord.find_by(record_id: paypal_resource['id'])
+
+    if PaypalWebhookEvent::HANDLED_EVENTS.include?(raw_event['event_type'])
+      if stored_record.nil?
+        logger.error "Paypal webhook reported event on entity #{paypal_resource['id']} but we have no matching transaction."
+        return head :not_found
+      else
+        audit_event.update!(paypal_record: stored_record, handled: true)
+      end
+    end
+
+    # Handle the event
+    # TODO: This whole block looks eerily similar to Stripe above. Figure out a clever way to de-duplicate this?
+    case raw_event['event_type']
+    when PaypalWebhookEvent::CHECKOUT_ORDER_APPROVED
+      # paypal_resource contains a PayPal Order as per PayPal's description
+      # https://developer.paypal.com/api/rest/webhooks/event-names/#link-orders
+
+      stored_intent = stored_record.payment_intent
+
+      stored_intent.update_status_and_charges(paypal_resource, audit_event, audit_event.created_at_remote) do |charge_transaction|
+        if stored_intent.holder.is_a? Registration
+          ruby_money = charge_transaction.money_amount
+
+          stored_payment = stored_intent.holder.record_payment(
+            ruby_money.cents,
+            ruby_money.currency.iso_code,
+            charge_transaction,
+            stored_intent.user.id,
+          )
+
+          # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by PayPal.
+          # Context: When our servers die due to traffic spikes, the PayPal webhook cannot be processed
+          #   and PayPal (hopefully?) tries again after an exponential backoff. So we (erroneously!) record the creation timestamp
+          #   in our DB _after_ the backed-off event has been processed. This can lead to a wrong registration order :(
+          stored_payment.update!(created_at: audit_event.created_at_remote)
+        elsif stored_intent.holder.is_a? MicroserviceRegistration
+          ruby_money = charge_transaction.money_amount
+
+          begin
+            Microservices::Registrations.update_registration_payment(stored_intent.holder.attendee_id, stored_intent.id, ruby_money.cents, ruby_money.currency.iso_code, stored_intent.status)
+          rescue Faraday::Error => e
+            logger.error "Couldn't update Microservice: #{e.message}, at #{e.backtrace}"
+            return head :internal_server_error
+          end
+        end
+      end
+    when PaypalWebhookEvent::CHECKOUT_PAYMENT_APPROVAL_REVERSED
+      # paypal_resource contains a PayPal Order as per PayPal's description
+      # https://developer.paypal.com/api/rest/webhooks/event-names/#link-orders
+
+      stored_intent = stored_record.payment_intent
+      stored_intent.update_status_and_charges(paypal_resource, audit_event, audit_event.created_at_remote)
+    else
+      logger.info "Unhandled PayPal event type: #{raw_event['event_type']}"
     end
 
     head :ok

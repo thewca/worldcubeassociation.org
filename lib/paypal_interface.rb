@@ -128,6 +128,38 @@ module PaypalInterface
     refund
   end
 
+  def self.verify_webhook(webhook_event, webhook_id, req_headers)
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v1/notifications/verify-webhook-signature"
+
+    payload = {
+      auth_algo: req_headers['PAYPAL-AUTH-ALGO'],
+      cert_url: req_headers['PAYPAL-CERT-URL'],
+      transmission_id: req_headers['PAYPAL-TRANSMISSION-ID'],
+      transmission_sig: req_headers['PAYPAL-TRANSMISSION-SIG'],
+      transmission_time: req_headers['PAYPAL-TRANSMISSION-TIME'],
+      webhook_id: webhook_id,
+      webhook_event: webhook_event,
+    }
+
+    response = paypal_connection(url).post do |req|
+      req.body = payload
+    end
+
+    response.body
+  end
+
+  def self.retrieve_webhook_event(merchant_id, event_id)
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v1/notifications/webhook-events/#{event_id}"
+
+    response = paypal_connection(url).get do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      # FIXME: This will break currently, wait until other PR is merged
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
   private_class_method def self.paypal_connection(url)
     Faraday.new(
       url: url,
