@@ -16,13 +16,13 @@ export default function TeamsCommitteesCouncils({ canViewPastRoles }) {
     data: teamsCommittees,
     loading: teamsCommitteesLoading,
     error: teamsCommitteesError,
-  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.teams_committees));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.teams_committees, 'name', { isActive: true, isHidden: false }));
 
   const {
     data: councils,
     loading: councilsLoading,
     error: councilsError,
-  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.councils, 'name', { isActive: true, isHidden: false }));
 
   const [hash, setHash] = useHash();
   const loading = teamsCommitteesLoading || councilsLoading;

@@ -25,6 +25,10 @@ class UserGroup < ApplicationRecord
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
 
+  def roles_migrated?
+    user_roles.any?
+  end
+
   # For teams which have groups migrated but not roles, this method will help to get the
   # corresponding team to fetch the team_members.
   def team
@@ -33,8 +37,8 @@ class UserGroup < ApplicationRecord
 
   def roles
     role_list = self.user_roles.to_a
-    if self.teams_committees?
-      TeamMember.where(team_id: self.team&.id).each do |team_member|
+    if self.teams_committees? && !self.roles_migrated?
+      TeamMember.where(team_id: self.team.id).each do |team_member|
         role_list << team_member.role
       end
     end
