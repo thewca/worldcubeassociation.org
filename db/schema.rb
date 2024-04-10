@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_04_165513) do
+ActiveRecord::Schema[7.1].define(version: 2024_04_10_055751) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -883,6 +883,20 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_04_165513) do
     t.index ["parent_record_id"], name: "index_paypal_records_on_parent_record_id"
   end
 
+  create_table "paypal_webhook_events", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "paypal_id"
+    t.string "event_type"
+    t.string "event_version"
+    t.string "merchant_id"
+    t.datetime "created_at_remote"
+    t.text "paypal_headers"
+    t.boolean "handled"
+    t.bigint "paypal_record_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["paypal_record_id"], name: "index_paypal_webhook_events_on_paypal_record_id"
+  end
+
   create_table "poll_options", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "description", limit: 200, null: false
     t.integer "poll_id", null: false
@@ -1289,6 +1303,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_04_165513) do
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
+  add_foreign_key "paypal_webhook_events", "paypal_records"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
   add_foreign_key "stripe_records", "stripe_records", column: "parent_transaction_id"

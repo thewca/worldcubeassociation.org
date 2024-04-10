@@ -556,7 +556,9 @@ class RegistrationsController < ApplicationController
     payload = request.body.read
     raw_event = JSON.parse(payload)
 
-    verification_result = PaypalInterface.verify_webhook(raw_event, AppSecrets.PAYPAL_WEBHOOK_ID, request.headers)
+    paypal_headers = request.headers.to_h.select { |key, _| key.to_s.start_with?('PAYPAL') }
+
+    verification_result = PaypalInterface.verify_webhook(raw_event, AppSecrets.PAYPAL_WEBHOOK_ID, paypal_headers)
 
     # See https://developer.paypal.com/docs/api/webhooks/v1/#verify-webhook-signature_post!c=200&path=verification_status&t=response
     unless verification_result['verification_status'] == "SUCCESS"
@@ -565,7 +567,7 @@ class RegistrationsController < ApplicationController
     end
 
     # Create a default audit that marks the event as "unhandled".
-    audit_event = PaypalWebhookEvent.create_from_api(raw_event)
+    audit_event = PaypalWebhookEvent.create_from_api(raw_event, paypal_headers)
 
     paypal_resource = raw_event['resource'] # contains a polymorphic type that depends on the event
     stored_record = PaypalRecord.find_by(record_id: paypal_resource['id'])
@@ -580,6 +582,7 @@ class RegistrationsController < ApplicationController
     end
 
     # Handle the event
+    # TODO: This whole block looks eerily similar to Stripe above. Figure out a clever way to de-duplicate this?
     case raw_event['event_type']
     when PaypalWebhookEvent::CHECKOUT_ORDER_APPROVED
       # paypal_resource contains a PayPal Order as per PayPal's description

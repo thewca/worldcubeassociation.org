@@ -148,6 +148,18 @@ module PaypalInterface
     response.body
   end
 
+  def self.retrieve_webhook_event(merchant_id, event_id)
+    url = "#{EnvConfig.PAYPAL_BASE_URL}/v1/notifications/webhook-events/#{event_id}"
+
+    response = paypal_connection(url).get do |req|
+      req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
+      # FIXME: This will break currently, wait until other PR is merged
+      req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(merchant_id)
+    end
+
+    response.body
+  end
+
   private_class_method def self.paypal_connection(url)
     Faraday.new(
       url: url,
