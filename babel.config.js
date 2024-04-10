@@ -23,7 +23,8 @@ module.exports = function(api) {
           'semantic-css': ([, name]) => `stylesheets/semantic/components${name}.min.css`,
         }
       }],
-      process.env.WEBPACK_SERVE && 'react-refresh/babel',
+      // FIXME The below line currently breaks react-rails, no clue why :(
+      //   process.env.WEBPACK_SERVE && 'react-refresh/babel',
       !isDevelopmentEnv && [
         'babel-plugin-transform-react-remove-prop-types',
         {
