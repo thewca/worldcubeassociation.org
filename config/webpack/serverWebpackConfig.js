@@ -1,10 +1,7 @@
-// The source code including full typescript support is available at:
-// https://github.com/shakacode/react_on_rails_demo_ssr_hmr/blob/master/config/webpack/serverWebpackConfig.js
+const webpack = require('webpack');
 
 const { merge, config } = require('shakapacker');
 const commonWebpackConfig = require('./commonWebpackConfig');
-
-const webpack = require('webpack');
 
 const configureServer = () => {
   // We need to use "merge" because the clientConfigObject, EVEN after running
@@ -15,13 +12,11 @@ const configureServer = () => {
 
   // We just want the single server bundle entry
   const serverEntry = {
-    'server-bundle': serverWebpackConfig.entry['server-bundle'],
+    'server_rendering': serverWebpackConfig.entry['server_rendering'],
   };
 
-  if (!serverEntry['server-bundle']) {
-    throw new Error(
-      "Create a pack with the file name 'server-bundle.js' containing all the server rendering files",
-    );
+  if (!serverEntry['server_rendering']) {
+    throw new Error('Create a pack with the file name \'server_rendering.js\' containing all the server rendering files');
   }
 
   serverWebpackConfig.entry = serverEntry;
@@ -32,7 +27,8 @@ const configureServer = () => {
   serverWebpackConfig.module.rules.forEach((loader) => {
     if (loader.use && loader.use.filter) {
       loader.use = loader.use.filter(
-        (item) => !(typeof item === 'string' && item.match(/mini-css-extract-plugin/)),
+        (item) =>
+          !(typeof item === 'string' && item.match(/mini-css-extract-plugin/))
       );
     }
   });
@@ -41,12 +37,14 @@ const configureServer = () => {
   serverWebpackConfig.optimization = {
     minimize: false,
   };
-  serverWebpackConfig.plugins.unshift(new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }));
+  serverWebpackConfig.plugins.unshift(
+    new webpack.optimize.LimitChunkCountPlugin({ maxChunks: 1 }),
+  );
 
-  // Custom output for the server-bundle that matches the config in
+  // Custom output for the server_rendering that matches the config in
   // config/initializers/react_on_rails.rb
   serverWebpackConfig.output = {
-    filename: 'server-bundle.js',
+    filename: 'server_rendering.js',
     globalObject: 'this',
     // If using the React on Rails Pro node server renderer, uncomment the next line
     // libraryTarget: 'commonjs2',
@@ -61,7 +59,7 @@ const configureServer = () => {
     (plugin) =>
       plugin.constructor.name !== 'WebpackAssetsManifest' &&
       plugin.constructor.name !== 'MiniCssExtractPlugin' &&
-      plugin.constructor.name !== 'ForkTsCheckerWebpackPlugin',
+      plugin.constructor.name !== 'ForkTsCheckerWebpackPlugin'
   );
 
   // Configure loader rules for SSR

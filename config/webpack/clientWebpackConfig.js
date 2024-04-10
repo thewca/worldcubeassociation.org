@@ -1,6 +1,3 @@
-// The source code including full typescript support is available at:
-// https://github.com/shakacode/react_on_rails_demo_ssr_hmr/blob/master/config/webpack/clientWebpackConfig.js
-
 const commonWebpackConfig = require('./commonWebpackConfig');
 
 const configureClient = () => {
@@ -10,7 +7,7 @@ const configureClient = () => {
   // In case this entry is not deleted, a very strange "window" not found
   // error shows referring to window["webpackJsonp"]. That is because the
   // client config is going to try to load chunks.
-  delete clientConfig.entry['server-bundle'];
+  delete clientConfig.entry['server_rendering'];
 
   return clientConfig;
 };

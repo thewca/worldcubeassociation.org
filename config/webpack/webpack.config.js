@@ -1,7 +1,6 @@
-const { env } = require('shakapacker');
-
 const { existsSync } = require('fs');
 const { resolve } = require('path');
+const { env, generatewebpackConfig } = require('shakapacker');
 
 const envSpecificConfig = () => {
   const path = resolve(__dirname, `${env.nodeEnv}.js`);
@@ -11,7 +10,7 @@ const envSpecificConfig = () => {
     return require(path);
   }
 
-  throw new Error(`Could not find file to load ${path}, based on NODE_ENV`);
+  return generatewebpackConfig();
 };
 
 module.exports = envSpecificConfig();
