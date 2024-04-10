@@ -601,21 +601,13 @@ sv:
         f: Kvinna
         #original_hash: 6e6a6f2
         o: Övrigt
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Trainee-delegat
-        #original_hash: 9b97968
-        candidate_delegate: Junior-delegat
-        #original_hash: 12ab214
-        delegate: Delegat
-        #original_hash: d463c23
-        senior_delegate: Senior-delegat
-      role_status:
+    user_roles:
+      status:
         delegate_regions:
           #original_hash: 621101a
           trainee_delegate: Trainee-delegat
           #original_hash: 9b97968
-          candidate_delegate: Junior-delegat
+          junior_delegate: Junior-delegat
           #original_hash: 12ab214
           delegate: Delegat
           #original_hash: 45c2317
@@ -636,6 +628,17 @@ sv:
           senior_member: Senior medlem
           #original_hash: e26c936
           leader: Ledare
+        officers:
+          #original_hash: de34439
+          chair: 'WCA:s ordförande'
+          #original_hash: 7d405ff
+          executive_director: 'WCA:s VD'
+          #original_hash: 1dd4a07
+          secretary: 'WCA:s sekreterare'
+          #original_hash: 0388b19
+          vice_chair: 'WCA:s vice ordförande'
+          #original_hash: 75e65d9
+          treasurer: 'WCA:s kassör'
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -935,6 +938,10 @@ sv:
           pending: Väntelista
           #original_hash: 441bda6
           deleted: Raderad
+          #original_hash: a1bf92e
+          cancelled: Raderad
+          #original_hash: 8cf6f9c
+          waiting_list: På väntelistan
   mail_form:
     attributes:
       contact_form:
@@ -1145,13 +1152,13 @@ sv:
       error_pages:
         #original_hash: 1042478
         500_error: 'Vi ber om ursäkt, något gick fel.'
-        #original_hash: d815249
+        #original_hash: d656a11
         500_contact: >-
-          Om du rapporterar detta fel till WCA Software Team, var vänlig nämn
-          anrops-ID:t
+          Om du rapporterar detta fel till WCA Software Team, var vänlig kopiera
+          in anrops-ID:t i detta mejl.
         #original_hash: b61e305
         400_error: Sidan du letade efter existerar inte.
-        #original_hash: 8b309f5
+        #original_hash: c8a7d4e
         400_contact: >-
           Om du tror detta är ett misstag, var vänlig kontakta WCA Software
           Team, och inkludera anrops-ID:t
@@ -1160,7 +1167,7 @@ sv:
         help:
           #original_hash: 95c10ec
           https_info: HTTPS krävs om inte hosten är "localhost"
-          #original_hash: 62a0113
+          #original_hash: 40b9d10
           scopes_html: >-
             Separera scopes med mellanslag. Lämna tomt för att använda
             standardscope(s). Se <a
@@ -1205,10 +1212,14 @@ sv:
       about: Om WCA
       #original_hash: ed97787
       documents: WCA-Dokument
+      #original_hash: c9bae18
+      officers_and_board: 'WCA:s ledning och styrelse'
       #original_hash: d8fd3e4
       delegates: WCA-delegater
       #original_hash: 37b8fdc
       organizations: Regionala Organisationer
+      #original_hash: 959d354
+      translators: Översättare
       #original_hash: d790b40
       faq: Vanliga frågor
       #original_hash: cf1d2c9
@@ -1219,8 +1230,8 @@ sv:
       education: Utbildningsresurser
       #original_hash: c66444f
       wca_live: WCA Live
-      #original_hash: a34b69f
-      contact: Kontaktinformation
+      #original_hash: b37456c
+      contact: Kontakt
       #original_hash: 8e12c09
       speedcubing_history: Speedcubings historia
       #original_hash: 4fa8cc8
@@ -1317,6 +1328,155 @@ sv:
       disclaimer: Observera
       #original_hash: d561f1a
       find_us: Hitta oss
+  page:
+    translators:
+      #original_hash: 959d354
+      title: Översättare
+    officers_and_board:
+      #original_hash: c9bae18
+      title: 'WCA:s ledning och styrelse'
+      #original_hash: 312e799
+      officers_description: >-
+        WCA:s ledning hanterar uppgifter som rör WCA:s status som ideell
+        organisation. Dessa tjänstemän väljs av WCA:s styrelse. VD:n är WCA:s
+        verkställande direktör, ordföranden leder alla styrelsemöten,
+        sekreteraren upprätthåller organisationens dokument och kassören
+        hanterar WCA:s finansiella frågor.
+      #original_hash: e0d37a2
+      board_description: >-
+        WCA:s styrelse ansvarar för att leda organisationen som helhet och
+        fullgöra alla uppgifter som inte fullgörs av andra team, kommittéer och
+        råd
+    teams_committees_councils:
+      #original_hash: 0d62207
+      title: 'WCA:s teams, kommittéer, och råd'
+      #original_hash: d54d953
+      description: >-
+        WCA:s team och kommittéer är en central del av organisationen och utför
+        de dagliga uppgifter som krävs för att den ska fungera. Dessa kommittéer
+        består av WCA-medlemmar, inklusive WCA-delegater och tävlande. Varje
+        team har en ledare, vars roll är att se till att teamet fungerar korrekt
+        och vägleda andra teammedlemmar. Råd är en särskild typ av team som har
+        en rådgivande roll till WCA:s styrelse och består av
+        community-medlemmar, inte WCA:s personal. När det finns lediga platser i
+        kommittéer, team eller råd publiceras information om hur man ansöker på
+        förstasidan.
+      groups_name:
+        #original_hash: 90a1280
+        wat: WCA Archive Team
+        #original_hash: 63a2388
+        wct: WCA Communication Team
+        #original_hash: 2b81984
+        wcat: WCA Competition Announcement Team
+        #original_hash: c97077a
+        wdc: WCA Disciplinary Committee
+        #original_hash: 83bd1d0
+        wec: WCA Ethics Committee
+        #original_hash: d1dbb86
+        weat: WCA Executive Assistants Team
+        #original_hash: 9cb13de
+        wfc: WCA Financial Committee
+        #original_hash: 2035811
+        wmt: WCA Marketing Team
+        #original_hash: 8f32116
+        wqac: WCA Quality Assurance Committee
+        #original_hash: 3da1e85
+        wrc: WCA Regulations Committee
+        #original_hash: 67be768
+        wrt: WCA Results Team
+        #original_hash: a14bc62
+        wst: WCA Software Team
+        #original_hash: 58765c7
+        wsot: WCA Sports Organization Team
+        #original_hash: 1ce7604
+        wac: WCA Advisory Council
+      groups_description:
+        #original_hash: 5b1aade
+        wat: >-
+          WAT ansvarar för utveckling och underhåll av WCA:s historiska arkiv.
+          De dokumenterar viktiga speedcubing-händelser och anmärkningsvärda
+          WCA-milstolpar som ska presenteras som en del av en bredare
+          WCA-tidslinje, för att bevara arvet från WCA inom speedcubing.
+        #original_hash: 50fd091
+        wct: >-
+          WCA:s kommunikationsteam (WCT) har till uppgift att övervaka och
+          stödja WCA:s kommunikation med communityt och allmänheten. WCA:s
+          kommunikation ska bidra till WCA:s mål och stödja en allmänt positiv
+          kultur av vänlighet, transparens, delaktighet, öppenhet, och
+          lyhördhet.
+        #original_hash: 3e5570f
+        wcat: >-
+          WCA Competition Announcement Team (WCAT) har till uppgift att godkänna
+          och publicera WCA-tävlingar som skickats in av delegater, och se till
+          att sådana publiceringar följer WCA:s kvalitetsstandarder. Detta team
+          är också ansvarigt för att upprätthålla ett korrekt procedur för
+          inskickande av tävlingar, från dokument som WCA Competition
+          Requirements Policy. WCAT är INTE ansvarig för arrangering och
+          delegering av enskilda tävlingar.
+        #original_hash: 41eb6fd
+        wdc: >-
+          WCA Disciplinary Committee (WDC) utför oberoende utredningar avseende
+          registrerade speedcubers och incidenter under WCA-tävlingar eller på
+          officiella WCA-plattformar online. Dessa incidenter är påstådda
+          överträdelser av WCA:s anda, uppförandekod och/eller regler.
+        #original_hash: 6cdac80
+        wec: >-
+          Kommitténs roll är att säkerställa att alla procedurer som följs av
+          WCA-personal följer etikkoden, och att utföra oberoende utredningar om
+          någon av dessa medlemmars beteende inte är förenligt med koden. WEC är
+          en ombudsman för registrerade speedcubers som kan rapportera problem
+          och begära en utredning. Denna kommitté fungerar också som
+          överklagandenämnd om någon inblandad inte håller med om ett beslut som
+          fattats av WCA Disciplinary Committee.
+        #original_hash: 889dd90
+        weat: >-
+          Denna grupp ansvarar för att utföra de administrativa uppgifter som
+          åligger WCA:s styrelse.
+        #original_hash: 43e4e33
+        wfc: >-
+          Denna kommitté ansvarar för att hantera WCA:s övergripande ekonomi,
+          inklusive budgetering, rapportering, analys, bokföring, och
+          skattedeklarationer. De hanterar också WCA:s största inkomstkälla, WCA
+          Dues, tillsammans med olika finansieringsprogram som ger stöd till
+          lokala communities i olika utvecklingsstadier, inklusive
+          resefinansiering, utrustningsfinansiering, och stöd till regionala
+          organisationer.
+        #original_hash: f2a0140
+        wmt: >-
+          Detta team ansvarar för att utveckla och förvalta WCA:s varumärke,
+          söka sponsorer, stödja distributionen av WCA:s tävlingsutrustning och
+          marknadsföra WCA:s merchandise.
+        #original_hash: 0171b3b
+        wqac: >-
+          Denna kommitté har till uppgift att stödja och främja kontinuerlig
+          kvalitetsförbättring inom WCA, samt global tillämpning av
+          kvalitetsstandarder för att säkerställa konsekvent hög kvalitet på
+          processer, WCA-personal, regionala organisationer, tävlingsarrangörer,
+          och tävlingspersonal.
+        #original_hash: a1260bb
+        wrc: >-
+          WRC hanterar alla frågor som är relaterade till tillämpningen,
+          förbättringen, och utvecklingen av WCA-reglerna. De stöder
+          WCA-delegater i alla typer av procedurfrågor som inträffar vid
+          tävlingar och beslutar om olösta och oupptäckta incidenter.
+        #original_hash: 7bc588b
+        wrt: >-
+          WRT ansvarar för att hantera all data i WCA:s databaser, framför allt
+          tävlingsresultat och personuppgifter.
+        #original_hash: ec961e4
+        wst: >-
+          Detta team ansvarar för att hantera WCA:s mjukvara (webbplats,
+          blandningsprogram, arbetsböcker, administrationsverktyg).
+        #original_hash: 8f888d6
+        wsot: >-
+          Denna grupp har till uppgift att övervaka och stödja erkännandet av
+          WCA som en internationell idrottsorganisation.
+        #original_hash: 73d8df4
+        wac: >-
+          WAC ansvarar för att upprätthålla feedback och kommunikation mellan
+          WCA-communityt och WCA-personalen. De underhåller WCA-forumen och
+          sammanfattar undersökningar och försöker öka räckvidden i det globala
+          communityt.
   homepage:
     #original_hash: 824d76b
     learn_more: Läs mer
@@ -1804,6 +1964,8 @@ sv:
       board: 'WCA:s styrelse'
       #original_hash: d79bd00
       officers: WCA Officers
+      #original_hash: 959d354
+      translators: Översättare
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2143,8 +2305,8 @@ sv:
         payment_button: Betala avgifter med Stripe
         #original_hash: f94d00f
         ajax_error: WCA server-error
-        #original_hash: e62c56c
-        stripe_error: Stripe-error
+        #original_hash: d9185e8
+        payment_service_error: Error i betaltjänsten
         #original_hash: 97f7359
         subtotal: Summa
       alerts:
@@ -2246,10 +2408,10 @@ sv:
     messages:
       #original_hash: 7b80062
       not_visible: Tävlingen är inte synlig för allmänheten.
-      #original_hash: c1d4926
+      #original_hash: 0398a14
       name_too_long: >-
-        Tävlingsnamnet är längre än 32 tecken. Vi föredrar kortare och vi vore
-        glada om ni ändrar det.
+        Tävlingsnamnet är längre än 32 tecken. Vänligen redigera tävlingens ID
+        och korta namn på lämpligt sätt.
       #original_hash: af27396
       id_starts_with_lowercase: >-
         Tävlings-ID:t startar med en liten bokstav. Vi skulle föredra att det
@@ -3215,6 +3377,118 @@ sv:
               'false': >-
                 Tävlande MÅSTE vara kvalificerade för att anmäla sig till en
                 gren
+    registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: 'Som en <0>%{pdfLink}</0>'
+      info:
+        #original_hash: eade5c7
+        download: Ladda ner alla tävlingsdetaljer.
+      list:
+        #original_hash: 713f805
+        spots_remaining: '%{spots} plats(er) kvar.'
+      bookmark:
+        #original_hash: 7952a5c
+        unbookmark: Du har tagit bort ditt bokmärke.
+      requirements:
+        #original_hash: 09a428f
+        title: Krav
+        #original_hash: 695cf86
+        acknowledgement: >-
+          Jag har läst och bekräftat all information under fliken "Anmälan",
+          inklusive anmälningsavgifter och återbetalningspolicy
+        #original_hash: 270bd63
+        acknowledgment_extra: Jag har läst och förstått all information som anges ovan
+        #original_hash: 80d2933
+        next_step: Fortsätt till nästa steg
+      update:
+        #original_hash: 65bbb07
+        no_changes: Det finns inga ändringar
+        #original_hash: be4e8e2
+        email_send: Skicka mejl
+        #original_hash: d9def5d
+        email_copy: Kopiera mejladress
+        #original_hash: 71327f1
+        move_pending: Flytta till väntande
+        #original_hash: 9144dd6
+        move_waiting: Flytta till väntelista
+        #original_hash: 284b24f
+        cancel: Radera anmälan
+        #original_hash: 67b3c7d
+        too_many: >-
+          Att acceptera alla dessa registreringar skulle överskrida
+          deltagargränsen med %{count}
+      register:
+        #original_hash: affea61
+        error: 'Anmälan misslyckades med error %{error}'
+        #original_hash: f5a8630
+        early_registration: >-
+          Anmälan är inte öppen ännu, men du kan ändå anmäla dig som
+          tävlingsarrangör eller delegat.
+        #original_hash: 6b76fab
+        comment: Ytterligare kommentarer till arrangörerna
+        #original_hash: 8eae30c
+        until: 'Du kan uppdatera din anmälan fram till %{date}'
+        #original_hash: fc8bc84
+        passed: Du kan inte längre uppdatera din anmälan
+        #original_hash: 3c8d8b7
+        editing_disabled: Det går inte att redigera anmälningar till den här tävlingen.
+        registration_status:
+          #original_hash: f1f32b6
+          header: 'Din anmälningsstatus:'
+        #original_hash: 2d9f36c
+        disclaimer: Inskickande av anmälan innebär inte godkännande att tävla
+        #original_hash: 8fe68a1
+        processing: Din anmälan hanteras...
+        #original_hash: 897f272
+        processing_longer: 'Hanteringen tar längre tid än vanligt, lämna inte sidan!'
+        #original_hash: 79ba42a
+        processing_queue: 'Många anmälningar hanteras just nu, %{queueCount} i kö.'
+      errors:
+        #original_hash: 3890616
+        events: 'Misslyckades med att ladda grenar, vänligen försök igen'
+        #original_hash: 7b78793
+        '-1': >-
+          Du har skickat en ogiltig token, vänligen uppdatera sidan. Om
+          problemet kvarstår, kontakta WST
+        #original_hash: 44cf123
+        '-2': 'Autentiseringen har löpt ut, vänligen uppdatera sidan'
+        #original_hash: 2d63156
+        '-3': 'Saknar autentisering, vänligen logga in'
+        #original_hash: e0b69a9
+        '-1000': Tävlingen existerar inte
+        #original_hash: 2aa4aa1
+        '-1001': 'Fel vid hämtning av tävlingsuppgifter, försök igen senare'
+        #original_hash: 25b0063
+        '-2001': Du är avstängd från att tävla i WCA-tävlingar
+        #original_hash: 82267b1
+        '-2002': Din profil är ofullständig
+        #original_hash: 4dd79f2
+        '-2003': Du har inte behörighet att slutföra denna åtgärd
+        #original_hash: cb4093a
+        '-3000': Anmälan existerar inte
+        #original_hash: 0df821f
+        '-3001': WCA-betalning är inte aktiverat för den här tävlingen
+        #original_hash: 092da51
+        '-3002': Du måste slutföra din anmälan innan du kan betala
+        #original_hash: bc53fb6
+        '-4000': Anropet innehåller ogiltig data.
+        #original_hash: 35fddf4
+        '-4001': Deadline för att redigera grenar har passerats.
+        #original_hash: 097491c
+        '-4002': Antalet gäster är över den tillåtna gränsen
+        #original_hash: 4a0baa0
+        '-4003': Kommentaren är för lång
+        #original_hash: 952daed
+        '-4004': Ogiltigt val av grenar
+        #original_hash: b8a1526
+        '-4005': Den här tävlingen kräver att du lämnar en kommentar.
+        #original_hash: 2087dad
+        '-4006': Gränsen för antal tävlande har nåtts
+        #original_hash: 6d95124
+        '-4007': Ogiltigt anmälningsstatus
+        #original_hash: 020234c
+        '-4008': Anmälan har stängt
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3307,6 +3581,10 @@ sv:
       no_date_yet: Du har inte lagt till ett datum för denna tävling ännu.
       #original_hash: 82a95d2
       no_location_yet: Du har inte lagt till en plats för denna tävling ännu.
+      #original_hash: 6def491
+      save_first: >-
+        Vänligen spara den här tävlingen innan du lägger till den i en
+        tävlingsserie.
       #original_hash: 709a232
       name: Namn
       #original_hash: adc24b7
@@ -4197,8 +4475,6 @@ sv:
       #original_hash: 96d77f3
       donate_other: Andra sätt att donera
     structure:
-      #original_hash: 0d62207
-      teams_committees_councils: 'WCA-Team, Kommittéer och Råd'
       #original_hash: 9482c5d
       title: Struktur
       board:
@@ -4209,157 +4485,58 @@ sv:
           WCA-styrelsen är ansvarig för att leda organisationen som helhet, och
           fullgöra alla uppgifter som inte uppfylls av andra team, kommittéer
           och råd
-      #original_hash: d54d953
-      committees: >-
-        WCA:s team och kommittéer är en väsentlig del av organisationen och
-        utför de dagliga uppgifter som krävs för att den ska fungera. Dessa
-        kommittéer består av WCA-medlemmar, inklusive WCA-delegater och
-        tävlande. Varje team har en ledare vars roll är att säkerställa att
-        teamet fungerar väl och att vägleda andra teammedlemmar. Råd är en
-        speciell typ av team som har en rådgivande roll för WCA-styrelsen och
-        består av medlemmar, inte WCA-personal. När det finns lediga platser i
-        kommittéer, team, eller råd publiceras information om hur man ansöker på
-        förstasidan.
       #original_hash: c366473
       senior_member: Senior-Medlem
       #original_hash: e26c936
       leader: Ledare
-      officers:
-        #original_hash: d79bd00
-        name: 'WCA:s Ledning'
-        #original_hash: 312e799
-        description: >-
-          WCA:s ledning hanterar uppgifter som rör WCA:s ideella status. Dessa
-          personer väljs av WCA:s styrelse. Verkställande direktören är WCA:s
-          VD, ordföranden leder alla styrelsemöten, sekreteraren underhåller
-          organisationens handlingar, och kassören hanterar WCA:s ekonomi.
-      chair:
-        #original_hash: de34439
-        name: 'WCA:s Ordförande'
-      executive_director:
-        #original_hash: 7d405ff
-        name: 'WCA:s Verkställande Direktör'
-      secretary:
-        #original_hash: 1dd4a07
-        name: 'WCA:s Sekreterare'
-      vice_chair:
-        #original_hash: 0388b19
-        name: 'WCA:s Vice Ordförande'
-      treasurer:
-        #original_hash: 75e65d9
-        name: 'WCA:s Kassör'
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}s profil'
       wdc:
         #original_hash: c97077a
         name: WCA Disciplinary Committee
-        #original_hash: 286fdf8
-        description: >-
-          Denna kommitté ger WCA-styrelsen råd i speciella fall, som anklagelser
-          om brott mot WCA-reglerna, och kan kontaktas av WCA-medlemmar vid
-          viktiga personliga frågor angående WCA-tävlingar.
       wdpc:
         #original_hash: 70539cd
         name: WCA Data Protection Committee
-        #original_hash: 1f69829
-        description: Denna kommitté ansvarar för alla frågor som rör dataskydd.
       wrc:
         #original_hash: 3da1e85
         name: WCA Regulations Committee
-        #original_hash: 13ada5b
-        description: Denna kommitté är ansvarig för att hantera WCA-reglerna.
       wrt:
         #original_hash: 67be768
         name: WCA Results Team
-        #original_hash: 439ffae
-        description: Detta team ansvarar för att hantera alla tävlingsresultat.
       wst:
         #original_hash: a14bc62
         name: WCA Software Team
-        #original_hash: ec961e4
-        description: >-
-          Detta team ansvarar för att hantera WCA:s mjukvara (webbplats,
-          blandningsprogram, arbetsböcker, adminverktyg).
       wct:
         #original_hash: 63a2388
         name: WCA Communication Team
-        #original_hash: 50fd091
-        description: >-
-          WCA Communication Team (WCT) har rollen att övervaka och stödja WCA:s
-          kommunikation med Communityt och allmänheten. WCA:s kommunikation bör
-          bidra till WCA:s Mål och stödja en allmän positiv kultur av vänlighet,
-          transparens, inkludering, öppenhet, och lyhördhet.
       wfc:
         #original_hash: 9cb13de
         name: WCA Financial Committee
-        #original_hash: b4ed44b
-        description: 'Detta team ansvarar för att hantera WCA:s ekonomi.'
       wec:
         #original_hash: 83bd1d0
         name: WCA Ethics Committee
-        #original_hash: c304d57
-        description: >-
-          Denna kommittés roll är att se till att alla förfaranden som följs av
-          WCA-Personal och Extern Personal följer WCA:s Etik-kod, och att utför
-          oberoende utredningar om uppförandet av någon av dessa medlemmar inte
-          överensstämmer med nämnda Etik-kod. Sådana utredningar kan begäras av
-          alla Registrerade Speedcubers, som kan lita på WEC. Denna kommitté
-          fungerar också som överklagandenämnd om någon inblandad inte håller
-          med om ett beslut fattat av WCA Disciplinary Committee.
       weat:
         #original_hash: d1dbb86
         name: WCA Executive Assistants Team
-        #original_hash: 889dd90
-        description: >-
-          Detta team ansvarar för att utföra WCA-Styrelsens administrativa
-          uppgifter.
       wqac:
         #original_hash: 8f32116
         name: WCA Quality Assurance Committee
-        #original_hash: 0171b3b
-        description: >-
-          Denna kommitté har rollen att stödja och främja en kontinuerlig
-          kvalitetsförbättring inom WCA, såväl som en global tillämpning av
-          kvalitetsstandarder för att säkerställa en jämn och hög kvalitet på
-          processer, WCA-Personal, Regionala Organisationer, Tävlingsarrangörer
-          och Tävlingsfunktionärer.
       wcat:
         #original_hash: 2b81984
         name: WCA Competition Announcement Team
-        #original_hash: f511502
-        description: >-
-          Detta team har rollen att godkänna och publicera WCA-tävlingar och se
-          till att sådana publiceringar följer WCA:s kvalitetsstandarder.
       wmt:
         #original_hash: 2035811
         name: WCA Marketing Team
-        #original_hash: f2a0140
-        description: >-
-          Detta team ansvarar för att utveckla och hantera varumärket WCA, söka
-          sponsring, stödja distributionen av tävlingsutrustning, och
-          marknadsföra WCA:s Profilprodukter.
       wac:
         #original_hash: 1ce7604
         name: WCA Advisory Council
-        #original_hash: fb6cd86
-        description: >-
-          Detta råd är ansvarigt för att bygga upp och upprätthålla bilateral
-          kommunikation mellan WCA:s Community och WCA-Personal.
       wsot:
         #original_hash: 58765c7
         name: WCA Sports Organization Team
-        #original_hash: 8f888d6
-        description: >-
-          Detta team har till uppgift att överse och stötta erkännandet av WCA
-          som en internationell idrottsorganisation.
       wat:
         #original_hash: 90a1280
         name: WCA Archive Team
-        #original_hash: fae6850
-        description: >-
-          WCA Archive Team är en rådgivande kommitté inom WCA. Gruppen har som
-          uppgift att överse och stötta utvecklingen av organisationens arkiv.
       banned:
         #original_hash: d30e2e5
         name: Avstängda Tävlande
@@ -4370,9 +4547,6 @@ sv:
       operations_html: 'Den dagliga verksamheten drivs av WCA:s %{committees_and_teams}.'
       #original_hash: 0e7a036
       teams_committees: Team och Kommittéer
-      probation:
-        #original_hash: 1dd6e3b
-        name: Tillfälligt avstängda delegater
       wst_admin:
         #original_hash: d4112d2
         name: Mjukvaruadministratörer
@@ -4534,132 +4708,6 @@ sv:
       confirm_delete: >-
         Är du säker på att du vill radera den här förfrågan om en Regional
         Organization?
-  contact:
-    #original_hash: a34b69f
-    title: Kontaktinformation
-    #original_hash: b5c2eaa
-    info_alert_html: >-
-      Innan du kontaktar något team på den här sidan, ta en titt på våra
-      %{link}!
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      För frågor, kommentarer, och förslag om hemsidan, använd detta <a
-      href='/contact/website'>kontaktformulär</a>. För frågor angående en
-      specifik region eller tävling, kontakta din lokala %{link}.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Kommittéer och Team </u>
-    #original_hash: 1cb449c
-    members: Medlemmar
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        World Cube Association leds av WCA:s styrelse. De ansvarar för allmänna
-        förfrågningar och WCA-organisationen som helhet.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        WCT ansvarar för övervakning och stöd för WCA:s kommunikation med
-        communityt och allmänheten. De bör kontaktas om du har allmänna frågor
-        om WCA eller våra sociala medier.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        WDC utreder olika situationer och föreslår lösningar, inklusive straff
-        vid behov. Bland annat kan dessa situationer vara allvarliga
-        överträdelser av WCA-reglerna eller community-problem. Om du har upplevt
-        något av dessa är du välkommen att kontakta denna kommitté.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        WDPC har ansvaret att undersöka, skapa, implementera, hantera och
-        genomdriva alla WCA:s Dataskyddspolicyer, avtal med externa
-        databehandlare av WCA-Data och hantering av uppgifter som rör Dataskydd.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        WRC hanterar alla frågor som är relaterade till tillämpningen,
-        förbättringen och utvecklingen av WCA-reglerna. De stöder WCA-delegater
-        i alla typer av procedurfrågor som uppkommer vid tävlingar och beslutar
-        om incidenter som inte är lösta och inte täcks av Reglerna. WRC
-        publicerar regelbundet interna rapporter för att hjälpa alla
-        WCA-delegater och förbättra deras kunskap om reglerna. Om du vill delta
-        i utvecklingen av regler eller föreslå ändringar kan du nå WRC genom att
-        kontakta dem via e-post, eller via diskussioner på <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        WRT ansvarar för att hantera all data i WCA:s databaser, framför allt
-        tävlingsresultat och personuppgifter. De publicerar resultat från
-        WCA-tävlingar till WCA:s hemsida när WCA-delegaten för tävlingen har
-        skickat in dem. Förutom att lägga upp tävlingsresultat är WCA Results
-        Team också ansvariga för att korrigera tävlingsresultaten vid behov och
-        de har ansvaret att administrera alla WCA-profilsidor. Detta inkluderar
-        till exempel att ändra användardata (som födelsedatum) enligt
-        verifierade förfrågningar, och att hantera profilbildförfrågningar.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        WST ansvarar för underhåll och hantering av all programvara från WCA. De
-        utvecklar också ny programvara för olika uppgifter inom WCA när det
-        behövs. Om du har förslag och idéer för vidareutveckling av hemsidan
-        eller om du vill rapportera fel och buggar, kontakta dem gärna! WCA:s
-        webbplats är ett enormt open source-projekt på <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>, så
-        om du är intresserad av att hjälpa till att utveckla för WCA, ta en titt
-        där.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        WFC ansvarar för allt som rör ekonomi inom WCA. De hanterar WCA:s
-        ekonomi och räkenskaper i enlighet med ett godkänt årligt budgetförslag,
-        vilket också är deras uppgift att tillhandahålla regelbundet.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Denna kommitté har till uppgift att se till att alla procedurer som
-        följs av WCA-Personal och Extern Personal följer Etik-koden.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Detta team ansvarar för att utföra WCA-styrelsens administrativa
-        uppgifter.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Denna kommitté har rollen att stödja och främja kontinuerlig
-        kvalitetsförbättring inom WCA, såväl som en global tillämpning av
-        kvalitetsstandarder för att säkerställa en jämn kvalitet på processer,
-        WCA-Personal, Regionala Organisationer, Tävlingsarrangörer och
-        Tävlingsfunktionärer.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Denna kommitté har rollen att godkänna och publicera WCA-tävlingar och
-        se till att sådana publiceranden följer WCA:s kvalitetsstandarder.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Detta team ansvarar för att utveckla och hantera varumärket WCA, söka
-        sponsring, stödja distributionen av tävlingsmaterial, och marknadsföra
-        WCA:s Profilprodukter.
-    wsot:
-      #original_hash: 8f888d6
-      info_html: >-
-        Detta team har som uppgift att överse och stötta erkännandet av WCA som
-        en internationell idrottsorganisation.
-    wat:
-      #original_hash: fae6850
-      info_html: >-
-        WCA Archive Team är en rådgivande kommitté inom WCA. Gruppen har som
-        uppgift att överse och stötta utvecklingen av organisationens arkiv.
-    #original_hash: f97a4f5
-    councils_html: Råd
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Detta råd ansvarar för att bygga upp och upprätthålla bilateral
-        kommunikation mellan WCA-communityt och WCA:s Personal.
   score_tools:
     #original_hash: 4fc2133
     title: Mjukvaruverktyg för WCA-tävlingar
