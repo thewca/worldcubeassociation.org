@@ -55,7 +55,6 @@ RSpec.describe SyncMailingListsJob, type: :job do
     translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
 
     # leaders@ mailing list
-    board_member = FactoryBot.create :user, :board_member
     wct_member = FactoryBot.create :user, :wct_member
     wct_china_member = FactoryBot.create :user, :wct_china_member
     wcat_member = FactoryBot.create :user, :wcat_member
@@ -93,7 +92,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     # board@ mailing list
     expect(GsuiteMailingLists).to receive(:sync_group).with(
       "board@worldcubeassociation.org",
-      a_collection_containing_exactly(board_member.email),
+      a_collection_containing_exactly(*UserGroup.board_group.active_users.map(&:email)),
     )
 
     # communication-china@ mailing list

@@ -215,7 +215,12 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     context 'signed in as board member' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:user, :board_member))
+        board_user = UserGroup.board_group.active_roles.sample.user
+        puts("Some debug logs are below:")
+        puts("Role json: #{UserGroup.board_group.active_roles[0].to_json}")
+        puts("Board user ID: #{board_user&.id}")
+        puts("Board user name: #{board_user&.name}")
+        api_sign_in_as(board_user)
       end
 
       it 'has correct team membership' do

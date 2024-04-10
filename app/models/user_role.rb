@@ -108,6 +108,9 @@ class UserRole < ApplicationRecord
   }.freeze
 
   def serializable_hash(options = nil)
+    puts("User ID: #{self.user_id}")
+    puts("User Object: #{User.find_by(id: self.user_id)}")
+    puts("User ID from user object#{user&.id}")
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json[:class] = self.class.to_s.downcase
     json
