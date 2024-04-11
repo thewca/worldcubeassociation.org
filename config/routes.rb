@@ -71,9 +71,6 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
-  get 'competitions/v2/:id' => 'competitions_v2#show', as: :competitions_v2
-  get 'competitions/v2/:id/*all' => 'competitions_v2#show'
-
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
 
@@ -357,7 +354,7 @@ Rails.application.routes.draw do
       get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
-      get '/users/me/token' => 'users#token'
+      get '/users/me/token' => 'users#token', as: :token
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
