@@ -133,12 +133,6 @@ class User < ApplicationRecord
     }[g]
   end
 
-  enum delegate_status: {
-    trainee_delegate: "trainee_delegate",
-    candidate_delegate: "candidate_delegate",
-    delegate: "delegate",
-  }
-
   validate :wca_id_is_unique_or_for_dummy_account
   def wca_id_is_unique_or_for_dummy_account
     if wca_id_change && wca_id
@@ -411,8 +405,6 @@ class User < ApplicationRecord
       self.saved_pending_avatar_crop_h = nil
     end
   end
-
-  validates :region_id, presence: true, if: -> { delegate_status.present? }
 
   validate :avatar_requires_wca_id
   def avatar_requires_wca_id
@@ -1140,8 +1132,8 @@ class User < ApplicationRecord
 
   DEFAULT_SERIALIZE_OPTIONS = {
     only: ["id", "wca_id", "name", "gender",
-           "country_iso2", "delegate_status", "created_at", "updated_at"],
-    methods: ["url", "country"],
+           "country_iso2", "created_at", "updated_at"],
+    methods: ["url", "country", "delegate_status"],
     include: ["avatar", "teams"],
   }.freeze
 
