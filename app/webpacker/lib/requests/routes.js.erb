@@ -80,6 +80,10 @@ export const adminFixResultsUrl = (personId, competition_id = undefined, event_i
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>?${searchParams.toString()}`
 };
 
+export const paymentFinishRoute = "replace"
+
+export const paymentConfigRoute = "replace"
+
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 
 export const personApiUrl = (wcaId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_person_path("${wcaId}"))%>`;
@@ -164,6 +168,8 @@ export const apiV0Urls = {
   users: {
     me: {
       permissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`,
+      info: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_path) %>`,
+      preferred_events: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_preferred_events_path) %>`
     },
   },
   persons: {
@@ -188,6 +194,7 @@ export const apiV0Urls = {
   },
   competitions: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
+    info: (compId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${compId}"))%>`
   },
   delegates: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
@@ -212,3 +219,9 @@ export const panelUrls = {
     groupsManager: `<%= CGI.unescape(Rails.application.routes.url_helpers.panel_leader_path(anchor: PanelController.panel_list['leader']['groupsManager'])) %>`,
   },
 }
+
+export const userPreferencesRoute = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path)%>?section=preferences`;
+
+export const tokenRoute = `replace`;
+
+export const pollingRoute = (userId, competitionId) => `replace?attendee_id=${competitionId}-${userId}`;
