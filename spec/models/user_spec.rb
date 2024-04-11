@@ -733,7 +733,7 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for non-trainee Delegate roles" do
-      junior_delegate_user = FactoryBot.create(:candidate_delegate)
+      junior_delegate_user = FactoryBot.create(:junior_delegate)
       full_delegate_user = FactoryBot.create(:delegate)
       regional_delegate = FactoryBot.create(:regional_delegate_role)
       senior_delegate = FactoryBot.create(:senior_delegate_role)

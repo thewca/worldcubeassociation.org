@@ -195,7 +195,7 @@ FactoryBot.define do
       end
     end
 
-    factory :candidate_delegate, traits: [:wca_id] do
+    factory :junior_delegate, traits: [:wca_id] do
       after(:create) do |user|
         FactoryBot.create(:junior_delegate_role, user: user)
       end
