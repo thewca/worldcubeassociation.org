@@ -9,7 +9,7 @@ import { RegionsDetailView } from '../SeniorDelegate/Regions';
 export default function RegionsAdmin() {
   const {
     data: delegateRegions, loading, error,
-  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.delegate_regions));
+  } = useLoadedData(apiV0Urls.userGroups.list(groupTypes.delegate_regions, 'name', { isActive: true }));
 
   if (loading) return <Loading />;
   if (error) return <Errored />;
