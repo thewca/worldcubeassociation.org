@@ -1682,6 +1682,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@babel/runtime@npm:^7.23.9":
+  version: 7.24.4
+  resolution: "@babel/runtime@npm:7.24.4"
+  dependencies:
+    regenerator-runtime: "npm:^0.14.0"
+  checksum: 10c0/785aff96a3aa8ff97f90958e1e8a7b1d47f793b204b47c6455eaadc3f694f48c97cd5c0a921fe3596d818e71f18106610a164fb0f1c71fd68c622a58269d537c
+  languageName: node
+  linkType: hard
+
 "@babel/runtime@npm:^7.24.1":
   version: 7.24.1
   resolution: "@babel/runtime@npm:7.24.1"
@@ -2658,6 +2667,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@remix-run/router@npm:1.15.3":
+  version: 1.15.3
+  resolution: "@remix-run/router@npm:1.15.3"
+  checksum: 10c0/aea197447cee21e137d70f0c93e00de70c64fcfae20ae349ade9dc4202e782bd94dbc88be7302d13b6aa6cde38a701b074cd8e09a161d14cecda832a36dd2695
+  languageName: node
+  linkType: hard
+
 "@semantic-ui-react/event-stack@npm:^3.1.3":
   version: 3.1.3
   resolution: "@semantic-ui-react/event-stack@npm:3.1.3"
@@ -2678,6 +2694,26 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@stripe/react-stripe-js@npm:^2.7.0":
+  version: 2.7.0
+  resolution: "@stripe/react-stripe-js@npm:2.7.0"
+  dependencies:
+    prop-types: "npm:^15.7.2"
+  peerDependencies:
+    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0
+    react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+  checksum: 10c0/c33ebcf813abb16e9d1492dfbde0aa811ed577d7c4526901a42bf88ebb85d28b867b0229013dbc339dcc17599e421c073b1656beb3e0727b42095f64232998ed
+  languageName: node
+  linkType: hard
+
+"@stripe/stripe-js@npm:^3.3.0":
+  version: 3.3.0
+  resolution: "@stripe/stripe-js@npm:3.3.0"
+  checksum: 10c0/46ed343b05a1ad5f88a7fa50757a66485f66830cfd42a96fc8028e57f1c6582e82ee812d917be43a47f7500c24e0d4a69a83d32678bfe7fb2b0b79751f58dfb7
+  languageName: node
+  linkType: hard
+
 "@tanstack/query-core@npm:5.28.9":
   version: 5.28.9
   resolution: "@tanstack/query-core@npm:5.28.9"
@@ -2693,6 +2729,22 @@ __metadata:
   peerDependencies:
     react: ^18.0.0
   checksum: 10c0/2f6dcc691074f99cbd52a80f26bbc1dcad536700fda09d156ac430b917f054d1d206459be0deb6baa8933075ffcf6457925db6b76bf8634bee48805fde8d3037
+  languageName: node
+  linkType: hard
+
+"@thewca/wca-components@npm:^0.6.0":
+  version: 0.6.0
+  resolution: "@thewca/wca-components@npm:0.6.0"
+  peerDependencies:
+    "@types/react": ^17.0.0 || ^18.0.0
+    "@types/react-dom": ^17.0.0 || ^18.0.0
+    "@wca/helpers": ^1.1.4
+    fomantic-ui-css: ^2.9.2
+    react: ^17.0.0 || ^18.0.0
+    react-dom: ^17.0.0 || ^18.0.0
+    react-router-dom: ">=6.3.0"
+    semantic-ui-react: ^2.1.4
+  checksum: 10c0/ddd7f310231f64672bc2d8ca4ed811002a553f89748a92eedd5110b7d737c0d34375b3f26ae9ca15c427939c3cb80d98a2bd3574f971988961433086d8866005
   languageName: node
   linkType: hard
 
@@ -3040,6 +3092,13 @@ __metadata:
   version: 1.2.0
   resolution: "@ungap/structured-clone@npm:1.2.0"
   checksum: 10c0/8209c937cb39119f44eb63cf90c0b73e7c754209a6411c707be08e50e29ee81356dca1a848a405c8bdeebfe2f5e4f831ad310ae1689eeef65e7445c090c6657d
+  languageName: node
+  linkType: hard
+
+"@wca/helpers@npm:^1.1.5":
+  version: 1.1.5
+  resolution: "@wca/helpers@npm:1.1.5"
+  checksum: 10c0/8a626f2213549586c4cfeb130f04dc8c63ea3f44e6804f29282e0aa973bb17b28cfb3b108b3758b2c677077413c8d9644546f97856abecab3045dc94c287c06f
   languageName: node
   linkType: hard
 
@@ -6431,6 +6490,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"html-parse-stringify@npm:^3.0.1":
+  version: 3.0.1
+  resolution: "html-parse-stringify@npm:3.0.1"
+  dependencies:
+    void-elements: "npm:3.1.0"
+  checksum: 10c0/159292753d48b84d216d61121054ae5a33466b3db5b446e2ffc093ac077a411a99ce6cbe0d18e55b87cf25fa3c5a86c4d8b130b9719ec9b66623259000c72c15
+  languageName: node
+  linkType: hard
+
 "html-tags@npm:^3.3.1":
   version: 3.3.1
   resolution: "html-tags@npm:3.3.1"
@@ -8182,6 +8250,22 @@ __metadata:
   languageName: node
   linkType: hard
 
+"openapi-fetch@npm:^0.9.3":
+  version: 0.9.3
+  resolution: "openapi-fetch@npm:0.9.3"
+  dependencies:
+    openapi-typescript-helpers: "npm:^0.0.7"
+  checksum: 10c0/b74c6c8800cf889241e9c3733d54e7a20b3f79e84fcbb7a022d45f5521ba6fc141152f4d4a4c681daccbda8d6ab92e8cd02e2a165c7dd068800f2a74ebe8aff4
+  languageName: node
+  linkType: hard
+
+"openapi-typescript-helpers@npm:^0.0.7":
+  version: 0.0.7
+  resolution: "openapi-typescript-helpers@npm:0.0.7"
+  checksum: 10c0/06fee561e8ceee7a1aa0ff000a6a9ebbf77ffa7de40907898410c40da55dfb957ba650d5fd03f22ee68cd3781489009b5fb62b50cce967448de85e1b3d5f9ad1
+  languageName: node
+  linkType: hard
+
 "opener@npm:^1.5.2":
   version: 1.5.2
   resolution: "opener@npm:1.5.2"
@@ -9465,6 +9549,24 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-i18next@npm:^14.1.0":
+  version: 14.1.0
+  resolution: "react-i18next@npm:14.1.0"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.9"
+    html-parse-stringify: "npm:^3.0.1"
+  peerDependencies:
+    i18next: ">= 23.2.3"
+    react: ">= 16.8.0"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+    react-native:
+      optional: true
+  checksum: 10c0/d3e2d1e5183068a7a23f2fefc432d61546baef0afef176929a1a7b33489e5b3a2a892745a4424327c4bd3ab02ee3a6a4e450b57c2598393032a1efdbe57f8841
+  languageName: node
+  linkType: hard
+
 "react-intersection-observer@npm:^9.8.1":
   version: 9.8.1
   resolution: "react-intersection-observer@npm:9.8.1"
@@ -9526,6 +9628,30 @@ __metadata:
     react: ^16.8.0 || ^17 || ^18
     react-dom: ^16.8.0 || ^17 || ^18
   checksum: 10c0/23f93540537ca4c035425bb8d5e51b11131fbc921d7ac1d041d0ae557feac8c877f3a012d36b94df8787803f52ed81e6df9257ac9e58719875f7805518d6db3f
+  languageName: node
+  linkType: hard
+
+"react-router-dom@npm:^6.22.3":
+  version: 6.22.3
+  resolution: "react-router-dom@npm:6.22.3"
+  dependencies:
+    "@remix-run/router": "npm:1.15.3"
+    react-router: "npm:6.22.3"
+  peerDependencies:
+    react: ">=16.8"
+    react-dom: ">=16.8"
+  checksum: 10c0/39b0472db5d153cbbbf4f5df5c0b26f2b75ffd7b857d7b67d17e03f4618d806b957cf033fbeb265bb317ade951e6ce0d576311bdf6eb15a7013203079cfadf03
+  languageName: node
+  linkType: hard
+
+"react-router@npm:6.22.3":
+  version: 6.22.3
+  resolution: "react-router@npm:6.22.3"
+  dependencies:
+    "@remix-run/router": "npm:1.15.3"
+  peerDependencies:
+    react: ">=16.8"
+  checksum: 10c0/a2c85c3d1fa93585e312b1f7e6e21d1ca421875013a8d879e109d3ed41fb035bc93faef4cd42b354ea18d039bc50b679bf752679ad83ac26a986e3432fbd0462
   languageName: node
   linkType: hard
 
@@ -9941,7 +10067,11 @@ __metadata:
     "@fullcalendar/react": "npm:^6.1.11"
     "@fullcalendar/timegrid": "npm:^6.1.11"
     "@rails/ujs": "npm:^7.1.3"
+    "@stripe/react-stripe-js": "npm:^2.7.0"
+    "@stripe/stripe-js": "npm:^3.3.0"
     "@tanstack/react-query": "npm:^5.28.9"
+    "@thewca/wca-components": "npm:^0.6.0"
+    "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.5"
     autoprefixer: "npm:^10.4.19"
     autosize: "npm:^6.0.1"
@@ -9979,6 +10109,7 @@ __metadata:
     lodash: "npm:^4.17.21"
     luxon: "npm:^3.4.4"
     mini-css-extract-plugin: "npm:^2.8.1"
+    openapi-fetch: "npm:^0.9.3"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
     postcss: "npm:^8.4.38"
@@ -9992,8 +10123,10 @@ __metadata:
     react-csv: "npm:^2.2.2"
     react-datepicker: "npm:^6.6.0"
     react-dom: "npm:^18.2.0"
+    react-i18next: "npm:^14.1.0"
     react-intersection-observer: "npm:^9.8.1"
     react-leaflet: "npm:^4.2.1"
+    react-router-dom: "npm:^6.22.3"
     react-simplemde-editor: "npm:^5.2.0"
     react-spinners: "npm:^0.13.8"
     react-textarea-autosize: "npm:^8.5.3"
@@ -11352,6 +11485,13 @@ __metadata:
   version: 1.1.2
   resolution: "vary@npm:1.1.2"
   checksum: 10c0/f15d588d79f3675135ba783c91a4083dcd290a2a5be9fcb6514220a1634e23df116847b1cc51f66bfb0644cf9353b2abb7815ae499bab06e46dd33c1a6bf1f4f
+  languageName: node
+  linkType: hard
+
+"void-elements@npm:3.1.0":
+  version: 3.1.0
+  resolution: "void-elements@npm:3.1.0"
+  checksum: 10c0/0b8686f9f9aa44012e9bd5eabf287ae0cde409b9a2854c5a2335cb83920c957668ac5876e3f0d158dd424744ac411a7270e64128556b451ed3bec875ef18534d
   languageName: node
   linkType: hard
 
