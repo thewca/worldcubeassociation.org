@@ -168,8 +168,7 @@ export const apiV0Urls = {
   users: {
     me: {
       permissions: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_permissions_path) %>`,
-      info: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_path) %>`,
-      preferred_events: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_users_me_preferred_events_path) %>`
+      token: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_token_path) %>`,
     },
   },
   persons: {
@@ -222,6 +221,6 @@ export const panelUrls = {
 
 export const userPreferencesRoute = `<%= CGI.unescape(Rails.application.routes.url_helpers.profile_edit_path)%>?section=preferences`;
 
-export const tokenRoute = `replace`;
+export const pollingRoute = (userId, competitionId) => `<%= CGI.unescape(EnvConfig.WCA_REGISTRATIONS_POLL_URL)%>?attendee_id=${competitionId}-${userId}`;
 
-export const pollingRoute = (userId, competitionId) => `replace?attendee_id=${competitionId}-${userId}`;
+export const wcaRegistrationUrl = `<%= CGI.unescape(EnvConfig.WCA_REGISTRATIONS_URL)%>`;

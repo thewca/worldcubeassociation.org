@@ -1,12 +1,13 @@
 import createClient from 'openapi-fetch';
-import { getJWT } from '../../auth/get_jwt';
+import getJWT from '../../auth/get_jwt';
 import { BackendError, EXPIRED_TOKEN } from '../../helper/error_codes';
+import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
 const { PATCH } = createClient({
-  baseUrl: 'asdasd',
+  baseUrl: wcaRegistrationUrl,
 });
 
-export async function updateRegistration(
+export default async function updateRegistration(
   body,
 ) {
   const { data, error, response } = await PATCH('/api/v1/register', {

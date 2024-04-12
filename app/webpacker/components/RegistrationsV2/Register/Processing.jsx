@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { Message, Modal } from 'semantic-ui-react';
 import { CompetitionContext } from '../Context/competition_context';
 import { UserContext } from '../Context/user_context';
-import { pollRegistrations } from '../api/registration/get/poll_registrations';
+import pollRegistrations from '../api/registration/get/poll_registrations';
 
 const REFETCH_INTERVAL = 3000;
 

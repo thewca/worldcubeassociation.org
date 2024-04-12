@@ -1,9 +1,10 @@
 import createClient from 'openapi-fetch';
-import { getJWT } from '../../auth/get_jwt';
+import getJWT from '../../auth/get_jwt';
 import { BackendError, EXPIRED_TOKEN } from '../../helper/error_codes';
+import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
 
 const { POST } = createClient({
-  baseUrl: 'asdasd',
+  baseUrl: wcaRegistrationUrl,
 });
 export default async function submitEventRegistration(
   body,

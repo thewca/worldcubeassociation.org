@@ -21,7 +21,7 @@ import {
 import { CompetitionContext } from '../Context/competition_context';
 import { RegistrationContext } from '../Context/registration_context';
 import { UserContext } from '../Context/user_context';
-import { updateRegistration } from '../api/registration/patch/update_registration';
+import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import { getMediumDateString, hasPassed } from '../lib/dates';
 import { setMessage } from '../ui/events/messages';
