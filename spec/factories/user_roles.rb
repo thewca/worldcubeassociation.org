@@ -43,7 +43,7 @@ FactoryBot.define do
     end
 
     trait :delegate_regions_junior_delegate do
-      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'candidate_delegate') }
+      metadata { FactoryBot.create(:roles_metadata_delegate_regions, status: 'junior_delegate') }
     end
 
     trait :delegate_regions_trainee_delegate do

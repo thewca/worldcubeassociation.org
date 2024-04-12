@@ -5,7 +5,7 @@ class RolesMetadataDelegateRegions < ApplicationRecord
     senior_delegate: "senior_delegate",
     regional_delegate: "regional_delegate",
     delegate: "delegate",
-    junior_delegate: "candidate_delegate",
+    junior_delegate: "junior_delegate",
     trainee_delegate: "trainee_delegate",
   }
 end

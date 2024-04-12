@@ -49,7 +49,13 @@ class UserRole < ApplicationRecord
   end
 
   STATUS_SORTING_ORDER = {
-    UserGroup.group_types[:delegate_regions].to_sym => ["senior_delegate", "regional_delegate", "delegate", "candidate_delegate", "trainee_delegate"],
+    UserGroup.group_types[:delegate_regions].to_sym => [
+      RolesMetadataDelegateRegions.statuses[:senior_delegate],
+      RolesMetadataDelegateRegions.statuses[:regional_delegate],
+      RolesMetadataDelegateRegions.statuses[:delegate],
+      RolesMetadataDelegateRegions.statuses[:junior_delegate],
+      RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+    ],
     UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
     UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
     UserGroup.group_types[:board].to_sym => ["member"],

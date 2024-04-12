@@ -12,10 +12,15 @@ import useSaveAction from '../../../../lib/hooks/useSaveAction';
 import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
 import { useConfirm } from '../../../../lib/providers/ConfirmProvider';
 import { nextStatusOfGroupType, previousStatusOfGroupType, statusObjectOfGroupType } from '../../../../lib/helpers/status-objects';
+import { delegateRegionsStatus } from '../../../../lib/wca-data.js.erb';
 import RegionSelector from './RegionSelector';
 import useInputState from '../../../../lib/hooks/useInputState';
 
-const delegateStatusOptions = ['trainee_delegate', 'candidate_delegate', 'delegate'];
+const delegateStatusOptions = [
+  delegateRegionsStatus.trainee_delegate,
+  delegateRegionsStatus.junior_delegate,
+  delegateRegionsStatus.delegate,
+];
 const delegateStatusOptionsList = delegateStatusOptions.map((option) => ({
   text: I18n.t(`enums.user_roles.status.delegate_regions.${option}`),
   value: option,

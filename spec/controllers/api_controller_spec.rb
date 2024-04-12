@@ -232,7 +232,7 @@ RSpec.describe Api::V0::ApiController, clean_db_with_truncation: true do
 
     context 'signed in as Junior delegate' do
       before :each do
-        api_sign_in_as(FactoryBot.create(:candidate_delegate))
+        api_sign_in_as(FactoryBot.create(:junior_delegate))
       end
 
       it 'has correct delegate_status' do
