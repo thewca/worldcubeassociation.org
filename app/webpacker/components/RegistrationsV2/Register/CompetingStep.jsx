@@ -1,5 +1,4 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { EventSelector } from '@thewca/wca-components';
 import _ from 'lodash';
 import React, {
   useCallback, useContext, useEffect, useState,
@@ -27,6 +26,7 @@ import { getMediumDateString, hasPassed } from '../lib/dates';
 import setMessage from '../ui/events/messages';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
+import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 
 const maxCommentLength = 240;
 
@@ -187,6 +187,21 @@ export default function CompetingStep({ nextStep }) {
     });
   };
 
+  const handleEventSelection = ({ type, eventId }) => {
+    if (type === 'select_all_events') {
+      setSelectedEvents(competitionInfo.event_ids);
+    } else if (type === 'clear_events') {
+      setSelectedEvents([]);
+    } else if (type === 'toggle_event') {
+      const index = selectedEvents.indexOf(eventId);
+      if (index === -1) {
+        setSelectedEvents([...selectedEvents, eventId]);
+      } else {
+        setSelectedEvents(selectedEvents.toSpliced(index, 1));
+      }
+    }
+  };
+
   const shouldShowUpdateButton = isRegistered
     && !hasRegistrationEditDeadlinePassed
     && registration.competing.registration_status !== 'cancelled';
@@ -231,10 +246,9 @@ export default function CompetingStep({ nextStep }) {
           <Form.Field>
             <label htmlFor="event-selection">Events</label>
             <EventSelector
-              handleEventSelection={setSelectedEvents}
-              events={competitionInfo.event_ids}
-              selected={selectedEvents}
-              size="2x"
+              onEventSelection={handleEventSelection}
+              eventList={competitionInfo.event_ids}
+              selectedEvents={selectedEvents}
               id="event-selection"
             />
             <p
