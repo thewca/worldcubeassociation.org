@@ -3,7 +3,7 @@ import React, { useContext, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CompetitionContext } from '../Context/competition_context';
 import { UserContext } from '../Context/user_context';
-import { setMessage } from '../ui/events/messages';
+import setMessage from '../ui/events/messages';
 import { paymentFinishRoute } from '../../../lib/requests/routes.js.erb';
 
 export default function PaymentStep() {

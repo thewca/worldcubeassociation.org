@@ -15,6 +15,7 @@ export const areOnSameDate = (
   .setZone(timeZone)
   .hasSame(luxonDate2.setZone(timeZone), 'day');
 
+// eslint-disable-next-line max-len
 export const roundBackToHour = (luxonDate) => luxonDate.set({ minute: 0, second: 0, millisecond: 0 });
 
 export const addEndBufferWithinDay = (luxonDate) => {

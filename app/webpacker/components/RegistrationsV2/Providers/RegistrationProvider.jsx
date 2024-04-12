@@ -4,7 +4,7 @@ import { CompetitionContext } from '../Context/competition_context';
 import { RegistrationContext } from '../Context/registration_context';
 import { UserContext } from '../Context/user_context';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
-import { setMessage } from '../ui/events/messages';
+import setMessage from '../ui/events/messages';
 import LoadingMessage from '../messages/LoadingMessage';
 
 export default function RegistrationProvider({ children }) {

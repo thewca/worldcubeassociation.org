@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { CompetitionContext } from '../Context/competition_context';
 import getStripeConfig from '../api/payment/get/get_stripe_config';
 import getPaymentId from '../api/registration/get/get_payment_intent';
-import { setMessage } from '../ui/events/messages';
+import setMessage from '../ui/events/messages';
 import PaymentStep from './PaymentStep';
 
 export default function StripeWrapper() {
