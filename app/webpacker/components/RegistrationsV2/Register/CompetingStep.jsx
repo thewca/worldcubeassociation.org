@@ -244,7 +244,6 @@ export default function CompetingStep({ nextStep }) {
 
         <Form>
           <Form.Field>
-            <label htmlFor="event-selection">Events</label>
             <EventSelector
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
