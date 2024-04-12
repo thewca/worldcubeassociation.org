@@ -8,7 +8,6 @@ import { CompetitionContext } from '../Context/competition_context';
 const queryClient = new QueryClient();
 
 export default function Register({ competitionInfo, userInfo, preferredEvents }) {
-  console.log(preferredEvents);
   return (
     <QueryClientProvider client={queryClient}>
       {/* eslint-disable-next-line react/jsx-no-constructed-context-values */}
