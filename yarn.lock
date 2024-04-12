@@ -6619,6 +6619,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"i18next@npm:^23.11.1":
+  version: 23.11.1
+  resolution: "i18next@npm:23.11.1"
+  dependencies:
+    "@babel/runtime": "npm:^7.23.2"
+  checksum: 10c0/25a462574f12d99e29204a4f43a0ffebeb08170568a1aff3de49ce97c99b481ddd7488a57b767180bfd7864120187df95f6599e7cc449462c083231aa3d1f4a7
+  languageName: node
+  linkType: hard
+
 "iconv-lite@npm:0.4.24":
   version: 0.4.24
   resolution: "iconv-lite@npm:0.4.24"
@@ -10102,6 +10111,7 @@ __metadata:
     flag-icons: "npm:^7.2.1"
     glob: "npm:^10.3.12"
     i18n-js: "npm:^4.4.3"
+    i18next: "npm:^23.11.1"
     jquery: "npm:3.7.1"
     js-yaml: "npm:^4.1.0"
     leaflet: "npm:^1.9.4"
