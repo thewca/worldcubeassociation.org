@@ -1199,7 +1199,7 @@ zh-CN:
       title: WCA团队、委员会和理事会
       #original_hash: d54d953
       description: >-
-        WCA的团队和委员会是组织不可分割的一部分，执行保持其运作所需的日常任务。这些委员会由WCA社区成员组成，包括WCA代表和竞争对手。每个团队都有一个领导者，其作用是确保团队的正常运作并指导其他团队成员。理事会是一种特殊类型的团队，为WCA董事会发挥咨询作用，由社区成员组成，而不是WCA工作人员。当有委员会、团队或理事会空缺时，有关如何申请的信息会发布在首页上。
+        WCA的团队和委员会是组织不可分割的一部分，执行保持其运作所需的日常任务。这些委员会由WCA社区成员组成，包括WCA代表和参赛人员。每个团队都有一个领导者，其作用是确保团队的正常运作并指导其他团队成员。理事会是一种特殊类型的团队，为WCA董事会发挥咨询作用，由社区成员组成，而不是WCA工作人员。当有委员会、团队或理事会空缺时，有关如何申请的信息会发布在首页上。
       groups_name:
         #original_hash: 90a1280
         wat: WCA资料整理组
@@ -1226,7 +1226,7 @@ zh-CN:
         #original_hash: a14bc62
         wst: WCA软件组
         #original_hash: 58765c7
-        wsot: WCA竞技组织团队
+        wsot: WCA体育组织团队
         #original_hash: 1ce7604
         wac: WCA顾问委员会
       groups_description:groups_description:
@@ -1263,7 +1263,7 @@ zh-CN:
         #original_hash: ec961e4
         wst: 该组负责管理WCA软件（官网、打乱程序、管理工具等）。
         #original_hash: 8f888d6
-        wsot: 该团队负责监督和协助WCA成为一个国际认可的竞技组织。
+        wsot: 该团队负责监督和协助WCA成为一个国际认可的体育组织。
         #original_hash: 73d8df4
         wac: 该委员会负责建立和维护WCA社群与WCA员工之间的双边沟通。他们负责维护WCA论坛和总结问卷调查以及试着拓展到更多全球魔方社群。
   homepage:
