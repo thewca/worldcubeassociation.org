@@ -150,40 +150,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "ConciseAverageResults" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          average
-          continentId
-          countryId
-          day
-          eventId
-          id
-          month
-          personId
-          valueAndId
-          year
-        ),
-      ),
-    }.freeze,
-    "ConciseSingleResults" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          best
-          continentId
-          countryId
-          day
-          eventId
-          id
-          month
-          personId
-          valueAndId
-          year
-        ),
-      ),
-    }.freeze,
+    "ConciseAverageResults" => :skip_all_rows,
+    "ConciseSingleResults" => :skip_all_rows,
     "connected_paypal_accounts" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -287,34 +255,8 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "RanksAverage" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
-        ),
-      ),
-    }.freeze,
-    "RanksSingle" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          best
-          continentRank
-          countryRank
-          eventId
-          personId
-          worldRank
-        ),
-      ),
-    }.freeze,
+    "RanksAverage" => :skip_all_rows,
+    "RanksSingle" => :skip_all_rows,
     "Results" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
