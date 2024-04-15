@@ -490,7 +490,7 @@ class User < ApplicationRecord
     team_member?(Team.wrt)
   end
 
-  def software_team?
+  private def software_team?
     team_member?(Team.wst)
   end
 
@@ -605,7 +605,9 @@ class User < ApplicationRecord
       groups += UserGroup.delegate_probation.ids
     end
 
-    # FIXME: Consider groups of other groupTypes as well.
+    if software_team?
+      groups << UserGroup.translators.ids
+    end
 
     groups
   end
@@ -629,12 +631,6 @@ class User < ApplicationRecord
       },
       can_edit_groups: {
         scope: groups_with_edit_access,
-      },
-      can_edit_teams_committees: {
-        scope: can_edit_any_groups? ? "*" : self.leader_teams,
-      },
-      can_edit_translators: {
-        scope: can_edit_translators? ? "*" : [],
       },
       can_access_wfc_senior_matters: {
         scope: can_access_wfc_senior_matters? ? "*" : [],
@@ -1280,7 +1276,7 @@ class User < ApplicationRecord
     UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
   end
 
-  def can_manage_delegate_probation?
+  private def can_manage_delegate_probation?
     admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
   end
 
@@ -1350,16 +1346,8 @@ class User < ApplicationRecord
       .uniq
   end
 
-  def leader_teams
-    self.current_team_members.select { |member| member.team_leader? }.pluck(:team_id)
-  end
-
   def can_access_wfc_senior_matters?
     financial_committee? && team_membership_details(Team.wfc).at_least_senior_member?
-  end
-
-  def can_edit_translators?
-    can_edit_any_groups? || software_team?
   end
 
   def roles(include_converted: true)
