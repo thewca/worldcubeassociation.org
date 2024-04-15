@@ -9,14 +9,15 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
   end
 
   # Filters the list of groups based on given parameters.
-  private def filter_groups_for_parameters(groups: [], is_active: nil, is_hidden: nil, parent_group_id: nil)
+  private def filter_groups_for_parameters(groups: [], is_active: nil, is_hidden: nil, parent_group_id: nil, is_root_group: nil)
     groups.reject do |group|
       # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
       # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
         (!is_active.nil? && is_active != group.is_active) ||
         (!is_hidden.nil? && is_hidden != group.is_hidden) ||
-        (!parent_group_id.nil? && parent_group_id != group.parent_group_id)
+        (!parent_group_id.nil? && parent_group_id != group.parent_group_id) ||
+        (!is_root_group.nil? && is_root_group != group.is_root_group?)
       )
     end
   end
@@ -34,6 +35,7 @@ class Api::V0::UserGroupsController < Api::V0::ApiController
       is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
       is_hidden: params.key?(:isHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isHidden)) : nil,
       parent_group_id: params.key?(:parentGroupId) ? params.require(:parentGroupId).to_i : nil,
+      is_root_group: params.key?(:isRootGroup) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isRootGroup)) : nil,
     )
 
     # Sorts the list of groups by name.
