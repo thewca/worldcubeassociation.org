@@ -3,7 +3,6 @@ import { marked } from 'marked';
 import React, {
   useContext, useEffect, useMemo, useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Accordion,
   Button,
@@ -13,6 +12,7 @@ import {
   Transition,
 } from 'semantic-ui-react';
 import { CompetitionContext } from '../Context/competition_context';
+import I18n from '../../../lib/i18n';
 
 export default function RegistrationRequirements({ nextStep }) {
   const { competitionInfo } = useContext(CompetitionContext);
@@ -21,8 +21,6 @@ export default function RegistrationRequirements({ nextStep }) {
   const [regRequirementsAcknowledged, setRegRequirementsAcknowledged] = useState(false);
 
   const [showRegRequirements, setShowRegRequirements] = useState(false);
-
-  const { t } = useTranslation();
 
   const setFromCheckbox = (data, setState) => {
     const { checked } = data;
@@ -55,14 +53,14 @@ export default function RegistrationRequirements({ nextStep }) {
         <Form.Checkbox
           checked={generalInfoAcknowledged}
           onClick={(_, data) => setFromCheckbox(data, setGeneralInfoAcknowledged)}
-          label={t('competitions.registration_v2.requirements.acknowledgement')}
+          label={I18n.t('competitions.registration_v2.requirements.acknowledgement')}
           required
         />
         {competitionInfo.extra_registration_requirements && (
           <Accordion as={Form.Field} styled fluid>
             <Accordion.Title active index={0} onClick={handleAccordionClick}>
               <UiIcon name="dropdown" />
-              {t(
+              {I18n.t(
                 'competitions.competition_form.labels.registration.extra_requirements',
               )}
             </Accordion.Title>
@@ -83,7 +81,7 @@ export default function RegistrationRequirements({ nextStep }) {
                   <Form.Checkbox
                     checked={regRequirementsAcknowledged}
                     onClick={(_, data) => setFromCheckbox(data, setRegRequirementsAcknowledged)}
-                    label={t(
+                    label={I18n.t(
                       'competitions.registration_v2.requirements.acknowledgment_extra',
                     )}
                     required
@@ -94,7 +92,7 @@ export default function RegistrationRequirements({ nextStep }) {
           </Accordion>
         )}
         <Button disabled={buttonDisabled} type="submit" positive>
-          {t('competitions.registration_v2.requirements.next_step')}
+          {I18n.t('competitions.registration_v2.requirements.next_step')}
         </Button>
       </Form>
     </Segment>

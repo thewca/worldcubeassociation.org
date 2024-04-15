@@ -4,7 +4,6 @@ import { UserContext } from '../Context/user_context';
 import StepPanel from './StepPanel';
 import RegistrationProvider from '../Providers/RegistrationProvider';
 import { CompetitionContext } from '../Context/competition_context';
-import '../../../lib/i18next';
 
 const queryClient = new QueryClient();
 

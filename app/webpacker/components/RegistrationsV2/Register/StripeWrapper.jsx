@@ -3,7 +3,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import I18n from '../../../lib/i18n';
 import { CompetitionContext } from '../Context/competition_context';
 import getStripeConfig from '../api/payment/get/get_stripe_config';
 import getPaymentId from '../api/registration/get/get_payment_intent';
@@ -13,7 +13,6 @@ import PaymentStep from './PaymentStep';
 export default function StripeWrapper() {
   const [stripePromise, setStripePromise] = useState(null);
   const { competitionInfo } = useContext(CompetitionContext);
-  const { t } = useTranslation();
   const {
     data: paymentInfo,
     isLoading: isPaymentIdLoading,
@@ -29,8 +28,8 @@ export default function StripeWrapper() {
       const { errorCode } = err;
       setMessage(
         errorCode
-          ? t(`competitions.registration_v2.errors.${errorCode}`)
-          : t('registrations.flash.failed') + err.message,
+          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
+          : I18n.t('registrations.flash.failed') + err.message,
         'negative',
       );
     },

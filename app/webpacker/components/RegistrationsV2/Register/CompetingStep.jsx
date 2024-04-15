@@ -3,7 +3,6 @@ import _ from 'lodash';
 import React, {
   useCallback, useContext, useEffect, useState,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import {
   Button,
   ButtonGroup,
@@ -17,6 +16,7 @@ import {
   Segment,
   TextArea,
 } from 'semantic-ui-react';
+import I18n from '../../../lib/i18n';
 import { CompetitionContext } from '../Context/competition_context';
 import { RegistrationContext } from '../Context/registration_context';
 import { UserContext } from '../Context/user_context';
@@ -34,8 +34,6 @@ export default function CompetingStep({ nextStep }) {
   const { user, preferredEvents } = useContext(UserContext);
   const { competitionInfo } = useContext(CompetitionContext);
   const { registration, isRegistered, refetch } = useContext(RegistrationContext);
-
-  const { t } = useTranslation();
 
   const [comment, setComment] = useState('');
   const [selectedEvents, setSelectedEvents] = useState(
@@ -60,13 +58,13 @@ export default function CompetingStep({ nextStep }) {
       const { errorCode } = data;
       setMessage(
         errorCode
-          ? t(`competitions.registration_v2.errors.${errorCode}`)
-          : t('registrations.flash.failed') + data.message,
+          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
+          : I18n.t('registrations.flash.failed') + data.message,
         'negative',
       );
     },
     onSuccess: (data) => {
-      setMessage(t('registrations.flash.updated'), 'positive');
+      setMessage(I18n.t('registrations.flash.updated'), 'positive');
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
         data.registration,
@@ -80,8 +78,8 @@ export default function CompetingStep({ nextStep }) {
       const { errorCode } = data;
       setMessage(
         errorCode
-          ? t(`competitions.registration_v2.errors.${errorCode}`)
-          : t('competitions.registration_v2.register.error', {
+          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
+          : I18n.t('competitions.registration_v2.register.error', {
             error: data.message,
           }),
         'negative',
@@ -90,7 +88,7 @@ export default function CompetingStep({ nextStep }) {
     onSuccess: (_) => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
-      setMessage(t('registrations.flash.registered'), 'positive');
+      setMessage(I18n.t('registrations.flash.registered'), 'positive');
       setProcessing(true);
     },
   });
@@ -116,24 +114,24 @@ export default function CompetingStep({ nextStep }) {
   const attemptAction = useCallback(
     (action, options = {}) => {
       if (options.checkForChanges && !hasChanges) {
-        setMessage(t('competitions.registration_v2.update.no_changes'), 'basic');
+        setMessage(I18n.t('competitions.registration_v2.update.no_changes'), 'basic');
       } else if (!commentIsValid) {
         setMessage(
-          t('registrations.errors.cannot_register_without_comment'),
+          I18n.t('registrations.errors.cannot_register_without_comment'),
           'negative',
         );
       } else if (!eventsAreValid) {
         setMessage(
           maxEvents === Infinity
-            ? t('registrations.errors.must_register')
-            : t('registrations.errors.exceeds_event_limit.other'),
+            ? I18n.t('registrations.errors.must_register')
+            : I18n.t('registrations.errors.exceeds_event_limit.other'),
           'negative',
         );
       } else {
         action();
       }
     },
-    [commentIsValid, eventsAreValid, hasChanges, maxEvents, t],
+    [commentIsValid, eventsAreValid, hasChanges, maxEvents],
   );
 
   const actionCreateRegistration = () => {
@@ -238,7 +236,7 @@ export default function CompetingStep({ nextStep }) {
         )}
         {!competitionInfo['registration_opened?'] && (
           <Message warning>
-            {t('competitions.registration_v2.register.early_registration')}
+            {I18n.t('competitions.registration_v2.register.early_registration')}
           </Message>
         )}
 
@@ -252,7 +250,7 @@ export default function CompetingStep({ nextStep }) {
             />
             <p
               dangerouslySetInnerHTML={{
-                __html: t('registrations.preferred_events_prompt_html', {
+                __html: I18n.t('registrations.preferred_events_prompt_html', {
                   link: `<a href="${userPreferencesRoute}">here</a>`,
                 }),
               }}
@@ -260,7 +258,7 @@ export default function CompetingStep({ nextStep }) {
           </Form.Field>
           <Form.Field required={competitionInfo.force_comment_in_registration}>
             <label htmlFor="comment">
-              {t('competitions.registration_v2.register.comment')}
+              {I18n.t('competitions.registration_v2.register.comment')}
             </label>
             <TextArea
               maxLength={maxCommentLength}
@@ -268,7 +266,7 @@ export default function CompetingStep({ nextStep }) {
               value={comment}
               placeholder={
                 competitionInfo.force_comment_in_registration
-                  ? t('registrations.errors.cannot_register_without_comment')
+                  ? I18n.t('registrations.errors.cannot_register_without_comment')
                   : ''
               }
               id="comment"
@@ -302,30 +300,30 @@ export default function CompetingStep({ nextStep }) {
                 position="top center"
                 content={
                   canUpdateRegistration
-                    ? t('competitions.registration_v2.register.until', {
+                    ? I18n.t('competitions.registration_v2.register.until', {
                       date: getMediumDateString(
                         competitionInfo.event_change_deadline_date
                         ?? competitionInfo.start_date,
                       ),
                     })
-                    : t('competitions.registration_v2.register.passed')
+                    : I18n.t('competitions.registration_v2.register.passed')
                 }
               />
               <Message.Content>
                 <Message.Header>
-                  {t(
+                  {I18n.t(
                     'competitions.registration_v2.register.registration_status.header',
                   )}
-                  {t(
+                  {I18n.t(
                     `simple_form.options.registration.status.${registration.competing.registration_status}`,
                   )}
                 </Message.Header>
                 {/* eslint-disable-next-line no-nested-ternary */}
                 {canUpdateRegistration
-                  ? t('registrations.update')
+                  ? I18n.t('registrations.update')
                   : hasRegistrationEditDeadlinePassed
-                    ? t('competitions.registration_v2.errors.-4001')
-                    : t(
+                    ? I18n.t('competitions.registration_v2.errors.-4001')
+                    : I18n.t(
                       'competitions.registration_v2.register.editing_disabled',
                     )}
               </Message.Content>
@@ -343,7 +341,7 @@ export default function CompetingStep({ nextStep }) {
                       checkForChanges: true,
                     })}
                   >
-                    {t('registrations.update')}
+                    {I18n.t('registrations.update')}
                   </Button>
                   <ButtonOr />
                 </>
@@ -365,7 +363,7 @@ export default function CompetingStep({ nextStep }) {
                   negative
                   onClick={actionDeleteRegistration}
                 >
-                  {t('registrations.delete_registration')}
+                  {I18n.t('registrations.delete_registration')}
                 </Button>
               )}
             </ButtonGroup>
@@ -374,12 +372,12 @@ export default function CompetingStep({ nextStep }) {
           <>
             <Message info icon floating>
               <Popup
-                content={t('registrations.mailer.new.awaits_approval')}
+                content={I18n.t('registrations.mailer.new.awaits_approval')}
                 position="top left"
                 trigger={<Icon name="circle info" />}
               />
               <Message.Content>
-                {t('competitions.registration_v2.register.disclaimer')}
+                {I18n.t('competitions.registration_v2.register.disclaimer')}
               </Message.Content>
             </Message>
 
@@ -392,7 +390,7 @@ export default function CompetingStep({ nextStep }) {
               onClick={() => attemptAction(actionCreateRegistration)}
             >
               <Icon name="paper plane" />
-              {t('registrations.register')}
+              {I18n.t('registrations.register')}
             </Button>
           </>
         )}

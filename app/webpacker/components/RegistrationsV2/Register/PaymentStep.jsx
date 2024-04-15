@@ -1,6 +1,6 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useContext, useState } from 'react';
-import { useTranslation } from 'react-i18next';
+import I18n from '../../../lib/i18n';
 import { CompetitionContext } from '../Context/competition_context';
 import { UserContext } from '../Context/user_context';
 import setMessage from '../ui/events/messages';
@@ -12,8 +12,6 @@ export default function PaymentStep() {
   const [isLoading, setIsLoading] = useState(false);
   const { competitionInfo } = useContext(CompetitionContext);
   const { user } = useContext(UserContext);
-
-  const { t } = useTranslation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -55,7 +53,7 @@ export default function PaymentStep() {
           {isLoading ? (
             <div className="spinner" id="spinner" />
           ) : (
-            t('registrations.payment_form.button_text')
+            I18n.t('registrations.payment_form.button_text')
           )}
         </span>
       </button>

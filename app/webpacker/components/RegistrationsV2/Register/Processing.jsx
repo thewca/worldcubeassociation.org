@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import React, { useContext, useEffect, useState } from 'react';
-import { useTranslation } from 'react-i18next';
 import { Message, Modal } from 'semantic-ui-react';
+import I18n from '../../../lib/i18n';
 import { CompetitionContext } from '../Context/competition_context';
 import { UserContext } from '../Context/user_context';
 import pollRegistrations from '../api/registration/get/poll_registrations';
@@ -12,8 +12,6 @@ export default function Processing({ onProcessingComplete }) {
   const [pollCounter, setPollCounter] = useState(0);
   const { competitionInfo } = useContext(CompetitionContext);
   const { user } = useContext(UserContext);
-
-  const { t } = useTranslation();
 
   const { data } = useQuery({
     queryKey: ['registration-status-polling', user.id, competitionInfo.id],
@@ -35,17 +33,17 @@ export default function Processing({ onProcessingComplete }) {
   return (
     <Modal open={data?.status?.competing !== 'pending'} dimmer="blurring">
       <Modal.Header>
-        {t('competitions.registration_v2.register.processing')}
+        {I18n.t('competitions.registration_v2.register.processing')}
       </Modal.Header>
       <Modal.Content>
         {pollCounter > 3 && (
           <Message warning>
-            {t('competitions.registration_v2.register.processing_longer')}
+            {I18n.t('competitions.registration_v2.register.processing_longer')}
           </Message>
         )}
         {data && data.queueCount > 500 && (
           <Message warning>
-            {t('competitions.registration_v2.register.processing_queue', {
+            {I18n.t('competitions.registration_v2.register.processing_queue', {
               queueCount: data.queueCount,
             })}
           </Message>
