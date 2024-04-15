@@ -518,22 +518,6 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
   end
 
-  def member_of_any_official_team?
-    self.current_teams.any?(&:official?)
-  end
-
-  def senior_member_of_any_official_team?
-    self.teams_where_is_senior_member.any?(&:official?)
-  end
-
-  def leader_of_any_official_team?
-    self.teams_where_is_leader.any?(&:official?)
-  end
-
-  def teams_where_is_senior_member
-    self.current_team_members.select(&:team_senior_member).map(&:team).uniq
-  end
-
   def teams_where_is_leader
     self.current_team_members.select(&:team_leader).map(&:team).uniq
   end
