@@ -16,7 +16,6 @@ import {
   Segment,
   TextArea,
 } from 'semantic-ui-react';
-import { di } from '@fullcalendar/core/internal-common';
 import I18n from '../../../lib/i18n';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
@@ -133,7 +132,6 @@ export default function CompetingStep({
   );
 
   const actionCreateRegistration = () => {
-    dispatch(setMessage('Registration is being processed', 'basic'));
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
