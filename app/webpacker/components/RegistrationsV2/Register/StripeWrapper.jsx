@@ -6,11 +6,13 @@ import React, { useEffect, useState } from 'react';
 import I18n from '../../../lib/i18n';
 import getStripeConfig from '../api/payment/get/get_stripe_config';
 import getPaymentId from '../api/registration/get/get_payment_intent';
-import setMessage from '../ui/events/messages';
 import PaymentStep from './PaymentStep';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { setMessage } from './RegistrationMessage';
 
 export default function StripeWrapper({ competitionInfo }) {
   const [stripePromise, setStripePromise] = useState(null);
+  const dispatch = useDispatch();
   const {
     data: paymentInfo,
     isLoading: isPaymentIdLoading,
@@ -24,12 +26,12 @@ export default function StripeWrapper({ competitionInfo }) {
     refetchOnMount: 'always',
     onError: (err) => {
       const { errorCode } = err;
-      setMessage(
+      dispatch(setMessage(
         errorCode
           ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
           : I18n.t('registrations.flash.failed') + err.message,
         'negative',
-      );
+      ));
     },
   });
 

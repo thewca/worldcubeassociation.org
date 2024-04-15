@@ -1,14 +1,16 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import I18n from '../../../lib/i18n';
-import setMessage from '../ui/events/messages';
 import { paymentFinishRoute } from '../../../lib/requests/routes.js.erb';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { setMessage } from './RegistrationMessage';
 
 export default function PaymentStep({
   competitionInfo, user,
 }) {
   const stripe = useStripe();
   const elements = useElements();
+  const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -35,9 +37,9 @@ export default function PaymentStep({
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
     if (error.type === 'card_error' || error.type === 'validation_error') {
-      setMessage(error.message, 'error');
+      dispatch(setMessage(error.message, 'error'));
     } else {
-      setMessage('An unexpected error occurred.', 'error');
+      dispatch(setMessage('An unexpected error occurred.', 'error'));
     }
 
     setIsLoading(false);

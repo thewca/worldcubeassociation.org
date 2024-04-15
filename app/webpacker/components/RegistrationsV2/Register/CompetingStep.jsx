@@ -20,10 +20,11 @@ import I18n from '../../../lib/i18n';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import { getMediumDateString, hasPassed } from '../lib/dates';
-import setMessage from '../ui/events/messages';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import { setMessage } from './RegistrationMessage';
 
 const maxCommentLength = 240;
 
@@ -31,6 +32,7 @@ export default function CompetingStep({
   nextStep, competitionInfo, user, preferredEvents, registration, refetchRegistration,
 }) {
   const isRegistered = Boolean(registration);
+  const dispatch = useDispatch();
 
   const [comment, setComment] = useState('');
   const [selectedEvents, setSelectedEvents] = useState(
@@ -53,15 +55,15 @@ export default function CompetingStep({
     mutationFn: updateRegistration,
     onError: (data) => {
       const { errorCode } = data;
-      setMessage(
+      dispatch(setMessage(
         errorCode
           ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
           : I18n.t('registrations.flash.failed') + data.message,
         'negative',
-      );
+      ));
     },
     onSuccess: (data) => {
-      setMessage(I18n.t('registrations.flash.updated'), 'positive');
+      dispatch(setMessage(I18n.t('registrations.flash.updated'), 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
         data.registration,
@@ -73,19 +75,19 @@ export default function CompetingStep({
     mutationFn: submitEventRegistration,
     onError: (data) => {
       const { errorCode } = data;
-      setMessage(
+      dispatch(setMessage(
         errorCode
           ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
           : I18n.t('competitions.registration_v2.register.error', {
             error: data.message,
           }),
         'negative',
-      );
+      ));
     },
     onSuccess: (_) => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
-      setMessage(I18n.t('registrations.flash.registered'), 'positive');
+      dispatch(setMessage(I18n.t('registrations.flash.registered'), 'positive'));
       setProcessing(true);
     },
   });

@@ -3,22 +3,33 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import Loading from '../../Requests/Loading';
+import RegistrationMessage, { setMessage } from './RegistrationMessage';
+import I18n from '../../../lib/i18n';
+import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
 
 const queryClient = new QueryClient();
+
+const messageReducer = (state, { payload }) => ({
+  ...state,
+  message: payload.message,
+});
 
 export default function Index({ competitionInfo, userInfo, preferredEvents }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Register
-        competitionInfo={competitionInfo}
-        userInfo={userInfo}
-        preferredEvents={preferredEvents}
-      />
+      <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
+        <Register
+          competitionInfo={competitionInfo}
+          userInfo={userInfo}
+          preferredEvents={preferredEvents}
+        />
+      </StoreProvider>
     </QueryClientProvider>
   );
 }
 
 function Register({ competitionInfo, userInfo, preferredEvents }) {
+  const dispatch = useDispatch();
   const {
     data: registration,
     isLoading,
@@ -28,21 +39,30 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
     queryFn: () => getSingleRegistration(userInfo.id, competitionInfo.id),
     staleTime: Infinity,
     retry: false,
-    onError: (err) => {
-      setMessage(err.error, 'error');
+    onError: (data) => {
+      const { errorCode } = data;
+      dispatch(setMessage(
+        errorCode
+          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
+          : I18n.t('registrations.flash.failed') + data.message,
+        'negative',
+      ));
     },
   });
 
   return (
     isLoading ? <Loading />
       : (
-        <StepPanel
-          user={userInfo}
-          preferredEvents={preferredEvents}
-          competitionInfo={competitionInfo}
-          registration={registration}
-          refetchRegistration={refetch}
-        />
+        <>
+          <RegistrationMessage />
+          <StepPanel
+            user={userInfo}
+            preferredEvents={preferredEvents}
+            competitionInfo={competitionInfo}
+            registration={registration}
+            refetchRegistration={refetch}
+          />
+        </>
       )
   );
 }
