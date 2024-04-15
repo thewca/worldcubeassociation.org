@@ -2723,22 +2723,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@thewca/wca-components@npm:^0.6.0":
-  version: 0.6.0
-  resolution: "@thewca/wca-components@npm:0.6.0"
-  peerDependencies:
-    "@types/react": ^17.0.0 || ^18.0.0
-    "@types/react-dom": ^17.0.0 || ^18.0.0
-    "@wca/helpers": ^1.1.4
-    fomantic-ui-css: ^2.9.2
-    react: ^17.0.0 || ^18.0.0
-    react-dom: ^17.0.0 || ^18.0.0
-    react-router-dom: ">=6.3.0"
-    semantic-ui-react: ^2.1.4
-  checksum: 10c0/ddd7f310231f64672bc2d8ca4ed811002a553f89748a92eedd5110b7d737c0d34375b3f26ae9ca15c427939c3cb80d98a2bd3574f971988961433086d8866005
-  languageName: node
-  linkType: hard
-
 "@trysound/sax@npm:0.2.0":
   version: 0.2.0
   resolution: "@trysound/sax@npm:0.2.0"
@@ -10043,7 +10027,6 @@ __metadata:
     "@stripe/react-stripe-js": "npm:^2.7.0"
     "@stripe/stripe-js": "npm:^3.3.0"
     "@tanstack/react-query": "npm:^5.28.9"
-    "@thewca/wca-components": "npm:^0.6.0"
     "@wca/helpers": "npm:^1.1.5"
     autonumeric: "npm:^4.10.5"
     autoprefixer: "npm:^10.4.19"

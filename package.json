@@ -29,7 +29,6 @@
     "@stripe/react-stripe-js": "^2.7.0",
     "@stripe/stripe-js": "^3.3.0",
     "@tanstack/react-query": "^5.28.9",
-    "@thewca/wca-components": "^0.6.0",
     "@wca/helpers": "^1.1.5",
     "autonumeric": "^4.10.5",
     "autoprefixer": "^10.4.19",

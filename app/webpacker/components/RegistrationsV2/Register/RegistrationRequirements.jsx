@@ -1,4 +1,3 @@
-import { UiIcon } from '@thewca/wca-components';
 import { marked } from 'marked';
 import React, {
   useContext, useEffect, useMemo, useState,
@@ -6,7 +5,7 @@ import React, {
 import {
   Accordion,
   Button,
-  Form,
+  Form, Icon,
   Message,
   Segment,
   Transition,
@@ -59,7 +58,7 @@ export default function RegistrationRequirements({ nextStep }) {
         {competitionInfo.extra_registration_requirements && (
           <Accordion as={Form.Field} styled fluid>
             <Accordion.Title active index={0} onClick={handleAccordionClick}>
-              <UiIcon name="dropdown" />
+              <Icon name="dropdown" />
               {I18n.t(
                 'competitions.competition_form.labels.registration.extra_requirements',
               )}
