@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import _ from 'lodash';
 import React, {
-  useCallback, useContext, useEffect, useState,
+  useCallback, useEffect, useState,
 } from 'react';
 import {
   Button,
@@ -17,7 +17,6 @@ import {
   TextArea,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import { RegistrationContext } from '../Context/registration_context';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import { getMediumDateString, hasPassed } from '../lib/dates';
@@ -29,9 +28,9 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 const maxCommentLength = 240;
 
 export default function CompetingStep({
-  nextStep, competitionInfo, user, preferredEvents,
+  nextStep, competitionInfo, user, preferredEvents, registration, refetchRegistration,
 }) {
-  const { registration, isRegistered, refetch } = useContext(RegistrationContext);
+  const isRegistered = Boolean(registration);
 
   const [comment, setComment] = useState('');
   const [selectedEvents, setSelectedEvents] = useState(
@@ -221,7 +220,7 @@ export default function CompetingStep({
             if (competitionInfo['using_stripe_payments?']) {
               nextStep();
             } else {
-              refetch();
+              refetchRegistration();
             }
           }}
         />

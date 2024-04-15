@@ -1,7 +1,6 @@
-import React, { useContext, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Step } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import { RegistrationContext } from '../Context/registration_context';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
@@ -22,8 +21,10 @@ const paymentStepConfig = {
   component: StripeWrapper,
 };
 
-export default function StepPanel({ competitionInfo, preferredEvents, user }) {
-  const { isRegistered } = useContext(RegistrationContext);
+export default function StepPanel({
+  competitionInfo, preferredEvents, user, registration, refetchRegistration,
+}) {
+  const isRegistered = Boolean(registration);
 
   const steps = useMemo(() => {
     const steps = [requirementsStepConfig, competingStepConfig];
@@ -58,6 +59,8 @@ export default function StepPanel({ competitionInfo, preferredEvents, user }) {
         ))}
       </Step.Group>
       <CurrentStepPanel
+        registration={registration}
+        refetchRegistration={refetchRegistration}
         competitionInfo={competitionInfo}
         preferredEvents={preferredEvents}
         user={user}
