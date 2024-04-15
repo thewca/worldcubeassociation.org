@@ -12,19 +12,15 @@ import {
 } from 'semantic-ui-react';
 import { CompetitionContext } from '../Context/competition_context';
 import I18n from '../../../lib/i18n';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 export default function RegistrationRequirements({ nextStep }) {
   const { competitionInfo } = useContext(CompetitionContext);
 
-  const [generalInfoAcknowledged, setGeneralInfoAcknowledged] = useState(false);
-  const [regRequirementsAcknowledged, setRegRequirementsAcknowledged] = useState(false);
+  const [generalInfoAcknowledged, setGeneralInfoAcknowledged] = useCheckboxState(false);
+  const [regRequirementsAcknowledged, setRegRequirementsAcknowledged] = useCheckboxState(false);
 
   const [showRegRequirements, setShowRegRequirements] = useState(false);
-
-  const setFromCheckbox = (data, setState) => {
-    const { checked } = data;
-    setState(checked);
-  };
 
   const handleAccordionClick = () => {
     setShowRegRequirements((oldShowRegRequirements) => !oldShowRegRequirements);
@@ -51,7 +47,7 @@ export default function RegistrationRequirements({ nextStep }) {
       <Form onSubmit={nextStep}>
         <Form.Checkbox
           checked={generalInfoAcknowledged}
-          onClick={(_, data) => setFromCheckbox(data, setGeneralInfoAcknowledged)}
+          onClick={setGeneralInfoAcknowledged}
           label={I18n.t('competitions.registration_v2.requirements.acknowledgement')}
           required
         />
@@ -79,7 +75,7 @@ export default function RegistrationRequirements({ nextStep }) {
                 <Message positive>
                   <Form.Checkbox
                     checked={regRequirementsAcknowledged}
-                    onClick={(_, data) => setFromCheckbox(data, setRegRequirementsAcknowledged)}
+                    onClick={setRegRequirementsAcknowledged}
                     label={I18n.t(
                       'competitions.registration_v2.requirements.acknowledgment_extra',
                     )}
