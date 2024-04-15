@@ -19,15 +19,3 @@ export const REQUIRED_COMMENT_MISSING = -4005;
 export const COMPETITOR_LIMIT_REACHED = -4006;
 export const INVALID_REGISTRATION_STATUS = -4007;
 export const REGISTRATION_CLOSED = -4008;
-
-export class BackendError extends Error {
-  errorCode;
-
-  httpCode;
-
-  constructor(errorCode, httpCode) {
-    super(`Error ${errorCode}, httpCode: ${httpCode}`);
-    this.errorCode = errorCode;
-    this.httpCode = httpCode;
-  }
-}

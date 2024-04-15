@@ -24,12 +24,12 @@ export default function StripeWrapper({ competitionInfo }) {
     refetchOnReconnect: false,
     staleTime: Infinity,
     refetchOnMount: 'always',
-    onError: (err) => {
-      const { errorCode } = err;
+    onError: (data) => {
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
-          : I18n.t('registrations.flash.failed') + err.message,
+        error
+          ? I18n.t(`competitions.registration_v2.errors.${error}`)
+          : I18n.t('registrations.flash.failed') + data.message,
         'negative',
       ));
     },

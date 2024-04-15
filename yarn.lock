@@ -8209,22 +8209,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"openapi-fetch@npm:^0.9.3":
-  version: 0.9.3
-  resolution: "openapi-fetch@npm:0.9.3"
-  dependencies:
-    openapi-typescript-helpers: "npm:^0.0.7"
-  checksum: 10c0/b74c6c8800cf889241e9c3733d54e7a20b3f79e84fcbb7a022d45f5521ba6fc141152f4d4a4c681daccbda8d6ab92e8cd02e2a165c7dd068800f2a74ebe8aff4
-  languageName: node
-  linkType: hard
-
-"openapi-typescript-helpers@npm:^0.0.7":
-  version: 0.0.7
-  resolution: "openapi-typescript-helpers@npm:0.0.7"
-  checksum: 10c0/06fee561e8ceee7a1aa0ff000a6a9ebbf77ffa7de40907898410c40da55dfb957ba650d5fd03f22ee68cd3781489009b5fb62b50cce967448de85e1b3d5f9ad1
-  languageName: node
-  linkType: hard
-
 "opener@npm:^1.5.2":
   version: 1.5.2
   resolution: "opener@npm:1.5.2"
@@ -10025,7 +10009,6 @@ __metadata:
     lodash: "npm:^4.17.21"
     luxon: "npm:^3.4.4"
     mini-css-extract-plugin: "npm:^2.8.1"
-    openapi-fetch: "npm:^0.9.3"
     path-complete-extname: "npm:^1.0.0"
     pnp-webpack-plugin: "npm:^1.7.0"
     postcss: "npm:^8.4.38"

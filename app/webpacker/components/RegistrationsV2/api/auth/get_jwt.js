@@ -1,5 +1,5 @@
-import { BackendError } from '../helper/error_codes';
 import { apiV0Urls } from '../../../../lib/requests/routes.js.erb';
+import FetchJsonError from '../../../../lib/requests/FetchJsonError';
 
 const JWT_KEY = 'jwt';
 
@@ -16,9 +16,9 @@ export default async function getJWT(reauthenticate = false) {
         return token;
       }
       // This should not happen, but I am throwing an error here regardless
-      throw new BackendError(body.error, 500);
+      throw new FetchJsonError(response.status, response, body);
     }
-    throw new BackendError(body.error, response.status);
+    throw new FetchJsonError(response.status, response, body);
   } else {
     return cachedToken;
   }

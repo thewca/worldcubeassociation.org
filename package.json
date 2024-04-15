@@ -60,7 +60,6 @@
     "lodash": "^4.17.21",
     "luxon": "^3.4.4",
     "mini-css-extract-plugin": "^2.8.1",
-    "openapi-fetch": "^0.9.3",
     "path-complete-extname": "^1.0.0",
     "pnp-webpack-plugin": "^1.7.0",
     "postcss": "^8.4.38",

@@ -54,10 +54,10 @@ export default function CompetingStep({
   const { mutate: updateRegistrationMutation, isLoading: isUpdating } = useMutation({
     mutationFn: updateRegistration,
     onError: (data) => {
-      const { errorCode } = data;
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
+        error
+          ? `competitions.registration_v2.errors.${error}`
           : 'registrations.flash.failed',
         'negative',
       ));
@@ -74,10 +74,10 @@ export default function CompetingStep({
   const { mutate: createRegistrationMutation, isLoading: isCreating } = useMutation({
     mutationFn: submitEventRegistration,
     onError: (data) => {
-      const { errorCode } = data;
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
+        error
+          ? `competitions.registration_v2.errors.${error}`
           : 'registrations.flash.failed',
         'negative',
       ));

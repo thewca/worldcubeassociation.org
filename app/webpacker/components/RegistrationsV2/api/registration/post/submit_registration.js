@@ -1,24 +1,13 @@
-import createClient from 'openapi-fetch';
-import getJWT from '../../auth/get_jwt';
-import { BackendError, EXPIRED_TOKEN } from '../../helper/error_codes';
 import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 
-const { POST } = createClient({
-  baseUrl: wcaRegistrationUrl,
-});
+const submitRegistrationUrl = `${wcaRegistrationUrl}/api/v1/register`;
 export default async function submitEventRegistration(
   body,
 ) {
-  const { data, error, response } = await POST('/api/v1/register', {
-    headers: { Authorization: await getJWT() },
-    body,
+  const { data } = await fetchWithJWTToken(submitRegistrationUrl, {
+    method: 'POST',
+    body: JSON.stringify(body),
   });
-  if (error) {
-    if (error.error === EXPIRED_TOKEN) {
-      await getJWT(true);
-      return submitEventRegistration(body);
-    }
-    throw new BackendError(error.error, response.status);
-  }
   return data;
 }

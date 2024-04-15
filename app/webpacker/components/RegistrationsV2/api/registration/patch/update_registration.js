@@ -1,25 +1,14 @@
-import createClient from 'openapi-fetch';
-import getJWT from '../../auth/get_jwt';
-import { BackendError, EXPIRED_TOKEN } from '../../helper/error_codes';
 import { wcaRegistrationUrl } from '../../../../../lib/requests/routes.js.erb';
+import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
 
-const { PATCH } = createClient({
-  baseUrl: wcaRegistrationUrl,
-});
+const updateRegistrationUrl = `${wcaRegistrationUrl}/api/v1/register`;
 
 export default async function updateRegistration(
   body,
 ) {
-  const { data, error, response } = await PATCH('/api/v1/register', {
-    headers: { Authorization: await getJWT() },
-    body,
+  const { data } = await fetchWithJWTToken(updateRegistrationUrl, {
+    method: 'PATCH',
+    body: JSON.stringify(body),
   });
-  if (error) {
-    if (error.error === EXPIRED_TOKEN) {
-      await getJWT(true);
-      return updateRegistration(body);
-    }
-    throw new BackendError(error.error, response.status);
-  }
   return data;
 }

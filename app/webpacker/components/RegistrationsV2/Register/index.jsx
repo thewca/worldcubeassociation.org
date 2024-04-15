@@ -4,7 +4,6 @@ import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import Loading from '../../Requests/Loading';
 import RegistrationMessage, { setMessage } from './RegistrationMessage';
-import I18n from '../../../lib/i18n';
 import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
 
 const queryClient = new QueryClient();
@@ -40,10 +39,10 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
     staleTime: Infinity,
     retry: false,
     onError: (data) => {
-      const { errorCode } = data;
+      const { error } = data.json;
       dispatch(setMessage(
-        errorCode
-          ? `competitions.registration_v2.errors.${errorCode}`
+        error
+          ? `competitions.registration_v2.errors.${error}`
           : 'registrations.flash.failed',
         'negative',
       ));
