@@ -7,11 +7,26 @@ import { contactUrl } from '../../lib/requests/routes.js.erb';
 import useInputState from '../../lib/hooks/useInputState';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
-import { CONTACT_TYPES, RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
+import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
 import UserData from './SubForms/UserData';
 import Loading from '../Requests/Loading';
 import Wct from './SubForms/Wct';
 import Competition from './SubForms/Competition';
+
+const CONTACT_TYPES = [
+  'competition',
+  'competitions_in_general',
+  'results_team',
+  'wca_id_or_profile',
+  'media',
+  'software',
+  'different',
+];
+
+const CONTACT_TYPES_MAP = CONTACT_TYPES.reduce((accumulator, contactType) => {
+  accumulator[contactType] = contactType;
+  return accumulator;
+}, {});
 
 export default function ContactForm({ userDetails }) {
   const initialFormValues = useMemo(() => ({
@@ -31,7 +46,7 @@ export default function ContactForm({ userDetails }) {
   const SubForm = useMemo(() => {
     if (!formValues.contactType) return null;
     switch (formValues.contactType) {
-      case CONTACT_TYPES[0]: // competition
+      case CONTACT_TYPES_MAP.competition:
         return Competition;
       default:
         return Wct;
@@ -63,12 +78,6 @@ export default function ContactForm({ userDetails }) {
               name="contactType"
               value={contactType}
               checked={formValues.contactType === contactType}
-              style={{
-                // This is temporary fix because bootstrap is having a css which makes the margin of
-                // this radio as 10px, and the UI looks ugly because of that. This temporary fix
-                // can be removed once bootstrap is not there in our UI.
-                margin: '1.5px 0px',
-              }}
               onChange={(_, { value }) => {
                 setFormValues({
                   userData: formValues.userData,
@@ -96,13 +105,16 @@ export default function ContactForm({ userDetails }) {
         <ReCAPTCHA
           ref={recaptchaRef}
           sitekey={RECAPTCHA_PUBLIC_KEY}
+          // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
+          // is called when user successfully completes the captcha, hence we are assuming that any
+          // existing errors will be cleared when onChange is called.
           onChange={() => setCaptchaError(false)}
         />
         {captchaError && (
-        <Message
-          error
-          content={I18n.t('page.contacts.form.captcha.validation_error')}
-        />
+          <Message
+            error
+            content={I18n.t('page.contacts.form.captcha.validation_error')}
+          />
         )}
       </FormField>
       <Button
