@@ -168,7 +168,7 @@ class UserGroup < ApplicationRecord
   end
 
   def is_root_group?
-    UserGroup.root_groups.include?(self)
+    parent_group_id.nil?
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
