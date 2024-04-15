@@ -128,7 +128,7 @@ export default function CompetingStep({
         action();
       }
     },
-    [commentIsValid, eventsAreValid, hasChanges, maxEvents],
+    [commentIsValid, dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
   const actionCreateRegistration = () => {

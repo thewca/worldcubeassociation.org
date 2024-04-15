@@ -1,4 +1,3 @@
-import { marked } from 'marked';
 import React, {
   useEffect, useMemo, useState,
 } from 'react';
@@ -12,6 +11,7 @@ import {
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import Markdown from '../../Markdown';
 
 export default function RegistrationRequirements({ nextStep, competitionInfo }) {
   const [generalInfoAcknowledged, setGeneralInfoAcknowledged] = useCheckboxState(false);
@@ -62,12 +62,9 @@ export default function RegistrationRequirements({ nextStep, competitionInfo }) 
               duration={500}
             >
               <Accordion.Content active={showRegRequirements}>
-                <p
-                  dangerouslySetInnerHTML={{
-                    __html: marked(
-                      competitionInfo.extra_registration_requirements,
-                    ),
-                  }}
+                <Markdown
+                  id={`registration-requirements-${competitionInfo.id}`}
+                  md={competitionInfo.extra_registration_requirements}
                 />
                 <Message positive>
                   <Form.Checkbox
