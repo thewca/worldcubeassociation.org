@@ -28,7 +28,6 @@ function CompetitionsFilters({
         <EventSelector
           selectedEvents={filterState.selectedEvents}
           onEventSelection={dispatchFilter}
-          eventList={WCA_EVENT_IDS}
         />
       </Form.Field>
 
@@ -77,7 +76,7 @@ function CompetitionsFilters({
   );
 }
 
-export function EventSelector({ selectedEvents, onEventSelection, eventList }) {
+export function EventSelector({ selectedEvents, onEventSelection, eventList = WCA_EVENT_IDS }) {
   return (
     <>
       <label htmlFor="events">
