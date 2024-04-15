@@ -135,4 +135,12 @@ RSpec.describe UserGroup, type: :model do
       delegate_users[35..36],
     ].flatten)
   end
+
+  it "is_root_group? returns true for root group" do
+    expect(asia_region.is_root_group?).to eq(true)
+  end
+
+  it "is_root_group? returns false for non-root group" do
+    expect(india_region.is_root_group?).to eq(false)
+  end
 end

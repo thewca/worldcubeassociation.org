@@ -167,6 +167,10 @@ class UserGroup < ApplicationRecord
     end
   end
 
+  def is_root_group?
+    parent_group_id.nil?
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
     methods: %w[lead_user],
