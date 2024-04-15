@@ -7,20 +7,6 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
-  def self.is_visible_to_user?(role, user)
-    is_actual_role = role.is_a?(UserRole)
-    group = is_actual_role ? role.group : role[:group]
-    return true unless group[:is_hidden]
-    case group[:group_type]
-    when UserGroup.group_types[:delegate_probation]
-      user&.can_manage_delegate_probation?
-    when UserGroup.group_types[:translators]
-      user&.software_team?
-    else
-      false # Don't allow to view any other hidden groups.
-    end
-  end
-
   def self.is_group_type?(role, group_type)
     is_actual_role = role.is_a?(UserRole)
     is_actual_role ? role.group.group_type == group_type : role[:group][:group_type] == group_type

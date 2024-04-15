@@ -39,7 +39,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
-      UserRole.is_visible_to_user?(role, current_user)
+      group = UserRole.group(role)
+      !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
     end
   end
 
@@ -213,6 +214,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:delegate_probation],
       UserGroup.group_types[:translators],
       UserGroup.group_types[:officers],
+      UserGroup.group_types[:teams_committees],
       UserGroup.group_types[:councils],
       UserGroup.group_types[:board],
     ]
@@ -230,7 +232,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = nil
     end
 
-    if group.group_type == UserGroup.group_types[:teams_committees]
+    if group.group_type == UserGroup.group_types[:teams_committees] && group.team.present?
       return create_team_committee_council_role(group, user_id, status)
     end
 
@@ -245,6 +247,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
     elsif group.group_type == UserGroup.group_types[:officers]
       metadata = RolesMetadataOfficers.create!(status: status)
+    elsif group.group_type == UserGroup.group_types[:teams_committees]
+      metadata = RolesMetadataTeamsCommittees.create!(status: status)
     elsif group.group_type == UserGroup.group_types[:councils]
       metadata = RolesMetadataCouncils.create!(status: status)
     else

@@ -494,8 +494,8 @@ class User < ApplicationRecord
     team_member?(Team.wst)
   end
 
-  def software_team_admin?
-    team_member?(Team.wst_admin)
+  private def software_team_admin?
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wst_admin }
   end
 
   def staff?
@@ -1316,7 +1316,7 @@ class User < ApplicationRecord
     roles = []
     self.current_team_members.each do |team_member|
       team_member_group = team_member.team.group
-      if team_member_group.present? || team_member.team.official?
+      if team_member_group.present? && !team_member_group.roles_migrated?
         roles << team_member.role
       end
     end

@@ -229,4 +229,11 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     is_hidden: false,
     metadata: wat_metadata,
   )
+  UserGroup.create!(
+    name: 'WCA Software Admin',
+    group_type: :teams_committees,
+    is_active: true,
+    is_hidden: true,
+    metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wst_admin'),
+  )
 end
