@@ -3,7 +3,7 @@ import React from 'react';
 import { RegistrationContext } from '../Context/registration_context';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import setMessage from '../ui/events/messages';
-import LoadingMessage from '../messages/LoadingMessage';
+import Loading from '../../Requests/Loading';
 
 export default function RegistrationProvider({ competitionInfo, user, children }) {
   const loggedIn = user !== null;
@@ -27,7 +27,7 @@ export default function RegistrationProvider({ competitionInfo, user, children }
   });
   // eslint-disable-next-line no-nested-ternary
   return loggedIn && isLoading ? (
-    <LoadingMessage />
+    <Loading />
   )
     : isError || !loggedIn || !registration ? (
       <RegistrationContext.Provider
