@@ -1,6 +1,6 @@
 import { marked } from 'marked';
 import React, {
-  useContext, useEffect, useMemo, useState,
+  useEffect, useMemo, useState,
 } from 'react';
 import {
   Accordion,
@@ -10,13 +10,10 @@ import {
   Segment,
   Transition,
 } from 'semantic-ui-react';
-import { CompetitionContext } from '../Context/competition_context';
 import I18n from '../../../lib/i18n';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
-export default function RegistrationRequirements({ nextStep }) {
-  const { competitionInfo } = useContext(CompetitionContext);
-
+export default function RegistrationRequirements({ nextStep, competitionInfo }) {
   const [generalInfoAcknowledged, setGeneralInfoAcknowledged] = useCheckboxState(false);
   const [regRequirementsAcknowledged, setRegRequirementsAcknowledged] = useCheckboxState(false);
 

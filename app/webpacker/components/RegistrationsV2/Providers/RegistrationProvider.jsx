@@ -1,16 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext } from 'react';
-import { CompetitionContext } from '../Context/competition_context';
+import React from 'react';
 import { RegistrationContext } from '../Context/registration_context';
-import { UserContext } from '../Context/user_context';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import setMessage from '../ui/events/messages';
 import LoadingMessage from '../messages/LoadingMessage';
 
-export default function RegistrationProvider({ children }) {
-  const { user } = useContext(UserContext);
+export default function RegistrationProvider({ competitionInfo, user, children }) {
   const loggedIn = user !== null;
-  const { competitionInfo } = useContext(CompetitionContext);
   const {
     data: registration,
     isLoading,

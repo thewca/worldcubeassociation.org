@@ -17,9 +17,7 @@ import {
   TextArea,
 } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import { CompetitionContext } from '../Context/competition_context';
 import { RegistrationContext } from '../Context/registration_context';
-import { UserContext } from '../Context/user_context';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
 import { getMediumDateString, hasPassed } from '../lib/dates';
@@ -30,9 +28,9 @@ import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
 
 const maxCommentLength = 240;
 
-export default function CompetingStep({ nextStep }) {
-  const { user, preferredEvents } = useContext(UserContext);
-  const { competitionInfo } = useContext(CompetitionContext);
+export default function CompetingStep({
+  nextStep, competitionInfo, user, preferredEvents,
+}) {
   const { registration, isRegistered, refetch } = useContext(RegistrationContext);
 
   const [comment, setComment] = useState('');
@@ -216,6 +214,8 @@ export default function CompetingStep({ nextStep }) {
     <Segment basic>
       {processing && (
         <Processing
+          competitionInfo={competitionInfo}
+          user={user}
           onProcessingComplete={() => {
             setProcessing(false);
             if (competitionInfo['using_stripe_payments?']) {

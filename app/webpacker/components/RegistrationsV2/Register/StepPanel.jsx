@@ -1,7 +1,6 @@
 import React, { useContext, useMemo, useState } from 'react';
 import { Step } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import { CompetitionContext } from '../Context/competition_context';
 import { RegistrationContext } from '../Context/registration_context';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
@@ -23,8 +22,7 @@ const paymentStepConfig = {
   component: StripeWrapper,
 };
 
-export default function StepPanel() {
-  const { competitionInfo } = useContext(CompetitionContext);
+export default function StepPanel({ competitionInfo, preferredEvents, user }) {
   const { isRegistered } = useContext(RegistrationContext);
 
   const steps = useMemo(() => {
@@ -60,6 +58,9 @@ export default function StepPanel() {
         ))}
       </Step.Group>
       <CurrentStepPanel
+        competitionInfo={competitionInfo}
+        preferredEvents={preferredEvents}
+        user={user}
         nextStep={() => setActiveIndex((oldActiveIndex) => oldActiveIndex + 1)}
       />
     </>

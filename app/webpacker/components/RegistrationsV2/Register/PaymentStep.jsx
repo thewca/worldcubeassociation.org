@@ -1,17 +1,15 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useContext, useState } from 'react';
 import I18n from '../../../lib/i18n';
-import { CompetitionContext } from '../Context/competition_context';
-import { UserContext } from '../Context/user_context';
 import setMessage from '../ui/events/messages';
 import { paymentFinishRoute } from '../../../lib/requests/routes.js.erb';
 
-export default function PaymentStep() {
+export default function PaymentStep({
+  competitionInfo, user,
+}) {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
-  const { competitionInfo } = useContext(CompetitionContext);
-  const { user } = useContext(UserContext);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

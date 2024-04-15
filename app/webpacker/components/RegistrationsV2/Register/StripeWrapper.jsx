@@ -2,17 +2,15 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import I18n from '../../../lib/i18n';
-import { CompetitionContext } from '../Context/competition_context';
 import getStripeConfig from '../api/payment/get/get_stripe_config';
 import getPaymentId from '../api/registration/get/get_payment_intent';
 import setMessage from '../ui/events/messages';
 import PaymentStep from './PaymentStep';
 
-export default function StripeWrapper() {
+export default function StripeWrapper({ competitionInfo }) {
   const [stripePromise, setStripePromise] = useState(null);
-  const { competitionInfo } = useContext(CompetitionContext);
   const {
     data: paymentInfo,
     isLoading: isPaymentIdLoading,
