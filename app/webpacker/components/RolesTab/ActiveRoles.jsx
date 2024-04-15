@@ -39,7 +39,7 @@ export default function ActiveRoles({ activeRoles }) {
         {activeRoles?.map((role) => (
           <List.Item
             key={role.id}
-            disabled={!loggedInUserPermissions.canEditRole(role)}
+            disabled={!loggedInUserPermissions.canEditGroup(role.group.id)}
           >
             <List.Content
               floated="left"
