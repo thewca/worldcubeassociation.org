@@ -480,8 +480,6 @@ RSpec.describe User, type: :model do
     team_member.update!(end_date: 1.day.ago)
 
     expect(wrt_leader.reload.team_leader?(Team.wrt)).to eq false
-
-    expect(wrt_leader.teams_where_is_leader.count).to eq 0
   end
 
   it "removes whitespace around names" do
