@@ -16,6 +16,7 @@ import {
   Segment,
   TextArea,
 } from 'semantic-ui-react';
+import { di } from '@fullcalendar/core/internal-common';
 import I18n from '../../../lib/i18n';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
@@ -57,13 +58,13 @@ export default function CompetingStep({
       const { errorCode } = data;
       dispatch(setMessage(
         errorCode
-          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
-          : I18n.t('registrations.flash.failed') + data.message,
+          ? `competitions.registration_v2.errors.${errorCode}`
+          : 'registrations.flash.failed',
         'negative',
       ));
     },
     onSuccess: (data) => {
-      dispatch(setMessage(I18n.t('registrations.flash.updated'), 'positive'));
+      dispatch(setMessage('registrations.flash.updated', 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
         data.registration,
@@ -77,17 +78,15 @@ export default function CompetingStep({
       const { errorCode } = data;
       dispatch(setMessage(
         errorCode
-          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
-          : I18n.t('competitions.registration_v2.register.error', {
-            error: data.message,
-          }),
+          ? `competitions.registration_v2.errors.${errorCode}`
+          : 'registrations.flash.failed',
         'negative',
       ));
     },
     onSuccess: (_) => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
-      dispatch(setMessage(I18n.t('registrations.flash.registered'), 'positive'));
+      dispatch(setMessage('registrations.flash.registered', 'positive'));
       setProcessing(true);
     },
   });
@@ -113,19 +112,19 @@ export default function CompetingStep({
   const attemptAction = useCallback(
     (action, options = {}) => {
       if (options.checkForChanges && !hasChanges) {
-        setMessage(I18n.t('competitions.registration_v2.update.no_changes'), 'basic');
+        dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
       } else if (!commentIsValid) {
-        setMessage(
-          I18n.t('registrations.errors.cannot_register_without_comment'),
+        dispatch(setMessage(
+          'registrations.errors.cannot_register_without_comment',
           'negative',
-        );
+        ));
       } else if (!eventsAreValid) {
-        setMessage(
+        dispatch(setMessage(
           maxEvents === Infinity
-            ? I18n.t('registrations.errors.must_register')
-            : I18n.t('registrations.errors.exceeds_event_limit.other'),
+            ? 'registrations.errors.must_register'
+            : 'registrations.errors.exceeds_event_limit.other',
           'negative',
-        );
+        ));
       } else {
         action();
       }
@@ -134,7 +133,7 @@ export default function CompetingStep({
   );
 
   const actionCreateRegistration = () => {
-    setMessage('Registration is being processed', 'basic');
+    dispatch(setMessage('Registration is being processed', 'basic'));
     createRegistrationMutation({
       user_id: user.id,
       competition_id: competitionInfo.id,
@@ -147,7 +146,7 @@ export default function CompetingStep({
   };
 
   const actionUpdateRegistration = () => {
-    setMessage('Registration is being updated', 'basic');
+    dispatch(setMessage('Registration is being updated', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -160,7 +159,7 @@ export default function CompetingStep({
   };
 
   const actionReRegister = () => {
-    setMessage('Registration is being updated', 'basic');
+    dispatch(setMessage('Registration is being updated', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,
@@ -174,7 +173,7 @@ export default function CompetingStep({
   };
 
   const actionDeleteRegistration = () => {
-    setMessage('Registration is being deleted', 'basic');
+    dispatch(setMessage('Registration is being deleted', 'basic'));
     updateRegistrationMutation({
       user_id: registration.user_id,
       competition_id: competitionInfo.id,

@@ -4,7 +4,6 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import I18n from '../../../lib/i18n';
 
 export const setMessage = (key, type) => ({
-  type: 'registration_message',
   payload: {
     key,
     type,
@@ -16,17 +15,17 @@ export default function RegistrationMessage() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (message) {
+    if (message?.key) {
       setTimeout(() => {
-        dispatch(setMessage(''));
+        dispatch({ payload: { message: null } });
       }, 4000);
     }
   }, [dispatch, message]);
 
-  if (!message) return null;
+  if (!message?.key) return null;
 
   return (
-    <Sticky>
+    <Sticky active>
       <Message
         positive={message.type === 'positive'}
         negative={message.type === 'negative'}

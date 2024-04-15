@@ -11,7 +11,7 @@ const queryClient = new QueryClient();
 
 const messageReducer = (state, { payload }) => ({
   ...state,
-  message: payload.message,
+  message: { key: payload.key, type: payload.type },
 });
 
 export default function Index({ competitionInfo, userInfo, preferredEvents }) {
@@ -43,8 +43,8 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
       const { errorCode } = data;
       dispatch(setMessage(
         errorCode
-          ? I18n.t(`competitions.registration_v2.errors.${errorCode}`)
-          : I18n.t('registrations.flash.failed') + data.message,
+          ? `competitions.registration_v2.errors.${errorCode}`
+          : 'registrations.flash.failed',
         'negative',
       ));
     },
