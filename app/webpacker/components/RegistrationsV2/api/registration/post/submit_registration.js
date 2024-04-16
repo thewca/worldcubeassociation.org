@@ -7,6 +7,9 @@ export default async function submitEventRegistration(
 ) {
   const { data } = await fetchWithJWTToken(submitRegistrationUrl, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
   return data;

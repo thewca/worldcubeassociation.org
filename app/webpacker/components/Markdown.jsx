@@ -1,5 +1,6 @@
 import React from 'react';
 import { useQuery } from '@tanstack/react-query';
+import { sanitize } from 'dompurify';
 import Loading from './Requests/Loading';
 
 /*
@@ -18,6 +19,6 @@ export default function Markdown({ md, id = crypto.randomUUID() }) {
 
   return isLoading ? <Loading /> : (
     // eslint-disable-next-line react/no-danger
-    <span dangerouslySetInnerHTML={{ __html: html }} />
+    <span dangerouslySetInnerHTML={{ __html: sanitize(html) }} />
   );
 }

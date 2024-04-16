@@ -8,6 +8,9 @@ export default async function updateRegistration(
 ) {
   const { data } = await fetchWithJWTToken(updateRegistrationUrl, {
     method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
     body: JSON.stringify(body),
   });
   return data;
