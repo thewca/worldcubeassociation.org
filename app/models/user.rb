@@ -442,52 +442,56 @@ class User < ApplicationRecord
     preferred_locale || I18n.default_locale
   end
 
+  private def group_member?(group)
+    active_roles.any? { |role| UserRole.group(role) == group }
+  end
+
   def board_member?
-    active_roles.any? { |role| UserRole.group_type(role) == UserGroup.group_types[:board] }
+    group_member?(UserGroup.board_group)
   end
 
   def communication_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wct }
+    group_member?(UserGroup.teams_committees_group_wct)
   end
 
   def competition_announcement_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wcat }
+    group_member?(UserGroup.teams_committees_group_wcat)
   end
 
   def wdc_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wdc }
+    group_member?(UserGroup.teams_committees_group_wdc)
   end
 
   def wdpc_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wdpc }
+    group_member?(UserGroup.teams_committees_group_wdpc)
   end
 
   def ethics_committee?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wec }
+    group_member?(UserGroup.teams_committees_group_wec)
   end
 
   def weat_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_weat }
+    group_member?(UserGroup.teams_committees_group_weat)
   end
 
   def financial_committee?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wfc }
+    group_member?(UserGroup.teams_committees_group_wfc)
   end
 
   def marketing_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wmt }
+    group_member?(UserGroup.teams_committees_group_wmt)
   end
 
   def quality_assurance_committee?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wqac }
+    group_member?(UserGroup.teams_committees_group_wqac)
   end
 
   def wrc_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wrc }
+    group_member?(UserGroup.teams_committees_group_wrc)
   end
 
   def results_team?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wrt }
+    group_member?(UserGroup.teams_committees_group_wrt)
   end
 
   def software_team?
