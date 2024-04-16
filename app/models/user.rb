@@ -65,9 +65,9 @@ class User < ApplicationRecord
   end
 
   def self.leader_senior_voters
-    team_leaders = TeamMember.current.in_official_team.leader.map(&:user)
+    team_leaders = UserGroup.teams_committees.map(&:lead_user)
     senior_delegates = UserGroup.delegate_region_groups_senior_delegates
-    (team_leaders + senior_delegates).uniq
+    (team_leaders + senior_delegates).uniq.compact
   end
 
   def self.all_discourse_groups

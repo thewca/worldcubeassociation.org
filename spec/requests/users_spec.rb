@@ -200,7 +200,7 @@ RSpec.describe "users" do
       # WST is not moderator by default, admin status is granted manually in
       # Discourse
       expect(answer_sso.moderator).to be false
-      expect(answer_sso.add_groups).to eq "wst,delegate"
+      expect(answer_sso.add_groups).to eq "delegate,wst"
       expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
     end
 

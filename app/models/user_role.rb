@@ -129,8 +129,10 @@ class UserRole < ApplicationRecord
     case group_type
     when UserGroup.group_types[:delegate_regions]
       UserRole.status(role)
-    when UserGroup.group_types[:councils]
+    when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       group.metadata.friendly_id
+    when UserGroup.group_types[:board]
+      UserGroup.group_types[:board]
     else
       nil
     end
