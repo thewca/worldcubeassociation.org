@@ -842,7 +842,7 @@ class User < ApplicationRecord
   end
 
   def can_issue_refunds?(competition)
-      competition.managers.include?(self) || admin?
+    competition.managers.include?(self) || admin?
   end
 
   def can_approve_media?
