@@ -447,47 +447,47 @@ class User < ApplicationRecord
   end
 
   def communication_team?
-    team_member?(Team.wct)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wct }
   end
 
   def competition_announcement_team?
-    team_member?(Team.wcat)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wcat }
   end
 
   def wdc_team?
-    team_member?(Team.wdc)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wdc }
   end
 
   def wdpc_team?
-    team_member?(Team.wdpc)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wdpc }
   end
 
   def ethics_committee?
-    team_member?(Team.wec)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wec }
   end
 
   def weat_team?
-    team_member?(Team.weat)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_weat }
   end
 
   def financial_committee?
-    team_member?(Team.wfc)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wfc }
   end
 
   def marketing_team?
-    team_member?(Team.wmt)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wmt }
   end
 
   def quality_assurance_committee?
-    team_member?(Team.wqac)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wqac }
   end
 
   def wrc_team?
-    team_member?(Team.wrc)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wrc }
   end
 
   def results_team?
-    team_member?(Team.wrt)
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wrt }
   end
 
   def software_team?

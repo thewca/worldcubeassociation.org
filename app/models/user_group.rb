@@ -131,6 +131,50 @@ class UserGroup < ApplicationRecord
     UserGroup.board.first
   end
 
+  def self.teams_committees_group_wct
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wct').user_group
+  end
+
+  def self.teams_committees_group_wcat
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wcat').user_group
+  end
+
+  def self.teams_committees_group_wdc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wdc').user_group
+  end
+
+  def self.teams_committees_group_wdpc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wdpc').user_group
+  end
+
+  def self.teams_committees_group_wec
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wec').user_group
+  end
+
+  def self.teams_committees_group_weat
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'weat').user_group
+  end
+
+  def self.teams_committees_group_wfc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wfc').user_group
+  end
+
+  def self.teams_committees_group_wmt
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wmt').user_group
+  end
+
+  def self.teams_committees_group_wqac
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wqac').user_group
+  end
+
+  def self.teams_committees_group_wrc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wrc').user_group
+  end
+
+  def self.teams_committees_group_wrt
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wrt').user_group
+  end
+
   def self.council_group_wac
     UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: 'wac').id, metadata_type: 'GroupsMetadataCouncils')
   end
