@@ -1669,12 +1669,12 @@ class Competition < ApplicationRecord
     end
 
     if params[:delegate].present?
-      delegate = User.find_by(wca_id: params[:delegate])
-      if !delegate
+      delegate_user = User.find_by(wca_id: params[:delegate]) || User.find(params[:delegate])
+      if !delegate_user || !delegate_user.delegate_status
         raise WcaExceptions::BadApiParameter.new("Invalid delegate: '#{params[:delegate]}'")
       end
       competitions = competitions.left_outer_joins(:delegates)
-                                 .where('competition_delegates.delegate_id = ?', delegate.id)
+                                 .where('competition_delegates.delegate_id = ?', delegate_user.id)
     end
 
     if params[:start].present?
@@ -1760,6 +1760,22 @@ class Competition < ApplicationRecord
         "useWcaRegistration" => use_wca_registration,
       },
     }
+  end
+
+  def to_competition_info
+    options = {
+      only: %w[id name website start_date registration_open registration_close announced_at cancelled_at end_date competitor_limit
+               extra_registration_requirements enable_donations refund_policy_limit_date event_change_deadline_date waiting_list_deadline_date
+               on_the_spot_registration on_the_spot_entry_fee_lowest_denomination qualification_results event_restrictions
+               base_entry_fee_lowest_denomination currency_code allow_registration_edits allow_registration_self_delete_after_acceptance
+               allow_registration_without_qualification refund_policy_percent use_wca_registration guests_per_registration_limit venue contact
+               force_comment_in_registration use_wca_registration external_registration_page guests_entry_fee_lowest_denomination guest_entry_status
+               information events_per_registration_limit],
+      methods: %w[url website short_name city venue_address venue_details latitude_degrees longitude_degrees country_iso2 event_ids registration_opened?
+                  main_event_id number_of_bookmarks using_payment_integrations? uses_qualification? uses_cutoff? competition_series_ids],
+      include: %w[delegates organizers tabs],
+    }
+    self.as_json(options)
   end
 
   def competition_series_wcif(authorized: false)

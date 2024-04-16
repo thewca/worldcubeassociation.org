@@ -161,7 +161,7 @@ RSpec.describe "users" do
     let(:sso) { SingleSignOn.new }
 
     it "authenticates WAC user and validates user attributes" do
-      user = FactoryBot.create(:user, :wac_member, :wca_id)
+      user = FactoryBot.create(:wac_role_member, user: FactoryBot.create(:user_with_wca_id)).user
       sign_in user
       sso.nonce = 1234
       get "#{sso_discourse_path}?#{sso.payload}"
@@ -200,7 +200,7 @@ RSpec.describe "users" do
       # WST is not moderator by default, admin status is granted manually in
       # Discourse
       expect(answer_sso.moderator).to be false
-      expect(answer_sso.add_groups).to eq "wst,delegate"
+      expect(answer_sso.add_groups).to eq "delegate,wst"
       expect(answer_sso.remove_groups).to eq((User.all_discourse_groups - ["wst", "delegate"]).join(","))
     end
 

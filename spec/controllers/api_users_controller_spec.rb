@@ -121,7 +121,8 @@ RSpec.describe Api::V0::UsersController do
     end
 
     it 'correctly returns delegate to be able to create competitions' do
-      sign_in FactoryBot.create :user, :delegate, region_id: senior_delegate_role.group.id
+      delegate = FactoryBot.create :delegate_role
+      sign_in delegate.user
       get :permissions
       expect(response.status).to eq 200
       json = JSON.parse(response.body)
@@ -168,7 +169,7 @@ RSpec.describe Api::V0::UsersController do
       expect(json["can_administer_competitions"]["scope"]).to eq "*"
     end
 
-    let!(:delegate_user) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
+    let!(:delegate_user) { (FactoryBot.create :delegate_role, group_id: senior_delegate_role.group.id).user }
     let!(:organizer_user) { FactoryBot.create :user }
     let!(:competition) {
       FactoryBot.create(:competition, :confirmed, delegates: [delegate_user], organizers: [organizer_user])

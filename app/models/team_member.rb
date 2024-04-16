@@ -5,7 +5,6 @@ class TeamMember < ApplicationRecord
   belongs_to :user
 
   scope :current, -> { where("end_date IS NULL OR end_date > ?", Date.today) }
-  scope :in_official_team, -> { where(team_id: Team.all_official.map(&:id)) }
   scope :leader, -> { where(team_leader: true) }
   scope :senior_member, -> { where(team_senior_member: true) }
   scope :current_leader, -> { self.current.merge(self.leader) }
@@ -77,15 +76,16 @@ class TeamMember < ApplicationRecord
   end
 
   def role
+    group_type = UserGroup.group_types[:teams_committees]
     {
-      id: team.group_type + "_" + self.id.to_s,
+      id: group_type + "_" + self.id.to_s,
       start_date: start_date,
       end_date: end_date,
       is_active: current_member?,
       group: team.group || {
-        id: team.group_type + "_" + team.id.to_s,
+        id: group_type + "_" + team.id.to_s,
         name: team.name,
-        group_type: team.group_type,
+        group_type: group_type,
         is_hidden: team[:hidden],
         is_active: true,
         metadata: {

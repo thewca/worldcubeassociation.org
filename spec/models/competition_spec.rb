@@ -181,7 +181,7 @@ RSpec.describe Competition do
   context "delegates" do
     it "delegates for future comps must be current delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :future
-      competition.delegates.first.update_columns(delegate_status: nil)
+      competition.delegates.first.delegate_roles.first.update!(end_date: Date.today)
 
       expect(competition).to be_invalid_with_errors(staff_delegate_ids: ["are not all Delegates"],
                                                     trainee_delegate_ids: ["are not all Delegates"])
@@ -189,7 +189,7 @@ RSpec.describe Competition do
 
     it "delegates for past comps no longer need to be delegates" do
       competition = FactoryBot.build :competition, :with_delegate, :past
-      competition.delegates.first.update_columns(delegate_status: nil, region_id: nil)
+      competition.delegates.first.delegate_roles.first.update(end_date: Date.today)
 
       expect(competition).to be_valid
     end

@@ -65,19 +65,6 @@ RSpec.describe User, type: :model do
     user.confirm
   end
 
-  it "requires region_id for a delegate" do
-    delegate = FactoryBot.create :delegate
-    region_id = delegate.region_id
-    user = FactoryBot.create :user
-
-    delegate.region_id = user.region_id
-    expect(delegate).to be_invalid_with_errors(region_id: ["can't be blank"])
-
-    delegate.region_id = region_id
-    user.update(delegate_status: "delegate", region_id: region_id)
-    expect(delegate).to be_valid
-  end
-
   it "doesn't delete a real account when a dummy account's WCA ID is cleared" do
     # Create someone without a password and without a WCA ID. This simulates the kind
     # of accounts we originally created for all delegates without accounts.
@@ -336,10 +323,10 @@ RSpec.describe User, type: :model do
 
   describe "unconfirmed_wca_id" do
     let!(:person) { FactoryBot.create :person, dob: '1990-01-02' }
-    let!(:delegate) { FactoryBot.create :delegate, region_id: (FactoryBot.create :delegate_region_americas).id }
+    let!(:delegate_role) { FactoryBot.create :delegate_role }
     let!(:user) do
       FactoryBot.create(:user, unconfirmed_wca_id: person.wca_id,
-                               delegate_id_to_handle_wca_id_claim: delegate.id,
+                               delegate_id_to_handle_wca_id_claim: delegate_role.user.id,
                                claiming_wca_id: true,
                                dob_verification: "1990-01-2")
     end
@@ -442,7 +429,7 @@ RSpec.describe User, type: :model do
 
     it "can match a wca id already claimed by a user" do
       user2 = FactoryBot.create :user
-      user2.delegate_id_to_handle_wca_id_claim = delegate.id
+      user2.delegate_id_to_handle_wca_id_claim = delegate_role.user.id
 
       user2.unconfirmed_wca_id = person.wca_id
       user2.dob_verification = person.dob.strftime("%F")
@@ -456,7 +443,7 @@ RSpec.describe User, type: :model do
     it "cannot have an unconfirmed_wca_id if you already have a wca_id" do
       user_with_wca_id.claiming_wca_id = true
       user_with_wca_id.unconfirmed_wca_id = person.wca_id
-      user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate.id
+      user_with_wca_id.delegate_id_to_handle_wca_id_claim = delegate_role.user.id
       expect(user_with_wca_id).to be_invalid_with_errors(unconfirmed_wca_id: ["cannot claim a WCA ID because you already have WCA ID #{user_with_wca_id.wca_id}"])
     end
 
@@ -746,7 +733,7 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for non-trainee Delegate roles" do
-      junior_delegate_user = FactoryBot.create(:candidate_delegate)
+      junior_delegate_user = FactoryBot.create(:junior_delegate)
       full_delegate_user = FactoryBot.create(:delegate)
       regional_delegate = FactoryBot.create(:regional_delegate_role)
       senior_delegate = FactoryBot.create(:senior_delegate_role)
@@ -789,19 +776,19 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for board user for any group" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
+      americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       board_user = FactoryBot.create(:user, :board_member)
       expect(board_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for WRT user for any group" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
+      americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       wrt_user = FactoryBot.create(:user, :wrt_member)
       expect(wrt_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
 
     it "returns true for admin user for any group" do
-      americas_region = FactoryBot.create(:delegate_region_americas)
+      americas_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'americas').user_group
       admin_user = FactoryBot.create(:admin)
       expect(admin_user.has_permission?(:can_edit_groups, americas_region.id)).to be true
     end
@@ -812,15 +799,15 @@ RSpec.describe User, type: :model do
     end
 
     it "returns true for senior delegate if scope requested is their subregion" do
-      usa_region = FactoryBot.create(:delegate_region_usa)
-      senior_delegate = FactoryBot.create(:senior_delegate_role, group: usa_region.parent_group).user
-      expect(senior_delegate.has_permission?(:can_edit_groups, usa_region.id)).to be true
+      asia_east_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia-east').user_group
+      senior_delegate = FactoryBot.create(:senior_delegate_role, group: asia_east_region.parent_group).user
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_east_region.id)).to be true
     end
 
     it "returns false for senior delegate if scope requested is other's region" do
-      asia_pacific_region = FactoryBot.create(:delegate_region_asia_pacific)
+      asia_region = GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group
       senior_delegate = FactoryBot.create(:senior_delegate_role).user
-      expect(senior_delegate.has_permission?(:can_edit_groups, asia_pacific_region.id)).to be false
+      expect(senior_delegate.has_permission?(:can_edit_groups, asia_region.id)).to be false
     end
   end
 end

@@ -22,14 +22,14 @@ after :teams do
   5.times do
     senior_delegate = FactoryBot.create(:senior_delegate_role)
     rand(10).times do
-      FactoryBot.create([:delegate, :candidate_delegate].sample,
+      FactoryBot.create([:delegate, :junior_delegate].sample,
                         region_id: senior_delegate.group.id)
     end
   end
 
   # Create some delegates without a senior delegate
   5.times do
-    FactoryBot.create([:delegate, :candidate_delegate].sample)
+    FactoryBot.create([:delegate, :junior_delegate].sample)
   end
 
   # Create members and leaders for every WCA team

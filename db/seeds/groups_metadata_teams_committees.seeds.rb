@@ -13,3 +13,4 @@ GroupsMetadataTeamsCommittees.create!(friendly_id: 'wqac', email: 'quality@world
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wrc', email: 'regulations@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wsot', email: 'sports@worldcubeassociation.org')
 GroupsMetadataTeamsCommittees.create!(friendly_id: 'wat', email: 'archive@worldcubeassociation.org')
+GroupsMetadataTeamsCommittees.create!(friendly_id: 'wst_admin', email: 'software-admin@worldcubeassociation.org')

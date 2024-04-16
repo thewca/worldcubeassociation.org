@@ -392,7 +392,7 @@ en:
       status:
         delegate_regions:
           trainee_delegate: "Trainee Delegate"
-          candidate_delegate: "Junior Delegate"
+          junior_delegate: "Junior Delegate"
           delegate: "Delegate"
           regional_delegate: "Regional Delegate"
           senior_delegate: "Senior Delegate"
@@ -2228,8 +2228,6 @@ en:
       board:
         name: "WCA Board of Directors"
         description: "The WCA Board is responsible for leading the organization as a whole, and fulfilling any duties not fulfilled by other Teams,  Committees, and Councils"
-      senior_member: "Senior Member"
-      leader: "Leader"
       users:
         profile: "%{user_name}'s profile"
       #context: WDC

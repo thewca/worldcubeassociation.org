@@ -5,30 +5,30 @@ require "rails_helper"
 RSpec.describe CompetitionsMailer, type: :mailer do
   describe "notify_wcat_of_confirmed_competition" do
     let(:senior_delegate_role) { FactoryBot.create :senior_delegate_role }
-    let(:delegate) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
-    let(:second_senior_delegate_role) { FactoryBot.create :senior_delegate_role }
-    let(:second_delegate) { FactoryBot.create :delegate, region_id: senior_delegate_role.group.id }
-    let(:third_delegate) { FactoryBot.create :trainee_delegate, region_id: second_senior_delegate_role.group.id }
-    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate, second_delegate, third_delegate] }
+    let(:delegate_role) { FactoryBot.create :delegate_role, group: senior_delegate_role.group }
+    let(:second_senior_delegate_role) { FactoryBot.create :senior_delegate_role, group: GroupsMetadataDelegateRegions.find_by!(friendly_id: 'asia').user_group }
+    let(:second_delegate_role) { FactoryBot.create :delegate_role, group: senior_delegate_role.group }
+    let(:third_delegate_role) { FactoryBot.create :trainee_delegate_role, group: second_senior_delegate_role.group }
+    let(:competition) { FactoryBot.create :competition, :with_competitor_limit, championship_types: %w(world PL), delegates: [delegate_role.user, second_delegate_role.user, third_delegate_role.user] }
     let(:mail) do
       I18n.locale = :pl
-      CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate, competition)
+      CompetitionsMailer.notify_wcat_of_confirmed_competition(delegate_role.user, competition)
     end
 
     it "renders in English" do
       expect(mail.to).to eq(["competitions@worldcubeassociation.org"])
       expect(mail.cc).to match_array(competition.delegates.reload.pluck(:email) + [senior_delegate_role.user.email, second_senior_delegate_role.user.email])
       expect(mail.from).to eq(["competitions@worldcubeassociation.org"])
-      expect(mail.reply_to).to eq([delegate.email])
+      expect(mail.reply_to).to eq([delegate_role.user.email])
 
       expect(mail.subject).to eq("#{competition.name} is confirmed")
-      expect(mail.body.encoded).to match("#{delegate.name} has confirmed")
+      expect(mail.body.encoded).to match("#{delegate_role.user.name} has confirmed")
       expect(mail.body.encoded).to match(competition_admin_edit_url(competition))
       expect(mail.body.encoded).to match("The competition will take place on ")
       expect(mail.body.encoded).to match("This competition is marked as World Championship and National Championship: Poland")
       expect(mail.body.encoded).to match("There is a competitor limit of 100 because \"The hall only fits 100 competitors.\"")
-      expect(mail.body.encoded).to match(second_delegate.name)
-      expect(mail.body.encoded).to match(third_delegate.name)
+      expect(mail.body.encoded).to match(second_delegate_role.user.name)
+      expect(mail.body.encoded).to match(third_delegate_role.user.name)
     end
   end
 
@@ -137,10 +137,10 @@ RSpec.describe CompetitionsMailer, type: :mailer do
 
   describe "submit_results_nag" do
     let(:senior) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate, region_id: senior.group.id) }
-    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate, region_id: senior.group.id) }
+    let(:delegate) { FactoryBot.create(:delegate_role) }
+    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate_role) }
     let(:competition) do
-      FactoryBot.create(:competition, name: "Comp of the Future 2016", delegates: [delegate, trainee_delegate])
+      FactoryBot.create(:competition, name: "Comp of the Future 2016", delegates: [delegate.user, trainee_delegate.user])
     end
     let(:mail) { CompetitionsMailer.submit_results_nag(competition) }
 
@@ -148,7 +148,7 @@ RSpec.describe CompetitionsMailer, type: :mailer do
       expect(mail.subject).to eq "Comp of the Future 2016 Results"
       expect(mail.to).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq ["assistants@worldcubeassociation.org"]
-      expect(mail.cc).to eq ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org", senior.user.email]
+      expect(mail.cc).to eq ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org", delegate.group.senior_delegate.email]
       expect(mail.reply_to).to eq ["results@worldcubeassociation.org"]
     end
 
@@ -159,18 +159,17 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "submit_report_nag" do
-    let(:senior) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate, region_id: senior.group.id) }
-    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate, region_id: senior.group.id) }
-    let(:competition) { FactoryBot.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate, trainee_delegate], starts: 5.days.ago, ends: 3.days.ago) }
+    let(:delegate) { FactoryBot.create(:delegate_role) }
+    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate_role) }
+    let(:competition) { FactoryBot.create(:competition, name: "Peculiar Comp 2016", delegates: [delegate.user, trainee_delegate.user], starts: 5.days.ago, ends: 3.days.ago) }
     let(:mail) { CompetitionsMailer.submit_report_nag(competition) }
 
     it "renders the headers" do
       expect(mail.subject).to eq "Peculiar Comp 2016 Delegate Report"
       expect(mail.to).to match_array competition.delegates.pluck(:email)
       expect(mail.from).to eq ["assistants@worldcubeassociation.org"]
-      expect(mail.cc).to eq ["assistants@worldcubeassociation.org", senior.user.email]
-      expect(mail.reply_to).to eq [senior.user.email]
+      expect(mail.cc).to eq ["assistants@worldcubeassociation.org", delegate.group.senior_delegate.email]
+      expect(mail.reply_to).to eq [delegate.group.senior_delegate.email]
     end
 
     it "renders the body" do
@@ -180,15 +179,14 @@ RSpec.describe CompetitionsMailer, type: :mailer do
   end
 
   describe "notify_of_delegate_report_submission" do
-    let(:senior) { FactoryBot.create(:senior_delegate_role) }
-    let(:delegate) { FactoryBot.create(:delegate, region_id: senior.group.id) }
-    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate, region_id: senior.group.id) }
+    let(:delegate) { FactoryBot.create(:delegate_role) }
+    let(:trainee_delegate) { FactoryBot.create(:trainee_delegate_role) }
     let(:competition) do
       competition = FactoryBot.create(:competition, :with_delegate_report,
                                       countryId: "Australia",
                                       cityName: "Perth, Western Australia",
                                       name: "Comp of the Future 2016",
-                                      delegates: [delegate, trainee_delegate],
+                                      delegates: [delegate.user, trainee_delegate.user],
                                       starts: Date.new(2016, 2, 1),
                                       ends: Date.new(2016, 2, 2))
       competition.delegate_report.update!(remarks: "This was a great competition")

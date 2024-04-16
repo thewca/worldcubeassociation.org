@@ -789,11 +789,9 @@ module DatabaseDumper
           created_at
           current_sign_in_at
           delegate_id_to_handle_wca_id_claim
-          delegate_status
           gender
           last_sign_in_at
           name
-          location
           registration_notifications_enabled
           results_notifications_enabled
           saved_avatar_crop_h
@@ -805,7 +803,6 @@ module DatabaseDumper
           saved_pending_avatar_crop_x
           saved_pending_avatar_crop_y
           unconfirmed_wca_id
-          region_id
           updated_at
           wca_id
           receive_delegate_reports
@@ -908,7 +905,7 @@ module DatabaseDumper
     }.freeze,
     "paypal_records" => :skip_all_rows,
     "stripe_records" => :skip_all_rows,
-    "stripe_payment_intents" => :skip_all_rows,
+    "payment_intents" => :skip_all_rows,
     "stripe_webhook_events" => :skip_all_rows,
     "uploaded_jsons" => :skip_all_rows,
     "bookmarked_competitions" => {
@@ -973,10 +970,31 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
+    "roles_metadata_councils" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          status
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
+    "roles_metadata_teams_committees" => {
+      where_clause: "",
+      column_sanitizers: actions_to_column_sanitizers(
+        copy: %w(
+          id
+          status
+          created_at
+          updated_at
+        ),
+      ),
+    }.freeze,
     "jwt_denylist" => :skip_all_rows,
     "wfc_xero_users" => :skip_all_rows,
     "wfc_dues_redirects" => :skip_all_rows,
-    "attendee_payment_requests" => :skip_all_rows,
   }.freeze
 
   RESULTS_SANITIZERS = {

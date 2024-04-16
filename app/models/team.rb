@@ -66,10 +66,6 @@ class Team < ApplicationRecord
     self.c_all_by_friendly_id[friendly_id] || raise("friendly id not found #{friendly_id}")
   end
 
-  def self.board
-    Team.c_find_by_friendly_id!('board')
-  end
-
   def self.wct
     Team.c_find_by_friendly_id!('wct')
   end
@@ -110,10 +106,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wst')
   end
 
-  def self.wst_admin
-    Team.c_find_by_friendly_id!('wst_admin')
-  end
-
   def self.banned
     Team.c_find_by_friendly_id!('banned')
   end
@@ -130,20 +122,12 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wdpc')
   end
 
-  def self.wac
-    Team.c_find_by_friendly_id!('wac').reload
-  end
-
   def self.wsot
     Team.c_find_by_friendly_id!('wsot')
   end
 
   def self.wat
     Team.c_find_by_friendly_id!('wat')
-  end
-
-  def official?
-    Team.all_official.include?(self)
   end
 
   def acronym
@@ -154,24 +138,8 @@ class Team < ApplicationRecord
     I18n.t("about.structure.#{friendly_id}.name")
   end
 
-  private def council_if_any
-    UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: self.friendly_id)&.id, metadata_type: 'GroupsMetadataCouncils')
-  end
-
-  private def team_if_any
-    GroupsMetadataTeamsCommittees.find_by(friendly_id: self.friendly_id)&.user_group
-  end
-
   def group
-    council_if_any || team_if_any
-  end
-
-  def group_type
-    if council_if_any.present?
-      UserGroup.group_types[:councils]
-    elsif official?
-      UserGroup.group_types[:teams_committees]
-    end
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: self.friendly_id)&.user_group
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

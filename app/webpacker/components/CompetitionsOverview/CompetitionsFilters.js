@@ -2,23 +2,17 @@ import React from 'react';
 import {
   Button, Icon, Form, Dropdown, Popup, List, Input, Header,
 } from 'semantic-ui-react';
-import { DateTime } from 'luxon';
 import PulseLoader from 'react-spinners/PulseLoader';
 
 import I18n from '../../lib/i18n';
 import {
-  events, continents, countries, competitionConstants,
+  events, continents, countries, competitionConstants, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
 
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
 
 const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
-const PAST_YEARS_WITH_COMPETITIONS = [];
-for (let { year } = DateTime.now(); year >= 2003; year -= 1) {
-  PAST_YEARS_WITH_COMPETITIONS.push(year);
-}
-PAST_YEARS_WITH_COMPETITIONS.push(1982);
 
 function CompetitionsFilters({
   filterState,
@@ -33,7 +27,7 @@ function CompetitionsFilters({
       <Form.Field>
         <EventSelector
           selectedEvents={filterState.selectedEvents}
-          dispatchFilter={dispatchFilter}
+          onEventSelection={dispatchFilter}
         />
       </Form.Field>
 
@@ -82,18 +76,18 @@ function CompetitionsFilters({
   );
 }
 
-function EventSelector({ selectedEvents, dispatchFilter }) {
+export function EventSelector({ selectedEvents, onEventSelection, eventList = WCA_EVENT_IDS }) {
   return (
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button primary type="button" size="mini" id="select-all-events" onClick={() => dispatchFilter({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
-        <Button type="button" size="mini" id="clear-all-events" onClick={() => dispatchFilter({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        <Button primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+        <Button type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
 
       <div id="events">
-        {WCA_EVENT_IDS.map((eventId) => (
+        {eventList.map((eventId) => (
           <React.Fragment key={eventId}>
             <Button
               basic
@@ -106,7 +100,7 @@ function EventSelector({ selectedEvents, dispatchFilter }) {
               value={eventId}
               data-tooltip={I18n.t(`events.${eventId}`)}
               data-variation="tiny"
-              onClick={() => dispatchFilter({ type: 'toggle_event', eventId })}
+              onClick={() => onEventSelection({ type: 'toggle_event', eventId })}
               active={selectedEvents.includes(eventId)}
             >
               <Icon className={`cubing-icon event-${eventId}`} />
@@ -181,12 +175,15 @@ function DelegateSelector({ delegateId, dispatchFilter }) {
         search
         deburr
         selection
+        error={
+          !delegatesLoading && delegateId && delegatesData.every(({ id }) => id !== delegateId)
+        }
         style={{ textAlign: 'center' }}
         options={[{ key: 'None', text: I18n.t('competitions.index.no_delegates'), value: '' }, ...(delegatesData?.filter((item) => item.name !== 'WCA Board').map((delegate) => (
           {
             key: delegate.id,
             text: `${delegate.name} (${delegate.wca_id})`,
-            value: delegate.wca_id,
+            value: delegate.id,
             image: { avatar: true, src: delegate.thumb_url, style: { width: '28px', height: '28px' } },
           }
         )) || [])]}
@@ -285,7 +282,7 @@ function PastCompYearSelector({ filterState, dispatchFilter }) {
           >
             {I18n.t('competitions.index.all_years')}
           </Dropdown.Item>
-          {PAST_YEARS_WITH_COMPETITIONS.map((year) => (
+          {nonFutureCompetitionYears.map((year) => (
             <Dropdown.Item
               key={`past_select_${year}`}
               onClick={() => dispatchFilter({ timeOrder: 'past', selectedYear: year })}

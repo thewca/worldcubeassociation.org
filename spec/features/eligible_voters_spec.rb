@@ -15,14 +15,14 @@ RSpec.feature "Eligible voters csv" do
       user.team_members.find_by_team_id(wrc_team_id).update!(end_date: 1.day.ago)
     end
   }
-  let!(:team_leader) { FactoryBot.create(:user, :wrc_member, team_leader: true) }
-  let!(:wac_leader) { FactoryBot.create(:user, :wac_member, team_leader: true) }
+  let!(:team_leader) { FactoryBot.create(:user, :wrt_member, team_leader: true) }
+  let!(:wac_leader) { FactoryBot.create(:wac_role_leader) }
   let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
   let!(:senior_delegate_role) { FactoryBot.create(:senior_delegate_role) }
-  let!(:candidate_delegate) { FactoryBot.create(:candidate_delegate, region_id: senior_delegate_role.group.id) }
-  let!(:delegate) { FactoryBot.create(:delegate, region_id: senior_delegate_role.group.id) }
-  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true, region_id: senior_delegate_role.group.id) }
+  let!(:junior_delegate) { FactoryBot.create(:junior_delegate_role, group_id: senior_delegate_role.group_id) }
+  let!(:delegate) { FactoryBot.create(:delegate_role, group_id: senior_delegate_role.group.id).user }
+  let!(:delegate_who_is_also_team_leader) { FactoryBot.create(:delegate, :wrc_member, team_leader: true) }
   let!(:board_member) { FactoryBot.create(:user, :board_member) }
   let!(:officer) { FactoryBot.create(:secretary_role) }
 

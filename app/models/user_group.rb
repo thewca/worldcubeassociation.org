@@ -18,12 +18,15 @@ class UserGroup < ApplicationRecord
   belongs_to :parent_group, class_name: "UserGroup", optional: true
 
   has_many :user_roles, foreign_key: "group_id"
-  has_many :delegate_users, -> { delegates.includes(:region) }, class_name: "User", foreign_key: "region_id"
 
   scope :root_groups, -> { where(parent_group: nil) }
 
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
+  end
+
+  def roles_migrated?
+    user_roles.any?
   end
 
   # For teams which have groups migrated but not roles, this method will help to get the
@@ -34,13 +37,7 @@ class UserGroup < ApplicationRecord
 
   def roles
     role_list = self.user_roles.to_a
-    if self.delegate_regions?
-      role_list += self.delegate_users.map(&:delegate_role)
-    end
-    if self.board?
-      role_list.concat(Team.board.reload.current_members.map(&:board_role))
-    end
-    if self.councils? || self.teams_committees?
+    if self.teams_committees? && !self.roles_migrated?
       TeamMember.where(team_id: self.team.id).each do |team_member|
         role_list << team_member.role
       end
@@ -109,6 +106,8 @@ class UserGroup < ApplicationRecord
       teams_committees: "Teams & Committees",
       councils: "Councils",
       translators: "Translators",
+      board: "Board",
+      officers: "Officers",
     }
   end
 
@@ -132,8 +131,56 @@ class UserGroup < ApplicationRecord
     UserGroup.board.first
   end
 
+  def self.teams_committees_group_wct
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wct').user_group
+  end
+
+  def self.teams_committees_group_wcat
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wcat').user_group
+  end
+
+  def self.teams_committees_group_wdc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wdc').user_group
+  end
+
+  def self.teams_committees_group_wdpc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wdpc').user_group
+  end
+
+  def self.teams_committees_group_wec
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wec').user_group
+  end
+
+  def self.teams_committees_group_weat
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'weat').user_group
+  end
+
+  def self.teams_committees_group_wfc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wfc').user_group
+  end
+
+  def self.teams_committees_group_wmt
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wmt').user_group
+  end
+
+  def self.teams_committees_group_wqac
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wqac').user_group
+  end
+
+  def self.teams_committees_group_wrc
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wrc').user_group
+  end
+
+  def self.teams_committees_group_wrt
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wrt').user_group
+  end
+
   def self.council_group_wac
     UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: 'wac').id, metadata_type: 'GroupsMetadataCouncils')
+  end
+
+  def self.teams_committees_group_wst_admin
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wst_admin').user_group
   end
 
   def senior_delegate
@@ -162,6 +209,10 @@ class UserGroup < ApplicationRecord
     else
       false
     end
+  end
+
+  def is_root_group?
+    parent_group_id.nil?
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

@@ -1,10 +1,18 @@
-import { events } from '../../lib/wca-data.js.erb';
+import { DateTime } from 'luxon';
+import {
+  events, continents, countries, nonFutureCompetitionYears,
+} from '../../lib/wca-data.js.erb';
+
+// constants
+
+const WCA_EVENT_IDS = Object.keys(events.byId);
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'
+// --> handled by the fact that every non-number is interpreted as "default value" all_years
+//     which means that 'all+years' lands in this "catchall" despite not being explicitly converted
 // - region value was the name, is now the 2-char code (for non-continents)
-// - delegate value was user id, is now the WCA ID
-// - selected events key was 'event_ids' and they were not a list
+// --> handled in sanitizer below that checks for ID or ISO or name for backwards compatibility
 
 const DISPLAY_MODE = 'display';
 const TIME_ORDER = 'state';
@@ -14,7 +22,7 @@ const END_DATE = 'to_date';
 const REGION = 'region';
 const DELEGATE = 'delegate';
 const SEARCH = 'search';
-const SELECTED_EVENTS = 'events';
+const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
 
 const DEFAULT_DISPLAY_MODE = 'list';
@@ -24,23 +32,71 @@ const DEFAULT_DATE = null;
 const DEFAULT_REGION = 'all';
 const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
-const DEFAULT_EVENTS = [];
 const INCLUDE_CANCELLED_TRUE = 'on';
 
+// search param sanitizers
+
+const displayModes = ['list', 'map'];
+const sanitizeMode = (mode) => {
+  if (displayModes.includes(mode)) {
+    return mode;
+  }
+  return DEFAULT_DISPLAY_MODE;
+};
+
+const timeOrders = ['present', 'recent', 'past', 'by_announcement', 'custom'];
+const sanitizeTimeOrder = (order) => {
+  if (timeOrders.includes(order)) {
+    return order;
+  }
+  return DEFAULT_TIME_ORDER;
+};
+
+const sanitizeYear = (year) => {
+  if (nonFutureCompetitionYears.includes(Number(year))) {
+    return Number(year);
+  }
+  return DEFAULT_YEAR;
+};
+
+const dateFormat = 'yyyy-MM-dd';
+const sanitizeDate = (date) => {
+  const luxonDate = DateTime.fromFormat(date || '', dateFormat);
+  if (luxonDate.isValid) {
+    return luxonDate.toFormat(dateFormat);
+  }
+  return DEFAULT_DATE;
+};
+
+const sanitizeRegion = (region) => {
+  if (region === 'all') return region;
+  const continent = continents.real.find(
+    ({ id, name }) => region === id || region === name,
+  );
+  const country = countries.real.find(({ id, iso2 }) => region === id || region === iso2);
+  return continent?.id ?? country?.iso2 ?? DEFAULT_REGION;
+};
+
+const sanitizeEvents = (values) => (values || []).filter(
+  (value) => WCA_EVENT_IDS.includes(value),
+);
+
+// filter state
+
 export const getDisplayMode = (searchParams) => (
-  searchParams.get(DISPLAY_MODE) || DEFAULT_DISPLAY_MODE
+  sanitizeMode(searchParams.get(DISPLAY_MODE))
 );
 
 export const createFilterState = (searchParams) => ({
-  timeOrder: searchParams.get(TIME_ORDER) || DEFAULT_TIME_ORDER,
-  selectedYear: searchParams.get(YEAR) || DEFAULT_YEAR,
-  customStartDate: searchParams.get(START_DATE) || DEFAULT_DATE,
-  customEndDate: searchParams.get(END_DATE) || DEFAULT_DATE,
-  region: searchParams.get(REGION) || DEFAULT_REGION,
-  delegate: searchParams.get(DELEGATE) || DEFAULT_DELEGATE,
+  timeOrder: sanitizeTimeOrder(searchParams.get(TIME_ORDER)),
+  selectedYear: sanitizeYear(searchParams.get(YEAR)),
+  customStartDate: sanitizeDate(searchParams.get(START_DATE)),
+  customEndDate: sanitizeDate(searchParams.get(END_DATE)),
+  region: sanitizeRegion(searchParams.get(REGION)),
+  delegate: Number(searchParams.get(DELEGATE)) || DEFAULT_DELEGATE,
   search: searchParams.get(SEARCH) || DEFAULT_SEARCH,
   selectedEvents:
-    searchParams.get(SELECTED_EVENTS)?.split(',')?.filter(Boolean) || DEFAULT_EVENTS,
+    sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
 });
 
@@ -76,9 +132,10 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   searchParams.set(SEARCH, search);
   searchParams.delete(SEARCH, DEFAULT_SEARCH);
 
-  // similarly for array-of-string values
-  searchParams.set(SELECTED_EVENTS, selectedEvents.join(','));
-  searchParams.delete(SELECTED_EVENTS, DEFAULT_EVENTS.join(','));
+  // first, delete previously selected events, then add new events.
+  // If no custom events are selected, this code does not change the URL, which is what we want.
+  searchParams.delete(SELECTED_EVENTS);
+  selectedEvents.forEach((selectedEvent) => searchParams.append(SELECTED_EVENTS, selectedEvent));
 
   // for date values, add them if applicable, otherwise omit them
   if (customStartDate) {
@@ -102,8 +159,6 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
 
   window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);
 };
-
-const WCA_EVENT_IDS = Object.keys(events.byId);
 
 export const filterReducer = (state, action) => {
   switch (action.type) {

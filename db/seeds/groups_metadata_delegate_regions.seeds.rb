@@ -1,0 +1,16 @@
+# frozen_string_literal: true
+
+GroupsMetadataDelegateRegions.create!(friendly_id: 'africa')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'oceania')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'americas')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'north-america')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'south-america')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia-east')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'asia-west')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'india')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe-north')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'europe-south')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'australia')
+GroupsMetadataDelegateRegions.create!(friendly_id: 'new-zealand')

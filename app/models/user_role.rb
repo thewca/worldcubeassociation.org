@@ -1,27 +1,11 @@
 # frozen_string_literal: true
 
 class UserRole < ApplicationRecord
-  DELEGATE_ROLE_ID = "dummyRoleId"
-
   belongs_to :user
   belongs_to :group, class_name: "UserGroup"
   belongs_to :metadata, polymorphic: true, optional: true
 
   delegate :group_type, to: :group
-
-  def self.is_visible_to_user?(role, user)
-    is_actual_role = role.is_a?(UserRole)
-    group = is_actual_role ? role.group : role[:group]
-    return true unless group[:is_hidden]
-    case group[:group_type]
-    when UserGroup.group_types[:delegate_probation]
-      user&.can_manage_delegate_probation?
-    when UserGroup.group_types[:translators]
-      user&.software_team?
-    else
-      false # Don't allow to view any other hidden groups.
-    end
-  end
 
   def self.is_group_type?(role, group_type)
     is_actual_role = role.is_a?(UserRole)
@@ -48,6 +32,26 @@ class UserRole < ApplicationRecord
     is_actual_role = role.is_a?(UserRole)
     return nil if (is_actual_role && role.metadata.nil?) || (!is_actual_role && role[:metadata].nil?)
     is_actual_role ? role.metadata[:status] : role[:metadata][:status]
+  end
+
+  STATUS_SORTING_ORDER = {
+    UserGroup.group_types[:delegate_regions].to_sym => [
+      RolesMetadataDelegateRegions.statuses[:senior_delegate],
+      RolesMetadataDelegateRegions.statuses[:regional_delegate],
+      RolesMetadataDelegateRegions.statuses[:delegate],
+      RolesMetadataDelegateRegions.statuses[:junior_delegate],
+      RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+    ],
+    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
+    UserGroup.group_types[:board].to_sym => ["member"],
+    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+  }.freeze
+
+  def self.status_sort_rank(role)
+    group_type = UserRole.group_type(role)
+    status = UserRole.status(role) || ''
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
   end
 
   def is_active?
@@ -89,12 +93,7 @@ class UserRole < ApplicationRecord
     group_type = UserRole.group_type(role)
     case group_type
     when UserGroup.group_types[:delegate_regions]
-      [
-        RolesMetadataDelegateRegions.statuses[:senior_delegate],
-        RolesMetadataDelegateRegions.statuses[:regional_delegate],
-        RolesMetadataDelegateRegions.statuses[:delegate],
-        RolesMetadataDelegateRegions.statuses[:junior_delegate],
-      ].include?(UserRole.status(role))
+      ["senior_delegate", "regional_delegate", "delegate", "junior_delegate"].include?(UserRole.status(role))
     when UserGroup.group_types[:board], UserGroup.group_types[:officers], UserGroup.group_types[:teams_committees]
       true
     else
@@ -128,8 +127,12 @@ class UserRole < ApplicationRecord
     group_type = UserRole.group_type(role)
     group = UserRole.group(role)
     case group_type
-    when UserGroup.group_types[:councils]
+    when UserGroup.group_types[:delegate_regions]
+      UserRole.status(role)
+    when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       group.metadata.friendly_id
+    when UserGroup.group_types[:board]
+      UserGroup.group_types[:board]
     else
       nil
     end

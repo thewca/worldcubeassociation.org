@@ -539,7 +539,6 @@ class CompetitionsController < ApplicationController
     @competition = competition_from_params(includes: associations)
     respond_to do |format|
       format.html do
-        return redirect_to competitions_v2_path(id: @competition.id) if @competition.uses_new_registration_service? && !@competition.results_posted?
       end
       format.pdf do
         unless @competition.has_schedule?
@@ -616,7 +615,7 @@ class CompetitionsController < ApplicationController
       return redirect_to competition_path(@competition)
     end
     @competition.enable_v2_registrations!
-    redirect_to competitions_v2_path(@competition)
+    redirect_to competition_path(@competition)
   end
 
   before_action -> { require_user_permission(:can_create_competitions?) }, only: [:create]

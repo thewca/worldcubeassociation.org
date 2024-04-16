@@ -71,9 +71,6 @@ Rails.application.routes.draw do
   post 'competitions/bookmark' => 'competitions#bookmark', as: :bookmark
   post 'competitions/unbookmark' => 'competitions#unbookmark', as: :unbookmark
 
-  get 'competitions/v2/:id' => 'competitions_v2#show', as: :competitions_v2
-  get 'competitions/v2/:id/*all' => 'competitions_v2#show'
-
   resources :competitions do
     get 'edit/admin' => 'competitions#admin_edit', as: :admin_edit
 
@@ -335,7 +332,7 @@ Rails.application.routes.draw do
         get '/users/:id/permissions' => 'permissions#index'
         post '/users/competitor-info' => 'users#competitor_info'
         post '/mailers/registration' => 'mailers#registration'
-        post '/payment/init_stripe' => 'payment#init'
+        post '/payment/init_stripe' => 'payment#init_stripe'
       end
     end
     namespace :v0 do
@@ -357,7 +354,7 @@ Rails.application.routes.draw do
       get '/users/me/preferred_events' => 'users#preferred_events'
       get '/users/me/permissions' => 'users#permissions'
       get '/users/me/bookmarks' => 'users#bookmarked_competitions'
-      get '/users/me/token' => 'users#token'
+      get '/users/me/token' => 'users#token', as: :token
       get '/users/:id' => 'users#show_user_by_id', constraints: { id: /\d+/ }
       get '/users/:wca_id' => 'users#show_user_by_wca_id', as: :user
       get '/delegates' => 'api#delegates'
@@ -375,6 +372,7 @@ Rails.application.routes.draw do
         get '/results' => 'competitions#results', as: :results
         get '/results/:event_id' => 'competitions#event_results', as: :event_results
         get '/competitors' => 'competitions#competitors'
+        get '/qualifications' => 'competitions#qualifications'
         get '/registrations' => 'competitions#registrations'
         get '/schedule' => 'competitions#schedule'
         get '/scrambles' => 'competitions#scrambles', as: :scrambles
@@ -390,7 +388,7 @@ Rails.application.routes.draw do
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
-      resources :user_roles, only: [:create, :show, :update, :destroy]
+      resources :user_roles, only: [:create, :update, :destroy]
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
         resources :persons, only: [:update, :destroy] do

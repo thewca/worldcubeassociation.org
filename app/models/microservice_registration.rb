@@ -6,6 +6,7 @@ class MicroserviceRegistration < ApplicationRecord
 
   has_many :assignments, as: :registration
   has_many :wcif_extensions, as: :extendable, dependent: :delete_all
+  has_many :payment_intents, as: :holder
 
   serialize :roles, coder: YAML
 
