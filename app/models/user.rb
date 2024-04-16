@@ -442,52 +442,56 @@ class User < ApplicationRecord
     preferred_locale || I18n.default_locale
   end
 
+  private def group_member?(group)
+    active_roles.any? { |role| UserRole.group(role) == group }
+  end
+
   def board_member?
-    active_roles.any? { |role| UserRole.group_type(role) == UserGroup.group_types[:board] }
+    group_member?(UserGroup.board_group)
   end
 
   def communication_team?
-    team_member?(Team.wct)
+    group_member?(UserGroup.teams_committees_group_wct)
   end
 
   def competition_announcement_team?
-    team_member?(Team.wcat)
+    group_member?(UserGroup.teams_committees_group_wcat)
   end
 
   def wdc_team?
-    team_member?(Team.wdc)
+    group_member?(UserGroup.teams_committees_group_wdc)
   end
 
   def wdpc_team?
-    team_member?(Team.wdpc)
+    group_member?(UserGroup.teams_committees_group_wdpc)
   end
 
   def ethics_committee?
-    team_member?(Team.wec)
+    group_member?(UserGroup.teams_committees_group_wec)
   end
 
   def weat_team?
-    team_member?(Team.weat)
+    group_member?(UserGroup.teams_committees_group_weat)
   end
 
   def financial_committee?
-    team_member?(Team.wfc)
+    group_member?(UserGroup.teams_committees_group_wfc)
   end
 
   def marketing_team?
-    team_member?(Team.wmt)
+    group_member?(UserGroup.teams_committees_group_wmt)
   end
 
   def quality_assurance_committee?
-    team_member?(Team.wqac)
+    group_member?(UserGroup.teams_committees_group_wqac)
   end
 
   def wrc_team?
-    team_member?(Team.wrc)
+    group_member?(UserGroup.teams_committees_group_wrc)
   end
 
   def results_team?
-    team_member?(Team.wrt)
+    group_member?(UserGroup.teams_committees_group_wrt)
   end
 
   private def software_team?
