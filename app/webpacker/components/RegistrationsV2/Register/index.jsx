@@ -5,13 +5,9 @@ import { getSingleRegistration } from '../api/registration/get/get_registrations
 import Loading from '../../Requests/Loading';
 import RegistrationMessage, { setMessage } from './RegistrationMessage';
 import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
+import messageReducer from '../reducers/messageReducer';
 
 const queryClient = new QueryClient();
-
-const messageReducer = (state, { payload }) => ({
-  ...state,
-  message: { key: payload.key, type: payload.type },
-});
 
 export default function Index({ competitionInfo, userInfo, preferredEvents }) {
   return (
