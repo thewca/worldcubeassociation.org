@@ -268,6 +268,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
         />
 
         <Header>
@@ -293,6 +294,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
         />
 
         <Header>
@@ -313,6 +315,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
         />
 
         <Header>
@@ -332,6 +335,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           changeSortColumn={changeSortColumn}
           sortDirection={sortDirection}
           sortColumn={sortColumn}
+          competitionInfo={competitionInfo}
         />
       </div>
 
@@ -358,6 +362,7 @@ function RegistrationAdministrationTable({
   sortDirection,
   sortColumn,
   changeSortColumn,
+  competitionInfo,
 }) {
   const handleHeaderCheck = (_, data) => {
     if (data.checked) {
@@ -378,6 +383,7 @@ function RegistrationAdministrationTable({
           sortDirection={sortDirection}
           sortColumn={sortColumn}
           changeSortColumn={changeSortColumn}
+          competitionInfo={competitionInfo}
         />
 
         <Table.Body>
