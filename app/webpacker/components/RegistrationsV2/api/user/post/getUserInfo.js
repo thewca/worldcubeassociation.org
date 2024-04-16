@@ -1,4 +1,5 @@
-import fetchWithJWTToken from '../../../../../lib/requests/fetchWithJWTToken';
+import { fetchJsonOrError } from '../../../../../lib/requests/fetchWithAuthenticityToken';
+import { apiV0Urls } from '../../../../../lib/requests/routes.js.erb';
 
 export default async function getUsersInfo(
   userIds,
@@ -9,12 +10,6 @@ export default async function getUsersInfo(
     return [];
   }
 
-  const { data } = await fetchWithJWTToken('/api/v1/users', {
-    body: JSON.stringify({ ids: userIds }),
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const { data } = await fetchJsonOrError(apiV0Urls.users.show(userIds));
   return data;
 }
