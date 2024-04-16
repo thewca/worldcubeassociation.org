@@ -130,10 +130,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wat')
   end
 
-  def official?
-    Team.all_official.include?(self)
-  end
-
   def acronym
     friendly_id.upcase
   end
@@ -144,12 +140,6 @@ class Team < ApplicationRecord
 
   def group
     GroupsMetadataTeamsCommittees.find_by(friendly_id: self.friendly_id)&.user_group
-  end
-
-  def group_type
-    if official?
-      UserGroup.group_types[:teams_committees]
-    end
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {

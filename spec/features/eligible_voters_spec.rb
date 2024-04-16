@@ -15,7 +15,7 @@ RSpec.feature "Eligible voters csv" do
       user.team_members.find_by_team_id(wrc_team_id).update!(end_date: 1.day.ago)
     end
   }
-  let!(:team_leader) { FactoryBot.create(:user, :wrc_member, team_leader: true) }
+  let!(:team_leader) { FactoryBot.create(:user, :wrt_member, team_leader: true) }
   let!(:wac_leader) { FactoryBot.create(:wac_role_leader) }
   let!(:team_senior_member) { FactoryBot.create(:user, :wrc_member, team_senior_member: true) }
   let!(:team_member) { FactoryBot.create(:user, :wrc_member) }
