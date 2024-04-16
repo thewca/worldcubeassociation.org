@@ -89,7 +89,7 @@ class PaymentController < ApplicationController
 
     competition = payment_request.competition
     return render json: { error: "no_stripe" } unless competition.using_payment_integrations?
-    return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.competition_specific_staff?(competition)
+    return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_issue_refunds?(competition)
 
     charge = StripeRecord.find(payment_id)
 
