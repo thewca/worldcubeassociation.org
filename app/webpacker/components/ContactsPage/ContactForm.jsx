@@ -1,8 +1,9 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   Form, FormGroup, FormField, Button, Radio, Message,
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
+import _ from 'lodash';
 import { contactUrl } from '../../lib/requests/routes.js.erb';
 import useInputState from '../../lib/hooks/useInputState';
 import useSaveAction from '../../lib/hooks/useSaveAction';
@@ -23,51 +24,66 @@ const CONTACT_TYPES = [
   'different',
 ];
 
-const CONTACT_TYPES_MAP = CONTACT_TYPES.reduce((accumulator, contactType) => {
-  accumulator[contactType] = contactType;
-  return accumulator;
-}, {});
+const CONTACT_TYPES_MAP = _.keyBy(CONTACT_TYPES);
+
+const SUBFORM_DEFAULT_VALUE = {
+  competition: null,
+  message: '',
+};
 
 export default function ContactForm({ userDetails }) {
-  const initialFormValues = useMemo(() => ({
-    userData: {
-      name: userDetails?.user?.name || '',
-      email: userDetails?.user?.email || '',
-    },
-  }), [userDetails]);
-  const [formValues, setFormValues] = useInputState(initialFormValues);
+  const [userData, setUserData] = useState({
+    name: userDetails?.user?.name || '',
+    email: userDetails?.user?.email || '',
+  });
+  const [selectedContactType, setSelectedContactType] = useInputState(null);
+  const [subformValues, setSubformValues] = useState(SUBFORM_DEFAULT_VALUE);
+
   const { save, saving } = useSaveAction();
+  const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
-  const recaptchaRef = useRef();
 
   const isFormValid = (
-    formValues.contactType && formValues.userData.name && formValues.userData.email
+    selectedContactType && userData.name && userData.email && captchaValue
   );
   const SubForm = useMemo(() => {
-    if (!formValues.contactType) return null;
-    switch (formValues.contactType) {
+    if (!selectedContactType) return null;
+    switch (selectedContactType) {
       case CONTACT_TYPES_MAP.competition:
         return Competition;
       default:
         return Wct;
     }
-  }, [formValues.contactType]);
+  }, [selectedContactType]);
 
-  const resetForm = () => setFormValues(initialFormValues);
+  useEffect(() => {
+    setSubformValues(SUBFORM_DEFAULT_VALUE);
+  }, [selectedContactType]);
 
   if (saving) return <Loading />;
 
   return (
     <Form
       onSubmit={() => {
-        save(contactUrl, formValues, resetForm, { method: 'POST' });
+        if (isFormValid) {
+          save(
+            contactUrl,
+            {
+              userData,
+              contactType: selectedContactType,
+              [selectedContactType]: subformValues,
+            },
+            () => setSelectedContactType(null),
+            { method: 'POST' },
+          );
+        }
       }}
       error={!!captchaError}
     >
       <UserData
-        formValues={formValues.userData}
-        setFormValues={(userData) => setFormValues({ ...formValues, userData })}
-        userDetails={userDetails}
+        formValues={userData}
+        setFormValues={setUserData}
+        isInputDisabled={!!userDetails}
       />
       <FormGroup grouped>
         <div>{I18n.t('page.contacts.form.contact_type.label')}</div>
@@ -77,38 +93,26 @@ export default function ContactForm({ userDetails }) {
               label={I18n.t(`page.contacts.form.contact_type.${contactType}.label`)}
               name="contactType"
               value={contactType}
-              checked={formValues.contactType === contactType}
-              onChange={(_, { value }) => {
-                setFormValues({
-                  userData: formValues.userData,
-                  contactType: value,
-                  [value]: {
-                    competition: null,
-                    message: '',
-                  },
-                });
-              }}
+              checked={selectedContactType === contactType}
+              onChange={setSelectedContactType}
             />
           </FormField>
         ))}
       </FormGroup>
       {SubForm && (
         <SubForm
-          formValues={formValues[formValues.contactType] || {}}
-          setFormValues={(subFormData) => setFormValues({
-            ...formValues,
-            [formValues.contactType]: subFormData,
-          })}
+          formValues={subformValues}
+          setFormValues={setSubformValues}
         />
       )}
       <FormField>
         <ReCAPTCHA
-          ref={recaptchaRef}
           sitekey={RECAPTCHA_PUBLIC_KEY}
           // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
           // is called when user successfully completes the captcha, hence we are assuming that any
           // existing errors will be cleared when onChange is called.
-          onChange={() => setCaptchaError(false)}
+          onChange={setCaptchaValue}
+          onErrored={setCaptchaError}
         />
         {captchaError && (
           <Message
@@ -120,13 +124,6 @@ export default function ContactForm({ userDetails }) {
       <Button
         disabled={!isFormValid}
         type="submit"
-        onClick={(e) => {
-          const captchaValue = recaptchaRef.current.getValue();
-          if (!captchaValue) {
-            setCaptchaError(true);
-            e.preventDefault();
-          }
-        }}
       >
         {I18n.t('page.contacts.form.submit_button')}
       </Button>
