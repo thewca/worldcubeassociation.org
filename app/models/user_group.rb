@@ -204,7 +204,7 @@ class UserGroup < ApplicationRecord
   def unique_status?(status)
     if self.group_type == UserGroup.group_types[:delegate_regions]
       ["senior_delegate", "regional_delegate"].include?(status)
-    elsif self.group_type == UserGroup.group_types[:teams_committees]
+    elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(self.group_type)
       status == "leader"
     else
       false
