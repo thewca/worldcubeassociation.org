@@ -8,8 +8,6 @@ class Team < ApplicationRecord
   default_scope -> { where(hidden: false) }
   scope :with_hidden, -> { unscope(where: :hidden) }
 
-  scope :official, -> { where(id: Team.all_official.map(&:id)) }
-
   accepts_nested_attributes_for :team_members, reject_if: :all_blank, allow_destroy: true
 
   validate :membership_periods_cannot_overlap_for_single_user
@@ -25,28 +23,6 @@ class Team < ApplicationRecord
         end
       end
     end
-  end
-
-  # "Official" teams are teams recognized by Motion "10.2019.0":
-  #  https://documents.worldcubeassociation.org/documents/motions/10.2019.0%20-%20Committees%20and%20Teams.pdf
-  # Motions starting with "10.YYYY.N" define these teams:
-  #  https://www.worldcubeassociation.org/documents
-  def self.all_official
-    [
-      Team.wct,
-      Team.wcat,
-      Team.wdc,
-      Team.wec,
-      Team.weat,
-      Team.wfc,
-      Team.wmt,
-      Team.wqac,
-      Team.wrc,
-      Team.wrt,
-      Team.wst,
-      Team.wsot,
-      Team.wat,
-    ]
   end
 
   # Code duplication from Cachable concern, as we index by friendly_id and not by id :(
@@ -158,7 +134,7 @@ class Team < ApplicationRecord
 
   def self.changes_in_all_teams
     team_changes = []
-    all_teams = Team.all_official + UserGroup.councils.map(&:team)
+    all_teams = UserGroup.teams_committees.select { |team_committee| !team_committee.roles_migrated? }.map(&:team) + UserGroup.councils.map(&:team)
     all_teams.each do |team|
       current_team_changes = team.changes_in_team
       if !current_team_changes.empty?
