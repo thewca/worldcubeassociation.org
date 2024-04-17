@@ -65,7 +65,7 @@ RSpec.describe RoleChangeMailer, type: :mailer do
     let(:mail) { described_class.notify_role_end(translator, user_who_made_the_change) }
 
     it 'renders the headers' do
-      expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
+      expect(mail.to).to match_array [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email]
       expect(mail.reply_to).to match_array [user_who_made_the_change.email]
       expect(mail.subject).to eq "Role removed for #{translator.user.name} in Delegate Regions"
     end

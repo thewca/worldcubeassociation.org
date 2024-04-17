@@ -179,7 +179,11 @@ class UserGroup < ApplicationRecord
   end
 
   def self.council_group_wac
-    UserGroup.find_by(metadata_id: GroupsMetadataCouncils.find_by(friendly_id: 'wac').id, metadata_type: 'GroupsMetadataCouncils')
+    GroupsMetadataCouncils.find_by(friendly_id: 'wac').user_group
+  end
+
+  def self.teams_committees_group_wst
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wst').user_group
   end
 
   def self.teams_committees_group_wst_admin

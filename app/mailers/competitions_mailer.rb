@@ -11,8 +11,8 @@ class CompetitionsMailer < ApplicationMailer
       @competition = competition
       @confirmer = confirmer
       mail(
-        from: Team.wcat.email,
-        to: Team.wcat.email,
+        from: UserGroup.teams_committees_group_wcat.metadata.email,
+        to: UserGroup.teams_committees_group_wcat.metadata.email,
         cc: (competition.delegates.map(&:email) + delegates_to_senior_delegates_email(competition.delegates) + delegates_to_regional_delegates_email(competition.delegates)).compact.uniq,
         reply_to: confirmer.email,
         subject: "#{competition.name} is confirmed",
@@ -110,7 +110,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_results_nag(competition)
     @competition = competition
     mail(
-      from: Team.weat.email,
+      from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
       cc: ["results@worldcubeassociation.org", "assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: "results@worldcubeassociation.org",
@@ -121,7 +121,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_report_nag(competition)
     @competition = competition
     mail(
-      from: Team.weat.email,
+      from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
       cc: ["assistants@worldcubeassociation.org"] + delegates_to_senior_delegates_email(competition.delegates),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
@@ -132,7 +132,7 @@ class CompetitionsMailer < ApplicationMailer
   def submit_report_reminder(competition)
     @competition = competition
     mail(
-      from: Team.weat.email,
+      from: UserGroup.teams_committees_group_weat.metadata.email,
       to: competition.delegates.pluck(:email),
       reply_to: delegates_to_senior_delegates_email(competition.delegates),
       subject: "Friendly reminder to submit #{competition.name} Delegate Report",
