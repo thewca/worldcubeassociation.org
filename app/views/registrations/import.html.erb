@@ -1,10 +1,14 @@
 <% provide(:title, t('registrations.import.title', comp: @competition.name)) %>
 
 <%= render layout: "nav" do %>
-  <%= alert :info, t('registrations.import.info'), note: true %>
-  <%= simple_form_for :registrations_import, url: competition_registrations_do_import_path(@competition) do |f| %>
-    <%= f.input :registrations_file, as: :file, input_html: { accept: 'text/csv' },
-                label: t('registrations.import.registrations_file_label'), hint: t('registrations.import.registrations_file_hint') %>
-    <%= f.submit t('registrations.import.import'), class: "btn btn-primary" %>
+  <% if @competition.uses_new_registration_service? %>
+    <%= alert :info, t('registrations.import.info'), note: true %>
+    <%= simple_form_for :registrations_import, url: competition_registrations_do_import_path(@competition) do |f| %>
+      <%= f.input :registrations_file, as: :file, input_html: { accept: 'text/csv' },
+                  label: t('registrations.import.registrations_file_label'), hint: t('registrations.import.registrations_file_hint') %>
+      <%= f.submit t('registrations.import.import'), class: "btn btn-primary" %>
+    <% end %>
+  <% else %>
+    <%= react_component('RegistrationsV2/Import', { competitionInfo: @competition.to_competition_info }) %>
   <% end %>
 <% end %>

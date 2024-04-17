@@ -116,9 +116,6 @@ class RegistrationsController < ApplicationController
 
   def import
     @competition = competition_from_params
-    if @competition.uses_new_registration_service?
-      redirect_to Microservices::Registrations.registration_import_path(@competition.id)
-    end
   end
 
   def do_import
