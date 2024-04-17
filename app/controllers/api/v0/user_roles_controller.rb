@@ -174,16 +174,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def end_role_for_user_in_group_with_status(group, status)
-    if group.group_type == UserGroup.group_types[:delegate_regions]
-      role_to_end = group.lead_role
-      if role_to_end.present?
-        role_to_end.update!(end_date: Date.today)
-        RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later
-      end
-    end
-  end
-
   private def create_team_committee_council_role(group, user_id, status)
     team = group.team
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
@@ -232,36 +222,46 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = nil
     end
 
-    if group.group_type == UserGroup.group_types[:teams_committees] && group.team.present?
+    if group.group_type == UserGroup.group_types[:teams_committees] && !group.roles_migrated? && group.team.present?
       return create_team_committee_council_role(group, user_id, status)
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
 
-    if status.present? && group.unique_status?(status)
-      end_role_for_user_in_group_with_status(group, status)
+    role_to_end = nil
+    new_role = nil
+
+    ActiveRecord::Base.transaction do
+      if status.present? && group.unique_status?(status)
+        role_to_end = group.lead_role
+        if role_to_end.present?
+          role_to_end.update!(end_date: Date.today)
+        end
+      end
+
+      if group.group_type == UserGroup.group_types[:delegate_regions]
+        metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
+      elsif group.group_type == UserGroup.group_types[:officers]
+        metadata = RolesMetadataOfficers.create!(status: status)
+      elsif group.group_type == UserGroup.group_types[:teams_committees]
+        metadata = RolesMetadataTeamsCommittees.create!(status: status)
+      elsif group.group_type == UserGroup.group_types[:councils]
+        metadata = RolesMetadataCouncils.create!(status: status)
+      else
+        metadata = nil
+      end
+
+      new_role = UserRole.create!(
+        user_id: user_id,
+        group_id: group_id,
+        start_date: Date.today,
+        metadata: metadata,
+      )
     end
 
-    if group.group_type == UserGroup.group_types[:delegate_regions]
-      metadata = RolesMetadataDelegateRegions.create!(status: status, location: location)
-    elsif group.group_type == UserGroup.group_types[:officers]
-      metadata = RolesMetadataOfficers.create!(status: status)
-    elsif group.group_type == UserGroup.group_types[:teams_committees]
-      metadata = RolesMetadataTeamsCommittees.create!(status: status)
-    elsif group.group_type == UserGroup.group_types[:councils]
-      metadata = RolesMetadataCouncils.create!(status: status)
-    else
-      metadata = nil
-    end
-
-    role = UserRole.create!(
-      user_id: user_id,
-      group_id: group_id,
-      start_date: Date.today,
-      metadata: metadata,
-    )
-    RoleChangeMailer.notify_role_start(role, current_user).deliver_later
+    RoleChangeMailer.notify_role_end(role_to_end, current_user).deliver_later if role_to_end.present?
+    RoleChangeMailer.notify_role_start(new_role, current_user).deliver_later
     render json: {
       success: true,
     }
