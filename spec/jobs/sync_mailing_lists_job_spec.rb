@@ -49,7 +49,7 @@ RSpec.describe SyncMailingListsJob, type: :job do
     americas_delegate_4 = FactoryBot.create :trainee_delegate_role, group: americas_region
 
     # Translators
-    translators_group = FactoryBot.create :translators_user_group
+    translators_group = GroupsMetadataTranslators.find_by!(locale: 'ca').user_group
     translator_1 = FactoryBot.create :translator_role, group_id: translators_group.id
     translator_2 = FactoryBot.create :translator_role, group_id: translators_group.id
     translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
