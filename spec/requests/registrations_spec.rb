@@ -554,7 +554,7 @@ RSpec.describe "registrations" do
           expect(registration.reload.outstanding_entry_fees).to eq(outstanding_fees_money)
         end
 
-        it "processes sufficient payment" do
+        it "processes sufficient payment when confirmed by redirect" do
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
 
           post registration_payment_intent_path(registration.id), params: {
@@ -573,6 +573,36 @@ RSpec.describe "registrations" do
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
+
+          expect(registration.reload.outstanding_entry_fees).to eq 0
+          expect(registration.paid_entry_fees).to eq competition.base_entry_fee
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
+          expect(charge.amount).to eq competition.base_entry_fee.cents
+          expect(charge.receipt_email).to eq user.email
+          # Stripe stores everything under "metadata" as string, even if we originally pass in integers
+          expect(charge.metadata.competition).to eq competition.id
+          expect(charge.metadata.registration_id.to_i).to eq registration.id
+          # Check that the website actually records who made the charge
+          expect(registration.registration_payments.first.user).to eq user
+        end
+
+        it "processes sufficient payment when confirmed by webhook" do
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+          payment_intent = registration.reload.payment_intents.first
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.payment_record.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: competition.payment_account_for(:stripe).account_id,
+          )
+
+          # mimic the response that Stripe sends to our webhook upon payment completion
+          post registration_stripe_webhook_path, params: payment_confirmation_webhook(competition, registration, payment_intent)
 
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
@@ -1311,5 +1341,92 @@ def refund_response(capture_id)
       { href: "https://api.sandbox.paypal.com/v2/payments/refunds/942276552E022623T", rel: "self", method: "GET" },
       { href: "https://api.sandbox.paypal.com/v2/payments/captures/#{capture_id}", rel: "up", method: "GET" },
     ],
+  }.to_json
+end
+
+def payment_confirmation_webhook(competition, registration, intent)
+  {
+    id: "evt_3P6aXQJzvpX2joEA18jzmlxq",
+    object: "event",
+    account: "acct_1FcgXcJzvpX2joEA",
+    api_version: "2023-10-16",
+    created: DateTime.now.to_i,
+    data: {
+      object: {
+        id: intent.payment_record.stripe_id,
+        object: "payment_intent",
+        amount: competition.base_entry_fee_lowest_denomination,
+        amount_capturable: 0,
+        amount_details: {
+          tip: {},
+        },
+        amount_received: competition.base_entry_fee_lowest_denomination,
+        application: "ca_A2YDBfeCwmd5iRFVnyYFO6f4MA3ydI2M",
+        application_fee_amount: nil,
+        automatic_payment_methods: {
+          allow_redirects: "always",
+          enabled: true,
+        },
+        canceled_at: nil,
+        cancellation_reason: nil,
+        capture_method: "automatic",
+        client_secret: "pi_3P6aXQJzvpX2joEA1vggn79y_secret_CAveuiNUyVOzlCCGpPUPT6KhO",
+        confirmation_method: "automatic",
+        created: intent.created_at.to_i,
+        currency: competition.currency_code,
+        customer: nil,
+        description: "Registration payment for #{competition.name}",
+        invoice: nil,
+        last_payment_error: nil,
+        latest_charge: "ch_3P6aXQJzvpX2joEA1UBDqu7G",
+        livemode: true,
+        metadata: {
+          competition: competition.id,
+          registration_id: registration.id,
+          registration_type: "Registration",
+          user: registration.user.id,
+        },
+        next_action: nil,
+        on_behalf_of: nil,
+        payment_method: "pm_1P6aXQJzvpX2joEAYLzlo4mM",
+        payment_method_configuration_details: {
+          id: "pmc_1NFY6TJzvpX2joEAxmpggQtI",
+          parent: "pmc_1NFY4rI8ds2wj1dZIV9Uw4J3",
+        },
+        payment_method_options: {
+          card: {
+            installments: nil,
+            mandate_options: nil,
+            network: nil,
+            request_three_d_secure: "automatic",
+          },
+          link: {
+            persistent_token: nil,
+          },
+        },
+        payment_method_types: [
+          :card,
+          :link,
+        ],
+        processing: nil,
+        receipt_email: "richard_maddenw@yahoo.com",
+        review: nil,
+        setup_future_usage: nil,
+        shipping: nil,
+        source: nil,
+        statement_descriptor: nil,
+        statement_descriptor_suffix: nil,
+        status: "succeeded",
+        transfer_data: nil,
+        transfer_group: nil,
+      },
+    },
+    livemode: true,
+    pending_webhooks: 0,
+    request: {
+      id: "req_PgTt3KXlGjI0vd",
+      idempotency_key: "400ffbac-cfe0-476e-ad40-335b329bb0e8"
+    },
+    type: "payment_intent.succeeded",
   }.to_json
 end

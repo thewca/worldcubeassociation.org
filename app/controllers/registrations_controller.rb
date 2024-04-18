@@ -515,7 +515,7 @@ class RegistrationsController < ApplicationController
             ruby_money.cents,
             ruby_money.currency.iso_code,
             charge_transaction,
-            stored_intent.user.id,
+            stored_intent.initiated_by_id,
           )
 
           # Webhooks are running in async mode, so we need to rely on the creation timestamp sent by Stripe.
