@@ -4565,10 +4565,6 @@ pt:
           O Conselho da WCA é responsável por liderar a organização como um todo
           e dar cumprimento a todas as tarefas que não sejam do âmbito de outras
           Equipas, Comités e Conselhos
-      #original_hash: c366473
-      senior_member: Membro Sénior
-      #original_hash: e26c936
-      leader: Líder
       users:
         #original_hash: 57bbaad
         profile: 'Perfil de %{user_name}'
