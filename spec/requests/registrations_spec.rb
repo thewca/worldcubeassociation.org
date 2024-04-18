@@ -592,17 +592,22 @@ RSpec.describe "registrations" do
           post registration_payment_intent_path(registration.id), params: {
             amount: registration.outstanding_entry_fees.cents,
           }
+
           payment_intent = registration.reload.payment_intents.first
+          stripe_account_id = competition.payment_account_for(:stripe).account_id
 
           # mimic the user clicking through the interface
           Stripe::PaymentIntent.confirm(
             payment_intent.payment_record.stripe_id,
             { payment_method: 'pm_card_visa' },
-            stripe_account: competition.payment_account_for(:stripe).account_id,
+            stripe_account: stripe_account_id,
           )
 
           # mimic the response that Stripe sends to our webhook upon payment completion
-          post registration_stripe_webhook_path, params: payment_confirmation_webhook(payment_intent.retrieve_remote.to_hash)
+          post registration_stripe_webhook_path, params: payment_confirmation_webhook_as_json(
+            payment_intent.retrieve_remote.to_hash,
+            stripe_account_id,
+          )
 
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
@@ -1344,15 +1349,15 @@ def refund_response(capture_id)
   }.to_json
 end
 
-def payment_confirmation_webhook(intent)
+def payment_confirmation_webhook_as_json(intent, account_id)
   {
     id: "evt_3P6aXQJzvpX2joEA18jzmlxq",
     object: "event",
-    account: "acct_1FcgXcJzvpX2joEA",
+    account: account_id,
     api_version: "2023-10-16",
     created: DateTime.now.to_i,
     data: { object: intent },
-    livemode: true,
+    livemode: false,
     pending_webhooks: 0,
     request: {
       id: "req_PgTt3KXlGjI0vd",
