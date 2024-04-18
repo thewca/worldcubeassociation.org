@@ -5,5 +5,9 @@ FactoryBot.define do
     factory :wst_admin_metadata do
       status { "member" }
     end
+
+    factory :wct_china_metadata do
+      status { "member" }
+    end
   end
 end
