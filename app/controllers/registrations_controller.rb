@@ -78,7 +78,7 @@ class RegistrationsController < ApplicationController
   end
 
   def edit_v2
-    @competition = Competition.find(params[:comp_id])
+    @competition = Competition.find(params[:competition_id])
     @user = User.find(params[:user_id])
   end
 
