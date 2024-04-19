@@ -749,18 +749,27 @@ class RegistrationsController < ApplicationController
     registration = registration_from_params
     amount = params.require(:amount)
 
-    render json: PaypalInterface.create_order(registration, amount)
+    competition = registration.competition
+    paypal_integration = competition.payment_account_for(:paypal)
+
+    render json: PaypalInterface.create_order(
+      paypal_integration.paypal_merchant_id,
+      amount,
+      competition.currency_code,
+    )
   end
 
   def capture_paypal_payment
     return head :forbidden if PaypalInterface.paypal_disabled?
 
     registration = registration_from_params
+
     competition = registration.competition
+    paypal_integration = competition.payment_account_for(:paypal)
 
     order_id = params.require(:orderID)
 
-    response = PaypalInterface.capture_payment(competition, order_id)
+    response = PaypalInterface.capture_payment(paypal_integration.paypal_merchant_id, order_id)
     if response['status'] == 'COMPLETED'
 
       # TODO: Handle the case where there are multiple captures for a payment
@@ -790,7 +799,7 @@ class RegistrationsController < ApplicationController
         amount,
         currency_code,
         record, # TODO: Add error handling for the PaypalRecord not being found
-        registration.user.id,
+        current_user.id,
       )
     end
 
@@ -798,18 +807,27 @@ class RegistrationsController < ApplicationController
   end
 
   def refund_paypal_payment
-    registration = Registration.find(params[:id])
-    paypal_order = RegistrationPayment.find(params[:payment_id]).receipt
+    registration = registration_from_params
+    paypal_integration = registration.competition.payment_account_for(:paypal)
+
+    registration_payment = RegistrationPayment.find(params[:payment_id])
+    paypal_order = registration_payment.receipt
+
     payment_capture_id = paypal_order.capture_id
 
-    refund = PaypalInterface.issue_refund(registration, payment_capture_id)
+    refund = PaypalInterface.issue_refund(
+      paypal_integration.paypal_merchant_id,
+      payment_capture_id,
+      registration_payment.amount_lowest_denomination,
+      registration_payment.currency_code,
+    )
 
     registration.record_refund(
-      refund.amount_in_cents,
-      refund.currency_code,
+      registration_payment.amount_lowest_denomination,
+      registration_payment.currency_code,
       refund,
-      payment_capture_id,
-      registration.user.id,
+      registration_payment.id,
+      current_user.id,
     )
   end
 end
