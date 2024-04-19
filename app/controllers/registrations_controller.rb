@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination, :create_paypal_order]
+  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination, :create_paypal_order]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -20,10 +20,10 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy,
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
                          :update, :create_paypal_order, :capture_paypal_payment, :refund_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
@@ -442,16 +442,19 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def stripe_denomination
+  def payment_denomination
     ruby_denomination = params.require(:amount)
     currency_iso = params.require(:currency_iso)
-
-    stripe_amount = StripeRecord.amount_to_stripe(ruby_denomination, currency_iso.downcase)
 
     ruby_money = Money.new(ruby_denomination, currency_iso)
     human_amount = helpers.format_money(ruby_money)
 
-    render json: { stripe_amount: stripe_amount, human_amount: human_amount }
+    api_amounts = {
+      stripe: StripeRecord.amount_to_stripe(ruby_denomination, currency_iso),
+      paypal: PaypalRecord.paypal_amount(ruby_denomination, currency_iso),
+    }
+
+    render json: { api_amounts: api_amounts, human_amount: human_amount }
   end
 
   # Respond to asynchronous payment updates from Stripe.
@@ -743,18 +746,21 @@ class RegistrationsController < ApplicationController
   def create_paypal_order
     return head :forbidden if PaypalInterface.paypal_disabled?
 
-    @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration, params[:total_charge])
+    registration = registration_from_params
+    amount = params.require(:amount)
+
+    render json: PaypalInterface.create_order(registration, amount)
   end
 
   def capture_paypal_payment
     return head :forbidden if PaypalInterface.paypal_disabled?
 
-    @registration = registration_from_params
-    @competition = @registration.competition
-    order_id = params[:order_id]
+    registration = registration_from_params
+    competition = registration.competition
 
-    response = PaypalInterface.capture_payment(@competition, order_id)
+    order_id = params.require(:orderID)
+
+    response = PaypalInterface.capture_payment(competition, order_id)
     if response['status'] == 'COMPLETED'
 
       # TODO: Handle the case where there are multiple captures for a payment
@@ -780,11 +786,11 @@ class RegistrationsController < ApplicationController
       )
 
       # Record the payment
-      @registration.record_payment(
+      registration.record_payment(
         amount,
         currency_code,
         record, # TODO: Add error handling for the PaypalRecord not being found
-        @registration.user.id,
+        registration.user.id,
       )
     end
 

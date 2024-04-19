@@ -248,10 +248,10 @@
       $paymentButton.toggleClass("saving", true);
 
       window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
-        url: '<%= registration_stripe_denomination_path %>',
+        url: '<%= registration_payment_denomination_path %>',
         data: { amount: amount, currency_iso: currencyIsoCode },
         success: function (data) {
-          const { stripe_amount: stripeAmount, human_amount: humanAmount } = data;
+          const { api_amounts: { stripe: stripeAmount }, human_amount: humanAmount } = data;
 
           if (refreshStripe) {
             elements.update({ amount: stripeAmount });

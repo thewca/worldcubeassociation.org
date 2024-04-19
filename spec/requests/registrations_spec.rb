@@ -1084,7 +1084,7 @@ RSpec.describe "registrations" do
       stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
     end
 
@@ -1109,7 +1109,7 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
       # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
@@ -1122,7 +1122,7 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id, @record_id), params: {}
+      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
     end
 
     it 'creates a PaypalRecord of type :capture' do
@@ -1161,7 +1161,7 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
       # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
@@ -1174,7 +1174,7 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id, @record_id), params: {}
+      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
 
       # Mock the refunds endpoint
       capture_id = '7WA034444N6390300' # Defined in the `capture_order_response` payload
