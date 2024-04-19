@@ -130,7 +130,9 @@
             // Or go to another URL:  actions.redirect('thank_you.html');
           })
           .catch(handleAjaxError);
-        }
+        },
+
+        onError: handlePaypalError,
     });
 
     paypalButtons.render('#payment-buttons')
@@ -155,12 +157,9 @@
 
       const $paypalErrorDiv = $('#paypal-sdk-error');
 
-      // TODO: Look up how error handling is done in PayPal JS SDK
-      if (error.type === 'card_error' || error.type === 'validation_error') {
-        $paypalErrorDiv.text(error.message);
-      } else {
-        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.stripe_failed") %>');
-      }
+      // Quote from the PayPal documentation: (see https://developer.paypal.com/sdk/js/reference/#onerror)
+      // Note: This error handler is a catch-all. Errors at this point aren't expected to be handled beyond showing a generic error message or page.
+      $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_failed") %>');
 
       $paymentElementRow.addClass("has-error");
       $paypalErrorRow.show();
