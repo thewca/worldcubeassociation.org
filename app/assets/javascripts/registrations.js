@@ -1,6 +1,6 @@
 onPage('registrations#edit_registrations', () => {
   const $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
-  if (!$registrationsTable) {
+  if ($registrationsTable.empty()) {
     return null;
   }
 
