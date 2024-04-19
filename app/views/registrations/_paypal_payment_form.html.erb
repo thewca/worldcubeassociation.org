@@ -98,6 +98,8 @@
     const paypalButtons = paypal.Buttons({
         // Order is created on the server and the order id is returned
         createOrder: (data, actions) => {
+          toggleSaving(true);
+
           const amount = getCurrentRubyAmount();
 
           return wrapAjaxPromise('load-payment-intent', {
@@ -119,6 +121,8 @@
             data: JSON.stringify(data),
         })
           .then((orderData) => {
+            toggleSaving(false);
+
             // Successful capture! For dev/demo purposes:
             console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
             const transaction = orderData.purchase_units[0].payments.captures[0];
