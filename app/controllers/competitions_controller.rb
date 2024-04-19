@@ -307,7 +307,7 @@ class CompetitionsController < ApplicationController
 
     @cpi_onboarding_urls = not_connected_integrations.index_with do |cpi_type|
       connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[cpi_type].safe_constantize
-      connector&.generate_onboarding_link(@competition.id, current_user)
+      connector&.generate_onboarding_link(@competition.id)
     end
   end
 
@@ -325,7 +325,7 @@ class CompetitionsController < ApplicationController
     end
 
     connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
-    account_reference = connector&.connect_account(params, current_user)
+    account_reference = connector&.connect_account(params)
 
     unless account_reference.present?
       raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
@@ -340,6 +340,28 @@ class CompetitionsController < ApplicationController
     end
 
     redirect_to competition_payment_integration_setup_path(competition)
+  end
+
+  def stripe_connect
+    # Stripe is very strict about OAuth. We need to specify **hard-coded** return URLs in the Stripe Dashboard manually.
+    # This means that we cannot use the default connect path above, because that contains the competition ID in the URL
+    #   meaning that we cannot hard-code every CompetitionID in existence in the Stripe Dashboard.
+    # Luckily, Stripe _does_ allow to pass a "state" (which should normally be a CSRF token) that we can abuse to
+    #   transmit the competition ID instead. So we use this static URL for OAuth,
+    #   and then for code reuse we just redirect internally :)
+    competition_id = params.require(:state)
+    competition = Competition.find(competition_id)
+
+    unless current_user&.can_manage_competition?(competition)
+      raise ActionController::RoutingError.new('Not Found')
+    end
+
+    redirect_to competition_connect_payment_integration_path(
+      competition_id,
+      payment_integration: :stripe,
+      # see https://docs.stripe.com/connect/oauth-reference#get-authorize-response
+      params: params.permit(:code, :scope, :state),
+    )
   end
 
   def disconnect_payment_integration

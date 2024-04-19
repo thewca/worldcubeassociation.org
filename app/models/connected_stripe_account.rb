@@ -89,21 +89,19 @@ class ConnectedStripeAccount < ApplicationRecord
     StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
   end
 
-  def self.generate_onboarding_link(competition_id, current_user)
+  def self.generate_onboarding_link(competition_id)
     client = self.oauth_client
 
     oauth_params = {
       scope: 'read_write',
-      redirect_uri: Rails.application.routes.url_helpers.competition_connect_payment_integration_url(competition_id, payment_integration: :stripe),
-      state: current_user.id,
+      redirect_uri: Rails.application.routes.url_helpers.competitions_stripe_connect_url(host: EnvConfig.ROOT_URL),
+      state: competition_id,
     }
 
     client.auth_code.authorize_url(oauth_params)
   end
 
-  def self.connect_account(oauth_return_params, current_user)
-    return nil if oauth_return_params[:state] != current_user.id
-
+  def self.connect_account(oauth_return_params)
     client = self.oauth_client
 
     resp = client.auth_code.get_token(
