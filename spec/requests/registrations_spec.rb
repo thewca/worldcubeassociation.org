@@ -1093,7 +1093,7 @@ RSpec.describe "registrations" do
     end
 
     it 'PaypalRecord amount matches registration cost' do
-      expect(PaypalRecord.all.first.amount_in_cents).to eq(registration.competition.base_entry_fee_lowest_denomination)
+      expect(PaypalRecord.all.first.money_amount).to eq(registration.competition.base_entry_fee)
     end
   end
 
@@ -1115,7 +1115,7 @@ RSpec.describe "registrations" do
       # Stub the create order response
       @record_id = JSON.parse(create_order_payload)['id']
       @currency_code = competition.currency_code
-      @amount = PaypalRecord.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+      @amount = PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, @currency_code)
 
       url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, url)
@@ -1127,11 +1127,11 @@ RSpec.describe "registrations" do
 
     it 'creates a PaypalRecord of type :capture' do
       capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
-      expect(PaypalRecord.find_by(record_id: capture_id).record_type).to eq('capture')
+      expect(PaypalRecord.find_by(paypal_id: capture_id).paypal_record_type).to eq('capture')
     end
 
     it 'associates PaypalCapture to the PaypalRecord' do
-      paypal_record = PaypalRecord.find_by(record_id: JSON.parse(response.body)['id'])
+      paypal_record = PaypalRecord.find_by(paypal_id: JSON.parse(response.body)['id'])
       expect(paypal_record.child_records.count).to eq(1)
     end
 
@@ -1167,7 +1167,7 @@ RSpec.describe "registrations" do
       # Stub the create order response
       @record_id = JSON.parse(create_order_payload)['id']
       @currency_code = competition.currency_code
-      @amount = PaypalRecord.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+      @amount = PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, @currency_code)
 
       capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, capture_url)
@@ -1191,7 +1191,7 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord of type `refund`' do
-      expect(registration.registration_payments[1].receipt.record_type).to eq('refund')
+      expect(registration.registration_payments[1].receipt.paypal_record_type).to eq('refund')
     end
 
     it 'records the registration total paid as zero' do
