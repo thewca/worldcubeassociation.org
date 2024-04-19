@@ -2,104 +2,98 @@
 <% add_to_packs("auto_numeric") %>
 
 <%= render layout: 'nav' do %>
-  <% if @competition.uses_new_registration_service? %>
-    <%= react_component('RegistrationsV2/RegistrationEdit', { competitionInfo: @competition.to_competition_info ,
-                                                                  userId: @registration.id,
-    }) %>
-  <% else %>
-    <%= horizontal_simple_form_for @registration, html: { class: 'are-you-sure' } do |f| %>
-      <%= hidden_field_tag :from_admin_view, "1" %>
-      <%= f.hidden_field :updated_at %>
+  <%= horizontal_simple_form_for @registration, html: { class: 'are-you-sure' } do |f| %>
+    <%= hidden_field_tag :from_admin_view, "1" %>
+    <%= f.hidden_field :updated_at %>
 
-      <% if current_user&.can_edit_user?(@registration.user) %>
-        <%= alert :info do %>
-          <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
-        <% end %>
+    <% if current_user&.can_edit_user?(@registration.user) %>
+      <%= alert :info do %>
+        <%= t('registrations.registered_with_account_html', here: link_to(t('common.here'), edit_user_path(@registration.user))) %>
       <% end %>
-      <h4><%= @registration.name %></h4>
-
-      <%= render "shared/associated_events_picker",
-                 form_builder: f,
-                 events_association_name: :registration_competition_events,
-                 allowed_events: @competition.events,
-                 disabled_events: @competition.ineligible_events(@registration.user),
-                 disabled_tooltip: t('registrations.not_qualified'),
-                 selected_events: @registration.saved_and_unsaved_events
-      %>
-
-      <% if @competition.guests_enabled? %>
-        <%= f.input :guests %>
-      <% end %>
-
-      <%= f.input :comments %>
-
-      <%= f.input :administrative_notes %>
-
-      <%= f.input :status, as: :radio_buttons, collection: [:accepted, :pending, :deleted], checked: @registration.checked_status, include_blank: false %>
-
-      <div class="form-group">
-        <div class="col-sm-offset-2 col-sm-10">
-          <%= f.submit t('registrations.update'), class: "btn btn-primary" %>
-        </div>
-      </div>
     <% end %>
-    <% if @registration.registration_payments.count > 0 %>
-      <hr/>
-      <div>
-        <h4>Payment History</h4>
-        <% @registration.registration_payments.each do |payment| %>
-          <p>
-            <b><%= wca_local_time(payment.created_at) %></b>
-            <br />
-            Amount: <%= format_money payment.amount %>
-            <br />
-            Made by: <%= name_for_payment(payment) %>
-            <%#
+    <h4><%= @registration.name %></h4>
+
+    <%= render "shared/associated_events_picker",
+               form_builder: f,
+               events_association_name: :registration_competition_events,
+               allowed_events: @competition.events,
+               disabled_events: @competition.ineligible_events(@registration.user),
+               disabled_tooltip: t('registrations.not_qualified'),
+               selected_events: @registration.saved_and_unsaved_events
+    %>
+
+    <% if @competition.guests_enabled? %>
+      <%= f.input :guests %>
+    <% end %>
+
+    <%= f.input :comments %>
+
+    <%= f.input :administrative_notes %>
+
+    <%= f.input :status, as: :radio_buttons, collection: [:accepted, :pending, :deleted], checked: @registration.checked_status, include_blank: false %>
+
+    <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+        <%= f.submit t('registrations.update'), class: "btn btn-primary" %>
+      </div>
+    </div>
+  <% end %>
+  <% if @registration.registration_payments.count > 0 %>
+    <hr/>
+    <div>
+      <h4>Payment History</h4>
+      <% @registration.registration_payments.each do |payment| %>
+        <p>
+          <b><%= wca_local_time(payment.created_at) %></b>
+          <br />
+          Amount: <%= format_money payment.amount %>
+          <br />
+          Made by: <%= name_for_payment(payment) %>
+          <%#
           NOTE: the connected Stripe account id is cleared roughly 3 weeks
           after the competition, therefore we need to check for that before
           offering the refund payment button.
           %>
-            <% if @competition.using_payment_integrations? && payment.amount_available_for_refund > 0 %>
-              <% if @competition.stripe_connected? %>
-                <% refund_url = registration_payment_refund_path(@registration, payment) %>
-              <% else %>
-                <% refund_url = paypal_payment_refund_path(@registration, payment) %>
-              <% end %>
-              <%= horizontal_simple_form_for :payment, url: refund_url, html: { id: :form_refund } do |f| %>
-                <%= f.input :refund_amount, as: :money_amount, currency: payment.amount.currency.iso_code, value: payment.amount_available_for_refund, label: t('registrations.refund_form.labels.refund_amount'), hint: t('registrations.refund_form.hints.refund_amount') %>
-                <%= submit_tag t('registrations.refund'), class: "btn btn-warning", data: { confirm: t('registrations.refund_confirmation') } %>
-              <% end %>
+          <% if @competition.using_payment_integrations? && payment.amount_available_for_refund > 0 %>
+            <% if @competition.stripe_connected? %>
+              <% refund_url = registration_payment_refund_path(@registration, payment) %>
+            <% else %>
+              <% refund_url = paypal_payment_refund_path(@registration, payment) %>
             <% end %>
-          </p>
-        <% end %>
-      </div>
-    <% end %>
-    <% unless @registration.series_sibling_registrations.empty? %>
-      <hr/>
-      <div>
-        <h4>Series Registrations</h4>
-        <ul>
-          <% @registration.series_sibling_registrations.each do |reg| %>
-            <% registration_i18n_status = t("simple_form.options.registration.status.#{reg.checked_status}") %>
-            <li><%= link_to reg.competition.name, edit_registration_path(reg) %> (<%= registration_i18n_status %>)</li>
+            <%= horizontal_simple_form_for :payment, url: refund_url, html: { id: :form_refund } do |f| %>
+              <%= f.input :refund_amount, as: :money_amount, currency: payment.amount.currency.iso_code, value: payment.amount_available_for_refund, label: t('registrations.refund_form.labels.refund_amount'), hint: t('registrations.refund_form.hints.refund_amount') %>
+              <%= submit_tag t('registrations.refund'), class: "btn btn-warning", data: { confirm: t('registrations.refund_confirmation') } %>
+            <% end %>
           <% end %>
-        </ul>
-      </div>
-    <% end %>
-    <hr />
-    <div>
-      <h4>Registration History</h4>
-      Created on <%= wca_local_time(@registration.created_at) %> by <%= @registration.user.name %>
+        </p>
+      <% end %>
     </div>
-    <% if @registration.accepted_at %>
-      <div>
-        Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name unless @registration.accepted_user.nil? %>
-      </div>
-    <% end %>
-    <% if @registration.deleted_at %>
-      <div>
-        Deleted on <%= wca_local_time(@registration.deleted_at) %> by <%= @registration.deleted_user.name %>
-      </div>
-    <% end %>
+  <% end %>
+  <% unless @registration.series_sibling_registrations.empty? %>
+    <hr/>
+    <div>
+      <h4>Series Registrations</h4>
+      <ul>
+        <% @registration.series_sibling_registrations.each do |reg| %>
+          <% registration_i18n_status = t("simple_form.options.registration.status.#{reg.checked_status}") %>
+          <li><%= link_to reg.competition.name, edit_registration_path(reg) %> (<%= registration_i18n_status %>)</li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <hr />
+  <div>
+    <h4>Registration History</h4>
+    Created on <%= wca_local_time(@registration.created_at) %> by <%= @registration.user.name %>
+  </div>
+  <% if @registration.accepted_at %>
+    <div>
+      Accepted on <%= wca_local_time(@registration.accepted_at) %> by <%= @registration.accepted_user.name unless @registration.accepted_user.nil? %>
+    </div>
+  <% end %>
+  <% if @registration.deleted_at %>
+    <div>
+      Deleted on <%= wca_local_time(@registration.deleted_at) %> by <%= @registration.deleted_user.name %>
+    </div>
   <% end %>
 <% end %>

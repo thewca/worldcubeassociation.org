@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     post 'registrations/export' => 'registrations#export', as: :registrations_export
     get 'registrations/import' => 'registrations#import', as: :registrations_import
     post 'registrations/import' => 'registrations#do_import', as: :registrations_do_import
+    get 'registrations_v2/:competition_id/:user_id/edit' => 'registrations#edit_v2', as: :edit_registration_v2
     get 'registrations/add' => 'registrations#add', as: :registrations_add
     post 'registrations/add' => 'registrations#do_add', as: :registrations_do_add
     get 'registrations/psych-sheet' => 'registrations#psych_sheet', as: :psych_sheet

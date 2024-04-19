@@ -232,4 +232,4 @@ export const pollingRoute = (userId, competitionId) => `<%= CGI.unescape(EnvConf
 
 export const wcaRegistrationUrl = `<%= CGI.unescape(EnvConfig.WCA_REGISTRATIONS_URL)%>`;
 
-export const editRegistrationUrl = (attendeeId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_registration_path("${attendeeId}"))%>`
+export const editRegistrationUrl = (userId, competitionId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.edit_registration_v2_path("${competitionId}","${userId}"))%>`

@@ -3,7 +3,6 @@ import _ from 'lodash';
 import React, {
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from 'react';
 import {
@@ -30,8 +29,10 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
+import Refunds from './Refunds';
+import { editPersonUrl } from '../../../lib/requests/routes.js.erb';
 
-export default function RegistrationEditor({ userId, competitionInfo }) {
+export default function RegistrationEditor({ competitor, competitionInfo }) {
   const dispatch = useDispatch();
   const [comment, setComment] = useState('');
   const [adminComment, setAdminComment] = useState('');
@@ -46,8 +47,8 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
   const queryClient = useQueryClient();
 
   const { data: serverRegistration } = useQuery({
-    queryKey: ['registration-admin', competitionInfo.id, userId],
-    queryFn: () => getSingleRegistration(userId, competitionInfo.id),
+    queryKey: ['registration-admin', competitionInfo.id, competitor.id],
+    queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
     refetchOnWindowFocus: false,
     refetchOnReconnect: false,
     staleTime: Infinity,
@@ -55,10 +56,9 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
   });
 
   const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['info', userId],
+    queryKey: ['history-user', serverRegistration.history],
     queryFn: () => getUsersInfo([
       ...new Set([
-        userId,
         ...serverRegistration.history.map((e) => e.actor_user_id),
       ]),
     ]),
@@ -79,7 +79,7 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
     onSuccess: (data) => {
       setMessage(setMessage('Registration update succeeded', 'positive'));
       queryClient.setQueryData(
-        ['registration', competitionInfo.id, userId],
+        ['registration', competitionInfo.id, competitor.id],
         data,
       );
     },
@@ -134,7 +134,7 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
     } else {
       dispatch(setMessage('Updating Registration', 'basic'));
       updateRegistrationMutation({
-        user_id: userId,
+        user_id: competitor.id,
         competing: {
           status,
           event_ids: selectedEvents,
@@ -148,19 +148,12 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
   }, [hasChanges,
     commentIsValid,
     eventsAreValid, dispatch, maxEvents,
-    updateRegistrationMutation, userId,
+    updateRegistrationMutation, competitor,
     status, selectedEvents, comment,
     adminComment, waitingListPosition, competitionInfo.id]);
 
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
-
-  const competitorInfo = useMemo(() => {
-    if (competitorsInfo) {
-      return competitorsInfo.find((c) => c.id === userId);
-    }
-    return null;
-  }, [competitorsInfo, userId]);
 
   return (
     <Segment padded attached>
@@ -168,15 +161,15 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
         <Loading />
       ) : (
         <div>
-          {competitorInfo.wca_id && (
+          {competitor.wca_id && (
             <Message>
               This person registered with an account. You can edit their
               personal information
               {' '}
-              <a href={`${process.env.WCA_URL}/users/${userId}/edit`}>here.</a>
+              <a href={editPersonUrl(competitor.id)}>here.</a>
             </Message>
           )}
-          <Header>{competitorInfo.name}</Header>
+          <Header>{competitor.name}</Header>
           <EventSelector
             handleEventSelection={setSelectedEvents}
             selected={selectedEvents}
@@ -285,7 +278,7 @@ export default function RegistrationEditor({ userId, competitionInfo }) {
               )}
               <Refunds
                 competitionId={competitionInfo.id}
-                userId={userId}
+                userId={competitor}
                 open={isCheckingRefunds}
                 onExit={() => setIsCheckingRefunds(false)}
               />
