@@ -7,10 +7,6 @@ module Microservices
       "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/register?&stripe_status=#{stripe_status}"
     end
 
-    def self.registration_import_path(competition_id)
-      "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/import"
-    end
-
     def self.edit_registration_path(competition_id, user_id, stripe_error = nil)
       "#{EnvConfig.ROOT_URL}/competitions/v2/#{competition_id}/#{user_id}/edit?&stripe_error=#{stripe_error}"
     end
