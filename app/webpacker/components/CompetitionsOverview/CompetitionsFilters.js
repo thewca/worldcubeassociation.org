@@ -78,7 +78,8 @@ function CompetitionsFilters({
 
 export function EventSelector({
   selectedEvents,
-  onEventSelection, eventList = WCA_EVENT_IDS,
+  onEventSelection,
+  eventList = WCA_EVENT_IDS,
   disabled = false,
 }) {
   return (
