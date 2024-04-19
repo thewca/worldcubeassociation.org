@@ -191,7 +191,7 @@
       // TODO: Can we control the "disabled" state of the PayPal Buttons form?
       window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
         // TODO: Use a separate/more unified currency API here?
-        url: '<%= registration_stripe_denomination_path %>',
+        url: '<%= registration_payment_denomination_path %>',
         data: { amount: amount, currency_iso: currencyIsoCode },
         success: function (data) {
           const { human_amount: humanAmount } = data;
