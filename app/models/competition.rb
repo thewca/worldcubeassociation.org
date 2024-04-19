@@ -2533,7 +2533,7 @@ class Competition < ApplicationRecord
   def payment_integration_connected?(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
 
-    self.competition_payment_integrations.send(integration_name).exists?
+    self.competition_payment_integrations.send(integration_name.to_sym).exists?
   end
 
   def stripe_connected?
