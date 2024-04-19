@@ -1221,6 +1221,7 @@ en:
         not_allowed: "You can't pay for that registration."
         stripe_failed: "Please check the Stripe transaction."
         paypal_failed: "Please check the PayPal order."
+        paypal_canceled: "PayPal reported that the order was manually canceled. Please try again."
         stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
         stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
         payment_reset: "The payment was rejected by Stripe."

@@ -132,7 +132,8 @@
           .catch(handleAjaxError);
         },
 
-        onError: handlePaypalError,
+        onError: (err) => handlePaypalError(err, false),
+        onCancel: (data) => handlePaypalError(data, true),
     });
 
     paypalButtons.render('#payment-buttons')
@@ -152,14 +153,18 @@
       $ajaxErrorRow.show();
     }
 
-    function handlePaypalError(error) {
+    function handlePaypalError(errPayload, isManualCancel = false) {
       toggleSaving(false);
 
       const $paypalErrorDiv = $('#paypal-sdk-error');
 
-      // Quote from the PayPal documentation: (see https://developer.paypal.com/sdk/js/reference/#onerror)
-      // Note: This error handler is a catch-all. Errors at this point aren't expected to be handled beyond showing a generic error message or page.
-      $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_failed") %>');
+      if (isManualCancel) {
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_canceled") %>');
+      } else {
+        // Quote from the PayPal documentation: (see https://developer.paypal.com/sdk/js/reference/#onerror)
+        // Note: This error handler is a catch-all. Errors at this point aren't expected to be handled beyond showing a generic error message or page.
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_failed") %>');
+      }
 
       $paymentElementRow.addClass("has-error");
       $paypalErrorRow.show();
