@@ -758,7 +758,7 @@ class RegistrationsController < ApplicationController
     registration = registration_from_params
     competition = registration.competition
 
-    order_id = params.require(:order_id)
+    order_id = params.require(:orderID)
 
     response = PaypalInterface.capture_payment(competition, order_id)
     if response['status'] == 'COMPLETED'

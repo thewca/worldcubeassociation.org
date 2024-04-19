@@ -106,7 +106,7 @@
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({ amount: amount }),
           })
-            .then(({ client_secret: orderId }) => orderId)
+            .then(({ id: orderId }) => orderId)
             .catch(handleAjaxError);
         },
 
@@ -116,7 +116,7 @@
             url: '<%= registration_capture_paypal_payment_path(@registration) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(data),
+            data: JSON.stringify(data),
         })
           .then((orderData) => {
             // Successful capture! For dev/demo purposes:
@@ -190,7 +190,6 @@
 
       // TODO: Can we control the "disabled" state of the PayPal Buttons form?
       window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
-        // TODO: Use a separate/more unified currency API here?
         url: '<%= registration_payment_denomination_path %>',
         data: { amount: amount, currency_iso: currencyIsoCode },
         success: function (data) {
