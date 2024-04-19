@@ -192,7 +192,6 @@
     function updateSubtotal() {
       const amount = getCurrentRubyAmount();
 
-      // TODO: Can we control the "disabled" state of the PayPal Buttons form?
       window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
         url: '<%= registration_payment_denomination_path %>',
         data: { amount: amount, currency_iso: currencyIsoCode },
