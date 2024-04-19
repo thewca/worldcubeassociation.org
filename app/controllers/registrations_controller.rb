@@ -746,18 +746,21 @@ class RegistrationsController < ApplicationController
   def create_paypal_order
     return head :forbidden if PaypalInterface.paypal_disabled?
 
-    @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration, params[:total_charge])
+    registration = registration_from_params
+    amount = params.require(:amount)
+
+    render json: PaypalInterface.create_order(registration, amount)
   end
 
   def capture_paypal_payment
     return head :forbidden if PaypalInterface.paypal_disabled?
 
-    @registration = registration_from_params
-    @competition = @registration.competition
-    order_id = params[:order_id]
+    registration = registration_from_params
+    competition = registration.competition
 
-    response = PaypalInterface.capture_payment(@competition, order_id)
+    order_id = params.require(:order_id)
+
+    response = PaypalInterface.capture_payment(competition, order_id)
     if response['status'] == 'COMPLETED'
 
       # TODO: Handle the case where there are multiple captures for a payment
@@ -783,11 +786,11 @@ class RegistrationsController < ApplicationController
       )
 
       # Record the payment
-      @registration.record_payment(
+      registration.record_payment(
         amount,
         currency_code,
         record, # TODO: Add error handling for the PaypalRecord not being found
-        @registration.user.id,
+        registration.user.id,
       )
     end
 

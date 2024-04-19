@@ -101,24 +101,23 @@
           const amount = getCurrentRubyAmount();
 
           return wrapAjaxPromise('load-payment-intent', {
-            url: '<%= registration_payment_intent_path(@registration, payment_integration: :paypal) %>',
+            url: '<%= registration_create_paypal_order_path(@registration) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             data: JSON.stringify({ amount: amount }),
           })
-            .then((paymentIntent) => paymentIntent.client_secret)
+            .then(({ client_secret: orderId }) => orderId)
             .catch(handleAjaxError);
         },
 
         // Finalize the transaction on the server after payer approval
         onApprove: (data, actions) => {
           return wrapAjaxPromise('capture-paypal-order', {
-            url: `/registration/<%= @registration.id %>/capture-paypal-payment/${data.orderID}`,
+            url: '<%= registration_capture_paypal_payment_path(@registration) %>',
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ competition_id: '<%= @competition.id %>' }),
+            body: JSON.stringify(data),
         })
-          .then((response) => response.json())
           .then((orderData) => {
             // Successful capture! For dev/demo purposes:
             console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
@@ -129,7 +128,8 @@
             // const element = document.getElementById('paypal-button-container');
             // element.innerHTML = '<h3>Thank you for your payment!</h3>';
             // Or go to another URL:  actions.redirect('thank_you.html');
-          });
+          })
+          .catch(handleAjaxError);
         }
     });
 
