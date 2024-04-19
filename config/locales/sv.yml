@@ -4485,10 +4485,6 @@ sv:
           WCA-styrelsen är ansvarig för att leda organisationen som helhet, och
           fullgöra alla uppgifter som inte uppfylls av andra team, kommittéer
           och råd
-      #original_hash: c366473
-      senior_member: Senior-Medlem
-      #original_hash: e26c936
-      leader: Ledare
       users:
         #original_hash: 57bbaad
         profile: '%{user_name}s profil'
