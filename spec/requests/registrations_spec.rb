@@ -1084,7 +1084,7 @@ RSpec.describe "registrations" do
       stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
     end
 
@@ -1109,7 +1109,7 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
       # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
@@ -1161,7 +1161,7 @@ RSpec.describe "registrations" do
         .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
 
       # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
