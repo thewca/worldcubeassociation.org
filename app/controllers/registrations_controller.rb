@@ -785,7 +785,7 @@ class RegistrationsController < ApplicationController
       # NOTE: This assumes there is only ONE capture per order - not a valid long-term assumption
       capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
 
-      PaypalRecord.create_from_api(
+      capture_record = PaypalRecord.create_from_api(
         capture_from_response,
         :capture,
         {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?,
@@ -797,7 +797,7 @@ class RegistrationsController < ApplicationController
       registration.record_payment(
         amount,
         currency_code,
-        order_record,
+        capture_record,
         current_user.id,
       )
     end
@@ -810,13 +810,11 @@ class RegistrationsController < ApplicationController
     paypal_integration = registration.competition.payment_account_for(:paypal)
 
     registration_payment = RegistrationPayment.find(params[:payment_id])
-    paypal_order = registration_payment.receipt
-
-    payment_capture_id = paypal_order.capture_id
+    paypal_capture = registration_payment.receipt
 
     refund = PaypalInterface.issue_refund(
       paypal_integration.paypal_merchant_id,
-      payment_capture_id,
+      paypal_capture.paypal_id,
       registration_payment.amount_lowest_denomination,
       registration_payment.currency_code,
     )

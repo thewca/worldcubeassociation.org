@@ -116,16 +116,15 @@ module PaypalInterface
 
     body = response.body
 
-    refunded_order = PaypalRecord.find_by(record_id: capture_id).parent_record
+    refunded_capture = PaypalRecord.find_by(paypal_id: capture_id)
 
     if body["status"] == "COMPLETED"
-      # TODO: The refund should be linked to a charge and/or an order
       refund = PaypalRecord.create_from_api(
         body,
         :refund,
         payload,
         merchant_id,
-        refunded_order,
+        refunded_capture,
       )
     end
 
