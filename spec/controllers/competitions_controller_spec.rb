@@ -1238,12 +1238,12 @@ RSpec.describe CompetitionsController do
     end
   end
 
-  describe 'GET #payment_setup' do
+  describe 'GET #payment_integration_setup' do
     context 'when not signed in' do
       sign_out
 
       it 'redirects to the sign in page' do
-        get :payment_setup, params: { id: competition }
+        get :payment_integration_setup, params: { competition_id: competition }
         expect(response).to redirect_to new_user_session_path
       end
     end
@@ -1252,7 +1252,7 @@ RSpec.describe CompetitionsController do
       sign_in { FactoryBot.create :admin }
 
       it 'displays payment setup status' do
-        get :payment_setup, params: { id: competition }
+        get :payment_integration_setup, params: { competition_id: competition }
         expect(response.status).to eq 200
         expect(assigns(:competition)).to eq competition
       end
@@ -1263,7 +1263,7 @@ RSpec.describe CompetitionsController do
 
       it 'does not allow access' do
         expect {
-          get :payment_setup, params: { id: competition }
+          get :payment_integration_setup, params: { competition_id: competition }
         }.to raise_error(ActionController::RoutingError)
       end
     end
