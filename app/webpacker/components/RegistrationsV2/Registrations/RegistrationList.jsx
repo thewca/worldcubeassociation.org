@@ -1,39 +1,95 @@
 import { useQuery } from '@tanstack/react-query';
 import { formatCentiseconds } from '@wca/helpers';
 import React, {
-  useContext,
   useEffect,
   useMemo,
   useReducer,
   useState,
 } from 'react';
-import { Icon, Table } from 'semantic-ui-react';
+import { Flag, Icon, Table } from 'semantic-ui-react';
 import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
 } from '../api/registration/get/get_registrations';
 import { useWithUserData } from '../hooks/useUserData';
 import { createSortReducer } from '../reducers/sortReducer';
-import styles from './list.module.scss';
+import { setMessage } from '../Register/RegistrationMessage';
+import { useDispatch } from '../../../lib/providers/StoreProvider';
+import Loading from '../../Requests/Loading';
+import EventIcon from '../../wca/EventIcon';
+import { personUrl } from '../../../lib/requests/routes.js.erb';
 
 const sortReducer = createSortReducer(['name', 'country', 'total']);
 
-export default function RegistrationList() {
-  const { competitionInfo } = useContext(CompetitionContext);
-  const { t } = useTranslation();
+function FooterContent({
+  dataWithUser, registrations, competitionInfo, psychSheetEvent,
+}) {
+  if (!dataWithUser || !registrations) return null;
 
+  const newcomerCount = dataWithUser.filter(
+    (reg) => reg.user.wca_id === undefined,
+  ).length;
+
+  const countryCount = new Set(
+    dataWithUser.map((reg) => reg.user.country.iso2),
+  ).size;
+
+  const eventCounts = Object.fromEntries(
+    competitionInfo.event_ids.map((evt) => {
+      const competingCount = registrations.filter(
+        (reg) => reg.competing.event_ids.includes(evt),
+      ).length;
+
+      return [evt, competingCount];
+    }),
+  );
+
+  const totalEvents = Object.values(eventCounts).reduce((a, b) => a + b, 0);
+
+  return (
+    <Table.Row>
+      <Table.Cell>
+        {`${newcomerCount} First-Timers + ${
+          dataWithUser.length - newcomerCount
+        } Returners = ${dataWithUser.length} People`}
+      </Table.Cell>
+      <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
+      {psychSheetEvent === undefined ? (
+        <>
+          {competitionInfo.event_ids.map((evt) => (
+            <Table.Cell key={`footer-count-${evt}`}>
+              {eventCounts[evt]}
+            </Table.Cell>
+          ))}
+          <Table.Cell>{totalEvents}</Table.Cell>
+        </>
+      ) : (
+        <>
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+          <Table.Cell />
+        </>
+      )}
+    </Table.Row>
+  );
+}
+
+export default function RegistrationList({ competitionInfo }) {
+  const dispatchStore = useDispatch();
   const { isLoading: registrationsLoading, data: registrations } = useQuery({
     queryKey: ['registrations', competitionInfo.id],
     queryFn: () => getConfirmedRegistrations(competitionInfo.id),
     retry: false,
-    onError: (err) => {
-      const { errorCode } = err;
-      setMessage(
-        errorCode
-          ? t(`competitions.registration_v2.errors.${errorCode}`)
-          : t('registrations.flash.failed') + data.message,
+    onError: (data) => {
+      const { error } = data.json;
+      dispatchStore(setMessage(
+        error
+          ? `competitions.registration_v2.errors.${error}`
+          : 'registrations.flash.failed',
         'negative',
-      );
+      ));
     },
   });
 
@@ -101,61 +157,10 @@ export default function RegistrationList() {
     return [];
   }, [dataWithUser, sortColumn, sortDirection, psychSheetEvent]);
 
-  function FooterContent() {
-    if (!dataWithUser || !registrations) return null;
-
-    const newcomerCount = dataWithUser.filter(
-      (reg) => reg.user.wca_id === undefined,
-    ).length;
-
-    const countryCount = new Set(
-      dataWithUser.map((reg) => reg.user.country.iso2),
-    ).size;
-
-    const eventCounts = Object.fromEntries(
-      competitionInfo.event_ids.map((evt) => {
-        const competingCount = registrations.filter((reg) => reg.competing.event_ids.includes(evt)).length;
-
-        return [evt, competingCount];
-      }),
-    );
-
-    const totalEvents = Object.values(eventCounts).reduce((a, b) => a + b, 0);
-
-    return (
-      <Table.Row>
-        <Table.Cell>
-          {`${newcomerCount} First-Timers + ${
-            dataWithUser.length - newcomerCount
-          } Returners = ${dataWithUser.length} People`}
-        </Table.Cell>
-        <Table.Cell>{`${countryCount}  Countries`}</Table.Cell>
-        {psychSheetEvent === undefined ? (
-          <>
-            {competitionInfo.event_ids.map((evt) => (
-              <Table.Cell key={`footer-count-${evt}`}>
-                {eventCounts[evt]}
-              </Table.Cell>
-            ))}
-            <Table.Cell>{totalEvents}</Table.Cell>
-          </>
-        ) : (
-          <>
-            <Table.Cell />
-            <Table.Cell />
-            <Table.Cell />
-            <Table.Cell />
-            <Table.Cell />
-          </>
-        )}
-      </Table.Row>
-    );
-  }
-
   return registrationsLoading || userInfoLoading ? (
-    <LoadingMessage />
+    <Loading />
   ) : (
-    <div className={styles.tableContainer}>
+    <div>
       <Table sortable textAlign="left">
         <Table.Header>
           <Table.Row>
@@ -178,7 +183,7 @@ export default function RegistrationList() {
                     key={`registration-table-header-${id}`}
                     onClick={() => setPsychSheetEvent(id)}
                   >
-                    <CubingIcon event={id} selected />
+                    <EventIcon event={id} className="selected" />
                   </Table.HeaderCell>
                 ))}
                 <Table.HeaderCell
@@ -199,7 +204,7 @@ export default function RegistrationList() {
                   Go back
                 </Table.HeaderCell>
                 <Table.HeaderCell>
-                  <CubingIcon event={psychSheetEvent} selected size="2x" />
+                  <EventIcon event={psychSheetEvent} className="selected" />
                 </Table.HeaderCell>
                 <Table.HeaderCell>
                   <Icon name="trophy" />
@@ -233,7 +238,7 @@ export default function RegistrationList() {
                 <Table.Cell>
                   {registration.user.wca_id ? (
                     <a
-                      href={`https://worldcubeassociation.org/persons/${registration.user.wca_id}`}
+                      href={personUrl(registration.user.wca_id)}
                     >
                       {registration.user.name}
                     </a>
@@ -242,8 +247,8 @@ export default function RegistrationList() {
                   )}
                 </Table.Cell>
                 <Table.Cell>
-                  <FlagIcon
-                    iso2={registration.user.country.iso2.toLowerCase()}
+                  <Flag
+                    name={registration.user.country.iso2.toLowerCase()}
                   />
                   {registration.user.country.name}
                 </Table.Cell>
@@ -254,7 +259,7 @@ export default function RegistrationList() {
                         key={`registration-table-row-${registration.user.id}-${id}`}
                       >
                         {registration.competing.event_ids.includes(id) ? (
-                          <CubingIcon event={id} selected />
+                          <EventIcon event={id} className="selected" />
                         ) : null}
                       </Table.Cell>
                     ))}
@@ -305,7 +310,12 @@ export default function RegistrationList() {
           )}
         </Table.Body>
         <Table.Footer>
-          <FooterContent />
+          <FooterContent
+            registrations={registrations}
+            psychSheetEvent={psychSheetEvent}
+            dataWithUser={dataWithUser}
+            competitionInfo={competitionInfo}
+          />
         </Table.Footer>
       </Table>
     </div>
