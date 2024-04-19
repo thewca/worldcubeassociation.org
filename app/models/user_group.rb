@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
 class UserGroup < ApplicationRecord
+  # Teams & Committees are recognized by Motion "10.2022.0":
+  # https://documents.worldcubeassociation.org/documents/motions/10.2022.0%20-%20Committees%20and%20Teams.pdf
+  # Motions starting with "10.YYYY.N" define these teams: https://www.worldcubeassociation.org/documents
   # Councils are recognized by Motions. The corresponding motions related to councils can be found in the following URL:
   # https://www.worldcubeassociation.org/documents
   enum :group_type, {
@@ -204,7 +207,7 @@ class UserGroup < ApplicationRecord
   def unique_status?(status)
     if self.group_type == UserGroup.group_types[:delegate_regions]
       ["senior_delegate", "regional_delegate"].include?(status)
-    elsif self.group_type == UserGroup.group_types[:teams_committees]
+    elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(self.group_type)
       status == "leader"
     else
       false

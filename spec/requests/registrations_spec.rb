@@ -554,7 +554,7 @@ RSpec.describe "registrations" do
           expect(registration.reload.outstanding_entry_fees).to eq(outstanding_fees_money)
         end
 
-        it "processes sufficient payment" do
+        it "processes sufficient payment when confirmed by redirect" do
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
 
           post registration_payment_intent_path(registration.id), params: {
@@ -573,6 +573,41 @@ RSpec.describe "registrations" do
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
+
+          expect(registration.reload.outstanding_entry_fees).to eq 0
+          expect(registration.paid_entry_fees).to eq competition.base_entry_fee
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
+          expect(charge.amount).to eq competition.base_entry_fee.cents
+          expect(charge.receipt_email).to eq user.email
+          # Stripe stores everything under "metadata" as string, even if we originally pass in integers
+          expect(charge.metadata.competition).to eq competition.id
+          expect(charge.metadata.registration_id.to_i).to eq registration.id
+          # Check that the website actually records who made the charge
+          expect(registration.registration_payments.first.user).to eq user
+        end
+
+        it "processes sufficient payment when confirmed by webhook" do
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+
+          payment_intent = registration.reload.payment_intents.first
+          stripe_account_id = competition.payment_account_for(:stripe).account_id
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.payment_record.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: stripe_account_id,
+          )
+
+          # mimic the response that Stripe sends to our webhook upon payment completion
+          post registration_stripe_webhook_path, params: payment_confirmation_webhook_as_json(
+            payment_intent.retrieve_remote.to_hash,
+            stripe_account_id,
+          )
 
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
@@ -1311,5 +1346,23 @@ def refund_response(capture_id)
       { href: "https://api.sandbox.paypal.com/v2/payments/refunds/942276552E022623T", rel: "self", method: "GET" },
       { href: "https://api.sandbox.paypal.com/v2/payments/captures/#{capture_id}", rel: "up", method: "GET" },
     ],
+  }.to_json
+end
+
+def payment_confirmation_webhook_as_json(intent, account_id)
+  {
+    id: "evt_3P6aXQJzvpX2joEA18jzmlxq",
+    object: "event",
+    account: account_id,
+    api_version: "2023-10-16",
+    created: DateTime.now.to_i,
+    data: { object: intent },
+    livemode: false,
+    pending_webhooks: 0,
+    request: {
+      id: "req_PgTt3KXlGjI0vd",
+      idempotency_key: "400ffbac-cfe0-476e-ad40-335b329bb0e8",
+    },
+    type: "payment_intent.succeeded",
   }.to_json
 end

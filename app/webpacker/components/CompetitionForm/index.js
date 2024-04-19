@@ -40,10 +40,12 @@ import CompDates from './FormSections/CompDates';
 import SubSection from './FormSections/SubSection';
 import RegistrationDates from './FormSections/RegistrationDates';
 import AnnouncementActions from './AnnouncementActions';
-import { teams } from '../../lib/wca-data.js.erb';
 import { createCompetitionUrl, competitionUrl } from '../../lib/requests/routes.js.erb';
 import ConfirmationActions, { CreateOrUpdateButton } from './ConfirmationActions';
 import UserPreferences from './UserPreferences';
+
+// FIXME: We should consider a better way of accessing the friendly ID instead of hard-coding.
+const WCAT_FRIENDLY_ID = 'wcat';
 
 function AnnouncementMessage() {
   const {
@@ -59,8 +61,6 @@ function AnnouncementMessage() {
 
   if (!isPersisted) return null;
 
-  const wcatTeam = teams.byId.wcat;
-
   let messageStyle = null;
 
   let i18nKey = null;
@@ -74,14 +74,14 @@ function AnnouncementMessage() {
   } else if (isConfirmed && !isVisible) {
     messageStyle = 'warning';
     i18nKey = 'competitions.competition_form.confirmed_but_not_visible_html';
-    i18nReplacements = { contact: wcatTeam.email };
+    i18nReplacements = { contact: WCAT_FRIENDLY_ID.toLocaleUpperCase() };
   } else if (!isConfirmed && isVisible) {
     messageStyle = 'error';
     i18nKey = 'competitions.competition_form.is_visible';
   } else if (!isConfirmed && !isVisible) {
     messageStyle = 'warning';
     i18nKey = 'competitions.competition_form.pending_confirmation_html';
-    i18nReplacements = { contact: wcatTeam.email };
+    i18nReplacements = { contact: WCAT_FRIENDLY_ID.toLocaleUpperCase() };
   }
 
   return (

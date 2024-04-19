@@ -40,7 +40,7 @@ class PaymentIntent < ApplicationRecord
   private
 
     def update_stripe_status_and_charges(api_intent, action_source, source_datetime)
-      ActiveRecord::Base.transaction do
+      self.with_lock do
         self.update!(error_details: api_intent.last_payment_error)
         self.payment_record.update_status(api_intent)
 
