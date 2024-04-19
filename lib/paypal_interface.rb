@@ -6,7 +6,7 @@ module PaypalInterface
   end
 
   def self.generate_paypal_onboarding_link(competition_id)
-    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/customer/partner-referrals"
+    url = "/v2/customer/partner-referrals"
 
     payload = {
       operations: [
@@ -25,7 +25,7 @@ module PaypalInterface
       ],
       products: ['PPCP'], # TODO: Experiment with other payment types
       partner_config_override: {
-        return_url: EnvConfig.ROOT_URL + Rails.application.routes.url_helpers.competitions_paypal_return_path(competition_id),
+        return_url: Rails.application.routes.url_helpers.competitions_paypal_return_url(competition_id, host: EnvConfig.ROOT_URL),
         return_url_description: "the url to return the WCA after the paypal onboarding process.",
       },
       legal_consents: [
@@ -36,7 +36,7 @@ module PaypalInterface
       ],
     }
 
-    response = paypal_connection(url).post do |req|
+    response = paypal_connection.post(url) do |req|
       req.body = payload
     end
 
@@ -48,7 +48,7 @@ module PaypalInterface
   end
 
   def self.create_order(registration, outstanding_fees)
-    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+    url = "/v2/checkout/orders"
 
     fee_currency = registration.competition.currency_code
     amount = PaypalRecord.paypal_amount(outstanding_fees, fee_currency)
@@ -62,7 +62,7 @@ module PaypalInterface
       ],
     }
 
-    response = paypal_connection(url).post do |req|
+    response = paypal_connection.post(url) do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
       req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(registration.competition)
 
@@ -85,9 +85,9 @@ module PaypalInterface
 
   # TODO: Update the status of the PaypalRecord object?
   def self.capture_payment(competition, order_id)
-    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{order_id}/capture"
+    url = "/v2/checkout/orders/#{order_id}/capture"
 
-    response = paypal_connection(url).post do |req|
+    response = paypal_connection.post(url) do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
       req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(competition)
     end
@@ -96,11 +96,11 @@ module PaypalInterface
   end
 
   def self.issue_refund(registration, capture_id)
-    url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/payments/captures/#{capture_id}/refund"
+    url = "/v2/payments/captures/#{capture_id}/refund"
 
     payload = {}
 
-    response = paypal_connection(url).post do |req|
+    response = paypal_connection.post(url) do |req|
       req.headers['PayPal-Partner-Attribution-Id'] = AppSecrets.PAYPAL_ATTRIBUTION_CODE
       req.headers['PayPal-Auth-Assertion'] = paypal_auth_assertion(registration.competition)
 
@@ -128,9 +128,9 @@ module PaypalInterface
     refund
   end
 
-  private_class_method def self.paypal_connection(url)
+  private_class_method def self.paypal_connection
     Faraday.new(
-      url: url,
+      url: EnvConfig.PAYPAL_BASE_URL,
       headers: {
         'Authorization' => "Bearer #{generate_access_token}",
         'Content-Type' => 'application/json',
