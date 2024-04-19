@@ -306,25 +306,8 @@ class CompetitionsController < ApplicationController
     not_connected_integrations = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.keys - @competition.connected_payment_integration_types
 
     @cpi_onboarding_urls = not_connected_integrations.index_with do |cpi_type|
-      # TODO: Move this bit of code somewhere else?
-      case cpi_type
-      when :stripe
-        # Stripe setup URL
-        client = create_stripe_oauth_client
-        oauth_params = {
-          scope: 'read_write',
-          redirect_uri: competition_connect_payment_integration_url(payment_integration: :stripe),
-          state: current_user.id,
-        }
-
-        client.auth_code.authorize_url(oauth_params)
-      when :paypal
-        return nil if PaypalInterface.paypal_disabled?
-
-        PaypalInterface.generate_paypal_onboarding_link(@competition.id) unless PaypalInterface.paypal_disabled? || Rails.env.test?
-      else
-        nil # TODO: how to react in this case? Shouldn't really happen anyways…
-      end
+      connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[cpi_type].safe_constantize
+      connector&.generate_onboarding_link(@competition.id, current_user)
     end
   end
 
@@ -336,28 +319,15 @@ class CompetitionsController < ApplicationController
       raise ActionController::RoutingError.new('Not Found')
     end
 
-    # TODO: Move this bit of code somewhere else?
-    case payment_integration
-    when "paypal"
-      if PaypalInterface.paypal_disabled?
-        flash[:error] = 'PayPal is not yet available in production environments'
-        return redirect_to competitions_payment_setup_path(competition)
-      end
+    if payment_integration == 'paypal' && PaypalInterface.paypal_disabled?
+      flash[:error] = 'PayPal is not yet available in production environments'
+      return redirect_to competitions_payment_setup_path(competition)
+    end
 
-      account_reference = ConnectedPaypalAccount.new(
-        paypal_merchant_id: params[:merchantIdInPayPal],
-        permissions_granted: params[:permissionsGranted],
-        account_status: params[:accountStatus],
-        consent_status: params[:consentStatus],
-      )
-    when "stripe"
-      client = create_stripe_oauth_client
-      resp = client.auth_code.get_token(code, params: { scope: 'read_write' })
+    connector = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[payment_integration.to_sym].safe_constantize
+    account_reference = connector&.connect_account(params, current_user)
 
-      account_reference = ConnectedStripeAccount.new(
-        account_id: resp.params['stripe_user_id'],
-      )
-    else
+    unless account_reference.present?
       raise ActionController::RoutingError.new("Payment Integration #{payment_integration} not Found")
     end
 
@@ -370,17 +340,6 @@ class CompetitionsController < ApplicationController
     end
 
     redirect_to competition_payment_integration_setup_path(competition)
-  end
-
-  private def create_stripe_oauth_client
-    options = {
-      site: 'https://connect.stripe.com',
-      authorize_url: '/oauth/authorize',
-      token_url: '/oauth/token',
-      auth_scheme: :request_body,
-    }
-
-    OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
   end
 
   def disconnect_payment_integration
