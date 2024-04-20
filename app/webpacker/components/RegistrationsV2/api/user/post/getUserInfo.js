@@ -11,5 +11,5 @@ export default async function getUsersInfo(
   }
 
   const { data } = await fetchJsonOrError(apiV0Urls.users.show(userIds));
-  return data;
+  return data.users;
 }

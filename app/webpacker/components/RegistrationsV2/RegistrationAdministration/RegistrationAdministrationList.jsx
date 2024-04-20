@@ -393,6 +393,7 @@ function RegistrationAdministrationTable({
               return (
                 <TableRow
                   key={id}
+                  competitionInfo={competitionInfo}
                   columnsExpanded={columnsExpanded}
                   registration={registration}
                   isSelected={selected.includes(id)}
@@ -486,7 +487,7 @@ function TableHeader({
         {events ? (
           competitionInfo.event_ids.map((eventId) => (
             <Table.HeaderCell key={`event-${eventId}`}>
-              <EventIcon event={eventId} className="selected" />
+              <EventIcon id={eventId} className="selected" />
             </Table.HeaderCell>
           ))
         ) : (
@@ -559,7 +560,6 @@ function TableRow({
           Edit
         </a>
       </Table.Cell>
-      )
 
       <Table.Cell>
         {wcaId ? (
@@ -619,7 +619,7 @@ function TableRow({
         competitionInfo.event_ids.map((eventId) => (
           <Table.Cell key={`event-${eventId}`}>
             {eventIds.includes(eventId) && (
-              <EventIcon event={eventId} size="1x" selected />
+              <EventIcon id={eventId} size="1x" selected />
             )}
           </Table.Cell>
         ))
@@ -627,7 +627,7 @@ function TableRow({
         <Table.Cell>
           <Popup
             content={eventIds.map((eventId) => (
-              <EventIcon key={eventId} event={eventId} className="selected" />
+              <EventIcon key={eventId} id={eventId} className="selected" />
             ))}
             trigger={<span>{eventIds.length}</span>}
           />
