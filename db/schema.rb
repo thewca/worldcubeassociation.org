@@ -871,15 +871,18 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
   end
 
   create_table "paypal_records", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "record_id"
-    t.string "paypal_status"
-    t.string "payload"
-    t.integer "amount_in_cents"
+    t.string "paypal_id"
+    t.string "paypal_status", null: false
+    t.text "parameters", null: false
+    t.string "amount_paypal_denomination"
     t.string "currency_code"
-    t.string "record_type"
+    t.string "paypal_record_type"
     t.bigint "parent_record_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "merchant_id"
+    t.datetime "created_at_remote"
+    t.datetime "updated_at_remote"
     t.index ["parent_record_id"], name: "index_paypal_records_on_parent_record_id"
   end
 
@@ -1109,8 +1112,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
     t.string "account_id"
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
-    t.bigint "parent_transaction_id"
-    t.index ["parent_transaction_id"], name: "fk_rails_6ad225b020"
+    t.bigint "parent_record_id"
+    t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
 
@@ -1292,7 +1295,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"
   add_foreign_key "sanity_check_exclusions", "sanity_checks"
   add_foreign_key "sanity_checks", "sanity_check_categories"
-  add_foreign_key "stripe_records", "stripe_records", column: "parent_transaction_id"
+  add_foreign_key "stripe_records", "stripe_records", column: "parent_record_id"
   add_foreign_key "stripe_webhook_events", "stripe_records"
   add_foreign_key "user_groups", "user_groups", column: "parent_group_id"
   add_foreign_key "user_roles", "user_groups", column: "group_id"

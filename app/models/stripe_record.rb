@@ -39,8 +39,8 @@ class StripeRecord < ApplicationRecord
   has_one :registration_payment, as: :receipt
   has_one :payment_intent, as: :payment_record
 
-  belongs_to :parent_transaction, class_name: "StripeRecord", optional: true
-  has_many :child_transactions, class_name: "StripeRecord", inverse_of: :parent_transaction, foreign_key: :parent_transaction_id
+  belongs_to :parent_record, class_name: "StripeRecord", optional: true
+  has_many :child_records, class_name: "StripeRecord", inverse_of: :parent_record, foreign_key: :parent_record_id
 
   has_many :stripe_webhook_events, inverse_of: :stripe_record, dependent: :nullify
 
@@ -54,11 +54,11 @@ class StripeRecord < ApplicationRecord
   end
 
   def account_id
-    super || parent_transaction&.account_id
+    super || parent_record&.account_id
   end
 
-  def root_transaction
-    parent_transaction&.root_transaction || self
+  def root_record
+    parent_record&.root_record || self
   end
 
   def update_status(api_transaction)
@@ -173,16 +173,16 @@ class StripeRecord < ApplicationRecord
     amount_stripe_denomination.to_i
   end
 
-  def self.create_from_api(api_transaction, parameters, account_id, parent_transaction = nil)
+  def self.create_from_api(api_record, parameters, account_id, parent_record = nil)
     StripeRecord.create!(
-      stripe_record_type: api_transaction.object,
+      stripe_record_type: api_record.object,
       parameters: parameters,
-      stripe_id: api_transaction.id,
-      amount_stripe_denomination: api_transaction.amount,
-      currency_code: api_transaction.currency,
-      stripe_status: api_transaction.status,
+      stripe_id: api_record.id,
+      amount_stripe_denomination: api_record.amount,
+      currency_code: api_record.currency,
+      stripe_status: api_record.status,
       account_id: account_id,
-      parent_transaction: parent_transaction,
+      parent_record: parent_record,
     )
   end
 end

@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PaypalRecord < ActiveRecord::Migration[7.1]
+class CreatePaypalRecordsTable < ActiveRecord::Migration[7.1]
   def change
     create_table :paypal_records do |t|
       t.string :record_id

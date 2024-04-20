@@ -50,7 +50,7 @@ module PaypalInterface
   def self.create_order(merchant_id, amount_iso, currency_code)
     url = "/v2/checkout/orders"
 
-    amount_paypal = PaypalRecord.paypal_amount(amount_iso, currency_code)
+    amount_paypal = PaypalRecord.amount_to_paypal(amount_iso, currency_code)
 
     payload = {
       intent: 'CAPTURE',
@@ -73,13 +73,11 @@ module PaypalInterface
 
     body = response.body
 
-    PaypalRecord.create(
-      record_type: :payment,
-      record_id: body["id"],
-      paypal_status: body["status"],
-      payload: payload,
-      amount_in_cents: amount_iso,
-      currency_code: currency_code,
+    PaypalRecord.create_from_api(
+      body,
+      :paypal_order,
+      payload,
+      merchant_id,
     )
 
     body
@@ -100,7 +98,7 @@ module PaypalInterface
   def self.issue_refund(merchant_id, capture_id, amount_iso, currency_code)
     url = "/v2/payments/captures/#{capture_id}/refund"
 
-    amount_paypal = PaypalRecord.paypal_amount(amount_iso, currency_code)
+    amount_paypal = PaypalRecord.amount_to_paypal(amount_iso, currency_code)
 
     payload = {
       amount: {
@@ -118,19 +116,16 @@ module PaypalInterface
 
     body = response.body
 
-    refunded_order = PaypalRecord.find_by(record_id: capture_id).parent_record
+    refunded_capture = PaypalRecord.find_by(paypal_id: capture_id)
 
     if body["status"] == "COMPLETED"
-      # TODO: The refund should be linked to a charge and/or an order
-      refund = PaypalRecord.create(
-        record_type: :refund,
-        record_id: body["id"],
-        paypal_status: body["status"],
-        payload: payload,
-        amount_in_cents: refunded_order.amount_in_cents,
-        currency_code: refunded_order.currency_code,
+      refund = PaypalRecord.create_from_api(
+        body,
+        :refund,
+        payload,
+        merchant_id,
+        refunded_capture,
       )
-
     end
 
     # TODO: Add error handling for if we don't get a COMPLETED status, because then this will be undefined

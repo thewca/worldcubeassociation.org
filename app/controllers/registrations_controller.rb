@@ -451,7 +451,7 @@ class RegistrationsController < ApplicationController
 
     api_amounts = {
       stripe: StripeRecord.amount_to_stripe(ruby_denomination, currency_iso),
-      paypal: PaypalRecord.paypal_amount(ruby_denomination, currency_iso),
+      paypal: PaypalRecord.amount_to_paypal(ruby_denomination, currency_iso),
     }
 
     render json: { api_amounts: api_amounts, human_amount: human_amount }
@@ -778,27 +778,26 @@ class RegistrationsController < ApplicationController
 
       amount_details = response['purchase_units'][0]['payments']['captures'][0]['amount']
       currency_code = amount_details['currency_code']
-      amount = PaypalRecord.ruby_amount(amount_details["value"], currency_code)
-      record = PaypalRecord.find_by(record_id: response["id"])
+      amount = PaypalRecord.amount_to_ruby(amount_details["value"], currency_code)
+      order_record = PaypalRecord.find_by(paypal_id: response["id"]) # TODO: Add error handling for the PaypalRecord not being found
 
       # Create a Capture object and link it to the PaypalRecord
       # NOTE: This assumes there is only ONE capture per order - not a valid long-term assumption
       capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
-      PaypalRecord.create(
-        record_id: capture_from_response['id'],
-        paypal_status: capture_from_response['status'],
-        payload: {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?
-        amount_in_cents: capture_from_response['amount']['value'],
-        currency_code: capture_from_response['amount']['currency_code'],
-        record_type: :capture,
-        parent_record: record,
+
+      capture_record = PaypalRecord.create_from_api(
+        capture_from_response,
+        :capture,
+        {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?,
+        paypal_integration.paypal_merchant_id,
+        order_record,
       )
 
       # Record the payment
       registration.record_payment(
         amount,
         currency_code,
-        record, # TODO: Add error handling for the PaypalRecord not being found
+        capture_record,
         current_user.id,
       )
     end
@@ -811,13 +810,11 @@ class RegistrationsController < ApplicationController
     paypal_integration = registration.competition.payment_account_for(:paypal)
 
     registration_payment = RegistrationPayment.find(params[:payment_id])
-    paypal_order = registration_payment.receipt
-
-    payment_capture_id = paypal_order.capture_id
+    paypal_capture = registration_payment.receipt
 
     refund = PaypalInterface.issue_refund(
       paypal_integration.paypal_merchant_id,
-      payment_capture_id,
+      paypal_capture.paypal_id,
       registration_payment.amount_lowest_denomination,
       registration_payment.currency_code,
     )
