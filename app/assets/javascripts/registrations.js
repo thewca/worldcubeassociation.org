@@ -1,7 +1,8 @@
 onPage('registrations#edit_registrations', function() {
   var $registrationsTable = $('table.registrations-table:not(.floatThead-table)');
 
-  if ($registrationsTable.empty()) {
+  // return early if the new registration V2 React frontend is used
+  if ($registrationsTable.length === 0) {
     return;
   }
 
