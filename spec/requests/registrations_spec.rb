@@ -1090,8 +1090,8 @@ RSpec.describe "registrations" do
       stub_request(:post, order_url)
         .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
 
-      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
-      post registration_create_paypal_order_path(registration.id), params: payload
+      payload = { amount: competition.base_entry_fee_lowest_denomination }
+      post registration_payment_intent_path(registration, payment_integration: :paypal), params: payload
     end
 
     it 'creates a PaypalRecord' do
@@ -1109,41 +1109,50 @@ RSpec.describe "registrations" do
     let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
     before :each do
-      sign_in user # TODO: Why do we need to sign in here?
+      sign_in user
 
       stubbed_order = create_order_payload(
         PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, competition.currency_code),
         competition.currency_code,
       )
 
-      order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
-      stub_request(:post, order_url)
+      create_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+      stub_request(:post, create_order_url)
         .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
 
-      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
-      post registration_create_paypal_order_path(registration.id), params: payload
+      # Create a PaypalOrder
+      payload = { amount: competition.base_entry_fee_lowest_denomination }
+      post registration_payment_intent_path(registration, payment_integration: :paypal), params: payload
 
       # Stub the create order response
       @record_id = JSON.parse(stubbed_order)['id']
       @currency_code = competition.currency_code
       @amount = PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, @currency_code)
 
-      url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
-      stub_request(:post, url)
-        .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+      stubbed_capture = capture_order_response(@record_id, @amount, @currency_code)
+
+      retrieve_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}"
+      stub_request(:get, retrieve_order_url)
+        .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
+
+      capture_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
+      stub_request(:post, capture_order_url)
+        .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
+      post registration_payment_completion_paypal_path(registration), params: { orderID: @record_id }, as: :json
+
+      # make sure every follow-up test gets a hold of the refunds
+      registration.reload
     end
 
     it 'creates a PaypalRecord of type :capture' do
-      capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
-      expect(PaypalRecord.find_by(paypal_id: capture_id).paypal_record_type).to eq('capture')
+      capture_record = registration.registration_payments.first.receipt
+      expect(capture_record.paypal_record_type).to eq('capture')
     end
 
     it 'associates PaypalCapture to the PaypalRecord' do
-      paypal_record = PaypalRecord.find_by(paypal_id: JSON.parse(response.body)['id'])
+      paypal_record = registration.payment_intents.first.payment_record
       expect(paypal_record.child_records.count).to eq(1)
     end
 
@@ -1164,23 +1173,23 @@ RSpec.describe "registrations" do
   describe "POST #issue_paypal_refund" do
     let(:competition) { FactoryBot.create(:competition, :paypal_connected, :visible, :registration_open, events: Event.where(id: %w(222 333)), base_entry_fee_lowest_denomination: 1000) }
     let!(:user) { FactoryBot.create(:user, :wca_id) }
+    let!(:admin_user) { FactoryBot.create(:admin) }
     let!(:registration) { FactoryBot.create(:registration, competition: competition, user: user) }
 
     before :each do
-      sign_in user # TODO: Why do we need to sign in here?
+      sign_in user
 
       stubbed_order = create_order_payload(
         PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, competition.currency_code),
         competition.currency_code,
       )
 
-      order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
-      stub_request(:post, order_url)
+      create_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+      stub_request(:post, create_order_url)
         .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
 
-      # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
-      post registration_create_paypal_order_path(registration.id), params: payload
+      payload = { amount: competition.base_entry_fee_lowest_denomination }
+      post registration_payment_intent_path(registration, payment_integration: :paypal), params: payload
 
       # Stub the create order response
       @record_id = JSON.parse(stubbed_order)['id']
@@ -1189,15 +1198,20 @@ RSpec.describe "registrations" do
 
       stubbed_capture = capture_order_response(@record_id, @amount, @currency_code)
 
+      retrieve_order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}"
+      stub_request(:get, retrieve_order_url)
+        .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
+
       capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, capture_url)
         .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
+      post registration_payment_completion_paypal_path(registration), params: { orderID: @record_id }, as: :json
 
       # Mock the refunds endpoint
-      capture_id = JSON.parse(stubbed_capture)['purchase_units'][0]['payments']['captures'][0]['id']
+      registration_payment = registration.registration_payments.reload.first
+      capture_id = registration_payment.receipt.paypal_id
 
       stubbed_refund = refund_response(capture_id, @amount, @currency_code)
 
@@ -1205,8 +1219,15 @@ RSpec.describe "registrations" do
       stub_request(:post, refund_url)
         .to_return(status: 200, body: stubbed_refund, headers: { 'Content-Type' => 'application/json' })
 
+      # Make sure that we actually have permission to refund
+      sign_in admin_user
+
       # Make the API call to issue the refund
-      post paypal_payment_refund_path(registration.id, registration.registration_payments.first), params: {}
+      refund_params = { payment: { refund_amount: registration_payment.amount_lowest_denomination } }
+      post registration_payment_refund_path(registration, registration_payment), params: refund_params
+
+      # make sure every follow-up test gets a hold of the refunds
+      registration.reload
     end
 
     it 'creates a RegistrationPayment with a negative value' do

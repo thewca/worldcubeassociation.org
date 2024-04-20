@@ -849,6 +849,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
           sign_in organizer
           post :load_payment_intent, params: {
             id: registration.id,
+            payment_integration: :stripe,
             amount: registration.outstanding_entry_fees.cents,
           }
           payment_intent = registration.reload.payment_intents.first
@@ -857,7 +858,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
             { payment_method: 'pm_card_visa' },
             stripe_account: competition.payment_account_for(:stripe).account_id,
           )
-          get :payment_completion, params: {
+          get :payment_completion_stripe, params: {
             id: registration.id,
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
@@ -914,7 +915,7 @@ RSpec.describe RegistrationsController, clean_db_with_truncation: true do
           ClearConnectedPaymentIntegrations.perform_now
           post :refund_payment, params: { id: registration.id, payment_id: @payment.id, payment: { refund_amount: competition.base_entry_fee.cents } }
           expect(response).to redirect_to edit_registration_path(registration)
-          expect(flash[:danger]).to eq "You cannot emit refund for this competition anymore. Please use your Stripe dashboard to do so."
+          expect(flash[:danger]).to eq "You cannot emit refund for this competition anymore. Please use the integration's dashboard to do so."
           expect(@payment.reload.amount_available_for_refund).to eq competition.base_entry_fee.cents
         end
       end
