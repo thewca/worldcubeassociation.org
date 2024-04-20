@@ -604,7 +604,7 @@ th:
           #original_hash: 621101a
           trainee_delegate: Trainee Delegate
           #original_hash: 9b97968
-          candidate_delegate: Junior Delegate
+          junior_delegate: Junior Delegate
           #original_hash: 12ab214
           delegate: Delegate
           #original_hash: 45c2317
@@ -2232,6 +2232,10 @@ th:
         not_allowed: คุณไม่สามารถชำระค่าสมัครการแข่งขันนั้นได้
         #original_hash: a073600
         stripe_failed: โปรดตรวจสอบธุรกรรมของ Stripe
+        #original_hash: d571a4e
+        paypal_failed: โปรดตรวจสอบคำสั่งซื้อของ PayPal
+        #original_hash: df1a70e
+        paypal_canceled: PayPal รายงานว่าคำสั่งซื้อถูกยกเลิกด้วยตนเอง กรุณาลองอีกครั้ง.
         #original_hash: a32e40f
         stripe_not_found: Stripe รายงานกลับว่าไม่พบ Transaction ID ดังกล่าว
         #original_hash: aaa8ab7
@@ -4322,10 +4326,6 @@ th:
           คณะกรรมการ WCA
           มีหน้าที่รับผิดชอบในการนำองค์กรโดยรวมและปฏิบัติหน้าที่ใด ๆ
           ที่ไม่ได้ปฏิบัติตามโดยทีมงาน, คณะกรรมการและสภา
-      #original_hash: c366473
-      senior_member: สมาชิกอวุโส
-      #original_hash: e26c936
-      leader: หัวหน้า
       users:
         #original_hash: 57bbaad
         profile: 'profile ของ %{user_name}'
