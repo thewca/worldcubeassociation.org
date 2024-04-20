@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useMemo, useReducer } from 'react';
+import React, { useMemo, useReducer, useRef } from 'react';
 import {
-  Checkbox, Flag, Form, Header, Icon, Popup, Table,
+  Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import { getShortDateString, getShortTimeString } from '../lib/dates';
@@ -118,6 +118,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   );
 
   const dispatchStore = useDispatch();
+
+  const actionsRef = useRef();
 
   const [state, dispatchSort] = useReducer(sortReducer, {
     sortColumn: competitionInfo['using_stripe_payments?']
@@ -252,7 +254,20 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
         </Form.Group>
       </Form>
 
-      <div>
+      <div ref={actionsRef}>
+        <Sticky context={actionsRef} offset={20}>
+          <RegistrationActions
+            partitionedSelected={partitionedSelected}
+            refresh={async () => {
+              await refetch();
+              dispatch({ type: 'clear-selected' });
+            }}
+            registrations={registrations}
+            spotsRemaining={spotsRemaining}
+            userEmailMap={userEmailMap}
+          />
+        </Sticky>
+
         <Header>
           Pending registrations (
           {pending.length}
@@ -338,17 +353,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           competitionInfo={competitionInfo}
         />
       </div>
-
-      <RegistrationActions
-        partitionedSelected={partitionedSelected}
-        refresh={async () => {
-          await refetch();
-          dispatch({ type: 'clear-selected' });
-        }}
-        registrations={registrations}
-        spotsRemaining={spotsRemaining}
-        userEmailMap={userEmailMap}
-      />
     </>
   );
 }

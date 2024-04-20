@@ -2,7 +2,6 @@ import { useMutation } from '@tanstack/react-query';
 import React from 'react';
 import { Button, Icon } from 'semantic-ui-react';
 import updateRegistration from '../api/registration/patch/update_registration';
-import './actions.css';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import i18n from '../../../lib/i18n';
@@ -108,7 +107,7 @@ export default function RegistrationActions({
 
   return (
     anySelected && (
-      <Button.Group className="actions">
+      <Button.Group>
         <Button
           onClick={() => {
             csvExport(
