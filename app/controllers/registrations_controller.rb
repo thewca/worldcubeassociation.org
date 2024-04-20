@@ -20,8 +20,8 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
-                         :update]
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :update, :destroy,
+                         :payment_completion_stripe, :payment_completion_paypal, :load_payment_intent, :stripe_webhook, :payment_denomination]
 
   before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
