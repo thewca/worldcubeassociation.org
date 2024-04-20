@@ -11,7 +11,7 @@ function csvExport(selected, registrations) {
   csvContent
     += 'user_id,guests,competing.event_ids,competing.registration_status,competing.registered_on,competing.comment,competing.admin_comment\n';
   registrations
-    .filter((r) => selected.includes(r.user.id))
+    .filter((r) => selected.length === 0 || selected.includes(r.user.id))
     .forEach((registration) => {
       csvContent += `${registration.user_id},${
         registration.guests
@@ -106,86 +106,88 @@ export default function RegistrationActions({
   };
 
   return (
-    anySelected && (
-      <Button.Group>
-        <Button
-          onClick={() => {
-            csvExport(
-              [...pending, ...accepted, ...cancelled, ...waiting],
-              registrations,
-            );
-          }}
-        >
-          <Icon name="download" />
-          {' '}
-          {i18n.t('registrations.list.export_csv')}
-        </Button>
+    <Button.Group>
+      <Button
+        onClick={() => {
+          csvExport(
+            [...pending, ...accepted, ...cancelled, ...waiting],
+            registrations,
+          );
+        }}
+      >
+        <Icon name="download" />
+        {' '}
+        {i18n.t('registrations.list.export_csv')}
+      </Button>
 
-        <Button>
-          <a
-            href={`mailto:?bcc=${selectedEmails}`}
-            id="email-selected"
-            target="_blank"
-            className="btn btn-info selected-registrations-actions"
-            rel="noreferrer"
-          >
-            <Icon name="envelope" />
-            {i18n.t('competitions.registration_v2.update.email_send')}
-          </a>
-        </Button>
-
-        <Button onClick={() => copyEmails(selectedEmails)}>
-          <Icon name="copy" />
-          {i18n.t('competitions.registration_v2.update.email_copy')}
-        </Button>
+      {anySelected && (
         <>
-          {anyApprovable && (
-          <Button positive onClick={attemptToApprove}>
-            <Icon name="check" />
-            {i18n.t('registrations.list.approve')}
+          <Button>
+            <a
+              href={`mailto:?bcc=${selectedEmails}`}
+              id="email-selected"
+              target="_blank"
+              className="btn btn-info selected-registrations-actions"
+              rel="noreferrer"
+            >
+              <Icon name="envelope" />
+              {i18n.t('competitions.registration_v2.update.email_send')}
+            </a>
           </Button>
-          )}
 
-          {anyRejectable && (
-          <Button
-            onClick={() => changeStatus(
-              [...accepted, ...cancelled, ...waiting],
-              'pending',
-            )}
-          >
-            <Icon name="times" />
-            {i18n.t('competitions.registration_v2.update.move_pending')}
+          <Button onClick={() => copyEmails(selectedEmails)}>
+            <Icon name="copy" />
+            {i18n.t('competitions.registration_v2.update.email_copy')}
           </Button>
-          )}
+          <>
+            {anyApprovable && (
+              <Button positive onClick={attemptToApprove}>
+                <Icon name="check" />
+                {i18n.t('registrations.list.approve')}
+              </Button>
+            )}
 
-          {anyWaitlistable && (
-          <Button
-            color="yellow"
-            onClick={() => changeStatus(
-              [...pending, ...cancelled, ...accepted],
-              'waiting_list',
+            {anyRejectable && (
+              <Button
+                onClick={() => changeStatus(
+                  [...accepted, ...cancelled, ...waiting],
+                  'pending',
+                )}
+              >
+                <Icon name="times" />
+                {i18n.t('competitions.registration_v2.update.move_pending')}
+              </Button>
             )}
-          >
-            <Icon name="hourglass" />
-            {i18n.t('competitions.registration_v2.update.move_waiting')}
-          </Button>
-          )}
 
-          {anyCancellable && (
-          <Button
-            negative
-            onClick={() => changeStatus(
-              [...pending, ...accepted, ...waiting],
-              'cancelled',
+            {anyWaitlistable && (
+              <Button
+                color="yellow"
+                onClick={() => changeStatus(
+                  [...pending, ...cancelled, ...accepted],
+                  'waiting_list',
+                )}
+              >
+                <Icon name="hourglass" />
+                {i18n.t('competitions.registration_v2.update.move_waiting')}
+              </Button>
             )}
-          >
-            <Icon name="trash" />
-            {i18n.t('competitions.registration_v2.update.cancel')}
-          </Button>
-          )}
+
+            {anyCancellable && (
+              <Button
+                negative
+                onClick={() => changeStatus(
+                  [...pending, ...accepted, ...waiting],
+                  'cancelled',
+                )}
+              >
+                <Icon name="trash" />
+                {i18n.t('competitions.registration_v2.update.cancel')}
+              </Button>
+            )}
+          </>
+          )
         </>
-        )
-      </Button.Group>
-    )
+      )}
+    </Button.Group>
   );
 }
