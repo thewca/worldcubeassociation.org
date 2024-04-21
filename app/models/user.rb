@@ -1328,7 +1328,7 @@ class User < ApplicationRecord
   end
 
   def can_access_leader_panel?
-    admin? || active_roles.any? { |role| UserRole.is_lead?(role) }
+    admin? || active_roles.any? { |role| UserRole.is_lead?(role) && (UserRole.group(role).teams_committees? || UserRole.group(role).councils?) }
   end
 
   def can_access_senior_delegate_panel?
