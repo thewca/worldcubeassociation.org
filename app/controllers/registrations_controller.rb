@@ -77,6 +77,11 @@ class RegistrationsController < ApplicationController
     @competition = @registration.competition
   end
 
+  def edit_v2
+    @competition = Competition.find(params[:competition_id])
+    @user = User.find(params[:user_id])
+  end
+
   def destroy
     @competition = competition_from_params
     @registration = Registration.find(params[:id])

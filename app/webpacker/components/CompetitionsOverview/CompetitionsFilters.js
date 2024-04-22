@@ -76,7 +76,12 @@ function CompetitionsFilters({
   );
 }
 
-export function EventSelector({ selectedEvents, onEventSelection, eventList = WCA_EVENT_IDS }) {
+export function EventSelector({
+  selectedEvents,
+  onEventSelection,
+  eventList = WCA_EVENT_IDS,
+  disabled = false,
+}) {
   return (
     <>
       <label htmlFor="events">
@@ -90,6 +95,7 @@ export function EventSelector({ selectedEvents, onEventSelection, eventList = WC
         {eventList.map((eventId) => (
           <React.Fragment key={eventId}>
             <Button
+              disabled={disabled}
               basic
               icon
               toggle
