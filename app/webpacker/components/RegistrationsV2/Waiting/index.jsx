@@ -1,11 +1,11 @@
 import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import RegistrationList from './RegistrationList';
+import WaitingList from './WaitingList';
 
 export default function Index({ competitionInfo }) {
   return (
     <QueryClientProvider client={new QueryClient()}>
-      <RegistrationList
+      <WaitingList
         competitionInfo={competitionInfo}
       />
     </QueryClientProvider>
