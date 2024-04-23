@@ -140,10 +140,14 @@
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),
-              icon: "users",
+              icon: "users", # Don't add event icons if v2 is used
               tiny_children: @competition.events.map do |event|
-                { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-              end
+                if @competition.uses_new_registration_service?
+                  { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
+                else
+                  nil
+                end
+              end.compact
             }
           end
           if @competition.uses_new_registration_service?
