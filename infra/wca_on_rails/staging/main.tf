@@ -17,6 +17,10 @@ locals {
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
+      name = "WCA_REGISTRATIONS_POLL_URL"
+      value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/staging"
+    },
+    {
       name = "READ_REPLICA_HOST"
       value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },

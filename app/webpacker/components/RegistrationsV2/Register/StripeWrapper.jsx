@@ -4,7 +4,7 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import I18n from '../../../lib/i18n';
-import getStripeConfig from '../api/payment/get/get_stripe_config';
+import getStripeConfig from '../api/payment/get/getStripeConfig';
 import getPaymentId from '../api/registration/get/get_payment_intent';
 import PaymentStep from './PaymentStep';
 import { useDispatch } from '../../../lib/providers/StoreProvider';

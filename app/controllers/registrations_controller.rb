@@ -3,7 +3,7 @@
 require "csv"
 
 class RegistrationsController < ApplicationController
-  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :stripe_denomination, :create_paypal_order]
+  before_action :authenticate_user!, except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :stripe_webhook, :payment_denomination, :create_paypal_order]
   # Stripe has its own authenticity mechanism with Webhook Secrets.
   protect_from_forgery except: [:stripe_webhook]
 
@@ -20,10 +20,10 @@ class RegistrationsController < ApplicationController
   end
 
   before_action -> { redirect_to_root_unless_user(:can_manage_competition?, competition_from_params) },
-                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :stripe_denomination, :destroy,
+                except: [:create, :index, :psych_sheet, :psych_sheet_event, :register, :payment_completion, :load_payment_intent, :stripe_webhook, :payment_denomination, :destroy,
                          :update, :create_paypal_order, :capture_paypal_payment, :refund_paypal_payment]
 
-  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :stripe_denomination]
+  before_action :competition_must_be_using_wca_registration!, except: [:import, :do_import, :add, :do_add, :index, :psych_sheet, :psych_sheet_event, :stripe_webhook, :payment_denomination]
   private def competition_must_be_using_wca_registration!
     if !competition_from_params.use_wca_registration?
       flash[:danger] = I18n.t('registrations.flash.not_using_wca')
@@ -79,6 +79,11 @@ class RegistrationsController < ApplicationController
   def edit
     @registration = Registration.find(params[:id])
     @competition = @registration.competition
+  end
+
+  def edit_v2
+    @competition = Competition.find(params[:competition_id])
+    @user = User.find(params[:user_id])
   end
 
   def destroy
@@ -446,16 +451,19 @@ class RegistrationsController < ApplicationController
     end
   end
 
-  def stripe_denomination
+  def payment_denomination
     ruby_denomination = params.require(:amount)
     currency_iso = params.require(:currency_iso)
-
-    stripe_amount = StripeRecord.amount_to_stripe(ruby_denomination, currency_iso.downcase)
 
     ruby_money = Money.new(ruby_denomination, currency_iso)
     human_amount = helpers.format_money(ruby_money)
 
-    render json: { stripe_amount: stripe_amount, human_amount: human_amount }
+    api_amounts = {
+      stripe: StripeRecord.amount_to_stripe(ruby_denomination, currency_iso),
+      paypal: PaypalRecord.amount_to_paypal(ruby_denomination, currency_iso),
+    }
+
+    render json: { api_amounts: api_amounts, human_amount: human_amount }
   end
 
   # Respond to asynchronous payment updates from Stripe.
@@ -747,18 +755,30 @@ class RegistrationsController < ApplicationController
   def create_paypal_order
     return head :forbidden if PaypalInterface.paypal_disabled?
 
-    @registration = registration_from_params
-    render json: PaypalInterface.create_order(@registration, params[:total_charge])
+    registration = registration_from_params
+    amount = params.require(:amount)
+
+    competition = registration.competition
+    paypal_integration = competition.payment_account_for(:paypal)
+
+    render json: PaypalInterface.create_order(
+      paypal_integration.paypal_merchant_id,
+      amount,
+      competition.currency_code,
+    )
   end
 
   def capture_paypal_payment
     return head :forbidden if PaypalInterface.paypal_disabled?
 
-    @registration = registration_from_params
-    @competition = @registration.competition
-    order_id = params[:order_id]
+    registration = registration_from_params
 
-    response = PaypalInterface.capture_payment(@competition, order_id)
+    competition = registration.competition
+    paypal_integration = competition.payment_account_for(:paypal)
+
+    order_id = params.require(:orderID)
+
+    response = PaypalInterface.capture_payment(paypal_integration.paypal_merchant_id, order_id)
     if response['status'] == 'COMPLETED'
 
       # TODO: Handle the case where there are multiple captures for a payment
@@ -767,28 +787,27 @@ class RegistrationsController < ApplicationController
 
       amount_details = response['purchase_units'][0]['payments']['captures'][0]['amount']
       currency_code = amount_details['currency_code']
-      amount = PaypalRecord.ruby_amount(amount_details["value"], currency_code)
-      record = PaypalRecord.find_by(record_id: response["id"])
+      amount = PaypalRecord.amount_to_ruby(amount_details["value"], currency_code)
+      order_record = PaypalRecord.find_by(paypal_id: response["id"]) # TODO: Add error handling for the PaypalRecord not being found
 
       # Create a Capture object and link it to the PaypalRecord
       # NOTE: This assumes there is only ONE capture per order - not a valid long-term assumption
       capture_from_response = response['purchase_units'][0]['payments']['captures'][0]
-      PaypalRecord.create(
-        record_id: capture_from_response['id'],
-        paypal_status: capture_from_response['status'],
-        payload: {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?
-        amount_in_cents: capture_from_response['amount']['value'],
-        currency_code: capture_from_response['amount']['currency_code'],
-        record_type: :capture,
-        parent_record: record,
+
+      capture_record = PaypalRecord.create_from_api(
+        capture_from_response,
+        :capture,
+        {}, # TODO: Refactor so that we can actually capture the payload? Perhaps this needs to be called in PaypalInterface?,
+        paypal_integration.paypal_merchant_id,
+        order_record,
       )
 
       # Record the payment
-      @registration.record_payment(
+      registration.record_payment(
         amount,
         currency_code,
-        record, # TODO: Add error handling for the PaypalRecord not being found
-        @registration.user.id,
+        capture_record,
+        current_user.id,
       )
     end
 
@@ -796,18 +815,25 @@ class RegistrationsController < ApplicationController
   end
 
   def refund_paypal_payment
-    registration = Registration.find(params[:id])
-    paypal_order = RegistrationPayment.find(params[:payment_id]).receipt
-    payment_capture_id = paypal_order.capture_id
+    registration = registration_from_params
+    paypal_integration = registration.competition.payment_account_for(:paypal)
 
-    refund = PaypalInterface.issue_refund(registration, payment_capture_id)
+    registration_payment = RegistrationPayment.find(params[:payment_id])
+    paypal_capture = registration_payment.receipt
+
+    refund = PaypalInterface.issue_refund(
+      paypal_integration.paypal_merchant_id,
+      paypal_capture.paypal_id,
+      registration_payment.amount_lowest_denomination,
+      registration_payment.currency_code,
+    )
 
     registration.record_refund(
-      refund.amount_in_cents,
-      refund.currency_code,
+      registration_payment.amount_lowest_denomination,
+      registration_payment.currency_code,
       refund,
-      payment_capture_id,
-      registration.user.id,
+      registration_payment.id,
+      current_user.id,
     )
   end
 end

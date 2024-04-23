@@ -13,6 +13,10 @@ locals {
       value = var.ROOT_URL
     },
     {
+      name = "WCA_REGISTRATIONS_POLL_URL"
+      value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/prod"
+    },
+    {
       name = "DATABASE_HOST"
       value = "worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
@@ -239,7 +243,7 @@ resource "aws_ecs_service" "this" {
   # container image, so we want use data.aws_ecs_task_definition to
   # always point to the active task definition
   task_definition                    = data.aws_ecs_task_definition.this.arn
-  desired_count                      = 0
+  desired_count                      = 1
   scheduling_strategy                = "REPLICA"
   deployment_maximum_percent         = 200
   deployment_minimum_healthy_percent = 50
@@ -288,7 +292,9 @@ resource "aws_ecs_service" "this" {
       # The target group changes during Blue/Green deployment
       load_balancer,
       # The Task definition will be set by Code Deploy
-      task_definition
+      task_definition,
+      # We set the capacity provider strategy in the buildspec
+      capacity_provider_strategy
     ]
   }
 }

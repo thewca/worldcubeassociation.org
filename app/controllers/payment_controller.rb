@@ -113,7 +113,7 @@ class PaymentController < ApplicationController
     charge = StripeRecord.charge.find(payment_id)
     return render json: { error: "invalid_transaction" } unless charge.present?
 
-    intent = charge.root_transaction.payment_intent
+    intent = charge.root_record.payment_intent
     return render json: { error: "invalid_transaction" } unless intent.holder == ms_registration
 
     refund_amount_param = params.require(:refund_amount)

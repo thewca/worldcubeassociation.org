@@ -36,7 +36,7 @@
                                                         userInfo: @current_user,
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
                                                         }) %>
-    <%else %>
+    <% else %>
       <% user_may_register = current_user.cannot_register_for_competition_reasons(@competition).length == 0 %>
       <% if @registration.show_details?(current_user) %>
         <p><%= t 'registrations.greeting', name: current_user.name %></p>

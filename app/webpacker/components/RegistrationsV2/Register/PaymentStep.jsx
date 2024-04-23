@@ -1,7 +1,7 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import I18n from '../../../lib/i18n';
-import { paymentFinishRoute } from '../../../lib/requests/routes.js.erb';
+import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 
@@ -27,7 +27,7 @@ export default function PaymentStep({
     const { error } = await stripe.confirmPayment({
       elements,
       confirmParams: {
-        return_url: paymentFinishRoute(competitionInfo.id, user.id),
+        return_url: paymentFinishUrl(competitionInfo.id, user.id),
       },
     });
 

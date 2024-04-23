@@ -554,7 +554,7 @@ RSpec.describe "registrations" do
           expect(registration.reload.outstanding_entry_fees).to eq(outstanding_fees_money)
         end
 
-        it "processes sufficient payment" do
+        it "processes sufficient payment when confirmed by redirect" do
           expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
 
           post registration_payment_intent_path(registration.id), params: {
@@ -573,6 +573,41 @@ RSpec.describe "registrations" do
             payment_intent: payment_intent.payment_record.stripe_id,
             payment_intent_client_secret: payment_intent.client_secret,
           }
+
+          expect(registration.reload.outstanding_entry_fees).to eq 0
+          expect(registration.paid_entry_fees).to eq competition.base_entry_fee
+          charge = registration.registration_payments.first.receipt.retrieve_stripe
+          expect(charge.amount).to eq competition.base_entry_fee.cents
+          expect(charge.receipt_email).to eq user.email
+          # Stripe stores everything under "metadata" as string, even if we originally pass in integers
+          expect(charge.metadata.competition).to eq competition.id
+          expect(charge.metadata.registration_id.to_i).to eq registration.id
+          # Check that the website actually records who made the charge
+          expect(registration.registration_payments.first.user).to eq user
+        end
+
+        it "processes sufficient payment when confirmed by webhook" do
+          expect(registration.outstanding_entry_fees).to eq competition.base_entry_fee
+
+          post registration_payment_intent_path(registration.id), params: {
+            amount: registration.outstanding_entry_fees.cents,
+          }
+
+          payment_intent = registration.reload.payment_intents.first
+          stripe_account_id = competition.payment_account_for(:stripe).account_id
+
+          # mimic the user clicking through the interface
+          Stripe::PaymentIntent.confirm(
+            payment_intent.payment_record.stripe_id,
+            { payment_method: 'pm_card_visa' },
+            stripe_account: stripe_account_id,
+          )
+
+          # mimic the response that Stripe sends to our webhook upon payment completion
+          post registration_stripe_webhook_path, params: payment_confirmation_webhook_as_json(
+            payment_intent.retrieve_remote.to_hash,
+            stripe_account_id,
+          )
 
           expect(registration.reload.outstanding_entry_fees).to eq 0
           expect(registration.paid_entry_fees).to eq competition.base_entry_fee
@@ -1046,10 +1081,16 @@ RSpec.describe "registrations" do
     before :each do
       sign_in user # TODO: Why do we need to sign in here?
 
-      stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
-        .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
+      stubbed_order = create_order_payload(
+        PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, competition.currency_code),
+        competition.currency_code,
+      )
 
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+      stub_request(:post, order_url)
+        .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
+
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
     end
 
@@ -1058,7 +1099,7 @@ RSpec.describe "registrations" do
     end
 
     it 'PaypalRecord amount matches registration cost' do
-      expect(PaypalRecord.all.first.amount_in_cents).to eq(registration.competition.base_entry_fee_lowest_denomination)
+      expect(PaypalRecord.all.first.money_amount).to eq(registration.competition.base_entry_fee)
     end
   end
 
@@ -1070,33 +1111,39 @@ RSpec.describe "registrations" do
     before :each do
       sign_in user # TODO: Why do we need to sign in here?
 
-      stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
-        .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
+      stubbed_order = create_order_payload(
+        PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, competition.currency_code),
+        competition.currency_code,
+      )
+
+      order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+      stub_request(:post, order_url)
+        .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
 
       # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
-      @record_id = JSON.parse(create_order_payload)['id']
+      @record_id = JSON.parse(stubbed_order)['id']
       @currency_code = competition.currency_code
-      @amount = PaypalRecord.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+      @amount = PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, @currency_code)
 
       url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, url)
         .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id, @record_id), params: {}
+      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
     end
 
     it 'creates a PaypalRecord of type :capture' do
       capture_id = JSON.parse(response.body)['purchase_units'][0]['payments']['captures'][0]['id']
-      expect(PaypalRecord.find_by(record_id: capture_id).record_type).to eq('capture')
+      expect(PaypalRecord.find_by(paypal_id: capture_id).paypal_record_type).to eq('capture')
     end
 
     it 'associates PaypalCapture to the PaypalRecord' do
-      paypal_record = PaypalRecord.find_by(record_id: JSON.parse(response.body)['id'])
+      paypal_record = PaypalRecord.find_by(paypal_id: JSON.parse(response.body)['id'])
       expect(paypal_record.child_records.count).to eq(1)
     end
 
@@ -1122,30 +1169,41 @@ RSpec.describe "registrations" do
     before :each do
       sign_in user # TODO: Why do we need to sign in here?
 
-      stub_request(:post, "https://api-m.sandbox.paypal.com/v2/checkout/orders")
-        .to_return(status: 200, body: create_order_payload, headers: { 'Content-Type' => 'application/json' })
+      stubbed_order = create_order_payload(
+        PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, competition.currency_code),
+        competition.currency_code,
+      )
+
+      order_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders"
+      stub_request(:post, order_url)
+        .to_return(status: 200, body: stubbed_order, headers: { 'Content-Type' => 'application/json' })
 
       # Create a PaypalOrder - TODO: maybe we only need to create a PaypalRecord object?
-      payload = { total_charge: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
+      payload = { amount: competition.base_entry_fee_lowest_denomination, currency_code: competition.currency_code }
       post registration_create_paypal_order_path(registration.id), params: payload
 
       # Stub the create order response
-      @record_id = JSON.parse(create_order_payload)['id']
+      @record_id = JSON.parse(stubbed_order)['id']
       @currency_code = competition.currency_code
-      @amount = PaypalRecord.paypal_amount(competition.base_entry_fee_lowest_denomination, @currency_code)
+      @amount = PaypalRecord.amount_to_paypal(competition.base_entry_fee_lowest_denomination, @currency_code)
+
+      stubbed_capture = capture_order_response(@record_id, @amount, @currency_code)
 
       capture_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/checkout/orders/#{@record_id}/capture"
       stub_request(:post, capture_url)
-        .to_return(status: 200, body: capture_order_response(@record_id, @amount, @currency_code), headers: { 'Content-Type' => 'application/json' })
+        .to_return(status: 200, body: stubbed_capture, headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to capture the order
-      post registration_capture_paypal_payment_path(registration.id, @record_id), params: {}
+      post registration_capture_paypal_payment_path(registration.id), params: { orderID: @record_id }, as: :json
 
       # Mock the refunds endpoint
-      capture_id = '7WA034444N6390300' # Defined in the `capture_order_response` payload
+      capture_id = JSON.parse(stubbed_capture)['purchase_units'][0]['payments']['captures'][0]['id']
+
+      stubbed_refund = refund_response(capture_id, @amount, @currency_code)
+
       refund_url = "#{EnvConfig.PAYPAL_BASE_URL}/v2/payments/captures/#{capture_id}/refund"
       stub_request(:post, refund_url)
-        .to_return(status: 200, body: refund_response(capture_id), headers: { 'Content-Type' => 'application/json' })
+        .to_return(status: 200, body: stubbed_refund, headers: { 'Content-Type' => 'application/json' })
 
       # Make the API call to issue the refund
       post paypal_payment_refund_path(registration.id, registration.registration_payments.first), params: {}
@@ -1156,7 +1214,7 @@ RSpec.describe "registrations" do
     end
 
     it 'creates a PaypalRecord of type `refund`' do
-      expect(registration.registration_payments[1].receipt.record_type).to eq('refund')
+      expect(registration.registration_payments[1].receipt.paypal_record_type).to eq('refund')
     end
 
     it 'records the registration total paid as zero' do
@@ -1274,10 +1332,25 @@ def capture_order_response(record_id, amount, currency)
   }.to_json
 end
 
-def create_order_payload
+def create_order_payload(amount_paypal, currency_code)
   {
     id: "3R2327881A3748640",
+    intent: "CAPTURE",
     status: "CREATED",
+    purchase_units: [
+      {
+        reference_id: "default",
+        amount: {
+          currency_code: currency_code.upcase,
+          value: amount_paypal,
+        },
+        payee: {
+          email_address: "sb-noyt529176316@business.example.com",
+          merchant_id: "HYJH9T9XSAKPN",
+        },
+      },
+    ],
+    create_time: DateTime.now.utc.iso8601,
     links: [
       {
         href: "https://api.sandbox.paypal.com/v2/checkout/orders/3R2327881A3748640",
@@ -1303,13 +1376,55 @@ def create_order_payload
   }.to_json
 end
 
-def refund_response(capture_id)
+def refund_response(capture_id, amount_paypal, currency_code)
   {
     id: "942276552E022623T",
+    amount: {
+      currency_code: currency_code,
+      value: amount_paypal,
+    },
+    seller_payable_breakdown: {
+      gross_amount: {
+        currency_code: currency_code,
+        value: amount_paypal,
+      },
+      paypal_fee: {
+        currency_code: currency_code,
+        value: PaypalRecord.amount_to_paypal(0, currency_code),
+      },
+      net_amount: {
+        currency_code: currency_code,
+        value: amount_paypal,
+      },
+      total_refunded_amount: {
+        currency_code: currency_code,
+        value: amount_paypal,
+      },
+    },
     status: "COMPLETED",
+    create_time: DateTime.now.utc.iso8601,
+    update_time: DateTime.now.utc.iso8601,
     links: [
       { href: "https://api.sandbox.paypal.com/v2/payments/refunds/942276552E022623T", rel: "self", method: "GET" },
       { href: "https://api.sandbox.paypal.com/v2/payments/captures/#{capture_id}", rel: "up", method: "GET" },
     ],
+  }.to_json
+end
+
+def payment_confirmation_webhook_as_json(intent, account_id)
+  {
+    id: "evt_3P6aXQJzvpX2joEA18jzmlxq",
+    object: "event",
+    account: account_id,
+    api_version: "2023-10-16",
+    created: DateTime.now.to_i,
+    data: { object: intent },
+    livemode: false,
+    pending_webhooks: 0,
+    request: {
+      id: "req_PgTt3KXlGjI0vd",
+      idempotency_key: "400ffbac-cfe0-476e-ad40-335b329bb0e8",
+    },
+    type: "payment_intent.succeeded",
   }.to_json
 end

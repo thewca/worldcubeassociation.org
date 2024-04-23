@@ -542,6 +542,10 @@ class User < ApplicationRecord
     delegate_roles.any? { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
   end
 
+  private def staff_delegate?
+    any_kind_of_delegate? && !trainee_delegate?
+  end
+
   def senior_delegate?
     senior_delegate_roles.any?
   end
@@ -1126,7 +1130,7 @@ class User < ApplicationRecord
     # of the freezed variables (which would leak PII)!
     default_options = DEFAULT_SERIALIZE_OPTIONS.deep_dup
     # Delegates's emails and regions are public information.
-    if any_kind_of_delegate?
+    if staff_delegate?
       default_options[:methods].push("email", "location", "region_id")
     end
 
@@ -1324,7 +1328,7 @@ class User < ApplicationRecord
   end
 
   def can_access_leader_panel?
-    admin? || active_roles.any? { |role| UserRole.is_lead?(role) }
+    admin? || active_roles.any? { |role| UserRole.is_lead?(role) && (UserRole.group(role).teams_committees? || UserRole.group(role).councils?) }
   end
 
   def can_access_senior_delegate_panel?
