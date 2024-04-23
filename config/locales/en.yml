@@ -1222,6 +1222,7 @@ en:
         stripe_failed: "Please check the Stripe transaction."
         stripe_not_found: "Stripe reported back a transaction ID that couldn't be found."
         stripe_secret_invalid: "Stripe reported back a transaction secret that doesn't match our records."
+        stripe_not_an_intent: "Stripe reported back a transaction ID that is not actually a payment intent."
         payment_reset: "The payment was rejected by Stripe."
         payment_pending: "The payment has not been completed yet."
     preferred_events_prompt_html: "To speed up registration in the future, you can set your preferred events %{link}."
