@@ -72,7 +72,7 @@ class RegistrationsController < ApplicationController
     @newcomers = @returners = 0
   end
 
-  def waiting
+  def waiting_list
     @competition = competition_from_params
   end
 
