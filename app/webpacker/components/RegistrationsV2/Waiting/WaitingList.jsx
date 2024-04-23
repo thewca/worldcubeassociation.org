@@ -2,7 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { Table, TableFooter } from 'semantic-ui-react';
 import { getWaitingCompetitors } from '../api/registration/get/get_registrations';
-import { useWithUserData } from '../hooks/useUserData';
+import useWithUserData from '../hooks/useWithUserData';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';

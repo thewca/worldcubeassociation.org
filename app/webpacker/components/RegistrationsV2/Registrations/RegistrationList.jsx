@@ -11,8 +11,8 @@ import {
   getConfirmedRegistrations,
   getPsychSheetForEvent,
 } from '../api/registration/get/get_registrations';
-import { useWithUserData } from '../hooks/useUserData';
-import { createSortReducer } from '../reducers/sortReducer';
+import useWithUserData from '../hooks/useWithUserData';
+import createSortReducer from '../reducers/sortReducer';
 import { setMessage } from '../Register/RegistrationMessage';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import Loading from '../../Requests/Loading';
