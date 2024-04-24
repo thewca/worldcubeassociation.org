@@ -510,10 +510,6 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id }.count > 0
   end
 
-  def team_membership_details(team)
-    self.current_team_members.find_by(team_id: team.id)
-  end
-
   def team_senior_member?(team)
     self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
   end
@@ -1262,12 +1258,11 @@ class User < ApplicationRecord
   # Note: Someone can Delegate a competition without ever being a Delegate.
   def is_special_account?
     self.teams.any? ||
+      self.roles.any? ||
       !self.organized_competitions.empty? ||
-      any_kind_of_delegate? ||
       !delegated_competitions.empty? ||
       !competitions_announced.empty? ||
-      !competitions_results_posted.empty? ||
-      board_member?
+      !competitions_results_posted.empty?
   end
 
   def accepted_registrations
@@ -1285,7 +1280,7 @@ class User < ApplicationRecord
   end
 
   private def can_manage_delegate_probation?
-    admin? || board_member? || senior_delegate? || team_leader?(Team.wfc) || team_senior_member?(Team.wfc)
+    admin? || board_member? || senior_delegate? || can_access_wfc_senior_matters?
   end
 
   def senior_delegates
@@ -1354,8 +1349,8 @@ class User < ApplicationRecord
       .uniq
   end
 
-  def can_access_wfc_senior_matters?
-    financial_committee? && team_membership_details(Team.wfc).at_least_senior_member?
+  private def can_access_wfc_senior_matters?
+    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wfc && GroupsMetadataTeamsCommittees.at_least_senior_member?(role) }
   end
 
   def roles(include_converted: true)
