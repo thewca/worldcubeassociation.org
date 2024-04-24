@@ -6432,6 +6432,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"hoist-non-react-statics@npm:^3.3.0":
+  version: 3.3.2
+  resolution: "hoist-non-react-statics@npm:3.3.2"
+  dependencies:
+    react-is: "npm:^16.7.0"
+  checksum: 10c0/fe0889169e845d738b59b64badf5e55fa3cf20454f9203d1eb088df322d49d4318df774828e789898dcb280e8a5521bb59b3203385662ca5e9218a6ca5820e74
+  languageName: node
+  linkType: hard
+
 "hpack.js@npm:^2.1.6":
   version: 2.1.6
   resolution: "hpack.js@npm:2.1.6"
@@ -9366,7 +9375,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
+"prop-types@npm:^15.5.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2, prop-types@npm:^15.8.1":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -9450,6 +9459,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-async-script@npm:^1.2.0":
+  version: 1.2.0
+  resolution: "react-async-script@npm:1.2.0"
+  dependencies:
+    hoist-non-react-statics: "npm:^3.3.0"
+    prop-types: "npm:^15.5.0"
+  peerDependencies:
+    react: ">=16.4.1"
+  checksum: 10c0/89450912110c380abc08258ce17d2fb18d31d6b7179a74f6bc504c0761a4ca271edb671e402fa8e5ea4250b5c17fa953af80a9f1c4ebb26c9e81caee8476c903
+  languageName: node
+  linkType: hard
+
 "react-csv@npm:^2.2.2":
   version: 2.2.2
   resolution: "react-csv@npm:2.2.2"
@@ -9492,6 +9513,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-google-recaptcha@npm:^3.1.0":
+  version: 3.1.0
+  resolution: "react-google-recaptcha@npm:3.1.0"
+  dependencies:
+    prop-types: "npm:^15.5.0"
+    react-async-script: "npm:^1.2.0"
+  peerDependencies:
+    react: ">=16.4.1"
+  checksum: 10c0/5ecaa6b88f238defd939012cb2671b4cbda59fe03f059158994b8c5215db482412e905eae6a67d23cef220d77cfe0430ab91ce7849d476515cda72f3a8a0a746
+  languageName: node
+  linkType: hard
+
 "react-intersection-observer@npm:^9.8.1":
   version: 9.8.1
   resolution: "react-intersection-observer@npm:9.8.1"
@@ -9505,7 +9538,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.6.3":
+"react-is@npm:^16.13.1, react-is@npm:^16.6.3, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
@@ -10022,6 +10055,7 @@ __metadata:
     react-csv: "npm:^2.2.2"
     react-datepicker: "npm:^6.6.0"
     react-dom: "npm:^18.2.0"
+    react-google-recaptcha: "npm:^3.1.0"
     react-intersection-observer: "npm:^9.8.1"
     react-leaflet: "npm:^4.2.1"
     react-simplemde-editor: "npm:^5.2.0"

@@ -1,18 +1,28 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  def index
-    @contact = WebsiteContact.new(your_email: current_user&.email, name: current_user&.name,
-                                  competition_id: params[:competitionId],
-                                  inquiry: params[:competitionId] ? "competition" : nil)
-  end
-
   def website_create
-    website_contact_params = params[:website_contact]
-    website_contact_params[:logged_in_email] = current_user&.email || 'None'
-    @contact = WebsiteContact.new(website_contact_params)
-    @contact.request = request
-    maybe_send_email success_url: contact_url, fail_view: :index
+    user_data = params.require(:userData)
+    name = user_data[:name]
+    email = user_data[:email]
+    contact_type = params.require(:contactType)
+    website_contact = WebsiteContact.new(
+      your_email: email,
+      name: name,
+      inquiry: contact_type,
+    )
+    case contact_type
+    when 'competition'
+      contact_params = params.require(:competition)
+      competition_id = contact_params[:competition][:id]
+      website_contact.competition_id = competition_id
+    else
+      contact_params = params.require(contact_type)
+    end
+    website_contact.message = contact_params[:message]
+    website_contact.request = request
+    website_contact.logged_in_email = current_user&.email || 'None'
+    maybe_send_contact_email(website_contact)
   end
 
   def dob
@@ -24,10 +34,20 @@ class ContactsController < ApplicationController
     @contact.request = request
     @contact.to_email = "results@worldcubeassociation.org"
     @contact.subject = "WCA DOB change request by #{@contact.name}"
-    maybe_send_email success_url: contact_dob_url, fail_view: :dob
+    maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
   end
 
-  private def maybe_send_email(success_url: nil, fail_view: nil)
+  private def maybe_send_contact_email(website_contact)
+    if !website_contact.valid?
+      render json: { error: "invalid" }
+    elsif website_contact.deliver
+      render json: { status: "ok" }
+    else
+      render json: { error: "mail_delivery_error" }
+    end
+  end
+
+  private def maybe_send_dob_email(success_url: nil, fail_view: nil)
     if !@contact.valid?
       render fail_view
     elsif !verify_recaptcha
