@@ -34,6 +34,28 @@ export default function TimeZoneSelector({
     [venues],
   );
 
+  const renderTimezoneDisplay = () => {
+    if (activeTimeZoneLocation === 'custom') {
+      return (
+        <Dropdown
+          search
+          selection
+          value={activeTimeZone}
+          onChange={(_, data) => dispatchTimeZone({
+            type: 'update-time-zone',
+            timeZone: data.value,
+            venues,
+          })}
+          options={timeZoneOptions}
+        />
+      );
+    }
+
+    return (
+      <b>{activeTimeZone}</b>
+    );
+  };
+
   return (
     <div>
       The schedule is currently displayed in
@@ -52,17 +74,7 @@ export default function TimeZoneSelector({
       {' '}
       time zone:
       {' '}
-      <Dropdown
-        search
-        selection
-        value={activeTimeZone}
-        onChange={(_, data) => dispatchTimeZone({
-          type: 'update-time-zone',
-          timeZone: data.value,
-          venues,
-        })}
-        options={timeZoneOptions}
-      />
+      {renderTimezoneDisplay()}
       .
     </div>
   );
