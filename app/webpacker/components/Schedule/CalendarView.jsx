@@ -10,8 +10,6 @@ import {
 } from '../../lib/utils/activities';
 import { getTextColor } from '../../lib/utils/calendar';
 
-// based on monolith code: https://github.com/thewca/worldcubeassociation.org/blob/0882a86cf5d83c3a0dbc667a59be05ce8845c3e4/WcaOnRails/app/webpacker/components/EditSchedule/EditActivities/index.js
-
 // We can render custom content for the individual fullcalendar events, by
 // passing in a render function as the `eventContent` param to the `FullCalendar`
 // component.
@@ -32,6 +30,7 @@ export default function CalendarView({
   activeVenues,
   activeRooms,
   activeEvents,
+  calendarLocale,
 }) {
   const activeEventIds = activeEvents.map(({ id }) => id);
   const fcActivities = activeRooms.flatMap((room) => room.activities
@@ -79,9 +78,9 @@ export default function CalendarView({
         dayHeaderFormat={DateTime.DATE_HUGE}
         slotMinTime={calendarStart}
         slotMaxTime={calendarEnd}
-        slotDuration="00:30:00"
+        slotDuration="00:15:00"
         height="auto"
-        locale="local"
+        locale={calendarLocale}
         timeZone={timeZone}
         events={fcActivities}
       />

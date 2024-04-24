@@ -1,5 +1,6 @@
 <%= react_component("Schedule", {
   wcifSchedule: @competition.schedule_wcif,
   wcifEvents: @competition.events_wcif,
-  competitionName: @competition.name
+  competitionName: @competition.name,
+  calendarLocale: I18n.locale,
 }) %>

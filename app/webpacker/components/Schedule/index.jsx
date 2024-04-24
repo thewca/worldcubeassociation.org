@@ -90,7 +90,12 @@ const timeZoneReducer = (state, {
   return state;
 };
 
-export default function Schedule({ wcifSchedule, wcifEvents, competitionName }) {
+export default function Schedule({
+  wcifSchedule,
+  wcifEvents,
+  competitionName,
+  calendarLocale,
+}) {
   // venues
 
   const { venues } = wcifSchedule;
@@ -226,6 +231,7 @@ export default function Schedule({ wcifSchedule, wcifEvents, competitionName }) 
           activeVenues={activeVenues}
           activeRooms={activeRooms}
           activeEvents={activeEvents}
+          calendarLocale={calendarLocale}
         />
       ) : (
         <TableView
