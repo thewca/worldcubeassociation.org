@@ -1,4 +1,5 @@
 <%= react_component("Schedule", {
-  wcif: @competition.to_wcif,
+  wcifSchedule: @competition.schedule_wcif,
+  wcifEvents: @competition.events_wcif,
   competitionName: @competition.name
 }) %>

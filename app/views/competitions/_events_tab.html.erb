@@ -1,4 +1,4 @@
-<%= react_component("Events", {
-  wcif: @competition.to_wcif,
+<%= react_component("EventsTable", {
+  wcifEvents: @competition.events_wcif,
   competitionInfo: @competition.to_competition_info
 }) %>
