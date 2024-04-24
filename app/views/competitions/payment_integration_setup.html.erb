@@ -25,10 +25,10 @@
     <%# CPI not connected %>
     <% if !@competition.payment_integration_connected?(type) && url.present? %>
       <p>
-        <b><%= t("payments.payment_setup.#{type}_connect_warning") %></b>
+        <b><%= t("payments.payment_setup.connect_account_warning.#{type}") %></b>
       </p>
       <p>
-        <%= t("payments.payment_setup.#{type}_payment_info") %>
+        <%= t("payments.payment_setup.connect_account_info.#{type}") %>
       </p>
 
       <%= link_to url, class: "btn btn-primary" do %>
@@ -38,12 +38,12 @@
     <%# CPI connected %>
     <% else %>
       <p>
-        <b><%= t("payments.payment_setup.#{type}_disconnect_warning") %></b>
+        <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
       </p>
       <p>
-        <%= t("payments.payment_setup.#{type}_disconnect_info") %>
+        <%= t("payments.payment_setup.before_disconnect_info", provider: t("payments.payment_providers.#{type}")) %>
         <ul>
-          <li><%= link_to(t("payments.payment_setup.#{type}_dashboard"), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
+          <li><%= link_to(t("payments.payment_setup.external_dashboard", provider: t("payments.payment_providers.#{type}")), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
         </ul>
       </p>
 
