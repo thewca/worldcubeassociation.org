@@ -143,9 +143,9 @@
               icon: "users", # Don't add event icons if v2 is used
               tiny_children: @competition.events.map do |event|
                 if @competition.uses_new_registration_service?
-                  { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-                else
                   nil
+                else
+                  { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
                 end
               end.compact
             }
