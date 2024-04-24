@@ -24,7 +24,7 @@ export default function AddToCalendar({
   }`;
 
   return (
-    <a href={googleCalendarLink} target="_blank" rel="noreferrer">
+    <a href={googleCalendarLink} target="_blank" rel="noreferrer" className="hide-new-window-icon">
       <List.Icon name="calendar plus" link />
     </a>
   );
