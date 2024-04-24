@@ -23,6 +23,12 @@ export const earliestWithLongestTieBreaker = (a, b) => {
   return 0;
 };
 
+const areGroupable = (a, b) => (
+  a.startTime === b.startTime
+  && a.endTime === b.endTime
+  && a.activityCode === b.activityCode
+);
+
 // assumes they are sorted
 export const groupActivities = (activities) => {
   const grouped = [];
@@ -39,12 +45,6 @@ export const groupActivities = (activities) => {
   return grouped;
 };
 
-const areGroupable = (a, b) => (
-  a.startTime === b.startTime
-    && a.endTime === b.endTime
-    && a.activityCode === b.activityCode
-);
-
 export const getActivityEvent = (activity) => activity.activityCode.split('-')[0];
 
 export const getActivityRoundId = (activity) => activity.activityCode.split('-').slice(0, 2).join('-');
@@ -53,7 +53,9 @@ export const activitiesOnDate = (
   activities,
   date,
   timeZone,
-) => activities.filter((activity) => areOnSameDate(DateTime.fromISO(activity.startTime), date, timeZone));
+) => activities.filter(
+  (activity) => areOnSameDate(DateTime.fromISO(activity.startTime), date, timeZone),
+);
 
 export const earliestTimeOfDayWithBuffer = (
   activities,
@@ -61,7 +63,10 @@ export const earliestTimeOfDayWithBuffer = (
 ) => {
   if (activities.length === 0) return undefined;
 
-  const doesAnyCrossMidnight = activities.some(({ startTime, endTime }) => doesRangeCrossMidnight(startTime, endTime, timeZone));
+  const doesAnyCrossMidnight = activities.some(
+    ({ startTime, endTime }) => doesRangeCrossMidnight(startTime, endTime, timeZone),
+  );
+
   if (doesAnyCrossMidnight) {
     return '00:00:00';
   }
@@ -79,7 +84,10 @@ export const latestTimeOfDayWithBuffer = (
 ) => {
   if (activities.length === 0) return undefined;
 
-  const doesAnyCrossMidnight = activities.some(({ startTime, endTime }) => doesRangeCrossMidnight(startTime, endTime, timeZone));
+  const doesAnyCrossMidnight = activities.some(
+    ({ startTime, endTime }) => doesRangeCrossMidnight(startTime, endTime, timeZone),
+  );
+
   if (doesAnyCrossMidnight) {
     return '24:00:00';
   }

@@ -1,6 +1,6 @@
 import { getFormatName } from '@wca/helpers';
 import { DateTime } from 'luxon';
-import React, { useContext, useState } from 'react';
+import React, { useState } from 'react';
 import {
   Checkbox, Header, Segment, Table, TableCell,
 } from 'semantic-ui-react';
@@ -12,7 +12,7 @@ import {
   groupActivities,
 } from '../../lib/utils/activities';
 import { getSimpleTimeString } from '../../lib/utils/dates';
-import { toDegrees } from '../../lib/utils/venues';
+import { toDegrees } from '../../lib/utils/edit-schedule';
 import AddToCalendar from './AddToCalendar';
 
 export default function TableView({

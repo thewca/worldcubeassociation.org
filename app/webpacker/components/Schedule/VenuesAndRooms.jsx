@@ -3,7 +3,7 @@ import {
   Form, Grid, Menu, Message,
 } from 'semantic-ui-react';
 import { getTextColor } from '../../lib/utils/calendar';
-import { toDegrees } from '../../lib/utils/venues';
+import { toDegrees } from '../../lib/utils/edit-schedule';
 
 export default function VenuesAndRooms({
   venues,
