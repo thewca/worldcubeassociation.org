@@ -5,7 +5,7 @@ class Api::V0::UsersController < Api::V0::ApiController
     require_user!
     if stale?(current_user)
       # Also include the users current prs so we can handle qualifications on the Frontend
-      show_user(current_user, show_rankings: true, current_user: true)
+      show_user(current_user, show_rankings: true, private_attributes: ['email'])
     end
   end
 
@@ -62,13 +62,9 @@ class Api::V0::UsersController < Api::V0::ApiController
 
   private
 
-    def show_user(user, show_rankings: false, current_user: false)
+    def show_user(user, show_rankings: false, private_attributes: [])
       if user
-        if current_user
-          json = { user: user.serializable_hash(private_attributes: ['email']) }
-        else
-          json = { user: user }
-        end
+        json = { user: user.serializable_hash(private_attributes: private_attributes) }
         if params[:upcoming_competitions]
           json[:upcoming_competitions] = user.accepted_competitions.select(&:upcoming?)
         end
