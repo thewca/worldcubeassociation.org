@@ -1,5 +1,6 @@
 import React from 'react';
 import { Header, Message, Container } from 'semantic-ui-react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import I18n from '../../lib/i18n';
 import I18nHTMLTranslate from '../I18nHTMLTranslate';
 import ContactForm from './ContactForm';
@@ -13,14 +14,16 @@ export default function ContactsPage() {
   if (loading) return <Loading />;
 
   return (
-    <Container fluid>
-      <Header as="h2">{I18n.t('page.contacts.title')}</Header>
-      <Message visible>
-        <I18nHTMLTranslate
-          i18nKey="page.contacts.faq_note_html"
-        />
-      </Message>
-      <ContactForm userDetails={userDetails} />
-    </Container>
+    <QueryClientProvider client={new QueryClient()}>
+      <Container fluid>
+        <Header as="h2">{I18n.t('page.contacts.title')}</Header>
+        <Message visible>
+          <I18nHTMLTranslate
+            i18nKey="page.contacts.faq_note_html"
+          />
+        </Message>
+        <ContactForm userDetails={userDetails} />
+      </Container>
+    </QueryClientProvider>
   );
 }

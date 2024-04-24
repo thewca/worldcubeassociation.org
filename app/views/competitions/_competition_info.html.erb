@@ -36,7 +36,7 @@
         <% if competition.contact.present? %>
           <%=md competition.contact %>
         <% else %>
-          <%= link_to t('.organization_team'), contact_path(competitionId: competition.id) %>
+          <%= link_to t('.organization_team'), contact_path(contactRecipient: 'competition', competitionId: competition.id) %>
         <% end %>
       </dd>
 
