@@ -281,16 +281,6 @@
               <li><%= link_to t('.new_post'), new_post_path %></li>
             <% end %>
 
-            <% unless current_user.teams_where_is_leader.empty? %>
-              <li class="divider"></li>
-              <li role="presentation" class="dropdown-header">
-                <%= t '.team_leader' %>
-              </li>
-              <% current_user.teams_where_is_leader.each do |team| %>
-                <li><%= link_to team.name, edit_team_path(team) %></li>
-              <% end %>
-            <% end %>
-
             <% if current_user.can_manage_regional_organizations? %>
               <li class="divider"></li>
               <li role="presentation" class="dropdown-header">

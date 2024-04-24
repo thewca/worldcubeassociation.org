@@ -522,10 +522,6 @@ class User < ApplicationRecord
     self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
   end
 
-  def teams_where_is_leader
-    self.current_team_members.select(&:team_leader).map(&:team).uniq
-  end
-
   def admin?
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end

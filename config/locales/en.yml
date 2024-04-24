@@ -733,7 +733,6 @@ en:
       #context: "Sidekiq" is the name of a software product
       results_sidekiq: "Sidekiq dashboard"
       new_post: "New post"
-      team_leader: "Team leader"
       regional_organizations: "Regional Organizations"
       manage_regional_organizations: "Manage Regional Organizations"
       new_regional_organization: "New Regional Organization"
