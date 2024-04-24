@@ -14,17 +14,14 @@ import Loading from '../Requests/Loading';
 import Wct from './SubForms/Wct';
 import Competition from './SubForms/Competition';
 
-const CONTACT_TYPES = [
+const CONTACT_RECIPIENTS = [
   'competition',
-  'competitions_in_general',
+  'communications_team',
   'results_team',
-  'wca_id_or_profile',
-  'media',
   'software',
-  'different',
 ];
 
-const CONTACT_TYPES_MAP = _.keyBy(CONTACT_TYPES);
+const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS);
 
 const SUBFORM_DEFAULT_VALUE = {
   competition: null,
@@ -49,7 +46,7 @@ export default function ContactForm({ userDetails }) {
   const SubForm = useMemo(() => {
     if (!selectedContactType) return null;
     switch (selectedContactType) {
-      case CONTACT_TYPES_MAP.competition:
+      case CONTACT_RECIPIENTS_MAP.competition:
         return Competition;
       default:
         return Wct;
@@ -80,17 +77,18 @@ export default function ContactForm({ userDetails }) {
       }}
       error={!!captchaError}
     >
-      <UserData
-        formValues={userData}
-        setFormValues={setUserData}
-        isInputDisabled={!!userDetails}
-      />
+      {!userDetails && (
+        <UserData
+          formValues={userData}
+          setFormValues={setUserData}
+        />
+      )}
       <FormGroup grouped>
-        <div>{I18n.t('page.contacts.form.contact_type.label')}</div>
-        {CONTACT_TYPES.map((contactType) => (
+        <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
+        {CONTACT_RECIPIENTS.map((contactType) => (
           <FormField key={contactType}>
             <Radio
-              label={I18n.t(`page.contacts.form.contact_type.${contactType}.label`)}
+              label={I18n.t(`page.contacts.form.contact_recipient.${contactType}.label`)}
               name="contactType"
               value={contactType}
               checked={selectedContactType === contactType}
