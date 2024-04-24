@@ -1871,7 +1871,7 @@ en:
     receive_registration_emails: "Notify me by email when someone registers for this competition"
     note_reg_closed_orga_close_reg: "Note: registration is already closed."
     show:
-      general_info: "General info"
+      general_info: "General Info"
       events: "Events"
       schedule: "Schedule"
       no_schedule: "This competition has no schedule, the pdf can't be generated."
