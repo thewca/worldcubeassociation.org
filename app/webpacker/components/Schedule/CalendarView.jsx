@@ -8,7 +8,7 @@ import {
   getActivityEvent,
   latestTimeOfDayWithBuffer,
 } from '../../lib/utils/activities';
-import { getTextColor } from '../../lib/utils/calendar';
+import { ACTIVITY_OTHER_GREY, getTextColor } from '../../lib/utils/calendar';
 
 // We can render custom content for the individual fullcalendar events, by
 // passing in a render function as the `eventContent` param to the `FullCalendar`
@@ -35,13 +35,17 @@ export default function CalendarView({
   const activeEventIds = activeEvents.map(({ id }) => id);
   const fcActivities = activeRooms.flatMap((room) => room.activities
     .filter((activity) => ['other', ...activeEventIds].includes(getActivityEvent(activity)))
-    .map((activity) => ({
-      title: activity.name,
-      start: activity.startTime,
-      end: activity.endTime,
-      backgroundColor: room.color,
-      textColor: getTextColor(room.color),
-    })));
+    .map((activity) => {
+      const eventColor = activity.activityCode.startsWith('other') ? ACTIVITY_OTHER_GREY : room.color;
+
+      return ({
+        title: activity.name,
+        start: activity.startTime,
+        end: activity.endTime,
+        backgroundColor: eventColor,
+        textColor: getTextColor(eventColor),
+      });
+    }));
 
   // independent of which activities are visible,
   // to prevent calendar height jumping around

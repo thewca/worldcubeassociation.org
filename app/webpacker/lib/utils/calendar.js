@@ -29,6 +29,8 @@ export const hexToRgb = (hexColor) => {
 const WHITE = '#ffffff';
 const BLACK = '#000000';
 
+export const ACTIVITY_OTHER_GREY = '#666666';
+
 /**
  * Compute appropriate text color (black or white) based on how "light" or "dark"
  * the background color of a calendar item is.
