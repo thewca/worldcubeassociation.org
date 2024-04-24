@@ -841,6 +841,10 @@ class User < ApplicationRecord
     can_admin_competitions? || senior_delegate? || quality_assurance_committee? || weat_team?
   end
 
+  def can_issue_refunds?(competition)
+    competition.managers.include?(self) || admin?
+  end
+
   def can_approve_media?
     admin? || communication_team? || board_member?
   end

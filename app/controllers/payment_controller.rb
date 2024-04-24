@@ -105,7 +105,7 @@ class PaymentController < ApplicationController
     return render status: :bad_request, json: { error: "Registration not found" } unless ms_registration.present?
 
     competition = ms_registration.competition
-    return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_manage_competition?(competition)
+    return render status: :unauthorized, json: { error: 'unauthorized' } unless current_user.can_issue_refunds?(competition)
 
     stripe_integration = competition.payment_account_for(:stripe)
     return render json: { error: "no_stripe" } unless stripe_integration.present?
