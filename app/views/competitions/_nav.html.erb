@@ -49,7 +49,7 @@
                 { text: t('.menu.admin_view'), path: competition_admin_edit_path(@competition), icon: "lock" },
               ] : [])
           }
-          if @competition.use_wca_registration? && !@competition.uses_new_registration_service?
+          if @competition.use_wca_registration?
             nav_items << {
               text: t('.menu.registration'),
               path: competition_edit_registrations_path(@competition),
@@ -129,21 +129,29 @@
           }
         end
         unless @competition.results_posted?
-          if @competition.use_wca_registration? && !@competition.uses_new_registration_service?
+          if @competition.use_wca_registration?
             nav_items << {
               text: t('.menu.register'),
               path: competition_register_path(@competition),
               icon: "sign in alt"
             }
           end
-          if @competition.registrations.any? && !@competition.uses_new_registration_service?
+          if @competition.registrations.any?
+            event_icons = @competition.events.map do |event|
+              { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
+            end unless @competition.uses_new_registration_service?
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),
-              icon: "users",
-              tiny_children: @competition.events.map do |event|
-                { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-              end
+              icon: "users", # Don't add event icons if v2 is used
+              tiny_children: event_icons
+            }
+          end
+          if @competition.uses_new_registration_service?
+            nav_items << {
+              text: t('registrations.list.waiting_list'),
+              path: competition_waiting_list_path(@competition),
+              icon: "list"
             }
           end
         end
