@@ -26,7 +26,7 @@ class WebsiteContact < ContactForm
         return ValidateEmail.valid?(competition.contact) ? competition.contact : competition.managers.map(&:email)
       end
     elsif inquiry == "results_team"
-      return Team.wrt.email
+      return UserGroup.teams_committees_group_wrt.metadata.email
     end
 
     "contact@worldcubeassociation.org"

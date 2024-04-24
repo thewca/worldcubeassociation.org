@@ -30,16 +30,16 @@ class RoleChangeMailer < ApplicationMailer
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, role.user.senior_delegates.map(&:email)].flatten
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:translators]
-      to_list = [user_who_made_the_change.email, Team.wst.email]
+      to_list = [user_who_made_the_change.email, UserGroup.teams_committees_group_wst.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, role.group.lead_user.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
@@ -68,10 +68,10 @@ class RoleChangeMailer < ApplicationMailer
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, role.user.senior_delegates.map(&:email)].flatten
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, role.group.lead_user.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{UserRole.group(role).group_type}"
@@ -94,16 +94,16 @@ class RoleChangeMailer < ApplicationMailer
     # Populate the recepient list.
     case UserRole.group(role).group_type
     when UserGroup.group_types[:delegate_regions]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, Team.wfc.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, UserGroup.teams_committees_group_wfc.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:translators]
-      to_list = [user_who_made_the_change.email, Team.wst.email]
+      to_list = [user_who_made_the_change.email, UserGroup.teams_committees_group_wst.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email, role.group.lead_user.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, role.group.lead_user.email]
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
-      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, Team.weat.email]
+      to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
