@@ -137,17 +137,14 @@
             }
           end
           if @competition.registrations.any?
+            event_icons = @competition.events.map do |event|
+              { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
+            end unless @competition.uses_new_registration_service?
             nav_items << {
               text: t('.menu.competitors'),
               path: competition_registrations_path(@competition),
               icon: "users", # Don't add event icons if v2 is used
-              tiny_children: @competition.events.map do |event|
-                if @competition.uses_new_registration_service?
-                  nil
-                else
-                  { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
-                end
-              end.compact
+              tiny_children: event_icons
             }
           end
           if @competition.uses_new_registration_service?
