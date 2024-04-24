@@ -5,6 +5,7 @@ import { List } from 'semantic-ui-react';
 export default function AddToCalendar({
   startDate,
   endDate,
+  timeZone,
   name,
   address,
   allDay,
@@ -13,8 +14,8 @@ export default function AddToCalendar({
   const endDateOffset = allDay ? { days: 1 } : {};
   const format = allDay ? 'yyyyMMdd' : "yyyyMMdd'T'HHmmssZ";
 
-  const formattedStartDate = DateTime.fromISO(startDate).toFormat(format);
-  const formattedEndDate = DateTime.fromISO(endDate)
+  const formattedStartDate = DateTime.fromISO(startDate, { zone: timeZone }).toFormat(format);
+  const formattedEndDate = DateTime.fromISO(endDate, { zone: timeZone })
     .plus(endDateOffset)
     .toFormat(format);
 

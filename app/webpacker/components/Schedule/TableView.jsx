@@ -97,6 +97,7 @@ function SingleDayTable({
           <AddToCalendar
             startDate={startTime}
             endDate={endTime}
+            timeZone={timeZone}
             name={competitionName}
             address={activeVenueAddress}
           />
