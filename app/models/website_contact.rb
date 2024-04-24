@@ -35,12 +35,9 @@ class WebsiteContact < ContactForm
   def subject
     topic = case inquiry
             when "competition" then "Comment for #{Competition.find_by_id(competition_id)&.name}"
-            when "competitions_in_general" then "General Competition Comment"
+            when "communications_team" then "General Comment"
             when "results_team" then "Results Team Comment"
-            when "wca_id_or_profile" then "WCA ID or WCA Profile Comment"
-            when "media" then "Media Comment"
             when "software" then "Software Comment"
-            when "different" then "Other Comment"
             else
               raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
             end

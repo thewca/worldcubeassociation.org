@@ -62,29 +62,14 @@ RSpec.describe WebsiteContact do
       expect(form.subject).to start_with("[WCA Website] Comment for #{competition_name} by #{form.name} on")
     end
 
-    it "builds subject line for general competition inquiry" do
-      form = FactoryBot.build(:website_contact, inquiry: "competitions_in_general")
-      expect(form.subject).to start_with("[WCA Website] General Competition Comment by #{form.name} on")
-    end
-
-    it "builds subject line for wca id or profile inquiry" do
-      form = FactoryBot.build(:website_contact, inquiry: "wca_id_or_profile")
-      expect(form.subject).to start_with("[WCA Website] WCA ID or WCA Profile Comment by #{form.name} on")
-    end
-
-    it "builds subject line for media inquiry" do
-      form = FactoryBot.build(:website_contact, inquiry: "media")
-      expect(form.subject).to start_with("[WCA Website] Media Comment by #{form.name} on")
+    it "builds subject line for general inquiry" do
+      form = FactoryBot.build(:website_contact, inquiry: "communications_team")
+      expect(form.subject).to start_with("[WCA Website] General Comment by #{form.name} on")
     end
 
     it "builds subject line for software inquiry" do
       form = FactoryBot.build(:website_contact, inquiry: "software")
       expect(form.subject).to start_with("[WCA Website] Software Comment by #{form.name} on")
-    end
-
-    it "builds subject line for other inquiry" do
-      form = FactoryBot.build(:website_contact, inquiry: "different")
-      expect(form.subject).to start_with("[WCA Website] Other Comment by #{form.name} on")
     end
 
     it "raises error for invalid inquiry type" do
