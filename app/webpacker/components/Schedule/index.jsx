@@ -142,7 +142,18 @@ export default function Schedule({ wcifSchedule, wcifEvents, competitionName }) 
     activeIdReducer,
     wcifEvents.map((event) => event.id),
   );
+  const availableEventIds = wcifEvents.map(({ id }) => id);
   const activeEvents = wcifEvents.filter(({ id }) => activeEventIds.includes(id));
+
+  const handleEventSelection = ({ type, eventId }) => {
+    if (type === 'select_all_events') {
+      dispatchEvents({ type: 'reset', ids: availableEventIds });
+    } else if (type === 'clear_events') {
+      dispatchEvents({ type: 'reset' });
+    } else if (type === 'toggle_event') {
+      dispatchEvents({ type: 'toggle', id: eventId });
+    }
+  };
 
   // view
 
@@ -193,9 +204,9 @@ export default function Schedule({ wcifSchedule, wcifEvents, competitionName }) 
 
       <Segment>
         <EventSelector
-          eventList={wcifEvents.map(({ id }) => id)}
+          eventList={availableEventIds}
           selectedEvents={activeEventIds}
-          onEventSelection={(ids) => dispatchEvents({ type: 'reset', ids })}
+          onEventSelection={handleEventSelection}
         />
       </Segment>
 
