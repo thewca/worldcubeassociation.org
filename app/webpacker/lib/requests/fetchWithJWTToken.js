@@ -11,7 +11,7 @@ export default async function fetchWithJWTToken(url, fetchOptions) {
   const response = await fetch(url, options);
   const json = await response.json();
   if (!response.ok) {
-    if (response.error === EXPIRED_TOKEN) {
+    if (json.error === EXPIRED_TOKEN) {
       await getJWT(true);
       return fetchWithJWTToken(url, fetchOptions);
     }
