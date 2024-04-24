@@ -89,6 +89,11 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wst_admin_metadata, status: RolesMetadataTeamsCommittees.statuses[:member]) }
     end
 
+    trait :wct_china_member do
+      group { UserGroup.teams_committees_group_wct_china }
+      metadata { FactoryBot.create(:wct_china_metadata, status: RolesMetadataTeamsCommittees.statuses[:member]) }
+    end
+
     trait :board do
       group_id { UserGroup.board_group.id }
     end
@@ -109,6 +114,7 @@ FactoryBot.define do
     factory :wac_role_leader, traits: [:councils_leader, :active]
     factory :wac_role_member, traits: [:councils_member, :active]
     factory :wst_admin_role, traits: [:wst_admin_member, :active]
+    factory :wct_china_role, traits: [:wct_china_member, :active]
     factory :board_role, traits: [:board, :active]
   end
 end

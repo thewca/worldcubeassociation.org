@@ -2,7 +2,6 @@
 
 Team.create(friendly_id: 'board', email: "board@worldcubeassociation.org")
 Team.create(friendly_id: 'wct', email: "communication@worldcubeassociation.org")
-Team.create(friendly_id: 'wct_china', email: "communication-china@worldcubeassociation.org")
 Team.create(friendly_id: 'wdc', email: "disciplinary@worldcubeassociation.org")
 Team.create(friendly_id: 'wec', email: "ethics@worldcubeassociation.org")
 Team.create(friendly_id: 'wfc', email: "finance@worldcubeassociation.org")
