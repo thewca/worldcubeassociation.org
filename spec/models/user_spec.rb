@@ -457,10 +457,11 @@ RSpec.describe User, type: :model do
   it "#teams and #current_teams return unique team names" do
     user = FactoryBot.create(:user)
 
-    FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today - 20)
-    FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today - 10)
+    FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
+    FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
+    FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
 
-    expect(user.teams).to match_array [Team.banned]
+    expect(user.teams).to match_array [Team.wst, Team.banned]
     expect(user.current_teams).to match_array [Team.banned]
   end
 
