@@ -1,0 +1,59 @@
+<% provide(:title, t('faq.title')) %>
+
+<%
+faq_variables = {
+  profile_edit_path: profile_edit_path,
+  preferences_edit_path: profile_edit_path + "?section=preferences",
+  current_user_status: if current_user
+                         t('faq.already_logged_in')
+                       else
+                         t('faq.create_an_account', here: link_to(t('common.here'), new_user_registration_path))
+                       end,
+  current_user_claim: if current_user
+                        t('faq.claim_your_wca_id', here: link_to(t('common.here'), profile_claim_wca_id_path))
+                      else
+                        t('faq.create_an_account_and_claim', here: link_to(t('common.here'), new_user_registration_path))
+                      end,
+  comp_search_form: render("faq_search_form", search_competition: t('faq.search_for_competition')),
+}
+%>
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <%
+    @questions = []
+    def add_answer(question_data, &block)
+      @questions << question_data
+      render layout: "faq_item", locals: question_data, &block
+    end
+  %>
+  <% @answers_markup = capture do %>
+    <ul id="faq-list" class="list-group">
+      <% answers_in_english = t("faq.answers", locale: :en) %>
+      <% localized_answers = t("faq.answers") %>
+      <% # We want to iterate through the *English* entries: so that if the translation doesn't have it, it will fall back to English. %>
+      <% answers_in_english.deep_merge(localized_answers).each do |key, value| %>
+        <% # We include the original question in English so that the anchors (and urls!) stay the same across languages. %>
+        <%= add_answer({ question: value[:title], original_question: answers_in_english[key][:title] }) do %>
+          <% value[:content].values.each do |paragraph| %>
+            <p>
+              <%= raw paragraph % faq_variables %>
+            </p>
+          <% end %>
+        <% end %>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <ul>
+    <% @questions.each do |question_data| %>
+       <li><%= link_to question_data[:question], anchor: question_data[:original_question].parameterize %></li>
+    <% end %>
+  </ul>
+
+  <%= @answers_markup %>
+
+  <p>
+    <%= t('faq.contact_html', contact_us: link_to(t('faq.contact_us'), contact_path)) %>
+  </p>
+</div>

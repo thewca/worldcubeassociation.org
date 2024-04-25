@@ -1,0 +1,56 @@
+<% provide(:title, 'Panel') %>
+
+<div class="container">
+  <h1><%= yield(:title) %></h1>
+
+  <% if current_user&.staff? %>
+    <h2>Staff</h2>
+
+    <ul>
+      <%= documents_list("policies/internal") %>
+      <li>
+        <%= link_to "Staff crash course", "https://documents.worldcubeassociation.org/edudoc/staff-crash-course/staff_crash_course.pdf" %>
+      </li>
+      <li>
+        <%= link_to "Merch Order Form (with staff discount)", "https://forms.gle/RAor4LyzNCxs6Mvb8" %>
+      </li>
+    </ul>
+  <% end %>
+
+  <% if current_user&.can_view_delegate_matters? %>
+    <h2>Delegates</h2>
+
+    <ul>
+      <li>
+        <%= link_to "Delegate Crash course", panel_delegate_crash_course_path %>
+      </li>
+      <li>
+        <%= link_to "Guidelines for Disciplinary Incidents", "https://documents.worldcubeassociation.org/edudoc/guidelines-for-disciplinary-incidents/guidelines-for-disciplinary-incidents.pdf" %>
+      </li>
+      <li>
+        <%= link_to "Delegates", delegates_path(anchor: "all") %>
+      </li>
+      <li>
+        <%= link_to "WR Submission Form", "https://docs.google.com/forms/d/e/1FAIpQLSeJwf6b7yGGyWFhU0xfKSF3ki_nITyIKXVFRP86unb9EYRtHQ/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Gear Order Form", "https://forms.gle/owX3ppZahYkoq9s48" %>
+      </li>
+      <li>
+        <%= link_to "Travel Reimbursement Form", "https://docs.google.com/forms/d/12tz2I_EeBORm14kQO6ZB5TOp321YbXkIXvrxUNIHxN0/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Equipment Funding Form", "https://docs.google.com/forms/d/e/1FAIpQLSebkWMyG2kRzR3cDm3jXFVMFCwd5u4XI6Yt35givu0SOidpHg/viewform" %>
+      </li>
+      <li>
+        <%= link_to "Bands for WCA Dues", country_bands_path %>
+      </li>
+      <li>
+        <%= link_to "Visual Guide for Regulation 3j", "https://drive.google.com/file/d/1m6THsA8fXRN7QFM4ApJbm6eVODKGbMLx/view" %>
+      </li>
+      <li>
+        <%= link_to "Visual Guide for Regulation 5b5f", "https://drive.google.com/file/d/15XszaCGNvy3Dk6X6qERzZWZaDH1RH04z/view" %>
+      </li>
+    </ul>
+  <% end %>
+</div>

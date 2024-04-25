@@ -1,0 +1,44 @@
+<tfoot>
+  <tr>
+    <td colspan="4">
+      <%= render "registration_info_people", registrations: registrations %>
+    </td>
+    <% country_count = registrations.map(&:country).uniq.length %>
+    <td><%= t('registrations.list.country_plural', count: country_count) %></td>
+    <% if @show_birthdays %>
+      <td></td>
+    <% end %>
+    <% if @show_events %>
+      <% @competition.events.each do |event| %>
+        <td><%= registrations.select { |r| r.events.include?(event) }.length %></td>
+      <% end %>
+    <% end %>
+    <%# registered on %>
+    <td></td>
+    <%# Series registrations %>
+    <% if @competition.part_of_competition_series? %>
+      <td></td>
+    <% end %>
+    <%# number of events %>
+    <td></td>
+    <td>
+      <% if @competition.guests_enabled? %>
+        <%# We need to convert `registrations` to an array here rather than computing the sum directly in the database.
+            The reason is that we include `registration_competition_events` table which results in having duplicated registrations
+            in the result set, thus the produced sum is too large.
+            See: https://github.com/thewca/worldcubeassociation.org/issues/678#issuecomment-222386567 %>
+        <%= registrations.to_a.sum(&:guests) %>
+      <% end %>
+    </td>
+    <%# comments %>
+    <td></td>
+    <% if @competition.using_payment_integrations? %>
+      <td>
+        <span data-toggle="tooltip" data-placement="bottom" data-container="body" title="Amount does not reflect Stripe fees">
+          <%= format_money registrations.to_a.sum(Money.new(0, @competition.currency_code), &:paid_entry_fees) %>*
+        </span>
+      </td>
+    <% end %>
+    <td></td>
+  </tr>
+</tfoot>

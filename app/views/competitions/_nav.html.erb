@@ -1,0 +1,335 @@
+<% collapsible_id = 0 %>
+<div class="container-fluid">
+  <div class="row">
+    <div id="competition-nav">
+      <%
+        nav_items = []
+        if @competition.user_can_view_results?(current_user)
+          nav_items << {
+            text: t('.menu.results'),
+            path: competition_path(@competition),
+            icon: "trophy",
+            children: [
+              { text: t('.menu.podiums'), path: competition_results_podiums_path(@competition), icon: "cubes" },
+              {
+                text: t('.menu.all'),
+                path: competition_results_all_path(@competition),
+                icon: "list",
+                tiny_children: @competition.events.map do |event|
+                  { text: event.id, path: competition_results_all_path(@competition, event: event.id), cubing_icon: event.id, title: event.name }
+                end
+              },
+              { text: t('.menu.by_person'), path: competition_results_by_person_path(@competition), icon: "user" },
+            ],
+          }
+          nav_items << {
+            text: t('.menu.scrambles'),
+            path: competition_scrambles_path(@competition),
+            icon: "cubing-icon unofficial-333mts",
+          }
+        else
+          nav_items << {
+            text: t('.menu.info'),
+            path: competition_path(@competition),
+            icon: "info circle",
+          }
+        end
+        if current_user&.can_manage_competition?(@competition)
+          nav_items << {
+            text: t('.menu.edit'),
+            icon: "lock",
+            collapsible: true,
+            children: [
+              { text: t('.menu.orga_view'), path: edit_competition_path(@competition), icon: "lock" },
+              { text: t('.menu.event_view'), path: edit_events_path(@competition), icon: "cubes" },
+              { text: t('.menu.schedule_view'), path: edit_schedule_path(@competition), icon: "calendar" },
+              { text: t('.menu.payment_view'), path: competitions_payment_setup_path(@competition), icon: "cc stripe" },
+            ] +
+              (current_user.can_admin_competitions? ? [
+                { text: t('.menu.admin_view'), path: competition_admin_edit_path(@competition), icon: "lock" },
+              ] : [])
+          }
+          if @competition.use_wca_registration? && !@competition.uses_new_registration_service?
+            nav_items << {
+              text: t('.menu.registration'),
+              path: competition_edit_registrations_path(@competition),
+              icon: "list ul",
+              notification_count: @competition.registrations.pending.count,
+              children: [{
+                           hidden: true,
+                           is_active: lambda do
+                             controller.is_a?(RegistrationsController) && ["edit", "update"].include?(action_name)
+                           end,
+                         }],
+            }
+          else
+            nav_items << {
+              text: t('.menu.import_registrations'),
+              path: competition_registrations_import_path(@competition),
+              icon: "upload",
+            }
+          end
+        end
+        if current_user&.can_create_competitions?
+          nav_items << {
+            text: t('.menu.clone'),
+            path: clone_competition_path(@competition),
+            icon: "clone",
+          }
+        end
+        if current_user&.can_upload_competition_results?(@competition)
+          nav_items << {
+            text: t('.menu.submit_results'),
+            path: competition_submit_results_edit_path(@competition),
+            icon: "cloud upload alt",
+          }
+        end
+        if current_user&.can_admin_results?
+          nav_items << {
+            text: "Admin results",
+            collapsible: true,
+            icon: "cogs",
+            children: [
+              { text: "Upload and check results", path: competition_admin_upload_results_edit_path(@competition), icon: "check" },
+              { text: "Import uploaded results", path: competition_admin_import_results_path(@competition), icon: "check" },
+              {
+                text: "Check existing results",
+                path: competition_admin_check_existing_results_path(@competition),
+                icon: "check",
+                is_active: lambda do
+                  controller.is_a?(AdminController) && ["check_results", "run_validators"].include?(action_name)
+                end,
+              },
+            ],
+          }
+        end
+        if current_user&.can_view_delegate_report?(@competition.delegate_report)
+          nav_items << {
+            text: t('.menu.delegate_report'),
+            path: delegate_report_path(@competition),
+            icon: if current_user.can_edit_delegate_report?(@competition.delegate_report)
+                    "edit"
+                  else
+                    "file alt"
+                  end
+          }
+        end
+        if current_user&.can_manage_competition?(@competition)
+          nav_items << {
+            text: t('.menu.tabs'),
+            path: competition_tabs_path(@competition),
+            icon: "align left",
+          }
+        end
+        if !EnvConfig.WCA_LIVE_SITE? && current_user&.can_manage_competition?(@competition) && !@competition.uses_new_registration_service? && !@competition.registration_opened?
+          nav_items << {
+            text: t('.menu.enable_v2'),
+            path: enable_v2_path(@competition),
+            icon: "lightbulb",
+          }
+        end
+        unless @competition.results_posted?
+          if @competition.use_wca_registration? && !@competition.uses_new_registration_service?
+            nav_items << {
+              text: t('.menu.register'),
+              path: competition_register_path(@competition),
+              icon: "sign in alt"
+            }
+          end
+          if @competition.registrations.any? && !@competition.uses_new_registration_service?
+            nav_items << {
+              text: t('.menu.competitors'),
+              path: competition_registrations_path(@competition),
+              icon: "users",
+              tiny_children: @competition.events.map do |event|
+                { text: event.id, path: competition_psych_sheet_event_path(@competition, event.id), cubing_icon: event.id, title: event.name }
+              end
+            }
+          end
+        end
+        nav_items = process_nav_items(nav_items)
+      %>
+
+      <% blocks.define :nav_list do |nav_items| %>
+        <div class="list-group list-group-root">
+          <%= blocks.render :nav_list_item, collection: nav_items %>
+        </div>
+      <% end %>
+
+      <% blocks.define :nav_icon do |nav_item| %>
+        <% if nav_item[:icon] %>
+          <%= ui_icon(nav_item[:icon]) %>
+        <% end %>
+        <% if nav_item[:cubing_icon] %>
+          <%= cubing_icon(nav_item[:cubing_icon]) %>
+        <% end %>
+      <% end %>
+
+      <% blocks.define :nav_list_item do |nav_item| %>
+        <% nav_item = nav_item[:object] %>
+        <% unless nav_item[:hidden] %>
+          <% link_args = [nav_item[:path], { class: "list-group-item" + (nav_item[:active] ? ' active' : '') }] %>
+          <% if nav_item[:collapsible] %>
+            <% collapsible_id += 1 %>
+            <% link_args[0] = "#collapsible-#{collapsible_id}" %>
+            <% link_args[1][:data] = { toggle: "collapse" } %>
+          <% end %>
+          <%= link_to *link_args do %>
+            <%= blocks.render :nav_icon, nav_item %>
+            <%= nav_item[:text] %>
+            <% if nav_item[:notification_count] %>
+              <span id="pending-registrations-count" class="pull-right label <%= nav_item[:notification_count] > 0 ? "label-danger" : "label-success" %>">
+                <%= nav_item[:notification_count] %>
+              </span>
+            <% end %>
+          <% end %>
+
+          <% if nav_item[:active] || nav_item[:collapsible] %>
+
+            <% if nav_item[:tiny_children] && nav_item[:tiny_children].length > 0 %>
+              <div class="list-group">
+                <span class="list-group-item">
+                  <% nav_item[:tiny_children].each do |child_nav_item| %>
+                    <%= link_to child_nav_item[:path],
+                                title: child_nav_item[:title],
+                                class: "nav-event" + (child_nav_item[:active] ? " active" : ""),
+                                data: {
+                                  toggle: "tooltip",
+                                  placement: "top",
+                                  container: "body",
+                                } do %>
+                      <%= blocks.render :nav_icon, child_nav_item %>
+                    <% end %>
+                  <% end %>
+                </span>
+              </div>
+            <% end %>
+
+            <% if nav_item[:children] && nav_item[:children].length > 0 %>
+              <% css_classes = %w(list-group) %>
+              <% if nav_item[:collapsible] %>
+                <% css_classes << "collapse" %>
+                <% css_classes << "in" if nav_item[:active] %>
+              <% end %>
+              <div class="<%= css_classes.join(" ") %>"
+                   <% if nav_item[:collapsible] %>
+                   id="collapsible-<%= collapsible_id %>"
+                   <% end %>
+                   >
+                <%= blocks.render :nav_list_item, collection: nav_item[:children] %>
+              </div>
+            <% end %>
+          <% end %>
+
+        <% end %>
+      <% end %>
+
+      <%= blocks.render :nav_list, nav_items %>
+
+    </div>
+    <div id="competition-data">
+      <h3 style="<%= @competition.uses_new_registration_service? ? "display:none" : ""  %>">
+        <% if current_user && @competition.upcoming? %>
+          <span class="bookmark-icon" id="not-bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.bookmark') %>" <% if current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
+            <%= ui_icon('bookmark') %>
+          </span>
+          <span class="bookmark-icon" id="bookmarked" data-toggle="tooltip" data-placement="bottom" title="<%= I18n.t('competitions.competition_info.is_bookmarked') %>" <% if !current_user.is_bookmarked?(@competition) %>style="display: none;"<% end %>>
+            <%= ui_icon('bookmark') %>
+          </span>
+        <% end %>
+        <% if @competition.championships.any? %>
+          <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= @competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
+            <%= ui_icon('trophy') %>
+          </span>
+        <% end %>
+        <%= @competition.display_name %>
+      </h3>
+      <hr style="<%= @competition.uses_new_registration_service? ? "display:none" : ""  %>" />
+
+      <% if @competition.cancelled? %>
+        <%= alert :danger, note: true do %>
+          <%= t('competitions.messages.cancelled') %>
+        <% end %>
+      <% end %>
+
+      <% if @competition.user_should_post_delegate_report?(current_user) %>
+        <%= alert :warning, note: true do %>
+          Your report is not posted yet!
+          <% editing_delegate_report = yield(:editing_delegate_report).present? %>
+          <% if editing_delegate_report %>
+            Click
+            <%= link_to "here", delegate_report_path(@competition) %>
+            to see what it looks like.
+          <% else %>
+            Click
+            <%= link_to "here", delegate_report_edit_path(@competition) %>
+            to work on it.
+          <% end %>
+          Note that you must submit results before you can post your report.
+        <% end %>
+      <% end %>
+
+      <% if @competition.user_should_post_competition_results?(current_user) %>
+        <%= alert :warning, note: true do %>
+          Please submit results for this competition! You can upload them <%= link_to "here", competition_submit_results_edit_path(@competition) %>.
+        <% end %>
+      <% end %>
+
+      <% @competition.warnings_for(current_user).each do |field, message| %>
+        <%= alert :warning, message, note: true %>
+      <% end %>
+
+
+      <% @competition.info_for(current_user).each do |field, message| %>
+        <%= alert :info, message, note: true %>
+      <% end %>
+
+      <%= yield %>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function() {
+    var $nav = $('#competition-nav > .list-group');
+    $nav.affix({
+      offset: {
+        top: function() {
+          var parentTop = $nav.parent().offset().top;
+          var affixTopSpacing = 20; // From .bs-affix in wca.scss
+          return parentTop - affixTopSpacing;
+        },
+        bottom: function () {
+          return (this.bottom = $('.footer').outerHeight(true));
+        },
+      },
+    });
+
+    $('#not-bookmarked').click(function() {
+      window.wca.cancelPendingAjaxAndAjax('bookmark', {
+        url: '<%= bookmark_path %>',
+        method: 'POST',
+        data: {
+          'id': <%= @competition.id.to_json.html_safe %>,
+        },
+        success: function(data) {
+          $('#not-bookmarked').toggle();
+          $('#bookmarked').toggle();
+        }
+      });
+    });
+    $('#bookmarked').click(function() {
+      window.wca.cancelPendingAjaxAndAjax('bookmark', {
+        url: '<%= unbookmark_path %>',
+        method: 'POST',
+        data: {
+          'id': <%= @competition.id.to_json.html_safe %>,
+        },
+        success: function(data) {
+          $('#not-bookmarked').toggle();
+          $('#bookmarked').toggle();
+        }
+      });
+    });
+  })();
+</script>

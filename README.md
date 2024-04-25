@@ -1,6 +1,6 @@
 <h1 align="center">WorldCubeAssociation Website</h1>
 <div align="center">
-  <img height="120" src="WcaOnRails/public/files/wca_icon_only.png" />
+  <img height="120" src="public/files/wca_icon_only.png" />
 </div>
 <br />
 <div align="center">
@@ -13,7 +13,7 @@
 <div align="center">
 
 [![Build Status](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml/badge.svg?event=push)](https://github.com/thewca/worldcubeassociation.org/actions/workflows/ruby.yml)
-[![Coverage Status](https://coveralls.io/repos/github/thewca/worldcubeassociation.org/badge.svg?branch=master)](https://coveralls.io/github/thewca/worldcubeassociation.org?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/thewca/worldcubeassociation.org/badge.svg?branch=main)](https://coveralls.io/github/thewca/worldcubeassociation.org?branch=main)
 
 </div>
 
@@ -36,5 +36,5 @@ If you want to query WCA data via an API, the [Unofficial API](https://wca-rest-
 
 ----
 
-If the above links don't give you what you need, feel free to open an issue or [contact WST](https://www.worldcubeassociation.org/contact/website)
+If the above links don't give you what you need, feel free to open an issue or [contact us](https://www.worldcubeassociation.org/contact)
 

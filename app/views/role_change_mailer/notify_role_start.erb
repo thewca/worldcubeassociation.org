@@ -1,0 +1,10 @@
+<p>A new role has been added for <%= @role.user.name %> in <%= @group_type_name %> on <%= @role.start_date %>.</p>
+<p>The change has been executed by <%= @user_who_made_the_change.name %>.</p>
+<% if @metadata.present? %>
+  <p>More details of the role are:</p>
+  <ul>
+    <% @metadata.each do |key, value| %>
+      <li><%= I18n.t("user_roles.email.role_metadata.#{key}" , locale: 'en') %>: <%= value %></li>
+    <% end %>
+  </ul>
+<% end %>

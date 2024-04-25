@@ -2,9 +2,9 @@ name: Ruby tests
 
 on:
   push:
-    branches: [ master ]
+    branches: [ main ]
   pull_request:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -12,27 +12,25 @@ jobs:
     env:
       RACK_ENV: test
       RAILS_ENV: test
-    defaults:
-      run:
-        working-directory: WcaOnRails
     steps:
       - uses: actions/checkout@v4
       - uses: fregante/setup-git-user@v2 # set up dummy user.name and user.email in git so that Overcommit doesn't explode
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
-          working-directory: WcaOnRails
           bundler-cache: true # runs 'bundle install' and caches installed gems automatically
-      - uses: actions/setup-node@v4 # this also includes Yarn
+      - name: Set up Corepack/Yarn
+        run: corepack enable # this allows NPM to use its own Yarn. It is crucial that this is run BEFORE the Node setup!
+      - uses: actions/setup-node@v4
         with:
           node-version: '20'
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-node_modules-${{ hashFiles('**/yarn.lock') }}
           restore-keys: |
             ${{ runner.os }}-node_modules
-      - uses: actions/cache@v3
+      - uses: actions/cache@v4
         with:
           path: '~/.cache/yarn'
           key: ${{ runner.os }}-yarn
@@ -40,8 +38,6 @@ jobs:
         run: bundle exec rake yarn:install
       - name: Run Overcommit commit hooks
         working-directory: ${{ env.GITHUB_WORKSPACE }}
-        env:
-          BUNDLE_GEMFILE: WcaOnRails/Gemfile
         run: bundle exec overcommit --sign && bundle exec overcommit --sign pre-commit && bundle exec overcommit --run
       - name: Activate MySQL # as per https://github.com/actions/virtual-environments/blob/main/images/linux/Ubuntu2004-README.md#mysql
         run: |
@@ -56,13 +52,12 @@ jobs:
         id: rspec
         run: bundle exec rake
       - name: Push coverage data to Coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: 'WcaOnRails/coverage/lcov/WcaOnRails.lcov'
-          base-path: 'WcaOnRails'
-      - uses: actions/upload-artifact@v3
+          path-to-lcov: 'coverage/lcov/worldcubeassociation.org.lcov'
+      - uses: actions/upload-artifact@v4
         if: always() && steps.rspec.outcome == 'failure'
         with:
           name: capybara-screenshots
-          path: WcaOnRails/tmp/capybara
+          path: tmp/capybara

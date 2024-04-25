@@ -1,0 +1,30 @@
+<p>Hey WRT,</p>
+<p>
+  <%= @resource.name %> reported that the birthdate in our database is incorrect.
+</p>
+<h4>Data</h4>
+<table>
+  <body>
+    <tr>
+      <td>Name</td>
+      <td><%= @resource.name %></td>
+    </tr>
+    <tr>
+      <td>WCA ID</td>
+      <td><%= @resource.wca_id %></td>
+    </tr>
+    <tr>
+      <td>Correct birthdate</td>
+      <td><strong><%= @resource.dob %></strong></td>
+    </tr>
+    <tr style="height: 1em">
+      <td colspan="2"></td>
+    </tr>
+    <tr>
+      <td>Incorrect WCA ID claims</td>
+      <td><strong><%= "#{@resource.incorrect_wca_id_claim_count}/#{User::MAX_INCORRECT_WCA_ID_CLAIM_COUNT}" %></strong></td>
+    </tr>
+  </body>
+</table>
+<p>You can edit this person <%= link_to "here", panel_wrt_url(wcaId: @resource.wca_id, anchor: PanelController.panel_list['wrt']['editPerson']) %>.</p>
+<p>A proof of identity is attached.</p>

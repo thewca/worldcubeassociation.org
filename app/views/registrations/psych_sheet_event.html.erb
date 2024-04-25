@@ -1,0 +1,56 @@
+<% provide(:title, "#{@event.name} Psych Sheet for #{@competition.name}") %>
+
+<%= render layout: "nav" do %>
+  <h2>
+    <%= cubing_icon @event.id %> <%= @event.name %> Psych Sheet
+  </h2>
+  <p>
+    Sorted by: <%= @psych_sheet.sort_by %><% unless @event.multiple_blindfolded? %>, sort by <%= link_to @psych_sheet.sort_by_second, competition_psych_sheet_event_path(@competition, @event.id, sort_by: @psych_sheet.sort_by_second) %><% end %>
+  </p>
+
+  <%= wca_table table_class: "wca-results wca-results-sort-by-#{@psych_sheet.sort_by}" do %>
+    <thead>
+      <tr>
+        <th class="pos">#</th>
+        <th class="name"><%= t 'activerecord.attributes.registration.name' %></th>
+        <th class="wca-id"><%= t 'common.user.wca_id' %></th>
+        <th class="country"><%= t 'common.user.representing' %></th>
+
+        <th class="average"><%= t 'common.average' %></th>
+        <th class="world-rank-average">WR</th>
+
+        <th class="single"><%= t 'common.single' %></th>
+        <th class="world-rank-single">WR</th>
+
+        <!-- Extra column for .table-greedy-last-column -->
+        <th></th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <% @psych_sheet.sorted_rankings.each do |sorted_ranking| %>
+        <tr>
+          <td class="pos <%= sorted_ranking.tied_previous ? "tied-previous" : "" %>">
+            <%= sorted_ranking.pos %>
+          </td>
+          <td class="name"><%= sorted_ranking.name %></td>
+          <td class="wca-id">
+            <% if sorted_ranking.wca_id %>
+              <%= wca_id_link sorted_ranking.wca_id %>
+            <% end %>
+          </td>
+          <td class="country"><%= Country.c_find!(sorted_ranking.country_id).name %></td>
+
+          <td class="average"><%= SolveTime.new(@event.id, :average, sorted_ranking.average_best).clock_format %></td>
+          <td class="world-rank-average"><%= sorted_ranking.average_rank %></td>
+
+          <td class="single"><%= SolveTime.new(@event.id, :single, sorted_ranking.single_best).clock_format %></td>
+          <td class="world-rank-single"><%= sorted_ranking.single_rank %></td>
+
+          <!-- Extra column for .table-greedy-last-column -->
+          <td></td>
+        </tr>
+      <% end %>
+    </tbody>
+  <% end %>
+<% end %>

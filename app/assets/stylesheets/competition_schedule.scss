@@ -1,0 +1,181 @@
+#schedule-tab {
+  .venue-pills {
+    overflow-x: auto;
+    .venue-pill {
+      white-space: nowrap;
+      &:not(.active) a {
+        color: inherit;
+      }
+    }
+  }
+  div.list-group {
+    margin-top: 10px;
+  }
+  .room-entry {
+    .room-checkbox {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      display: inline-block;
+      border: 1px solid black;
+      vertical-align: bottom;
+      .room-checkbox-bg {
+        opacity: 0.3;
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .room-name {
+      display: inline-block;
+    }
+    &.selected {
+      .room-checkbox {
+        .room-checkbox-bg {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .schedule-table-header {
+    margin-top: 30px;
+    border-bottom: 3px solid #ddd;
+  }
+
+  .panel-events-filter {
+    .panel-body {
+      .events-filter {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        .cubing-icon {
+          line-height: unset;
+          height: 35px;
+          width: 35px;
+          margin: 0;
+          font-size: 25px;
+          color: #888;
+          cursor: pointer;
+          &.selected {
+            color: #333;
+          }
+        }
+        .event-all {
+          cursor: pointer;
+          margin-left: 5px;
+          margin-right: 5px;
+          text-align: center;
+          vertical-align: top;
+          display: inline-block;
+          border-radius: 3px;
+          font-size: 12px;
+          color: white;
+          height: 25px;
+          width: 25px;
+          line-height: 25px;
+          background-color: #888;
+          &.selected {
+            background-color: #333;
+          }
+        }
+      }
+    }
+  }
+
+  .schedule-table {
+    margin-bottom: 60px;
+    .row {
+      display: none;
+      border-bottom: 1px solid #ddd;
+      &.room-selected.event-selected {
+        display: block;
+      }
+      div {
+        @media (min-width : 992px){
+          padding: 8px;
+        }
+      }
+      .schedule-event-icon {
+        .cubing-icon {
+          width: auto;
+          &::before {
+            font-size: 40px;
+          }
+        }
+      }
+      @media (max-width : 992px){
+        padding-top: 8px;
+        padding-bottom: 8px;
+        border-bottom-width: 3px;
+        .activity-end-time,
+        .responsive-cell-content {
+          text-align: right;
+        }
+        .bolded-xs-sm {
+          font-weight: bold;
+        }
+      }
+      @media (min-width : 768px) and (max-width : 992px) {
+        .activity-name,
+        .room-name {
+          padding-top: 8px;
+          padding-bottom: 8px;
+        }
+        .responsive-cell-content {
+          padding-bottom: 5px;
+        }
+        .room-name {
+          text-align: right;
+        }
+      }
+      .activity-name {
+        @media (max-width : 768px) {
+          text-align: center;
+          padding-top: 8px;
+        }
+      }
+      .room-name {
+        font-style: italic;
+        @media (max-width : 768px) {
+          text-align: center;
+          padding-bottom: 8px;
+        }
+      }
+    }
+  }
+}
+
+// Popover is added to body, can't nest this above
+.round-info-popover {
+  .row {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    .room-name {
+      font-style: italic;
+    }
+  }
+}
+
+// We want this to be shared both by the show and edit schedule views
+.fc-event {
+  &.fc-short > .fc-content {
+    // By default for vertically short events FC don't display the full time
+    // But we have some width to do so
+    .fc-time {
+      &::before {
+        content: "";
+      }
+      &::after {
+        content: ":\000A0";
+      }
+      span {
+        display: inline-block;
+      }
+    }
+  }
+
+  .fc-bg {
+    // FC applies a white background with opacity .25 to each event, .15 makes it a bit darker
+    opacity: 0.15;
+  }
+}
