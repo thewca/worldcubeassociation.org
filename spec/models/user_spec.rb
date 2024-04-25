@@ -457,15 +457,11 @@ RSpec.describe User, type: :model do
   it "#teams and #current_teams return unique team names" do
     user = FactoryBot.create(:user)
 
-    team_member = FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today - 20)
+    FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today - 20)
+    FactoryBot.create(:team_member, team_id: Team.banned.id, user_id: user.id, start_date: Date.today - 10)
 
     expect(user.teams).to match_array [Team.banned]
     expect(user.current_teams).to match_array [Team.banned]
-
-    team_member.update(end_date: Date.today - 10)
-
-    expect(user.teams).to match_array [Team.banned]
-    expect(user.current_teams.reload).to match_array []
   end
 
   it 'former banned users are not considered current members of Team.banned' do
