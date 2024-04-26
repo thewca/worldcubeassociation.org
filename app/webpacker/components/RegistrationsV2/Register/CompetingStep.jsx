@@ -216,7 +216,7 @@ export default function CompetingStep({
           user={user}
           onProcessingComplete={() => {
             setProcessing(false);
-            if (competitionInfo['using_stripe_payments?']) {
+            if (competitionInfo['using_payment_integrations?']) {
               nextStep();
             } else {
               refetchRegistration();

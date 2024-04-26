@@ -29,7 +29,7 @@ export default function StepPanel({
   const steps = useMemo(() => {
     const steps = [requirementsStepConfig, competingStepConfig];
 
-    if (competitionInfo['using_stripe_payments?']) {
+    if (competitionInfo['using_payment_integrations?']) {
       steps.push(paymentStepConfig);
     }
 

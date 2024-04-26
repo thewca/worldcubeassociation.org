@@ -122,7 +122,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const actionsRef = useRef();
 
   const [state, dispatchSort] = useReducer(sortReducer, {
-    sortColumn: competitionInfo['using_stripe_payments?']
+    sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on'
       : 'registered_on',
     sortDirection: undefined,
@@ -477,7 +477,7 @@ function TableHeader({
         >
           {i18n.t('registrations.list.registered.without_stripe')}
         </Table.HeaderCell>
-        {competitionInfo['using_stripe_payments?'] && (
+        {competitionInfo['using_payment_integrations?'] && (
           <>
             <Table.HeaderCell>Payment Status</Table.HeaderCell>
             <Table.HeaderCell
@@ -605,7 +605,7 @@ function TableRow({
         />
       </Table.Cell>
 
-      {competitionInfo['using_stripe_payments?'] && (
+      {competitionInfo['using_payment_integrations?'] && (
         <>
           <Table.Cell>{paymentStatus ?? 'not paid'}</Table.Cell>
           <Table.Cell>
