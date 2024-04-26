@@ -109,6 +109,7 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
+    newcomers_enabled
     guests_enabled
     guests_per_registration_limit
     base_entry_fee_lowest_denomination

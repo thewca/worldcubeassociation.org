@@ -15,6 +15,7 @@ export default function EventRestrictions() {
   const {
     competition: {
       eventRestrictions: {
+        newcomersAllowed,
         earlyPuzzleSubmission,
         qualificationResults,
         eventLimitation,
@@ -24,6 +25,11 @@ export default function EventRestrictions() {
     isPersisted,
     storedEvents,
   } = useStore();
+
+  const newcomersEnabledOptions = [true, false].map((bool) => ({
+    value: bool,
+    text: I18n.t(`competitions.competition_form.choices.newcomers_enabled.${bool.toString()}`),
+  }));
 
   const mainEventOptions = useMemo(() => {
     const storedEventOptions = storedEvents.map((event) => ({
@@ -39,12 +45,20 @@ export default function EventRestrictions() {
     }, ...storedEventOptions];
   }, [storedEvents]);
 
+  const newcomersAllowed = newcomersAllowed.enabled;
   const earlySubmission = earlyPuzzleSubmission.enabled;
   const needQualification = qualificationResults.enabled;
   const restrictEvents = eventLimitation.enabled;
 
   return (
     <SubSection section="eventRestrictions">
+      <SubSection section="newcomersAllowed">
+        <InputBoolean id="enabled" />
+        <ConditionalSection showIf={newcomersAllowed}>
+          <InputTextArea id="reason" />
+        </ConditionalSection>
+        <InputBoolean id="newcomersAllowed" />
+      </SubSection>
       <SubSection section="earlyPuzzleSubmission">
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={earlySubmission}>
