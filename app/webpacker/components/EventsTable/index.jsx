@@ -10,11 +10,10 @@ import {
 import i18n from '../../lib/i18n';
 import { attemptResultToString } from '../../lib/utils/edit-events';
 import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
-import { events, formats, roundTypes } from '../../lib/wca-data.js.erb';
-import { eventQualificationToString, parseActivityCode, roundIdToString } from '../../lib/utils/wcif';
+import { events, formats } from '../../lib/wca-data.js.erb';
+import { eventQualificationToString, parseActivityCode } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
-  { console.log(wcifEvents); }
   return (
     <Table striped>
       <TableHeader>
@@ -83,7 +82,10 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
                 && i18n.t(`advancement_condition.${round.advancementCondition.type}`, { ranking: round.advancementCondition.level, percent: round.advancementCondition.level })}
             </TableCell>
             {competitionInfo['uses_qualification?'] && (
-              <TableCell>{ i === 0 && eventQualificationToString(event, event.qualification, { short: true })}</TableCell>
+              <TableCell>
+                { i === 0
+                && eventQualificationToString(event, event.qualification, { short: true })}
+              </TableCell>
             )}
           </TableRow>
         )))}
