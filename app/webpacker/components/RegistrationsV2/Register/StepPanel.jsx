@@ -22,7 +22,14 @@ const paymentStepConfig = {
 };
 
 export default function StepPanel({
-  competitionInfo, preferredEvents, user, registration, refetchRegistration,
+  competitionInfo,
+  preferredEvents,
+  user,
+  registration,
+  refetchRegistration,
+  stripePublishableKey,
+  connectedAccountId,
+  clientSecret,
 }) {
   const isRegistered = Boolean(registration);
 
@@ -41,6 +48,7 @@ export default function StepPanel({
   ));
 
   const CurrentStepPanel = steps[activeIndex].component;
+  const stepName = steps[activeIndex].key;
 
   return (
     <>
@@ -58,14 +66,30 @@ export default function StepPanel({
           </Step>
         ))}
       </Step.Group>
-      <CurrentStepPanel
-        registration={registration}
-        refetchRegistration={refetchRegistration}
-        competitionInfo={competitionInfo}
-        preferredEvents={preferredEvents}
-        user={user}
-        nextStep={() => setActiveIndex((oldActiveIndex) => oldActiveIndex + 1)}
-      />
+      { stepName === 'payment' ? (
+        <CurrentStepPanel
+          registration={registration}
+          refetchRegistration={refetchRegistration}
+          competitionInfo={competitionInfo}
+          preferredEvents={preferredEvents}
+          user={user}
+          stripePublishableKey={stripePublishableKey}
+          connectedAccountId={connectedAccountId}
+          clientSecret={clientSecret}
+          nextStep={() => {}}
+        />
+      )
+        : (
+          <CurrentStepPanel
+            registration={registration}
+            refetchRegistration={refetchRegistration}
+            competitionInfo={competitionInfo}
+            preferredEvents={preferredEvents}
+            user={user}
+            nextStep={() => setActiveIndex((oldActiveIndex) => oldActiveIndex + 1)}
+          />
+        )}
+
     </>
   );
 }

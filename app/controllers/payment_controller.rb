@@ -1,24 +1,6 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
-  def payment_config
-    if current_user
-      payment_id = params.require(:payment_id)
-      competition_id = params.require(:competition_id)
-
-      competition = Competition.find(competition_id)
-      return render status: :bad_request, json: { error: "Competition doesn't use new Registration Service" } unless competition.uses_new_registration_service?
-
-      payment_intent = PaymentIntent.find(payment_id)
-      secret = payment_intent.client_secret
-      render json: { stripe_publishable_key: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                     connected_account_id: competition.payment_account_for(:stripe).account_id,
-                     client_secret: secret }
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
-    end
-  end
-
   def payment_finish
     if current_user
       attendee_id = params.require(:attendee_id)

@@ -123,7 +123,6 @@ Rails.application.routes.draw do
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
   end
   scope :payment do
-    get '/config' => 'payment#payment_config'
     get '/finish' => 'payment#payment_finish'
     get '/refunds' => 'payment#available_refunds'
     get '/refund' => 'payment#payment_refund'

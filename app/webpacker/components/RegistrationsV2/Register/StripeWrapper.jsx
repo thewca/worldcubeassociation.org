@@ -4,13 +4,14 @@ import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
 import I18n from '../../../lib/i18n';
-import getStripeConfig from '../api/payment/get/getStripeConfig';
 import getPaymentId from '../api/registration/get/get_payment_intent';
 import PaymentStep from './PaymentStep';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 
-export default function StripeWrapper({ competitionInfo }) {
+export default function StripeWrapper({
+  competitionInfo, stripePublishableKey, connectedAccountId, clientSecret,
+}) {
   const [stripePromise, setStripePromise] = useState(null);
   const dispatch = useDispatch();
   const {
@@ -35,31 +36,13 @@ export default function StripeWrapper({ competitionInfo }) {
     },
   });
 
-  const { data: config, isLoading: isConfigLoading } = useQuery({
-    queryKey: ['payment-config', competitionInfo.id, paymentInfo?.id],
-    queryFn: () => getStripeConfig(competitionInfo.id, paymentInfo?.id),
-    onError: (err) => setMessage(err.error, 'error'),
-    enabled:
-      !isPaymentIdLoading && !isError && paymentInfo?.status !== 'succeeded',
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-  });
-
   useEffect(() => {
-    if (!isConfigLoading) {
-      setStripePromise(
-        loadStripe(config.stripe_publishable_key, {
-          stripeAccount: config.connected_account_id,
-        }),
-      );
-    }
-  }, [
-    config?.connected_account_id,
-    config?.stripe_publishable_key,
-    isConfigLoading,
-  ]);
+    setStripePromise(
+      loadStripe(stripePublishableKey, {
+        stripeAccount: connectedAccountId,
+      }),
+    );
+  }, [connectedAccountId, stripePublishableKey]);
 
   return (
     <>
@@ -71,7 +54,7 @@ export default function StripeWrapper({ competitionInfo }) {
         <Elements
           stripe={stripePromise}
           options={{
-            clientSecret: config.client_secret,
+            clientSecret,
           }}
         >
           <PaymentStep />

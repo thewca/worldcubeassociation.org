@@ -9,7 +9,12 @@ import messageReducer from '../reducers/messageReducer';
 
 const queryClient = new QueryClient();
 
-export default function Index({ competitionInfo, userInfo, preferredEvents }) {
+export default function Index({
+  competitionInfo, userInfo, preferredEvents,
+  stripePublishableKey = '',
+  connectedAccountId = '',
+  clientSecret = '',
+}) {
   return (
     <QueryClientProvider client={queryClient}>
       <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
@@ -17,13 +22,18 @@ export default function Index({ competitionInfo, userInfo, preferredEvents }) {
           competitionInfo={competitionInfo}
           userInfo={userInfo}
           preferredEvents={preferredEvents}
+          stripePublishableKey={stripePublishableKey}
+          connectedAccountId={connectedAccountId}
+          clientSecret={clientSecret}
         />
       </StoreProvider>
     </QueryClientProvider>
   );
 }
 
-function Register({ competitionInfo, userInfo, preferredEvents }) {
+function Register({
+  competitionInfo, userInfo, preferredEvents, clientSecret, connectedAccountId, stripePublishableKey,
+}) {
   const dispatch = useDispatch();
   const {
     data: registration,
@@ -56,6 +66,9 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
             competitionInfo={competitionInfo}
             registration={registration}
             refetchRegistration={refetch}
+            connectedAccountId={connectedAccountId}
+            stripePublishableKey={stripePublishableKey}
+            clientSecret={clientSecret}
           />
         </>
       )
