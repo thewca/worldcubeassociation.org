@@ -26,11 +26,6 @@ export default function EventRestrictions() {
     storedEvents,
   } = useStore();
 
-  const newcomersEnabledOptions = [true, false].map((bool) => ({
-    value: bool,
-    text: I18n.t(`competitions.competition_form.choices.newcomers_enabled.${bool.toString()}`),
-  }));
-
   const mainEventOptions = useMemo(() => {
     const storedEventOptions = storedEvents.map((event) => ({
       key: event.id,

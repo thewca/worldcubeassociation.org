@@ -2284,6 +2284,9 @@ class Competition < ApplicationRecord
         "forceComment" => force_comment_in_registration,
       },
       "eventRestrictions" => {
+        "newcomersAllowed" => {
+          "enabled" => newcomers_allowed?,
+          "reason" => newcomers_allowed,
         "earlyPuzzleSubmission" => {
           "enabled" => early_puzzle_submission?,
           "reason" => early_puzzle_submission_reason,
