@@ -64,3 +64,6 @@ translations:
       - "*.page.*"
       - "*.registrations.*"
       - "*.api.*"
+      - "*.cutoff.*"
+      - "*.advancement_condition.*"
+      - "*.rounds.*"

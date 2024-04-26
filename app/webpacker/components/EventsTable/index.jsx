@@ -1,4 +1,3 @@
-import { getEventName, getFormatName } from '@wca/helpers';
 import React from 'react';
 import {
   Table,
@@ -9,9 +8,13 @@ import {
   TableRow,
 } from 'semantic-ui-react';
 import i18n from '../../lib/i18n';
-import { attemptResultToString, centisecondsToString } from '../../lib/utils/edit-events';
+import { attemptResultToString } from '../../lib/utils/edit-events';
+import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
+import { events, formats, roundTypes } from '../../lib/wca-data.js.erb';
+import { eventQualificationToString, parseActivityCode, roundIdToString } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
+  { console.log(wcifEvents); }
   return (
     <Table striped>
       <TableHeader>
@@ -22,13 +25,15 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
           <TableHeaderCell>
             {i18n.t('competitions.results_table.round')}
           </TableHeaderCell>
-          <TableHeaderCell>{i18n.t('competitions.events.format')}</TableHeaderCell>
           <TableHeaderCell>
-            {i18n.t('competitions.events.time_limit')}
+            <a href="#format">{i18n.t('competitions.events.format')}</a>
+          </TableHeaderCell>
+          <TableHeaderCell>
+            <a href="#time-limit">{i18n.t('competitions.events.time_limit')}</a>
           </TableHeaderCell>
           {competitionInfo['uses_cutoff?'] && (
             <TableHeaderCell>
-              {i18n.t('competitions.events.cutoff')}
+              <a href="#cutoff">{i18n.t('competitions.events.cutoff')}</a>
             </TableHeaderCell>
           )}
           <TableHeaderCell>
@@ -45,36 +50,40 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
       <TableBody>
         {wcifEvents.map((event) => event.rounds.map((round, i) => (
           <TableRow key={round.id}>
-            <TableCell
-              className={
-                i === event.rounds.length - 1 ? 'last-round' : ''
-              }
-            >
-              {i === 0 && getEventName(event.id)}
+            <TableCell>
+              {i === 0 && events.byId[event.id].name}
             </TableCell>
-            <TableCell>{i + 1}</TableCell>
-            <TableCell>{getFormatName(round.format)}</TableCell>
+            <TableCell>{i18n.t(`rounds.${parseActivityCode(round.id).roundNumber}.cellName`)}</TableCell>
+            <TableCell>
+              {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
+              {formats.byId[round.format].shortName}
+            </TableCell>
             <TableCell>
               {round.timeLimit
-                && centisecondsToString(
+                && centisecondsToClockFormat(
                   round.timeLimit.centiseconds,
                 )}
             </TableCell>
             {competitionInfo['uses_cutoff?'] && (
               <TableCell>
                 {round.cutoff
-                  && attemptResultToString(
-                    round.cutoff.attemptResult,
-                    event.id,
+                  && i18n.t(
+                    `cutoff.${attemptTypeById(event.id)}`,
+                    {
+                      time: attemptResultToString(round.cutoff.attemptResult, event.id),
+                      moves: attemptResultToString(round.cutoff.attemptResult, event.id),
+                      points: attemptResultToString(round.cutoff.attemptResult, event.id),
+                      count: round.cutoff.numberOfAttempts,
+                    },
                   )}
               </TableCell>
             )}
             <TableCell>
               {round.advancementCondition
-                && `Top ${round.advancementCondition.level} ${round.advancementCondition.type} proceed`}
+                && i18n.t(`advancement_condition.${round.advancementCondition.type}`, { ranking: round.advancementCondition.level, percent: round.advancementCondition.level })}
             </TableCell>
             {competitionInfo['uses_qualification?'] && (
-              <TableCell>{event.qualification}</TableCell>
+              <TableCell>{ i === 0 && eventQualificationToString(event, event.qualification, { short: true })}</TableCell>
             )}
           </TableRow>
         )))}
