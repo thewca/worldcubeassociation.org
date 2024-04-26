@@ -2,7 +2,7 @@
 
 class Api::V0::ResultsController < Api::V0::ApiController
   def personal_records
-    user = User.find_by_id(params[:user_id])
+    user = User.find_by_id(params.require(:user_id))
 
     return render json: { single: [], average: [] } unless user.wca_id.present?
     person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(user.wca_id)
