@@ -205,6 +205,7 @@ class Round < ApplicationRecord
     {
       "id" => wcif_id,
       "format" => self.format_id,
+      "roundType" => self.round_type_id,
       "timeLimit" => event.can_change_time_limit? ? time_limit&.to_wcif : nil,
       "cutoff" => cutoff&.to_wcif,
       "advancementCondition" => advancement_condition&.to_wcif,
@@ -219,7 +220,8 @@ class Round < ApplicationRecord
       "type" => "object",
       "properties" => {
         "id" => { "type" => "string" },
-        "format" => { "type" => "string", "enum" => Format.pluck(:id) },
+        "format" => { "type" => "string", "enum" => Format.ids },
+        "roundType" => { "type" => "string", "enum" => RoundType.ids },
         "timeLimit" => TimeLimit.wcif_json_schema,
         "cutoff" => Cutoff.wcif_json_schema,
         "advancementCondition" => AdvancementConditions::AdvancementCondition.wcif_json_schema,

@@ -11,7 +11,7 @@ import i18n from '../../lib/i18n';
 import { attemptResultToString } from '../../lib/utils/edit-events';
 import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
 import { events, formats } from '../../lib/wca-data.js.erb';
-import { eventQualificationToString, parseActivityCode } from '../../lib/utils/wcif';
+import { eventQualificationToString } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
@@ -52,7 +52,7 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
             <TableCell>
               {i === 0 && events.byId[event.id].name}
             </TableCell>
-            <TableCell>{i18n.t(`rounds.${parseActivityCode(round.id).roundNumber}.cellName`)}</TableCell>
+            <TableCell>{i18n.t(`rounds.${round.roundType}.cellName`)}</TableCell>
             <TableCell>
               {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
               {formats.byId[round.format].shortName}
