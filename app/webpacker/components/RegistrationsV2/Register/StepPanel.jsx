@@ -17,7 +17,7 @@ const competingStepConfig = {
 };
 const paymentStepConfig = {
   key: 'payment',
-  i18nKey: 'competitions.registration_v2.tabs.payment',
+  i18nKey: 'registrations.payment_form.labels.payment_information',
   component: StripeWrapper,
 };
 
