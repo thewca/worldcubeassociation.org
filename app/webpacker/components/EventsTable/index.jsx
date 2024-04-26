@@ -15,7 +15,7 @@ import { eventQualificationToString } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
-    <Table striped>
+    <Table striped selectable>
       <TableHeader>
         <TableRow>
           <TableHeaderCell>
@@ -49,9 +49,11 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
       <TableBody>
         {wcifEvents.map((event) => event.rounds.map((round, i) => (
           <TableRow key={round.id}>
-            <TableCell>
-              {i === 0 && events.byId[event.id].name}
-            </TableCell>
+            {i === 0 && (
+              <TableCell rowSpan={event.rounds.length}>
+                {events.byId[event.id].name}
+              </TableCell>
+            )}
             <TableCell>{i18n.t(`rounds.${round.roundType}.cellName`)}</TableCell>
             <TableCell>
               {round.cutoff && `${formats.byId[round.cutoff.numberOfAttempts].shortName} / `}
