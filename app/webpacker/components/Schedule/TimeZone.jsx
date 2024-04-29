@@ -37,37 +37,37 @@ export default function TimeZoneSelector({
 
   return (
     <div>
-      {i18n.t('competitions.schedule.timezone_message', { timezone: activeTimeZone })}
-      <p>
-        {i18n.t('competitions.schedule.timezone.adjust')}
-        {' '}
-        { activeTimeZoneLocation === 'custom'
-          ? (
-            <Dropdown
-              search
-              selection
-              value={activeTimeZone}
-              onChange={(_, data) => dispatchTimeZone({
-                type: 'update-time-zone',
-                timeZone: data.value,
-                venues,
-              })}
-              options={timeZoneOptions}
-            />
-          ) : (
-            <Dropdown
-              search
-              selection
-              value={activeTimeZoneLocation}
-              onChange={(_, data) => dispatchTimeZone({
-                type: 'update-location',
-                location: data.value,
-                venues,
-              })}
-              options={locationOptions}
-            />
-          )}
-      </p>
+      {i18n.t('competitions.schedule.timezone_setting')}
+      {' '}
+      <Dropdown
+        search
+        selection
+        value={activeTimeZoneLocation}
+        onChange={(_, data) => dispatchTimeZone({
+          type: 'update-location',
+          location: data.value,
+          venues,
+        })}
+        options={locationOptions}
+      />
+      {activeTimeZoneLocation === 'custom' && (
+        <p>
+          {i18n.t('competitions.schedule.timezone_custom')}
+          {' '}
+          <Dropdown
+            search
+            selection
+            value={activeTimeZone}
+            onChange={(_, data) => dispatchTimeZone({
+              type: 'update-time-zone',
+              timeZone: data.value,
+              venues,
+            })}
+            options={timeZoneOptions}
+          />
+        </p>
+      ) }
+
     </div>
   );
 }
