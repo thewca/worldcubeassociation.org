@@ -8,7 +8,7 @@ import {
   earliestWithLongestTieBreaker,
   getActivityEventId,
   getActivityRoundId,
-  groupActivities,
+  groupActivities, localizeActivityName,
 } from '../../lib/utils/activities';
 import { getSimpleTimeString } from '../../lib/utils/dates';
 import { toDegrees } from '../../lib/utils/edit-schedule';
@@ -27,7 +27,7 @@ export default function TableView({
   activeVenueOrNull,
   competitionName,
 }) {
-  const rounds = activeEvents.flatMap((event) => event.rounds);
+  const activeRounds = activeEvents.flatMap((event) => event.rounds);
 
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -62,7 +62,8 @@ export default function TableView({
             date={date}
             timeZone={timeZone}
             groupedActivities={groupedActivitiesForDay}
-            rounds={rounds}
+            events={activeEvents}
+            rounds={activeRounds}
             rooms={activeRooms}
             isExpanded={isExpanded}
             activeVenueOrNull={activeVenueOrNull}
@@ -78,6 +79,7 @@ function SingleDayTable({
   date,
   timeZone,
   groupedActivities,
+  events,
   rounds,
   rooms,
   isExpanded,
@@ -127,6 +129,7 @@ function SingleDayTable({
                   key={activityGroup[0].id}
                   isExpanded={isExpanded}
                   activityGroup={activityGroup}
+                  events={events}
                   round={activityRound}
                   rooms={rooms}
                   timeZone={timeZone}
@@ -166,10 +169,20 @@ function HeaderRow({ isExpanded }) {
 }
 
 function ActivityRow({
-  isExpanded, activityGroup, round, rooms, timeZone,
+  isExpanded,
+  activityGroup,
+  events,
+  round,
+  rooms,
+  timeZone,
 }) {
-  const { name, startTime, endTime } = activityGroup[0];
+  const representativeActivity = activityGroup[0];
+
+  const name = representativeActivity.activityCode.startsWith('other') ? representativeActivity.name : localizeActivityName(representativeActivity, events);
+  const { startTime, endTime } = representativeActivity;
+
   const activityIds = activityGroup.map((activity) => activity.id);
+
   // note: round may be undefined for custom activities like lunch
   const {
     format, timeLimit, cutoff, advancementCondition,
