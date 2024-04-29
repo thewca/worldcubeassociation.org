@@ -15,12 +15,12 @@ FactoryBot.define do
 
     trait :delegate_probation do
       user { FactoryBot.create(:delegate) }
-      group { FactoryBot.create(:delegate_probations_user_group) }
+      group { UserGroup.delegate_probation.first }
     end
 
     trait :translators do
-      group { FactoryBot.create(:translators_user_group) }
-      metadata { FactoryBot.create(:translator_en_role_metadata) }
+      group { GroupsMetadataTranslators.find_by!(locale: 'ca').user_group }
+      metadata { FactoryBot.create(:translator_ca_role_metadata) }
     end
 
     trait :delegate_regions do
@@ -51,7 +51,7 @@ FactoryBot.define do
     end
 
     trait :officers do
-      group { FactoryBot.create(:officers_user_group) }
+      group { UserGroup.officers.first }
     end
 
     trait :officers_executive_director do
