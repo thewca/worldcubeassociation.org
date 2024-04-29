@@ -9,6 +9,7 @@ import useStoredState from '../../lib/hooks/useStoredState';
 import { earliestWithLongestTieBreaker } from '../../lib/utils/activities';
 import { getDatesBetweenInclusive } from '../../lib/utils/dates';
 import { EventSelector } from '../CompetitionsOverview/CompetitionsFilters';
+import i18n from '../../lib/i18n';
 
 const { timeZone: userTimeZone } = Intl.DateTimeFormat().resolvedOptions();
 
@@ -182,17 +183,14 @@ export default function Schedule({
       {timeZoneCount > 1 && (
         <Message warning>
           <Message.Content>
-            Note that not all venues are in the same time zone -- please be
-            careful!
+            {i18n.t('competitions.schedule.multiple_timezones_available')}
           </Message.Content>
         </Message>
       )}
 
       <Message>
         <Message.Content>
-          Schedules are subject to adjustments, especially once registration
-          totals are known. Registered competitors will be notified by email of
-          any major changes.
+          {i18n.t('competitions.schedule.schedule_change_warning')}
         </Message.Content>
       </Message>
 

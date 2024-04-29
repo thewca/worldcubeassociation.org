@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu } from 'semantic-ui-react';
+import i18n from '../../lib/i18n';
 
 const views = ['calendar', 'table'];
 
@@ -9,7 +10,7 @@ export default function ViewSelector({ activeView, setActiveView }) {
       {views.map((view) => (
         <Menu.Item
           key={view}
-          name={view}
+          name={i18n.t(`competitions.schedule.display_as.${view}`)}
           active={activeView === view}
           onClick={() => setActiveView(view)}
         />

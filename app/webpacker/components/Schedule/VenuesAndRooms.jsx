@@ -4,6 +4,7 @@ import {
 } from 'semantic-ui-react';
 import { getTextColor } from '../../lib/utils/calendar';
 import { toDegrees } from '../../lib/utils/edit-schedule';
+import i18n from '../../lib/i18n';
 
 export default function VenuesAndRooms({
   venues,
@@ -38,7 +39,7 @@ export default function VenuesAndRooms({
           style={{ overflowX: 'auto', overflowY: 'hidden' }}
         >
           <Menu.Item
-            name="All Venues"
+            name={i18n.t('competitions.schedule.all_venues')}
             active={activeVenueIndex === -1}
             onClick={() => setActiveVenueIndexAndResetRooms(-1)}
           />
@@ -99,7 +100,7 @@ function RoomSelector({ rooms, activeRoomIds, toggleRoom }) {
   );
 }
 
-function VenueInfo({ activeVenueOrNull, venueCount, timeZoneCount }) {
+function VenueInfo({ activeVenueOrNull, venueCount }) {
   const { name, timezone } = activeVenueOrNull || {};
   const latitude = toDegrees(activeVenueOrNull?.latitudeMicrodegrees);
   const longitude = toDegrees(activeVenueOrNull?.longitudeMicrodegrees);
@@ -110,29 +111,21 @@ function VenueInfo({ activeVenueOrNull, venueCount, timeZoneCount }) {
       <Message.Content>
         {activeVenueOrNull ? (
           <p>
-            You are viewing the schedule for
-            {' '}
-            <a target="_blank" href={mapLink} rel="noreferrer">
-              {name}
-            </a>
-            {venueCount === 1
-              ? ', the sole venue for this competition.'
-              : `, one of ${venueCount} venues for this competition.`}
-            {' '}
-            This venue is in the time zone
-            {' '}
-            {timezone}
-            {venueCount > 1 && timeZoneCount === 1
-              ? ', as are all other venues for this competition.'
-              : '.'}
+            {/* eslint-disable-next-line react/no-danger */}
+            <p dangerouslySetInnerHTML={{
+              __html: i18n.t('competitions.schedule.venue_information_html', {
+                venue_name: `<a target="_blank" href=${mapLink} rel="noreferrer">
+                  ${name}
+                </a>`,
+                count: venueCount,
+              }),
+            }}
+            />
+            {i18n.t('competitions.schedule.timezone_message', { timezone })}
           </p>
         ) : (
           <p>
-            You are viewing the schedule for all
-            {' '}
-            {venueCount}
-            {' '}
-            venues at once.
+            {i18n.t('competitions.schedule.venue_information_all', { venueCount })}
           </p>
         )}
       </Message.Content>

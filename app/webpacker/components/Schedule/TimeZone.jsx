@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Dropdown } from 'semantic-ui-react';
+import i18n from '../../lib/i18n';
 
 const timeZoneOptions = Intl.supportedValuesOf('timeZone').map((timeZone) => ({
   key: timeZone,
@@ -17,7 +18,7 @@ export default function TimeZoneSelector({
     () => [
       {
         key: 'local',
-        text: 'your local',
+        text: i18n.t('competitions.schedule.timezone.local'),
         value: 'local',
       },
       ...venues.map((venue, index) => ({
@@ -27,55 +28,46 @@ export default function TimeZoneSelector({
       })),
       {
         key: 'custom',
-        text: 'a custom',
+        text: i18n.t('competitions.schedule.timezone.custom'),
         value: 'custom',
       },
     ],
     [venues],
   );
 
-  const renderTimezoneDisplay = () => {
-    if (activeTimeZoneLocation === 'custom') {
-      return (
-        <Dropdown
-          search
-          selection
-          value={activeTimeZone}
-          onChange={(_, data) => dispatchTimeZone({
-            type: 'update-time-zone',
-            timeZone: data.value,
-            venues,
-          })}
-          options={timeZoneOptions}
-        />
-      );
-    }
-
-    return (
-      <b>{activeTimeZone}</b>
-    );
-  };
-
   return (
     <div>
-      The schedule is currently displayed in
-      {' '}
-      <Dropdown
-        search
-        selection
-        value={activeTimeZoneLocation}
-        onChange={(_, data) => dispatchTimeZone({
-          type: 'update-location',
-          location: data.value,
-          venues,
-        })}
-        options={locationOptions}
-      />
-      {' '}
-      time zone:
-      {' '}
-      {renderTimezoneDisplay()}
-      .
+      {i18n.t('competitions.schedule.timezone_message', { timezone: activeTimeZone })}
+      <p>
+        {i18n.t('competitions.schedule.timezone.adjust')}
+        {' '}
+        { activeTimeZoneLocation === 'custom'
+          ? (
+            <Dropdown
+              search
+              selection
+              value={activeTimeZone}
+              onChange={(_, data) => dispatchTimeZone({
+                type: 'update-time-zone',
+                timeZone: data.value,
+                venues,
+              })}
+              options={timeZoneOptions}
+            />
+          ) : (
+            <Dropdown
+              search
+              selection
+              value={activeTimeZoneLocation}
+              onChange={(_, data) => dispatchTimeZone({
+                type: 'update-location',
+                location: data.value,
+                venues,
+              })}
+              options={locationOptions}
+            />
+          )}
+      </p>
     </div>
   );
 }

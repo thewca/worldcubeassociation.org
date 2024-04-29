@@ -1,4 +1,3 @@
-import { getFormatName } from '@wca/helpers';
 import { DateTime } from 'luxon';
 import React, { useState } from 'react';
 import {
@@ -14,6 +13,11 @@ import {
 import { getSimpleTimeString } from '../../lib/utils/dates';
 import { toDegrees } from '../../lib/utils/edit-schedule';
 import AddToCalendar from './AddToCalendar';
+import i18n from '../../lib/i18n';
+import { formats } from '../../lib/wca-data.js.erb';
+import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
+import { attemptResultToString } from '../../lib/utils/edit-events';
+import { parseActivityCode } from '../../lib/utils/wcif';
 
 export default function TableView({
   dates,
@@ -38,7 +42,7 @@ export default function TableView({
     <>
       <Checkbox
         name="details"
-        label="Show Round Details"
+        label={i18n.t('competitions.schedule.more_details')}
         toggle
         checked={isExpanded}
         onChange={(_, data) => setIsExpanded(data.checked)}
@@ -80,7 +84,7 @@ function SingleDayTable({
   activeVenueOrNull,
   competitionName,
 }) {
-  const title = `Schedule for ${date.toLocaleString(DateTime.DATE_HUGE)}`;
+  const title = i18n.t('competitions.schedule.schedule_for_date', { date: date.toLocaleString(DateTime.DATE_HUGE) });
 
   const hasActivities = groupedActivities.length > 0;
   const startTime = hasActivities && groupedActivities[0][0].startTime;
@@ -132,7 +136,7 @@ function SingleDayTable({
           ) : (
             <Table.Row>
               <Table.Cell colSpan={4}>
-                <em>No activities for the selected rooms/events.</em>
+                <em>{i18n.t('competitions.schedule.no_activities')}</em>
               </Table.Cell>
             </Table.Row>
           )}
@@ -145,16 +149,16 @@ function SingleDayTable({
 function HeaderRow({ isExpanded }) {
   return (
     <Table.Row>
-      <Table.HeaderCell>Start</Table.HeaderCell>
-      <Table.HeaderCell>End</Table.HeaderCell>
-      <Table.HeaderCell>Activity</Table.HeaderCell>
-      <Table.HeaderCell>Room(s) or Stage(s)</Table.HeaderCell>
+      <Table.HeaderCell>{i18n.t('competitions.schedule.start')}</Table.HeaderCell>
+      <Table.HeaderCell>{i18n.t('competitions.schedule.end')}</Table.HeaderCell>
+      <Table.HeaderCell>{i18n.t('competitions.schedule.activity')}</Table.HeaderCell>
+      <Table.HeaderCell>{i18n.t('competitions.schedule.room_or_stage')}</Table.HeaderCell>
       {isExpanded && (
         <>
-          <Table.HeaderCell>Format</Table.HeaderCell>
-          <Table.HeaderCell>Time Limit</Table.HeaderCell>
-          <Table.HeaderCell>Cutoff</Table.HeaderCell>
-          <Table.HeaderCell>Proceed</Table.HeaderCell>
+          <Table.HeaderCell>{i18n.t('competitions.events.format')}</Table.HeaderCell>
+          <Table.HeaderCell><a href="#time-limit">{i18n.t('competitions.events.time_limit')}</a></Table.HeaderCell>
+          <Table.HeaderCell><a href="#cutoff">{i18n.t('competitions.events.cutoff')}</a></Table.HeaderCell>
+          <Table.HeaderCell>{i18n.t('competitions.events.proceed')}</Table.HeaderCell>
         </>
       )}
     </Table.Row>
@@ -173,10 +177,7 @@ function ActivityRow({
   const roomsUsed = rooms.filter(
     (room) => room.activities.some((activity) => activityIds.includes(activity.id)),
   );
-
-  // TODO: create name from activity code when possible (fallback to name property)
-  // TODO: time limit not showing up for fm & multi
-  // TODO: display times in appropriate format
+  const { eventId } = cutoff ? parseActivityCode(round.id) : {};
 
   return (
     <Table.Row>
@@ -190,19 +191,34 @@ function ActivityRow({
 
       {isExpanded && (
         <>
-          <Table.Cell>{format && getFormatName(format)}</Table.Cell>
+          <Table.Cell>
+            {cutoff && format && `${formats.byId[cutoff.numberOfAttempts].shortName} / `}
+            {format && formats.byId[format].shortName}
+          </Table.Cell>
 
           <TableCell>
-            {timeLimit && `${timeLimit.centiseconds / 100} seconds`}
+            {timeLimit
+              && centisecondsToClockFormat(
+                timeLimit.centiseconds,
+              )}
           </TableCell>
 
           <TableCell>
-            {cutoff && `${cutoff.attemptResult / 100} seconds`}
+            {cutoff
+              && i18n.t(
+                `cutoff.${attemptTypeById(eventId)}`,
+                {
+                  time: attemptResultToString(cutoff.attemptResult, eventId),
+                  moves: attemptResultToString(cutoff.attemptResult, eventId),
+                  points: attemptResultToString(cutoff.attemptResult, eventId),
+                  count: cutoff.numberOfAttempts,
+                },
+              )}
           </TableCell>
 
           <TableCell>
             {advancementCondition
-              && `Top ${advancementCondition.level} ${advancementCondition.type} proceed`}
+              && i18n.t(`advancement_condition.${advancementCondition.type}`, { ranking: advancementCondition.level, percent: advancementCondition.level })}
           </TableCell>
         </>
       )}
