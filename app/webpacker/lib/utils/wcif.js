@@ -66,8 +66,7 @@ export function roundIdToString(roundId) {
 }
 
 // After round_type_id in round.rb
-export function roundTypeId(roundId, totalNumberOfRounds, cutoff = false) {
-  const { roundNumber } = parseActivityCode(roundId);
+export function getRoundTypeId(roundNumber, totalNumberOfRounds, cutoff = false) {
   if (roundNumber === totalNumberOfRounds) {
     return cutoff ? 'c' : 'f';
   }

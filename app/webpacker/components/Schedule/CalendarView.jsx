@@ -5,8 +5,9 @@ import { DateTime } from 'luxon';
 import React from 'react';
 import {
   earliestTimeOfDayWithBuffer,
-  getActivityEvent,
+  getActivityEventId,
   latestTimeOfDayWithBuffer,
+  localizeActivityName,
 } from '../../lib/utils/activities';
 import { ACTIVITY_OTHER_GREY, getTextColor } from '../../lib/utils/calendar';
 
@@ -34,12 +35,13 @@ export default function CalendarView({
 }) {
   const activeEventIds = activeEvents.map(({ id }) => id);
   const fcActivities = activeRooms.flatMap((room) => room.activities
-    .filter((activity) => ['other', ...activeEventIds].includes(getActivityEvent(activity)))
+    .filter((activity) => ['other', ...activeEventIds].includes(getActivityEventId(activity)))
     .map((activity) => {
+      const eventName = activity.activityCode.startsWith('other') ? activity.name : localizeActivityName(activity, activeEvents);
       const eventColor = activity.activityCode.startsWith('other') ? ACTIVITY_OTHER_GREY : room.color;
 
       return ({
-        title: activity.name,
+        title: eventName,
         start: activity.startTime,
         end: activity.endTime,
         backgroundColor: eventColor,

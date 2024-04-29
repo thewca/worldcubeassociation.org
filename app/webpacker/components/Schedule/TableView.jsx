@@ -6,7 +6,7 @@ import {
 import {
   activitiesOnDate,
   earliestWithLongestTieBreaker,
-  getActivityEvent,
+  getActivityEventId,
   getActivityRoundId,
   groupActivities,
 } from '../../lib/utils/activities';
@@ -36,7 +36,7 @@ export default function TableView({
     .toSorted(earliestWithLongestTieBreaker);
 
   const eventIds = activeEvents.map(({ id }) => id);
-  const visibleActivities = sortedActivities.filter((activity) => ['other', ...eventIds].includes(getActivityEvent(activity)));
+  const visibleActivities = sortedActivities.filter((activity) => ['other', ...eventIds].includes(getActivityEventId(activity)));
 
   return (
     <>

@@ -67,3 +67,4 @@ translations:
       - "*.cutoff.*"
       - "*.advancement_condition.*"
       - "*.rounds.*"
+      - "*.attempts.*"
