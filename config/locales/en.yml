@@ -744,6 +744,8 @@ en:
       results_database: "Database"
       #context: "Sidekiq" is the name of a software product
       results_sidekiq: "Sidekiq dashboard"
+      #context: "Rails" is the name of our application server
+      results_rails_admin: "Rails object admin"
       new_post: "New post"
       regional_organizations: "Regional Organizations"
       manage_regional_organizations: "Manage Regional Organizations"
