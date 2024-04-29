@@ -9,7 +9,7 @@ import useInputState from '../../lib/hooks/useInputState';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
-import UserData from './SubForms/UserData';
+import UserData from './UserData';
 import Loading from '../Requests/Loading';
 import Wct from './SubForms/Wct';
 import Competition from './SubForms/Competition';
@@ -33,7 +33,7 @@ export default function ContactForm({ userDetails }) {
     name: userDetails?.user?.name || '',
     email: userDetails?.user?.email || '',
   });
-  const [selectedContactType, setSelectedContactType] = useInputState(null);
+  const [selectedContactRecipient, setSelectedContactRecipient] = useInputState(null);
   const [subformValues, setSubformValues] = useState(SUBFORM_DEFAULT_VALUE);
 
   const { save, saving } = useSaveAction();
@@ -41,21 +41,21 @@ export default function ContactForm({ userDetails }) {
   const [captchaError, setCaptchaError] = useState(false);
 
   const isFormValid = (
-    selectedContactType && userData.name && userData.email && captchaValue
+    selectedContactRecipient && userData.name && userData.email && captchaValue
   );
   const SubForm = useMemo(() => {
-    if (!selectedContactType) return null;
-    switch (selectedContactType) {
+    if (!selectedContactRecipient) return null;
+    switch (selectedContactRecipient) {
       case CONTACT_RECIPIENTS_MAP.competition:
         return Competition;
       default:
         return Wct;
     }
-  }, [selectedContactType]);
+  }, [selectedContactRecipient]);
 
   useEffect(() => {
     setSubformValues(SUBFORM_DEFAULT_VALUE);
-  }, [selectedContactType]);
+  }, [selectedContactRecipient]);
 
   if (saving) return <Loading />;
 
@@ -67,10 +67,10 @@ export default function ContactForm({ userDetails }) {
             contactUrl,
             {
               userData,
-              contactType: selectedContactType,
-              [selectedContactType]: subformValues,
+              contactRecipient: selectedContactRecipient,
+              [selectedContactRecipient]: subformValues,
             },
-            () => setSelectedContactType(null),
+            () => setSelectedContactRecipient(null),
             { method: 'POST' },
           );
         }
@@ -85,14 +85,14 @@ export default function ContactForm({ userDetails }) {
       )}
       <FormGroup grouped>
         <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
-        {CONTACT_RECIPIENTS.map((contactType) => (
-          <FormField key={contactType}>
+        {CONTACT_RECIPIENTS.map((contactRecipient) => (
+          <FormField key={contactRecipient}>
             <Radio
-              label={I18n.t(`page.contacts.form.contact_recipient.${contactType}.label`)}
-              name="contactType"
-              value={contactType}
-              checked={selectedContactType === contactType}
-              onChange={setSelectedContactType}
+              label={I18n.t(`page.contacts.form.contact_recipient.${contactRecipient}.label`)}
+              name="contactRecipient"
+              value={contactRecipient}
+              checked={selectedContactRecipient === contactRecipient}
+              onChange={setSelectedContactRecipient}
             />
           </FormField>
         ))}

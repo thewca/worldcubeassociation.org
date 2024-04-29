@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import I18n from '../../../../lib/i18n';
+import I18n from '../../lib/i18n';
 
 export default function UserData({ formValues, setFormValues }) {
   const handleFormChange = (_, { name, value }) => setFormValues(
