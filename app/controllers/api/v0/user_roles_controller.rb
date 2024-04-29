@@ -36,11 +36,16 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
+  # Filter role based on the permissions of the current user.
+  private def can_current_user_access(role)
+    group = UserRole.group(role)
+    !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
+  end
+
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
-      group = UserRole.group(role)
-      !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
+      can_current_user_access(role)
     end
   end
 
@@ -193,6 +198,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: {
       success: true,
     }
+  end
+
+  def show
+    id = params.require(:id)
+    role = UserRole.find(id)
+    return render status: :unauthorized, json: { error: "Cannot access role" } unless can_current_user_access(role)
+    render json: role
   end
 
   def create
