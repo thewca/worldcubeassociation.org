@@ -1595,7 +1595,7 @@ en:
           extra_requirements: "Extra registration requirements"
           force_comment: "Force competitors to make a comment when registering"
         event_restrictions:
-          newcomers_allowed:
+          forbid_newcomers:
             enabled: "Prevent newcomers from registering"
             reason: "Reason and details for not allowing newcomers to register"
           early_puzzle_submission:
@@ -1679,7 +1679,7 @@ en:
           extra_requirements: "Please indicate here any extra registration requirements not covered above, like for example directions on how to pay. <br/>Please fill this out <b>in English</b> and whatever other languages your competitors speak; this will be displayed on the competition's information page, as well on the registration page if you are using the WCA website registrations."
           force_comment: ""
         event_restrictions:
-          newcomers_allowed:
+          forbid_newcomers:
             enabled: ""
             reason: "Please elaborate here why you would not like newcomers to register for your competition. Please fill this out in English!"
           early_puzzle_submission:

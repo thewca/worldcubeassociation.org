@@ -1,7 +1,10 @@
 <% add_to_packs("wca_maps") %>
 
+<% puts "uses v2 reg: #{@competition.uses_v2_registrations}" %>
+
 <%= react_component("CompetitionForm", {
   competition: @competition.to_form_data,
+  usesV2Registration: @competition.uses_v2_registrations,
   storedEvents: @competition.events,
   isAdminView: @competition_admin_view,
   isPersisted: @competition.persisted?,

@@ -15,12 +15,13 @@ export default function EventRestrictions() {
   const {
     competition: {
       eventRestrictions: {
-        newcomersAllowed,
+        forbidNewcomers,
         earlyPuzzleSubmission,
         qualificationResults,
         eventLimitation,
       },
     },
+    usesV2Registrations,
     isCloning,
     isPersisted,
     storedEvents,
@@ -40,20 +41,23 @@ export default function EventRestrictions() {
     }, ...storedEventOptions];
   }, [storedEvents]);
 
-  const newcomersAllowed = newcomersAllowed.enabled;
+  const newcomers = forbidNewcomers.enabled;
   const earlySubmission = earlyPuzzleSubmission.enabled;
   const needQualification = qualificationResults.enabled;
   const restrictEvents = eventLimitation.enabled;
 
   return (
     <SubSection section="eventRestrictions">
-      <SubSection section="newcomersAllowed">
-        <InputBoolean id="enabled" />
-        <ConditionalSection showIf={newcomersAllowed}>
-          <InputTextArea id="reason" />
-        </ConditionalSection>
-        <InputBoolean id="newcomersAllowed" />
-      </SubSection>
+      {console.log("Value of usesV2Registrations:", usesV2Registrations)} {/* Log the value */}
+      {console.log("Value of isCloning:", isCloning)} {/* Log the value */}
+      { usesV2Registrations && (
+        <SubSection section="forbidNewcomers" showIf={usesV2Registrations}>
+          <InputBoolean id="enabled" />
+          <ConditionalSection showIf={newcomers}>
+            <InputTextArea id="reason" />
+          </ConditionalSection>
+        </SubSection>
+      )}
       <SubSection section="earlyPuzzleSubmission">
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={earlySubmission}>
