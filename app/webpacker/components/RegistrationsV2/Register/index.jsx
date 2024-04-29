@@ -13,7 +13,6 @@ export default function Index({
   competitionInfo, userInfo, preferredEvents,
   stripePublishableKey = '',
   connectedAccountId = '',
-  clientSecret = '',
 }) {
   return (
     <QueryClientProvider client={queryClient}>
@@ -24,7 +23,6 @@ export default function Index({
           preferredEvents={preferredEvents}
           stripePublishableKey={stripePublishableKey}
           connectedAccountId={connectedAccountId}
-          clientSecret={clientSecret}
         />
       </StoreProvider>
     </QueryClientProvider>
@@ -32,7 +30,7 @@ export default function Index({
 }
 
 function Register({
-  competitionInfo, userInfo, preferredEvents, clientSecret, connectedAccountId, stripePublishableKey,
+  competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
 }) {
   const dispatch = useDispatch();
   const {
@@ -68,7 +66,6 @@ function Register({
             refetchRegistration={refetch}
             connectedAccountId={connectedAccountId}
             stripePublishableKey={stripePublishableKey}
-            clientSecret={clientSecret}
           />
         </>
       )

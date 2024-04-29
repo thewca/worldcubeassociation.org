@@ -1,12 +1,14 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
+import { Input, Label } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
 import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
+import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 
 export default function PaymentStep({
-  competitionInfo, user,
+  competitionInfo, user, handleDonation,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -24,8 +26,19 @@ export default function PaymentStep({
 
     setIsLoading(true);
 
+    // Create the PaymentIntent and obtain clientSecret
+    const res = await fetchWithJWTToken('/create-intent', {
+      method: 'POST',
+      body: {
+        competition_id: `${competitionInfo.id}`,
+      },
+    });
+
+    const { client_secret: clientSecret } = await res.json();
+
     const { error } = await stripe.confirmPayment({
       elements,
+      clientSecret,
       confirmParams: {
         return_url: paymentFinishUrl(competitionInfo.id, user.id),
       },
@@ -48,6 +61,11 @@ export default function PaymentStep({
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
+      <Input type="number" onChange={(_, data) => handleDonation(data.value)} placeholder="Amount">
+        <Label> Donation</Label>
+        <input min={0} />
+        <Label>.00</Label>
+      </Input>
       <button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
         <span id="button-text">
           {isLoading ? (

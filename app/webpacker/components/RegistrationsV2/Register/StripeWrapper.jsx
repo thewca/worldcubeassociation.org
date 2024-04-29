@@ -2,7 +2,7 @@
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import I18n from '../../../lib/i18n';
 import getPaymentId from '../api/registration/get/get_payment_intent';
 import PaymentStep from './PaymentStep';
@@ -10,7 +10,7 @@ import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 
 export default function StripeWrapper({
-  competitionInfo, stripePublishableKey, connectedAccountId, clientSecret,
+  competitionInfo, stripePublishableKey, connectedAccountId, initialAmount,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const dispatch = useDispatch();
@@ -44,6 +44,13 @@ export default function StripeWrapper({
     );
   }, [connectedAccountId, stripePublishableKey]);
 
+  const [amount, setAmount] = React.useState(initialAmount);
+
+  const handleDonation = useCallback(async (donationAmount) => {
+    // TODO: make sure this is always correct stripe money
+    setAmount(initialAmount + donationAmount);
+  }, [initialAmount]);
+
   return (
     <>
       <h1>Payment</h1>
@@ -53,11 +60,9 @@ export default function StripeWrapper({
       {!isPaymentIdLoading && stripePromise && !isError && (
         <Elements
           stripe={stripePromise}
-          options={{
-            clientSecret,
-          }}
+          options={{ amount }}
         >
-          <PaymentStep />
+          <PaymentStep handleDonation={handleDonation} />
         </Elements>
       )}
     </>
