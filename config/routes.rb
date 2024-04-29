@@ -4,7 +4,6 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   use_doorkeeper do
     controllers applications: 'oauth/applications'
   end
@@ -17,6 +16,7 @@ Rails.application.routes.draw do
   # Specifically referring to results because WRT needs access to this on top of regular admins.
   authenticate :user, ->(user) { user.can_admin_results? } do
     mount Sidekiq::Web => '/sidekiq'
+    mount RailsAdmin::Engine => '/rails_admin', as: 'rails_admin'
   end
 
   # Don't expose Paypal routes in production until we're reading to launch
