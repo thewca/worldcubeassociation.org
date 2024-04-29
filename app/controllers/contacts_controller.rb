@@ -5,19 +5,19 @@ class ContactsController < ApplicationController
     user_data = params.require(:userData)
     name = user_data[:name]
     email = user_data[:email]
-    contact_type = params.require(:contactType)
+    contact_recipient = params.require(:contactRecipient)
     website_contact = WebsiteContact.new(
       your_email: email,
       name: name,
-      inquiry: contact_type,
+      inquiry: contact_recipient,
     )
-    case contact_type
+    case contact_recipient
     when 'competition'
       contact_params = params.require(:competition)
       competition_id = contact_params[:competition][:id]
       website_contact.competition_id = competition_id
     else
-      contact_params = params.require(contact_type)
+      contact_params = params.require(contact_recipient)
     end
     website_contact.message = contact_params[:message]
     website_contact.request = request
