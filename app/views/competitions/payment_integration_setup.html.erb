@@ -38,6 +38,9 @@
     <%# CPI connected %>
     <% else %>
       <p>
+        <%= t("payments.payment_setup.currently_connected_info", provider: t("payments.payment_providers.#{type}")) %>
+      </p>
+      <p>
         <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
       </p>
       <p>
