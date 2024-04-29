@@ -130,7 +130,6 @@ function BottomConfirmationPanel({
 function CompetitionForm() {
   const {
     competition,
-    usesV2Registrations,
     initialCompetition,
     isPersisted,
     isCloning,

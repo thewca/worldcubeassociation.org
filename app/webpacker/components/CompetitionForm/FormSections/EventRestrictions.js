@@ -48,8 +48,6 @@ export default function EventRestrictions() {
 
   return (
     <SubSection section="eventRestrictions">
-      {console.log("Value of usesV2Registrations:", usesV2Registrations)} {/* Log the value */}
-      {console.log("Value of isCloning:", isCloning)} {/* Log the value */}
       { usesV2Registrations && (
         <SubSection section="forbidNewcomers" showIf={usesV2Registrations}>
           <InputBoolean id="enabled" />
