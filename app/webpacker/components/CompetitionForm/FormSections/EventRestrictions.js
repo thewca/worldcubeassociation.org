@@ -49,7 +49,7 @@ export default function EventRestrictions() {
   return (
     <SubSection section="eventRestrictions">
       { usesV2Registrations && (
-        <SubSection section="forbidNewcomers" showIf={usesV2Registrations}>
+        <SubSection section="forbidNewcomers">
           <InputBoolean id="enabled" />
           <ConditionalSection showIf={newcomers}>
             <InputTextArea id="reason" />

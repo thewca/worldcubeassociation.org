@@ -212,6 +212,7 @@ class Competition < ApplicationRecord
            as: "guests_base_fee",
            allow_nil: true,
            with_model_currency: :currency_code
+  validates :forbid_newcomers_reason, presence: true, if: :forbid_newcomers?
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   # cannot validate `qualification_results IN [true, false]` because we historically have competitions
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
