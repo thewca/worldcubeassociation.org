@@ -44,7 +44,7 @@ export default function StripeWrapper({
     );
   }, [connectedAccountId, stripePublishableKey]);
 
-  const [amount, setAmount] = React.useState(initialAmount);
+  const [amount, setAmount] = useState(initialAmount);
 
   const handleDonation = useCallback(async (donationAmount) => {
     // TODO: make sure this is always correct stripe money

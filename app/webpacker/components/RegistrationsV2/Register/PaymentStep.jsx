@@ -2,7 +2,7 @@ import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js'
 import React, { useState } from 'react';
 import { Input, Label } from 'semantic-ui-react';
 import I18n from '../../../lib/i18n';
-import { paymentFinishUrl } from '../../../lib/requests/routes.js.erb';
+import { paymentFinishUrl, wcaRegistrationUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
@@ -27,11 +27,8 @@ export default function PaymentStep({
     setIsLoading(true);
 
     // Create the PaymentIntent and obtain clientSecret
-    const res = await fetchWithJWTToken('/create-intent', {
-      method: 'POST',
-      body: {
-        competition_id: `${competitionInfo.id}`,
-      },
+    const res = await fetchWithJWTToken(`${wcaRegistrationUrl}/api/v1/${competitionInfo.id}/payment`, {
+      method: 'GET',
     });
 
     const { client_secret: clientSecret } = await res.json();
