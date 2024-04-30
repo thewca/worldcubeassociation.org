@@ -98,10 +98,10 @@ export default function ContactForm({ userDetails }) {
         {CONTACT_RECIPIENTS.map((contactRecipient) => (
           <FormField key={contactRecipient}>
             <Radio
-              label={I18n.t(`page.contacts.form.contact_recipient.${CONTACT_RECIPIENTS_MAP[contactRecipient]}.label`)}
+              label={I18n.t(`page.contacts.form.contact_recipient.${contactRecipient}.label`)}
               name="contactRecipient"
-              value={CONTACT_RECIPIENTS_MAP[contactRecipient]}
-              checked={selectedContactRecipient === CONTACT_RECIPIENTS_MAP[contactRecipient]}
+              value={contactRecipient}
+              checked={selectedContactRecipient === contactRecipient}
               onChange={setSelectedContactRecipient}
             />
           </FormField>
