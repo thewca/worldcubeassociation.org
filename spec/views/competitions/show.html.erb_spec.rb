@@ -14,9 +14,9 @@ RSpec.describe "competitions/show", type: :feature, js: true do
     competition.reload
   end
 
-  before do
-    assign(:competition, competition)
-  end
+  # before do
+  #   assign(:competition, competition)
+  # end
 
   # it "renders advancment condition for 333 round 1" do
   #   render
