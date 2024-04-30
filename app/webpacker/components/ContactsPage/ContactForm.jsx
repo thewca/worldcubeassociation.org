@@ -17,15 +17,12 @@ import Competition from './SubForms/Competition';
 
 const CONTACT_RECIPIENTS = [
   'competition',
-  'communicationsTeam',
-  'resultsTeam',
-  'softwareTeam',
+  'communications_team',
+  'results_team',
+  'software_team',
 ];
 
-const CONTACT_RECIPIENTS_MAP = CONTACT_RECIPIENTS.reduce((acc, recipient) => {
-  acc[recipient] = _.snakeCase(recipient);
-  return acc;
-}, {});
+const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
 const SUBFORM_DEFAULT_VALUE = {
   competitionId: null,
