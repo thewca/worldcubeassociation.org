@@ -26,7 +26,7 @@ const CONTACT_RECIPIENTS = [
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
-export default function ContactForm({ userDetails }) {
+export default function ContactForm({ loggedInUserData }) {
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
@@ -69,7 +69,7 @@ export default function ContactForm({ userDetails }) {
       }}
       error={!!captchaError}
     >
-      <UserData userDetails={userDetails} />
+      <UserData loggedInUserData={loggedInUserData} />
       <FormGroup grouped>
         <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
         {CONTACT_RECIPIENTS.map((contactRecipient) => (

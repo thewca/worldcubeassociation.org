@@ -11,7 +11,7 @@ import contactsReducer from './store/reducer';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 
 export default function ContactsPage() {
-  const { data: userDetails, loading } = useLoadedData(apiV0Urls.users.me.userDetails);
+  const { data: loggedInUserData, loading } = useLoadedData(apiV0Urls.users.me.userDetails);
   const [queryParams] = useQueryParams();
 
   if (loading) return <Loading />;
@@ -21,16 +21,13 @@ export default function ContactsPage() {
       reducer={contactsReducer}
       initialState={{
         userData: {
-          name: userDetails?.user?.name,
-          email: userDetails?.user?.email,
+          name: loggedInUserData?.user?.name,
+          email: loggedInUserData?.user?.email,
         },
         contactRecipient: queryParams?.contactRecipient,
         competition: {
           competitionId: queryParams?.competitionId,
         },
-        communications_team: {},
-        results_team: {},
-        software_team: {},
       }}
     >
       <Container fluid>
@@ -40,7 +37,7 @@ export default function ContactsPage() {
             i18nKey="page.contacts.faq_note_html"
           />
         </Message>
-        <ContactForm userDetails={userDetails} />
+        <ContactForm loggedInUserData={loggedInUserData} />
       </Container>
     </StoreProvider>
   );

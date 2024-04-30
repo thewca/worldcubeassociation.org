@@ -20,7 +20,7 @@ export default function Competition() {
       <IdWcaSearch
         label={I18n.t('page.contacts.form.competition.competition.label')}
         name="competitionId"
-        value={competition.competitionId}
+        value={competition?.competitionId}
         onChange={handleFormChange}
         model={SEARCH_MODELS.competition}
         multiple={false}
@@ -28,7 +28,7 @@ export default function Competition() {
       <FormTextArea
         label={I18n.t('page.contacts.form.competition.message.label')}
         name="message"
-        value={competition.message}
+        value={competition?.message}
         onChange={handleFormChange}
       />
     </>

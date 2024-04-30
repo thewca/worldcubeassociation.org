@@ -16,7 +16,7 @@ export default function ResultsTeam() {
     <Form.TextArea
       label={I18n.t('page.contacts.form.communications_team.message.label')}
       name="message"
-      value={resultsTeam.message}
+      value={resultsTeam?.message}
       onChange={handleFormChange}
     />
   );

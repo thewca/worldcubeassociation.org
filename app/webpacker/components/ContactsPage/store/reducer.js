@@ -7,7 +7,7 @@ const reducers = {
   [UpdateSectionData]: (state, { payload }) => ({
     ...state,
     [payload.section]: {
-      ...state[payload.section],
+      ...(state[payload.section] || {}),
       [payload.name]: payload.value,
     },
   }),

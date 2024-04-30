@@ -6,14 +6,14 @@ import { updateSectionData } from './store/actions';
 
 const SECTION = 'userData';
 
-export default function UserData({ userDetails }) {
+export default function UserData({ loggedInUserData }) {
   const { userData } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),
   );
 
-  if (userDetails) return null;
+  if (loggedInUserData) return null;
 
   return (
     <>
