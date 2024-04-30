@@ -7,7 +7,7 @@ import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthe
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function StripeWrapper({
-  competitionInfo, stripePublishableKey, connectedAccountId,
+  competitionInfo, stripePublishableKey, connectedAccountId, user,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;

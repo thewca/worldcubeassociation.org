@@ -29,7 +29,6 @@ export default function StepPanel({
   refetchRegistration,
   stripePublishableKey,
   connectedAccountId,
-  clientSecret,
 }) {
   const isRegistered = Boolean(registration);
 
@@ -75,7 +74,6 @@ export default function StepPanel({
           user={user}
           stripePublishableKey={stripePublishableKey}
           connectedAccountId={connectedAccountId}
-          clientSecret={clientSecret}
           nextStep={() => {}}
         />
       )
