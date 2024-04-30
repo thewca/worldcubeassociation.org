@@ -3,6 +3,8 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useCallback, useEffect, useState } from 'react';
 import PaymentStep from './PaymentStep';
+import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
 
 export default function StripeWrapper({
   competitionInfo, stripePublishableKey, connectedAccountId,
@@ -10,6 +12,7 @@ export default function StripeWrapper({
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
   const [amount, setAmount] = useState(initialAmount);
+  const [donationAmount, setDonationAmount] = useState('0.00');
 
   useEffect(() => {
     setStripePromise(
@@ -19,10 +22,20 @@ export default function StripeWrapper({
     );
   }, [connectedAccountId, stripePublishableKey]);
 
-  const handleDonation = useCallback(async (donationAmount) => {
-    // TODO: make sure this is always correct stripe money
-    setAmount(initialAmount + donationAmount);
-  }, [initialAmount]);
+  const handleDonation = useCallback(async (newDonationAmount) => {
+    const { api_amounts: { stripe: stripeAmount } } = await fetchWithAuthenticityToken(
+      paymentDenominationUrl,
+      {
+        method: 'POST',
+        body: JSON.stringify({
+          amount: initialAmount + newDonationAmount,
+          currency_iso: competitionInfo.currency_iso,
+        }),
+      },
+    );
+    setAmount(stripeAmount);
+    setDonationAmount(newDonationAmount);
+  }, [competitionInfo.currency_iso, initialAmount]);
 
   return (
     <>
@@ -32,7 +45,7 @@ export default function StripeWrapper({
           stripe={stripePromise}
           options={{ amount, currency: competitionInfo.currency_code }}
         >
-          <PaymentStep handleDonation={handleDonation} />
+          <PaymentStep handleDonation={handleDonation} competitionInfo={competitionInfo} user={user} donationAmount={donationAmount} />
         </Elements>
       )}
     </>

@@ -1,14 +1,15 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
-import { Input, Label } from 'semantic-ui-react';
-import I18n from '../../../lib/i18n';
+import { Button, Input, Label } from 'semantic-ui-react';
 import { paymentFinishUrl, wcaRegistrationUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
+import Loading from '../../Requests/Loading';
+import i18n from '../../../lib/i18n';
 
 export default function PaymentStep({
-  competitionInfo, user, handleDonation,
+  competitionInfo, user, handleDonation, donationAmount,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -27,7 +28,7 @@ export default function PaymentStep({
     setIsLoading(true);
 
     // Create the PaymentIntent and obtain clientSecret
-    const res = await fetchWithJWTToken(`${wcaRegistrationUrl}/api/v1/${competitionInfo.id}/payment`, {
+    const res = await fetchWithJWTToken(`${wcaRegistrationUrl}/api/v1/${competitionInfo.id}/payment?donation_iso=${donationAmount}`, {
       method: 'GET',
     });
 
@@ -58,20 +59,27 @@ export default function PaymentStep({
   return (
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
-      <Input type="number" onChange={(_, data) => handleDonation(data.value)} placeholder="Amount">
-        <Label> Donation</Label>
-        <input min={0} />
-        <Label>.00</Label>
-      </Input>
-      <button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
-        <span id="button-text">
+      { competitionInfo.enable_donations && (
+        <Input
+          onChange={(_, data) => {
+            handleDonation(data.value);
+          }}
+          placeholder="Amount"
+        >
+          <Label>{i18n.t('registrations.payment_form.labels.donation')}</Label>
+          <input value={donationAmount} />
+          <Label>{competitionInfo.currency_iso}</Label>
+        </Input>
+      )}
+      <Button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
+        <Label id="button-text">
           {isLoading ? (
-            <div className="spinner" id="spinner" />
+            <Loading />
           ) : (
-            I18n.t('registrations.payment_form.button_text')
+            i18n.t('registrations.payment_form.button_text')
           )}
-        </span>
-      </button>
+        </Label>
+      </Button>
     </form>
   );
 }
