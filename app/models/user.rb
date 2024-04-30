@@ -1170,7 +1170,7 @@ class User < ApplicationRecord
   end
 
   def personal_records
-    [person&.ranksAverage, person&.ranksSingle].compact.flatten.map(&:to_wcif)
+    [person&.ranksAverage, person&.ranksSingle].compact.flatten
   end
 
   def to_wcif(competition, registration = nil, registrant_id = nil, authorized: false)
@@ -1196,7 +1196,7 @@ class User < ApplicationRecord
       },
       "roles" => roles,
       "assignments" => registration&.assignments&.map(&:to_wcif) || [],
-      "personalBests" => personal_records,
+      "personalBests" => personal_records.map(&:to_wcif),
       "extensions" => registration&.wcif_extensions&.map(&:to_wcif) || [],
     }.merge(authorized ? authorized_fields : {})
   end
