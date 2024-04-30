@@ -68,8 +68,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wmt_member = FactoryBot.create :user, :wmt_member, team_leader: false
     wqac_member = FactoryBot.create :user, :wqac_member, team_leader: false
     wrc_member = FactoryBot.create :user, :wrc_member, team_leader: false
-    wrt_leader = FactoryBot.create :user, :wrt_member, team_leader: true
-    wrt_member = FactoryBot.create :user, :wrt_member, team_leader: false
+    wrt_leader = FactoryBot.create :user, :wrt_leader
+    wrt_member = FactoryBot.create :user, :wrt_member
     wst_member = FactoryBot.create :user, :wst_member, team_leader: false
     wst_admin_member = FactoryBot.create :user, :wst_admin_member, team_leader: false
     wac_member = FactoryBot.create :wac_role_member

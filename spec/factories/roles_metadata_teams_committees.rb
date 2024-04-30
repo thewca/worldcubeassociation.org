@@ -2,12 +2,17 @@
 
 FactoryBot.define do
   factory :roles_metadata_teams_committees do
-    factory :wst_admin_metadata do
-      status { "member" }
+    trait :member do
+      status { RolesMetadataTeamsCommittees.statuses[:member] }
     end
 
-    factory :wct_china_metadata do
-      status { "member" }
+    trait :leader do
+      status { RolesMetadataTeamsCommittees.statuses[:leader] }
     end
+
+    factory :wst_admin_metadata, traits: [:member]
+    factory :wct_china_metadata, traits: [:member]
+    factory :wrt_member_metadata, traits: [:member]
+    factory :wrt_leader_metadata, traits: [:leader]
   end
 end

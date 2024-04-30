@@ -70,10 +70,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wrc')
   end
 
-  def self.wrt
-    Team.c_find_by_friendly_id!('wrt')
-  end
-
   def self.wst
     Team.c_find_by_friendly_id!('wst')
   end
