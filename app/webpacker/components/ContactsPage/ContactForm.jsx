@@ -6,6 +6,7 @@ import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
 import { contactUrl } from '../../lib/requests/routes.js.erb';
 import useInputState from '../../lib/hooks/useInputState';
+import useQueryParams from '../../lib/hooks/useQueryParams';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
@@ -24,7 +25,7 @@ const CONTACT_RECIPIENTS = [
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS);
 
 const SUBFORM_DEFAULT_VALUE = {
-  competition: null,
+  competitionId: null,
   message: '',
 };
 
@@ -33,8 +34,14 @@ export default function ContactForm({ userDetails }) {
     name: userDetails?.user?.name || '',
     email: userDetails?.user?.email || '',
   });
-  const [selectedContactRecipient, setSelectedContactRecipient] = useInputState(null);
-  const [subformValues, setSubformValues] = useState(SUBFORM_DEFAULT_VALUE);
+  const [queryParams] = useQueryParams();
+  const [selectedContactRecipient, setSelectedContactRecipient] = useInputState(
+    queryParams?.contactRecipient,
+  );
+  const [subformValues, setSubformValues] = useState({
+    ...SUBFORM_DEFAULT_VALUE,
+    competitionId: queryParams?.competitionId,
+  });
 
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
@@ -54,8 +61,11 @@ export default function ContactForm({ userDetails }) {
   }, [selectedContactRecipient]);
 
   useEffect(() => {
-    setSubformValues(SUBFORM_DEFAULT_VALUE);
-  }, [selectedContactRecipient]);
+    setSubformValues({
+      ...SUBFORM_DEFAULT_VALUE,
+      competitionId: queryParams?.competitionId,
+    });
+  }, [queryParams?.competitionId, selectedContactRecipient]);
 
   if (saving) return <Loading />;
 
