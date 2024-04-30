@@ -12,7 +12,7 @@ export default function StripeWrapper({
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
   const [amount, setAmount] = useState(initialAmount);
-  const [donationAmount, setDonationAmount] = useState('0.00');
+  const [donationAmount, setDonationAmount] = useState(0);
 
   useEffect(() => {
     setStripePromise(
@@ -22,16 +22,9 @@ export default function StripeWrapper({
     );
   }, [connectedAccountId, stripePublishableKey]);
 
-  const handleDonation = useCallback(async (newDonationAmount) => {
+  const handleDonation = useCallback(async (_, { value: newDonationAmount }) => {
     const { api_amounts: { stripe: stripeAmount } } = await fetchWithAuthenticityToken(
-      paymentDenominationUrl,
-      {
-        method: 'POST',
-        body: JSON.stringify({
-          amount: initialAmount + newDonationAmount,
-          currency_iso: competitionInfo.currency_iso,
-        }),
-      },
+      paymentDenominationUrl(initialAmount + newDonationAmount, competitionInfo.currency_iso),
     );
     setAmount(stripeAmount);
     setDonationAmount(newDonationAmount);
@@ -45,7 +38,12 @@ export default function StripeWrapper({
           stripe={stripePromise}
           options={{ amount, currency: competitionInfo.currency_code }}
         >
-          <PaymentStep handleDonation={handleDonation} competitionInfo={competitionInfo} user={user} donationAmount={donationAmount} />
+          <PaymentStep
+            handleDonation={handleDonation}
+            competitionInfo={competitionInfo}
+            user={user}
+            donationAmount={donationAmount}
+          />
         </Elements>
       )}
     </>

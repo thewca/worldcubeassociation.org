@@ -7,6 +7,7 @@ import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
+import AutonumericField from '../../CompetitionForm/Inputs/AutonumericField';
 
 export default function PaymentStep({
   competitionInfo, user, handleDonation, donationAmount,
@@ -60,16 +61,11 @@ export default function PaymentStep({
     <form id="payment-form" onSubmit={handleSubmit}>
       <PaymentElement id="payment-element" />
       { competitionInfo.enable_donations && (
-        <Input
-          onChange={(_, data) => {
-            handleDonation(data.value);
-          }}
-          placeholder="Amount"
-        >
-          <Label>{i18n.t('registrations.payment_form.labels.donation')}</Label>
-          <input value={donationAmount} />
-          <Label>{competitionInfo.currency_iso}</Label>
-        </Input>
+        <AutonumericField
+          onChange={handleDonation}
+          currency={competitionInfo.currency_iso}
+          value={donationAmount}
+        />
       )}
       <Button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
         <Label id="button-text">
