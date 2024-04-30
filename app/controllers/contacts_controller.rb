@@ -11,14 +11,8 @@ class ContactsController < ApplicationController
       name: name,
       inquiry: contact_recipient,
     )
-    case contact_recipient
-    when 'competition'
-      contact_params = params.require(:competition)
-      competition_id = contact_params[:competition][:id]
-      website_contact.competition_id = competition_id
-    else
-      contact_params = params.require(contact_recipient)
-    end
+    contact_params = params.require(contact_recipient)
+    website_contact.competition_id = contact_params[:competitionId] if contact_recipient == 'competition'
     website_contact.message = contact_params[:message]
     website_contact.request = request
     website_contact.logged_in_email = current_user&.email || 'None'
