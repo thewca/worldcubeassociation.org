@@ -6,21 +6,42 @@ import ContactForm from './ContactForm';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
+import StoreProvider from '../../lib/providers/StoreProvider';
+import contactsReducer from './store/reducer';
+import useQueryParams from '../../lib/hooks/useQueryParams';
 
 export default function ContactsPage() {
   const { data: userDetails, loading } = useLoadedData(apiV0Urls.users.me.userDetails);
+  const [queryParams] = useQueryParams();
 
   if (loading) return <Loading />;
 
   return (
-    <Container fluid>
-      <Header as="h2">{I18n.t('page.contacts.title')}</Header>
-      <Message visible>
-        <I18nHTMLTranslate
-          i18nKey="page.contacts.faq_note_html"
-        />
-      </Message>
-      <ContactForm userDetails={userDetails} />
-    </Container>
+    <StoreProvider
+      reducer={contactsReducer}
+      initialState={{
+        userData: {
+          name: userDetails?.user?.name,
+          email: userDetails?.user?.email,
+        },
+        contactRecipient: queryParams?.contactRecipient,
+        competition: {
+          competitionId: queryParams?.competitionId,
+        },
+        communications_team: {},
+        results_team: {},
+        software_team: {},
+      }}
+    >
+      <Container fluid>
+        <Header as="h2">{I18n.t('page.contacts.title')}</Header>
+        <Message visible>
+          <I18nHTMLTranslate
+            i18nKey="page.contacts.faq_note_html"
+          />
+        </Message>
+        <ContactForm userDetails={userDetails} />
+      </Container>
+    </StoreProvider>
   );
 }

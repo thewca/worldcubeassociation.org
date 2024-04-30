@@ -1,19 +1,21 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Form, FormGroup, FormField, Button, Radio, Message,
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
 import { contactUrl } from '../../lib/requests/routes.js.erb';
-import useInputState from '../../lib/hooks/useInputState';
-import useQueryParams from '../../lib/hooks/useQueryParams';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
 import UserData from './UserData';
 import Loading from '../Requests/Loading';
-import Wct from './SubForms/Wct';
+import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import { updateContactRecipient } from './store/actions';
+import CommunicationsTeam from './SubForms/CommunicationsTeam';
 import Competition from './SubForms/Competition';
+import ResultsTeam from './SubForms/ResultsTeam';
+import SoftwareTeam from './SubForms/SoftwareTeam';
 
 const CONTACT_RECIPIENTS = [
   'competition',
@@ -24,28 +26,13 @@ const CONTACT_RECIPIENTS = [
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
-const SUBFORM_DEFAULT_VALUE = {
-  competitionId: null,
-  message: '',
-};
-
 export default function ContactForm({ userDetails }) {
-  const [userData, setUserData] = useState({
-    name: userDetails?.user?.name || '',
-    email: userDetails?.user?.email || '',
-  });
-  const [queryParams] = useQueryParams();
-  const [selectedContactRecipient, setSelectedContactRecipient] = useInputState(
-    queryParams?.contactRecipient,
-  );
-  const [subformValues, setSubformValues] = useState({
-    ...SUBFORM_DEFAULT_VALUE,
-    competitionId: queryParams?.competitionId,
-  });
-
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
+  const contactFormState = useStore();
+  const dispatch = useDispatch();
+  const { contactRecipient: selectedContactRecipient, userData } = contactFormState;
 
   const isFormValid = (
     selectedContactRecipient && userData.name && userData.email && captchaValue
@@ -55,17 +42,16 @@ export default function ContactForm({ userDetails }) {
     switch (selectedContactRecipient) {
       case CONTACT_RECIPIENTS_MAP.competition:
         return Competition;
+      case CONTACT_RECIPIENTS_MAP.communicationsTeam:
+        return CommunicationsTeam;
+      case CONTACT_RECIPIENTS_MAP.resultsTeam:
+        return ResultsTeam;
+      case CONTACT_RECIPIENTS_MAP.softwareTeam:
+        return SoftwareTeam;
       default:
-        return Wct;
+        return null;
     }
   }, [selectedContactRecipient]);
-
-  useEffect(() => {
-    setSubformValues({
-      ...SUBFORM_DEFAULT_VALUE,
-      competitionId: queryParams?.competitionId,
-    });
-  }, [queryParams?.competitionId, selectedContactRecipient]);
 
   if (saving) return <Loading />;
 
@@ -75,24 +61,15 @@ export default function ContactForm({ userDetails }) {
         if (isFormValid) {
           save(
             contactUrl,
-            {
-              userData,
-              contactRecipient: selectedContactRecipient,
-              [selectedContactRecipient]: subformValues,
-            },
-            () => setSelectedContactRecipient(null),
+            contactFormState,
+            () => dispatch(updateContactRecipient(null)),
             { method: 'POST' },
           );
         }
       }}
       error={!!captchaError}
     >
-      {!userDetails && (
-        <UserData
-          formValues={userData}
-          setFormValues={setUserData}
-        />
-      )}
+      <UserData userDetails={userDetails} />
       <FormGroup grouped>
         <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
         {CONTACT_RECIPIENTS.map((contactRecipient) => (
@@ -102,17 +79,12 @@ export default function ContactForm({ userDetails }) {
               name="contactRecipient"
               value={contactRecipient}
               checked={selectedContactRecipient === contactRecipient}
-              onChange={setSelectedContactRecipient}
+              onChange={() => dispatch(updateContactRecipient(contactRecipient))}
             />
           </FormField>
         ))}
       </FormGroup>
-      {SubForm && (
-        <SubForm
-          formValues={subformValues}
-          setFormValues={setSubformValues}
-        />
-      )}
+      {SubForm && <SubForm />}
       <FormField>
         <ReCAPTCHA
           sitekey={RECAPTCHA_PUBLIC_KEY}
