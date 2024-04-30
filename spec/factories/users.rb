@@ -163,8 +163,14 @@ FactoryBot.define do
     end
 
     trait :wat_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wat_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wat_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wat_leader_role, user_id: user.id)
       end
     end
 

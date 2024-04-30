@@ -86,10 +86,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wsot')
   end
 
-  def self.wat
-    Team.c_find_by_friendly_id!('wat')
-  end
-
   def acronym
     friendly_id.upcase
   end

@@ -76,8 +76,8 @@ RSpec.describe SyncMailingListsJob, type: :job do
     wac_leader = FactoryBot.create :wac_role_leader
     wsot_member = FactoryBot.create :user, :wsot_member, team_leader: false
     wsot_leader = FactoryBot.create :user, :wsot_member, team_leader: true
-    wat_member = FactoryBot.create :user, :wat_member, team_leader: false
-    wat_leader = FactoryBot.create :user, :wat_member, team_leader: true
+    wat_member = FactoryBot.create :user, :wat_member
+    wat_leader = FactoryBot.create :user, :wat_leader
     treasurer_role = FactoryBot.create :treasurer_role
 
     # organizations@ mailing list
