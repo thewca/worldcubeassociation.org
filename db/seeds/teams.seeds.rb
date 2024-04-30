@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-Team.create(friendly_id: 'wct', email: "communication@worldcubeassociation.org")
 Team.create(friendly_id: 'wdc', email: "disciplinary@worldcubeassociation.org")
 Team.create(friendly_id: 'wec', email: "ethics@worldcubeassociation.org")
 Team.create(friendly_id: 'wfc', email: "finance@worldcubeassociation.org")

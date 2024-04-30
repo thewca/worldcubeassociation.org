@@ -109,6 +109,11 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wqac_member_metadata) }
     end
 
+    trait :wct_member do
+      group { UserGroup.teams_committees_group_wct }
+      metadata { FactoryBot.create(:wct_member_metadata) }
+    end
+
     trait :board do
       group_id { UserGroup.board_group.id }
     end
@@ -133,6 +138,7 @@ FactoryBot.define do
     factory :wrt_member_role, traits: [:wrt_member, :active]
     factory :wrt_leader_role, traits: [:wrt_leader, :active]
     factory :wqac_member_role, traits: [:wqac_member, :active]
+    factory :wct_member_role, traits: [:wct_member, :active]
     factory :board_role, traits: [:board, :active]
   end
 end
