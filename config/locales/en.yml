@@ -803,7 +803,7 @@ en:
             label: "Contact WCA for general queries (this can involve anything like WCA ID/profile, organizing competitions, competition rules, competition media, etc)"
           results_team:
             label: "Contact Results Team (for anything related to the results of a competition)"
-          software:
+          software_team:
             label: "Contact Software Team (to report some bug in website or any API related questions)"
         competition:
           competition:

@@ -17,12 +17,15 @@ import Competition from './SubForms/Competition';
 
 const CONTACT_RECIPIENTS = [
   'competition',
-  'communications_team',
-  'results_team',
-  'software',
+  'communicationsTeam',
+  'resultsTeam',
+  'softwareTeam',
 ];
 
-const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS);
+const CONTACT_RECIPIENTS_MAP = CONTACT_RECIPIENTS.reduce((acc, recipient) => {
+  acc[recipient] = _.snakeCase(recipient);
+  return acc;
+}, {});
 
 const SUBFORM_DEFAULT_VALUE = {
   competitionId: null,
@@ -98,10 +101,10 @@ export default function ContactForm({ userDetails }) {
         {CONTACT_RECIPIENTS.map((contactRecipient) => (
           <FormField key={contactRecipient}>
             <Radio
-              label={I18n.t(`page.contacts.form.contact_recipient.${contactRecipient}.label`)}
+              label={I18n.t(`page.contacts.form.contact_recipient.${CONTACT_RECIPIENTS_MAP[contactRecipient]}.label`)}
               name="contactRecipient"
-              value={contactRecipient}
-              checked={selectedContactRecipient === contactRecipient}
+              value={CONTACT_RECIPIENTS_MAP[contactRecipient]}
+              checked={selectedContactRecipient === CONTACT_RECIPIENTS_MAP[contactRecipient]}
               onChange={setSelectedContactRecipient}
             />
           </FormField>

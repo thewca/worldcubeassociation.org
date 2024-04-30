@@ -37,7 +37,7 @@ class WebsiteContact < ContactForm
             when "competition" then "Comment for #{Competition.find_by_id(competition_id)&.name}"
             when "communications_team" then "General Comment"
             when "results_team" then "Results Team Comment"
-            when "software" then "Software Comment"
+            when "software_team" then "Software Comment"
             else
               raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
             end
