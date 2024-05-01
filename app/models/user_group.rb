@@ -198,6 +198,10 @@ class UserGroup < ApplicationRecord
     GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wat').user_group
   end
 
+  def self.teams_committees_group_wsot
+    GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wsot').user_group
+  end
+
   def senior_delegate
     if parent_group_id.nil?
       self.lead_user
