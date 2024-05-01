@@ -593,7 +593,7 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     raindrops (0.20.0)
-    rake (13.1.0)
+    rake (13.2.1)
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
