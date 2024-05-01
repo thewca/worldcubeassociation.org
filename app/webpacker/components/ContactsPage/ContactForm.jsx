@@ -79,7 +79,7 @@ export default function ContactForm({ loggedInUserData }) {
               name="contactRecipient"
               value={contactRecipient}
               checked={selectedContactRecipient === contactRecipient}
-              onChange={() => dispatch(updateContactRecipient(contactRecipient))}
+              onChange={(__, { value }) => dispatch(updateContactRecipient(value))}
             />
           </FormField>
         ))}
