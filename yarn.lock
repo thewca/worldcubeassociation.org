@@ -9478,9 +9478,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-datepicker@npm:^6.6.0":
-  version: 6.6.0
-  resolution: "react-datepicker@npm:6.6.0"
+"react-datepicker@npm:^6.9.0":
+  version: 6.9.0
+  resolution: "react-datepicker@npm:6.9.0"
   dependencies:
     "@floating-ui/react": "npm:^0.26.2"
     clsx: "npm:^2.1.0"
@@ -9490,7 +9490,7 @@ __metadata:
   peerDependencies:
     react: ^16.9.0 || ^17 || ^18
     react-dom: ^16.9.0 || ^17 || ^18
-  checksum: 10c0/37928f01a3e9a99c819f39559147c72bed6e844d54b1eb91d954fd61b1ea90a4375b6593412c8dc9019e25a3e814e0f4e1f64f1bc77edcb72b79ecb29b70f880
+  checksum: 10c0/aed97871a60071bf00dd1447a7c4a3841a05db6f57bd24b3e499c9ef8c20bc5c46a826b6b0667ae804c4ddd2bb88319bd8115a08bb670c2a57505b0a7a18bec6
   languageName: node
   linkType: hard
 
@@ -10053,7 +10053,7 @@ __metadata:
     rails-erb-loader: "npm:^5.5.2"
     react: "npm:^18.2.0"
     react-csv: "npm:^2.2.2"
-    react-datepicker: "npm:^6.6.0"
+    react-datepicker: "npm:^6.9.0"
     react-dom: "npm:^18.2.0"
     react-google-recaptcha: "npm:^3.1.0"
     react-intersection-observer: "npm:^9.8.1"
