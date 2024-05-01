@@ -6,6 +6,7 @@ class PanelController < ApplicationController
   before_action :authenticate_user!
   before_action -> { redirect_to_root_unless_user(:staff_or_any_delegate?) }
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
+  before_action -> { redirect_to_root_unless_user(:can_access_delegate_panel?) }, only: [:delegate]
   before_action -> { redirect_to_root_unless_user(:can_access_board_panel?) }, only: [:board]
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:senior_delegate]
   before_action -> { redirect_to_root_unless_user(:can_access_leader_panel?) }, only: [:leader]
@@ -25,6 +26,10 @@ class PanelController < ApplicationController
 
   def self.panel_list
     {
+      "delegate" => {
+        "importantLinks" => "important-links",
+        "delegateCrashCourse" => "delegate-crash-course",
+      },
       "board" => {
         "seniorDelegatesList" => "senior-delegates-list",
         "leadersAdmin" => "leaders-admin",

@@ -226,6 +226,9 @@
                 <%= t '.panel' %>
               </li>
               <li><%= link_to t('.panel'), panel_path %></li>
+              <% if current_user.can_access_delegate_panel? %>
+                <li><%= link_to "Delegate panel", panel_delegate_path %></li>
+              <% end %>
               <% if current_user.can_access_wfc_panel? %>
                 <li><%= link_to "WFC panel", panel_wfc_path %></li>
               <% end %>
