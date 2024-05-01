@@ -416,7 +416,7 @@ GEM
     jmespath (1.6.2)
     js_cookie_rails (2.2.0)
       railties (>= 3.1)
-    json (2.7.1)
+    json (2.7.2)
     json-schema (4.3.0)
       addressable (>= 2.8)
     jwt (2.8.1)
@@ -524,7 +524,7 @@ GEM
       rexml (~> 3.2)
     package_json (0.1.0)
     parallel (1.24.0)
-    parser (3.3.0.5)
+    parser (3.3.1.0)
       ast (~> 2.4.1)
       racc
     premailer (1.22.0)
@@ -657,7 +657,7 @@ GEM
     rspec-retry (0.6.2)
       rspec-core (> 3.3)
     rspec-support (3.13.1)
-    rubocop (1.62.1)
+    rubocop (1.63.4)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -668,8 +668,8 @@ GEM
       rubocop-ast (>= 1.31.1, < 2.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (>= 2.4.0, < 3.0)
-    rubocop-ast (1.31.2)
-      parser (>= 3.3.0.4)
+    rubocop-ast (1.31.3)
+      parser (>= 3.3.1.0)
     ruby-ll (2.1.2)
       ansi
       ast
