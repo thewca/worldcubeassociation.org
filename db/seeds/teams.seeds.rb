@@ -10,4 +10,3 @@ Team.create(friendly_id: 'banned', email: "disciplinary@worldcubeassociation.org
 Team.create(friendly_id: 'wcat', email: "competitions@worldcubeassociation.org")
 Team.create(friendly_id: 'wdpc', hidden: true)
 Team.create(friendly_id: 'wac', email: "advisory@worldcubeassociation.org")
-Team.create(friendly_id: 'weat', email: "assistants@worldcubeassociation.org")

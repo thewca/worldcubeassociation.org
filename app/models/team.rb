@@ -50,10 +50,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wec')
   end
 
-  def self.weat
-    Team.c_find_by_friendly_id!('weat')
-  end
-
   def self.wfc
     Team.c_find_by_friendly_id!('wfc')
   end

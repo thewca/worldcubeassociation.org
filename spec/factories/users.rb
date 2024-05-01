@@ -127,8 +127,8 @@ FactoryBot.define do
     end
 
     trait :weat_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.weat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:weat_member_role, user_id: user.id)
       end
     end
 

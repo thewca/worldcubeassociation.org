@@ -134,6 +134,11 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wsot_leader_metadata) }
     end
 
+    trait :weat_member do
+      group { UserGroup.teams_committees_group_weat }
+      metadata { FactoryBot.create(:weat_member_metadata) }
+    end
+
     trait :board do
       group_id { UserGroup.board_group.id }
     end
@@ -163,6 +168,7 @@ FactoryBot.define do
     factory :wat_leader_role, traits: [:wat_leader, :active]
     factory :wsot_member_role, traits: [:wsot_member, :active]
     factory :wsot_leader_role, traits: [:wsot_leader, :active]
+    factory :weat_member_role, traits: [:weat_member, :active]
     factory :board_role, traits: [:board, :active]
   end
 end
