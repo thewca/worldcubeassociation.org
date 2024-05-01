@@ -273,6 +273,10 @@ class Person < ApplicationRecord
     methods: ["url", "country_iso2"],
   }.freeze
 
+  def personal_records
+    [self&.ranksAverage, self&.ranksSingle].compact.flatten
+  end
+
   def serializable_hash(options = nil)
     json = super(DEFAULT_SERIALIZE_OPTIONS.merge(options || {}))
     json.merge!(

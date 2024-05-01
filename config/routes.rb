@@ -363,11 +363,11 @@ Rails.application.routes.draw do
       get '/persons/:wca_id' => "persons#show", as: :person
       get '/persons/:wca_id/results' => "persons#results", as: :person_results
       get '/persons/:wca_id/competitions' => "persons#competitions", as: :person_competitions
+      get '/persons/:wca_id/personal_records' => "persons#personal_records", as: :personal_records
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
       get '/records' => "api#records"
       get '/competition_series/:id' => 'api#competition_series'
-      get '/results/personal_records/:user_id' => "results#personal_records", as: :personal_records
 
       resources :competitions, only: [:index, :show] do
         get '/wcif' => 'competitions#show_wcif'
