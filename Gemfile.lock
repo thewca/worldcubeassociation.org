@@ -607,8 +607,8 @@ GEM
       tilt
     recaptcha (5.16.0)
     redcarpet (3.6.0)
-    redis (5.1.0)
-      redis-client (>= 0.17.0)
+    redis (5.2.0)
+      redis-client (>= 0.22.0)
     redis-client (0.22.1)
       connection_pool
     regexp_parser (2.9.0)
