@@ -16,7 +16,7 @@ RSpec.describe "competitions/show", type: :feature, js: true do
   end
 
   it "renders advancement condition for 333 round 1" do
-    visit competition_path(competition, anchor: )
+    visit competition_path(competition, anchor: 'competition-events')
     expect(page).to have_text('Top 16 advance to next round')
   end
 end
