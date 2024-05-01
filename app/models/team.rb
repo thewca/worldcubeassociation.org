@@ -66,10 +66,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('banned')
   end
 
-  def self.wcat
-    Team.c_find_by_friendly_id!('wcat')
-  end
-
   def self.wmt
     Team.c_find_by_friendly_id!('wmt')
   end
