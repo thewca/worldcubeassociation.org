@@ -22,10 +22,10 @@ class ScheduleActivity < ApplicationRecord
   def included_in_parent_schedule
     return unless errors.blank?
     unless start_time >= holder.start_time
-      errors.add(:start_time, "should be after parent's start_time")
+      errors.add(:start_time, "should be after parent's start_time. Parent: #{holder.class}: #{holder&.name}")
     end
     unless end_time <= holder.end_time
-      errors.add(:end_time, "should be before parent's end_time")
+      errors.add(:end_time, "should be before parent's end_time. Parent: #{holder.class}: #{holder&.name}")
     end
     unless start_time <= end_time
       errors.add(:end_time, "should be after start_time")
