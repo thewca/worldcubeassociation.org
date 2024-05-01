@@ -2,12 +2,7 @@
 
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_manage_teams?) }, except: [:edit, :update]
   before_action -> { redirect_to_root_unless_user(:can_edit_team?, team_from_params) }, only: [:edit, :update]
-
-  def index
-    @teams = Team.unscoped.all
-  end
 
   def edit
     @team = team_from_params
