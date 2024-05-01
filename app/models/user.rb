@@ -673,14 +673,9 @@ class User < ApplicationRecord
     admin? || financial_committee?
   end
 
-  # Returns true if the user can perform every action for teams.
-  def can_manage_teams?
-    admin? || board_member? || results_team?
-  end
-
   # Returns true if the user can edit the given team.
   def can_edit_team?(team)
-    can_manage_teams? ||
+    can_edit_any_groups? ||
       team_leader?(team) ||
       # The leader of the WDC can edit the banned competitors list
       (team == Team.banned && team_leader?(Team.wdc))
