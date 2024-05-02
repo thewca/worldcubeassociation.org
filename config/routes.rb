@@ -406,4 +406,5 @@ Rails.application.routes.draw do
 
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
+  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
 end
