@@ -1325,6 +1325,10 @@ class User < ApplicationRecord
     admin? || board_member? || senior_delegate?
   end
 
+  def can_access_delegate_panel?
+    admin? || any_kind_of_delegate?
+  end
+
   def can_access_panel?
     (
       can_access_wfc_panel? ||

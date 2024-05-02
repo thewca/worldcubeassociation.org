@@ -189,9 +189,9 @@ Rails.application.routes.draw do
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
   get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course', to: redirect('https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
+    get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'wrt' => 'panel#wrt', as: :panel_wrt
     get 'wst' => 'panel#wst', as: :panel_wst
@@ -406,4 +406,5 @@ Rails.application.routes.draw do
 
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
+  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
 end
