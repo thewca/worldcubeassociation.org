@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button, Header } from 'semantic-ui-react';
+import { Button, Header, Message } from 'semantic-ui-react';
 import EmailButton from '../EmailButton';
 import { apiV0Urls, contactRecipientUrl } from '../../lib/requests/routes.js.erb';
 import I18n from '../../lib/i18n';
@@ -45,6 +45,10 @@ export default function GroupPage({ group, canViewPastRoles }) {
             {I18n.t('page.teams_committees_councils.contact_button')}
           </Button>
           )
+      }
+      {
+        group.metadata.preferred_contact_mode === 'no_public_way'
+          && <Message>{I18n.t('page.teams_committees_councils.no_contact_description')}</Message>
       }
       <RolesTable roleList={activeRoles} />
       {canViewPastRoles && (
