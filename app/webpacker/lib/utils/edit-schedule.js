@@ -100,13 +100,29 @@ export function moveByIsoDuration(isoDateTime, isoDuration) {
   return luxonToWcifIso(movedDateTime);
 }
 
-export function rescaleDuration(isoDuration, scalingFactor) {
+export function rescaleIsoDuration(isoDuration, scalingFactor) {
   const luxonDuration = Duration.fromISO(isoDuration);
 
   const durationMillis = luxonDuration.toMillis();
   const scaledMillis = durationMillis * scalingFactor;
 
   return Duration.fromMillis(scaledMillis).rescale().toISO();
+}
+
+export function millisecondsBetween(isoStart, isoEnd) {
+  const luxonStart = DateTime.fromISO(isoStart);
+  const luxonEnd = DateTime.fromISO(isoEnd);
+
+  const diffDuration = luxonEnd.diff(luxonStart);
+  return Math.abs(diffDuration.toMillis());
+}
+
+export function addIsoDurations(isoDurationA, isoDurationB) {
+  const luxonDurationA = Duration.fromISO(isoDurationA);
+  const luxonDurationB = Duration.fromISO(isoDurationB);
+
+  const durationSum = luxonDurationA.plus(luxonDurationB);
+  return durationSum.rescale().toISO();
 }
 
 export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTimezone) {
