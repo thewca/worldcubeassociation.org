@@ -761,6 +761,7 @@ module DatabaseDumper
           id
           email
           friendly_id
+          preferred_contact_mode
           created_at
           updated_at
         ),

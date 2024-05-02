@@ -756,6 +756,7 @@ en:
     teams_committees_councils:
       title: "WCA Teams, Committees, and Councils"
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      contact_button: "Contact"
       groups_name:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
@@ -788,7 +789,7 @@ en:
         wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
     contacts:
       title: "WCA Contact Form"
-      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees-councils">this page</a>.'
+      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees-councils">this page</a> (Some committee/team might have also opted out from contacting, you will not be able to contact them).'
       form:
         user_data:
           name:
