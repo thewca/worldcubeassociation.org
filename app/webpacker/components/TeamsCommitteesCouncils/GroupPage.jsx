@@ -8,13 +8,6 @@ import Loading from '../Requests/Loading';
 import Errored from '../Requests/Errored';
 import RolesTable from './RolesTable';
 
-function contactRecipientUrlForGroup(group) {
-  if (group.metadata.friendly_id === 'wrt') {
-    return contactRecipientUrl('results_team');
-  }
-  return contactRecipientUrl('communications_team');
-}
-
 export default function GroupPage({ group, canViewPastRoles }) {
   const {
     data: activeRoles,
@@ -41,13 +34,13 @@ export default function GroupPage({ group, canViewPastRoles }) {
       {
         group.metadata.preferred_contact_mode === 'contact_form'
           && (
-          <Button href={contactRecipientUrlForGroup(group)}>
+          <Button href={contactRecipientUrl(group.metadata.friendly_id)}>
             {I18n.t('page.teams_committees_councils.contact_button')}
           </Button>
           )
       }
       {
-        group.metadata.preferred_contact_mode === 'no_public_way'
+        group.metadata.preferred_contact_mode === 'no_contact'
           && <Message>{I18n.t('page.teams_committees_councils.no_contact_description')}</Message>
       }
       <RolesTable roleList={activeRoles} />
