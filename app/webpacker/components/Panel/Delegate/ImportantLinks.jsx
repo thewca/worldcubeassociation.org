@@ -55,7 +55,7 @@ export default function ImportantLinks() {
       <Header as="h2">Important Links</Header>
       <List>
         {IMPORTANT_LINKS.map(({ title, link }) => (
-          <ListItemLink key={title.replace(/ /g, '')} title={title} link={link} />
+          <ListItemLink key={link} title={title} link={link} />
         ))}
       </List>
     </>
