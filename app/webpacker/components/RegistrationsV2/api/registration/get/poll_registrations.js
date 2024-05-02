@@ -7,7 +7,8 @@ export default async function pollRegistrations(
   competitionId,
 ) {
   if (process.env.NODE_ENV === 'production') {
-    return fetchJsonOrError(pollingRoute(userId, competitionId));
+    const { data } = await fetchJsonOrError(pollingRoute(userId, competitionId));
+    return data;
   }
   return pollingMock(userId, competitionId);
 }

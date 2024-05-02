@@ -220,7 +220,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const spotsRemaining = (competitionInfo.competitor_limit ?? Infinity) - accepted.length;
   const spotsRemainingText = i18n.t(
     'competitions.registration_v2.list.spots_remaining',
-    'competitions.registration_v2.list.spots_remaining',
     { spots: spotsRemaining },
   );
 
@@ -265,6 +264,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
+            competitionInfo={competitionInfo}
           />
         </Sticky>
 
