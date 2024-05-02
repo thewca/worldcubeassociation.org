@@ -12,16 +12,16 @@ import UserData from './UserData';
 import Loading from '../Requests/Loading';
 import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
 import { updateContactRecipient } from './store/actions';
-import CommunicationsTeam from './SubForms/CommunicationsTeam';
+import Wct from './SubForms/Wct';
+import Wrt from './SubForms/Wrt';
+import Wst from './SubForms/Wst';
 import Competition from './SubForms/Competition';
-import ResultsTeam from './SubForms/ResultsTeam';
-import SoftwareTeam from './SubForms/SoftwareTeam';
 
 const CONTACT_RECIPIENTS = [
   'competition',
-  'communications_team',
-  'results_team',
-  'software_team',
+  'wct',
+  'wrt',
+  'wst',
 ];
 
 const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
@@ -42,12 +42,12 @@ export default function ContactForm({ loggedInUserData }) {
     switch (selectedContactRecipient) {
       case CONTACT_RECIPIENTS_MAP.competition:
         return Competition;
-      case CONTACT_RECIPIENTS_MAP.communicationsTeam:
-        return CommunicationsTeam;
-      case CONTACT_RECIPIENTS_MAP.resultsTeam:
-        return ResultsTeam;
-      case CONTACT_RECIPIENTS_MAP.softwareTeam:
-        return SoftwareTeam;
+      case CONTACT_RECIPIENTS_MAP.wct:
+        return Wct;
+      case CONTACT_RECIPIENTS_MAP.wrt:
+        return Wrt;
+      case CONTACT_RECIPIENTS_MAP.wst:
+        return Wst;
       default:
         return null;
     }
