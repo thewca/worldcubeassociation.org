@@ -63,12 +63,12 @@ RSpec.describe WebsiteContact do
     end
 
     it "builds subject line for general inquiry" do
-      form = FactoryBot.build(:website_contact, inquiry: "communications_team")
+      form = FactoryBot.build(:website_contact, inquiry: "wct")
       expect(form.subject).to start_with("[WCA Website] General Comment by #{form.name} on")
     end
 
     it "builds subject line for software inquiry" do
-      form = FactoryBot.build(:website_contact, inquiry: "software_team")
+      form = FactoryBot.build(:website_contact, inquiry: "wst")
       expect(form.subject).to start_with("[WCA Website] Software Comment by #{form.name} on")
     end
 

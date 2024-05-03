@@ -25,7 +25,7 @@ class WebsiteContact < ContactForm
       if competition.present?
         return ValidateEmail.valid?(competition.contact) ? competition.contact : competition.managers.map(&:email)
       end
-    elsif inquiry == "results_team"
+    elsif inquiry == UserGroup.teams_committees_group_wrt.metadata.friendly_id
       return UserGroup.teams_committees_group_wrt.metadata.email
     end
 
@@ -35,9 +35,9 @@ class WebsiteContact < ContactForm
   def subject
     topic = case inquiry
             when "competition" then "Comment for #{Competition.find_by_id(competition_id)&.name}"
-            when "communications_team" then "General Comment"
-            when "results_team" then "Results Team Comment"
-            when "software_team" then "Software Comment"
+            when UserGroup.teams_committees_group_wct.metadata.friendly_id then "General Comment"
+            when UserGroup.teams_committees_group_wrt.metadata.friendly_id then "Results Team Comment"
+            when UserGroup.teams_committees_group_wst.metadata.friendly_id then "Software Comment"
             else
               raise "Invalid inquiry type: `#{inquiry}`" if inquiry.present?
             end
