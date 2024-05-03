@@ -104,6 +104,46 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wrt_leader_metadata) }
     end
 
+    trait :wqac_member do
+      group { UserGroup.teams_committees_group_wqac }
+      metadata { FactoryBot.create(:wqac_member_metadata) }
+    end
+
+    trait :wct_member do
+      group { UserGroup.teams_committees_group_wct }
+      metadata { FactoryBot.create(:wct_member_metadata) }
+    end
+
+    trait :wat_member do
+      group { UserGroup.teams_committees_group_wat }
+      metadata { FactoryBot.create(:wat_member_metadata) }
+    end
+
+    trait :wat_leader do
+      group { UserGroup.teams_committees_group_wat }
+      metadata { FactoryBot.create(:wat_leader_metadata) }
+    end
+
+    trait :wsot_member do
+      group { UserGroup.teams_committees_group_wsot }
+      metadata { FactoryBot.create(:wsot_member_metadata) }
+    end
+
+    trait :wsot_leader do
+      group { UserGroup.teams_committees_group_wsot }
+      metadata { FactoryBot.create(:wsot_leader_metadata) }
+    end
+
+    trait :weat_member do
+      group { UserGroup.teams_committees_group_weat }
+      metadata { FactoryBot.create(:weat_member_metadata) }
+    end
+
+    trait :wcat_member do
+      group { UserGroup.teams_committees_group_wcat }
+      metadata { FactoryBot.create(:wcat_member_metadata) }
+    end
+
     trait :board do
       group_id { UserGroup.board_group.id }
     end
@@ -127,6 +167,14 @@ FactoryBot.define do
     factory :wct_china_role, traits: [:wct_china_member, :active]
     factory :wrt_member_role, traits: [:wrt_member, :active]
     factory :wrt_leader_role, traits: [:wrt_leader, :active]
+    factory :wqac_member_role, traits: [:wqac_member, :active]
+    factory :wct_member_role, traits: [:wct_member, :active]
+    factory :wat_member_role, traits: [:wat_member, :active]
+    factory :wat_leader_role, traits: [:wat_leader, :active]
+    factory :wsot_member_role, traits: [:wsot_member, :active]
+    factory :wsot_leader_role, traits: [:wsot_leader, :active]
+    factory :weat_member_role, traits: [:weat_member, :active]
+    factory :wcat_member_role, traits: [:wcat_member, :active]
     factory :board_role, traits: [:board, :active]
   end
 end

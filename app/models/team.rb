@@ -42,10 +42,6 @@ class Team < ApplicationRecord
     self.c_all_by_friendly_id[friendly_id] || raise("friendly id not found #{friendly_id}")
   end
 
-  def self.wct
-    Team.c_find_by_friendly_id!('wct')
-  end
-
   def self.wdc
     Team.c_find_by_friendly_id!('wdc')
   end
@@ -54,16 +50,8 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('wec')
   end
 
-  def self.weat
-    Team.c_find_by_friendly_id!('weat')
-  end
-
   def self.wfc
     Team.c_find_by_friendly_id!('wfc')
-  end
-
-  def self.wqac
-    Team.c_find_by_friendly_id!('wqac')
   end
 
   def self.wrc
@@ -78,24 +66,12 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('banned')
   end
 
-  def self.wcat
-    Team.c_find_by_friendly_id!('wcat')
-  end
-
   def self.wmt
     Team.c_find_by_friendly_id!('wmt')
   end
 
   def self.wdpc
     Team.c_find_by_friendly_id!('wdpc')
-  end
-
-  def self.wsot
-    Team.c_find_by_friendly_id!('wsot')
-  end
-
-  def self.wat
-    Team.c_find_by_friendly_id!('wat')
   end
 
   def acronym

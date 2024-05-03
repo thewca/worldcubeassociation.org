@@ -98,7 +98,7 @@ FactoryBot.define do
 
     trait :wct_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wct.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wct_member_role, user_id: user.id)
       end
     end
 
@@ -110,13 +110,13 @@ FactoryBot.define do
 
     trait :wqac_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wqac.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wqac_member_role, user_id: user.id)
       end
     end
 
     trait :wcat_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wcat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wcat_member_role, user_id: user.id)
       end
     end
 
@@ -127,8 +127,8 @@ FactoryBot.define do
     end
 
     trait :weat_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.weat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:weat_member_role, user_id: user.id)
       end
     end
 
@@ -157,14 +157,26 @@ FactoryBot.define do
     end
 
     trait :wsot_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wsot.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wsot_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wsot_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wsot_leader_role, user_id: user.id)
       end
     end
 
     trait :wat_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wat.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wat_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wat_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wat_leader_role, user_id: user.id)
       end
     end
 
