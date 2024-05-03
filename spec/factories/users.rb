@@ -35,7 +35,7 @@ FactoryBot.define do
         if Rails.env.production?
           FactoryBot.create(:wst_admin_role, user: user)
         else
-          FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_leader: true)
+          FactoryBot.create(:wst_member_role, user: user)
         end
       end
     end
@@ -145,8 +145,8 @@ FactoryBot.define do
     end
 
     trait :wst_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wst.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wst_member_role, user: user)
       end
     end
 

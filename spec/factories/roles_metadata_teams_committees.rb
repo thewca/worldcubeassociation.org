@@ -28,5 +28,6 @@ FactoryBot.define do
     factory :wfc_member_metadata, traits: [:member]
     factory :wfc_leader_metadata, traits: [:leader]
     factory :wmt_member_metadata, traits: [:member]
+    factory :wst_member_metadata, traits: [:member]
   end
 end
