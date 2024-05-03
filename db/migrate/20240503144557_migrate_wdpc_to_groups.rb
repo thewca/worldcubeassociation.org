@@ -8,7 +8,7 @@ class MigrateWdpcToGroups < ActiveRecord::Migration[7.1]
     # email was removed in https://github.com/thewca/worldcubeassociation.org/pull/6065, but I don't
     # think there was any reason to remove it. Hence adding it back.
     metadata = GroupsMetadataTeamsCommittees.create!(email: 'dataprotection@worldcubeassociation.org', friendly_id: team.friendly_id)
-    UserGroup.create!(name: team.name, group_type: UserGroup.group_types[:teams_committees], is_active: false, is_hidden: false, metadata: metadata)
-    migrate_team_members_to_group(Team.c_find_by_friendly_id!('wdpc'), GroupsMetadataTeamsCommittees.find_by(friendly_id: 'wdpc').user_group)
+    group = UserGroup.create!(name: team.name, group_type: UserGroup.group_types[:teams_committees], is_active: false, is_hidden: false, metadata: metadata)
+    migrate_team_members_to_group(team, group)
   end
 end

@@ -23,6 +23,7 @@ class UserGroup < ApplicationRecord
   has_many :user_roles, foreign_key: "group_id"
 
   scope :root_groups, -> { where(parent_group: nil) }
+  scope :active_groups, -> { where(is_active: true) }
 
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten

@@ -1139,7 +1139,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_144557) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.boolean "team_senior_member", default: false, null: false
-    t.bigint "group_id"
   end
 
   create_table "teams", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1235,8 +1234,6 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_03_144557) do
     t.boolean "cookies_acknowledged", default: false, null: false
     t.boolean "registration_notifications_enabled", default: false
     t.string "otp_secret"
-    t.integer "senior_delegate_id"
-    t.string "delegate_status", limit: 64
     t.index ["delegate_id_to_handle_wca_id_claim"], name: "index_users_on_delegate_id_to_handle_wca_id_claim"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
