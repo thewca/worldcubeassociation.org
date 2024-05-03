@@ -102,7 +102,7 @@ class Team < ApplicationRecord
 
   def self.changes_in_all_teams
     team_changes = []
-    all_teams = UserGroup.teams_committees.select { |team_committee| !team_committee.roles_migrated? && team_committee.team.present? }.map(&:team) + UserGroup.councils.map(&:team)
+    all_teams = UserGroup.teams_committees.select { |team_committee| !team_committee.roles_migrated? && team_committee.team.present? }.map(&:team)
     all_teams.each do |team|
       current_team_changes = team.changes_in_team
       if !current_team_changes.empty?
