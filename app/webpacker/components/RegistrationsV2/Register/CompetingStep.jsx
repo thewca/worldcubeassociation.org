@@ -309,10 +309,7 @@ export default function CompetingStep({
               <Message.Content>
                 <Message.Header>
                   {i18n.t(
-                    'competitions.registration_v2.register.registration_status.header',
-                  )}
-                  {i18n.t(
-                    `simple_form.options.registration.status.${registration.competing.registration_status}`,
+                    `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
                   )}
                 </Message.Header>
                 {/* eslint-disable-next-line no-nested-ternary */}

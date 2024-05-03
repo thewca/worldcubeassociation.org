@@ -546,8 +546,6 @@ en:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
-          cancelled: "Cancelled"
-          waiting_list: "On the Waiting List"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
@@ -1763,7 +1761,10 @@ en:
         passed: "You can no longer update your registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
-          header: "Your Registration Status:"
+          accepted: "Your registration has been accepted."
+          pending: "Your registration is pending."
+          cancelled: "Your registration has been deleted."
+          waiting_list: "You are on the Waiting List."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
