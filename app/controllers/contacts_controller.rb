@@ -13,6 +13,7 @@ class ContactsController < ApplicationController
     )
     contact_params = params.require(contact_recipient)
     website_contact.competition_id = contact_params[:competitionId] if contact_recipient == 'competition'
+    website_contact.request_id = contact_params[:requestId] if contact_recipient == 'wst'
     website_contact.message = contact_params[:message]
     website_contact.request = request
     website_contact.logged_in_email = current_user&.email || 'None'

@@ -28,6 +28,9 @@ export default function ContactsPage() {
         competition: {
           competitionId: queryParams?.competitionId,
         },
+        wst: {
+          requestId: queryParams?.requestId,
+        },
       }}
     >
       <Container fluid>
