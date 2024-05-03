@@ -9,6 +9,7 @@ class WebsiteContact < ContactForm
   attr_accessor :inquiry
   attr_accessor :competition_id
   attr_accessor :logged_in_email
+  attr_accessor :request_id
 
   # Override the `to_mail` validation, to show errors for `inquiry` instead.
   def validate_to_email
