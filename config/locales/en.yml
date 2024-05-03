@@ -660,7 +660,7 @@ en:
         500_error: "We're sorry, but something went wrong."
         500_contact_html: "<a href=%{contact_url}>Click here</a> to report it."
         400_error: "The page you were looking for doesn't exist."
-        400_contact_html: "If you think this is a mistake please <a href=%{contact_url}>click here</a> to report it to Software Team."
+        400_contact_html: "If you think this is a mistake please <a href=%{contact_url}>click here</a> to report it."
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
