@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
@@ -25,6 +25,7 @@ export default function Index({ competitionInfo, userInfo, preferredEvents }) {
 
 function Register({ competitionInfo, userInfo, preferredEvents }) {
   const dispatch = useDispatch();
+  const ref = useRef();
   const {
     data: registration,
     isLoading,
@@ -49,7 +50,7 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
     isLoading ? <Loading />
       : (
         <>
-          <RegistrationMessage />
+          <RegistrationMessage ref={ref} />
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}
