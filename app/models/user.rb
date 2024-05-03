@@ -446,6 +446,10 @@ class User < ApplicationRecord
     active_roles.any? { |role| UserRole.group(role) == group }
   end
 
+  private def group_leader?(group)
+    group.lead_user == self
+  end
+
   def board_member?
     group_member?(UserGroup.board_group)
   end
@@ -678,11 +682,15 @@ class User < ApplicationRecord
     can_edit_any_groups? ||
       team_leader?(team) ||
       # The leader of the WDC can edit the banned competitors list
-      (team == Team.banned && team_leader?(Team.wdc))
+      (team == Team.banned && can_edit_banned_competitors?)
   end
 
   def can_view_banned_competitors?
     admin? || staff?
+  end
+
+  private def can_edit_banned_competitors?
+    can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc)
   end
 
   def can_manage_regional_organizations?
@@ -841,7 +849,7 @@ class User < ApplicationRecord
   end
 
   def can_see_eligible_voters?
-    can_admin_results? || team_leader?(Team.wec)
+    can_admin_results? || group_leader?(UserGroup.teams_committees_group_wec)
   end
 
   def get_cannot_delete_competition_reason(competition)
