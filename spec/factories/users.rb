@@ -72,12 +72,6 @@ FactoryBot.define do
       end
     end
 
-    trait :wdpc_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wdpc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
-      end
-    end
-
     trait :wdc_leader do
       after(:create) do |user|
         FactoryBot.create(:wdc_leader_role, user_id: user.id)
