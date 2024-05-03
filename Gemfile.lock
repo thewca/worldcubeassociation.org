@@ -597,6 +597,7 @@ GEM
     rb-fsevent (0.11.0)
     rb-inotify (0.10.1)
       ffi (~> 1.0)
+    rb_sys (0.9.98)
     rdoc (6.7.0)
       psych (>= 4.0.0)
     react-rails (3.2.1)
@@ -777,6 +778,8 @@ GEM
       camertron-eprun
       cldr-plurals-runtime-rb (~> 1.1)
       tzinfo
+    tzf (1.0.0)
+      rb_sys (~> 0.9.89)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
     uber (0.1.0)
@@ -942,6 +945,7 @@ DEPENDENCIES
   timecop
   translighterate
   twitter_cldr
+  tzf
   unicorn
   valid_email
   vault
