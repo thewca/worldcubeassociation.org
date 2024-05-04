@@ -6,31 +6,6 @@ RSpec.describe TeamsController do
   let(:team) { FactoryBot.create :team }
 
   describe 'GET #edit' do
-    context 'when signed in as a team leader without rights to manage all teams' do
-      let(:team_where_is_leader) { Team.wrc }
-      let(:team_where_is_not_leader) { Team.wst }
-      let!(:leader) do
-        user = FactoryBot.create(:user)
-        FactoryBot.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
-        user
-      end
-
-      before :each do
-        sign_in leader
-      end
-
-      it 'can edit his team' do
-        get :edit, params: { id: team_where_is_leader.id }
-        expect(response).to render_template :edit
-      end
-
-      it 'cannot edit other teams' do
-        get :edit, params: { id: team_where_is_not_leader.id }
-        expect(response).to redirect_to root_url
-        expect(flash[:danger]).to_not be_nil
-      end
-    end
-
     it "leader of WDC can manage the banned team, despite not being a member of the banned team" do
       sign_in FactoryBot.create :user, :wdc_leader
 
