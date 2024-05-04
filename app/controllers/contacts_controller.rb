@@ -18,6 +18,7 @@ class ContactsController < ApplicationController
         your_email: requestor_details[:email],
         message: contact_params[:message],
         request: request,
+        logged_in_email: current_user&.email || 'None',
       ),
     )
   end
