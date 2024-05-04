@@ -4,6 +4,7 @@ class PanelController < ApplicationController
   include DocumentsHelper
 
   before_action :authenticate_user!
+  before_action -> { redirect_to_root_unless_user(:can_access_panel?) }
   before_action -> { redirect_to_root_unless_user(:can_access_senior_delegate_panel?) }, only: [:pending_claims_for_subordinate_delegates]
   before_action -> { redirect_to_root_unless_user(:can_access_staff_panel?) }, only: [:staff]
   before_action -> { redirect_to_root_unless_user(:can_access_delegate_panel?) }, only: [:delegate]
