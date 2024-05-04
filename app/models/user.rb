@@ -466,10 +466,6 @@ class User < ApplicationRecord
     group_member?(UserGroup.teams_committees_group_wdc)
   end
 
-  def wdpc_team?
-    group_member?(UserGroup.teams_committees_group_wdpc)
-  end
-
   def ethics_committee?
     group_member?(UserGroup.teams_committees_group_wec)
   end

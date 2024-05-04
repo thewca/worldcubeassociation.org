@@ -233,13 +233,19 @@ after :groups_metadata_board, :groups_metadata_councils, :groups_metadata_teams_
     is_hidden: true,
     metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wst_admin'),
   )
-
   UserGroup.create!(
     name: 'WCT China',
     group_type: :teams_committees,
     is_active: true,
     is_hidden: true,
     metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wct_china'),
+  )
+  UserGroup.create!(
+    name: 'WCA Data Protection Committee',
+    group_type: :teams_committees,
+    is_active: false,
+    is_hidden: false,
+    metadata: GroupsMetadataTeamsCommittees.find_by!(friendly_id: 'wdpc'),
   )
 
   # Translators

@@ -54,10 +54,6 @@ class Team < ApplicationRecord
     Team.c_find_by_friendly_id!('banned')
   end
 
-  def self.wdpc
-    Team.c_find_by_friendly_id!('wdpc')
-  end
-
   def acronym
     friendly_id.upcase
   end
