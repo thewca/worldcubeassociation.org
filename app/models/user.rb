@@ -1333,6 +1333,10 @@ class User < ApplicationRecord
     admin? || any_kind_of_delegate?
   end
 
+  def can_access_staff_panel?
+    admin? || staff?
+  end
+
   def can_access_panel?
     (
       can_access_wfc_panel? ||
@@ -1341,7 +1345,8 @@ class User < ApplicationRecord
       can_access_board_panel? ||
       can_access_leader_panel? ||
       can_access_senior_delegate_panel? ||
-      staff_or_any_delegate? # Staff or any delegate can access the remaining things in panel.
+      can_access_delegate_panel? ||
+      can_access_staff_panel?
     )
   end
 
