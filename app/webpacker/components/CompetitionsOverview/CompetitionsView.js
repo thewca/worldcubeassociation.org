@@ -1,7 +1,7 @@
 import React, {
   useEffect, useMemo, useReducer, useState,
 } from 'react';
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Container } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -78,7 +78,7 @@ function CompetitionsView() {
 
   const {
     data: compRegistrationData,
-    isPending: regDataIsPending,
+    isFetching: regDataIsPending,
   } = useQuery({
     queryFn: () => fetchJsonOrError(apiV0Urls.competitions.registrationData, {
       headers: {
@@ -89,6 +89,10 @@ function CompetitionsView() {
     }),
     queryKey: ['registration-info', ...compIds],
     enabled: shouldShowRegStatus,
+    // This is where the magic happens: Using `keepPreviousData` makes it so that
+    //   all previously loaded indicators are held in-cache while the fetcher for the next
+    //   batch is running in the background. (Adding comment here because it's not in the docs)
+    placeholderData: keepPreviousData,
     select: (data) => data.data,
   });
 
@@ -120,6 +124,7 @@ function CompetitionsView() {
               filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
               isLoading={competitionsIsFetching}
+              regStatusLoading={regDataIsPending}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />
