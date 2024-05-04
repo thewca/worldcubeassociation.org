@@ -135,6 +135,16 @@ class Api::V0::CompetitionsController < Api::V0::ApiController
     render json: competition.registrations.accepted.includes(:events)
   end
 
+  def registration_data
+    competition_ids = params.require(:ids)
+
+    data = CacheAccess.hydrate_entities('comp-registration-data', competition_ids, expires_in: 5.minutes) do |uncached_ids|
+      Competition.find(uncached_ids).map { |comp| { id: comp.id, registration_status: comp.registration_status } }
+    end
+
+    render json: data
+  end
+
   def show_wcif
     competition = competition_from_params
     require_can_manage!(competition)

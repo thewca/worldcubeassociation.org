@@ -1,7 +1,7 @@
 import React, {
   useEffect, useMemo, useReducer, useState,
 } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { Container } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -68,11 +68,36 @@ function CompetitionsView() {
     },
   });
 
-  const competitions = rawCompetitionData?.pages.flatMap((page) => page.data)
+  const baseCompetitions = rawCompetitionData?.pages.flatMap((page) => page.data)
     .filter((comp) => (
       (!isCancelled(comp) || debouncedFilterState.shouldIncludeCancelled)
       && (debouncedFilterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
     ));
+
+  const compIds = baseCompetitions?.map((comp) => comp.id) || [];
+
+  const {
+    data: compRegistrationData,
+    isPending: regDataIsPending,
+  } = useQuery({
+    queryFn: () => fetchJsonOrError(apiV0Urls.competitions.registrationData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ ids: compIds }),
+    }),
+    queryKey: ['registration-info', ...compIds],
+    enabled: shouldShowRegStatus,
+    select: (data) => data.data,
+  });
+
+  const competitions = useMemo(() => (shouldShowRegStatus ? (
+    baseCompetitions.map((comp) => {
+      const regData = compRegistrationData?.find((reg) => reg.id === comp.id);
+      return regData ? { ...comp, ...regData } : comp;
+    })
+  ) : baseCompetitions), [baseCompetitions, compRegistrationData, shouldShowRegStatus]);
 
   return (
     <Container>
