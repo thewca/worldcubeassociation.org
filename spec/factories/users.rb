@@ -67,8 +67,8 @@ FactoryBot.define do
     end
 
     trait :wdc_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wdc_member_role, user_id: user.id)
       end
     end
 
@@ -80,7 +80,7 @@ FactoryBot.define do
 
     trait :wdc_leader do
       after(:create) do |user|
-        FactoryBot.create(:team_member, team_id: Team.wdc.id, user_id: user.id, team_leader: true)
+        FactoryBot.create(:wdc_leader_role, user_id: user.id)
       end
     end
 
@@ -121,8 +121,8 @@ FactoryBot.define do
     end
 
     trait :wec_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wec.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wec_member_role, user_id: user.id)
       end
     end
 
@@ -133,14 +133,20 @@ FactoryBot.define do
     end
 
     trait :wfc_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wfc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wfc_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wfc_leader do
+      after(:create) do |user|
+        FactoryBot.create(:wfc_leader_role, user_id: user.id)
       end
     end
 
     trait :wmt_member do
-      after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wmt.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+      after(:create) do |user|
+        FactoryBot.create(:wmt_member_role, user_id: user.id)
       end
     end
 

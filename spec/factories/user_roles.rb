@@ -144,6 +144,36 @@ FactoryBot.define do
       metadata { FactoryBot.create(:wcat_member_metadata) }
     end
 
+    trait :wdc_member do
+      group { UserGroup.teams_committees_group_wdc }
+      metadata { FactoryBot.create(:wdc_member_metadata) }
+    end
+
+    trait :wdc_leader do
+      group { UserGroup.teams_committees_group_wdc }
+      metadata { FactoryBot.create(:wdc_leader_metadata) }
+    end
+
+    trait :wec_member do
+      group { UserGroup.teams_committees_group_wec }
+      metadata { FactoryBot.create(:wec_member_metadata) }
+    end
+
+    trait :wfc_member do
+      group { UserGroup.teams_committees_group_wfc }
+      metadata { FactoryBot.create(:wfc_member_metadata) }
+    end
+
+    trait :wfc_leader do
+      group { UserGroup.teams_committees_group_wfc }
+      metadata { FactoryBot.create(:wfc_leader_metadata) }
+    end
+
+    trait :wmt_member do
+      group { UserGroup.teams_committees_group_wmt }
+      metadata { FactoryBot.create(:wmt_member_metadata) }
+    end
+
     trait :board do
       group_id { UserGroup.board_group.id }
     end
@@ -175,6 +205,12 @@ FactoryBot.define do
     factory :wsot_leader_role, traits: [:wsot_leader, :active]
     factory :weat_member_role, traits: [:weat_member, :active]
     factory :wcat_member_role, traits: [:wcat_member, :active]
+    factory :wdc_member_role, traits: [:wdc_member, :active]
+    factory :wdc_leader_role, traits: [:wdc_leader, :active]
+    factory :wec_member_role, traits: [:wec_member, :active]
+    factory :wfc_member_role, traits: [:wfc_member, :active]
+    factory :wfc_leader_role, traits: [:wfc_leader, :active]
+    factory :wmt_member_role, traits: [:wmt_member, :active]
     factory :board_role, traits: [:board, :active]
   end
 end
