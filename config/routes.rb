@@ -188,9 +188,9 @@ Rails.application.routes.draw do
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
-  get 'panel' => 'panel#index'
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
+    get 'staff' => 'panel#staff', as: :panel_staff
     get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'wrt' => 'panel#wrt', as: :panel_wrt
@@ -407,4 +407,5 @@ Rails.application.routes.draw do
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
   get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
+  get 'panel' => redirect('panel/staff')
 end
