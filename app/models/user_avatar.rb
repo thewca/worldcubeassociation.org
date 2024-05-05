@@ -45,12 +45,38 @@ class UserAvatar < ApplicationRecord
     end
   end
 
+  def thumbnail_url
+    case self.backend
+    when 'active_storage'
+      if self.approved?
+        Rails.application.routes.url_helpers.rails_storage_proxy_path(self.image)
+      else
+        Rails.application.routes.url_helpers.rails_representation_url(self.image)
+      end
+    else
+      # Only get the thumbnail if AR does the image processing for us
+      nil
+    end
+  end
+
   def filename
     self.active_storage? ? self.image.blob.filename.to_s : super
   end
 
   def image
     self.approved? ? self.public_image : self.private_image
+  end
+
+  def thumbnail_image
+    self.image.variant(
+      resize_and_pad: [100, 100],
+      crop: [
+        self.thumbnail_crop_x,
+        self.thumbnail_crop_y,
+        self.thumbnail_crop_w,
+        self.thumbnail_crop_h,
+      ],
+    )
   end
 
   def attach_image(file)
