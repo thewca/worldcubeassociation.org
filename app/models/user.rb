@@ -59,8 +59,8 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select { |role| UserRole.is_eligible_voter?(role) }
-      .map { |role| UserRole.user(role) }
+      .select { |role| role.is_eligible_voter? }
+      .map { |role| role.user }
       .uniq
   end
 
@@ -443,7 +443,7 @@ class User < ApplicationRecord
   end
 
   private def group_member?(group)
-    active_roles.any? { |role| UserRole.group(role) == group }
+    active_roles.any? { |role| role.group == group }
   end
 
   private def group_leader?(group)
@@ -499,11 +499,11 @@ class User < ApplicationRecord
   end
 
   private def software_team_admin?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wst_admin }
+    active_roles.any? { |role| role.group == UserGroup.teams_committees_group_wst_admin }
   end
 
   def staff?
-    active_roles.any? { |role| UserRole.is_staff?(role) }
+    active_roles.any? { |role| role.is_staff? }
   end
 
   def team_member?(team)
@@ -523,7 +523,7 @@ class User < ApplicationRecord
   end
 
   def delegate_roles
-    active_roles(include_converted: false).filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
+    active_roles(include_converted: false).filter { |role| role.group.delegate_regions? }
   end
 
   def any_kind_of_delegate?
@@ -588,14 +588,14 @@ class User < ApplicationRecord
     groups = []
 
     active_roles.select do |role|
-      group = UserRole.group(role)
-      group_type = UserRole.group_type(role)
+      group = role.group
+      group_type = role.group_type
       if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        if UserRole.is_lead?(role)
+        if role.is_lead?
           groups << group.id
         end
       elsif group_type == UserGroup.group_types[:delegate_regions]
-        if UserRole.is_lead?(role) && UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+        if role.is_lead? && role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
           groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
         end
       end
@@ -985,9 +985,9 @@ class User < ApplicationRecord
   def self.delegate_reports_receivers_emails
     delegate_groups = UserGroup.delegate_regions
     roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      ["trainee_delegate", "junior_delegate"].include?(UserRole.status(role))
+      ["trainee_delegate", "junior_delegate"].include?(role.metadata.status)
     end
-    eligible_delegate_users = roles.map { |role| UserRole.user(role) }
+    eligible_delegate_users = roles.map { |role| role.user }
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
@@ -1051,16 +1051,16 @@ class User < ApplicationRecord
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| UserRole.is_staff?(role) }
-      .map { |role| UserRole.user(role).id }
+      .select { |role| role.is_staff? }
+      .map { |role| role.user_id }
   end
 
   def self.trainee_delegate_ids
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
-      .map { |role| UserRole.user(role).id }
+      .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+      .map { |role| role.user_id }
   end
 
   def self.search(query, params: {})
@@ -1102,15 +1102,14 @@ class User < ApplicationRecord
   private def deprecated_team_roles
     active_roles
       .select { |role|
-        group_type = UserRole.group_type(role)
         [
           UserGroup.group_types[:teams_committees],
           UserGroup.group_types[:councils],
           UserGroup.group_types[:board],
-        ].include?(group_type)
+        ].include?(role.group_type)
       }
-      .reject { |role| UserRole.group(role).is_hidden }
-      .map { |role| UserRole.deprecated_team_role(role) }
+      .reject { |role| role.group.is_hidden }
+      .map { |role| role.deprecated_team_role }
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -1283,26 +1282,15 @@ class User < ApplicationRecord
   end
 
   def senior_delegates
-    delegate_roles.map { |role| UserRole.group(role).senior_delegate }
+    delegate_roles.map { |role| role.group.senior_delegate }
   end
 
   def regional_delegates
-    delegate_roles.map { |role| UserRole.group(role).lead_user }
+    delegate_roles.map { |role| role.group.lead_user }
   end
 
   def active_roles(include_converted: true)
-    roles(include_converted: include_converted).select { |role| UserRole.is_active?(role) }
-  end
-
-  def team_roles
-    roles = []
-    self.current_team_members.each do |team_member|
-      team_member_group = team_member.team.group
-      if team_member_group.present? && !team_member_group.roles_migrated?
-        roles << team_member.role
-      end
-    end
-    roles
+    roles(include_converted: include_converted).select { |role| role.is_active? }
   end
 
   def can_access_wfc_panel?
@@ -1322,7 +1310,7 @@ class User < ApplicationRecord
   end
 
   def can_access_leader_panel?
-    admin? || active_roles.any? { |role| UserRole.is_lead?(role) && (UserRole.group(role).teams_committees? || UserRole.group(role).councils?) }
+    admin? || active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
   end
 
   def can_access_senior_delegate_panel?
@@ -1353,26 +1341,21 @@ class User < ApplicationRecord
   def subordinate_delegates
     delegate_roles
       .filter { |role| role.is_lead? }
-      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_users_of_all_child_groups }
+      .flat_map { |role| role.group.active_users + role.group.active_users_of_all_child_groups }
       .uniq
   end
 
   private def can_access_wfc_senior_matters?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wfc && GroupsMetadataTeamsCommittees.at_least_senior_member?(role) }
+    active_roles.any? { |role| role.group == UserGroup.teams_committees_group_wfc && role.metadata.at_least_senior_member? }
   end
 
   def roles(include_converted: true)
-    roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
+    UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
     # array, so that we can append roles which are not yet migrated to the new system. This can be
-    # removed once all roles are migrated to the new system.
-
-    roles.concat(team_roles) if include_converted
-
-    roles
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| UserRole.status_sort_rank(role) }
+    delegate_roles.max_by { |role| role.status_sort_rank }
   end
 
   def delegate_status

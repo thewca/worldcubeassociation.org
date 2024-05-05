@@ -8,11 +8,4 @@ class GroupsMetadataTeamsCommittees < ApplicationRecord
     email: "email",
     contact_form: "contact_form",
   }
-
-  def self.at_least_senior_member?(role)
-    [
-      RolesMetadataTeamsCommittees.statuses[:senior_member],
-      RolesMetadataTeamsCommittees.statuses[:leader],
-    ].include?(UserRole.status(role))
-  end
 end
