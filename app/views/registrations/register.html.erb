@@ -1,0 +1,131 @@
+<% provide(:title, I18n.t('registrations.new_registration.title', comp: @competition.name)) %>
+
+<%= render layout: "nav" do %>
+
+  <p><b><%= t('registrations.registration_requirements') %></b>
+  </p>
+  <%= render "competitions/registration_requirements", show_links_to_register_page: false %>
+  <hr/>
+
+  <% opens_in_days = distance_of_time_in_words_to_now(@competition.registration_open) %>
+  <% closes_in_days = distance_of_time_in_words_to_now(@competition.registration_close) %>
+
+  <% if @competition.registration_not_yet_opened? %>
+    <%= alert :info, t('registrations.will_open_html', days: opens_in_days, time: wca_local_time(@competition.registration_open)) %>
+  <%# Don't show this alert if we're showing the registration's details: this message is included in it! %>
+  <% elsif @competition.registration_past? && !@registration&.show_details?(current_user) %>
+    <%= alert :danger, t('registrations.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
+  <% end %>
+
+  <% unless current_user %>
+    <%= alert :info do %>
+      <% if @competition.registration_past? %>
+        <% # i18n-tasks-use t('registrations.please_sign_in_past_html') %>
+        <%= please_sign_in('registrations.please_sign_in_past_html', @competition) %>
+      <% elsif @competition.registration_not_yet_opened? %>
+        <% # i18n-tasks-use t('registrations.please_sign_in_not_yet_open_html') %>
+        <%= please_sign_in('registrations.please_sign_in_not_yet_open_html', @competition) %>
+      <% else %>
+        <% # i18n-tasks-use t('registrations.please_sign_in_html') %>
+        <%= please_sign_in('registrations.please_sign_in_html', @competition, comp: @competition.name) %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <% if @competition.uses_new_registration_service? %>
+      <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
+                                                        userInfo: @current_user,
+                                                        preferredEvents: @current_user.preferred_events.pluck(:id),
+                                                        }) %>
+    <% else %>
+      <% user_may_register = current_user.cannot_register_for_competition_reasons(@competition).length == 0 %>
+      <% if @registration.show_details?(current_user) %>
+        <p><%= t 'registrations.greeting', name: current_user.name %></p>
+      <% end %>
+
+      <% if !@registration.new_or_deleted? %>
+        <p>
+          <%= t 'registrations.have_registered', comp: @competition.name %>
+        </p>
+
+        <% if !current_user.can_edit_registration?(@registration) %>
+          <%= t 'registrations.contact_organizer' %>
+        <% end %>
+        <hr/>
+      <% elsif @competition.registration_opened? %>
+        <% unless user_may_register %>
+          <%= alert :danger do %>
+            <%= t 'registrations.please_fix_profile_html', comp: @competition.name,
+                  profile: link_to(t('registrations.profile'), profile_edit_path) %>
+            <ul>
+              <% current_user.cannot_register_for_competition_reasons(@competition).each do |reason| %>
+                <li><%= reason %></li>
+              <% end %>
+            </ul>
+          <% end %>
+        <% else %>
+          <% if @competition.registration_full? %>
+            <%= alert :warning, @competition.registration_full_message %>
+          <% end %>
+          <p>
+            <%= t 'registrations.can_register', comp: @competition.name %>
+          </p>
+          <hr/>
+        <% end %>
+      <% end %>
+
+      <% if user_may_register %>
+        <% show_payment_form = @registration.show_payment_form? %>
+        <% if show_payment_form %>
+          <div class="panel panel-info">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <%= t 'registrations.payment_form.title'%>
+              </h4>
+            </div>
+            <div class="panel-body">
+              <%# Intention: Display this if there is a payment in a state that is processing on Stripe's side - where the user can't advance the state %>
+              <% if @registration.payment_intents.processing.any? %>
+                <%= render "payment_intents" %>
+              <% else %>
+                <%# Intention: If the user can do something to advance the payment state, show the payment form. %>
+                <%= render "payment_form" %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+        <% if @registration.show_details?(current_user) %>
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h4 class="panel-title">
+                <%= render "register_panel_title", foldable: show_payment_form do %>
+                  <span><%= t 'registrations.panel_title' %></span>
+                <% end %>
+              </h4>
+            </div>
+            <div id="register-panel" class="panel-body <%= "collapse" if show_payment_form %>">
+              <p>
+                <% if @registration.new_or_deleted? %>
+                  <%= t('registrations.check_registration_information') %>
+                <% elsif @registration.accepted? %>
+                  <%= t('registrations.accepted') %>
+                <% elsif @registration.pending? %>
+                  <%= t('registrations.waiting_list') %>
+                <% end %>
+              </p>
+              <hr/>
+              <%= render "register_form" %>
+            </div>
+            <div class="panel-footer">
+              <% if @competition.registration_past? %>
+                <%= t('registrations.closed_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
+              <% else %>
+                <%= t('registrations.will_close_html', days: closes_in_days, time: wca_local_time(@competition.registration_close)) %>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

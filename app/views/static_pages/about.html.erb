@@ -1,0 +1,7 @@
+<% provide(:title, t('about.title')) %>
+
+<%= react_component('StaticPages/About', {
+  currentBoardMembers: UserGroup.board.flat_map(&:active_users).sort_by(&:name)
+}, {
+  class: 'container'
+}) %>

@@ -1,0 +1,93 @@
+<% show_delegates ||= false %>
+<% bookmarked ||= false %>
+<% registrations_by_competition_id ||= {} %>
+<% if competitions.length < 1 %>
+  <%= alert :info do %>
+    <% if bookmarked %>
+      <%= t '.no_bookmarked_competitions' %>
+    <% elsif !past %>
+      <%= t '.no_upcoming_competitions_html', link: link_to(t('.competitions_list'), competitions_path) %>
+    <% else %>
+      <%= t '.no_past_competitions' %>
+    <% end %>
+  <% end %>
+<% else %>
+  <div class="table-responsive">
+    <table class="table competitions-table <%= past ? "table-striped" : "" %>">
+      <thead>
+        <tr>
+          <% if @show_registration_status && bookmarked %>
+            <th></th>
+          <% end %>
+          <th><%= t 'competitions.adjacent_competitions.name' %></th>
+          <th><%= t 'competitions.adjacent_competitions.location' %></th>
+          <th><%= t 'competitions.adjacent_competitions.date' %></th>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th><%= "Delegates" if show_delegates %></th>
+          <th class="big-column"></th>
+        </tr>
+      </thead>
+      <tbody>
+        <% competitions.each do |competition| %>
+          <% registration = registrations_by_competition_id[competition.id] %>
+          <% tr_classes = [ competition.confirmed? ? "confirmed" : "not-confirmed",
+                          competition.showAtAll? ? "visible" : "not-visible",
+                          competition.cancelled? ? "cancelled" : "",
+                          past ? "past" : "not-past" ].join(' ') %>
+          <tr class="<%= tr_classes %>"
+              data-toggle="tooltip" data-placement="bottom" data-container="body"
+              title="<%= competition_message_for_user(competition, current_user, registration) unless past %>">
+            <% if @show_registration_status && bookmarked %>
+              <td><%= registration_status_icon(competition) %></td>
+            <% end %>
+            <td>
+              <%= link_to competition.display_name, competition_path(competition) %>
+              <% if competition.championships.any? %>
+                <span class="championship-trophy" data-toggle="tooltip" data-placement="bottom" title="<%= competition.championships.sort.map { |championship| championship.name }.join(", ") %>">
+                  <%= ui_icon('trophy') %>
+                </span>
+              <% end %>
+            </td>
+            <td><%= competition.city_and_country %></td>
+            <td><%= wca_date_range(competition.start_date, competition.end_date) %></td>
+            <td>
+              <% if registration %>
+                <%= ui_icon(registration.accepted? ? "calendar check" : "hourglass half") %>
+              <% end %>
+            </td>
+            <td>
+              <% if !past && current_user.can_manage_competition?(competition) %>
+                <%= link_to t('.edit'), edit_competition_path(competition) %>
+              <% elsif competition.results_posted? %>
+                <%= ui_icon("check circle", data: { toggle: "tooltip", placement: "top", container: "body" }, title: t('.results_up')) %>
+              <% end %>
+            </td>
+            <td>
+              <% if !past && competition.use_wca_registration? && current_user.can_manage_competition?(competition) %>
+                <%= link_to t('.registrations'), competition_edit_registrations_path(competition) %>
+              <% end %>
+            </td>
+            <td>
+              <% if show_delegates %>
+                <%= competition.delegates.map(&:name).join(", ") %>
+              <% else %>
+                <% if current_user.can_view_delegate_report?(competition.delegate_report) %>
+                  <%= link_to ui_icon('file alt'), delegate_report_path(competition), title: t('.report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                <% end %>
+                <% if current_user.can_edit_delegate_report?(competition.delegate_report) %>
+                  <%= link_to ui_icon('edit'), delegate_report_edit_path(competition), title: t('.edit_report'), data: { 'toggle': 'tooltip', 'container': 'body' } %>
+                <% end %>
+                <% if competition.user_should_post_delegate_report?(current_user) %>
+                  <%= ui_icon('warning', title: t('.missing_report'), data: { 'toggle': 'tooltip', 'container': 'body' }) %>
+                <% end %>
+              <% end %>
+            </td>
+            <td class="big-column"></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>

@@ -1,0 +1,26 @@
+<footer class="footer ui vertical segment">
+  <div class="ui container footer-links text-center">
+    <div class="ui horizontal divided list">
+      <div class="item">
+        <%= link_to(t('homepage.about_us.title'), about_path) %>
+      </div>
+      <div class="item">
+        <%= link_to(t('homepage.faq.title'), faq_path) %>
+      </div>
+      <div class="item">
+        <%= link_to(t('homepage.contact.title'), contact_path) %>
+      </div>
+      <div class="item">
+        <a href="https://github.com/thewca/worldcubeassociation.org" target="_blank" class="hide-new-window-icon">
+          <%= ui_icon("github") %> GitHub
+        </a>
+      </div>
+      <div class="item">
+        <%= link_to(t('footer.privacy'), privacy_path) %>
+      </div>
+      <div class="item">
+        <%= link_to(t('footer.disclaimer'), disclaimer_path) %>
+      </div>
+    </div>
+  </div>
+</footer>

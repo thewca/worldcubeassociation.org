@@ -1,0 +1,83 @@
+<% provide(:title, I18n.t('registrations.list.title', comp: @competition.name)) %>
+
+<%= render layout: "nav" do %>
+  <% if @competition.uses_new_registration_service? %>
+    <%= react_component('RegistrationsV2/Registrations', { competitionInfo: @competition.to_competition_info }) %>
+  <% else %>
+    <% cache [
+               "registrations_index",
+               @competition.events.pluck(:id),
+               @competition.registrations.accepted.joins(:user).order(:id).pluck(:id, :updated_at, :"users.updated_at"),
+               I18n.locale
+             ] do %>
+      <%= wca_table data: { toggle: "table" } do %>
+        <thead>
+        <tr>
+          <th class="name" data-sortable="true" data-field="name" data-sorter="compareHtmlContent"><%= t 'activerecord.attributes.registration.name' %></th>
+          <th class="country" data-sortable="true"><%= t 'common.user.representing' %></th>
+
+          <% @competition.events.each do |event| %>
+            <th>
+              <%= cubing_icon event.id, data: { toggle: "tooltip", placement: "bottom", container: "body" }, title: event.name %>
+            </th>
+          <% end %>
+
+          <th class="event-count" data-sortable="true"><%= t 'registrations.list.total' %></th>
+          <!-- Extra column for .table-greedy-last-column -->
+          <th></th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <% @registrations.each do |registration| %>
+          <tr>
+            <td class="name">
+              <% if registration.wca_id.present? %>
+                <% @returners += 1 %>
+                <%= link_to registration.name, person_path(registration.wca_id) %>
+              <% else %>
+                <% @newcomers += 1 %>
+                <%= registration.name %>
+              <% end %>
+            </td>
+            <td class="country"><%= registration.country.name %></td>
+
+            <% @competition.events.each do |event| %>
+              <td>
+                <% if registration.events.include?(event) %>
+                  <% @count_by_event[event.id] += 1 %>
+                  <%= cubing_icon event.id %>
+                <% end %>
+              </td>
+            <% end %>
+
+            <td class="event-count">
+              <%= registration.events.length %>
+            </td>
+            <!-- Extra column for .table-greedy-last-column -->
+            <td></td>
+          </tr>
+        <% end %>
+        </tbody>
+
+        <tfoot>
+        <tr>
+          <td>
+            <%= @newcomers %> <%= t('registrations.registration_info_people.newcomer', count: @newcomers) %> +
+            <%= @returners %> <%= t('registrations.registration_info_people.returner', count: @returners) %> =
+            <%= @newcomers + @returners %> <%= t('registrations.registration_info_people.person', count: @newcomers + @returners) %>
+          </td>
+          <% country_count = @registrations.map(&:country).uniq.length %>
+          <td><%= t('registrations.list.country_plural', count: country_count) %></td>
+          <% @competition.events.each do |event| %>
+            <td><%= @count_by_event[event.id] %></td>
+          <% end %>
+
+          <!-- Extra column for .table-greedy-last-column -->
+          <td></td>
+        </tr>
+        </tfoot>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

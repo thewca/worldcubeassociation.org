@@ -1,0 +1,221 @@
+<% add_to_packs("auto_numeric") %>
+<%= horizontal_simple_form_for :payment, url: "", html: { id: :form_payment } do |f| %>
+  <%= f.input :fees_paid, label: t('registrations.payment_form.labels.fees_paid'), hint: false do %>
+    <p class="form-control-static"><%= format_money(@registration.paid_entry_fees) %></p>
+  <% end %>
+  <%= f.input :fees_remaining, label: t('registrations.payment_form.labels.fees_remaining'), hint: false do %>
+    <p class="form-control-static"><%= format_money(@registration.outstanding_entry_fees) %></p>
+  <% end %>
+
+  <% if @competition.enable_donations %>
+    <%= f.input :show_donation, as: :boolean, label: t('registrations.payment_form.labels.show_donation'), hint: false, input_html: { id: 'toggle-show-donation' } %>
+    <%= f.input :donation, as: :money_amount, currency: @competition.currency_code, value: "0", label: t('registrations.payment_form.labels.donation'), hint: t('registrations.payment_form.hints.donation'), wrapper_html: { id: 'donation-amount-wrapper' } %>
+  <% end %>
+
+  <%= f.input :ajax_error, label: t('registrations.payment_form.labels.ajax_error'), hint: false, wrapper_html: { id: 'wca-error-wrapper', class: 'text-danger' } do %>
+    <p class="form-control-static" id="wca-ajax-error"></p>
+  <% end %>
+
+  <hr/>
+  <%= f.input :subtotal, label: t('registrations.payment_form.labels.subtotal'), hint: false do %>
+    <p class="form-control-static" id="money-subtotal"><%= format_money(@registration.outstanding_entry_fees) %></p>
+  <% end %>
+  <div id="paypal-buttons">
+    <%= f.input :payment_information, label: t("registrations.payment_form.labels.payment_information"), hint: false, wrapper_html: { id: 'payment-element-wrapper' } do %>
+      <div id="payment-buttons"></div>
+    <% end %>
+    <%= f.input :payment_service_error, label: t('registrations.payment_form.labels.payment_service_error'), hint: false, wrapper_html: { id: 'paypal-error-wrapper', class: 'text-danger' } do %>
+      <p class="form-control-static" id="paypal-sdk-error"></p>
+    <% end %>
+  </div>
+
+  <% merchant_id = @competition.payment_account_for(:paypal).paypal_merchant_id %>
+  <% currency_iso = @registration.outstanding_entry_fees.currency.iso_code %>
+
+  <script src="https://www.paypal.com/sdk/js?client-id=<%= AppSecrets.PAYPAL_CLIENT_ID%>&merchant-id=<%= merchant_id %>&currency=<%= currency_iso %>"></script>
+
+  <script>
+    // ----------
+    // I18N and currency code data
+    // ----------
+
+    const pendingAmountRuby = parseInt('<%= @registration.outstanding_entry_fees.cents %>');
+    const currencyIsoCode = '<%= @registration.outstanding_entry_fees.currency.iso_code %>';
+
+    // ----------
+    // Init jQuery variables and reset their state
+    // ----------
+
+    const $ajaxErrorRow = $('#wca-error-wrapper');
+    $ajaxErrorRow.hide();
+
+    const $paypalErrorRow = $('#paypal-error-wrapper');
+    $paypalErrorRow.hide();
+
+    const $paymentElementRow = $('#payment-element-wrapper');
+    $paymentElementRow.removeClass("has-error");
+
+    const $donationFormRow = $('#donation-amount-wrapper');
+    $donationFormRow.hide();
+
+    // we use a custom RubyMoney input that works with JS auto_numeric
+    // unfortunately, it doesn't support simple_form's usual input_html options
+    // and I am too afraid to change it (at the risk of breaking other parts of the website)
+    // so we resort to manually fetching the input and its backing money field
+    const $donationAmountField = $('input[name="payment[donation]"]');
+    const $donationInputField = $(`input[data-target="#${$donationAmountField.attr('id')}"]`);
+
+    // ----------
+    // Toggles upon submitting/loading a payment
+    // ----------
+
+    function toggleSaving(saving) {
+      $donationInputField.prop("disabled", saving);
+      $donationInputField.toggleClass("saving", saving);
+
+      if (saving) {
+        $ajaxErrorRow.hide();
+        $paypalErrorRow.hide();
+
+        $paymentElementRow.removeClass("has-error");
+      }
+    }
+
+    // ----------
+    // Init PayPal PaymentElement
+    // ----------
+
+    function wrapAjaxPromise(queryKey, settings) {
+      return new Promise((resolve, reject) => {
+        window.wca.cancelPendingAjaxAndAjax(queryKey, {
+          ...settings,
+          success: resolve,
+          error: reject,
+        })
+      });
+    }
+
+    const paypalButtons = paypal.Buttons({
+        // Order is created on the server and the order id is returned
+        createOrder: (data, actions) => {
+          toggleSaving(true);
+
+          const amount = getCurrentRubyAmount();
+
+          return wrapAjaxPromise('load-payment-intent', {
+            url: '<%= registration_create_paypal_order_path(@registration) %>',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify({ amount: amount }),
+          })
+            .then(({ id: orderId }) => orderId)
+            .catch(handleAjaxError);
+        },
+
+        // Finalize the transaction on the server after payer approval
+        onApprove: (data, actions) => {
+          return wrapAjaxPromise('capture-paypal-order', {
+            url: '<%= registration_capture_paypal_payment_path(@registration) %>',
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            data: JSON.stringify(data),
+        })
+          .then((orderData) => {
+            toggleSaving(false);
+
+            // Successful capture! For dev/demo purposes:
+            console.log('Capture result', orderData, JSON.stringify(orderData, null, 2));
+            const transaction = orderData.purchase_units[0].payments.captures[0];
+            alert(`Transaction ${transaction.status}: ${transaction.id}\n\nSee console for all available details`);
+
+            // When ready to go live, remove the alert and show a success message within this page. For example:
+            // const element = document.getElementById('paypal-button-container');
+            // element.innerHTML = '<h3>Thank you for your payment!</h3>';
+            // Or go to another URL:  actions.redirect('thank_you.html');
+          })
+          .catch(handleAjaxError);
+        },
+
+        onError: (err) => handlePaypalError(err, false),
+        onCancel: (data) => handlePaypalError(data, true),
+    });
+
+    paypalButtons.render('#payment-buttons')
+
+    // ----------
+    // Error handling
+    // ----------
+
+    async function handleAjaxError(errorData) {
+      toggleSaving(false);
+
+      const $ajaxErrorDiv = $('#wca-ajax-error');
+
+      const requestId = errorData.getResponseHeader('X-Request-Id');
+      $ajaxErrorDiv.text(`${errorData.statusText}: ${requestId}`);
+
+      $ajaxErrorRow.show();
+    }
+
+    function handlePaypalError(errPayload, isManualCancel = false) {
+      toggleSaving(false);
+
+      const $paypalErrorDiv = $('#paypal-sdk-error');
+
+      if (isManualCancel) {
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_canceled") %>');
+      } else {
+        // Quote from the PayPal documentation: (see https://developer.paypal.com/sdk/js/reference/#onerror)
+        // Note: This error handler is a catch-all. Errors at this point aren't expected to be handled beyond showing a generic error message or page.
+        $paypalErrorDiv.text('<%= t("registrations.payment_form.errors.paypal_failed") %>');
+      }
+
+      $paymentElementRow.addClass("has-error");
+      $paypalErrorRow.show();
+    }
+
+    // ----------
+    // Subtotal text and Stripe PaymentElement internal amount
+    // ----------
+
+    const $donationToggle = $('#toggle-show-donation');
+    const $subtotalText = $('#money-subtotal');
+
+    updateSubtotal();
+
+    function getCurrentRubyAmount() {
+      if ($donationToggle.is(':checked')) {
+        const donation = parseInt($donationAmountField.val() || 0);
+
+        return pendingAmountRuby + donation;
+      }
+
+      return pendingAmountRuby;
+    }
+
+    function updateSubtotal() {
+      const amount = getCurrentRubyAmount();
+
+      window.wca.cancelPendingAjaxAndAjax('refresh-payment-subtotal', {
+        url: '<%= registration_payment_denomination_path %>',
+        data: { amount: amount, currency_iso: currencyIsoCode },
+        success: function (data) {
+          const { human_amount: humanAmount } = data;
+
+          $subtotalText.text(humanAmount);
+        },
+        error: handleAjaxError,
+      });
+    }
+
+    $donationToggle.on('change', function() {
+      $donationFormRow.slideToggle(this.checked);
+      updateSubtotal();
+    });
+
+    $donationAmountField.on('change', function() {
+      updateSubtotal();
+    });
+  </script>
+<% end %>
+

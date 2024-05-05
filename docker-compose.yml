@@ -2,9 +2,8 @@ version: "3.8"
 
 x-app: &app
   build:
-    context: WcaOnRails
     dockerfile: Dockerfile.dev
-  working_dir: /app/WcaOnRails
+  working_dir: /app
   volumes:
     - .:/app
     - gems_volume:/usr/local/bundle
@@ -30,7 +29,7 @@ services:
     # Next, load the database if it does not exist yet
     # Start the server and bind to 0.0.0.0 (vs 127.0.0.1) so Docker's port mappings work correctly
     command: >
-      bash -c 'bundle install && yarn install &&
+      bash -c 'bundle install && corepack install && yarn install &&
       rm -f .db-inited &&
       if ! [[ "`mysqlshow --user=root --host=wca_db wca_development`" =~ "Tables" ]] ;
         then echo "Populating development db, this will take a while" && bin/rake db:reset ;

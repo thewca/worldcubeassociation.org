@@ -17,6 +17,10 @@ locals {
       value = "staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
     {
+      name = "WCA_REGISTRATIONS_POLL_URL"
+      value = "https://1rq8d7dif3.execute-api.us-west-2.amazonaws.com/v1/staging"
+    },
+    {
       name = "READ_REPLICA_HOST"
       value = "readonly-staging-worldcubeassociation-dot-org.comp2du1hpno.us-west-2.rds.amazonaws.com"
     },
@@ -87,6 +91,10 @@ locals {
     {
       name = "TASK_ROLE",
       value = aws_iam_role.task_role.name
+    },
+    {
+      name = "PAYPAL_BASE_URL",
+      value = "https://api-m.sandbox.paypal.com"
     }
   ]
   pma_environment = [
@@ -179,7 +187,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1536
-      memory = 6000
+      memory = 5500
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -209,7 +217,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "sidekiq-staging"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
       cpu    = 256
-      memory = 1349
+      memory = 1849
       portMappings = [{
         # Mailcatcher
         containerPort = 1080

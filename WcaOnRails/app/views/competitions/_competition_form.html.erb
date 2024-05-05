@@ -1,9 +1,0 @@
-<% add_to_packs("wca_maps") %>
-
-<%= react_component("CompetitionForm", {
-  competition: @competition.to_form_data,
-  storedEvents: @competition.events,
-  isAdminView: @competition_admin_view,
-  isPersisted: @competition.persisted?,
-  isSeriesPersisted: @competition.competition_series&.persisted? || false,
-}) %>
