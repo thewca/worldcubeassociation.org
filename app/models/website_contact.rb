@@ -2,14 +2,13 @@
 
 class WebsiteContact < ContactForm
   attribute :message, validate: true
+  attribute :request_id
 
   validates :inquiry, presence: true
   validates :competition_id, presence: true, if: -> { inquiry == 'competition' }
 
   attr_accessor :inquiry
   attr_accessor :competition_id
-  attr_accessor :logged_in_email
-  attr_accessor :request_id
 
   # Override the `to_mail` validation, to show errors for `inquiry` instead.
   def validate_to_email

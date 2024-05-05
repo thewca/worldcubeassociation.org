@@ -1,23 +1,53 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  def website_create
-    user_data = params.require(:userData)
-    name = user_data[:name]
-    email = user_data[:email]
-    contact_recipient = params.require(:contactRecipient)
+  private def maybe_send_contact_email(contact)
+    if !contact.valid?
+      render status: :bad_request, json: { error: "Invalid contact object created" }
+    elsif contact.deliver
+      render status: :ok, json: { message: "Mail sent successfully" }
+    else
+      render status: :internal_server_error, json: { error: "Mail delivery failed" }
+    end
+  end
+
+  private def contact_wct(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactWct.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
+  private def contact_others(requestor_details, contact_params, contact_recipient)
     website_contact = WebsiteContact.new(
-      your_email: email,
-      name: name,
+      your_email: requestor_details[:email],
+      name: requestor_details[:name],
       inquiry: contact_recipient,
     )
-    contact_params = params.require(contact_recipient)
     website_contact.competition_id = contact_params[:competitionId] if contact_recipient == 'competition'
     website_contact.request_id = contact_params[:requestId] if contact_recipient == 'wst'
     website_contact.message = contact_params[:message]
     website_contact.request = request
     website_contact.logged_in_email = current_user&.email || 'None'
     maybe_send_contact_email(website_contact)
+  end
+
+  def website_create
+    contact_recipient = params.require(:contactRecipient)
+    contact_params = params.require(contact_recipient)
+    requestor_details = current_user || params.require(:userData)
+
+    case contact_recipient
+    when UserGroup.teams_committees_group_wct.metadata.friendly_id
+      contact_wct(requestor_details, contact_params)
+    else
+      contact_others(requestor_details, contact_params, contact_recipient)
+    end
   end
 
   def dob
@@ -30,16 +60,6 @@ class ContactsController < ApplicationController
     @contact.to_email = "results@worldcubeassociation.org"
     @contact.subject = "WCA DOB change request by #{@contact.name}"
     maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
-  end
-
-  private def maybe_send_contact_email(website_contact)
-    if !website_contact.valid?
-      render json: { error: "invalid" }
-    elsif website_contact.deliver
-      render json: { status: "ok" }
-    else
-      render json: { error: "mail_delivery_error" }
-    end
   end
 
   private def maybe_send_dob_email(success_url: nil, fail_view: nil)
