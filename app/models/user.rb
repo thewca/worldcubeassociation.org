@@ -506,18 +506,6 @@ class User < ApplicationRecord
     active_roles.any? { |role| role.is_staff? }
   end
 
-  def team_member?(team)
-    self.current_team_members.select { |t| t.team_id == team.id }.count > 0
-  end
-
-  def team_senior_member?(team)
-    self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
-  end
-
-  def team_leader?(team)
-    self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
-  end
-
   def admin?
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
@@ -673,19 +661,11 @@ class User < ApplicationRecord
     admin? || financial_committee?
   end
 
-  # Returns true if the user can edit the given team.
-  def can_edit_team?(team)
-    can_edit_any_groups? ||
-      team_leader?(team) ||
-      # The leader of the WDC can edit the banned competitors list
-      (team == Team.banned && can_edit_banned_competitors?)
-  end
-
   def can_view_banned_competitors?
     admin? || staff?
   end
 
-  private def can_edit_banned_competitors?
+  def can_edit_banned_competitors?
     can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc)
   end
 

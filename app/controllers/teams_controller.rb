@@ -2,7 +2,7 @@
 
 class TeamsController < ApplicationController
   before_action :authenticate_user!
-  before_action -> { redirect_to_root_unless_user(:can_edit_team?, team_from_params) }, only: [:edit, :update]
+  before_action -> { redirect_to_root_unless_user(:can_edit_banned_competitors?) }, only: [:edit, :update]
 
   def edit
     @team = team_from_params
