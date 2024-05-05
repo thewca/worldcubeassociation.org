@@ -24,6 +24,8 @@ class User < ApplicationRecord
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
   has_many :active_roles, -> { active }, class_name: "UserRole"
+  has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
+  has_many :delegate_roles, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -509,10 +511,6 @@ class User < ApplicationRecord
 
   def admin?
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
-  end
-
-  def delegate_roles
-    active_roles.filter { |role| role.group.delegate_regions? }
   end
 
   def any_kind_of_delegate?
