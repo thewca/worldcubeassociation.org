@@ -514,11 +514,11 @@ class User < ApplicationRecord
   end
 
   def any_kind_of_delegate?
-    delegate_roles.any?
+    delegate_role_metadata.any?
   end
 
   def trainee_delegate?
-    delegate_roles.any? { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+    delegate_role_metadata.trainee_delegate.any?
   end
 
   private def staff_delegate?
