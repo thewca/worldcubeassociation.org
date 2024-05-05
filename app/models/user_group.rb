@@ -235,6 +235,159 @@ class UserGroup < ApplicationRecord
     parent_group_id.nil?
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity
+  # rubocop:disable Metrics/PerceivedComplexity
+  def changes_in_group_for_digest
+    duration_start_date = Time.now.beginning_of_month - 1.month
+    sorted_users = []
+    team_member_changes = {}
+
+    leader_appointments = []
+    no_more_leaders = []
+    promoted_senior_members = []
+    new_senior_members = []
+    new_members = []
+    demoted_senior_members = []
+    no_more_senior_members = []
+    no_more_members = []
+
+    roles
+      .select { |role| role.updated_at >= duration_start_date } # Filters members who have change in the duration.
+      .sort_by { |role| [role.user.name, role.updated_at] } # Sorts the members alphabetically.
+      .each do |role|
+        user = role.user
+        if sorted_users.count == 0 || sorted_users.last.id != user.id
+          sorted_users.append(user)
+          team_member_changes[user.id] = [role]
+        else
+          team_member_changes[user.id].append(role)
+        end
+      end
+    sorted_users.each do |user|
+      new_leader = false
+      new_senior_member = false
+      new_member = false
+      ex_leader = false
+      ex_senior_member = false
+      ex_member = false
+      new_and_ex_leader = false
+      new_and_ex_senior_member = false
+      new_and_ex_member = false
+
+      # Creates flags for what all actioned in the duration.
+      team_member_changes[user.id].each do |member|
+        if member.end_date && member.end_date >= duration_start_date
+          if member.start_date >= duration_start_date
+            new_and_ex_leader = member.metadata.status == 'leader'
+            new_and_ex_senior_member = member.metadata.status == 'senior_member'
+            new_and_ex_member = !new_and_ex_leader && !new_and_ex_senior_member
+          else
+            ex_leader = member.metadata.status == 'leader'
+            ex_senior_member = member.metadata.status == 'senior_member'
+            ex_member = !ex_leader && !ex_senior_member
+          end
+        elsif !member.end_date && member.start_date >= duration_start_date
+          new_leader = member.metadata.status == 'leader'
+          new_senior_member = member.metadata.status == 'senior_member'
+          new_member = !new_leader && !new_senior_member
+        end
+      end
+
+      # Gets assigned to respective group of changes
+      name = user.name
+      if new_leader || ex_leader || new_and_ex_leader
+        if new_leader
+          leader_appointments.append("#{name} has been appointed as the new Leader.")
+        elsif ex_leader
+          if new_member
+            no_more_leaders.append("#{name} is no longer the Leader, but will continue as member.")
+          elsif new_senior_member
+            no_more_leaders.append("#{name} is no longer the Leader, but will continue as Senior member.")
+          else
+            no_more_leaders.append("#{name} is no longer the Leader and no longer a member.")
+          end
+        else
+          if new_member
+            no_more_leaders.append("#{name} was the Leader for few days and is continuing as member.")
+          elsif new_senior_member
+            no_more_leaders.append("#{name} was the Leader for few days and is continuing as Senior member.")
+          else
+            no_more_leaders.append("#{name} was the Leader for few days and is no longer a member.")
+          end
+        end
+      else
+        if new_senior_member || new_and_ex_senior_member
+          if ex_member || new_and_ex_member
+            promoted_senior_members.append(name)
+          else
+            new_senior_members.append(name)
+          end
+        end
+        if new_member || new_and_ex_member
+          if !ex_senior_member && !new_and_ex_senior_member
+            new_members.append(name)
+          else
+            demoted_senior_members.append(name)
+          end
+        elsif ex_senior_member || new_and_ex_senior_member
+          no_more_senior_members.append(name)
+        end
+        if (ex_member || new_and_ex_member) && !new_senior_member && !new_member
+          no_more_members.append(name)
+        end
+      end
+    end
+
+    changes_of_last_month = []
+    if leader_appointments.count + no_more_leaders.count + promoted_senior_members.count + new_senior_members.count + new_members.count + demoted_senior_members.count + no_more_senior_members.count + no_more_members.count > 0
+      changes_of_last_month.push("<b>Changes in #{self.name}</b>")
+      if leader_appointments.count + no_more_leaders.count > 0
+        changes_of_last_month.push("<br><b>Leaders</b>")
+        if leader_appointments.count > 0
+          changes_of_last_month.push(leader_appointments.join("<br>"))
+        end
+        if no_more_leaders.count > 0
+          changes_of_last_month.push(no_more_leaders.join("<br>"))
+        end
+      end
+      if promoted_senior_members.count > 0
+        changes_of_last_month.push("<br><b>Promoted Senior Members</b><br>#{promoted_senior_members.join("<br>")}")
+      end
+      if new_senior_members.count > 0
+        changes_of_last_month.push("<br><b>New Senior Members</b><br>#{new_senior_members.join("<br>")}")
+      end
+      if new_members.count > 0
+        changes_of_last_month.push("<br><b>New Members</b><br>#{new_members.join("<br>")}")
+      end
+      if demoted_senior_members.count > 0
+        changes_of_last_month.push("<br><b>Demotions from Senior Member to Member</b><br>#{demoted_senior_members.join("<br>")}")
+      end
+      if no_more_senior_members.count > 0
+        changes_of_last_month.push("<br><b>Resigned/Demoted Senior Members</b><br>#{no_more_senior_members.join("<br>")}")
+      end
+      if no_more_members.count > 0
+        changes_of_last_month.push("<br><b>Resigned/Demoted Members</b><br>#{no_more_members.join("<br>")}")
+      end
+    end
+    changes_of_last_month.join("<br>")
+  end
+  # rubocop:enable Metrics/CyclomaticComplexity
+  # rubocop:enable Metrics/PerceivedComplexity
+
+  def self.changes_in_groups_for_digest
+    group_changes = []
+    [UserGroup.teams_committees, UserGroup.councils].flatten!.each do |group|
+      current_group_changes = group.changes_in_group_for_digest
+      if !current_group_changes.empty?
+        group_changes.push(current_group_changes)
+      end
+    end
+    if group_changes.empty?
+      group_changes.push("There are no changes to show.")
+    end
+    group_changes.join("<br>")
+  end
+
   DEFAULT_SERIALIZE_OPTIONS = {
     include: %w[metadata],
     methods: %w[lead_user],
