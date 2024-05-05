@@ -42,10 +42,6 @@ class Team < ApplicationRecord
     self.c_all_by_friendly_id[friendly_id] || raise("friendly id not found #{friendly_id}")
   end
 
-  def self.wrc
-    Team.c_find_by_friendly_id!('wrc')
-  end
-
   def self.banned
     Team.c_find_by_friendly_id!('banned')
   end

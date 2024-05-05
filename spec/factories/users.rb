@@ -48,6 +48,10 @@ FactoryBot.define do
       team_senior_member { false }
     end
 
+    transient do
+      end_date { nil }
+    end
+
     trait :board_member do
       after(:create) do |user|
         FactoryBot.create(:board_role, user: user)
@@ -86,7 +90,19 @@ FactoryBot.define do
 
     trait :wrc_member do
       after(:create) do |user, options|
-        FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, team_senior_member: options.team_senior_member, team_leader: options.team_leader)
+        FactoryBot.create(:wrc_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wrc_senior_member do
+      after(:create) do |user, options|
+        FactoryBot.create(:wrc_senior_member_role, user_id: user.id)
+      end
+    end
+
+    trait :wrc_leader do
+      after(:create) do |user, options|
+        FactoryBot.create(:wrc_leader_role, user_id: user.id, end_date: options.end_date)
       end
     end
 
