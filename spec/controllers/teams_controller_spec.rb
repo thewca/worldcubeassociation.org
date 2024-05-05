@@ -46,13 +46,6 @@ RSpec.describe TeamsController do
         expect(team.team_members.first.current_member?).to be false
       end
 
-      it 'cannot demote oneself' do
-        admin_team = admin.teams.first
-        patch :update, params: { id: admin_team.id, team: { team_members_attributes: { "0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } } }
-        admin_team.reload
-        expect(admin_team.team_members.first.end_date).to eq nil
-      end
-
       it 'cannot set start_date < end_date' do
         member = FactoryBot.create :user
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { user_id: member.id, start_date: Date.today, end_date: Date.today-1, team_leader: false } } } }

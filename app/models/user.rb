@@ -495,7 +495,7 @@ class User < ApplicationRecord
   end
 
   private def software_team?
-    team_member?(Team.wst)
+    group_member?(UserGroup.teams_committees_group_wst)
   end
 
   private def software_team_admin?
