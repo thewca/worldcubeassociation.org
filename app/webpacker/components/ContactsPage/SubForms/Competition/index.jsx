@@ -9,7 +9,7 @@ import { updateSectionData } from '../../store/actions';
 const SECTION = 'competition';
 
 export default function Competition() {
-  const { competition } = useStore();
+  const { formValues: { competition } } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),

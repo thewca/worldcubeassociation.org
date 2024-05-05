@@ -62,9 +62,10 @@ class ContactsController < ApplicationController
   end
 
   def contact
-    contact_recipient = params.require(:contactRecipient)
-    contact_params = params.require(contact_recipient)
-    requestor_details = current_user || params.require(:userData)
+    formValues = JSON.parse(params.require(:formValues)).deep_symbolize_keys
+    contact_recipient = formValues.fetch(:contactRecipient)
+    contact_params = formValues.fetch(contact_recipient.to_sym)
+    requestor_details = current_user || formValues.fetch(userData)
 
     case contact_recipient
     when UserGroup.teams_committees_group_wct.metadata.friendly_id
