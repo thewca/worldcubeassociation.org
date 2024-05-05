@@ -13,7 +13,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   SORT_WEIGHT_LAMBDAS = {
     startDate:
-      lambda { |role| role[:start_date].to_time.to_i },
+      lambda { |role| role.start_date.to_time.to_i },
     lead:
       lambda { |role| role.is_lead? ? 0 : 1 },
     eligibleVoter:
@@ -23,11 +23,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     status:
       lambda { |role| role.status_sort_rank },
     name:
-      lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+      lambda { |role| role.user.name },
     groupName:
-      lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+      lambda { |role| role.group.name },
     location:
-      lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
+      lambda { |role| role.metadata.location || '' },
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -52,21 +52,12 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # Filters the list of roles based on given parameters.
   private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil, group_type: nil, is_lead: nil)
     roles.reject do |role|
-      is_actual_role = role.is_a?(UserRole) # See previous is_actual_role comment.
-      # In future, the following lines will be replaced by the following:
-      # (
-      #   status.present? && status != role.metadata.status ||
-      #   is_active.present? && is_active != role.is_active ||
-      #   is_group_hidden.present? && is_group_hidden != role.group.is_hidden
-      # )
-      # Till then, we need to support both the old and new systems. So, we will be using ternary
-      # operator to access the parameters.
       # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
       # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
-        (!status.nil? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
-        (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
-        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden])) ||
+        (!status.nil? && status != role.metadata&.status) ||
+        (!is_active.nil? && is_active != role.is_active?) ||
+        (!is_group_hidden.nil? && is_group_hidden != role.group.is_hidden) ||
         (!group_type.nil? && group_type != role.group_type) ||
         (!is_lead.nil? && is_lead != role.is_lead?)
       )
@@ -137,15 +128,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def roles_of_group_type(group_type)
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
-    roles = UserRole.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
-
-    # Temporary hack to support the old system roles, will be removed once all roles are
-    # migrated to the new system.
-    if group_type == UserGroup.group_types[:teams_committees]
-      roles.concat(UserGroup.teams_committees.flat_map(&:roles))
-    end
-
-    roles
+    UserRole.where(group_id: group_ids)
   end
 
   # Returns a list of roles primarily based on groupType.
