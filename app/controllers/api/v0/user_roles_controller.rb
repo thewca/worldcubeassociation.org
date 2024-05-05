@@ -73,12 +73,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     end
   end
 
-  private def group_id_of_old_system_to_group_type(group_id)
-    # group_id can be something like "teams_committees_1" or "delegate_regions_1", where 1 is the
-    # id of the group. This method will return "teams_committees" or "delegate_regions" respectively.
-    group_id.split("_").reverse.drop(1).reverse.join("_")
-  end
-
   # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
   private def remove_pending_wca_id_claims(user)
     region_senior_delegate = user.region.senior_delegate
@@ -179,27 +173,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def create_team_committee_council_role(group, user_id, status)
-    team = group.team
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
-    if status == "leader"
-      # If the new role to be added is leader, we will be ending the leader role of already existing person.
-      old_leader = Team.find_by(id: team.id).leader
-      if old_leader.present?
-        old_leader.update!(end_date: Date.today)
-      end
-    end
-    # If the person who is going to get the new role is already having a role, that role will be ended.
-    already_existing_row = TeamMember.find_by(team_id: team.id, user_id: user_id, end_date: nil)
-    if already_existing_row.present?
-      already_existing_row.update!(end_date: Date.today)
-    end
-    TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-    render json: {
-      success: true,
-    }
-  end
-
   def show
     id = params.require(:id)
     role = UserRole.find(id)
@@ -232,10 +205,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = params[:location]
     else
       location = nil
-    end
-
-    if group.group_type == UserGroup.group_types[:teams_committees] && !group.roles_migrated? && group.team.present?
-      return create_team_committee_council_role(group, user_id, status)
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
@@ -283,27 +252,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
     id = params.require(:id)
-
-    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
-      # all roles are migrated to the new system.
-      group_type = group_id_of_old_system_to_group_type(id)
-      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-        return
-      end
-      team_member_id = id.split("_").last
-      team_member = TeamMember.find_by!(id: team_member_id)
-      team = team_member.team
-      status = params.require(:status)
-
-      return head :unauthorized unless current_user.can_edit_team?(team)
-
-      team_member.update!(end_date: Time.now)
-      TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-      return render json: {
-        success: true,
-      }
-    end
 
     role = UserRole.find(id)
     group_type = role.group.group_type
@@ -384,28 +332,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   def destroy
     id = params.require(:id)
-
-    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
-      # all roles are migrated to the new system.
-      team_member_id = id.split("_").last
-      group_type = group_id_of_old_system_to_group_type(id)
-      team_member = TeamMember.find_by(id: team_member_id)
-
-      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-        return
-      end
-      return head :unauthorized unless current_user.can_edit_team?(team_member.team)
-
-      if team_member.present?
-        team_member.update!(end_date: Date.today)
-        return render json: {
-          success: true,
-        }
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid member" }
-      end
-    end
 
     role = UserRole.find(id)
 
