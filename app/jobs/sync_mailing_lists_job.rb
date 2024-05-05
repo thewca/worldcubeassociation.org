@@ -27,8 +27,8 @@ class SyncMailingListsJob < WcaCronjob
     active_root_delegate_regions.each do |region|
       region_emails = []
       (region.active_roles + region.active_roles_of_all_child_groups).each do |role|
-        role_email = UserRole.user(role).email
-        role_status = UserRole.status(role)
+        role_email = role.user.email
+        role_status = role.metadata.status
         region_emails << role_email
         if role_status == RolesMetadataDelegateRegions.statuses[:trainee_delegate]
           trainee_emails << role_email

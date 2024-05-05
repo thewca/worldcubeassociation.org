@@ -50,7 +50,7 @@ class UserGroup < ApplicationRecord
   end
 
   def active_roles
-    self.roles.select { |role| UserRole.is_active?(role) }
+    self.roles.select { |role| role.is_active? }
   end
 
   def roles_of_direct_child_groups
@@ -70,27 +70,27 @@ class UserGroup < ApplicationRecord
   end
 
   def users
-    self.roles.map { |role| UserRole.user(role) }
+    self.roles.map { |role| role.user }
   end
 
   def active_users
-    self.active_roles.map { |role| UserRole.user(role) }
+    self.active_roles.map { |role| role.user }
   end
 
   def users_of_direct_child_groups
-    self.roles_of_direct_child_groups.map { |role| UserRole.user(role) }
+    self.roles_of_direct_child_groups.map { |role| role.user }
   end
 
   def users_of_all_child_groups
-    self.roles_of_all_child_groups.map { |role| UserRole.user(role) }
+    self.roles_of_all_child_groups.map { |role| role.user }
   end
 
   def active_users_of_direct_child_groups
-    self.active_roles_of_direct_child_groups.map { |role| UserRole.user(role) }
+    self.active_roles_of_direct_child_groups.map { |role| role.user }
   end
 
   def active_users_of_all_child_groups
-    self.active_roles_of_all_child_groups.map { |role| UserRole.user(role) }
+    self.active_roles_of_all_child_groups.map { |role| role.user }
   end
 
   def self.group_types_containing_status_metadata
@@ -217,7 +217,7 @@ class UserGroup < ApplicationRecord
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.
   def lead_user
-    UserRole.user(self.lead_role)
+    lead_role&.user
   end
 
   # Unique status means that there can only be one active user with this status in the group.

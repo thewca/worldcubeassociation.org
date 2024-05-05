@@ -15,13 +15,13 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     startDate:
       lambda { |role| role[:start_date].to_time.to_i },
     lead:
-      lambda { |role| UserRole.is_lead?(role) ? 0 : 1 },
+      lambda { |role| role.is_lead? ? 0 : 1 },
     eligibleVoter:
-      lambda { |role| UserRole.is_eligible_voter?(role) ? 0 : 1 },
+      lambda { |role| role.is_eligible_voter? ? 0 : 1 },
     groupTypeRank:
-      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
+      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
     status:
-      lambda { |role| UserRole.status_sort_rank(role) },
+      lambda { |role| role.status_sort_rank },
     name:
       lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
     groupName:
@@ -38,7 +38,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   # Filter role based on the permissions of the current user.
   private def can_current_user_access(role)
-    group = UserRole.group(role)
+    group = role.group
     !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
   end
 
@@ -67,8 +67,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         (!status.nil? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
         (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
         (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden])) ||
-        (!group_type.nil? && group_type != UserRole.group_type(role)) ||
-        (!is_lead.nil? && is_lead != UserRole.is_lead?(role))
+        (!group_type.nil? && group_type != role.group_type) ||
+        (!is_lead.nil? && is_lead != role.is_lead?)
       )
     end
   end
@@ -424,11 +424,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     query = params.require(:query)
     group_type = params.require(:groupType)
     roles = roles_of_group_type(group_type)
-    active_roles = roles.select { |role| UserRole.is_active?(role) }
+    active_roles = roles.select { |role| role.is_active? }
 
     query.split.each do |part|
       active_roles = active_roles.select do |role|
-        user = UserRole.user(role)
+        user = role.user
         name = user[:name] || ''
         wca_id = user[:wca_id] || ''
         email = user[:email] || ''
