@@ -6,6 +6,10 @@ FactoryBot.define do
       status { RolesMetadataTeamsCommittees.statuses[:member] }
     end
 
+    trait :senior_member do
+      status { RolesMetadataTeamsCommittees.statuses[:senior_member] }
+    end
+
     trait :leader do
       status { RolesMetadataTeamsCommittees.statuses[:leader] }
     end
@@ -29,5 +33,8 @@ FactoryBot.define do
     factory :wfc_leader_metadata, traits: [:leader]
     factory :wmt_member_metadata, traits: [:member]
     factory :wst_member_metadata, traits: [:member]
+    factory :wrc_member_metadata, traits: [:member]
+    factory :wrc_senior_member_metadata, traits: [:senior_member]
+    factory :wrc_leader_metadata, traits: [:leader]
   end
 end
