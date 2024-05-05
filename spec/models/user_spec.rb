@@ -458,7 +458,7 @@ RSpec.describe User, type: :model do
     banned_user = FactoryBot.create :user, :banned
     banned_user.team_members.first.update!(end_date: 1.day.ago)
 
-    expect(banned_user.reload.team_member?(Team.banned)).to eq false
+    expect(banned_user.reload.banned?).to eq false
   end
 
   it "removes whitespace around names" do

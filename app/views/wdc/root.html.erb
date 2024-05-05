@@ -6,7 +6,7 @@
   <% if current_user&.can_view_banned_competitors? %>
     <h2>Banned competitors</h2>
 
-    <% if current_user.can_edit_team?(Team.banned) %>
+    <% if current_user.can_edit_banned_competitors? %>
       <%= link_to "Edit banned competitors", edit_team_path(Team.banned) %>
     <% end %>
 
