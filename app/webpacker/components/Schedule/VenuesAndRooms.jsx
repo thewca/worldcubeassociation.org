@@ -1,8 +1,9 @@
 import React from 'react';
 import {
-  Form, Grid, Menu, Message,
+  Button, Checkbox,
+  Grid, Menu, Message, Segment,
 } from 'semantic-ui-react';
-import { getTextColor } from '../../lib/utils/calendar';
+import { getTextColor, TEXT_WHITE } from '../../lib/utils/calendar';
 import { toDegrees } from '../../lib/utils/edit-schedule';
 import i18n from '../../lib/i18n';
 
@@ -76,24 +77,27 @@ function RoomSelector({ rooms, activeRoomIds, toggleRoom }) {
     <Grid stackable columns={Math.min(4, rooms.length)}>
       {rooms.map(({ id, name, color }) => (
         <Grid.Column key={id}>
-          <div
+          <Button
+            as={Segment}
+            padded
+            fluid
+            basic
+            inverted={getTextColor(color) === TEXT_WHITE}
             style={{
               backgroundColor: color,
               opacity: activeRoomIds.includes(id) ? 1 : 0.5,
-              border: 'solid black 1px',
-              padding: '1em',
-              height: '100%',
             }}
+            onClick={() => toggleRoom(id)}
           >
-            <Form.Checkbox
-              label={
-                // eslint-disable-next-line jsx-a11y/label-has-associated-control
-                <label style={{ color: getTextColor(color) }}>{name}</label>
-              }
+            <Checkbox
+              as={Segment}
+              basic
+              floated="left"
               checked={activeRoomIds.includes(id)}
-              onChange={() => toggleRoom(id)}
+              readOnly
             />
-          </div>
+            {name}
+          </Button>
         </Grid.Column>
       ))}
     </Grid>
