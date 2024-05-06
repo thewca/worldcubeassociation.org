@@ -37,7 +37,6 @@ export default function PaymentStep({
     });
 
     const { client_secret: clientSecret } = data;
-    console.log(paymentFinishUrl(competitionInfo.id, user.id));
 
     const { error } = await stripe.confirmPayment({
       elements,

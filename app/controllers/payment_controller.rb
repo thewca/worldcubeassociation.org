@@ -6,10 +6,10 @@ class PaymentController < ApplicationController
       attendee_id = params.require(:attendee_id)
       competition_id, user_id = attendee_id.split("-")
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "not_authorized") unless user_id == current_user.id
+      return redirect_to competition_register_path(competition_id, "not_authorized") unless user_id == current_user.id
 
       ms_registration = MicroserviceRegistration.find_by(competition_id: competition_id, user_id: user_id)
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "payment_not_found") unless ms_registration.present?
+      return redirect_to competition_register_path(competition_id, "payment_not_found") unless ms_registration.present?
 
       # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
       intent_id = params[:payment_intent]
@@ -18,13 +18,13 @@ class PaymentController < ApplicationController
       stored_stripe_record = StripeRecord.find_by(stripe_id: intent_id)
       payment_intent = stored_stripe_record.payment_intent
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "not_authorized") unless payment_intent.holder == ms_registration
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "secret_invalid") unless payment_intent.client_secret == intent_secret
+      return redirect_to competition_register_path(competition_id, "not_authorized") unless payment_intent.holder == ms_registration
+      return redirect_to competition_register_path(competition_id, "secret_invalid") unless payment_intent.client_secret == intent_secret
 
       # No need to create a new intent here. We can just query the stored intent from Stripe directly.
       stripe_intent = payment_intent.retrieve_remote
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "intent_not_found") unless stripe_intent.present?
+      return redirect_to competition_register_path(competition_id, "intent_not_found") unless stripe_intent.present?
 
       payment_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
         ruby_money = charge.money_amount
@@ -32,11 +32,11 @@ class PaymentController < ApplicationController
         begin
           Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
         rescue Faraday::Error
-          return redirect_to Microservices::Registrations.competition_register_path(competition_id, "registration_unreachable")
+          return redirect_to competition_register_path(competition_id, "registration_unreachable")
         end
       end
 
-      redirect_to Microservices::Registrations.competition_register_path(competition_id, stored_stripe_record.status)
+      redirect_to competition_register_path(competition_id, stored_stripe_record.status)
     else
       redirect_to user_session_path
     end
