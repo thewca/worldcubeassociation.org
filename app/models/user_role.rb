@@ -7,6 +7,8 @@ class UserRole < ApplicationRecord
 
   delegate :group_type, to: :group
 
+  scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
+
   STATUS_SORTING_ORDER = {
     UserGroup.group_types[:delegate_regions].to_sym => [
       RolesMetadataDelegateRegions.statuses[:senior_delegate],

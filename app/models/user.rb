@@ -23,6 +23,9 @@ class User < ApplicationRecord
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
+  has_many :active_roles, -> { active }, class_name: "UserRole"
+  has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
+  has_many :delegate_roles, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -510,16 +513,12 @@ class User < ApplicationRecord
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
-  def delegate_roles
-    active_roles(include_converted: false).filter { |role| role.group.delegate_regions? }
-  end
-
   def any_kind_of_delegate?
-    delegate_roles.any?
+    delegate_role_metadata.any?
   end
 
   def trainee_delegate?
-    delegate_roles.any? { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+    delegate_role_metadata.trainee_delegate.any?
   end
 
   private def staff_delegate?
@@ -1269,10 +1268,6 @@ class User < ApplicationRecord
     delegate_roles.map { |role| role.group.lead_user }
   end
 
-  def active_roles(include_converted: true)
-    roles(include_converted: include_converted).select { |role| role.is_active? }
-  end
-
   def can_access_wfc_panel?
     can_admin_finances?
   end
@@ -1327,11 +1322,6 @@ class User < ApplicationRecord
 
   private def can_access_wfc_senior_matters?
     active_roles.any? { |role| role.group == UserGroup.teams_committees_group_wfc && role.metadata.at_least_senior_member? }
-  end
-
-  def roles(include_converted: true)
-    UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
-    # array, so that we can append roles which are not yet migrated to the new system. This can be
   end
 
   private def highest_delegate_role
