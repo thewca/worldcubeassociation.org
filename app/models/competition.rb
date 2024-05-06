@@ -110,6 +110,7 @@ class Competition < ApplicationRecord
     competitor_limit
     competitor_limit_reason
     forbid_newcomers
+    forbid_newcomers_reason
     guests_enabled
     guests_per_registration_limit
     base_entry_fee_lowest_denomination
@@ -124,8 +125,6 @@ class Competition < ApplicationRecord
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     guest_entry_status
-    forbid_newcomers
-    forbid_newcomers_reason
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
