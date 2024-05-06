@@ -1,4 +1,4 @@
-<p>The role has been changed for <%= UserRole.user(@role).name %> in <%= @group_type_name %> on <%= @today_date %>.</p>
+<p>The role has been changed for <%= @role.user.name %> in <%= @group_type_name %> on <%= @today_date %>.</p>
 <p>The change has been executed by <%= @user_who_made_the_change.name %>.</p>
 <p>Change made:</p>
 <p><%= @changed_parameter %>: <%= @previous_value %> -> <%= @new_value %></p>

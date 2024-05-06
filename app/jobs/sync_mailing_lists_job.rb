@@ -14,7 +14,7 @@ class SyncMailingListsJob < WcaCronjob
     User.clear_receive_delegate_reports_if_not_eligible
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
 
-    UserGroup.teams_committees.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
+    UserGroup.teams_committees.active_groups.each { |team_committee| GsuiteMailingLists.sync_group(team_committee.metadata.email, team_committee.active_users.map(&:email)) }
     UserGroup.councils.each { |council| GsuiteMailingLists.sync_group(council.metadata.email, council.active_users.map(&:email)) }
 
     treasurers = UserGroup.officers.flat_map(&:active_roles).filter { |role| role.metadata.status == RolesMetadataOfficers.statuses[:treasurer] }
@@ -27,8 +27,8 @@ class SyncMailingListsJob < WcaCronjob
     active_root_delegate_regions.each do |region|
       region_emails = []
       (region.active_roles + region.active_roles_of_all_child_groups).each do |role|
-        role_email = UserRole.user(role).email
-        role_status = UserRole.status(role)
+        role_email = role.user.email
+        role_status = role.metadata.status
         region_emails << role_email
         if role_status == RolesMetadataDelegateRegions.statuses[:trainee_delegate]
           trainee_emails << role_email

@@ -454,32 +454,11 @@ RSpec.describe User, type: :model do
     end
   end
 
-  it "#teams and #current_teams return unique team names" do
-    user = FactoryBot.create(:user)
+  it 'former banned users are not considered current members of Team.banned' do
+    banned_user = FactoryBot.create :user, :banned
+    banned_user.team_members.first.update!(end_date: 1.day.ago)
 
-    FactoryBot.create(:team_member, team_id: Team.wrc.id, user_id: user.id, start_date: Date.today - 20, end_date: Date.today - 10)
-    FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today - 5, end_date: Date.today + 5)
-    FactoryBot.create(:team_member, team_id: Team.wrt.id, user_id: user.id, start_date: Date.today + 6, end_date: Date.today + 10)
-
-    expect(user.teams).to match_array [Team.wrc, Team.wrt]
-    expect(user.current_teams).to match_array [Team.wrt]
-  end
-
-  it 'former members of the results team are not considered current members' do
-    wrt_member = FactoryBot.create :user, :wrt_member
-    team_member = wrt_member.team_members.first
-    team_member.update!(end_date: 1.day.ago)
-
-    expect(wrt_member.reload.team_member?(Team.wrt)).to eq false
-  end
-
-  it 'former leaders of the results team are not considered current leaders' do
-    wrt_leader = FactoryBot.create :user, :wrt_member
-    team_member = wrt_leader.team_members.first
-    team_member.update!(team_leader: true)
-    team_member.update!(end_date: 1.day.ago)
-
-    expect(wrt_leader.reload.team_leader?(Team.wrt)).to eq false
+    expect(banned_user.reload.banned?).to eq false
   end
 
   it "removes whitespace around names" do

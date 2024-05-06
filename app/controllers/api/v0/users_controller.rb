@@ -36,7 +36,7 @@ class Api::V0::UsersController < Api::V0::ApiController
     require_user!
     return render json: { single: [], average: [] } unless current_user.wca_id.present?
     person = Person.includes(:ranksSingle, :ranksAverage).find_by_wca_id!(current_user.wca_id)
-    render json: { single: person.ranksSingle, average: person.ranksAverage }
+    render json: { single: person.ranksSingle.map(&:to_wcif), average: person.ranksAverage.map(&:to_wcif) }
   end
 
   def preferred_events

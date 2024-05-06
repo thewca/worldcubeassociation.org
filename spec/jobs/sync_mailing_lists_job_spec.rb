@@ -49,35 +49,35 @@ RSpec.describe SyncMailingListsJob, type: :job do
     americas_delegate_4 = FactoryBot.create :trainee_delegate_role, group: americas_region
 
     # Translators
-    translators_group = FactoryBot.create :translators_user_group
+    translators_group = GroupsMetadataTranslators.find_by!(locale: 'ca').user_group
     translator_1 = FactoryBot.create :translator_role, group_id: translators_group.id
     translator_2 = FactoryBot.create :translator_role, group_id: translators_group.id
     translator_3 = FactoryBot.create :translator_role, group_id: translators_group.id
 
     # leaders@ mailing list
-    board_member = FactoryBot.create :user, :board_member, team_leader: false
-    wct_member = FactoryBot.create :user, :wct_member, team_leader: false
-    wct_china_member = FactoryBot.create :user, :wct_china_member, team_leader: false
-    wcat_member = FactoryBot.create :user, :wcat_member, team_leader: false
-    wdc_leader = FactoryBot.create :user, :wdc_member, team_leader: true, receive_delegate_reports: true
-    wdc_member = FactoryBot.create :user, :wdc_member, team_leader: false, receive_delegate_reports: true
-    wec_member = FactoryBot.create :user, :wec_member, team_leader: false, receive_delegate_reports: true
-    weat_member = FactoryBot.create :user, :weat_member, team_leader: false
-    wfc_member = FactoryBot.create :user, :wfc_member, team_leader: false
-    wfc_leader = FactoryBot.create :user, :wfc_member, team_leader: true
-    wmt_member = FactoryBot.create :user, :wmt_member, team_leader: false
-    wqac_member = FactoryBot.create :user, :wqac_member, team_leader: false
-    wrc_member = FactoryBot.create :user, :wrc_member, team_leader: false
-    wrt_leader = FactoryBot.create :user, :wrt_member, team_leader: true
-    wrt_member = FactoryBot.create :user, :wrt_member, team_leader: false
-    wst_member = FactoryBot.create :user, :wst_member, team_leader: false
-    wst_admin_member = FactoryBot.create :user, :wst_admin_member, team_leader: false
+    board_member = FactoryBot.create :user, :board_member
+    wct_member = FactoryBot.create :user, :wct_member
+    wct_china_member = FactoryBot.create :user, :wct_china_member
+    wcat_member = FactoryBot.create :user, :wcat_member
+    wdc_leader = FactoryBot.create :user, :wdc_leader, receive_delegate_reports: true
+    wdc_member = FactoryBot.create :user, :wdc_member, receive_delegate_reports: true
+    wec_member = FactoryBot.create :user, :wec_member, receive_delegate_reports: true
+    weat_member = FactoryBot.create :user, :weat_member
+    wfc_member = FactoryBot.create :user, :wfc_member
+    wfc_leader = FactoryBot.create :user, :wfc_leader
+    wmt_member = FactoryBot.create :user, :wmt_member
+    wqac_member = FactoryBot.create :user, :wqac_member
+    wrc_member = FactoryBot.create :user, :wrc_member
+    wrt_leader = FactoryBot.create :user, :wrt_leader
+    wrt_member = FactoryBot.create :user, :wrt_member
+    wst_member = FactoryBot.create :user, :wst_member
+    wst_admin_member = FactoryBot.create :user, :wst_admin_member
     wac_member = FactoryBot.create :wac_role_member
     wac_leader = FactoryBot.create :wac_role_leader
-    wsot_member = FactoryBot.create :user, :wsot_member, team_leader: false
-    wsot_leader = FactoryBot.create :user, :wsot_member, team_leader: true
-    wat_member = FactoryBot.create :user, :wat_member, team_leader: false
-    wat_leader = FactoryBot.create :user, :wat_member, team_leader: true
+    wsot_member = FactoryBot.create :user, :wsot_member
+    wsot_leader = FactoryBot.create :user, :wsot_leader
+    wat_member = FactoryBot.create :user, :wat_member
+    wat_leader = FactoryBot.create :user, :wat_leader
     treasurer_role = FactoryBot.create :treasurer_role
 
     # organizations@ mailing list

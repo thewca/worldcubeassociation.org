@@ -82,12 +82,8 @@ class DelegateReportsController < ApplicationController
   end
 
   private def assign_wrc_users(delegate_report)
-    # TODO(https://github.com/thewca/worldcubeassociation.org/issues/4535):
-    # We're reloading here as a workaround. This should be handled in a more
-    # general way.
-    Team.wrc.reload
-    wrc_primary_team_member, wrc_secondary_team_member = Team.wrc.current_members.sample 2
-    delegate_report.wrc_primary_user = wrc_primary_team_member.user
-    delegate_report.wrc_secondary_user = wrc_secondary_team_member.user
+    wrc_primary_user, wrc_secondary_user = UserGroup.teams_committees_group_wrc.active_users.sample 2
+    delegate_report.wrc_primary_user = wrc_primary_user
+    delegate_report.wrc_secondary_user = wrc_secondary_user
   end
 end

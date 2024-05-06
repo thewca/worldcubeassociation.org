@@ -13,21 +13,21 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   SORT_WEIGHT_LAMBDAS = {
     startDate:
-      lambda { |role| role[:start_date].to_time.to_i },
+      lambda { |role| role.start_date.to_time.to_i },
     lead:
-      lambda { |role| UserRole.is_lead?(role) ? 0 : 1 },
+      lambda { |role| role.is_lead? ? 0 : 1 },
     eligibleVoter:
-      lambda { |role| UserRole.is_eligible_voter?(role) ? 0 : 1 },
+      lambda { |role| role.is_eligible_voter? ? 0 : 1 },
     groupTypeRank:
-      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(UserRole.group_type(role)) || GROUP_TYPE_RANK_ORDER.length },
+      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
     status:
-      lambda { |role| UserRole.status_sort_rank(role) },
+      lambda { |role| role.status_sort_rank },
     name:
-      lambda { |role| role.is_a?(UserRole) ? role.user[:name] : role[:user][:name] }, # Can be changed to `role.user.name` once all roles are migrated to the new system.
+      lambda { |role| role.user.name },
     groupName:
-      lambda { |role| role.is_a?(UserRole) ? role.group[:name] : role[:group][:name] }, # Can be changed to `role.group.name` once all roles are migrated to the new system.
+      lambda { |role| role.group.name },
     location:
-      lambda { |role| role.is_a?(UserRole) ? role.metadata[:location] || '' : role[:metadata][:location] || '' }, # Can be changed to `role.location` once all roles are migrated to the new system.
+      lambda { |role| role.metadata.location || '' },
   }.freeze
 
   # Sorts the list of roles based on the given list of sort keys and directions.
@@ -36,42 +36,32 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
+  # Filter role based on the permissions of the current user.
+  private def can_current_user_access(role)
+    group = role.group
+    !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
+  end
+
   # Filters the list of roles based on the permissions of the current user.
   private def filter_roles_for_logged_in_user(roles)
     roles.select do |role|
-      group = UserRole.group(role)
-      !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
+      can_current_user_access(role)
     end
   end
 
   # Filters the list of roles based on given parameters.
   private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil, group_type: nil, is_lead: nil)
     roles.reject do |role|
-      is_actual_role = role.is_a?(UserRole) # See previous is_actual_role comment.
-      # In future, the following lines will be replaced by the following:
-      # (
-      #   status.present? && status != role.metadata.status ||
-      #   is_active.present? && is_active != role.is_active ||
-      #   is_group_hidden.present? && is_group_hidden != role.group.is_hidden
-      # )
-      # Till then, we need to support both the old and new systems. So, we will be using ternary
-      # operator to access the parameters.
       # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
       # foo is a boolean false but we need to actually check if the boolean is present or not.
       (
-        (!status.nil? && status != (is_actual_role ? role.metadata.status : role[:metadata][:status])) ||
-        (!is_active.nil? && is_active != (is_actual_role ? role.is_active? : role[:is_active])) ||
-        (!is_group_hidden.nil? && is_group_hidden != (is_actual_role ? role.group.is_hidden : role[:group][:is_hidden])) ||
-        (!group_type.nil? && group_type != UserRole.group_type(role)) ||
-        (!is_lead.nil? && is_lead != UserRole.is_lead?(role))
+        (!status.nil? && status != role.metadata&.status) ||
+        (!is_active.nil? && is_active != role.is_active?) ||
+        (!is_group_hidden.nil? && is_group_hidden != role.group.is_hidden) ||
+        (!group_type.nil? && group_type != role.group_type) ||
+        (!is_lead.nil? && is_lead != role.is_lead?)
       )
     end
-  end
-
-  private def group_id_of_old_system_to_group_type(group_id)
-    # group_id can be something like "teams_committees_1" or "delegate_regions_1", where 1 is the
-    # id of the group. This method will return "teams_committees" or "delegate_regions" respectively.
-    group_id.split("_").reverse.drop(1).reverse.join("_")
   end
 
   # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
@@ -138,15 +128,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
   private def roles_of_group_type(group_type)
     group_ids = UserGroup.where(group_type: group_type).pluck(:id)
-    roles = UserRole.where(group_id: group_ids).to_a # to_a is for the same reason as in index_for_user.
-
-    # Temporary hack to support the old system roles, will be removed once all roles are
-    # migrated to the new system.
-    if group_type == UserGroup.group_types[:teams_committees]
-      roles.concat(UserGroup.teams_committees.flat_map(&:roles))
-    end
-
-    roles
+    UserRole.where(group_id: group_ids)
   end
 
   # Returns a list of roles primarily based on groupType.
@@ -174,25 +156,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     render json: roles
   end
 
-  private def create_team_committee_council_role(group, user_id, status)
-    team = group.team
-    return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group.id)
-    if status == "leader"
-      # If the new role to be added is leader, we will be ending the leader role of already existing person.
-      old_leader = Team.find_by(id: team.id).leader
-      if old_leader.present?
-        old_leader.update!(end_date: Date.today)
-      end
-    end
-    # If the person who is going to get the new role is already having a role, that role will be ended.
-    already_existing_row = TeamMember.find_by(team_id: team.id, user_id: user_id, end_date: nil)
-    if already_existing_row.present?
-      already_existing_row.update!(end_date: Date.today)
-    end
-    TeamMember.create!(team_id: team.id, user_id: user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-    render json: {
-      success: true,
-    }
+  def show
+    id = params.require(:id)
+    role = UserRole.find(id)
+    return render status: :unauthorized, json: { error: "Cannot access role" } unless can_current_user_access(role)
+    render json: role
   end
 
   def create
@@ -220,10 +188,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       location = params[:location]
     else
       location = nil
-    end
-
-    if group.group_type == UserGroup.group_types[:teams_committees] && !group.roles_migrated? && group.team.present?
-      return create_team_committee_council_role(group, user_id, status)
     end
 
     return render status: :unprocessable_entity, json: { error: "Invalid group type" } unless create_supported_groups.include?(group.group_type)
@@ -271,27 +235,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
     id = params.require(:id)
-
-    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
-      # all roles are migrated to the new system.
-      group_type = group_id_of_old_system_to_group_type(id)
-      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-        return
-      end
-      team_member_id = id.split("_").last
-      team_member = TeamMember.find_by!(id: team_member_id)
-      team = team_member.team
-      status = params.require(:status)
-
-      return head :unauthorized unless current_user.can_edit_team?(team)
-
-      team_member.update!(end_date: Time.now)
-      TeamMember.create!(team_id: team.id, user_id: team_member.user_id, start_date: Date.today, team_leader: status == "leader", team_senior_member: status == "senior_member")
-      return render json: {
-        success: true,
-      }
-    end
 
     role = UserRole.find(id)
     group_type = role.group.group_type
@@ -373,28 +316,6 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def destroy
     id = params.require(:id)
 
-    if id.include?("_") # Temporary hack to support some old system roles, will be removed once
-      # all roles are migrated to the new system.
-      team_member_id = id.split("_").last
-      group_type = group_id_of_old_system_to_group_type(id)
-      team_member = TeamMember.find_by(id: team_member_id)
-
-      unless [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        render status: :unprocessable_entity, json: { error: "Invalid group type" }
-        return
-      end
-      return head :unauthorized unless current_user.can_edit_team?(team_member.team)
-
-      if team_member.present?
-        team_member.update!(end_date: Date.today)
-        return render json: {
-          success: true,
-        }
-      else
-        return render status: :unprocessable_entity, json: { error: "Invalid member" }
-      end
-    end
-
     role = UserRole.find(id)
 
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
@@ -412,11 +333,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     query = params.require(:query)
     group_type = params.require(:groupType)
     roles = roles_of_group_type(group_type)
-    active_roles = roles.select { |role| UserRole.is_active?(role) }
+    active_roles = roles.select { |role| role.is_active? }
 
     query.split.each do |part|
       active_roles = active_roles.select do |role|
-        user = UserRole.user(role)
+        user = role.user
         name = user[:name] || ''
         wca_id = user[:wca_id] || ''
         email = user[:email] || ''
