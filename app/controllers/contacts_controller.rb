@@ -11,6 +11,19 @@ class ContactsController < ApplicationController
     end
   end
 
+  private def contact_competition(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactCompetition.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        competition_id: contact_params[:competitionId],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
   private def contact_wct(requestor_details, contact_params)
     maybe_send_contact_email(
       ContactWct.new(
@@ -23,21 +36,32 @@ class ContactsController < ApplicationController
     )
   end
 
-  private def contact_others(requestor_details, contact_params, contact_recipient)
-    website_contact = WebsiteContact.new(
-      your_email: requestor_details[:email],
-      name: requestor_details[:name],
-      inquiry: contact_recipient,
+  private def contact_wrt(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactWrt.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
     )
-    website_contact.competition_id = contact_params[:competitionId] if contact_recipient == 'competition'
-    website_contact.request_id = contact_params[:requestId] if contact_recipient == 'wst'
-    website_contact.message = contact_params[:message]
-    website_contact.request = request
-    website_contact.logged_in_email = current_user&.email || 'None'
-    maybe_send_contact_email(website_contact)
   end
 
-  def website_create
+  private def contact_wst(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactWst.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        request_id: contact_params[:requestId],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
+  def contact
     contact_recipient = params.require(:contactRecipient)
     contact_params = params.require(contact_recipient)
     requestor_details = current_user || params.require(:userData)
@@ -45,8 +69,14 @@ class ContactsController < ApplicationController
     case contact_recipient
     when UserGroup.teams_committees_group_wct.metadata.friendly_id
       contact_wct(requestor_details, contact_params)
+    when UserGroup.teams_committees_group_wrt.metadata.friendly_id
+      contact_wrt(requestor_details, contact_params)
+    when UserGroup.teams_committees_group_wst.metadata.friendly_id
+      contact_wst(requestor_details, contact_params)
+    when "competition"
+      contact_competition(requestor_details, contact_params)
     else
-      contact_others(requestor_details, contact_params, contact_recipient)
+      render status: :bad_request, json: { error: "Invalid contact recipient" }
     end
   end
 

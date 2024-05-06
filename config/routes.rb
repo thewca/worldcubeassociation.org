@@ -243,7 +243,7 @@ Rails.application.routes.draw do
   get 'disciplinary' => 'wdc#root'
 
   get 'contact' => 'contacts#index'
-  post 'contact' => 'contacts#website_create'
+  post 'contact' => 'contacts#contact'
   get 'contact/dob' => 'contacts#dob'
   post 'contact/dob' => 'contacts#dob_create'
 
