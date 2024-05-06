@@ -92,7 +92,7 @@ class Competition < ApplicationRecord
   }, _prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
-    cityName
+    CityName
     countryId
     information
     venue
@@ -124,6 +124,8 @@ class Competition < ApplicationRecord
     refund_policy_percent
     guests_entry_fee_lowest_denomination
     guest_entry_status
+    forbid_newcomers
+    forbid_newcomers_reason
   ).freeze
   UNCLONEABLE_ATTRIBUTES = %w(
     id
