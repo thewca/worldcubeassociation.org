@@ -1,11 +1,12 @@
 import React, { useMemo } from 'react';
 import { Dropdown } from 'semantic-ui-react';
 import i18n from '../../lib/i18n';
+import { timezoneData } from '../../lib/wca-data.js.erb';
 
-const timeZoneOptions = Intl.supportedValuesOf('timeZone').map((timeZone) => ({
-  key: timeZone,
-  text: timeZone,
-  value: timeZone,
+const timeZoneOptions = Object.entries(timezoneData).map(([tzName, tzId]) => ({
+  key: tzId,
+  text: tzName,
+  value: tzId,
 }));
 
 export default function TimeZoneSelector({
