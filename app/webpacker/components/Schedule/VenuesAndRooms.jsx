@@ -44,12 +44,9 @@ export default function VenuesAndRooms({
     <>
       {venueCount > 1 && (
         <Menu
-          pointing
-          secondary
+          borderless
           fluid
           stackable
-          // TODO: can't scroll left when 6+ venues
-          widths={Math.min(6, venueCount + 1)}
           style={{ overflowX: 'auto', overflowY: 'hidden' }}
         >
           <Menu.Item
