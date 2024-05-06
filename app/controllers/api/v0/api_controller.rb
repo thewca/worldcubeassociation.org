@@ -29,6 +29,11 @@ class Api::V0::ApiController < ApplicationController
     render json: { status: "ok" }
   end
 
+  def user_qualification_data
+    user = User.find(params.require(:user_id))
+    render json: user.person.personal_records.map(&:to_wcif)
+  end
+
   def scramble_program
     begin
       rsa_key = OpenSSL::PKey::RSA.new(AppSecrets.TNOODLE_PUBLIC_KEY)

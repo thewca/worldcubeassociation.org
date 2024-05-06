@@ -367,6 +367,7 @@ Rails.application.routes.draw do
       get '/geocoding/search' => 'geocoding#get_location_from_query', as: :geocoding_search
       get '/countries' => 'api#countries'
       get '/records' => "api#records"
+      get '/results/:user_id/qualification_data' => 'api#user_qualification_data', as: :user_qualification_data
       get '/competition_series/:id' => 'api#competition_series'
 
       resources :competitions, only: [:index, :show] do
