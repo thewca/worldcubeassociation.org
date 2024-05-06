@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  Button, Checkbox,
-  Grid, Header, Menu, Message, Segment,
+  Button, Checkbox, Grid, Header,
+  Menu, Message, Segment, Transition,
 } from 'semantic-ui-react';
 import { getTextColor, TEXT_WHITE } from '../../lib/utils/calendar';
 import { toDegrees } from '../../lib/utils/edit-schedule';
@@ -16,6 +16,7 @@ export default function VenuesAndRooms({
   rooms,
   activeRoomIds,
   dispatchRooms,
+  setActiveTimeZone,
 }) {
   const venueCount = venues.length;
 
@@ -26,6 +27,18 @@ export default function VenuesAndRooms({
 
     setActiveVenueIndex(newVenueIndex);
   };
+
+  const setTimeZoneForRoom = (roomId) => {
+    const venueForRoom = venues.find((venue) => (
+      venue.rooms.some((room) => room.id === roomId)
+    ));
+
+    if (venueForRoom) {
+      setActiveTimeZone(venueForRoom.timezone);
+    }
+  };
+
+  const [showTimeZoneButton, setShowTimeZoneButton] = useState(false);
 
   return (
     <>
@@ -77,11 +90,20 @@ export default function VenuesAndRooms({
               content={i18n.t('competitions.schedule.rooms_panel.none')}
               onClick={() => dispatchRooms({ type: 'reset' })}
             />
+            <Button
+              toggle
+              size="mini"
+              content={i18n.t('competitions.schedule.rooms_panel.show_buttons')}
+              active={showTimeZoneButton}
+              onClick={() => setShowTimeZoneButton((buttonState) => !buttonState)}
+            />
           </Header>
           <RoomSelector
             rooms={rooms}
             activeRoomIds={activeRoomIds}
             toggleRoom={(id) => dispatchRooms({ type: 'toggle', id })}
+            setTimeZoneForRoom={setTimeZoneForRoom}
+            showTimeZoneButton={showTimeZoneButton}
           />
         </Segment>
       )}
@@ -89,7 +111,13 @@ export default function VenuesAndRooms({
   );
 }
 
-function RoomSelector({ rooms, activeRoomIds, toggleRoom }) {
+function RoomSelector({
+  rooms,
+  activeRoomIds,
+  toggleRoom,
+  setTimeZoneForRoom,
+  showTimeZoneButton,
+}) {
   return (
     <Grid stackable columns={Math.min(4, rooms.length)}>
       {rooms.map(({ id, name, color }) => (
@@ -99,6 +127,7 @@ function RoomSelector({ rooms, activeRoomIds, toggleRoom }) {
             padded
             fluid
             basic
+            attached={showTimeZoneButton && 'top'}
             inverted={getTextColor(color) === TEXT_WHITE}
             style={{
               backgroundColor: color,
@@ -115,6 +144,19 @@ function RoomSelector({ rooms, activeRoomIds, toggleRoom }) {
             />
             {name}
           </Button>
+          <Transition visible={showTimeZoneButton} animation="scale" duration={150}>
+            <Button
+              fluid
+              basic
+              attached="bottom"
+              size="small"
+              compact
+              icon="globe"
+              content={i18n.t('competitions.schedule.rooms_panel.use_time_zone')}
+              onClick={() => setTimeZoneForRoom(id)}
+              style={{ textAlign: 'right' }}
+            />
+          </Transition>
         </Grid.Column>
       ))}
     </Grid>

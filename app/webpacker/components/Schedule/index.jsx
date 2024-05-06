@@ -139,6 +139,7 @@ export default function Schedule({
         rooms={roomsOfActiveVenues}
         activeRoomIds={activeRoomIds}
         dispatchRooms={dispatchRooms}
+        setActiveTimeZone={setActiveTimeZone}
       />
 
       <Segment>

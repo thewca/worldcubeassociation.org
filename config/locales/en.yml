@@ -1923,6 +1923,8 @@ en:
         title: "Rooms"
         all: "All"
         none: "None"
+        show_buttons: "Show time zone buttons"
+        use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
       venue_information_html:
