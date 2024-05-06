@@ -11,32 +11,6 @@ import { getDatesBetweenInclusive } from '../../lib/utils/dates';
 import { EventSelector } from '../CompetitionsOverview/CompetitionsFilters';
 import i18n from '../../lib/i18n';
 
-const { timeZone: userTimeZone } = Intl.DateTimeFormat().resolvedOptions();
-
-const getTimeZone = (venues, location) => {
-  if (Number.isInteger(location)) {
-    return venues[location].timezone;
-  }
-  if (location === 'local') {
-    return userTimeZone;
-  }
-  return undefined;
-};
-
-const getLocation = (venues, timeZone) => {
-  const matchingVenueIndex = venues.findIndex(
-    (venue) => venue.timezone === timeZone,
-  );
-
-  if (matchingVenueIndex !== -1) {
-    return matchingVenueIndex;
-  }
-  if (timeZone === userTimeZone) {
-    return 'local';
-  }
-  return 'custom';
-};
-
 const activeIdReducer = (state, { type, id, ids }) => {
   let newState = [...state];
 
@@ -55,40 +29,6 @@ const activeIdReducer = (state, { type, id, ids }) => {
     default:
       throw new Error('Unknown action.');
   }
-};
-
-const timeZoneReducer = (state, {
-  type, venues, location, timeZone,
-}) => {
-  switch (type) {
-    case 'update-location':
-      if (venues && (location || location === 0)) {
-        if (location === 'custom') {
-          return { location, timeZone: state.timeZone };
-        }
-        const newTimeZone = getTimeZone(venues, location);
-        if (newTimeZone) {
-          return { location, timeZone: newTimeZone };
-        }
-        console.error('Must supply valid location.');
-      } else {
-        console.error('Must supply venues and location.');
-      }
-      break;
-
-    case 'update-time-zone':
-      if (timeZone) {
-        const newLocation = getLocation(venues, timeZone);
-        return { location: newLocation, timeZone };
-      }
-      console.error('Must supply time zone.');
-      break;
-
-    default:
-      break;
-  }
-
-  return state;
 };
 
 export default function Schedule({
@@ -113,23 +53,19 @@ export default function Schedule({
 
   // time zones
 
-  const [
-    { location: activeTimeZoneLocation, timeZone: activeTimeZone },
-    dispatchTimeZone,
-  ] = useReducer(timeZoneReducer, {
-    location: mainVenueIndex,
-    timeZone: venues[mainVenueIndex].timezone,
-  });
+  const [followVenueSelection, setFollowVenueSelection] = useState(true);
+  const [activeTimeZone, setActiveTimeZone] = useState(venues[mainVenueIndex].timezone);
 
   const uniqueTimeZones = [...new Set(venues.map((venue) => venue.timezone))];
   const timeZoneCount = uniqueTimeZones.length;
 
   const setActiveVenueIndexAndUpdateTimeZone = (newIndex) => {
-    dispatchTimeZone({
-      type: 'update-location',
-      venues,
-      location: newIndex === -1 ? mainVenueIndex : newIndex,
-    });
+    // First tab represents "all" and has index -1
+    if (newIndex >= 0 && followVenueSelection) {
+      const venueTimeZone = venues[newIndex].timezone;
+      setActiveTimeZone(venueTimeZone);
+    }
+
     setActiveVenueIndex(newIndex);
   };
 
@@ -214,10 +150,11 @@ export default function Schedule({
       </Segment>
 
       <TimeZoneSelector
-        venues={venues}
+        activeVenueOrNull={activeVenueOrNull}
         activeTimeZone={activeTimeZone}
-        activeTimeZoneLocation={activeTimeZoneLocation}
-        dispatchTimeZone={dispatchTimeZone}
+        setActiveTimeZone={setActiveTimeZone}
+        followVenueSelection={followVenueSelection}
+        setFollowVenueSelection={setFollowVenueSelection}
       />
 
       <ViewSelector activeView={activeView} setActiveView={setActiveView} />

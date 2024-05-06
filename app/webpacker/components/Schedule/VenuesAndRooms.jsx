@@ -114,7 +114,7 @@ function VenueInfo({ activeVenueOrNull, venueCount }) {
     <Message>
       <Message.Content>
         {activeVenueOrNull ? (
-          <p>
+          <>
             {/* eslint-disable-next-line react/no-danger */}
             <p dangerouslySetInnerHTML={{
               __html: i18n.t('competitions.schedule.venue_information_html', {
@@ -126,7 +126,7 @@ function VenueInfo({ activeVenueOrNull, venueCount }) {
             }}
             />
             {i18n.t('competitions.schedule.timezone_message', { timezone })}
-          </p>
+          </>
         ) : (
           <p>
             {i18n.t('competitions.schedule.venue_information_all', { venueCount })}

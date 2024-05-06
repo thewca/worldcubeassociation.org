@@ -1,5 +1,11 @@
-import React, { useMemo } from 'react';
-import { Dropdown } from 'semantic-ui-react';
+import React from 'react';
+import {
+  Button,
+  Checkbox,
+  Dropdown,
+  Header,
+  Segment,
+} from 'semantic-ui-react';
 import i18n from '../../lib/i18n';
 import { timezoneData } from '../../lib/wca-data.js.erb';
 
@@ -9,66 +15,50 @@ const timeZoneOptions = Object.entries(timezoneData).map(([tzName, tzId]) => ({
   value: tzId,
 }));
 
-export default function TimeZoneSelector({
-  venues,
-  activeTimeZone,
-  activeTimeZoneLocation,
-  dispatchTimeZone,
-}) {
-  const locationOptions = useMemo(
-    () => [
-      {
-        key: 'local',
-        text: i18n.t('competitions.schedule.timezone.local'),
-        value: 'local',
-      },
-      ...venues.map((venue, index) => ({
-        key: venue.name,
-        text: `${venue.name}'s`,
-        value: index,
-      })),
-      {
-        key: 'custom',
-        text: i18n.t('competitions.schedule.timezone.custom'),
-        value: 'custom',
-      },
-    ],
-    [venues],
-  );
+const { timeZone: userTimeZone } = Intl.DateTimeFormat().resolvedOptions();
 
+export default function TimeZoneSelector({
+  activeVenueOrNull,
+  activeTimeZone,
+  setActiveTimeZone,
+  followVenueSelection,
+  setFollowVenueSelection,
+}) {
   return (
-    <div>
+    <Segment>
+      <Header size="small">{i18n.t('competitions.schedule.time_zone')}</Header>
       {i18n.t('competitions.schedule.timezone_setting')}
       {' '}
       <Dropdown
         search
         selection
-        value={activeTimeZoneLocation}
-        onChange={(_, data) => dispatchTimeZone({
-          type: 'update-location',
-          location: data.value,
-          venues,
-        })}
-        options={locationOptions}
+        value={activeTimeZone}
+        onChange={(_, data) => setActiveTimeZone(data.value)}
+        options={timeZoneOptions}
       />
-      {activeTimeZoneLocation === 'custom' && (
-        <p>
-          {i18n.t('competitions.schedule.timezone_custom')}
-          {' '}
-          <Dropdown
-            search
-            selection
-            value={activeTimeZone}
-            onChange={(_, data) => dispatchTimeZone({
-              type: 'update-time-zone',
-              timeZone: data.value,
-              venues,
-            })}
-            options={timeZoneOptions}
-          />
-        </p>
-      ) }
-
-    </div>
+      <br />
+      <Button
+        compact
+        icon="home"
+        content={i18n.t('competitions.schedule.timezone_set_local')}
+        labelPosition="left"
+        onClick={() => setActiveTimeZone(userTimeZone)}
+      />
+      {activeVenueOrNull && (
+        <Button
+          compact
+          icon="map pin"
+          content={i18n.t('competitions.schedule.timezone_set_venue')}
+          labelPosition="left"
+          onClick={() => setActiveTimeZone(activeVenueOrNull.timezone)}
+        />
+      )}
+      {' '}
+      <Checkbox
+        label={i18n.t('competitions.schedule.timezone_follow_venue')}
+        checked={followVenueSelection}
+        onChange={(_, data) => setFollowVenueSelection(data.checked)}
+      />
+    </Segment>
   );
 }

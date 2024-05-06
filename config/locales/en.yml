@@ -1918,19 +1918,19 @@ en:
       all_venues: "All Venues"
       room_or_stage: "Room or Stage"
       more_details: "Show Round Details"
-      timezone:
-        local: "your local"
-        custom: "a custom"
+      time_zone: "Time Zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
       venue_information_html:
         one: "You are viewing the schedule for the venue %{venue_name}, the sole venue for this competition."
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
       venue_information_all: "You are viewing the schedule for all %{venueCount} venues at once."
-      timezone_message: "The schedule is displayed in the timezone %{timezone}."
+      timezone_message: "The time zone for this venue is %{timezone}."
       timezone_setting: "You are viewing this schedule in the following timezone setting:"
-      timezone_custom: "The current custom timezone setting is"
       multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
+      timezone_set_local: "Set to local"
+      timezone_set_venue: "Set to venue"
+      timezone_follow_venue: "Follow the active venue tab"
       schedule_for_date: "Schedule for %{date}"
       schedule_change_warning: "Schedules are subject to adjustments, especially once registration totals are known. Registered competitors will be notified by email of any major changes."
     #context: entry of the left navigation menu
