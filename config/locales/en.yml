@@ -1919,6 +1919,10 @@ en:
       room_or_stage: "Room or Stage"
       more_details: "Show Round Details"
       time_zone: "Time Zone"
+      rooms_panel:
+        title: "Rooms"
+        all: "All"
+        none: "None"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
       venue_information_html:

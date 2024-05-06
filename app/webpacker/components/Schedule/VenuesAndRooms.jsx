@@ -1,7 +1,7 @@
 import React from 'react';
 import {
   Button, Checkbox,
-  Grid, Menu, Message, Segment,
+  Grid, Header, Menu, Message, Segment,
 } from 'semantic-ui-react';
 import { getTextColor, TEXT_WHITE } from '../../lib/utils/calendar';
 import { toDegrees } from '../../lib/utils/edit-schedule';
@@ -62,11 +62,28 @@ export default function VenuesAndRooms({
       />
 
       {rooms.length > 1 && (
-        <RoomSelector
-          rooms={rooms}
-          activeRoomIds={activeRoomIds}
-          toggleRoom={(id) => dispatchRooms({ type: 'toggle', id })}
-        />
+        <Segment>
+          <Header size="small">
+            {i18n.t('competitions.schedule.rooms_panel.title')}
+            {' '}
+            <Button
+              primary
+              size="mini"
+              content={i18n.t('competitions.schedule.rooms_panel.all')}
+              onClick={() => dispatchRooms({ type: 'reset', ids: rooms.map((room) => room.id) })}
+            />
+            <Button
+              size="mini"
+              content={i18n.t('competitions.schedule.rooms_panel.none')}
+              onClick={() => dispatchRooms({ type: 'reset' })}
+            />
+          </Header>
+          <RoomSelector
+            rooms={rooms}
+            activeRoomIds={activeRoomIds}
+            toggleRoom={(id) => dispatchRooms({ type: 'toggle', id })}
+          />
+        </Segment>
       )}
     </>
   );
