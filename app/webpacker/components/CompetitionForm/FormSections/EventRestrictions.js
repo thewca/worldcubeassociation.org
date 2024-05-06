@@ -15,11 +15,13 @@ export default function EventRestrictions() {
   const {
     competition: {
       eventRestrictions: {
+        forbidNewcomers,
         earlyPuzzleSubmission,
         qualificationResults,
         eventLimitation,
       },
     },
+    usesV2Registrations,
     isCloning,
     isPersisted,
     storedEvents,
@@ -39,12 +41,21 @@ export default function EventRestrictions() {
     }, ...storedEventOptions];
   }, [storedEvents]);
 
+  const newcomers = forbidNewcomers.enabled;
   const earlySubmission = earlyPuzzleSubmission.enabled;
   const needQualification = qualificationResults.enabled;
   const restrictEvents = eventLimitation.enabled;
 
   return (
     <SubSection section="eventRestrictions">
+      { usesV2Registrations && (
+        <SubSection section="forbidNewcomers">
+          <InputBoolean id="enabled" />
+          <ConditionalSection showIf={newcomers}>
+            <InputTextArea id="reason" />
+          </ConditionalSection>
+        </SubSection>
+      )}
       <SubSection section="earlyPuzzleSubmission">
         <InputBoolean id="enabled" />
         <ConditionalSection showIf={earlySubmission}>

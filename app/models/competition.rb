@@ -109,6 +109,8 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
+    forbid_newcomers
+    forbid_newcomers_reason
     guests_enabled
     guests_per_registration_limit
     base_entry_fee_lowest_denomination
@@ -211,6 +213,7 @@ class Competition < ApplicationRecord
            as: "guests_base_fee",
            allow_nil: true,
            with_model_currency: :currency_code
+  validates :forbid_newcomers_reason, presence: true, if: :forbid_newcomers?
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   # cannot validate `qualification_results IN [true, false]` because we historically have competitions
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
@@ -2283,6 +2286,10 @@ class Competition < ApplicationRecord
         "forceComment" => force_comment_in_registration,
       },
       "eventRestrictions" => {
+        "forbidNewcomers" => {
+          "enabled" => forbid_newcomers?,
+          "reason" => forbid_newcomers_reason,
+        },
         "earlyPuzzleSubmission" => {
           "enabled" => early_puzzle_submission?,
           "reason" => early_puzzle_submission_reason,
@@ -2380,6 +2387,10 @@ class Competition < ApplicationRecord
         "forceComment" => errors[:force_comment_in_registration],
       },
       "eventRestrictions" => {
+        "forbidNewcomers" => {
+          "enabled" => errors[:forbid_newcomers],
+          "reason" => errors[:forbid_newcomers_reason],
+        },
         "earlyPuzzleSubmission" => {
           "enabled" => errors[:early_puzzle_submission],
           "reason" => errors[:early_puzzle_submission_reason],
@@ -2482,6 +2493,8 @@ class Competition < ApplicationRecord
       guests_entry_fee_lowest_denomination: form_data.dig('entryFees', 'guestEntryFee'),
       early_puzzle_submission: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'enabled'),
       early_puzzle_submission_reason: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'reason'),
+      forbid_newcomers: form_data.dig('eventRestrictions', 'forbidNewcomers', 'enabled'),
+      forbid_newcomers_reason: form_data.dig('eventRestrictions', 'forbidNewcomers', 'reason'),
       qualification_results: form_data.dig('eventRestrictions', 'qualificationResults', 'enabled'),
       qualification_results_reason: form_data.dig('eventRestrictions', 'qualificationResults', 'reason'),
       name_reason: form_data['nameReason'],
@@ -2677,6 +2690,13 @@ class Competition < ApplicationRecord
         "eventRestrictions" => {
           "type" => "object",
           "properties" => {
+            "forbidNewcomers" => {
+              "type" => "object",
+              "properties" => {
+                "enabled" => { "type" => "boolean" },
+                "reason" => { "type" => ["string", "null"] },
+              },
+            },
             "earlyPuzzleSubmission" => {
               "type" => "object",
               "properties" => {

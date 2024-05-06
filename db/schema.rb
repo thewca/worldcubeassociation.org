@@ -80,6 +80,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_05_004834) do
     t.boolean "force_comment_in_registration"
     t.integer "posting_by"
     t.boolean "uses_v2_registrations", default: false, null: false
+    t.boolean "forbid_newcomers", default: false, null: false
+    t.string "forbid_newcomers_reason"
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"

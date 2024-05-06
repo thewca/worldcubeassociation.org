@@ -46,7 +46,7 @@ module DbDumpHelper
   end
 
   def self.public_s3_path(file_name)
-    "https://s3.#{EnvConfig.STORAGE_AWS_REGION}.amazonaws.com/#{BUCKET_NAME}/#{file_name}"
+    "http://#{BUCKET_NAME}.s3#{EnvConfig.STORAGE_AWS_REGION}.amazonaws.com/#{file_name}"
   end
 
   def self.dump_results_db(export_timestamp = DateTime.now)

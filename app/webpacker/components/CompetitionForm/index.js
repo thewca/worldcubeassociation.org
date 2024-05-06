@@ -290,6 +290,7 @@ function CompetitionForm() {
 
 export default function Wrapper({
   competition = null,
+  usesV2Registrations = false,
   storedEvents = [],
   isAdminView = false,
   isPersisted = false,
@@ -301,6 +302,7 @@ export default function Wrapper({
       reducer={competitionFormReducer}
       initialState={{
         competition,
+        usesV2Registrations,
         initialCompetition: competition,
         errors: null,
         storedEvents,
