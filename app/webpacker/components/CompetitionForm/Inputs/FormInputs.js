@@ -11,7 +11,6 @@ import { Circle } from 'react-leaflet';
 import _ from 'lodash';
 import I18n from '../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
-import { CompetitionSearch, UserSearch } from './FormSearch';
 import AutonumericField from './AutonumericField';
 import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import {
@@ -23,6 +22,8 @@ import {
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
 import UtcDatePicker from '../../wca/UtcDatePicker';
+import { IdWcaSearch } from '../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../SearchWidget/SearchModel';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -284,21 +285,29 @@ export const InputMarkdown = wrapInput((props) => (
   />
 ), [], '');
 
-export const InputUsers = wrapInput((props) => (
-  <UserSearch
-    id={props.htmlId}
-    value={props.value}
-    onChange={props.onChange}
-    delegateOnly={props.delegateOnly}
-    traineeOnly={props.traineeOnly}
-  />
-), ['delegateOnly', 'traineeOnly']);
+export const InputUsers = wrapInput((props) => {
+  const searchParams = {};
+
+  if (props.delegateOnly) searchParams.only_staff_delegates = true;
+  if (props.traineeOnly) searchParams.only_trainee_delegates = true;
+
+  return (
+    <IdWcaSearch
+      id={props.htmlId}
+      value={props.value || []}
+      onChange={props.onChange}
+      model={SEARCH_MODELS.user}
+      params={searchParams}
+    />
+  );
+}, ['delegateOnly', 'traineeOnly']);
 
 export const InputCompetitions = wrapInput((props) => (
-  <CompetitionSearch
+  <IdWcaSearch
     id={props.htmlId}
-    value={props.value}
+    value={props.value || []}
     onChange={props.onChange}
+    model={SEARCH_MODELS.competition}
     disabled={props.disabled}
   />
 ), ['disabled']);

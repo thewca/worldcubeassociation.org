@@ -658,9 +658,9 @@ en:
       error_pages:
         #context: The error pages in the case of 500s or 400s
         500_error: "We're sorry, but something went wrong."
-        500_contact: "If you report this error to the Software Team please copy the Request ID into the email"
+        500_contact_html: "<a href=%{contact_url}>Click here</a> to report it."
         400_error: "The page you were looking for doesn't exist."
-        400_contact: "If you think this is a mistake please contact the Software Team and copy the Request ID into the email"
+        400_contact_html: "If you think this is a mistake please <a href=%{contact_url}>click here</a> to report it."
     #context: Key used when an external OAuth app is willing to access a WCA user's data
     doorkeeper:
       applications:
@@ -756,6 +756,8 @@ en:
     teams_committees_councils:
       title: "WCA Teams, Committees, and Councils"
       description: "The WCA's teams and committees are an integral part of the organization and perform the day-to-day tasks that are required to keep it functioning. These committees are made up of WCA community members, including WCA Delegates and competitors. Each team has a leader, whose role is to ensure the proper functioning of the team and guide other team members. Councils are a special type of team that serve an advisory role to the WCA Board and are made up of community members, not WCA Staff members. When there are committee, team, or council openings, information about how to apply is posted on the front page."
+      contact_button: "Contact"
+      no_contact_description: "The contact details of this team/committee is not publicly available."
       groups_name:
         wat: "WCA Archive Team"
         wct: "WCA Communication Team"
@@ -788,7 +790,7 @@ en:
         wac: "The WAC is responsible for maintaining feedback and communication between the WCA Community and the WCA Staff. They maintain the WCA Forums and summarize surveys and attempt to increase reach across the worldwide community."
     contacts:
       title: "WCA Contact Form"
-      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you can find their contact information on <a href="/teams-committees-councils">this page</a>.'
+      faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
       form:
         user_data:
           name:
@@ -799,18 +801,24 @@ en:
           label: "Which of the following best describes your inquiry?"
           competition:
             label: "Contact organizers/delegates of a competition (to ask query regarding that particular competition)"
-          communications_team:
+          wct:
             label: "Contact WCA for general queries (this can involve anything like WCA ID/profile, organizing competitions, competition rules, competition media, etc)"
-          results_team:
+          wrt:
             label: "Contact Results Team (for anything related to the results of a competition)"
-          software:
+          wst:
             label: "Contact Software Team (to report some bug in website or any API related questions)"
         competition:
           competition:
             label: "Competition"
           message:
             label: "Message"
-        communications_team:
+        wct:
+          message:
+            label: "Message"
+        wrt:
+          message:
+            label: "Message"
+        wst:
           message:
             label: "Message"
         captcha:

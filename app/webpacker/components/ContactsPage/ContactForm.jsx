@@ -1,61 +1,57 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import {
   Form, FormGroup, FormField, Button, Radio, Message,
 } from 'semantic-ui-react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import _ from 'lodash';
 import { contactUrl } from '../../lib/requests/routes.js.erb';
-import useInputState from '../../lib/hooks/useInputState';
 import useSaveAction from '../../lib/hooks/useSaveAction';
 import I18n from '../../lib/i18n';
 import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
-import UserData from './SubForms/UserData';
+import UserData from './UserData';
 import Loading from '../Requests/Loading';
+import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import { updateContactRecipient } from './store/actions';
 import Wct from './SubForms/Wct';
+import Wrt from './SubForms/Wrt';
+import Wst from './SubForms/Wst';
 import Competition from './SubForms/Competition';
 
 const CONTACT_RECIPIENTS = [
   'competition',
-  'communications_team',
-  'results_team',
-  'software',
+  'wct',
+  'wrt',
+  'wst',
 ];
 
-const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS);
+const CONTACT_RECIPIENTS_MAP = _.keyBy(CONTACT_RECIPIENTS, _.camelCase);
 
-const SUBFORM_DEFAULT_VALUE = {
-  competition: null,
-  message: '',
-};
-
-export default function ContactForm({ userDetails }) {
-  const [userData, setUserData] = useState({
-    name: userDetails?.user?.name || '',
-    email: userDetails?.user?.email || '',
-  });
-  const [selectedContactType, setSelectedContactType] = useInputState(null);
-  const [subformValues, setSubformValues] = useState(SUBFORM_DEFAULT_VALUE);
-
+export default function ContactForm({ loggedInUserData }) {
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
+  const contactFormState = useStore();
+  const dispatch = useDispatch();
+  const { contactRecipient: selectedContactRecipient, userData } = contactFormState;
 
   const isFormValid = (
-    selectedContactType && userData.name && userData.email && captchaValue
+    selectedContactRecipient && userData.name && userData.email && captchaValue
   );
   const SubForm = useMemo(() => {
-    if (!selectedContactType) return null;
-    switch (selectedContactType) {
+    if (!selectedContactRecipient) return null;
+    switch (selectedContactRecipient) {
       case CONTACT_RECIPIENTS_MAP.competition:
         return Competition;
-      default:
+      case CONTACT_RECIPIENTS_MAP.wct:
         return Wct;
+      case CONTACT_RECIPIENTS_MAP.wrt:
+        return Wrt;
+      case CONTACT_RECIPIENTS_MAP.wst:
+        return Wst;
+      default:
+        return null;
     }
-  }, [selectedContactType]);
-
-  useEffect(() => {
-    setSubformValues(SUBFORM_DEFAULT_VALUE);
-  }, [selectedContactType]);
+  }, [selectedContactRecipient]);
 
   if (saving) return <Loading />;
 
@@ -65,44 +61,30 @@ export default function ContactForm({ userDetails }) {
         if (isFormValid) {
           save(
             contactUrl,
-            {
-              userData,
-              contactType: selectedContactType,
-              [selectedContactType]: subformValues,
-            },
-            () => setSelectedContactType(null),
+            contactFormState,
+            () => dispatch(updateContactRecipient(null)),
             { method: 'POST' },
           );
         }
       }}
       error={!!captchaError}
     >
-      {!userDetails && (
-        <UserData
-          formValues={userData}
-          setFormValues={setUserData}
-        />
-      )}
+      <UserData loggedInUserData={loggedInUserData} />
       <FormGroup grouped>
         <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
-        {CONTACT_RECIPIENTS.map((contactType) => (
-          <FormField key={contactType}>
+        {CONTACT_RECIPIENTS.map((contactRecipient) => (
+          <FormField key={contactRecipient}>
             <Radio
-              label={I18n.t(`page.contacts.form.contact_recipient.${contactType}.label`)}
-              name="contactType"
-              value={contactType}
-              checked={selectedContactType === contactType}
-              onChange={setSelectedContactType}
+              label={I18n.t(`page.contacts.form.contact_recipient.${contactRecipient}.label`)}
+              name="contactRecipient"
+              value={contactRecipient}
+              checked={selectedContactRecipient === contactRecipient}
+              onChange={(__, { value }) => dispatch(updateContactRecipient(value))}
             />
           </FormField>
         ))}
       </FormGroup>
-      {SubForm && (
-        <SubForm
-          formValues={subformValues}
-          setFormValues={setSubformValues}
-        />
-      )}
+      {SubForm && <SubForm />}
       <FormField>
         <ReCAPTCHA
           sitekey={RECAPTCHA_PUBLIC_KEY}

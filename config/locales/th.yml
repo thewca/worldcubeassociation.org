@@ -1106,16 +1106,14 @@ th:
       error_pages:
         #original_hash: 1042478
         500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
-        #original_hash: d656a11
-        500_contact: >-
-          หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรด copy Request ID ใส่ใน
-          email ด้วย
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>Click here</a> เพื่อรายงาน.'
         #original_hash: b61e305
         400_error: ไม่มีหน้าที่คุณกำลังมองหา
-        #original_hash: c8a7d4e
-        400_contact: >-
-          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และ copy
-          Request ID ใส่ใน email ด้วย
+        #original_hash: c9290b6
+        400_contact_html: >-
+          หากคุณคิดว่านี่คือข้อผิดพลาด กรุณา<a
+          href=%{contact_url}>กดที่นี่</a>เพื่อรายงาน
     doorkeeper:
       applications:
         help:
@@ -1309,6 +1307,10 @@ th:
         และประกอบด้วยสมาชิกในชุมชน ไม่ใช่สมาชิกเจ้าหน้าที่ WCA
         เมื่อมีการเปิดคณะกรรมการ ทีมงาน หรือสภา
         ข้อมูลเกี่ยวกับวิธีการสมัครจะโพสต์ไว้ที่หน้าแรก
+      #original_hash: b37456c
+      contact_button: ติดต่อ
+      #original_hash: ae7928f
+      no_contact_description: ยังไม่มีข้อมูลการติดต่อทีม / กรรมการนี้
       groups_name:
         #original_hash: 90a1280
         wat: WCA Archive Team
@@ -1424,7 +1426,7 @@ th:
     contacts:
       #original_hash: 4ef2aad
       title: WCA Contact Form
-      #original_hash: c343cae
+      #original_hash: bddd3ea
       faq_note_html: >-
         ก่อนที่จะทำการสอบถาม คุณอาจต้องการดู <a href="/faq">คำถามที่พบบ่อย</a>
         ของเรา!
@@ -1447,19 +1449,19 @@ th:
             label: >-
               ติดต่อผู้จัดงาน/ผู้แทนการแข่งขัน
               (เพื่อสอบถามเกี่ยวกับการแข่งขันนั้นๆ)
-          communications_team:
+          wct:
             #original_hash: b73e465
             label: >-
-              ติดต่อ WCA สำหรับคำถามทั่วไป (ซึ่งอาจเกี่ยวข้องกับอะไรก็ได้ เช่น 
-              WCA ID/profile, การจัดการการแข่งขัน, กติกาการแข่งขัน,
+              ติดต่อ WCA สำหรบปัญหาทั่วไป (ซึ่งอาจเกี่ยวข้องกับอะไรก็ได้ เช่น
+              WCA ID/Profile, การจัดการการแข่งขัน, กติกาการแข่งขัน,
               สื่อการแข่งขัน ฯลฯ)
-          results_team:
+          wrt:
             #original_hash: 0f6b96b
-            label: Contact Results Team (สำหรับสิ่งที่เกี่ยวข้องกับผลการแข่งขัน)
-          software:
+            label: ติดต่อ Results Team (สำหรับสิ่งที่เกี่ยวข้องกับผลการแข่งขัน)
+          wst:
             #original_hash: 1d74033
             label: >-
-              Contact Software Team
+              ติดต่อ Software Team
               (เพื่อรายงานข้อผิดพลาดในเว็บไซต์หรือคำถามที่เกี่ยวข้องกับ API)
         competition:
           competition:
@@ -1468,7 +1470,15 @@ th:
           message:
             #original_hash: 68f4145
             label: ข้อความ
-        communications_team:
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wrt:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wst:
           message:
             #original_hash: 68f4145
             label: ข้อความ

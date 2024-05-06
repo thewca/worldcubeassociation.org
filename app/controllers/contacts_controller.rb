@@ -1,28 +1,83 @@
 # frozen_string_literal: true
 
 class ContactsController < ApplicationController
-  def website_create
-    user_data = params.require(:userData)
-    name = user_data[:name]
-    email = user_data[:email]
-    contact_type = params.require(:contactType)
-    website_contact = WebsiteContact.new(
-      your_email: email,
-      name: name,
-      inquiry: contact_type,
-    )
-    case contact_type
-    when 'competition'
-      contact_params = params.require(:competition)
-      competition_id = contact_params[:competition][:id]
-      website_contact.competition_id = competition_id
+  private def maybe_send_contact_email(contact)
+    if !contact.valid?
+      render status: :bad_request, json: { error: "Invalid contact object created" }
+    elsif contact.deliver
+      render status: :ok, json: { message: "Mail sent successfully" }
     else
-      contact_params = params.require(contact_type)
+      render status: :internal_server_error, json: { error: "Mail delivery failed" }
     end
-    website_contact.message = contact_params[:message]
-    website_contact.request = request
-    website_contact.logged_in_email = current_user&.email || 'None'
-    maybe_send_contact_email(website_contact)
+  end
+
+  private def contact_competition(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactCompetition.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        competition_id: contact_params[:competitionId],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
+  private def contact_wct(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactWct.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
+  private def contact_wrt(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactWrt.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
+  private def contact_wst(requestor_details, contact_params)
+    maybe_send_contact_email(
+      ContactWst.new(
+        name: requestor_details[:name],
+        your_email: requestor_details[:email],
+        message: contact_params[:message],
+        request_id: contact_params[:requestId],
+        request: request,
+        logged_in_email: current_user&.email || 'None',
+      ),
+    )
+  end
+
+  def contact
+    contact_recipient = params.require(:contactRecipient)
+    contact_params = params.require(contact_recipient)
+    requestor_details = current_user || params.require(:userData)
+
+    case contact_recipient
+    when UserGroup.teams_committees_group_wct.metadata.friendly_id
+      contact_wct(requestor_details, contact_params)
+    when UserGroup.teams_committees_group_wrt.metadata.friendly_id
+      contact_wrt(requestor_details, contact_params)
+    when UserGroup.teams_committees_group_wst.metadata.friendly_id
+      contact_wst(requestor_details, contact_params)
+    when "competition"
+      contact_competition(requestor_details, contact_params)
+    else
+      render status: :bad_request, json: { error: "Invalid contact recipient" }
+    end
   end
 
   def dob
@@ -35,16 +90,6 @@ class ContactsController < ApplicationController
     @contact.to_email = "results@worldcubeassociation.org"
     @contact.subject = "WCA DOB change request by #{@contact.name}"
     maybe_send_dob_email success_url: contact_dob_url, fail_view: :dob
-  end
-
-  private def maybe_send_contact_email(website_contact)
-    if !website_contact.valid?
-      render json: { error: "invalid" }
-    elsif website_contact.deliver
-      render json: { status: "ok" }
-    else
-      render json: { error: "mail_delivery_error" }
-    end
   end
 
   private def maybe_send_dob_email(success_url: nil, fail_view: nil)
