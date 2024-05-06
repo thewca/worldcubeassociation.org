@@ -92,7 +92,7 @@ class Competition < ApplicationRecord
   }, _prefix: true
 
   CLONEABLE_ATTRIBUTES = %w(
-    CityName
+    cityName
     countryId
     information
     venue
