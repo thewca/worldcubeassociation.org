@@ -36,7 +36,7 @@ export default function StripeWrapper({
       { stripePromise && (
         <Elements
           stripe={stripePromise}
-          options={{ amount, currency: competitionInfo.currency_code }}
+          options={{ amount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
             handleDonation={handleDonation}

@@ -31,6 +31,7 @@ export default function StepPanel({
   connectedAccountId,
 }) {
   const isRegistered = Boolean(registration);
+  const hasPaid = registration?.payment.payment_status === 'completed';
 
   const steps = useMemo(() => {
     const steps = [requirementsStepConfig, competingStepConfig];
@@ -43,7 +44,8 @@ export default function StepPanel({
   }, [competitionInfo]);
 
   const [activeIndex, setActiveIndex] = useState(() => steps.findIndex(
-    (step) => step === (isRegistered ? competingStepConfig : requirementsStepConfig),
+    // eslint-disable-next-line no-nested-ternary
+    (step) => step === (isRegistered ? hasPaid ? competingStepConfig : paymentStepConfig : requirementsStepConfig),
   ));
 
   const CurrentStepPanel = steps[activeIndex].component;

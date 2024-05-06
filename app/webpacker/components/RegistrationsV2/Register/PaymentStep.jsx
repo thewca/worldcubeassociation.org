@@ -1,6 +1,6 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
-import { Button, Input, Label } from 'semantic-ui-react';
+import { Button, Label } from 'semantic-ui-react';
 import { paymentFinishUrl, wcaRegistrationUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';

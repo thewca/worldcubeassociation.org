@@ -36,8 +36,7 @@
                                                         userInfo: @current_user,
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
                                                         stripePublishableKey: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                                                        connectedAccountId: @competition.payment_account_for(:stripe).account_id,
-                                                        client_secret: "??"
+                                                        connectedAccountId: @competition.payment_account_for(:stripe)&.account_id,
                                                         }) %>
     <% else %>
       <% user_may_register = current_user.cannot_register_for_competition_reasons(@competition).length == 0 %>

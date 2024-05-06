@@ -28,8 +28,13 @@ module Microservices
     end
 
     def self.registration_connection
+      base_url = if Rails.env.development?
+                   EnvConfig.WCA_REGISTRATIONS_BACKEND_URL
+                 else
+                   EnvConfig.WCA_REGISTRATIONS_URL
+                 end
       Faraday.new(
-        url: EnvConfig.WCA_REGISTRATIONS_URL,
+        url: base_url ,
         headers: { Microservices::Auth::MICROSERVICE_AUTH_HEADER => Microservices::Auth.get_wca_token },
       ) do |builder|
         # Sets headers and parses jsons automatically
