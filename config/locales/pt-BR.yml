@@ -605,16 +605,8 @@ pt-BR:
         f: Feminino
         #original_hash: 6e6a6f2
         o: Outro
-      delegate_status:
-        #original_hash: 621101a
-        trainee_delegate: Delegado Trainee
-        #original_hash: 9b97968
-        candidate_delegate: Delegado Junior
-        #original_hash: 12ab214
-        delegate: Delegado
-        #original_hash: d463c23
-        senior_delegate: Delegado Senior
-      role_status:
+    user_roles:
+      status:
         delegate_regions:
           #original_hash: 621101a
           trainee_delegate: Delegado Trainee
@@ -640,6 +632,17 @@ pt-BR:
           senior_member: Membro Sênior
           #original_hash: e26c936
           leader: Líder
+        officers:
+          #original_hash: de34439
+          chair: Presidente da WCA
+          #original_hash: 7d405ff
+          executive_director: Diretor Executivo da WCA
+          #original_hash: 1dd4a07
+          secretary: Secretário da WCA
+          #original_hash: 0388b19
+          vice_chair: Vice-Presidente da WCA
+          #original_hash: 75e65d9
+          treasurer: Tesoureiro da WCA
     competition_medium:
       status:
         #original_hash: 61a0572
@@ -936,6 +939,10 @@ pt-BR:
           pending: Na espera
           #original_hash: 441bda6
           deleted: Excluída
+          #original_hash: a1bf92e
+          cancelled: Cancelada
+          #original_hash: 8cf6f9c
+          waiting_list: Na Lista de Espera
   mail_form:
     attributes:
       contact_form:
@@ -1149,22 +1156,22 @@ pt-BR:
       error_pages:
         #original_hash: 1042478
         500_error: 'Desculpe, algo deu errado.'
-        #original_hash: d815249
+        #original_hash: d656a11
         500_contact: >-
-          Se você reportar este erro para a Equipe de Software, por favor
-          mencione o "Request ID"
+          Se você reportar este erro para a Equipe de Software, por favor copie
+          o "Request ID" no e-mail
         #original_hash: b61e305
         400_error: A página que você estava procurando não existe.
-        #original_hash: 8b309f5
+        #original_hash: c8a7d4e
         400_contact: >-
           Se você acha que isso é um erro, por favor contate a Equipe de
-          Software e inclua o "Request ID"
+          Software e copie o "Request ID" no e-mail
     doorkeeper:
       applications:
         help:
           #original_hash: 95c10ec
           https_info: HTTPS é necessário a menos que esteja em "localhost"
-          #original_hash: 62a0113
+          #original_hash: 40b9d10
           scopes_html: >-
             Separe os escopos com espaços. Deixe em branco para usar o escopo
             padrão. Veja a lista de escopos suportados em <a
@@ -1209,10 +1216,14 @@ pt-BR:
       about: Sobre a WCA
       #original_hash: ed97787
       documents: Documentos da WCA
+      #original_hash: c9bae18
+      officers_and_board: Oficiais e Conselho da WCA
       #original_hash: d8fd3e4
       delegates: Delegados da WCA
       #original_hash: 37b8fdc
       organizations: Organizações Regionais
+      #original_hash: 959d354
+      translators: Tradutores
       #original_hash: d790b40
       faq: Perguntas Frequentes
       #original_hash: cf1d2c9
@@ -1223,8 +1234,8 @@ pt-BR:
       education: Recursos educacionais
       #original_hash: c66444f
       wca_live: WCA Live
-      #original_hash: a34b69f
-      contact: Informação de contato
+      #original_hash: b37456c
+      contact: Contato
       #original_hash: 8e12c09
       speedcubing_history: História do Speedcubing
       #original_hash: 4fa8cc8
@@ -1321,6 +1332,158 @@ pt-BR:
       disclaimer: Aviso Legal
       #original_hash: d561f1a
       find_us: Onde estamos
+  page:
+    translators:
+      #original_hash: 959d354
+      title: Tradutores
+    officers_and_board:
+      #original_hash: c9bae18
+      title: Oficiais e Conselho da WCA
+      #original_hash: 312e799
+      officers_description: >-
+        Os oficiais da WCA cuidam de tarefas relacionadas à condição de entidade
+        sem fins lucrativos. Esses oficiais são eleitos pelo Conselho. O Diretor
+        Executivo é o "Chief Executive Officer (CEO)" da WCA, o Presidente
+        coordena as reuniões do Conselho, o Secretário cuida dos documentos da
+        organização, e o Tesoureiro é responsável pelos assuntos financeiros da
+        WCA.
+      #original_hash: e0d37a2
+      board_description: >-
+        O Conselho da WCA é responsável por liderar a organização como um todo e
+        assumir quaisquer funções não cobertas pelas Equipes, Comitês e
+        Conselhos.
+    teams_committees_councils:
+      #original_hash: 0d62207
+      title: 'Equipes, Comitês e Conselhos da WCA'
+      #original_hash: d54d953
+      description: >-
+        Os comitês e equipes da WCA são uma parte fundamental da organização e
+        desempenham as atividades cotidianas que são necessárias para seu
+        funcionamento. Estes comitês/equipes são formatos por membros da
+        comunidade da WCA, incluindo Delegados e competidores. Cada
+        comitê/equipe tem um líder, cujo papel é garantir o bom funcionamento da
+        equipe e direcionar os demais membros. Conselhos são um tipo especial de
+        comitê que têm um papel consultivo ao Conselho da WCA, e são compostos
+        de membros da comunidade, não parte do Staff da WCA. Quando há vagas em
+        um comitê, equipe ou Conselho, as informações sobre como se candidatar
+        são postadas na página principal.
+      groups_name:
+        #original_hash: 90a1280
+        wat: Equipe de Arquivo da WCA
+        #original_hash: 63a2388
+        wct: Equipe de Comunicação da WCA
+        #original_hash: 2b81984
+        wcat: Equipe de Anúncios de Competições da WCA
+        #original_hash: c97077a
+        wdc: Comitê Disciplinar da WCA
+        #original_hash: 83bd1d0
+        wec: Comitê de Ética da WCA
+        #original_hash: d1dbb86
+        weat: Equipe de Assistentes Executivos da WCA
+        #original_hash: 9cb13de
+        wfc: Comitê Financeiro da WCA
+        #original_hash: 2035811
+        wmt: Equipe de Marketing da WCA
+        #original_hash: 8f32116
+        wqac: Comitê de Garantia da Qualidade da WCA
+        #original_hash: 3da1e85
+        wrc: Comitê do Regulamento da WCA
+        #original_hash: 67be768
+        wrt: Equipe de Resultados da WCA
+        #original_hash: a14bc62
+        wst: Equipe de Software da WCA
+        #original_hash: 58765c7
+        wsot: Equipe de Organização de Esportes da WCA
+        #original_hash: 1ce7604
+        wac: Conselho Consultivo da WCA
+      groups_description:
+        #original_hash: 5b1aade
+        wat: >-
+          A Equipe de Arquivo é responsável por gerenciar o desenvolvimento e
+          manutenção do arquivo histórico da WCA. Eles documentam eventos chaves
+          do speedcubing e marcos notáveis da WCA para serem apresentados numa
+          linha do tempo da organização, preservando o legado da WCA.
+        #original_hash: 50fd091
+        wct: >-
+          A Equipe de Comunicação da WCA (WCT) tem o papel de supervisionar e
+          apoiar a comunicação da WCA com a Comunidade e o público em geral. A
+          comunicação da WCA deve contribuir para os Objetivos da WCA e apoiar
+          uma cultura geral positiva de amizade, transparência, inclusão,
+          abertura e capacidade de resposta.
+        #original_hash: 3e5570f
+        wcat: >-
+          A WCAT tem o papel de aprovar e anunciar as competições da WCA e
+          garantir que esses anúncios estejam de acordo com os padrões de
+          qualidade da WCA. Também é responsável pelo protocolo adequado de
+          pedidos de competições a partir de documentos como a Política de
+          Requisitos de Competições da WCA. A WCAT NÃO é responsável por
+          organizar ou delegar competições individualmente.
+        #original_hash: 41eb6fd
+        wdc: >-
+          O WDC realiza investigações independentes referentes a cubistas e
+          incidentes ocorridos em competições da WCA ou em plataformas online
+          oficiais da WCA. Esses incidentes são possíveis violações do Espírito,
+          Código de Conduta e/ou Regulamento da WCA.
+        #original_hash: 6cdac80
+        wec: >-
+          O papel do WEC é garantir que todos os procedimentos adotados pelo
+          Staff da WCA estejam de acordo com o Código de Ética, e realizar
+          investigações independentes caso a conduta de algum desses membros não
+          esteja em conformidade com o Código. O WEC é um confidente para os
+          Cubistas Registrados, que podem reportar preocupações e solicitar uma
+          investigação. O Comitê também funciona como instância de recurso se
+          algum dos envolvidos não concorda com uma decisão do Comitê
+          Disciplinar da WCA.
+        #original_hash: 889dd90
+        weat: >-
+          Essa equipe é responsável por realizar as tarefas administrativas do
+          Conselho de Diretores da WCA.
+        #original_hash: 43e4e33
+        wfc: >-
+          O WFC é responsável por gerenciar as finanças da WCA, incluindo
+          orçamentos, relatórios, análises, escrituração contábil e declarações
+          fiscais. Eles também gerenciam a principal fonte de recursos, o
+          Sistema de Taxas da WCA, juntamente com vários programas de
+          financiamento que oferecem suporte às comunidades locais em diferentes
+          estágios de desenvolvimento, incluindo financiamento de viagens,
+          equipamentos e suporte às Organizações Regionais.
+        #original_hash: f2a0140
+        wmt: >-
+          A WMT é responsável por desenvolver e gerir a marca da WCA, procurar
+          patrocínios, apoiar a distribuição de Equipamento de Competição da
+          WCA, e comercializar Mercadorias da WCA.
+        #original_hash: 0171b3b
+        wqac: >-
+          Este comitê tem a função de apoiar a promover a contínua melhora da
+          qualidade na WCA, assim como a aplicação mundial de padrões de
+          qualidade para garantir uma consistente alta qualidade dos processos,
+          do Staff da WCA, Organizações Regionais, Organizadores e Staff de
+          Competição.
+        #original_hash: a1260bb
+        wrc: >-
+          O WRC lida com os problemas relacionados à aplicação, melhoria e
+          desenvolvimento do Regulamento da WCA. Eles apoiam os Delegados da WCA
+          em qualquer tipo de matéria procedimental que ocorra em competições e
+          decidem sobre incidentes não resolvidos ou não previstos.
+        #original_hash: 7bc588b
+        wrt: >-
+          A WRT é responsável por gerenciar as informações nos bancos de dados
+          da WCA, principalmente resultados de competições e dados dos
+          competidores.
+        #original_hash: ec961e4
+        wst: >-
+          A WST é responsável pela manutenção e e gerenciamento de todo o
+          software da WCA (website, embaralhadores, planilhas, ferramentas
+          administrativas.
+        #original_hash: 8f888d6
+        wsot: >-
+          Esta equipe tem o papel de supervisionar e apoiar o reconhecimento da
+          WCA como uma organização esportiva internacional.
+        #original_hash: 73d8df4
+        wac: >-
+          O WAC é responsável por manter feedback e comunicação entre a
+          Comunidade e o Staff da WCA. Eles cuidam do Fórum da WCA, realizam
+          pesquisas e tentam aumentar o alcance em toda a comunidade mundial.
   homepage:
     #original_hash: 824d76b
     learn_more: Saiba mais
@@ -1808,6 +1971,8 @@ pt-BR:
       board: Conselho da WCA
       #original_hash: d79bd00
       officers: Oficiais da WCA
+      #original_hash: 959d354
+      translators: Tradutores
   registrations:
     errors:
       #original_hash: 44ab952
@@ -2152,8 +2317,8 @@ pt-BR:
         payment_button: Pague sua taxa com Stripe
         #original_hash: f94d00f
         ajax_error: Erro no servidor da WCA
-        #original_hash: e62c56c
-        stripe_error: Erro no Stripe
+        #original_hash: d9185e8
+        payment_service_error: Erro no serviço de pagamento
         #original_hash: 97f7359
         subtotal: Subtotal
       alerts:
@@ -2257,10 +2422,10 @@ pt-BR:
     messages:
       #original_hash: 7b80062
       not_visible: Esta competição não está visível para o público.
-      #original_hash: c1d4926
+      #original_hash: 0398a14
       name_too_long: >-
-        O nome da competição tem mais de 32 caracteres. Preferimos nomes mais
-        curtos e agradecemos se você puder alterá-lo.
+        O nome da competição tem mais de 32 caracteres. Por favor altere o ID da
+        competição e o nome curto.
       #original_hash: af27396
       id_starts_with_lowercase: >-
         O id da competição começa com uma letra minúscula. Nós preferimos que
@@ -2651,6 +2816,8 @@ pt-BR:
       from_date: De
       #original_hash: ae79ea1
       to_date: Até
+      #original_hash: 5be6985
+      reset_filters: Limpar Filtros
       #original_hash: 52c30f8
       past_from: 'Passadas - %{year}'
       #original_hash: 7cff459
@@ -3255,6 +3422,122 @@ pt-BR:
               'false': >-
                 Os competidores PRECISAM estar qualificados para se inscrevem em
                 um evento
+    registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: 'Como um <0>%{pdfLink}</0>'
+      info:
+        #original_hash: eade5c7
+        download: Baixar todos os detalhes da competição
+      list:
+        #original_hash: 8fab566
+        empty: Nenhum registro encontrado
+        #original_hash: 713f805
+        spots_remaining: '%{spots} vaga(s) restante(s)'
+      bookmark:
+        #original_hash: 7952a5c
+        unbookmark: Você removeu seu favorito
+      requirements:
+        #original_hash: 09a428f
+        title: Requisitos
+        #original_hash: 695cf86
+        acknowledgement: >-
+          Eu li e compreendi todas as informações da aba 'Inscrição', incluindo
+          taxas e política de devolução
+        #original_hash: 270bd63
+        acknowledgment_extra: Eu li e compreendi toda a informação listada acima
+        #original_hash: 80d2933
+        next_step: Continuar para a próxima etapa
+      update:
+        #original_hash: 65bbb07
+        no_changes: Não há mudanças
+        #original_hash: be4e8e2
+        email_send: Enviar e-mail
+        #original_hash: d9def5d
+        email_copy: Copiar e-mail
+        #original_hash: 71327f1
+        move_pending: Mover para Pendentes
+        #original_hash: 9144dd6
+        move_waiting: Mover para Lista de Espera
+        #original_hash: 284b24f
+        cancel: Cancelar inscrição
+        #original_hash: 67b3c7d
+        too_many: >-
+          Aceitar todas essas inscrições ultrapassaria o limite de competidores
+          por %{count}
+      register:
+        #original_hash: affea61
+        error: 'Inscrição falhou com erro %{error}'
+        #original_hash: f5a8630
+        early_registration: >-
+          A inscrição não está aberta ainda, mas você pode se inscrever como um
+          organizador ou Delegado da competição.
+        #original_hash: 6b76fab
+        comment: Comentários adicionais para os organizadores
+        #original_hash: 8eae30c
+        until: 'Você pode atualizar sua inscrição até %{date}'
+        #original_hash: fc8bc84
+        passed: Você não pode mais atualizar sua inscrição
+        #original_hash: 3c8d8b7
+        editing_disabled: Encerramento das inscrições está desabilitado para esta competição
+        registration_status:
+          #original_hash: f1f32b6
+          header: 'Situação da sua inscrição:'
+        #original_hash: 2d9f36c
+        disclaimer: Envio da inscrição não significa aprovação para competir
+        #original_hash: 8fe68a1
+        processing: Sua inscrição está processando...
+        #original_hash: 897f272
+        processing_longer: O processamento está levando mais tempo que o normal. Não saia!
+        #original_hash: 79ba42a
+        processing_queue: 'Lotes de inscrições sendo processados, %{queueCount} na fila.'
+      errors:
+        #original_hash: 3890616
+        events: 'Carregar Eventos falhou, por favor tente novamente'
+        #original_hash: 7b78793
+        '-1': >-
+          Você enviou um token inválido, por favor atualize a página. Se o
+          problema persistir, contate o WST
+        #original_hash: 44cf123
+        '-2': 'Autenticação expirada, por favor atualize a página'
+        #original_hash: 2d63156
+        '-3': 'Autenticação não encontrada, por favor faça o login'
+        #original_hash: e0b69a9
+        '-1000': Competição não existe
+        #original_hash: 2aa4aa1
+        '-1001': >-
+          Erro ao buscar os detalhes da Competição. Por favor tente novamente
+          mais tarde
+        #original_hash: 25b0063
+        '-2001': Você está banido de participar das Competições da WCA
+        #original_hash: 82267b1
+        '-2002': Seu perfil está incompleto
+        #original_hash: 4dd79f2
+        '-2003': Você não tem permissão para realizar esta ação
+        #original_hash: cb4093a
+        '-3000': Inscrição não existe
+        #original_hash: 0df821f
+        '-3001': Pagamento da WCA não está habilitado para esta competição
+        #original_hash: 092da51
+        '-3002': Você precisar concluir sua inscrição antes de pagar
+        #original_hash: bc53fb6
+        '-4000': O pedido contém informações inválidas
+        #original_hash: 35fddf4
+        '-4001': A data limite para editar os eventos já passou
+        #original_hash: 097491c
+        '-4002': O número de convidados está acima do limite
+        #original_hash: 4a0baa0
+        '-4003': O comentário é muito longo
+        #original_hash: 952daed
+        '-4004': Seleção de eventos inválida
+        #original_hash: b8a1526
+        '-4005': Essa competição exige um comentário
+        #original_hash: 2087dad
+        '-4006': O limite de competidores foi atingido
+        #original_hash: 6d95124
+        '-4007': Situação de inscrição inválida
+        #original_hash: 020234c
+        '-4008': As inscrições estão encerradas
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3355,6 +3638,8 @@ pt-BR:
       no_date_yet: Você ainda não definiu uma data para esta competição.
       #original_hash: 82a95d2
       no_location_yet: Você ainda não definiu um local para esta competição.
+      #original_hash: 6def491
+      save_first: Por favor salve esta competição antes de adicioná-la a uma Série.
       #original_hash: 709a232
       name: Nome
       #original_hash: adc24b7
@@ -3775,7 +4060,7 @@ pt-BR:
       confirm_account_disconnect: >-
         Tem certeza que deseja desconectar a conta %{provider}? Essa ação não
         pode ser desfeita.
-      #original_hash: 0be9f82
+      #original_hash: ddea6cf
       supported_currency_warning: >-
         Por favor certifique-se de que a moeda que você escolheu é compatível
         com o sistema de pagamento escolhido! As moedas disponíveis vão depender
@@ -4253,8 +4538,6 @@ pt-BR:
       #original_hash: 96d77f3
       donate_other: Outras formas de doar
     structure:
-      #original_hash: 0d62207
-      teams_committees_councils: 'Equipes, Comitês e Conselhos da WCA'
       #original_hash: 9482c5d
       title: Estrutura
       board:
@@ -4264,167 +4547,58 @@ pt-BR:
         description: >-
           A World Cube Association é conduzida pelo WCA Board (Conselho da WCA),
           que consiste nos seguintes membros:
-      #original_hash: d54d953
-      committees: >-
-        Os comitês e equipes da WCA são uma parte fundamental da organização e
-        desempenham as atividades cotidianas que são necessárias para seu
-        funcionamento. Estes comitês/equipes são formatos por membros da
-        comunidade da WCA, incluindo Delegados e competidores. Cada
-        comitê/equipe tem um líder, cujo papel é garantir o bom funcionamento da
-        equipe e direcionar os demais membros. Conselhos são um tipo especial de
-        comitê que têm um papel consultivo ao Conselho da WCA, e são compostos
-        de membros da comunidade, não parte do Staff da WCA. Quando há vagas em
-        um comitê, equipe ou Conselho, as informações sobre como se candidatar
-        são postadas na página principal.
       #original_hash: c366473
       senior_member: Membro Senior
       #original_hash: e26c936
       leader: Líder
-      officers:
-        #original_hash: d79bd00
-        name: Oficiais da WCA
-        #original_hash: 312e799
-        description: >-
-          Os oficias da WCA lidam com tarefas relacionadas ao status sem fins
-          lucrativos da organização. Estes oficiais são eleitos pelo Conselho da
-          WCA. O Diretor Executivo é o "Chief Executive Officer" da WCA, o
-          Presidente preside as reuniões do Conselho, o Secretário cuida dos
-          documentos da organização e o Tesoureiro gerencia os assuntos
-          financeiros da WCA.
-      chair:
-        #original_hash: de34439
-        name: Presidente da WCA
-      executive_director:
-        #original_hash: 7d405ff
-        name: Diretor Executivo da WCA
-      secretary:
-        #original_hash: 1dd4a07
-        name: Secretário da WCA
-      vice_chair:
-        #original_hash: 0388b19
-        name: Vice-Presidente da WCA
-      treasurer:
-        #original_hash: 75e65d9
-        name: Tesoureiro da WCA
       users:
         #original_hash: 57bbaad
         profile: 'Perfil de %{user_name}'
       wdc:
         #original_hash: c97077a
         name: Comitê Disciplinar da WCA
-        #original_hash: 286fdf8
-        description: >-
-          Este comitê assessora o Conselho da WCA em casos especiais, como
-          supostas violações do Regulamento da WCA, e pode ser contactado pelos
-          membros da WCA em caso de algum assunto pessoal importante referente a
-          competições da WCA.
       wdpc:
         #original_hash: 70539cd
         name: Comitê de Proteção de Dados da WCA
-        #original_hash: 1f69829
-        description: >-
-          Este comitê é responsável por todos os assuntos acerca de Proteção de
-          Dados.
       wrc:
         #original_hash: 3da1e85
         name: Comitê do Regulamento da WCA
-        #original_hash: 13ada5b
-        description: Este comitê é responsável por gerenciar o Regulamento da WCA.
       wrt:
         #original_hash: 67be768
         name: Equipe de Resultados da WCA
-        #original_hash: 439ffae
-        description: Esta equipe é responsável por gerenciar os resultados das competições.
       wst:
         #original_hash: a14bc62
         name: Equipe de Software da WCA
-        #original_hash: ec961e4
-        description: >-
-          Esta equipe é responsável por gerenciar o software da WCA (website,
-          embaralhadores, assistente de planilha, ferramentas administrativas).
       wct:
         #original_hash: 63a2388
         name: Equipe de Comunicação da WCA
-        #original_hash: 50fd091
-        description: >-
-          A Equipe de Comunicação da WCA (WCT) tem o papel de supervisionar e
-          apoiar a comunicação da WCA com a Comunidade e o público em geral. A
-          comunicação da WCA deve contribuir para os Objetivos da WCA e apoiar
-          uma cultura geral positiva de amizade, transparência, inclusão,
-          compreensão e responsividade.
       wfc:
         #original_hash: 9cb13de
         name: Comitê Financeiro da WCA
-        #original_hash: b4ed44b
-        description: Esse comitê é responsável por gerenciar as finanças da WCA
       wec:
         #original_hash: 83bd1d0
         name: Comitê de Ética da WCA
-        #original_hash: c304d57
-        description: >-
-          A função desse comitê é garantir que todos os procedimentos do Staff e
-          External Staff da WCA estejam de acordo com o Código de Ética, e
-          conduzir investigações independentes caso a conduta de algum desses
-          membros não estiver em conformidade com o Código. Estas investigações
-          podem ser solicitadas por qualquer Cubista Registrado, para os quais o
-          WEC é um confidente. Esse comitê também funciona como conselho de
-          recurso se algum dos envolvidos não concorda com uma decisão do Comitê
-          Disciplinar da WCA.
       weat:
         #original_hash: d1dbb86
         name: Equipe de Assistentes Executivos da WCA
-        #original_hash: 889dd90
-        description: >-
-          Essa equipe é responsável por desempenhar as tarefas administrativas
-          do Conselho de Diretores da WCA.
       wqac:
         #original_hash: 8f32116
         name: Comitê de Garantia da Qualidade da WCA
-        #original_hash: 0171b3b
-        description: >-
-          Este comitê tem a função de apoiar a promover a contínua melhora da
-          qualidade na WCA, assim como a aplicação mundial de padrões de
-          qualidade para garantir uma consistente alta qualidade dos processos,
-          do Staff da WCA, Organizações Regionais, Organizadores e Competição e
-          Staff de Competição.
       wcat:
         #original_hash: 2b81984
         name: Equipe de Anúncios de Competições da WCA
-        #original_hash: f511502
-        description: >-
-          Essa equipe tem o papel de aprovar e anunciar as competições da WCA e
-          garantir que esses anúncios estejam de acordo com os padrões de
-          qualidade da WCA.
       wmt:
         #original_hash: 2035811
         name: Equipe de Marketing da WCA
-        #original_hash: f2a0140
-        description: >-
-          Essa equipe é responsável por desenvolver e gerir a marca da WCA,
-          procurar patrocínios, apoiar a distribuição de Equipamento de
-          Competição da WCA, e comercializar Mercadorias da WCA.
       wac:
         #original_hash: 1ce7604
         name: Conselho Consultivo da WCA
-        #original_hash: fb6cd86
-        description: >-
-          Esse conselho é responsável por construir e manter comunicação
-          bilateral entre a Comunidade da WCA e a Equipe da WCA.
       wsot:
         #original_hash: 58765c7
         name: Equipe de Organização de Esportes da WCA
-        #original_hash: 8f888d6
-        description: >-
-          Essa equipe tem o papel de supervisionar e apoiar o reconhecimento da
-          WCA como uma organização esportiva internacional.
       wat:
         #original_hash: 90a1280
         name: Equipe de Arquivo da WCA
-        #original_hash: fae6850
-        description: >-
-          A Equipe de Arquivo da WCA é um Conselho Consultivo da WCA. Esta
-          equipe tem o papel de supervisionar e apoiar o desenvolvimento de um
-          arquivo da organização.
       banned:
         #original_hash: d30e2e5
         name: Competidores Suspensos ou Banidos
@@ -4435,9 +4609,6 @@ pt-BR:
       operations_html: 'As operações cotidianas são feitas pelos %{committees_and_teams} da WCA.'
       #original_hash: 0e7a036
       teams_committees: Equipes e Comitês
-      probation:
-        #original_hash: 1dd6e3b
-        name: Delegados em "Probation"
       wst_admin:
         #original_hash: d4112d2
         name: Administradores de Software
@@ -4599,139 +4770,6 @@ pt-BR:
     delete:
       #original_hash: 6588652
       confirm_delete: Tem certeza que deseja excluir esse pedido de Organização Regional?
-  contact:
-    #original_hash: a34b69f
-    title: Informações de Contato
-    #original_hash: b5c2eaa
-    info_alert_html: >-
-      Antes de contatar algum dos comitês ou equipes listados aqui, por favor
-      verifique nossas %{link}!
-    #original_hash: 2b023eb
-    questions_and_comments_html: >-
-      Para questões, comentários ou sugestões sobre o website, use este <a
-      href='/contact/website'>formulário</a>. Para dúvidas sobre uma área ou
-      competição específicas, por favor contate seu %{link} local.
-    #original_hash: 4a30d30
-    committees_and_teams_html: <u>Comitês e Equipes</u>
-    #original_hash: 1cb449c
-    members: Membros
-    board:
-      #original_hash: f3cbb35
-      info_html: >-
-        A World Cube Association é liderada pelo Conselho da WCA. Eles são
-        responsáveis por questões gerais e a organização da WCA como um todo.
-    wct:
-      #original_hash: 846684d
-      info_html: >-
-        A WCT é responsável por supervisionar e apoiar a comunicação da WCA com
-        a comunidade e o público em geral. Eles devem ser contatados se você tem
-        perguntas gerais sobre a WCA ou sua presença nas mídias sociais.
-    wdc:
-      #original_hash: 77f119f
-      info_html: >-
-        o WDC investiga uma variedade de situações e propõe soluções, incluindo
-        punições quando necessário. Entre outros tópicos, estas situações podem
-        ser violações graves do Regulamento da WCA ou problemas na comunidade.
-        Se você passou por alguma dessas, sinta-se livre para contatar este
-        comitê.
-    wdpc:
-      #original_hash: c21a96e
-      info_html: >-
-        O WDPC tem a responsabilidade e dever de pesquisar, criar, implementar,
-        gerenciar e aplicar as políticas de Proteção de Dados da WCA, contratos
-        com Processados de Dados externos da WCA, e tarefas relacionadas a
-        Proteção de Dados.
-    wrc:
-      #original_hash: fcd3526
-      info_html: >-
-        O WRC lida com os problemas relacionados à aplicação, melhoria e
-        desenvolvimento do Regulamento da WCA. Eles apoiam os Delegados da WCA
-        em qualquer tipo de matéria procedimental que ocorra em competições e
-        decidem sobre incidentes não resolvidos ou não previstos. O WRC
-        regularmente publica relatórios internos da WCA para ajudar os Delegates
-        a melhorar seu conhecimento sobre o Regulamento. Se você gostaria de
-        participar do desenvolvimento ou propor mudanças no Regulamento, você
-        pode contatar o WRC por e-mail ou pelas discussões no <a
-        href='https://github.com/thewca/wca-regulations'>GitHub</a>.
-    wrt:
-      #original_hash: 45b0c09
-      info_html: >-
-        A WRT é responsável por gerenciar as informações nos bancos de dados da
-        WCA, principalmente resultados de competições e dados dos competidores.
-        Eles postam os resultados das competições da WCA no site, após o envio
-        destes pelo Delegado da competição. Além disso, a Equipe de Resultados
-        da WCA também é responsável por fazer correções em resultados quando
-        necessário e por administrar as páginas de perfil na WCA. Isso inclui,
-        por exemplo, alterar dados dos usuários, como data de nascimento,
-        atendendo a pedidos verificados e cuidar das solicitações de fotos de
-        perfil.
-    wst:
-      #original_hash: 7de6222
-      info_html: >-
-        A WST é responsável pela manutenção e e gerenciamento de todo o software
-        da WCA. Eles também desenvolvem softwares novos para várias tarefas
-        dentro da WCA quando necessário. Se você tem sugestões e ideias para
-        melhoria do website ou se gostaria de informar um erro, sinta-se livre
-        para entrar em contato com eles! O website da WCA é um enorme projeto
-        "open source" no <a
-        href='https://github.com/thewca/worldcubeassociation.org'>GitHub</a>,
-        então se vocês está interessado em ajudar a desenvolvê-lo, dê uma olhada
-        no link.
-    wfc:
-      #original_hash: 3ec8256
-      info_html: >-
-        O WFC é responsável por tudo relacionado às finanças da WCA. Eles
-        gerenciam as contas e recursos da WCA de acordo com uma proposta
-        aprovada de orçamento anual, a qual eles também devem apresentar
-        regularmente.
-    wec:
-      #original_hash: ec2b9c3
-      info_html: >-
-        Esse comitê tem a função de garantir que todos os procedimentos do Staff
-        e External Staff da WCA estejam de acordo com o Código de Ética.
-    weat:
-      #original_hash: 889dd90
-      info_html: >-
-        Esta equipe é responsável por desempenhar as tarefas administrativas do
-        Conselho de Diretores da WCA.
-    wqac:
-      #original_hash: 0171b3b
-      info_html: >-
-        Este comitê tem a função de apoiar a promover a contínua melhora da
-        qualidade na WCA, assim como a aplicação mundial de padrões de qualidade
-        para garantir uma consistente alta qualidade dos processos, do Staff da
-        WCA, Organizações Regionais, Organizadores e Competição e Staff de
-        Competição.
-    wcat:
-      #original_hash: 61a471f
-      info_html: >-
-        Esse comitê tem o papel de aprovar e anunciar as competições da WCA e
-        garantir que esses anúncios estejam de acordo com os padrões de
-        qualidade da WCA.
-    wmt:
-      #original_hash: f2a0140
-      info_html: >-
-        Essa equipe é responsável por desenvolver e gerir a marca da WCA,
-        procurar patrocínios, apoiar a distribuição de Equipamento de Competição
-        da WCA, e comercializar Mercadorias da WCA.
-    wsot:
-      #original_hash: 8f888d6
-      info_html: >-
-        Esta equipe tem o papel de supervisionar e apoiar o reconhecimento da
-        WCA como uma organização esportiva internacional.
-    wat:
-      #original_hash: fae6850
-      info_html: >-
-        A Equipe de Arquivo da WCA é um Conselho Consultivo da WCA. Esta equipe
-        tem o papel de supervisionar e apoiar o desenvolvimento de um arquivo da
-        organização.
-    #original_hash: f97a4f5
-    councils_html: Conselhos
-    wac:
-      #original_hash: fb6cd86
-      info_html: >-
-        Esse conselho é responsável por construir e manter comunicação bilateral
-        entre a Comunidade da WCA e a Equipe da WCA.
   score_tools:
     #original_hash: 4fc2133
     title: Ferramentas para competições da WCA
