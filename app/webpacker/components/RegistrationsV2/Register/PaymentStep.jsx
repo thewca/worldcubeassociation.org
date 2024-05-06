@@ -28,12 +28,16 @@ export default function PaymentStep({
 
     setIsLoading(true);
 
+    // Call submit before doing any async work as per Stripe Documentation
+    await elements.submit();
+
     // Create the PaymentIntent and obtain clientSecret
-    const res = await fetchWithJWTToken(`${wcaRegistrationUrl}/api/v1/${competitionInfo.id}/payment?donation_iso=${donationAmount}`, {
+    const { data } = await fetchWithJWTToken(`${wcaRegistrationUrl}/api/v1/${competitionInfo.id}/payment?donation_iso=${donationAmount}`, {
       method: 'GET',
     });
 
-    const { client_secret: clientSecret } = await res.json();
+    const { client_secret: clientSecret } = data;
+    console.log(paymentFinishUrl(competitionInfo.id, user.id));
 
     const { error } = await stripe.confirmPayment({
       elements,
@@ -48,10 +52,9 @@ export default function PaymentStep({
     // your `return_url`. For some payment methods like iDEAL, your customer will
     // be redirected to an intermediate site first to authorize the payment, then
     // redirected to the `return_url`.
-    if (error.type === 'card_error' || error.type === 'validation_error') {
-      dispatch(setMessage(error.message, 'error'));
-    } else {
-      dispatch(setMessage('An unexpected error occurred.', 'error'));
+    if (error) {
+      dispatch(setMessage('registrations.payment_form.errors.stripe_failed', 'error'));
+      console.error(error);
     }
 
     setIsLoading(false);
