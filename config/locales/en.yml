@@ -546,8 +546,6 @@ en:
           accepted: "Accepted"
           pending: "Waiting list"
           deleted: "Deleted"
-          cancelled: "Cancelled"
-          waiting_list: "On the Waiting List"
   mail_form:
     #context: This key is used as a label for contact form attributes
     attributes:
@@ -1099,7 +1097,6 @@ en:
       failed: "Could not update registration"
       deleted: "Successfully deleted your registration for %{comp}"
       registered: "Registration form submitted - make sure to follow all instructions from the Registration Requirements below to ensure your registration is complete."
-
       imported: "Successfully imported registrations!"
       added: "Successfully added registration!"
     edit_registration:
@@ -1747,10 +1744,11 @@ en:
         unbookmark: "You have removed your bookmark"
       requirements:
         title: "Requirements"
-        acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees and refund policies"
-        acknowledgment_extra: "I have read and understood all information listed above"
+        acknowledgement: "I have read and acknowledged all information under the 'Register' tab, including entry fees, refund policies and any extra requirements listed above."
         next_step: "Continue to next Step"
       update:
+        being_updated: "Registration is being updated"
+        being_deleted: "Registration is being deleted"
         no_changes: "There are no changes"
         email_send: "Send Email"
         email_copy: "Copy Email"
@@ -1759,6 +1757,8 @@ en:
         cancel: "Cancel Registration"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
       register:
+        re-register: "Re-Register"
+        success: "You are registered for %{comp_name}"
         error: "Registration failed with error %{error}"
         early_registration: "Registration is not open yet, but you can still register as a competition organizer or Delegate."
         comment: "Additional comments to the organizers"
@@ -1766,7 +1766,10 @@ en:
         passed: "You can no longer update your registration"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
-          header: "Your Registration Status:"
+          accepted: "Your registration has been accepted."
+          pending: "Your registration is pending approval by the organizers."
+          cancelled: "Your registration has been deleted."
+          waiting_list: "You are on the Waiting List."
         disclaimer: "Submission of Registration does not mean approval to compete"
         processing: "Your registration is processing..."
         processing_longer: "Processing is taking longer than usual, don't go away!"
