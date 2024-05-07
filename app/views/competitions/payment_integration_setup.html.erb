@@ -49,6 +49,9 @@
     <% end %>
 
     <% @cpi_onboarding_urls.each do |type, url| %>
+      <%# Some connectors may return `nil` instead of an actual URL when they are (currently) disabled %>
+      <% next unless url.present? %>
+
       <h2><%= t('payments.payment_setup.provider_heading', provider: t("payments.payment_providers.#{type}")) %></h2>
 
       <p>
