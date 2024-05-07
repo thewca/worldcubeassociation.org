@@ -13,6 +13,7 @@ export default function AutonumericField({
   value,
   onChange,
   currency,
+  label,
 }) {
   const [autoNumeric, setAutoNumeric] = useState(null);
 
@@ -77,5 +78,5 @@ export default function AutonumericField({
     onChange(event, { value: getCurrentUiValue() });
   };
 
-  return <Input id={id} ref={autoNumericRef} type="text" onChange={onChangeAutonumeric} />;
+  return <Input id={id} ref={autoNumericRef} type="text" onChange={onChangeAutonumeric} label={label} />;
 }

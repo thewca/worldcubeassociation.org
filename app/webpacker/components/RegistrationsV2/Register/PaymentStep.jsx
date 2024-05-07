@@ -1,6 +1,8 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
-import { Button, Label } from 'semantic-ui-react';
+import {
+  Button, Checkbox, Form, FormField, Input, Label, Segment,
+} from 'semantic-ui-react';
 import { paymentFinishUrl, wcaRegistrationUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from './RegistrationMessage';
@@ -8,14 +10,16 @@ import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
 import AutonumericField from '../../CompetitionForm/Inputs/AutonumericField';
+import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
 export default function PaymentStep({
-  competitionInfo, user, handleDonation, donationAmount,
+  competitionInfo, user, handleDonation, donationAmount, displayAmount,
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
+  const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -60,24 +64,47 @@ export default function PaymentStep({
   };
 
   return (
-    <form id="payment-form" onSubmit={handleSubmit}>
-      <PaymentElement id="payment-element" />
-      { competitionInfo.enable_donations && (
-        <AutonumericField
-          onChange={handleDonation}
-          currency={competitionInfo.currency_iso}
-          value={donationAmount}
-        />
-      )}
-      <Button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
-        <Label id="button-text">
-          {isLoading ? (
-            <Loading />
-          ) : (
-            i18n.t('registrations.payment_form.button_text')
+    <Segment>
+      <Form id="payment-form" onSubmit={handleSubmit}>
+        <PaymentElement id="payment-element" />
+        { competitionInfo.enable_donations && (
+          <FormField>
+            <Checkbox value={isDonationChecked} onChange={setDonationChecked} label={i18n.t('registrations.payment_form.labels.show_donation')} />
+            { isDonationChecked && (
+            <AutonumericField
+              onChange={handleDonation}
+              currency={competitionInfo.currency_code}
+              value={donationAmount}
+              label={(
+                <Label>
+                  {i18n.t('registrations.payment_form.labels.donation')}
+                </Label>
+)}
+            />
+            )}
+          </FormField>
+        )}
+        { isLoading
+          ? <Loading />
+          : (
+            <>
+              <FormField>
+                <Input
+                  readOnly
+                  label={(
+                    <Label>
+                      {i18n.t('registrations.payment_form.labels.subtotal')}
+                    </Label>
+                  )}
+                  value={displayAmount}
+                />
+              </FormField>
+              <Button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
+                {i18n.t('registrations.payment_form.button_text')}
+              </Button>
+            </>
           )}
-        </Label>
-      </Button>
-    </form>
+      </Form>
+    </Segment>
   );
 }
