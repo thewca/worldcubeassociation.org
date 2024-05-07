@@ -1,3 +1,5 @@
+import { events } from '../wca-data.js.erb';
+
 export const SKIPPED_VALUE = 0;
 export const DNF_VALUE = -1;
 export const DNS_VALUE = -2;
@@ -209,4 +211,17 @@ export function formatAttemptsForResult(result, eventId) {
     return highlightBestAndWorst && (result.best_index === index || result.worst_index === index)
       ? `(${attemptStr})` : attemptStr;
   }).join(' ');
+}
+
+export function attemptTypeById(eventId) {
+  if (events.byId[eventId].isTimedEvent) {
+    return 'time';
+  }
+  if (events.byId[eventId].isFewestMoves) {
+    return 'moves';
+  }
+  if (events.byId[eventId].isMultipleBlindfolded) {
+    return 'points';
+  }
+  throw Error('Unknown Event Type');
 }

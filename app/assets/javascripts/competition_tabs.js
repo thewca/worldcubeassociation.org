@@ -9,7 +9,7 @@ onPage("competitions#show", function() {
   $(window).on('hashchange', showTabFromHash);
 
   function showTabFromHash() {
-    id = window.location.hash || '#general-info';
+    var id = window.location.hash || '#general-info';
     $('a[href="' + id + '"]').tab('show');
     $(id).find("iframe").each(function () {
       $iframe = $(this);
@@ -17,6 +17,12 @@ onPage("competitions#show", function() {
         $iframe.attr("src", $iframe.data("src"));
       }
     });
+    // The FullCalendar implementation that lives inside React (rendered client-side!)
+    //   does not go well with the Bootstrap Tabs that are rendered server-side :(
+    //   So we "fake" a resize fo React FullCalendar to compute its own dimensions correctly.
+    if (id === '#competition-schedule') {
+      window.dispatchEvent(new Event('resize'));
+    }
   }
 });
 

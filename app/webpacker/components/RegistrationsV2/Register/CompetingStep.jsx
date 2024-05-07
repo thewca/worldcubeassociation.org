@@ -18,7 +18,7 @@ import {
 } from 'semantic-ui-react';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
-import { getMediumDateString, hasPassed } from '../lib/dates';
+import { getMediumDateString, hasPassed } from '../../../lib/utils/dates';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';

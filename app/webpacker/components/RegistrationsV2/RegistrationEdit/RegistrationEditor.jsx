@@ -24,7 +24,7 @@ import {
   getShortDateString,
   getShortTimeString,
   hasPassed,
-} from '../lib/dates';
+} from '../../../lib/utils/dates';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
 import { setMessage } from '../Register/RegistrationMessage';
 import Loading from '../../Requests/Loading';
