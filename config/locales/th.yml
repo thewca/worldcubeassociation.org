@@ -908,10 +908,6 @@ th:
           pending: รายชื่อรอ
           #original_hash: 441bda6
           deleted: ถูกลบทิ้ง
-          #original_hash: a1bf92e
-          cancelled: ยกเลิก
-          #original_hash: 8cf6f9c
-          waiting_list: อยู่ใน waiting list
   mail_form:
     attributes:
       contact_form:
@@ -3007,6 +3003,12 @@ th:
           #original_hash: 6c8e5bf
           force_comment: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: ไม่อนุญาติไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
+            #original_hash: 40c4b4c
+            reason: >-
+              เหตุผลและรายละเอียดสำหรับการไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
@@ -3210,6 +3212,13 @@ th:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: >-
+              โปรดอธิบายรายละเอียดที่นี่ว่าทำไมคุณถึงไม่อยากให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขันของคุณ
+              กรุณากรอกเป็นภาษาอังกฤษ!
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -3319,15 +3328,18 @@ th:
       requirements:
         #original_hash: 09a428f
         title: ความต้องการ
-        #original_hash: 695cf86
+        #original_hash: 1255806
         acknowledgement: >-
           ฉันได้อ่านและรับทราบข้อมูลทั้งหมดภายใต้แท็บ 'ลงทะเบียน' แล้ว
-          รวมถึงค่าธรรมเนียมการแข่งขันและนโยบายการคืนเงิน
-        #original_hash: 270bd63
-        acknowledgment_extra: ฉันได้อ่านและทำความเข้าใจข้อมูลทั้งหมดที่ระบุไว้ข้างต้นแล้ว
+          รวมถึงค่าธรรมเนียมการแข่งขัน, นโยบายการคืนเงิน
+          และเงื่อนไขเพิ่มเติมที่แสดงไว้แล้ว
         #original_hash: 80d2933
         next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
       update:
+        #original_hash: c04744e
+        being_updated: กำลังอัปเดตการสมัคร
+        #original_hash: 75596b9
+        being_deleted: การสมัครกำลังถูกลบ
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3345,6 +3357,10 @@ th:
           การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
           %{count} คน
       register:
+        #original_hash: dddec0b
+        re-register: สมัครการแข่งขันใหม่อีกครั้ง
+        #original_hash: a38d5fa
+        success: 'คุณได้สมัครการแข่งขัน %{comp_name} แล้ว'
         #original_hash: affea61
         error: 'การสมัครล้มเหลวโดยมีข้อผิดพลาด %{error}'
         #original_hash: f5a8630
@@ -3360,8 +3376,14 @@ th:
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
-          #original_hash: f1f32b6
-          header: 'สถานะการสมัครของคุณ:'
+          #original_hash: b1e97b8
+          accepted: การสมัครของคุณได้รับการยอมรับแล้ว
+          #original_hash: 3d7aa97
+          pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
+          #original_hash: dcc4906
+          cancelled: การสมัครของคุณถูกลบแล้ว
+          #original_hash: c890478
+          waiting_list: คุณอยู่ใน Waiting List
         #original_hash: 2d9f36c
         disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
         #original_hash: 8fe68a1
