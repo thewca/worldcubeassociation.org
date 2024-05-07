@@ -7,9 +7,10 @@ import I18n from '../../../lib/i18n';
 import CompsTable from './CompsTable';
 import Loading from '../../Requests/Loading';
 import TableWrapper from './TableWrapper';
-import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import { updateFormValue } from '../store/actions';
+import { useStore } from '../../../lib/providers/StoreProvider';
 import useLoadedData from '../../../lib/hooks/useLoadedData';
+import { useFormUpdateAction } from '../../wca/FormBuilder/EditForm';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function MissingInfo({ missingDate, missingLocation }) {
   return (
@@ -21,20 +22,18 @@ function MissingInfo({ missingDate, missingLocation }) {
 }
 
 export default function SeriesComps() {
+  const { isPersisted } = useStore();
   const {
-    competition: {
-      competitionId,
-      venue: {
-        coordinates,
-      },
-      startDate,
-      endDate,
-      series,
+    competitionId,
+    venue: {
+      coordinates,
     },
-    isPersisted,
-  } = useStore();
+    startDate,
+    endDate,
+    series,
+  } = useFormObject();
 
-  const dispatch = useDispatch();
+  const updateFormObject = useFormUpdateAction();
 
   const lat = parseFloat(coordinates.lat);
   const long = parseFloat(coordinates.long);
@@ -85,8 +84,8 @@ export default function SeriesComps() {
 
   const addToSeries = useCallback((selectedComp) => {
     const newSeries = createBaseSeries(selectedComp);
-    dispatch(updateFormValue('series', newSeries));
-  }, [dispatch, createBaseSeries]);
+    updateFormObject('series', newSeries);
+  }, [updateFormObject, createBaseSeries]);
 
   const label = I18n.t('competitions.adjacent_competitions.label', { days: 33, kms: 200 });
 

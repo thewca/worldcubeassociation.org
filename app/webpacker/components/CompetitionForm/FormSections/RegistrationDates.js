@@ -1,19 +1,17 @@
 import React from 'react';
 import { Form } from 'semantic-ui-react';
-import { InputDate } from '../Inputs/FormInputs';
-import { useStore } from '../../../lib/providers/StoreProvider';
-import SubSection from './SubSection';
+import { InputDate } from '../../wca/FormBuilder/input/FormInputs';
 import RegistrationCollisions from '../Tables/RegistrationCollisions';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function RegistrationDates() {
   const {
-    competition: {
-      registration: {
-        openingDateTime,
-        closingDateTime,
-      },
+    registration: {
+      openingDateTime,
+      closingDateTime,
     },
-  } = useStore();
+  } = useFormObject();
 
   return (
     <SubSection section="registration">

@@ -1,11 +1,11 @@
 import React from 'react';
-import SubSection from './SubSection';
-import { InputBoolean, InputString } from '../Inputs/FormInputs';
-import { useStore } from '../../../lib/providers/StoreProvider';
+import { InputBoolean, InputString } from '../../wca/FormBuilder/input/FormInputs';
 import ConditionalSection from './ConditionalSection';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function Website() {
-  const { competition: { website: websiteData } } = useStore();
+  const { website: websiteData } = useFormObject();
 
   const usingExternalWebsite = websiteData && !websiteData.generateWebsite;
   const usingExternalRegistration = websiteData && !websiteData.usesWcaRegistration;

@@ -20,7 +20,7 @@ const updateValueRecursive = (formValues, key, value, sectionKeys = []) => {
 const reducers = {
   [ChangesSaved]: (state) => ({
     ...state,
-    initialCompetition: state.competition,
+    initialObject: state.object,
   }),
 
   [SetErrors]: (state, { payload }) => ({
@@ -30,8 +30,8 @@ const reducers = {
 
   [UpdateFormValue]: (state, { payload }) => ({
     ...state,
-    competition: updateValueRecursive(
-      state.competition,
+    object: updateValueRecursive(
+      state.object,
       payload.key,
       payload.value,
       // This might look useless but we're doing a (shallow) copy on purpose

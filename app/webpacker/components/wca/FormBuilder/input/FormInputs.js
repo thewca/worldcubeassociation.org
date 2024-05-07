@@ -9,21 +9,17 @@ import {
 import TextareaAutosize from 'react-textarea-autosize';
 import { Circle } from 'react-leaflet';
 import _ from 'lodash';
-import I18n from '../../../lib/i18n';
+import I18n from '../../../../lib/i18n';
 import MarkdownEditor from './MarkdownEditor';
 import AutonumericField from './AutonumericField';
-import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
-import {
-  readValueRecursive,
-  useCompetitionForm,
-  useSections,
-  useUpdateFormAction,
-} from '../store/sections';
 import { CompetitionsMap, DraggableMarker, StaticMarker } from './InputMap';
 import { AddChampionshipButton, ChampionshipSelect } from './InputChampionship';
-import UtcDatePicker from '../../wca/UtcDatePicker';
-import { IdWcaSearch } from '../../SearchWidget/WcaSearch';
-import SEARCH_MODELS from '../../SearchWidget/SearchModel';
+import UtcDatePicker from '../../UtcDatePicker';
+import { IdWcaSearch } from '../../../SearchWidget/WcaSearch';
+import SEARCH_MODELS from '../../../SearchWidget/SearchModel';
+import { readValueRecursive, useSectionDisabled, useSections } from '../provider/FormSectionProvider';
+import { useFormObjectSection, useFormSectionUpdateAction } from '../EditForm';
+import { useFormContext } from '../provider/FormObjectProvider';
 
 function snakifyId(id, section = []) {
   const idParts = [...section, id];
@@ -106,13 +102,13 @@ const wrapInput = (
   nullDefault = undefined,
   inputValueKey = 'value',
 ) => function WcaFormInput(props) {
-  const { isAdminView, errors, competition: { admin: { isConfirmed } } } = useStore();
-  const dispatch = useDispatch();
+  const { errors } = useFormContext();
 
   const section = useSections();
+  const sectionDisabled = useSectionDisabled();
 
-  const formValues = useCompetitionForm();
-  const updateFormValue = useUpdateFormAction();
+  const formValues = useFormObjectSection();
+  const updateFormValue = useFormSectionUpdateAction();
 
   const inputProps = additionalPropNames.reduce((acc, propName) => ({
     ...acc,
@@ -120,8 +116,8 @@ const wrapInput = (
   }), {});
 
   const onChange = useCallback((e, { [inputValueKey]: newValue }) => {
-    dispatch(updateFormValue(props.id, newValue));
-  }, [dispatch, updateFormValue, props.id]);
+    updateFormValue(props.id, newValue);
+  }, [updateFormValue, props.id]);
 
   let value = formValues[props.id];
 
@@ -143,8 +139,7 @@ const wrapInput = (
 
   const noLabel = passDownLabel ? 'ignore' : props.noLabel;
 
-  const defaultDisabled = isConfirmed && !isAdminView;
-  const disabled = defaultDisabled || props.disabled;
+  const disabled = sectionDisabled || props.disabled;
 
   const passDownDisabled = additionalPropNames.includes('disabled');
   if (passDownDisabled) inputProps.disabled = disabled;

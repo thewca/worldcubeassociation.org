@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from 'react';
 import SimpleMDE from 'react-simplemde-editor';
-import { fetchWithAuthenticityToken } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { fetchWithAuthenticityToken } from '../../../../lib/requests/fetchWithAuthenticityToken';
 import 'easymde/dist/easymde.min.css';
 
 function insertText(editor, markup, promptText) {
