@@ -560,8 +560,8 @@ function TableRow({
       </Table.Cell>
 
       <Table.Cell>
-        <a href={editRegistrationUrl(`${competitionInfo.id}-${id}`)}>
-          Edit
+        <a href={editRegistrationUrl(id, competitionInfo.id)}>
+          {i18n.t('registrations.list.edit')}
         </a>
       </Table.Cell>
 
@@ -571,7 +571,7 @@ function TableRow({
         ) : (
           <a href={editResultUrl(id)}>
             <Icon name="edit" />
-            Profile
+            {i18n.t('users.edit.profile')}
           </a>
         )}
       </Table.Cell>
@@ -607,7 +607,7 @@ function TableRow({
 
       {competitionInfo['using_stripe_payments?'] && (
         <>
-          <Table.Cell>{paymentStatus ?? 'not paid'}</Table.Cell>
+          <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
           <Table.Cell>
             {updatedAt && (
               <Popup
@@ -674,7 +674,7 @@ function TableRow({
           )}
         </a>
         {' '}
-        <Icon link onClick={copyEmail} name="copy" title="Copy Email Address" />
+        <Icon link onClick={copyEmail} name="copy" title={i18n.t('competitions.registration_v2.update.email_copy')} />
       </Table.Cell>
     </Table.Row>
   );
