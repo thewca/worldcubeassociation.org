@@ -31,7 +31,7 @@
       <% end %>
     <% end %>
   <% else %>
-    <% if @competition.uses_new_registration_service? %>
+    <% if @competition.uses_new_registration_service? && @competition.registration_opened? %>
       <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
                                                         userInfo: @current_user,
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
