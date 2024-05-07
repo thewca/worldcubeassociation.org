@@ -207,7 +207,8 @@ export const apiV0Urls = {
   },
   competitions: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
-    info: (compId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${compId}"))%>`
+    info: (compId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${compId}"))%>`,
+    registrationData: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_registration_data_path) %>`
   },
   delegates: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,

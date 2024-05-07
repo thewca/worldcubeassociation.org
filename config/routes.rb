@@ -383,6 +383,7 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
+      post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
         get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user

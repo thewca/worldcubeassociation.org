@@ -936,6 +936,18 @@ class Competition < ApplicationRecord
     registration_close && registration_close < Time.now
   end
 
+  def registration_status
+    if registration_not_yet_opened?
+      :not_yet_opened
+    elsif registration_past?
+      :past
+    elsif registration_full?
+      :full
+    else
+      :open
+    end
+  end
+
   def registration_range_specified?
     registration_open.present? && registration_close.present?
   end
