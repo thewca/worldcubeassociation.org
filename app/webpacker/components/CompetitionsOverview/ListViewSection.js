@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, Icon, Popup, Loader,
+  List, Icon, Popup, Loader, Table, Flag,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -25,47 +25,49 @@ function ListViewSection({
   isSortedByAnnouncement = false,
 }) {
   return (
-    <List divided relaxed>
-      <List.Item>
-        <strong>
-          {`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad || isLoading ? '...' : ''})`}
-        </strong>
-      </List.Item>
-      {competitions?.map((comp, index) => (
-        <React.Fragment key={comp.id}>
-          <ConditionalYearHeader
-            competitions={competitions}
-            index={index}
-            isSortedByAnnouncement={isSortedByAnnouncement}
-          />
-          <List.Item className={`${isProbablyOver(comp) ? ' past' : ' not-past'}${isCancelled(comp) ? ' cancelled' : ''}`}>
-            <span className="date">
-              <StatusIcon
-                comp={comp}
-                shouldShowRegStatus={shouldShowRegStatus}
-                isSortedByAnnouncement={isSortedByAnnouncement}
-                regStatusLoading={regStatusLoading}
-              />
-              {comp.date_range}
-            </span>
-            <span className="competition-info">
-              <div className="competition-link">
-                <span className={` fi fi-${comp.country_iso2?.toLowerCase()}`} />
-                &nbsp;
+    <Table striped compact="very" basic="very">
+      <Table.Header>
+        <Table.Row>
+          <Table.HeaderCell colSpan={5}>{`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad || isLoading ? '...' : ''})`}</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {competitions?.map((comp, index) => (
+          <React.Fragment key={comp.id}>
+            <ConditionalYearHeader
+              competitions={competitions}
+              index={index}
+              isSortedByAnnouncement={isSortedByAnnouncement}
+            />
+            <Table.Row error={isCancelled(comp)}>
+              <Table.Cell collapsing>
+                <StatusIcon
+                  comp={comp}
+                  shouldShowRegStatus={shouldShowRegStatus}
+                  isSortedByAnnouncement={isSortedByAnnouncement}
+                  regStatusLoading={regStatusLoading}
+                />
+              </Table.Cell>
+              <Table.Cell width={2}>
+                {comp.date_range}
+              </Table.Cell>
+              {/* <span class="competition-info"> currently missing from this layout */}
+              <Table.Cell width={6}>
+                <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={comp.url}>{comp.short_display_name}</a>
-              </div>
-              <div className="location">
+              </Table.Cell>
+              <Table.Cell width={4}>
                 <strong>{countries.byIso2[comp.country_iso2].name}</strong>
                 {`, ${comp.city}`}
-              </div>
-              <div className="venue-link">
+              </Table.Cell>
+              <Table.Cell width={4}>
                 <PseudoLinkMarkdown text={comp.venue} />
-              </div>
-            </span>
-          </List.Item>
-        </React.Fragment>
-      ))}
-    </List>
+              </Table.Cell>
+            </Table.Row>
+          </React.Fragment>
+        ))}
+      </Table.Body>
+    </Table>
   );
 }
 
