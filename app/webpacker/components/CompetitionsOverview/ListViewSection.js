@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  List, Icon, Popup, Loader, Table, Flag,
+  Icon, Popup, Loader, Table, Flag, Label, Segment, Header, Container,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -25,10 +25,51 @@ function ListViewSection({
   isSortedByAnnouncement = false,
 }) {
   return (
+    <Segment basic>
+      <Header>
+        {title}
+        {competitions && (
+          <Label horizontal>
+            {hasMoreCompsToLoad && <Icon name="angle double down" />}
+            {competitions?.length}
+          </Label>
+        )}
+      </Header>
+      <CompetitionsTable
+        competitions={competitions}
+        isLoading={isLoading}
+        shouldShowRegStatus={shouldShowRegStatus}
+        regStatusLoading={regStatusLoading}
+        isSortedByAnnouncement={isSortedByAnnouncement}
+      />
+    </Segment>
+  );
+}
+
+export function CompetitionsTable({
+  competitions,
+  isLoading,
+  shouldShowRegStatus,
+  regStatusLoading,
+  isSortedByAnnouncement = false,
+}) {
+  const nonePresent = !competitions && !isLoading;
+
+  if (nonePresent || competitions?.length === 0) {
+    return (
+      <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
+    );
+  }
+
+  return (
     <Table striped compact="very" basic="very">
-      <Table.Header>
+      <Table.Header fullWidth>
         <Table.Row>
-          <Table.HeaderCell colSpan={5}>{`${title} (${competitions ? competitions.length : 0}${hasMoreCompsToLoad || isLoading ? '...' : ''})`}</Table.HeaderCell>
+          <Table.HeaderCell />
+          <Table.HeaderCell>Date</Table.HeaderCell>
+          <Table.HeaderCell>Competition</Table.HeaderCell>
+          <Table.HeaderCell>Location</Table.HeaderCell>
+          <Table.HeaderCell>Venue</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
@@ -51,7 +92,6 @@ function ListViewSection({
               <Table.Cell width={2}>
                 {comp.date_range}
               </Table.Cell>
-              {/* <span class="competition-info"> currently missing from this layout */}
               <Table.Cell width={6}>
                 <Flag name={comp.country_iso2?.toLowerCase()} />
                 <a href={comp.url}>{comp.short_display_name}</a>
@@ -78,7 +118,11 @@ function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) 
       !== startYear(competitions[index - 1])
     && !isSortedByAnnouncement
   ) {
-    return <List.Item style={{ textAlign: 'center', fontWeight: 'bold' }}>{startYear(competitions[index])}</List.Item>;
+    return (
+      <Table.Row>
+        <Table.Cell textAlign="center" colSpan={5}>{startYear(competitions[index])}</Table.Cell>
+      </Table.Row>
+    );
   }
 }
 

@@ -40,10 +40,6 @@ function ListView({
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
           />
-          {
-            inProgressComps?.length === 0
-            && <div style={{ textAlign: 'center' }}>{I18n.t('competitions.index.no_comp_found')}</div>
-          }
           <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
