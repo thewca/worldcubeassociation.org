@@ -19,6 +19,7 @@ const { timeZone: userTimeZone } = Intl.DateTimeFormat().resolvedOptions();
 
 export default function TimeZoneSelector({
   activeVenueOrNull,
+  hasMultipleVenues,
   activeTimeZone,
   setActiveTimeZone,
   followVenueSelection,
@@ -54,11 +55,13 @@ export default function TimeZoneSelector({
         />
       )}
       {' '}
-      <Checkbox
-        label={i18n.t('competitions.schedule.timezone_follow_venue')}
-        checked={followVenueSelection}
-        onChange={(_, data) => setFollowVenueSelection(data.checked)}
-      />
+      {hasMultipleVenues && (
+        <Checkbox
+          label={i18n.t('competitions.schedule.timezone_follow_venue')}
+          checked={followVenueSelection}
+          onChange={(_, data) => setFollowVenueSelection(data.checked)}
+        />
+      )}
     </Segment>
   );
 }

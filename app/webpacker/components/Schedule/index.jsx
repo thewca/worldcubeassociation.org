@@ -152,6 +152,7 @@ export default function Schedule({
 
       <TimeZoneSelector
         activeVenueOrNull={activeVenueOrNull}
+        hasMultipleVenues={venueCount > 1}
         activeTimeZone={activeTimeZone}
         setActiveTimeZone={setActiveTimeZone}
         followVenueSelection={followVenueSelection}
