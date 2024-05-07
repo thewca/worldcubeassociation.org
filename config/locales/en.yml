@@ -1937,7 +1937,8 @@ en:
       timezone_set_local: "Set to local"
       timezone_set_venue: "Set to venue"
       timezone_follow_venue: "Automatically use the active venue's time zone"
-      schedule_for_date: "Schedule for %{date}"
+      schedule_for_date: "Schedule for %{day_name} (%{full_date})"
+      schedule_for_full_date: "Schedule for %{date}"
       schedule_change_warning: "Schedules are subject to adjustments, especially once registration totals are known. Registered competitors will be notified by email of any major changes."
     #context: entry of the left navigation menu
     nav:

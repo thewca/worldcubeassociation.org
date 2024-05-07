@@ -86,7 +86,7 @@ function SingleDayTable({
   activeVenueOrNull,
   competitionName,
 }) {
-  const title = i18n.t('competitions.schedule.schedule_for_date', { date: date.toLocaleString(DateTime.DATE_HUGE) });
+  const title = i18n.t('competitions.schedule.schedule_for_full_date', { date: date.toLocaleString(DateTime.DATE_HUGE) });
 
   const hasActivities = groupedActivities.length > 0;
   const startTime = hasActivities && groupedActivities[0][0].startTime;
