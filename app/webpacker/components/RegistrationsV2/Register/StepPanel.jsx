@@ -31,17 +31,19 @@ export default function StepPanel({
   connectedAccountId,
 }) {
   const isRegistered = Boolean(registration);
-  const hasPaid = registration?.payment.payment_status === 'completed';
+  const hasPaid = registration?.payment.payment_status === 'succeeded';
 
   const steps = useMemo(() => {
-    const steps = [requirementsStepConfig, competingStepConfig];
-
-    if (competitionInfo['using_payment_integrations?']) {
-      steps.push(paymentStepConfig);
+    if (competitionInfo['using_payment_integrations?'] && !hasPaid) {
+      return [requirementsStepConfig, competingStepConfig, paymentStepConfig];
     }
 
-    return steps;
-  }, [competitionInfo]);
+    if (hasPaid) {
+      return [requirementsStepConfig, paymentStepConfig, competingStepConfig];
+    }
+
+    return [requirementsStepConfig, competingStepConfig];
+  }, [competitionInfo, hasPaid]);
 
   const [activeIndex, setActiveIndex] = useState(() => steps.findIndex(
     // eslint-disable-next-line no-nested-ternary

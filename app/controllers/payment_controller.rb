@@ -4,7 +4,9 @@ class PaymentController < ApplicationController
   def payment_finish
     if current_user
       attendee_id = params.require(:attendee_id)
-      competition_id, user_id = attendee_id.split("-")
+      competition_id, user_id_s = attendee_id.split("-")
+
+      user_id = user_id_s.to_i
 
       return redirect_to competition_register_path(competition_id, "not_authorized") unless user_id == current_user.id
 
@@ -36,7 +38,7 @@ class PaymentController < ApplicationController
         end
       end
 
-      redirect_to competition_register_path(competition_id, stored_stripe_record.status)
+      redirect_to competition_register_path(competition_id, stored_stripe_record.stripe_status)
     else
       redirect_to user_session_path
     end

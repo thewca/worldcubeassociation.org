@@ -29,7 +29,12 @@ import { setMessage } from './RegistrationMessage';
 const maxCommentLength = 240;
 
 export default function CompetingStep({
-  nextStep, competitionInfo, user, preferredEvents, registration, refetchRegistration,
+  nextStep,
+  competitionInfo,
+  user,
+  preferredEvents,
+  registration,
+  refetchRegistration,
 }) {
   const isRegistered = Boolean(registration);
   const dispatch = useDispatch();
@@ -230,6 +235,11 @@ export default function CompetingStep({
           <Message info>
             You have registered for
             {competitionInfo.name}
+          </Message>
+        )}
+        {registration?.payment.payment_status === 'succeeded' && (
+          <Message info>
+            {I18n.t('competitions.registration_v2.register.payment_successful', { comp_name: competitionInfo.name })}
           </Message>
         )}
         {!competitionInfo['registration_opened?'] && (
