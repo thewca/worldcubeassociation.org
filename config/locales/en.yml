@@ -1347,6 +1347,9 @@ en:
         download_html: "Download all the competition's details as PDF %{here}."
       date: "Date"
       add_to_calendar: "Add to calendar"
+      #context: This is shown as a header above the column that shows competition names
+      name: "Name"
+      location: "Location"
       city: "City"
       venue: "Venue"
       address: "Address"

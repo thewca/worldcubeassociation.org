@@ -66,10 +66,10 @@ export function CompetitionsTable({
       <Table.Header fullWidth>
         <Table.Row>
           <Table.HeaderCell />
-          <Table.HeaderCell>Date</Table.HeaderCell>
-          <Table.HeaderCell>Competition</Table.HeaderCell>
-          <Table.HeaderCell>Location</Table.HeaderCell>
-          <Table.HeaderCell>Venue</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.name')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.location')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.venue')}</Table.HeaderCell>
         </Table.Row>
       </Table.Header>
       <Table.Body>
