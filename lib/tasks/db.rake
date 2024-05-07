@@ -57,7 +57,6 @@ namespace :db do
       Dir.mktmpdir do |dir|
         FileUtils.cd dir do
           dev_db_dump_url = DbDumpHelper.public_s3_path(DbDumpHelper::DEVELOPER_EXPORT_SQL_PERMALINK)
-          puts "dev dump url: #{dev_db_dump_url}"
           local_file = "./dump.zip"
           LogTask.log_task("Downloading #{dev_db_dump_url}") do
             system("curl -o #{local_file} #{dev_db_dump_url}") || raise("Error while running `curl`")
