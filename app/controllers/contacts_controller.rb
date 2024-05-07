@@ -62,7 +62,7 @@ class ContactsController < ApplicationController
   end
 
   def contact
-    formValues = JSON.parse(params.require(:formValues)).deep_symbolize_keys
+    formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
     contact_recipient = formValues.fetch(:contactRecipient)
     contact_params = formValues.fetch(contact_recipient.to_sym)
     requestor_details = current_user || formValues.fetch(userData)
