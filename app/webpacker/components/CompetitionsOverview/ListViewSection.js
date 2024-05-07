@@ -192,7 +192,7 @@ function StatusIcon({
   if (isProbablyOver(comp)) {
     if (hasResultsPosted(comp)) {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.posted');
-      iconClass = 'check circle result-posted-indicator';
+      iconClass = 'check circle';
     } else {
       tooltipInfo = I18n.t('competitions.index.tooltips.hourglass.ended', { days: I18n.t('common.days', { count: dayDifferenceFromToday(comp.end_date) }) });
       iconClass = 'hourglass end';
@@ -212,7 +212,7 @@ function StatusIcon({
 
   return (
     <Popup
-      trigger={<Icon className={iconClass} />}
+      trigger={<Icon name={iconClass} />}
       content={tooltipInfo}
       position="top center"
       size="tiny"
