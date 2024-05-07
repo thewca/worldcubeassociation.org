@@ -13,7 +13,7 @@ import i18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import EventIcon from '../../wca/EventIcon';
 import useWithUserData from '../hooks/useWithUserData';
-import { editRegistrationUrl, editResultUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -569,7 +569,7 @@ function TableRow({
         {wcaId ? (
           <a href={personUrl(wcaId)}>{wcaId}</a>
         ) : (
-          <a href={editResultUrl(id)}>
+          <a href={editPersonUrl(id)}>
             <Icon name="edit" />
             {i18n.t('users.edit.profile')}
           </a>
