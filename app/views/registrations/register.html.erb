@@ -31,13 +31,13 @@
       <% end %>
     <% end %>
   <% else %>
-    <% if @competition.uses_new_registration_service? && ( @competition.registration_opened? || @competition.user_can_pre_register?(current_user)) %>
+    <% user_may_register = current_user.cannot_register_for_competition_reasons(@competition).length == 0 %>
+    <% if @competition.uses_new_registration_service? && user_may_register && ( @competition.registration_opened? || @competition.user_can_pre_register?(current_user)) %>
       <%= react_component('RegistrationsV2/Register', { competitionInfo: @competition.to_competition_info ,
                                                         userInfo: @current_user,
                                                         preferredEvents: @current_user.preferred_events.pluck(:id),
                                                         }) %>
     <% else %>
-      <% user_may_register = current_user.cannot_register_for_competition_reasons(@competition).length == 0 %>
       <% if @registration.show_details?(current_user) %>
         <p><%= t 'registrations.greeting', name: current_user.name %></p>
       <% end %>
