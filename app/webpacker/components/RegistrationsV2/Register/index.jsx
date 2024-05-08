@@ -33,7 +33,10 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
     queryFn: () => getSingleRegistration(userInfo.id, competitionInfo.id),
+    refetchOnWindowFocus: false,
+    refetchOnReconnect: false,
     staleTime: Infinity,
+    refetchOnMount: 'always',
     retry: false,
     onError: (data) => {
       const { error } = data.json;
