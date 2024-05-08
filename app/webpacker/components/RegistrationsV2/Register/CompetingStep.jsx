@@ -283,7 +283,7 @@ export default function CompetingStep({
                 setGuests(Number.parseInt(data.value, 10));
               }}
               min="0"
-              label={<Label>Guests</Label>}
+              label={<Label>{i18n.t('activerecord.attributes.registration.guests')}</Label>}
               max={competitionInfo.guests_per_registration_limit ?? 10}
             />
           </Form.Field>
