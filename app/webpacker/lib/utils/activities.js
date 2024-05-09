@@ -6,8 +6,7 @@ import {
   roundBackToHour,
   todayWithTime,
 } from './dates';
-import I18n from '../i18n';
-import { getRoundTypeId, parseActivityCode } from './wcif';
+import { localizeActivityCode } from './wcif';
 
 export const earliestWithLongestTieBreaker = (a, b) => {
   if (a.startTime < b.startTime) {
@@ -119,26 +118,8 @@ export const latestTimeOfDayWithBuffer = (
 };
 
 export const localizeActivityName = (activity, wcifEvents) => {
-  const { eventId, roundNumber, attempt } = parseActivityCode(activity.activityCode);
-
   const activityEvent = findActivityEvent(activity, wcifEvents);
   const activityRound = findActivityRound(activity, activityEvent.rounds);
 
-  const roundTypeId = getRoundTypeId(
-    roundNumber,
-    activityEvent.rounds.length,
-    Boolean(activityRound.cutoff),
-  );
-
-  const eventName = I18n.t(`events.${eventId}`);
-  const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
-
-  const roundName = I18n.t('round.name', { event_name: eventName, round_name: roundTypeName });
-
-  if (attempt) {
-    const attemptName = I18n.t('attempts.attempt_name', { number: attempt });
-    return `${roundName} (${attemptName})`;
-  }
-
-  return roundName;
+  return localizeActivityCode(activity.activityCode, activityRound, activityEvent);
 };

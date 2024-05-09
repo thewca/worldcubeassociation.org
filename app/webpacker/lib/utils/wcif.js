@@ -81,6 +81,28 @@ export function getRoundTypeId(roundNumber, totalNumberOfRounds, cutoff = false)
   return cutoff ? 'g' : '3';
 }
 
+export const localizeActivityCode = (activityCode, wcifRound, wcifEvent) => {
+  const { eventId, roundNumber, attempt } = parseActivityCode(activityCode);
+
+  const roundTypeId = getRoundTypeId(
+    roundNumber,
+    wcifEvent.rounds.length,
+    Boolean(wcifRound.cutoff),
+  );
+
+  const eventName = I18n.t(`events.${eventId}`);
+  const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
+
+  const roundName = I18n.t('round.name', { event_name: eventName, round_name: roundTypeName });
+
+  if (attempt) {
+    const attemptName = I18n.t('attempts.attempt_name', { number: attempt });
+    return `${roundName} (${attemptName})`;
+  }
+
+  return roundName;
+};
+
 export function timeLimitToString(wcifRound, wcifEvents) {
   const wcifTimeLimit = wcifRound.timeLimit;
   const { eventId } = parseActivityCode(wcifRound.id);
@@ -106,23 +128,10 @@ export function timeLimitToString(wcifRound, wcifEvents) {
   const roundStrs = wcifTimeLimit.cumulativeRoundIds.map((cumulativeId) => {
     const cumulativeRound = allWcifRounds.find((round) => round.id === cumulativeId);
 
-    const {
-      eventId: cumulativeEventId,
-      roundNumber: cumulativeRoundNumber,
-    } = parseActivityCode(cumulativeRound.id);
-
+    const { eventId: cumulativeEventId } = parseActivityCode(cumulativeRound.id);
     const cumulativeEvent = wcifEvents.find((event) => event.id === cumulativeEventId);
 
-    const roundTypeId = getRoundTypeId(
-      cumulativeRoundNumber,
-      cumulativeEvent.rounds.length,
-      Boolean(cumulativeRound.cutoff),
-    );
-
-    const eventName = I18n.t(`events.${cumulativeEventId}`);
-    const roundTypeName = I18n.t(`rounds.${roundTypeId}.name`);
-
-    return I18n.t('round.name', { event_name: eventName, round_name: roundTypeName });
+    return localizeActivityCode(cumulativeRound.id, cumulativeRound, cumulativeEvent);
   });
 
   // TODO: In Rails-world this used "to_sentence" which joins it nicely
