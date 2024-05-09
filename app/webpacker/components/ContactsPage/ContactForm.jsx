@@ -11,7 +11,7 @@ import { RECAPTCHA_PUBLIC_KEY } from '../../lib/wca-data.js.erb';
 import UserData from './UserData';
 import Loading from '../Requests/Loading';
 import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
-import { updateContactRecipient } from './store/actions';
+import { clearForm, updateContactRecipient } from './store/actions';
 import Wct from './SubForms/Wct';
 import Wrt from './SubForms/Wrt';
 import Wst from './SubForms/Wst';
@@ -30,6 +30,7 @@ export default function ContactForm({ loggedInUserData }) {
   const { save, saving } = useSaveAction();
   const [captchaValue, setCaptchaValue] = useState();
   const [captchaError, setCaptchaError] = useState(false);
+  const [contactSuccess, setContactSuccess] = useState(false);
   const contactFormState = useStore();
   const dispatch = useDispatch();
   const { contactRecipient: selectedContactRecipient, userData } = contactFormState;
@@ -37,6 +38,12 @@ export default function ContactForm({ loggedInUserData }) {
   const isFormValid = (
     selectedContactRecipient && userData.name && userData.email && captchaValue
   );
+
+  const contactSuccessHandler = () => {
+    dispatch(clearForm(loggedInUserData));
+    setContactSuccess(true);
+  };
+
   const SubForm = useMemo(() => {
     if (!selectedContactRecipient) return null;
     switch (selectedContactRecipient) {
@@ -56,57 +63,65 @@ export default function ContactForm({ loggedInUserData }) {
   if (saving) return <Loading />;
 
   return (
-    <Form
-      onSubmit={() => {
-        if (isFormValid) {
-          save(
-            contactUrl,
-            contactFormState,
-            () => dispatch(updateContactRecipient(null)),
-            { method: 'POST' },
-          );
-        }
-      }}
-      error={!!captchaError}
-    >
-      <UserData loggedInUserData={loggedInUserData} />
-      <FormGroup grouped>
-        <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
-        {CONTACT_RECIPIENTS.map((contactRecipient) => (
-          <FormField key={contactRecipient}>
-            <Radio
-              label={I18n.t(`page.contacts.form.contact_recipient.${contactRecipient}.label`)}
-              name="contactRecipient"
-              value={contactRecipient}
-              checked={selectedContactRecipient === contactRecipient}
-              onChange={(__, { value }) => dispatch(updateContactRecipient(value))}
-            />
-          </FormField>
-        ))}
-      </FormGroup>
-      {SubForm && <SubForm />}
-      <FormField>
-        <ReCAPTCHA
-          sitekey={RECAPTCHA_PUBLIC_KEY}
+    <>
+      {contactSuccess && (
+        <Message
+          success
+          content={I18n.t('page.contacts.success_message')}
+        />
+      )}
+      <Form
+        onSubmit={() => {
+          if (isFormValid) {
+            save(
+              contactUrl,
+              contactFormState,
+              contactSuccessHandler,
+              { method: 'POST' },
+            );
+          }
+        }}
+        error={!!captchaError}
+      >
+        <UserData loggedInUserData={loggedInUserData} />
+        <FormGroup grouped>
+          <div>{I18n.t('page.contacts.form.contact_recipient.label')}</div>
+          {CONTACT_RECIPIENTS.map((contactRecipient) => (
+            <FormField key={contactRecipient}>
+              <Radio
+                label={I18n.t(`page.contacts.form.contact_recipient.${contactRecipient}.label`)}
+                name="contactRecipient"
+                value={contactRecipient}
+                checked={selectedContactRecipient === contactRecipient}
+                onChange={(__, { value }) => dispatch(updateContactRecipient(value))}
+              />
+            </FormField>
+          ))}
+        </FormGroup>
+        {SubForm && <SubForm />}
+        <FormField>
+          <ReCAPTCHA
+            sitekey={RECAPTCHA_PUBLIC_KEY}
           // onChange is a mandatory parameter for ReCAPTCHA. According to the documentation, this
           // is called when user successfully completes the captcha, hence we are assuming that any
           // existing errors will be cleared when onChange is called.
-          onChange={setCaptchaValue}
-          onErrored={setCaptchaError}
-        />
-        {captchaError && (
+            onChange={setCaptchaValue}
+            onErrored={setCaptchaError}
+          />
+          {captchaError && (
           <Message
             error
             content={I18n.t('page.contacts.form.captcha.validation_error')}
           />
-        )}
-      </FormField>
-      <Button
-        disabled={!isFormValid}
-        type="submit"
-      >
-        {I18n.t('page.contacts.form.submit_button')}
-      </Button>
-    </Form>
+          )}
+        </FormField>
+        <Button
+          disabled={!isFormValid}
+          type="submit"
+        >
+          {I18n.t('page.contacts.form.submit_button')}
+        </Button>
+      </Form>
+    </>
   );
 }
