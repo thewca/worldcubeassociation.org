@@ -51,7 +51,7 @@
           }
           if @competition.use_wca_registration?
             pending_registrations = if @competition.uses_new_registration_service?
-                                      Microservices::Registrations.registrations_by_competition(@competition.id, 'pending', cache: false)
+                                      Microservices::Registrations.registrations_by_competition(@competition.id, 'pending', cache: true).length
                                       else
                                         @competition.registrations.pending.count
                                       end
