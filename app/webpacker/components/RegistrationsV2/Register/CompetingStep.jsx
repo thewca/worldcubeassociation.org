@@ -6,7 +6,7 @@ import React, {
 import {
   Button,
   ButtonGroup,
-  ButtonOr,
+  ButtonOr, Divider,
   Form,
   Icon,
   Input,
@@ -37,6 +37,7 @@ export default function CompetingStep({
   refetchRegistration,
 }) {
   const isRegistered = Boolean(registration);
+  const hasPaid = registration?.payment.payment_status === 'succeeded';
   const dispatch = useDispatch();
 
   const [comment, setComment] = useState('');
@@ -231,19 +232,15 @@ export default function CompetingStep({
       )}
 
       <>
-        {isRegistered && (
-          <Message info>
-            {i18n.t('competitions.registration_v2.register.success', { comp_name: competitionInfo.name })}
-          </Message>
-        )}
-        {registration?.payment.payment_status === 'succeeded' && (
-          <Message info>
-            {I18n.t('competitions.registration_v2.register.payment_successful', { comp_name: competitionInfo.name })}
-          </Message>
-        )}
         {!competitionInfo['registration_opened?'] && (
           <Message warning>
             {i18n.t('competitions.registration_v2.register.early_registration')}
+          </Message>
+        )}
+
+        {hasPaid && (
+          <Message success>
+            {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
           </Message>
         )}
 
@@ -298,80 +295,47 @@ export default function CompetingStep({
             />
           </Form.Field>
         </Form>
+        <Divider />
 
         {isRegistered ? (
-          <>
-            <Message warning icon>
-              <Popup
-                trigger={<Icon name="circle info" />}
-                position="top center"
-                content={
-                  canUpdateRegistration
-                    ? i18n.t('competitions.registration_v2.register.until', {
-                      date: getMediumDateString(
-                        competitionInfo.event_change_deadline_date
-                        ?? competitionInfo.start_date,
-                      ),
-                    })
-                    : i18n.t('competitions.registration_v2.register.passed')
-                }
-              />
-              <Message.Content>
-                <Message.Header>
-                  {i18n.t(
-                    `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
-                  )}
-                </Message.Header>
-                {/* eslint-disable-next-line no-nested-ternary */}
-                {canUpdateRegistration
-                  ? i18n.t('registrations.update')
-                  : hasRegistrationEditDeadlinePassed
-                    ? i18n.t('competitions.registration_v2.errors.-4001')
-                    : i18n.t(
-                      'competitions.registration_v2.register.editing_disabled',
-                    )}
-              </Message.Content>
-            </Message>
-
-            <ButtonGroup widths={2}>
-              {shouldShowUpdateButton && (
-                <>
-                  <Button
-                    primary
-                    disabled={
+          <ButtonGroup widths={2}>
+            {shouldShowUpdateButton && (
+            <>
+              <Button
+                primary
+                disabled={
                       isUpdating || !canUpdateRegistration || !hasChanges
                     }
-                    onClick={() => attemptAction(actionUpdateRegistration, {
-                      checkForChanges: true,
-                    })}
-                  >
-                    {i18n.t('registrations.update')}
-                  </Button>
-                  <ButtonOr />
-                </>
-              )}
+                onClick={() => attemptAction(actionUpdateRegistration, {
+                  checkForChanges: true,
+                })}
+              >
+                {i18n.t('registrations.update')}
+              </Button>
+              <ButtonOr />
+            </>
+            )}
 
-              {shouldShowReRegisterButton && (
-                <Button
-                  secondary
-                  disabled={isUpdating}
-                  onClick={() => attemptAction(actionReRegister)}
-                >
-                  {i18n.t('competitions.registration_v2.register.re-register')}
-                </Button>
-              )}
+            {shouldShowReRegisterButton && (
+            <Button
+              secondary
+              disabled={isUpdating}
+              onClick={() => attemptAction(actionReRegister)}
+            >
+              {i18n.t('competitions.registration_v2.register.re-register')}
+            </Button>
+            )}
 
-              {shouldShowDeleteButton && (
-                <Button
-                  disabled={isUpdating}
-                  negative
-                  onClick={actionDeleteRegistration}
-                >
-                  {i18n.t('registrations.delete_registration')}
-                </Button>
-              )}
-            </ButtonGroup>
-          </>
+            {shouldShowDeleteButton && (
+            <Button
+              disabled={isUpdating}
+              negative
+              onClick={actionDeleteRegistration}
+            >
+              {i18n.t('registrations.delete_registration')}
+            </Button>
+            )}
+          </ButtonGroup>
         ) : (
           <>
             <Message info icon floating>

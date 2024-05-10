@@ -1,9 +1,12 @@
 import React, { useMemo, useState } from 'react';
-import { Step } from 'semantic-ui-react';
-import I18n from '../../../lib/i18n';
+import {
+  Button, Icon, Message, Popup, Step,
+} from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
+import i18n from '../../../lib/i18n';
+import { getMediumDateString, hasPassed } from '../../../lib/utils/dates';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -21,6 +24,19 @@ const paymentStepConfig = {
   component: StripeWrapper,
 };
 
+function registrationIconByStatus(registrationStatus) {
+  switch (registrationStatus) {
+    case 'pending':
+      return 'hourglass';
+    case 'accepted':
+      return 'checkmark';
+    case 'cancelled':
+      return 'cross';
+    default:
+      return 'info circle';
+  }
+}
+
 export default function StepPanel({
   competitionInfo,
   preferredEvents,
@@ -33,22 +49,85 @@ export default function StepPanel({
   const isRegistered = Boolean(registration);
   const hasPaid = registration?.payment.payment_status === 'succeeded';
 
+  const hasRegistrationEditDeadlinePassed = hasPassed(
+    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
+  );
+  const canUpdateRegistration = competitionInfo.allow_registration_edits
+    && !hasRegistrationEditDeadlinePassed;
+
   const steps = useMemo(() => {
-    if (competitionInfo['using_payment_integrations?'] && !hasPaid) {
+    if (competitionInfo['using_payment_integrations?']) {
       return [requirementsStepConfig, competingStepConfig, paymentStepConfig];
     }
 
-    if (hasPaid) {
-      return [requirementsStepConfig, paymentStepConfig, competingStepConfig];
-    }
-
     return [requirementsStepConfig, competingStepConfig];
-  }, [competitionInfo, hasPaid]);
+  }, [competitionInfo]);
 
-  const [activeIndex, setActiveIndex] = useState(() => steps.findIndex(
-    // eslint-disable-next-line no-nested-ternary
-    (step) => step === (isRegistered ? hasPaid ? competingStepConfig : paymentStepConfig : requirementsStepConfig),
-  ));
+  const [activeIndex, setActiveIndex] = useState(() => {
+    if (hasPaid) {
+      return -1;
+    }
+    return steps.findIndex(
+      (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
+    );
+  });
+
+  if (activeIndex === -1) {
+    return (
+      <>
+        <Step.Group fluid ordered stackable="tablet">
+          {steps.map((stepConfig) => (
+            <Step
+              key={stepConfig.key}
+              completed
+            >
+              <Step.Content>
+                <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
+              </Step.Content>
+            </Step>
+          ))}
+        </Step.Group>
+        <Message
+          info={registration.competing.registration_status === 'pending'}
+          icon
+        >
+          <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
+          <Message.Content>
+            <Message.Header>
+              {i18n.t(
+                `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
+              )}
+            </Message.Header>
+          </Message.Content>
+        </Message>
+        <Popup
+          trigger={(
+            <Button
+              disabled={!canUpdateRegistration}
+              primary
+              attached
+              onClick={() => setActiveIndex(1)}
+            >
+              Update Registration
+              {' '}
+
+            </Button>
+)}
+          position="top center"
+          content={
+            canUpdateRegistration
+              ? i18n.t('competitions.registration_v2.register.until', {
+                date: getMediumDateString(
+                  competitionInfo.event_change_deadline_date
+                  ?? competitionInfo.start_date,
+                ),
+              })
+              : i18n.t('competitions.registration_v2.register.passed')
+          }
+        />
+      </>
+    );
+  }
 
   const CurrentStepPanel = steps[activeIndex].component;
   const stepName = steps[activeIndex].key;
@@ -64,7 +143,7 @@ export default function StepPanel({
             disabled={activeIndex < index}
           >
             <Step.Content>
-              <Step.Title>{I18n.t(stepConfig.i18nKey)}</Step.Title>
+              <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
             </Step.Content>
           </Step>
         ))}

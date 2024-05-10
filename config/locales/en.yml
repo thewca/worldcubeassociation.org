@@ -1765,7 +1765,7 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
-        payment_successful: "You have paid for %{comp_name}"
+        already_paid: "You have already paid for %{comp_name}"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."
