@@ -159,10 +159,10 @@ function SingleDayTable({
 function HeaderRow({ isExpanded }) {
   return (
     <Grid.Row only="computer">
-      <Grid.Column width={1}>{i18n.t('competitions.schedule.start')}</Grid.Column>
-      <Grid.Column width={1}>{i18n.t('competitions.schedule.end')}</Grid.Column>
-      <Grid.Column width={4}>{i18n.t('competitions.schedule.activity')}</Grid.Column>
-      <Grid.Column width={3}>{i18n.t('competitions.schedule.room_or_stage')}</Grid.Column>
+      <Grid.Column width={isExpanded ? 1 : 2}>{i18n.t('competitions.schedule.start')}</Grid.Column>
+      <Grid.Column width={isExpanded ? 1 : 2}>{i18n.t('competitions.schedule.end')}</Grid.Column>
+      <Grid.Column width={isExpanded ? 4 : 7}>{i18n.t('competitions.schedule.activity')}</Grid.Column>
+      <Grid.Column width={isExpanded ? 3 : 5}>{i18n.t('competitions.schedule.room_or_stage')}</Grid.Column>
       {isExpanded && (
         <>
           <Grid.Column width={1}>{i18n.t('competitions.events.format')}</Grid.Column>
@@ -204,10 +204,18 @@ function ActivityRow({
   return (
     <>
       <Grid.Row only="computer">
-        <Grid.Column width={1}>{getSimpleTimeString(startTime, timeZone)}</Grid.Column>
-        <Grid.Column width={1}>{getSimpleTimeString(endTime, timeZone)}</Grid.Column>
-        <Grid.Column width={4}>{name}</Grid.Column>
-        <Grid.Column width={3}>{roomsUsed.map((room) => room.name).join(', ')}</Grid.Column>
+        <Grid.Column width={isExpanded ? 1 : 2}>
+          {getSimpleTimeString(startTime, timeZone)}
+        </Grid.Column>
+        <Grid.Column width={isExpanded ? 1 : 2}>
+          {getSimpleTimeString(endTime, timeZone)}
+        </Grid.Column>
+        <Grid.Column width={isExpanded ? 4 : 7}>
+          {name}
+        </Grid.Column>
+        <Grid.Column width={isExpanded ? 3 : 5}>
+          {roomsUsed.map((room) => room.name).join(', ')}
+        </Grid.Column>
         {isExpanded && (
           <>
             <Grid.Column width={1}>
