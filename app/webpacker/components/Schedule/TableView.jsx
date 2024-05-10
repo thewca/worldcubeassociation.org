@@ -255,7 +255,7 @@ function ActivityRow({
         <Grid.Column textAlign="right" mobile={6} tablet={4}>
           {i18n.t('competitions.schedule.range.to')}
           <br />
-          <b>{getSimpleTimeString(startTime, timeZone)}</b>
+          <b>{getSimpleTimeString(endTime, timeZone)}</b>
         </Grid.Column>
         <Grid.Column textAlign="center" mobile={16} tablet={10}>
           <b>{name}</b>
