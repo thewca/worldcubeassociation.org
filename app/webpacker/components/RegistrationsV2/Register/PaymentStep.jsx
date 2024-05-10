@@ -1,7 +1,13 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
 import React, { useState } from 'react';
 import {
-  Button, Checkbox, Form, FormField, Input, Label, Segment,
+  Button,
+  Checkbox,
+  Divider,
+  Form,
+  FormField,
+  Label,
+  Segment,
 } from 'semantic-ui-react';
 import { paymentFinishUrl, wcaRegistrationUrl } from '../../../lib/requests/routes.js.erb';
 import { useDispatch } from '../../../lib/providers/StoreProvider';
@@ -9,8 +15,8 @@ import { setMessage } from './RegistrationMessage';
 import fetchWithJWTToken from '../../../lib/requests/fetchWithJWTToken';
 import Loading from '../../Requests/Loading';
 import i18n from '../../../lib/i18n';
-import AutonumericField from '../../CompetitionForm/Inputs/AutonumericField';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
+import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 
 export default function PaymentStep({
   competitionInfo, user, handleDonation, donationAmount, displayAmount,
@@ -67,6 +73,7 @@ export default function PaymentStep({
     <Segment>
       <Form id="payment-form" onSubmit={handleSubmit}>
         <PaymentElement id="payment-element" />
+        <Divider />
         { competitionInfo.enable_donations && (
           <FormField>
             <Checkbox value={isDonationChecked} onChange={setDonationChecked} label={i18n.t('registrations.payment_form.labels.show_donation')} />
@@ -88,18 +95,15 @@ export default function PaymentStep({
           ? <Loading />
           : (
             <>
-              <FormField>
-                <Input
-                  readOnly
-                  label={(
-                    <Label>
-                      {i18n.t('registrations.payment_form.labels.subtotal')}
-                    </Label>
-                  )}
-                  value={displayAmount}
-                />
-              </FormField>
-              <Button type="submit" disabled={isLoading || !stripe || !elements} id="submit">
+              <div>
+                <b>
+                  Subtotal:
+                  {' '}
+                  {displayAmount}
+                </b>
+              </div>
+              <FormField />
+              <Button attached type="submit" primary disabled={isLoading || !stripe || !elements} id="submit">
                 {i18n.t('registrations.payment_form.button_text')}
               </Button>
             </>
