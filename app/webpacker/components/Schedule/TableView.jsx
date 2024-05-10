@@ -16,9 +16,8 @@ import AddToCalendar from './AddToCalendar';
 import useStoredState from '../../lib/hooks/useStoredState';
 import i18n from '../../lib/i18n';
 import { formats } from '../../lib/wca-data.js.erb';
-import { attemptTypeById } from '../../lib/wca-live/attempts';
-import { attemptResultToString } from '../../lib/utils/edit-events';
-import { parseActivityCode, timeLimitToString } from '../../lib/utils/wcif';
+import { timeLimitToString } from '../../lib/utils/wcif';
+import { advancementConditionToString, cutoffToString } from '../../lib/utils/wcif';
 
 export default function TableView({
   dates,
@@ -193,10 +192,10 @@ function ActivityRow({
   const {
     format, timeLimit, cutoff, advancementCondition,
   } = round || {};
+
   const roomsUsed = rooms.filter(
     (room) => room.activities.some((activity) => activityIds.includes(activity.id)),
   );
-  const { eventId } = cutoff ? parseActivityCode(round.id) : {};
 
   return (
     <Table.Row>
@@ -231,20 +230,12 @@ function ActivityRow({
 
           <TableCell>
             {cutoff
-              && i18n.t(
-                `cutoff.${attemptTypeById(eventId)}`,
-                {
-                  time: attemptResultToString(cutoff.attemptResult, eventId),
-                  moves: attemptResultToString(cutoff.attemptResult, eventId),
-                  points: attemptResultToString(cutoff.attemptResult, eventId),
-                  count: cutoff.numberOfAttempts,
-                },
-              )}
+              && cutoffToString(round)}
           </TableCell>
 
           <TableCell>
             {advancementCondition
-              && i18n.t(`advancement_condition.${advancementCondition.type}`, { ranking: advancementCondition.level, percent: advancementCondition.level })}
+              && advancementConditionToString(round)}
           </TableCell>
         </>
       )}

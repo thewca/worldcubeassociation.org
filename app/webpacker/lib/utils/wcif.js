@@ -229,3 +229,62 @@ export function eventQualificationToString(wcifEvent, qualification, { short } =
       return '-';
   }
 }
+
+export function advancementConditionToString(wcifRound, { short } = {}) {
+  if (!wcifRound.advancementCondition) {
+    return null;
+  }
+
+  const condition = wcifRound.advancementCondition;
+  const shortTag = short ? '.short' : '';
+
+  const roundFormat = I18n.t(`formats${shortTag}.${wcifRound.format}`);
+
+  const { eventId } = parseActivityCode(wcifRound.id);
+  const wcaEvent = events.byId[eventId];
+
+  switch (condition.type) {
+    case 'ranking':
+      return I18n.t(`advancement_condition${shortTag}.ranking`, { ranking: condition.level });
+    case 'percent':
+      return I18n.t(`advancement_condition${shortTag}.percent`, { percent: condition.level });
+    case 'attemptResult':
+      if (wcaEvent.isTimedEvent) {
+        return I18n.t(`advancement_condition${shortTag}.attempt_result.time`, { round_format: roundFormat, time: centisecondsToClockFormat(condition.level) });
+      }
+
+      if (wcaEvent.isFewestMoves) {
+        return I18n.t(`advancement_condition${shortTag}.attempt_result.moves`, { round_format: roundFormat, moves: condition.level });
+      }
+
+      if (wcaEvent.isMultipleBlindfolded) {
+        return I18n.t(`advancement_condition${shortTag}.attempt_result.points`, { round_format: roundFormat, points: attemptResultToMbPoints(condition.level) });
+      }
+
+      return null;
+    default:
+      return null;
+  }
+}
+
+export function cutoffToString(wcifRound, { short } = {}) {
+  const { eventId } = parseActivityCode(wcifRound.id);
+  const wcaEvent = events.byId[eventId];
+
+  if (wcaEvent.isTimedEvent) {
+    const time = centisecondsToClockFormat(wcifRound.cutoff.attemptResult);
+    return short ? time : I18n.t('cutoff.time', { count: wcifRound.cutoff.numberOfAttempts, time });
+  }
+
+  if (wcaEvent.isFewestMoves) {
+    const moves = wcifRound.cutoff.attemptResult;
+    return short ? moves : I18n.t('cutoff.moves', { count: wcifRound.cutoff.numberOfAttempts, moves });
+  }
+
+  if (wcaEvent.isMultipleBlindfolded) {
+    const points = attemptResultToMbPoints(wcifRound.cutoff.attemptResult);
+    return short ? points : I18n.t('cutoff.points', { count: wcifRound.cutoff.numberOfAttempts, points });
+  }
+
+  return null;
+}

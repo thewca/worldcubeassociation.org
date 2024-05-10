@@ -8,10 +8,14 @@ import {
   TableRow,
 } from 'semantic-ui-react';
 import i18n from '../../lib/i18n';
-import { attemptResultToString } from '../../lib/utils/edit-events';
-import { attemptTypeById } from '../../lib/wca-live/attempts';
 import { events, formats } from '../../lib/wca-data.js.erb';
-import { eventQualificationToString, getRoundTypeId, timeLimitToString } from '../../lib/utils/wcif';
+import {
+  advancementConditionToString,
+  cutoffToString,
+  eventQualificationToString,
+  getRoundTypeId,
+  timeLimitToString,
+} from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
@@ -75,25 +79,17 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
             {competitionInfo['uses_cutoff?'] && (
               <TableCell>
                 {round.cutoff
-                  && i18n.t(
-                    `cutoff.${attemptTypeById(event.id)}`,
-                    {
-                      time: attemptResultToString(round.cutoff.attemptResult, event.id),
-                      moves: attemptResultToString(round.cutoff.attemptResult, event.id),
-                      points: attemptResultToString(round.cutoff.attemptResult, event.id),
-                      count: round.cutoff.numberOfAttempts,
-                    },
-                  )}
+                  && cutoffToString(round)}
               </TableCell>
             )}
             <TableCell>
               {round.advancementCondition
-                && i18n.t(`advancement_condition.${round.advancementCondition.type}`, { ranking: round.advancementCondition.level, percent: round.advancementCondition.level })}
+                && advancementConditionToString(round)}
             </TableCell>
             {competitionInfo['uses_qualification?'] && (
               <TableCell>
                 { i === 0
-                && eventQualificationToString(event, event.qualification, { short: true })}
+                && eventQualificationToString(event, event.qualification)}
               </TableCell>
             )}
           </TableRow>
