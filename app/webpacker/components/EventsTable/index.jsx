@@ -19,7 +19,7 @@ import {
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
-    <Table striped selectable compact>
+    <Table striped selectable compact unstackable>
       <TableHeader>
         <TableRow>
           <TableHeaderCell>
