@@ -111,9 +111,7 @@ export default function StepPanel({
               attached
               onClick={() => setActiveIndex(1)}
             >
-              Update Registration
-              {' '}
-
+              {i18n.t('registrations.update')}
             </Button>
 )}
           position="top center"
