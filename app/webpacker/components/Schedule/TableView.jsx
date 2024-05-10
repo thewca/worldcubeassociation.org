@@ -191,7 +191,7 @@ function ActivityRow({
 
   // note: round may be undefined for custom activities like lunch
   const {
-    format, cutoff, advancementCondition,
+    format, timeLimit, cutoff, advancementCondition,
   } = round || {};
   const roomsUsed = rooms.filter(
     (room) => room.activities.some((activity) => activityIds.includes(activity.id)),
@@ -217,6 +217,16 @@ function ActivityRow({
 
           <TableCell>
             {round && timeLimitToString(round, wcifEvents)}
+            {timeLimit && (
+              <>
+                {timeLimit.cumulativeRoundIds.length === 1 && (
+                  <a href="#cumulative-time-limit">*</a>
+                )}
+                {timeLimit.cumulativeRoundIds.length > 1 && (
+                  <a href="#cumulative-across-rounds-time-limit">**</a>
+                )}
+              </>
+            )}
           </TableCell>
 
           <TableCell>

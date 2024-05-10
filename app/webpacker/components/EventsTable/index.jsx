@@ -61,6 +61,16 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
             </TableCell>
             <TableCell>
               {timeLimitToString(round, wcifEvents)}
+              {round.timeLimit !== null && (
+                <>
+                  {round.timeLimit.cumulativeRoundIds.length === 1 && (
+                    <a href="#cumulative-time-limit">*</a>
+                  )}
+                  {round.timeLimit.cumulativeRoundIds.length > 1 && (
+                    <a href="#cumulative-across-rounds-time-limit">**</a>
+                  )}
+                </>
+              )}
             </TableCell>
             {competitionInfo['uses_cutoff?'] && (
               <TableCell>
