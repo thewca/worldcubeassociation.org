@@ -15,7 +15,12 @@ const convertISOAmount = async (amount, currency) => {
 };
 
 export default function StripeWrapper({
-  competitionInfo, stripePublishableKey, connectedAccountId, user,
+  competitionInfo,
+  stripePublishableKey,
+  connectedAccountId,
+  user,
+  registration,
+  nextStep,
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
@@ -65,6 +70,8 @@ export default function StripeWrapper({
             user={user}
             donationAmount={donationAmount}
             displayAmount={displayAmount}
+            registration={registration}
+            nextStep={nextStep}
           />
         </Elements>
       )}

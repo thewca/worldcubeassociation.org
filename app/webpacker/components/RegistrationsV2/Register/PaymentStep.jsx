@@ -1,5 +1,5 @@
 import { PaymentElement, useElements, useStripe } from '@stripe/react-stripe-js';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Button,
   Checkbox,
@@ -20,13 +20,26 @@ import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 
 export default function PaymentStep({
-  competitionInfo, user, handleDonation, donationAmount, displayAmount,
+  competitionInfo,
+  user,
+  handleDonation,
+  donationAmount,
+  displayAmount,
+  registration,
+  nextStep,
 }) {
   const stripe = useStripe();
   const elements = useElements();
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState(false);
   const [isDonationChecked, setDonationChecked] = useCheckboxState(false);
+
+  useEffect(() => {
+    // TODO When we add per Event Payment this logic needs to also check if an additional payment is needed
+    if (registration?.payment?.payment_status === 'succeeded') {
+      nextStep();
+    }
+  }, [nextStep, registration]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

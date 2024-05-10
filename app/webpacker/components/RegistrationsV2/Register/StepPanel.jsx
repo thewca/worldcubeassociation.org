@@ -158,7 +158,7 @@ export default function StepPanel({
           user={user}
           stripePublishableKey={stripePublishableKey}
           connectedAccountId={connectedAccountId}
-          nextStep={() => {}}
+          nextStep={() => setActiveIndex(-1)}
         />
       )
         : (
