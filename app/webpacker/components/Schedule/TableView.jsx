@@ -1,8 +1,9 @@
 import { DateTime } from 'luxon';
 import React from 'react';
 import {
-  Checkbox, Header, Segment, Table, TableCell,
+  Checkbox, Grid, Header, Icon, Segment,
 } from 'semantic-ui-react';
+import cn from 'classnames';
 import {
   activitiesOnDate,
   earliestWithLongestTieBreaker,
@@ -16,8 +17,12 @@ import AddToCalendar from './AddToCalendar';
 import useStoredState from '../../lib/hooks/useStoredState';
 import i18n from '../../lib/i18n';
 import { formats } from '../../lib/wca-data.js.erb';
-import { timeLimitToString } from '../../lib/utils/wcif';
-import { advancementConditionToString, cutoffToString } from '../../lib/utils/wcif';
+import {
+  parseActivityCode,
+  timeLimitToString,
+  advancementConditionToString,
+  cutoffToString,
+} from '../../lib/utils/wcif';
 
 export default function TableView({
   dates,
@@ -115,62 +120,58 @@ function SingleDayTable({
         {title}
       </Header>
 
-      <div style={{ overflowX: 'scroll' }}>
-        <Table striped compact unstackable>
-          <Table.Header>
-            <HeaderRow isExpanded={isExpanded} />
-          </Table.Header>
+      <Grid centered divided="vertically">
+        <HeaderRow isExpanded={isExpanded} />
 
-          <Table.Body>
-            {hasActivities ? (
-              groupedActivities.map((activityGroup) => {
-                const activityRound = rounds.find(
-                  (round) => round.id === getActivityRoundId(activityGroup[0]),
-                );
+        {hasActivities ? (
+          groupedActivities.map((activityGroup) => {
+            const representativeActivity = activityGroup[0];
 
-                return (
-                  <ActivityRow
-                    key={activityGroup[0].id}
-                    isExpanded={isExpanded}
-                    activityGroup={activityGroup}
-                    events={events}
-                    round={activityRound}
-                    rooms={rooms}
-                    timeZone={timeZone}
-                    wcifEvents={wcifEvents}
-                  />
-                );
-              })
-            ) : (
-              <Table.Row>
-                <Table.Cell colSpan={4}>
-                  <em>{i18n.t('competitions.schedule.no_activities')}</em>
-                </Table.Cell>
-              </Table.Row>
-            )}
-          </Table.Body>
-        </Table>
-      </div>
+            const activityRound = rounds.find(
+              (round) => round.id === getActivityRoundId(representativeActivity),
+            );
+
+            return (
+              <ActivityRow
+                key={representativeActivity.id}
+                isExpanded={isExpanded}
+                activityGroup={activityGroup}
+                events={events}
+                round={activityRound}
+                rooms={rooms}
+                timeZone={timeZone}
+                wcifEvents={wcifEvents}
+              />
+            );
+          })
+        ) : (
+          <Grid.Row columns={1}>
+            <Grid.Column textAlign="center">
+              <em>{i18n.t('competitions.schedule.no_activities')}</em>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+      </Grid>
     </Segment>
   );
 }
 
 function HeaderRow({ isExpanded }) {
   return (
-    <Table.Row>
-      <Table.HeaderCell>{i18n.t('competitions.schedule.start')}</Table.HeaderCell>
-      <Table.HeaderCell>{i18n.t('competitions.schedule.end')}</Table.HeaderCell>
-      <Table.HeaderCell>{i18n.t('competitions.schedule.activity')}</Table.HeaderCell>
-      <Table.HeaderCell>{i18n.t('competitions.schedule.room_or_stage')}</Table.HeaderCell>
+    <Grid.Row only="computer">
+      <Grid.Column width={1}>{i18n.t('competitions.schedule.start')}</Grid.Column>
+      <Grid.Column width={1}>{i18n.t('competitions.schedule.end')}</Grid.Column>
+      <Grid.Column width={4}>{i18n.t('competitions.schedule.activity')}</Grid.Column>
+      <Grid.Column width={3}>{i18n.t('competitions.schedule.room_or_stage')}</Grid.Column>
       {isExpanded && (
         <>
-          <Table.HeaderCell>{i18n.t('competitions.events.format')}</Table.HeaderCell>
-          <Table.HeaderCell><a href="#time-limit">{i18n.t('competitions.events.time_limit')}</a></Table.HeaderCell>
-          <Table.HeaderCell><a href="#cutoff">{i18n.t('competitions.events.cutoff')}</a></Table.HeaderCell>
-          <Table.HeaderCell>{i18n.t('competitions.events.proceed')}</Table.HeaderCell>
+          <Grid.Column width={1}>{i18n.t('competitions.events.format')}</Grid.Column>
+          <Grid.Column width={2}><a href="#time-limit">{i18n.t('competitions.events.time_limit')}</a></Grid.Column>
+          <Grid.Column width={2}><a href="#cutoff">{i18n.t('competitions.events.cutoff')}</a></Grid.Column>
+          <Grid.Column width={2}>{i18n.t('competitions.events.proceed')}</Grid.Column>
         </>
       )}
-    </Table.Row>
+    </Grid.Row>
   );
 }
 
@@ -184,9 +185,10 @@ function ActivityRow({
   wcifEvents,
 }) {
   const representativeActivity = activityGroup[0];
+  const { startTime, endTime } = representativeActivity;
 
   const name = representativeActivity.activityCode.startsWith('other') ? representativeActivity.name : localizeActivityName(representativeActivity, events);
-  const { startTime, endTime } = representativeActivity;
+  const eventId = representativeActivity.activityCode.startsWith('other') ? 'other' : parseActivityCode(representativeActivity.activityCode).eventId;
 
   const activityIds = activityGroup.map((activity) => activity.id);
 
@@ -200,47 +202,114 @@ function ActivityRow({
   );
 
   return (
-    <Table.Row>
-      <Table.Cell>{getSimpleTimeString(startTime, timeZone)}</Table.Cell>
-
-      <Table.Cell>{getSimpleTimeString(endTime, timeZone)}</Table.Cell>
-
-      <Table.Cell>{name}</Table.Cell>
-
-      <Table.Cell>{roomsUsed.map((room) => room.name).join(', ')}</Table.Cell>
-
-      {isExpanded && (
-        <>
-          <Table.Cell>
-            {cutoff && format && `${formats.byId[cutoff.numberOfAttempts].shortName} / `}
-            {format && formats.byId[format].shortName}
-          </Table.Cell>
-
-          <TableCell>
-            {round && timeLimitToString(round, wcifEvents)}
-            {timeLimit && (
+    <>
+      <Grid.Row only="computer">
+        <Grid.Column width={1}>{getSimpleTimeString(startTime, timeZone)}</Grid.Column>
+        <Grid.Column width={1}>{getSimpleTimeString(endTime, timeZone)}</Grid.Column>
+        <Grid.Column width={4}>{name}</Grid.Column>
+        <Grid.Column width={3}>{roomsUsed.map((room) => room.name).join(', ')}</Grid.Column>
+        {isExpanded && (
+          <>
+            <Grid.Column width={1}>
+              {cutoff && format && `${formats.byId[cutoff.numberOfAttempts].shortName} / `}
+              {format && formats.byId[format].shortName}
+            </Grid.Column>
+            <Grid.Column width={2}>
+              {round && timeLimitToString(round, wcifEvents)}
+              {timeLimit && (
+                <>
+                  {timeLimit.cumulativeRoundIds.length === 1 && (
+                    <a href="#cumulative-time-limit">*</a>
+                  )}
+                  {timeLimit.cumulativeRoundIds.length > 1 && (
+                    <a href="#cumulative-across-rounds-time-limit">**</a>
+                  )}
+                </>
+              )}
+            </Grid.Column>
+            <Grid.Column width={2}>{cutoff && cutoffToString(round)}</Grid.Column>
+            <Grid.Column width={2}>
+              {advancementCondition && advancementConditionToString(round)}
+            </Grid.Column>
+          </>
+        )}
+      </Grid.Row>
+      <Grid.Row only="tablet mobile">
+        <Grid.Column textAlign="left" mobile={6} tablet={4}>
+          {i18n.t('competitions.schedule.range.from')}
+          <br />
+          <b>{getSimpleTimeString(startTime, timeZone)}</b>
+        </Grid.Column>
+        <Grid.Column textAlign="center" mobile={4} tablet={8}>
+          <Icon size="big" className={cn('cubing-icon', `event-${eventId}`)} />
+        </Grid.Column>
+        <Grid.Column textAlign="right" mobile={6} tablet={4}>
+          {i18n.t('competitions.schedule.range.to')}
+          <br />
+          <b>{getSimpleTimeString(startTime, timeZone)}</b>
+        </Grid.Column>
+        <Grid.Column textAlign="center" mobile={16} tablet={10}>
+          <b>{name}</b>
+        </Grid.Column>
+        <Grid.Column textAlign="center" mobile={16} tablet={6}>
+          {roomsUsed.map((room) => room.name).join(', ')}
+        </Grid.Column>
+        {isExpanded && eventId !== 'other' && (
+          <>
+            {format && (
               <>
-                {timeLimit.cumulativeRoundIds.length === 1 && (
-                  <a href="#cumulative-time-limit">*</a>
-                )}
-                {timeLimit.cumulativeRoundIds.length > 1 && (
-                  <a href="#cumulative-across-rounds-time-limit">**</a>
-                )}
+                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                  {i18n.t('competitions.events.format')}
+                </Grid.Column>
+                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                  <b>
+                    {cutoff && `${formats.byId[cutoff.numberOfAttempts].shortName} / `}
+                    {formats.byId[format].shortName}
+                  </b>
+                </Grid.Column>
               </>
             )}
-          </TableCell>
-
-          <TableCell>
-            {cutoff
-              && cutoffToString(round)}
-          </TableCell>
-
-          <TableCell>
-            {advancementCondition
-              && advancementConditionToString(round)}
-          </TableCell>
-        </>
-      )}
-    </Table.Row>
+            {timeLimit && (
+              <>
+                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                  {i18n.t('competitions.events.time_limit')}
+                </Grid.Column>
+                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                  <b>
+                    {round && timeLimitToString(round, wcifEvents)}
+                    {timeLimit.cumulativeRoundIds.length === 1 && (
+                      <a href="#cumulative-time-limit">*</a>
+                    )}
+                    {timeLimit.cumulativeRoundIds.length > 1 && (
+                      <a href="#cumulative-across-rounds-time-limit">**</a>
+                    )}
+                  </b>
+                </Grid.Column>
+              </>
+            )}
+            {cutoff && (
+              <>
+                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                  {i18n.t('competitions.events.cutoff')}
+                </Grid.Column>
+                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                  <b>{cutoffToString(round)}</b>
+                </Grid.Column>
+              </>
+            )}
+            {advancementCondition && (
+              <>
+                <Grid.Column textAlign="left" mobile={6} tablet={4}>
+                  {i18n.t('competitions.events.proceed')}
+                </Grid.Column>
+                <Grid.Column textAlign="right" mobile={10} tablet={4}>
+                  <b>{advancementConditionToString(round)}</b>
+                </Grid.Column>
+              </>
+            )}
+          </>
+        )}
+      </Grid.Row>
+    </>
   );
 }
