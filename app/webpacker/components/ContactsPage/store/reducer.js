@@ -1,7 +1,22 @@
 import {
+  ClearForm,
   UpdateContactRecipient,
   UpdateSectionData,
 } from './actions';
+
+export const getContactFormInitialState = (loggedInUserData, queryParams) => ({
+  userData: {
+    name: loggedInUserData?.user?.name,
+    email: loggedInUserData?.user?.email,
+  },
+  contactRecipient: queryParams?.contactRecipient,
+  competition: {
+    competitionId: queryParams?.competitionId,
+  },
+  wst: {
+    requestId: queryParams?.requestId,
+  },
+});
 
 const reducers = {
   [UpdateSectionData]: (state, { payload }) => ({
@@ -16,6 +31,10 @@ const reducers = {
     ...state,
     contactRecipient: payload.contactRecipient,
   }),
+
+  [ClearForm]: (__, { payload }) => (
+    getContactFormInitialState(payload.loggedInUserData, payload.queryParams)
+  ),
 };
 
 export default function rootReducer(state, action) {
