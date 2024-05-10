@@ -10,9 +10,9 @@ import { useState } from 'react';
 export default function useStoredState(initialState, key) {
   let storedState;
   try {
-    storedState = JSON.parse(localStorage.getItem(key))
+    storedState = JSON.parse(localStorage.getItem(key));
   } catch {
-    storedState = null
+    storedState = null;
   }
 
   const [state, setState] = useState(() => {
