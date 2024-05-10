@@ -704,7 +704,7 @@ class Competition < ApplicationRecord
   end
 
   def should_render_register_v2?(user)
-    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).length == 0 && ( registration_opened? || user_can_pre_register?(user))
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
   end
 
   before_validation :unpack_delegate_organizer_ids
