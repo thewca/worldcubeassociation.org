@@ -115,7 +115,7 @@ function SingleDayTable({
         {title}
       </Header>
 
-      <Table striped compact>
+      <Table striped compact unstackable>
         <Table.Header>
           <HeaderRow isExpanded={isExpanded} />
         </Table.Header>
