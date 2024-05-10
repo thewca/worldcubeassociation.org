@@ -31,7 +31,7 @@ function ListView({
         !isInProgress(comp) && !isProbablyOver(comp)
       ));
       return (
-        <div id="competitions-list">
+        <>
           <ListViewSection
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
@@ -54,7 +54,7 @@ function ListView({
             numCompetitions={upcomingComps?.length}
             bottomRef={bottomRef}
           />
-        </div>
+        </>
       );
     }
     case 'recent':

@@ -2,7 +2,7 @@ import React, {
   useEffect, useMemo, useReducer, useState,
 } from 'react';
 import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
-import { Container } from 'semantic-ui-react';
+import { Container, Header } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
@@ -105,7 +105,7 @@ function CompetitionsView() {
 
   return (
     <Container>
-      <h2>{I18n.t('competitions.index.title')}</h2>
+      <Header as="h2">{I18n.t('competitions.index.title')}</Header>
       <CompetitionsFilters
         filterState={filterState}
         dispatchFilter={dispatchFilter}
@@ -115,7 +115,7 @@ function CompetitionsView() {
         setShouldShowRegStatus={setShouldShowRegStatus}
       />
 
-      <Container id="search-results" className="row competitions-list">
+      <Container fluid>
         {
           displayMode === 'list'
           && (

@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Icon, Popup, Loader, Table, Flag, Label, Segment, Header, Container,
+  Icon, Popup, Loader, Table, Flag, Label, Segment, Header, Container, Grid,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -25,7 +25,7 @@ function ListViewSection({
   isSortedByAnnouncement = false,
 }) {
   return (
-    <Segment basic>
+    <>
       <Header>
         {title}
         {competitions && (
@@ -42,7 +42,7 @@ function ListViewSection({
         regStatusLoading={regStatusLoading}
         isSortedByAnnouncement={isSortedByAnnouncement}
       />
-    </Segment>
+    </>
   );
 }
 
@@ -62,11 +62,10 @@ export function CompetitionsTable({
   }
 
   return (
-    <Table striped compact="very" basic="very">
-      <Table.Header fullWidth>
+    <Table striped compact="very" basic size="small">
+      <Table.Header>
         <Table.Row>
-          <Table.HeaderCell />
-          <Table.HeaderCell>{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="right">{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.name')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.location')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.venue')}</Table.HeaderCell>
@@ -81,15 +80,13 @@ export function CompetitionsTable({
               isSortedByAnnouncement={isSortedByAnnouncement}
             />
             <Table.Row error={isCancelled(comp)}>
-              <Table.Cell collapsing>
+              <Table.Cell textAlign="right" width={2}>
                 <StatusIcon
                   comp={comp}
                   shouldShowRegStatus={shouldShowRegStatus}
                   isSortedByAnnouncement={isSortedByAnnouncement}
                   regStatusLoading={regStatusLoading}
                 />
-              </Table.Cell>
-              <Table.Cell width={2}>
                 {comp.date_range}
               </Table.Cell>
               <Table.Cell width={6}>
