@@ -4,7 +4,7 @@ import {
   Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import { getShortDateString, getShortTimeString } from '../lib/dates';
+import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { setMessage } from '../Register/RegistrationMessage';
@@ -220,7 +220,6 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const spotsRemaining = (competitionInfo.competitor_limit ?? Infinity) - accepted.length;
   const spotsRemainingText = i18n.t(
     'competitions.registration_v2.list.spots_remaining',
-    'competitions.registration_v2.list.spots_remaining',
     { spots: spotsRemaining },
   );
 
@@ -265,6 +264,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             registrations={registrations}
             spotsRemaining={spotsRemaining}
             userEmailMap={userEmailMap}
+            competitionInfo={competitionInfo}
           />
         </Sticky>
 

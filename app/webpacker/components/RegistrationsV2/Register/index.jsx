@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
@@ -33,6 +33,7 @@ function Register({
   competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
 }) {
   const dispatch = useDispatch();
+  const ref = useRef();
   const {
     data: registration,
     isLoading,
@@ -57,7 +58,7 @@ function Register({
     isLoading ? <Loading />
       : (
         <>
-          <RegistrationMessage />
+          <RegistrationMessage ref={ref} />
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}

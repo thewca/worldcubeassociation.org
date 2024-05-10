@@ -1,7 +1,9 @@
 import {
+  addIsoDurations,
   changeTimezoneKeepingLocalTime,
+  millisecondsBetween,
   moveByIsoDuration,
-  rescaleDuration,
+  rescaleIsoDuration,
 } from '../../lib/utils/edit-schedule';
 
 export const moveActivityByDuration = (activity, isoDuration) => ({
@@ -13,55 +15,82 @@ export const moveActivityByDuration = (activity, isoDuration) => ({
   )),
 });
 
-export const scaleActivitiesByDuration = (activity, isoDeltaStart, isoDeltaEnd) => ({
-  ...activity,
-  startTime: moveByIsoDuration(activity.startTime, isoDeltaStart),
-  endTime: moveByIsoDuration(activity.endTime, isoDeltaEnd),
-  childActivities: activity.childActivities.map((childActivity, childIdx) => {
-    // Unfortunately, scaling child activities (properly) is rocket science.
-    const nChildren = activity.childActivities.length;
+export const scaleActivitiesByDuration = (activity, isoDeltaStart, isoDeltaEnd) => {
+  const rootActivityLengthMs = millisecondsBetween(
+    activity.startTime,
+    activity.endTime,
+  );
 
-    // Say you have a parent activity with n=3 children,
-    // and you scale the start by -1 hour (i.e. 1 hour earlier).
-    //   In that case, the first child activity's start also has to be scaled by 1 hour.
-    // However, the second child activity's start only has to be scaled by 2/3 of 1 hour,
-    //   and the last has to be scaled by only 1/3 of 1 hour.
-    // In general, the i-th child of n children scales by (n-i)/n for the start of the activity.
-    const startScaleUp = (nChildren - childIdx) / nChildren;
+  return ({
+    ...activity,
+    startTime: moveByIsoDuration(activity.startTime, isoDeltaStart),
+    endTime: moveByIsoDuration(activity.endTime, isoDeltaEnd),
+    childActivities: activity.childActivities.map((childActivity) => {
+      // Unfortunately, scaling child activities (properly) is rocket science.
+      const childActivityLengthMs = millisecondsBetween(
+        childActivity.startTime,
+        childActivity.endTime,
+      );
 
-    // However, it doesn't end there. When a parent activity's _start_ scales,
-    //   only the startTime has to be manipulated.
-    // But for the children, the _endTime_ ALSO has to be manipulated
-    //   because even though only the start of the parent changes,
-    //   the children _move_ within that scaled parent as a whole.
-    // The scaling factor for the end of a child is the same as the scaling factor
-    //   for the start of the _next_ child.
-    const endScaleUp = (nChildren - (childIdx + 1)) / nChildren;
+      // Say you scale the start by -1 hour (i.e. 1 hour earlier).
+      // The amount that you have to scale a child by is directly proportional
+      //   to the child's length. So we calculate the proportion of durations using milliseconds.
+      // Say you have a parent activity with three equally sized children. In that case,
+      //   every child gets scaled down an equal amount, because they are all equally long.
+      // If you plan your schedule with one slow group (long duration) and one fast group
+      //   (short duration), the fast and short group only needs to be rescaled a little bit
+      //   while the slow and long group gets the "lion share" of the scaling factor.
+      const scalingFactor = childActivityLengthMs / rootActivityLengthMs;
 
-    const childDeltaStartUp = rescaleDuration(isoDeltaStart, startScaleUp);
-    const childDeltaEndUp = rescaleDuration(isoDeltaStart, endScaleUp);
+      const childStartScale = rescaleIsoDuration(isoDeltaStart, scalingFactor);
+      const childEndScale = rescaleIsoDuration(isoDeltaEnd, scalingFactor);
 
-    // Of course, this all has to happen recursively because children can have children!
-    const startScaledChild = scaleActivitiesByDuration(
-      childActivity,
-      childDeltaStartUp,
-      childDeltaEndUp,
-    );
+      // Of course, this all has to happen recursively because children can have children!
+      const scaledChild = scaleActivitiesByDuration(
+        childActivity,
+        childStartScale,
+        childEndScale,
+      );
 
-    // And it gets even more crazy:
-    //   The same (n-i)/n logic from above has to be applied to the endDate as well,
-    //   but of course IN REVERSE! So the _last_ child moves the full amount,
-    //   the second-to-last child moves a little less, and the first child only moves a tiny bit.
-    const startScaleDown = childIdx / nChildren;
-    const endScaleDown = (childIdx + 1) / nChildren;
+      // However, it doesn't end there. When a parent activity _scales_,
+      //   the child activities also have to _move_. Think of an activity "shrinking",
+      //   i.e. becoming shorter: Then the children also "shrink" as a result.
+      // This "shrinking" will create gaps which can only be filled by the children
+      //   _moving_ closer together after shrinking down.
 
-    const childDeltaStartDown = rescaleDuration(isoDeltaEnd, startScaleDown);
-    const childDeltaEndDown = rescaleDuration(isoDeltaEnd, endScaleDown);
+      const ownStartToParentStart = millisecondsBetween(
+        childActivity.startTime,
+        activity.startTime,
+      );
 
-    // Phew, we're done.
-    return scaleActivitiesByDuration(startScaledChild, childDeltaStartDown, childDeltaEndDown);
-  }),
-});
+      const ownEndToParentEnd = millisecondsBetween(
+        childActivity.endTime,
+        activity.endTime,
+      );
+
+      // Again, this growth is proportional to the size of the child activity.
+      const scalingStartUp = ownStartToParentStart / rootActivityLengthMs;
+      const scalingEndDown = ownEndToParentEnd / rootActivityLengthMs;
+
+      // Now it gets a little bit crazy:
+      // - When applying a Delta to the END of the activity, we have to move it UP
+      // - When applying a Delta to the START of the activity, we have to move it DOWN
+      // Think of it this way: With two subsequent child activities, removing a few minutes
+      //   from the END of either activity creates a gap that needs to be closed by moving
+      //   the second, later activity UP closer towards its predecessor.
+      // The same logic applies in reverse for adding minutes instead of removing minutes.
+      const moveUpwardsDuration = rescaleIsoDuration(isoDeltaEnd, scalingStartUp);
+      const moveDownwardsDuration = rescaleIsoDuration(isoDeltaStart, scalingEndDown);
+
+      // Both directional Deltas are added together, and it is possible that they cancel
+      //   each other out, most notably if DeltaStart == -DeltaEnd.
+      const totalMovingDuration = addIsoDurations(moveUpwardsDuration, moveDownwardsDuration);
+
+      // Phew, we're done.
+      return moveActivityByDuration(scaledChild, totalMovingDuration);
+    }),
+  });
+};
 
 export const changeActivityTimezone = (activity, oldTimezone, newTimezone) => ({
   ...activity,

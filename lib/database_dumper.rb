@@ -108,6 +108,8 @@ module DatabaseDumper
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
           uses_v2_registrations
+          forbid_newcomers
+          forbid_newcomers_reason
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -761,6 +763,7 @@ module DatabaseDumper
           id
           email
           friendly_id
+          preferred_contact_mode
           created_at
           updated_at
         ),

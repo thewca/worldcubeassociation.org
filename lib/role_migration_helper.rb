@@ -18,4 +18,10 @@ module RoleMigrationHelper
       metadata: metadata,
     )
   end
+
+  def migrate_team_members_to_group(team, group)
+    team.team_members.each do |team_member|
+      create_user_role_for_team_member(team_member, group)
+    end
+  end
 end

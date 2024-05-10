@@ -178,17 +178,17 @@ Rails.application.routes.draw do
   get 'polls/:id/vote' => 'votes#vote', as: 'polls_vote'
   get 'polls/:id/results' => 'polls#results', as: 'polls_results'
 
-  resources :teams, only: [:index, :update, :edit]
+  resources :teams, only: [:update, :edit]
 
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
   post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
-  get 'panel' => 'panel#index'
-  get 'panel/delegate-crash-course', to: redirect('https://documents.worldcubeassociation.org/edudoc/delegate-crash-course/delegate_crash_course.pdf', status: 302)
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do
+    get 'staff' => 'panel#staff', as: :panel_staff
+    get 'delegate' => 'panel#delegate', as: :panel_delegate
     get 'wfc' => 'panel#wfc', as: :panel_wfc
     get 'wrt' => 'panel#wrt', as: :panel_wrt
     get 'wst' => 'panel#wst', as: :panel_wst
@@ -240,7 +240,7 @@ Rails.application.routes.draw do
   get 'disciplinary' => 'wdc#root'
 
   get 'contact' => 'contacts#index'
-  post 'contact' => 'contacts#website_create'
+  post 'contact' => 'contacts#contact'
   get 'contact/dob' => 'contacts#dob'
   post 'contact/dob' => 'contacts#dob_create'
 
@@ -380,6 +380,7 @@ Rails.application.routes.draw do
         patch '/wcif' => 'competitions#update_wcif', as: :update_wcif
       end
       get '/records' => "api#records"
+      post '/registration-data' => 'competitions#registration_data', as: :registration_data
 
       scope 'user_roles' do
         get '/user/:user_id' => 'user_roles#index_for_user', as: :index_for_user
@@ -387,7 +388,7 @@ Rails.application.routes.draw do
         get '/group-type/:group_type' => 'user_roles#index_for_group_type', as: :index_for_group_type
         get '/search' => 'user_roles#search', as: :user_roles_search
       end
-      resources :user_roles, only: [:create, :update, :destroy]
+      resources :user_roles, only: [:show, :create, :update, :destroy]
       resources :user_groups, only: [:index, :create, :update]
       namespace :wrt do
         resources :persons, only: [:update, :destroy] do
@@ -403,4 +404,6 @@ Rails.application.routes.draw do
 
   # Deprecated Links
   get 'teams-committees' => redirect('teams-committees-councils')
+  get 'panel/delegate-crash-course' => redirect('panel/delegate#delegate-crash-course')
+  get 'panel' => redirect('panel/staff')
 end

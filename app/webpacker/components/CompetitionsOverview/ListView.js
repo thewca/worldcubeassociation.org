@@ -13,6 +13,7 @@ function ListView({
   filterState,
   shouldShowRegStatus,
   isLoading,
+  regStatusLoading,
   fetchMoreCompetitions,
   hasMoreCompsToLoad,
 }) {
@@ -36,6 +37,7 @@ function ListView({
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
             isLoading={isLoading && !upcomingComps?.length}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
           />
           {
@@ -47,6 +49,7 @@ function ListView({
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -66,6 +69,7 @@ function ListView({
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -84,6 +88,7 @@ function ListView({
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -102,6 +107,7 @@ function ListView({
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
             isSortedByAnnouncement
           />
@@ -121,6 +127,7 @@ function ListView({
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
             isLoading={isLoading}
+            regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter

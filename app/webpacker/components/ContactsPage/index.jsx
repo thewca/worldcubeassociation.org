@@ -6,21 +6,30 @@ import ContactForm from './ContactForm';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
+import StoreProvider from '../../lib/providers/StoreProvider';
+import contactsReducer, { getContactFormInitialState } from './store/reducer';
+import useQueryParams from '../../lib/hooks/useQueryParams';
 
 export default function ContactsPage() {
-  const { data: userDetails, loading } = useLoadedData(apiV0Urls.users.me.userDetails);
+  const { data: loggedInUserData, loading } = useLoadedData(apiV0Urls.users.me.userDetails);
+  const [queryParams] = useQueryParams();
 
   if (loading) return <Loading />;
 
   return (
-    <Container fluid>
-      <Header as="h2">{I18n.t('page.contacts.title')}</Header>
-      <Message visible>
-        <I18nHTMLTranslate
-          i18nKey="page.contacts.faq_note_html"
-        />
-      </Message>
-      <ContactForm userDetails={userDetails} />
-    </Container>
+    <StoreProvider
+      reducer={contactsReducer}
+      initialState={getContactFormInitialState(loggedInUserData, queryParams)}
+    >
+      <Container fluid>
+        <Header as="h2">{I18n.t('page.contacts.title')}</Header>
+        <Message visible>
+          <I18nHTMLTranslate
+            i18nKey="page.contacts.faq_note_html"
+          />
+        </Message>
+        <ContactForm loggedInUserData={loggedInUserData} />
+      </Container>
+    </StoreProvider>
   );
 }

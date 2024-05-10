@@ -102,7 +102,7 @@ export default function MultiSearchInput({
 
   const dropDownOptions = [
     ...(showOptionToGoToSearchPage && search.length > 0 ? [createSearchItem(search)] : []),
-    ...(multiple ? selectedValue : []),
+    ...(multiple ? selectedValue : [selectedValue].filter(Boolean)),
     ...results,
   ].map((option) => ({
     ...option,

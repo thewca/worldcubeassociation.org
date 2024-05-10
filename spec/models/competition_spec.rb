@@ -624,7 +624,7 @@ RSpec.describe Competition do
     expect(competition.longitude).to eq 4.6*1e6
   end
 
-  it "ensures all attributes are defined as either cloneable or uncloneable" do
+  it "ensures all attributes are defined as either cloneable or uncloneable", :focus do
     expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
   end
 

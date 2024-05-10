@@ -32,7 +32,8 @@ class ConnectedStripeAccount < ApplicationRecord
     # The Stripe API forces the user to provide a return_url when using automated payment methods.
     # In our test suite however, we want to be able to confirm specific payment methods without a return URL
     # because our CI containers are not exposed to the public. So we need this little hack :/
-    enable_automatic_pm = !Rails.env.test?
+    # See also https://docs.stripe.com/upgrades/manage-payment-methods
+    allow_redirects = Rails.env.test? ? 'never' : 'always'
 
     payment_intent_args = {
       amount: stripe_amount,
@@ -42,7 +43,10 @@ class ConnectedStripeAccount < ApplicationRecord
       metadata: registration_metadata,
       # we cannot recycle an existing intent, so we create a new one which needs all possible PaymentMethods enabled.
       # Required as per https://stripe.com/docs/payments/accept-a-payment-deferred?type=payment&client=html#create-intent
-      automatic_payment_methods: { enabled: enable_automatic_pm },
+      automatic_payment_methods: {
+        enabled: true,
+        allow_redirects: allow_redirects,
+      },
     }
 
     # Create the PaymentIntent, overriding the stripe_account for the request

@@ -908,10 +908,6 @@ th:
           pending: รายชื่อรอ
           #original_hash: 441bda6
           deleted: ถูกลบทิ้ง
-          #original_hash: a1bf92e
-          cancelled: ยกเลิก
-          #original_hash: 8cf6f9c
-          waiting_list: อยู่ใน waiting list
   mail_form:
     attributes:
       contact_form:
@@ -1106,16 +1102,14 @@ th:
       error_pages:
         #original_hash: 1042478
         500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
-        #original_hash: d656a11
-        500_contact: >-
-          หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรด copy Request ID ใส่ใน
-          email ด้วย
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>Click here</a> เพื่อรายงาน.'
         #original_hash: b61e305
         400_error: ไม่มีหน้าที่คุณกำลังมองหา
-        #original_hash: c8a7d4e
-        400_contact: >-
-          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และ copy
-          Request ID ใส่ใน email ด้วย
+        #original_hash: c9290b6
+        400_contact_html: >-
+          หากคุณคิดว่านี่คือข้อผิดพลาด กรุณา<a
+          href=%{contact_url}>กดที่นี่</a>เพื่อรายงาน
     doorkeeper:
       applications:
         help:
@@ -1309,6 +1303,10 @@ th:
         และประกอบด้วยสมาชิกในชุมชน ไม่ใช่สมาชิกเจ้าหน้าที่ WCA
         เมื่อมีการเปิดคณะกรรมการ ทีมงาน หรือสภา
         ข้อมูลเกี่ยวกับวิธีการสมัครจะโพสต์ไว้ที่หน้าแรก
+      #original_hash: b37456c
+      contact_button: ติดต่อ
+      #original_hash: ae7928f
+      no_contact_description: ยังไม่มีข้อมูลการติดต่อทีม / กรรมการนี้
       groups_name:
         #original_hash: 90a1280
         wat: WCA Archive Team
@@ -1424,7 +1422,7 @@ th:
     contacts:
       #original_hash: 4ef2aad
       title: WCA Contact Form
-      #original_hash: c343cae
+      #original_hash: bddd3ea
       faq_note_html: >-
         ก่อนที่จะทำการสอบถาม คุณอาจต้องการดู <a href="/faq">คำถามที่พบบ่อย</a>
         ของเรา!
@@ -1447,19 +1445,19 @@ th:
             label: >-
               ติดต่อผู้จัดงาน/ผู้แทนการแข่งขัน
               (เพื่อสอบถามเกี่ยวกับการแข่งขันนั้นๆ)
-          communications_team:
+          wct:
             #original_hash: b73e465
             label: >-
-              ติดต่อ WCA สำหรับคำถามทั่วไป (ซึ่งอาจเกี่ยวข้องกับอะไรก็ได้ เช่น 
-              WCA ID/profile, การจัดการการแข่งขัน, กติกาการแข่งขัน,
+              ติดต่อ WCA สำหรบปัญหาทั่วไป (ซึ่งอาจเกี่ยวข้องกับอะไรก็ได้ เช่น
+              WCA ID/Profile, การจัดการการแข่งขัน, กติกาการแข่งขัน,
               สื่อการแข่งขัน ฯลฯ)
-          results_team:
+          wrt:
             #original_hash: 0f6b96b
-            label: Contact Results Team (สำหรับสิ่งที่เกี่ยวข้องกับผลการแข่งขัน)
-          software:
+            label: ติดต่อ Results Team (สำหรับสิ่งที่เกี่ยวข้องกับผลการแข่งขัน)
+          wst:
             #original_hash: 1d74033
             label: >-
-              Contact Software Team
+              ติดต่อ Software Team
               (เพื่อรายงานข้อผิดพลาดในเว็บไซต์หรือคำถามที่เกี่ยวข้องกับ API)
         competition:
           competition:
@@ -1468,7 +1466,15 @@ th:
           message:
             #original_hash: 68f4145
             label: ข้อความ
-        communications_team:
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wrt:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wst:
           message:
             #original_hash: 68f4145
             label: ข้อความ
@@ -2997,6 +3003,12 @@ th:
           #original_hash: 6c8e5bf
           force_comment: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: ไม่อนุญาติไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
+            #original_hash: 40c4b4c
+            reason: >-
+              เหตุผลและรายละเอียดสำหรับการไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
@@ -3200,6 +3212,13 @@ th:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: >-
+              โปรดอธิบายรายละเอียดที่นี่ว่าทำไมคุณถึงไม่อยากให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขันของคุณ
+              กรุณากรอกเป็นภาษาอังกฤษ!
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -3309,15 +3328,18 @@ th:
       requirements:
         #original_hash: 09a428f
         title: ความต้องการ
-        #original_hash: 695cf86
+        #original_hash: 1255806
         acknowledgement: >-
           ฉันได้อ่านและรับทราบข้อมูลทั้งหมดภายใต้แท็บ 'ลงทะเบียน' แล้ว
-          รวมถึงค่าธรรมเนียมการแข่งขันและนโยบายการคืนเงิน
-        #original_hash: 270bd63
-        acknowledgment_extra: ฉันได้อ่านและทำความเข้าใจข้อมูลทั้งหมดที่ระบุไว้ข้างต้นแล้ว
+          รวมถึงค่าธรรมเนียมการแข่งขัน, นโยบายการคืนเงิน
+          และเงื่อนไขเพิ่มเติมที่แสดงไว้แล้ว
         #original_hash: 80d2933
         next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
       update:
+        #original_hash: c04744e
+        being_updated: กำลังอัปเดตการสมัคร
+        #original_hash: 75596b9
+        being_deleted: การสมัครกำลังถูกลบ
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3335,6 +3357,10 @@ th:
           การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
           %{count} คน
       register:
+        #original_hash: dddec0b
+        re-register: สมัครการแข่งขันใหม่อีกครั้ง
+        #original_hash: a38d5fa
+        success: 'คุณได้สมัครการแข่งขัน %{comp_name} แล้ว'
         #original_hash: affea61
         error: 'การสมัครล้มเหลวโดยมีข้อผิดพลาด %{error}'
         #original_hash: f5a8630
@@ -3350,8 +3376,14 @@ th:
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
-          #original_hash: f1f32b6
-          header: 'สถานะการสมัครของคุณ:'
+          #original_hash: b1e97b8
+          accepted: การสมัครของคุณได้รับการยอมรับแล้ว
+          #original_hash: 3d7aa97
+          pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
+          #original_hash: dcc4906
+          cancelled: การสมัครของคุณถูกลบแล้ว
+          #original_hash: c890478
+          waiting_list: คุณอยู่ใน Waiting List
         #original_hash: 2d9f36c
         disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
         #original_hash: 8fe68a1

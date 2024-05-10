@@ -37,6 +37,8 @@ function UtcDatePicker({
   isoEndDate = null,
   isoMinDate = null,
   isoMaxDate = null,
+  dateFormatOverride = null,
+  timeFormatOverride = null,
 }) {
   const date = useIsoDate(isoDate);
 
@@ -57,6 +59,14 @@ function UtcDatePicker({
   const minDate = useIsoDate(isoMinDate);
   const maxDate = useIsoDate(isoMaxDate);
 
+  const timeFormat = timeFormatOverride || 'p';
+
+  // weird quirk in the 3rd party datepicker implementation: The "dateFormat" field actually means
+  //  "format for the whole input row, which may or may not include time". The field "timeFormat"
+  //  is only considered for time-specific inputs *within* the dropdown parts of the picker.
+  const dateOnlyFormat = dateFormatOverride || 'P';
+  const dateFormat = showTimeInput ? (dateOnlyFormat + timeFormat) : dateOnlyFormat;
+
   return (
     <DatePicker
       id={id}
@@ -69,8 +79,8 @@ function UtcDatePicker({
       dropdownMode={dropdownMode}
       scrollableYearDropdown={scrollableYearDropdown}
       timeInputLabel="UTC"
-      dateFormat={showTimeInput ? 'Pp' : 'P'}
-      timeFormat="p"
+      dateFormat={dateFormat}
+      timeFormat={timeFormat}
       showIcon={showIcon}
       placeholderText={placeholderText}
       selectsStart={selectsStart}

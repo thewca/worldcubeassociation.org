@@ -17,9 +17,6 @@ Rails.application.config.assets.paths << Rails.root.join("node_modules", "@cubin
 Rails.application.config.assets.precompile += %w(oms.js)
 Rails.application.config.assets.precompile += %w(email.css)
 Rails.application.config.assets.precompile += %w(pdf.css)
-Rails.application.config.assets.precompile += %w(fullcalendar/fullcalendar_wca.js)
-Rails.application.config.assets.precompile += %w(fullcalendar_wca.css)
 (I18n.available_locales - [:en]).each do |locale|
   Rails.application.config.assets.precompile += ["locales/#{locale.downcase}.js"]
-  Rails.application.config.assets.precompile += ["fullcalendar/locales/#{locale.downcase}.js"]
 end
