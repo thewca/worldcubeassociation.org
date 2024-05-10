@@ -2412,9 +2412,10 @@ en:
   logo:
     title: 'WCA Logo'
     paragraphs:
-      '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
-      '2': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
-      '3': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
+      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
+      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
+      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
+      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"
