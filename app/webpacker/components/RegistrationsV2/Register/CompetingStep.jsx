@@ -31,12 +31,15 @@ const maxCommentLength = 240;
 export default function CompetingStep({
   nextStep, competitionInfo, user, preferredEvents, registration, refetchRegistration,
 }) {
+  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
   const dispatch = useDispatch();
 
   const [comment, setComment] = useState('');
   const [selectedEvents, setSelectedEvents] = useState(
-    preferredEvents.filter((event) => competitionInfo.event_ids.includes(event)),
+    preferredEvents
+      .filter((event) => competitionInfo.event_ids.includes(event))
+      .slice(0, maxEvents),
   );
   const [guests, setGuests] = useState(0);
 
@@ -105,7 +108,6 @@ export default function CompetingStep({
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
   const commentIsValid = comment.trim() || !competitionInfo.force_comment_in_registration;
-  const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
 
   const attemptAction = useCallback(
@@ -123,6 +125,9 @@ export default function CompetingStep({
             ? 'registrations.errors.must_register'
             : 'registrations.errors.exceeds_event_limit.other',
           'negative',
+          {
+            count: selectedEvents.length,
+          },
         ));
       } else {
         action();
@@ -183,7 +188,7 @@ export default function CompetingStep({
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids);
+      setSelectedEvents(competitionInfo.event_ids.slice(0, maxEvents));
     } else if (type === 'clear_events') {
       setSelectedEvents([]);
     } else if (type === 'toggle_event') {
@@ -238,12 +243,14 @@ export default function CompetingStep({
         )}
 
         <Form>
-          <Form.Field>
+          <Form.Field required>
             <EventSelector
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
               id="event-selection"
+              required
+              maxEvents={maxEvents}
             />
             <p
               dangerouslySetInnerHTML={{
@@ -253,7 +260,7 @@ export default function CompetingStep({
               }}
             />
           </Form.Field>
-          <Form.Field required={competitionInfo.force_comment_in_registration}>
+          <Form.Field required={Boolean(competitionInfo.force_comment_in_registration)}>
             <label htmlFor="comment">
               {i18n.t('competitions.registration_v2.register.comment')}
             </label>
