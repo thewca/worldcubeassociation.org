@@ -73,6 +73,7 @@ export default function StepPanel({
   });
 
   if (activeIndex === -1) {
+    const status = registration.competing.registration_status;
     return (
       <>
         <Step.Group fluid ordered stackable="tablet">
@@ -88,14 +89,16 @@ export default function StepPanel({
           ))}
         </Step.Group>
         <Message
-          info={registration.competing.registration_status === 'pending'}
+          info={status === 'pending'}
+          success={status === 'accepted'}
+          negative={status === 'cancelled'}
           icon
         >
-          <Icon name={registrationIconByStatus(registration.competing.registration_status)} />
+          <Icon name={registrationIconByStatus(status)} />
           <Message.Content>
             <Message.Header>
               {i18n.t(
-                `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
+                `competitions.registration_v2.register.registration_status.${status}`,
               )}
             </Message.Header>
           </Message.Content>
