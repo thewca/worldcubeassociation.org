@@ -249,7 +249,6 @@ export default function CompetingStep({
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
               id="event-selection"
-              required
               maxEvents={maxEvents}
             />
             <p
@@ -291,7 +290,7 @@ export default function CompetingStep({
               }}
               min="0"
               label={<Label>{i18n.t('activerecord.attributes.registration.guests')}</Label>}
-              max={competitionInfo.guests_per_registration_limit ?? 10}
+              max={competitionInfo.guests_per_registration_limit ?? Infinity}
             />
           </Form.Field>
         </Form>
@@ -387,7 +386,10 @@ export default function CompetingStep({
               fluid
               icon
               labelPosition="left"
-              disabled={isCreating}
+              disabled={
+              isCreating
+                || (competitionInfo.guests_per_registration_limit ?? Infinity) < guests
+}
               onClick={() => attemptAction(actionCreateRegistration)}
             >
               <Icon name="paper plane" />

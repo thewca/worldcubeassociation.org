@@ -2,11 +2,15 @@ import React from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 const queryClient = new QueryClient({
-  refetchOnWindowFocus: false,
-  refetchOnReconnect: false,
-  staleTime: Infinity,
-  refetchOnMount: 'always',
-  retry: false,
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+      staleTime: Infinity,
+      refetchOnMount: 'always',
+      retry: false,
+    },
+  },
 });
 
 export default function WCAQueryClientProvider({ children }) {
