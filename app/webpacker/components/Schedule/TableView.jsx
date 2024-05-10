@@ -23,6 +23,7 @@ import {
   advancementConditionToString,
   cutoffToString,
 } from '../../lib/utils/wcif';
+import '../../stylesheets/schedule_events.scss';
 
 export default function TableView({
   dates,
@@ -120,7 +121,7 @@ function SingleDayTable({
         {title}
       </Header>
 
-      <Grid centered divided="vertically">
+      <Grid centered divided="vertically" className="schedule-events">
         <HeaderRow isExpanded={isExpanded} />
 
         {hasActivities ? (
