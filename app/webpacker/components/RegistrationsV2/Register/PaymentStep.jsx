@@ -6,6 +6,7 @@ import {
   Divider,
   Form,
   FormField,
+  Header,
   Label,
   Segment,
 } from 'semantic-ui-react';
@@ -95,14 +96,12 @@ export default function PaymentStep({
           ? <Loading />
           : (
             <>
-              <div>
-                <b>
-                  Subtotal:
-                  {' '}
-                  {displayAmount}
-                </b>
-              </div>
-              <FormField />
+              <Header size="small">
+                Subtotal:
+                {' '}
+                {displayAmount}
+              </Header>
+              <Divider hidden />
               <Button attached type="submit" primary disabled={isLoading || !stripe || !elements} id="submit">
                 {i18n.t('registrations.payment_form.button_text')}
               </Button>

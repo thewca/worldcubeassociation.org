@@ -72,7 +72,10 @@ export default function CompetingStep({
       dispatch(setMessage('registrations.flash.updated', 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
-        data.registration,
+        {
+          ...data.registration,
+          payment: registration.payment,
+        },
       );
     },
   });
