@@ -44,6 +44,11 @@ export default function ContactForm({ loggedInUserData }) {
     setContactSuccess(true);
   };
 
+  const recipientChangeHandler = (__, { value }) => {
+    setContactSuccess(false);
+    dispatch(updateContactRecipient(value));
+  };
+
   const SubForm = useMemo(() => {
     if (!selectedContactRecipient) return null;
     switch (selectedContactRecipient) {
@@ -93,7 +98,7 @@ export default function ContactForm({ loggedInUserData }) {
                 name="contactRecipient"
                 value={contactRecipient}
                 checked={selectedContactRecipient === contactRecipient}
-                onChange={(__, { value }) => dispatch(updateContactRecipient(value))}
+                onChange={recipientChangeHandler}
               />
             </FormField>
           ))}

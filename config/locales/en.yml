@@ -789,7 +789,7 @@ en:
     contacts:
       title: "WCA Contact Form"
       faq_note_html: 'Before making an inquiry, you may wish to take a look at our <a href="/faq">Frequently Asked Questions</a>! If you wish to contact a specific committee or team not listed here, you may check their details on <a href="/teams-committees-councils">this page</a>.'
-      success_message: 'Successfully sent an email, you will get a reply soon.'
+      success_message: 'Email successfully sent! We will get back to you soon.'
       form:
         user_data:
           name:
