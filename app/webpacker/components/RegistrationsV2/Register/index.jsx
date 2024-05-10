@@ -1,17 +1,16 @@
 import React, { useRef } from 'react';
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import StepPanel from './StepPanel';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import Loading from '../../Requests/Loading';
 import RegistrationMessage, { setMessage } from './RegistrationMessage';
 import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider';
 import messageReducer from '../reducers/messageReducer';
-
-const queryClient = new QueryClient();
+import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 
 export default function Index({ competitionInfo, userInfo, preferredEvents }) {
   return (
-    <QueryClientProvider client={queryClient}>
+    <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
         <Register
           competitionInfo={competitionInfo}
@@ -19,7 +18,7 @@ export default function Index({ competitionInfo, userInfo, preferredEvents }) {
           preferredEvents={preferredEvents}
         />
       </StoreProvider>
-    </QueryClientProvider>
+    </WCAQueryClientProvider>
   );
 }
 
@@ -33,11 +32,6 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
     queryFn: () => getSingleRegistration(userInfo.id, competitionInfo.id),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-    retry: false,
     onError: (data) => {
       const { error } = data.json;
       dispatch(setMessage(
