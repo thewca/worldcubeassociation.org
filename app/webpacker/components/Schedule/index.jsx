@@ -178,6 +178,7 @@ export default function Schedule({
           activeEvents={activeEvents}
           activeVenueOrNull={activeVenueOrNull}
           competitionName={competitionName}
+          wcifEvents={wcifEvents}
         />
       )}
     </>

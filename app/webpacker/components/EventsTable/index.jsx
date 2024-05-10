@@ -9,13 +9,13 @@ import {
 } from 'semantic-ui-react';
 import i18n from '../../lib/i18n';
 import { attemptResultToString } from '../../lib/utils/edit-events';
-import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
+import { attemptTypeById } from '../../lib/wca-live/attempts';
 import { events, formats } from '../../lib/wca-data.js.erb';
-import { eventQualificationToString, getRoundTypeId } from '../../lib/utils/wcif';
+import { eventQualificationToString, getRoundTypeId, timeLimitToString } from '../../lib/utils/wcif';
 
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
-    <Table striped selectable>
+    <Table striped selectable compact>
       <TableHeader>
         <TableRow>
           <TableHeaderCell>
@@ -60,10 +60,17 @@ export default function EventsTable({ competitionInfo, wcifEvents }) {
               {formats.byId[round.format].shortName}
             </TableCell>
             <TableCell>
-              {round.timeLimit
-                && centisecondsToClockFormat(
-                  round.timeLimit.centiseconds,
-                )}
+              {timeLimitToString(round, wcifEvents)}
+              {round.timeLimit !== null && (
+                <>
+                  {round.timeLimit.cumulativeRoundIds.length === 1 && (
+                    <a href="#cumulative-time-limit">*</a>
+                  )}
+                  {round.timeLimit.cumulativeRoundIds.length > 1 && (
+                    <a href="#cumulative-across-rounds-time-limit">**</a>
+                  )}
+                </>
+              )}
             </TableCell>
             {competitionInfo['uses_cutoff?'] && (
               <TableCell>

@@ -16,9 +16,9 @@ import AddToCalendar from './AddToCalendar';
 import useStoredState from '../../lib/hooks/useStoredState';
 import i18n from '../../lib/i18n';
 import { formats } from '../../lib/wca-data.js.erb';
-import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
+import { attemptTypeById } from '../../lib/wca-live/attempts';
 import { attemptResultToString } from '../../lib/utils/edit-events';
-import { parseActivityCode } from '../../lib/utils/wcif';
+import { parseActivityCode, timeLimitToString } from '../../lib/utils/wcif';
 
 export default function TableView({
   dates,
@@ -27,6 +27,7 @@ export default function TableView({
   activeEvents,
   activeVenueOrNull,
   competitionName,
+  wcifEvents,
 }) {
   const activeRounds = activeEvents.flatMap((event) => event.rounds);
 
@@ -69,6 +70,7 @@ export default function TableView({
             isExpanded={isExpanded}
             activeVenueOrNull={activeVenueOrNull}
             competitionName={competitionName}
+            wcifEvents={wcifEvents}
           />
         );
       })}
@@ -86,6 +88,7 @@ function SingleDayTable({
   isExpanded,
   activeVenueOrNull,
   competitionName,
+  wcifEvents,
 }) {
   const title = i18n.t('competitions.schedule.schedule_for_full_date', { date: date.toLocaleString(DateTime.DATE_HUGE) });
 
@@ -113,7 +116,7 @@ function SingleDayTable({
         {title}
       </Header>
 
-      <Table striped>
+      <Table striped compact>
         <Table.Header>
           <HeaderRow isExpanded={isExpanded} />
         </Table.Header>
@@ -134,6 +137,7 @@ function SingleDayTable({
                   round={activityRound}
                   rooms={rooms}
                   timeZone={timeZone}
+                  wcifEvents={wcifEvents}
                 />
               );
             })
@@ -176,6 +180,7 @@ function ActivityRow({
   round,
   rooms,
   timeZone,
+  wcifEvents,
 }) {
   const representativeActivity = activityGroup[0];
 
@@ -211,10 +216,17 @@ function ActivityRow({
           </Table.Cell>
 
           <TableCell>
-            {timeLimit
-              && centisecondsToClockFormat(
-                timeLimit.centiseconds,
-              )}
+            {round && timeLimitToString(round, wcifEvents)}
+            {timeLimit && (
+              <>
+                {timeLimit.cumulativeRoundIds.length === 1 && (
+                  <a href="#cumulative-time-limit">*</a>
+                )}
+                {timeLimit.cumulativeRoundIds.length > 1 && (
+                  <a href="#cumulative-across-rounds-time-limit">**</a>
+                )}
+              </>
+            )}
           </TableCell>
 
           <TableCell>
