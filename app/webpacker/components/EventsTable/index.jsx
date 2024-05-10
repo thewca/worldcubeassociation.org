@@ -20,7 +20,7 @@ import {
 export default function EventsTable({ competitionInfo, wcifEvents }) {
   return (
     <div style={{ overflowX: 'scroll' }}>
-      <Table striped selectable compact unstackable>
+      <Table striped selectable compact unstackable singleLine>
         <TableHeader>
           <TableRow>
             <TableHeaderCell>
