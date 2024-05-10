@@ -6,16 +6,18 @@ import { useState } from 'react';
  *
  * Do NOT call this twice with the same key - updating one of such a pair
  * will not update the other's state.
- *
- * Currently only works for strings, but can be generalized with JSON.parse
- * and JSON.stringify if needed.
  */
 export default function useStoredState(initialState, key) {
-  const storedState = localStorage.getItem(key);
+  let storedState;
+  try {
+    storedState = JSON.parse(localStorage.getItem(key));
+  } catch {
+    storedState = null;
+  }
 
   const [state, setState] = useState(() => {
     if (storedState === null) {
-      localStorage.setItem(key, initialState);
+      localStorage.setItem(key, JSON.stringify(initialState));
       return initialState;
     }
     return storedState;
@@ -23,7 +25,7 @@ export default function useStoredState(initialState, key) {
 
   function setAndStoreState(newState) {
     setState(newState);
-    localStorage.setItem(key, newState);
+    localStorage.setItem(key, JSON.stringify(newState));
   }
 
   return [state, setAndStoreState];

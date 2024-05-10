@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import React, { useState } from 'react';
+import React from 'react';
 import {
   Checkbox, Header, Segment, Table, TableCell,
 } from 'semantic-ui-react';
@@ -13,6 +13,7 @@ import {
 import { getSimpleTimeString } from '../../lib/utils/dates';
 import { toDegrees } from '../../lib/utils/edit-schedule';
 import AddToCalendar from './AddToCalendar';
+import useStoredState from '../../lib/hooks/useStoredState';
 import i18n from '../../lib/i18n';
 import { formats } from '../../lib/wca-data.js.erb';
 import { attemptTypeById, centisecondsToClockFormat } from '../../lib/wca-live/attempts';
@@ -29,7 +30,7 @@ export default function TableView({
 }) {
   const activeRounds = activeEvents.flatMap((event) => event.rounds);
 
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isExpanded, setIsExpanded] = useStoredState(true, 'scheduleTableExpanded');
 
   const sortedActivities = activeRooms
     .flatMap((room) => room.activities)
