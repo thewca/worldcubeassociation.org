@@ -23,7 +23,7 @@ function ListView({
     if (hasMoreCompsToLoad && bottomInView) {
       fetchMoreCompetitions();
     }
-  }, [bottomInView, hasMoreCompsToLoad, fetchMoreCompetitions]);
+  }, [bottomInView, hasMoreCompsToLoad, fetchMoreCompetitions, competitions]);
 
   switch (filterState.timeOrder) {
     case 'present': {
