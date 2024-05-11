@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Icon, Popup, Loader, Table, Flag, Label, Segment, Header, Container, Grid,
+  Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid,
 } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
@@ -35,7 +35,7 @@ function ListViewSection({
           </Label>
         )}
       </Header>
-      <CompetitionsTable
+      <ResponsiveCompetitionsTables
         competitions={competitions}
         isLoading={isLoading}
         shouldShowRegStatus={shouldShowRegStatus}
@@ -46,25 +46,65 @@ function ListViewSection({
   );
 }
 
-export function CompetitionsTable({
+function ResponsiveCompetitionsTables({
   competitions,
   isLoading,
   shouldShowRegStatus,
   regStatusLoading,
-  isSortedByAnnouncement = false,
+  isSortedByAnnouncement,
 }) {
-  const nonePresent = !competitions && !isLoading;
+  const noCompetitons = !competitions || competitions.length === 0;
 
-  if (nonePresent || competitions?.length === 0) {
+  if (noCompetitons && !isLoading) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );
   }
 
   return (
-    <Table striped compact="very" basic size="small">
-      <Table.Header>
+    <Grid centered>
+      <Grid.Row only="computer">
+        <CompetitionsTable
+          competitions={competitions}
+          isLoading={isLoading}
+          shouldShowRegStatus={shouldShowRegStatus}
+          regStatusLoading={regStatusLoading}
+          isSortedByAnnouncement={isSortedByAnnouncement}
+        />
+      </Grid.Row>
+      <Grid.Row only="tablet">
+        <CompetitionsTabletTable
+          competitions={competitions}
+          isLoading={isLoading}
+          shouldShowRegStatus={shouldShowRegStatus}
+          regStatusLoading={regStatusLoading}
+          isSortedByAnnouncement={isSortedByAnnouncement}
+        />
+      </Grid.Row>
+      <Grid.Row only="mobile">
+        <CompetitionsMobileTable
+          competitions={competitions}
+          isLoading={isLoading}
+          shouldShowRegStatus={shouldShowRegStatus}
+          regStatusLoading={regStatusLoading}
+          isSortedByAnnouncement={isSortedByAnnouncement}
+        />
+      </Grid.Row>
+    </Grid>
+  );
+}
+
+export function CompetitionsTable({
+  competitions,
+  shouldShowRegStatus,
+  regStatusLoading,
+  isSortedByAnnouncement = false,
+}) {
+  return (
+    <Table striped compact basic="very">
+      <Table.Header fullWidth>
         <Table.Row>
+          <Table.HeaderCell />
           <Table.HeaderCell textAlign="right">{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.name')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.location')}</Table.HeaderCell>
@@ -80,13 +120,15 @@ export function CompetitionsTable({
               isSortedByAnnouncement={isSortedByAnnouncement}
             />
             <Table.Row error={isCancelled(comp)}>
-              <Table.Cell textAlign="right" width={2}>
+              <Table.Cell collapsing>
                 <StatusIcon
                   comp={comp}
                   shouldShowRegStatus={shouldShowRegStatus}
                   isSortedByAnnouncement={isSortedByAnnouncement}
                   regStatusLoading={regStatusLoading}
                 />
+              </Table.Cell>
+              <Table.Cell textAlign="right" width={2}>
                 {comp.date_range}
               </Table.Cell>
               <Table.Cell width={6}>
@@ -98,6 +140,103 @@ export function CompetitionsTable({
                 {`, ${comp.city}`}
               </Table.Cell>
               <Table.Cell width={4}>
+                <PseudoLinkMarkdown text={comp.venue} />
+              </Table.Cell>
+            </Table.Row>
+          </React.Fragment>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}
+
+export function CompetitionsTabletTable({
+  competitions,
+  shouldShowRegStatus,
+  regStatusLoading,
+  isSortedByAnnouncement = false,
+}) {
+  return (
+    <Table striped compact="very" basic size="small">
+      <Table.Header fullWidth>
+        <Table.Row>
+          <Table.HeaderCell />
+          <Table.HeaderCell textAlign="right">{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.name')}</Table.HeaderCell>
+          <Table.HeaderCell>{I18n.t('competitions.competition_info.location_and_venue')}</Table.HeaderCell>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {competitions?.map((comp, index) => (
+          <React.Fragment key={comp.id}>
+            <ConditionalYearHeader
+              competitions={competitions}
+              index={index}
+              isSortedByAnnouncement={isSortedByAnnouncement}
+            />
+            <Table.Row error={isCancelled(comp)}>
+              <Table.Cell collapsing>
+                <StatusIcon
+                  comp={comp}
+                  shouldShowRegStatus={shouldShowRegStatus}
+                  isSortedByAnnouncement={isSortedByAnnouncement}
+                  regStatusLoading={regStatusLoading}
+                />
+              </Table.Cell>
+              <Table.Cell textAlign="right" width={3}>
+                {comp.date_range}
+              </Table.Cell>
+              <Table.Cell width={6}>
+                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <a href={comp.url}>{comp.short_display_name}</a>
+              </Table.Cell>
+              <Table.Cell width={7}>
+                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                {`, ${comp.city}`}
+                <PseudoLinkMarkdown text={comp.venue} />
+              </Table.Cell>
+            </Table.Row>
+          </React.Fragment>
+        ))}
+      </Table.Body>
+    </Table>
+  );
+}
+
+export function CompetitionsMobileTable({
+  competitions,
+  shouldShowRegStatus,
+  regStatusLoading,
+  isSortedByAnnouncement = false,
+}) {
+  return (
+    <Table striped compact="very" basic size="small">
+      <Table.Body>
+        {competitions?.map((comp, index) => (
+          <React.Fragment key={comp.id}>
+            <ConditionalYearHeader
+              competitions={competitions}
+              index={index}
+              isSortedByAnnouncement={isSortedByAnnouncement}
+            />
+            <Table.Row error={isCancelled(comp)}>
+              <Table.Cell textAlign="right">
+                {comp.date_range}
+                {' '}
+                <StatusIcon
+                  comp={comp}
+                  shouldShowRegStatus={shouldShowRegStatus}
+                  isSortedByAnnouncement={isSortedByAnnouncement}
+                  regStatusLoading={regStatusLoading}
+                />
+              </Table.Cell>
+              <Table.Cell>
+                <Flag name={comp.country_iso2?.toLowerCase()} />
+                <a href={comp.url}>{comp.short_display_name}</a>
+              </Table.Cell>
+              <Table.Cell>
+                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                {`, ${comp.city}`}
                 <PseudoLinkMarkdown text={comp.venue} />
               </Table.Cell>
             </Table.Row>

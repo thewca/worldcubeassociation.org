@@ -18,6 +18,7 @@ function ListView({
   hasMoreCompsToLoad,
 }) {
   const { ref: bottomRef, inView: bottomInView } = useInView();
+
   useEffect(() => {
     if (hasMoreCompsToLoad && bottomInView) {
       fetchMoreCompetitions();
@@ -30,6 +31,7 @@ function ListView({
       const upcomingComps = competitions?.filter((comp) => (
         !isInProgress(comp) && !isProbablyOver(comp)
       ));
+
       return (
         <>
           <ListViewSection
