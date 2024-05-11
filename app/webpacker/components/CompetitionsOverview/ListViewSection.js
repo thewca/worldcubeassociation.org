@@ -29,10 +29,10 @@ function ListViewSection({
     <>
       <Header>
         {title}
-        {competitions && (
-          <Label horizontal>
-            {hasMoreCompsToLoad && <Icon name="angle double down" />}
-            {competitions?.length}
+        {competitions && competitions.length > 0 && (
+          <Label horizontal size="large">
+            {competitions.length}
+            {hasMoreCompsToLoad && '+'}
           </Label>
         )}
       </Header>
