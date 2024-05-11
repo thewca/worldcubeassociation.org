@@ -26,7 +26,8 @@ const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
 const DEFAULT_YEAR = 'all_years';
 const DEFAULT_DATE = null;
-const DEFAULT_REGION = 'all';
+const DEFAULT_REGION_ALL = 'all';
+const DEFAULT_REGION = '';
 const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
 const INCLUDE_CANCELLED_TRUE = 'on';
@@ -71,7 +72,7 @@ const sanitizeRegion = (region) => {
     ({ id, name }) => region === id || region === name,
   );
   const country = countries.real.find(({ id, iso2 }) => region === id || region === iso2);
-  return continent?.id ?? country?.iso2 ?? DEFAULT_REGION;
+  return continent?.id ?? country?.iso2 ?? DEFAULT_REGION_ALL;
 };
 
 const sanitizeEvents = (values) => (values || []).filter(
@@ -121,6 +122,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
   searchParams.delete(YEAR, DEFAULT_YEAR);
 
   searchParams.set(REGION, region);
+  searchParams.delete(REGION, DEFAULT_REGION_ALL);
   searchParams.delete(REGION, DEFAULT_REGION);
 
   searchParams.set(DELEGATE, delegate);

@@ -131,7 +131,9 @@ function RegionSelector({ region, dispatchFilter }) {
       key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(countries.real).map((country) => (
-      { key: country.id, text: country.name, value: country.iso2 }
+      {
+        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+      }
     ))),
   ];
 
@@ -141,6 +143,7 @@ function RegionSelector({ region, dispatchFilter }) {
       <Dropdown
         search
         selection
+        clearable
         value={region}
         options={regionsOptions}
         onChange={(_, data) => dispatchFilter({ region: data.value })}
