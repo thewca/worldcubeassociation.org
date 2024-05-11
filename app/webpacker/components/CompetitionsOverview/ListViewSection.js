@@ -3,6 +3,7 @@ import {
   Icon, Popup, Loader, Table, Flag, Label, Header, Container, Grid,
 } from 'semantic-ui-react';
 
+import { BarLoader } from 'react-spinners';
 import I18n from '../../lib/i18n';
 import {
   dayDifferenceFromToday,
@@ -38,10 +39,12 @@ function ListViewSection({
       <ResponsiveCompetitionsTables
         competitions={competitions}
         isLoading={isLoading}
+        hasMoreCompsToLoad={hasMoreCompsToLoad}
         shouldShowRegStatus={shouldShowRegStatus}
         regStatusLoading={regStatusLoading}
         isSortedByAnnouncement={isSortedByAnnouncement}
       />
+      {isLoading && <BarLoader cssOverride={{ width: '100%' }} />}
     </>
   );
 }
@@ -49,13 +52,14 @@ function ListViewSection({
 function ResponsiveCompetitionsTables({
   competitions,
   isLoading,
+  hasMoreCompsToLoad,
   shouldShowRegStatus,
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
   const noCompetitons = !competitions || competitions.length === 0;
 
-  if (noCompetitons && !isLoading) {
+  if (noCompetitons && !isLoading && !hasMoreCompsToLoad) {
     return (
       <Container text textAlign="center">{I18n.t('competitions.index.no_comp_found')}</Container>
     );

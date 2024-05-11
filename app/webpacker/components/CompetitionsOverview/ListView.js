@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import BarLoader from 'react-spinners/BarLoader';
 
+import { Container } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
 
@@ -28,6 +28,7 @@ function ListView({
   switch (filterState.timeOrder) {
     case 'present': {
       const inProgressComps = competitions?.filter((comp) => isInProgress(comp));
+
       const upcomingComps = competitions?.filter((comp) => (
         !isInProgress(comp) && !isProbablyOver(comp)
       ));
@@ -38,16 +39,16 @@ function ListView({
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading && !upcomingComps?.length}
             regStatusLoading={regStatusLoading}
+            isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
           />
           <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             regStatusLoading={regStatusLoading}
+            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -144,15 +145,11 @@ function ListView({
 function ListViewFooter({
   isLoading, hasMoreCompsToLoad, numCompetitions, bottomRef,
 }) {
-  if (isLoading) {
-    return <BarLoader cssOverride={{ width: '100%' }} />;
-  }
-
-  if (!hasMoreCompsToLoad) {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
-      </div>
+  if (!isLoading && !hasMoreCompsToLoad) {
+    return numCompetitions > 0 && (
+      <Container text textAlign="center">
+        {I18n.t('competitions.index.no_more_comps')}
+      </Container>
     );
   }
 
