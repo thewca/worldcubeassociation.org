@@ -37,8 +37,8 @@ export function hasResultsPosted(competition) {
 }
 
 export function isInProgress(competition) {
-  const startDate = parseDateString(competition.start_date);
-  const endDate = parseDateString(competition.end_date);
+  const startDate = parseDateString(competition.start_date).startOf('day');
+  const endDate = parseDateString(competition.end_date).endOf('day');
 
   const running = Interval.fromDateTimes(startDate, endDate).contains(DateTime.now());
 
