@@ -88,7 +88,7 @@ function CompetitionsView() {
       body: JSON.stringify({ ids: compIds }),
     }),
     queryKey: ['registration-info', ...compIds],
-    enabled: shouldShowRegStatus,
+    enabled: shouldShowRegStatus && compIds.length > 0,
     // This is where the magic happens: Using `keepPreviousData` makes it so that
     //   all previously loaded indicators are held in-cache while the fetcher for the next
     //   batch is running in the background. (Adding comment here because it's not in the docs)
@@ -97,7 +97,7 @@ function CompetitionsView() {
   });
 
   const competitions = useMemo(() => (shouldShowRegStatus ? (
-    baseCompetitions.map((comp) => {
+    baseCompetitions?.map((comp) => {
       const regData = compRegistrationData?.find((reg) => reg.id === comp.id);
       return regData ? { ...comp, ...regData } : comp;
     })
