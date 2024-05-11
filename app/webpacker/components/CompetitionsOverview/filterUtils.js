@@ -1,11 +1,8 @@
 import { DateTime } from 'luxon';
 import {
-  events, continents, countries, nonFutureCompetitionYears,
+  continents, countries, nonFutureCompetitionYears,
 } from '../../lib/wca-data.js.erb';
-
-// constants
-
-const WCA_EVENT_IDS = Object.keys(events.byId);
+import { WCA_EVENT_IDS } from './CompetitionsFilters';
 
 // note: inconsistencies with previous search params
 // - year value was 'all+years', is now 'all_years'

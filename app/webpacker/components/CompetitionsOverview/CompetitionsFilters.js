@@ -12,7 +12,7 @@ import {
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
 
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function CompetitionsFilters({
   filterState,
