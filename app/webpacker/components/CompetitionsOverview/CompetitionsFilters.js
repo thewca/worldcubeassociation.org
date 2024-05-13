@@ -87,8 +87,8 @@ export function EventSelector({
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
-        <Button type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        <Button disabled={disabled} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
 
       <div id="events">

@@ -278,6 +278,7 @@ export default function CompetingStep({
               onEventSelection={handleEventSelection}
               eventList={competitionInfo.event_ids}
               selectedEvents={selectedEvents}
+              disabled={!canUpdateRegistration}
               id="event-selection"
             />
             <p
@@ -293,6 +294,7 @@ export default function CompetingStep({
               {i18n.t('competitions.registration_v2.register.comment')}
             </label>
             <TextArea
+              disabled={!canUpdateRegistration}
               maxLength={maxCommentLength}
               onChange={(_, data) => setComment(data.value)}
               value={comment}
@@ -313,6 +315,7 @@ export default function CompetingStep({
             <Input
               id="guest-dropdown"
               type="number"
+              disabled={!canUpdateRegistration}
               value={guests}
               onChange={(_, data) => {
                 setGuests(Number.parseInt(data.value, 10));
