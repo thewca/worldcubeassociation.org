@@ -17,26 +17,19 @@ class UserGroup < ApplicationRecord
   }
 
   has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
+  has_many :roles, foreign_key: "group_id", class_name: "UserRole"
+  has_many :active_roles, -> { active }, foreign_key: "group_id", class_name: "UserRole"
+  has_many :users, through: :roles
+  has_many :active_users, through: :active_roles, source: :user, class_name: "User"
+
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
-
-  has_many :roles, foreign_key: "group_id", class_name: "UserRole"
 
   scope :root_groups, -> { where(parent_group: nil) }
   scope :active_groups, -> { where(is_active: true) }
 
   def all_child_groups
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
-  end
-
-  # For teams which have groups migrated but not roles, this method will help to get the
-  # corresponding team to fetch the team_members.
-  def team
-    Team.find_by(friendly_id: self.metadata.friendly_id)
-  end
-
-  def active_roles
-    self.roles.select { |role| role.is_active? }
   end
 
   def roles_of_direct_child_groups
@@ -53,14 +46,6 @@ class UserGroup < ApplicationRecord
 
   def active_roles_of_all_child_groups
     self.all_child_groups.map(&:active_roles).flatten
-  end
-
-  def users
-    self.roles.map { |role| role.user }
-  end
-
-  def active_users
-    self.active_roles.map { |role| role.user }
   end
 
   def users_of_direct_child_groups
@@ -99,22 +84,6 @@ class UserGroup < ApplicationRecord
       board: "Board",
       officers: "Officers",
     }
-  end
-
-  def self.delegate_region_groups
-    UserGroup.where(group_type: UserGroup.group_types[:delegate_regions])
-  end
-
-  def self.delegate_region_groups_senior_delegates
-    UserGroup.delegate_region_groups.root_groups.map(&:lead_user).compact
-  end
-
-  def self.delegate_probation_groups
-    UserGroup.where(group_type: UserGroup.group_types[:delegate_probation])
-  end
-
-  def self.translator_groups
-    UserGroup.where(group_type: UserGroup.group_types[:translators])
   end
 
   def self.board_group
@@ -198,7 +167,7 @@ class UserGroup < ApplicationRecord
   end
 
   def lead_role
-    self.active_roles.find { |role| role.is_lead? }
+    active_roles.includes(:group, :metadata).find { |role| role.is_lead? }
   end
 
   # TODO: Once the roles migration is done, add a validation to make sure there is only one lead_user per group.

@@ -7,10 +7,13 @@ class RolesMetadataTeamsCommittees < ApplicationRecord
     member: "member",
   }
 
+  has_one :user_role, as: :metadata
+  has_one :user, through: :user_role
+
   def at_least_senior_member?
     [
-      RolesMetadataTeamsCommittees.statuses[:senior_member],
-      RolesMetadataTeamsCommittees.statuses[:leader],
+      statuses[:senior_member],
+      statuses[:leader],
     ].include?(status)
   end
 end
