@@ -10,8 +10,6 @@ class RolesMetadataTeamsCommittees < ApplicationRecord
   has_one :user_role, as: :metadata
   has_one :user, through: :user_role
 
-  scope :leader, -> { where(status: statuses[:leader]) }
-
   def at_least_senior_member?
     [
       statuses[:senior_member],
