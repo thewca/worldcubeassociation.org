@@ -19,8 +19,12 @@ class UserGroup < ApplicationRecord
   has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
   has_many :roles, foreign_key: "group_id", class_name: "UserRole"
   has_many :active_roles, -> { active }, foreign_key: "group_id", class_name: "UserRole"
+  has_many :roles_of_direct_child_groups, through: :direct_child_groups, source: :roles
+  has_many :active_roles_of_direct_child_groups, -> { active }, through: :direct_child_groups, source: :roles
   has_many :users, through: :roles
-  has_many :active_users, through: :active_roles, source: :user, class_name: "User"
+  has_many :active_users, through: :active_roles, source: :user
+  has_many :users_of_direct_child_groups, through: :roles_of_direct_child_groups, source: :user
+  has_many :active_users_of_direct_child_groups, through: :active_roles_of_direct_child_groups, source: :user
 
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
@@ -32,32 +36,16 @@ class UserGroup < ApplicationRecord
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
 
-  def roles_of_direct_child_groups
-    self.direct_child_groups.map(&:roles).flatten
-  end
-
   def roles_of_all_child_groups
     self.all_child_groups.map(&:roles).flatten
-  end
-
-  def active_roles_of_direct_child_groups
-    self.direct_child_groups.map(&:active_roles).flatten
   end
 
   def active_roles_of_all_child_groups
     self.all_child_groups.map(&:active_roles).flatten
   end
 
-  def users_of_direct_child_groups
-    self.roles_of_direct_child_groups.map { |role| role.user }
-  end
-
   def users_of_all_child_groups
     self.roles_of_all_child_groups.map { |role| role.user }
-  end
-
-  def active_users_of_direct_child_groups
-    self.active_roles_of_direct_child_groups.map { |role| role.user }
   end
 
   def active_users_of_all_child_groups

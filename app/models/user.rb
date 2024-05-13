@@ -53,8 +53,6 @@ class User < ApplicationRecord
     end
   }
 
-  scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
-
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
