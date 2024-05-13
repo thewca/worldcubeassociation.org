@@ -36,7 +36,7 @@ function Register({
   const ref = useRef();
   const {
     data: registration,
-    isLoading,
+    isFetching,
     refetch,
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
@@ -55,7 +55,7 @@ function Register({
   });
 
   return (
-    isLoading ? <Loading />
+    isFetching ? <Loading />
       : (
         <>
           <RegistrationMessage parentRef={ref} />

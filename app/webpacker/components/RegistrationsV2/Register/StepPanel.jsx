@@ -22,7 +22,7 @@ const paymentStepConfig = {
   component: StripeWrapper,
 };
 
-const registrationOverViewConfig = {
+const registrationOverviewConfig = {
   index: -100,
 };
 
@@ -48,7 +48,7 @@ export default function StepPanel({
 
   const [activeIndex, setActiveIndex] = useState(() => {
     if (hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?'])) {
-      return -100;
+      return registrationOverviewConfig.index;
     }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
     return steps.findIndex(
@@ -56,7 +56,7 @@ export default function StepPanel({
     );
   });
 
-  if (activeIndex === registrationOverViewConfig.index) {
+  if (activeIndex === registrationOverviewConfig.index) {
     const status = registration.competing.registration_status;
     return (
       <RegistrationOverview
@@ -97,7 +97,7 @@ export default function StepPanel({
         nextStep={
           () => setActiveIndex((oldActiveIndex) => {
             if (oldActiveIndex === steps.length - 1) {
-              return registrationOverViewConfig.index;
+              return registrationOverviewConfig.index;
             }
             return oldActiveIndex + 1;
           })

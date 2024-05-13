@@ -247,12 +247,13 @@ export default function CompetingStep({
         <Processing
           competitionInfo={competitionInfo}
           user={user}
-          onProcessingComplete={() => {
+          onProcessingComplete={async () => {
             setProcessing(false);
             if (competitionInfo['using_payment_integrations?']) {
               nextStep();
             } else {
-              refetchRegistration();
+              await refetchRegistration();
+              nextStep();
             }
           }}
         />
@@ -323,9 +324,6 @@ export default function CompetingStep({
           </Form.Field>
         </Form>
         <Divider />
-        {console.log(isUpdating)}
-        {console.log(canUpdateRegistration)}
-        {console.log(hasChanges)}
         {isRegistered ? (
           <ButtonGroup>
             {shouldShowUpdateButton && (
