@@ -77,9 +77,7 @@ export default function CompetingStep({
           payment: registration.payment,
         },
       );
-      if (hasPaid) {
-        nextStep();
-      }
+      nextStep();
     },
   });
 

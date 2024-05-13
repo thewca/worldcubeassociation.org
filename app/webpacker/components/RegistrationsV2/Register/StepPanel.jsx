@@ -1,12 +1,10 @@
 import React, { useMemo, useState } from 'react';
-import {
-  Button, Icon, Message, Popup, Step,
-} from 'semantic-ui-react';
+import { Step } from 'semantic-ui-react';
 import CompetingStep from './CompetingStep';
 import RegistrationRequirements from './RegistrationRequirements';
 import StripeWrapper from './StripeWrapper';
 import i18n from '../../../lib/i18n';
-import { getMediumDateString, hasPassed } from '../../../lib/utils/dates';
+import RegistrationOverview from './RegistrationOverview';
 
 const requirementsStepConfig = {
   key: 'requirements',
@@ -24,18 +22,9 @@ const paymentStepConfig = {
   component: StripeWrapper,
 };
 
-function registrationIconByStatus(registrationStatus) {
-  switch (registrationStatus) {
-    case 'pending':
-      return 'hourglass';
-    case 'accepted':
-      return 'checkmark';
-    case 'cancelled':
-      return 'cross';
-    default:
-      return 'info circle';
-  }
-}
+const registrationOverViewConfig = {
+  index: -100,
+};
 
 export default function StepPanel({
   competitionInfo,
@@ -49,12 +38,6 @@ export default function StepPanel({
   const isRegistered = Boolean(registration);
   const hasPaid = registration?.payment.payment_status === 'succeeded';
 
-  const hasRegistrationEditDeadlinePassed = hasPassed(
-    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
-  );
-  const canUpdateRegistration = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
-
   const steps = useMemo(() => {
     if (competitionInfo['using_payment_integrations?']) {
       return [requirementsStepConfig, competingStepConfig, paymentStepConfig];
@@ -64,74 +47,29 @@ export default function StepPanel({
   }, [competitionInfo]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
-    if (hasPaid) {
-      return -1;
+    if (hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?'])) {
+      return -100;
     }
+    // If the user has not paid but refreshes the page, we want to display the paymentStep again
     return steps.findIndex(
       (step) => step === (isRegistered ? paymentStepConfig : requirementsStepConfig),
     );
   });
 
-  if (activeIndex === -1) {
+  if (activeIndex === registrationOverViewConfig.index) {
     const status = registration.competing.registration_status;
     return (
-      <>
-        <Step.Group fluid ordered stackable="tablet">
-          {steps.map((stepConfig) => (
-            <Step
-              key={stepConfig.key}
-              completed
-            >
-              <Step.Content>
-                <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
-              </Step.Content>
-            </Step>
-          ))}
-        </Step.Group>
-        <Message
-          info={status === 'pending'}
-          success={status === 'accepted'}
-          negative={status === 'cancelled'}
-          icon
-        >
-          <Icon name={registrationIconByStatus(status)} />
-          <Message.Content>
-            <Message.Header>
-              {i18n.t(
-                `competitions.registration_v2.register.registration_status.${status}`,
-              )}
-            </Message.Header>
-          </Message.Content>
-        </Message>
-        <Popup
-          trigger={(
-            <Button
-              disabled={!canUpdateRegistration}
-              primary
-              attached
-              onClick={() => setActiveIndex(1)}
-            >
-              {i18n.t('registrations.update')}
-            </Button>
-)}
-          position="top center"
-          content={
-            canUpdateRegistration
-              ? i18n.t('competitions.registration_v2.register.until', {
-                date: getMediumDateString(
-                  competitionInfo.event_change_deadline_date
-                  ?? competitionInfo.start_date,
-                ),
-              })
-              : i18n.t('competitions.registration_v2.register.passed')
-          }
-        />
-      </>
+      <RegistrationOverview
+        status={status}
+        steps={steps}
+        competitionInfo={competitionInfo}
+        setToUpdate={
+        () => setActiveIndex(steps.findIndex((step) => step.key === competingStepConfig.key))
+}
+      />
     );
   }
-
   const CurrentStepPanel = steps[activeIndex].component;
-  const stepName = steps[activeIndex].key;
 
   return (
     <>
@@ -149,29 +87,23 @@ export default function StepPanel({
           </Step>
         ))}
       </Step.Group>
-      { stepName === 'payment' ? (
-        <CurrentStepPanel
-          registration={registration}
-          refetchRegistration={refetchRegistration}
-          competitionInfo={competitionInfo}
-          preferredEvents={preferredEvents}
-          user={user}
-          stripePublishableKey={stripePublishableKey}
-          connectedAccountId={connectedAccountId}
-          nextStep={() => setActiveIndex(-1)}
-        />
-      )
-        : (
-          <CurrentStepPanel
-            registration={registration}
-            refetchRegistration={refetchRegistration}
-            competitionInfo={competitionInfo}
-            preferredEvents={preferredEvents}
-            user={user}
-            nextStep={() => setActiveIndex((oldActiveIndex) => oldActiveIndex + 1)}
-          />
-        )}
-
+      <CurrentStepPanel
+        registration={registration}
+        refetchRegistration={refetchRegistration}
+        competitionInfo={competitionInfo}
+        preferredEvents={preferredEvents}
+        user={user}
+        stripePublishableKey={stripePublishableKey}
+        connectedAccountId={connectedAccountId}
+        nextStep={
+          () => setActiveIndex((oldActiveIndex) => {
+            if (oldActiveIndex === steps.length - 1) {
+              return registrationOverViewConfig.index;
+            }
+            return oldActiveIndex + 1;
+          })
+      }
+      />
     </>
   );
 }

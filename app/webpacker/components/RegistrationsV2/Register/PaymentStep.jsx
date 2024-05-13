@@ -115,7 +115,7 @@ export default function PaymentStep({
                 {displayAmount}
               </Header>
               <Divider hidden />
-              <Button attached type="submit" primary disabled={isLoading || !stripe || !elements} id="submit">
+              <Button type="submit" primary disabled={isLoading || !stripe || !elements} id="submit">
                 {i18n.t('registrations.payment_form.button_text')}
               </Button>
             </>
