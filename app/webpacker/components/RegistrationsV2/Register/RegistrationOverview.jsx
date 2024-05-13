@@ -1,9 +1,8 @@
 import React from 'react';
 import {
-  Button, Icon, Message, Popup, Step,
+  Button, Icon, Message, Step,
 } from 'semantic-ui-react';
 import i18n from '../../../lib/i18n';
-import { getMediumDateString, hasPassed } from '../../../lib/utils/dates';
 
 function registrationIconByStatus(registrationStatus) {
   switch (registrationStatus) {
@@ -19,14 +18,8 @@ function registrationIconByStatus(registrationStatus) {
 }
 
 export default function RegistrationOverview({
-  status, steps, competitionInfo, setToUpdate,
+  status, steps, setToUpdate,
 }) {
-  const hasRegistrationEditDeadlinePassed = hasPassed(
-    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
-  );
-  const canUpdateRegistration = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
-
   return (
     <>
       <Step.Group fluid ordered stackable="tablet">
@@ -56,29 +49,13 @@ export default function RegistrationOverview({
           </Message.Header>
         </Message.Content>
       </Message>
-      <Popup
-        trigger={(
-          <Button
-            disabled={!canUpdateRegistration}
-            primary
-            attached
-            onClick={setToUpdate}
-          >
-            {i18n.t('registrations.update')}
-          </Button>
-      )}
-        position="top center"
-        content={
-        canUpdateRegistration
-          ? i18n.t('competitions.registration_v2.register.until', {
-            date: getMediumDateString(
-              competitionInfo.event_change_deadline_date
-              ?? competitionInfo.start_date,
-            ),
-          })
-          : i18n.t('competitions.registration_v2.register.passed')
-      }
-      />
+      <Button
+        primary
+        attached
+        onClick={setToUpdate}
+      >
+        {i18n.t('competitions.registration_v2.register.view')}
+      </Button>
     </>
   );
 }

@@ -28,6 +28,26 @@ import i18n from '../../../lib/i18n';
 
 const maxCommentLength = 240;
 
+function updateRegistrationKey(editsAllowed, deadlinePassed) {
+  if (!editsAllowed && !deadlinePassed) {
+    return 'competitions.registration_v2.update.no_self_update';
+  }
+  if (deadlinePassed) {
+    return 'competitions.registration_v2.register.passed';
+  }
+  return 'competitions.registration_v2.register.until';
+}
+
+function deleteRegistrationKey(deleteAllowed, deadlinePassed) {
+  if (!deleteAllowed && !deadlinePassed) {
+    return 'competitions.registration_v2.update.no_self_delete';
+  }
+  if (deadlinePassed) {
+    return 'competitions.registration_v2.register.passed';
+  }
+  return 'competitions.registration_v2.register.until';
+}
+
 export default function CompetingStep({
   nextStep,
   competitionInfo,
@@ -104,6 +124,9 @@ export default function CompetingStep({
     competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
   );
   const canUpdateRegistration = competitionInfo.allow_registration_edits
+    && !hasRegistrationEditDeadlinePassed;
+
+  const canDeleteRegistration = competitionInfo.allow_registration_self_delete_after_acceptance
     && !hasRegistrationEditDeadlinePassed;
 
   const hasEventsChanged = registration?.competing
@@ -300,22 +323,41 @@ export default function CompetingStep({
           </Form.Field>
         </Form>
         <Divider />
-
+        {console.log(isUpdating)}
+        {console.log(canUpdateRegistration)}
+        {console.log(hasChanges)}
         {isRegistered ? (
-          <ButtonGroup widths={2}>
+          <ButtonGroup>
             {shouldShowUpdateButton && (
             <>
-              <Button
-                primary
-                disabled={
-                      isUpdating || !canUpdateRegistration || !hasChanges
-                    }
-                onClick={() => attemptAction(actionUpdateRegistration, {
-                  checkForChanges: true,
-                })}
-              >
-                {i18n.t('registrations.update')}
-              </Button>
+              <Popup
+                trigger={(
+                  <div style={{ display: 'inline-block' }}>
+                    <Button
+                      disabled={isUpdating || !canUpdateRegistration || !hasChanges}
+                      primary
+                      attached
+                      onClick={() => attemptAction(actionUpdateRegistration, {
+                        checkForChanges: true,
+                      })}
+                    >
+                      {i18n.t('registrations.update')}
+                    </Button>
+                  </div>
+                )}
+                position="top center"
+                content={
+                  i18n.t(updateRegistrationKey(
+                    competitionInfo.allow_registration_edits,
+                    hasRegistrationEditDeadlinePassed,
+                  ), {
+                    date: getMediumDateString(
+                      competitionInfo.event_change_deadline_date
+                      ?? competitionInfo.start_date,
+                    ),
+                  })
+                }
+              />
               <ButtonOr />
             </>
             )}
@@ -331,13 +373,31 @@ export default function CompetingStep({
             )}
 
             {shouldShowDeleteButton && (
-            <Button
-              disabled={isUpdating}
-              negative
-              onClick={actionDeleteRegistration}
-            >
-              {i18n.t('registrations.delete_registration')}
-            </Button>
+              <Popup
+                trigger={(
+                  <div style={{ display: 'inline-block' }}>
+                    <Button
+                      disabled={isUpdating || !canDeleteRegistration}
+                      negative
+                      onClick={actionDeleteRegistration}
+                    >
+                      {i18n.t('registrations.delete_registration')}
+                    </Button>
+                  </div>
+                )}
+                position="top center"
+                content={
+                  i18n.t(deleteRegistrationKey(
+                    competitionInfo.allow_registration_self_delete_after_acceptance,
+                    hasRegistrationEditDeadlinePassed,
+                  ), {
+                    date: getMediumDateString(
+                      competitionInfo.event_change_deadline_date
+                      ?? competitionInfo.start_date,
+                    ),
+                  })
+                }
+              />
             )}
           </ButtonGroup>
         ) : (

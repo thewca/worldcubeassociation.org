@@ -62,7 +62,6 @@ export default function StepPanel({
       <RegistrationOverview
         status={status}
         steps={steps}
-        competitionInfo={competitionInfo}
         setToUpdate={
         () => setActiveIndex(steps.findIndex((step) => step.key === competingStepConfig.key))
 }
