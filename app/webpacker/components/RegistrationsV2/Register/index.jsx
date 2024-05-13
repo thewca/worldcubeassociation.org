@@ -58,7 +58,7 @@ function Register({
     isLoading ? <Loading />
       : (
         <>
-          <RegistrationMessage ref={ref} />
+          <RegistrationMessage parentRef={ref} />
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}
