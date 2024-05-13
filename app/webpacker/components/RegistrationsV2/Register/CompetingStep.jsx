@@ -272,6 +272,17 @@ export default function CompetingStep({
           </Message>
         )}
 
+        {
+          !canUpdateRegistration && (
+            <Message info>
+              {i18n.t(updateRegistrationKey(
+                competitionInfo.allow_registration_edits,
+                hasRegistrationEditDeadlinePassed,
+              ))}
+            </Message>
+          )
+        }
+
         <Form>
           <Form.Field>
             <EventSelector
