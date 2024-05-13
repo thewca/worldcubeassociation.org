@@ -63,9 +63,11 @@ class ContactsController < ApplicationController
 
   def contact
     formValues = JSON.parse(params.require(:formValues), symbolize_names: true)
-    contact_recipient = formValues.fetch(:contactRecipient)
-    contact_params = formValues.fetch(contact_recipient.to_sym)
-    requestor_details = current_user || formValues.fetch(userData)
+    contact_recipient = formValues[:contactRecipient]
+    contact_params = formValues[contact_recipient.to_sym]
+    requestor_details = current_user || formValues[:userData]
+
+    render status: :bad_request, json: { error: "Invalid arguments" } if contact_recipient.nil? || contact_params.nil? || requestor_details.nil?
 
     case contact_recipient
     when UserGroup.teams_committees_group_wct.metadata.friendly_id
