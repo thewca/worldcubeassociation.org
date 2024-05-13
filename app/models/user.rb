@@ -68,8 +68,8 @@ class User < ApplicationRecord
   end
 
   def self.leader_senior_voters
-    team_leaders = UserGroup.teams_committees.map(&:lead_user)
-    senior_delegates = UserGroup.delegate_region_groups_senior_delegates
+    team_leaders = RolesMetadataTeamsCommittees.leader.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
+    senior_delegates = RolesMetadataDelegateRegions.senior_delegate.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
     (team_leaders + senior_delegates).uniq.compact
   end
 
@@ -1253,7 +1253,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
+    UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
 
   private def can_manage_delegate_probation?

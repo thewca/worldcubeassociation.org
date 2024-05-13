@@ -9,7 +9,7 @@ class SyncMailingListsJob < WcaCronjob
   def perform
     GsuiteMailingLists.sync_group("leaders@worldcubeassociation.org", UserGroup.teams_committees.map(&:lead_user).compact.map(&:email))
     GsuiteMailingLists.sync_group(GroupsMetadataBoard.email, UserGroup.board_group.active_users.map(&:email))
-    translator_users = UserGroup.translator_groups.flat_map(&:users)
+    translator_users = UserGroup.translators.flat_map(&:users)
     GsuiteMailingLists.sync_group("translators@worldcubeassociation.org", translator_users.map(&:email))
     User.clear_receive_delegate_reports_if_not_eligible
     GsuiteMailingLists.sync_group("reports@worldcubeassociation.org", User.delegate_reports_receivers_emails)
@@ -23,7 +23,7 @@ class SyncMailingListsJob < WcaCronjob
     delegate_emails = []
     trainee_emails = []
     senior_emails = []
-    active_root_delegate_regions = UserGroup.delegate_region_groups.where(parent_group_id: nil, is_active: true)
+    active_root_delegate_regions = UserGroup.delegate_regions.where(parent_group_id: nil, is_active: true)
     active_root_delegate_regions.each do |region|
       region_emails = []
       (region.active_roles + region.active_roles_of_all_child_groups).each do |role|
