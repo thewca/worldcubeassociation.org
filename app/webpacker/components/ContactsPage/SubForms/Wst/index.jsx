@@ -7,7 +7,7 @@ import { updateSectionData } from '../../store/actions';
 const SECTION = 'wst';
 
 export default function Wst() {
-  const { wst } = useStore();
+  const { formValues: { wst } } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),

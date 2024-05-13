@@ -33,7 +33,7 @@ export default function ContactForm({ loggedInUserData }) {
   const [contactSuccess, setContactSuccess] = useState(false);
   const contactFormState = useStore();
   const dispatch = useDispatch();
-  const { contactRecipient: selectedContactRecipient, userData } = contactFormState;
+  const { formValues: { contactRecipient: selectedContactRecipient, userData } } = contactFormState;
 
   const isFormValid = (
     selectedContactRecipient && userData.name && userData.email && captchaValue
@@ -78,11 +78,13 @@ export default function ContactForm({ loggedInUserData }) {
       <Form
         onSubmit={() => {
           if (isFormValid) {
+            const formData = new FormData();
+            formData.append('formValues', JSON.stringify(contactFormState.formValues));
             save(
               contactUrl,
-              contactFormState,
+              formData,
               contactSuccessHandler,
-              { method: 'POST' },
+              { method: 'POST', headers: {}, body: formData },
             );
           }
         }}

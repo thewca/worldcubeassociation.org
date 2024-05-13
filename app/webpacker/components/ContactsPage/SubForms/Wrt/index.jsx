@@ -7,7 +7,7 @@ import { updateSectionData } from '../../store/actions';
 const SECTION = 'wrt';
 
 export default function Wrt() {
-  const { wrt } = useStore();
+  const { formValues: { wrt } } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),

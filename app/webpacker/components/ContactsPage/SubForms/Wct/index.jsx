@@ -7,7 +7,7 @@ import { updateSectionData } from '../../store/actions';
 const SECTION = 'wct';
 
 export default function Wct() {
-  const { wct } = useStore();
+  const { formValues: { wct } } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),
