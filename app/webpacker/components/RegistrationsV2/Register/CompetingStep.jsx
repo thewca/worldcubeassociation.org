@@ -18,7 +18,6 @@ import {
 } from 'semantic-ui-react';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
-import { getMediumDateString, hasPassed } from '../../../lib/utils/dates';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
@@ -27,26 +26,6 @@ import { setMessage } from './RegistrationMessage';
 import i18n from '../../../lib/i18n';
 
 const maxCommentLength = 240;
-
-// function updateRegistrationKey(editsAllowed, deadlinePassed) {
-//   if (!editsAllowed && !deadlinePassed) {
-//     return 'competitions.registration_v2.update.no_self_update';
-//   }
-//   if (deadlinePassed) {
-//     return 'competitions.registration_v2.register.passed';
-//   }
-//   return 'competitions.registration_v2.register.until';
-// }
-//
-// function deleteRegistrationKey(deleteAllowed, deadlinePassed) {
-//   if (!deleteAllowed && !deadlinePassed) {
-//     return 'competitions.registration_v2.update.no_self_delete';
-//   }
-//   if (deadlinePassed) {
-//     return 'competitions.registration_v2.register.passed';
-//   }
-//   return 'competitions.registration_v2.register.until';
-// }
 
 export default function CompetingStep({
   nextStep,
