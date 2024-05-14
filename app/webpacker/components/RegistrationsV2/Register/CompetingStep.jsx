@@ -28,25 +28,25 @@ import i18n from '../../../lib/i18n';
 
 const maxCommentLength = 240;
 
-function updateRegistrationKey(editsAllowed, deadlinePassed) {
-  if (!editsAllowed && !deadlinePassed) {
-    return 'competitions.registration_v2.update.no_self_update';
-  }
-  if (deadlinePassed) {
-    return 'competitions.registration_v2.register.passed';
-  }
-  return 'competitions.registration_v2.register.until';
-}
-
-function deleteRegistrationKey(deleteAllowed, deadlinePassed) {
-  if (!deleteAllowed && !deadlinePassed) {
-    return 'competitions.registration_v2.update.no_self_delete';
-  }
-  if (deadlinePassed) {
-    return 'competitions.registration_v2.register.passed';
-  }
-  return 'competitions.registration_v2.register.until';
-}
+// function updateRegistrationKey(editsAllowed, deadlinePassed) {
+//   if (!editsAllowed && !deadlinePassed) {
+//     return 'competitions.registration_v2.update.no_self_update';
+//   }
+//   if (deadlinePassed) {
+//     return 'competitions.registration_v2.register.passed';
+//   }
+//   return 'competitions.registration_v2.register.until';
+// }
+//
+// function deleteRegistrationKey(deleteAllowed, deadlinePassed) {
+//   if (!deleteAllowed && !deadlinePassed) {
+//     return 'competitions.registration_v2.update.no_self_delete';
+//   }
+//   if (deadlinePassed) {
+//     return 'competitions.registration_v2.register.passed';
+//   }
+//   return 'competitions.registration_v2.register.until';
+// }
 
 export default function CompetingStep({
   nextStep,
@@ -119,15 +119,6 @@ export default function CompetingStep({
       setProcessing(true);
     },
   });
-
-  const hasRegistrationEditDeadlinePassed = hasPassed(
-    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
-  );
-  const canUpdateRegistration = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
-
-  const canDeleteRegistration = competitionInfo.allow_registration_self_delete_after_acceptance
-    && !hasRegistrationEditDeadlinePassed;
 
   const hasEventsChanged = registration?.competing
     && _.xor(registration.competing.event_ids, selectedEvents).length > 0;
@@ -230,7 +221,6 @@ export default function CompetingStep({
   };
 
   const shouldShowUpdateButton = isRegistered
-    && !hasRegistrationEditDeadlinePassed
     && registration.competing.registration_status !== 'cancelled';
 
   const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
@@ -271,17 +261,6 @@ export default function CompetingStep({
             {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
           </Message>
         )}
-
-        {
-          isRegistered && !canUpdateRegistration && (
-            <Message info>
-              {i18n.t(updateRegistrationKey(
-                competitionInfo.allow_registration_edits,
-                hasRegistrationEditDeadlinePassed,
-              ))}
-            </Message>
-          )
-        }
 
         <Form>
           <Form.Field>
@@ -339,34 +318,16 @@ export default function CompetingStep({
           <ButtonGroup>
             {shouldShowUpdateButton && (
             <>
-              <Popup
-                trigger={(
-                  <div style={{ display: 'inline-block' }}>
-                    <Button
-                      disabled={isUpdating || !canUpdateRegistration || !hasChanges}
-                      primary
-                      attached
-                      onClick={() => attemptAction(actionUpdateRegistration, {
-                        checkForChanges: true,
-                      })}
-                    >
-                      {i18n.t('registrations.update')}
-                    </Button>
-                  </div>
-                )}
-                position="top center"
-                content={
-                  i18n.t(updateRegistrationKey(
-                    competitionInfo.allow_registration_edits,
-                    hasRegistrationEditDeadlinePassed,
-                  ), {
-                    date: getMediumDateString(
-                      competitionInfo.event_change_deadline_date
-                      ?? competitionInfo.start_date,
-                    ),
-                  })
-                }
-              />
+              <Button
+                disabled={isUpdating || !hasChanges}
+                primary
+                attached
+                onClick={() => attemptAction(actionUpdateRegistration, {
+                  checkForChanges: true,
+                })}
+              >
+                {i18n.t('registrations.update')}
+              </Button>
               <ButtonOr />
             </>
             )}
@@ -382,31 +343,13 @@ export default function CompetingStep({
             )}
 
             {shouldShowDeleteButton && (
-              <Popup
-                trigger={(
-                  <div style={{ display: 'inline-block' }}>
-                    <Button
-                      disabled={isUpdating || !canDeleteRegistration}
-                      negative
-                      onClick={actionDeleteRegistration}
-                    >
-                      {i18n.t('registrations.delete_registration')}
-                    </Button>
-                  </div>
-                )}
-                position="top center"
-                content={
-                  i18n.t(deleteRegistrationKey(
-                    competitionInfo.allow_registration_self_delete_after_acceptance,
-                    hasRegistrationEditDeadlinePassed,
-                  ), {
-                    date: getMediumDateString(
-                      competitionInfo.event_change_deadline_date
-                      ?? competitionInfo.start_date,
-                    ),
-                  })
-                }
-              />
+              <Button
+                disabled={isUpdating}
+                negative
+                onClick={actionDeleteRegistration}
+              >
+                {i18n.t('registrations.delete_registration')}
+              </Button>
             )}
           </ButtonGroup>
         ) : (
