@@ -50,6 +50,7 @@ export default function StepPanel({
 }) {
   const isRegistered = Boolean(registration);
   const hasPaid = registration?.payment.payment_status === 'succeeded';
+  const registrationFinished = hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?']);
 
   const steps = useMemo(() => {
     if (competitionInfo['using_payment_integrations?']) {
@@ -60,7 +61,7 @@ export default function StepPanel({
   }, [competitionInfo]);
 
   const [activeIndex, setActiveIndex] = useState(() => {
-    if (hasPaid || (isRegistered && !competitionInfo['using_payment_integrations?'])) {
+    if (registrationFinished) {
       return registrationOverviewConfig.index;
     }
     // If the user has not paid but refreshes the page, we want to display the paymentStep again
@@ -94,8 +95,8 @@ export default function StepPanel({
           <Step
             key={stepConfig.key}
             active={activeIndex === index}
-            completed={hasPaid || activeIndex > index}
-            disabled={!hasPaid && activeIndex < index}
+            completed={registrationFinished || activeIndex > index}
+            disabled={!registrationFinished && activeIndex < index}
           >
             <Step.Content>
               <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
