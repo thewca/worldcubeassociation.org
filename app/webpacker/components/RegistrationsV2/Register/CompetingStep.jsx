@@ -37,9 +37,8 @@ export default function CompetingStep({
 
   const [comment, setComment] = useState('');
   const [selectedEvents, setSelectedEvents] = useState(
-    preferredEvents
-      .filter((event) => competitionInfo.event_ids.includes(event))
-      .slice(0, maxEvents),
+    !competitionInfo.events_per_registration_limit ? preferredEvents
+      .filter((event) => competitionInfo.event_ids.includes(event)) : [],
   );
   const [guests, setGuests] = useState(0);
 
@@ -188,7 +187,7 @@ export default function CompetingStep({
 
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
-      setSelectedEvents(competitionInfo.event_ids.slice(0, maxEvents));
+      setSelectedEvents(competitionInfo.event_ids);
     } else if (type === 'clear_events') {
       setSelectedEvents([]);
     } else if (type === 'toggle_event') {
@@ -253,8 +252,9 @@ export default function CompetingStep({
             />
             <p
               dangerouslySetInnerHTML={{
-                __html: i18n.t('registrations.preferred_events_prompt_html', {
+                __html: i18n.t(!competitionInfo.events_per_registration_limit ? 'registrations.preferred_events_prompt_html' : 'competitions.registration_v2.register.event_limit', {
                   link: `<a href="${userPreferencesRoute}">here</a>`,
+                  max_events: competitionInfo.events_per_registration_limit,
                 }),
               }}
             />
