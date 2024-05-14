@@ -22,18 +22,6 @@ export default function RegistrationOverview({
 }) {
   return (
     <>
-      <Step.Group fluid ordered stackable="tablet">
-        {steps.map((stepConfig) => (
-          <Step
-            key={stepConfig.key}
-            completed
-          >
-            <Step.Content>
-              <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
-            </Step.Content>
-          </Step>
-        ))}
-      </Step.Group>
       <Message
         info={status === 'pending'}
         success={status === 'accepted'}
@@ -49,6 +37,18 @@ export default function RegistrationOverview({
           </Message.Header>
         </Message.Content>
       </Message>
+      <Step.Group fluid ordered stackable="tablet">
+        {steps.map((stepConfig) => (
+          <Step
+            key={stepConfig.key}
+            completed
+          >
+            <Step.Content>
+              <Step.Title>{i18n.t(stepConfig.i18nKey)}</Step.Title>
+            </Step.Content>
+          </Step>
+        ))}
+      </Step.Group>
       <Button
         primary
         attached
