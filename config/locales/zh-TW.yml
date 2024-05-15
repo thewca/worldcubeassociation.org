@@ -335,7 +335,7 @@ zh-TW:
       invalid: 無效的
     #original_hash: 49d0140
     days:
-      zero: 0天
+      zero: 1天
       other: '%{count}天'
     #original_hash: 203e1b3
     these_events:
@@ -865,10 +865,6 @@ zh-TW:
           pending: 等待候補
           #original_hash: 441bda6
           deleted: 取消
-          #original_hash: a1bf92e
-          cancelled: 已取消
-          #original_hash: 8cf6f9c
-          waiting_list: 在候補名單中
   mail_form:
     attributes:
       contact_form:
@@ -1027,17 +1023,17 @@ zh-TW:
       messages:
         #original_hash: e88f903
         form_error:
-          zero: 沒有錯誤：
+          zero: 1個錯誤：
           other: '有%{count}個錯誤：'
       error_pages:
         #original_hash: 1042478
         500_error: 抱歉，出現問題了
-        #original_hash: d656a11
-        500_contact: 如果您要把這個錯誤回報給軟體組，請在郵件中貼上Request ID
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>按這裡</a>來回報。'
         #original_hash: b61e305
         400_error: 您要尋找的頁面並不存在
-        #original_hash: c8a7d4e
-        400_contact: 如果您認為這是一個錯誤，請聯絡軟體組且附上郵件中附上Request ID
+        #original_hash: c9290b6
+        400_contact_html: '如果您認為這是一個錯誤，請<a href=%{contact_url}>按這裡</a>來回報。'
     doorkeeper:
       applications:
         help:
@@ -1212,6 +1208,10 @@ zh-TW:
       #original_hash: d54d953
       description: >-
         WCA的團隊和委員會是整個組織的一部分並負責日常的事務才能讓整個組織運作。這些團隊是由WCA成員包含WCA代表和參賽者所組成的。每一個團隊會都有一個領導者，他們的職務是確保整個團隊的正常運作以及帶領其他團隊成員。理事會是一個特殊的團隊，他們的工作是擔任WCA董事會諮詢的腳色，由社群成員組成而非WCA員工。當有委員會、團隊、理事會的空缺時，如何申請的資訊將會公布在首頁。
+      #original_hash: b37456c
+      contact_button: 聯絡
+      #original_hash: ae7928f
+      no_contact_description: 這個團隊/委員會的連絡資訊是非公開的。
       groups_name:
         #original_hash: 90a1280
         wat: WCA資料整理組 (WAT)
@@ -1281,10 +1281,12 @@ zh-TW:
     contacts:
       #original_hash: 4ef2aad
       title: WCA聯絡表
-      #original_hash: c343cae
+      #original_hash: bddd3ea
       faq_note_html: >-
-        在詢問前，也許您可以先看看我們的<a href="/faq">常見問題</a>！如果您想要聯絡這邊沒有列出的特定委員會或團隊，你可以在<a
-        href="/teams-committees-councils">這個頁面</a>找到聯絡資訊。
+        在詢問前，也許您可以先看看我們的<a href="/faq">常見問題</a>！如果您想要聯絡這邊沒有列出的特定委員會或團隊，你可以試試在<a
+        href="/teams-committees-councils">這個頁面</a>找到詳細資訊。
+      #original_hash: ea20be0
+      success_message: 已送出電子郵件 - 我們會盡快回覆您。
       form:
         user_data:
           name:
@@ -1299,13 +1301,13 @@ zh-TW:
           competition:
             #original_hash: baa2425
             label: 聯絡比賽的主辦團隊/WCA代表(詢問關於某場比賽的內容)
-          communications_team:
+          wct:
             #original_hash: b73e465
             label: 關於WCA一般的詢問（可以是WCA ID/個人檔案，主辦比賽，比賽要求規則，比賽時的媒體等等）
-          results_team:
+          wrt:
             #original_hash: 0f6b96b
             label: 聯絡成績組（關於比賽成績的相關事務）
-          software:
+          wst:
             #original_hash: 1d74033
             label: 聯絡軟體組（回報網站bug或是應用程式介面相關問題）
         competition:
@@ -1315,7 +1317,15 @@ zh-TW:
           message:
             #original_hash: 68f4145
             label: 訊息
-        communications_team:
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: 訊息
+        wrt:
+          message:
+            #original_hash: 68f4145
+            label: 訊息
+        wst:
           message:
             #original_hash: 68f4145
             label: 訊息
@@ -1724,7 +1734,7 @@ zh-TW:
       must_register: 必須報名至少一個項目
       #original_hash: abdc718
       exceeds_event_limit:
-        zero: 您不能不報名任何項目。
+        zero: 您必須只能報名一個項目。
         other: '您不能報名超過%{count}個項目。'
       #original_hash: e78eec3
       banned_html: >-
@@ -1840,8 +1850,8 @@ zh-TW:
       edit: 編輯
       #original_hash: beffc45
       country_plural:
-        zero: 0區域
-        other: '%{count}區域'
+        zero: 1個區域
+        other: '%{count}個區域'
       #original_hash: 1feee0e
       export_csv: 下載CSV檔
       #original_hash: 84add5b
@@ -2010,6 +2020,8 @@ zh-TW:
         stripe_not_found: 無法找到Stripe傳回的交易ID。
         #original_hash: aaa8ab7
         stripe_secret_invalid: Stripe傳回的交易碼與我們的紀錄不相符。
+        #original_hash: f808249
+        stripe_not_an_intent: Stripe回報一個這是不能用來付款的交易ID。
         #original_hash: 8d1a199
         payment_reset: 付款被Stripe拒絕。
         #original_hash: bcf6a93
@@ -2269,11 +2281,11 @@ zh-TW:
         restricted: 只有參賽者的陪同者才能入場當觀眾
       #original_hash: 35f892a
       guest_limit:
-        zero: 比賽不能有陪同者。
+        zero: 比賽可以最多1位陪同者。
         other: '比賽最多可以有%{count}位陪同者。'
       #original_hash: bad09c8
       event_limit:
-        zero: 參賽者可以報名一個比賽項目。
+        zero: 參賽者可以報名最多一個比賽項目。
         other: '參賽者可以報名最多%{count}個比賽項目。'
       #original_hash: 64e0ddd
       require_qualification: 參賽者只能報名他們已經取得資格的比賽項目。
@@ -2626,6 +2638,11 @@ zh-TW:
           #original_hash: 6c8e5bf
           force_comment: 強迫要求參賽者要在報名時填寫註記
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: 防止新手報名
+            #original_hash: 40c4b4c
+            reason: 不讓新手報名的理由以及細節
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: 我希望參賽者能在該比賽項目開始前的一個時間點先繳交方塊
@@ -2780,6 +2797,11 @@ zh-TW:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: 請詳細說明為什麼您不希望新手報名您的比賽。填入請使用英文！
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -2850,6 +2872,9 @@ zh-TW:
               #original_hash: 6509041
               'false': 參賽者必須要達到資格限制才能報名
     registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: '如同<0>%{pdfLink}</0>'
       info:
         #original_hash: eade5c7
         download: 下載所有比賽細節。
@@ -2864,13 +2889,15 @@ zh-TW:
       requirements:
         #original_hash: 09a428f
         title: 條件
-        #original_hash: 695cf86
-        acknowledgement: 我已閱讀並確認所有在「報名」標籤裡的資訊，包含參加費用以及退費政策。
-        #original_hash: 270bd63
-        acknowledgment_extra: 我已閱讀並了解這邊所列出的訊息
+        #original_hash: 1255806
+        acknowledgement: 我已閱讀並確認所有在「報名」標籤裡的資訊，包含參加費用、退費政策以及額外的參賽條件。
         #original_hash: 80d2933
         next_step: 繼續前往下一步驟
       update:
+        #original_hash: c04744e
+        being_updated: 正在更新報名中
+        #original_hash: 75596b9
+        being_deleted: 正在刪除報名
         #original_hash: 65bbb07
         no_changes: 沒有變化
         #original_hash: be4e8e2
@@ -2886,6 +2913,10 @@ zh-TW:
         #original_hash: 67b3c7d
         too_many: '接受這些全部報名會造成參賽者人數超過上限，會多出%{count}人'
       register:
+        #original_hash: dddec0b
+        re-register: 重新報名
+        #original_hash: a38d5fa
+        success: '您已報名了%{comp_name}'
         #original_hash: affea61
         error: '報名發生錯誤 %{error}'
         #original_hash: f5a8630
@@ -2899,8 +2930,14 @@ zh-TW:
         #original_hash: 3c8d8b7
         editing_disabled: 這場比賽不允許更改報名內容
         registration_status:
-          #original_hash: f1f32b6
-          header: 您的報名狀態：
+          #original_hash: b1e97b8
+          accepted: 您的報名已被核准。
+          #original_hash: 3d7aa97
+          pending: 您的報名正在等待比賽團隊的核准。
+          #original_hash: dcc4906
+          cancelled: 您的報名已被刪除。
+          #original_hash: c890478
+          waiting_list: 您在候補名單中。
         #original_hash: 2d9f36c
         disclaimer: 送出報名資訊不代表已批准能參賽
         #original_hash: 8fe68a1
@@ -3154,8 +3191,6 @@ zh-TW:
       qualification: 參賽資格
     schedule:
       display_as:
-        #original_hash: ec5dd7c
-        label: 將賽程顯示為：
         #original_hash: 0424f6e
         table: 列表模式
         #original_hash: adab509
@@ -3173,18 +3208,53 @@ zh-TW:
       end: 結束
       #original_hash: 81c0d91
       activity: 內容
-      #original_hash: 90e2fca
-      room: 賽場
+      #original_hash: 15e58c6
+      no_activities: 選擇的會場/項目並沒有活動。
+      #original_hash: 10a56c8
+      all_venues: 所有會場
+      #original_hash: a0b3266
+      room_or_stage: 房間或舞台
+      #original_hash: f37605b
+      more_details: 顯示該輪細節
+      #original_hash: a30e720
+      time_zone: 時區
+      rooms_panel:
+        #original_hash: 3a28d6f
+        title: 房間
+        #original_hash: 6a72085
+        all: 全部
+        #original_hash: 6eef664
+        none: 無
+        #original_hash: 9b9a6aa
+        show_buttons: 顯示時區按鈕
+        #original_hash: d2ac826
+        use_time_zone: 使用這個時區
       #original_hash: 73acb7f
       room_in_venue: '在%{venue}的%{room}'
-      #original_hash: 2896c7a
-      venue_information_html: '您正在瀏覽賽場%{venue_name}的賽程。'
-      #original_hash: b97e383
-      timezone_message: '賽程顯示的時區為%{timezone}。'
-      #original_hash: 2ab94a0
-      multiple_venues_available: 本場比賽有多個賽場，請留意其他賽場的賽程！
+      #original_hash: f7fd979
+      venue_information_html:
+        zero: '您正在瀏覽這場比賽唯一的比賽場地%{venue_name}的賽程。'
+        other: '您正在瀏覽比賽場地%{venue_name}的賽程。這場比賽有%{count}個比賽場地。'
+      #original_hash: 8d175ad
+      venue_information_all: '您正在閱覽所有%{venueCount}個比賽會場的賽程。'
+      #original_hash: 97df911
+      timezone_message: '比賽場地的時區為%{timezone}。'
+      #original_hash: 94b2570
+      timezone_setting: 您閱覽中賽程的時區：
+      #original_hash: 75194fd
+      multiple_timezones_available: 請注意不是所有比賽會場都是相同的時區 - 請小心！
+      #original_hash: d94a371
+      timezone_set_local: 設成本地
+      #original_hash: 17ab650
+      timezone_set_venue: 設成場地
+      #original_hash: 9974a46
+      timezone_follow_venue: 自動使用顯示中的會場時區。
       #original_hash: 37b1adb
       schedule_for_date: '%{day_name}的賽程(%{full_date})'
+      #original_hash: d58b281
+      schedule_for_full_date: '%{date}的賽程'
+      #original_hash: eb1090e
+      schedule_change_warning: 賽程有可能會有調整，特別是知道報名總人數之後。如果有重大變更，已報名的參賽者會收到電子郵件通知
     nav:
       menu:
         #original_hash: 612e12d
