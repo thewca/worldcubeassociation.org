@@ -86,9 +86,11 @@ namespace :db do
               DatabaseDumper.mysql("SET unique_checks=1", config.database)
               DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
               DatabaseDumper.mysql("SET autocommit=1", config.database)
-              DatabaseDumper.mysql("COMMIT", config.database)
               DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", config.database)
             end
+
+            # We always Commit, even if RDS has autocommit=1, it will act as a No Op
+            DatabaseDumper.mysql("COMMIT", config.database)
           end
 
           dummy_password = DbDumpHelper.use_staging_password? ? AppSecrets.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD
