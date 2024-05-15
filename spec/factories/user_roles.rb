@@ -2,15 +2,15 @@
 
 FactoryBot.define do
   factory :user_role do
-    user { FactoryBot.create(:user) }
+    user { rand(2) == 0 ? FactoryBot.create(:user_with_wca_id) : FactoryBot.create(:user) }
 
     trait :active do
       start_date { Date.today }
     end
 
     trait :inactive do
-      start_date { Date.today - 1.year }
-      end_date { Date.today - 1.day }
+      start_date { Faker::Date.between(from: 10.years.ago, to: 5.years.ago) }
+      end_date { Faker::Date.between(from: 5.years.ago, to: Date.today) }
     end
 
     trait :delegate_probation do
