@@ -4,7 +4,7 @@ import PanelTemplate from '../PanelTemplate';
 import SeniorDelegatesList from './SeniorDelegatesList';
 import RegionManager from './RegionManager';
 import { PANEL_LIST } from '../../../lib/wca-data.js.erb';
-import GroupsManagerAdmin from './GroupsManagerAdmin';
+import GroupsManagerAdmin from '../pages/GroupsManagerAdmin';
 import OfficersEditor from './OfficersEditor';
 import RegionsAdmin from './RegionsAdmin';
 import LeadersAdminPage from './LeadersAdminPage';
