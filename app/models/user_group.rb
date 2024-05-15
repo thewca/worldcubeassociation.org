@@ -16,15 +16,17 @@ class UserGroup < ApplicationRecord
     officers: "officers",
   }
 
+  # There are few associations/methods here that are used only for testing. They are to make sure
+  # the connections between group and roles are as expected. It's recommended not to remove them.
   has_many :direct_child_groups, class_name: "UserGroup", inverse_of: :parent_group, foreign_key: "parent_group_id"
   has_many :roles, foreign_key: "group_id", class_name: "UserRole"
   has_many :active_roles, -> { active }, foreign_key: "group_id", class_name: "UserRole"
-  has_many :roles_of_direct_child_groups, through: :direct_child_groups, source: :roles
-  has_many :active_roles_of_direct_child_groups, -> { active }, through: :direct_child_groups, source: :roles
+  has_many :direct_child_roles, through: :direct_child_groups, source: :roles
+  has_many :active_direct_child_roles, -> { active }, through: :direct_child_groups, source: :roles
   has_many :users, through: :roles
   has_many :active_users, through: :active_roles, source: :user
-  has_many :users_of_direct_child_groups, through: :roles_of_direct_child_groups, source: :user
-  has_many :active_users_of_direct_child_groups, through: :active_roles_of_direct_child_groups, source: :user
+  has_many :direct_child_users, through: :direct_child_roles, source: :user
+  has_many :active_direct_child_users, through: :active_direct_child_roles, source: :user
 
   belongs_to :metadata, polymorphic: true, optional: true
   belongs_to :parent_group, class_name: "UserGroup", optional: true
@@ -36,20 +38,20 @@ class UserGroup < ApplicationRecord
     [direct_child_groups, direct_child_groups.map(&:all_child_groups)].flatten
   end
 
-  def roles_of_all_child_groups
+  def all_child_roles
     self.all_child_groups.map(&:roles).flatten
   end
 
-  def active_roles_of_all_child_groups
+  def active_all_child_roles
     self.all_child_groups.map(&:active_roles).flatten
   end
 
-  def users_of_all_child_groups
-    self.roles_of_all_child_groups.map { |role| role.user }
+  def all_child_users
+    self.all_child_roles.map { |role| role.user }
   end
 
-  def active_users_of_all_child_groups
-    self.active_roles_of_all_child_groups.map { |role| role.user }
+  def active_all_child_users
+    self.active_all_child_roles.map { |role| role.user }
   end
 
   def self.group_types_containing_status_metadata
