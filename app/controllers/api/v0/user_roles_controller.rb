@@ -306,6 +306,30 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       else
         return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
       end
+    elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
+      if params.key?(:status)
+        status = params.require(:status)
+        changed_parameter = 'Status'
+        previous_value = I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en')
+        new_value = I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en')
+
+        ActiveRecord::Base.transaction do
+          role.update!(end_date: Date.today)
+          if group_type == UserGroup.group_types[:teams_committees]
+            metadata = RolesMetadataTeamsCommittees.create!(status: status)
+          elsif group_type == UserGroup.group_types[:councils]
+            metadata = RolesMetadataCouncils.create!(status: status)
+          end
+          UserRole.create!(
+            user_id: role.user.id,
+            group_id: role.group.id,
+            start_date: Date.today,
+            metadata: metadata,
+          )
+        end
+      else
+        return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+      end
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
