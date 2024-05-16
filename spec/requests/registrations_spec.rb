@@ -892,7 +892,7 @@ RSpec.describe "registrations" do
           expect(payment_intent.payment_record.error).to be_nil
         end
 
-        it "records a failure in the stripe journal", :focus do
+        it "records a failure in the stripe journal" do
           expect(StripeRecord.count).to eq 0
           expect(PaymentIntent.count).to eq 0
 

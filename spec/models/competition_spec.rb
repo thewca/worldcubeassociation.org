@@ -624,7 +624,7 @@ RSpec.describe Competition do
     expect(competition.longitude).to eq 4.6*1e6
   end
 
-  it "ensures all attributes are defined as either cloneable or uncloneable", :focus do
+  it "ensures all attributes are defined as either cloneable or uncloneable" do
     expect(Competition.column_names).to match_array(Competition::CLONEABLE_ATTRIBUTES + Competition::UNCLONEABLE_ATTRIBUTES)
   end
 
@@ -1554,6 +1554,30 @@ RSpec.describe Competition do
 
         expect { competition.disconnect_all_payment_integrations }.not_to raise_error
       end
+    end
+  end
+
+  context "new competition is invalid when" do
+    let!(:new_competition) { FactoryBot.build(:competition, :with_delegate, :future, :visible, :with_valid_schedule) }
+
+    it "nameReason is too long" do
+      new_competition.name_reason = "Veeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeery long name reason"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "venue details is too long" do
+      new_competition.venueAddress = "121 character venue details reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "venue address is too long" do
+      new_competition.venueDetails = "121 character venue address reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
+    end
+
+    it "external website is too long" do
+      new_competition.external_website = "201 character external website reeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+      expect(new_competition).not_to be_valid
     end
   end
 end

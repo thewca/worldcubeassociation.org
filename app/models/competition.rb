@@ -221,6 +221,13 @@ class Competition < ApplicationRecord
   validates :event_restrictions_reason, presence: true, if: :event_restrictions?
   validates_inclusion_of :main_event_id, in: ->(comp) { [nil].concat(comp.persisted_events_id) }
 
+  # Ensure that no string fields exceed the varchar limit in the database
+  columns_hash.each do |column_name, column_info|
+    if column_info.type == :string && column_info.limit
+      validates column_name, length: { maximum: column_info.limit }
+    end
+  end
+
   # Dirty old trick to deal with competition id changes (see other methods using
   # 'with_old_id' for more details).
   def persisted_events_id
