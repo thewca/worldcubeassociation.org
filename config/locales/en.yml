@@ -2460,10 +2460,10 @@ en:
   logo:
     title: 'WCA Logo'
     paragraphs:
-      '1': "The WCA logo was designed by Justin Eastman, in a design contest in January 2005.<br />We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube."
-      '2': 'We have four different versions of the logo: a <a href="/files/WCAlogo_XL.jpg">large version</a> (46 KB, 1756 px by 1068 px), a <a href="/files/WCAlogo.svg">vector version</a>, a <a href="/files/WCAlogo_notext.svg">vector version without text</a> and a <a href="/files/WCAlogo_monochrome.svg">monochrome vector version</a>.'
-      '3': '3D version of the logo, designed by Vu Minh Tan from Vietnam: <a href="/files/WCALogo3D.png">PNG version</a> (2.1 MB), a <a href="/files/WCALogo3Dsmall.png">small PNG version</a> (0.25 MB).'
-      '4': 'Acceptable usage of the WCA logo is outlined by the WCA Logo Usage policy which appears on the <a href="/documents">WCA Documents page</a>.'
+      '1': 'The WCA logo was designed by Justin Eastman, in a design contest in January 2005.'
+      '2': 'We liked the logo because of its design, the colours, and the fact that it does not specifically show a 3x3x3 cube.'
+      '3': 'We have three different versions of the logo: a <a href="/files/WCAlogo.svg">full-color version</a>, an <a href="/files/WCAlogo_monochrome.svg">all-black version</a>, and an <a href="/files/WCAlogo_monochrome_white.svg">all-white version</a>.'
+      '4': 'Acceptable usage of the WCA logo is outlined by the <a href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA Logo Usage Policy</a>.'
   workbook_assistant:
     title: "WCA Workbook Assistant"
     download: "Download WCA Workbook Assistant"
