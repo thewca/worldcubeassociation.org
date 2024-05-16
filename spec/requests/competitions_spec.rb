@@ -56,11 +56,11 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = existing_competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
-                                                             competitionIds: [partner_competition.id, existing_competition.id],
-                                                           } })
+                                                                      wcifId: "SomeNewSeries2015",
+                                                                      name: "Some New Series 2015",
+                                                                      shortName: "Some New Series 2015",
+                                                                      competitionIds: [partner_competition.id, existing_competition.id],
+                                                                    } })
 
             patch competition_path(existing_competition), params: update_params, as: :json
             expect(response).to be_successful
@@ -158,11 +158,11 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = existing_competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
-                                                             competitionIds: [partner_competition.id, existing_competition.id],
-                                                           } })
+                                                                      wcifId: "SomeNewSeries2015",
+                                                                      name: "Some New Series 2015",
+                                                                      shortName: "Some New Series 2015",
+                                                                      competitionIds: [partner_competition.id, existing_competition.id],
+                                                                    } })
 
             patch competition_path(existing_competition), params: update_params, as: :json
             expect(response).to be_successful
@@ -267,11 +267,11 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = existing_competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
-                                                             competitionIds: [partner_competition.id, existing_competition.id],
-                                                           } })
+                                                                      wcifId: "SomeNewSeries2015",
+                                                                      name: "Some New Series 2015",
+                                                                      shortName: "Some New Series 2015",
+                                                                      competitionIds: [partner_competition.id, existing_competition.id],
+                                                                    } })
 
             patch competition_path(existing_competition), params: update_params, as: :json
             expect(response).to be_successful
@@ -370,11 +370,11 @@ RSpec.describe "competitions" do
             partner_competition.update!(competition_series_id: nil)
 
             update_params = existing_competition.to_form_data.merge({ series: {
-                                                             wcifId: "SomeNewSeries2015",
-                                                             name: "Some New Series 2015",
-                                                             shortName: "Some New Series 2015",
-                                                             competitionIds: [partner_competition.id, existing_competition.id],
-                                                           } })
+                                                                      wcifId: "SomeNewSeries2015",
+                                                                      name: "Some New Series 2015",
+                                                                      shortName: "Some New Series 2015",
+                                                                      competitionIds: [partner_competition.id, existing_competition.id],
+                                                                    } })
 
             patch competition_path(existing_competition), params: update_params, as: :json
             expect(response).to have_http_status(:unprocessable_entity)
