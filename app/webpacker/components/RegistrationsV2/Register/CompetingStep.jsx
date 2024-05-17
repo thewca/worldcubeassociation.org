@@ -84,7 +84,7 @@ export default function CompetingStep({
         'negative',
       ));
     },
-    onSuccess: (_) => {
+    onSuccess: () => {
       // We can't update the registration yet, because there might be more steps needed
       // And the Registration might still be processing
       dispatch(setMessage('registrations.flash.registered', 'positive'));
@@ -106,18 +106,12 @@ export default function CompetingStep({
 
   const hasChanges = hasEventsChanged || hasCommentChanged || hasGuestsChanged;
 
-  const commentIsValid = comment.trim() || !competitionInfo.force_comment_in_registration;
   const eventsAreValid = selectedEvents.length > 0 && selectedEvents.length <= maxEvents;
 
   const attemptAction = useCallback(
     (action, options = {}) => {
       if (options.checkForChanges && !hasChanges) {
         dispatch(setMessage('competitions.registration_v2.update.no_changes', 'basic'));
-      } else if (!commentIsValid) {
-        dispatch(setMessage(
-          'registrations.errors.cannot_register_without_comment',
-          'negative',
-        ));
       } else if (!eventsAreValid) {
         dispatch(setMessage(
           maxEvents === Infinity
@@ -132,7 +126,7 @@ export default function CompetingStep({
         action();
       }
     },
-    [commentIsValid, dispatch, eventsAreValid, hasChanges, maxEvents],
+    [dispatch, eventsAreValid, hasChanges, maxEvents],
   );
 
   const actionCreateRegistration = () => {
@@ -183,6 +177,13 @@ export default function CompetingStep({
         status: 'cancelled',
       },
     });
+  };
+
+  const actionById = {
+    'registration-update': actionUpdateRegistration,
+    'registration-delete': actionDeleteRegistration,
+    'registration-register': actionCreateRegistration,
+    'registration-re-register': actionReRegister,
   };
 
   const handleEventSelection = ({ type, eventId }) => {
@@ -241,7 +242,11 @@ export default function CompetingStep({
           </Message>
         )}
 
-        <Form>
+        <Form onSubmit={(event) => {
+          event.preventDefault();
+          attemptAction(actionById[event.target.id]);
+        }}
+        >
           <Form.Field required>
             <EventSelector
               onEventSelection={handleEventSelection}
@@ -265,7 +270,7 @@ export default function CompetingStep({
             </label>
             <TextArea
               maxLength={maxCommentLength}
-              onChange={(_, data) => setComment(data.value)}
+              onChange={(event, data) => setComment(data.value)}
               value={comment}
               placeholder={
                 competitionInfo.force_comment_in_registration
@@ -285,118 +290,118 @@ export default function CompetingStep({
               id="guest-dropdown"
               type="number"
               value={guests}
-              onChange={(_, data) => {
+              onChange={(event, data) => {
                 setGuests(Number.parseInt(data.value, 10));
               }}
               min="0"
               label={<Label>{i18n.t('activerecord.attributes.registration.guests')}</Label>}
-              max={competitionInfo.guests_per_registration_limit ?? Infinity}
+              max={competitionInfo.guests_per_registration_limit}
             />
           </Form.Field>
-        </Form>
-
-        {isRegistered ? (
-          <>
-            <Message warning icon>
-              <Popup
-                trigger={<Icon name="circle info" />}
-                position="top center"
-                content={
-                  canUpdateRegistration
-                    ? i18n.t('competitions.registration_v2.register.until', {
-                      date: getMediumDateString(
-                        competitionInfo.event_change_deadline_date
-                        ?? competitionInfo.start_date,
-                      ),
-                    })
-                    : i18n.t('competitions.registration_v2.register.passed')
-                }
-              />
-              <Message.Content>
-                <Message.Header>
-                  {i18n.t(
-                    `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
-                  )}
-                </Message.Header>
-                {/* eslint-disable-next-line no-nested-ternary */}
-                {canUpdateRegistration
-                  ? i18n.t('registrations.update')
-                  : hasRegistrationEditDeadlinePassed
-                    ? i18n.t('competitions.registration_v2.errors.-4001')
-                    : i18n.t(
-                      'competitions.registration_v2.register.editing_disabled',
+          {isRegistered ? (
+            <>
+              <Message warning icon>
+                <Popup
+                  trigger={<Icon name="circle info" />}
+                  position="top center"
+                  content={
+                    canUpdateRegistration
+                      ? i18n.t('competitions.registration_v2.register.until', {
+                        date: getMediumDateString(
+                          competitionInfo.event_change_deadline_date
+                          ?? competitionInfo.start_date,
+                        ),
+                      })
+                      : i18n.t('competitions.registration_v2.register.passed')
+                  }
+                />
+                <Message.Content>
+                  <Message.Header>
+                    {i18n.t(
+                      `competitions.registration_v2.register.registration_status.${registration.competing.registration_status}`,
                     )}
-              </Message.Content>
-            </Message>
+                  </Message.Header>
+                  {/* eslint-disable-next-line no-nested-ternary */}
+                  {canUpdateRegistration
+                    ? i18n.t('registrations.update')
+                    : hasRegistrationEditDeadlinePassed
+                      ? i18n.t('competitions.registration_v2.errors.-4001')
+                      : i18n.t(
+                        'competitions.registration_v2.register.editing_disabled',
+                      )}
+                </Message.Content>
+              </Message>
 
-            <ButtonGroup widths={2}>
-              {shouldShowUpdateButton && (
-                <>
+              <ButtonGroup widths={2}>
+                {shouldShowUpdateButton && (
+                  <>
+                    <Button
+                      primary
+                      disabled={
+                        isUpdating || !canUpdateRegistration || !hasChanges
+                      }
+                      id="registration-update"
+                      onClick={() => attemptAction(actionUpdateRegistration, {
+                        checkForChanges: true,
+                      })}
+                    >
+                      {i18n.t('registrations.update')}
+                    </Button>
+                    <ButtonOr />
+                  </>
+                )}
+
+                {shouldShowReRegisterButton && (
                   <Button
-                    primary
-                    disabled={
-                      isUpdating || !canUpdateRegistration || !hasChanges
-                    }
-                    onClick={() => attemptAction(actionUpdateRegistration, {
-                      checkForChanges: true,
-                    })}
+                    secondary
+                    disabled={isUpdating}
+                    type="submit"
+                    id="registration-re-register"
                   >
-                    {i18n.t('registrations.update')}
+                    {i18n.t('competitions.registration_v2.register.re-register')}
                   </Button>
-                  <ButtonOr />
-                </>
-              )}
+                )}
 
-              {shouldShowReRegisterButton && (
-                <Button
-                  secondary
-                  disabled={isUpdating}
-                  onClick={() => attemptAction(actionReRegister)}
-                >
-                  {i18n.t('competitions.registration_v2.register.re-register')}
-                </Button>
-              )}
+                {shouldShowDeleteButton && (
+                  <Button
+                    disabled={isUpdating}
+                    type="submit"
+                    id="registration-delete"
+                    negative
+                  >
+                    {i18n.t('registrations.delete_registration')}
+                  </Button>
+                )}
+              </ButtonGroup>
+            </>
+          ) : (
+            <>
+              <Message info icon floating>
+                <Popup
+                  content={i18n.t('registrations.mailer.new.awaits_approval')}
+                  position="top left"
+                  trigger={<Icon name="circle info" />}
+                />
+                <Message.Content>
+                  {i18n.t('competitions.registration_v2.register.disclaimer')}
+                </Message.Content>
+              </Message>
 
-              {shouldShowDeleteButton && (
-                <Button
-                  disabled={isUpdating}
-                  negative
-                  onClick={actionDeleteRegistration}
-                >
-                  {i18n.t('registrations.delete_registration')}
-                </Button>
-              )}
-            </ButtonGroup>
-          </>
-        ) : (
-          <>
-            <Message info icon floating>
-              <Popup
-                content={i18n.t('registrations.mailer.new.awaits_approval')}
-                position="top left"
-                trigger={<Icon name="circle info" />}
-              />
-              <Message.Content>
-                {i18n.t('competitions.registration_v2.register.disclaimer')}
-              </Message.Content>
-            </Message>
-
-            <Button
-              positive
-              fluid
-              icon
-              labelPosition="left"
-              disabled={
-              isCreating
-                || (competitionInfo.guests_per_registration_limit ?? Infinity) < guests
-}
-              onClick={() => attemptAction(actionCreateRegistration)}
-            >
-              <Icon name="paper plane" />
-              {i18n.t('registrations.register')}
-            </Button>
-          </>
-        )}
+              <Button
+                positive
+                fluid
+                icon
+                type="submit"
+                id="registration-register"
+                labelPosition="left"
+                disabled={isCreating}
+              >
+                <Icon name="paper plane" />
+                {i18n.t('registrations.register')}
+              </Button>
+            </>
+          )}
+        </Form>
       </>
     </Segment>
   );

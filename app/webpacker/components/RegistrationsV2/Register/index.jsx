@@ -47,7 +47,9 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
     isLoading ? <Loading />
       : (
         <>
-          <RegistrationMessage ref={ref} />
+          <div ref={ref}>
+            <RegistrationMessage parentRef={ref} />
+          </div>
           <StepPanel
             user={userInfo}
             preferredEvents={preferredEvents}
