@@ -244,7 +244,13 @@ export default function CompetingStep({
 
         <Form onSubmit={(event) => {
           event.preventDefault();
-          attemptAction(actionById[event.nativeEvent.submitter.id]);
+          if (shouldShowUpdateButton) {
+            attemptAction(actionUpdateRegistration, { checkForChanges: true });
+          } else if (shouldShowReRegisterButton) {
+            attemptAction(actionReRegister);
+          } else {
+            attemptAction(actionCreateRegistration);
+          }
         }}
         >
           <Form.Field required>
@@ -340,10 +346,7 @@ export default function CompetingStep({
                       disabled={
                         isUpdating || !canUpdateRegistration || !hasChanges
                       }
-                      id="registration-update"
-                      onClick={() => attemptAction(actionUpdateRegistration, {
-                        checkForChanges: true,
-                      })}
+                      type="submit"
                     >
                       {i18n.t('registrations.update')}
                     </Button>
@@ -356,7 +359,6 @@ export default function CompetingStep({
                     secondary
                     disabled={isUpdating}
                     type="submit"
-                    id="registration-re-register"
                   >
                     {i18n.t('competitions.registration_v2.register.re-register')}
                   </Button>
@@ -365,9 +367,8 @@ export default function CompetingStep({
                 {shouldShowDeleteButton && (
                   <Button
                     disabled={isUpdating}
-                    type="submit"
-                    id="registration-delete"
                     negative
+                    onClick={() => attemptAction(actionDeleteRegistration)}
                   >
                     {i18n.t('registrations.delete_registration')}
                   </Button>
@@ -392,7 +393,6 @@ export default function CompetingStep({
                 fluid
                 icon
                 type="submit"
-                id="registration-register"
                 labelPosition="left"
                 disabled={isCreating}
               >
