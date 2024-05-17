@@ -179,13 +179,6 @@ export default function CompetingStep({
     });
   };
 
-  const actionById = {
-    'registration-update': actionUpdateRegistration,
-    'registration-delete': actionDeleteRegistration,
-    'registration-register': actionCreateRegistration,
-    'registration-re-register': actionReRegister,
-  };
-
   const handleEventSelection = ({ type, eventId }) => {
     if (type === 'select_all_events') {
       setSelectedEvents(competitionInfo.event_ids);
