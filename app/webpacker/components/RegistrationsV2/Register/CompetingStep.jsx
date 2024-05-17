@@ -244,7 +244,7 @@ export default function CompetingStep({
 
         <Form onSubmit={(event) => {
           event.preventDefault();
-          attemptAction(actionById[event.target.id]);
+          attemptAction(actionById[event.nativeEvent.submitter.id]);
         }}
         >
           <Form.Field required>
