@@ -11,9 +11,6 @@ class RolesMetadataTeamsCommittees < ApplicationRecord
   has_one :user, through: :user_role
 
   def at_least_senior_member?
-    [
-      statuses[:senior_member],
-      statuses[:leader],
-    ].include?(status)
+    user_role.status_sort_rank <= UserRole.status_rank(UserGroup.group_types[:teams_committees], RolesMetadataTeamsCommittees.statuses[:senior_member])
   end
 end

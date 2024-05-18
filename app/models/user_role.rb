@@ -23,9 +23,13 @@ class UserRole < ApplicationRecord
     UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
   }.freeze
 
+  def self.status_rank(group_type, status)
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+  end
+
   def status_sort_rank
     status = metadata&.status || ''
-    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+    UserRole.status_rank(group_type, status)
   end
 
   def is_active?
