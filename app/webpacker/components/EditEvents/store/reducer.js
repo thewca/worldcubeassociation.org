@@ -34,6 +34,7 @@ const reducers = {
   [ChangesSaved]: (state) => ({
     ...state,
     initialWcifEvents: state.wcifEvents,
+    initialWcifSchedule: state.wcifSchedule,
   }),
 
   [AddEvent]: (state, { payload }) => ({
