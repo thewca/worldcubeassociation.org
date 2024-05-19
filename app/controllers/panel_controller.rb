@@ -14,6 +14,9 @@ class PanelController < ApplicationController
   before_action -> { redirect_to_root_unless_user(:can_access_wfc_panel?) }, only: [:wfc]
   before_action -> { redirect_to_root_unless_user(:can_access_wrt_panel?) }, only: [:wrt]
   before_action -> { redirect_to_root_unless_user(:can_access_wst_panel?) }, only: [:wst]
+  before_action -> { redirect_to_root_unless_user(:can_access_wdc_panel?) }, only: [:wdc]
+  before_action -> { redirect_to_root_unless_user(:can_access_wec_panel?) }, only: [:wec]
+  before_action -> { redirect_to_root_unless_user(:can_access_weat_panel?) }, only: [:weat]
 
   def pending_claims_for_subordinate_delegates
     # Show pending claims for a given user, or the current user, if they can see them
@@ -37,6 +40,7 @@ class PanelController < ApplicationController
         "boardEditor" => "board-editor",
         "officersEditor" => "officers-editor",
         "regionsAdmin" => "regions-admin",
+        "bannedCompetitors" => "banned-competitors",
       },
       "seniorDelegate" => {
         "delegateForms" => "delegate-forms",
@@ -48,6 +52,7 @@ class PanelController < ApplicationController
       "leader" => {
         "leaderForms" => "leader-forms",
         "groupsManager" => "groups-manager",
+        "bannedCompetitors" => "banned-competitors",
       },
       "wfc" => {
         "duesExport" => "dues-export",
@@ -60,9 +65,19 @@ class PanelController < ApplicationController
         "postingDashboard" => "posting-dashboard",
         "editPerson" => "edit-person",
         "regionsManager" => "regions-manager",
+        "bannedCompetitors" => "banned-competitors",
       },
       "wst" => {
         "translators" => "translators",
+      },
+      "wdc" => {
+        "bannedCompetitors" => "banned-competitors",
+      },
+      "wec" => {
+        "bannedCompetitors" => "banned-competitors",
+      },
+      "weat" => {
+        "bannedCompetitors" => "banned-competitors",
       },
     }
   end

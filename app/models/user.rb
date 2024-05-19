@@ -577,6 +577,17 @@ class User < ApplicationRecord
     delegate_roles.select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate] }
   end
 
+  private def groups_with_read_access
+    return "*" if can_edit_any_groups?
+    groups = groups_with_edit_access
+
+    if can_view_banned_competitors?
+      groups += UserGroup.banned_competitors.ids
+    end
+
+    groups
+  end
+
   private def groups_with_edit_access
     return "*" if can_edit_any_groups?
     groups = []
@@ -622,6 +633,9 @@ class User < ApplicationRecord
       },
       can_create_groups: {
         scope: groups_with_create_access,
+      },
+      can_read_groups: {
+        scope: groups_with_read_access,
       },
       can_edit_groups: {
         scope: groups_with_edit_access,
@@ -1308,6 +1322,18 @@ class User < ApplicationRecord
     admin? || staff?
   end
 
+  def can_access_wdc_panel?
+    admin? || wdc_team?
+  end
+
+  def can_access_wec_panel?
+    admin? || ethics_committee?
+  end
+
+  def can_access_weat_panel?
+    admin? || weat_team?
+  end
+
   def can_access_panel?
     (
       can_access_wfc_panel? ||
@@ -1317,7 +1343,10 @@ class User < ApplicationRecord
       can_access_leader_panel? ||
       can_access_senior_delegate_panel? ||
       can_access_delegate_panel? ||
-      can_access_staff_panel?
+      can_access_staff_panel? ||
+      can_access_wdc_panel? ||
+      can_access_wec_panel? ||
+      can_access_weat_panel?
     )
   end
 

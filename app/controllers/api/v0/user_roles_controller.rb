@@ -64,6 +64,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def create
     user_id = params.require(:userId)
     group_id = params[:groupId] || UserGroup.find_by(group_type: params.require(:groupType)).id
+    end_date = params[:endDate]
 
     create_supported_groups = [
       UserGroup.group_types[:delegate_regions],
@@ -73,6 +74,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
       UserGroup.group_types[:teams_committees],
       UserGroup.group_types[:councils],
       UserGroup.group_types[:board],
+      UserGroup.group_types[:banned_competitors],
     ]
     group = UserGroup.find(group_id)
 
@@ -110,6 +112,8 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         metadata = RolesMetadataTeamsCommittees.create!(status: status)
       elsif group.group_type == UserGroup.group_types[:councils]
         metadata = RolesMetadataCouncils.create!(status: status)
+      elsif group.group_type == UserGroup.group_types[:banned_competitors]
+        metadata = RolesMetadataBannedCompetitors.create!
       else
         metadata = nil
       end
@@ -118,6 +122,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         user_id: user_id,
         group_id: group_id,
         start_date: Date.today,
+        end_date: end_date,
         metadata: metadata,
       )
     end
@@ -238,6 +243,29 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         end
       else
         return render status: :unprocessable_entity, json: { error: "Invalid parameter to be changed" }
+      end
+    elsif group_type == UserGroup.group_types[:banned_competitors]
+      if params.key?(:endDate)
+        role.end_date = params.require(:endDate)
+      end
+
+      role.save!
+      role.previous_changes.each do |changed_key, values|
+        changed_parameter = (
+          case changed_key
+          when 'end_date'
+            'End Date'
+          else
+            nil
+          end
+        )
+        if changed_parameter.present?
+          changes << UserRole::UserRoleChange.new(
+            changed_parameter: changed_parameter,
+            previous_value: values[0] || 'None',
+            new_value: values[1] || 'None',
+          )
+        end
       end
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }

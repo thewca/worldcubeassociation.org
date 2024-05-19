@@ -41,6 +41,9 @@ class RoleChangeMailer < ApplicationMailer
     when UserGroup.group_types[:board], UserGroup.group_types[:officers]
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:banned_competitors]
+      to_list = [user_who_made_the_change.email, UserGroup.teams_committees_group_wdc.metadata.email]
+      reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group.group_type}"
     end
@@ -70,6 +73,9 @@ class RoleChangeMailer < ApplicationMailer
       reply_to_list = [user_who_made_the_change.email]
     when UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]
       to_list = [user_who_made_the_change.email, GroupsMetadataBoard.email, UserGroup.teams_committees_group_weat.metadata.email, role.group.lead_user.email]
+      reply_to_list = [user_who_made_the_change.email]
+    when UserGroup.group_types[:banned_competitors]
+      to_list = [user_who_made_the_change.email, UserGroup.teams_committees_group_wdc.metadata.email]
       reply_to_list = [user_who_made_the_change.email]
     else
       raise "Unknown/Unhandled group type: #{role.group_type}"

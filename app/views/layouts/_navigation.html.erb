@@ -249,6 +249,15 @@
               <% if current_user.can_access_senior_delegate_panel? %>
                 <li><%= link_to "Senior Delegate panel", panel_senior_delegate_path %></li>
               <% end %>
+              <% if current_user.can_access_wdc_panel? %>
+                <li><%= link_to "WDC panel", panel_wdc_path %></li>
+              <% end %>
+              <% if current_user.can_access_wec_panel? %>
+                <li><%= link_to "WEC panel", panel_wec_path %></li>
+              <% end %>
+              <% if current_user.can_access_weat_panel? %>
+                <li><%= link_to "WEAT panel", panel_weat_path %></li>
+              <% end %>
             <% end %>
             <% if current_user.can_view_poll? %>
               <li class="divider"></li>
