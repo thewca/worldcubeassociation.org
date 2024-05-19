@@ -1,3 +1,4 @@
+import { getActivityEventId, getActivityRoundId } from '../../../lib/utils/activities';
 import { generateWcifRound, removeSharedTimeLimits } from '../utils';
 import {
   AddEvent,
@@ -54,6 +55,16 @@ const reducers = {
         id: e.id,
         rounds: null,
       }) : removeSharedTimeLimits(e, roundIdsToRemove))),
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((v) => ({
+          ...v,
+          rooms: v.rooms.map((r) => ({
+            ...r,
+            activities: r.activities.filter((a) => getActivityEventId(a) !== eventId),
+          })),
+        })),
+      },
     };
   },
 
@@ -101,6 +112,19 @@ const reducers = {
       wcifEvents: state.wcifEvents.map((e) => (
         e.id === eventId ? newEvent : removeSharedTimeLimits(e, roundIdsToRemove)
       )),
+      wcifSchedule: {
+        ...state.wcifSchedule,
+        venues: state.wcifSchedule.venues.map((v) => ({
+          ...v,
+          rooms: v.rooms.map((r) => ({
+            ...r,
+            activities: r.activities.filter(
+              (a) => getActivityEventId(a) !== eventId ||
+                !roundIdsToRemove.includes(getActivityRoundId(a)),
+            ),
+          })),
+        })),
+      },
     };
   },
 
