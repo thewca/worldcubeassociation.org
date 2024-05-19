@@ -17,13 +17,13 @@ import ConfirmProvider from '../../lib/providers/ConfirmProvider';
 
 function EditEvents() {
   const {
-    competitionId, wcifEvents, initialWcifEvents,
+    competitionId, wcifEvents, initialWcifEvents, wcifSchedule, initialWcifSchedule,
   } = useStore();
   const dispatch = useDispatch();
 
   const unsavedChanges = useMemo(() => (
-    !_.isEqual(wcifEvents, initialWcifEvents)
-  ), [wcifEvents, initialWcifEvents]);
+    !_.isEqual(wcifEvents, initialWcifEvents) || !_.isEqual(wcifSchedule, initialWcifSchedule)
+  ), [wcifEvents, initialWcifEvents, wcifSchedule, initialWcifSchedule]);
 
   const onUnload = useCallback((e) => {
     // Prompt the user before letting them navigate away from this page with unsaved changes.
@@ -49,10 +49,10 @@ function EditEvents() {
   const save = useCallback(() => {
     saveWcif(
       competitionId,
-      { events: wcifEvents },
+      { events: wcifEvents, schedule: wcifSchedule },
       () => dispatch(changesSaved()),
     );
-  }, [competitionId, dispatch, saveWcif, wcifEvents]);
+  }, [competitionId, dispatch, saveWcif, wcifEvents, wcifSchedule]);
 
   const renderUnsavedChangesAlert = () => (
     <Message color="blue">
@@ -110,6 +110,7 @@ export default function Wrapper({
   canUpdateEvents,
   canUpdateQualifications,
   wcifEvents,
+  wcifSchedule,
 }) {
   const normalizedEvents = normalizeWcifEvents(wcifEvents);
 
@@ -123,6 +124,8 @@ export default function Wrapper({
         canUpdateQualifications,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
+        wcifSchedule: wcifSchedule,
+        initialWcifSchedule: wcifSchedule,
         unsavedChanges: false,
       }}
     >

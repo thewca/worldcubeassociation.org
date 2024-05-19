@@ -38,7 +38,7 @@ export default function EventPanel({
         content: `Are you sure you want to remove all ${pluralize(
           wcifEvent.rounds.length,
           'round',
-        )} of ${event.name}?`,
+        )} of ${event.name}? This will also remove these rounds from the schedule.`,
       })
         .then(() => {
           dispatch(removeEvent(wcifEvent.id));
@@ -57,7 +57,7 @@ export default function EventPanel({
         content: `Are you sure you want to remove ${pluralize(
           roundsToRemoveCount,
           'round',
-        )} of ${event.name}?`,
+        )} of ${event.name}? This will also remove these rounds from the schedule.`,
       }).then(() => {
         // We have too many rounds
         dispatch(removeRounds(wcifEvent.id, roundsToRemoveCount));
