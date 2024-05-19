@@ -34,11 +34,16 @@ export default function EventPanel({
 
   const handleRemoveEvent = () => {
     if (wcifEvent.rounds && wcifEvent.rounds.length > 0) {
+      const pluralizedRound = pluralize(
+        wcifEvent.rounds.length,
+        'round',
+      );
       confirm({
-        content: `Are you sure you want to remove all ${pluralize(
-          wcifEvent.rounds.length,
-          'round',
-        )} of ${event.name}? This will also remove these rounds from the schedule.`,
+        content: `Are you sure you want to remove all ${
+          pluralizedRound
+        } of ${event.name}? This will also remove the ${
+          pluralizedRound
+        } from the schedule.`,
       })
         .then(() => {
           dispatch(removeEvent(wcifEvent.id));
@@ -53,11 +58,16 @@ export default function EventPanel({
 
     if (roundsToRemoveCount > 0) {
       // remove the rounds
+      const pluralizedRound = pluralize(
+        roundsToRemoveCount,
+        'round',
+      );
       confirm({
-        content: `Are you sure you want to remove ${pluralize(
-          roundsToRemoveCount,
-          'round',
-        )} of ${event.name}? This will also remove these rounds from the schedule.`,
+        content: `Are you sure you want to remove ${
+          pluralizedRound
+        } of ${event.name}? This will also remove the ${
+          pluralizedRound
+        } from the schedule.`,
       }).then(() => {
         // We have too many rounds
         dispatch(removeRounds(wcifEvent.id, roundsToRemoveCount));
