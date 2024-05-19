@@ -124,7 +124,7 @@ export default function Wrapper({
         canUpdateQualifications,
         wcifEvents: normalizedEvents,
         initialWcifEvents: normalizedEvents,
-        wcifSchedule: wcifSchedule,
+        wcifSchedule,
         initialWcifSchedule: wcifSchedule,
         unsavedChanges: false,
       }}

@@ -120,8 +120,8 @@ const reducers = {
           rooms: v.rooms.map((r) => ({
             ...r,
             activities: r.activities.filter(
-              (a) => getActivityEventId(a) !== eventId ||
-                !roundIdsToRemove.includes(getActivityRoundId(a)),
+              (a) => getActivityEventId(a) !== eventId
+                || !roundIdsToRemove.includes(getActivityRoundId(a)),
             ),
           })),
         })),
