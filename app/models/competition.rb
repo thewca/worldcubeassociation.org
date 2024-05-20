@@ -703,6 +703,10 @@ class Competition < ApplicationRecord
     self.uses_v2_registrations
   end
 
+  def should_render_register_v2?(user)
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
+  end
+
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
