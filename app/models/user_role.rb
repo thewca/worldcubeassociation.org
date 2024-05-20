@@ -12,18 +12,31 @@ class UserRole < ApplicationRecord
 
   scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
 
-  STATUS_SORTING_ORDER = {
+  STATUS_RANK = {
     UserGroup.group_types[:delegate_regions].to_sym => [
-      RolesMetadataDelegateRegions.statuses[:senior_delegate],
-      RolesMetadataDelegateRegions.statuses[:regional_delegate],
-      RolesMetadataDelegateRegions.statuses[:delegate],
-      RolesMetadataDelegateRegions.statuses[:junior_delegate],
       RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+      RolesMetadataDelegateRegions.statuses[:junior_delegate],
+      RolesMetadataDelegateRegions.statuses[:delegate],
+      RolesMetadataDelegateRegions.statuses[:regional_delegate],
+      RolesMetadataDelegateRegions.statuses[:senior_delegate],
     ],
-    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:board].to_sym => ["member"],
-    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+    UserGroup.group_types[:teams_committees].to_sym => [
+      RolesMetadataTeamsCommittees.statuses[:member],
+      RolesMetadataTeamsCommittees.statuses[:senior_member],
+      RolesMetadataTeamsCommittees.statuses[:leader],
+    ],
+    UserGroup.group_types[:councils].to_sym => [
+      RolesMetadataCouncils.statuses[:member],
+      RolesMetadataCouncils.statuses[:senior_member],
+      RolesMetadataCouncils.statuses[:leader],
+    ],
+    UserGroup.group_types[:officers].to_sym => [
+      RolesMetadataOfficers.statuses[:treasurer],
+      RolesMetadataOfficers.statuses[:vice_chair],
+      RolesMetadataOfficers.statuses[:secretary],
+      RolesMetadataOfficers.statuses[:executive_director],
+      RolesMetadataOfficers.statuses[:chair],
+    ],
   }.freeze
 
   GROUP_TYPE_RANK_ORDER = [
@@ -54,10 +67,10 @@ class UserRole < ApplicationRecord
   }.freeze
 
   def self.status_rank(group_type, status)
-    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+    STATUS_RANK[group_type.to_sym]&.find_index(status) || STATUS_RANK[group_type.to_sym]&.length || 1
   end
 
-  def status_sort_rank
+  def status_rank
     status = metadata&.status || ''
     UserRole.status_rank(group_type, status)
   end

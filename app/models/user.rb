@@ -1333,7 +1333,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| role.status_sort_rank }
+    delegate_roles.max_by { |role| role.status_rank }
   end
 
   def delegate_status

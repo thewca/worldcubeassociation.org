@@ -29,7 +29,7 @@ function GroupTable({ group }) {
     data: roles, loading, error, sync,
   } = useLoadedData(apiV0Urls.userRoles.listOfGroup(
     group.id,
-    'status,startDate,name', // Sort params
+    'status:desc,startDate,name', // Sort params
     { isActive: true },
   ));
   const confirm = useConfirm();
