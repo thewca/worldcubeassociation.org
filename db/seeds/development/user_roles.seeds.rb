@@ -6,7 +6,7 @@ after :user_groups do
   current_board_roles = 4.times.collect { |index| FactoryBot.create!(:board_role, :active) }
 
   # Officer Roles
-  # Giving officer roles to all board users except a few
+  # Giving officer roles to all board users except past_board_roles[0] and current_board_roles[0]
   FactoryBot.create!(:executive_director_role, :inactive, user: past_board_roles[1].user)
   FactoryBot.create!(:executive_director_role, :inactive, user: past_board_roles[2].user)
   FactoryBot.create!(:executive_director_role, user: current_board_roles[1].user)

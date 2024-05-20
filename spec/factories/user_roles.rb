@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :user_role do
-    user { rand(2) == 0 ? FactoryBot.create(:user_with_wca_id) : FactoryBot.create(:user) }
+    user { FactoryBot.create(:user) }
 
     trait :active do
       start_date { Date.today }
