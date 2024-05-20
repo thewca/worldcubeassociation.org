@@ -1333,6 +1333,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
+    # Lower the status rank, higher the position. Hence taking the role with the least rank.
     delegate_roles.min_by { |role| role.status_rank }
   end
 
