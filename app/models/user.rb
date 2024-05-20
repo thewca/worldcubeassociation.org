@@ -518,7 +518,15 @@ class User < ApplicationRecord
   end
 
   def trainee_delegate?
-    delegate_role_metadata.trainee_delegate.any?
+    # NOTE: `delegate_role_metadata.trainee_delegate.any?`, does fire a db query
+    # even if the `delegate_role_metadata` is eager loaded (because rails
+    # really wants to translate it to a "select 1 ..."; therefore we use a
+    # different implementation when we explicitly eager load roles.
+    if delegate_role_metadata.loaded?
+      delegate_role_metadata.any?(&:trainee_delegate?)
+    else
+      delegate_role_metadata.trainee_delegate.any?
+    end
   end
 
   private def staff_delegate?
