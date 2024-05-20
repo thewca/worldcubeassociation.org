@@ -206,6 +206,24 @@ export default function CompetingStep({
       || competitionInfo.allow_registration_self_delete_after_acceptance)
     && competitionInfo['registration_opened?'];
 
+  const handleSubmit = useCallback((event) => {
+    event.preventDefault();
+    if (shouldShowUpdateButton) {
+      attemptAction(actionUpdateRegistration, { checkForChanges: true });
+    } else if (shouldShowReRegisterButton) {
+      attemptAction(actionReRegister);
+    } else {
+      attemptAction(actionCreateRegistration);
+    }
+  }, [
+    actionCreateRegistration,
+    actionReRegister,
+    actionUpdateRegistration,
+    attemptAction,
+    shouldShowReRegisterButton,
+    shouldShowUpdateButton,
+  ]);
+
   return (
     <Segment basic>
       {processing && (
@@ -235,17 +253,7 @@ export default function CompetingStep({
           </Message>
         )}
 
-        <Form onSubmit={(event) => {
-          event.preventDefault();
-          if (shouldShowUpdateButton) {
-            attemptAction(actionUpdateRegistration, { checkForChanges: true });
-          } else if (shouldShowReRegisterButton) {
-            attemptAction(actionReRegister);
-          } else {
-            attemptAction(actionCreateRegistration);
-          }
-        }}
-        >
+        <Form onSubmit={handleSubmit}>
           <Form.Field required>
             <EventSelector
               onEventSelection={handleEventSelection}
