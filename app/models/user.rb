@@ -53,8 +53,6 @@ class User < ApplicationRecord
     end
   }
 
-  scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
-
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -1326,7 +1324,7 @@ class User < ApplicationRecord
   def subordinate_delegates
     delegate_roles
       .filter { |role| role.is_lead? }
-      .flat_map { |role| role.group.active_users + role.group.active_users_of_all_child_groups }
+      .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
 

@@ -1,69 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V0::UserRolesController < Api::V0::ApiController
-  include SortHelper
-
-  GROUP_TYPE_RANK_ORDER = [
-    UserGroup.group_types[:board],
-    UserGroup.group_types[:officers],
-    UserGroup.group_types[:teams_committees],
-    UserGroup.group_types[:delegate_regions],
-    UserGroup.group_types[:councils],
-  ].freeze
-
-  SORT_WEIGHT_LAMBDAS = {
-    startDate:
-      lambda { |role| role.start_date.to_time.to_i },
-    lead:
-      lambda { |role| role.is_lead? ? 0 : 1 },
-    eligibleVoter:
-      lambda { |role| role.is_eligible_voter? ? 0 : 1 },
-    groupTypeRank:
-      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
-    status:
-      lambda { |role| role.status_sort_rank },
-    name:
-      lambda { |role| role.user.name },
-    groupName:
-      lambda { |role| role.group.name },
-    location:
-      lambda { |role| role.metadata.location || '' },
-  }.freeze
-
-  # Sorts the list of roles based on the given list of sort keys and directions.
-  private def sorted_roles(roles, sort_param)
-    sort_param ||= ''
-    sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
-  end
-
-  # Filter role based on the permissions of the current user.
-  private def can_current_user_access(role)
-    group = role.group
-    !group.is_hidden || current_user&.has_permission?(:can_edit_groups, group.id)
-  end
-
-  # Filters the list of roles based on the permissions of the current user.
-  private def filter_roles_for_logged_in_user(roles)
-    roles.select do |role|
-      can_current_user_access(role)
-    end
-  end
-
-  # Filters the list of roles based on given parameters.
-  private def filter_roles_for_parameters(roles: [], status: nil, is_active: nil, is_group_hidden: nil, group_type: nil, is_lead: nil)
-    roles.reject do |role|
-      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
-      # foo is a boolean false but we need to actually check if the boolean is present or not.
-      (
-        (!status.nil? && status != role.metadata&.status) ||
-        (!is_active.nil? && is_active != role.is_active?) ||
-        (!is_group_hidden.nil? && is_group_hidden != role.group.is_hidden) ||
-        (!group_type.nil? && group_type != role.group_type) ||
-        (!is_lead.nil? && is_lead != role.is_lead?)
-      )
-    end
-  end
-
   # Removes all pending WCA ID claims for the demoted Delegate and notifies the users.
   private def remove_pending_wca_id_claims(user)
     region_senior_delegate = user.region.senior_delegate
@@ -80,20 +17,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     user = User.find(user_id)
     roles = user.roles
 
-    # Filter the list based on the permissions of the logged in user.
-    roles = filter_roles_for_logged_in_user(roles)
-
-    # Filter the list based on the other parameters.
-    roles = filter_roles_for_parameters(
-      roles: roles,
-      is_active: params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil,
-      is_group_hidden: params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil,
-      status: params[:status],
-      group_type: params[:groupType],
-    )
-
-    # Sort the roles.
-    roles = sorted_roles(roles, params[:sort])
+    # Filter & Sort roles
+    roles = UserRole.filter_roles(roles, current_user, params)
+    roles = UserRole.sort_roles(roles, params[:sort])
 
     render json: roles
   end
@@ -104,24 +30,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     group = UserGroup.find(group_id)
     roles = group.roles
 
-    # Filter the list based on the permissions of the logged in user.
-    roles = filter_roles_for_logged_in_user(roles)
-
-    # Filter the list based on the other parameters.
-    status = params[:status]
-    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
-    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
-    is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
-    roles = filter_roles_for_parameters(
-      roles: roles,
-      status: status,
-      is_active: is_active,
-      is_group_hidden: is_group_hidden,
-      is_lead: is_lead,
-    )
-
-    # Sort the roles.
-    roles = sorted_roles(roles, params[:sort])
+    # Filter & Sort roles
+    roles = UserRole.filter_roles(roles, current_user, params)
+    roles = UserRole.sort_roles(roles, params[:sort])
 
     render json: roles
   end
@@ -136,22 +47,9 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     group_type = params.require(:group_type)
     roles = roles_of_group_type(group_type)
 
-    # Filter the list based on the permissions of the logged in user.
-    roles = filter_roles_for_logged_in_user(roles)
-
-    # Filter the list based on the other parameters.
-    status = params[:status]
-    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
-    is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
-    roles = filter_roles_for_parameters(
-      roles: roles,
-      status: status,
-      is_active: is_active,
-      is_lead: is_lead,
-    )
-
-    # Sort the roles.
-    roles = sorted_roles(roles, params[:sort])
+    # Filter & Sort roles
+    roles = UserRole.filter_roles(roles, current_user, params)
+    roles = UserRole.sort_roles(roles, params[:sort])
 
     render json: roles
   end
@@ -159,7 +57,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
   def show
     id = params.require(:id)
     role = UserRole.find(id)
-    return render status: :unauthorized, json: { error: "Cannot access role" } unless can_current_user_access(role)
+    return render status: :unauthorized, json: { error: "Cannot access role" } unless role.can_user_read?(current_user)
     render json: role
   end
 
