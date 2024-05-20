@@ -36,7 +36,7 @@ export default function RegistrationOverview({
         <>
           <Segment>
             <Header>Your Registration:</Header>
-            <Form>
+            <Form onSubmit={nextStep}>
               <FormField>
                 <label>{i18n.t('activerecord.attributes.registration.registration_competition_events')}</label>
                 {registration.competing.event_ids.map((id) => (<EventIcon key={id} id={id} style={{ cursor: 'unset' }} />))}
@@ -55,7 +55,7 @@ export default function RegistrationOverview({
           <Button
             primary
             attached
-            onClick={nextStep}
+            type="submit"
           >
             {i18n.t('registrations.update')}
           </Button>
