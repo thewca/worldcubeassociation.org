@@ -27,6 +27,7 @@ export default function PaymentStep({
   displayAmount,
   registration,
   nextStep,
+  conversionFetching,
 }) {
   const stripe = useStripe();
   const elements = useElements();
@@ -90,10 +91,17 @@ export default function PaymentStep({
         <Divider />
         { competitionInfo.enable_donations && (
           <FormField>
-            <Checkbox value={isDonationChecked} onChange={setDonationChecked} label={i18n.t('registrations.payment_form.labels.show_donation')} />
+            <Checkbox
+              value={isDonationChecked}
+              onChange={(event, data) => {
+                setDonationChecked(event, data);
+                handleDonation(0);
+              }}
+              label={i18n.t('registrations.payment_form.labels.show_donation')}
+            />
             { isDonationChecked && (
             <AutonumericField
-              onChange={handleDonation}
+              onChange={(_, { value }) => handleDonation(value)}
               currency={competitionInfo.currency_code}
               value={donationAmount}
               label={(
@@ -115,7 +123,7 @@ export default function PaymentStep({
                 {displayAmount}
               </Header>
               <Divider hidden />
-              <Button type="submit" primary disabled={isLoading || !stripe || !elements} id="submit">
+              <Button type="submit" primary disabled={isLoading || conversionFetching || !stripe || !elements} id="submit">
                 {i18n.t('registrations.payment_form.button_text')}
               </Button>
             </>

@@ -3,6 +3,7 @@ import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
 import React, { useCallback, useEffect, useState } from 'react';
 import { Header } from 'semantic-ui-react';
+import { useQuery } from '@tanstack/react-query';
 import PaymentStep from './PaymentStep';
 import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
 import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
@@ -24,20 +25,14 @@ export default function StripeWrapper({
 }) {
   const [stripePromise, setStripePromise] = useState(null);
   const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
-  const [amount, setAmount] = useState(initialAmount);
   const [donationAmount, setDonationAmount] = useState(0);
-  const [displayAmount, setDisplayAmount] = useState();
 
-  useEffect(() => {
-    async function fetchInitialAmount() {
-      const { human_amount: humanAmount } = await convertISOAmount(
-        initialAmount,
-        competitionInfo.currency_code,
-      );
-      setDisplayAmount(humanAmount);
-    }
-    fetchInitialAmount();
-  }, [competitionInfo.currency_code, initialAmount]);
+  const {
+    data, isFetching, refetch,
+  } = useQuery({
+    queryFn: () => convertISOAmount(initialAmount + donationAmount, competitionInfo.currency_code),
+    queryKey: ['displayAmount', initialAmount + donationAmount, competitionInfo.currency_code],
+  });
 
   useEffect(() => {
     setStripePromise(
@@ -46,15 +41,11 @@ export default function StripeWrapper({
       }),
     );
   }, [connectedAccountId, stripePublishableKey]);
-  const handleDonation = useCallback(async (_, { value: newDonationAmount }) => {
-    const {
-      api_amounts: { stripe: stripeAmount },
-      human_amount: humanAmount,
-    } = await convertISOAmount(initialAmount + newDonationAmount, competitionInfo.currency_code);
-    setAmount(stripeAmount);
+
+  const handleDonation = useCallback(async (newDonationAmount) => {
     setDonationAmount(newDonationAmount);
-    setDisplayAmount(humanAmount);
-  }, [competitionInfo.currency_code, initialAmount]);
+    refetch();
+  }, [refetch]);
 
   return (
     <>
@@ -62,16 +53,17 @@ export default function StripeWrapper({
       { stripePromise && (
         <Elements
           stripe={stripePromise}
-          options={{ amount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
+          options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
             handleDonation={handleDonation}
             competitionInfo={competitionInfo}
             user={user}
             donationAmount={donationAmount}
-            displayAmount={displayAmount}
+            displayAmount={data?.human_amount}
             registration={registration}
             nextStep={nextStep}
+            conversionFetching={isFetching}
           />
         </Elements>
       )}
