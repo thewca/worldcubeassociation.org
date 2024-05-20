@@ -221,11 +221,12 @@ class User < ApplicationRecord
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
+        wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
         remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
         if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?
-          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)
+          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
@@ -884,6 +885,7 @@ class User < ApplicationRecord
     if cannot_edit_reason
       I18n.t('users.edit.cannot_edit.msg',
              reason: cannot_edit_reason,
+             wrt_contact_path: Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt'),
              delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
     end
   end
