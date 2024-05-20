@@ -4,6 +4,7 @@ require 'rails_helper'
 
 RSpec.describe User, type: :model do
   let(:dob_form_path) { Rails.application.routes.url_helpers.contact_dob_path }
+  let(:wrt_contact_path) { Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt') }
 
   it "defines a valid user" do
     user = FactoryBot.create :user
@@ -120,7 +121,7 @@ RSpec.describe User, type: :model do
 
     it "does not allow assigning a genderless WCA ID to a user" do
       user.wca_id = genderless_person.wca_id
-      expect(user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.wca_id_no_gender_html')])
+      expect(user).to be_invalid_with_errors(wca_id: [I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path)])
     end
 
     it "nullifies empty WCA IDs" do
@@ -380,7 +381,7 @@ RSpec.describe User, type: :model do
     it "does not allow claiming wca id Person without gender" do
       user.unconfirmed_wca_id = person_without_gender.wca_id
       user.dob_verification = "1234-04-03"
-      expect(user).to be_invalid_with_errors(gender: [I18n.t('users.errors.wca_id_no_gender_html')])
+      expect(user).to be_invalid_with_errors(gender: [I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path)])
     end
 
     it "does not show a message about incorrect dob for people who have already claimed their wca id" do
