@@ -37,8 +37,8 @@ export default function CompetingStep({
 
   const [comment, setComment] = useState('');
   const [selectedEvents, setSelectedEvents] = useState(
-    !competitionInfo.events_per_registration_limit ? preferredEvents
-      .filter((event) => competitionInfo.event_ids.includes(event)) : [],
+    competitionInfo.events_per_registration_limit ? [] : preferredEvents
+      .filter((event) => competitionInfo.event_ids.includes(event)),
   );
   const [guests, setGuests] = useState(0);
 
