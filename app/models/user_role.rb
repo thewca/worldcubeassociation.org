@@ -53,6 +53,10 @@ class UserRole < ApplicationRecord
       lambda { |role| role.metadata.location || '' },
   }.freeze
 
+  def self.status_rank(group_type, status)
+    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+  end
+
   def status_sort_rank
     status = metadata&.status || ''
     UserRole.status_rank(group_type, status)
