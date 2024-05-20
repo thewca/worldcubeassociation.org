@@ -12,6 +12,13 @@ class UserRole < ApplicationRecord
 
   scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
 
+  UserRoleChange = Struct.new(
+    :changed_parameter,
+    :previous_value,
+    :new_value,
+    keyword_init: true,
+  )
+
   STATUS_RANK = {
     UserGroup.group_types[:delegate_regions].to_sym => [
       RolesMetadataDelegateRegions.statuses[:trainee_delegate],

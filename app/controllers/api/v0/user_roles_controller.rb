@@ -136,15 +136,18 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
     role = UserRole.find(id)
     group_type = role.group.group_type
+    changes = []
 
     return head :unauthorized unless current_user.has_permission?(:can_edit_groups, role.group.id)
 
     if group_type == UserGroup.group_types[:delegate_regions]
       if params.key?(:status)
         status = params.require(:status)
-        changed_parameter = 'Status'
-        previous_value = I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en')
-        new_value = I18n.t("enums.user_roles.status.delegate_regions.#{status}", locale: 'en')
+        changes << UserRole::UserRoleChange.new(
+          changed_parameter: 'Status',
+          previous_value: I18n.t("enums.user_roles.status.delegate_regions.#{role.metadata.status}", locale: 'en'),
+          new_value: I18n.t("enums.user_roles.status.delegate_regions.#{status}", locale: 'en'),
+        )
 
         ActiveRecord::Base.transaction do
           role.update!(end_date: Date.today)
@@ -158,9 +161,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         end
       elsif params.key?(:groupId)
         group_id = params.require(:groupId)
-        changed_parameter = 'Delegate Region'
-        previous_value = UserGroup.find(role.group.id).name
-        new_value = UserGroup.find(group_id).name
+        changes << UserRole::UserRoleChange.new(
+          changed_parameter: 'Delegate Region',
+          previous_value: UserGroup.find(role.group.id).name,
+          new_value: UserGroup.find(group_id).name,
+        )
 
         return head :unauthorized unless current_user.has_permission?(:can_edit_groups, group_id)
 
@@ -176,9 +181,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
         end
       elsif params.key?(:location)
         location = params.require(:location)
-        changed_parameter = 'Location'
-        previous_value = role.metadata.location
-        new_value = location
+        changes << UserRole::UserRoleChange.new(
+          changed_parameter: 'Location',
+          previous_value: role.metadata.location,
+          new_value: location,
+        )
 
         ActiveRecord::Base.transaction do
           role.update!(end_date: Date.today)
@@ -196,9 +203,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     elsif group_type == UserGroup.group_types[:delegate_probation]
       if params.key?(:endDate)
         end_date = params.require(:endDate)
-        changed_parameter = 'End Date'
-        previous_value = role.end_date || 'Empty'
-        new_value = end_date
+        changes << UserRole::UserRoleChange.new(
+          changed_parameter: 'End Date',
+          previous_value: role.end_date || 'Empty',
+          new_value: end_date,
+        )
 
         role.update!(end_date: Date.safe_parse(end_date))
       else
@@ -207,9 +216,11 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     elsif [UserGroup.group_types[:teams_committees], UserGroup.group_types[:councils]].include?(group_type)
       if params.key?(:status)
         status = params.require(:status)
-        changed_parameter = 'Status'
-        previous_value = I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en')
-        new_value = I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en')
+        changes << UserRole::UserRoleChange.new(
+          changed_parameter: 'Status',
+          previous_value: I18n.t("enums.user_roles.status.#{group_type}.#{role.metadata.status}", locale: 'en'),
+          new_value: I18n.t("enums.user_roles.status.#{group_type}.#{status}", locale: 'en'),
+        )
 
         ActiveRecord::Base.transaction do
           role.update!(end_date: Date.today)
@@ -231,7 +242,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     else
       return render status: :unprocessable_entity, json: { error: "Invalid group type" }
     end
-    RoleChangeMailer.notify_role_change(role, current_user, changed_parameter, previous_value, new_value).deliver_later
+    RoleChangeMailer.notify_role_change(role, current_user, changes).deliver_later
     render json: { success: true }
   end
 

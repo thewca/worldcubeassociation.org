@@ -53,12 +53,10 @@ class RoleChangeMailer < ApplicationMailer
     )
   end
 
-  def notify_role_change(role, user_who_made_the_change, changed_parameter, previous_value, new_value)
+  def notify_role_change(role, user_who_made_the_change, changes)
     @role = role
     @user_who_made_the_change = user_who_made_the_change
-    @changed_parameter = changed_parameter
-    @previous_value = previous_value
-    @new_value = new_value
+    @changes = changes
     @group_type_name = UserGroup.group_type_name[role.group_type.to_sym]
     @today_date = Date.today
 
