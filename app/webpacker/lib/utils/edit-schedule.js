@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import { DateTime, Duration } from 'luxon';
 import { toLuxonDateTime } from '@fullcalendar/luxon3';
-import { parseActivityCode } from './wcif';
+import { humanizeActivityCode, parseActivityCode } from './wcif';
 
 export function toMicrodegrees(coord) {
   const result = Math.trunc(parseFloat(coord) * 1e6);
@@ -134,6 +134,21 @@ export function changeTimezoneKeepingLocalTime(isoDateTime, oldTimezone, newTime
   return luxonToWcifIso(newZoneSameLocalTime);
 }
 
+export const buildPartialActivityFromCode = (
+  activityCode,
+  childActivities = [],
+  extensions = [],
+) => {
+  const humanizedCode = humanizeActivityCode(activityCode);
+
+  return {
+    name: humanizedCode,
+    activityCode,
+    childActivities,
+    extensions,
+  };
+};
+
 export function fcEventToActivityAndDates(fcEvent, calendar) {
   const eventStartLuxon = toLuxonDateTime(fcEvent.start, calendar);
   const eventEndLuxon = toLuxonDateTime(fcEvent.end, calendar);
@@ -141,20 +156,14 @@ export function fcEventToActivityAndDates(fcEvent, calendar) {
   const utcStartIso = luxonToWcifIso(eventStartLuxon);
   const utcEndIso = luxonToWcifIso(eventEndLuxon);
 
-  const {
-    activityId,
-    activityCode,
-    activityName,
-    childActivities,
-  } = fcEvent.extendedProps;
+  const { activity: attachedActivity } = fcEvent.extendedProps;
+  const partialActivity = buildPartialActivityFromCode(attachedActivity.activityCode);
 
   const activity = {
-    id: activityId,
-    name: activityName,
-    activityCode,
+    ...partialActivity,
+    ...attachedActivity,
     startTime: utcStartIso,
     endTime: utcEndIso,
-    childActivities: childActivities || [],
   };
 
   return {

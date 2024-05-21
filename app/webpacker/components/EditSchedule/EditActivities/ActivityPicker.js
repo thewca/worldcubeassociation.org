@@ -8,8 +8,9 @@ import {
 import cn from 'classnames';
 import _ from 'lodash';
 import {
+  humanizeActivityCode,
   parseActivityCode,
-  roundIdToString,
+  roundIdToString, shortLabelForActivityCode,
 } from '../../../lib/utils/wcif';
 import { formats } from '../../../lib/wca-data.js.erb';
 
@@ -64,7 +65,6 @@ function PickerRow({
         key={n}
         wcifRoom={wcifRoom}
         activityCode={`${wcifRound.id}-a${n + 1}`}
-        attemptNumber={n + 1}
       />
     ));
   }
@@ -80,36 +80,24 @@ function PickerRow({
 function ActivityLabel({
   wcifRoom,
   activityCode,
-  attemptNumber,
 }) {
   const usedActivityCodes = useMemo(
     () => wcifRoom.activities.map((activity) => activity.activityCode),
     [wcifRoom.activities],
   );
 
-  const { roundNumber } = parseActivityCode(activityCode);
-
-  let tooltipText = roundIdToString(activityCode);
-  let text = `R${roundNumber}`;
-
-  if (attemptNumber) {
-    tooltipText += `, Attempt ${attemptNumber}`;
-    text += `A${attemptNumber}`;
-  }
-
   const isEnabled = !usedActivityCodes.includes(activityCode);
 
   return (
     <Popup
-      content={tooltipText}
+      content={humanizeActivityCode(activityCode)}
       trigger={(
         <Label
           className={isEnabled ? 'fc-draggable' : ''}
           color={isEnabled ? 'blue' : 'grey'}
-          wcif-title={tooltipText}
           wcif-ac={activityCode}
         >
-          {text}
+          {shortLabelForActivityCode(activityCode)}
         </Label>
       )}
     />

@@ -26,7 +26,11 @@ import { useDispatch, useStore } from '../../../lib/providers/StoreProvider';
 import { useConfirm } from '../../../lib/providers/ConfirmProvider';
 import useInputState from '../../../lib/hooks/useInputState';
 import ActivityPicker from './ActivityPicker';
-import { getMatchingActivities, roomWcifFromId, venueWcifFromRoomId } from '../../../lib/utils/wcif';
+import {
+  getMatchingActivities,
+  roomWcifFromId,
+  venueWcifFromRoomId,
+} from '../../../lib/utils/wcif';
 import { getTextColor } from '../../../lib/utils/calendar';
 import useCheckboxState from '../../../lib/hooks/useCheckboxState';
 
@@ -40,6 +44,7 @@ import {
 
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import {
+  buildPartialActivityFromCode,
   defaultDurationFromActivityCode,
   fcEventToActivityAndDates,
   luxonToWcifIso,
@@ -106,10 +111,7 @@ function EditActivities({
         start: activity.startTime,
         end: activity.endTime,
         extendedProps: {
-          activityId: activity.id,
-          activityCode: activity.activityCode,
-          activityName: activity.name,
-          childActivities: activity.childActivities,
+          activity,
           matchCount,
         },
       };
@@ -126,15 +128,15 @@ function EditActivities({
       itemSelector: '.fc-draggable',
       eventData: (eventEl) => {
         const activityCode = eventEl.getAttribute('wcif-ac');
-        const activityName = eventEl.getAttribute('wcif-title');
+
+        const partialActivity = buildPartialActivityFromCode(activityCode);
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
         return {
-          title: activityName,
+          title: partialActivity.name,
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
-            activityCode,
-            activityName,
+            activity: partialActivity,
           },
         };
       },
@@ -160,7 +162,14 @@ function EditActivities({
         && jsEvent.pageY >= top
         && jsEvent.pageY <= bottom
     ) {
-      const { activityId, activityName, matchCount } = fcEvent.extendedProps;
+      const {
+        activity: {
+          id: activityId,
+          name: activityName,
+        },
+        matchCount,
+      } = fcEvent.extendedProps;
+
       const matchText = `all ${matchCount + 1} copies of `;
       confirm({
         content: `Are you sure you want to delete ${shouldUpdateMatches && matchCount > 1 ? matchText : ''}the event ${activityName}? THIS ACTION CANNOT BE UNDONE!`,
@@ -181,7 +190,7 @@ function EditActivities({
     delta,
     view: { calendar },
   }) => {
-    const { activityId } = fcEvent.extendedProps;
+    const { activity: { id: activityId } } = fcEvent.extendedProps;
 
     const duration = toLuxonDuration(delta, calendar);
     const deltaIso = duration.toISO();
@@ -195,7 +204,7 @@ function EditActivities({
     endDelta,
     view: { calendar },
   }) => {
-    const { activityId } = fcEvent.extendedProps;
+    const { activity: { id: activityId } } = fcEvent.extendedProps;
 
     const startScaleDuration = toLuxonDuration(startDelta, calendar);
     const startScaleIso = startScaleDuration.toISO();
