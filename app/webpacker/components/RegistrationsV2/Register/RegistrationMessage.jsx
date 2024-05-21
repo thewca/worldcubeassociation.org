@@ -26,15 +26,13 @@ export default function RegistrationMessage({ parentRef }) {
   if (!message?.key) return null;
 
   return (
-    <div ref={parentRef}>
-      <Sticky active context={parentRef}>
-        <Message
-          positive={message.type === 'positive'}
-          negative={message.type === 'negative'}
-        >
-          {I18n.t(message.key, message.params)}
-        </Message>
-      </Sticky>
-    </div>
+    <Sticky active context={parentRef}>
+      <Message
+        positive={message.type === 'positive'}
+        negative={message.type === 'negative'}
+      >
+        {I18n.t(message.key, message.params)}
+      </Message>
+    </Sticky>
   );
 }

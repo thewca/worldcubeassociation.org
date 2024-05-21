@@ -1,5 +1,8 @@
 # frozen_string_literal: true
 
+# Disabling Style/MixinUsage because SortHelper cannot be included inside class as static methods need to access it.
+include SortHelper # rubocop:disable Style/MixinUsage
+
 class UserRole < ApplicationRecord
   belongs_to :user
   belongs_to :group, class_name: "UserGroup"
@@ -9,23 +12,74 @@ class UserRole < ApplicationRecord
 
   scope :active, -> { where(end_date: nil).or(where.not(end_date: ..Date.today)) }
 
-  STATUS_SORTING_ORDER = {
+  UserRoleChange = Struct.new(
+    :changed_parameter,
+    :previous_value,
+    :new_value,
+    keyword_init: true,
+  )
+
+  STATUS_RANK = {
     UserGroup.group_types[:delegate_regions].to_sym => [
-      RolesMetadataDelegateRegions.statuses[:senior_delegate],
-      RolesMetadataDelegateRegions.statuses[:regional_delegate],
-      RolesMetadataDelegateRegions.statuses[:delegate],
-      RolesMetadataDelegateRegions.statuses[:junior_delegate],
       RolesMetadataDelegateRegions.statuses[:trainee_delegate],
+      RolesMetadataDelegateRegions.statuses[:junior_delegate],
+      RolesMetadataDelegateRegions.statuses[:delegate],
+      RolesMetadataDelegateRegions.statuses[:regional_delegate],
+      RolesMetadataDelegateRegions.statuses[:senior_delegate],
     ],
-    UserGroup.group_types[:teams_committees].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:councils].to_sym => ["leader", "senior_member", "member"],
-    UserGroup.group_types[:board].to_sym => ["member"],
-    UserGroup.group_types[:officers].to_sym => ["chair", "executive_director", "secretary", "vice_chair", "treasurer"],
+    UserGroup.group_types[:teams_committees].to_sym => [
+      RolesMetadataTeamsCommittees.statuses[:member],
+      RolesMetadataTeamsCommittees.statuses[:senior_member],
+      RolesMetadataTeamsCommittees.statuses[:leader],
+    ],
+    UserGroup.group_types[:councils].to_sym => [
+      RolesMetadataCouncils.statuses[:member],
+      RolesMetadataCouncils.statuses[:senior_member],
+      RolesMetadataCouncils.statuses[:leader],
+    ],
+    UserGroup.group_types[:officers].to_sym => [
+      RolesMetadataOfficers.statuses[:treasurer],
+      RolesMetadataOfficers.statuses[:vice_chair],
+      RolesMetadataOfficers.statuses[:secretary],
+      RolesMetadataOfficers.statuses[:executive_director],
+      RolesMetadataOfficers.statuses[:chair],
+    ],
   }.freeze
 
-  def status_sort_rank
+  GROUP_TYPE_RANK_ORDER = [
+    UserGroup.group_types[:board],
+    UserGroup.group_types[:officers],
+    UserGroup.group_types[:teams_committees],
+    UserGroup.group_types[:delegate_regions],
+    UserGroup.group_types[:councils],
+  ].freeze
+
+  SORT_WEIGHT_LAMBDAS = {
+    startDate:
+      lambda { |role| role.start_date.to_time.to_i },
+    lead:
+      lambda { |role| role.is_lead? ? 0 : 1 },
+    eligibleVoter:
+      lambda { |role| role.is_eligible_voter? ? 0 : 1 },
+    groupTypeRank:
+      lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
+    status:
+      lambda { |role| role.status_sort_rank },
+    name:
+      lambda { |role| role.user.name },
+    groupName:
+      lambda { |role| role.group.name },
+    location:
+      lambda { |role| role.metadata.location || '' },
+  }.freeze
+
+  def self.status_rank(group_type, status)
+    STATUS_RANK[group_type.to_sym]&.find_index(status) || STATUS_RANK[group_type.to_sym]&.length || 1
+  end
+
+  def status_rank
     status = metadata&.status || ''
-    STATUS_SORTING_ORDER[group_type.to_sym]&.find_index(status) || STATUS_SORTING_ORDER[group_type.to_sym]&.length || 1
+    UserRole.status_rank(group_type, status)
   end
 
   def is_active?
@@ -82,6 +136,48 @@ class UserRole < ApplicationRecord
     else
       nil
     end
+  end
+
+  def can_user_read?(user)
+    # A user can view a role if:
+    # 1. the role belongs to a non-hidden group, or
+    # 2. the user has edit-access to that group.
+    !group.is_hidden || user&.has_permission?(:can_edit_groups, group.id)
+  end
+
+  def self.filter_roles_for_logged_in_user(roles, current_user)
+    roles.select { |role| role.can_user_read?(current_user) }
+  end
+
+  def self.filter_roles_for_parameters(roles, params)
+    status = params[:status]
+    is_active = params.key?(:isActive) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isActive)) : nil
+    is_group_hidden = params.key?(:isGroupHidden) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isGroupHidden)) : nil
+    group_type = params[:groupType]
+    is_lead = params.key?(:isLead) ? ActiveRecord::Type::Boolean.new.cast(params.require(:isLead)) : nil
+
+    roles.reject do |role|
+      # Here, instead of foo.present? we are using !foo.nil? because foo.present? returns false if
+      # foo is a boolean false but we need to actually check if the boolean is present or not.
+      (
+        (!status.nil? && status != role.metadata&.status) ||
+        (!is_active.nil? && is_active != role.is_active?) ||
+        (!is_group_hidden.nil? && is_group_hidden != role.group.is_hidden) ||
+        (!group_type.nil? && group_type != role.group_type) ||
+        (!is_lead.nil? && is_lead != role.is_lead?)
+      )
+    end
+  end
+
+  def self.filter_roles(roles, current_user, params)
+    roles = UserRole.filter_roles_for_logged_in_user(roles, current_user)
+    UserRole.filter_roles_for_parameters(roles, params)
+  end
+
+  # Sorts the list of roles based on the given list of sort keys and directions.
+  def self.sort_roles(roles, sort_param)
+    sort_param ||= ''
+    sort(roles, sort_param, SORT_WEIGHT_LAMBDAS)
   end
 
   def deprecated_team_role

@@ -156,13 +156,13 @@ class Api::V0::ApiController < ApplicationController
   end
 
   def delegates
-    paginate json: UserGroup.delegate_region_groups.flat_map(&:active_users)
+    paginate json: UserGroup.delegate_regions.flat_map(&:active_users)
   end
 
   def delegates_search_index
     # TODO: There is a `uniq` call at the end which I feel shouldn't be necessary?!
     #   Postponing investigation until the Roles system migration is complete.
-    all_delegates = UserGroup.includes(roles: [:user]).delegate_region_groups.flat_map(&:active_users).uniq
+    all_delegates = UserGroup.includes(roles: [:user]).delegate_regions.flat_map(&:active_users).uniq
 
     search_index = all_delegates.map do |delegate|
       delegate.slice(:id, :name, :wca_id).merge({ thumb_url: delegate.avatar.url(:thumb) })

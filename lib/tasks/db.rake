@@ -70,21 +70,27 @@ namespace :db do
             ActiveRecord::Tasks::DatabaseTasks.drop config
             ActiveRecord::Tasks::DatabaseTasks.create config
 
-            DatabaseDumper.mysql("SET unique_checks=0", config.database)
-            DatabaseDumper.mysql("SET foreign_key_checks=0", config.database)
-            DatabaseDumper.mysql("SET autocommit=0", config.database)
-            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", config.database)
+            if Rails.env.development?
+              DatabaseDumper.mysql("SET unique_checks=0", config.database)
+              DatabaseDumper.mysql("SET foreign_key_checks=0", config.database)
+              DatabaseDumper.mysql("SET autocommit=0", config.database)
+              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=0", config.database)
+            end
 
             # Explicitly loading the schema is not necessary because the downloaded SQL dump file contains CREATE TABLE
             # definitions, so if we load the schema here the SOURCE command below would overwrite it anyways
 
             DatabaseDumper.mysql("SOURCE #{DbDumpHelper::DEVELOPER_EXPORT_SQL}", config.database)
 
-            DatabaseDumper.mysql("SET unique_checks=1", config.database)
-            DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
-            DatabaseDumper.mysql("SET autocommit=1", config.database)
+            if Rails.env.development?
+              DatabaseDumper.mysql("SET unique_checks=1", config.database)
+              DatabaseDumper.mysql("SET foreign_key_checks=1", config.database)
+              DatabaseDumper.mysql("SET autocommit=1", config.database)
+              DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", config.database)
+            end
+
+            # We always Commit, even if RDS has autocommit=1, it will act as a No Op
             DatabaseDumper.mysql("COMMIT", config.database)
-            DatabaseDumper.mysql("SET GLOBAL innodb_flush_log_at_trx_commit=1", config.database)
           end
 
           dummy_password = DbDumpHelper.use_staging_password? ? AppSecrets.STAGING_PASSWORD : DbDumpHelper::DEFAULT_DEV_PASSWORD

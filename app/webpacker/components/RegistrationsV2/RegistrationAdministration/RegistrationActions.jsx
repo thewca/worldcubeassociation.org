@@ -89,7 +89,7 @@ export default function RegistrationActions({
     const idsToAccept = [...pending, ...cancelled, ...waiting];
     if (idsToAccept.length > spotsRemaining) {
       dispatch(setMessage(
-        'competitions.registration_v2.update.tooMany',
+        'competitions.registration_v2.update.too_many',
         'negative',
         {
           count: idsToAccept.length - spotsRemaining,

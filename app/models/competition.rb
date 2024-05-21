@@ -16,7 +16,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_role_metadata) }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -701,6 +701,10 @@ class Competition < ApplicationRecord
 
   def uses_new_registration_service?
     self.uses_v2_registrations
+  end
+
+  def should_render_register_v2?(user)
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
   end
 
   before_validation :unpack_delegate_organizer_ids

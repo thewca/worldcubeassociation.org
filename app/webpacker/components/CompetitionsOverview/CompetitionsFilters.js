@@ -81,13 +81,14 @@ export function EventSelector({
   onEventSelection,
   eventList = WCA_EVENT_IDS,
   disabled = false,
+  maxEvents = Infinity,
 }) {
   return (
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button disabled={disabled} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+        <Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
         <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
 
@@ -95,7 +96,8 @@ export function EventSelector({
         {eventList.map((eventId) => (
           <React.Fragment key={eventId}>
             <Button
-              disabled={disabled}
+              disabled={disabled
+                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
               basic
               icon
               toggle
