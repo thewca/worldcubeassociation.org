@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Button, Input, Label, Modal, Table,
+  Button, Modal, Table,
 } from 'semantic-ui-react';
 import getAvailableRefunds from '../api/payment/get/getAvailableRefunds';
 import refundPayment from '../api/payment/get/refundPayment';
@@ -12,7 +12,6 @@ import Loading from '../../Requests/Loading';
 export default function Refunds({
   open, onExit, userId, competitionId,
 }) {
-  const [refundAmount, setRefundAmount] = useState(0);
   const dispatch = useDispatch();
 
   const {
@@ -49,25 +48,16 @@ export default function Refunds({
         <Modal.Content>
           <Table>
             <Table.Header>
-              <Table.Header>Amount</Table.Header>
-              <Table.Header> </Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Amount</Table.HeaderCell>
+                <Table.HeaderCell> </Table.HeaderCell>
+              </Table.Row>
             </Table.Header>
             <Table.Body>
               {refunds.charges.map((refund) => (
                 <Table.Row key={refund.payment_id}>
                   <Table.Cell>
-                    <Input
-                      labelPosition="right"
-                      type="text"
-                      placeholder={refund.amount}
-                    >
-                      <Label basic>$</Label>
-                      <input
-                        value={refundAmount}
-                        max={refund.amount}
-                        onChange={(event) => setRefundAmount(event.target.value)}
-                      />
-                    </Input>
+                    {refund.human_amount}
                   </Table.Cell>
                   <Table.Cell>
                     <Button
@@ -75,7 +65,7 @@ export default function Refunds({
                         competitionId,
                         userId,
                         paymentId: refund.payment_id,
-                        amount: refundAmount,
+                        amount: refund.ruby_amount,
                       })}
                     >
                       Refund Amount
