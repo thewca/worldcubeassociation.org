@@ -1940,10 +1940,10 @@ en:
         use_time_zone: "Use this time zone"
       #context: when displaying the room on the general schedule, we may also display the venue if there are multiple venues
       room_in_venue: "%{room} in %{venue}"
-      venue_information_html:
+      venue_selection_html:
         one: "You are viewing the schedule for the venue %{venue_name}, the sole venue for this competition."
         other: "You are viewing the schedule for the venue %{venue_name}, one of %{count} venues for this competition."
-      venue_information_all: "You are viewing the schedule for all %{venueCount} venues at once."
+      venue_selection_all: "You are viewing the schedule for all %{venueCount} venues at once."
       timezone_message: "The time zone for this venue is %{timezone}."
       timezone_setting: "You are viewing this schedule in the following timezone setting:"
       multiple_timezones_available: "Note that not all venues are in the same time zone -- please be careful!"
