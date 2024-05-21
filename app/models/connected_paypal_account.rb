@@ -3,6 +3,11 @@
 class ConnectedPaypalAccount < ApplicationRecord
   has_one :competition_payment_integration, as: :connected_account
 
+  def account_details
+    PaypalInterface.account_details(self.paypal_merchant_id)
+                   .slice("display_name", "primary_email")
+  end
+
   def self.generate_onboarding_link(competition_id)
     return nil if PaypalInterface.paypal_disabled? || Rails.env.test?
 

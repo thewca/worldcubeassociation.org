@@ -2111,6 +2111,15 @@ en:
       currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
       before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
       before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
+      account_details:
+        stripe:
+          email: "Email"
+          country: "Country"
+          business_name: "Business name"
+        paypal:
+          display_name: "Name"
+          primary_email: "Email"
+        fallback_not_applicable: "N/A"
   persons:
     #context: Person search page
     index:
