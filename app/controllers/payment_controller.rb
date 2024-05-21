@@ -65,9 +65,14 @@ class PaymentController < ApplicationController
 
           available_amount = paid_amount - already_refunded
 
+          ruby_amount = StripeRecord.amount_to_ruby(available_amount, record.currency_code)
+          ruby_money = Money.new(ruby_amount, record.currency_code)
+          human_amount = helpers.format_money(ruby_money)
+
           {
             payment_id: record.id,
-            amount: StripeRecord.amount_to_ruby(available_amount, record.currency_code),
+            ruby_amount: ruby_amount,
+            human_amount: human_amount,
           }
         }
       }

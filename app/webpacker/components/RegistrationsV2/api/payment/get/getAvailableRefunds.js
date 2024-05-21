@@ -5,5 +5,6 @@ export default async function getAvailableRefunds(
   competitionId,
   userId,
 ) {
-  return fetchJsonOrError(paymentRefundsUrl(competitionId, userId));
+  const { data } = await fetchJsonOrError(paymentRefundsUrl(competitionId, userId));
+  return data;
 }

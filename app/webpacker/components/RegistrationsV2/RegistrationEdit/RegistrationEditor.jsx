@@ -56,7 +56,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   });
 
   const { isLoading, data: competitorsInfo } = useQuery({
-    queryKey: ['history-user', serverRegistration.history],
+    queryKey: ['history-user', serverRegistration?.history],
     queryFn: () => getUsersInfo([
       ...new Set([
         ...serverRegistration.history.map((e) => e.actor_user_id),
@@ -161,7 +161,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
         <Loading />
       ) : (
         <div>
-          {competitor.wca_id && (
+          {!competitor.wca_id && (
             <Message>
               This person registered with an account. You can edit their
               personal information
@@ -171,8 +171,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           )}
           <Header>{competitor.name}</Header>
           <EventSelector
-            handleEventSelection={setSelectedEvents}
-            selected={selectedEvents}
+            onEventSelection={setSelectedEvents}
+            selectedEvents={selectedEvents}
             disabled={registrationEditDeadlinePassed}
             eventList={competitionInfo.event_ids}
           />
@@ -183,7 +183,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             maxLength={240}
             value={comment}
             disabled={registrationEditDeadlinePassed}
-            onChange={(_, data) => {
+            onChange={(event, data) => {
               setComment(data.value);
             }}
           />
@@ -194,7 +194,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             maxLength={240}
             value={adminComment}
             disabled={registrationEditDeadlinePassed}
-            onChange={(_, data) => {
+            onChange={(event, data) => {
               setAdminComment(data.value);
             }}
           />
@@ -208,7 +208,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               value="pending"
               checked={status === 'pending'}
               disabled={registrationEditDeadlinePassed}
-              onChange={(_, data) => setStatus(data.value)}
+              onChange={(event, data) => setStatus(data.value)}
             />
             <br />
             <Checkbox
@@ -218,7 +218,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               value="accepted"
               checked={status === 'accepted'}
               disabled={registrationEditDeadlinePassed}
-              onChange={(_, data) => setStatus(data.value)}
+              onChange={(event, data) => setStatus(data.value)}
             />
             <br />
             <Checkbox
@@ -228,7 +228,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               value="waiting_list"
               checked={status === 'waiting_list'}
               disabled={registrationEditDeadlinePassed}
-              onChange={(_, data) => setStatus(data.value)}
+              onChange={(event, data) => setStatus(data.value)}
             />
             <br />
             <Checkbox
@@ -238,7 +238,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               value="cancelled"
               disabled={registrationEditDeadlinePassed}
               checked={status === 'cancelled'}
-              onChange={(_, data) => setStatus(data.value)}
+              onChange={(event, data) => setStatus(data.value)}
             />
             <br />
             <Header>Guests</Header>
@@ -248,7 +248,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               min={0}
               max={99}
               value={guests}
-              onChange={(_, data) => setGuests(data.value)}
+              onChange={(event, data) => setGuests(data.value)}
             />
           </div>
 
@@ -278,7 +278,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               )}
               <Refunds
                 competitionId={competitionInfo.id}
-                userId={competitor}
+                userId={competitor.id}
                 open={isCheckingRefunds}
                 onExit={() => setIsCheckingRefunds(false)}
               />
