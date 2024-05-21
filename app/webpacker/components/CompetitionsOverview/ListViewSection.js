@@ -66,7 +66,7 @@ function ResponsiveCompetitionsTables({
   }
 
   return (
-    <Grid centered>
+    <Grid centered id="competitions-list">
       <Grid.Row only="computer">
         <CompetitionsTable
           competitions={competitions}
@@ -123,7 +123,7 @@ export function CompetitionsTable({
               index={index}
               isSortedByAnnouncement={isSortedByAnnouncement}
             />
-            <Table.Row error={isCancelled(comp)}>
+            <Table.Row error={isCancelled(comp)} className="competition-info">
               <Table.Cell collapsing>
                 <StatusIcon
                   comp={comp}
@@ -178,7 +178,7 @@ export function CompetitionsTabletTable({
               index={index}
               isSortedByAnnouncement={isSortedByAnnouncement}
             />
-            <Table.Row error={isCancelled(comp)}>
+            <Table.Row error={isCancelled(comp)} className="competition-info">
               <Table.Cell collapsing>
                 <StatusIcon
                   comp={comp}
@@ -223,7 +223,7 @@ export function CompetitionsMobileTable({
               index={index}
               isSortedByAnnouncement={isSortedByAnnouncement}
             />
-            <Table.Row error={isCancelled(comp)}>
+            <Table.Row error={isCancelled(comp)} className="competition-info">
               <Table.Cell textAlign="right">
                 {comp.date_range}
                 {' '}
