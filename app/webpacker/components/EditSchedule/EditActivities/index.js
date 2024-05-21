@@ -44,6 +44,7 @@ import {
 
 import { friendlyTimezoneName } from '../../../lib/wca-data.js.erb';
 import {
+  activityToFcTitle,
   buildPartialActivityFromCode,
   defaultDurationFromActivityCode,
   fcEventToActivityAndDates,
@@ -106,8 +107,10 @@ function EditActivities({
       const matchCount = getMatchingActivities(wcifSchedule, activity).length - 1;
       const matchesText = ` (${matchCount} matching activit${matchCount === 1 ? 'y' : 'ies'})`;
 
+      const fcTitle = activityToFcTitle(activity) + (shouldUpdateMatches && matchCount > 0 ? matchesText : '');
+
       return {
-        title: activity.name + (shouldUpdateMatches && matchCount > 0 ? matchesText : ''),
+        title: fcTitle,
         start: activity.startTime,
         end: activity.endTime,
         extendedProps: {
@@ -133,7 +136,7 @@ function EditActivities({
         const defaultDuration = defaultDurationFromActivityCode(activityCode);
 
         return {
-          title: partialActivity.name,
+          title: activityToFcTitle(partialActivity),
           duration: `00:${defaultDuration.toString().padStart(2, '0')}:00`,
           extendedProps: {
             activity: partialActivity,

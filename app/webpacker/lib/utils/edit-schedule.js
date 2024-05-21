@@ -2,6 +2,7 @@ import _ from 'lodash';
 import { DateTime, Duration } from 'luxon';
 import { toLuxonDateTime } from '@fullcalendar/luxon3';
 import { humanizeActivityCode, parseActivityCode } from './wcif';
+import { DEFAULT_LOCALE, withLocale } from '../i18n';
 
 export function toMicrodegrees(coord) {
   const result = Math.trunc(parseFloat(coord) * 1e6);
@@ -139,7 +140,7 @@ export const buildPartialActivityFromCode = (
   childActivities = [],
   extensions = [],
 ) => {
-  const humanizedCode = humanizeActivityCode(activityCode);
+  const humanizedCode = withLocale(DEFAULT_LOCALE, () => humanizeActivityCode(activityCode));
 
   return {
     name: humanizedCode,
@@ -172,3 +173,5 @@ export function fcEventToActivityAndDates(fcEvent, calendar) {
     endLuxon: eventEndLuxon,
   };
 }
+
+export const activityToFcTitle = (activity) => activity.name;

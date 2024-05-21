@@ -7,12 +7,9 @@ import {
 } from 'semantic-ui-react';
 import cn from 'classnames';
 import _ from 'lodash';
-import {
-  humanizeActivityCode,
-  parseActivityCode,
-  roundIdToString, shortLabelForActivityCode,
-} from '../../../lib/utils/wcif';
+import { shortLabelForActivityCode } from '../../../lib/utils/wcif';
 import { formats } from '../../../lib/wca-data.js.erb';
+import { activityToFcTitle, buildPartialActivityFromCode } from '../../../lib/utils/edit-schedule';
 
 function ActivityPicker({
   wcifEvents,
@@ -88,9 +85,11 @@ function ActivityLabel({
 
   const isEnabled = !usedActivityCodes.includes(activityCode);
 
+  const partialActivity = buildPartialActivityFromCode(activityCode);
+
   return (
     <Popup
-      content={humanizeActivityCode(activityCode)}
+      content={activityToFcTitle(partialActivity)}
       trigger={(
         <Label
           className={isEnabled ? 'fc-draggable' : ''}
