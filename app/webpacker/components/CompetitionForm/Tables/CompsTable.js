@@ -7,6 +7,7 @@ import I18n from '../../../lib/i18n';
 import { events } from '../../../lib/wca-data.js.erb';
 import useToggleState from '../../../lib/hooks/useToggleState';
 import { useStore } from '../../../lib/providers/StoreProvider';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 function NotConfirmedIcon() {
   return (
@@ -80,7 +81,9 @@ function CompsTableHeaderRow({ showEvents }) {
  * @constructor
  */
 function CompsTableCompRow({ comp, action, showEvents }) {
-  const { isAdminView, competition: { admin: { isConfirmed } } } = useStore();
+  const { isAdminView } = useStore();
+  const { admin: { isConfirmed } } = useFormObject();
+
   const formDisabled = isConfirmed && !isAdminView;
 
   return (

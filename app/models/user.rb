@@ -53,8 +53,6 @@ class User < ApplicationRecord
     end
   }
 
-  scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
-
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -68,8 +66,8 @@ class User < ApplicationRecord
   end
 
   def self.leader_senior_voters
-    team_leaders = UserGroup.teams_committees.map(&:lead_user)
-    senior_delegates = UserGroup.delegate_region_groups_senior_delegates
+    team_leaders = RolesMetadataTeamsCommittees.leader.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
+    senior_delegates = RolesMetadataDelegateRegions.senior_delegate.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
     (team_leaders + senior_delegates).uniq.compact
   end
 
@@ -221,11 +219,12 @@ class User < ApplicationRecord
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
+        wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
         remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
         if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?
-          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)
+          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
@@ -518,7 +517,15 @@ class User < ApplicationRecord
   end
 
   def trainee_delegate?
-    delegate_role_metadata.trainee_delegate.any?
+    # NOTE: `delegate_role_metadata.trainee_delegate.any?`, does fire a db query
+    # even if the `delegate_role_metadata` is eager loaded (because rails
+    # really wants to translate it to a "select 1 ..."; therefore we use a
+    # different implementation when we explicitly eager load roles.
+    if delegate_role_metadata.loaded?
+      delegate_role_metadata.any?(&:trainee_delegate?)
+    else
+      delegate_role_metadata.trainee_delegate.any?
+    end
   end
 
   private def staff_delegate?
@@ -876,6 +883,7 @@ class User < ApplicationRecord
     if cannot_edit_reason
       I18n.t('users.edit.cannot_edit.msg',
              reason: cannot_edit_reason,
+             wrt_contact_path: Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt'),
              delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
     end
   end
@@ -1253,7 +1261,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
+    UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
 
   private def can_manage_delegate_probation?
@@ -1316,7 +1324,7 @@ class User < ApplicationRecord
   def subordinate_delegates
     delegate_roles
       .filter { |role| role.is_lead? }
-      .flat_map { |role| role.group.active_users + role.group.active_users_of_all_child_groups }
+      .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
 
@@ -1325,7 +1333,7 @@ class User < ApplicationRecord
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| role.status_sort_rank }
+    delegate_roles.max_by { |role| role.status_rank }
   end
 
   def delegate_status

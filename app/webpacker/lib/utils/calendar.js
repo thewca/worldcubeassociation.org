@@ -26,8 +26,10 @@ export const hexToRgb = (hexColor) => {
   return [0, 0, 0];
 };
 
-const WHITE = '#ffffff';
-const BLACK = '#000000';
+export const TEXT_WHITE = '#ffffff';
+export const TEXT_BLACK = '#000000';
+
+export const ACTIVITY_OTHER_GREY = '#666666';
 
 /**
  * Compute appropriate text color (black or white) based on how "light" or "dark"
@@ -44,5 +46,5 @@ const BLACK = '#000000';
 export const getTextColor = (backgroundColor) => {
   const [red, green, blue] = hexToRgb(backgroundColor);
   // formula from https://stackoverflow.com/a/3943023
-  return (red * 0.299 + green * 0.587 + blue * 0.114) > 186 ? BLACK : WHITE;
+  return (red * 0.299 + green * 0.587 + blue * 0.114) > 186 ? TEXT_BLACK : TEXT_WHITE;
 };

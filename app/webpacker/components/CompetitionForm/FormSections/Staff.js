@@ -1,6 +1,6 @@
 import React from 'react';
-import SubSection from './SubSection';
-import { InputString, InputUsers } from '../Inputs/FormInputs';
+import { InputString, InputUsers } from '../../wca/FormBuilder/input/FormInputs';
+import SubSection from '../../wca/FormBuilder/SubSection';
 
 export default function Staff() {
   return (

@@ -11,7 +11,7 @@ export const setMessage = (key, type, params) => ({
   },
 });
 
-export default function RegistrationMessage({ ref }) {
+export default function RegistrationMessage({ parentRef }) {
   const { message } = useStore();
   const dispatch = useDispatch();
 
@@ -26,7 +26,7 @@ export default function RegistrationMessage({ ref }) {
   if (!message?.key) return null;
 
   return (
-    <Sticky active context={ref}>
+    <Sticky active context={parentRef}>
       <Message
         positive={message.type === 'positive'}
         negative={message.type === 'negative'}

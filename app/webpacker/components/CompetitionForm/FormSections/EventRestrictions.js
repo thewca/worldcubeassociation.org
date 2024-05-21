@@ -1,31 +1,33 @@
 import React, { useMemo } from 'react';
 import { Divider } from 'semantic-ui-react';
-import SubSection from './SubSection';
 import {
   InputBoolean,
   InputBooleanSelect,
   InputNumber,
   InputSelect,
   InputTextArea,
-} from '../Inputs/FormInputs';
+} from '../../wca/FormBuilder/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
 import ConditionalSection from './ConditionalSection';
+import SubSection from '../../wca/FormBuilder/SubSection';
+import { useFormObject } from '../../wca/FormBuilder/provider/FormObjectProvider';
 
 export default function EventRestrictions() {
   const {
-    competition: {
-      eventRestrictions: {
-        forbidNewcomers,
-        earlyPuzzleSubmission,
-        qualificationResults,
-        eventLimitation,
-      },
-    },
     usesV2Registrations,
     isCloning,
     isPersisted,
     storedEvents,
   } = useStore();
+
+  const {
+    eventRestrictions: {
+      forbidNewcomers,
+      earlyPuzzleSubmission,
+      qualificationResults,
+      eventLimitation,
+    },
+  } = useFormObject();
 
   const mainEventOptions = useMemo(() => {
     const storedEventOptions = storedEvents.map((event) => ({

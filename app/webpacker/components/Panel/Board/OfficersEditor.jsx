@@ -27,7 +27,7 @@ export default function OfficersEditor() {
   const {
     data: officers, loading: officersLoading, error: officersError, sync,
   } = useLoadedData(
-    apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status', {
+    apiV0Urls.userRoles.listOfGroupType(groupTypes.officers, 'status:desc', {
       isActive: true,
     }),
   );

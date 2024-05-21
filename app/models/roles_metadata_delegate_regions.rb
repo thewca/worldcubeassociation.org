@@ -11,5 +11,6 @@ class RolesMetadataDelegateRegions < ApplicationRecord
 
   has_one :user_role, as: :metadata
   has_one :group, through: :user_role
+  has_one :user, through: :user_role
   has_one :delegate_region, through: :group, source: :metadata, source_type: "GroupsMetadataDelegateRegions"
 end

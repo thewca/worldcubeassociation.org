@@ -13,12 +13,12 @@ export default function GroupPage({ group, canViewPastRoles }) {
     data: activeRoles,
     loading: activeRolesLoading,
     error: activeRolesError,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(group.id, 'status,name', { isActive: true }));
+  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(group.id, 'status:desc,name', { isActive: true }));
   const {
     data: pastRoles,
     loading: pastRolesLoading,
     error: pastRolesError,
-  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(group.id, 'status,name', { isActive: false }));
+  } = useLoadedData(apiV0Urls.userRoles.listOfGroup(group.id, 'status:desc,name', { isActive: false }));
 
   if (activeRolesLoading || pastRolesLoading) return <Loading />;
   if (activeRolesError || pastRolesError) return <Errored />;
