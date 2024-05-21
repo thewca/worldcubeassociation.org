@@ -250,7 +250,7 @@ export default function CompetingStep({
             {i18n.t('competitions.registration_v2.register.early_registration')}
           </Message>
         )}
-        
+
         {hasPaid && (
           <Message success>
             {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
