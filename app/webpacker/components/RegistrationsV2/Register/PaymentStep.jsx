@@ -22,7 +22,7 @@ import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 export default function PaymentStep({
   competitionInfo,
   user,
-  handleDonation,
+  setDonationAmount,
   donationAmount,
   displayAmount,
   registration,
@@ -95,13 +95,13 @@ export default function PaymentStep({
               value={isDonationChecked}
               onChange={(event, data) => {
                 setDonationChecked(event, data);
-                handleDonation(0);
+                setDonationAmount(0);
               }}
               label={i18n.t('registrations.payment_form.labels.show_donation')}
             />
             { isDonationChecked && (
             <AutonumericField
-              onChange={(_, { value }) => handleDonation(value)}
+              onChange={(_, { value }) => setDonationAmount(value)}
               currency={competitionInfo.currency_code}
               value={donationAmount}
               label={(

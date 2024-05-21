@@ -42,10 +42,6 @@ export default function StripeWrapper({
     );
   }, [connectedAccountId, stripePublishableKey]);
 
-  const handleDonation = useCallback(async (newDonationAmount) => {
-    setDonationAmount(newDonationAmount);
-  }, []);
-
   return (
     <>
       <Header>Payment</Header>
@@ -55,7 +51,7 @@ export default function StripeWrapper({
           options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
           <PaymentStep
-            handleDonation={handleDonation}
+            setDonationAmount={setDonationAmount}
             competitionInfo={competitionInfo}
             user={user}
             donationAmount={donationAmount}
