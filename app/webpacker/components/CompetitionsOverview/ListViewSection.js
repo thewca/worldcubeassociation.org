@@ -122,6 +122,7 @@ export function CompetitionsTable({
               competitions={competitions}
               index={index}
               isSortedByAnnouncement={isSortedByAnnouncement}
+              colSpan={5}
             />
             <Table.Row error={isCancelled(comp)} className="competition-info">
               <Table.Cell collapsing>
@@ -177,6 +178,7 @@ export function CompetitionsTabletTable({
               competitions={competitions}
               index={index}
               isSortedByAnnouncement={isSortedByAnnouncement}
+              colSpan={4}
             />
             <Table.Row error={isCancelled(comp)} className="competition-info">
               <Table.Cell collapsing>
@@ -222,6 +224,7 @@ export function CompetitionsMobileTable({
               competitions={competitions}
               index={index}
               isSortedByAnnouncement={isSortedByAnnouncement}
+              colSpan={3}
             />
             <Table.Row error={isCancelled(comp)} className="competition-info">
               <Table.Cell textAlign="right">
@@ -251,7 +254,12 @@ export function CompetitionsMobileTable({
   );
 }
 
-function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) {
+function ConditionalYearHeader({
+  competitions,
+  index,
+  isSortedByAnnouncement,
+  colSpan,
+}) {
   if (
     index > 0
     && startYear(competitions[index])
@@ -260,7 +268,7 @@ function ConditionalYearHeader({ competitions, index, isSortedByAnnouncement }) 
   ) {
     return (
       <Table.Row>
-        <Table.Cell textAlign="center" colSpan={5}>{startYear(competitions[index])}</Table.Cell>
+        <Table.Cell textAlign="center" colSpan={colSpan}>{startYear(competitions[index])}</Table.Cell>
       </Table.Row>
     );
   }
