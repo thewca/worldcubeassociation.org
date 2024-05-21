@@ -8,7 +8,11 @@ import StoreProvider, { useDispatch } from '../../../lib/providers/StoreProvider
 import messageReducer from '../reducers/messageReducer';
 import WCAQueryClientProvider from '../../../lib/providers/WCAQueryClientProvider';
 
-export default function Index({ competitionInfo, userInfo, preferredEvents }) {
+export default function Index({
+  competitionInfo, userInfo, preferredEvents,
+  stripePublishableKey = '',
+  connectedAccountId = '',
+}) {
   return (
     <WCAQueryClientProvider>
       <StoreProvider reducer={messageReducer} initialState={{ message: null }}>
@@ -16,18 +20,22 @@ export default function Index({ competitionInfo, userInfo, preferredEvents }) {
           competitionInfo={competitionInfo}
           userInfo={userInfo}
           preferredEvents={preferredEvents}
+          stripePublishableKey={stripePublishableKey}
+          connectedAccountId={connectedAccountId}
         />
       </StoreProvider>
     </WCAQueryClientProvider>
   );
 }
 
-function Register({ competitionInfo, userInfo, preferredEvents }) {
+function Register({
+  competitionInfo, userInfo, preferredEvents, connectedAccountId, stripePublishableKey,
+}) {
   const dispatch = useDispatch();
   const ref = useRef();
   const {
     data: registration,
-    isLoading,
+    isFetching,
     refetch,
   } = useQuery({
     queryKey: ['registration', competitionInfo.id, userInfo.id],
@@ -44,7 +52,7 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
   });
 
   return (
-    isLoading ? <Loading />
+    isFetching ? <Loading />
       : (
         <>
           <div ref={ref}>
@@ -56,6 +64,8 @@ function Register({ competitionInfo, userInfo, preferredEvents }) {
             competitionInfo={competitionInfo}
             registration={registration}
             refetchRegistration={refetch}
+            connectedAccountId={connectedAccountId}
+            stripePublishableKey={stripePublishableKey}
           />
         </>
       )

@@ -6,7 +6,7 @@ import React, {
 import {
   Button,
   ButtonGroup,
-  ButtonOr,
+  ButtonOr, Divider,
   Form,
   Icon,
   Input,
@@ -18,7 +18,6 @@ import {
 } from 'semantic-ui-react';
 import updateRegistration from '../api/registration/patch/update_registration';
 import submitEventRegistration from '../api/registration/post/submit_registration';
-import { getMediumDateString, hasPassed } from '../../../lib/utils/dates';
 import Processing from './Processing';
 import { userPreferencesRoute } from '../../../lib/requests/routes.js.erb';
 import { EventSelector } from '../../CompetitionsOverview/CompetitionsFilters';
@@ -29,10 +28,16 @@ import i18n from '../../../lib/i18n';
 const maxCommentLength = 240;
 
 export default function CompetingStep({
-  nextStep, competitionInfo, user, preferredEvents, registration, refetchRegistration,
+  nextStep,
+  competitionInfo,
+  user,
+  preferredEvents,
+  registration,
+  refetchRegistration,
 }) {
   const maxEvents = competitionInfo.events_per_registration_limit ?? Infinity;
   const isRegistered = Boolean(registration);
+  const hasPaid = registration?.payment.payment_status === 'succeeded';
   const dispatch = useDispatch();
 
   const [comment, setComment] = useState('');
@@ -68,8 +73,12 @@ export default function CompetingStep({
       dispatch(setMessage('registrations.flash.updated', 'positive'));
       queryClient.setQueryData(
         ['registration', competitionInfo.id, user.id],
-        data.registration,
+        {
+          ...data.registration,
+          payment: registration.payment,
+        },
       );
+      nextStep();
     },
   });
 
@@ -91,12 +100,6 @@ export default function CompetingStep({
       setProcessing(true);
     },
   });
-
-  const hasRegistrationEditDeadlinePassed = hasPassed(
-    competitionInfo.event_change_deadline_date ?? competitionInfo.start_date,
-  );
-  const canUpdateRegistration = competitionInfo.allow_registration_edits
-    && !hasRegistrationEditDeadlinePassed;
 
   const hasEventsChanged = registration?.competing
     && _.xor(registration.competing.event_ids, selectedEvents).length > 0;
@@ -195,7 +198,6 @@ export default function CompetingStep({
   };
 
   const shouldShowUpdateButton = isRegistered
-    && !hasRegistrationEditDeadlinePassed
     && registration.competing.registration_status !== 'cancelled';
 
   const shouldShowReRegisterButton = registration?.competing?.registration_status === 'cancelled';
@@ -230,26 +232,28 @@ export default function CompetingStep({
         <Processing
           competitionInfo={competitionInfo}
           user={user}
-          onProcessingComplete={() => {
+          onProcessingComplete={async () => {
             setProcessing(false);
-            if (competitionInfo['using_stripe_payments?']) {
+            if (competitionInfo['using_payment_integrations?']) {
               nextStep();
             } else {
-              refetchRegistration();
+              await refetchRegistration();
+              nextStep();
             }
           }}
         />
       )}
 
       <>
-        {isRegistered && (
-          <Message info>
-            {i18n.t('competitions.registration_v2.register.success', { comp_name: competitionInfo.name })}
-          </Message>
-        )}
         {!competitionInfo['registration_opened?'] && (
           <Message warning>
             {i18n.t('competitions.registration_v2.register.early_registration')}
+          </Message>
+        )}
+
+        {hasPaid && (
+          <Message success>
+            {i18n.t('competitions.registration_v2.register.already_paid', { comp_name: competitionInfo.name })}
           </Message>
         )}
 
@@ -388,7 +392,6 @@ export default function CompetingStep({
                   {i18n.t('competitions.registration_v2.register.disclaimer')}
                 </Message.Content>
               </Message>
-
               <Button
                 positive
                 fluid

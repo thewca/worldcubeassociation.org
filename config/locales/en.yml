@@ -1757,6 +1757,7 @@ en:
         move_waiting: "Move to Waiting List"
         cancel: "Cancel Registration"
         too_many: "Accepting all these registrations would go over the competitor limit by %{count}"
+        no_self_update: "Contact the Organization Team to update your registration."
       register:
         re-register: "Re-Register"
         success: "You are registered for %{comp_name}"
@@ -1765,6 +1766,7 @@ en:
         comment: "Additional comments to the organizers"
         until: "You can update your registration until %{date}"
         passed: "You can no longer update your registration"
+        already_paid: "You have already paid for %{comp_name}"
         editing_disabled: "Registration editing is disabled for this competition"
         registration_status:
           accepted: "Your registration has been accepted."
