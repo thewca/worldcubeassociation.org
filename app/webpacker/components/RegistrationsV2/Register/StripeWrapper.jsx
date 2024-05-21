@@ -28,7 +28,7 @@ export default function StripeWrapper({
   const [donationAmount, setDonationAmount] = useState(0);
 
   const {
-    data, isFetching, refetch,
+    data, isFetching,
   } = useQuery({
     queryFn: () => convertISOAmount(initialAmount + donationAmount, competitionInfo.currency_code),
     queryKey: ['displayAmount', initialAmount + donationAmount, competitionInfo.currency_code],
@@ -44,8 +44,7 @@ export default function StripeWrapper({
 
   const handleDonation = useCallback(async (newDonationAmount) => {
     setDonationAmount(newDonationAmount);
-    refetch();
-  }, [refetch]);
+  }, []);
 
   return (
     <>
