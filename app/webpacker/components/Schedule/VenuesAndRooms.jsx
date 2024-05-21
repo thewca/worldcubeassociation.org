@@ -173,7 +173,7 @@ function VenueInfo({ activeVenueOrNull, venueCount }) {
           <>
             {/* eslint-disable-next-line react/no-danger */}
             <p dangerouslySetInnerHTML={{
-              __html: i18n.t('competitions.schedule.venue_information_html', {
+              __html: i18n.t('competitions.schedule.venue_selection_html', {
                 venue_name: `<a target="_blank" href=${mapLink} rel="noreferrer">
                   ${name}
                 </a>`,
@@ -185,8 +185,9 @@ function VenueInfo({ activeVenueOrNull, venueCount }) {
           </>
         ) : (
           <p>
-            {i18n.t('competitions.schedule.venue_information_all', { venueCount })}
+            {i18n.t('competitions.schedule.venue_selection_all', { venueCount })}
           </p>
+
         )}
       </Message.Content>
     </Message>
