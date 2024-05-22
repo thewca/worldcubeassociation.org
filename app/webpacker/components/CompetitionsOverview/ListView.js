@@ -12,6 +12,7 @@ function ListView({
   competitions,
   filterState,
   shouldShowRegStatus,
+  shouldShowAdminData,
   isLoading,
   regStatusLoading,
   fetchMoreCompetitions,
@@ -34,6 +35,28 @@ function ListView({
 
   switch (filterState.timeOrder) {
     case 'present': {
+      if (shouldShowAdminData) {
+        return (
+          <>
+            <ListViewSection
+              competitions={competitions}
+              title={I18n.t('competitions.index.titles.ongoing_and_upcoming')}
+              shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowAdminData={shouldShowAdminData}
+              regStatusLoading={regStatusLoading}
+              isLoading={isLoading}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+            />
+            <ListViewFooter
+              isLoading={isLoading}
+              hasMoreCompsToLoad={hasMoreCompsToLoad}
+              numCompetitions={competitions?.length}
+              bottomRef={bottomRef}
+            />
+          </>
+        );
+      }
+
       const inProgressComps = competitions?.filter((comp) => isInProgress(comp));
 
       const upcomingComps = competitions?.filter((comp) => (
@@ -74,6 +97,7 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminData={shouldShowAdminData}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -93,6 +117,7 @@ function ListView({
             competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminData={shouldShowAdminData}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -112,6 +137,7 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminData={shouldShowAdminData}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -132,6 +158,7 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
+            shouldShowAdminData={shouldShowAdminData}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}

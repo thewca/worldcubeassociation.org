@@ -127,6 +127,7 @@ function CompetitionsView({ canViewAdminData = false }) {
               competitions={competitions}
               filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
+              shouldShowAdminData={shouldShowAdminData}
               isLoading={competitionsIsFetching}
               regStatusLoading={regDataIsPending}
               fetchMoreCompetitions={competitionsFetchNextPage}

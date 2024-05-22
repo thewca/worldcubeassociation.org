@@ -20,6 +20,7 @@ function ListViewSection({
   competitions,
   title,
   shouldShowRegStatus,
+  shouldShowAdminData,
   isLoading,
   regStatusLoading,
   hasMoreCompsToLoad,
@@ -41,6 +42,7 @@ function ListViewSection({
         isLoading={isLoading}
         hasMoreCompsToLoad={hasMoreCompsToLoad}
         shouldShowRegStatus={shouldShowRegStatus}
+        shouldShowAdminData={shouldShowAdminData}
         regStatusLoading={regStatusLoading}
         isSortedByAnnouncement={isSortedByAnnouncement}
       />
