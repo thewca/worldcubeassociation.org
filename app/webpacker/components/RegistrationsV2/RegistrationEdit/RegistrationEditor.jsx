@@ -58,7 +58,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
     queryKey: ['history-user', serverRegistration?.history],
     queryFn: () => getUsersInfo([
       ...new Set([
-        ...serverRegistration.history.map((e) => e.actor_user_id),
+        // Filter out non userId Actors like Stripe Webhooks
+        ...serverRegistration.history.filter((e) => !Number.isNaN(e.actor_user_id)).map((e) => e.actor_user_id),
       ]),
     ]),
     enabled: Boolean(serverRegistration),
@@ -331,7 +332,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
                         {
                           competitorsInfo.find(
                             (c) => c.id === entry.actor_user_id,
-                          ).name
+                          )?.name ?? entry.actor_user_id
                         }
                       </Table.Cell>
                       <Table.Cell>{entry.action}</Table.Cell>
