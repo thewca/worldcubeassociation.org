@@ -64,7 +64,7 @@ class UserRole < ApplicationRecord
     groupTypeRank:
       lambda { |role| GROUP_TYPE_RANK_ORDER.find_index(role.group_type) || GROUP_TYPE_RANK_ORDER.length },
     status:
-      lambda { |role| role.status_sort_rank },
+      lambda { |role| role.status_rank },
     name:
       lambda { |role| role.user.name },
     groupName:
