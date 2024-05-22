@@ -21,6 +21,9 @@ function CompetitionsFilters({
   setDisplayMode,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminData,
+  setShouldShowAdminData,
+  canViewAdminData,
 }) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
@@ -52,12 +55,23 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
+      {canViewAdminData && shouldShowAdminData && (
+        <Form.Group>
+          <Form.Field>
+            <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
+          </Form.Field>
+        </Form.Group>
+      )}
+
       <Form.Group inline>
         <CompDisplayCheckboxes
           shouldIncludeCancelled={filterState.shouldIncludeCancelled}
           dispatchFilter={dispatchFilter}
           shouldShowRegStatus={shouldShowRegStatus}
           setShouldShowRegStatus={setShouldShowRegStatus}
+          shouldShowAdminData={shouldShowAdminData}
+          setShouldShowAdminData={setShouldShowAdminData}
+          canViewAdminData={canViewAdminData}
           displayMode={displayMode}
         />
       </Form.Group>
@@ -261,6 +275,53 @@ function TimeOrderButtonGroup({ filterState, dispatchFilter }) {
   );
 }
 
+function AdminStatusButtonGroup({ filterState, dispatchFilter }) {
+  return (
+    <>
+      <label htmlFor="admin-status">{I18n.t('competitions.index.admin_status')}</label>
+      <Button.Group id="admin-status">
+
+        <Button
+          primary
+          type="button"
+          name="admin-status"
+          id="all"
+          value="all"
+          onClick={() => dispatchFilter({ adminStatus: 'all' })}
+          active={filterState.adminStatus === 'all'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.all')}</span>
+        </Button>
+
+        <Button
+          color="yellow"
+          type="button"
+          name="admin-status"
+          id="warning"
+          value="warning"
+          onClick={() => dispatchFilter({ adminStatus: 'warning' })}
+          active={filterState.adminStatus === 'warning'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.warning')}</span>
+        </Button>
+
+        <Button
+          negative
+          type="button"
+          name="admin-status"
+          id="danger"
+          value="danger"
+          onClick={() => dispatchFilter({ adminStatus: 'danger' })}
+          active={filterState.adminStatus === 'danger'}
+        >
+          <span className="caption">{I18n.t('competitions.index.status_flags.danger')}</span>
+        </Button>
+
+      </Button.Group>
+    </>
+  );
+}
+
 function PastCompYearSelector({ filterState, dispatchFilter }) {
   return (
     <Button
@@ -366,6 +427,9 @@ function CompDisplayCheckboxes({
   dispatchFilter,
   shouldShowRegStatus,
   setShouldShowRegStatus,
+  shouldShowAdminData,
+  setShouldShowAdminData,
+  canViewAdminData,
   displayMode,
 }) {
   return (
@@ -396,6 +460,18 @@ function CompDisplayCheckboxes({
           </div>
         )
       }
+
+      {canViewAdminData && (
+        <div id="admin-data" className="admin-data-selector">
+          <Form.Checkbox
+            label={I18n.t('competitions.index.show_admin_data')}
+            name="show_admin_data"
+            id="show_admin_data"
+            checked={shouldShowAdminData}
+            onChange={() => setShouldShowAdminData(!shouldShowAdminData)}
+          />
+        </div>
+      )}
     </>
   );
 }

@@ -1459,6 +1459,11 @@ en:
       custom: "Custom"
       by_announcement: "By announcement"
       sort_by_announcement: "Sort by announcement"
+      admin_status: "Admin status"
+      status_flags:
+        all: "All"
+        warning: "Warning"
+        danger: "Danger"
       from_date: "From"
       to_date: "To"
       reset_filters: "Reset Filters"
@@ -1470,6 +1475,7 @@ en:
       no_delegates_found: "No Delegates found."
       show_cancelled: "Show cancelled competitions"
       show_registration_status: "Show registration status icon"
+      show_admin_data: "Show admin data"
       #context: titles for the competitions list
       titles:
         in_progress: "Competitions in progress"

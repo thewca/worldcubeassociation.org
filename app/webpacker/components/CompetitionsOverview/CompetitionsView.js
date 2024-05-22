@@ -23,7 +23,7 @@ import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/compe
 
 const DEBOUNCE_MS = 600;
 
-function CompetitionsView() {
+function CompetitionsView({ canViewAdminData = false }) {
   const searchParams = useMemo(
     () => new URLSearchParams(window.location.search),
     [],
@@ -37,6 +37,7 @@ function CompetitionsView() {
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
   const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
+  const [shouldShowAdminData, setShouldShowAdminData] = useState(false);
   const competitionQueryKey = useMemo(
     () => calculateQueryKey(debouncedFilterState),
     [debouncedFilterState],
@@ -113,6 +114,9 @@ function CompetitionsView() {
         setDisplayMode={setDisplayMode}
         shouldShowRegStatus={shouldShowRegStatus}
         setShouldShowRegStatus={setShouldShowRegStatus}
+        shouldShowAdminData={shouldShowAdminData}
+        setShouldShowAdminData={setShouldShowAdminData}
+        canViewAdminData={canViewAdminData}
       />
 
       <Container fluid>

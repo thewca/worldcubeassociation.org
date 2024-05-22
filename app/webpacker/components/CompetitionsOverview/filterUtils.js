@@ -21,6 +21,7 @@ const DELEGATE = 'delegate';
 const SEARCH = 'search';
 const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
+const ADMIN_STATUS = 'status';
 
 const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
@@ -30,6 +31,7 @@ const DEFAULT_REGION_ALL = 'all';
 const DEFAULT_REGION = '';
 const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
+const DEFAULT_ADMIN_STATUS = 'all';
 const INCLUDE_CANCELLED_TRUE = 'on';
 
 // search param sanitizers
@@ -48,6 +50,14 @@ const sanitizeTimeOrder = (order) => {
     return order;
   }
   return DEFAULT_TIME_ORDER;
+};
+
+const adminStatusFlags = ['all', 'warning', 'danger'];
+const sanitizeAdminStatus = (status) => {
+  if (adminStatusFlags.includes(status)) {
+    return status;
+  }
+  return DEFAULT_ADMIN_STATUS;
 };
 
 const sanitizeYear = (year) => {
@@ -96,6 +106,7 @@ export const createFilterState = (searchParams) => ({
   selectedEvents:
     sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
+  adminStatus: sanitizeAdminStatus(searchParams.get(ADMIN_STATUS)),
 });
 
 export const updateSearchParams = (searchParams, filterState, displayMode) => {
@@ -109,6 +120,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     search,
     selectedEvents,
     shouldIncludeCancelled,
+    adminStatus,
   } = filterState;
 
   // update every string value; and then remove that value if it's redundant (ie is the default)
@@ -117,6 +129,9 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
 
   searchParams.set(TIME_ORDER, timeOrder);
   searchParams.delete(TIME_ORDER, DEFAULT_TIME_ORDER);
+
+  searchParams.set(ADMIN_STATUS, adminStatus);
+  searchParams.delete(ADMIN_STATUS, DEFAULT_ADMIN_STATUS);
 
   searchParams.set(YEAR, selectedYear);
   searchParams.delete(YEAR, DEFAULT_YEAR);
