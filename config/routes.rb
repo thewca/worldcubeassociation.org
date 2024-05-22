@@ -22,8 +22,6 @@ Rails.application.routes.draw do
   unless PaypalInterface.paypal_disabled?
     post 'registration/:id/create-paypal-order' => 'registrations#create_paypal_order', as: :registration_create_paypal_order
     post 'registration/:id/capture-paypal-payment' => 'registrations#capture_paypal_payment', as: :registration_capture_paypal_payment
-    get 'competitions/:id/paypal-return' => 'competitions#paypal_return', as: :competitions_paypal_return
-    post 'competitions/:id/disconnect_paypal' => 'competitions#disconnect_paypal', as: :competition_disconnect_paypal
     post 'registration/:id/paypal_refund/:payment_id' => 'registrations#refund_paypal_payment', as: :paypal_payment_refund
   end
 
@@ -121,6 +119,10 @@ Rails.application.routes.draw do
     delete '/admin/inbox-data' => 'admin#delete_inbox_data', as: :admin_delete_inbox_data
     delete '/admin/results-data' => 'admin#delete_results_data', as: :admin_delete_results_data
     get '/admin/results/:round_id/new' => 'admin/results#new', as: :new_result
+
+    get '/payment_integration/setup' => 'competitions#payment_integration_setup', as: :payment_integration_setup
+    get '/payment_integration/:payment_integration/connect' => 'competitions#connect_payment_integration', as: :connect_payment_integration
+    post '/payment_integration/:payment_integration/disconnect' => 'competitions#disconnect_payment_integration', as: :disconnect_payment_integration
   end
   scope :payment do
     get '/finish' => 'payment#payment_finish'
@@ -132,7 +134,7 @@ Rails.application.routes.draw do
   get 'competitions/:competition_id/report' => 'delegate_reports#show', as: :delegate_report
   patch 'competitions/:competition_id/report' => 'delegate_reports#update'
 
-  get 'competitions/:id/payment_setup' => 'competitions#payment_setup', as: :competitions_payment_setup
+  # Stripe needs this special redirect URL during OAuth, see the linked controller method for details
   get 'stripe-connect' => 'competitions#stripe_connect', as: :competitions_stripe_connect
   get 'competitions/:id/events/edit' => 'competitions#edit_events', as: :edit_events
   get 'competitions/:id/schedule/edit' => 'competitions#edit_schedule', as: :edit_schedule
@@ -183,7 +185,6 @@ Rails.application.routes.draw do
   resources :votes, only: [:create, :update]
 
   post 'competitions/:id/post_results' => 'competitions#post_results', as: :competition_post_results
-  post 'competitions/:id/disconnect_stripe' => 'competitions#disconnect_stripe', as: :competition_disconnect_stripe
 
   get 'panel/pending-claims(/:user_id)' => 'panel#pending_claims_for_subordinate_delegates', as: 'pending_claims'
   scope 'panel' do

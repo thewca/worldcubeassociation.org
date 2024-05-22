@@ -2086,7 +2086,7 @@ en:
       stripe: 'Stripe'
     #context: Setting up and making payments
     payment_setup:
-      stripe_dashboard: 'Stripe Dashboard'
+      external_dashboard: '%{provider} Dashboard'
       account_connected: "You have successfully connected your %{provider} account and can now receive registration payments for this competition."
       account_disconnected_success: "Sucessfully disconnected your %{provider} account."
       account_disconnected_failure: "There was an error with disconnecting the %{provider} account."
@@ -2098,14 +2098,15 @@ en:
       provider_heading: "%{provider} Payments"
       accept_payments_header: "Accept Registration Payments"
       connect_button: "Connect with %{provider}"
-      stripe_payment_info: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
-      stripe_connect_warning: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
-      stripe_disconnect_info: "This competition is set up to accept payments through Stripe. If you want to disconnect your Stripe account, you should first do so from your Stripe dashboard (link below). Please note it will revoke access for all competitions using the account. Before a new Stripe account can be connected, the competition's Delegate must reach out to WCAT to clear the entry."
-      stripe_disconnect_warning: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
-      paypal_payment_info: "A PayPal business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
-      paypal_connect_warning: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly from your PayPal account."
-      paypal_disconnect_info: "This competition is set up to accept payments through Paypal. Note that clicking disconnecting here will not revoke the permissions you have granted to the WCA - this must be done from your PayPal account."
-      paypal_disconnect_warning: "Keep in mind that these account changes should only be done in exceptional situations, such as the current account being unable to receive payments."
+      connect_account_info:
+        stripe: "In order to accept payments for this competition, you need to connect your own Stripe account with the WCA Stripe account by clicking the button below. If you don't already have your own Stripe account you can still click on the button below and it will guide you through the process."
+        paypal: "A PayPal Business account is required to accept PayPal payments via the competition page. If you don't already have a PayPal business account, you can still click on the button below and it will guide you through the process."
+      connect_account_warning:
+        stripe: "Connecting your Stripe account gives the WCA website the ability to create charges, and issue refunds directly on your Stripe account."
+        paypal: "Connecting your PayPal account gives the WCA website the ability to route payments to you, and issue refunds directly on your PayPal account."
+      currently_connected_info: "This competition is set up to accept payments through %{provider}. The Delegate(s) of the competition should contact WCAT to make any changes to connected accounts."
+      before_disconnect_warning: "Disconnecting on this page will make our website forget the connection to your %{provider} account. But your %{provider} dashboard (see link below) may still list the WCA website based on the authorization that you previously granted. Note that revoking authorization in the %{provider} dashboard will also affect any other competition linked to accept payments through this account!"
+      before_disconnect_info: "Keep in mind that disconnecting an account should only be done in exceptional situations, such as the current account being unable to receive payments."
   persons:
     #context: Person search page
     index:
