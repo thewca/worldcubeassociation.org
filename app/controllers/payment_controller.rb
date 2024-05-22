@@ -73,6 +73,7 @@ class PaymentController < ApplicationController
             payment_id: record.id,
             ruby_amount: ruby_amount,
             human_amount: human_amount,
+            currency_code: record.currency_code,
           }
         }
       }

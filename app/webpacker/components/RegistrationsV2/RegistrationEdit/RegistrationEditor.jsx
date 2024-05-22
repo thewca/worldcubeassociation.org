@@ -41,7 +41,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [guests, setGuests] = useState(0);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [registration, setRegistration] = useState({});
-  const [isCheckingRefunds, setIsCheckingRefunds] = useState(false);
   const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
 
   const queryClient = useQueryClient();
@@ -272,16 +271,11 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
                 {registration.payment.payment_status}
               </Header>
               {registration.payment.payment_status === 'succeeded' && (
-                <Button onClick={() => setIsCheckingRefunds(true)}>
-                  Show Available Refunds
-                </Button>
+                <Refunds
+                  competitionId={competitionInfo.id}
+                  userId={competitor.id}
+                />
               )}
-              <Refunds
-                competitionId={competitionInfo.id}
-                userId={competitor.id}
-                open={isCheckingRefunds}
-                onExit={() => setIsCheckingRefunds(false)}
-              />
             </>
           )}
           <Accordion>
