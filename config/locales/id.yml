@@ -608,7 +608,7 @@ id:
           #original_hash: 621101a
           trainee_delegate: Delegasi Pelatihan
           #original_hash: 9b97968
-          candidate_delegate: Delegasi Junior
+          junior_delegate: Delegasi Junior
           #original_hash: 12ab214
           delegate: Delegasi
           #original_hash: 45c2317
@@ -741,17 +741,6 @@ id:
         otp_attempt: >-
           Cek aplikasi mobile Anda untuk one-time password (OTP), atau isi
           dengan kode pemulihan Anda.
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -946,6 +935,10 @@ id:
           pending: Daftar tunggu
           #original_hash: 441bda6
           deleted: Dihapus
+          #original_hash: a1bf92e
+          cancelled: Dibatalkan
+          #original_hash: 8cf6f9c
+          waiting_list: Dalam Daftar Tunggu
   mail_form:
     attributes:
       contact_form:
@@ -1160,16 +1153,16 @@ id:
       error_pages:
         #original_hash: 1042478
         500_error: 'Mohon maaf, ada yang tidak beres.'
-        #original_hash: d815249
+        #original_hash: d656a11
         500_contact: >-
-          Jika Anda melapor kesalahan ini kepada Tim Perangkat Lunak, harap
-          sebutkan ID Permintaan
+          Jika Anda melapor kesalahan ini kepada Tim Perangkat Lunak, mohon
+          salin ID Permintaan ke dalam email
         #original_hash: b61e305
         400_error: Laman yang Anda inginkan tidak tersedia.
-        #original_hash: 8b309f5
+        #original_hash: c8a7d4e
         400_contact: >-
-          Jika menurut Anda ini adalah kesalahan, harap hubungi Tim Perangkat
-          Lunak dan sertakan ID Permintaan
+          Jika menurut Anda ini adalah kesalahan, mohon hubungi Tim Perangkat
+          Lunak dan salin ID Permintaan ke dalam email
     doorkeeper:
       applications:
         help:
@@ -1234,7 +1227,7 @@ id:
       #original_hash: cf1d2c9
       forum: Forum
       #original_hash: 3ad28c0
-      teams: 'Tim, Komite dan Dewan'
+      teams: 'Tim, Komite, dan Majelis'
       #original_hash: 7981fb3
       education: Sumber daya pendidikan
       #original_hash: c66444f
@@ -1356,6 +1349,197 @@ id:
         Dewan WCA bertanggung jawab dalam memimpin organisasi secara
         keseluruhan, dan memenuhi segala kewajiban yang tidak dapat dipenuhi
         oleh Tim, Komite, atau Majelis lain.
+    teams_committees_councils:
+      #original_hash: 0d62207
+      title: 'Tim, Komite, dan Majelis WCA'
+      #original_hash: d54d953
+      description: >-
+        Tim dan komite WCA adalah bagian yang penting dari organisasi dan
+        menjalankan tugas sehari-hari yang dibutuhkan agar organisasi tetap
+        berjalan. Komite-komite ini dipilih oleh anggota komunitas WCA, termasuk
+        Delegasi WCA dan kompetitor. Setiap tim memiliki ketua yang berperan
+        untuk memastikan bahwa tim bekerja dengan semestinya dan memandu anggota
+        tim lain. Majelis adalah tipe tim khusus yang berperan sebagai penasihat
+        bagi Dewan WCA dan dipilih oleh anggota komunitas, bukan anggota Staf
+        WCA. Ketika komite, tim, atau majelis membuka lowongan, informasi
+        tentang cara melamar akan diposting pada halaman depan.
+      groups_name:
+        #original_hash: 90a1280
+        wat: Tim Arsip WCA
+        #original_hash: 63a2388
+        wct: Tim Komunikasi WCA
+        #original_hash: 2b81984
+        wcat: Tim Pengumuman Kompetisi WCA
+        #original_hash: c97077a
+        wdc: Komite Disiplin WCA
+        #original_hash: 83bd1d0
+        wec: Komite Etik WCA
+        #original_hash: d1dbb86
+        weat: Tim Asisten Eksekutif WCA
+        #original_hash: 9cb13de
+        wfc: Komite Keuangan WCA
+        #original_hash: 2035811
+        wmt: Tim Marketing WCA
+        #original_hash: 8f32116
+        wqac: Komite Penjaminan Mutu WCA
+        #original_hash: 3da1e85
+        wrc: Komite Regulasi WCA
+        #original_hash: 67be768
+        wrt: Tim Hasil WCA
+        #original_hash: a14bc62
+        wst: Tim Perangkat Lunak WCA
+        #original_hash: 58765c7
+        wsot: Tim Organisasi Olahraga WCA
+        #original_hash: 1ce7604
+        wac: Majelis Penasihat WCA
+      groups_description:
+        #original_hash: 5b1aade
+        wat: >-
+          WAT bertanggung jawab dalam mengelola pengembangan dan pemeliharaan
+          arsip historis WCA. Mereka mendokumentasikan berbagai peristiwa
+          penting dalam speedcubing dan pencapaian penting WCA untuk disajikan
+          sebagai bagian dari linimasa WCA yang lebih luas, untuk melestarikan
+          warisan WCA dalam speedcubing.
+        #original_hash: 50fd091
+        wct: >-
+          Tim Komunikasi WCA (WCT) berperan untuk mengawasi dan mendukung
+          komunikasi WCA dengan Komunitas dan publik umum. Komunikasi WCA harus
+          berkontribusi pada Tujuan WCA dan mendukung budaya positif secara umum
+          seperti keramahan, transparansi, inklusivitas, keterbukaan, dan
+          ketanggapan.
+        #original_hash: 3e5570f
+        wcat: >-
+          Tim Pengumuman Kompetisi WCA (WCAT) berperan untuk menyetujui dan
+          mengumumkan Kompetisi WCA yang diajukan oleh delegasi, dan memastikan
+          pengumuman tersebut mematuhi standar kualitas WCA. Tim ini juga
+          bertanggung jawab dalam menjaga protokol pengajuan kompetisi yang
+          tepat dari dokumen-dokumen seperti Kebijakan Kebutuhan Kompetisi WCA.
+          WCAT TIDAK bertanggung jawab dalam kepengurusan dan delegasi setiap
+          kompetisi.
+        #original_hash: 41eb6fd
+        wdc: >-
+          Komite Disiplin WCA (WDC) melakukan investigasi independen terkait
+          Speedcuber Terdaftar dan insiden dalam Kompetisi WCA atau pada
+          platform online resmi WCA. Insiden-insiden ini merupakan dugaan
+          pelanggaran terhadap Semangat, Pedoman Perilaku, dan/atau Regulasi
+          WCA.
+        #original_hash: 6cdac80
+        wec: >-
+          Komite ini berperan dalam memastikan semua prosedur yang diikuti oleh
+          Staf WCA mematuhi Pedoman Perilaku, dan melakukan investigasi
+          independen jika perilaku dari anggota-anggota ini tidak sesuai dengan
+          Pedoman. WEC adalah pihak yang dipercaya oleh Speedcuber Terdaftar
+          yang dapat melaporkan masalah dan meminta penyelidikan. Komite ini
+          juga berfungsi sebagai dewan banding jika ada pihak yang tidak setuju
+          dengan keputusan yang dibuat oleh Komite Disiplin WCA.
+        #original_hash: 889dd90
+        weat: >-
+          Tim ini bertanggung jawab dalam melaksanakan tugas administratif Dewan
+          Direktur WCA.
+        #original_hash: 43e4e33
+        wfc: >-
+          Komite ini bertanggung jawab dalam mengelola keuangan WCA secara
+          keseluruhan, termasuk anggaran, laporan, analisis, pembukuan, dan
+          pelaporan pajak. Komite ini juga mengelola sumber pemasukan terbesar
+          WCA, yaitu Sistem Iuran WCA, serta berbagai program pendanaan yang
+          memberikan dukungan kepada komunitas lokal di berbagai tahap
+          pembangunan, termasuk Pendanaan Perjalanan, Pendanaan Peralatan, dan
+          Dukungan Organisasi Regional.
+        #original_hash: f2a0140
+        wmt: >-
+          Tim ini bertanggung jawab dalam mengembangkan dan mengelola Brand WCA,
+          mencari sponsor, mendukung distribusi Peralatan Kompetisi WCA, dan
+          memasarkan Merchandise WCA.
+        #original_hash: 0171b3b
+        wqac: >-
+          Komite ini berperan dalam mendukung dan mempromosikan peningkatan
+          kualitas secara berkala di dalam WCA, dan juga penerapan standar
+          kualitas di seluruh dunia untuk memastikan kualitas tinggi yang
+          konsisten dari proses, Staf WCA, Organisasi Regional, Panitia
+          Kompetisi, dan Staf Kompetisi.
+        #original_hash: a1260bb
+        wrc: >-
+          WRC menangani seluruh masalah yang berhubungan dengan penerapan,
+          peningkatan, dan pengembangan Regulasi WCA. Mereka membantu Delegasi
+          WCA dalam berbagai masalah prosedur yang terjadi pada kompetisi dan
+          memberi keputusan dalam insiden yang belum terselesaikan dan belum
+          dibahas.
+        #original_hash: 7bc588b
+        wrt: >-
+          WRT bertanggung jawab dalam mengelola seluruh data dalam basis data
+          WCA, khususnya yang terpenting hasil kompetisi dan data orang.
+        #original_hash: ec961e4
+        wst: >-
+          Tim ini bertanggung jawab dalam mengelola perangkat lunak WCA (situs
+          web, pengacak, buku kerja, kakas admin).
+        #original_hash: 8f888d6
+        wsot: >-
+          Tim ini berperan dalam mengawasi dan mendukung pengakuan WCA sebagai
+          organisasi olahraga internasional.
+        #original_hash: 73d8df4
+        wac: >-
+          WCA bertanggung jawab dalam menjaga umpan balik dan komunikasi antara
+          Komunitas WCA dengan Staf WCA. Mereka memelihara Forum WCA dan
+          merangkum survei serta berupaya untuk meningkatkan jangkauan ke
+          seluruh komunitas di seluruh dunia.
+    contacts:
+      #original_hash: 4ef2aad
+      title: Formulir Kontak WCA
+      #original_hash: c343cae
+      faq_note_html: >-
+        Sebelum membuat pertanyaan, Anda dapat melihat <a href="/faq">Pertanyaan
+        yang Sering Diajukan</a> kami terlebih dahulu! Jika Anda ingin
+        menghubungi komite atau tim spesifik yang tidak tertulis di sini, Anda
+        dapat menemukan informasi kontak mereka pada <a
+        href="/teams-committees-councils">halaman ini</a>.
+      form:
+        user_data:
+          name:
+            #original_hash: 709a232
+            label: Nama
+          email:
+            #original_hash: 84add5b
+            label: Email
+        contact_type:
+          #original_hash: d31ab65
+          label: Manakah di antara ini yang paling menggambarkan pertanyaan Anda?
+          competition:
+            #original_hash: 92ea7e8
+            label: Kontak Panitia dari Kompetisi Spesifik (pilih di bawah)
+          competitions_in_general:
+            #original_hash: f0bffb7
+            label: 'Kompetisi secara Umum (kepanitiaan, aturan kompetisi, dll.)'
+          results_team:
+            #original_hash: aabfcf7
+            label: Kontak Tim Hasil
+          wca_id_or_profile:
+            #original_hash: f6ffa78
+            label: ID WCA atau Profil WCA
+          media:
+            #original_hash: 0c77aee
+            label: Media
+          software:
+            #original_hash: 9ad0522
+            label: Perangkat Lunak
+          different:
+            #original_hash: 6e6a6f2
+            label: Lainnya
+        competition:
+          competition:
+            #original_hash: 1917f4f
+            label: Kompetisi
+          message:
+            #original_hash: 68f4145
+            label: Pesan
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: Pesan
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Mohon verifikasi bahwa Anda bukan robot.
+        #original_hash: 2dacf65
+        submit_button: Kirim
   homepage:
     #original_hash: 824d76b
     learn_more: Pelajari lebih lanjut
@@ -2223,12 +2407,22 @@ id:
         not_allowed: Anda tidak dapat membayar untuk pendaftaran tersebut.
         #original_hash: a073600
         stripe_failed: Mohon cek transaksi Stripe terkait.
+        #original_hash: d571a4e
+        paypal_failed: Mohon cek transaksi PayPal.
+        #original_hash: df1a70e
+        paypal_canceled: >-
+          PayPal melaporkan bahwa transaksi dibatalkan secara manual. Mohon coba
+          lagi.
         #original_hash: a32e40f
         stripe_not_found: Stripe melapor balik bahwa ID transaksi tidak dapat ditemukan.
         #original_hash: aaa8ab7
         stripe_secret_invalid: >-
           Stripe melapor balik bahwa data transaksi tidak cocok dengan data
           arsip kami.
+        #original_hash: f808249
+        stripe_not_an_intent: >-
+          Stripe melaporkan kembali ID transaksi yang tidak dimaksudkan untuk
+          pembayaran.
         #original_hash: 8d1a199
         payment_reset: Pembayaran ditolak oleh Stripe.
         #original_hash: bcf6a93
@@ -2303,10 +2497,10 @@ id:
     messages:
       #original_hash: 7b80062
       not_visible: Kompetisi ini tidak terlihat di publik.
-      #original_hash: c1d4926
+      #original_hash: 0398a14
       name_too_long: >-
-        Nama kompetisi melebihi 32 karakter. Kami anjurkan untuk
-        mempersingkatnya jika Anda berkenan.
+        Nama kompetisi melebihi 32 karakter. Mohon sunting ID dan nama singkat
+        kompetisi dengan benar.
       #original_hash: af27396
       id_starts_with_lowercase: >-
         ID kompetisi dimulai dengan huruf kecil. Kami menganjurkan untuk
@@ -3301,6 +3495,122 @@ id:
                 kualifikasinya tidak terpenuhi (Saya akan menghapusnya nanti)
               #original_hash: 6509041
               'false': Kompetitor HARUS memenuhi kualifikasi untuk mendaftar cabang
+    registration_v2:
+      pdf:
+        #original_hash: 5c7d60f
+        link: 'Sebagai <0>%{pdfLink}</0>'
+      info:
+        #original_hash: eade5c7
+        download: Unduh semua detail kompetisi.
+      list:
+        #original_hash: 8fab566
+        empty: Rekor yang sesuai tidak ditemukan
+        #original_hash: 713f805
+        spots_remaining: '%{spots} tempat tersisa'
+      bookmark:
+        #original_hash: 7952a5c
+        unbookmark: Anda telah menghapus penanda Anda
+      requirements:
+        #original_hash: 09a428f
+        title: Kebutuhan
+        #original_hash: 695cf86
+        acknowledgement: >-
+          Saya telah membaca dan memahami semua informasi pada tab 'Daftar',
+          termasuk biaya masuk dan kebijakan pengembalian uang
+        #original_hash: 270bd63
+        acknowledgment_extra: Saya telah membaca dan memahami semua informasi di atas
+        #original_hash: 80d2933
+        next_step: Lanjut ke Langkah selanjutnya
+      update:
+        #original_hash: 65bbb07
+        no_changes: Tidak ada perubahan
+        #original_hash: be4e8e2
+        email_send: Kirim Email
+        #original_hash: d9def5d
+        email_copy: Salin Email
+        #original_hash: 71327f1
+        move_pending: Pindahkan ke Daftar Tertunda
+        #original_hash: 9144dd6
+        move_waiting: Pindahkan ke Daftar Tunggu
+        #original_hash: 284b24f
+        cancel: Batalkan Pendaftaran
+        #original_hash: 67b3c7d
+        too_many: >-
+          Menyutujui semua pendaftaran ini akan membuat jumlah kompetitor
+          melebihi batas dengan jumlah kelebihan %{count}
+      register:
+        #original_hash: affea61
+        error: 'Pendaftaran gagal dengan kesalahan %{error}'
+        #original_hash: f5a8630
+        early_registration: >-
+          Pendaftaran belum dibuka, namun Anda dapat mendaftar sebagai panitia
+          atau Delegasi kompetisi.
+        #original_hash: 6b76fab
+        comment: Komentar tambahan kepada panitia
+        #original_hash: 8eae30c
+        until: 'Anda dapat memperbarui pendaftaran Anda sampai %{date}'
+        #original_hash: fc8bc84
+        passed: Anda tidak dapat lagi memperbarui pendaftaran Anda
+        #original_hash: 3c8d8b7
+        editing_disabled: Penyuntingan pendaftaran dinonaktifkan pada kompetisi ini
+        registration_status:
+          #original_hash: f1f32b6
+          header: 'Status Pendaftaran Anda:'
+        #original_hash: 2d9f36c
+        disclaimer: Pengajuan Pendaftaran bukan berarti persetujuan untuk berkompetisi
+        #original_hash: 8fe68a1
+        processing: Pendaftaran Anda sedang diproses...
+        #original_hash: 897f272
+        processing_longer: >-
+          Pemrosesan membutuhkan waktu yang lebih lama dari biasanya, jangan
+          keluar dari halaman ini!
+        #original_hash: 79ba42a
+        processing_queue: 'Banyak Pendaftaran yang sedang diproses, %{queueCount} dalam antrean.'
+      errors:
+        #original_hash: 3890616
+        events: 'Cabang gagal dimuat, mohon coba lagi'
+        #original_hash: 7b78793
+        '-1': >-
+          Anda mengirimkan token yang tidak valid, mohon muat ulang halaman ini.
+          Jika masalah ini masih terjadi, kontak WST
+        #original_hash: 44cf123
+        '-2': 'Otentikasi sudah Kedaluwarsa, mohon muat ulang halaman ini'
+        #original_hash: 2d63156
+        '-3': 'Otentikasi tidak ditemukan, mohon login'
+        #original_hash: e0b69a9
+        '-1000': Kompetisi tidak ditemukan
+        #original_hash: 2aa4aa1
+        '-1001': 'Kesalahan dalam memuat detail Kompetisi, mohon coba beberapa saat lagi'
+        #original_hash: 25b0063
+        '-2001': Anda telah di-banned dari Kompetisi WCA untuk berkompetisi
+        #original_hash: 82267b1
+        '-2002': Profil Anda tidak lengkap
+        #original_hash: 4dd79f2
+        '-2003': Anda tidak memiliki izin untuk menyelesaikan tindakan ini
+        #original_hash: cb4093a
+        '-3000': Pendaftaran tidak ditemukan
+        #original_hash: 0df821f
+        '-3001': Pembayaran WCA tidak diaktifkan untuk kompetisi ini
+        #original_hash: 092da51
+        '-3002': Anda harus menyelesaikan pendaftaran Anda sebelum Anda dapat membayar
+        #original_hash: bc53fb6
+        '-4000': Permintaan ini berisi data yang tidak valid
+        #original_hash: 35fddf4
+        '-4001': Batas waktu untuk menyunting cabang telah lewat
+        #original_hash: 097491c
+        '-4002': Jumlah pendamping telah melewati batas yang diperbolehkan
+        #original_hash: 4a0baa0
+        '-4003': Komentar yang dibuat terlalu panjang
+        #original_hash: 952daed
+        '-4004': Pengajuan pemilihan cabang tidak valid
+        #original_hash: b8a1526
+        '-4005': Kompetisi ini membutuhkan komentar
+        #original_hash: 2087dad
+        '-4006': Batas kompetitor telah tercapai
+        #original_hash: 6d95124
+        '-4007': Status pendaftaran yang dibuat tidak valid
+        #original_hash: 020234c
+        '-4008': Pendaftaran telah ditutup
     errors:
       #original_hash: f7ef9f6
       invalid_name_message: >-
@@ -3954,33 +4264,6 @@ id:
       #original_hash: 75d7ff7
       unstick_at_future: harus pada masa mendatang
   contacts:
-    website:
-      #original_hash: d7707e7
-      faq_note_html: >-
-        Sebelum membuat pertanyaan, Anda bisa melihat halaman <a
-        href="/faq">Pertanyaan yang Sering Diajukan</a> terlebih dahulu! Jika
-        Anda ingin menghubungi komite atau tim tertentu yang tidak tertulis di
-        sini, Anda dapat menemukan informasi kontak mereka pada <a
-        href="/teams-committees">halaman ini</a>.
-      #original_hash: 4ef2aad
-      title: Form Kontak WCA
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: Kontak Panitia dari Kompetisi Tertentu (harap pilih di bawah ini)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Kompetisi Secara Umum (kepanitiaan, peraturan kompetisi, dsb.)'
-        #original_hash: aabfcf7
-        results_team: Kontak Tim Hasil
-        #original_hash: f6ffa78
-        wca_id_or_profile: ID WCA atau Profil WCA
-        #original_hash: 0c77aee
-        media: Media
-        #original_hash: 9ad0522
-        software: Perangkat Lunak
-        #original_hash: 6e6a6f2
-        different: Lainnya
-      #original_hash: c70a890
-      submit: Kirim pesan
     dob:
       #original_hash: 907ac6c
       title: Form Permintaan Perubahan Tanggal Lahir
@@ -4309,8 +4592,6 @@ id:
       #original_hash: 96d77f3
       donate_other: Cara lain untuk berdonasi
     structure:
-      #original_hash: 0d62207
-      teams_committees_councils: 'Tim, Komite, dan Majelis WCA'
       #original_hash: 9482c5d
       title: Struktur
       board:
@@ -4321,140 +4602,57 @@ id:
           Dewan WCA bertanggung jawab dalam memimpin organisasi secara
           menyeluruh, dan memenuhi tugas yang tidak dipenuhi oleh Tim, Komite,
           atau Majelis
-      #original_hash: d54d953
-      committees: >-
-        Tim dan komite WCA adalah bagian yang tidak dapat dipisahkan dari
-        organisasi dan melakukan tugas harian yang dibutuhkan agar tetap aktif.
-        Komite ini terbentuk oleh anggota komunitas WCA, termasuk Delegasi dan
-        kompetitor. Setiap tim mempunyai ketua yang mempunyai peran untuk
-        memastikan keaktifan tim dan memandu anggota lain dalam tim. Dewan
-        adalah tipe khusus dalam tim yang melayani Dewan WCA sebagai penasihat
-        dan dibentuk oleh anggota komunitas, bukan anggota Staf WCA. Ketika
-        pembukaan lowongan komite, tim, atau dewan dibuka, informasi cara
-        pengajuan akan diposting pada halaman depan.
-      #original_hash: c366473
-      senior_member: Anggota Senior
-      #original_hash: e26c936
-      leader: Pemimpin
       users:
         #original_hash: 57bbaad
         profile: 'Profil %{user_name}'
       wdc:
         #original_hash: c97077a
         name: Komite Disiplin WCA
-        #original_hash: 286fdf8
-        description: >-
-          Komite ini memberi saran kepada Board WCA dalam kasus-kasus khusus,
-          seperti dugaan pelanggaran Regulasi WCA, dan memungkinkan untuk
-          dikontak oleh anggota-anggota WCA dalam masalah pribadi yang penting
-          terkait kompetisi WCA.
       wdpc:
         #original_hash: 70539cd
         name: Komite Keamanan Data WCA
-        #original_hash: 1f69829
-        description: Komite ini bertanggung jawab dalam segala hal terkait Keamanan Data.
       wrc:
         #original_hash: 3da1e85
         name: Komite Regulasi WCA
-        #original_hash: 13ada5b
-        description: Komite ini bertanggung jawab untuk mengatur Regulasi WCA.
       wrt:
         #original_hash: 67be768
         name: WCA Results Team
-        #original_hash: 439ffae
-        description: Tim ini bertanggung jawab untuk mengatur seluruh hasil kompetisi.
       wst:
         #original_hash: a14bc62
         name: Tim Perangkat Lunak WCA
-        #original_hash: ec961e4
-        description: >-
-          Tim ini bertanggung jawab untuk mengatur perangkat lunak WCA (situs
-          web, pengacak, buku kerja, kakas admin).
       wct:
         #original_hash: 63a2388
         name: WCA Communication Team
-        #original_hash: 50fd091
-        description: >-
-          WCA Communication Team (WCT) memiliki peranan untuk memantau dan
-          mendukung komunikasi antara WCA dengan Komunitas dan khalayak umum.
-          Komunikasi dari WCA harus memberikan Tujuan dari WCA dan mendukung
-          budaya positif secara umum seperti keramahan, tranparansi,
-          keterlibatan, keterbukaan, dan tanggung jawab.
       wfc:
         #original_hash: 9cb13de
         name: Komite Keuangan WCA
-        #original_hash: b4ed44b
-        description: Tim ini bertanggung jawab untuk mengatur keuangan WCA.
       wec:
         #original_hash: 83bd1d0
         name: Komite Etik WCA
-        #original_hash: c304d57
-        description: >-
-          Peran komite ini adalah memastikan bahwa semua prosedur yang diikuti
-          Staf WCA dan Staf Luar mematuhi Kode Etik, dan untuk melakukan
-          investigasi secara independen jika perbuatan dari anggota tersebut ada
-          yang tidak sesuai dengan Kode Etik. Investigasi ini dapat diajukan
-          oleh Speedcuber manapun yang telah terdaftar, yang dipercaya oleh WEC.
-          Komite ini juga berfungsi sebagai dewan banding jika seseorang yang
-          terlibat tidak setuju dengan keputusan yang dibuat oleh Komite
-          Disiplin WCA.
       weat:
         #original_hash: d1dbb86
         name: Tim Asisten Eksekutif WCA
-        #original_hash: 889dd90
-        description: >-
-          Tim ini bertanggung jawab untuk membawakan tugas administratif kepada
-          Dewan Direktur WCA.
       wqac:
         #original_hash: 8f32116
         name: Komite Penjamin Kualitas WCA
-        #original_hash: 0171b3b
-        description: >-
-          Komite ini memiliki peranan dalam mendukung dan meningkatkan kualitas
-          secara kontinu di dalam WCA, sama halnya dengan aplikasi standar
-          kualitas di seluruh dunia untuk memastikan konsistensi kualitas yang
-          tinggi dari proses, Staf WCA, Organisasi Regional, Panitia Kompetisi,
-          dan Staf Kompetisi.
       wcat:
         #original_hash: 2b81984
         name: Tim Pengumuman Kompetisi WCA
-        #original_hash: f511502
-        description: >-
-          Tim ini mempunyai peran untuk menyetujui dan mengumumkan Kompetisi WCA
-          dan memeriksa pengumuman kompetisi apakah sudah mengikuti standar
-          kualitas WCA.
       wmt:
         #original_hash: 2035811
         name: Tim Marketing WCA
-        #original_hash: f2a0140
-        description: >-
-          Tim ini bertanggung jawab untuk mengembangkan dan mengatur Brand WCA,
-          mencari sponsor, membantu penyebaran Kelengkapan Kompetisi WCA, dan
-          memasarkan Merchandise WCA.
       wac:
         #original_hash: 1ce7604
         name: Majelis Penasihat WCA
-        #original_hash: fb6cd86
-        description: >-
-          Majelis ini bertanggung jawab dalam membangun dan menjaga komunikasi
-          dua arah antara Komunitas WCA dan Staf WCA.
       wsot:
         #original_hash: 58765c7
         name: Tim Organisasi Olahraga WCA
-        #original_hash: 8f888d6
-        description: >-
-          Tim ini berperan untuk mengawasi dan mendukung pengakuan WCA sebagai
-          organisasi olahraga internasional.
       wat:
         #original_hash: 90a1280
         name: Tim Arsip WCA
-        #original_hash: fae6850
-        description: >-
-          Tim Arsip WCA adalah Komite Penasihat WCA. Tim ini berperan untuk
-          mengawasi dan mendukung perkembangan arsip organisasi.
       banned:
         #original_hash: d30e2e5
-        name: Kompetitor yang Diblokir
+        name: Kompetitor yang Di-Banned
       wct_china:
         #original_hash: ed5b65a
         name: WCT Tiongkok
@@ -5418,7 +5616,7 @@ id:
     user_password_placeholder: PASSWORD_ANDA
     #original_hash: 80c5cf5
     user_info_request_intro: >-
-      Token akses OAuth dapat digunakan sampai kadaluwarsa untuk membuat
+      Token akses OAuth dapat digunakan sampai kedaluwarsa untuk membuat
       permintaan API terotorisasi. Contohnya, untuk mengakses informasi akun
       Anda:
     #original_hash: 040b3da

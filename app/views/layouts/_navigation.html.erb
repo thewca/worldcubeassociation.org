@@ -1,6 +1,6 @@
 <div class="navbar navbar-default navbar-static-top" role="navigation">
   <div class="brand">
-    <a href="<%= root_path %>" ><%= image_tag "WCA Logo 2020.svg" %></a>
+    <a href="<%= root_path %>" ><%= image_tag "WCA Logo.svg" %></a>
   </div>
   <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
     <span class="icon-bar"></span>
@@ -10,7 +10,7 @@
   <div class="navbar-collapse collapse disabled">
     <ul class="nav navbar-nav">
       <li class="top-nav logo">
-        <a href="<%= root_path %>"><%= image_tag "WCA Logo 2020.svg" %></a>
+        <a href="<%= root_path %>"><%= image_tag "WCA Logo.svg" %></a>
       </li>
       <li class="dropdown <%= (params[:controller] == 'static_pages' && params[:action] != 'homepage') ? 'active' : '' %>">
         <a href="#" class="dropdown-toggle top-nav" data-toggle="dropdown" data-hover="dropdown">
@@ -34,7 +34,7 @@
           <li><a href="<%= disclaimer_path %>"><%= ui_icon('exclamation circle') %> <%= t '.disclaimer' %></a></li>
           <li class="divider"></li>
           <li><a href="<%= score_tools_path %>"><%= ui_icon('wrench') %> <%= t '.tools' %></a></li>
-          <li><a href="<%= logo_path %>"><i><%= image_tag('wca_logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
+          <li><a href="<%= logo_path %>"><i><%= image_tag('WCA Logo.svg', width: '16px') %></i> <%= t '.logo' %></a></li>
         </ul>
       </li>
       <li class="dropdown <%= Set['competitions', 'delegate_reports', 'results_submission'].include?(params[:controller]) ? 'active' : '' %>">
@@ -225,7 +225,12 @@
               <li role="presentation" class="dropdown-header">
                 <%= t '.panel' %>
               </li>
-              <li><%= link_to t('.panel'), panel_path %></li>
+              <% if current_user.can_access_staff_panel? %>
+                <li><%= link_to "Staff panel", panel_staff_path %></li>
+              <% end %>
+              <% if current_user.can_access_delegate_panel? %>
+                <li><%= link_to "Delegate panel", panel_delegate_path %></li>
+              <% end %>
               <% if current_user.can_access_wfc_panel? %>
                 <li><%= link_to "WFC panel", panel_wfc_path %></li>
               <% end %>
@@ -279,16 +284,6 @@
             <% if current_user.can_create_posts? %>
               <li class="divider"></li>
               <li><%= link_to t('.new_post'), new_post_path %></li>
-            <% end %>
-
-            <% unless current_user.teams_where_is_leader.empty? %>
-              <li class="divider"></li>
-              <li role="presentation" class="dropdown-header">
-                <%= t '.team_leader' %>
-              </li>
-              <% current_user.teams_where_is_leader.each do |team| %>
-                <li><%= link_to team.name, edit_team_path(team) %></li>
-              <% end %>
             <% end %>
 
             <% if current_user.can_manage_regional_organizations? %>

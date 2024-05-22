@@ -5,61 +5,7 @@ require 'rails_helper'
 RSpec.describe TeamsController do
   let(:team) { FactoryBot.create :team }
 
-  describe "GET #index" do
-    context "when not signed in" do
-      sign_out
-
-      it 'redirects to the sign in page' do
-        get :index
-        expect(response).to redirect_to new_user_session_path
-      end
-    end
-
-    context "when signed in as admin" do
-      sign_in { FactoryBot.create :admin }
-
-      it 'shows the teams index page' do
-        get :index
-        expect(response).to render_template :index
-      end
-    end
-
-    context 'when signed in as a regular user' do
-      sign_in { FactoryBot.create :user }
-
-      it 'does not allow access' do
-        get :index
-        expect(response).to redirect_to root_url
-      end
-    end
-  end
-
   describe 'GET #edit' do
-    context 'when signed in as a team leader without rights to manage all teams' do
-      let(:team_where_is_leader) { Team.wrc }
-      let(:team_where_is_not_leader) { Team.wst }
-      let!(:leader) do
-        user = FactoryBot.create(:user)
-        FactoryBot.create(:team_member, team_id: team_where_is_leader.id, user_id: user.id, team_leader: true)
-        user
-      end
-
-      before :each do
-        sign_in leader
-      end
-
-      it 'can edit his team' do
-        get :edit, params: { id: team_where_is_leader.id }
-        expect(response).to render_template :edit
-      end
-
-      it 'cannot edit other teams' do
-        get :edit, params: { id: team_where_is_not_leader.id }
-        expect(response).to redirect_to root_url
-        expect(flash[:danger]).to_not be_nil
-      end
-    end
-
     it "leader of WDC can manage the banned team, despite not being a member of the banned team" do
       sign_in FactoryBot.create :user, :wdc_leader
 
@@ -98,13 +44,6 @@ RSpec.describe TeamsController do
         patch :update, params: { id: team, team: { team_members_attributes: { "0" => { id: new_member.id, user_id: other_member.id, start_date: new_member.start_date, end_date: Date.today-1, team_leader: false } } } }
         team.reload
         expect(team.team_members.first.current_member?).to be false
-      end
-
-      it 'cannot demote oneself' do
-        admin_team = admin.teams.first
-        patch :update, params: { id: admin_team.id, team: { team_members_attributes: { "0" => { user_id: admin.id, start_date: admin.team_members.first.start_date, end_date: Date.today-1 } } } }
-        admin_team.reload
-        expect(admin_team.team_members.first.end_date).to eq nil
       end
 
       it 'cannot set start_date < end_date' do

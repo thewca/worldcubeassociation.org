@@ -23,7 +23,10 @@ def wca_registration_checkbox
   all(:css, "label[for='website-usesWcaRegistration']").last
 end
 
-RSpec.feature "Competition management", js: true do
+# The retry count for this specific set of tests is ludicrously high because our slow and deprecated
+# Apparition browser engine does not render React state changes properly.
+# We can remove this `retry` count when we migrated to a "proper" browser engine in tests.
+RSpec.feature "Competition management", js: true, retry: 10 do
   context "when signed in as admin" do
     let!(:admin) { FactoryBot.create :admin }
     before :each do

@@ -739,17 +739,6 @@ sv:
         otp_attempt: >-
           Se din konfigurerade mobilapplikation för ett engångslösenord eller
           ange en av dina återställningskoder.
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -1300,8 +1289,6 @@ sv:
       results_sidekiq: Sidekiq dashboard
       #original_hash: aee74b8
       new_post: Nytt inlägg
-      #original_hash: 0d67445
-      team_leader: Team-ledare
       #original_hash: 37b8fdc
       regional_organizations: Regionala Organisationer
       #original_hash: 6568fa0
@@ -1477,6 +1464,61 @@ sv:
           WCA-communityt och WCA-personalen. De underhåller WCA-forumen och
           sammanfattar undersökningar och försöker öka räckvidden i det globala
           communityt.
+    contacts:
+      #original_hash: 4ef2aad
+      title: Kontaktformulär
+      #original_hash: c343cae
+      faq_note_html: >-
+        Innan du ställer en fråga, titta gärna på våra <a href=”/faq”>Vanliga
+        Frågor</a>! Om du vill kontakta en specifik kommitté eller ett team som
+        inte finns med här, hittar du deras kontaktuppgifter på <a
+        href=”/teams-committees-councils”>den här sidan</a>.
+      form:
+        user_data:
+          name:
+            #original_hash: 709a232
+            label: Namn
+          email:
+            #original_hash: 84add5b
+            label: Mejl
+        contact_recipient:
+          #original_hash: d31ab65
+          label: Vilket alternativ beskriver bäst ditt ärende?
+          competition:
+            #original_hash: baa2425
+            label: >-
+              Kontakta arrangörer/delegater för en tävling (för att ställa
+              frågor om den specifika tävlingen)
+          communications_team:
+            #original_hash: b73e465
+            label: >-
+              Kontakta WCA för allmänna frågor (detta kan gälla vad som helst,
+              som WCA ID/profil, arrangering av tävlingar, tävlingsregler, media
+              etc.)
+          results_team:
+            #original_hash: 0f6b96b
+            label: Kontakta Results Team (för allt som rör resultaten av en tävling)
+          software:
+            #original_hash: 1d74033
+            label: >-
+              Kontakta Software Team (för att rapportera något fel på
+              webbplatsen eller några API-relaterade frågor)
+        competition:
+          competition:
+            #original_hash: 1917f4f
+            label: Tävling
+          message:
+            #original_hash: 68f4145
+            label: Meddelande
+        communications_team:
+          message:
+            #original_hash: 68f4145
+            label: Meddelande
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Verifiera att du inte är en robot.
+        #original_hash: 2dacf65
+        submit_button: Skicka in
   homepage:
     #original_hash: 824d76b
     learn_more: Läs mer
@@ -2327,6 +2369,10 @@ sv:
         not_allowed: Du kan inte betala för den anmälan.
         #original_hash: a073600
         stripe_failed: Var vänlig kontrollera Stripe-transaktionen
+        #original_hash: d571a4e
+        paypal_failed: Vänligen kontrollera PayPal-ordern.
+        #original_hash: df1a70e
+        paypal_canceled: PayPal rapporterade att ordern avbröts manuellt. Vänligen försök igen.
         #original_hash: a32e40f
         stripe_not_found: >-
           Stripe rapporterade tillbaka ett transaktions-ID som inte kunde
@@ -2335,6 +2381,10 @@ sv:
         stripe_secret_invalid: >-
           Stripe rapporterade tillbaka en transaction secret som inte matchar
           våra uppgifter.
+        #original_hash: f808249
+        stripe_not_an_intent: >-
+          Stripe rapporterade tillbaka ett transaktions-ID som inte är ett
+          payment intent.
         #original_hash: 8d1a199
         payment_reset: Betalningen avvisades av Stripe.
         #original_hash: bcf6a93
@@ -3665,8 +3715,8 @@ sv:
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Notera: anmälan är redan stängd.'
     show:
-      #original_hash: b0fe391
-      general_info: Generell information
+      #original_hash: a1fd58a
+      general_info: Generell Information
       #original_hash: c5497bc
       events: Grenar
       #original_hash: 0a8adac
@@ -4131,32 +4181,6 @@ sv:
       #original_hash: 75d7ff7
       unstick_at_future: måste vara i framtiden
   contacts:
-    website:
-      #original_hash: d7707e7
-      faq_note_html: >-
-        Innan du gör en förfrågan får du gärna ta en titt på våra <a
-        href="/faq">Vanliga Frågor</a>! Om du vill kontakta en viss kommitté
-        eller ett team som inte listas här kan du hitta deras kontaktinformation
-        på <a href="/teams-committees">den här sidan</a>.
-      #original_hash: 4ef2aad
-      title: 'WCA:s Kontaktformulär'
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: Kontakta arrangörerna av en specifik tävling (välj nedan)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Tävlingar i allmänhet (arrangerande, tävlingsregler, etc.)'
-        #original_hash: aabfcf7
-        results_team: Kontakta WCA Results Team
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA-ID eller WCA-profil
-        #original_hash: 0c77aee
-        media: Media
-        #original_hash: 9ad0522
-        software: Mjukvara
-        #original_hash: 6e6a6f2
-        different: Övrigt
-      #original_hash: c70a890
-      submit: Skicka meddelande
     dob:
       #original_hash: 907ac6c
       title: Formulär för ändring av födelsedatum

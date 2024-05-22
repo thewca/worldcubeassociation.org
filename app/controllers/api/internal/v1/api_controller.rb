@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 class Api::Internal::V1::ApiController < ApplicationController
-  prepend_before_action :validate_token
+  prepend_before_action :validate_wca_token unless Rails.env.development?
 
-  def validate_token
+  def validate_wca_token
     service_token = request.headers[Microservices::Auth::MICROSERVICE_AUTH_HEADER]
     return render json: { error: "Missing Authentication" }, status: :forbidden unless service_token.present?
     # The Vault CLI can't parse the response from identity/oidc/introspect so

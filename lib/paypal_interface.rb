@@ -25,7 +25,7 @@ module PaypalInterface
       ],
       products: ['PPCP'], # TODO: Experiment with other payment types
       partner_config_override: {
-        return_url: Rails.application.routes.url_helpers.competitions_paypal_return_url(competition_id, host: EnvConfig.ROOT_URL),
+        return_url: Rails.application.routes.url_helpers.competition_connect_payment_integration_url(competition_id, :paypal, host: EnvConfig.ROOT_URL),
         return_url_description: "the url to return the WCA after the paypal onboarding process.",
       },
       legal_consents: [

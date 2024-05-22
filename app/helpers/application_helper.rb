@@ -250,12 +250,4 @@ module ApplicationHelper
       [@all_js_assets, *names].compact.join(",")
     end
   end
-
-  def add_fullcalendar_to_packs
-    add_to_js_assets('fullcalendar/fullcalendar_wca')
-    add_to_css_assets('fullcalendar_wca')
-    if I18n.locale != :en
-      add_to_js_assets("fullcalendar/locales/#{I18n.locale.downcase}.js")
-    end
-  end
 end

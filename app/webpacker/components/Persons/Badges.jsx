@@ -54,7 +54,7 @@ function badgeParams(role) {
 export default function Badges({ userId }) {
   const { data } = useLoadedData(apiV0Urls.userRoles.listOfUser(
     userId,
-    ['lead', 'eligibleVoter', 'groupTypeRank', 'status', 'groupName'].join(','), // Sort params
+    ['lead', 'eligibleVoter', 'groupTypeRank', 'status:desc', 'groupName'].join(','), // Sort params
     {
       isActive: true,
       isGroupHidden: false,

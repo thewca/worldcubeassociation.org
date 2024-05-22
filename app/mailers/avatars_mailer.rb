@@ -6,7 +6,7 @@ class AvatarsMailer < ApplicationMailer
     @reason = reason
 
     mail(
-      from: Team.wrt.email,
+      from: UserGroup.teams_committees_group_wrt.metadata.email,
       to: user.email,
       reply_to: "results@worldcubeassociation.org",
       subject: "Your avatar has been rejected",
@@ -19,7 +19,7 @@ class AvatarsMailer < ApplicationMailer
     @reason = reason
 
     mail(
-      from: Team.wrt.email,
+      from: UserGroup.teams_committees_group_wrt.metadata.email,
       to: user.email,
       subject: "Your avatar has been removed by #{@remover}",
     )

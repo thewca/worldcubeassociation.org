@@ -604,7 +604,7 @@ th:
           #original_hash: 621101a
           trainee_delegate: Trainee Delegate
           #original_hash: 9b97968
-          candidate_delegate: Junior Delegate
+          junior_delegate: Junior Delegate
           #original_hash: 12ab214
           delegate: Delegate
           #original_hash: 45c2317
@@ -731,17 +731,6 @@ th:
         otp_attempt: >-
           ตรวจสอบโทรศัพท์มือถือของคุณสำหรับ one-time password หรือ ใส่ recovery
           codes
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -919,10 +908,6 @@ th:
           pending: รายชื่อรอ
           #original_hash: 441bda6
           deleted: ถูกลบทิ้ง
-          #original_hash: a1bf92e
-          cancelled: ยกเลิก
-          #original_hash: 8cf6f9c
-          waiting_list: อยู่ใน waiting list
   mail_form:
     attributes:
       contact_form:
@@ -1117,16 +1102,14 @@ th:
       error_pages:
         #original_hash: 1042478
         500_error: เราขอโทษ มีบางสิ่งบางอย่างผิดปกติ.
-        #original_hash: d656a11
-        500_contact: >-
-          หากคุณรายงานข้อผิดพลาดนี้กับ Software Team โปรด copy Request ID ใส่ใน
-          email ด้วย
+        #original_hash: 3e2364e
+        500_contact_html: '<a href=%{contact_url}>Click here</a> เพื่อรายงาน.'
         #original_hash: b61e305
         400_error: ไม่มีหน้าที่คุณกำลังมองหา
-        #original_hash: c8a7d4e
-        400_contact: >-
-          หากคุณคิดว่านี่เป็นข้อผิดพลาด โปรดติดต่อ Software Team และ copy
-          Request ID ใส่ใน email ด้วย
+        #original_hash: c9290b6
+        400_contact_html: >-
+          หากคุณคิดว่านี่คือข้อผิดพลาด กรุณา<a
+          href=%{contact_url}>กดที่นี่</a>เพื่อรายงาน
     doorkeeper:
       applications:
         help:
@@ -1262,8 +1245,6 @@ th:
       results_sidekiq: Sidekiq dashboard
       #original_hash: aee74b8
       new_post: New post
-      #original_hash: 0d67445
-      team_leader: Team leader
       #original_hash: 37b8fdc
       regional_organizations: องค์กรระดับภูมิภาค
       #original_hash: 6568fa0
@@ -1322,6 +1303,10 @@ th:
         และประกอบด้วยสมาชิกในชุมชน ไม่ใช่สมาชิกเจ้าหน้าที่ WCA
         เมื่อมีการเปิดคณะกรรมการ ทีมงาน หรือสภา
         ข้อมูลเกี่ยวกับวิธีการสมัครจะโพสต์ไว้ที่หน้าแรก
+      #original_hash: b37456c
+      contact_button: ติดต่อ
+      #original_hash: ae7928f
+      no_contact_description: ยังไม่มีข้อมูลการติดต่อทีม / กรรมการนี้
       groups_name:
         #original_hash: 90a1280
         wat: WCA Archive Team
@@ -1434,6 +1419,70 @@ th:
           WAC มีหน้าที่รับผิดชอบในการรักษาความคิดเห็นและการสื่อสารระหว่างชุมชน
           WCA และเจ้าหน้าที่ WCA พวกเขาดูแลฟอรัม WCA
           และสรุปแบบสำรวจและพยายามเพิ่มการเข้าถึงทั่วทั้งชุมชนทั่วโลก
+    contacts:
+      #original_hash: 4ef2aad
+      title: WCA Contact Form
+      #original_hash: bddd3ea
+      faq_note_html: >-
+        ก่อนที่จะทำการสอบถาม คุณอาจต้องการดู <a href="/faq">คำถามที่พบบ่อย</a>
+        ของเรา!
+        หากคุณต้องการติดต่อคณะกรรมการหรือทีมใดโดยเฉพาะที่ไม่ได้ระบุไว้ที่นี่
+        คุณสามารถดูข้อมูลติดต่อได้ที่<a
+        href="/teams-committees-councils">หน้านี้</a>
+      form:
+        user_data:
+          name:
+            #original_hash: 709a232
+            label: ชื่อ
+          email:
+            #original_hash: 84add5b
+            label: Email
+        contact_recipient:
+          #original_hash: d31ab65
+          label: ข้อใดต่อไปนี้ตรงกับคำถามของคุณมากที่สุด
+          competition:
+            #original_hash: baa2425
+            label: >-
+              ติดต่อผู้จัดงาน/ผู้แทนการแข่งขัน
+              (เพื่อสอบถามเกี่ยวกับการแข่งขันนั้นๆ)
+          wct:
+            #original_hash: b73e465
+            label: >-
+              ติดต่อ WCA สำหรบปัญหาทั่วไป (ซึ่งอาจเกี่ยวข้องกับอะไรก็ได้ เช่น
+              WCA ID/Profile, การจัดการการแข่งขัน, กติกาการแข่งขัน,
+              สื่อการแข่งขัน ฯลฯ)
+          wrt:
+            #original_hash: 0f6b96b
+            label: ติดต่อ Results Team (สำหรับสิ่งที่เกี่ยวข้องกับผลการแข่งขัน)
+          wst:
+            #original_hash: 1d74033
+            label: >-
+              ติดต่อ Software Team
+              (เพื่อรายงานข้อผิดพลาดในเว็บไซต์หรือคำถามที่เกี่ยวข้องกับ API)
+        competition:
+          competition:
+            #original_hash: 1917f4f
+            label: การแข่งขัน
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wct:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wrt:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        wst:
+          message:
+            #original_hash: 68f4145
+            label: ข้อความ
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Please verify that you are not a robot.
+        #original_hash: 2dacf65
+        submit_button: ส่ง
   homepage:
     #original_hash: 824d76b
     learn_more: เรียนรู้เพิ่มเติม
@@ -2232,10 +2281,16 @@ th:
         not_allowed: คุณไม่สามารถชำระค่าสมัครการแข่งขันนั้นได้
         #original_hash: a073600
         stripe_failed: โปรดตรวจสอบธุรกรรมของ Stripe
+        #original_hash: d571a4e
+        paypal_failed: โปรดตรวจสอบคำสั่งซื้อของ PayPal
+        #original_hash: df1a70e
+        paypal_canceled: PayPal รายงานว่าคำสั่งซื้อถูกยกเลิกด้วยตนเอง กรุณาลองอีกครั้ง.
         #original_hash: a32e40f
         stripe_not_found: Stripe รายงานกลับว่าไม่พบ Transaction ID ดังกล่าว
         #original_hash: aaa8ab7
         stripe_secret_invalid: Stripe รายงานว่า transaction secret ไม่ตรงกับค่าของเรา
+        #original_hash: f808249
+        stripe_not_an_intent: Stripe รายงานรหัสธุรกรรมกลับซึ่งไม่ใช่จุดประสงค์ในการชำระเงินจริงๆ
         #original_hash: 8d1a199
         payment_reset: การชำระเงินถูกปฏิเสธโดย Stripe
         #original_hash: bcf6a93
@@ -2948,6 +3003,12 @@ th:
           #original_hash: 6c8e5bf
           force_comment: บังคับให้ผู้เข้าแข่งขันใส่ข้อความในช่องอธิบายเพิ่มเติม
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: d0a4ce9
+            enabled: ไม่อนุญาติไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
+            #original_hash: 40c4b4c
+            reason: >-
+              เหตุผลและรายละเอียดสำหรับการไม่ให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขัน
           early_puzzle_submission:
             #original_hash: 723cad9
             enabled: ฉันต้องการให้ผู้เข้าแข่งขันส่ง puzzle ก่อนที่การแข่งขันจะเริ่มขึ้น
@@ -3151,6 +3212,13 @@ th:
           #original_hash: da39a3e
           force_comment: ''
         event_restrictions:
+          forbid_newcomers:
+            #original_hash: da39a3e
+            enabled: ''
+            #original_hash: d75332f
+            reason: >-
+              โปรดอธิบายรายละเอียดที่นี่ว่าทำไมคุณถึงไม่อยากให้ผู้เข้าแข่งขันใหม่สมัครการแข่งขันของคุณ
+              กรุณากรอกเป็นภาษาอังกฤษ!
           early_puzzle_submission:
             #original_hash: da39a3e
             enabled: ''
@@ -3260,15 +3328,18 @@ th:
       requirements:
         #original_hash: 09a428f
         title: ความต้องการ
-        #original_hash: 695cf86
+        #original_hash: 1255806
         acknowledgement: >-
           ฉันได้อ่านและรับทราบข้อมูลทั้งหมดภายใต้แท็บ 'ลงทะเบียน' แล้ว
-          รวมถึงค่าธรรมเนียมการแข่งขันและนโยบายการคืนเงิน
-        #original_hash: 270bd63
-        acknowledgment_extra: ฉันได้อ่านและทำความเข้าใจข้อมูลทั้งหมดที่ระบุไว้ข้างต้นแล้ว
+          รวมถึงค่าธรรมเนียมการแข่งขัน, นโยบายการคืนเงิน
+          และเงื่อนไขเพิ่มเติมที่แสดงไว้แล้ว
         #original_hash: 80d2933
         next_step: ดำเนินการต่อไปยังขั้นตอนถัดไป
       update:
+        #original_hash: c04744e
+        being_updated: กำลังอัปเดตการสมัคร
+        #original_hash: 75596b9
+        being_deleted: การสมัครกำลังถูกลบ
         #original_hash: 65bbb07
         no_changes: ไม่มีการเปลี่ยนแปลง
         #original_hash: be4e8e2
@@ -3286,6 +3357,10 @@ th:
           การยอมรับการลงทะเบียนทั้งหมดเหล่านี้จะเกินขีดจำกัดของผู้เข้าแข่งขันที่
           %{count} คน
       register:
+        #original_hash: dddec0b
+        re-register: สมัครการแข่งขันใหม่อีกครั้ง
+        #original_hash: a38d5fa
+        success: 'คุณได้สมัครการแข่งขัน %{comp_name} แล้ว'
         #original_hash: affea61
         error: 'การสมัครล้มเหลวโดยมีข้อผิดพลาด %{error}'
         #original_hash: f5a8630
@@ -3301,8 +3376,14 @@ th:
         #original_hash: 3c8d8b7
         editing_disabled: การแก้ไขการสมัครถูกปิดใช้งานสำหรับการแข่งขันครั้งนี้
         registration_status:
-          #original_hash: f1f32b6
-          header: 'สถานะการสมัครของคุณ:'
+          #original_hash: b1e97b8
+          accepted: การสมัครของคุณได้รับการยอมรับแล้ว
+          #original_hash: 3d7aa97
+          pending: การสมัครของคุณอยู่ระหว่างการได้รับการยอมรับจากผู้จัดการแข่งขัน
+          #original_hash: dcc4906
+          cancelled: การสมัครของคุณถูกลบแล้ว
+          #original_hash: c890478
+          waiting_list: คุณอยู่ใน Waiting List
         #original_hash: 2d9f36c
         disclaimer: การสมัครการแข่งขันไม่ได้หมายถึงว่าจะได้รับอนุมัติให้เข้าแข่งขัน
         #original_hash: 8fe68a1
@@ -3525,7 +3606,7 @@ th:
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'หมายเหตุ: ปิดการรับสมัครแล้ว'
     show:
-      #original_hash: b0fe391
+      #original_hash: a1fd58a
       general_info: ข้อมูลทั่วไป
       #original_hash: c5497bc
       events: ประเภท
@@ -3980,32 +4061,6 @@ th:
       #original_hash: 75d7ff7
       unstick_at_future: ต้องอยู่ในอนาคต
   contacts:
-    website:
-      #original_hash: d7707e7
-      faq_note_html: >-
-        ก่อนที่จะทำการสอบถามคุณอาจต้องดู <a href="/faq">คำถามที่พบบ่อย</a>!
-        หากคุณต้องการติดต่อคณะกรรมการหรือทีมแบบเฉพาะเจาะจง
-        หรือไม่ได้อยู่ในรายชื่อนี้ คุณสามารถค้นหาข้อมูลติดต่อของพวกเขาได้ที่ <a
-        href="/teams-committees">หน้านี้</a>
-      #original_hash: 4ef2aad
-      title: WCA Contact Form
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: ติดต่อผู้จัดการการแข่งขัน (เลือกได้ที่ด้านล่าง)
-        #original_hash: f0bffb7
-        competitions_in_general: 'การแข่งขันโดยทั่วไป (การจัดการ, กติกาการแข่งขัน อื่น ๆ)'
-        #original_hash: aabfcf7
-        results_team: ติดต่อ Results Team
-        #original_hash: f6ffa78
-        wca_id_or_profile: WCA ID หรือ WCA Profile
-        #original_hash: 0c77aee
-        media: มีเดีย
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: อื่น ๆ
-      #original_hash: c70a890
-      submit: ส่งข้อความ
     dob:
       #original_hash: 907ac6c
       title: ฟอร์มการขอเปลี่ยนวันเกิด
@@ -4322,10 +4377,6 @@ th:
           คณะกรรมการ WCA
           มีหน้าที่รับผิดชอบในการนำองค์กรโดยรวมและปฏิบัติหน้าที่ใด ๆ
           ที่ไม่ได้ปฏิบัติตามโดยทีมงาน, คณะกรรมการและสภา
-      #original_hash: c366473
-      senior_member: สมาชิกอวุโส
-      #original_hash: e26c936
-      leader: หัวหน้า
       users:
         #original_hash: 57bbaad
         profile: 'profile ของ %{user_name}'

@@ -187,7 +187,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "rails-staging"
       image             = "${var.shared.ecr_repository.repository_url}:staging"
       cpu    = 1536
-      memory = 6000
+      memory = 5500
       portMappings = [
         {
           # The hostPort is automatically set for awsvpc network mode,
@@ -217,7 +217,7 @@ resource "aws_ecs_task_definition" "this" {
       name              = "sidekiq-staging"
       image             = "${var.shared.ecr_repository.repository_url}:sidekiq-staging"
       cpu    = 256
-      memory = 1349
+      memory = 1849
       portMappings = [{
         # Mailcatcher
         containerPort = 1080

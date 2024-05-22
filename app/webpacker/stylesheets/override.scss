@@ -80,4 +80,10 @@ body, html {
       width: inherit !important;
     }
   }
+
+  // This is to reduce the extra margin provided for radio by bootstrap. This was making the
+  // contacts page ugly, hence doing this fix.
+  .ui.radio.checkbox {
+    margin: 1.5px 0px;
+  }
 }

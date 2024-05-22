@@ -738,17 +738,6 @@ pt:
         otp_attempt: >-
           Verifique a aplicação móvel configurada para uma password ou insira um
           dos seus códigos de recuperação.
-      website_contact:
-        #original_hash: da39a3e
-        inquiry: ''
-        #original_hash: da39a3e
-        competition_id: ''
-        #original_hash: da39a3e
-        message: ''
-        #original_hash: da39a3e
-        name: ''
-        #original_hash: da39a3e
-        your_email: ''
       dob_contact:
         #original_hash: da39a3e
         name: ''
@@ -1301,8 +1290,6 @@ pt:
       results_sidekiq: Dashboard Sidekiq
       #original_hash: aee74b8
       new_post: Novo artigo
-      #original_hash: 0d67445
-      team_leader: Líder da Equipa
       #original_hash: 37b8fdc
       regional_organizations: Organizações Regionais
       #original_hash: 6568fa0
@@ -1483,6 +1470,64 @@ pt:
           O WAC é responsável por manter o feedback e a comunicação entre a
           Comunidade WCA e o Staff da WCA. Mantêm os Fóruns da WCA e tratam
           inquéritos e tentam aumentar o alcance em toda a comunidade mundial.
+    contacts:
+      #original_hash: 4ef2aad
+      title: Formulário de Contacto WCA
+      #original_hash: c343cae
+      faq_note_html: >-
+        Antes de colocar uma questão, pode dar uma olhada nas nossas <a
+        href="/faq">Perguntas Frequentes</a>! Se desejar entrar em contacto com
+        um comité ou equipa específica não listada aqui, pode encontrar as suas
+        informações de contacto <a href="/teams-committees-councils">nesta
+        página</a>.
+      form:
+        user_data:
+          name:
+            #original_hash: 709a232
+            label: Nome
+          email:
+            #original_hash: 84add5b
+            label: Email
+        contact_recipient:
+          #original_hash: d31ab65
+          label: Qual das seguintes opções melhor descreve a sua questão?
+          competition:
+            #original_hash: baa2425
+            label: >-
+              Contactar com os organizadores/delegados de uma competição (para
+              fazer perguntas sobre essa competição específica)
+          communications_team:
+            #original_hash: b73e465
+            label: >-
+              Contactar com a WCA para dúvidas gerais (isto pode envolver
+              qualquer coisa como ID/perfil da WCA, organização de competições,
+              regras de competição, imagens/vídeos de competição, etc.)
+          results_team:
+            #original_hash: 0f6b96b
+            label: >-
+              Contactar com a Equipa de Resultados (para qualquer coisa
+              relacionada com resultados de uma competição)
+          software:
+            #original_hash: 1d74033
+            label: >-
+              Contactar com a Equipa de Software (para relatar algum bug no site
+              ou qualquer dúvida relacionada com a API)
+        competition:
+          competition:
+            #original_hash: 1917f4f
+            label: Competição
+          message:
+            #original_hash: 68f4145
+            label: Mensagem
+        communications_team:
+          message:
+            #original_hash: 68f4145
+            label: Mensagem
+        captcha:
+          #original_hash: 58c1271
+          validation_error: Por favor verifique que não é um robot.
+        #original_hash: 2dacf65
+        submit_button: Submeter
   homepage:
     #original_hash: 824d76b
     learn_more: Saber mais
@@ -2347,12 +2392,22 @@ pt:
         not_allowed: Não pode pagar para esse registo
         #original_hash: a073600
         stripe_failed: Por favor verifique a transação Stripe.
+        #original_hash: d571a4e
+        paypal_failed: Por favor verifique o pedido do PayPal.
+        #original_hash: df1a70e
+        paypal_canceled: >-
+          O PayPal informou que o pedido foi cancelado manualmente. Por favor,
+          tente novamente.
         #original_hash: a32e40f
         stripe_not_found: O Stripe reportou um ID de transação que não foi encontrado.
         #original_hash: aaa8ab7
         stripe_secret_invalid: >-
           O Stripe reportou um código secreto de transação que não corresponde
           aos nossos registos.
+        #original_hash: f808249
+        stripe_not_an_intent: >-
+          Stripe reportou um ID de transação que não é realmente uma intenção de
+          pagamento.
         #original_hash: 8d1a199
         payment_reset: O pagamento foi rejeitado pelo Stripe.
         #original_hash: bcf6a93
@@ -3733,8 +3788,8 @@ pt:
     #original_hash: 9d473a2
     note_reg_closed_orga_close_reg: 'Nota: Inscrições já se encontram encerradas.'
     show:
-      #original_hash: b0fe391
-      general_info: Informações gerais
+      #original_hash: a1fd58a
+      general_info: Informações Gerais
       #original_hash: c5497bc
       events: Eventos
       #original_hash: 0a8adac
@@ -4198,34 +4253,6 @@ pt:
       #original_hash: 75d7ff7
       unstick_at_future: tem de ser no futuro
   contacts:
-    website:
-      #original_hash: d7707e7
-      faq_note_html: >-
-        Antes de colocar uma questão, pode querer verificar a nossa <a
-        href="/faq">Lista de Perguntas Frequentes </a>! Se desejar contactar um
-        comité ou equipa específicos não listados aqui, pode encontrar as
-        informações de contacto <a href="/teams-committees">nesta página</a>.
-      #original_hash: 4ef2aad
-      title: Formulário de Contacto da WCA
-      inquiries:
-        #original_hash: 92ea7e8
-        competition: >-
-          Contactar os Organizadores de uma competição específica (escolher
-          abaixo)
-        #original_hash: f0bffb7
-        competitions_in_general: 'Competições em geral (organização, regras para competições, etc.)'
-        #original_hash: aabfcf7
-        results_team: Contactar a Equipa de Resultados
-        #original_hash: f6ffa78
-        wca_id_or_profile: ID da WCA ou Perfil da WCA
-        #original_hash: 0c77aee
-        media: Média
-        #original_hash: 9ad0522
-        software: Software
-        #original_hash: 6e6a6f2
-        different: Outro
-      #original_hash: c70a890
-      submit: Enviar mensagem
     dob:
       #original_hash: 907ac6c
       title: Formulário de Alteração de Data de Nascimento

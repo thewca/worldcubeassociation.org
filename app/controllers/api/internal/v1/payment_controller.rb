@@ -28,6 +28,6 @@ class Api::Internal::V1::PaymentController < Api::Internal::V1::ApiController
 
     payment_intent = payment_account.prepare_intent(ms_registration, amount_iso, currency_iso, paying_user)
 
-    render json: { id: payment_intent.id }
+    render json: { id: payment_intent.id, client_secret: payment_intent.client_secret }
   end
 end

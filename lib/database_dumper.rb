@@ -108,6 +108,8 @@ module DatabaseDumper
           use_wca_live_for_scoretaking
           allow_registration_without_qualification
           uses_v2_registrations
+          forbid_newcomers
+          forbid_newcomers_reason
         ),
         db_default: %w(
           connected_stripe_account_id
@@ -117,19 +119,7 @@ module DatabaseDumper
         },
       ),
     }.freeze,
-    "competition_payment_integrations" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          connected_account_type
-          competition_id
-          connected_account_id
-          created_at
-          updated_at
-        ),
-      ),
-    }.freeze,
+    "competition_payment_integrations" => :skip_all_rows,
     "CompetitionsMedia" => {
       where_clause: "WHERE status = 'accepted'",
       column_sanitizers: actions_to_column_sanitizers(
@@ -184,36 +174,8 @@ module DatabaseDumper
         ),
       ),
     }.freeze,
-    "connected_paypal_accounts" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          account_status
-          consent_status
-          permissions_granted
-          created_at
-          updated_at
-        ),
-        fake_values: {
-          "paypal_merchant_id" => "'abcdefgh'",
-        },
-      ),
-    }.freeze,
-    "connected_stripe_accounts" => {
-      where_clause: "",
-      column_sanitizers: actions_to_column_sanitizers(
-        copy: %w(
-          id
-          created_at
-          updated_at
-        ),
-        fake_values: {
-          "account_id" => "'fake_stripe_account'",
-        },
-      ),
-    }.freeze,
-
+    "connected_paypal_accounts" => :skip_all_rows,
+    "connected_stripe_accounts" => :skip_all_rows,
     "Continents" => {
       where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
@@ -761,6 +723,7 @@ module DatabaseDumper
           id
           email
           friendly_id
+          preferred_contact_mode
           created_at
           updated_at
         ),

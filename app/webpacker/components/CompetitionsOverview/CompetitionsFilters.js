@@ -76,20 +76,28 @@ function CompetitionsFilters({
   );
 }
 
-export function EventSelector({ selectedEvents, onEventSelection, eventList = WCA_EVENT_IDS }) {
+export function EventSelector({
+  selectedEvents,
+  onEventSelection,
+  eventList = WCA_EVENT_IDS,
+  disabled = false,
+  maxEvents = Infinity,
+}) {
   return (
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
-        <Button type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        <Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
 
       <div id="events">
         {eventList.map((eventId) => (
           <React.Fragment key={eventId}>
             <Button
+              disabled={disabled
+                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
               basic
               icon
               toggle
@@ -381,7 +389,6 @@ function CompDisplayCheckboxes({
               id="show_registration_status"
               checked={shouldShowRegStatus}
               onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-              disabled // FIXME Pending because of too expensive queries
             />
           </div>
         )

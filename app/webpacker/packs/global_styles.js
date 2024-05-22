@@ -19,6 +19,7 @@ import 'semantic-css/input';
 import 'semantic-css/item';
 import 'semantic-css/label';
 import 'semantic-css/list';
+import 'semantic-css/loader';
 import 'semantic-css/menu';
 import 'semantic-css/message';
 import 'semantic-css/modal';

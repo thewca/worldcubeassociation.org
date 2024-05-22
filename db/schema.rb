@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_20_170239) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
@@ -80,6 +80,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
     t.boolean "force_comment_in_registration"
     t.integer "posting_by"
     t.boolean "uses_v2_registrations", default: false, null: false
+    t.boolean "forbid_newcomers", default: false, null: false
+    t.string "forbid_newcomers_reason"
     t.index ["cancelled_at"], name: "index_Competitions_on_cancelled_at"
     t.index ["countryId"], name: "index_Competitions_on_countryId"
     t.index ["end_date"], name: "index_Competitions_on_end_date"
@@ -737,6 +739,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
     t.string "friendly_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "preferred_contact_mode", default: "email", null: false
   end
 
   create_table "groups_metadata_translators", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -789,13 +792,14 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
   end
 
   create_table "microservice_registrations", charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
-    t.string "competition_id"
-    t.integer "user_id"
+    t.string "competition_id", limit: 32, null: false
+    t.integer "user_id", null: false
     t.text "roles"
     t.boolean "is_competing", default: true, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["competition_id", "user_id"], name: "index_microservice_registrations_on_competition_id_and_user_id", unique: true
+    t.index ["user_id"], name: "fk_rails_dc6d05bc5e"
   end
 
   create_table "oauth_access_grants", id: :integer, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
@@ -1290,6 +1294,8 @@ ActiveRecord::Schema[7.1].define(version: 2024_04_11_113530) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "microservice_registrations", "Competitions", column: "competition_id"
+  add_foreign_key "microservice_registrations", "users"
   add_foreign_key "oauth_openid_requests", "oauth_access_grants", column: "access_grant_id", on_delete: :cascade
   add_foreign_key "payment_intents", "users", column: "initiated_by_id"
   add_foreign_key "paypal_records", "paypal_records", column: "parent_record_id"

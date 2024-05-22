@@ -16,7 +16,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_role_metadata) }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -109,6 +109,8 @@ class Competition < ApplicationRecord
     competitor_limit_enabled
     competitor_limit
     competitor_limit_reason
+    forbid_newcomers
+    forbid_newcomers_reason
     guests_enabled
     guests_per_registration_limit
     base_entry_fee_lowest_denomination
@@ -211,6 +213,7 @@ class Competition < ApplicationRecord
            as: "guests_base_fee",
            allow_nil: true,
            with_model_currency: :currency_code
+  validates :forbid_newcomers_reason, presence: true, if: :forbid_newcomers?
   validates :early_puzzle_submission_reason, presence: true, if: :early_puzzle_submission?
   # cannot validate `qualification_results IN [true, false]` because we historically have competitions
   # where we legitimately don't know whether or not they used qualification times so we have to set them to NULL.
@@ -700,6 +703,10 @@ class Competition < ApplicationRecord
     self.uses_v2_registrations
   end
 
+  def should_render_register_v2?(user)
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
+  end
+
   before_validation :unpack_delegate_organizer_ids
   def unpack_delegate_organizer_ids
     # This is a mess. When changing competition ids, the calls to delegates=
@@ -931,6 +938,18 @@ class Competition < ApplicationRecord
 
   def registration_past?
     registration_close && registration_close < Time.now
+  end
+
+  def registration_status
+    if registration_not_yet_opened?
+      :not_yet_opened
+    elsif registration_past?
+      :past
+    elsif registration_full?
+      :full
+    else
+      :open
+    end
   end
 
   def registration_range_specified?
@@ -2283,6 +2302,10 @@ class Competition < ApplicationRecord
         "forceComment" => force_comment_in_registration,
       },
       "eventRestrictions" => {
+        "forbidNewcomers" => {
+          "enabled" => forbid_newcomers?,
+          "reason" => forbid_newcomers_reason,
+        },
         "earlyPuzzleSubmission" => {
           "enabled" => early_puzzle_submission?,
           "reason" => early_puzzle_submission_reason,
@@ -2380,6 +2403,10 @@ class Competition < ApplicationRecord
         "forceComment" => errors[:force_comment_in_registration],
       },
       "eventRestrictions" => {
+        "forbidNewcomers" => {
+          "enabled" => errors[:forbid_newcomers],
+          "reason" => errors[:forbid_newcomers_reason],
+        },
         "earlyPuzzleSubmission" => {
           "enabled" => errors[:early_puzzle_submission],
           "reason" => errors[:early_puzzle_submission_reason],
@@ -2482,6 +2509,8 @@ class Competition < ApplicationRecord
       guests_entry_fee_lowest_denomination: form_data.dig('entryFees', 'guestEntryFee'),
       early_puzzle_submission: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'enabled'),
       early_puzzle_submission_reason: form_data.dig('eventRestrictions', 'earlyPuzzleSubmission', 'reason'),
+      forbid_newcomers: form_data.dig('eventRestrictions', 'forbidNewcomers', 'enabled'),
+      forbid_newcomers_reason: form_data.dig('eventRestrictions', 'forbidNewcomers', 'reason'),
       qualification_results: form_data.dig('eventRestrictions', 'qualificationResults', 'enabled'),
       qualification_results_reason: form_data.dig('eventRestrictions', 'qualificationResults', 'reason'),
       name_reason: form_data['nameReason'],
@@ -2525,12 +2554,23 @@ class Competition < ApplicationRecord
     competition_payment_integrations.exists?
   end
 
+  def connected_payment_integration_types
+    raw_types = self.competition_payment_integrations.pluck(:connected_account_type)
+    raw_types.map { |type| CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.invert[type] }
+  end
+
+  def payment_integration_connected?(integration_name)
+    CompetitionPaymentIntegration.validate_integration_name!(integration_name)
+
+    self.competition_payment_integrations.send(integration_name.to_sym).exists?
+  end
+
   def stripe_connected?
-    competition_payment_integrations.stripe.exists?
+    self.payment_integration_connected?(:stripe)
   end
 
   def paypal_connected?
-    competition_payment_integrations.paypal.exists?
+    self.payment_integration_connected?(:paypal)
   end
 
   def payment_account_for(integration_name)
@@ -2543,7 +2583,10 @@ class Competition < ApplicationRecord
 
   def disconnect_payment_integration(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
-    competition_payment_integrations.destroy_by(connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name])
+
+    competition_payment_integrations.destroy_by(
+      connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
+    )
   end
 
   def disconnect_all_payment_integrations
@@ -2677,6 +2720,13 @@ class Competition < ApplicationRecord
         "eventRestrictions" => {
           "type" => "object",
           "properties" => {
+            "forbidNewcomers" => {
+              "type" => "object",
+              "properties" => {
+                "enabled" => { "type" => "boolean" },
+                "reason" => { "type" => ["string", "null"] },
+              },
+            },
             "earlyPuzzleSubmission" => {
               "type" => "object",
               "properties" => {
