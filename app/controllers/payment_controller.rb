@@ -32,7 +32,7 @@ class PaymentController < ApplicationController
         ruby_money = charge.money_amount
 
         begin
-          Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
+          Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status, current_user.id)
         rescue Faraday::Error
           return redirect_to competition_register_path(competition_id, "registration_unreachable")
         end
@@ -116,7 +116,7 @@ class PaymentController < ApplicationController
     currency_iso = refund_receipt.currency_code
 
     begin
-      Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund")
+      Microservices::Registrations.update_registration_payment(attendee_id, refund_receipt.id, refund_amount, currency_iso, "refund", current_user.id)
     rescue Faraday::Error
       return render json: { error: "registration_unreachable" }
     end
