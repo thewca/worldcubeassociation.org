@@ -647,6 +647,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "user_groups" => {
+      # groups have a self-referencing foreign key to their parent group, so we need to make sure that root groups are inserted first
+      order_by_clause: "ORDER BY parent_group_id ASC",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
