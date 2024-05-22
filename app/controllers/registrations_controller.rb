@@ -447,7 +447,7 @@ class RegistrationsController < ApplicationController
     @selected_events = []
     if current_user
       @registration = @competition.registrations.find_or_initialize_by(user_id: current_user.id, competition_id: @competition.id)
-      @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.prapi_amoueferred_events : @registration.saved_and_unsaved_events
+      @selected_events = @registration.saved_and_unsaved_events.empty? ? @registration.user.preferred_events : @registration.saved_and_unsaved_events
     end
   end
 
