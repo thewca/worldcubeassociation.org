@@ -1357,6 +1357,11 @@ en:
       address: "Address"
       details: "Details"
       website: "Website"
+      name_and_location: "Name and location"
+      delegates: "Delegate(s)"
+      announced: "Announced"
+      report_posted: "Report posted"
+      results_submitted: "Results submitted"
       #context: Used to display an explicit tag when the competition is cancelled
       display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form

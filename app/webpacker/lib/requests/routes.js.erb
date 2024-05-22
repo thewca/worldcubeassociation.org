@@ -41,6 +41,7 @@ export const homepageUrl = `<%= CGI.unescape(Rails.application.routes.url_helper
 
 export const createCompetitionUrl = `<%= CGI.unescape(Rails.application.routes.url_helpers.competitions_path)%>`;
 export const competitionUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_path("${id}"))%>`;
+export const adminCompetitionUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.competition_admin_edit_path("${id}"))%>`;
 
 export const competitionReportUrl = (id) => `<%= CGI.unescape(Rails.application.routes.url_helpers.delegate_report_path("${id}"))%>`;
 
