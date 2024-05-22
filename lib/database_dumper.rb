@@ -141,7 +141,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "ConciseAverageResults" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           average
@@ -158,7 +157,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "ConciseSingleResults" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           best
@@ -177,7 +175,6 @@ module DatabaseDumper
     "connected_paypal_accounts" => :skip_all_rows,
     "connected_stripe_accounts" => :skip_all_rows,
     "Continents" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -190,7 +187,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -201,7 +197,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -213,7 +208,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Formats" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -229,7 +223,6 @@ module DatabaseDumper
     "InboxPersons" => :skip_all_rows,
     "InboxResults" => :skip_all_rows,
     "Persons" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -250,7 +243,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksAverage" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -264,7 +256,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -278,7 +269,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Results" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -324,7 +314,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RoundTypes" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -336,7 +325,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           competitionId
@@ -509,7 +497,6 @@ module DatabaseDumper
     "poll_options" => :skip_all_rows,
     "polls" => :skip_all_rows,
     "posts" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -536,7 +523,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "preferred_formats" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           event_id
@@ -546,7 +532,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "regional_organizations" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -570,7 +555,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "registration_competition_events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -642,7 +626,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "teams" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -655,7 +638,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "user_preferred_events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -665,7 +647,8 @@ module DatabaseDumper
       ),
     }.freeze,
     "user_groups" => {
-      where_clause: "",
+      # groups have a self-referencing foreign key to their parent group, so we need to make sure that root groups are inserted first
+      order_by_clause: "ORDER BY parent_group_id ASC",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -682,7 +665,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "groups_metadata_board" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -693,7 +675,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "groups_metadata_delegate_regions" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -705,7 +686,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "groups_metadata_councils" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -717,7 +697,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "groups_metadata_teams_committees" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -730,7 +709,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "groups_metadata_translators" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -741,7 +719,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "users" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -799,21 +776,18 @@ module DatabaseDumper
     }.freeze,
     "locations" => :skip_all_rows,
     "incidents" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(id title public_summary digest_worthy resolved_at digest_sent_at created_at updated_at),
         db_default: %w(private_description private_wrc_decision),
       ),
     }.freeze,
     "incident_competitions" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(id incident_id competition_id),
         db_default: %w(comments),
       ),
     }.freeze,
     "incident_tags" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(id incident_id tag),
       ),
@@ -821,7 +795,6 @@ module DatabaseDumper
     "vote_options" => :skip_all_rows,
     "votes" => :skip_all_rows,
     "server_settings" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           name
@@ -843,7 +816,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "eligible_country_iso2s_for_championship" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -854,7 +826,6 @@ module DatabaseDumper
     }.freeze,
     "wcif_extensions" => :skip_all_rows,
     "assignments" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -882,7 +853,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "country_bands" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -908,7 +878,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_delegate_regions" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -923,7 +892,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_officers" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -934,7 +902,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_councils" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -945,7 +912,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "roles_metadata_teams_committees" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -962,7 +928,6 @@ module DatabaseDumper
 
   RESULTS_SANITIZERS = {
     "Results" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           competitionId
@@ -988,7 +953,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksSingle" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           personId
@@ -1001,7 +965,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RanksAverage" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           personId
@@ -1014,7 +977,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "RoundTypes" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1026,7 +988,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Events" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1038,7 +999,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Formats" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1052,7 +1012,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Countries" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1063,7 +1022,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Continents" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1076,7 +1034,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Persons" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           subid
@@ -1125,7 +1082,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "Scrambles" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           competitionId
@@ -1155,7 +1111,6 @@ module DatabaseDumper
       ),
     }.freeze,
     "eligible_country_iso2s_for_championship" => {
-      where_clause: "",
       column_sanitizers: actions_to_column_sanitizers(
         copy: %w(
           id
@@ -1204,8 +1159,11 @@ module DatabaseDumper
         # Some column names like "rank" are reserved keywords starting mysql 8.0 and require quoting.
         quoted_column_list = column_sanitizers.keys.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }.join(", ")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{table_sanitizer[:where_clause]}"
-        ActiveRecord::Base.connection.execute(populate_table_sql)
+        where_clause_sql = table_sanitizer.fetch(:where_clause, "")
+        order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
+
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
+        ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
       if dump_ts_name.present?
