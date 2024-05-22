@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import {
-  Button, Header, Modal, Table,
+  Button, Header, Message, Table,
 } from 'semantic-ui-react';
 import getAvailableRefunds from '../api/payment/get/getAvailableRefunds';
 import refundPayment from '../api/payment/get/refundPayment';
@@ -11,14 +11,13 @@ import Loading from '../../Requests/Loading';
 import AutonumericField from '../../wca/FormBuilder/input/AutonumericField';
 
 export default function Refunds({
-  onExit, userId, competitionId,
+  onSuccess, userId, competitionId,
 }) {
   const dispatch = useDispatch();
 
   const {
     data: refunds,
     isLoading: refundsLoading,
-    isError: refundError,
   } = useQuery({
     queryKey: ['refunds', competitionId, userId],
     queryFn: () => getAvailableRefunds(competitionId, userId),
@@ -26,6 +25,7 @@ export default function Refunds({
     refetchOnReconnect: false,
     staleTime: Infinity,
     refetchOnMount: 'always',
+    select: (data) => data.charges.filter((r) => r.ruby_amount !== 0),
   });
   const { mutate: refundMutation, isLoading: isMutating } = useMutation({
     mutationFn: refundPayment,
@@ -37,38 +37,43 @@ export default function Refunds({
     },
     onSuccess: () => {
       dispatch(setMessage('Refund succeeded', 'positive'));
-      onExit();
+      onSuccess();
     },
   });
-  return refundsLoading ? (
-    <Loading />
-  ) : (
-    !refundError && (
-      <>
-        <Header>Available Refunds:</Header>
-        <Table>
-          <Table.Header>
-            <Table.Row>
-              <Table.HeaderCell>Full Amount</Table.HeaderCell>
-              <Table.HeaderCell>Refund Amount </Table.HeaderCell>
-              <Table.HeaderCell />
-            </Table.Row>
-          </Table.Header>
-          <Table.Body>
-            {refunds.charges.map((refund) => (
-              <RefundRow
-                refund={refund}
-                refundMutation={refundMutation}
-                isMutating={isMutating}
-                userId={userId}
-                competitionId={competitionId}
-                key={refund.payment_id}
-              />
-            ))}
-          </Table.Body>
-        </Table>
-      </>
-    )
+
+  if (refundsLoading) {
+    return <Loading />;
+  }
+
+  if (refunds.length === 0) {
+    return <Message success>All charges have been refunded</Message>;
+  }
+
+  return (
+    <>
+      <Header>Available Refunds:</Header>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Full Amount</Table.HeaderCell>
+            <Table.HeaderCell>Refund Amount </Table.HeaderCell>
+            <Table.HeaderCell />
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {refunds.map((refund) => (
+            <RefundRow
+              refund={refund}
+              refundMutation={refundMutation}
+              isMutating={isMutating}
+              userId={userId}
+              competitionId={competitionId}
+              key={refund.payment_id}
+            />
+          ))}
+        </Table.Body>
+      </Table>
+    </>
   );
 }
 

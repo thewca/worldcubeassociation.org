@@ -44,7 +44,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const queryClient = useQueryClient();
 
-  const { data: serverRegistration, refetch } = useQuery({
+  const { isLoading: isRegistrationLoading, data: serverRegistration, refetch } = useQuery({
     queryKey: ['registration-admin', competitionInfo.id, competitor.id],
     queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
     refetchOnWindowFocus: false,
@@ -154,180 +154,180 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const registrationEditDeadlinePassed = Boolean(competitionInfo.event_change_deadline_date)
     && hasPassed(competitionInfo.event_change_deadline_date);
 
+  if (isLoading || isRegistrationLoading) {
+    return <Loading />;
+  }
+
   return (
     <Segment padded attached>
-      {!registration?.competing?.registration_status || isLoading ? (
-        <Loading />
-      ) : (
-        <Form onSubmit={handleRegisterClick}>
-          {!competitor.wca_id && (
-            <Message>
-              This person registered with an account. You can edit their
-              personal information
-              {' '}
-              <a href={editPersonUrl(competitor.id)}>here.</a>
-            </Message>
+      <Form onSubmit={handleRegisterClick}>
+        {!competitor.wca_id && (
+        <Message>
+          This person registered with an account. You can edit their
+          personal information
+          {' '}
+          <a href={editPersonUrl(competitor.id)}>here.</a>
+        </Message>
+        )}
+        <Header>{competitor.name}</Header>
+        <EventSelector
+          onEventSelection={setSelectedEvents}
+          selectedEvents={selectedEvents}
+          disabled={registrationEditDeadlinePassed}
+          eventList={competitionInfo.event_ids}
+        />
+        <label>Comment</label>
+        <Form.TextArea
+          id="competitor-comment"
+          maxLength={240}
+          value={comment}
+          disabled={registrationEditDeadlinePassed}
+          onChange={(event, data) => {
+            setComment(data.value);
+          }}
+        />
+
+        <label>Administrative Notes</label>
+        <Form.TextArea
+          id="admin-comment"
+          maxLength={240}
+          value={adminComment}
+          disabled={registrationEditDeadlinePassed}
+          onChange={(event, data) => {
+            setAdminComment(data.value);
+          }}
+        />
+
+        <Form.Group inline>
+          <label>Status</label>
+          <Form.Checkbox
+            radio
+            label="Pending"
+            name="checkboxRadioGroup"
+            value="pending"
+            checked={status === 'pending'}
+            disabled={registrationEditDeadlinePassed}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+          <Form.Checkbox
+            radio
+            label="Accepted"
+            name="checkboxRadioGroup"
+            value="accepted"
+            checked={status === 'accepted'}
+            disabled={registrationEditDeadlinePassed}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+          <Form.Checkbox
+            radio
+            label="Waiting List"
+            name="checkboxRadioGroup"
+            value="waiting_list"
+            checked={status === 'waiting_list'}
+            disabled={registrationEditDeadlinePassed}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+          <Form.Checkbox
+            radio
+            label="Cancelled"
+            name="checkboxRadioGroup"
+            value="cancelled"
+            disabled={registrationEditDeadlinePassed}
+            checked={status === 'cancelled'}
+            onChange={(event, data) => setStatus(data.value)}
+          />
+        </Form.Group>
+        <label>Guests</label>
+        <Form.Input
+          disabled={registrationEditDeadlinePassed}
+          type="number"
+          min={0}
+          max={99}
+          value={guests}
+          onChange={(event, data) => setGuests(data.value)}
+        />
+
+        {registrationEditDeadlinePassed ? (
+          <Message negative>Registration edit deadline has passed.</Message>
+        ) : (
+          <Button
+            color="blue"
+            disabled={isUpdating}
+          >
+            Update Registration
+          </Button>
+        )}
+      </Form>
+      {competitionInfo['using_payment_integrations?'] && (
+        <>
+          <Header>
+            Payment status:
+            {' '}
+            {registration.payment.payment_status}
+          </Header>
+          {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
+            <Refunds
+              competitionId={competitionInfo.id}
+              userId={competitor.id}
+              onSuccess={refetch}
+            />
           )}
-          <Header>{competitor.name}</Header>
-          <EventSelector
-            onEventSelection={setSelectedEvents}
-            selectedEvents={selectedEvents}
-            disabled={registrationEditDeadlinePassed}
-            eventList={competitionInfo.event_ids}
-          />
-          <label>Comment</label>
-          <Form.TextArea
-            id="competitor-comment"
-            maxLength={240}
-            value={comment}
-            disabled={registrationEditDeadlinePassed}
-            onChange={(event, data) => {
-              setComment(data.value);
-            }}
-          />
-
-          <label>Administrative Notes</label>
-          <Form.TextArea
-            id="admin-comment"
-            maxLength={240}
-            value={adminComment}
-            disabled={registrationEditDeadlinePassed}
-            onChange={(event, data) => {
-              setAdminComment(data.value);
-            }}
-          />
-
-          <Form.Group inline>
-            <label>Status</label>
-            <Form.Checkbox
-              radio
-              label="Pending"
-              name="checkboxRadioGroup"
-              value="pending"
-              checked={status === 'pending'}
-              disabled={registrationEditDeadlinePassed}
-              onChange={(event, data) => setStatus(data.value)}
-            />
-            <Form.Checkbox
-              radio
-              label="Accepted"
-              name="checkboxRadioGroup"
-              value="accepted"
-              checked={status === 'accepted'}
-              disabled={registrationEditDeadlinePassed}
-              onChange={(event, data) => setStatus(data.value)}
-            />
-            <Form.Checkbox
-              radio
-              label="Waiting List"
-              name="checkboxRadioGroup"
-              value="waiting_list"
-              checked={status === 'waiting_list'}
-              disabled={registrationEditDeadlinePassed}
-              onChange={(event, data) => setStatus(data.value)}
-            />
-            <Form.Checkbox
-              radio
-              label="Cancelled"
-              name="checkboxRadioGroup"
-              value="cancelled"
-              disabled={registrationEditDeadlinePassed}
-              checked={status === 'cancelled'}
-              onChange={(event, data) => setStatus(data.value)}
-            />
-          </Form.Group>
-          <label>Guests</label>
-          <Form.Input
-            disabled={registrationEditDeadlinePassed}
-            type="number"
-            min={0}
-            max={99}
-            value={guests}
-            onChange={(event, data) => setGuests(data.value)}
-          />
-
-          {registrationEditDeadlinePassed ? (
-            <Message negative>Registration edit deadline has passed.</Message>
-          ) : (
-            <Button
-              color="blue"
-              disabled={isUpdating}
-            >
-              Update Registration
-            </Button>
-          )}
-
-          {competitionInfo['using_payment_integrations?'] && (
-            <>
-              <Header>
-                Payment status:
-                {' '}
-                {registration.payment.payment_status}
-              </Header>
-              {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
-                <Refunds
-                  competitionId={competitionInfo.id}
-                  userId={competitor.id}
-                />
-              )}
-            </>
-          )}
-          <Header>Registration History</Header>
-          <Table>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Timestamp</Table.HeaderCell>
-                <Table.HeaderCell>Changes</Table.HeaderCell>
-                <Table.HeaderCell>Acting User</Table.HeaderCell>
-                <Table.HeaderCell>Action</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
-            <Table.Body>
-              {registration.history.map((entry) => (
-                <Table.Row key={entry.timestamp}>
-                  <Table.Cell>
-                    <Popup
-                      content={getShortTimeString(entry.timestamp)}
-                      trigger={
-                        <span>{getShortDateString(entry.timestamp)}</span>
-                          }
-                    />
-                  </Table.Cell>
-                  <Table.Cell>
-                    {!_.isEmpty(entry.changed_attributes) ? (
-                      Object.entries(entry.changed_attributes).map(
-                        ([k, v]) => (
-                          <span key={k}>
-                            Changed
-                            {' '}
-                            {k}
-                            {' '}
-                            to
-                            {' '}
-                            {JSON.stringify(v)}
-                            {' '}
-                            <br />
-                          </span>
-                        ),
-                      )
-                    ) : (
-                      <span>Registration Created</span>
-                    )}
-                  </Table.Cell>
-                  <Table.Cell>
-                    {
-                          competitorsInfo.find(
-                            (c) => c.id === entry.actor_user_id,
-                          )?.name ?? entry.actor_user_id
-                        }
-                  </Table.Cell>
-                  <Table.Cell>{entry.action}</Table.Cell>
-                </Table.Row>
-              ))}
-            </Table.Body>
-          </Table>
-        </Form>
+        </>
       )}
+      <Header>Registration History</Header>
+      <Table>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell>Timestamp</Table.HeaderCell>
+            <Table.HeaderCell>Changes</Table.HeaderCell>
+            <Table.HeaderCell>Acting User</Table.HeaderCell>
+            <Table.HeaderCell>Action</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+        <Table.Body>
+          {registration.history.map((entry) => (
+            <Table.Row key={entry.timestamp}>
+              <Table.Cell>
+                <Popup
+                  content={getShortTimeString(entry.timestamp)}
+                  trigger={
+                    <span>{getShortDateString(entry.timestamp)}</span>
+                  }
+                />
+              </Table.Cell>
+              <Table.Cell>
+                {!_.isEmpty(entry.changed_attributes) ? (
+                  Object.entries(entry.changed_attributes).map(
+                    ([k, v]) => (
+                      <span key={k}>
+                        Changed
+                        {' '}
+                        {k}
+                        {' '}
+                        to
+                        {' '}
+                        {JSON.stringify(v)}
+                        {' '}
+                        <br />
+                      </span>
+                    ),
+                  )
+                ) : (
+                  <span>Registration Created</span>
+                )}
+              </Table.Cell>
+              <Table.Cell>
+                {
+                  competitorsInfo.find(
+                    (c) => c.id === entry.actor_user_id,
+                  )?.name ?? entry.actor_user_id
+                }
+              </Table.Cell>
+              <Table.Cell>{entry.action}</Table.Cell>
+            </Table.Row>
+          ))}
+        </Table.Body>
+      </Table>
     </Segment>
   );
 }
