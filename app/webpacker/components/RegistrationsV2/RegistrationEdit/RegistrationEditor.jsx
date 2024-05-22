@@ -8,7 +8,7 @@ import React, {
 import {
   Accordion,
   Button,
-  Checkbox,
+  Checkbox, Divider, Form,
   Header,
   Input,
   Message,
@@ -44,7 +44,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const queryClient = useQueryClient();
 
-  const { data: serverRegistration } = useQuery({
+  const { data: serverRegistration, refetch } = useQuery({
     queryKey: ['registration-admin', competitionInfo.id, competitor.id],
     queryFn: () => getSingleRegistration(competitor.id, competitionInfo.id),
     refetchOnWindowFocus: false,
@@ -159,7 +159,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       {!registration?.competing?.registration_status || isLoading ? (
         <Loading />
       ) : (
-        <>
+        <Form onSubmit={handleRegisterClick}>
           {!competitor.wca_id && (
             <Message>
               This person registered with an account. You can edit their
@@ -175,9 +175,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             disabled={registrationEditDeadlinePassed}
             eventList={competitionInfo.event_ids}
           />
-
-          <Header>Comment</Header>
-          <TextArea
+          <label>Comment</label>
+          <Form.TextArea
             id="competitor-comment"
             maxLength={240}
             value={comment}
@@ -187,8 +186,8 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             }}
           />
 
-          <Header>Administrative Notes</Header>
-          <TextArea
+          <label>Administrative Notes</label>
+          <Form.TextArea
             id="admin-comment"
             maxLength={240}
             value={adminComment}
@@ -198,9 +197,9 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             }}
           />
 
-          <Header>Status</Header>
-          <div>
-            <Checkbox
+          <Form.Group inline>
+            <label>Status</label>
+            <Form.Checkbox
               radio
               label="Pending"
               name="checkboxRadioGroup"
@@ -209,8 +208,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               disabled={registrationEditDeadlinePassed}
               onChange={(event, data) => setStatus(data.value)}
             />
-            <br />
-            <Checkbox
+            <Form.Checkbox
               radio
               label="Accepted"
               name="checkboxRadioGroup"
@@ -219,8 +217,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               disabled={registrationEditDeadlinePassed}
               onChange={(event, data) => setStatus(data.value)}
             />
-            <br />
-            <Checkbox
+            <Form.Checkbox
               radio
               label="Waiting List"
               name="checkboxRadioGroup"
@@ -229,8 +226,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               disabled={registrationEditDeadlinePassed}
               onChange={(event, data) => setStatus(data.value)}
             />
-            <br />
-            <Checkbox
+            <Form.Checkbox
               radio
               label="Cancelled"
               name="checkboxRadioGroup"
@@ -239,24 +235,22 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               checked={status === 'cancelled'}
               onChange={(event, data) => setStatus(data.value)}
             />
-            <br />
-            <Header>Guests</Header>
-            <Input
-              disabled={registrationEditDeadlinePassed}
-              type="number"
-              min={0}
-              max={99}
-              value={guests}
-              onChange={(event, data) => setGuests(data.value)}
-            />
-          </div>
+          </Form.Group>
+          <label>Guests</label>
+          <Form.Input
+            disabled={registrationEditDeadlinePassed}
+            type="number"
+            min={0}
+            max={99}
+            value={guests}
+            onChange={(event, data) => setGuests(data.value)}
+          />
 
           {registrationEditDeadlinePassed ? (
             <Message negative>Registration edit deadline has passed.</Message>
           ) : (
             <Button
               color="blue"
-              onClick={handleRegisterClick}
               disabled={isUpdating}
             >
               Update Registration
@@ -270,7 +264,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
                 {' '}
                 {registration.payment.payment_status}
               </Header>
-              {registration.payment.payment_status === 'succeeded' && (
+              {(registration.payment.payment_status === 'succeeded' || registration.payment.payment_status === 'refund') && (
                 <Refunds
                   competitionId={competitionInfo.id}
                   userId={competitor.id}
@@ -332,7 +326,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               ))}
             </Table.Body>
           </Table>
-        </>
+        </Form>
       )}
     </Segment>
   );
