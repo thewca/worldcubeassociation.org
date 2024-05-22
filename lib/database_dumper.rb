@@ -1204,8 +1204,11 @@ module DatabaseDumper
         # Some column names like "rank" are reserved keywords starting mysql 8.0 and require quoting.
         quoted_column_list = column_sanitizers.keys.map { |column_name| ActiveRecord::Base.connection.quote_column_name column_name }.join(", ")
 
-        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{table_sanitizer[:where_clause]}"
-        ActiveRecord::Base.connection.execute(populate_table_sql)
+        where_clause_sql = table_sanitizer.fetch(:where_clause, "")
+        order_by_clause_sql = table_sanitizer.fetch(:order_by_clause, "")
+
+        populate_table_sql = "INSERT INTO #{dump_db_name}.#{table_name} (#{quoted_column_list}) SELECT #{column_expressions} FROM #{source_table} #{where_clause_sql} #{order_by_clause_sql}"
+        ActiveRecord::Base.connection.execute(populate_table_sql.strip)
       end
 
       if dump_ts_name.present?
