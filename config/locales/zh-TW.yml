@@ -1567,11 +1567,11 @@ zh-TW:
         這個WCA ID 和帳號
         有連結到WCA的特殊職位(例如：代表，主辦團隊，團隊成員)，所以無法被移除。請用電子郵件聯絡WCA成績組來協助修改WCA ID到另一個帳號。
       cannot_edit:
-        #original_hash: 8bb2def
+        #original_hash: 3d4d222
         msg: >-
           您無法更改您的姓名、生日、性別或區域，原因：%{reason}。如果您需要更改以上資料，請聯絡<a
-          href='mailto:results@worldcubeassociation.org'
-          target='_blank'>WCA成績組</a>或是您的<a href='%{delegate_url}'>WCA代表</a>。
+          href='%{wrt_contact_path}' target='_blank'>WCA成績組</a>或是您的<a
+          href='%{delegate_url}'>WCA代表</a>。
         reason:
           #original_hash: 370ff12
           assigned: 您已經有WCA ID了
@@ -1658,17 +1658,17 @@ zh-TW:
       already_have_id: '無法取得WCA ID，因為您已經有WCA ID %{wca_id}了'
       #original_hash: ec5db95
       wca_id_no_birthdate_html: '我們沒有此WCA ID的生日資料。請使用<a href="%{dob_form_path}">此表單</a>聯絡WCA成績組。'
-      #original_hash: 51fa5a4
+      #original_hash: f7dde6e
       wca_id_no_gender_html: >-
-        我們沒有此WCA ID的性別資料。請寄信至<a href='mailto:results@worldcubeassociation.org'
+        我們沒有此WCA ID的性別資料。請寄信至<a href='%{wrt_contact_path}'
         target='_blank'>WCA成績組</a>處理。
-      #original_hash: 87ee245
+      #original_hash: 11a7f81
       wca_id_no_citizenship_html: >-
-        我們沒有此WCA ID的國籍資料。請寄信至<a href='mailto:results@worldcubeassociation.org'
+        我們沒有此WCA ID的國籍資料。請寄信至<a href='%{wrt_contact_path}'
         target='_blank'>WCA成績組</a>處理。
-      #original_hash: c3839bc
+      #original_hash: 6890de8
       wca_id_no_name_html: >-
-        我們沒有此WCA ID的姓名資料。請寄信至<a href='mailto:results@worldcubeassociation.org'
+        我們沒有此WCA ID的姓名資料。請寄信至<a href='%{wrt_contact_path}'
         target='_blank'>WCA成績組</a>處理。
       #original_hash: d02c03b
       avatar_requires_wca_id: 需要對應的WCA ID
@@ -2912,6 +2912,8 @@ zh-TW:
         cancel: 取消報名
         #original_hash: 67b3c7d
         too_many: '接受這些全部報名會造成參賽者人數超過上限，會多出%{count}人'
+        #original_hash: 462376a
+        no_self_update: 聯絡比賽主辦團隊來更新您的報名。
       register:
         #original_hash: dddec0b
         re-register: 重新報名
@@ -2927,6 +2929,8 @@ zh-TW:
         until: '您可以在%{date}以前更新您的報名'
         #original_hash: fc8bc84
         passed: 您無法再更新您的報名內容
+        #original_hash: 54d5b77
+        already_paid: '您已付款：%{comp_name}'
         #original_hash: 3c8d8b7
         editing_disabled: 這場比賽不允許更改報名內容
         registration_status:
@@ -2946,6 +2950,8 @@ zh-TW:
         processing_longer: 出現比預期還久的處理時間，請再等一下！
         #original_hash: 79ba42a
         processing_queue: '正在處理多個報名資訊，您排在第%{queueCount}位。'
+        #original_hash: ff6550f
+        event_limit: '這場比賽有比賽項目的上限：%{max_events}個。'
       errors:
         #original_hash: 3890616
         events: 讀取比賽項目失敗，請再試一次
@@ -3232,11 +3238,11 @@ zh-TW:
       #original_hash: 73acb7f
       room_in_venue: '在%{venue}的%{room}'
       #original_hash: f7fd979
-      venue_information_html:
+      venue_selection_html:
         zero: '您正在瀏覽這場比賽唯一的比賽場地%{venue_name}的賽程。'
         other: '您正在瀏覽比賽場地%{venue_name}的賽程。這場比賽有%{count}個比賽場地。'
       #original_hash: 8d175ad
-      venue_information_all: '您正在閱覽所有%{venueCount}個比賽會場的賽程。'
+      venue_selection_all: '您正在閱覽所有%{venueCount}個比賽會場的賽程。'
       #original_hash: 97df911
       timezone_message: '比賽場地的時區為%{timezone}。'
       #original_hash: 94b2570
@@ -4086,22 +4092,19 @@ zh-TW:
     #original_hash: c72c969
     title: WCA標誌
     paragraphs:
-      #original_hash: 44cfe8d
-      '1': >-
-        WCA標誌由Justin Eastman設計，在2005年1月的設計比賽勝出。<br
-        />我們喜歡這個標誌是因為它的設計、顏色、以及它沒有特意秀出3x3x3方塊。
-      #original_hash: 916e3fc
-      '2': >-
-        我們有四種版本的標誌：<a href="/files/WCAlogo_XL.jpg">JPG檔(大)</a> (46 KB,
-        1756*1068像素)、<a href="/files/WCAlogo.svg">向量圖檔</a>、<a
-        href="/files/WCAlogo_notext.svg">無文字版向量圖檔</a>和<a
-        href="/files/WCAlogo_monochrome.svg">單色向量圖檔</a>。
-      #original_hash: dcb1ad6
+      #original_hash: 18fc057
+      '1': WCA標誌由Justin Eastman設計，在2005年1月的設計比賽勝出。
+      #original_hash: d7e75b2
+      '2': 我們喜歡這個標誌是因為它的設計、顏色、以及它沒有特意秀出3x3x3方塊。
+      #original_hash: a68dd02
       '3': >-
-        3D版標誌，由越南的Vu Minh Tan設計：<a href="/files/WCALogo3D.png">PNG檔</a> (2.1
-        MB)、<a href="/files/WCALogo3Dsmall.png">PNG檔(小)</a> (0.25 MB)。
-      #original_hash: e5df1bf
-      '4': WCA標誌的可使用範圍在<a href="/documents">WCA文件頁面</a>的WCA標誌使用政策中列出。
+        我們有三種版本的標誌：<a href="/files/WCAlogo.svg">全彩版本</a>、 <a
+        href="/files/WCAlogo_monochrome.svg">全黑版本</a>和 <a
+        href="/files/WCAlogo_monochrome_white.svg">全白版本</a>。
+      #original_hash: d0e34b2
+      '4': >-
+        WCA標誌的可使用範圍在<a
+        href="https://documents.worldcubeassociation.org/documents/policies/external/Logo%20Usage.pdf">WCA標誌使用政策</a>中列出。
   workbook_assistant:
     #original_hash: e442ea4
     title: WCA成績小幫手
