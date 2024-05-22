@@ -41,7 +41,6 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
   const [guests, setGuests] = useState(0);
   const [selectedEvents, setSelectedEvents] = useState([]);
   const [registration, setRegistration] = useState({});
-  const [isHistoryCollapsed, setIsHistoryCollapsed] = useState(true);
 
   const queryClient = useQueryClient();
 
@@ -160,7 +159,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
       {!registration?.competing?.registration_status || isLoading ? (
         <Loading />
       ) : (
-        <div>
+        <>
           {!competitor.wca_id && (
             <Message>
               This person registered with an account. You can edit their
@@ -279,70 +278,61 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               )}
             </>
           )}
-          <Accordion>
-            <Accordion.Title
-              active={isHistoryCollapsed}
-              onClick={() => setIsHistoryCollapsed(!isHistoryCollapsed)}
-            >
-              Registration History
-            </Accordion.Title>
-            <Accordion.Content active={isHistoryCollapsed}>
-              <Table>
-                <Table.Header>
-                  <Table.Row>
-                    <Table.HeaderCell>Timestamp</Table.HeaderCell>
-                    <Table.HeaderCell>Changes</Table.HeaderCell>
-                    <Table.HeaderCell>Acting User</Table.HeaderCell>
-                    <Table.HeaderCell>Action</Table.HeaderCell>
-                  </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                  {registration.history.map((entry) => (
-                    <Table.Row key={entry.timestamp}>
-                      <Table.Cell>
-                        <Popup
-                          content={getShortTimeString(entry.timestamp)}
-                          trigger={
-                            <span>{getShortDateString(entry.timestamp)}</span>
+          <Header>Registration History</Header>
+          <Table>
+            <Table.Header>
+              <Table.Row>
+                <Table.HeaderCell>Timestamp</Table.HeaderCell>
+                <Table.HeaderCell>Changes</Table.HeaderCell>
+                <Table.HeaderCell>Acting User</Table.HeaderCell>
+                <Table.HeaderCell>Action</Table.HeaderCell>
+              </Table.Row>
+            </Table.Header>
+            <Table.Body>
+              {registration.history.map((entry) => (
+                <Table.Row key={entry.timestamp}>
+                  <Table.Cell>
+                    <Popup
+                      content={getShortTimeString(entry.timestamp)}
+                      trigger={
+                        <span>{getShortDateString(entry.timestamp)}</span>
                           }
-                        />
-                      </Table.Cell>
-                      <Table.Cell>
-                        {!_.isEmpty(entry.changed_attributes) ? (
-                          Object.entries(entry.changed_attributes).map(
-                            ([k, v]) => (
-                              <span key={k}>
-                                Changed
-                                {' '}
-                                {k}
-                                {' '}
-                                to
-                                {' '}
-                                {JSON.stringify(v)}
-                                {' '}
-                                <br />
-                              </span>
-                            ),
-                          )
-                        ) : (
-                          <span>Registration Created</span>
-                        )}
-                      </Table.Cell>
-                      <Table.Cell>
-                        {
+                    />
+                  </Table.Cell>
+                  <Table.Cell>
+                    {!_.isEmpty(entry.changed_attributes) ? (
+                      Object.entries(entry.changed_attributes).map(
+                        ([k, v]) => (
+                          <span key={k}>
+                            Changed
+                            {' '}
+                            {k}
+                            {' '}
+                            to
+                            {' '}
+                            {JSON.stringify(v)}
+                            {' '}
+                            <br />
+                          </span>
+                        ),
+                      )
+                    ) : (
+                      <span>Registration Created</span>
+                    )}
+                  </Table.Cell>
+                  <Table.Cell>
+                    {
                           competitorsInfo.find(
                             (c) => c.id === entry.actor_user_id,
                           )?.name ?? entry.actor_user_id
                         }
-                      </Table.Cell>
-                      <Table.Cell>{entry.action}</Table.Cell>
-                    </Table.Row>
-                  ))}
-                </Table.Body>
-              </Table>
-            </Accordion.Content>
-          </Accordion>
-        </div>
+                  </Table.Cell>
+                  <Table.Cell>{entry.action}</Table.Cell>
+                </Table.Row>
+              ))}
+            </Table.Body>
+          </Table>
+        </>
       )}
     </Segment>
   );
