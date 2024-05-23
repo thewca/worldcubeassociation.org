@@ -49,6 +49,11 @@
           <%= t 'registrations.have_registered', comp: @competition.name %>
         </p>
 
+        <% if current_user.person.nil? %>
+          <%= alert :info, t('registrations.educational_resources_message_html',
+                             link: link_to(t('layouts.navigation.education'), education_path)) %>
+        <% end %>
+
         <% if !current_user.can_edit_registration?(@registration) %>
           <%= t 'registrations.contact_organizer' %>
         <% end %>
