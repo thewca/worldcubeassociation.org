@@ -1,6 +1,7 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
 import I18n from '../i18n';
+import { defaultFallbackInView } from 'react-intersection-observer';
 
 function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
@@ -25,7 +26,7 @@ export function startYear(competition) {
 export function isProbablyOver(competition) {
   if (!competition.end_date) return false;
 
-  const dateLuxon = parseDateString(competition.end_date);
+  const dateLuxon = parseDateString(competition.end_date).endOf('day');
   return dateLuxon < DateTime.now();
 }
 
@@ -72,6 +73,62 @@ export function numberOfDaysAfter(competition, refDate) {
 export function timeDifferenceAfter(competition, refDate) {
   const amountOfDays = I18n.t('datetime.distance_in_words.x_days', { count: numberOfDaysAfter(competition, refDate) });
   return I18n.t('competitions.competition_info.relative_days.after', { amount_of_days: amountOfDays });
+}
+
+export function reportAdminCellContent(comp) {
+  if (comp.report_posted_at) {
+    const delegateIds = comp.delegates.map((delegate) => delegate.id);
+
+    return delegateIds.includes(comp.report_posted_by_user)
+      ? timeDifferenceAfter(comp, comp.report_posted_at)
+      : I18n.t('competitions.competition_info.submitted_by_other');
+  }
+
+  if (isProbablyOver(comp)) {
+    return I18n.t('competitions.competition_info.pending');
+  }
+
+  return null;
+}
+
+function lookupStatus(numOfDays, statusMap, compareFn, defaultStatus = null) {
+  if (!Number.isInteger(numOfDays)) {
+    return defaultStatus;
+  }
+
+  const entries = Object.entries(statusMap)
+    .toSorted(([k1, v1], [k2, v2]) => (compareFn(v1, v2) ? 1 : -1));
+
+  const deadlines = entries.map(([k, v]) => v);
+  const statusClasses = entries.map(([k, v]) => k);
+
+  const numOfMissedDeadlines = deadlines.filter((dl) => compareFn(numOfDays, dl)).length;
+
+  return numOfMissedDeadlines === 0 ? defaultStatus : statusClasses[numOfMissedDeadlines - 1];
+}
+
+const announcementStatusLookup = {
+  warning: 28,
+  danger: 21,
+};
+
+export function computeAnnouncementStatus(comp) {
+  const numOfDays = numberOfDaysBefore(comp, comp.announced_at);
+
+  return lookupStatus(numOfDays, announcementStatusLookup, (a, b) => a < b, 'ok');
+}
+
+const reportResultsStatusLookup = {
+  semi_ok: 7,
+  warning: 14,
+  danger: 21,
+};
+
+export function computeReportsAndResultsStatus(comp, refDate) {
+  const numOfDays = numberOfDaysAfter(comp, refDate);
+  const defaultStatus = refDate ? 'ok' : null;
+
+  return lookupStatus(numOfDays, reportResultsStatusLookup, (a, b) => a > b, defaultStatus);
 }
 
 // Currently, the venue attribute of a competition object can be written as markdown,

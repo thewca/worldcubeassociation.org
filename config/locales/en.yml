@@ -1365,6 +1365,8 @@ en:
       relative_days:
         before: "%{amount_of_days} before"
         after: "%{amount_of_days} after"
+      pending: "Pending"
+      submitted_by_other: "Submitted by other"
       #context: Used to display an explicit tag when the competition is cancelled
       display_name: "[Cancelled] %{name}"
       #context: Pluralization of the "Organizer" label for a competition form

@@ -6,12 +6,13 @@ import {
 import { BarLoader } from 'react-spinners';
 import I18n from '../../lib/i18n';
 import {
+  computeAnnouncementStatus, computeReportsAndResultsStatus,
   dayDifferenceFromToday,
   hasResultsPosted,
   isCancelled,
   isInProgress,
-  isProbablyOver,
-  PseudoLinkMarkdown,
+  isProbablyOver, numberOfDaysBefore,
+  PseudoLinkMarkdown, reportAdminCellContent,
   startYear, timeDifferenceAfter, timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
@@ -298,58 +299,96 @@ function AdminCompetitionsTable({
         </Table.Row>
       </Table.Header>
       <Table.Body>
-        {competitions?.map((comp, index) => (
-          <React.Fragment key={comp.id}>
-            <ConditionalYearHeader
-              competitions={competitions}
-              index={index}
-              isSortedByAnnouncement={isSortedByAnnouncement}
-              colSpan={8}
-            />
-            <Table.Row error={isCancelled(comp)} className="competition-info">
-              <Table.Cell collapsing>
-                <StatusIcon
-                  comp={comp}
-                  shouldShowRegStatus={shouldShowRegStatus}
-                  isSortedByAnnouncement={isSortedByAnnouncement}
-                  regStatusLoading={regStatusLoading}
-                />
-              </Table.Cell>
-              <Table.Cell width={4}>
-                <Flag name={comp.country_iso2?.toLowerCase()} />
-                <a href={comp.url}>{comp.short_display_name}</a>
-                <br />
-                <strong>{countries.byIso2[comp.country_iso2].name}</strong>
-                {`, ${comp.city}`}
-              </Table.Cell>
-              <Table.Cell width={3}>
-                <List verticalAlign="middle">
-                  {comp.delegates.map((delegate) => (
-                    <List.Item key={delegate.id}>
-                      <Image avatar src={delegate.avatar.thumb_url} />
-                      <List.Content>{delegate.name}</List.Content>
-                    </List.Item>
-                  ))}
-                </List>
-              </Table.Cell>
-              <Table.Cell textAlign="center" width={3}>
-                {comp.date_range}
-              </Table.Cell>
-              <Table.Cell textAlign="center" width={2}>
-                {comp.announced_at && timeDifferenceBefore(comp, comp.announced_at)}
-              </Table.Cell>
-              <Table.Cell textAlign="center" width={2}>
-                {comp.report_posted_at && timeDifferenceAfter(comp, comp.report_posted_at)}
-              </Table.Cell>
-              <Table.Cell textAlign="center" width={2}>
-                {comp.results_posted_at && timeDifferenceAfter(comp, comp.results_posted_at)}
-              </Table.Cell>
-              <Table.Cell collapsing>
-                <Button compact size="tiny" secondary as="a" href={adminCompetitionUrl(comp.id)} target="_blank">Edit</Button>
-              </Table.Cell>
-            </Table.Row>
-          </React.Fragment>
-        ))}
+        {competitions?.map((comp, index) => {
+          const announcementStatus = computeAnnouncementStatus(comp);
+          const reportPostedStatus = computeReportsAndResultsStatus(comp, comp.report_posted_at);
+          const resultsPostedStatus = computeReportsAndResultsStatus(comp, comp.results_posted_at);
+
+          return (
+            <React.Fragment key={comp.id}>
+              <ConditionalYearHeader
+                competitions={competitions}
+                index={index}
+                isSortedByAnnouncement={isSortedByAnnouncement}
+                colSpan={8}
+              />
+              <Table.Row error={isCancelled(comp)} className="competition-info">
+                <Table.Cell collapsing>
+                  <StatusIcon
+                    comp={comp}
+                    shouldShowRegStatus={shouldShowRegStatus}
+                    isSortedByAnnouncement={isSortedByAnnouncement}
+                    regStatusLoading={regStatusLoading}
+                  />
+                </Table.Cell>
+                <Table.Cell width={4}>
+                  <Flag name={comp.country_iso2?.toLowerCase()} />
+                  <a href={comp.url}>{comp.short_display_name}</a>
+                  <br />
+                  <strong>{countries.byIso2[comp.country_iso2].name}</strong>
+                  {`, ${comp.city}`}
+                </Table.Cell>
+                <Table.Cell width={3}>
+                  <List verticalAlign="middle">
+                    {comp.delegates.map((delegate) => (
+                      <List.Item key={delegate.id}>
+                        <Image avatar src={delegate.avatar.thumb_url} />
+                        <List.Content>{delegate.name}</List.Content>
+                      </List.Item>
+                    ))}
+                  </List>
+                </Table.Cell>
+                <Table.Cell textAlign="center" width={3}>
+                  {comp.date_range}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  width={2}
+                  positive={announcementStatus === 'ok'}
+                  warning={announcementStatus === 'warning'}
+                  error={announcementStatus === 'danger'}
+                >
+                  {comp.announced_at && timeDifferenceBefore(comp, comp.announced_at)}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  width={2}
+                  positive={reportPostedStatus === 'ok'}
+                  warning={reportPostedStatus === 'warning'}
+                  error={reportPostedStatus === 'danger'}
+                >
+                  {reportAdminCellContent(comp)}
+                </Table.Cell>
+                <Table.Cell
+                  textAlign="center"
+                  width={2}
+                  positive={resultsPostedStatus === 'ok' || resultsPostedStatus === 'semi_ok'}
+                  disabled={resultsPostedStatus === 'semi_ok'}
+                  warning={resultsPostedStatus === 'warning'}
+                  error={resultsPostedStatus === 'danger'}
+                >
+                  {
+                    comp.results_posted_at
+                      ? timeDifferenceAfter(comp, comp.results_posted_at)
+                      : (isProbablyOver(comp) && I18n.t('competitions.competition_info.pending'))
+                  }
+                </Table.Cell>
+                <Table.Cell collapsing>
+                  <Button
+                    compact
+                    size="tiny"
+                    secondary
+                    as="a"
+                    href={adminCompetitionUrl(comp.id)}
+                    target="_blank"
+                  >
+                    Edit
+                  </Button>
+                </Table.Cell>
+              </Table.Row>
+            </React.Fragment>
+          );
+        })}
       </Table.Body>
     </Table>
   );
