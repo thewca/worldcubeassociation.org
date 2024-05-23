@@ -21,9 +21,8 @@ function CompetitionsFilters({
   setDisplayMode,
   shouldShowRegStatus,
   setShouldShowRegStatus,
-  shouldShowAdminData,
-  setShouldShowAdminData,
-  canViewAdminData,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
 }) {
   return (
     <Form className="competition-select" id="competition-query-form" acceptCharset="UTF-8">
@@ -55,7 +54,7 @@ function CompetitionsFilters({
         </Form.Field>
       </Form.Group>
 
-      {canViewAdminData && shouldShowAdminData && (
+      {canViewAdminDetails && shouldShowAdminDetails && (
         <Form.Group>
           <Form.Field>
             <AdminStatusButtonGroup filterState={filterState} dispatchFilter={dispatchFilter} />
@@ -69,9 +68,8 @@ function CompetitionsFilters({
           dispatchFilter={dispatchFilter}
           shouldShowRegStatus={shouldShowRegStatus}
           setShouldShowRegStatus={setShouldShowRegStatus}
-          shouldShowAdminData={shouldShowAdminData}
-          setShouldShowAdminData={setShouldShowAdminData}
-          canViewAdminData={canViewAdminData}
+          shouldShowAdminDetails={shouldShowAdminDetails}
+          canViewAdminDetails={canViewAdminDetails}
           displayMode={displayMode}
         />
       </Form.Group>
@@ -427,9 +425,8 @@ function CompDisplayCheckboxes({
   dispatchFilter,
   shouldShowRegStatus,
   setShouldShowRegStatus,
-  shouldShowAdminData,
-  setShouldShowAdminData,
-  canViewAdminData,
+  shouldShowAdminDetails,
+  canViewAdminDetails,
   displayMode,
 }) {
   return (
@@ -461,14 +458,16 @@ function CompDisplayCheckboxes({
         )
       }
 
-      {canViewAdminData && (
+      {canViewAdminDetails && (
         <div id="admin-data" className="admin-data-selector">
           <Form.Checkbox
             label={I18n.t('competitions.index.show_admin_data')}
             name="show_admin_data"
             id="show_admin_data"
-            checked={shouldShowAdminData}
-            onChange={() => setShouldShowAdminData(!shouldShowAdminData)}
+            checked={shouldShowAdminDetails}
+            onChange={() => dispatchFilter(
+              { shouldShowAdminDetails: !shouldShowAdminDetails },
+            )}
           />
         </div>
       )}

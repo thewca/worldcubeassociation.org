@@ -26,7 +26,7 @@ function ListViewSection({
   competitions,
   title,
   shouldShowRegStatus,
-  shouldShowAdminData,
+  shouldShowAdminDetails,
   selectedDelegate,
   isLoading,
   regStatusLoading,
@@ -44,7 +44,7 @@ function ListViewSection({
           </Label>
         )}
       </Header>
-      {shouldShowAdminData ? (
+      {shouldShowAdminDetails ? (
         <AdminCompetitionsTable
           competitions={competitions}
           isLoading={isLoading}

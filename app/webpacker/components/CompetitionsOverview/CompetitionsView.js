@@ -23,7 +23,7 @@ import { isCancelled, isInProgress, isProbablyOver } from '../../lib/utils/compe
 
 const DEBOUNCE_MS = 600;
 
-function CompetitionsView({ canViewAdminData = false }) {
+function CompetitionsView({ canViewAdminDetails = false }) {
   const searchParams = useMemo(
     () => new URLSearchParams(window.location.search),
     [],
@@ -37,10 +37,15 @@ function CompetitionsView({ canViewAdminData = false }) {
   const debouncedFilterState = useDebounce(filterState, DEBOUNCE_MS);
   const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
-  const [shouldShowAdminData, setShouldShowAdminData] = useState(false);
   const competitionQueryKey = useMemo(
     () => calculateQueryKey(debouncedFilterState),
     [debouncedFilterState],
+  );
+
+  // Need to make sure that people don't "hijack" admin mode by manipulating the URL
+  const shouldShowAdminDetails = useMemo(
+    () => canViewAdminDetails && filterState.shouldShowAdminDetails,
+    [canViewAdminDetails, filterState.shouldShowAdminDetails],
   );
 
   useEffect(
@@ -114,9 +119,8 @@ function CompetitionsView({ canViewAdminData = false }) {
         setDisplayMode={setDisplayMode}
         shouldShowRegStatus={shouldShowRegStatus}
         setShouldShowRegStatus={setShouldShowRegStatus}
-        shouldShowAdminData={shouldShowAdminData}
-        setShouldShowAdminData={setShouldShowAdminData}
-        canViewAdminData={canViewAdminData}
+        shouldShowAdminDetails={shouldShowAdminDetails}
+        canViewAdminDetails={canViewAdminDetails}
       />
 
       <Container fluid>
@@ -127,7 +131,7 @@ function CompetitionsView({ canViewAdminData = false }) {
               competitions={competitions}
               filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
-              shouldShowAdminData={shouldShowAdminData}
+              shouldShowAdminDetails={shouldShowAdminDetails}
               isLoading={competitionsIsFetching}
               regStatusLoading={regDataIsPending}
               fetchMoreCompetitions={competitionsFetchNextPage}

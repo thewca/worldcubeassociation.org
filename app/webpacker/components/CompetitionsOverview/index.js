@@ -5,10 +5,10 @@ import CompetitionsView from './CompetitionsView';
 
 const queryClient = new QueryClient();
 
-function CompetitionsOverview({ canViewAdminData = false }) {
+function CompetitionsOverview({ canViewAdminDetails = false }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <CompetitionsView canViewAdminData={canViewAdminData} />
+      <CompetitionsView canViewAdminDetails={canViewAdminDetails} />
     </QueryClientProvider>
   );
 }

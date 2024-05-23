@@ -12,7 +12,7 @@ function ListView({
   competitions,
   filterState,
   shouldShowRegStatus,
-  shouldShowAdminData,
+  shouldShowAdminDetails,
   isLoading,
   regStatusLoading,
   fetchMoreCompetitions,
@@ -35,14 +35,14 @@ function ListView({
 
   switch (filterState.timeOrder) {
     case 'present': {
-      if (shouldShowAdminData) {
+      if (shouldShowAdminDetails) {
         return (
           <>
             <ListViewSection
               competitions={competitions}
               title={I18n.t('competitions.index.titles.ongoing_and_upcoming')}
               shouldShowRegStatus={shouldShowRegStatus}
-              shouldShowAdminData={shouldShowAdminData}
+              shouldShowAdminDetails={shouldShowAdminDetails}
               selectedDelegate={filterState.delegate}
               regStatusLoading={regStatusLoading}
               isLoading={isLoading}
@@ -100,7 +100,7 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.recent', { count: competitionConstants.competitionRecentDays })}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldShowAdminData={shouldShowAdminData}
+            shouldShowAdminDetails={shouldShowAdminDetails}
             selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
@@ -121,7 +121,7 @@ function ListView({
             competitions={competitions}
             title={filterState.selectedYear === 'all_years' ? I18n.t('competitions.index.titles.past_all') : I18n.t('competitions.index.titles.past', { year: filterState.selectedYear })}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldShowAdminData={shouldShowAdminData}
+            shouldShowAdminDetails={shouldShowAdminDetails}
             selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
@@ -142,7 +142,7 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.by_announcement')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldShowAdminData={shouldShowAdminData}
+            shouldShowAdminDetails={shouldShowAdminDetails}
             selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}
@@ -164,7 +164,7 @@ function ListView({
             competitions={competitions}
             title={I18n.t('competitions.index.titles.custom')}
             shouldShowRegStatus={shouldShowRegStatus}
-            shouldShowAdminData={shouldShowAdminData}
+            shouldShowAdminDetails={shouldShowAdminDetails}
             selectedDelegate={filterState.delegate}
             isLoading={isLoading}
             regStatusLoading={regStatusLoading}

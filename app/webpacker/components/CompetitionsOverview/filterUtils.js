@@ -21,6 +21,7 @@ const DELEGATE = 'delegate';
 const SEARCH = 'search';
 const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
+const SHOW_ADMIN_DETAILS = 'show_admin_details';
 const ADMIN_STATUS = 'status';
 
 const DEFAULT_DISPLAY_MODE = 'list';
@@ -33,6 +34,8 @@ const DEFAULT_DELEGATE = '';
 const DEFAULT_SEARCH = '';
 const DEFAULT_ADMIN_STATUS = 'all';
 const INCLUDE_CANCELLED_TRUE = 'on';
+const SHOW_ADMIN_DETAILS_TRUE = 'yes';
+const _LEGACY_DISPLAY_MODE_ADMIN = 'admin';
 
 // search param sanitizers
 
@@ -106,6 +109,8 @@ export const createFilterState = (searchParams) => ({
   selectedEvents:
     sanitizeEvents(searchParams.getAll(SELECTED_EVENTS)),
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
+  shouldShowAdminDetails: searchParams.get(SHOW_ADMIN_DETAILS) === SHOW_ADMIN_DETAILS_TRUE
+    || searchParams.get(DISPLAY_MODE) === _LEGACY_DISPLAY_MODE_ADMIN,
   adminStatus: sanitizeAdminStatus(searchParams.get(ADMIN_STATUS)),
 });
 
@@ -120,12 +125,15 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     search,
     selectedEvents,
     shouldIncludeCancelled,
+    shouldShowAdminDetails,
     adminStatus,
   } = filterState;
 
   // update every string value; and then remove that value if it's redundant (ie is the default)
   searchParams.set(DISPLAY_MODE, displayMode);
   searchParams.delete(DISPLAY_MODE, DEFAULT_DISPLAY_MODE);
+  // also delete deprecated parameters (we set admin_details in a separate flag below)
+  searchParams.delete(DISPLAY_MODE, _LEGACY_DISPLAY_MODE_ADMIN);
 
   searchParams.set(TIME_ORDER, timeOrder);
   searchParams.delete(TIME_ORDER, DEFAULT_TIME_ORDER);
@@ -169,6 +177,12 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
     searchParams.set(INCLUDE_CANCELLED, INCLUDE_CANCELLED_TRUE);
   } else {
     searchParams.delete(INCLUDE_CANCELLED);
+  }
+
+  if (shouldShowAdminDetails) {
+    searchParams.set(SHOW_ADMIN_DETAILS, SHOW_ADMIN_DETAILS_TRUE);
+  } else {
+    searchParams.delete(SHOW_ADMIN_DETAILS);
   }
 
   window.history.replaceState({}, '', `${window.location.pathname}?${searchParams}`);

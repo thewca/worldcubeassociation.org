@@ -22,6 +22,6 @@
   </div>
 <% else %>
   <%= react_component("CompetitionsOverview", {
-    canViewAdminData: current_user&.can_see_admin_competitions?,
+    canViewAdminDetails: current_user&.can_see_admin_competitions?,
   }) %>
 <% end %>
