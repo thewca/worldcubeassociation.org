@@ -10,15 +10,15 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_05_20_170239) do
+ActiveRecord::Schema[7.1].define(version: 2024_05_23_104316) do
   create_table "Competitions", id: { type: :string, limit: 32, default: "" }, charset: "utf8mb4", collation: "utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name", limit: 50, default: "", null: false
     t.string "cityName", limit: 50, default: "", null: false
     t.string "countryId", limit: 50, default: "", null: false
     t.text "information", size: :medium
     t.string "venue", limit: 240, default: "", null: false
-    t.string "venueAddress", limit: 120
-    t.string "venueDetails", limit: 120
+    t.string "venueAddress"
+    t.string "venueDetails"
     t.string "external_website", limit: 200
     t.string "cellName", limit: 45, default: "", null: false
     t.boolean "showAtAll", default: false, null: false
@@ -1117,6 +1117,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_05_20_170239) do
     t.datetime "created_at", precision: nil, null: false
     t.datetime "updated_at", precision: nil, null: false
     t.bigint "parent_record_id"
+    t.string "test_string"
     t.index ["parent_record_id"], name: "fk_rails_6ad225b020"
     t.index ["stripe_status"], name: "index_stripe_records_on_stripe_status"
   end
