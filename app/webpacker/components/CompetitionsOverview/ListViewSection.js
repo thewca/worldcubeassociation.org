@@ -6,14 +6,18 @@ import {
 import { BarLoader } from 'react-spinners';
 import I18n from '../../lib/i18n';
 import {
-  computeAnnouncementStatus, computeReportsAndResultsStatus,
+  computeAnnouncementStatus,
+  computeReportsAndResultsStatus,
   dayDifferenceFromToday,
   hasResultsPosted,
   isCancelled,
   isInProgress,
-  isProbablyOver, numberOfDaysBefore,
-  PseudoLinkMarkdown, reportAdminCellContent,
-  startYear, timeDifferenceAfter, timeDifferenceBefore,
+  isProbablyOver,
+  PseudoLinkMarkdown,
+  reportAdminCellContent,
+  startYear,
+  timeDifferenceAfter,
+  timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl } from '../../lib/requests/routes.js.erb';
@@ -23,6 +27,7 @@ function ListViewSection({
   title,
   shouldShowRegStatus,
   shouldShowAdminData,
+  selectedDelegate,
   isLoading,
   regStatusLoading,
   hasMoreCompsToLoad,
@@ -45,6 +50,7 @@ function ListViewSection({
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
           shouldShowRegStatus={shouldShowRegStatus}
+          selectedDelegate={selectedDelegate}
           regStatusLoading={regStatusLoading}
           isSortedByAnnouncement={isSortedByAnnouncement}
         />
@@ -273,6 +279,7 @@ function AdminCompetitionsTable({
   isLoading,
   hasMoreCompsToLoad,
   shouldShowRegStatus,
+  selectedDelegate,
   regStatusLoading,
   isSortedByAnnouncement,
 }) {
@@ -329,11 +336,15 @@ function AdminCompetitionsTable({
                   {`, ${comp.city}`}
                 </Table.Cell>
                 <Table.Cell width={3}>
-                  <List verticalAlign="middle">
+                  <List verticalAlign="middle" link>
                     {comp.delegates.map((delegate) => (
-                      <List.Item key={delegate.id}>
+                      <List.Item
+                        key={delegate.id}
+                        active={!selectedDelegate || delegate.id === selectedDelegate}
+                        disabled
+                      >
                         <Image avatar src={delegate.avatar.thumb_url} />
-                        <List.Content>{delegate.name}</List.Content>
+                        <List.Content as="a">{delegate.name}</List.Content>
                       </List.Item>
                     ))}
                   </List>
