@@ -88,4 +88,41 @@ class ConnectedStripeAccount < ApplicationRecord
 
     StripeRecord.create_from_api(refund, refund_args, self.account_id, charge_record)
   end
+
+  def self.generate_onboarding_link(competition_id)
+    client = self.oauth_client
+
+    oauth_params = {
+      scope: 'read_write',
+      redirect_uri: Rails.application.routes.url_helpers.competitions_stripe_connect_url(host: EnvConfig.ROOT_URL),
+      state: competition_id,
+    }
+
+    client.auth_code.authorize_url(oauth_params)
+  end
+
+  def self.connect_account(oauth_return_params)
+    client = self.oauth_client
+
+    resp = client.auth_code.get_token(
+      oauth_return_params[:code],
+      params: { scope: 'read_write' },
+    )
+
+    ConnectedStripeAccount.new(
+      account_id: resp.params['stripe_user_id'],
+    )
+  end
+
+  # See https://docs.stripe.com/connect/oauth-reference
+  private_class_method def self.oauth_client
+    options = {
+      site: 'https://connect.stripe.com',
+      authorize_url: '/oauth/authorize',
+      token_url: '/oauth/token',
+      auth_scheme: :request_body,
+    }
+
+    OAuth2::Client.new(AppSecrets.STRIPE_CLIENT_ID, AppSecrets.STRIPE_API_KEY, options)
+  end
 end

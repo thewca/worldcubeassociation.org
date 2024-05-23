@@ -8,7 +8,7 @@ RSpec.describe Api::Internal::V1::UsersController do
     let!(:user2) { FactoryBot.create(:user, email: "user2@example.com", dob: Date.new(2001, 1, 1)) }
     before :each do
       # Stub vault validation
-      allow(controller).to receive(:validate_token).and_return(true)
+      allow(controller).to receive(:validate_wca_token).and_return(true)
     end
     it 'returns the correct pii' do
       get :competitor_info, params: { ids: [user1.id, user2.id] }

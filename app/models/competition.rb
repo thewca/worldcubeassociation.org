@@ -16,7 +16,7 @@ class Competition < ApplicationRecord
   has_many :competitors, -> { distinct }, through: :results, source: :person
   has_many :competitor_users, -> { distinct }, through: :competitors, source: :user
   has_many :competition_delegates, dependent: :delete_all
-  has_many :delegates, through: :competition_delegates
+  has_many :delegates, -> { includes(:delegate_role_metadata) }, through: :competition_delegates
   has_many :competition_organizers, dependent: :delete_all
   has_many :organizers, through: :competition_organizers
   has_many :media, class_name: "CompetitionMedium", foreign_key: "competitionId", dependent: :delete_all
@@ -708,6 +708,10 @@ class Competition < ApplicationRecord
 
   def uses_new_registration_service?
     self.uses_v2_registrations
+  end
+
+  def should_render_register_v2?(user)
+    uses_new_registration_service? && user.cannot_register_for_competition_reasons(self).empty? && (registration_opened? || user_can_pre_register?(user))
   end
 
   before_validation :unpack_delegate_organizer_ids
@@ -2557,12 +2561,23 @@ class Competition < ApplicationRecord
     competition_payment_integrations.exists?
   end
 
+  def connected_payment_integration_types
+    raw_types = self.competition_payment_integrations.pluck(:connected_account_type)
+    raw_types.map { |type| CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.invert[type] }
+  end
+
+  def payment_integration_connected?(integration_name)
+    CompetitionPaymentIntegration.validate_integration_name!(integration_name)
+
+    self.competition_payment_integrations.send(integration_name.to_sym).exists?
+  end
+
   def stripe_connected?
-    competition_payment_integrations.stripe.exists?
+    self.payment_integration_connected?(:stripe)
   end
 
   def paypal_connected?
-    competition_payment_integrations.paypal.exists?
+    self.payment_integration_connected?(:paypal)
   end
 
   def payment_account_for(integration_name)
@@ -2575,7 +2590,10 @@ class Competition < ApplicationRecord
 
   def disconnect_payment_integration(integration_name)
     CompetitionPaymentIntegration.validate_integration_name!(integration_name)
-    competition_payment_integrations.destroy_by(connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name])
+
+    competition_payment_integrations.destroy_by(
+      connected_account_type: CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS[integration_name],
+    )
   end
 
   def disconnect_all_payment_integrations

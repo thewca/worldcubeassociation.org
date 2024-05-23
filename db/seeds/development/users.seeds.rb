@@ -13,11 +13,6 @@ after :teams do
     }
   end
 
-  # Create board members
-  8.times do
-    FactoryBot.create(:user, :board_member)
-  end
-
   # Create senior delegates and their subordinate delegates
   5.times do
     senior_delegate = FactoryBot.create(:senior_delegate_role)

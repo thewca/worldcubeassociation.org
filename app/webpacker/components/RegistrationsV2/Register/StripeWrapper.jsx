@@ -1,80 +1,65 @@
 // Following https://github.com/stripe-samples/accept-a-payment/blob/main/payment-element/client/react-cra/src/Payment.js
 import { Elements } from '@stripe/react-stripe-js';
 import { loadStripe } from '@stripe/stripe-js';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Header } from 'semantic-ui-react';
 import { useQuery } from '@tanstack/react-query';
-import React, { useEffect, useState } from 'react';
-import I18n from '../../../lib/i18n';
-import getStripeConfig from '../api/payment/get/getStripeConfig';
-import getPaymentId from '../api/registration/get/get_payment_intent';
 import PaymentStep from './PaymentStep';
-import { useDispatch } from '../../../lib/providers/StoreProvider';
-import { setMessage } from './RegistrationMessage';
+import { fetchJsonOrError } from '../../../lib/requests/fetchWithAuthenticityToken';
+import { paymentDenominationUrl } from '../../../lib/requests/routes.js.erb';
 
-export default function StripeWrapper({ competitionInfo }) {
+const convertISOAmount = async (amount, currency) => {
+  const { data } = await fetchJsonOrError(
+    paymentDenominationUrl(amount, currency),
+  );
+  return data;
+};
+
+export default function StripeWrapper({
+  competitionInfo,
+  stripePublishableKey,
+  connectedAccountId,
+  user,
+  registration,
+  nextStep,
+}) {
   const [stripePromise, setStripePromise] = useState(null);
-  const dispatch = useDispatch();
-  const {
-    data: paymentInfo,
-    isLoading: isPaymentIdLoading,
-    isError,
-  } = useQuery({
-    queryKey: ['payment-secret', competitionInfo.id],
-    queryFn: () => getPaymentId(competitionInfo.id),
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
-    onError: (data) => {
-      const { error } = data.json;
-      dispatch(setMessage(
-        error
-          ? I18n.t(`competitions.registration_v2.errors.${error}`)
-          : I18n.t('registrations.flash.failed') + data.message,
-        'negative',
-      ));
-    },
-  });
+  const initialAmount = competitionInfo.base_entry_fee_lowest_denomination;
+  const [donationAmount, setDonationAmount] = useState(0);
 
-  const { data: config, isLoading: isConfigLoading } = useQuery({
-    queryKey: ['payment-config', competitionInfo.id, paymentInfo?.id],
-    queryFn: () => getStripeConfig(competitionInfo.id, paymentInfo?.id),
-    onError: (err) => setMessage(err.error, 'error'),
-    enabled:
-      !isPaymentIdLoading && !isError && paymentInfo?.status !== 'succeeded',
-    refetchOnWindowFocus: false,
-    refetchOnReconnect: false,
-    staleTime: Infinity,
-    refetchOnMount: 'always',
+  const {
+    data, isFetching,
+  } = useQuery({
+    queryFn: () => convertISOAmount(initialAmount + donationAmount, competitionInfo.currency_code),
+    queryKey: ['displayAmount', initialAmount + donationAmount, competitionInfo.currency_code],
   });
 
   useEffect(() => {
-    if (!isConfigLoading) {
-      setStripePromise(
-        loadStripe(config.stripe_publishable_key, {
-          stripeAccount: config.connected_account_id,
-        }),
-      );
-    }
-  }, [
-    config?.connected_account_id,
-    config?.stripe_publishable_key,
-    isConfigLoading,
-  ]);
+    setStripePromise(
+      loadStripe(stripePublishableKey, {
+        stripeAccount: connectedAccountId,
+      }),
+    );
+  }, [connectedAccountId, stripePublishableKey]);
 
   return (
     <>
-      <h1>Payment</h1>
-      {paymentInfo?.status === 'succeeded' && (
-        <div>Your payment has been successfully processed.</div>
-      )}
-      {!isPaymentIdLoading && stripePromise && !isError && (
+      <Header>Payment</Header>
+      { stripePromise && (
         <Elements
           stripe={stripePromise}
-          options={{
-            clientSecret: config.client_secret,
-          }}
+          options={{ amount: data?.api_amounts.stripe ?? initialAmount, currency: competitionInfo.currency_code.toLowerCase(), mode: 'payment' }}
         >
-          <PaymentStep />
+          <PaymentStep
+            setDonationAmount={setDonationAmount}
+            competitionInfo={competitionInfo}
+            user={user}
+            donationAmount={donationAmount}
+            displayAmount={data?.human_amount}
+            registration={registration}
+            nextStep={nextStep}
+            conversionFetching={isFetching}
+          />
         </Elements>
       )}
     </>

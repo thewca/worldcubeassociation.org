@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useInView } from 'react-intersection-observer';
-import BarLoader from 'react-spinners/BarLoader';
 
+import { Container } from 'semantic-ui-react';
 import I18n from '../../lib/i18n';
 import { competitionConstants } from '../../lib/wca-data.js.erb';
 
@@ -18,38 +18,44 @@ function ListView({
   hasMoreCompsToLoad,
 }) {
   const { ref: bottomRef, inView: bottomInView } = useInView();
+
   useEffect(() => {
     if (hasMoreCompsToLoad && bottomInView) {
       fetchMoreCompetitions();
     }
-  }, [bottomInView, hasMoreCompsToLoad, fetchMoreCompetitions]);
+  }, [
+    bottomInView,
+    hasMoreCompsToLoad,
+    fetchMoreCompetitions,
+    // The bottom ref can still _stay_ in view even after loading new comps.
+    //   In that case, the useEffect will not be triggered, so we introduce this extra dependency.
+    competitions,
+  ]);
 
   switch (filterState.timeOrder) {
     case 'present': {
       const inProgressComps = competitions?.filter((comp) => isInProgress(comp));
+
       const upcomingComps = competitions?.filter((comp) => (
         !isInProgress(comp) && !isProbablyOver(comp)
       ));
+
       return (
-        <div id="competitions-list">
+        <>
           <ListViewSection
             competitions={inProgressComps}
             title={I18n.t('competitions.index.titles.in_progress')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading && !upcomingComps?.length}
             regStatusLoading={regStatusLoading}
+            isLoading={isLoading && !upcomingComps?.length}
             hasMoreCompsToLoad={hasMoreCompsToLoad && !upcomingComps?.length}
           />
-          {
-            inProgressComps?.length === 0
-            && <div style={{ textAlign: 'center' }}>{I18n.t('competitions.index.no_comp_found')}</div>
-          }
           <ListViewSection
             competitions={upcomingComps}
             title={I18n.t('competitions.index.titles.upcoming')}
             shouldShowRegStatus={shouldShowRegStatus}
-            isLoading={isLoading}
             regStatusLoading={regStatusLoading}
+            isLoading={isLoading}
             hasMoreCompsToLoad={hasMoreCompsToLoad}
           />
           <ListViewFooter
@@ -58,7 +64,7 @@ function ListView({
             numCompetitions={upcomingComps?.length}
             bottomRef={bottomRef}
           />
-        </div>
+        </>
       );
     }
     case 'recent':
@@ -146,15 +152,11 @@ function ListView({
 function ListViewFooter({
   isLoading, hasMoreCompsToLoad, numCompetitions, bottomRef,
 }) {
-  if (isLoading) {
-    return <BarLoader cssOverride={{ width: '100%' }} />;
-  }
-
-  if (!hasMoreCompsToLoad) {
-    return (
-      <div style={{ textAlign: 'center' }}>
-        {numCompetitions > 0 ? I18n.t('competitions.index.no_more_comps') : I18n.t('competitions.index.no_comp_found')}
-      </div>
+  if (!isLoading && !hasMoreCompsToLoad) {
+    return numCompetitions > 0 && (
+      <Container text textAlign="center">
+        {I18n.t('competitions.index.no_more_comps')}
+      </Container>
     );
   }
 

@@ -264,7 +264,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
             </Button>
           )}
 
-          {competitionInfo['using_stripe_payments?'] && (
+          {competitionInfo['using_payment_integrations?'] && (
             <>
               <Header>
                 Payment status:
