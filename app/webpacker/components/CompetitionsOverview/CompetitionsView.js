@@ -38,8 +38,8 @@ function CompetitionsView({ canViewAdminDetails = false }) {
   const [displayMode, setDisplayMode] = useState(() => getDisplayMode(searchParams));
   const [shouldShowRegStatus, setShouldShowRegStatus] = useState(false);
   const competitionQueryKey = useMemo(
-    () => calculateQueryKey(debouncedFilterState),
-    [debouncedFilterState],
+    () => calculateQueryKey(debouncedFilterState, canViewAdminDetails),
+    [debouncedFilterState, canViewAdminDetails],
   );
 
   // Need to make sure that people don't "hijack" admin mode by manipulating the URL
@@ -61,7 +61,12 @@ function CompetitionsView({ canViewAdminDetails = false }) {
   } = useInfiniteQuery({
     queryKey: ['competitions', competitionQueryKey],
     queryFn: ({ pageParam = 1 }) => {
-      const querySearchParams = createSearchParams(debouncedFilterState, pageParam);
+      const querySearchParams = createSearchParams(
+        debouncedFilterState,
+        pageParam,
+        canViewAdminDetails,
+      );
+
       return fetchJsonOrError(`${apiV0Urls.competitions.list}?${querySearchParams}`);
     },
     getNextPageParam: (previousPage, allPages) => {

@@ -22,7 +22,8 @@ const SEARCH = 'search';
 const SELECTED_EVENTS = 'event_ids[]';
 const INCLUDE_CANCELLED = 'show_cancelled';
 const SHOW_ADMIN_DETAILS = 'show_admin_details';
-const ADMIN_STATUS = 'status';
+const ADMIN_STATUS = 'admin_status';
+const _LEGACY_ADMIN_STATUS = 'status';
 
 const DEFAULT_DISPLAY_MODE = 'list';
 const DEFAULT_TIME_ORDER = 'present';
@@ -111,7 +112,10 @@ export const createFilterState = (searchParams) => ({
   shouldIncludeCancelled: searchParams.get(INCLUDE_CANCELLED) === INCLUDE_CANCELLED_TRUE,
   shouldShowAdminDetails: searchParams.get(SHOW_ADMIN_DETAILS) === SHOW_ADMIN_DETAILS_TRUE
     || searchParams.get(DISPLAY_MODE) === _LEGACY_DISPLAY_MODE_ADMIN,
-  adminStatus: sanitizeAdminStatus(searchParams.get(ADMIN_STATUS)),
+  adminStatus: sanitizeAdminStatus(
+    searchParams.get(ADMIN_STATUS)
+    || searchParams.get(_LEGACY_ADMIN_STATUS),
+  ),
 });
 
 export const updateSearchParams = (searchParams, filterState, displayMode) => {
@@ -140,6 +144,7 @@ export const updateSearchParams = (searchParams, filterState, displayMode) => {
 
   searchParams.set(ADMIN_STATUS, adminStatus);
   searchParams.delete(ADMIN_STATUS, DEFAULT_ADMIN_STATUS);
+  searchParams.delete(_LEGACY_ADMIN_STATUS);
 
   searchParams.set(YEAR, selectedYear);
   searchParams.delete(YEAR, DEFAULT_YEAR);

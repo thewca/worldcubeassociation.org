@@ -4,12 +4,17 @@ import { competitionConstants } from '../../lib/wca-data.js.erb';
 
 const isContinent = (region) => region[0] === '_';
 
-export function calculateQueryKey(filterState) {
+export function calculateQueryKey(filterState, canViewAdminDetails = false) {
   let timeKey = '';
   if (filterState?.timeOrder === 'past') {
     timeKey = `${filterState.selectedYear}`;
   } else if (filterState?.timeOrder === 'custom') {
     timeKey = `start${filterState.customStartDate}-end${filterState.customEndDate}`;
+  }
+
+  let adminStatus = filterState?.adminStatus;
+  if (!canViewAdminDetails) {
+    adminStatus = null;
   }
 
   return {
@@ -18,12 +23,13 @@ export function calculateQueryKey(filterState) {
     delegate: filterState?.delegate,
     search: filterState?.search,
     time: timeKey,
+    adminStatus,
   };
 }
 
-export function createSearchParams(filterState, pageParam) {
+export function createSearchParams(filterState, pageParam, canViewAdminDetails = false) {
   const {
-    region, delegate, search, timeOrder, selectedYear, customStartDate, customEndDate,
+    region, delegate, search, timeOrder, selectedYear, customStartDate, customEndDate, adminStatus,
   } = filterState;
 
   const dateNow = DateTime.now();
@@ -38,6 +44,9 @@ export function createSearchParams(filterState, pageParam) {
   }
   if (search) {
     searchParams.append('q', search);
+  }
+  if (canViewAdminDetails && adminStatus && adminStatus !== 'all') {
+    searchParams.append('admin_status', adminStatus);
   }
 
   if (timeOrder === 'present') {
