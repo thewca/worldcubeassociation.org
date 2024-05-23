@@ -292,7 +292,7 @@ function AdminCompetitionsTable({
   }
 
   return (
-    <Table striped compact basic="very" size="small">
+    <Table striped compact basic="very" size="small" unstackable>
       <Table.Header fullWidth>
         <Table.Row>
           <Table.HeaderCell />
