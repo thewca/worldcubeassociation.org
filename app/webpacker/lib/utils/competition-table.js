@@ -1,5 +1,6 @@
 import React from 'react';
 import { DateTime, Interval } from 'luxon';
+import I18n from '../i18n';
 
 function parseDateString(yyyymmddDateString) {
   return DateTime.fromFormat(yyyymmddDateString, 'yyyy-MM-dd');
@@ -43,6 +44,34 @@ export function isInProgress(competition) {
   const running = Interval.fromDateTimes(startDate, endDate).contains(DateTime.now());
 
   return running && !hasResultsPosted(competition);
+}
+
+export function numberOfDaysBefore(competition, refDate) {
+  const parsedRefDate = DateTime.fromISO(refDate);
+  const parsedStartDate = parseDateString(competition.start_date).startOf('day');
+
+  const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
+
+  return Math.ceil(Math.abs(numberOfDays));
+}
+
+export function timeDifferenceBefore(competition, refDate) {
+  const amountOfDays = I18n.t('datetime.distance_in_words.x_days', { count: numberOfDaysBefore(competition, refDate) });
+  return I18n.t('competitions.competition_info.relative_days.before', { amount_of_days: amountOfDays });
+}
+
+export function numberOfDaysAfter(competition, refDate) {
+  const parsedStartDate = parseDateString(competition.end_date).endOf('day');
+  const parsedRefDate = DateTime.fromISO(refDate);
+
+  const numberOfDays = parsedStartDate.diff(parsedRefDate, 'days').days;
+
+  return Math.ceil(Math.abs(numberOfDays));
+}
+
+export function timeDifferenceAfter(competition, refDate) {
+  const amountOfDays = I18n.t('datetime.distance_in_words.x_days', { count: numberOfDaysAfter(competition, refDate) });
+  return I18n.t('competitions.competition_info.relative_days.after', { amount_of_days: amountOfDays });
 }
 
 // Currently, the venue attribute of a competition object can be written as markdown,

@@ -12,7 +12,7 @@ import {
   isInProgress,
   isProbablyOver,
   PseudoLinkMarkdown,
-  startYear,
+  startYear, timeDifferenceAfter, timeDifferenceBefore,
 } from '../../lib/utils/competition-table';
 import { countries } from '../../lib/wca-data.js.erb';
 import { adminCompetitionUrl } from '../../lib/requests/routes.js.erb';
@@ -39,7 +39,7 @@ function ListViewSection({
         )}
       </Header>
       {shouldShowAdminData ? (
-        <AdminCompetitionsTables
+        <AdminCompetitionsTable
           competitions={competitions}
           isLoading={isLoading}
           hasMoreCompsToLoad={hasMoreCompsToLoad}
@@ -267,7 +267,7 @@ export function CompetitionsMobileTable({
   );
 }
 
-function AdminCompetitionsTables({
+function AdminCompetitionsTable({
   competitions,
   isLoading,
   hasMoreCompsToLoad,
@@ -291,9 +291,9 @@ function AdminCompetitionsTables({
           <Table.HeaderCell>{I18n.t('competitions.competition_info.name_and_location')}</Table.HeaderCell>
           <Table.HeaderCell>{I18n.t('competitions.competition_info.delegates')}</Table.HeaderCell>
           <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.date')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('competitions.competition_info.announced')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('competitions.competition_info.report_posted')}</Table.HeaderCell>
-          <Table.HeaderCell>{I18n.t('competitions.competition_info.results_submitted')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.announced')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.report_posted')}</Table.HeaderCell>
+          <Table.HeaderCell textAlign="center">{I18n.t('competitions.competition_info.results_submitted')}</Table.HeaderCell>
           <Table.HeaderCell />
         </Table.Row>
       </Table.Header>
@@ -335,14 +335,14 @@ function AdminCompetitionsTables({
               <Table.Cell textAlign="center" width={3}>
                 {comp.date_range}
               </Table.Cell>
-              <Table.Cell width={2}>
-                {comp.announced_at}
+              <Table.Cell textAlign="center" width={2}>
+                {comp.announced_at && timeDifferenceBefore(comp, comp.announced_at)}
               </Table.Cell>
-              <Table.Cell width={2}>
-                {comp.report_posted_at}
+              <Table.Cell textAlign="center" width={2}>
+                {comp.report_posted_at && timeDifferenceAfter(comp, comp.report_posted_at)}
               </Table.Cell>
-              <Table.Cell width={2}>
-                {comp.results_posted_at}
+              <Table.Cell textAlign="center" width={2}>
+                {comp.results_posted_at && timeDifferenceAfter(comp, comp.results_posted_at)}
               </Table.Cell>
               <Table.Cell collapsing>
                 <Button compact size="tiny" secondary as="a" href={adminCompetitionUrl(comp.id)} target="_blank">Edit</Button>
