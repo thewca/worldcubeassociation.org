@@ -134,6 +134,15 @@ class Api::V0::UserRolesController < Api::V0::ApiController
     }
   end
 
+  private def changed_key_to_human_readable(changed_key)
+    case changed_key
+    when 'end_date'
+      'End Date'
+    else
+      nil
+    end
+  end
+
   # update method is written in a way that at a time, only one parameter can be changed. If multiple
   # values needs to be changed, then they need to be sent as separate APIs from the client.
   def update
@@ -251,14 +260,7 @@ class Api::V0::UserRolesController < Api::V0::ApiController
 
       role.save!
       role.previous_changes.each do |changed_key, values|
-        changed_parameter = (
-          case changed_key
-          when 'end_date'
-            'End Date'
-          else
-            nil
-          end
-        )
+        changed_parameter = changed_key_to_human_readable(changed_key)
         if changed_parameter.present?
           changes << UserRole::UserRoleChange.new(
             changed_parameter: changed_parameter,
