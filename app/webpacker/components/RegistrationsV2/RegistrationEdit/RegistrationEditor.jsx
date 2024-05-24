@@ -182,9 +182,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           maxLength={240}
           value={comment}
           disabled={registrationEditDeadlinePassed}
-          onChange={(event, data) => {
-            setComment(data.value);
-          }}
+          onChange={(event, data) => setComment(data.value)}
         />
 
         <label>Administrative Notes</label>
