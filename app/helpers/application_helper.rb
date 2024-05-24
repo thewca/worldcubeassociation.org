@@ -225,6 +225,10 @@ module ApplicationHelper
     "#{humanized_money_with_symbol(money)} (#{money.currency.name})"
   end
 
+  def stripe_to_human_readable(stripe_amount, currency_code)
+    format_money(Money.new(StripeRecord.amount_to_ruby(stripe_amount, currency_code), currency_code))
+  end
+
   def embedded_map_url(query)
     "#{EnvConfig.ROOT_URL}/map?q=#{URI.encode_www_form_component(CGI.unescapeHTML(query))}"
   end

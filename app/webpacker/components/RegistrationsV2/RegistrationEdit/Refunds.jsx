@@ -18,6 +18,7 @@ export default function Refunds({
   const {
     data: refunds,
     isLoading: refundsLoading,
+    refetch,
   } = useQuery({
     queryKey: ['refunds', competitionId, userId],
     queryFn: () => getAvailableRefunds(competitionId, userId),
@@ -27,7 +28,7 @@ export default function Refunds({
     refetchOnMount: 'always',
     select: (data) => data.charges.filter((r) => r.ruby_amount !== 0),
   });
-  const { mutate: refundMutation, isLoading: isMutating } = useMutation({
+  const { mutate: refundMutation, isPending: isMutating } = useMutation({
     mutationFn: refundPayment,
     onError: (data) => {
       dispatch(setMessage(
@@ -37,6 +38,7 @@ export default function Refunds({
     },
     onSuccess: () => {
       dispatch(setMessage('Refund succeeded', 'positive'));
+      refetch();
       onSuccess();
     },
   });
@@ -55,7 +57,8 @@ export default function Refunds({
       <Table>
         <Table.Header>
           <Table.Row>
-            <Table.HeaderCell>Full Amount</Table.HeaderCell>
+            <Table.HeaderCell>Original Payment</Table.HeaderCell>
+            <Table.HeaderCell>Available to Refund</Table.HeaderCell>
             <Table.HeaderCell>Refund Amount </Table.HeaderCell>
             <Table.HeaderCell />
           </Table.Row>
@@ -80,19 +83,22 @@ export default function Refunds({
 function RefundRow({
   refund, refundMutation, isMutating, userId, competitionId,
 }) {
-  const [amountToRefund, setAmountToRefund] = useState(refund.ruby_amount);
+  const [amountToRefund, setAmountToRefund] = useState(refund.ruby_amount_refundable);
 
   return (
     <Table.Row>
       <Table.Cell>
-        {refund.human_amount}
+        {refund.human_amount_payment}
+      </Table.Cell>
+      <Table.Cell>
+        {refund.human_amount_refundable}
       </Table.Cell>
       <Table.Cell>
         <AutonumericField
-          currency={refund.curreny_code}
+          currency={refund.currency_code.toUpperCase()}
           value={amountToRefund}
           onChange={(event, { value }) => setAmountToRefund(value)}
-          max={refund.ruby_amount}
+          max={refund.ruby_amount_refundable}
         />
       </Table.Cell>
       <Table.Cell>
