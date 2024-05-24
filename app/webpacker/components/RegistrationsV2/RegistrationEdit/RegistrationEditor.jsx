@@ -191,9 +191,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
           maxLength={240}
           value={adminComment}
           disabled={registrationEditDeadlinePassed}
-          onChange={(event, data) => {
-            setAdminComment(data.value);
-          }}
+          onChange={(event, data) => setAdminComment(data.value)}
         />
 
         <Form.Group inline>
