@@ -83,7 +83,7 @@ function RefundRow({
   const [amountToRefund, setAmountToRefund] = useState(refund.ruby_amount);
 
   return (
-    <Table.Row key={refund.payment_id}>
+    <Table.Row>
       <Table.Cell>
         {refund.human_amount}
       </Table.Cell>
