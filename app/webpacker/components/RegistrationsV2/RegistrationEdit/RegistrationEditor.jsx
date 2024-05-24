@@ -6,16 +6,13 @@ import React, {
   useState,
 } from 'react';
 import {
-  Accordion,
   Button,
-  Checkbox, Divider, Form,
+  Form,
   Header,
-  Input,
   Message,
   Popup,
   Segment,
   Table,
-  TextArea,
 } from 'semantic-ui-react';
 import { getSingleRegistration } from '../api/registration/get/get_registrations';
 import updateRegistration from '../api/registration/patch/update_registration';
@@ -55,12 +52,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
 
   const { isLoading, data: competitorsInfo } = useQuery({
     queryKey: ['history-user', serverRegistration?.history],
-    queryFn: () => getUsersInfo([
-      ...new Set([
-        // Filter out non userId Actors like Stripe Webhooks
-        ...serverRegistration.history.filter((e) => !Number.isNaN(e.actor_user_id)).map((e) => e.actor_user_id),
-      ]),
-    ]),
+    queryFn: () => getUsersInfo(_.uniq(serverRegistration.history.flatMap((e) => (e.actor_type === 'user' ? e.actor_id : [])))),
     enabled: Boolean(serverRegistration),
   });
 
@@ -315,7 +307,7 @@ export default function RegistrationEditor({ competitor, competitionInfo }) {
               <Table.Cell>
                 {
                   competitorsInfo.find(
-                    (c) => c.id === entry.actor_user_id,
+                    (c) => c.id === entry.actor_id,
                   )?.name ?? entry.actor_user_id
                 }
               </Table.Cell>
