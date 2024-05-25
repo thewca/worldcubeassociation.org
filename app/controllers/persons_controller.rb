@@ -27,7 +27,7 @@ class PersonsController < ApplicationController
   end
 
   def show
-    @enable_react = params[:beta]&.to_s == '0xDbOverload' || (Rails.env.production? && !EnvConfig.WCA_LIVE_SITE?)
+    @enable_react = params[:beta]&.to_s == '0xDbOverload' || (!EnvConfig.WCA_LIVE_SITE?)
 
     @person = Person.current.includes(:user, :ranksSingle, :ranksAverage, :competitions).find_by_wca_id!(params[:id])
     @previous_persons = Person.where(wca_id: params[:id]).where.not(subId: 1).order(:subId)
