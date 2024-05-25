@@ -10,10 +10,18 @@ import I18n from '../../../lib/i18n';
 import RegionalRecords from './RegionalRecords';
 import RegionalChampionshipPodiums from './RegionalChampionshipPodiums';
 import CompetitionsMap from './CompetitionsMap';
+import Results from './Results';
 
 function TabSection({ person }) {
   // TODO: Url Params?
-  const panes = [];
+  const panes = [{
+    menuItem: I18n.t('persons.show.results'),
+    render: () => (
+      <TabPane>
+        <Results person={person} />
+      </TabPane>
+    ),
+  }];
   if (person.records.total > 0) {
     panes.push({
       menuItem: I18n.t('persons.show.records'),
@@ -50,7 +58,7 @@ function TabSection({ person }) {
 
   return (
     <div>
-      <Tab defaultActiveIndex={1} panes={panes} />
+      <Tab defaultActiveIndex={panes.length - 1} panes={panes} />
     </div>
   );
 }
