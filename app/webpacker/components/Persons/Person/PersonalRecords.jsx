@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  Icon, Popup,
+  Icon, Popup, PopupContent, PopupHeader,
   Table, TableBody, TableCell, TableHeader, TableHeaderCell, TableRow,
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
@@ -46,8 +46,53 @@ function RankCell({ ranks, type }) {
   );
 }
 
+function ResultPopup({
+  person, resultForEvent, average, eventId,
+}) {
+  const matchingResult = person.results.reverse().find((r) => {
+    if (r.eventId !== eventId) return false;
+    if (average) return r.average === resultForEvent.time;
+    return r.best === resultForEvent.time;
+  });
+
+  if (!matchingResult) {
+    return (
+      <a href={resultForEvent.rankPath} className="plain">
+        {resultForEvent.time}
+      </a>
+    );
+  }
+
+  return (
+    <Popup
+      trigger={(
+        <a href={resultForEvent.rankPath} className="plain">
+          {resultForEvent.time}
+        </a>
+      )}
+    >
+      <PopupHeader><I18nHTMLTranslate i18nKey={`events.${eventId}`} /></PopupHeader>
+      <PopupContent>
+        <h2>
+          {resultForEvent.time}
+          {' '}
+          <I18nHTMLTranslate i18nKey={average ? 'common.average' : 'common.single'} />
+        </h2>
+        <p>
+          <EventIcon id={eventId} style={{ fontSize: 'medium' }} />
+          {' '}
+          {matchingResult.competition.name}
+        </p>
+        <p>
+          {matchingResult.competition.markerDate}
+        </p>
+      </PopupContent>
+    </Popup>
+  );
+}
+
 function EventRanks({
-  singles, averages, eventId, anyOddRank,
+  person, singles, averages, eventId, anyOddRank,
 }) {
   const singleForEvent = singles.find((r) => r.eventId === eventId);
   const averageForEvent = averages.find((r) => r.eventId === eventId);
@@ -65,14 +110,14 @@ function EventRanks({
       <RankCell ranks={singleForEvent} type="continent" />
       <RankCell ranks={singleForEvent} type="world" />
       <TableCell>
-        <a href={singleForEvent.rankPath} className="plain">
-          {singleForEvent.time}
-        </a>
+        {singleForEvent && (
+          <ResultPopup person={person} resultForEvent={singleForEvent} eventId={eventId} />
+        )}
       </TableCell>
       <TableCell>
-        <a href={averageForEvent?.rankPath} className="plain">
-          {averageForEvent?.time}
-        </a>
+        {averageForEvent && (
+          <ResultPopup person={person} resultForEvent={averageForEvent} eventId={eventId} average />
+        )}
       </TableCell>
       <RankCell ranks={averageForEvent} type="world" />
       <RankCell ranks={averageForEvent} type="continent" />
@@ -95,7 +140,7 @@ function EventRanks({
   );
 }
 
-export default function PersonalRecords({ averageRanks, singleRanks }) {
+export default function PersonalRecords({ person, averageRanks, singleRanks }) {
   const anyOddRank = singleRanks.some((r) => r.oddRank) || averageRanks.some((r) => r.oddRank);
 
   return (
@@ -128,6 +173,7 @@ export default function PersonalRecords({ averageRanks, singleRanks }) {
           <TableBody>
             {events.official.map((event) => (
               <EventRanks
+                person={person}
                 key={event.id}
                 eventId={event.id}
                 averages={averageRanks}
