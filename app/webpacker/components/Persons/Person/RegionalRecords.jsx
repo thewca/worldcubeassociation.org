@@ -5,7 +5,7 @@ import {
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
 import { events } from '../../../lib/wca-data.js.erb';
-import { AttemptItem } from '../TableComponents';
+import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
 
 const allEvents = events.official.map((event) => event.id);
