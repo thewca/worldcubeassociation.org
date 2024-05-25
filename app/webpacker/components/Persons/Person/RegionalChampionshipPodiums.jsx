@@ -4,7 +4,7 @@ import {
 } from 'semantic-ui-react';
 import I18nHTMLTranslate from '../../I18nHTMLTranslate';
 import EventIcon from '../../wca/EventIcon';
-import { AttemptItem } from '../TableComponents';
+import { AttemptItem } from './TableComponents';
 import I18n from '../../../lib/i18n';
 
 function CompetitionResults({
