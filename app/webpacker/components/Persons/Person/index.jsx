@@ -71,6 +71,7 @@ export default function Person({
         editUrl={editUrl}
       />
       <PersonalRecords
+        person={person}
         averageRanks={person.averageRanks}
         singleRanks={person.singleRanks}
       />
