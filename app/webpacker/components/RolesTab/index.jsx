@@ -6,7 +6,7 @@ import Loading from '../Requests/Loading';
 import ActiveRoles from './ActiveRoles';
 import PastRoles from './PastRoles';
 
-const sortParams = 'groupTypeRank,status';
+const sortParams = 'groupTypeRank,status:desc';
 
 export default function RolesTab({ userId }) {
   const {

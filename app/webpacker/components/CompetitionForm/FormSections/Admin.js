@@ -1,7 +1,7 @@
 import React from 'react';
-import SubSection from './SubSection';
-import { InputBoolean } from '../Inputs/FormInputs';
+import { InputBoolean } from '../../wca/FormBuilder/input/FormInputs';
 import { useStore } from '../../../lib/providers/StoreProvider';
+import SubSection from '../../wca/FormBuilder/SubSection';
 
 export default function Admin() {
   const { isAdminView, isPersisted } = useStore();

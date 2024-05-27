@@ -7,7 +7,7 @@ import useLoadedData from '../../lib/hooks/useLoadedData';
 import { apiV0Urls } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import StoreProvider from '../../lib/providers/StoreProvider';
-import contactsReducer from './store/reducer';
+import contactsReducer, { getContactFormInitialState } from './store/reducer';
 import useQueryParams from '../../lib/hooks/useQueryParams';
 
 export default function ContactsPage() {
@@ -19,19 +19,7 @@ export default function ContactsPage() {
   return (
     <StoreProvider
       reducer={contactsReducer}
-      initialState={{
-        userData: {
-          name: loggedInUserData?.user?.name,
-          email: loggedInUserData?.user?.email,
-        },
-        contactRecipient: queryParams?.contactRecipient,
-        competition: {
-          competitionId: queryParams?.competitionId,
-        },
-        wst: {
-          requestId: queryParams?.requestId,
-        },
-      }}
+      initialState={getContactFormInitialState(loggedInUserData, queryParams)}
     >
       <Container fluid>
         <Header as="h2">{I18n.t('page.contacts.title')}</Header>

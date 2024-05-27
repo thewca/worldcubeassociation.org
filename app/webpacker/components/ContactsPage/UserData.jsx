@@ -7,7 +7,7 @@ import { updateSectionData } from './store/actions';
 const SECTION = 'userData';
 
 export default function UserData({ loggedInUserData }) {
-  const { userData } = useStore();
+  const { formValues: { userData } } = useStore();
   const dispatch = useDispatch();
   const handleFormChange = (_, { name, value }) => dispatch(
     updateSectionData(SECTION, name, value),

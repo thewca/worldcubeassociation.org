@@ -1,35 +1,32 @@
 import { Button } from 'semantic-ui-react';
 import React, { useMemo } from 'react';
 import I18n from '../../lib/i18n';
-import { useDispatch, useStore } from '../../lib/providers/StoreProvider';
+import { useStore } from '../../lib/providers/StoreProvider';
 import useLoadedData from '../../lib/hooks/useLoadedData';
 import {
   competitionConfirmationDataUrl,
   competitionUrl,
-  confirmCompetitionUrl, homepageUrl,
+  confirmCompetitionUrl,
+  homepageUrl,
 } from '../../lib/requests/routes.js.erb';
 import Loading from '../Requests/Loading';
 import ConfirmProvider, { useConfirm } from '../../lib/providers/ConfirmProvider';
 import useSaveAction from '../../lib/hooks/useSaveAction';
-import { changesSaved, updateFormValue } from './store/actions';
+import { useFormCommitAction, useFormUpdateAction } from '../wca/FormBuilder/EditForm';
+import { useFormErrorHandler, useFormInitialObject } from '../wca/FormBuilder/provider/FormObjectProvider';
 
 export function CreateOrUpdateButton({
-  createComp,
-  updateComp,
+  saveObject,
 }) {
   const { isPersisted } = useStore();
 
-  if (isPersisted) {
-    return (
-      <Button primary onClick={updateComp}>
-        {I18n.t('competitions.competition_form.submit_update_value')}
-      </Button>
-    );
-  }
-
   return (
-    <Button primary onClick={createComp}>
-      {I18n.t('competitions.competition_form.submit_create_value')}
+    <Button primary onClick={saveObject}>
+      {
+        isPersisted
+          ? I18n.t('competitions.competition_form.submit_update_value')
+          : I18n.t('competitions.competition_form.submit_create_value')
+      }
     </Button>
   );
 }
@@ -38,14 +35,16 @@ function ConfirmButton({
   competitionId,
   data,
   sync,
-  onError,
 }) {
   const { canConfirm } = data;
+
+  const onError = useFormErrorHandler();
 
   const { save } = useSaveAction();
   const confirm = useConfirm();
 
-  const dispatch = useDispatch();
+  const updateFormObject = useFormUpdateAction();
+  const commitFormObject = useFormCommitAction();
 
   const confirmCompetition = () => {
     confirm({
@@ -56,8 +55,8 @@ function ConfirmButton({
 
         // mark the competition as announced and commit immediately.
         // (we do not want the announce button to trigger the "there are unsaved changes" alert)
-        dispatch(updateFormValue('isConfirmed', true, ['admin']));
-        dispatch(changesSaved());
+        updateFormObject('isConfirmed', true, ['admin']);
+        commitFormObject();
       }, {
         body: null,
         method: 'PUT',
@@ -112,18 +111,17 @@ function DeleteButton({
 }
 
 export default function ConfirmationActions({
-  createComp,
-  updateComp,
-  onError,
+  saveObject,
 }) {
   const {
     isAdminView,
     isPersisted,
-    initialCompetition: {
-      competitionId,
-      admin: { isConfirmed },
-    },
   } = useStore();
+
+  const {
+    competitionId,
+    admin: { isConfirmed },
+  } = useFormInitialObject();
 
   const dataUrl = useMemo(() => competitionConfirmationDataUrl(competitionId), [competitionId]);
 
@@ -138,9 +136,9 @@ export default function ConfirmationActions({
   return (
     <ConfirmProvider>
       <Button.Group>
-        <CreateOrUpdateButton createComp={createComp} updateComp={updateComp} />
+        <CreateOrUpdateButton saveObject={saveObject} />
         {isPersisted && !isAdminView && !isConfirmed && (
-          <ConfirmButton competitionId={competitionId} data={data} sync={sync} onError={onError} />
+          <ConfirmButton competitionId={competitionId} data={data} sync={sync} />
         )}
         {isPersisted && !isConfirmed && (
           <DeleteButton competitionId={competitionId} data={data} />

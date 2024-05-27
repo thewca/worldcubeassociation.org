@@ -23,6 +23,9 @@ class User < ApplicationRecord
   belongs_to :delegate_to_handle_wca_id_claim, foreign_key: "delegate_id_to_handle_wca_id_claim", class_name: "User", optional: true
   belongs_to :region, class_name: "UserGroup", optional: true
   has_many :roles, class_name: "UserRole"
+  has_many :active_roles, -> { active }, class_name: "UserRole"
+  has_many :delegate_role_metadata, through: :active_roles, source: :metadata, source_type: "RolesMetadataDelegateRegions"
+  has_many :delegate_roles, through: :delegate_role_metadata, source: :user_role, class_name: "UserRole"
   has_many :team_members, dependent: :destroy
   has_many :teams, -> { distinct }, through: :team_members
   has_many :current_team_members, -> { current }, class_name: "TeamMember"
@@ -53,8 +56,6 @@ class User < ApplicationRecord
     end
   }
 
-  scope :with_delegate_data, -> { includes(:actually_delegated_competitions, :region) }
-
   def self.eligible_voters
     [
       UserGroup.delegate_regions,
@@ -62,14 +63,14 @@ class User < ApplicationRecord
       UserGroup.board,
       UserGroup.officers,
     ].flatten.flat_map(&:active_roles)
-      .select { |role| UserRole.is_eligible_voter?(role) }
-      .map { |role| UserRole.user(role) }
+      .select { |role| role.is_eligible_voter? }
+      .map { |role| role.user }
       .uniq
   end
 
   def self.leader_senior_voters
-    team_leaders = UserGroup.teams_committees.map(&:lead_user)
-    senior_delegates = UserGroup.delegate_region_groups_senior_delegates
+    team_leaders = RolesMetadataTeamsCommittees.leader.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
+    senior_delegates = RolesMetadataDelegateRegions.senior_delegate.includes(:user, :user_role).select { |role_metadata| role_metadata.user_role.is_active? }.map(&:user)
     (team_leaders + senior_delegates).uniq.compact
   end
 
@@ -221,11 +222,12 @@ class User < ApplicationRecord
       dob_verification_date = Date.safe_parse(dob_verification, nil)
       if unconfirmed_person && (!current_user || !current_user.can_view_all_users?)
         dob_form_path = Rails.application.routes.url_helpers.contact_dob_path
+        wrt_contact_path = Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt')
         remaining_wca_id_claims = [0, MAX_INCORRECT_WCA_ID_CLAIM_COUNT - unconfirmed_person.incorrect_wca_id_claim_count].max
         if remaining_wca_id_claims == 0 || !unconfirmed_person.dob
           errors.add(:dob_verification, I18n.t('users.errors.wca_id_no_birthdate_html', dob_form_path: dob_form_path).html_safe)
         elsif unconfirmed_person.gender.blank?
-          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html').html_safe)
+          errors.add(:gender, I18n.t('users.errors.wca_id_no_gender_html', wrt_contact_path: wrt_contact_path).html_safe)
         elsif !already_assigned_to_user && unconfirmed_person.dob != dob_verification_date
           # Note that we don't verify DOB for WCA IDs that have already been
           # claimed. This protects people from DOB guessing attacks.
@@ -382,7 +384,7 @@ class User < ApplicationRecord
   end
 
   private def group_member?(group)
-    active_roles.any? { |role| UserRole.group(role) == group }
+    active_roles.any? { |role| role.group == group }
   end
 
   private def group_leader?(group)
@@ -438,39 +440,31 @@ class User < ApplicationRecord
   end
 
   private def software_team_admin?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wst_admin }
+    active_roles.any? { |role| role.group == UserGroup.teams_committees_group_wst_admin }
   end
 
   def staff?
-    active_roles.any? { |role| UserRole.is_staff?(role) }
-  end
-
-  def team_member?(team)
-    self.current_team_members.select { |t| t.team_id == team.id }.count > 0
-  end
-
-  def team_senior_member?(team)
-    self.current_team_members.select { |t| t.team_id == team.id && t.team_senior_member }.count > 0
-  end
-
-  def team_leader?(team)
-    self.current_team_members.select { |t| t.team_id == team.id && t.team_leader }.count > 0
+    active_roles.any? { |role| role.is_staff? }
   end
 
   def admin?
     Rails.env.production? && EnvConfig.WCA_LIVE_SITE? ? software_team_admin? : software_team?
   end
 
-  def delegate_roles
-    active_roles(include_converted: false).filter { |role| UserRole.is_group_type?(role, UserGroup.group_types[:delegate_regions]) }
-  end
-
   def any_kind_of_delegate?
-    delegate_roles.any?
+    delegate_role_metadata.any?
   end
 
   def trainee_delegate?
-    delegate_roles.any? { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+    # NOTE: `delegate_role_metadata.trainee_delegate.any?`, does fire a db query
+    # even if the `delegate_role_metadata` is eager loaded (because rails
+    # really wants to translate it to a "select 1 ..."; therefore we use a
+    # different implementation when we explicitly eager load roles.
+    if delegate_role_metadata.loaded?
+      delegate_role_metadata.any?(&:trainee_delegate?)
+    else
+      delegate_role_metadata.trainee_delegate.any?
+    end
   end
 
   private def staff_delegate?
@@ -527,14 +521,14 @@ class User < ApplicationRecord
     groups = []
 
     active_roles.select do |role|
-      group = UserRole.group(role)
-      group_type = UserRole.group_type(role)
+      group = role.group
+      group_type = role.group_type
       if [UserGroup.group_types[:councils], UserGroup.group_types[:teams_committees]].include?(group_type)
-        if UserRole.is_lead?(role)
+        if role.is_lead?
           groups << group.id
         end
       elsif group_type == UserGroup.group_types[:delegate_regions]
-        if UserRole.is_lead?(role) && UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:senior_delegate]
+        if role.is_lead? && role.metadata.status == RolesMetadataDelegateRegions.statuses[:senior_delegate]
           groups += [group.id, group.all_child_groups.map(&:id)].flatten.uniq
         end
       end
@@ -612,19 +606,11 @@ class User < ApplicationRecord
     admin? || financial_committee?
   end
 
-  # Returns true if the user can edit the given team.
-  def can_edit_team?(team)
-    can_edit_any_groups? ||
-      team_leader?(team) ||
-      # The leader of the WDC can edit the banned competitors list
-      (team == Team.banned && can_edit_banned_competitors?)
-  end
-
   def can_view_banned_competitors?
     admin? || staff?
   end
 
-  private def can_edit_banned_competitors?
+  def can_edit_banned_competitors?
     can_edit_any_groups? || group_leader?(UserGroup.teams_committees_group_wdc)
   end
 
@@ -836,6 +822,7 @@ class User < ApplicationRecord
     if cannot_edit_reason
       I18n.t('users.edit.cannot_edit.msg',
              reason: cannot_edit_reason,
+             wrt_contact_path: Rails.application.routes.url_helpers.contact_path(contactRecipient: 'wrt'),
              delegate_url: Rails.application.routes.url_helpers.delegates_path).html_safe
     end
   end
@@ -919,9 +906,9 @@ class User < ApplicationRecord
   def self.delegate_reports_receivers_emails
     delegate_groups = UserGroup.delegate_regions
     roles = delegate_groups.flat_map(&:active_roles).select do |role|
-      ["trainee_delegate", "junior_delegate"].include?(UserRole.status(role))
+      ["trainee_delegate", "junior_delegate"].include?(role.metadata.status)
     end
-    eligible_delegate_users = roles.map { |role| UserRole.user(role) }
+    eligible_delegate_users = roles.map { |role| role.user }
     other_staff = User.where(receive_delegate_reports: true)
     (%w(
       seniors@worldcubeassociation.org
@@ -974,16 +961,16 @@ class User < ApplicationRecord
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| UserRole.is_staff?(role) }
-      .map { |role| UserRole.user(role).id }
+      .select { |role| role.is_staff? }
+      .map { |role| role.user_id }
   end
 
   def self.trainee_delegate_ids
     UserGroup
       .delegate_regions
       .flat_map(&:active_roles)
-      .select { |role| UserRole.status(role) == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
-      .map { |role| UserRole.user(role).id }
+      .select { |role| role.metadata.status == RolesMetadataDelegateRegions.statuses[:trainee_delegate] }
+      .map { |role| role.user_id }
   end
 
   def self.search(query, params: {})
@@ -1025,15 +1012,14 @@ class User < ApplicationRecord
   private def deprecated_team_roles
     active_roles
       .select { |role|
-        group_type = UserRole.group_type(role)
         [
           UserGroup.group_types[:teams_committees],
           UserGroup.group_types[:councils],
           UserGroup.group_types[:board],
-        ].include?(group_type)
+        ].include?(role.group_type)
       }
-      .reject { |role| UserRole.group(role).is_hidden }
-      .map { |role| UserRole.deprecated_team_role(role) }
+      .reject { |role| role.group.is_hidden }
+      .map { |role| role.deprecated_team_role }
   end
 
   DEFAULT_SERIALIZE_OPTIONS = {
@@ -1184,7 +1170,7 @@ class User < ApplicationRecord
   end
 
   def is_delegate_in_probation
-    UserGroup.delegate_probation_groups.flat_map(&:active_users).include?(self)
+    UserGroup.delegate_probation.flat_map(&:active_users).include?(self)
   end
 
   private def can_manage_delegate_probation?
@@ -1192,26 +1178,11 @@ class User < ApplicationRecord
   end
 
   def senior_delegates
-    delegate_roles.map { |role| UserRole.group(role).senior_delegate }
+    delegate_roles.map { |role| role.group.senior_delegate }
   end
 
   def regional_delegates
-    delegate_roles.map { |role| UserRole.group(role).lead_user }
-  end
-
-  def active_roles(include_converted: true)
-    roles(include_converted: include_converted).select { |role| UserRole.is_active?(role) }
-  end
-
-  def team_roles
-    roles = []
-    self.current_team_members.each do |team_member|
-      team_member_group = team_member.team.group
-      if team_member_group.present? && !team_member_group.roles_migrated?
-        roles << team_member.role
-      end
-    end
-    roles
+    delegate_roles.map { |role| role.group.lead_user }
   end
 
   def can_access_wfc_panel?
@@ -1231,7 +1202,7 @@ class User < ApplicationRecord
   end
 
   def can_access_leader_panel?
-    admin? || active_roles.any? { |role| UserRole.is_lead?(role) && (UserRole.group(role).teams_committees? || UserRole.group(role).councils?) }
+    admin? || active_roles.any? { |role| role.is_lead? && (role.group.teams_committees? || role.group.councils?) }
   end
 
   def can_access_senior_delegate_panel?
@@ -1262,26 +1233,16 @@ class User < ApplicationRecord
   def subordinate_delegates
     delegate_roles
       .filter { |role| role.is_lead? }
-      .flat_map { |role| UserRole.group(role).active_users + UserRole.group(role).active_users_of_all_child_groups }
+      .flat_map { |role| role.group.active_users + role.group.active_all_child_users }
       .uniq
   end
 
   private def can_access_wfc_senior_matters?
-    active_roles.any? { |role| UserRole.group(role) == UserGroup.teams_committees_group_wfc && GroupsMetadataTeamsCommittees.at_least_senior_member?(role) }
-  end
-
-  def roles(include_converted: true)
-    roles = UserRole.where(user_id: self.id).to_a # to_a is to convert the ActiveRecord::Relation to an
-    # array, so that we can append roles which are not yet migrated to the new system. This can be
-    # removed once all roles are migrated to the new system.
-
-    roles.concat(team_roles) if include_converted
-
-    roles
+    active_roles.any? { |role| role.group == UserGroup.teams_committees_group_wfc && role.metadata.at_least_senior_member? }
   end
 
   private def highest_delegate_role
-    delegate_roles.max_by { |role| UserRole.status_sort_rank(role) }
+    delegate_roles.max_by { |role| role.status_rank }
   end
 
   def delegate_status

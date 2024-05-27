@@ -12,7 +12,7 @@ import {
 import useDelegatesData from './useDelegatesData';
 import UtcDatePicker from '../wca/UtcDatePicker';
 
-const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
+export const WCA_EVENT_IDS = Object.values(events.official).map((e) => e.id);
 
 function CompetitionsFilters({
   filterState,
@@ -81,21 +81,23 @@ export function EventSelector({
   onEventSelection,
   eventList = WCA_EVENT_IDS,
   disabled = false,
+  maxEvents = Infinity,
 }) {
   return (
     <>
       <label htmlFor="events">
         {`${I18n.t('competitions.competition_form.events')}`}
         <br />
-        <Button primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
-        <Button type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
+        <Button disabled={disabled || eventList.length >= maxEvents} primary type="button" size="mini" id="select-all-events" onClick={() => onEventSelection({ type: 'select_all_events' })}>{I18n.t('competitions.index.all_events')}</Button>
+        <Button disabled={disabled} type="button" size="mini" id="clear-all-events" onClick={() => onEventSelection({ type: 'clear_events' })}>{I18n.t('competitions.index.clear')}</Button>
       </label>
 
       <div id="events">
         {eventList.map((eventId) => (
           <React.Fragment key={eventId}>
             <Button
-              disabled={disabled}
+              disabled={disabled
+                || (!selectedEvents.includes(eventId) && selectedEvents.length >= maxEvents)}
               basic
               icon
               toggle
@@ -131,7 +133,9 @@ function RegionSelector({ region, dispatchFilter }) {
       key: 'countries_header', value: '', disabled: true, content: <Header content={I18n.t('common.country')} size="small" style={{ textAlign: 'center' }} />,
     },
     ...(Object.values(countries.real).map((country) => (
-      { key: country.id, text: country.name, value: country.iso2 }
+      {
+        key: country.id, text: country.name, value: country.iso2, flag: country.iso2.toLowerCase(),
+      }
     ))),
   ];
 
@@ -141,6 +145,7 @@ function RegionSelector({ region, dispatchFilter }) {
       <Dropdown
         search
         selection
+        clearable
         value={region}
         options={regionsOptions}
         onChange={(_, data) => dispatchFilter({ region: data.value })}
@@ -387,7 +392,6 @@ function CompDisplayCheckboxes({
               id="show_registration_status"
               checked={shouldShowRegStatus}
               onChange={() => setShouldShowRegStatus(!shouldShowRegStatus)}
-              disabled // FIXME Pending because of too expensive queries
             />
           </div>
         )

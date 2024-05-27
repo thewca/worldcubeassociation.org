@@ -27,7 +27,11 @@ module MicroserviceRegistrationHolder
           # we hydrate each model with the microservice information directly from above
           ar_models.each do |ar_model|
             matching_ms_model = ms_models.find { |ms_model| ms_model['competition_id'] == ar_model.competition_id && ms_model['user_id'] == ar_model.user_id }
-            raise "No matching Microservice registration found. This should not happen!" if !matching_ms_model.present? && ar_model.is_competing?
+
+            if !matching_ms_model.present? && ar_model.is_competing?
+              raise "No matching Microservice registration found: Row ID #{ar_model.id}, competition '#{ar_model.competition_id}', user '#{ar_model.user_id}'. " \
+                    "This means the microservice suddenly 'forgot' about an entry that it told us about before, and it should not happen!"
+            end
 
             ar_model.load_ms_model(matching_ms_model) if matching_ms_model.present?
           end

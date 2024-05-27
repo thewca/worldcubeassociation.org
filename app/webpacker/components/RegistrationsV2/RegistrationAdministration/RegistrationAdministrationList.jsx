@@ -4,7 +4,7 @@ import {
   Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
 } from 'semantic-ui-react';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
-import { getShortDateString, getShortTimeString } from '../lib/dates';
+import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
 import createSortReducer from '../reducers/sortReducer';
 import RegistrationActions from './RegistrationActions';
 import { setMessage } from '../Register/RegistrationMessage';
@@ -13,7 +13,7 @@ import i18n from '../../../lib/i18n';
 import Loading from '../../Requests/Loading';
 import EventIcon from '../../wca/EventIcon';
 import useWithUserData from '../hooks/useWithUserData';
-import { editRegistrationUrl, editResultUrl, personUrl } from '../../../lib/requests/routes.js.erb';
+import { editRegistrationUrl, editPersonUrl, personUrl } from '../../../lib/requests/routes.js.erb';
 
 const selectedReducer = (state, action) => {
   let newState = [...state];
@@ -122,7 +122,7 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
   const actionsRef = useRef();
 
   const [state, dispatchSort] = useReducer(sortReducer, {
-    sortColumn: competitionInfo['using_stripe_payments?']
+    sortColumn: competitionInfo['using_payment_integrations?']
       ? 'paid_on'
       : 'registered_on',
     sortDirection: undefined,
@@ -477,7 +477,7 @@ function TableHeader({
         >
           {i18n.t('registrations.list.registered.without_stripe')}
         </Table.HeaderCell>
-        {competitionInfo['using_stripe_payments?'] && (
+        {competitionInfo['using_payment_integrations?'] && (
           <>
             <Table.HeaderCell>Payment Status</Table.HeaderCell>
             <Table.HeaderCell
@@ -560,8 +560,8 @@ function TableRow({
       </Table.Cell>
 
       <Table.Cell>
-        <a href={editRegistrationUrl(`${competitionInfo.id}-${id}`)}>
-          Edit
+        <a href={editRegistrationUrl(id, competitionInfo.id)}>
+          {i18n.t('registrations.list.edit')}
         </a>
       </Table.Cell>
 
@@ -569,9 +569,9 @@ function TableRow({
         {wcaId ? (
           <a href={personUrl(wcaId)}>{wcaId}</a>
         ) : (
-          <a href={editResultUrl(id)}>
+          <a href={editPersonUrl(id)}>
             <Icon name="edit" />
-            Profile
+            {i18n.t('users.edit.profile')}
           </a>
         )}
       </Table.Cell>
@@ -605,9 +605,9 @@ function TableRow({
         />
       </Table.Cell>
 
-      {competitionInfo['using_stripe_payments?'] && (
+      {competitionInfo['using_payment_integrations?'] && (
         <>
-          <Table.Cell>{paymentStatus ?? 'not paid'}</Table.Cell>
+          <Table.Cell>{paymentStatus ?? i18n.t('registrations.list.not_paid')}</Table.Cell>
           <Table.Cell>
             {updatedAt && (
               <Popup
@@ -674,7 +674,7 @@ function TableRow({
           )}
         </a>
         {' '}
-        <Icon link onClick={copyEmail} name="copy" title="Copy Email Address" />
+        <Icon link onClick={copyEmail} name="copy" title={i18n.t('competitions.registration_v2.update.email_copy')} />
       </Table.Cell>
     </Table.Row>
   );

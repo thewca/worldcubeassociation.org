@@ -1,8 +1,8 @@
 import React, {
   useEffect, useMemo, useReducer, useState,
 } from 'react';
-import { useInfiniteQuery } from '@tanstack/react-query';
-import { Container } from 'semantic-ui-react';
+import { keepPreviousData, useInfiniteQuery, useQuery } from '@tanstack/react-query';
+import { Container, Header } from 'semantic-ui-react';
 
 import I18n from '../../lib/i18n';
 import { apiV0Urls, WCA_API_PAGINATION } from '../../lib/requests/routes.js.erb';
@@ -68,15 +68,44 @@ function CompetitionsView() {
     },
   });
 
-  const competitions = rawCompetitionData?.pages.flatMap((page) => page.data)
+  const baseCompetitions = rawCompetitionData?.pages.flatMap((page) => page.data)
     .filter((comp) => (
       (!isCancelled(comp) || debouncedFilterState.shouldIncludeCancelled)
       && (debouncedFilterState.selectedEvents.every((event) => comp.event_ids.includes(event)))
     ));
 
+  const compIds = baseCompetitions?.map((comp) => comp.id) || [];
+
+  const {
+    data: compRegistrationData,
+    isFetching: regDataIsPending,
+  } = useQuery({
+    queryFn: () => fetchJsonOrError(apiV0Urls.competitions.registrationData, {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+      body: JSON.stringify({ ids: compIds }),
+    }),
+    queryKey: ['registration-info', ...compIds],
+    enabled: shouldShowRegStatus && compIds.length > 0,
+    // This is where the magic happens: Using `keepPreviousData` makes it so that
+    //   all previously loaded indicators are held in-cache while the fetcher for the next
+    //   batch is running in the background. (Adding comment here because it's not in the docs)
+    placeholderData: keepPreviousData,
+    select: (data) => data.data,
+  });
+
+  const competitions = useMemo(() => (shouldShowRegStatus ? (
+    baseCompetitions?.map((comp) => {
+      const regData = compRegistrationData?.find((reg) => reg.id === comp.id);
+      return regData ? { ...comp, ...regData } : comp;
+    })
+  ) : baseCompetitions), [baseCompetitions, compRegistrationData, shouldShowRegStatus]);
+
   return (
     <Container>
-      <h2>{I18n.t('competitions.index.title')}</h2>
+      <Header as="h2">{I18n.t('competitions.index.title')}</Header>
       <CompetitionsFilters
         filterState={filterState}
         dispatchFilter={dispatchFilter}
@@ -86,7 +115,7 @@ function CompetitionsView() {
         setShouldShowRegStatus={setShouldShowRegStatus}
       />
 
-      <Container id="search-results" className="row competitions-list">
+      <Container fluid>
         {
           displayMode === 'list'
           && (
@@ -95,6 +124,7 @@ function CompetitionsView() {
               filterState={debouncedFilterState}
               shouldShowRegStatus={shouldShowRegStatus}
               isLoading={competitionsIsFetching}
+              regStatusLoading={regDataIsPending}
               fetchMoreCompetitions={competitionsFetchNextPage}
               hasMoreCompsToLoad={hasMoreCompsToLoad}
             />

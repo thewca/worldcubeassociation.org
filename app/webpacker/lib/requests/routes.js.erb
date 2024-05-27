@@ -84,13 +84,13 @@ export const adminFixResultsUrl = (personId, competition_id = undefined, event_i
   return `<%= CGI.unescape(Rails.application.routes.url_helpers.admin_fix_results_path) %>?${searchParams.toString()}`
 };
 
-export const paymentFinishUrl = "TODO"; //"<%# CGI.unescape(Rails.application.routes.url_helpers.finish_path) %>"
+export const paymentFinishUrl = (competitionId, userId) => `<%= Rails.application.routes.url_helpers.finish_url(host: EnvConfig.ROOT_URL) %>?attendee_id=${competitionId}-${userId}`
 
-export const paymentRefundsUrl = "TODO"; //(competitionId, userId) => `<%# CGI.unescape(Rails.application.routes.url_helpers.refunds_path) %>?attendee_id=${competitionId}-${userId}`
+export const paymentRefundsUrl = (competitionId, userId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.refunds_path) %>?attendee_id=${competitionId}-${userId}`
 
-export const refundPaymentUrl = "TODO"; // (competitionId, userId, paymentId, amount) => `<%# CGI.unescape(Rails.application.routes.url_helpers.refund_path) %>?attendee_id=${competitionId}-${userId}&payment_id=${paymentId}&refund_amount=${amount}`
+export const refundPaymentUrl = (competitionId, userId, paymentId, amount) => `<%= CGI.unescape(Rails.application.routes.url_helpers.refund_path) %>?attendee_id=${competitionId}-${userId}&payment_id=${paymentId}&refund_amount=${amount}`
 
-export const paymentConfigUrl = "TODO"; // <%# CGI.unescape(Rails.application.routes.url_helpers.config_path) %>"
+export const paymentDenominationUrl = (amount, currencyIsoCode) => `<%= Rails.application.routes.url_helpers.registration_payment_denomination_path %>?amount=${amount}&currency_iso=${currencyIsoCode}`
 
 export const adminGenerateIds = `<%= CGI.unescape(Rails.application.routes.url_helpers.persons_new_id_path) %>`;
 
@@ -209,10 +209,10 @@ export const apiV0Urls = {
   },
   competitions: {
     list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competitions_path)%>`,
-    info: (compId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${compId}"))%>`
+    info: (compId) => `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_competition_path("${compId}"))%>`,
+    registrationData: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_registration_data_path) %>`
   },
   delegates: {
-    list: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_path)%>`,
     searchIndex: `<%= CGI.unescape(Rails.application.routes.url_helpers.api_v0_delegates_search_index_path)%>`,
   },
 }

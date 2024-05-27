@@ -31,7 +31,9 @@ RSpec.describe "DatabaseDumper" do
     it "defines a sanitizer of table '#{table_name}'" do
       unless table_sanitizer == :skip_all_rows
         where_clause = table_sanitizer[:where_clause]
-        expect(where_clause).to_not be_nil
+        expect(where_clause).to be_nil.or(match(/WHERE/)).or(match(/JOIN/))
+        where_clause = table_sanitizer[:order_by_clause]
+        expect(where_clause).to be_nil.or(match(/ORDER BY/))
         column_sanitizers = table_sanitizer[:column_sanitizers]
         column_names = ActiveRecord::Base.connection.columns(table_name).map(&:name)
         expect(column_sanitizers.keys).to match_array(column_names)

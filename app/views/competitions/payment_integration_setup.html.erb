@@ -1,0 +1,69 @@
+<% provide(:title, @competition.name) %>
+
+<%= render layout: 'nav' do %>
+  <h1><%= t('payments.payment_setup.accept_payments_header') %></h1>
+
+  <% if @competition.payments_enabled? %>
+    <% cpi = @competition.competition_payment_integrations.first %>
+    <% type = CompetitionPaymentIntegration::AVAILABLE_INTEGRATIONS.invert[cpi.connected_account_type] %>
+
+    <p>
+      <%= t("payments.payment_setup.currently_connected_info", provider: t("payments.payment_providers.#{type}")) %>
+    </p>
+    <p>
+      <b><%= t("payments.payment_setup.before_disconnect_warning", provider: t("payments.payment_providers.#{type}")) %></b>
+    </p>
+    <ul>
+      <li><%= link_to(t("payments.payment_setup.external_dashboard", provider: t("payments.payment_providers.#{type}")), CompetitionPaymentIntegration::INTEGRATION_DASHBOARD_URLS[type]) %></li>
+    </ul>
+    <p>
+      <%= t("payments.payment_setup.before_disconnect_info", provider: t("payments.payment_providers.#{type}")) %>
+    </p>
+
+    <% if current_user&.can_admin_competitions? %>
+      <%= button_to(
+            competition_disconnect_payment_integration_path(payment_integration: type),
+            class: 'btn btn-danger',
+            method: :post,
+            data: { confirm: t('payments.payment_setup.confirm_account_disconnect', provider: t("payments.payment_providers.#{type}")) }
+          ) do %>
+        <%= t('payments.payment_setup.disconnect_account', provider: t("payments.payment_providers.#{type}")) %>
+      <% end %>
+    <% end %>
+  <% else %>
+    <%# Currency Warning %>
+    <%= alert :warning do %>
+      <%= t('payments.payment_setup.supported_currency_warning') %>
+
+      <ul>
+        <% @cpi_onboarding_urls.keys.each do |type| %>
+          <li>
+            <%= link_to(
+                  t('payments.payment_setup.supported_currencies', provider: t("payments.payment_providers.#{type}")),
+                  CompetitionPaymentIntegration::INTEGRATION_CURRENCY_INFORMATION[type],
+                  target: '_blank'
+                ) %>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+
+    <% @cpi_onboarding_urls.each do |type, url| %>
+      <%# Some connectors may return `nil` instead of an actual URL when they are (currently) disabled %>
+      <% next unless url.present? %>
+
+      <h2><%= t('payments.payment_setup.provider_heading', provider: t("payments.payment_providers.#{type}")) %></h2>
+
+      <p>
+        <b><%= t("payments.payment_setup.connect_account_warning.#{type}") %></b>
+      </p>
+      <p>
+        <%= t("payments.payment_setup.connect_account_info.#{type}") %>
+      </p>
+
+      <%= link_to url, class: "btn btn-primary" do %>
+        <%= ui_icon("cc #{type}") %><%= t('payments.payment_setup.connect_button', provider: t("payments.payment_providers.#{type}")) %>
+      <% end %>
+    <% end %>
+  <% end %>
+<% end %>

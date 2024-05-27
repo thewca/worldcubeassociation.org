@@ -8,10 +8,9 @@ FactoryBot.define do
     f.subject { "Subject" }
   end
 
-  factory :website_contact do
+  factory :contact_competition do
     name { "Jon" }
     your_email { "jon@example.com" }
-    inquiry { "different" }
 
     transient do
       competition_contact { nil }
@@ -25,5 +24,20 @@ FactoryBot.define do
     trait :with_competition do
       competition_id { FactoryBot.create(:competition, :announced, contact: competition_contact, delegates: competition_delegates).id }
     end
+  end
+
+  factory :contact_wct do
+    name { "Jon" }
+    your_email { "jon@example.com" }
+  end
+
+  factory :contact_wrt do
+    name { "Jon" }
+    your_email { "jon@example.com" }
+  end
+
+  factory :contact_wst do
+    name { "Jon" }
+    your_email { "jon@example.com" }
   end
 end

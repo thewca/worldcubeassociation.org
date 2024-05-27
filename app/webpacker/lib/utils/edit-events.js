@@ -8,7 +8,7 @@ export function pluralize(count, word, { fixed, abbreviate } = {}) {
 }
 
 // This is ported from the Ruby code in solve_time.rb.
-function parseMbValue(val) {
+export function parseMbValue(val) {
   let mbValue = val;
   const old = Math.floor(mbValue / 1000000000) !== 0;
   let timeSeconds; let attempted; let

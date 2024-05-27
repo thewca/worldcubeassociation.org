@@ -43,8 +43,9 @@ EnvConfig = SuperConfig.new do
     optional :PAYPAL_BASE_URL, :string, ''
 
     # Local-specific stuff
-    optional :ENABLE_BULLET, :bool, false
+    optional :DISABLE_BULLET, :bool, false
     optional :MAILCATCHER_SMTP_HOST, :string, ''
+    mandatory :WCA_REGISTRATIONS_BACKEND_URL, :string
   end
 
   if Rails.env.test?

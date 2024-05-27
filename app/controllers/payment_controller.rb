@@ -1,33 +1,17 @@
 # frozen_string_literal: true
 
 class PaymentController < ApplicationController
-  def payment_config
-    if current_user
-      payment_id = params.require(:payment_id)
-      competition_id = params.require(:competition_id)
-
-      competition = Competition.find(competition_id)
-      return render status: :bad_request, json: { error: "Competition doesn't use new Registration Service" } unless competition.uses_new_registration_service?
-
-      payment_intent = PaymentIntent.find(payment_id)
-      secret = payment_intent.client_secret
-      render json: { stripe_publishable_key: AppSecrets.STRIPE_PUBLISHABLE_KEY,
-                     connected_account_id: competition.payment_account_for(:stripe).account_id,
-                     client_secret: secret }
-    else
-      render status: :unauthorized, json: { error: I18n.t('api.login_message') }
-    end
-  end
-
   def payment_finish
     if current_user
       attendee_id = params.require(:attendee_id)
-      competition_id, user_id = attendee_id.split("-")
+      competition_id, user_id_s = attendee_id.split("-")
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "not_authorized") unless user_id == current_user.id
+      user_id = user_id_s.to_i
+
+      return redirect_to competition_register_path(competition_id, "not_authorized") unless user_id == current_user.id
 
       ms_registration = MicroserviceRegistration.find_by(competition_id: competition_id, user_id: user_id)
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "payment_not_found") unless ms_registration.present?
+      return redirect_to competition_register_path(competition_id, "payment_not_found") unless ms_registration.present?
 
       # Provided by Stripe upon redirect when the "PaymentElement" workflow is completed
       intent_id = params[:payment_intent]
@@ -36,13 +20,13 @@ class PaymentController < ApplicationController
       stored_stripe_record = StripeRecord.find_by(stripe_id: intent_id)
       payment_intent = stored_stripe_record.payment_intent
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "not_authorized") unless payment_intent.holder == ms_registration
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "secret_invalid") unless payment_intent.client_secret == intent_secret
+      return redirect_to competition_register_path(competition_id, "not_authorized") unless payment_intent.holder == ms_registration
+      return redirect_to competition_register_path(competition_id, "secret_invalid") unless payment_intent.client_secret == intent_secret
 
       # No need to create a new intent here. We can just query the stored intent from Stripe directly.
       stripe_intent = payment_intent.retrieve_remote
 
-      return redirect_to Microservices::Registrations.competition_register_path(competition_id, "intent_not_found") unless stripe_intent.present?
+      return redirect_to competition_register_path(competition_id, "intent_not_found") unless stripe_intent.present?
 
       payment_intent.update_status_and_charges(stripe_intent, current_user) do |charge|
         ruby_money = charge.money_amount
@@ -50,11 +34,11 @@ class PaymentController < ApplicationController
         begin
           Microservices::Registrations.update_registration_payment(attendee_id, charge.id, ruby_money.cents, ruby_money.currency.iso_code, stripe_intent.status)
         rescue Faraday::Error
-          return redirect_to Microservices::Registrations.competition_register_path(competition_id, "registration_unreachable")
+          return redirect_to competition_register_path(competition_id, "registration_unreachable")
         end
       end
 
-      redirect_to Microservices::Registrations.competition_register_path(competition_id, stored_stripe_record.status)
+      redirect_to competition_register_path(competition_id, stored_stripe_record.stripe_status)
     else
       redirect_to user_session_path
     end

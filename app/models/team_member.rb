@@ -18,10 +18,6 @@ class TeamMember < ApplicationRecord
   alias_attribute :leader, :team_leader
   alias_attribute :senior_member, :team_senior_member
 
-  TEAM_STATUS_LEADER = "leader"
-  TEAM_STATUS_SENIOR_MEMBER = "senior_member"
-  TEAM_STATUS_MEMBER = "member"
-
   def current_member?
     end_date.nil? || end_date > Date.today
   end
@@ -48,52 +44,6 @@ class TeamMember < ApplicationRecord
         errors.add(:user_id, "The user has upcoming competitions: #{upcoming_comps.join(', ')}. Before banning the user, make sure their registrations are deleted.")
       end
     end
-  end
-
-  def status
-    if leader?
-      TEAM_STATUS_LEADER
-    elsif senior_member?
-      TEAM_STATUS_SENIOR_MEMBER
-    else
-      TEAM_STATUS_MEMBER
-    end
-  end
-
-  def board_role
-    board_group = UserGroup.board_group
-    {
-      id: board_group.group_type + "_" + self.id.to_s,
-      start_date: start_date,
-      is_active: current_member?,
-      group: board_group,
-      user: user,
-    }
-  end
-
-  def role
-    group_type = UserGroup.group_types[:teams_committees]
-    {
-      id: group_type + "_" + self.id.to_s,
-      start_date: start_date,
-      end_date: end_date,
-      is_active: current_member?,
-      group: team.group || {
-        id: group_type + "_" + team.id.to_s,
-        name: team.name,
-        group_type: group_type,
-        is_hidden: team[:hidden],
-        is_active: true,
-        metadata: {
-          friendly_id: team.friendly_id,
-        },
-      },
-      user: user,
-      is_lead: status == 'leader',
-      metadata: {
-        status: status,
-      },
-    }
   end
 
   validates :start_date, presence: true
