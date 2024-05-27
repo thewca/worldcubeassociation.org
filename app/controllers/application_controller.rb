@@ -79,7 +79,7 @@ class ApplicationController < ActionController::Base
   end
 
   # This method is called by devise after a successful logout to know the redirect path
-  # We override it to do some action after signing in, but we want to use the original path
+  # We override it to do some action after signing out, but we want to use the original path
   protected def after_sign_out_path_for(resource_or_scope)
     session[:should_reset_jwt] = true
     super
