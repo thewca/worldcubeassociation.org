@@ -51,6 +51,7 @@ export default function RegistrationOverview({
             { editsAllowed && (
             <Button
               primary
+              fluid
               type="submit"
             >
               {i18n.t('registrations.update')}
