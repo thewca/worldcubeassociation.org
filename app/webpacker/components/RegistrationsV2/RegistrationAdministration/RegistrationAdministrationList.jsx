@@ -3,6 +3,7 @@ import React, { useMemo, useReducer, useRef } from 'react';
 import {
   Checkbox, Flag, Form, Header, Icon, Popup, Sticky, Table,
 } from 'semantic-ui-react';
+import { DateTime } from 'luxon';
 import { getAllRegistrations } from '../api/registration/get/get_registrations';
 import { getShortDateString, getShortTimeString } from '../../../lib/utils/dates';
 import createSortReducer from '../reducers/sortReducer';
@@ -177,13 +178,13 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
           case 'comment':
             return a.competing.comment.localeCompare(b.competing.comment);
           case 'registered_on':
-            return a.competing.registered_on.localeCompare(
-              b.competing.registered_on,
-            );
+            return DateTime.fromISO(a.competing.registered_on).toMillis()
+              - DateTime.fromISO(b.competing.registered_on).toMillis();
           case 'paid_on_with_registered_on_fallback':
           {
             if (a.payment && b.payment) {
-              return a.payment.updated_at.localeCompare(b.payment.updated_at);
+              return DateTime.fromISO(a.payment.updated_at).toMillis()
+                - DateTime.fromISO(b.payment.updated_at).toMillis();
             }
             if (a.payment && !b.payment) {
               return 1;
@@ -191,9 +192,8 @@ export default function RegistrationAdministrationList({ competitionInfo }) {
             if (!a.payment && b.payment) {
               return -1;
             }
-            return a.competing.registered_on.localeCompare(
-              b.competing.registered_on,
-            );
+            return DateTime.fromISO(a.competing.registered_on).toMillis()
+              - DateTime.fromISO(b.competing.registered_on).toMillis();
           }
           default:
             return 0;
